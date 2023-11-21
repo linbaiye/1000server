@@ -4,4 +4,6 @@ public enum PlayerStateCode {
     IDLE,
 
     WALK,
+
+
 }

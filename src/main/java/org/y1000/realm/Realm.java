@@ -1,63 +1,94 @@
 package org.y1000.realm;
 
 import org.y1000.connection.Connection;
-import org.y1000.entities.EntityManager;
-import org.y1000.entities.creatures.players.Player;
+import org.y1000.entities.managers.PlayerManager;
+import org.y1000.util.Coordinate;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Realm implements Runnable {
-    private final Set<EntityManager<?>> entityManagers;
 
-    private final Set<Connection> connectionSet = new HashSet<>();
+    private long lastUpdateMilli;
 
-    private final Set<Player> players = new HashSet<>();
+    private static final long stepMilli = 50;
 
-    private long lastEpoch;
+    private final PlayerManager playerManager;
 
-    private final List<Connection> addingConnections = new ArrayList<>();
+    private final List<Connection> addingConnections;
 
-    private final List<Connection> removingConnections = new ArrayList<>();
+    private final List<Connection> closingConnections;
 
-    public Realm(Set<EntityManager<?>> entityManagers) {
-        this.entityManagers = entityManagers;
-        lastEpoch = System.currentTimeMillis();
+    private final RealmMap realmMap;
+
+
+    public Realm() {
+        lastUpdateMilli = System.currentTimeMillis();
+        playerManager = new PlayerManager();
+        realmMap = new V2Map();
+        addingConnections = new ArrayList<>();
+        closingConnections = new ArrayList<>();
     }
 
-    public synchronized void addNewConnection(Connection connection) {
-        connectionSet.add(connection);
+
+    public RealmMap map() {
+        return realmMap;
+    }
+
+
+    public boolean hasPhysicalEntityAt(Coordinate coordinate) {
+        return playerManager.findOne(coordinate) != null;
+    }
+
+
+    public synchronized void onConnectionEstablished(Connection connection) {
+        addingConnections.add(connection);
         notify();
     }
 
     public synchronized void onConnectionClosed(Connection connection) {
-        removingConnections.add(connection);
+        closingConnections.add(connection);
         notify();
     }
 
+    private boolean hasConnectionEvents() {
+        return !closingConnections.isEmpty() || !addingConnections.isEmpty();
+    }
+
+
+    private void updateRealm(long delta) {
+        playerManager.update(delta);
+    }
 
     @Override
     public void run() {
-        while (true) {
-            synchronized (this) {
-                while (removingConnections.isEmpty() && addingConnections.isEmpty()) {
-                    try {
-                        wait(50);
-                        if (!removingConnections.isEmpty())
-                        {
-                            removingConnections.forEach(connectionSet::remove);
-                        }
-                        if (!addingConnections.isEmpty())
-                        {
-                            connectionSet.addAll(addingConnections);
-                        }
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+        try {
+            while (true) {
+                long currentMilli = System.currentTimeMillis();
+                long nextWakeupMilli = stepMilli;
+                long delta = 0;
+                List<Connection> newConnections;
+                List<Connection> deadConnections;
+                synchronized (this) {
+                    while (!hasConnectionEvents() && delta < stepMilli) {
+                        wait(nextWakeupMilli);
+                        delta = System.currentTimeMillis() - lastUpdateMilli;
+                        nextWakeupMilli = stepMilli - delta;
                     }
+                    deadConnections = new ArrayList<>(closingConnections);
+                    newConnections = new ArrayList<>(addingConnections);
+                    closingConnections.clear();
+                    addingConnections.clear();
+                    notifyAll();
+                }
+                deadConnections.forEach(playerManager::remove);
+                newConnections.forEach(c -> playerManager.add(c, this));
+                if (delta >= stepMilli) {
+                    updateRealm(delta);
+                    lastUpdateMilli = currentMilli;
                 }
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }
