@@ -1,46 +1,70 @@
 package org.y1000.entities.creatures.players;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.message.Message;
 import org.y1000.message.MoveMessage;
-import org.y1000.util.Coordinate;
+import org.y1000.message.PositionMessage;
+import org.y1000.message.StopMoveMessage;
 
 import java.util.Optional;
 
-public class PlayerWalkState implements PlayerState {
+@Slf4j
+final class PlayerWalkState implements PlayerState {
 
-    //private final static Vector2 WALK_VELOCITY = new Vector2(32, 24);
-    private static final float VELOCITY = 1 / 0.9f;
-
-    private long beginAtMilli;
-
-    private Coordinate beginAt;
+    private static final float MILLIS_PER_UNIT = 900f;
+    private float elapsed;
 
     private Direction movingDirection;
 
+    private boolean keepMoving;
 
-    public PlayerWalkState(long beginAtMilli, Coordinate beginAt, Direction movingDirection) {
-        this.beginAtMilli = beginAtMilli;
-        this.beginAt = beginAt;
-        this.movingDirection = movingDirection;
+    public PlayerWalkState() {
+        keepMoving = true;
+        elapsed = 0;
     }
 
     @Override
-    public Message sit(Player player) {
-        return null;
+    public Optional<Message> sit(PlayerImpl player) {
+        return Optional.empty();
     }
 
     @Override
-    public Message move(Player player, MoveMessage moveMessage) {
-        return null;
+    public Optional<Message> stopMove(PlayerImpl player, StopMoveMessage stopMoveMessage) {
+        keepMoving = false;
+        return Optional.of(stopMoveMessage);
     }
 
     @Override
-    public Optional<Message> update(Player player, long delta) {
-        double distance = ((double) (beginAtMilli + delta) / 1000 * VELOCITY);
-        if (distance >= 1) {
-            player.changeCoordinate(player.coordinate().moveBy(movingDirection));
+    public Optional<Message> move(PlayerImpl player, MoveMessage moveMessage) {
+        if (player.direction() != moveMessage.direction() || !keepMoving) {
+            keepMoving = true;
+            movingDirection = moveMessage.direction();
+            return Optional.of(moveMessage);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<Message> update(PlayerImpl player, long deltaMillis) {
+        if (!player.canMoveTo(player.coordinate().moveBy(player.direction()))) {
+            return Optional.of(PositionMessage.fromCreature(player));
+        }
+        elapsed += deltaMillis;
+        if (elapsed < MILLIS_PER_UNIT) {
+            return Optional.empty();
+        }
+        player.changeCoordinate(player.coordinate().moveBy(player.direction()));
+        if (keepMoving) {
+            elapsed -= MILLIS_PER_UNIT;
+            if (movingDirection != null && movingDirection != player.direction()) {
+                elapsed = 0;
+                player.changeDirection(movingDirection);
+            }
+            return Optional.of(MoveMessage.fromCreature(player));
+        } else {
+            player.changeState(PlayerIdleState.INSTANCE);
+            return Optional.empty();
+        }
     }
 }

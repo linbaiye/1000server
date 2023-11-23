@@ -8,4 +8,7 @@ public enum MessageType {
 
     CONFIRM,
 
+
+    STOP_MOVE,
+
 }

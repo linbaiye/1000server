@@ -20,7 +20,7 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
 
     public void add(Connection connection, Realm realm) {
         if (!players.containsKey(connection)) {
-            players.put(connection, new Player(realm));
+            players.put(connection, Player.ofRealm(realm));
         }
     }
 

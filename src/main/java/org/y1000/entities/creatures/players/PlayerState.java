@@ -2,14 +2,19 @@ package org.y1000.entities.creatures.players;
 
 import org.y1000.message.Message;
 import org.y1000.message.MoveMessage;
+import org.y1000.message.StopMoveMessage;
 
 import java.util.Optional;
 
-public interface PlayerState {
+interface PlayerState {
 
-    Message sit(Player player);
+    Optional<Message> sit(PlayerImpl player);
 
-    Message move(Player player, MoveMessage moveMessage);
+    Optional<Message> move(PlayerImpl player, MoveMessage moveMessage);
 
-    Optional<Message> update(Player player, long delta);
+    default Optional<Message> stopMove(PlayerImpl player, StopMoveMessage stopMoveMessage) {
+        return Optional.empty();
+    }
+
+    Optional<Message> update(PlayerImpl player, long deltaMillis);
 }

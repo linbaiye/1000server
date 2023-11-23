@@ -54,7 +54,6 @@ public class Realm implements Runnable {
         return !closingConnections.isEmpty() || !addingConnections.isEmpty();
     }
 
-
     private void updateRealm(long delta) {
         playerManager.update(delta);
     }
