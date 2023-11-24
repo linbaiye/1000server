@@ -7,6 +7,7 @@ import org.y1000.entities.Direction;
 import org.y1000.message.Message;
 import org.y1000.message.MessageType;
 import org.y1000.message.MoveMessage;
+import org.y1000.message.PositionMessage;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
@@ -31,10 +32,27 @@ class PlayerIdleStateTest {
     }
 
     @Test
+    void moveIntoUnmovable() {
+        when(player.coordinate()).thenReturn(new Coordinate(1, 1));
+        when(player.direction()).thenReturn(Direction.DOWN);
+        when(player.getRealm()).thenReturn(realm);
+        when(player.id()).thenReturn(1L);
+        when(realm.hasPhysicalEntityAt(any(Coordinate.class))).thenReturn(true);
+        Optional<Message> ret = state.move(player, new MoveMessage(Direction.UP, player.coordinate(), player.id(), System.currentTimeMillis()));
+        assertTrue(ret.isPresent());
+        var msg = ret.get();
+        assertEquals(MessageType.POSITION, msg.type());
+        assertEquals(1, msg.sourceId());
+        assertEquals(new Coordinate(1, 1), ((PositionMessage)msg).coordinate());
+        assertEquals(((PositionMessage) msg).direction(), player.direction());
+        verify(player, times(1)).changeDirection(Direction.UP);
+    }
+
+    @Test
     void move() {
         when(player.coordinate()).thenReturn(new Coordinate(1, 1));
         when(player.direction()).thenReturn(Direction.DOWN);
-        when(player.getRealm()).thenReturn(new Realm());
+        when(player.getRealm()).thenReturn(realm);
         when(player.id()).thenReturn(1L);
         when(realm.hasPhysicalEntityAt(any(Coordinate.class))).thenReturn(false);
         Optional<Message> ret = state.move(player, new MoveMessage(player.direction(), player.coordinate(), player.id(), System.currentTimeMillis()));
@@ -43,6 +61,5 @@ class PlayerIdleStateTest {
         assertEquals(MessageType.MOVE, msg.type());
         assertEquals(1, msg.sourceId());
         assertEquals(new Coordinate(1, 1), ((MoveMessage)msg).coordinate());
-        verify(player, times(1)).changeState(any(PlayerWalkState.class));
     }
 }

@@ -17,4 +17,5 @@ public interface Creature extends PhysicalEntity {
     default Set<Coordinate> occupyingCoordinates() {
         return Set.of(coordinate());
     }
+
 }

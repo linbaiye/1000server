@@ -8,7 +8,7 @@ public record PositionMessage(long sourceId, Coordinate coordinate, Direction di
 
     @Override
     public MessageType type() {
-        return MessageType.MOVE;
+        return MessageType.POSITION;
     }
 
     public static PositionMessage fromCreature(Creature creature) {

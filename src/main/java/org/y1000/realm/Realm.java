@@ -40,6 +40,11 @@ public class Realm implements Runnable {
     }
 
 
+    public boolean canMoveTo(Coordinate coordinate) {
+        return map().movable(coordinate) && !hasPhysicalEntityAt(coordinate);
+    }
+
+
     public synchronized void onConnectionEstablished(Connection connection) {
         addingConnections.add(connection);
         notify();

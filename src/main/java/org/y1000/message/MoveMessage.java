@@ -17,8 +17,5 @@ public record MoveMessage(Direction direction, Coordinate coordinate, long sourc
         return new MoveMessage(creature.direction(), creature.coordinate(), creature.id(), System.currentTimeMillis());
     }
 
-    @Override
-    public Optional<Message> dispatch(MessageHandler handler) {
-        return handler.handle(this);
-    }
+
 }

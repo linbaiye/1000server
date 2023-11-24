@@ -12,16 +12,26 @@ import java.util.Optional;
 @Slf4j
 final class PlayerWalkState implements PlayerState {
 
-    private static final float MILLIS_PER_UNIT = 900f;
-    private float elapsed;
+    static final long MILLIS_PER_UNIT = 900;
 
-    private Direction movingDirection;
+    private long elapsedMilli;
+
+    private Direction nextDirection;
 
     private boolean keepMoving;
 
     public PlayerWalkState() {
         keepMoving = true;
-        elapsed = 0;
+        elapsedMilli = 0;
+    }
+
+    @Override
+    public Optional<Message> stopMove(PlayerImpl player, StopMoveMessage stopMoveMessage) {
+        if (!keepMoving) {
+            return Optional.empty();
+        }
+        keepMoving = false;
+        return Optional.of(StopMoveMessage.fromCreature(player));
     }
 
     @Override
@@ -30,16 +40,10 @@ final class PlayerWalkState implements PlayerState {
     }
 
     @Override
-    public Optional<Message> stopMove(PlayerImpl player, StopMoveMessage stopMoveMessage) {
-        keepMoving = false;
-        return Optional.of(stopMoveMessage);
-    }
-
-    @Override
     public Optional<Message> move(PlayerImpl player, MoveMessage moveMessage) {
         if (player.direction() != moveMessage.direction() || !keepMoving) {
             keepMoving = true;
-            movingDirection = moveMessage.direction();
+            nextDirection = moveMessage.direction();
             return Optional.of(moveMessage);
         }
         return Optional.empty();
@@ -47,24 +51,22 @@ final class PlayerWalkState implements PlayerState {
 
     @Override
     public Optional<Message> update(PlayerImpl player, long deltaMillis) {
-        if (!player.canMoveTo(player.coordinate().moveBy(player.direction()))) {
-            return Optional.of(PositionMessage.fromCreature(player));
-        }
-        elapsed += deltaMillis;
-        if (elapsed < MILLIS_PER_UNIT) {
+        elapsedMilli += deltaMillis;
+        if (elapsedMilli < MILLIS_PER_UNIT) {
             return Optional.empty();
         }
         player.changeCoordinate(player.coordinate().moveBy(player.direction()));
         if (keepMoving) {
-            elapsed -= MILLIS_PER_UNIT;
-            if (movingDirection != null && movingDirection != player.direction()) {
-                elapsed = 0;
-                player.changeDirection(movingDirection);
+            elapsedMilli -= MILLIS_PER_UNIT;
+            if (nextDirection != null && nextDirection != player.direction()) {
+                elapsedMilli = 0;
+                player.changeDirection(nextDirection);
             }
-            return Optional.of(MoveMessage.fromCreature(player));
-        } else {
-            player.changeState(PlayerIdleState.INSTANCE);
-            return Optional.empty();
+            if (player.getRealm().canMoveTo(player.coordinate().moveBy(player.direction()))) {
+                return Optional.of(MoveMessage.fromCreature(player));
+            }
         }
+        player.changeState(PlayerIdleState.INSTANCE);
+        return Optional.of(PositionMessage.fromCreature(player));
     }
 }

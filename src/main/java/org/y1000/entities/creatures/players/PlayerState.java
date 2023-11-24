@@ -17,4 +17,6 @@ interface PlayerState {
     }
 
     Optional<Message> update(PlayerImpl player, long deltaMillis);
+
 }
+

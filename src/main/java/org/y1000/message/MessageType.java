@@ -11,4 +11,7 @@ public enum MessageType {
 
     STOP_MOVE,
 
+
+    POSITION,
+
 }

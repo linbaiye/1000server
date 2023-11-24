@@ -27,7 +27,7 @@ final class PlayerIdleState implements PlayerState {
         var nextCoordinate = player.coordinate().moveBy(moveMessage.direction());
         player.changeDirection(moveMessage.direction());
         if (player.getRealm().hasPhysicalEntityAt(nextCoordinate)) {
-            LOGGER.warn("Player {} trying to move into unmovable direction.", player.id());
+            LOGGER.warn("Player {} trying to move into unmovable coordinate.", player.id());
             return Optional.of(PositionMessage.fromCreature(player));
         }
         player.changeState(new PlayerWalkState());
@@ -38,4 +38,5 @@ final class PlayerIdleState implements PlayerState {
     public Optional<Message> update(PlayerImpl player, long deltaMillis) {
         return Optional.empty();
     }
+
 }

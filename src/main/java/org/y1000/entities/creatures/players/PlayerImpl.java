@@ -25,7 +25,11 @@ class PlayerImpl implements Player {
     private final long id;
 
     PlayerImpl(Realm realm) {
-        coordinate = new Coordinate(36, 41);
+        this(realm, new Coordinate(36, 41));
+    }
+
+    PlayerImpl(Realm realm, Coordinate coordinate) {
+        this.coordinate = coordinate;
         state = PlayerIdleState.INSTANCE;
         direction = Direction.DOWN;
         id = 0;
@@ -48,9 +52,6 @@ class PlayerImpl implements Player {
         coordinate = newCoordinate;
     }
 
-    boolean canMoveTo(Coordinate next) {
-        return realm.map().movable(next) && !realm.hasPhysicalEntityAt(next);
-    }
 
     public List<Message> handle(List<Message> messages) {
         List<Message> result = new ArrayList<>();
