@@ -1,15 +1,17 @@
 package org.y1000.connection;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.y1000.connection.gen.Packet;
 
-import java.nio.charset.StandardCharsets;
-
+@Slf4j
 public class LengthBasedMessageDecoder extends LengthFieldBasedFrameDecoder {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LengthBasedMessageDecoder.class);
+
 
     public LengthBasedMessageDecoder() {
         super(Short.MAX_VALUE, 0, 4, 0, 4);
@@ -22,7 +24,7 @@ public class LengthBasedMessageDecoder extends LengthFieldBasedFrameDecoder {
             return null;
         }
         byte[] bytes = new byte[byteBuf.readableBytes()];
-        byteBuf.readBytes(bytes);
-        return new String(bytes, StandardCharsets.UTF_8);
+        log.info("Received {} bytes.", bytes.length);
+        return Packet.parseFrom(bytes);
     }
 }

@@ -2,67 +2,29 @@
 syntax = "proto3";
 
 package org.y1000.connection.gen;
-
-
 option java_package ="org.y1000.connection.gen";
 option java_multiple_files = true;
 
-message Coordinate {
-  optional int32 x = 1;
-  optional int32 y = 2;
-}
-
-enum PacketType {
-    TURN = 0;
-
-    MOVE = 1;
-
-    CONFIRM = 2;
-
-    STOP_MOVE = 3;
-
-    POSITION = 4;
-}
-
-enum Direction {
-    UP = 0;
-
-    UP_RIGHT = 1;
-
-    RIGHT = 2;
-
-    DOWN_RIGHT = 3;
-
-    DOWN = 4;
-
-    DOWN_LEFT = 5;
-
-    LEFT = 6;
-
-    UP_LEFT = 7;
-}
-
-enum CreatureType {
-  DEER = 0;
-
-}
-
 message MovementPacket {
-  PacketType type = 1;
-  Coordinate coordinate = 2;
-  Direction direction = 3;
-  int32 sourceId = 4;
-  int64 timestamp = 5;
+  int32 type = 1;
+  int32 x = 2;
+  int32 y = 3;
+  int32 direction = 4;
+  int32 id = 5;
+  int64 timestamp = 6;
+}
+
+message Packet {
+  oneof TypedPacket {
+    MovementPacket movementPacket = 1;
+    ShowCreaturePacket showCreaturePacket = 2;
+  }
 }
 
 
 message ShowCreaturePacket {
-  PacketType packetType = 1;
-  Coordinate coordinate = 2;
-  Direction direction = 3;
-  CreatureType creatureType = 4;
-  int32 id = 5;
-  int64 timestamp = 6;
+  MovementPacket movement = 1;
+  int32 creatureType = 2;
 }
 
 

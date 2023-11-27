@@ -4,7 +4,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.util.Coordinate;
 
-public record PositionMessage(long sourceId, Coordinate coordinate, Direction direction, long timestamp) implements Message {
+public record PositionMessage(Direction direction, Coordinate coordinate, long sourceId, long timestamp) implements Message {
 
     @Override
     public MessageType type() {
@@ -12,6 +12,6 @@ public record PositionMessage(long sourceId, Coordinate coordinate, Direction di
     }
 
     public static PositionMessage fromCreature(Creature creature) {
-        return new PositionMessage(creature.id(), creature.coordinate(), creature.direction(), System.currentTimeMillis());
+        return new PositionMessage(creature.direction(), creature.coordinate(), creature.id(), System.currentTimeMillis());
     }
 }

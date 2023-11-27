@@ -2,8 +2,9 @@ package org.y1000.message;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
+import org.y1000.util.Coordinate;
 
-public record TurnMessage(long sourceId, Direction newDirection, long timestamp) implements Message {
+public record TurnMessage(Direction newDirection, Coordinate coordinate, long sourceId, long timestamp) implements Message {
 
     @Override
     public MessageType type() {
@@ -11,6 +12,6 @@ public record TurnMessage(long sourceId, Direction newDirection, long timestamp)
     }
 
     public static TurnMessage fromCreature(Creature creature) {
-        return new TurnMessage(creature.id(), creature.direction(), System.currentTimeMillis());
+        return new TurnMessage( creature.direction(), creature.coordinate(), creature.id(), System.currentTimeMillis());
     }
 }
