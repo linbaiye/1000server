@@ -1,5 +1,6 @@
 package org.y1000.message;
 
+import lombok.ToString;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.util.Coordinate;
@@ -18,4 +19,13 @@ public record MoveMessage(Direction direction, Coordinate coordinate, long sourc
     }
 
 
+    @Override
+    public String toString() {
+        return "MoveMessage{" +
+                "direction=" + direction +
+                ", coordinate=" + coordinate +
+                ", sourceId=" + sourceId +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

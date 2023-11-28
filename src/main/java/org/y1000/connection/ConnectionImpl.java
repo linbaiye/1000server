@@ -9,17 +9,18 @@ import org.y1000.entities.Direction;
 import org.y1000.message.*;
 import org.y1000.util.Coordinate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 public final class ConnectionImpl extends SimpleChannelInboundHandler<Packet> implements Connection {
 
     private final List<Message> messages;
 
-    public ConnectionImpl() {
+    private final ConnectionEventListener eventListener;
+
+    public ConnectionImpl(ConnectionEventListener listener) {
         messages = new ArrayList<>();
+        eventListener = listener;
     }
 
     private Message createMovementMessage(MovementPacket packet) {
@@ -36,6 +37,7 @@ public final class ConnectionImpl extends SimpleChannelInboundHandler<Packet> im
         };
     }
 
+
     private Message createMessage(Packet packet) {
         return switch (packet.getTypedPacketCase()) {
             case MOVEMENTPACKET -> createMovementMessage(packet.getMovementPacket());
@@ -43,9 +45,9 @@ public final class ConnectionImpl extends SimpleChannelInboundHandler<Packet> im
         };
     }
 
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) throws Exception {
-        log.info("Received message.");
         var message = createMessage(packet);
         synchronized (messages) {
             messages.add(message);
@@ -53,12 +55,28 @@ public final class ConnectionImpl extends SimpleChannelInboundHandler<Packet> im
     }
 
     @Override
-    public List<Message> getUnprocessedMessages() {
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        if (eventListener != null) {
+            eventListener.OnEvent(ConnectionEventType.CLOSED, this);
+        }
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        if (eventListener != null) {
+            eventListener.OnEvent(ConnectionEventType.ESTABLISHED, this);
+        }
+    }
+
+    @Override
+    public List<Message> takeMessages() {
         synchronized (messages) {
-            if (!messages.isEmpty()) {
-               return new ArrayList<>(messages);
+            if (messages.isEmpty()) {
+                return Collections.emptyList();
             }
-            return Collections.emptyList();
+            var ret = new ArrayList<>(messages);
+            messages.clear();
+            return ret;
         }
     }
 }

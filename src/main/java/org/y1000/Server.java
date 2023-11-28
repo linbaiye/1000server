@@ -1,30 +1,47 @@
 package org.y1000;
 
-import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.y1000.connection.ConnectionImpl;
 import org.y1000.connection.LengthBasedMessageDecoder;
-import org.y1000.connection.gen.Message;
-import org.y1000.connection.gen.ShowCreaturePacket;
+import org.y1000.realm.Realm;
 
 public class Server {
 
+    private final ServerBootstrap bootstrap;
 
-    public static void main(String[] args) {
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        EventLoopGroup serverGroup = new NioEventLoopGroup();
+    private final int port;
+
+    private final EventLoopGroup workerGroup;
+
+    private final  EventLoopGroup serverGroup;
+
+    private final Realm realm;
+
+    public Server(int port) {
+        this.port = port;
+        workerGroup = new NioEventLoopGroup();
+        serverGroup = new NioEventLoopGroup();
+        bootstrap = new ServerBootstrap();
+        realm = new Realm();
+    }
+
+
+    private void startRealms() {
+        new Thread(realm).start();
+    }
+
+
+    private void startNetworking() {
         try {
-            ServerBootstrap bootstrap = new ServerBootstrap(); // (2)
             bootstrap.group(serverGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class) // (3)
+                    .channel(NioServerSocketChannel.class)
+                    .option(ChannelOption.SO_BACKLOG, 4096)
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
@@ -32,12 +49,19 @@ public class Server {
                         protected void initChannel(NioSocketChannel channel) throws Exception {
                             channel.pipeline()
                                     .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                    .addLast("packetHandler", new ConnectionImpl());
+                                    .addLast("packetHandler", new ConnectionImpl(realm));
                         }
                     });
-            bootstrap.bind(9999).sync().channel().closeFuture().sync();
+            bootstrap.bind(port).sync().channel().closeFuture().sync();
         } catch (Exception e) {
-            e.printStackTrace();
+            workerGroup.shutdownGracefully();
+            serverGroup.shutdownGracefully();
         }
+    }
+
+    public static void main(String[] args) {
+        Server server = new Server(9999);
+        server.startRealms();
+        server.startNetworking();;
     }
 }

@@ -1,12 +1,17 @@
 package org.y1000.realm;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.connection.Connection;
+import org.y1000.connection.ConnectionEventListener;
+import org.y1000.connection.ConnectionEventType;
 import org.y1000.entities.managers.PlayerManager;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.function.UnaryOperator;
 
-public class Realm implements Runnable {
+@Slf4j
+public class Realm implements Runnable, ConnectionEventListener  {
 
     private long lastUpdateMilli;
 
@@ -93,6 +98,17 @@ public class Realm implements Runnable {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        }
+    }
+
+
+
+    @Override
+    public void OnEvent(ConnectionEventType type, Connection connection) {
+        if (type == ConnectionEventType.ESTABLISHED) {
+            onConnectionEstablished(connection);
+        } else if (type == ConnectionEventType.CLOSED) {
+            onConnectionClosed(connection);
         }
     }
 }

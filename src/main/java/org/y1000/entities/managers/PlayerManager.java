@@ -1,5 +1,6 @@
 package org.y1000.entities.managers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.connection.Connection;
 import org.y1000.entities.creatures.players.Player;
 import org.y1000.message.Message;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
 
     private final Map<Connection, Player> players;
@@ -34,7 +36,7 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
         players.values().forEach(p -> p.update(delta).ifPresent(messages::add));
         for (Map.Entry<Connection, Player> entry : players.entrySet()) {
             Connection connection = entry.getKey();
-            List<Message> unprocessedMessages = connection.getUnprocessedMessages();
+            List<Message> unprocessedMessages = connection.takeMessages();
             if (!unprocessedMessages.isEmpty()) {
                 entry.getValue().handle(unprocessedMessages);
             }

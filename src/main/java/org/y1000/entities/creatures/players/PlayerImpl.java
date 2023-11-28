@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.players;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.message.*;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 class PlayerImpl implements Player {
 
     private Coordinate coordinate;
