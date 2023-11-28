@@ -4,7 +4,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.util.Coordinate;
 
-public record TurnMessage(Direction newDirection, Coordinate coordinate, long sourceId, long timestamp) implements Message {
+public record TurnMessage(Direction direction, Coordinate coordinate, long sourceId, long timestamp) implements MovementMessage {
 
     @Override
     public MessageType type() {

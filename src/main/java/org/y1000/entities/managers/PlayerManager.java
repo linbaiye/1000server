@@ -38,7 +38,8 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
             Connection connection = entry.getKey();
             List<Message> unprocessedMessages = connection.takeMessages();
             if (!unprocessedMessages.isEmpty()) {
-                entry.getValue().handle(unprocessedMessages);
+                List<Message> ret = entry.getValue().handle(unprocessedMessages);
+                ret.forEach(connection::write);
             }
         }
         return messages;

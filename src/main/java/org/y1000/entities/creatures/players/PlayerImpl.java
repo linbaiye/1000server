@@ -60,7 +60,8 @@ class PlayerImpl implements Player {
         for (Message message : messages) {
             Optional<Message> ret = Optional.empty();
             if (message instanceof MoveMessage moveMessage) {
-                ret = state.move(this, moveMessage);
+                ret = Optional.of(new PositionMessage(Direction.LEFT, new Coordinate(36,45), 0L, System.currentTimeMillis()));
+                //ret = state.move(this, moveMessage);
             } else if (message instanceof StopMoveMessage stopMoveMessage) {
                 ret = state.stopMove(this, stopMoveMessage);
             }

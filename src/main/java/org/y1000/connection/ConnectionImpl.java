@@ -1,7 +1,7 @@
 package org.y1000.connection;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.connection.gen.MovementPacket;
 import org.y1000.connection.gen.Packet;
@@ -12,11 +12,13 @@ import org.y1000.util.Coordinate;
 import java.util.*;
 
 @Slf4j
-public final class ConnectionImpl extends SimpleChannelInboundHandler<Packet> implements Connection {
+public final class ConnectionImpl extends ChannelInboundHandlerAdapter implements Connection {
 
     private final List<Message> messages;
 
     private final ConnectionEventListener eventListener;
+
+    private ChannelHandlerContext context;
 
     public ConnectionImpl(ConnectionEventListener listener) {
         messages = new ArrayList<>();
@@ -47,10 +49,13 @@ public final class ConnectionImpl extends SimpleChannelInboundHandler<Packet> im
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) throws Exception {
-        var message = createMessage(packet);
-        synchronized (messages) {
-            messages.add(message);
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (msg instanceof Packet packet) {
+            var message = createMessage(packet);
+            log.debug("Received message {}.", message);
+            synchronized (messages) {
+                messages.add(message);
+            }
         }
     }
 
@@ -63,6 +68,7 @@ public final class ConnectionImpl extends SimpleChannelInboundHandler<Packet> im
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        context = ctx;
         if (eventListener != null) {
             eventListener.OnEvent(ConnectionEventType.ESTABLISHED, this);
         }
@@ -78,5 +84,13 @@ public final class ConnectionImpl extends SimpleChannelInboundHandler<Packet> im
             messages.clear();
             return ret;
         }
+    }
+
+    @Override
+    public void write(Message message) {
+        if (context == null) {
+            return;
+        }
+        context.channel().writeAndFlush(message);
     }
 }

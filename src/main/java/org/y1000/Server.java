@@ -7,8 +7,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldPrepender;
 import org.y1000.connection.ConnectionImpl;
 import org.y1000.connection.LengthBasedMessageDecoder;
+import org.y1000.connection.MessageEncoder;
 import org.y1000.realm.Realm;
 
 public class Server {
@@ -49,7 +51,9 @@ public class Server {
                         protected void initChannel(NioSocketChannel channel) throws Exception {
                             channel.pipeline()
                                     .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                    .addLast("packetHandler", new ConnectionImpl(realm));
+                                    .addLast("packetHandler", new ConnectionImpl(realm))
+                                    .addLast("packetLengthAppender", new LengthFieldPrepender(4))
+                                    .addLast("packetEncoder", MessageEncoder.ENCODER);
                         }
                     });
             bootstrap.bind(port).sync().channel().closeFuture().sync();

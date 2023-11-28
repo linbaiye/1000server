@@ -8,4 +8,6 @@ public interface Connection {
 
     List<Message> takeMessages();
 
+    void write(Message message);
+
 }

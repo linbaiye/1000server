@@ -7,7 +7,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
-public record MoveMessage(Direction direction, Coordinate coordinate, long sourceId, long timestamp) implements Message {
+public record MoveMessage(Direction direction, Coordinate coordinate, long sourceId, long timestamp) implements MovementMessage {
 
     @Override
     public MessageType type() {
