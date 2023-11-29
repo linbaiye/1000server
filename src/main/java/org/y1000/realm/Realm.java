@@ -8,7 +8,6 @@ import org.y1000.entities.managers.PlayerManager;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
-import java.util.function.UnaryOperator;
 
 @Slf4j
 public class Realm implements Runnable, ConnectionEventListener  {
@@ -34,6 +33,13 @@ public class Realm implements Runnable, ConnectionEventListener  {
         closingConnections = new ArrayList<>();
     }
 
+    public Realm(RealmMap map) {
+        lastUpdateMilli = System.currentTimeMillis();
+        playerManager = new PlayerManager();
+        realmMap = map;
+        addingConnections = new ArrayList<>();
+        closingConnections = new ArrayList<>();
+    }
 
     public RealmMap map() {
         return realmMap;
@@ -102,7 +108,6 @@ public class Realm implements Runnable, ConnectionEventListener  {
     }
 
 
-
     @Override
     public void OnEvent(ConnectionEventType type, Connection connection) {
         if (type == ConnectionEventType.ESTABLISHED) {
@@ -110,5 +115,10 @@ public class Realm implements Runnable, ConnectionEventListener  {
         } else if (type == ConnectionEventType.CLOSED) {
             onConnectionClosed(connection);
         }
+    }
+
+    public static Optional<Realm> create(String name) {
+        Optional<RealmMap> mapOptional = RealmMap.Load(name);
+        return mapOptional.map(Realm::new);
     }
 }

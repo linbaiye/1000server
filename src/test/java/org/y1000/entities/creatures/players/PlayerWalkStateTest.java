@@ -58,7 +58,7 @@ class PlayerWalkStateTest {
 
     @Test
     void stopMove() {
-        StopMoveMessage clientMessage = new StopMoveMessage(player.id(), player.coordinate(), player.direction(), System.currentTimeMillis());
+        StopMoveMessage clientMessage = new StopMoveMessage(player.direction(),  player.coordinate(), player.id(), System.currentTimeMillis());
         Optional<Message> message = walkState.stopMove(player, clientMessage);
         StopMoveMessage stopMoveMessage = (StopMoveMessage)message.get();
         assertEquals(player.coordinate(), stopMoveMessage.coordinate());

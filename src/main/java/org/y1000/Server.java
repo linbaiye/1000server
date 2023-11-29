@@ -8,10 +8,12 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
-import org.y1000.connection.ConnectionImpl;
+import org.y1000.connection.DevelopingConnection;
 import org.y1000.connection.LengthBasedMessageDecoder;
 import org.y1000.connection.MessageEncoder;
 import org.y1000.realm.Realm;
+
+import java.util.Optional;
 
 public class Server {
 
@@ -21,23 +23,28 @@ public class Server {
 
     private final EventLoopGroup workerGroup;
 
-    private final  EventLoopGroup serverGroup;
+    private final EventLoopGroup serverGroup;
 
-    private final Realm realm;
+    private Realm realm;
+
 
     public Server(int port) {
         this.port = port;
         workerGroup = new NioEventLoopGroup();
         serverGroup = new NioEventLoopGroup();
         bootstrap = new ServerBootstrap();
-        realm = new Realm();
     }
 
 
     private void startRealms() {
-        new Thread(realm).start();
+        Optional<Realm> realmOptional = Realm.create("start");
+        if (realmOptional.isPresent()) {
+            realm = realmOptional.get();
+            new Thread(realm).start();
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
-
 
     private void startNetworking() {
         try {
@@ -46,12 +53,12 @@ public class Server {
                     .option(ChannelOption.SO_BACKLOG, 4096)
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
-                    .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                    .childHandler(new ChannelInitializer<NioServerSocketChannel>() {
                         @Override
-                        protected void initChannel(NioSocketChannel channel) throws Exception {
+                        protected void initChannel(NioServerSocketChannel channel) throws Exception {
                             channel.pipeline()
                                     .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                    .addLast("packetHandler", new ConnectionImpl(realm))
+                                    .addLast("packetHandler", new DevelopingConnection(realm))
                                     .addLast("packetLengthAppender", new LengthFieldPrepender(4))
                                     .addLast("packetEncoder", MessageEncoder.ENCODER);
                         }
