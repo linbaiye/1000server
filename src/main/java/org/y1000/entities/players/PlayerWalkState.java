@@ -1,4 +1,4 @@
-package org.y1000.entities.creatures.players;
+package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
@@ -6,6 +6,7 @@ import org.y1000.message.Message;
 import org.y1000.message.MoveMessage;
 import org.y1000.message.PositionMessage;
 import org.y1000.message.StopMoveMessage;
+import org.y1000.message.input.RightMouseClick;
 
 import java.util.Optional;
 
@@ -41,12 +42,21 @@ final class PlayerWalkState implements PlayerState {
 
     @Override
     public Optional<Message> move(PlayerImpl player, MoveMessage moveMessage) {
-        if (player.direction() != moveMessage.direction() || !keepMoving) {
-            keepMoving = true;
-            nextDirection = moveMessage.direction();
-            return Optional.of(moveMessage);
-        }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<Message> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
+        if (player.direction() != click.direction() || !keepMoving) {
+            keepMoving = true;
+            nextDirection = click.direction();
+        }
+        return Optional.of(MoveMessage.fromPlayer(player, click.sequence()));
+    }
+
+    @Override
+    public State getState() {
+        return State.WALK;
     }
 
     @Override
@@ -63,7 +73,7 @@ final class PlayerWalkState implements PlayerState {
                 player.changeDirection(nextDirection);
             }
             if (player.getRealm().canMoveTo(player.coordinate().moveBy(player.direction()))) {
-                return Optional.of(MoveMessage.fromCreature(player));
+                return Optional.of(MoveMessage.fromPlayer(player, 0));
             }
         }
         player.changeState(PlayerIdleState.INSTANCE);

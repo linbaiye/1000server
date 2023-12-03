@@ -1,23 +1,23 @@
 package org.y1000.message;
 
-import lombok.ToString;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.players.Player;
+import org.y1000.entities.players.State;
 import org.y1000.util.Coordinate;
 
-import java.util.Optional;
 
-public record MoveMessage(Direction direction, Coordinate coordinate, long sourceId, long timestamp) implements MovementMessage {
+public record MoveMessage(Direction direction, Coordinate coordinate, long sourceId, long timestamp, long sequence, State state) implements UpdateMovementMessage {
 
     @Override
-    public MessageType type() {
-        return MessageType.MOVE;
+    public State state() {
+        return State.WALK;
     }
 
-    public static MoveMessage fromCreature(Creature creature) {
-        return new MoveMessage(creature.direction(), creature.coordinate(), creature.id(), System.currentTimeMillis());
-    }
 
+    public static MoveMessage fromPlayer(Player player, long sequence) {
+        return new MoveMessage(player.direction(), player.coordinate(), player.id(), System.currentTimeMillis(), sequence, player.state());
+    }
 
     @Override
     public String toString() {
@@ -26,6 +26,8 @@ public record MoveMessage(Direction direction, Coordinate coordinate, long sourc
                 ", coordinate=" + coordinate +
                 ", sourceId=" + sourceId +
                 ", timestamp=" + timestamp +
+                ", sequence=" + sequence +
+                ", state=" + state +
                 '}';
     }
 }

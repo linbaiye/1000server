@@ -3,10 +3,13 @@ package org.y1000.connection;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.connection.gen.InputPacket;
 import org.y1000.connection.gen.MovementPacket;
 import org.y1000.connection.gen.Packet;
 import org.y1000.entities.Direction;
 import org.y1000.message.*;
+import org.y1000.message.input.InputType;
+import org.y1000.message.input.RightMouseClick;
 import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
@@ -29,28 +32,21 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         context = new AtomicReference<>();
     }
 
-    private Message createMovementMessage(MovementPacket packet) {
-        var pkt = MessageType.fromValue(packet.getType());
-        if (pkt == null) {
-            throw new IllegalArgumentException("Unknown message type :" + packet.getType());
-        }
-        return switch (pkt) {
-            case MOVE -> new MoveMessage(Direction.fromValue(packet.getDirection()), new Coordinate(packet.getX(), packet.getY()), packet.getId(), packet.getTimestamp());
-            case TURN -> new TurnMessage(Direction.fromValue(packet.getDirection()), new Coordinate(packet.getX(), packet.getY()), packet.getId(), packet.getTimestamp());
-            case STOP_MOVE -> new StopMoveMessage(Direction.fromValue(packet.getDirection()), new Coordinate(packet.getX(), packet.getY()), packet.getId(), packet.getTimestamp());
-            case POSITION -> new PositionMessage(Direction.fromValue(packet.getDirection()), new Coordinate(packet.getX(), packet.getY()), packet.getId(), packet.getTimestamp());
+
+    private Message createInputMessage(InputPacket inputPacket) {
+        var type = ValueEnum.fromValue(InputType.values(), inputPacket.getType());
+        return switch (type) {
+            case MOUSE_RIGHT_CLICK -> RightMouseClick.fromPacket(inputPacket);
             default -> throw new IllegalArgumentException();
         };
     }
-
 
     private Message createMessage(Packet packet) {
         return switch (packet.getTypedPacketCase()) {
-            case MOVEMENTPACKET -> createMovementMessage(packet.getMovementPacket());
+            case INPUTPACKET -> createInputMessage(packet.getInputPacket());
             default -> throw new IllegalArgumentException();
         };
     }
-
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -75,8 +71,16 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
     }
 
     @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if (!ctx.channel().isActive()) {
+            channelInactive(ctx);
+        }
+    }
+
+    @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         context.set(ctx);
+        log.debug("Connection established.");
         if (eventListener != null) {
             eventListener.OnEvent(ConnectionEventType.ESTABLISHED, this);
         }

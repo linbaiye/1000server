@@ -1,4 +1,4 @@
-package org.y1000.entities.creatures.players;
+package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.Creature;
 import org.y1000.message.Message;
@@ -10,6 +10,8 @@ import java.util.List;
 public interface Player extends Creature {
 
     List<Message> handle(List<Message> messages);
+
+    State state();
 
     static Player ofRealm(Realm realm) {
         return new PlayerImpl(realm);

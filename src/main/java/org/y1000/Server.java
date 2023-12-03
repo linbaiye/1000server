@@ -53,9 +53,9 @@ public class Server {
                     .option(ChannelOption.SO_BACKLOG, 4096)
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
-                    .childHandler(new ChannelInitializer<NioServerSocketChannel>() {
+                    .childHandler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
-                        protected void initChannel(NioServerSocketChannel channel) throws Exception {
+                        protected void initChannel(NioSocketChannel channel) throws Exception {
                             channel.pipeline()
                                     .addLast("packetDecoder", new LengthBasedMessageDecoder())
                                     .addLast("packetHandler", new DevelopingConnection(realm))

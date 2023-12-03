@@ -12,6 +12,8 @@ public enum MessageType {
 
     CONFIRM(4),
 
+    LOGIN(5),
+
     ;
 
     private final int v;
