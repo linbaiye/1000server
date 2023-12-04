@@ -1,14 +1,14 @@
 package org.y1000.message;
 
-public interface ValueEnum <E extends Enum<E>> {
+public interface ValueEnum {
 
     int value();
 
-    static <E extends Enum<E>> E fromValue(ValueEnum<E>[] values, int v) {
+    static <E extends Enum<E> & ValueEnum> E fromValueOrThrow(ValueEnum[] values, int v) {
         for (var value : values) {
             if (value.value() == v)
                 return (E)value;
         }
-        return null;
+        throw new IllegalArgumentException("Unknown value " + v);
     }
 }

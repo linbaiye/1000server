@@ -36,17 +36,15 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
     }
 
     @Override
-    public List<Message> update(long delta) {
-        List<Message> messages = new ArrayList<>();
+    public List<I2ClientMessage> update(long delta) {
+        List<I2ClientMessage> messages = new ArrayList<>();
         players.values().forEach(p -> p.update(delta).ifPresent(messages::add));
         for (Map.Entry<Connection, Player> entry : players.entrySet()) {
             Connection connection = entry.getKey();
             List<Message> unprocessedMessages = connection.takeMessages();
             if (!unprocessedMessages.isEmpty()) {
-                List<Message> ret = entry.getValue().handle(unprocessedMessages);
-                ret.forEach(m -> {
-                    if (m instanceof I2ClientMessage msg) connection.write(msg);
-                });
+                List<I2ClientMessage> ret = entry.getValue().handle(unprocessedMessages);
+                ret.forEach(connection::write);
             }
         }
         return messages;

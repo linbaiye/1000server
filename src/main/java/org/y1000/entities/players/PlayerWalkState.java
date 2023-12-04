@@ -1,12 +1,12 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.Direction;
-import org.y1000.message.Message;
-import org.y1000.message.MoveMessage;
-import org.y1000.message.PositionMessage;
-import org.y1000.message.StopMoveMessage;
+import org.y1000.entities.creatures.CreatureManager;
+import org.y1000.message.*;
+import org.y1000.message.input.InputMessage;
 import org.y1000.message.input.RightMouseClick;
+import org.y1000.message.input.RightMouseRelease;
+import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
@@ -17,41 +17,27 @@ final class PlayerWalkState implements PlayerState {
 
     private long elapsedMilli;
 
-    private Direction nextDirection;
 
-    private boolean keepMoving;
+    private InputMessage trigger;
 
-    public PlayerWalkState() {
-        keepMoving = true;
+    private InputMessage lastReceivedInput;
+
+    public PlayerWalkState(InputMessage trigger) {
         elapsedMilli = 0;
+        this.trigger = trigger;
     }
 
-    @Override
-    public Optional<Message> stopMove(PlayerImpl player, StopMoveMessage stopMoveMessage) {
-        if (!keepMoving) {
-            return Optional.empty();
-        }
-        keepMoving = false;
-        return Optional.of(StopMoveMessage.fromCreature(player));
-    }
 
     @Override
-    public Optional<Message> sit(PlayerImpl player) {
+    public Optional<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
+        lastReceivedInput = click;
         return Optional.empty();
     }
 
     @Override
-    public Optional<Message> move(PlayerImpl player, MoveMessage moveMessage) {
+    public Optional<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
+        lastReceivedInput = release;
         return Optional.empty();
-    }
-
-    @Override
-    public Optional<Message> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
-        if (player.direction() != click.direction() || !keepMoving) {
-            keepMoving = true;
-            nextDirection = click.direction();
-        }
-        return Optional.of(MoveMessage.fromPlayer(player, click.sequence()));
     }
 
     @Override
@@ -59,24 +45,31 @@ final class PlayerWalkState implements PlayerState {
         return State.WALK;
     }
 
+
+    private void updatePlayerState(PlayerImpl player) {
+        if (lastReceivedInput instanceof RightMouseRelease) {
+            player.changeState(PlayerIdleState.INSTANCE);
+        }
+    }
+
+
     @Override
-    public Optional<Message> update(PlayerImpl player, long deltaMillis) {
+    public Optional<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
         elapsedMilli += deltaMillis;
         if (elapsedMilli < MILLIS_PER_UNIT) {
             return Optional.empty();
         }
-        player.changeCoordinate(player.coordinate().moveBy(player.direction()));
-        if (keepMoving) {
-            elapsedMilli -= MILLIS_PER_UNIT;
-            if (nextDirection != null && nextDirection != player.direction()) {
-                elapsedMilli = 0;
-                player.changeDirection(nextDirection);
-            }
-            if (player.getRealm().canMoveTo(player.coordinate().moveBy(player.direction()))) {
-                return Optional.of(MoveMessage.fromPlayer(player, 0));
-            }
+        elapsedMilli -= MILLIS_PER_UNIT;
+        Coordinate newCoordinate = player.coordinate().moveBy(player.direction());
+        log.debug("Changing coordinate to {}.", newCoordinate);
+        player.changeCoordinate(newCoordinate);
+        long triggerSequence = trigger.sequence();
+        updatePlayerState(player);
+        if (lastReceivedInput != null) {
+            trigger = lastReceivedInput;
+            lastReceivedInput = null;
         }
-        player.changeState(PlayerIdleState.INSTANCE);
-        return Optional.of(PositionMessage.fromCreature(player));
+        UpdateMovementStateMessage message = UpdateMovementStateMessage.fromPlayer(player, triggerSequence);
+        return Optional.of(message);
     }
 }

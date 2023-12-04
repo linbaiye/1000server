@@ -17,8 +17,6 @@ class PlayerImpl implements Player {
 
     private Coordinate coordinate;
 
-    private long lastUpdate;
-
     private Direction direction;
 
     private final Realm realm;
@@ -55,22 +53,21 @@ class PlayerImpl implements Player {
         coordinate = newCoordinate;
     }
 
-    private Optional<Message> handleInputMessage(InputMessage inputMessage) {
+    private Optional<I2ClientMessage> handleInputMessage(InputMessage inputMessage) {
         return switch (inputMessage.type()) {
             case MOUSE_RIGHT_CLICK -> state.onRightMouseClicked(this, (RightMouseClick) inputMessage);
+            case MOUSE_RIGHT_RELEASE -> state.onRightMouseClicked(this, (RightMouseClick) inputMessage);
             default -> Optional.empty();
         };
     }
 
 
-    public List<Message> handle(List<Message> messages) {
-        List<Message> result = new ArrayList<>();
+    public List<I2ClientMessage> handle(List<Message> messages) {
+        List<I2ClientMessage> result = new ArrayList<>();
         for (Message message : messages) {
-            Optional<Message> ret = Optional.empty();
+            Optional<I2ClientMessage> ret = Optional.empty();
             if (message instanceof InputMessage inputMessage) {
                 ret = handleInputMessage(inputMessage);
-            } else if (message instanceof StopMoveMessage stopMoveMessage) {
-                ret = state.stopMove(this, stopMoveMessage);
             }
             ret.ifPresent(result::add);
         }
@@ -88,7 +85,7 @@ class PlayerImpl implements Player {
     }
 
     @Override
-    public Optional<Message> update(long delta) {
+    public Optional<I2ClientMessage> update(long delta) {
         return state.update(this, delta);
     }
 

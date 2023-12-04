@@ -1,6 +1,5 @@
 package org.y1000.entities;
 
-import org.y1000.message.MessageType;
 import org.y1000.util.Coordinate;
 
 public enum Direction {

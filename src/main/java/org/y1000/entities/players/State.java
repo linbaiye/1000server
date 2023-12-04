@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import org.y1000.message.ValueEnum;
 
-public enum State implements ValueEnum<State> {
+public enum State implements ValueEnum {
     IDLE(1),
 
     WALK(2),

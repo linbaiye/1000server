@@ -4,13 +4,11 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.connection.gen.InputPacket;
-import org.y1000.connection.gen.MovementPacket;
 import org.y1000.connection.gen.Packet;
-import org.y1000.entities.Direction;
 import org.y1000.message.*;
 import org.y1000.message.input.InputType;
 import org.y1000.message.input.RightMouseClick;
-import org.y1000.util.Coordinate;
+import org.y1000.message.input.RightMouseRelease;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,9 +32,10 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
 
     private Message createInputMessage(InputPacket inputPacket) {
-        var type = ValueEnum.fromValue(InputType.values(), inputPacket.getType());
+        InputType type = ValueEnum.fromValueOrThrow(InputType.values(), inputPacket.getType());
         return switch (type) {
             case MOUSE_RIGHT_CLICK -> RightMouseClick.fromPacket(inputPacket);
+            case MOUSE_RIGHT_RELEASE -> RightMouseRelease.fromPacket(inputPacket);
             default -> throw new IllegalArgumentException();
         };
     }

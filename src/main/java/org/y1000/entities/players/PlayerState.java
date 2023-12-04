@@ -1,27 +1,22 @@
 package org.y1000.entities.players;
 
+import org.y1000.message.I2ClientMessage;
 import org.y1000.message.Message;
-import org.y1000.message.MoveMessage;
-import org.y1000.message.StopMoveMessage;
 import org.y1000.message.input.RightMouseClick;
+import org.y1000.message.input.RightMouseRelease;
 
 import java.util.Optional;
 
 interface PlayerState {
 
-    Optional<Message> sit(PlayerImpl player);
 
-    Optional<Message> move(PlayerImpl player, MoveMessage moveMessage);
+    Optional<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click);
 
-    Optional<Message> onRightMouseClicked(PlayerImpl player, RightMouseClick click);
+    Optional<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release);
 
     State getState();
 
-    default Optional<Message> stopMove(PlayerImpl player, StopMoveMessage stopMoveMessage) {
-        return Optional.empty();
-    }
-
-    Optional<Message> update(PlayerImpl player, long deltaMillis);
+    Optional<I2ClientMessage> update(PlayerImpl player, long deltaMillis);
 
 }
 

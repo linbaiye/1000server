@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.y1000.message.*;
 import org.y1000.message.input.RightMouseClick;
+import org.y1000.message.input.RightMouseRelease;
 
 import java.util.Optional;
 
@@ -18,26 +19,21 @@ final class PlayerIdleState implements PlayerState {
     public PlayerIdleState() {
     }
 
-    @Override
-    public Optional<Message> sit(PlayerImpl player) {
-        return Optional.empty();
-    }
 
     @Override
-    public Optional<Message> move(PlayerImpl player, MoveMessage moveMessage) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Message> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
+    public Optional<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
         var nextCoordinate = player.coordinate().moveBy(click.direction());
         player.changeDirection(click.direction());
-        if (player.getRealm().hasPhysicalEntityAt(nextCoordinate)) {
-            LOGGER.warn("Player {} trying to move into unmovable coordinate.", player.id());
-            return Optional.of(PositionMessage.fromCreature(player));
+        if (!player.getRealm().canMoveTo(nextCoordinate)) {
+            return Optional.of(UpdateMovementStateMessage.fromPlayer(player, click.sequence()));
         }
-        player.changeState(new PlayerWalkState());
-        return Optional.of(MoveMessage.fromPlayer(player, click.sequence()));
+        player.changeState(new PlayerWalkState(click));
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
+        return Optional.empty();
     }
 
     @Override
@@ -46,7 +42,7 @@ final class PlayerIdleState implements PlayerState {
     }
 
     @Override
-    public Optional<Message> update(PlayerImpl player, long deltaMillis) {
+    public Optional<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
         return Optional.empty();
     }
 }

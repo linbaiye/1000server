@@ -25,16 +25,8 @@ public class Realm implements Runnable, ConnectionEventListener  {
     private final RealmMap realmMap;
 
 
-    public Realm() {
-        lastUpdateMilli = System.currentTimeMillis();
-        playerManager = new PlayerManager();
-        realmMap = new V2Map();
-        addingConnections = new ArrayList<>();
-        closingConnections = new ArrayList<>();
-    }
-
     public Realm(RealmMap map) {
-        lastUpdateMilli = System.currentTimeMillis();
+        lastUpdateMilli = 0;
         playerManager = new PlayerManager();
         realmMap = map;
         addingConnections = new ArrayList<>();
@@ -45,16 +37,13 @@ public class Realm implements Runnable, ConnectionEventListener  {
         return realmMap;
     }
 
-
     public boolean hasPhysicalEntityAt(Coordinate coordinate) {
         return playerManager.findOne(coordinate) != null;
     }
 
-
     public boolean canMoveTo(Coordinate coordinate) {
         return map().movable(coordinate) && !hasPhysicalEntityAt(coordinate);
     }
-
 
     public synchronized void onConnectionEstablished(Connection connection) {
         addingConnections.add(connection);
@@ -66,41 +55,38 @@ public class Realm implements Runnable, ConnectionEventListener  {
         notify();
     }
 
-    private boolean hasConnectionEvents() {
-        return !closingConnections.isEmpty() || !addingConnections.isEmpty();
-    }
-
     private void updateRealm(long delta) {
         playerManager.update(delta);
+    }
+
+
+    private void handleConnectionEvents() {
+        List<Connection> newConnections = Collections.emptyList();
+        List<Connection> deadConnections = Collections.emptyList();
+        synchronized (this) {
+            if (!closingConnections.isEmpty()) {
+                deadConnections = new ArrayList<>(closingConnections);
+                closingConnections.clear();
+            }
+            if (!addingConnections.isEmpty()) {
+                newConnections = new ArrayList<>(addingConnections);
+                addingConnections.clear();
+            }
+            notifyAll();
+        }
+        deadConnections.forEach(playerManager::remove);
+        newConnections.forEach(c -> playerManager.add(c, this));
     }
 
     @Override
     public void run() {
         try {
             while (true) {
+                Thread.sleep(stepMilli);
                 long currentMilli = System.currentTimeMillis();
-                long nextWakeupMilli = stepMilli;
-                long delta = 0;
-                List<Connection> newConnections;
-                List<Connection> deadConnections;
-                synchronized (this) {
-                    while (!hasConnectionEvents() && delta < stepMilli) {
-                        wait(nextWakeupMilli);
-                        delta = System.currentTimeMillis() - lastUpdateMilli;
-                        nextWakeupMilli = stepMilli - delta;
-                    }
-                    deadConnections = new ArrayList<>(closingConnections);
-                    newConnections = new ArrayList<>(addingConnections);
-                    closingConnections.clear();
-                    addingConnections.clear();
-                    notifyAll();
-                }
-                deadConnections.forEach(playerManager::remove);
-                newConnections.forEach(c -> playerManager.add(c, this));
-                if (delta >= stepMilli) {
-                    updateRealm(delta);
-                    lastUpdateMilli = currentMilli;
-                }
+                updateRealm(lastUpdateMilli == 0 ? stepMilli : currentMilli - lastUpdateMilli);
+                lastUpdateMilli = currentMilli;
+                handleConnectionEvents();
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
