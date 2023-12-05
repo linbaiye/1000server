@@ -9,10 +9,7 @@ import org.y1000.message.Message;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
@@ -38,7 +35,6 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
     @Override
     public List<I2ClientMessage> update(long delta) {
         List<I2ClientMessage> messages = new ArrayList<>();
-        players.values().forEach(p -> p.update(delta).ifPresent(messages::add));
         for (Map.Entry<Connection, Player> entry : players.entrySet()) {
             Connection connection = entry.getKey();
             List<Message> unprocessedMessages = connection.takeMessages();
@@ -46,6 +42,8 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
                 List<I2ClientMessage> ret = entry.getValue().handle(unprocessedMessages);
                 ret.forEach(connection::write);
             }
+            Optional<I2ClientMessage> updatedMessage = entry.getValue().update(delta);
+            updatedMessage.ifPresent(connection::write);
         }
         return messages;
     }

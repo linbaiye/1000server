@@ -23,8 +23,8 @@ public record Coordinate(int x, int y) {
         return result;
     }
 
-    public static void main(String[] args) {
-        System.out.println(new Coordinate(1, 2));
+    public static Coordinate xy(int x, int y) {
+        return new Coordinate(x, y);
     }
 
 }

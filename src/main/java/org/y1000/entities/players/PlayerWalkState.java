@@ -17,7 +17,6 @@ final class PlayerWalkState implements PlayerState {
 
     private long elapsedMilli;
 
-
     private InputMessage trigger;
 
     private InputMessage lastReceivedInput;
@@ -49,6 +48,16 @@ final class PlayerWalkState implements PlayerState {
     private void updatePlayerState(PlayerImpl player) {
         if (lastReceivedInput instanceof RightMouseRelease) {
             player.changeState(PlayerIdleState.INSTANCE);
+        } else if (lastReceivedInput == null) {
+            if (trigger instanceof RightMouseClick click) {
+                Coordinate next = player.coordinate().moveBy(click.direction());
+                if (!player.getRealm().canMoveTo(next)) {
+                    log.debug("{} not movable, changing back to idle.", next);
+                    player.changeState(PlayerIdleState.INSTANCE);
+                }
+            }
+        } else if (lastReceivedInput instanceof RightMouseClick click) {
+            player.changeDirection(click.direction());
         }
     }
 

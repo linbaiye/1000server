@@ -22,6 +22,7 @@ public interface UpdateMovementMessage extends UpdateStateMessage {
                                 .setDirection(direction().value())
                                 .setX(coordinate().x())
                                 .setY(coordinate().y())
+                                .setSequence(sequence())
                                 .setTimestamp(timestamp())
                                 .setId((int) id())
                         .build()

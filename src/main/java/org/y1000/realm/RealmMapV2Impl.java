@@ -18,9 +18,11 @@ public final class RealmMapV2Impl implements RealmMap {
     private static final int BLOCK_SIZE = 40;
 
     // 20bytes for block header.
-    // id(16), changedCount(4)
-    // cells[1600 * 12]
+    // block id(16 bytes), changedCount(4 bytes)
+    // cells[1600 * 12 bytes]
     private static final int MAP_BLOCK_DATA_SIZE = 20 + BLOCK_SIZE * BLOCK_SIZE * 12;
+
+    private static final int MAP_CELL_SIZE = 12;
 
     private final byte[][] movableMask;
 
@@ -97,18 +99,18 @@ public final class RealmMapV2Impl implements RealmMap {
             }
             Header header = Header.parse(headerBinary);
             byte[][] cellMasks = new byte[header.height][header.width];
-            byte[] cellBinary = new byte[12];
+            byte[] cellBinary = new byte[MAP_CELL_SIZE];
             ByteBuffer blockData = ByteBuffer.allocate(MAP_BLOCK_DATA_SIZE);
             blockData.order(ByteOrder.LITTLE_ENDIAN);
-            for (int w = 0; w < header.width / BLOCK_SIZE; w++) {
-                for (int h = 0; h < header.height / BLOCK_SIZE; h++) {
+            for (int h = 0; h < header.height / BLOCK_SIZE; h++) {
+                for (int w = 0; w < header.width / BLOCK_SIZE; w++) {
                     if (is.read(blockData.array()) != MAP_BLOCK_DATA_SIZE) {
                         log.error("Failed to read map block.");
                         return Optional.empty();
                     }
                     for (int y = 0; y < BLOCK_SIZE; y++) {
                         for (int x = 0; x < BLOCK_SIZE; x++) {
-                            blockData.get(20 + y * BLOCK_SIZE + x, cellBinary);
+                            blockData.get(20 + (y * BLOCK_SIZE + x) * MAP_CELL_SIZE, cellBinary);
                             cellMasks[h *  BLOCK_SIZE + y][w * BLOCK_SIZE + x] = cellBinary[11];
                         }
                     }
