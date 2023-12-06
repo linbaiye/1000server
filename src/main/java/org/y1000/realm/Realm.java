@@ -81,12 +81,14 @@ public class Realm implements Runnable, ConnectionEventListener  {
     @Override
     public void run() {
         try {
+            long start = System.currentTimeMillis();
+            long end = start;
             while (true) {
-                Thread.sleep(stepMilli);
-                long currentMilli = System.currentTimeMillis();
-                updateRealm(lastUpdateMilli == 0 ? stepMilli : currentMilli - lastUpdateMilli);
-                lastUpdateMilli = currentMilli;
+                Thread.sleep(Math.max(stepMilli - (end - start), 0));
+                start = System.currentTimeMillis();
+                updateRealm(stepMilli);
                 handleConnectionEvents();
+                end = System.currentTimeMillis();
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

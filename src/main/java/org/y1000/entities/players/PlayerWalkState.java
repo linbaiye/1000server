@@ -1,7 +1,6 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.CreatureManager;
 import org.y1000.message.*;
 import org.y1000.message.input.InputMessage;
 import org.y1000.message.input.RightMouseClick;
@@ -17,26 +16,37 @@ final class PlayerWalkState implements PlayerState {
 
     private long elapsedMilli;
 
-    private InputMessage trigger;
+    private InputMessage currentInput;
 
     private InputMessage lastReceivedInput;
 
     public PlayerWalkState(InputMessage trigger) {
         elapsedMilli = 0;
-        this.trigger = trigger;
+        currentInput = trigger;
     }
-
 
     @Override
     public Optional<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
-        lastReceivedInput = click;
+        if (currentInput != null) {
+            lastReceivedInput = click;
+            return Optional.empty();
+        }
+        handleRightClick(player, click);
+        if (player.state() == State.IDLE) {
+            return Optional.of(UpdateMovementStateMessage.fromPlayer(player, click.sequence()));
+        }
         return Optional.empty();
     }
 
     @Override
     public Optional<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
-        lastReceivedInput = release;
-        return Optional.empty();
+        if (currentInput != null) {
+            lastReceivedInput = release;
+            return Optional.empty();
+        } else {
+            player.changeState(PlayerIdleState.INSTANCE);
+            return Optional.of(UpdateMovementStateMessage.fromPlayer(player, release.sequence()));
+        }
     }
 
     @Override
@@ -45,40 +55,36 @@ final class PlayerWalkState implements PlayerState {
     }
 
 
-    private void updatePlayerState(PlayerImpl player) {
-        if (lastReceivedInput instanceof RightMouseRelease) {
+    private void handleRightClick(PlayerImpl player, RightMouseClick click) {
+        player.changeDirection(click.direction());
+        Coordinate next = player.coordinate().moveBy(click.direction());
+        if (!player.getRealm().canMoveTo(next)) {
+            log.debug("{} not movable, changing back to idle.", next);
             player.changeState(PlayerIdleState.INSTANCE);
-        } else if (lastReceivedInput == null) {
-            if (trigger instanceof RightMouseClick click) {
-                Coordinate next = player.coordinate().moveBy(click.direction());
-                if (!player.getRealm().canMoveTo(next)) {
-                    log.debug("{} not movable, changing back to idle.", next);
-                    player.changeState(PlayerIdleState.INSTANCE);
-                }
-            }
-        } else if (lastReceivedInput instanceof RightMouseClick click) {
-            player.changeDirection(click.direction());
         }
+        player.changeState(new PlayerWalkState(click));
     }
 
 
     @Override
     public Optional<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
+        if (currentInput == null) {
+            return Optional.empty();
+        }
         elapsedMilli += deltaMillis;
         if (elapsedMilli < MILLIS_PER_UNIT) {
             return Optional.empty();
         }
-        elapsedMilli -= MILLIS_PER_UNIT;
         Coordinate newCoordinate = player.coordinate().moveBy(player.direction());
-        log.debug("Changing coordinate to {}.", newCoordinate);
+        log.debug("Moving to coordinate {}.", newCoordinate);
         player.changeCoordinate(newCoordinate);
-        long triggerSequence = trigger.sequence();
-        updatePlayerState(player);
-        if (lastReceivedInput != null) {
-            trigger = lastReceivedInput;
-            lastReceivedInput = null;
+        if (lastReceivedInput instanceof RightMouseRelease) {
+            player.changeState(PlayerIdleState.INSTANCE);
+        } else if (lastReceivedInput instanceof RightMouseClick click) {
+            handleRightClick(player, click);
         }
-        UpdateMovementStateMessage message = UpdateMovementStateMessage.fromPlayer(player, triggerSequence);
+        UpdateMovementStateMessage message = UpdateMovementStateMessage.fromPlayer(player, currentInput.sequence());
+        currentInput = null;
         return Optional.of(message);
     }
 }
