@@ -5,6 +5,7 @@ import org.y1000.entities.Direction;
 import org.y1000.message.*;
 import org.y1000.message.input.InputMessage;
 import org.y1000.message.input.RightMouseClick;
+import org.y1000.message.input.RightMouseRelease;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
@@ -56,7 +57,7 @@ class PlayerImpl implements Player {
     private Optional<I2ClientMessage> handleInputMessage(InputMessage inputMessage) {
         return switch (inputMessage.type()) {
             case MOUSE_RIGHT_CLICK -> state.onRightMouseClicked(this, (RightMouseClick) inputMessage);
-            case MOUSE_RIGHT_RELEASE -> state.onRightMouseClicked(this, (RightMouseClick) inputMessage);
+            case MOUSE_RIGHT_RELEASE -> state.onRightMouseReleased(this, (RightMouseRelease) inputMessage);
             default -> Optional.empty();
         };
     }
