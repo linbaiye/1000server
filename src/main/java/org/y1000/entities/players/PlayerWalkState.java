@@ -20,32 +20,32 @@ final class PlayerWalkState implements PlayerState {
 
     private InputMessage lastReceivedInput;
 
+    private boolean finished;
+
     public PlayerWalkState(InputMessage trigger) {
         elapsedMilli = 0;
         currentInput = trigger;
+        finished = false;
     }
 
     @Override
     public Optional<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
-        if (currentInput != null) {
+        if (!finished) {
             lastReceivedInput = click;
             return Optional.empty();
         }
         handleRightClick(player, click);
-        if (player.state() == State.IDLE) {
-            return Optional.of(UpdateMovementStateMessage.fromPlayer(player, click.sequence()));
-        }
-        return Optional.empty();
+        return Optional.of(UpdateMovementStateMessage.fromPlayer(player, click.sequence()));
     }
 
     @Override
     public Optional<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
-        if (currentInput != null) {
+        if (!finished) {
             lastReceivedInput = release;
             return Optional.empty();
         } else {
             player.changeState(PlayerIdleState.INSTANCE);
-            return Optional.of(UpdateMovementStateMessage.fromPlayer(player, release.sequence()));
+            return Optional.of(UpdateMovementStateMessage.fromPlayer(player, currentInput.sequence()));
         }
     }
 
@@ -68,7 +68,7 @@ final class PlayerWalkState implements PlayerState {
 
     @Override
     public Optional<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
-        if (currentInput == null) {
+        if (finished) {
             return Optional.empty();
         }
         elapsedMilli += deltaMillis;
@@ -78,7 +78,11 @@ final class PlayerWalkState implements PlayerState {
         Coordinate newCoordinate = player.coordinate().moveBy(player.direction());
         log.debug("Moving to coordinate {}.", newCoordinate);
         player.changeCoordinate(newCoordinate);
-        if (lastReceivedInput instanceof RightMouseRelease) {
+        if (lastReceivedInput == null) {
+            log.debug("Have not received input after finishing walking, standby.");
+            currentInput = null;
+            return Optional.empty();
+        } if (lastReceivedInput instanceof RightMouseRelease) {
             player.changeState(PlayerIdleState.INSTANCE);
         } else if (lastReceivedInput instanceof RightMouseClick click) {
             handleRightClick(player, click);
