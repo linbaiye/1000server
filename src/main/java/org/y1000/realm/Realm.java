@@ -14,6 +14,8 @@ public class Realm implements Runnable, ConnectionEventListener  {
 
     private static final long stepMilli = 50;
 
+    private long time;
+
     private final PlayerManager playerManager;
 
     private final List<Connection> addingConnections;
@@ -28,6 +30,7 @@ public class Realm implements Runnable, ConnectionEventListener  {
         realmMap = map;
         addingConnections = new ArrayList<>();
         closingConnections = new ArrayList<>();
+        time = 0;
     }
 
     public RealmMap map() {
@@ -52,8 +55,8 @@ public class Realm implements Runnable, ConnectionEventListener  {
         notify();
     }
 
-    private void updateRealm(long delta) {
-        playerManager.update(delta);
+    private void updateRealm(long delta, long time) {
+        playerManager.update(delta, time);
     }
 
 
@@ -83,8 +86,9 @@ public class Realm implements Runnable, ConnectionEventListener  {
                 handleConnectionEvents();
                 long current = System.currentTimeMillis();
                 if (timeMillis <= current) {
-                    updateRealm(stepMilli);
+                    updateRealm(stepMilli, time);
                     timeMillis += stepMilli;
+                    time += stepMilli;
                 } else {
                     Thread.sleep(timeMillis - current);
                 }

@@ -27,6 +27,8 @@ public class Server {
 
     private Realm realm;
 
+    // For dev only.
+    private long playerId = 0;
 
     public Server(int port) {
         this.port = port;
@@ -58,7 +60,7 @@ public class Server {
                         protected void initChannel(NioSocketChannel channel) throws Exception {
                             channel.pipeline()
                                     .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                    .addLast("packetHandler", new DevelopingConnection(realm))
+                                    .addLast("packetHandler", new DevelopingConnection(realm, playerId++))
                                     .addLast("packetLengthAppender", new LengthFieldPrepender(4))
                                     .addLast("packetEncoder", MessageEncoder.ENCODER);
                         }

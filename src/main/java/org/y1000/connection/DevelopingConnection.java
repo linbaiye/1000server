@@ -18,12 +18,14 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
 
     public final Thread sender;
 
-    public DevelopingConnection(ConnectionEventListener listener) {
+    private final long id;
+
+    public DevelopingConnection(ConnectionEventListener listener, long id) {
         super(listener);
         messages = new ArrayDeque<>();
         sender = new Thread(this);
         sender.start();
-        log.debug("New connection.");
+        this.id = id;
     }
 
     @Override
@@ -31,6 +33,11 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
         synchronized (messages) {
             messages.addLast(message);
         }
+    }
+
+    @Override
+    public long id() {
+        return id;
     }
 
 

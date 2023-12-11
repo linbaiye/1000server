@@ -28,4 +28,9 @@ public final class ConnectionImpl extends AbstractConnection {
         }
         context.channel().flush();
     }
+
+    @Override
+    public long id() {
+        return 0;
+    }
 }

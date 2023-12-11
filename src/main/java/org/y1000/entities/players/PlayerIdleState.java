@@ -9,7 +9,6 @@ import org.y1000.message.input.RightMouseRelease;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 final class PlayerIdleState implements PlayerState {
@@ -18,9 +17,10 @@ final class PlayerIdleState implements PlayerState {
 
     public static final PlayerIdleState INSTANCE = new PlayerIdleState();
 
+    private long elapsed = 0;
+
     public PlayerIdleState() {
     }
-
 
     @Override
     public List<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
@@ -45,6 +45,12 @@ final class PlayerIdleState implements PlayerState {
 
     @Override
     public List<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
+        elapsed += deltaMillis;
         return Collections.emptyList();
+    }
+
+    @Override
+    public Interpolation snapshot() {
+        return null;
     }
 }

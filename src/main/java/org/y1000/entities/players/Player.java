@@ -17,4 +17,8 @@ public interface Player extends Creature {
     static Player ofRealm(Realm realm, Coordinate coordinate) {
         return new PlayerImpl(realm, coordinate);
     }
+
+    Interpolation snapshot();
+
+    long joinedAtMilli();
 }

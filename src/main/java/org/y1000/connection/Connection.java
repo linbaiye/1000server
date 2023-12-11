@@ -13,4 +13,5 @@ public interface Connection {
 
     default void flush() {};
 
+    long id();
 }

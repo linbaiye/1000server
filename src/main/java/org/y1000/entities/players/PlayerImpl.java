@@ -9,10 +9,7 @@ import org.y1000.message.input.RightMouseRelease;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 class PlayerImpl implements Player {
@@ -27,9 +24,8 @@ class PlayerImpl implements Player {
 
     private final long id;
 
-    PlayerImpl(Realm realm) {
-        this(realm, new Coordinate(36, 41));
-    }
+    private long joinedAtMilli = -1;
+
 
     PlayerImpl(Realm realm, Coordinate coordinate) {
         this.coordinate = coordinate;
@@ -80,6 +76,16 @@ class PlayerImpl implements Player {
     }
 
     @Override
+    public Interpolation snapshot() {
+
+    }
+
+    @Override
+    public long joinedAtMilli() {
+        return joinedAtMilli;
+    }
+
+    @Override
     public long id() {
         return id;
     }
@@ -90,6 +96,16 @@ class PlayerImpl implements Player {
     }
 
     @Override
+    public List<I2ClientMessage> update(long delta, long timeMilli) {
+        if (joinedAtMilli == -1) {
+            joinedAtMilli = timeMilli;
+        }
+        return state.update(this, delta);
+    }
+
+
+
+    @Override
     public Coordinate coordinate() {
         return coordinate;
     }
@@ -97,5 +113,18 @@ class PlayerImpl implements Player {
     @Override
     public Direction direction() {
         return direction;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerImpl player = (PlayerImpl) o;
+        return id == player.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
