@@ -11,4 +11,6 @@ public interface Connection {
 
     void write(I2ClientMessage message);
 
+    default void flush() {};
+
 }

@@ -17,6 +17,15 @@ public final class ConnectionImpl extends AbstractConnection {
         if (context == null) {
             return;
         }
-        context.channel().writeAndFlush(message);
+        context.channel().write(message);
+    }
+
+    @Override
+    public void flush() {
+        var context = getContext();
+        if (context == null) {
+            return;
+        }
+        context.channel().flush();
     }
 }

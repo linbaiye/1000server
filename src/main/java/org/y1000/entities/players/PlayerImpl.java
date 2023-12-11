@@ -10,6 +10,7 @@ import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,11 +55,11 @@ class PlayerImpl implements Player {
         coordinate = newCoordinate;
     }
 
-    private Optional<I2ClientMessage> handleInputMessage(InputMessage inputMessage) {
+    private List<I2ClientMessage> handleInputMessage(InputMessage inputMessage) {
         return switch (inputMessage.type()) {
             case MOUSE_RIGHT_CLICK -> state.onRightMouseClicked(this, (RightMouseClick) inputMessage);
             case MOUSE_RIGHT_RELEASE -> state.onRightMouseReleased(this, (RightMouseRelease) inputMessage);
-            default -> Optional.empty();
+            default -> Collections.emptyList();
         };
     }
 
@@ -66,11 +67,9 @@ class PlayerImpl implements Player {
     public List<I2ClientMessage> handle(List<Message> messages) {
         List<I2ClientMessage> result = new ArrayList<>();
         for (Message message : messages) {
-            Optional<I2ClientMessage> ret = Optional.empty();
             if (message instanceof InputMessage inputMessage) {
-                ret = handleInputMessage(inputMessage);
+                result.addAll(handleInputMessage(inputMessage));
             }
-            ret.ifPresent(result::add);
         }
         return result;
     }
@@ -86,7 +85,7 @@ class PlayerImpl implements Player {
     }
 
     @Override
-    public Optional<I2ClientMessage> update(long delta) {
+    public List<I2ClientMessage> update(long delta) {
         return state.update(this, delta);
     }
 

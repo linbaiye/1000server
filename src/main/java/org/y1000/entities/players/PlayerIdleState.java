@@ -7,6 +7,8 @@ import org.y1000.message.*;
 import org.y1000.message.input.RightMouseClick;
 import org.y1000.message.input.RightMouseRelease;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -21,19 +23,19 @@ final class PlayerIdleState implements PlayerState {
 
 
     @Override
-    public Optional<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
+    public List<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
         var nextCoordinate = player.coordinate().moveBy(click.direction());
         player.changeDirection(click.direction());
         if (!player.getRealm().canMoveTo(nextCoordinate)) {
-            return Optional.of(UpdateMovementStateMessage.fromPlayer(player, click.sequence()));
+            return Collections.singletonList(UpdateMovementStateMessage.fromPlayer(player, click.sequence()));
         }
         player.changeState(new PlayerWalkState(click));
-        return Optional.empty();
+        return Collections.emptyList();
     }
 
     @Override
-    public Optional<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
-        return Optional.empty();
+    public List<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
+        return Collections.emptyList();
     }
 
     @Override
@@ -42,7 +44,7 @@ final class PlayerIdleState implements PlayerState {
     }
 
     @Override
-    public Optional<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
-        return Optional.empty();
+    public List<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
+        return Collections.emptyList();
     }
 }
