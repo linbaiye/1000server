@@ -17,9 +17,14 @@ final class PlayerIdleState implements PlayerState {
 
     public static final PlayerIdleState INSTANCE = new PlayerIdleState();
 
-    private long elapsed = 0;
-
+    private long elapsedMillis = 0;
+    private final long startAtMillis;
     public PlayerIdleState() {
+        startAtMillis = 0;
+    }
+
+    public PlayerIdleState(long startAt) {
+        startAtMillis = startAt;
     }
 
     @Override
@@ -45,12 +50,18 @@ final class PlayerIdleState implements PlayerState {
 
     @Override
     public List<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
-        elapsed += deltaMillis;
+        elapsedMillis += deltaMillis;
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<I2ClientMessage> update(PlayerImpl player, long timeMillis, long deltaMillis) {
+        elapsedMillis += deltaMillis;
         return Collections.emptyList();
     }
 
     @Override
     public Interpolation snapshot() {
-        return null;
+        return
     }
 }

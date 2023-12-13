@@ -26,7 +26,6 @@ class PlayerImpl implements Player {
 
     private long joinedAtMilli = -1;
 
-
     PlayerImpl(Realm realm, Coordinate coordinate) {
         this.coordinate = coordinate;
         state = PlayerIdleState.INSTANCE;
@@ -77,7 +76,7 @@ class PlayerImpl implements Player {
 
     @Override
     public Interpolation snapshot() {
-
+        return state.snapshot();
     }
 
     @Override

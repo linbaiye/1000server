@@ -8,4 +8,8 @@ public interface Interpolation extends I2ClientMessage {
     boolean canMerge(Interpolation interpolation);
 
     void merge(Interpolation interpolation);
+
+    int lengthMillis();
+
+    long startAtMillis();
 }

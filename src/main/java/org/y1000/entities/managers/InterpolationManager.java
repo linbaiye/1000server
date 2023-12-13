@@ -7,20 +7,20 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
 
-public class InterpolationSynchronizer {
+public class InterpolationManager {
 
-    private final Player source;
+    private final Player player;
 
     private final Deque<Interpolation> interpolations;
 
 
-    public InterpolationSynchronizer(Player source) {
-        this.source = source;
+    public InterpolationManager(Player player) {
+        this.player = player;
         this.interpolations = new ArrayDeque<>();
     }
 
     public void update(Collection<Player> others, long timeMillis) {
-        Interpolation interpolation = source.snapshot();
+        Interpolation interpolation = player.snapshot();
         for (Player other : others) {
             if (other.joinedAtMilli() )
         }

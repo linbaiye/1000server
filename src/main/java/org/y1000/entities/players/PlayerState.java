@@ -17,7 +17,8 @@ interface PlayerState {
 
     List<I2ClientMessage> update(PlayerImpl player, long deltaMillis);
 
-    Interpolation snapshot();
+    List<I2ClientMessage> update(PlayerImpl player, long timeMillis, long deltaMillis);
 
+    Interpolation snapshot();
 }
 

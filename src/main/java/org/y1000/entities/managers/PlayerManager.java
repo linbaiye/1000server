@@ -24,7 +24,7 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
         interpolations = new HashMap<>();
     }
 
-    public void add(Connection connection, Realm realm) {
+    public void add(Connection connection, Realm realm, long timeMillis) {
         if (!players.containsKey(connection)) {
             Player player = Player.ofRealm(realm, new Coordinate(37, 31));
             indexCoordinate(player);
@@ -33,6 +33,8 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
             connection.write(LoginMessage.ofPlayer(player));
         }
     }
+
+
 
     public void remove(Connection connection) {
         Player player = players.remove(connection);
