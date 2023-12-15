@@ -26,7 +26,7 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
 
     public void add(Connection connection, Realm realm, long timeMillis) {
         if (!players.containsKey(connection)) {
-            Player player = Player.ofRealm(realm, new Coordinate(37, 31));
+            Player player = Player.ofRealm(realm, new Coordinate(37, 31), , timeMillis);
             indexCoordinate(player);
             interpolations.put(player, new ArrayDeque<>());
             players.put(connection, player);

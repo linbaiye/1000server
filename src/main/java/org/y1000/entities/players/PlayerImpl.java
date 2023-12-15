@@ -26,13 +26,16 @@ class PlayerImpl implements Player {
 
     private long joinedAtMilli = -1;
 
-    PlayerImpl(Realm realm, Coordinate coordinate) {
+
+    PlayerImpl(Realm realm, Coordinate coordinate, long joinedAtMilli, long id) {
         this.coordinate = coordinate;
         state = PlayerIdleState.INSTANCE;
         direction = Direction.DOWN;
-        id = 0;
         this.realm = realm;
+        this.joinedAtMilli = joinedAtMilli;
+        this.id = id;
     }
+
 
     void changeDirection(Direction newDirection) {
         direction = newDirection;
@@ -96,9 +99,6 @@ class PlayerImpl implements Player {
 
     @Override
     public List<I2ClientMessage> update(long delta, long timeMilli) {
-        if (joinedAtMilli == -1) {
-            joinedAtMilli = timeMilli;
-        }
         return state.update(this, delta);
     }
 

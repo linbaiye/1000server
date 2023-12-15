@@ -15,7 +15,11 @@ public interface Player extends Creature {
     State state();
 
     static Player ofRealm(Realm realm, Coordinate coordinate) {
-        return new PlayerImpl(realm, coordinate);
+        return new PlayerImpl(realm, coordinate, 0, 0);
+    }
+
+    static Player ofRealm(Realm realm, Coordinate coordinate, long id, long joinedAtMillis) {
+        return new PlayerImpl(realm, coordinate, id, joinedAtMillis);
     }
 
     Interpolation snapshot();
