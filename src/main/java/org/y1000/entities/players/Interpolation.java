@@ -9,7 +9,7 @@ public interface Interpolation extends I2ClientMessage {
 
     void merge(Interpolation interpolation);
 
-    int lengthMillis();
+    long lengthMillis();
 
     long startAtMillis();
 }

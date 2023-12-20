@@ -5,6 +5,8 @@ import org.y1000.connection.Connection;
 import org.y1000.connection.ConnectionEventListener;
 import org.y1000.connection.ConnectionEventType;
 import org.y1000.entities.managers.PlayerManager;
+import org.y1000.entities.players.Player;
+import org.y1000.entities.repository.PlayerRepository;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
@@ -18,18 +20,21 @@ public class Realm implements Runnable, ConnectionEventListener  {
 
     private final PlayerManager playerManager;
 
-    private final List<Connection> addingConnections;
-
     private final List<Connection> closingConnections;
+
+    private final Map<Connection, Player> joiningPlayers;
+
+    private final PlayerRepository playerRepository;
 
     private final RealmMap realmMap;
 
 
-    public Realm(RealmMap map) {
+    public Realm(PlayerRepository playerRepository, RealmMap map) {
+        this.playerRepository = playerRepository;
         playerManager = new PlayerManager();
         realmMap = map;
-        addingConnections = new ArrayList<>();
         closingConnections = new ArrayList<>();
+        joiningPlayers = new HashMap<>();
         time = 0;
     }
 
@@ -45,8 +50,12 @@ public class Realm implements Runnable, ConnectionEventListener  {
         return map().movable(coordinate) && !hasPhysicalEntityAt(coordinate);
     }
 
-    public synchronized void onConnectionEstablished(Connection connection) {
-        addingConnections.add(connection);
+    public void onConnectionEstablished(Connection connection) {
+        long id = connection.id();
+        Player player = playerRepository.load(id);
+        synchronized (this) {
+            joiningPlayers.put(connection, player);
+        }
         notify();
     }
 
@@ -55,27 +64,26 @@ public class Realm implements Runnable, ConnectionEventListener  {
         notify();
     }
 
-    private void updateRealm(long delta, long time) {
-        playerManager.update(delta, time);
-    }
-
 
     private void handleConnectionEvents() {
-        List<Connection> newConnections = Collections.emptyList();
         List<Connection> deadConnections = Collections.emptyList();
+        Map<Connection, Player> newPlayers = new HashMap<>();
         synchronized (this) {
             if (!closingConnections.isEmpty()) {
                 deadConnections = new ArrayList<>(closingConnections);
                 closingConnections.clear();
             }
-            if (!addingConnections.isEmpty()) {
-                newConnections = new ArrayList<>(addingConnections);
-                addingConnections.clear();
+            if (!joiningPlayers.isEmpty()) {
+                newPlayers.putAll(joiningPlayers);
+                joiningPlayers.clear();
             }
             notifyAll();
         }
         deadConnections.forEach(playerManager::remove);
-        newConnections.forEach(c -> playerManager.add(c, this));
+        newPlayers.forEach((c, p) -> {
+            p.joinReam(this, time);
+            playerManager.add(c, p);
+        });
     }
 
     @Override
@@ -86,9 +94,10 @@ public class Realm implements Runnable, ConnectionEventListener  {
                 handleConnectionEvents();
                 long current = System.currentTimeMillis();
                 if (timeMillis <= current) {
-                    updateRealm(stepMilli, time);
+                    playerManager.update(stepMilli, time);
                     timeMillis += stepMilli;
                     time += stepMilli;
+                    playerManager.syncState();
                 } else {
                     Thread.sleep(timeMillis - current);
                 }
@@ -108,8 +117,8 @@ public class Realm implements Runnable, ConnectionEventListener  {
         }
     }
 
-    public static Optional<Realm> create(String name) {
+    public static Optional<Realm> create(String name, PlayerRepository playerRepository) {
         Optional<RealmMap> mapOptional = RealmMap.Load(name);
-        return mapOptional.map(Realm::new);
+        return mapOptional.map(map -> new Realm(playerRepository, map));
     }
 }

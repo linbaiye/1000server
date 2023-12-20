@@ -18,24 +18,26 @@ class PlayerImpl implements Player {
 
     private Direction direction;
 
-    private final Realm realm;
+    private Realm realm;
 
     private PlayerState state;
+
+    private long stateChangedAtMillis;
 
     private final long id;
 
     private long joinedAtMilli = -1;
 
+    private long timeMillis;
 
-    PlayerImpl(Realm realm, Coordinate coordinate, long joinedAtMilli, long id) {
-        this.coordinate = coordinate;
-        state = PlayerIdleState.INSTANCE;
-        direction = Direction.DOWN;
-        this.realm = realm;
-        this.joinedAtMilli = joinedAtMilli;
+    private final Deque<Interpolation> interpolations;
+
+
+    PlayerImpl(long id, Coordinate coordinate) {
         this.id = id;
+        this.coordinate = coordinate;
+        interpolations = new ArrayDeque<>();
     }
-
 
     void changeDirection(Direction newDirection) {
         direction = newDirection;
@@ -46,6 +48,7 @@ class PlayerImpl implements Player {
     }
 
     void changeState(PlayerState newState) {
+        stateChangedAtMillis = timeMillis;
         state = newState;
     }
 
@@ -61,6 +64,15 @@ class PlayerImpl implements Player {
         };
     }
 
+    public List<I2ClientMessage> handle(List<Message> messages, long timeMillis) {
+        List<I2ClientMessage> result = new ArrayList<>();
+        for (Message message : messages) {
+            if (message instanceof InputMessage inputMessage) {
+                result.addAll(handleInputMessage(inputMessage));
+            }
+        }
+        return result;
+    }
 
     public List<I2ClientMessage> handle(List<Message> messages) {
         List<I2ClientMessage> result = new ArrayList<>();
@@ -78,8 +90,17 @@ class PlayerImpl implements Player {
     }
 
     @Override
+    public void joinReam(Realm realm, long joinedAtMillis) {
+        this.realm = realm;
+        this.joinedAtMilli = joinedAtMillis;
+        direction = Direction.DOWN;
+        this.state = PlayerIdleState.INSTANCE;
+        stateChangedAtMillis = joinedAtMillis;
+    }
+
+    @Override
     public Interpolation snapshot() {
-        return state.snapshot();
+        return state.snapshot(this, stateChangedAtMillis);
     }
 
     @Override
@@ -99,10 +120,15 @@ class PlayerImpl implements Player {
 
     @Override
     public List<I2ClientMessage> update(long delta, long timeMilli) {
-        return state.update(this, delta);
+        this.timeMillis = timeMilli + delta;
+        List<I2ClientMessage> messages = state.update(this, delta);
+        takeSnapshot();
+        return messages;
     }
 
-
+    private void takeSnapshot() {
+        Interpolation snapshot = state.snapshot(this, stateChangedAtMillis);
+    }
 
     @Override
     public Coordinate coordinate() {

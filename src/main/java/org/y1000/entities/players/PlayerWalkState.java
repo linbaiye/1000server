@@ -94,4 +94,10 @@ final class PlayerWalkState implements PlayerState {
         }
         return result;
     }
+
+
+    @Override
+    public Interpolation snapshot() {
+        return null;
+    }
 }

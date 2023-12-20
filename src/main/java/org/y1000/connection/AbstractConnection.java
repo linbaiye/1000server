@@ -79,7 +79,6 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         context.set(ctx);
-        log.debug("Connection established.");
         if (eventListener != null) {
             eventListener.OnEvent(ConnectionEventType.ESTABLISHED, this);
         }

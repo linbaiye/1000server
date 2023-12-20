@@ -19,10 +19,7 @@ public class InterpolationManager {
         this.interpolations = new ArrayDeque<>();
     }
 
-    public void update(Collection<Player> others, long timeMillis) {
+    public void update() {
         Interpolation interpolation = player.snapshot();
-        for (Player other : others) {
-            if (other.joinedAtMilli() )
-        }
     }
 }

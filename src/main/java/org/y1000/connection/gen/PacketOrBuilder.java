@@ -68,5 +68,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.connection.gen.LoginPacketOrBuilder getLoginPacketOrBuilder();
 
+  /**
+   * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+   * @return Whether the showPlayerPacket field is set.
+   */
+  boolean hasShowPlayerPacket();
+  /**
+   * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+   * @return The showPlayerPacket.
+   */
+  org.y1000.connection.gen.ShowPlayerPacket getShowPlayerPacket();
+  /**
+   * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+   */
+  org.y1000.connection.gen.ShowPlayerPacketOrBuilder getShowPlayerPacketOrBuilder();
+
   org.y1000.connection.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

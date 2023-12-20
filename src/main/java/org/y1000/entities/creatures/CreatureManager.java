@@ -13,8 +13,9 @@ public class CreatureManager implements EntityManager<Creature> {
         return null;
     }
 
+
     @Override
-    public List<I2ClientMessage> update(long delta) {
+    public List<I2ClientMessage> update(long delta, long timeMillis) {
         return null;
     }
 

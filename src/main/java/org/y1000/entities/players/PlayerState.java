@@ -8,7 +8,6 @@ import java.util.List;
 
 interface PlayerState {
 
-
     List<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click);
 
     List<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release);
@@ -17,8 +16,6 @@ interface PlayerState {
 
     List<I2ClientMessage> update(PlayerImpl player, long deltaMillis);
 
-    List<I2ClientMessage> update(PlayerImpl player, long timeMillis, long deltaMillis);
-
-    Interpolation snapshot();
+    Interpolation snapshot(PlayerImpl player, long timeMillis);
 }
 

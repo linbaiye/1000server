@@ -7,8 +7,6 @@ import org.y1000.entities.players.Interpolation;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.message.LoginMessage;
 import org.y1000.message.Message;
-import org.y1000.realm.Realm;
-import org.y1000.util.Coordinate;
 
 import java.util.*;
 
@@ -24,17 +22,14 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
         interpolations = new HashMap<>();
     }
 
-    public void add(Connection connection, Realm realm, long timeMillis) {
+    public void add(Connection connection, Player player) {
         if (!players.containsKey(connection)) {
-            Player player = Player.ofRealm(realm, new Coordinate(37, 31), , timeMillis);
             indexCoordinate(player);
             interpolations.put(player, new ArrayDeque<>());
             players.put(connection, player);
             connection.write(LoginMessage.ofPlayer(player));
         }
     }
-
-
 
     public void remove(Connection connection) {
         Player player = players.remove(connection);
@@ -43,16 +38,24 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
         }
     }
 
-    @Override
-    public List<I2ClientMessage> update(long delta) {
-        return Collections.emptyList();
+
+    private Map<Connection, Player> findVisiblePlayers(Player source) {
+        Map<Connection, Player> result = new HashMap<>();
+        for (Map.Entry<Connection, Player> connectionPlayerEntry : players.entrySet()) {
+            Player player = connectionPlayerEntry.getValue();
+            if (player.id() == source.id()) {
+                continue;
+            }
+            if (Math.abs(player.coordinate().x() - source.coordinate().x()) <= 32 ||
+                    Math.abs(player.coordinate().y() - source.coordinate().y()) <= 32) {
+                result.put(connectionPlayerEntry.getKey(), connectionPlayerEntry.getValue());
+            }
+        }
+        return result;
     }
 
 
-
-    @Override
-    public List<I2ClientMessage> update(long delta, long timeMillis) {
-        List<I2ClientMessage> messages = new ArrayList<>();
+    private void updatePlayers(long delta) {
         for (Map.Entry<Connection, Player> entry : players.entrySet()) {
             Connection connection = entry.getKey();
             Player player = entry.getValue();
@@ -65,6 +68,17 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
             updatedMessages.forEach(connection::write);
             connection.flush();
         }
-        return messages;
+    }
+
+    public void syncState() {
+        for (Player value : players.values()) {
+            findVisiblePlayers(value);
+        }
+    }
+
+    @Override
+    public List<I2ClientMessage> update(long delta, long timeMillis) {
+        updatePlayers(delta);
+        return Collections.emptyList();
     }
 }

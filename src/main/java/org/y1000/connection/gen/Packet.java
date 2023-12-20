@@ -49,6 +49,7 @@ private static final long serialVersionUID = 0L;
     SHOWCREATUREPACKET(2),
     INPUTPACKET(3),
     LOGINPACKET(4),
+    SHOWPLAYERPACKET(5),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -70,6 +71,7 @@ private static final long serialVersionUID = 0L;
         case 2: return SHOWCREATUREPACKET;
         case 3: return INPUTPACKET;
         case 4: return LOGINPACKET;
+        case 5: return SHOWPLAYERPACKET;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -209,6 +211,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.connection.gen.LoginPacket.getDefaultInstance();
   }
 
+  public static final int SHOWPLAYERPACKET_FIELD_NUMBER = 5;
+  /**
+   * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+   * @return Whether the showPlayerPacket field is set.
+   */
+  @java.lang.Override
+  public boolean hasShowPlayerPacket() {
+    return typedPacketCase_ == 5;
+  }
+  /**
+   * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+   * @return The showPlayerPacket.
+   */
+  @java.lang.Override
+  public org.y1000.connection.gen.ShowPlayerPacket getShowPlayerPacket() {
+    if (typedPacketCase_ == 5) {
+       return (org.y1000.connection.gen.ShowPlayerPacket) typedPacket_;
+    }
+    return org.y1000.connection.gen.ShowPlayerPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+   */
+  @java.lang.Override
+  public org.y1000.connection.gen.ShowPlayerPacketOrBuilder getShowPlayerPacketOrBuilder() {
+    if (typedPacketCase_ == 5) {
+       return (org.y1000.connection.gen.ShowPlayerPacket) typedPacket_;
+    }
+    return org.y1000.connection.gen.ShowPlayerPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -235,6 +268,9 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 4) {
       output.writeMessage(4, (org.y1000.connection.gen.LoginPacket) typedPacket_);
     }
+    if (typedPacketCase_ == 5) {
+      output.writeMessage(5, (org.y1000.connection.gen.ShowPlayerPacket) typedPacket_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -259,6 +295,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 4) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(4, (org.y1000.connection.gen.LoginPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 5) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(5, (org.y1000.connection.gen.ShowPlayerPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -293,6 +333,10 @@ private static final long serialVersionUID = 0L;
         if (!getLoginPacket()
             .equals(other.getLoginPacket())) return false;
         break;
+      case 5:
+        if (!getShowPlayerPacket()
+            .equals(other.getShowPlayerPacket())) return false;
+        break;
       case 0:
       default:
     }
@@ -323,6 +367,10 @@ private static final long serialVersionUID = 0L;
       case 4:
         hash = (37 * hash) + LOGINPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getLoginPacket().hashCode();
+        break;
+      case 5:
+        hash = (37 * hash) + SHOWPLAYERPACKET_FIELD_NUMBER;
+        hash = (53 * hash) + getShowPlayerPacket().hashCode();
         break;
       case 0:
       default:
@@ -470,6 +518,9 @@ private static final long serialVersionUID = 0L;
       if (loginPacketBuilder_ != null) {
         loginPacketBuilder_.clear();
       }
+      if (showPlayerPacketBuilder_ != null) {
+        showPlayerPacketBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -526,6 +577,10 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 4 &&
           loginPacketBuilder_ != null) {
         result.typedPacket_ = loginPacketBuilder_.build();
+      }
+      if (typedPacketCase_ == 5 &&
+          showPlayerPacketBuilder_ != null) {
+        result.typedPacket_ = showPlayerPacketBuilder_.build();
       }
     }
 
@@ -590,6 +645,10 @@ private static final long serialVersionUID = 0L;
           mergeLoginPacket(other.getLoginPacket());
           break;
         }
+        case SHOWPLAYERPACKET: {
+          mergeShowPlayerPacket(other.getShowPlayerPacket());
+          break;
+        }
         case TYPEDPACKET_NOT_SET: {
           break;
         }
@@ -648,6 +707,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 4;
               break;
             } // case 34
+            case 42: {
+              input.readMessage(
+                  getShowPlayerPacketFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 5;
+              break;
+            } // case 42
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1246,6 +1312,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 4;
       onChanged();
       return loginPacketBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.connection.gen.ShowPlayerPacket, org.y1000.connection.gen.ShowPlayerPacket.Builder, org.y1000.connection.gen.ShowPlayerPacketOrBuilder> showPlayerPacketBuilder_;
+    /**
+     * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+     * @return Whether the showPlayerPacket field is set.
+     */
+    @java.lang.Override
+    public boolean hasShowPlayerPacket() {
+      return typedPacketCase_ == 5;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+     * @return The showPlayerPacket.
+     */
+    @java.lang.Override
+    public org.y1000.connection.gen.ShowPlayerPacket getShowPlayerPacket() {
+      if (showPlayerPacketBuilder_ == null) {
+        if (typedPacketCase_ == 5) {
+          return (org.y1000.connection.gen.ShowPlayerPacket) typedPacket_;
+        }
+        return org.y1000.connection.gen.ShowPlayerPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 5) {
+          return showPlayerPacketBuilder_.getMessage();
+        }
+        return org.y1000.connection.gen.ShowPlayerPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+     */
+    public Builder setShowPlayerPacket(org.y1000.connection.gen.ShowPlayerPacket value) {
+      if (showPlayerPacketBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        showPlayerPacketBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 5;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+     */
+    public Builder setShowPlayerPacket(
+        org.y1000.connection.gen.ShowPlayerPacket.Builder builderForValue) {
+      if (showPlayerPacketBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        showPlayerPacketBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 5;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+     */
+    public Builder mergeShowPlayerPacket(org.y1000.connection.gen.ShowPlayerPacket value) {
+      if (showPlayerPacketBuilder_ == null) {
+        if (typedPacketCase_ == 5 &&
+            typedPacket_ != org.y1000.connection.gen.ShowPlayerPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.connection.gen.ShowPlayerPacket.newBuilder((org.y1000.connection.gen.ShowPlayerPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 5) {
+          showPlayerPacketBuilder_.mergeFrom(value);
+        } else {
+          showPlayerPacketBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 5;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+     */
+    public Builder clearShowPlayerPacket() {
+      if (showPlayerPacketBuilder_ == null) {
+        if (typedPacketCase_ == 5) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 5) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        showPlayerPacketBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+     */
+    public org.y1000.connection.gen.ShowPlayerPacket.Builder getShowPlayerPacketBuilder() {
+      return getShowPlayerPacketFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+     */
+    @java.lang.Override
+    public org.y1000.connection.gen.ShowPlayerPacketOrBuilder getShowPlayerPacketOrBuilder() {
+      if ((typedPacketCase_ == 5) && (showPlayerPacketBuilder_ != null)) {
+        return showPlayerPacketBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 5) {
+          return (org.y1000.connection.gen.ShowPlayerPacket) typedPacket_;
+        }
+        return org.y1000.connection.gen.ShowPlayerPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ShowPlayerPacket showPlayerPacket = 5;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.connection.gen.ShowPlayerPacket, org.y1000.connection.gen.ShowPlayerPacket.Builder, org.y1000.connection.gen.ShowPlayerPacketOrBuilder> 
+        getShowPlayerPacketFieldBuilder() {
+      if (showPlayerPacketBuilder_ == null) {
+        if (!(typedPacketCase_ == 5)) {
+          typedPacket_ = org.y1000.connection.gen.ShowPlayerPacket.getDefaultInstance();
+        }
+        showPlayerPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.connection.gen.ShowPlayerPacket, org.y1000.connection.gen.ShowPlayerPacket.Builder, org.y1000.connection.gen.ShowPlayerPacketOrBuilder>(
+                (org.y1000.connection.gen.ShowPlayerPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 5;
+      onChanged();
+      return showPlayerPacketBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

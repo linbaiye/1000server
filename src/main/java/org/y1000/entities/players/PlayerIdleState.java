@@ -15,16 +15,11 @@ final class PlayerIdleState implements PlayerState {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlayerState.class);
 
-    public static final PlayerIdleState INSTANCE = new PlayerIdleState();
-
     private long elapsedMillis = 0;
-    private final long startAtMillis;
-    public PlayerIdleState() {
-        startAtMillis = 0;
-    }
 
-    public PlayerIdleState(long startAt) {
-        startAtMillis = startAt;
+    private 
+
+    public PlayerIdleState() {
     }
 
     @Override
@@ -55,13 +50,11 @@ final class PlayerIdleState implements PlayerState {
     }
 
     @Override
-    public List<I2ClientMessage> update(PlayerImpl player, long timeMillis, long deltaMillis) {
-        elapsedMillis += deltaMillis;
-        return Collections.emptyList();
-    }
-
-    @Override
-    public Interpolation snapshot() {
-        return
+    public Interpolation snapshot(PlayerImpl player, long started) {
+        return IdleInterpolation.builder()
+                .coordinate(player.coordinate())
+                .length(elapsedMillis)
+                .startAtMillis(started)
+                .build();
     }
 }

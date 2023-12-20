@@ -33,9 +33,14 @@ message Packet {
     ShowCreaturePacket showCreaturePacket = 2;
     InputPacket inputPacket = 3;
     LoginPacket loginPacket = 4;
+    ShowPlayerPacket showPlayerPacket = 5;
   }
 }
 
+message ShowPlayerPacket {
+  MovementPacket movement = 1;
+  int64 id = 2;
+}
 
 message ShowCreaturePacket {
   MovementPacket movement = 1;

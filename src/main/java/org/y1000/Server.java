@@ -11,6 +11,8 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import org.y1000.connection.DevelopingConnection;
 import org.y1000.connection.LengthBasedMessageDecoder;
 import org.y1000.connection.MessageEncoder;
+import org.y1000.entities.repository.PlayerRepository;
+import org.y1000.entities.repository.PlayerRepositoryImpl;
 import org.y1000.realm.Realm;
 
 import java.util.Optional;
@@ -27,9 +29,6 @@ public class Server {
 
     private Realm realm;
 
-    // For dev only.
-    private long playerId = 0;
-
     public Server(int port) {
         this.port = port;
         workerGroup = new NioEventLoopGroup();
@@ -37,9 +36,12 @@ public class Server {
         bootstrap = new ServerBootstrap();
     }
 
+    private PlayerRepository createPlayerRepository() {
+        return new PlayerRepositoryImpl();
+    }
 
     private void startRealms() {
-        Optional<Realm> realmOptional = Realm.create("start");
+        Optional<Realm> realmOptional = Realm.create("start", createPlayerRepository());
         if (realmOptional.isPresent()) {
             realm = realmOptional.get();
             new Thread(realm).start();
@@ -60,7 +62,7 @@ public class Server {
                         protected void initChannel(NioSocketChannel channel) throws Exception {
                             channel.pipeline()
                                     .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                    .addLast("packetHandler", new DevelopingConnection(realm, playerId++))
+                                    .addLast("packetHandler", new DevelopingConnection(realm))
                                     .addLast("packetLengthAppender", new LengthFieldPrepender(4))
                                     .addLast("packetEncoder", MessageEncoder.ENCODER);
                         }
