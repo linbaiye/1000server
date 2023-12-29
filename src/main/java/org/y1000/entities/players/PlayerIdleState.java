@@ -17,7 +17,6 @@ final class PlayerIdleState implements PlayerState {
 
     private long elapsedMillis = 0;
 
-    private 
 
     public PlayerIdleState() {
     }
@@ -34,11 +33,6 @@ final class PlayerIdleState implements PlayerState {
     }
 
     @Override
-    public List<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
-        return Collections.emptyList();
-    }
-
-    @Override
     public State getState() {
         return State.IDLE;
     }
@@ -50,11 +44,18 @@ final class PlayerIdleState implements PlayerState {
     }
 
     @Override
-    public Interpolation snapshot(PlayerImpl player, long started) {
+    public Interpolation captureInterpolation(PlayerImpl player, long stateStartedAtMillis) {
+        if (elapsedMillis == 0) {
+            return null;
+        }
+        long interpolationStartAt = (stateStartedAtMillis + (elapsedMillis - player.getRealm().stepMillis()));
         return IdleInterpolation.builder()
                 .coordinate(player.coordinate())
-                .length(elapsedMillis)
-                .startAtMillis(started)
+                .length((short) elapsedMillis)
+                .id(player.id())
+                .stateStartAtMillis(stateStartedAtMillis)
+                .interpolationStart(interpolationStartAt)
+                .direction(player.direction())
                 .build();
     }
 }

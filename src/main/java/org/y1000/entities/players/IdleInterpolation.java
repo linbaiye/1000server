@@ -1,18 +1,16 @@
 package org.y1000.entities.players;
 
 import lombok.Builder;
-import org.y1000.connection.gen.MovementPacket;
-import org.y1000.connection.gen.Packet;
-import org.y1000.connection.gen.ShowPlayerPacket;
+import org.y1000.connection.gen.*;
 import org.y1000.entities.Direction;
 import org.y1000.util.Coordinate;
 
 @Builder
 public class IdleInterpolation implements Interpolation {
 
-    private final long startAtMillis;
+    private final long stateStartAtMillis;
 
-    private long length;
+    private short length;
 
     private final Coordinate coordinate;
 
@@ -20,8 +18,15 @@ public class IdleInterpolation implements Interpolation {
 
     private final Direction direction;
 
+    private final long interpolationStart;
+
     @Builder.Default
     private long timestamp = System.currentTimeMillis();
+
+    @Override
+    public long id() {
+        return id;
+    }
 
     @Override
     public State state() {
@@ -29,49 +34,31 @@ public class IdleInterpolation implements Interpolation {
     }
 
     @Override
-    public boolean canMerge(Interpolation interpolation) {
-        if (interpolation instanceof IdleInterpolation idleInterpolation) {
-            return idleInterpolation.startAtMillis() == startAtMillis
-                    && direction == idleInterpolation.direction
-                    && coordinate.equals(idleInterpolation.coordinate);
-        }
-        return false;
-    }
-
-    @Override
-    public void merge(Interpolation interpolation) {
-        if (!canMerge(interpolation)) {
-            return;
-        }
-        IdleInterpolation idleInterpolation = (IdleInterpolation) interpolation;
-        length = Math.max(length, idleInterpolation.length);
-    }
-
-    @Override
-    public long lengthMillis() {
+    public short duration() {
         return length;
     }
 
     @Override
-    public long startAtMillis() {
-        return startAtMillis;
+    public long stateStartAtMillis() {
+        return stateStartAtMillis;
     }
 
     @Override
-    public Packet toPacket() {
-        MovementPacket movementPacket = MovementPacket.newBuilder()
-                .setId((int)id)
+    public long interpolationStartAtMillis() {
+        return interpolationStart;
+    }
+
+    @Override
+    public InterpolationPacket toPacket() {
+        return InterpolationPacket.newBuilder()
+                .setDuration(duration())
                 .setState(state().value())
                 .setDirection(direction.value())
-                .setTimestamp(timestamp)
-                .setX(coordinate.x())
-                .setY(coordinate.y())
+                .setTimestamp(timestamp())
+                .setId(id())
+                .setStateStart(stateStartAtMillis())
+                .setInterpolationStart(interpolationStartAtMillis())
                 .build();
-        return Packet.newBuilder()
-                .setShowPlayerPacket(ShowPlayerPacket.newBuilder()
-                        .setMovement(movementPacket)
-                        .build()
-                ).build();
     }
 
     @Override

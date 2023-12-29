@@ -84,6 +84,8 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         }
     }
 
+
+
     @Override
     public List<Message> takeMessages() {
         synchronized (messages) {

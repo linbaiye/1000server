@@ -12,18 +12,17 @@ public interface Player extends Creature {
 
     List<I2ClientMessage> handle(List<Message> messages);
 
-    List<I2ClientMessage> handle(List<Message> messages, long timeMillis);
-
     State state();
 
     void joinReam(Realm realm, long joinedAtMillis);
-
 
     static Player create(long id, Coordinate coordinate) {
         return new PlayerImpl(id, coordinate);
     }
 
-    Interpolation snapshot();
+    long interpolationDuration();
+
+    List<Interpolation> drainInterpolations(long durationMillis);
 
     long joinedAtMilli();
 }

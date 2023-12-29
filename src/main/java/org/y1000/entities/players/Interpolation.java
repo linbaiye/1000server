@@ -1,15 +1,18 @@
 package org.y1000.entities.players;
 
-import org.y1000.message.I2ClientMessage;
+import org.y1000.connection.gen.InterpolationPacket;
+import org.y1000.message.Message;
 
-public interface Interpolation extends I2ClientMessage {
+public interface Interpolation extends Message {
+    long id();
+
     State state();
 
-    boolean canMerge(Interpolation interpolation);
+    short duration();
 
-    void merge(Interpolation interpolation);
+    long stateStartAtMillis();
 
-    long lengthMillis();
+    long interpolationStartAtMillis();
 
-    long startAtMillis();
+    InterpolationPacket toPacket();
 }

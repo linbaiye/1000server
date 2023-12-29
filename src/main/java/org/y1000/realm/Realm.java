@@ -14,7 +14,7 @@ import java.util.*;
 @Slf4j
 public class Realm implements Runnable, ConnectionEventListener  {
 
-    private static final long stepMilli = 50;
+    private static final long STEP_MILLIS = 50;
 
     private long time;
 
@@ -28,6 +28,13 @@ public class Realm implements Runnable, ConnectionEventListener  {
 
     private final RealmMap realmMap;
 
+    public long stepMillis() {
+        return STEP_MILLIS;
+    }
+
+    public long timeMillis() {
+        return time;
+    }
 
     public Realm(PlayerRepository playerRepository, RealmMap map) {
         this.playerRepository = playerRepository;
@@ -94,9 +101,9 @@ public class Realm implements Runnable, ConnectionEventListener  {
                 handleConnectionEvents();
                 long current = System.currentTimeMillis();
                 if (timeMillis <= current) {
-                    playerManager.update(stepMilli, time);
-                    timeMillis += stepMilli;
-                    time += stepMilli;
+                    playerManager.update(STEP_MILLIS, time);
+                    timeMillis += STEP_MILLIS;
+                    time += STEP_MILLIS;
                     playerManager.syncState();
                 } else {
                     Thread.sleep(timeMillis - current);

@@ -1,5 +1,6 @@
 package org.y1000.util;
 
+import org.junit.jupiter.api.Test;
 import org.y1000.entities.Direction;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,5 +23,11 @@ class CoordinateTest {
     @org.junit.jupiter.api.Test
     void add() {
         assertEquals(new Coordinate(2, 2), new Coordinate(1, 1).add(new Coordinate(1, 1)));
+    }
+
+    @Test
+    void name() {
+
+        System.out.println(50%900);
     }
 }

@@ -22,21 +22,25 @@ class PlayerImpl implements Player {
 
     private PlayerState state;
 
+    // Milliseconds relative to joinedAtMillis the current state was changed at.
     private long stateChangedAtMillis;
 
     private final long id;
 
-    private long joinedAtMilli = -1;
-
-    private long timeMillis;
+    private long joinedAtRealmMilli = -1;
 
     private final Deque<Interpolation> interpolations;
 
+    private static final int INTERPOLATION_MAX_SIZE = 20;
+
+    // Is in update method?
+    private boolean updating;
 
     PlayerImpl(long id, Coordinate coordinate) {
         this.id = id;
         this.coordinate = coordinate;
-        interpolations = new ArrayDeque<>();
+        interpolations = new ArrayDeque<>(INTERPOLATION_MAX_SIZE);
+        updating = false;
     }
 
     void changeDirection(Direction newDirection) {
@@ -48,8 +52,9 @@ class PlayerImpl implements Player {
     }
 
     void changeState(PlayerState newState) {
-        stateChangedAtMillis = timeMillis;
         state = newState;
+        stateChangedAtMillis = (joinedAtRealmMilli -  realm.timeMillis())
+                + (updating ? realm.stepMillis() : 0);
     }
 
     void changeCoordinate(Coordinate newCoordinate) {
@@ -62,16 +67,6 @@ class PlayerImpl implements Player {
             case MOUSE_RIGHT_RELEASE -> state.onRightMouseReleased(this, (RightMouseRelease) inputMessage);
             default -> Collections.emptyList();
         };
-    }
-
-    public List<I2ClientMessage> handle(List<Message> messages, long timeMillis) {
-        List<I2ClientMessage> result = new ArrayList<>();
-        for (Message message : messages) {
-            if (message instanceof InputMessage inputMessage) {
-                result.addAll(handleInputMessage(inputMessage));
-            }
-        }
-        return result;
     }
 
     public List<I2ClientMessage> handle(List<Message> messages) {
@@ -92,20 +87,37 @@ class PlayerImpl implements Player {
     @Override
     public void joinReam(Realm realm, long joinedAtMillis) {
         this.realm = realm;
-        this.joinedAtMilli = joinedAtMillis;
+        this.joinedAtRealmMilli = joinedAtMillis;
         direction = Direction.DOWN;
-        this.state = PlayerIdleState.INSTANCE;
-        stateChangedAtMillis = joinedAtMillis;
+        this.state = new PlayerIdleState();
+        stateChangedAtMillis = 0;
+        interpolations.clear();
     }
 
     @Override
-    public Interpolation snapshot() {
-        return state.snapshot(this, stateChangedAtMillis);
+    public long interpolationDuration() {
+        return interpolations.size() * realm.stepMillis();
     }
+
+    @Override
+    public List<Interpolation> drainInterpolations(long durationMillis) {
+        if (interpolationDuration() < durationMillis) {
+            return Collections.emptyList();
+        }
+        if (durationMillis >= INTERPOLATION_MAX_SIZE * realm.stepMillis()) {
+            return Collections.emptyList();
+        }
+        List<Interpolation> result = new ArrayList<>();
+        for (int i = 0; i < durationMillis / realm.stepMillis(); i++) {
+            result.add(interpolations.pollFirst());
+        }
+        return result;
+    }
+
 
     @Override
     public long joinedAtMilli() {
-        return joinedAtMilli;
+        return joinedAtRealmMilli;
     }
 
     @Override
@@ -114,20 +126,23 @@ class PlayerImpl implements Player {
     }
 
     @Override
-    public List<I2ClientMessage> update(long delta) {
-        return state.update(this, delta);
-    }
-
-    @Override
     public List<I2ClientMessage> update(long delta, long timeMilli) {
-        this.timeMillis = timeMilli + delta;
+        updating = true;
         List<I2ClientMessage> messages = state.update(this, delta);
-        takeSnapshot();
+        captureInterpolation();
+        updating = false;
         return messages;
     }
 
-    private void takeSnapshot() {
-        Interpolation snapshot = state.snapshot(this, stateChangedAtMillis);
+    private void captureInterpolation() {
+        Interpolation snapshot = state.captureInterpolation(this, stateChangedAtMillis);
+        if (snapshot == null) {
+            return;
+        }
+        interpolations.add(snapshot);
+        while (interpolations.size() >= INTERPOLATION_MAX_SIZE) {
+            interpolations.remove();
+        }
     }
 
     @Override

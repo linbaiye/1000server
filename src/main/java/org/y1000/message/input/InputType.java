@@ -7,6 +7,8 @@ public enum InputType implements ValueEnum {
 
     MOUSE_RIGHT_RELEASE(2),
 
+    MOUSE_RIGHT_MOTION(3),
+
     ;
     private final int v;
 

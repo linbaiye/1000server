@@ -56,6 +56,12 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
     }
 
     @Override
+    public void writeAndFlush(I2ClientMessage message) {
+        write(message);
+        flush();
+    }
+
+    @Override
     public long id() {
         return id;
     }

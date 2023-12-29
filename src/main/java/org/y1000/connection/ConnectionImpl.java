@@ -22,6 +22,12 @@ public final class ConnectionImpl extends AbstractConnection {
     }
 
     @Override
+    public void writeAndFlush(I2ClientMessage message) {
+        write(message);
+        flush();
+    }
+
+    @Override
     public void flush() {
         var context = getContext();
         if (context == null) {

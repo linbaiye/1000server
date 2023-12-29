@@ -9,7 +9,5 @@ import java.util.Optional;
 public interface Entity {
     long id();
 
-    List<I2ClientMessage> update(long delta);
-
     List<I2ClientMessage> update(long delta, long timeMilli);
 }

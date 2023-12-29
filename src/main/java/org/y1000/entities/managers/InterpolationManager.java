@@ -20,6 +20,5 @@ public class InterpolationManager {
     }
 
     public void update() {
-        Interpolation interpolation = player.snapshot();
     }
 }

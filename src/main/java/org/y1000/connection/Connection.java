@@ -11,6 +11,8 @@ public interface Connection {
 
     void write(I2ClientMessage message);
 
+    void writeAndFlush(I2ClientMessage message);
+
     default void flush() {};
 
     long id();
