@@ -81,7 +81,10 @@ final class PlayerWalkState implements PlayerState {
         Coordinate newCoordinate = player.coordinate().moveBy(player.direction());
         log.debug("Moving to coordinate {}.", newCoordinate);
         player.changeCoordinate(newCoordinate);
-        if (lastReceivedInput instanceof RightMousePressedMotion motion) {
+        if (lastReceivedInput == null) {
+            player.changeState(new PlayerWalkState(currentInput));
+            return Collections.singletonList(UpdateMovementStateMessage.fromPlayer(player, currentInput.sequence()));
+        } else if (lastReceivedInput instanceof RightMousePressedMotion motion) {
             return handleMotion(player, motion);
         } else {
             player.changeState(new PlayerIdleState());
