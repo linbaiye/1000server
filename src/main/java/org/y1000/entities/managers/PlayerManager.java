@@ -22,6 +22,8 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
 
     private final Map<Player, Connection> playerConnectionMap;
 
+
+
     public PlayerManager() {
         connectionPlayerMap = new HashMap<>();
         playerConnectionMap = new HashMap<>();
@@ -72,18 +74,20 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
     }
 
 
-
     public void syncState() {
         for (Player source : connectionPlayerMap.values()) {
             if (source.interpolationDuration() < 700) {
                 continue;
             }
             List<Interpolation> interpolations = source.drainInterpolations(500);
+            if (interpolations.isEmpty()) {
+                continue;
+            }
             Map<Connection, Player> visiblePlayers = findVisiblePlayers(source);
             for (Map.Entry<Connection, Player> cv: visiblePlayers.entrySet()) {
-                Player visiblePlayer = cv.getValue();
                 Connection connection = cv.getKey();
                 connection.write(InterpolationsMessage.wrap(interpolations));
+                connection.flush();
             }
         }
     }

@@ -49,4 +49,16 @@ public interface InterpolationPacketOrBuilder extends
    * @return The direction.
    */
   int getDirection();
+
+  /**
+   * <code>int32 x = 8;</code>
+   * @return The x.
+   */
+  int getX();
+
+  /**
+   * <code>int32 y = 9;</code>
+   * @return The y.
+   */
+  int getY();
 }

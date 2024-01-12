@@ -71,7 +71,6 @@ final class PlayerWalkState implements PlayerState {
     }
 
 
-
     @Override
     public List<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
         lastMillis += deltaMillis;

@@ -55,6 +55,8 @@ public class IdleInterpolation implements Interpolation {
                 .setState(state().value())
                 .setDirection(direction.value())
                 .setTimestamp(timestamp())
+                .setX(coordinate.x())
+                .setY(coordinate.y())
                 .setId(id())
                 .setStateStart(stateStartAtMillis())
                 .setInterpolationStart(interpolationStartAtMillis())
