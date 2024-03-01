@@ -23,7 +23,6 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
     private final Map<Player, Connection> playerConnectionMap;
 
 
-
     public PlayerManager() {
         connectionPlayerMap = new HashMap<>();
         playerConnectionMap = new HashMap<>();
@@ -33,8 +32,6 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
         if (!connectionPlayerMap.containsKey(connection)) {
             indexCoordinate(player);
             connectionPlayerMap.put(connection, player);
-
-            connection.write(LoginMessage.ofPlayer(player));
         }
     }
 

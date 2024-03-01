@@ -13,7 +13,7 @@ import java.util.*;
 @Slf4j
 final class PlayerWalkState implements PlayerState {
 
-    static final long MILLIS_PER_UNIT = 900;
+    static final long MILLIS_TO_WALK_ONE_UNIT = 900;
 
     // Milliseconds this state lasts.
     private long lastMillis;
@@ -75,7 +75,7 @@ final class PlayerWalkState implements PlayerState {
     public List<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
         lastMillis += deltaMillis;
         walkMillis += deltaMillis;
-        if (walkMillis < MILLIS_PER_UNIT) {
+        if (walkMillis < MILLIS_TO_WALK_ONE_UNIT) {
             return Collections.emptyList();
         }
         Coordinate newCoordinate = player.coordinate().moveBy(player.direction());

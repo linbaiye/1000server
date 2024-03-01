@@ -5,11 +5,7 @@ import org.y1000.connection.gen.Packet;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 
-public record LoginMessage(Coordinate coordinate) implements I2ClientMessage {
-
-    public static LoginMessage ofPlayer(Player player) {
-        return new LoginMessage(player.coordinate());
-    }
+public record LoginMessage(long id, Coordinate coordinate) implements I2ClientMessage {
 
     @Override
     public Packet toPacket() {
@@ -17,6 +13,7 @@ public record LoginMessage(Coordinate coordinate) implements I2ClientMessage {
                 LoginPacket.newBuilder()
                         .setX(coordinate().x())
                         .setY(coordinate().y())
+                        .setId(id())
                         .build()
         ).build();
     }
