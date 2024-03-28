@@ -94,17 +94,6 @@ private static final long serialVersionUID = 0L;
     return id_;
   }
 
-  public static final int TIMESTAMP_FIELD_NUMBER = 6;
-  private long timestamp_ = 0L;
-  /**
-   * <code>int64 timestamp = 6;</code>
-   * @return The timestamp.
-   */
-  @java.lang.Override
-  public long getTimestamp() {
-    return timestamp_;
-  }
-
   public static final int SEQUENCE_FIELD_NUMBER = 7;
   private long sequence_ = 0L;
   /**
@@ -145,9 +134,6 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0) {
       output.writeInt32(5, id_);
     }
-    if (timestamp_ != 0L) {
-      output.writeInt64(6, timestamp_);
-    }
     if (sequence_ != 0L) {
       output.writeInt64(7, sequence_);
     }
@@ -180,10 +166,6 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(5, id_);
     }
-    if (timestamp_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(6, timestamp_);
-    }
     if (sequence_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(7, sequence_);
@@ -213,8 +195,6 @@ private static final long serialVersionUID = 0L;
         != other.getDirection()) return false;
     if (getId()
         != other.getId()) return false;
-    if (getTimestamp()
-        != other.getTimestamp()) return false;
     if (getSequence()
         != other.getSequence()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
@@ -238,9 +218,6 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getDirection();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId();
-    hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getTimestamp());
     hash = (37 * hash) + SEQUENCE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getSequence());
@@ -380,7 +357,6 @@ private static final long serialVersionUID = 0L;
       y_ = 0;
       direction_ = 0;
       id_ = 0;
-      timestamp_ = 0L;
       sequence_ = 0L;
       return this;
     }
@@ -431,9 +407,6 @@ private static final long serialVersionUID = 0L;
         result.id_ = id_;
       }
       if (((from_bitField0_ & 0x00000020) != 0)) {
-        result.timestamp_ = timestamp_;
-      }
-      if (((from_bitField0_ & 0x00000040) != 0)) {
         result.sequence_ = sequence_;
       }
     }
@@ -497,9 +470,6 @@ private static final long serialVersionUID = 0L;
       if (other.getId() != 0) {
         setId(other.getId());
       }
-      if (other.getTimestamp() != 0L) {
-        setTimestamp(other.getTimestamp());
-      }
       if (other.getSequence() != 0L) {
         setSequence(other.getSequence());
       }
@@ -554,14 +524,9 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000010;
               break;
             } // case 40
-            case 48: {
-              timestamp_ = input.readInt64();
-              bitField0_ |= 0x00000020;
-              break;
-            } // case 48
             case 56: {
               sequence_ = input.readInt64();
-              bitField0_ |= 0x00000040;
+              bitField0_ |= 0x00000020;
               break;
             } // case 56
             default: {
@@ -741,38 +706,6 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long timestamp_ ;
-    /**
-     * <code>int64 timestamp = 6;</code>
-     * @return The timestamp.
-     */
-    @java.lang.Override
-    public long getTimestamp() {
-      return timestamp_;
-    }
-    /**
-     * <code>int64 timestamp = 6;</code>
-     * @param value The timestamp to set.
-     * @return This builder for chaining.
-     */
-    public Builder setTimestamp(long value) {
-
-      timestamp_ = value;
-      bitField0_ |= 0x00000020;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int64 timestamp = 6;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearTimestamp() {
-      bitField0_ = (bitField0_ & ~0x00000020);
-      timestamp_ = 0L;
-      onChanged();
-      return this;
-    }
-
     private long sequence_ ;
     /**
      * <code>int64 sequence = 7;</code>
@@ -790,7 +723,7 @@ private static final long serialVersionUID = 0L;
     public Builder setSequence(long value) {
 
       sequence_ = value;
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -799,7 +732,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearSequence() {
-      bitField0_ = (bitField0_ & ~0x00000040);
+      bitField0_ = (bitField0_ & ~0x00000020);
       sequence_ = 0L;
       onChanged();
       return this;

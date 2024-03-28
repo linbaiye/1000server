@@ -25,10 +25,4 @@ public interface InputPacketOrBuilder extends
    * @return The clickedDirection.
    */
   int getClickedDirection();
-
-  /**
-   * <code>int64 timestamp = 4;</code>
-   * @return The timestamp.
-   */
-  long getTimestamp();
 }

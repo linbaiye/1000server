@@ -72,17 +72,6 @@ private static final long serialVersionUID = 0L;
     return clickedDirection_;
   }
 
-  public static final int TIMESTAMP_FIELD_NUMBER = 4;
-  private long timestamp_ = 0L;
-  /**
-   * <code>int64 timestamp = 4;</code>
-   * @return The timestamp.
-   */
-  @java.lang.Override
-  public long getTimestamp() {
-    return timestamp_;
-  }
-
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -106,9 +95,6 @@ private static final long serialVersionUID = 0L;
     if (clickedDirection_ != 0) {
       output.writeInt32(3, clickedDirection_);
     }
-    if (timestamp_ != 0L) {
-      output.writeInt64(4, timestamp_);
-    }
     getUnknownFields().writeTo(output);
   }
 
@@ -129,10 +115,6 @@ private static final long serialVersionUID = 0L;
     if (clickedDirection_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(3, clickedDirection_);
-    }
-    if (timestamp_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(4, timestamp_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -155,8 +137,6 @@ private static final long serialVersionUID = 0L;
         != other.getSequence()) return false;
     if (getClickedDirection()
         != other.getClickedDirection()) return false;
-    if (getTimestamp()
-        != other.getTimestamp()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -175,9 +155,6 @@ private static final long serialVersionUID = 0L;
         getSequence());
     hash = (37 * hash) + CLICKEDDIRECTION_FIELD_NUMBER;
     hash = (53 * hash) + getClickedDirection();
-    hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getTimestamp());
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -312,7 +289,6 @@ private static final long serialVersionUID = 0L;
       type_ = 0;
       sequence_ = 0L;
       clickedDirection_ = 0;
-      timestamp_ = 0L;
       return this;
     }
 
@@ -354,9 +330,6 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
         result.clickedDirection_ = clickedDirection_;
-      }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
-        result.timestamp_ = timestamp_;
       }
     }
 
@@ -413,9 +386,6 @@ private static final long serialVersionUID = 0L;
       if (other.getClickedDirection() != 0) {
         setClickedDirection(other.getClickedDirection());
       }
-      if (other.getTimestamp() != 0L) {
-        setTimestamp(other.getTimestamp());
-      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -457,11 +427,6 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000004;
               break;
             } // case 24
-            case 32: {
-              timestamp_ = input.readInt64();
-              bitField0_ |= 0x00000008;
-              break;
-            } // case 32
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -571,38 +536,6 @@ private static final long serialVersionUID = 0L;
     public Builder clearClickedDirection() {
       bitField0_ = (bitField0_ & ~0x00000004);
       clickedDirection_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private long timestamp_ ;
-    /**
-     * <code>int64 timestamp = 4;</code>
-     * @return The timestamp.
-     */
-    @java.lang.Override
-    public long getTimestamp() {
-      return timestamp_;
-    }
-    /**
-     * <code>int64 timestamp = 4;</code>
-     * @param value The timestamp to set.
-     * @return This builder for chaining.
-     */
-    public Builder setTimestamp(long value) {
-
-      timestamp_ = value;
-      bitField0_ |= 0x00000008;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int64 timestamp = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearTimestamp() {
-      bitField0_ = (bitField0_ & ~0x00000008);
-      timestamp_ = 0L;
       onChanged();
       return this;
     }

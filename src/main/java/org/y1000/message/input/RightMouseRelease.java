@@ -2,7 +2,7 @@ package org.y1000.message.input;
 
 import org.y1000.connection.gen.InputPacket;
 
-public record RightMouseRelease(long sequence, long timestamp) implements InputMessage {
+public record RightMouseRelease(long sequence) implements InputMessage {
 
     @Override
     public InputType type() {
@@ -10,6 +10,6 @@ public record RightMouseRelease(long sequence, long timestamp) implements InputM
     }
 
     public static RightMouseRelease fromPacket(InputPacket inputPacket) {
-        return new RightMouseRelease(inputPacket.getSequence(), inputPacket.getTimestamp());
+        return new RightMouseRelease(inputPacket.getSequence());
     }
 }

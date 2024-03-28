@@ -65,35 +65,34 @@ public final class Message {
   static {
     java.lang.String[] descriptorData = {
       "\n\rmessage.proto\022\030org.y1000.connection.ge" +
-      "n\"y\n\016MovementPacket\022\r\n\005state\030\001 \001(\005\022\t\n\001x\030" +
+      "n\"f\n\016MovementPacket\022\r\n\005state\030\001 \001(\005\022\t\n\001x\030" +
       "\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\021\n\tdirection\030\004 \001(\005\022\n\n\002i" +
-      "d\030\005 \001(\005\022\021\n\ttimestamp\030\006 \001(\003\022\020\n\010sequence\030\007" +
-      " \001(\003\"Z\n\013InputPacket\022\014\n\004type\030\001 \001(\005\022\020\n\010seq" +
-      "uence\030\002 \001(\003\022\030\n\020clickedDirection\030\003 \001(\005\022\021\n" +
-      "\ttimestamp\030\004 \001(\003\"\256\001\n\023InterpolationPacket" +
-      "\022\n\n\002id\030\001 \001(\003\022\r\n\005state\030\002 \001(\005\022\021\n\ttimestamp" +
-      "\030\003 \001(\003\022\022\n\nstateStart\030\004 \001(\003\022\032\n\022interpolat" +
-      "ionStart\030\005 \001(\003\022\020\n\010duration\030\006 \001(\005\022\021\n\tdire" +
-      "ction\030\007 \001(\005\022\t\n\001x\030\010 \001(\005\022\t\n\001y\030\t \001(\005\"]\n\024Int" +
-      "erpolationsPacket\022E\n\016interpolations\030\001 \003(" +
-      "\0132-.org.y1000.connection.gen.Interpolati" +
-      "onPacket\"/\n\013LoginPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030" +
-      "\002 \001(\005\022\n\n\002id\030\003 \001(\003\"\355\002\n\006Packet\022B\n\016movement" +
-      "Packet\030\001 \001(\0132(.org.y1000.connection.gen." +
-      "MovementPacketH\000\022J\n\022showCreaturePacket\030\002" +
-      " \001(\0132,.org.y1000.connection.gen.ShowCrea" +
-      "turePacketH\000\022<\n\013inputPacket\030\003 \001(\0132%.org." +
-      "y1000.connection.gen.InputPacketH\000\022<\n\013lo" +
-      "ginPacket\030\004 \001(\0132%.org.y1000.connection.g" +
-      "en.LoginPacketH\000\022H\n\016interpolations\030\005 \001(\013" +
-      "2..org.y1000.connection.gen.Interpolatio" +
-      "nsPacketH\000B\r\n\013TypedPacket\"Z\n\020ShowPlayerP" +
-      "acket\022:\n\010movement\030\001 \001(\0132(.org.y1000.conn" +
-      "ection.gen.MovementPacket\022\n\n\002id\030\002 \001(\003\"f\n" +
-      "\022ShowCreaturePacket\022:\n\010movement\030\001 \001(\0132(." +
-      "org.y1000.connection.gen.MovementPacket\022" +
-      "\024\n\014creatureType\030\002 \001(\005B\034\n\030org.y1000.conne" +
-      "ction.genP\001b\006proto3"
+      "d\030\005 \001(\005\022\020\n\010sequence\030\007 \001(\003\"G\n\013InputPacket" +
+      "\022\014\n\004type\030\001 \001(\005\022\020\n\010sequence\030\002 \001(\003\022\030\n\020clic" +
+      "kedDirection\030\003 \001(\005\"\233\001\n\023InterpolationPack" +
+      "et\022\n\n\002id\030\001 \001(\003\022\r\n\005state\030\002 \001(\005\022\022\n\nstateSt" +
+      "art\030\004 \001(\003\022\032\n\022interpolationStart\030\005 \001(\003\022\020\n" +
+      "\010duration\030\006 \001(\005\022\021\n\tdirection\030\007 \001(\005\022\t\n\001x\030" +
+      "\010 \001(\005\022\t\n\001y\030\t \001(\005\"]\n\024InterpolationsPacket" +
+      "\022E\n\016interpolations\030\001 \003(\0132-.org.y1000.con" +
+      "nection.gen.InterpolationPacket\"/\n\013Login" +
+      "Packet\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002id\030\003 \001(\003" +
+      "\"\355\002\n\006Packet\022B\n\016movementPacket\030\001 \001(\0132(.or" +
+      "g.y1000.connection.gen.MovementPacketH\000\022" +
+      "J\n\022showCreaturePacket\030\002 \001(\0132,.org.y1000." +
+      "connection.gen.ShowCreaturePacketH\000\022<\n\013i" +
+      "nputPacket\030\003 \001(\0132%.org.y1000.connection." +
+      "gen.InputPacketH\000\022<\n\013loginPacket\030\004 \001(\0132%" +
+      ".org.y1000.connection.gen.LoginPacketH\000\022" +
+      "H\n\016interpolations\030\005 \001(\0132..org.y1000.conn" +
+      "ection.gen.InterpolationsPacketH\000B\r\n\013Typ" +
+      "edPacket\"Z\n\020ShowPlayerPacket\022:\n\010movement" +
+      "\030\001 \001(\0132(.org.y1000.connection.gen.Moveme" +
+      "ntPacket\022\n\n\002id\030\002 \001(\003\"f\n\022ShowCreaturePack" +
+      "et\022:\n\010movement\030\001 \001(\0132(.org.y1000.connect" +
+      "ion.gen.MovementPacket\022\024\n\014creatureType\030\002" +
+      " \001(\005B\034\n\030org.y1000.connection.genP\001b\006prot" +
+      "o3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -104,19 +103,19 @@ public final class Message {
     internal_static_org_y1000_connection_gen_MovementPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_MovementPacket_descriptor,
-        new java.lang.String[] { "State", "X", "Y", "Direction", "Id", "Timestamp", "Sequence", });
+        new java.lang.String[] { "State", "X", "Y", "Direction", "Id", "Sequence", });
     internal_static_org_y1000_connection_gen_InputPacket_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_org_y1000_connection_gen_InputPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_InputPacket_descriptor,
-        new java.lang.String[] { "Type", "Sequence", "ClickedDirection", "Timestamp", });
+        new java.lang.String[] { "Type", "Sequence", "ClickedDirection", });
     internal_static_org_y1000_connection_gen_InterpolationPacket_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_org_y1000_connection_gen_InterpolationPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_InterpolationPacket_descriptor,
-        new java.lang.String[] { "Id", "State", "Timestamp", "StateStart", "InterpolationStart", "Duration", "Direction", "X", "Y", });
+        new java.lang.String[] { "Id", "State", "StateStart", "InterpolationStart", "Duration", "Direction", "X", "Y", });
     internal_static_org_y1000_connection_gen_InterpolationsPacket_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_org_y1000_connection_gen_InterpolationsPacket_fieldAccessorTable = new

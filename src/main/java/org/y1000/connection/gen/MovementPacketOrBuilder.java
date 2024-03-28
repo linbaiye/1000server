@@ -39,12 +39,6 @@ public interface MovementPacketOrBuilder extends
   int getId();
 
   /**
-   * <code>int64 timestamp = 6;</code>
-   * @return The timestamp.
-   */
-  long getTimestamp();
-
-  /**
    * <code>int64 sequence = 7;</code>
    * @return The sequence.
    */

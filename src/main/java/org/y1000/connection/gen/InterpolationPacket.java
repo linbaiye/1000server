@@ -61,17 +61,6 @@ private static final long serialVersionUID = 0L;
     return state_;
   }
 
-  public static final int TIMESTAMP_FIELD_NUMBER = 3;
-  private long timestamp_ = 0L;
-  /**
-   * <code>int64 timestamp = 3;</code>
-   * @return The timestamp.
-   */
-  @java.lang.Override
-  public long getTimestamp() {
-    return timestamp_;
-  }
-
   public static final int STATESTART_FIELD_NUMBER = 4;
   private long stateStart_ = 0L;
   /**
@@ -158,9 +147,6 @@ private static final long serialVersionUID = 0L;
     if (state_ != 0) {
       output.writeInt32(2, state_);
     }
-    if (timestamp_ != 0L) {
-      output.writeInt64(3, timestamp_);
-    }
     if (stateStart_ != 0L) {
       output.writeInt64(4, stateStart_);
     }
@@ -195,10 +181,6 @@ private static final long serialVersionUID = 0L;
     if (state_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(2, state_);
-    }
-    if (timestamp_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(3, timestamp_);
     }
     if (stateStart_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
@@ -243,8 +225,6 @@ private static final long serialVersionUID = 0L;
         != other.getId()) return false;
     if (getState()
         != other.getState()) return false;
-    if (getTimestamp()
-        != other.getTimestamp()) return false;
     if (getStateStart()
         != other.getStateStart()) return false;
     if (getInterpolationStart()
@@ -273,9 +253,6 @@ private static final long serialVersionUID = 0L;
         getId());
     hash = (37 * hash) + STATE_FIELD_NUMBER;
     hash = (53 * hash) + getState();
-    hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getTimestamp());
     hash = (37 * hash) + STATESTART_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getStateStart());
@@ -423,7 +400,6 @@ private static final long serialVersionUID = 0L;
       bitField0_ = 0;
       id_ = 0L;
       state_ = 0;
-      timestamp_ = 0L;
       stateStart_ = 0L;
       interpolationStart_ = 0L;
       duration_ = 0;
@@ -470,24 +446,21 @@ private static final long serialVersionUID = 0L;
         result.state_ = state_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.timestamp_ = timestamp_;
-      }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
         result.stateStart_ = stateStart_;
       }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
+      if (((from_bitField0_ & 0x00000008) != 0)) {
         result.interpolationStart_ = interpolationStart_;
       }
-      if (((from_bitField0_ & 0x00000020) != 0)) {
+      if (((from_bitField0_ & 0x00000010) != 0)) {
         result.duration_ = duration_;
       }
-      if (((from_bitField0_ & 0x00000040) != 0)) {
+      if (((from_bitField0_ & 0x00000020) != 0)) {
         result.direction_ = direction_;
       }
-      if (((from_bitField0_ & 0x00000080) != 0)) {
+      if (((from_bitField0_ & 0x00000040) != 0)) {
         result.x_ = x_;
       }
-      if (((from_bitField0_ & 0x00000100) != 0)) {
+      if (((from_bitField0_ & 0x00000080) != 0)) {
         result.y_ = y_;
       }
     }
@@ -541,9 +514,6 @@ private static final long serialVersionUID = 0L;
       }
       if (other.getState() != 0) {
         setState(other.getState());
-      }
-      if (other.getTimestamp() != 0L) {
-        setTimestamp(other.getTimestamp());
       }
       if (other.getStateStart() != 0L) {
         setStateStart(other.getStateStart());
@@ -599,39 +569,34 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000002;
               break;
             } // case 16
-            case 24: {
-              timestamp_ = input.readInt64();
-              bitField0_ |= 0x00000004;
-              break;
-            } // case 24
             case 32: {
               stateStart_ = input.readInt64();
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000004;
               break;
             } // case 32
             case 40: {
               interpolationStart_ = input.readInt64();
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000008;
               break;
             } // case 40
             case 48: {
               duration_ = input.readInt32();
-              bitField0_ |= 0x00000020;
+              bitField0_ |= 0x00000010;
               break;
             } // case 48
             case 56: {
               direction_ = input.readInt32();
-              bitField0_ |= 0x00000040;
+              bitField0_ |= 0x00000020;
               break;
             } // case 56
             case 64: {
               x_ = input.readInt32();
-              bitField0_ |= 0x00000080;
+              bitField0_ |= 0x00000040;
               break;
             } // case 64
             case 72: {
               y_ = input.readInt32();
-              bitField0_ |= 0x00000100;
+              bitField0_ |= 0x00000080;
               break;
             } // case 72
             default: {
@@ -715,38 +680,6 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long timestamp_ ;
-    /**
-     * <code>int64 timestamp = 3;</code>
-     * @return The timestamp.
-     */
-    @java.lang.Override
-    public long getTimestamp() {
-      return timestamp_;
-    }
-    /**
-     * <code>int64 timestamp = 3;</code>
-     * @param value The timestamp to set.
-     * @return This builder for chaining.
-     */
-    public Builder setTimestamp(long value) {
-
-      timestamp_ = value;
-      bitField0_ |= 0x00000004;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int64 timestamp = 3;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearTimestamp() {
-      bitField0_ = (bitField0_ & ~0x00000004);
-      timestamp_ = 0L;
-      onChanged();
-      return this;
-    }
-
     private long stateStart_ ;
     /**
      * <code>int64 stateStart = 4;</code>
@@ -764,7 +697,7 @@ private static final long serialVersionUID = 0L;
     public Builder setStateStart(long value) {
 
       stateStart_ = value;
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -773,7 +706,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearStateStart() {
-      bitField0_ = (bitField0_ & ~0x00000008);
+      bitField0_ = (bitField0_ & ~0x00000004);
       stateStart_ = 0L;
       onChanged();
       return this;
@@ -796,7 +729,7 @@ private static final long serialVersionUID = 0L;
     public Builder setInterpolationStart(long value) {
 
       interpolationStart_ = value;
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -805,7 +738,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearInterpolationStart() {
-      bitField0_ = (bitField0_ & ~0x00000010);
+      bitField0_ = (bitField0_ & ~0x00000008);
       interpolationStart_ = 0L;
       onChanged();
       return this;
@@ -828,7 +761,7 @@ private static final long serialVersionUID = 0L;
     public Builder setDuration(int value) {
 
       duration_ = value;
-      bitField0_ |= 0x00000020;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -837,7 +770,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearDuration() {
-      bitField0_ = (bitField0_ & ~0x00000020);
+      bitField0_ = (bitField0_ & ~0x00000010);
       duration_ = 0;
       onChanged();
       return this;
@@ -860,7 +793,7 @@ private static final long serialVersionUID = 0L;
     public Builder setDirection(int value) {
 
       direction_ = value;
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -869,7 +802,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearDirection() {
-      bitField0_ = (bitField0_ & ~0x00000040);
+      bitField0_ = (bitField0_ & ~0x00000020);
       direction_ = 0;
       onChanged();
       return this;
@@ -892,7 +825,7 @@ private static final long serialVersionUID = 0L;
     public Builder setX(int value) {
 
       x_ = value;
-      bitField0_ |= 0x00000080;
+      bitField0_ |= 0x00000040;
       onChanged();
       return this;
     }
@@ -901,7 +834,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearX() {
-      bitField0_ = (bitField0_ & ~0x00000080);
+      bitField0_ = (bitField0_ & ~0x00000040);
       x_ = 0;
       onChanged();
       return this;
@@ -924,7 +857,7 @@ private static final long serialVersionUID = 0L;
     public Builder setY(int value) {
 
       y_ = value;
-      bitField0_ |= 0x00000100;
+      bitField0_ |= 0x00000080;
       onChanged();
       return this;
     }
@@ -933,7 +866,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearY() {
-      bitField0_ = (bitField0_ & ~0x00000100);
+      bitField0_ = (bitField0_ & ~0x00000080);
       y_ = 0;
       onChanged();
       return this;

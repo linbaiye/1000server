@@ -21,12 +21,6 @@ public interface InterpolationPacketOrBuilder extends
   int getState();
 
   /**
-   * <code>int64 timestamp = 3;</code>
-   * @return The timestamp.
-   */
-  long getTimestamp();
-
-  /**
    * <code>int64 stateStart = 4;</code>
    * @return The stateStart.
    */
