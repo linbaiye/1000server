@@ -1,6 +1,7 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.Direction;
 import org.y1000.message.*;
 import org.y1000.message.input.InputMessage;
 import org.y1000.message.input.RightMouseClick;
@@ -13,21 +14,17 @@ import java.util.*;
 @Slf4j
 final class PlayerWalkState implements PlayerState {
 
-    static final long MILLIS_TO_WALK_ONE_UNIT = 900;
-
-    // Milliseconds this state lasts.
-    private long lastMillis;
+    private static final long MILLIS_TO_WALK_ONE_UNIT = 900;
 
     private InputMessage currentInput;
 
     private InputMessage lastReceivedInput;
 
-    private long walkMillis ;
+    private long walkedMillis;
 
     public PlayerWalkState(InputMessage trigger) {
-        lastMillis = 0;
         currentInput = trigger;
-        walkMillis = 0;
+        walkedMillis = 0;
     }
 
     @Override
@@ -55,37 +52,38 @@ final class PlayerWalkState implements PlayerState {
         return Collections.emptyList();
     }
 
-    private List<I2ClientMessage> handleMotion(PlayerImpl player, RightMousePressedMotion motion) {
-        player.changeDirection(motion.direction());
-        Coordinate next = player.coordinate().moveBy(motion.direction());
+
+
+    private Optional<I2ClientMessage> handleNonReleaseInput(PlayerImpl player, InputMessage trigger, Direction direction) {
+        player.changeDirection(direction);
+        Coordinate next = player.coordinate().moveBy(direction);
         if (!player.getRealm().canMoveTo(next)) {
             log.debug("{} not movable, changing back to idle.", next);
             player.changeState(new PlayerIdleState());
-            return Collections.singletonList(UpdateMovementStateMessage.fromPlayer(player, motion.sequence()));
+            return UpdateMovementStateMessage.fromPlayer(player, trigger.sequence());
         } else {
-            walkMillis = 0;
-            currentInput = motion;
-            lastReceivedInput = null;
-            return Collections.emptyList();
+            player.changeState(new PlayerWalkState(trigger));
+            return null;
         }
     }
 
 
+
     @Override
     public List<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
-        lastMillis += deltaMillis;
-        walkMillis += deltaMillis;
-        if (walkMillis < MILLIS_TO_WALK_ONE_UNIT) {
+        walkedMillis += deltaMillis;
+        if (walkedMillis < MILLIS_TO_WALK_ONE_UNIT) {
             return Collections.emptyList();
         }
+        List<I2ClientMessage> messages = new ArrayList<>();
         Coordinate newCoordinate = player.coordinate().moveBy(player.direction());
         log.debug("Moving to coordinate {}.", newCoordinate);
         player.changeCoordinate(newCoordinate);
+        messages.add(UpdateMovementStateMessage.fromPlayer(player, currentInput.sequence()));
         if (lastReceivedInput == null) {
-            player.changeState(new PlayerWalkState(currentInput));
-            return Collections.singletonList(UpdateMovementStateMessage.fromPlayer(player, currentInput.sequence()));
+            messages.add(handleNonReleaseInput(player, currentInput, player.direction()));
         } else if (lastReceivedInput instanceof RightMousePressedMotion motion) {
-            return handleMotion(player, motion);
+            return handleNonReleaseInput(player, motion, motion.direction());
         } else {
             player.changeState(new PlayerIdleState());
             return Collections.singletonList(UpdateMovementStateMessage.fromPlayer(player, currentInput.sequence()));
