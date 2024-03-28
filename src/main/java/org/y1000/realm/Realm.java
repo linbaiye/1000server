@@ -7,6 +7,7 @@ import org.y1000.connection.ConnectionEventType;
 import org.y1000.entities.managers.PlayerManager;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.repository.PlayerRepository;
+import org.y1000.message.LoginMessage;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
@@ -16,7 +17,7 @@ public class Realm implements Runnable, ConnectionEventListener  {
 
     private static final long STEP_MILLIS = 50;
 
-    private long time;
+    private long realmElapsedMillis;
 
     private final PlayerManager playerManager;
 
@@ -33,7 +34,7 @@ public class Realm implements Runnable, ConnectionEventListener  {
     }
 
     public long timeMillis() {
-        return time;
+        return realmElapsedMillis;
     }
 
     public Realm(PlayerRepository playerRepository, RealmMap map) {
@@ -42,7 +43,7 @@ public class Realm implements Runnable, ConnectionEventListener  {
         realmMap = map;
         closingConnections = new ArrayList<>();
         joiningPlayers = new HashMap<>();
-        time = 0;
+        realmElapsedMillis = 0;
     }
 
     public RealmMap map() {
@@ -58,8 +59,7 @@ public class Realm implements Runnable, ConnectionEventListener  {
     }
 
     public void onConnectionEstablished(Connection connection) {
-        long id = connection.id();
-        Player player = playerRepository.load(id);
+        Player player = playerRepository.load();
         synchronized (this) {
             joiningPlayers.put(connection, player);
         }
@@ -88,8 +88,9 @@ public class Realm implements Runnable, ConnectionEventListener  {
         }
         deadConnections.forEach(playerManager::remove);
         newPlayers.forEach((c, p) -> {
-            p.joinReam(this, time);
+            p.joinReam(this, realmElapsedMillis);
             playerManager.add(c, p);
+            c.write(new LoginMessage(p.id(), p.coordinate()));
         });
     }
 
@@ -101,9 +102,9 @@ public class Realm implements Runnable, ConnectionEventListener  {
                 handleConnectionEvents();
                 long current = System.currentTimeMillis();
                 if (timeMillis <= current) {
-                    playerManager.update(STEP_MILLIS, time);
+                    playerManager.update(STEP_MILLIS, realmElapsedMillis);
                     timeMillis += STEP_MILLIS;
-                    time += STEP_MILLIS;
+                    realmElapsedMillis += STEP_MILLIS;
                     playerManager.syncState();
                 } else {
                     Thread.sleep(timeMillis - current);

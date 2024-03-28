@@ -77,23 +77,23 @@ public final class Message {
       "ction\030\007 \001(\005\022\t\n\001x\030\010 \001(\005\022\t\n\001y\030\t \001(\005\"]\n\024Int" +
       "erpolationsPacket\022E\n\016interpolations\030\001 \003(" +
       "\0132-.org.y1000.connection.gen.Interpolati" +
-      "onPacket\"#\n\013LoginPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030" +
-      "\002 \001(\005\"\355\002\n\006Packet\022B\n\016movementPacket\030\001 \001(\013" +
-      "2(.org.y1000.connection.gen.MovementPack" +
-      "etH\000\022J\n\022showCreaturePacket\030\002 \001(\0132,.org.y" +
-      "1000.connection.gen.ShowCreaturePacketH\000" +
-      "\022<\n\013inputPacket\030\003 \001(\0132%.org.y1000.connec" +
-      "tion.gen.InputPacketH\000\022<\n\013loginPacket\030\004 " +
-      "\001(\0132%.org.y1000.connection.gen.LoginPack" +
-      "etH\000\022H\n\016interpolations\030\005 \001(\0132..org.y1000" +
-      ".connection.gen.InterpolationsPacketH\000B\r" +
-      "\n\013TypedPacket\"Z\n\020ShowPlayerPacket\022:\n\010mov" +
-      "ement\030\001 \001(\0132(.org.y1000.connection.gen.M" +
-      "ovementPacket\022\n\n\002id\030\002 \001(\003\"f\n\022ShowCreatur" +
-      "ePacket\022:\n\010movement\030\001 \001(\0132(.org.y1000.co" +
-      "nnection.gen.MovementPacket\022\024\n\014creatureT" +
-      "ype\030\002 \001(\005B\034\n\030org.y1000.connection.genP\001b" +
-      "\006proto3"
+      "onPacket\"/\n\013LoginPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030" +
+      "\002 \001(\005\022\n\n\002id\030\003 \001(\003\"\355\002\n\006Packet\022B\n\016movement" +
+      "Packet\030\001 \001(\0132(.org.y1000.connection.gen." +
+      "MovementPacketH\000\022J\n\022showCreaturePacket\030\002" +
+      " \001(\0132,.org.y1000.connection.gen.ShowCrea" +
+      "turePacketH\000\022<\n\013inputPacket\030\003 \001(\0132%.org." +
+      "y1000.connection.gen.InputPacketH\000\022<\n\013lo" +
+      "ginPacket\030\004 \001(\0132%.org.y1000.connection.g" +
+      "en.LoginPacketH\000\022H\n\016interpolations\030\005 \001(\013" +
+      "2..org.y1000.connection.gen.Interpolatio" +
+      "nsPacketH\000B\r\n\013TypedPacket\"Z\n\020ShowPlayerP" +
+      "acket\022:\n\010movement\030\001 \001(\0132(.org.y1000.conn" +
+      "ection.gen.MovementPacket\022\n\n\002id\030\002 \001(\003\"f\n" +
+      "\022ShowCreaturePacket\022:\n\010movement\030\001 \001(\0132(." +
+      "org.y1000.connection.gen.MovementPacket\022" +
+      "\024\n\014creatureType\030\002 \001(\005B\034\n\030org.y1000.conne" +
+      "ction.genP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -128,7 +128,7 @@ public final class Message {
     internal_static_org_y1000_connection_gen_LoginPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_LoginPacket_descriptor,
-        new java.lang.String[] { "X", "Y", });
+        new java.lang.String[] { "X", "Y", "Id", });
     internal_static_org_y1000_connection_gen_Packet_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_org_y1000_connection_gen_Packet_fieldAccessorTable = new

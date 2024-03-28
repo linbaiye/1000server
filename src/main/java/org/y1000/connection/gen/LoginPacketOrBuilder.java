@@ -19,4 +19,10 @@ public interface LoginPacketOrBuilder extends
    * @return The y.
    */
   int getY();
+
+  /**
+   * <code>int64 id = 3;</code>
+   * @return The id.
+   */
+  long getId();
 }

@@ -6,4 +6,6 @@ public interface PlayerRepository {
 
     Player load(long id);
 
+    Player load();
+
 }
