@@ -69,12 +69,10 @@ class PlayerImpl implements Player {
         };
     }
 
-    public List<I2ClientMessage> handle(List<Message> messages) {
+    public List<I2ClientMessage> handle(List<InputMessage> messages) {
         List<I2ClientMessage> result = new ArrayList<>();
-        for (Message message : messages) {
-            if (message instanceof InputMessage inputMessage) {
-                result.addAll(handleInputMessage(inputMessage));
-            }
+        for (InputMessage message : messages) {
+            result.addAll(handleInputMessage(message));
         }
         return result;
     }

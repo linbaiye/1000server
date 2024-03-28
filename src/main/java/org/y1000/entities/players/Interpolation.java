@@ -1,9 +1,8 @@
 package org.y1000.entities.players;
 
 import org.y1000.connection.gen.InterpolationPacket;
-import org.y1000.message.Message;
 
-public interface Interpolation extends Message {
+public interface Interpolation {
     long id();
 
     State state();

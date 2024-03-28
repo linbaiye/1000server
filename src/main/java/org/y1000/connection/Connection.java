@@ -1,13 +1,13 @@
 package org.y1000.connection;
 
 import org.y1000.message.I2ClientMessage;
-import org.y1000.message.Message;
+import org.y1000.message.input.InputMessage;
 
 import java.util.List;
 
 public interface Connection {
 
-    List<Message> takeMessages();
+    List<InputMessage> takeMessages();
 
     void write(I2ClientMessage message);
 

@@ -20,9 +20,4 @@ public record LoginMessage(Coordinate coordinate) implements I2ClientMessage {
                         .build()
         ).build();
     }
-
-    @Override
-    public long timestamp() {
-        return 0;
-    }
 }

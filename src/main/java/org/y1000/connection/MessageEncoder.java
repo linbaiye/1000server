@@ -6,8 +6,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.message.I2ClientMessage;
-import org.y1000.message.Message;
-import org.y1000.message.UpdateStateMessage;
 
 @Slf4j
 @ChannelHandler.Sharable

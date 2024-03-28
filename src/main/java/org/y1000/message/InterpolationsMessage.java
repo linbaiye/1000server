@@ -21,11 +21,6 @@ public class InterpolationsMessage implements I2ClientMessage {
                 .build()).build();
     }
 
-    @Override
-    public long timestamp() {
-        return 0;
-    }
-
     public static InterpolationsMessage wrap(Collection<Interpolation> interpolations) {
         return new InterpolationsMessage(interpolations);
     }

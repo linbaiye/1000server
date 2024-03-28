@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.connection.gen.InputPacket;
 import org.y1000.connection.gen.Packet;
 import org.y1000.message.*;
+import org.y1000.message.input.InputMessage;
 import org.y1000.message.input.InputType;
 import org.y1000.message.input.RightMouseClick;
 import org.y1000.message.input.RightMouseRelease;
@@ -18,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public abstract class AbstractConnection extends ChannelInboundHandlerAdapter implements Connection {
 
-    private final List<Message> messages;
+    private final List<InputMessage> messages;
 
     private final ConnectionEventListener eventListener;
 
@@ -31,7 +32,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
     }
 
 
-    private Message createInputMessage(InputPacket inputPacket) {
+    private InputMessage createInputMessage(InputPacket inputPacket) {
         InputType type = ValueEnum.fromValueOrThrow(InputType.values(), inputPacket.getType());
         return switch (type) {
             case MOUSE_RIGHT_CLICK -> RightMouseClick.fromPacket(inputPacket);
@@ -40,7 +41,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         };
     }
 
-    private Message createMessage(Packet packet) {
+    private InputMessage createMessage(Packet packet) {
         return switch (packet.getTypedPacketCase()) {
             case INPUTPACKET -> createInputMessage(packet.getInputPacket());
             default -> throw new IllegalArgumentException();
@@ -87,7 +88,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
 
     @Override
-    public List<Message> takeMessages() {
+    public List<InputMessage> takeMessages() {
         synchronized (messages) {
             if (messages.isEmpty()) {
                 return Collections.emptyList();

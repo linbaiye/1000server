@@ -88,11 +88,7 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
             if (messages.isEmpty()) {
                 return;
             }
-            I2ClientMessage message = messages.peekFirst();
-            if (curMilli - message.timestamp() < 200) {
-                return;
-            }
-            message = messages.pollFirst();
+            I2ClientMessage message = messages.pollFirst();
             context.channel().writeAndFlush(message);
         }
     }
@@ -102,7 +98,7 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
         while (true) {
             try {
                 handleMessages();
-                Thread.sleep(10);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 break;
             }

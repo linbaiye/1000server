@@ -20,9 +20,6 @@ public class IdleInterpolation implements Interpolation {
 
     private final long interpolationStart;
 
-    @Builder.Default
-    private long timestamp = System.currentTimeMillis();
-
     @Override
     public long id() {
         return id;
@@ -54,17 +51,11 @@ public class IdleInterpolation implements Interpolation {
                 .setDuration(duration())
                 .setState(state().value())
                 .setDirection(direction.value())
-                .setTimestamp(timestamp())
                 .setX(coordinate.x())
                 .setY(coordinate.y())
                 .setId(id())
                 .setStateStart(stateStartAtMillis())
                 .setInterpolationStart(interpolationStartAtMillis())
                 .build();
-    }
-
-    @Override
-    public long timestamp() {
-        return timestamp;
     }
 }

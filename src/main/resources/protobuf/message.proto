@@ -11,7 +11,6 @@ message MovementPacket {
   int32 y = 3;
   int32 direction = 4;
   int32 id = 5;
-  int64 timestamp = 6;
   int64 sequence = 7;
 }
 
@@ -19,14 +18,12 @@ message InputPacket {
   int32 type = 1;
   int64 sequence = 2;
   int32 clickedDirection = 3;
-  int64 timestamp = 4;
 }
 
 
 message InterpolationPacket {
   int64 id = 1;
   int32 state = 2;
-  int64 timestamp = 3;
   int64 stateStart = 4;
   int64 interpolationStart = 5;
   int32 duration = 6;

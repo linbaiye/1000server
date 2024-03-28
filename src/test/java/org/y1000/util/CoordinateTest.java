@@ -3,6 +3,8 @@ package org.y1000.util;
 import org.junit.jupiter.api.Test;
 import org.y1000.entities.Direction;
 
+import java.awt.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CoordinateTest {
@@ -27,7 +29,14 @@ class CoordinateTest {
 
     @Test
     void name() {
-
         System.out.println(50%900);
+    }
+
+    public static boolean isLeft(Point a, Point b, Point c) {
+        return (b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x) < 0;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isLeft(new Point(165,140), new Point(167, 142), new Point(164, 142)));
     }
 }
