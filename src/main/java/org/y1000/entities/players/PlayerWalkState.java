@@ -16,7 +16,7 @@ final class PlayerWalkState implements PlayerState {
 
     private static final long MILLIS_TO_WALK_ONE_UNIT = 900;
 
-    private InputMessage currentInput;
+    private final InputMessage currentInput;
 
     private InputMessage lastReceivedInput;
 
@@ -29,7 +29,7 @@ final class PlayerWalkState implements PlayerState {
 
     @Override
     public List<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
-        lastReceivedInput = null;
+        lastReceivedInput = click;
         return Collections.emptyList();
     }
 
@@ -53,22 +53,6 @@ final class PlayerWalkState implements PlayerState {
     }
 
 
-
-    private Optional<I2ClientMessage> handleNonReleaseInput(PlayerImpl player, InputMessage trigger, Direction direction) {
-        player.changeDirection(direction);
-        Coordinate next = player.coordinate().moveBy(direction);
-        if (!player.getRealm().canMoveTo(next)) {
-            log.debug("{} not movable, changing back to idle.", next);
-            player.changeState(new PlayerIdleState());
-            return UpdateMovementStateMessage.fromPlayer(player, trigger.sequence());
-        } else {
-            player.changeState(new PlayerWalkState(trigger));
-            return null;
-        }
-    }
-
-
-
     @Override
     public List<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
         walkedMillis += deltaMillis;
@@ -79,15 +63,15 @@ final class PlayerWalkState implements PlayerState {
         Coordinate newCoordinate = player.coordinate().moveBy(player.direction());
         log.debug("Moving to coordinate {}.", newCoordinate);
         player.changeCoordinate(newCoordinate);
-        messages.add(UpdateMovementStateMessage.fromPlayer(player, currentInput.sequence()));
         if (lastReceivedInput == null) {
-            messages.add(handleNonReleaseInput(player, currentInput, player.direction()));
+            return Collections.singletonList(Mover.move(player, currentInput.sequence(), player.direction()));
         } else if (lastReceivedInput instanceof RightMousePressedMotion motion) {
-            return handleNonReleaseInput(player, motion, motion.direction());
+            return Collections.singletonList(Mover.move(player, motion.sequence(), motion.direction()));
         } else {
             player.changeState(new PlayerIdleState());
-            return Collections.singletonList(UpdateMovementStateMessage.fromPlayer(player, currentInput.sequence()));
+            //messages.add(MoveMessage.fromPlayer(player, currentInput.sequence()));
         }
+        return messages;
     }
 
     @Override

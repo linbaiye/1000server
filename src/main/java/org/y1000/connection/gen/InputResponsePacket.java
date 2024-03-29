@@ -5,76 +5,76 @@
 package org.y1000.connection.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.ShowPlayerPacket}
+ * Protobuf type {@code org.y1000.connection.gen.InputResponsePacket}
  */
-public final class ShowPlayerPacket extends
+public final class InputResponsePacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.ShowPlayerPacket)
-    ShowPlayerPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.InputResponsePacket)
+    InputResponsePacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ShowPlayerPacket.newBuilder() to construct.
-  private ShowPlayerPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use InputResponsePacket.newBuilder() to construct.
+  private InputResponsePacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ShowPlayerPacket() {
+  private InputResponsePacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new ShowPlayerPacket();
+    return new InputResponsePacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowPlayerPacket_descriptor;
+    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_InputResponsePacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowPlayerPacket_fieldAccessorTable
+    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_InputResponsePacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.connection.gen.ShowPlayerPacket.class, org.y1000.connection.gen.ShowPlayerPacket.Builder.class);
+            org.y1000.connection.gen.InputResponsePacket.class, org.y1000.connection.gen.InputResponsePacket.Builder.class);
   }
 
   private int bitField0_;
-  public static final int MOVEMENT_FIELD_NUMBER = 1;
-  private org.y1000.connection.gen.PositionPacket movement_;
+  public static final int SEQUENCE_FIELD_NUMBER = 1;
+  private long sequence_ = 0L;
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
-   * @return Whether the movement field is set.
+   * <code>int64 sequence = 1;</code>
+   * @return The sequence.
    */
   @java.lang.Override
-  public boolean hasMovement() {
+  public long getSequence() {
+    return sequence_;
+  }
+
+  public static final int POSITIONPACKET_FIELD_NUMBER = 2;
+  private org.y1000.connection.gen.PositionPacket positionPacket_;
+  /**
+   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+   * @return Whether the positionPacket field is set.
+   */
+  @java.lang.Override
+  public boolean hasPositionPacket() {
     return ((bitField0_ & 0x00000001) != 0);
   }
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
-   * @return The movement.
+   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+   * @return The positionPacket.
    */
   @java.lang.Override
-  public org.y1000.connection.gen.PositionPacket getMovement() {
-    return movement_ == null ? org.y1000.connection.gen.PositionPacket.getDefaultInstance() : movement_;
+  public org.y1000.connection.gen.PositionPacket getPositionPacket() {
+    return positionPacket_ == null ? org.y1000.connection.gen.PositionPacket.getDefaultInstance() : positionPacket_;
   }
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
+   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
    */
   @java.lang.Override
-  public org.y1000.connection.gen.PositionPacketOrBuilder getMovementOrBuilder() {
-    return movement_ == null ? org.y1000.connection.gen.PositionPacket.getDefaultInstance() : movement_;
-  }
-
-  public static final int ID_FIELD_NUMBER = 2;
-  private long id_ = 0L;
-  /**
-   * <code>int64 id = 2;</code>
-   * @return The id.
-   */
-  @java.lang.Override
-  public long getId() {
-    return id_;
+  public org.y1000.connection.gen.PositionPacketOrBuilder getPositionPacketOrBuilder() {
+    return positionPacket_ == null ? org.y1000.connection.gen.PositionPacket.getDefaultInstance() : positionPacket_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -91,11 +91,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (((bitField0_ & 0x00000001) != 0)) {
-      output.writeMessage(1, getMovement());
+    if (sequence_ != 0L) {
+      output.writeInt64(1, sequence_);
     }
-    if (id_ != 0L) {
-      output.writeInt64(2, id_);
+    if (((bitField0_ & 0x00000001) != 0)) {
+      output.writeMessage(2, getPositionPacket());
     }
     getUnknownFields().writeTo(output);
   }
@@ -106,13 +106,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
+    if (sequence_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(1, sequence_);
+    }
     if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(1, getMovement());
-    }
-    if (id_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(2, id_);
+        .computeMessageSize(2, getPositionPacket());
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -124,18 +124,18 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.connection.gen.ShowPlayerPacket)) {
+    if (!(obj instanceof org.y1000.connection.gen.InputResponsePacket)) {
       return super.equals(obj);
     }
-    org.y1000.connection.gen.ShowPlayerPacket other = (org.y1000.connection.gen.ShowPlayerPacket) obj;
+    org.y1000.connection.gen.InputResponsePacket other = (org.y1000.connection.gen.InputResponsePacket) obj;
 
-    if (hasMovement() != other.hasMovement()) return false;
-    if (hasMovement()) {
-      if (!getMovement()
-          .equals(other.getMovement())) return false;
+    if (getSequence()
+        != other.getSequence()) return false;
+    if (hasPositionPacket() != other.hasPositionPacket()) return false;
+    if (hasPositionPacket()) {
+      if (!getPositionPacket()
+          .equals(other.getPositionPacket())) return false;
     }
-    if (getId()
-        != other.getId()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -147,56 +147,56 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    if (hasMovement()) {
-      hash = (37 * hash) + MOVEMENT_FIELD_NUMBER;
-      hash = (53 * hash) + getMovement().hashCode();
-    }
-    hash = (37 * hash) + ID_FIELD_NUMBER;
+    hash = (37 * hash) + SEQUENCE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getId());
+        getSequence());
+    if (hasPositionPacket()) {
+      hash = (37 * hash) + POSITIONPACKET_FIELD_NUMBER;
+      hash = (53 * hash) + getPositionPacket().hashCode();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.connection.gen.ShowPlayerPacket parseFrom(
+  public static org.y1000.connection.gen.InputResponsePacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.connection.gen.ShowPlayerPacket parseFrom(
+  public static org.y1000.connection.gen.InputResponsePacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowPlayerPacket parseFrom(
+  public static org.y1000.connection.gen.InputResponsePacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.connection.gen.ShowPlayerPacket parseFrom(
+  public static org.y1000.connection.gen.InputResponsePacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowPlayerPacket parseFrom(byte[] data)
+  public static org.y1000.connection.gen.InputResponsePacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.connection.gen.ShowPlayerPacket parseFrom(
+  public static org.y1000.connection.gen.InputResponsePacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowPlayerPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.connection.gen.InputResponsePacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.connection.gen.ShowPlayerPacket parseFrom(
+  public static org.y1000.connection.gen.InputResponsePacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -204,26 +204,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.connection.gen.ShowPlayerPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.connection.gen.InputResponsePacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.connection.gen.ShowPlayerPacket parseDelimitedFrom(
+  public static org.y1000.connection.gen.InputResponsePacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowPlayerPacket parseFrom(
+  public static org.y1000.connection.gen.InputResponsePacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.connection.gen.ShowPlayerPacket parseFrom(
+  public static org.y1000.connection.gen.InputResponsePacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -236,7 +236,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.connection.gen.ShowPlayerPacket prototype) {
+  public static Builder newBuilder(org.y1000.connection.gen.InputResponsePacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -252,26 +252,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.ShowPlayerPacket}
+   * Protobuf type {@code org.y1000.connection.gen.InputResponsePacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.ShowPlayerPacket)
-      org.y1000.connection.gen.ShowPlayerPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.InputResponsePacket)
+      org.y1000.connection.gen.InputResponsePacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowPlayerPacket_descriptor;
+      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_InputResponsePacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowPlayerPacket_fieldAccessorTable
+      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_InputResponsePacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.connection.gen.ShowPlayerPacket.class, org.y1000.connection.gen.ShowPlayerPacket.Builder.class);
+              org.y1000.connection.gen.InputResponsePacket.class, org.y1000.connection.gen.InputResponsePacket.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.ShowPlayerPacket.newBuilder()
+    // Construct using org.y1000.connection.gen.InputResponsePacket.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -284,36 +284,36 @@ private static final long serialVersionUID = 0L;
     private void maybeForceBuilderInitialization() {
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
-        getMovementFieldBuilder();
+        getPositionPacketFieldBuilder();
       }
     }
     @java.lang.Override
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      movement_ = null;
-      if (movementBuilder_ != null) {
-        movementBuilder_.dispose();
-        movementBuilder_ = null;
+      sequence_ = 0L;
+      positionPacket_ = null;
+      if (positionPacketBuilder_ != null) {
+        positionPacketBuilder_.dispose();
+        positionPacketBuilder_ = null;
       }
-      id_ = 0L;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowPlayerPacket_descriptor;
+      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_InputResponsePacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.connection.gen.ShowPlayerPacket getDefaultInstanceForType() {
-      return org.y1000.connection.gen.ShowPlayerPacket.getDefaultInstance();
+    public org.y1000.connection.gen.InputResponsePacket getDefaultInstanceForType() {
+      return org.y1000.connection.gen.InputResponsePacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.connection.gen.ShowPlayerPacket build() {
-      org.y1000.connection.gen.ShowPlayerPacket result = buildPartial();
+    public org.y1000.connection.gen.InputResponsePacket build() {
+      org.y1000.connection.gen.InputResponsePacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -321,24 +321,24 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.connection.gen.ShowPlayerPacket buildPartial() {
-      org.y1000.connection.gen.ShowPlayerPacket result = new org.y1000.connection.gen.ShowPlayerPacket(this);
+    public org.y1000.connection.gen.InputResponsePacket buildPartial() {
+      org.y1000.connection.gen.InputResponsePacket result = new org.y1000.connection.gen.InputResponsePacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.connection.gen.ShowPlayerPacket result) {
+    private void buildPartial0(org.y1000.connection.gen.InputResponsePacket result) {
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.movement_ = movementBuilder_ == null
-            ? movement_
-            : movementBuilder_.build();
-        to_bitField0_ |= 0x00000001;
+        result.sequence_ = sequence_;
       }
+      int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.id_ = id_;
+        result.positionPacket_ = positionPacketBuilder_ == null
+            ? positionPacket_
+            : positionPacketBuilder_.build();
+        to_bitField0_ |= 0x00000001;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -377,21 +377,21 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.connection.gen.ShowPlayerPacket) {
-        return mergeFrom((org.y1000.connection.gen.ShowPlayerPacket)other);
+      if (other instanceof org.y1000.connection.gen.InputResponsePacket) {
+        return mergeFrom((org.y1000.connection.gen.InputResponsePacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.connection.gen.ShowPlayerPacket other) {
-      if (other == org.y1000.connection.gen.ShowPlayerPacket.getDefaultInstance()) return this;
-      if (other.hasMovement()) {
-        mergeMovement(other.getMovement());
+    public Builder mergeFrom(org.y1000.connection.gen.InputResponsePacket other) {
+      if (other == org.y1000.connection.gen.InputResponsePacket.getDefaultInstance()) return this;
+      if (other.getSequence() != 0L) {
+        setSequence(other.getSequence());
       }
-      if (other.getId() != 0L) {
-        setId(other.getId());
+      if (other.hasPositionPacket()) {
+        mergePositionPacket(other.getPositionPacket());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -419,18 +419,18 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 10: {
-              input.readMessage(
-                  getMovementFieldBuilder().getBuilder(),
-                  extensionRegistry);
+            case 8: {
+              sequence_ = input.readInt64();
               bitField0_ |= 0x00000001;
               break;
-            } // case 10
-            case 16: {
-              id_ = input.readInt64();
+            } // case 8
+            case 18: {
+              input.readMessage(
+                  getPositionPacketFieldBuilder().getBuilder(),
+                  extensionRegistry);
               bitField0_ |= 0x00000002;
               break;
-            } // case 16
+            } // case 18
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -448,157 +448,157 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private org.y1000.connection.gen.PositionPacket movement_;
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder> movementBuilder_;
+    private long sequence_ ;
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
-     * @return Whether the movement field is set.
+     * <code>int64 sequence = 1;</code>
+     * @return The sequence.
      */
-    public boolean hasMovement() {
-      return ((bitField0_ & 0x00000001) != 0);
+    @java.lang.Override
+    public long getSequence() {
+      return sequence_;
     }
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
-     * @return The movement.
+     * <code>int64 sequence = 1;</code>
+     * @param value The sequence to set.
+     * @return This builder for chaining.
      */
-    public org.y1000.connection.gen.PositionPacket getMovement() {
-      if (movementBuilder_ == null) {
-        return movement_ == null ? org.y1000.connection.gen.PositionPacket.getDefaultInstance() : movement_;
+    public Builder setSequence(long value) {
+
+      sequence_ = value;
+      bitField0_ |= 0x00000001;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 sequence = 1;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearSequence() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      sequence_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private org.y1000.connection.gen.PositionPacket positionPacket_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder> positionPacketBuilder_;
+    /**
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+     * @return Whether the positionPacket field is set.
+     */
+    public boolean hasPositionPacket() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+     * @return The positionPacket.
+     */
+    public org.y1000.connection.gen.PositionPacket getPositionPacket() {
+      if (positionPacketBuilder_ == null) {
+        return positionPacket_ == null ? org.y1000.connection.gen.PositionPacket.getDefaultInstance() : positionPacket_;
       } else {
-        return movementBuilder_.getMessage();
+        return positionPacketBuilder_.getMessage();
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
      */
-    public Builder setMovement(org.y1000.connection.gen.PositionPacket value) {
-      if (movementBuilder_ == null) {
+    public Builder setPositionPacket(org.y1000.connection.gen.PositionPacket value) {
+      if (positionPacketBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
-        movement_ = value;
+        positionPacket_ = value;
       } else {
-        movementBuilder_.setMessage(value);
+        positionPacketBuilder_.setMessage(value);
       }
-      bitField0_ |= 0x00000001;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
-     */
-    public Builder setMovement(
-        org.y1000.connection.gen.PositionPacket.Builder builderForValue) {
-      if (movementBuilder_ == null) {
-        movement_ = builderForValue.build();
-      } else {
-        movementBuilder_.setMessage(builderForValue.build());
-      }
-      bitField0_ |= 0x00000001;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
-     */
-    public Builder mergeMovement(org.y1000.connection.gen.PositionPacket value) {
-      if (movementBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0) &&
-          movement_ != null &&
-          movement_ != org.y1000.connection.gen.PositionPacket.getDefaultInstance()) {
-          getMovementBuilder().mergeFrom(value);
-        } else {
-          movement_ = value;
-        }
-      } else {
-        movementBuilder_.mergeFrom(value);
-      }
-      if (movement_ != null) {
-        bitField0_ |= 0x00000001;
-        onChanged();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
-     */
-    public Builder clearMovement() {
-      bitField0_ = (bitField0_ & ~0x00000001);
-      movement_ = null;
-      if (movementBuilder_ != null) {
-        movementBuilder_.dispose();
-        movementBuilder_ = null;
-      }
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
-     */
-    public org.y1000.connection.gen.PositionPacket.Builder getMovementBuilder() {
-      bitField0_ |= 0x00000001;
-      onChanged();
-      return getMovementFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
-     */
-    public org.y1000.connection.gen.PositionPacketOrBuilder getMovementOrBuilder() {
-      if (movementBuilder_ != null) {
-        return movementBuilder_.getMessageOrBuilder();
-      } else {
-        return movement_ == null ?
-            org.y1000.connection.gen.PositionPacket.getDefaultInstance() : movement_;
-      }
-    }
-    /**
-     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder> 
-        getMovementFieldBuilder() {
-      if (movementBuilder_ == null) {
-        movementBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder>(
-                getMovement(),
-                getParentForChildren(),
-                isClean());
-        movement_ = null;
-      }
-      return movementBuilder_;
-    }
-
-    private long id_ ;
-    /**
-     * <code>int64 id = 2;</code>
-     * @return The id.
-     */
-    @java.lang.Override
-    public long getId() {
-      return id_;
-    }
-    /**
-     * <code>int64 id = 2;</code>
-     * @param value The id to set.
-     * @return This builder for chaining.
-     */
-    public Builder setId(long value) {
-
-      id_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>int64 id = 2;</code>
-     * @return This builder for chaining.
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
      */
-    public Builder clearId() {
-      bitField0_ = (bitField0_ & ~0x00000002);
-      id_ = 0L;
+    public Builder setPositionPacket(
+        org.y1000.connection.gen.PositionPacket.Builder builderForValue) {
+      if (positionPacketBuilder_ == null) {
+        positionPacket_ = builderForValue.build();
+      } else {
+        positionPacketBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+     */
+    public Builder mergePositionPacket(org.y1000.connection.gen.PositionPacket value) {
+      if (positionPacketBuilder_ == null) {
+        if (((bitField0_ & 0x00000002) != 0) &&
+          positionPacket_ != null &&
+          positionPacket_ != org.y1000.connection.gen.PositionPacket.getDefaultInstance()) {
+          getPositionPacketBuilder().mergeFrom(value);
+        } else {
+          positionPacket_ = value;
+        }
+      } else {
+        positionPacketBuilder_.mergeFrom(value);
+      }
+      if (positionPacket_ != null) {
+        bitField0_ |= 0x00000002;
+        onChanged();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+     */
+    public Builder clearPositionPacket() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      positionPacket_ = null;
+      if (positionPacketBuilder_ != null) {
+        positionPacketBuilder_.dispose();
+        positionPacketBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+     */
+    public org.y1000.connection.gen.PositionPacket.Builder getPositionPacketBuilder() {
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return getPositionPacketFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+     */
+    public org.y1000.connection.gen.PositionPacketOrBuilder getPositionPacketOrBuilder() {
+      if (positionPacketBuilder_ != null) {
+        return positionPacketBuilder_.getMessageOrBuilder();
+      } else {
+        return positionPacket_ == null ?
+            org.y1000.connection.gen.PositionPacket.getDefaultInstance() : positionPacket_;
+      }
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder> 
+        getPositionPacketFieldBuilder() {
+      if (positionPacketBuilder_ == null) {
+        positionPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder>(
+                getPositionPacket(),
+                getParentForChildren(),
+                isClean());
+        positionPacket_ = null;
+      }
+      return positionPacketBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(
@@ -613,23 +613,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.ShowPlayerPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.InputResponsePacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.ShowPlayerPacket)
-  private static final org.y1000.connection.gen.ShowPlayerPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.InputResponsePacket)
+  private static final org.y1000.connection.gen.InputResponsePacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.connection.gen.ShowPlayerPacket();
+    DEFAULT_INSTANCE = new org.y1000.connection.gen.InputResponsePacket();
   }
 
-  public static org.y1000.connection.gen.ShowPlayerPacket getDefaultInstance() {
+  public static org.y1000.connection.gen.InputResponsePacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ShowPlayerPacket>
-      PARSER = new com.google.protobuf.AbstractParser<ShowPlayerPacket>() {
+  private static final com.google.protobuf.Parser<InputResponsePacket>
+      PARSER = new com.google.protobuf.AbstractParser<InputResponsePacket>() {
     @java.lang.Override
-    public ShowPlayerPacket parsePartialFrom(
+    public InputResponsePacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -648,17 +648,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<ShowPlayerPacket> parser() {
+  public static com.google.protobuf.Parser<InputResponsePacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ShowPlayerPacket> getParserForType() {
+  public com.google.protobuf.Parser<InputResponsePacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.connection.gen.ShowPlayerPacket getDefaultInstanceForType() {
+  public org.y1000.connection.gen.InputResponsePacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

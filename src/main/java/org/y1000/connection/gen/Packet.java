@@ -45,11 +45,12 @@ private static final long serialVersionUID = 0L;
   public enum TypedPacketCase
       implements com.google.protobuf.Internal.EnumLite,
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
-    MOVEMENTPACKET(1),
+    POSITIONPACKET(1),
     SHOWCREATUREPACKET(2),
     INPUTPACKET(3),
     LOGINPACKET(4),
     INTERPOLATIONS(5),
+    RESPONSEPACKET(6),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -67,11 +68,12 @@ private static final long serialVersionUID = 0L;
 
     public static TypedPacketCase forNumber(int value) {
       switch (value) {
-        case 1: return MOVEMENTPACKET;
+        case 1: return POSITIONPACKET;
         case 2: return SHOWCREATUREPACKET;
         case 3: return INPUTPACKET;
         case 4: return LOGINPACKET;
         case 5: return INTERPOLATIONS;
+        case 6: return RESPONSEPACKET;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -87,35 +89,35 @@ private static final long serialVersionUID = 0L;
         typedPacketCase_);
   }
 
-  public static final int MOVEMENTPACKET_FIELD_NUMBER = 1;
+  public static final int POSITIONPACKET_FIELD_NUMBER = 1;
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
-   * @return Whether the movementPacket field is set.
+   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+   * @return Whether the positionPacket field is set.
    */
   @java.lang.Override
-  public boolean hasMovementPacket() {
+  public boolean hasPositionPacket() {
     return typedPacketCase_ == 1;
   }
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
-   * @return The movementPacket.
+   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+   * @return The positionPacket.
    */
   @java.lang.Override
-  public org.y1000.connection.gen.MovementPacket getMovementPacket() {
+  public org.y1000.connection.gen.PositionPacket getPositionPacket() {
     if (typedPacketCase_ == 1) {
-       return (org.y1000.connection.gen.MovementPacket) typedPacket_;
+       return (org.y1000.connection.gen.PositionPacket) typedPacket_;
     }
-    return org.y1000.connection.gen.MovementPacket.getDefaultInstance();
+    return org.y1000.connection.gen.PositionPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
+   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
    */
   @java.lang.Override
-  public org.y1000.connection.gen.MovementPacketOrBuilder getMovementPacketOrBuilder() {
+  public org.y1000.connection.gen.PositionPacketOrBuilder getPositionPacketOrBuilder() {
     if (typedPacketCase_ == 1) {
-       return (org.y1000.connection.gen.MovementPacket) typedPacket_;
+       return (org.y1000.connection.gen.PositionPacket) typedPacket_;
     }
-    return org.y1000.connection.gen.MovementPacket.getDefaultInstance();
+    return org.y1000.connection.gen.PositionPacket.getDefaultInstance();
   }
 
   public static final int SHOWCREATUREPACKET_FIELD_NUMBER = 2;
@@ -242,6 +244,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.connection.gen.InterpolationsPacket.getDefaultInstance();
   }
 
+  public static final int RESPONSEPACKET_FIELD_NUMBER = 6;
+  /**
+   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   * @return Whether the responsePacket field is set.
+   */
+  @java.lang.Override
+  public boolean hasResponsePacket() {
+    return typedPacketCase_ == 6;
+  }
+  /**
+   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   * @return The responsePacket.
+   */
+  @java.lang.Override
+  public org.y1000.connection.gen.InputResponsePacket getResponsePacket() {
+    if (typedPacketCase_ == 6) {
+       return (org.y1000.connection.gen.InputResponsePacket) typedPacket_;
+    }
+    return org.y1000.connection.gen.InputResponsePacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   */
+  @java.lang.Override
+  public org.y1000.connection.gen.InputResponsePacketOrBuilder getResponsePacketOrBuilder() {
+    if (typedPacketCase_ == 6) {
+       return (org.y1000.connection.gen.InputResponsePacket) typedPacket_;
+    }
+    return org.y1000.connection.gen.InputResponsePacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -257,7 +290,7 @@ private static final long serialVersionUID = 0L;
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
     if (typedPacketCase_ == 1) {
-      output.writeMessage(1, (org.y1000.connection.gen.MovementPacket) typedPacket_);
+      output.writeMessage(1, (org.y1000.connection.gen.PositionPacket) typedPacket_);
     }
     if (typedPacketCase_ == 2) {
       output.writeMessage(2, (org.y1000.connection.gen.ShowCreaturePacket) typedPacket_);
@@ -271,6 +304,9 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 5) {
       output.writeMessage(5, (org.y1000.connection.gen.InterpolationsPacket) typedPacket_);
     }
+    if (typedPacketCase_ == 6) {
+      output.writeMessage(6, (org.y1000.connection.gen.InputResponsePacket) typedPacket_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -282,7 +318,7 @@ private static final long serialVersionUID = 0L;
     size = 0;
     if (typedPacketCase_ == 1) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(1, (org.y1000.connection.gen.MovementPacket) typedPacket_);
+        .computeMessageSize(1, (org.y1000.connection.gen.PositionPacket) typedPacket_);
     }
     if (typedPacketCase_ == 2) {
       size += com.google.protobuf.CodedOutputStream
@@ -299,6 +335,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 5) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(5, (org.y1000.connection.gen.InterpolationsPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 6) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(6, (org.y1000.connection.gen.InputResponsePacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -318,8 +358,8 @@ private static final long serialVersionUID = 0L;
     if (!getTypedPacketCase().equals(other.getTypedPacketCase())) return false;
     switch (typedPacketCase_) {
       case 1:
-        if (!getMovementPacket()
-            .equals(other.getMovementPacket())) return false;
+        if (!getPositionPacket()
+            .equals(other.getPositionPacket())) return false;
         break;
       case 2:
         if (!getShowCreaturePacket()
@@ -337,6 +377,10 @@ private static final long serialVersionUID = 0L;
         if (!getInterpolations()
             .equals(other.getInterpolations())) return false;
         break;
+      case 6:
+        if (!getResponsePacket()
+            .equals(other.getResponsePacket())) return false;
+        break;
       case 0:
       default:
     }
@@ -353,8 +397,8 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     switch (typedPacketCase_) {
       case 1:
-        hash = (37 * hash) + MOVEMENTPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getMovementPacket().hashCode();
+        hash = (37 * hash) + POSITIONPACKET_FIELD_NUMBER;
+        hash = (53 * hash) + getPositionPacket().hashCode();
         break;
       case 2:
         hash = (37 * hash) + SHOWCREATUREPACKET_FIELD_NUMBER;
@@ -371,6 +415,10 @@ private static final long serialVersionUID = 0L;
       case 5:
         hash = (37 * hash) + INTERPOLATIONS_FIELD_NUMBER;
         hash = (53 * hash) + getInterpolations().hashCode();
+        break;
+      case 6:
+        hash = (37 * hash) + RESPONSEPACKET_FIELD_NUMBER;
+        hash = (53 * hash) + getResponsePacket().hashCode();
         break;
       case 0:
       default:
@@ -506,8 +554,8 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      if (movementPacketBuilder_ != null) {
-        movementPacketBuilder_.clear();
+      if (positionPacketBuilder_ != null) {
+        positionPacketBuilder_.clear();
       }
       if (showCreaturePacketBuilder_ != null) {
         showCreaturePacketBuilder_.clear();
@@ -520,6 +568,9 @@ private static final long serialVersionUID = 0L;
       }
       if (interpolationsBuilder_ != null) {
         interpolationsBuilder_.clear();
+      }
+      if (responsePacketBuilder_ != null) {
+        responsePacketBuilder_.clear();
       }
       typedPacketCase_ = 0;
       typedPacket_ = null;
@@ -563,8 +614,8 @@ private static final long serialVersionUID = 0L;
       result.typedPacketCase_ = typedPacketCase_;
       result.typedPacket_ = this.typedPacket_;
       if (typedPacketCase_ == 1 &&
-          movementPacketBuilder_ != null) {
-        result.typedPacket_ = movementPacketBuilder_.build();
+          positionPacketBuilder_ != null) {
+        result.typedPacket_ = positionPacketBuilder_.build();
       }
       if (typedPacketCase_ == 2 &&
           showCreaturePacketBuilder_ != null) {
@@ -581,6 +632,10 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 5 &&
           interpolationsBuilder_ != null) {
         result.typedPacket_ = interpolationsBuilder_.build();
+      }
+      if (typedPacketCase_ == 6 &&
+          responsePacketBuilder_ != null) {
+        result.typedPacket_ = responsePacketBuilder_.build();
       }
     }
 
@@ -629,8 +684,8 @@ private static final long serialVersionUID = 0L;
     public Builder mergeFrom(org.y1000.connection.gen.Packet other) {
       if (other == org.y1000.connection.gen.Packet.getDefaultInstance()) return this;
       switch (other.getTypedPacketCase()) {
-        case MOVEMENTPACKET: {
-          mergeMovementPacket(other.getMovementPacket());
+        case POSITIONPACKET: {
+          mergePositionPacket(other.getPositionPacket());
           break;
         }
         case SHOWCREATUREPACKET: {
@@ -647,6 +702,10 @@ private static final long serialVersionUID = 0L;
         }
         case INTERPOLATIONS: {
           mergeInterpolations(other.getInterpolations());
+          break;
+        }
+        case RESPONSEPACKET: {
+          mergeResponsePacket(other.getResponsePacket());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -681,7 +740,7 @@ private static final long serialVersionUID = 0L;
               break;
             case 10: {
               input.readMessage(
-                  getMovementPacketFieldBuilder().getBuilder(),
+                  getPositionPacketFieldBuilder().getBuilder(),
                   extensionRegistry);
               typedPacketCase_ = 1;
               break;
@@ -714,6 +773,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 5;
               break;
             } // case 42
+            case 50: {
+              input.readMessage(
+                  getResponsePacketFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 6;
+              break;
+            } // case 50
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -747,71 +813,71 @@ private static final long serialVersionUID = 0L;
     private int bitField0_;
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.connection.gen.MovementPacket, org.y1000.connection.gen.MovementPacket.Builder, org.y1000.connection.gen.MovementPacketOrBuilder> movementPacketBuilder_;
+        org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder> positionPacketBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
-     * @return Whether the movementPacket field is set.
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * @return Whether the positionPacket field is set.
      */
     @java.lang.Override
-    public boolean hasMovementPacket() {
+    public boolean hasPositionPacket() {
       return typedPacketCase_ == 1;
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
-     * @return The movementPacket.
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * @return The positionPacket.
      */
     @java.lang.Override
-    public org.y1000.connection.gen.MovementPacket getMovementPacket() {
-      if (movementPacketBuilder_ == null) {
+    public org.y1000.connection.gen.PositionPacket getPositionPacket() {
+      if (positionPacketBuilder_ == null) {
         if (typedPacketCase_ == 1) {
-          return (org.y1000.connection.gen.MovementPacket) typedPacket_;
+          return (org.y1000.connection.gen.PositionPacket) typedPacket_;
         }
-        return org.y1000.connection.gen.MovementPacket.getDefaultInstance();
+        return org.y1000.connection.gen.PositionPacket.getDefaultInstance();
       } else {
         if (typedPacketCase_ == 1) {
-          return movementPacketBuilder_.getMessage();
+          return positionPacketBuilder_.getMessage();
         }
-        return org.y1000.connection.gen.MovementPacket.getDefaultInstance();
+        return org.y1000.connection.gen.PositionPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
      */
-    public Builder setMovementPacket(org.y1000.connection.gen.MovementPacket value) {
-      if (movementPacketBuilder_ == null) {
+    public Builder setPositionPacket(org.y1000.connection.gen.PositionPacket value) {
+      if (positionPacketBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
         typedPacket_ = value;
         onChanged();
       } else {
-        movementPacketBuilder_.setMessage(value);
+        positionPacketBuilder_.setMessage(value);
       }
       typedPacketCase_ = 1;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
      */
-    public Builder setMovementPacket(
-        org.y1000.connection.gen.MovementPacket.Builder builderForValue) {
-      if (movementPacketBuilder_ == null) {
+    public Builder setPositionPacket(
+        org.y1000.connection.gen.PositionPacket.Builder builderForValue) {
+      if (positionPacketBuilder_ == null) {
         typedPacket_ = builderForValue.build();
         onChanged();
       } else {
-        movementPacketBuilder_.setMessage(builderForValue.build());
+        positionPacketBuilder_.setMessage(builderForValue.build());
       }
       typedPacketCase_ = 1;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
      */
-    public Builder mergeMovementPacket(org.y1000.connection.gen.MovementPacket value) {
-      if (movementPacketBuilder_ == null) {
+    public Builder mergePositionPacket(org.y1000.connection.gen.PositionPacket value) {
+      if (positionPacketBuilder_ == null) {
         if (typedPacketCase_ == 1 &&
-            typedPacket_ != org.y1000.connection.gen.MovementPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.connection.gen.MovementPacket.newBuilder((org.y1000.connection.gen.MovementPacket) typedPacket_)
+            typedPacket_ != org.y1000.connection.gen.PositionPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.connection.gen.PositionPacket.newBuilder((org.y1000.connection.gen.PositionPacket) typedPacket_)
               .mergeFrom(value).buildPartial();
         } else {
           typedPacket_ = value;
@@ -819,19 +885,19 @@ private static final long serialVersionUID = 0L;
         onChanged();
       } else {
         if (typedPacketCase_ == 1) {
-          movementPacketBuilder_.mergeFrom(value);
+          positionPacketBuilder_.mergeFrom(value);
         } else {
-          movementPacketBuilder_.setMessage(value);
+          positionPacketBuilder_.setMessage(value);
         }
       }
       typedPacketCase_ = 1;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
      */
-    public Builder clearMovementPacket() {
-      if (movementPacketBuilder_ == null) {
+    public Builder clearPositionPacket() {
+      if (positionPacketBuilder_ == null) {
         if (typedPacketCase_ == 1) {
           typedPacketCase_ = 0;
           typedPacket_ = null;
@@ -842,50 +908,50 @@ private static final long serialVersionUID = 0L;
           typedPacketCase_ = 0;
           typedPacket_ = null;
         }
-        movementPacketBuilder_.clear();
+        positionPacketBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
      */
-    public org.y1000.connection.gen.MovementPacket.Builder getMovementPacketBuilder() {
-      return getMovementPacketFieldBuilder().getBuilder();
+    public org.y1000.connection.gen.PositionPacket.Builder getPositionPacketBuilder() {
+      return getPositionPacketFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
      */
     @java.lang.Override
-    public org.y1000.connection.gen.MovementPacketOrBuilder getMovementPacketOrBuilder() {
-      if ((typedPacketCase_ == 1) && (movementPacketBuilder_ != null)) {
-        return movementPacketBuilder_.getMessageOrBuilder();
+    public org.y1000.connection.gen.PositionPacketOrBuilder getPositionPacketOrBuilder() {
+      if ((typedPacketCase_ == 1) && (positionPacketBuilder_ != null)) {
+        return positionPacketBuilder_.getMessageOrBuilder();
       } else {
         if (typedPacketCase_ == 1) {
-          return (org.y1000.connection.gen.MovementPacket) typedPacket_;
+          return (org.y1000.connection.gen.PositionPacket) typedPacket_;
         }
-        return org.y1000.connection.gen.MovementPacket.getDefaultInstance();
+        return org.y1000.connection.gen.PositionPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.connection.gen.MovementPacket, org.y1000.connection.gen.MovementPacket.Builder, org.y1000.connection.gen.MovementPacketOrBuilder> 
-        getMovementPacketFieldBuilder() {
-      if (movementPacketBuilder_ == null) {
+        org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder> 
+        getPositionPacketFieldBuilder() {
+      if (positionPacketBuilder_ == null) {
         if (!(typedPacketCase_ == 1)) {
-          typedPacket_ = org.y1000.connection.gen.MovementPacket.getDefaultInstance();
+          typedPacket_ = org.y1000.connection.gen.PositionPacket.getDefaultInstance();
         }
-        movementPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.connection.gen.MovementPacket, org.y1000.connection.gen.MovementPacket.Builder, org.y1000.connection.gen.MovementPacketOrBuilder>(
-                (org.y1000.connection.gen.MovementPacket) typedPacket_,
+        positionPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder>(
+                (org.y1000.connection.gen.PositionPacket) typedPacket_,
                 getParentForChildren(),
                 isClean());
         typedPacket_ = null;
       }
       typedPacketCase_ = 1;
       onChanged();
-      return movementPacketBuilder_;
+      return positionPacketBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -1454,6 +1520,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 5;
       onChanged();
       return interpolationsBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.connection.gen.InputResponsePacket, org.y1000.connection.gen.InputResponsePacket.Builder, org.y1000.connection.gen.InputResponsePacketOrBuilder> responsePacketBuilder_;
+    /**
+     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * @return Whether the responsePacket field is set.
+     */
+    @java.lang.Override
+    public boolean hasResponsePacket() {
+      return typedPacketCase_ == 6;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * @return The responsePacket.
+     */
+    @java.lang.Override
+    public org.y1000.connection.gen.InputResponsePacket getResponsePacket() {
+      if (responsePacketBuilder_ == null) {
+        if (typedPacketCase_ == 6) {
+          return (org.y1000.connection.gen.InputResponsePacket) typedPacket_;
+        }
+        return org.y1000.connection.gen.InputResponsePacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 6) {
+          return responsePacketBuilder_.getMessage();
+        }
+        return org.y1000.connection.gen.InputResponsePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     */
+    public Builder setResponsePacket(org.y1000.connection.gen.InputResponsePacket value) {
+      if (responsePacketBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        responsePacketBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 6;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     */
+    public Builder setResponsePacket(
+        org.y1000.connection.gen.InputResponsePacket.Builder builderForValue) {
+      if (responsePacketBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        responsePacketBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 6;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     */
+    public Builder mergeResponsePacket(org.y1000.connection.gen.InputResponsePacket value) {
+      if (responsePacketBuilder_ == null) {
+        if (typedPacketCase_ == 6 &&
+            typedPacket_ != org.y1000.connection.gen.InputResponsePacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.connection.gen.InputResponsePacket.newBuilder((org.y1000.connection.gen.InputResponsePacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 6) {
+          responsePacketBuilder_.mergeFrom(value);
+        } else {
+          responsePacketBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 6;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     */
+    public Builder clearResponsePacket() {
+      if (responsePacketBuilder_ == null) {
+        if (typedPacketCase_ == 6) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 6) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        responsePacketBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     */
+    public org.y1000.connection.gen.InputResponsePacket.Builder getResponsePacketBuilder() {
+      return getResponsePacketFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     */
+    @java.lang.Override
+    public org.y1000.connection.gen.InputResponsePacketOrBuilder getResponsePacketOrBuilder() {
+      if ((typedPacketCase_ == 6) && (responsePacketBuilder_ != null)) {
+        return responsePacketBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 6) {
+          return (org.y1000.connection.gen.InputResponsePacket) typedPacket_;
+        }
+        return org.y1000.connection.gen.InputResponsePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.connection.gen.InputResponsePacket, org.y1000.connection.gen.InputResponsePacket.Builder, org.y1000.connection.gen.InputResponsePacketOrBuilder> 
+        getResponsePacketFieldBuilder() {
+      if (responsePacketBuilder_ == null) {
+        if (!(typedPacketCase_ == 6)) {
+          typedPacket_ = org.y1000.connection.gen.InputResponsePacket.getDefaultInstance();
+        }
+        responsePacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.connection.gen.InputResponsePacket, org.y1000.connection.gen.InputResponsePacket.Builder, org.y1000.connection.gen.InputResponsePacketOrBuilder>(
+                (org.y1000.connection.gen.InputResponsePacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 6;
+      onChanged();
+      return responsePacketBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

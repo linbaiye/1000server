@@ -9,19 +9,19 @@ public interface PacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
-   * @return Whether the movementPacket field is set.
+   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+   * @return Whether the positionPacket field is set.
    */
-  boolean hasMovementPacket();
+  boolean hasPositionPacket();
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
-   * @return The movementPacket.
+   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+   * @return The positionPacket.
    */
-  org.y1000.connection.gen.MovementPacket getMovementPacket();
+  org.y1000.connection.gen.PositionPacket getPositionPacket();
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movementPacket = 1;</code>
+   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
    */
-  org.y1000.connection.gen.MovementPacketOrBuilder getMovementPacketOrBuilder();
+  org.y1000.connection.gen.PositionPacketOrBuilder getPositionPacketOrBuilder();
 
   /**
    * <code>.org.y1000.connection.gen.ShowCreaturePacket showCreaturePacket = 2;</code>
@@ -82,6 +82,21 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
    */
   org.y1000.connection.gen.InterpolationsPacketOrBuilder getInterpolationsOrBuilder();
+
+  /**
+   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   * @return Whether the responsePacket field is set.
+   */
+  boolean hasResponsePacket();
+  /**
+   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   * @return The responsePacket.
+   */
+  org.y1000.connection.gen.InputResponsePacket getResponsePacket();
+  /**
+   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   */
+  org.y1000.connection.gen.InputResponsePacketOrBuilder getResponsePacketOrBuilder();
 
   org.y1000.connection.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

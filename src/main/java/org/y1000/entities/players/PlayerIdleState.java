@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.y1000.message.*;
 import org.y1000.message.input.RightMouseClick;
-import org.y1000.message.input.RightMouseRelease;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,19 +16,15 @@ final class PlayerIdleState implements PlayerState {
 
     private long elapsedMillis = 0;
 
+    private static final long STATE_MILLIS = 3000;
 
     public PlayerIdleState() {
     }
 
     @Override
     public List<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
-        var nextCoordinate = player.coordinate().moveBy(click.direction());
-        player.changeDirection(click.direction());
-        if (!player.getRealm().canMoveTo(nextCoordinate)) {
-            return Collections.singletonList(UpdateMovementStateMessage.fromPlayer(player, click.sequence()));
-        }
-        player.changeState(new PlayerWalkState(click));
-        return Collections.emptyList();
+        InputResponseMessage message = Mover.move(player, click.sequence(), click.direction());
+        return Collections.singletonList(message);
     }
 
     @Override
@@ -40,6 +35,8 @@ final class PlayerIdleState implements PlayerState {
     @Override
     public List<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
         elapsedMillis += deltaMillis;
+        if (elapsedMillis >= STATE_MILLIS)
+            elapsedMillis = 0;
         return Collections.emptyList();
     }
 

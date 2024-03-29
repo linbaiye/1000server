@@ -9,19 +9,19 @@ public interface ShowPlayerPacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+   * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
    * @return Whether the movement field is set.
    */
   boolean hasMovement();
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+   * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
    * @return The movement.
    */
-  org.y1000.connection.gen.MovementPacket getMovement();
+  org.y1000.connection.gen.PositionPacket getMovement();
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+   * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
    */
-  org.y1000.connection.gen.MovementPacketOrBuilder getMovementOrBuilder();
+  org.y1000.connection.gen.PositionPacketOrBuilder getMovementOrBuilder();
 
   /**
    * <code>int64 id = 2;</code>

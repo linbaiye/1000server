@@ -16,10 +16,15 @@ public final class Message {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_MovementPacket_descriptor;
+    internal_static_org_y1000_connection_gen_PositionPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_MovementPacket_fieldAccessorTable;
+      internal_static_org_y1000_connection_gen_PositionPacket_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_org_y1000_connection_gen_InputResponsePacket_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_org_y1000_connection_gen_InputResponsePacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
     internal_static_org_y1000_connection_gen_InputPacket_descriptor;
   static final 
@@ -65,87 +70,97 @@ public final class Message {
   static {
     java.lang.String[] descriptorData = {
       "\n\rmessage.proto\022\030org.y1000.connection.ge" +
-      "n\"f\n\016MovementPacket\022\r\n\005state\030\001 \001(\005\022\t\n\001x\030" +
-      "\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\021\n\tdirection\030\004 \001(\005\022\n\n\002i" +
-      "d\030\005 \001(\005\022\020\n\010sequence\030\007 \001(\003\"G\n\013InputPacket" +
-      "\022\014\n\004type\030\001 \001(\005\022\020\n\010sequence\030\002 \001(\003\022\030\n\020clic" +
-      "kedDirection\030\003 \001(\005\"\233\001\n\023InterpolationPack" +
-      "et\022\n\n\002id\030\001 \001(\003\022\r\n\005state\030\002 \001(\005\022\022\n\nstateSt" +
-      "art\030\004 \001(\003\022\032\n\022interpolationStart\030\005 \001(\003\022\020\n" +
-      "\010duration\030\006 \001(\005\022\021\n\tdirection\030\007 \001(\005\022\t\n\001x\030" +
-      "\010 \001(\005\022\t\n\001y\030\t \001(\005\"]\n\024InterpolationsPacket" +
-      "\022E\n\016interpolations\030\001 \003(\0132-.org.y1000.con" +
-      "nection.gen.InterpolationPacket\"/\n\013Login" +
-      "Packet\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002id\030\003 \001(\003" +
-      "\"\355\002\n\006Packet\022B\n\016movementPacket\030\001 \001(\0132(.or" +
-      "g.y1000.connection.gen.MovementPacketH\000\022" +
-      "J\n\022showCreaturePacket\030\002 \001(\0132,.org.y1000." +
-      "connection.gen.ShowCreaturePacketH\000\022<\n\013i" +
-      "nputPacket\030\003 \001(\0132%.org.y1000.connection." +
-      "gen.InputPacketH\000\022<\n\013loginPacket\030\004 \001(\0132%" +
-      ".org.y1000.connection.gen.LoginPacketH\000\022" +
-      "H\n\016interpolations\030\005 \001(\0132..org.y1000.conn" +
-      "ection.gen.InterpolationsPacketH\000B\r\n\013Typ" +
-      "edPacket\"Z\n\020ShowPlayerPacket\022:\n\010movement" +
-      "\030\001 \001(\0132(.org.y1000.connection.gen.Moveme" +
-      "ntPacket\022\n\n\002id\030\002 \001(\003\"f\n\022ShowCreaturePack" +
-      "et\022:\n\010movement\030\001 \001(\0132(.org.y1000.connect" +
-      "ion.gen.MovementPacket\022\024\n\014creatureType\030\002" +
-      " \001(\005B\034\n\030org.y1000.connection.genP\001b\006prot" +
-      "o3"
+      "n\"S\n\016PositionPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(" +
+      "\005\022\021\n\tdirection\030\003 \001(\005\022\n\n\002id\030\004 \001(\003\022\014\n\004type" +
+      "\030\005 \001(\005\"i\n\023InputResponsePacket\022\020\n\010sequenc" +
+      "e\030\001 \001(\003\022@\n\016positionPacket\030\002 \001(\0132(.org.y1" +
+      "000.connection.gen.PositionPacket\"G\n\013Inp" +
+      "utPacket\022\014\n\004type\030\001 \001(\005\022\020\n\010sequence\030\002 \001(\003" +
+      "\022\030\n\020clickedDirection\030\003 \001(\005\"\233\001\n\023Interpola" +
+      "tionPacket\022\n\n\002id\030\001 \001(\003\022\r\n\005state\030\002 \001(\005\022\022\n" +
+      "\nstateStart\030\004 \001(\003\022\032\n\022interpolationStart\030" +
+      "\005 \001(\003\022\020\n\010duration\030\006 \001(\005\022\021\n\tdirection\030\007 \001" +
+      "(\005\022\t\n\001x\030\010 \001(\005\022\t\n\001y\030\t \001(\005\"]\n\024Interpolatio" +
+      "nsPacket\022E\n\016interpolations\030\001 \003(\0132-.org.y" +
+      "1000.connection.gen.InterpolationPacket\"" +
+      "/\n\013LoginPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002" +
+      "id\030\003 \001(\003\"\266\003\n\006Packet\022B\n\016positionPacket\030\001 " +
+      "\001(\0132(.org.y1000.connection.gen.PositionP" +
+      "acketH\000\022J\n\022showCreaturePacket\030\002 \001(\0132,.or" +
+      "g.y1000.connection.gen.ShowCreaturePacke" +
+      "tH\000\022<\n\013inputPacket\030\003 \001(\0132%.org.y1000.con" +
+      "nection.gen.InputPacketH\000\022<\n\013loginPacket" +
+      "\030\004 \001(\0132%.org.y1000.connection.gen.LoginP" +
+      "acketH\000\022H\n\016interpolations\030\005 \001(\0132..org.y1" +
+      "000.connection.gen.InterpolationsPacketH" +
+      "\000\022G\n\016responsePacket\030\006 \001(\0132-.org.y1000.co" +
+      "nnection.gen.InputResponsePacketH\000B\r\n\013Ty" +
+      "pedPacket\"Z\n\020ShowPlayerPacket\022:\n\010movemen" +
+      "t\030\001 \001(\0132(.org.y1000.connection.gen.Posit" +
+      "ionPacket\022\n\n\002id\030\002 \001(\003\"u\n\022ShowCreaturePac" +
+      "ket\022:\n\010movement\030\001 \001(\0132(.org.y1000.connec" +
+      "tion.gen.PositionPacket\022\024\n\014creatureType\030" +
+      "\002 \001(\005\022\r\n\005state\030\003 \001(\005B\034\n\030org.y1000.connec" +
+      "tion.genP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_org_y1000_connection_gen_MovementPacket_descriptor =
+    internal_static_org_y1000_connection_gen_PositionPacket_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_org_y1000_connection_gen_MovementPacket_fieldAccessorTable = new
+    internal_static_org_y1000_connection_gen_PositionPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_MovementPacket_descriptor,
-        new java.lang.String[] { "State", "X", "Y", "Direction", "Id", "Sequence", });
-    internal_static_org_y1000_connection_gen_InputPacket_descriptor =
+        internal_static_org_y1000_connection_gen_PositionPacket_descriptor,
+        new java.lang.String[] { "X", "Y", "Direction", "Id", "Type", });
+    internal_static_org_y1000_connection_gen_InputResponsePacket_descriptor =
       getDescriptor().getMessageTypes().get(1);
+    internal_static_org_y1000_connection_gen_InputResponsePacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_org_y1000_connection_gen_InputResponsePacket_descriptor,
+        new java.lang.String[] { "Sequence", "PositionPacket", });
+    internal_static_org_y1000_connection_gen_InputPacket_descriptor =
+      getDescriptor().getMessageTypes().get(2);
     internal_static_org_y1000_connection_gen_InputPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_InputPacket_descriptor,
         new java.lang.String[] { "Type", "Sequence", "ClickedDirection", });
     internal_static_org_y1000_connection_gen_InterpolationPacket_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_org_y1000_connection_gen_InterpolationPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_InterpolationPacket_descriptor,
         new java.lang.String[] { "Id", "State", "StateStart", "InterpolationStart", "Duration", "Direction", "X", "Y", });
     internal_static_org_y1000_connection_gen_InterpolationsPacket_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_org_y1000_connection_gen_InterpolationsPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_InterpolationsPacket_descriptor,
         new java.lang.String[] { "Interpolations", });
     internal_static_org_y1000_connection_gen_LoginPacket_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_org_y1000_connection_gen_LoginPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_LoginPacket_descriptor,
         new java.lang.String[] { "X", "Y", "Id", });
     internal_static_org_y1000_connection_gen_Packet_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_org_y1000_connection_gen_Packet_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_Packet_descriptor,
-        new java.lang.String[] { "MovementPacket", "ShowCreaturePacket", "InputPacket", "LoginPacket", "Interpolations", "TypedPacket", });
+        new java.lang.String[] { "PositionPacket", "ShowCreaturePacket", "InputPacket", "LoginPacket", "Interpolations", "ResponsePacket", "TypedPacket", });
     internal_static_org_y1000_connection_gen_ShowPlayerPacket_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_org_y1000_connection_gen_ShowPlayerPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_ShowPlayerPacket_descriptor,
         new java.lang.String[] { "Movement", "Id", });
     internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_org_y1000_connection_gen_ShowCreaturePacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor,
-        new java.lang.String[] { "Movement", "CreatureType", });
+        new java.lang.String[] { "Movement", "CreatureType", "State", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

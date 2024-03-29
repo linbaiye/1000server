@@ -41,9 +41,9 @@ private static final long serialVersionUID = 0L;
 
   private int bitField0_;
   public static final int MOVEMENT_FIELD_NUMBER = 1;
-  private org.y1000.connection.gen.MovementPacket movement_;
+  private org.y1000.connection.gen.PositionPacket movement_;
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+   * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
    * @return Whether the movement field is set.
    */
   @java.lang.Override
@@ -51,19 +51,19 @@ private static final long serialVersionUID = 0L;
     return ((bitField0_ & 0x00000001) != 0);
   }
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+   * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
    * @return The movement.
    */
   @java.lang.Override
-  public org.y1000.connection.gen.MovementPacket getMovement() {
-    return movement_ == null ? org.y1000.connection.gen.MovementPacket.getDefaultInstance() : movement_;
+  public org.y1000.connection.gen.PositionPacket getMovement() {
+    return movement_ == null ? org.y1000.connection.gen.PositionPacket.getDefaultInstance() : movement_;
   }
   /**
-   * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+   * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
    */
   @java.lang.Override
-  public org.y1000.connection.gen.MovementPacketOrBuilder getMovementOrBuilder() {
-    return movement_ == null ? org.y1000.connection.gen.MovementPacket.getDefaultInstance() : movement_;
+  public org.y1000.connection.gen.PositionPacketOrBuilder getMovementOrBuilder() {
+    return movement_ == null ? org.y1000.connection.gen.PositionPacket.getDefaultInstance() : movement_;
   }
 
   public static final int CREATURETYPE_FIELD_NUMBER = 2;
@@ -75,6 +75,17 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public int getCreatureType() {
     return creatureType_;
+  }
+
+  public static final int STATE_FIELD_NUMBER = 3;
+  private int state_ = 0;
+  /**
+   * <code>int32 state = 3;</code>
+   * @return The state.
+   */
+  @java.lang.Override
+  public int getState() {
+    return state_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -97,6 +108,9 @@ private static final long serialVersionUID = 0L;
     if (creatureType_ != 0) {
       output.writeInt32(2, creatureType_);
     }
+    if (state_ != 0) {
+      output.writeInt32(3, state_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -113,6 +127,10 @@ private static final long serialVersionUID = 0L;
     if (creatureType_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(2, creatureType_);
+    }
+    if (state_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(3, state_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -136,6 +154,8 @@ private static final long serialVersionUID = 0L;
     }
     if (getCreatureType()
         != other.getCreatureType()) return false;
+    if (getState()
+        != other.getState()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -153,6 +173,8 @@ private static final long serialVersionUID = 0L;
     }
     hash = (37 * hash) + CREATURETYPE_FIELD_NUMBER;
     hash = (53 * hash) + getCreatureType();
+    hash = (37 * hash) + STATE_FIELD_NUMBER;
+    hash = (53 * hash) + getState();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -296,6 +318,7 @@ private static final long serialVersionUID = 0L;
         movementBuilder_ = null;
       }
       creatureType_ = 0;
+      state_ = 0;
       return this;
     }
 
@@ -338,6 +361,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.creatureType_ = creatureType_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.state_ = state_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -392,6 +418,9 @@ private static final long serialVersionUID = 0L;
       if (other.getCreatureType() != 0) {
         setCreatureType(other.getCreatureType());
       }
+      if (other.getState() != 0) {
+        setState(other.getState());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -430,6 +459,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000002;
               break;
             } // case 16
+            case 24: {
+              state_ = input.readInt32();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 24
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -447,31 +481,31 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private org.y1000.connection.gen.MovementPacket movement_;
+    private org.y1000.connection.gen.PositionPacket movement_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.connection.gen.MovementPacket, org.y1000.connection.gen.MovementPacket.Builder, org.y1000.connection.gen.MovementPacketOrBuilder> movementBuilder_;
+        org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder> movementBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
      * @return Whether the movement field is set.
      */
     public boolean hasMovement() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
      * @return The movement.
      */
-    public org.y1000.connection.gen.MovementPacket getMovement() {
+    public org.y1000.connection.gen.PositionPacket getMovement() {
       if (movementBuilder_ == null) {
-        return movement_ == null ? org.y1000.connection.gen.MovementPacket.getDefaultInstance() : movement_;
+        return movement_ == null ? org.y1000.connection.gen.PositionPacket.getDefaultInstance() : movement_;
       } else {
         return movementBuilder_.getMessage();
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
      */
-    public Builder setMovement(org.y1000.connection.gen.MovementPacket value) {
+    public Builder setMovement(org.y1000.connection.gen.PositionPacket value) {
       if (movementBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -485,10 +519,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
      */
     public Builder setMovement(
-        org.y1000.connection.gen.MovementPacket.Builder builderForValue) {
+        org.y1000.connection.gen.PositionPacket.Builder builderForValue) {
       if (movementBuilder_ == null) {
         movement_ = builderForValue.build();
       } else {
@@ -499,13 +533,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
      */
-    public Builder mergeMovement(org.y1000.connection.gen.MovementPacket value) {
+    public Builder mergeMovement(org.y1000.connection.gen.PositionPacket value) {
       if (movementBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0) &&
           movement_ != null &&
-          movement_ != org.y1000.connection.gen.MovementPacket.getDefaultInstance()) {
+          movement_ != org.y1000.connection.gen.PositionPacket.getDefaultInstance()) {
           getMovementBuilder().mergeFrom(value);
         } else {
           movement_ = value;
@@ -520,7 +554,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
      */
     public Builder clearMovement() {
       bitField0_ = (bitField0_ & ~0x00000001);
@@ -533,33 +567,33 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
      */
-    public org.y1000.connection.gen.MovementPacket.Builder getMovementBuilder() {
+    public org.y1000.connection.gen.PositionPacket.Builder getMovementBuilder() {
       bitField0_ |= 0x00000001;
       onChanged();
       return getMovementFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
      */
-    public org.y1000.connection.gen.MovementPacketOrBuilder getMovementOrBuilder() {
+    public org.y1000.connection.gen.PositionPacketOrBuilder getMovementOrBuilder() {
       if (movementBuilder_ != null) {
         return movementBuilder_.getMessageOrBuilder();
       } else {
         return movement_ == null ?
-            org.y1000.connection.gen.MovementPacket.getDefaultInstance() : movement_;
+            org.y1000.connection.gen.PositionPacket.getDefaultInstance() : movement_;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.MovementPacket movement = 1;</code>
+     * <code>.org.y1000.connection.gen.PositionPacket movement = 1;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.connection.gen.MovementPacket, org.y1000.connection.gen.MovementPacket.Builder, org.y1000.connection.gen.MovementPacketOrBuilder> 
+        org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder> 
         getMovementFieldBuilder() {
       if (movementBuilder_ == null) {
         movementBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.connection.gen.MovementPacket, org.y1000.connection.gen.MovementPacket.Builder, org.y1000.connection.gen.MovementPacketOrBuilder>(
+            org.y1000.connection.gen.PositionPacket, org.y1000.connection.gen.PositionPacket.Builder, org.y1000.connection.gen.PositionPacketOrBuilder>(
                 getMovement(),
                 getParentForChildren(),
                 isClean());
@@ -596,6 +630,38 @@ private static final long serialVersionUID = 0L;
     public Builder clearCreatureType() {
       bitField0_ = (bitField0_ & ~0x00000002);
       creatureType_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int state_ ;
+    /**
+     * <code>int32 state = 3;</code>
+     * @return The state.
+     */
+    @java.lang.Override
+    public int getState() {
+      return state_;
+    }
+    /**
+     * <code>int32 state = 3;</code>
+     * @param value The state to set.
+     * @return This builder for chaining.
+     */
+    public Builder setState(int value) {
+
+      state_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 state = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearState() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      state_ = 0;
       onChanged();
       return this;
     }
