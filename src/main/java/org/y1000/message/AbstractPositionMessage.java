@@ -38,4 +38,14 @@ public abstract class AbstractPositionMessage implements CreatureMessage {
                         .build())
                 .build();
     }
+
+    @Override
+    public String toString() {
+        return "AbstractPositionMessage{" +
+                "id=" + id +
+                ", direction=" + direction +
+                ", coordinate=" + coordinate +
+                ", type=" + getType().name() +
+                '}';
+    }
 }

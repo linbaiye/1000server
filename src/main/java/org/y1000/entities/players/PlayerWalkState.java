@@ -35,7 +35,7 @@ final class PlayerWalkState implements PlayerState {
 
     @Override
     public List<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
-        lastReceivedInput = null;
+        lastReceivedInput = release;
         return Collections.emptyList();
     }
 
@@ -59,19 +59,17 @@ final class PlayerWalkState implements PlayerState {
         if (walkedMillis < MILLIS_TO_WALK_ONE_UNIT) {
             return Collections.emptyList();
         }
-        List<I2ClientMessage> messages = new ArrayList<>();
         Coordinate newCoordinate = player.coordinate().moveBy(player.direction());
-        log.debug("Moving to coordinate {}.", newCoordinate);
         player.changeCoordinate(newCoordinate);
         if (lastReceivedInput == null) {
-            return Collections.singletonList(Mover.move(player, currentInput.sequence(), player.direction()));
+            return Collections.singletonList(Mover.moveOrIdle(player, currentInput, player.direction()));
         } else if (lastReceivedInput instanceof RightMousePressedMotion motion) {
-            return Collections.singletonList(Mover.move(player, motion.sequence(), motion.direction()));
-        } else {
+            return Collections.singletonList(Mover.moveOrIdle(player, motion, motion.direction()));
+        } else if (lastReceivedInput instanceof RightMouseRelease) {
             player.changeState(new PlayerIdleState());
-            //messages.add(MoveMessage.fromPlayer(player, currentInput.sequence()));
+            return Collections.singletonList(new InputResponseMessage(lastReceivedInput.sequence(), SetPositionMessage.fromPlayer(player)));
         }
-        return messages;
+        return Collections.emptyList();
     }
 
     @Override

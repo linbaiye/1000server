@@ -143,6 +143,12 @@ class PlayerImpl implements Player {
         }
     }
 
+    boolean CanMoveOneUnit(Direction direction) {
+        var nextCoordinate = coordinate().moveBy(direction);
+        return realm.canMoveTo(nextCoordinate);
+    }
+
+
     @Override
     public Coordinate coordinate() {
         return coordinate;

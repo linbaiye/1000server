@@ -23,8 +23,8 @@ final class PlayerIdleState implements PlayerState {
 
     @Override
     public List<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
-        InputResponseMessage message = Mover.move(player, click.sequence(), click.direction());
-        return Collections.singletonList(message);
+        var msg = Mover.moveOrIdle(player, click, click.direction());
+        return Collections.singletonList(msg);
     }
 
     @Override
@@ -46,13 +46,14 @@ final class PlayerIdleState implements PlayerState {
             return null;
         }
         long interpolationStartAt = (stateStartedAtMillis + (elapsedMillis - player.getRealm().stepMillis()));
-        return IdleInterpolation.builder()
+        /*return IdleInterpolation.builder()
                 .coordinate(player.coordinate())
                 .length((short) elapsedMillis)
                 .id(player.id())
                 .stateStartAtMillis(stateStartedAtMillis)
                 .interpolationStart(interpolationStartAt)
                 .direction(player.direction())
-                .build();
+                .build();*/
+        return null;
     }
 }

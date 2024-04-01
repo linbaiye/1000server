@@ -18,4 +18,5 @@ public class MoveMessage extends AbstractPositionMessage {
     protected PositionType getType() {
         return PositionType.MOVE;
     }
+
 }
