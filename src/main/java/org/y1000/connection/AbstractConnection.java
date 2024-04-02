@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.connection.gen.InputPacket;
 import org.y1000.connection.gen.Packet;
 import org.y1000.message.*;
-import org.y1000.message.input.InputMessage;
-import org.y1000.message.input.InputType;
-import org.y1000.message.input.RightMouseClick;
-import org.y1000.message.input.RightMouseRelease;
+import org.y1000.message.input.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +34,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         return switch (type) {
             case MOUSE_RIGHT_CLICK -> RightMouseClick.fromPacket(inputPacket);
             case MOUSE_RIGHT_RELEASE -> RightMouseRelease.fromPacket(inputPacket);
+            case MOUSE_RIGHT_MOTION -> RightMousePressedMotion.fromPacket(inputPacket);
             default -> throw new IllegalArgumentException();
         };
     }

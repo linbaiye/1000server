@@ -5,6 +5,7 @@ import org.y1000.entities.Direction;
 import org.y1000.message.*;
 import org.y1000.message.input.InputMessage;
 import org.y1000.message.input.RightMouseClick;
+import org.y1000.message.input.RightMousePressedMotion;
 import org.y1000.message.input.RightMouseRelease;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
@@ -65,7 +66,7 @@ class PlayerImpl implements Player {
         return switch (inputMessage.type()) {
             case MOUSE_RIGHT_CLICK -> state.onRightMouseClicked(this, (RightMouseClick) inputMessage);
             case MOUSE_RIGHT_RELEASE -> state.onRightMouseReleased(this, (RightMouseRelease) inputMessage);
-            default -> Collections.emptyList();
+            case MOUSE_RIGHT_MOTION -> state.OnRightMousePressedMotion(this, (RightMousePressedMotion) inputMessage);
         };
     }
 

@@ -14,6 +14,10 @@ public class MoveMessage extends AbstractPositionMessage {
         return new MoveMessage(player.id(), player.direction(), player.coordinate());
     }
 
+    public static MoveMessage movingTo(Player player, Direction direction) {
+        return new MoveMessage(player.id(), direction, player.coordinate());
+    }
+
     @Override
     protected PositionType getType() {
         return PositionType.MOVE;

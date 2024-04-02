@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.y1000.message.*;
 import org.y1000.message.input.RightMouseClick;
+import org.y1000.message.input.RightMousePressedMotion;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +24,13 @@ final class PlayerIdleState implements PlayerState {
 
     @Override
     public List<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
-        var msg = Mover.moveOrIdle(player, click, click.direction());
+        var msg = Mover.onRightClick(player, click);
+        return Collections.singletonList(msg);
+    }
+
+    @Override
+    public List<I2ClientMessage> OnRightMousePressedMotion(PlayerImpl player, RightMousePressedMotion motion) {
+        var msg = Mover.onRightClick(player, motion);
         return Collections.singletonList(msg);
     }
 
