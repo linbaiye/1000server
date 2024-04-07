@@ -1,6 +1,7 @@
 package org.y1000.entities.players;
 
 import org.y1000.message.I2ClientMessage;
+import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.input.RightMouseClick;
 import org.y1000.message.input.RightMousePressedMotion;
 import org.y1000.message.input.RightMouseRelease;
@@ -15,6 +16,8 @@ interface PlayerState {
     default List<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
         return Collections.emptyList();
     }
+
+    List<I2ClientMessage> handleMovementEvent(PlayerImpl player, CharacterMovementEvent event);
 
     default List<I2ClientMessage> OnRightMousePressedMotion(PlayerImpl player, RightMousePressedMotion motion) {
         return Collections.emptyList();

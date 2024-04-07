@@ -21,22 +21,10 @@ public interface InterpolationPacketOrBuilder extends
   int getState();
 
   /**
-   * <code>int64 stateStart = 4;</code>
-   * @return The stateStart.
+   * <code>int64 elapsedMillis = 5;</code>
+   * @return The elapsedMillis.
    */
-  long getStateStart();
-
-  /**
-   * <code>int64 interpolationStart = 5;</code>
-   * @return The interpolationStart.
-   */
-  long getInterpolationStart();
-
-  /**
-   * <code>int32 duration = 6;</code>
-   * @return The duration.
-   */
-  int getDuration();
+  long getElapsedMillis();
 
   /**
    * <code>int32 direction = 7;</code>

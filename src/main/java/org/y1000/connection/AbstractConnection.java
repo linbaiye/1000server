@@ -3,9 +3,12 @@ package org.y1000.connection;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.connection.gen.ClientPacket;
 import org.y1000.connection.gen.InputPacket;
 import org.y1000.connection.gen.Packet;
 import org.y1000.message.*;
+import org.y1000.message.clientevent.CharacterMovementEvent;
+import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.input.*;
 
 import java.util.ArrayList;
@@ -16,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public abstract class AbstractConnection extends ChannelInboundHandlerAdapter implements Connection {
 
-    private final List<InputMessage> messages;
+    private final List<ClientEvent> messages;
 
     private final ConnectionEventListener eventListener;
 
@@ -39,16 +42,16 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         };
     }
 
-    private InputMessage createMessage(Packet packet) {
-        return switch (packet.getTypedPacketCase()) {
-            case INPUTPACKET -> createInputMessage(packet.getInputPacket());
+    private CharacterMovementEvent createMessage(ClientPacket clientPacket) {
+        return switch (clientPacket.getTypeCase()) {
+            case MOVEEVENTPACKET -> CharacterMovementEvent.fromPacket(clientPacket);
             default -> throw new IllegalArgumentException();
         };
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof Packet packet) {
+        if (msg instanceof ClientPacket packet) {
             var message = createMessage(packet);
             log.debug("Received message {}.", message);
             synchronized (messages) {
@@ -86,7 +89,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
 
     @Override
-    public List<InputMessage> takeMessages() {
+    public List<ClientEvent> takeMessages() {
         synchronized (messages) {
             if (messages.isEmpty()) {
                 return Collections.emptyList();

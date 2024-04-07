@@ -7,6 +7,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.message.InterpolationsMessage;
 import org.y1000.message.LoginMessage;
+import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.input.InputMessage;
 
 import java.util.*;
@@ -56,38 +57,38 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
         for (Map.Entry<Connection, Player> entry : connectionPlayerMap.entrySet()) {
             Connection connection = entry.getKey();
             Player player = entry.getValue();
-            List<InputMessage> unprocessedMessages = connection.takeMessages();
+            List<ClientEvent> unprocessedMessages = connection.takeMessages();
             if (!unprocessedMessages.isEmpty()) {
                 List<I2ClientMessage> ret = player.handle(unprocessedMessages);
-                ret.forEach(connection::write);
+                //ret.forEach(connection::write);
             }
             List<I2ClientMessage> updatedMessages = player.update(delta, timeMillis);
-            updatedMessages.forEach(connection::write);
+            //updatedMessages.forEach(connection::write);
         }
     }
 
 
+
     public void syncState() {
         for (Player source : connectionPlayerMap.values()) {
-            if (source.interpolationDuration() < 700) {
-                continue;
-            }
-            List<Interpolation> interpolations = source.drainInterpolations(500);
-            if (interpolations.isEmpty()) {
-                continue;
-            }
+//            if (source.interpolationDuration() < 700) {
+//                continue;
+//            }
+//            List<Interpolation> interpolations = source.drainInterpolations(500);
+//            if (interpolations.isEmpty()) {
+//                continue;
+//            }
             Map<Connection, Player> visiblePlayers = findVisiblePlayers(source);
             for (Map.Entry<Connection, Player> cv: visiblePlayers.entrySet()) {
                 Connection connection = cv.getKey();
-                connection.write(InterpolationsMessage.wrap(interpolations));
-                connection.flush();
+                //connection.write(InterpolationsMessage.wrap(interpolations));
+                //connection.flush();
             }
         }
     }
 
     @Override
-    public List<I2ClientMessage> update(long delta, long timeMillis) {
+    public void update(long delta, long timeMillis) {
         updatePlayers(delta, timeMillis);
-        return Collections.emptyList();
     }
 }

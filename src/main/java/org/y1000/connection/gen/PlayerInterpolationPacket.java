@@ -5,38 +5,38 @@
 package org.y1000.connection.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.ShowCreaturePacket}
+ * Protobuf type {@code org.y1000.connection.gen.PlayerInterpolationPacket}
  */
-public final class ShowCreaturePacket extends
+public final class PlayerInterpolationPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.ShowCreaturePacket)
-    ShowCreaturePacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.PlayerInterpolationPacket)
+    PlayerInterpolationPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ShowCreaturePacket.newBuilder() to construct.
-  private ShowCreaturePacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use PlayerInterpolationPacket.newBuilder() to construct.
+  private PlayerInterpolationPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ShowCreaturePacket() {
+  private PlayerInterpolationPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new ShowCreaturePacket();
+    return new PlayerInterpolationPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor;
+    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowCreaturePacket_fieldAccessorTable
+    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.connection.gen.ShowCreaturePacket.class, org.y1000.connection.gen.ShowCreaturePacket.Builder.class);
+            org.y1000.connection.gen.PlayerInterpolationPacket.class, org.y1000.connection.gen.PlayerInterpolationPacket.Builder.class);
   }
 
   private int bitField0_;
@@ -124,10 +124,10 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.connection.gen.ShowCreaturePacket)) {
+    if (!(obj instanceof org.y1000.connection.gen.PlayerInterpolationPacket)) {
       return super.equals(obj);
     }
-    org.y1000.connection.gen.ShowCreaturePacket other = (org.y1000.connection.gen.ShowCreaturePacket) obj;
+    org.y1000.connection.gen.PlayerInterpolationPacket other = (org.y1000.connection.gen.PlayerInterpolationPacket) obj;
 
     if (hasInterpolation() != other.hasInterpolation()) return false;
     if (hasInterpolation()) {
@@ -158,44 +158,44 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(byte[] data)
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(java.io.InputStream input)
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -203,26 +203,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.connection.gen.ShowCreaturePacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.connection.gen.ShowCreaturePacket parseDelimitedFrom(
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.PlayerInterpolationPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -235,7 +235,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.connection.gen.ShowCreaturePacket prototype) {
+  public static Builder newBuilder(org.y1000.connection.gen.PlayerInterpolationPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -251,26 +251,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.ShowCreaturePacket}
+   * Protobuf type {@code org.y1000.connection.gen.PlayerInterpolationPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.ShowCreaturePacket)
-      org.y1000.connection.gen.ShowCreaturePacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.PlayerInterpolationPacket)
+      org.y1000.connection.gen.PlayerInterpolationPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor;
+      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowCreaturePacket_fieldAccessorTable
+      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.connection.gen.ShowCreaturePacket.class, org.y1000.connection.gen.ShowCreaturePacket.Builder.class);
+              org.y1000.connection.gen.PlayerInterpolationPacket.class, org.y1000.connection.gen.PlayerInterpolationPacket.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.ShowCreaturePacket.newBuilder()
+    // Construct using org.y1000.connection.gen.PlayerInterpolationPacket.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -302,17 +302,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor;
+      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.connection.gen.ShowCreaturePacket getDefaultInstanceForType() {
-      return org.y1000.connection.gen.ShowCreaturePacket.getDefaultInstance();
+    public org.y1000.connection.gen.PlayerInterpolationPacket getDefaultInstanceForType() {
+      return org.y1000.connection.gen.PlayerInterpolationPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.connection.gen.ShowCreaturePacket build() {
-      org.y1000.connection.gen.ShowCreaturePacket result = buildPartial();
+    public org.y1000.connection.gen.PlayerInterpolationPacket build() {
+      org.y1000.connection.gen.PlayerInterpolationPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -320,14 +320,14 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.connection.gen.ShowCreaturePacket buildPartial() {
-      org.y1000.connection.gen.ShowCreaturePacket result = new org.y1000.connection.gen.ShowCreaturePacket(this);
+    public org.y1000.connection.gen.PlayerInterpolationPacket buildPartial() {
+      org.y1000.connection.gen.PlayerInterpolationPacket result = new org.y1000.connection.gen.PlayerInterpolationPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.connection.gen.ShowCreaturePacket result) {
+    private void buildPartial0(org.y1000.connection.gen.PlayerInterpolationPacket result) {
       int from_bitField0_ = bitField0_;
       int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -376,16 +376,16 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.connection.gen.ShowCreaturePacket) {
-        return mergeFrom((org.y1000.connection.gen.ShowCreaturePacket)other);
+      if (other instanceof org.y1000.connection.gen.PlayerInterpolationPacket) {
+        return mergeFrom((org.y1000.connection.gen.PlayerInterpolationPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.connection.gen.ShowCreaturePacket other) {
-      if (other == org.y1000.connection.gen.ShowCreaturePacket.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.y1000.connection.gen.PlayerInterpolationPacket other) {
+      if (other == org.y1000.connection.gen.PlayerInterpolationPacket.getDefaultInstance()) return this;
       if (other.hasInterpolation()) {
         mergeInterpolation(other.getInterpolation());
       }
@@ -612,23 +612,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.ShowCreaturePacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.PlayerInterpolationPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.ShowCreaturePacket)
-  private static final org.y1000.connection.gen.ShowCreaturePacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.PlayerInterpolationPacket)
+  private static final org.y1000.connection.gen.PlayerInterpolationPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.connection.gen.ShowCreaturePacket();
+    DEFAULT_INSTANCE = new org.y1000.connection.gen.PlayerInterpolationPacket();
   }
 
-  public static org.y1000.connection.gen.ShowCreaturePacket getDefaultInstance() {
+  public static org.y1000.connection.gen.PlayerInterpolationPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ShowCreaturePacket>
-      PARSER = new com.google.protobuf.AbstractParser<ShowCreaturePacket>() {
+  private static final com.google.protobuf.Parser<PlayerInterpolationPacket>
+      PARSER = new com.google.protobuf.AbstractParser<PlayerInterpolationPacket>() {
     @java.lang.Override
-    public ShowCreaturePacket parsePartialFrom(
+    public PlayerInterpolationPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -647,17 +647,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<ShowCreaturePacket> parser() {
+  public static com.google.protobuf.Parser<PlayerInterpolationPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ShowCreaturePacket> getParserForType() {
+  public com.google.protobuf.Parser<PlayerInterpolationPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.connection.gen.ShowCreaturePacket getDefaultInstanceForType() {
+  public org.y1000.connection.gen.PlayerInterpolationPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

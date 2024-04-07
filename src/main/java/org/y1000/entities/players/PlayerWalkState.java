@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.message.*;
+import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.input.*;
 import org.y1000.util.Coordinate;
 
@@ -14,9 +15,9 @@ final class PlayerWalkState implements PlayerState {
 
     private final AbstractRightClick currentInput;
 
-    private InputMessage lastReceivedInput;
-
     private long walkedMillis;
+
+    private CharacterMovementEvent lastReceived;
 
     public PlayerWalkState(AbstractRightClick trigger) {
         currentInput = trigger;
@@ -24,7 +25,6 @@ final class PlayerWalkState implements PlayerState {
     }
 
     private List<I2ClientMessage> takeInput(InputMessage input) {
-        lastReceivedInput = input;
         return Collections.emptyList();
     }
 
@@ -36,6 +36,12 @@ final class PlayerWalkState implements PlayerState {
     @Override
     public List<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
         return takeInput(release);
+    }
+
+    @Override
+    public List<I2ClientMessage> handleMovementEvent(PlayerImpl player, CharacterMovementEvent event) {
+        lastReceived = event;
+        return Collections.emptyList();
     }
 
     @Override
@@ -67,14 +73,17 @@ final class PlayerWalkState implements PlayerState {
         }
         player.changeCoordinate(newCoordinate);
         log.debug("Moved to coordinate {}", newCoordinate);
-        if (lastReceivedInput == null) {
-            InputResponseMessage message = Mover.onRightClick(player, currentInput);
-            return Collections.singletonList(message.positionMessage());
-        } else if (lastReceivedInput instanceof AbstractRightClick click) {
-            return Collections.singletonList(Mover.onRightClick(player, click));
-        } else if (lastReceivedInput instanceof RightMouseRelease) {
+        if (lastReceived == null) {
+            log.debug("No more input, back to idle.");
             player.changeState(new PlayerIdleState());
-            return Collections.singletonList(new InputResponseMessage(lastReceivedInput.sequence(), SetPositionMessage.fromPlayer(player)));
+            return Collections.emptyList();
+        } else if (lastReceived.inputMessage() instanceof AbstractRightClick click) {
+            log.debug("Continue moving due to event: {}.", lastReceived);
+            return Collections.singletonList(Mover.onRightClick(player, click));
+        } else if (lastReceived.inputMessage() instanceof RightMouseRelease) {
+            log.debug("Go back to idle, event: {}.", lastReceived);
+            player.changeState(new PlayerIdleState());
+            return Collections.singletonList(new InputResponseMessage(lastReceived.inputMessage().sequence(), SetPositionMessage.fromPlayer(player)));
         }
         return Collections.emptyList();
     }

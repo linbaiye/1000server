@@ -39,21 +39,6 @@ public interface PacketOrBuilder extends
   org.y1000.connection.gen.ShowCreaturePacketOrBuilder getShowCreaturePacketOrBuilder();
 
   /**
-   * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-   * @return Whether the inputPacket field is set.
-   */
-  boolean hasInputPacket();
-  /**
-   * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-   * @return The inputPacket.
-   */
-  org.y1000.connection.gen.InputPacket getInputPacket();
-  /**
-   * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-   */
-  org.y1000.connection.gen.InputPacketOrBuilder getInputPacketOrBuilder();
-
-  /**
    * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
    * @return Whether the loginPacket field is set.
    */
@@ -97,6 +82,21 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
    */
   org.y1000.connection.gen.InputResponsePacketOrBuilder getResponsePacketOrBuilder();
+
+  /**
+   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   * @return Whether the playerInterpolation field is set.
+   */
+  boolean hasPlayerInterpolation();
+  /**
+   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   * @return The playerInterpolation.
+   */
+  org.y1000.connection.gen.PlayerInterpolationPacket getPlayerInterpolation();
+  /**
+   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   */
+  org.y1000.connection.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder();
 
   org.y1000.connection.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

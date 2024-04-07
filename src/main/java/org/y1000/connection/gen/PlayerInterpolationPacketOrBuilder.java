@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.0-rc2
 package org.y1000.connection.gen;
 
-public interface ShowCreaturePacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.ShowCreaturePacket)
+public interface PlayerInterpolationPacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.PlayerInterpolationPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**

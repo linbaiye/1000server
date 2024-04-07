@@ -5,76 +5,87 @@
 package org.y1000.connection.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.ShowCreaturePacket}
+ * Protobuf type {@code org.y1000.connection.gen.MoveEventPacket}
  */
-public final class ShowCreaturePacket extends
+public final class MoveEventPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.ShowCreaturePacket)
-    ShowCreaturePacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.MoveEventPacket)
+    MoveEventPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ShowCreaturePacket.newBuilder() to construct.
-  private ShowCreaturePacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use MoveEventPacket.newBuilder() to construct.
+  private MoveEventPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ShowCreaturePacket() {
+  private MoveEventPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new ShowCreaturePacket();
+    return new MoveEventPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor;
+    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_MoveEventPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowCreaturePacket_fieldAccessorTable
+    return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_MoveEventPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.connection.gen.ShowCreaturePacket.class, org.y1000.connection.gen.ShowCreaturePacket.Builder.class);
+            org.y1000.connection.gen.MoveEventPacket.class, org.y1000.connection.gen.MoveEventPacket.Builder.class);
   }
 
   private int bitField0_;
-  public static final int INTERPOLATION_FIELD_NUMBER = 1;
-  private org.y1000.connection.gen.InterpolationPacket interpolation_;
+  public static final int INPUT_FIELD_NUMBER = 1;
+  private org.y1000.connection.gen.InputPacket input_;
   /**
-   * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
-   * @return Whether the interpolation field is set.
+   * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+   * @return Whether the input field is set.
    */
   @java.lang.Override
-  public boolean hasInterpolation() {
+  public boolean hasInput() {
     return ((bitField0_ & 0x00000001) != 0);
   }
   /**
-   * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
-   * @return The interpolation.
+   * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+   * @return The input.
    */
   @java.lang.Override
-  public org.y1000.connection.gen.InterpolationPacket getInterpolation() {
-    return interpolation_ == null ? org.y1000.connection.gen.InterpolationPacket.getDefaultInstance() : interpolation_;
+  public org.y1000.connection.gen.InputPacket getInput() {
+    return input_ == null ? org.y1000.connection.gen.InputPacket.getDefaultInstance() : input_;
   }
   /**
-   * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+   * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
    */
   @java.lang.Override
-  public org.y1000.connection.gen.InterpolationPacketOrBuilder getInterpolationOrBuilder() {
-    return interpolation_ == null ? org.y1000.connection.gen.InterpolationPacket.getDefaultInstance() : interpolation_;
+  public org.y1000.connection.gen.InputPacketOrBuilder getInputOrBuilder() {
+    return input_ == null ? org.y1000.connection.gen.InputPacket.getDefaultInstance() : input_;
   }
 
-  public static final int TYPE_FIELD_NUMBER = 2;
-  private int type_ = 0;
+  public static final int HAPPENEDATX_FIELD_NUMBER = 2;
+  private int happenedAtX_ = 0;
   /**
-   * <code>int32 type = 2;</code>
-   * @return The type.
+   * <code>int32 happenedAtX = 2;</code>
+   * @return The happenedAtX.
    */
   @java.lang.Override
-  public int getType() {
-    return type_;
+  public int getHappenedAtX() {
+    return happenedAtX_;
+  }
+
+  public static final int HAPPENEDATY_FIELD_NUMBER = 3;
+  private int happenedAtY_ = 0;
+  /**
+   * <code>int32 happenedAtY = 3;</code>
+   * @return The happenedAtY.
+   */
+  @java.lang.Override
+  public int getHappenedAtY() {
+    return happenedAtY_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -92,10 +103,13 @@ private static final long serialVersionUID = 0L;
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
     if (((bitField0_ & 0x00000001) != 0)) {
-      output.writeMessage(1, getInterpolation());
+      output.writeMessage(1, getInput());
     }
-    if (type_ != 0) {
-      output.writeInt32(2, type_);
+    if (happenedAtX_ != 0) {
+      output.writeInt32(2, happenedAtX_);
+    }
+    if (happenedAtY_ != 0) {
+      output.writeInt32(3, happenedAtY_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -108,11 +122,15 @@ private static final long serialVersionUID = 0L;
     size = 0;
     if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(1, getInterpolation());
+        .computeMessageSize(1, getInput());
     }
-    if (type_ != 0) {
+    if (happenedAtX_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, type_);
+        .computeInt32Size(2, happenedAtX_);
+    }
+    if (happenedAtY_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(3, happenedAtY_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -124,18 +142,20 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.connection.gen.ShowCreaturePacket)) {
+    if (!(obj instanceof org.y1000.connection.gen.MoveEventPacket)) {
       return super.equals(obj);
     }
-    org.y1000.connection.gen.ShowCreaturePacket other = (org.y1000.connection.gen.ShowCreaturePacket) obj;
+    org.y1000.connection.gen.MoveEventPacket other = (org.y1000.connection.gen.MoveEventPacket) obj;
 
-    if (hasInterpolation() != other.hasInterpolation()) return false;
-    if (hasInterpolation()) {
-      if (!getInterpolation()
-          .equals(other.getInterpolation())) return false;
+    if (hasInput() != other.hasInput()) return false;
+    if (hasInput()) {
+      if (!getInput()
+          .equals(other.getInput())) return false;
     }
-    if (getType()
-        != other.getType()) return false;
+    if (getHappenedAtX()
+        != other.getHappenedAtX()) return false;
+    if (getHappenedAtY()
+        != other.getHappenedAtY()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -147,55 +167,57 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    if (hasInterpolation()) {
-      hash = (37 * hash) + INTERPOLATION_FIELD_NUMBER;
-      hash = (53 * hash) + getInterpolation().hashCode();
+    if (hasInput()) {
+      hash = (37 * hash) + INPUT_FIELD_NUMBER;
+      hash = (53 * hash) + getInput().hashCode();
     }
-    hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + getType();
+    hash = (37 * hash) + HAPPENEDATX_FIELD_NUMBER;
+    hash = (53 * hash) + getHappenedAtX();
+    hash = (37 * hash) + HAPPENEDATY_FIELD_NUMBER;
+    hash = (53 * hash) + getHappenedAtY();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.MoveEventPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.MoveEventPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.MoveEventPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.MoveEventPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(byte[] data)
+  public static org.y1000.connection.gen.MoveEventPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.MoveEventPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(java.io.InputStream input)
+  public static org.y1000.connection.gen.MoveEventPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.MoveEventPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -203,26 +225,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.connection.gen.ShowCreaturePacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.connection.gen.MoveEventPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.connection.gen.ShowCreaturePacket parseDelimitedFrom(
+  public static org.y1000.connection.gen.MoveEventPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.MoveEventPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.connection.gen.ShowCreaturePacket parseFrom(
+  public static org.y1000.connection.gen.MoveEventPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -235,7 +257,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.connection.gen.ShowCreaturePacket prototype) {
+  public static Builder newBuilder(org.y1000.connection.gen.MoveEventPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -251,26 +273,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.ShowCreaturePacket}
+   * Protobuf type {@code org.y1000.connection.gen.MoveEventPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.ShowCreaturePacket)
-      org.y1000.connection.gen.ShowCreaturePacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.MoveEventPacket)
+      org.y1000.connection.gen.MoveEventPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor;
+      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_MoveEventPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowCreaturePacket_fieldAccessorTable
+      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_MoveEventPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.connection.gen.ShowCreaturePacket.class, org.y1000.connection.gen.ShowCreaturePacket.Builder.class);
+              org.y1000.connection.gen.MoveEventPacket.class, org.y1000.connection.gen.MoveEventPacket.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.ShowCreaturePacket.newBuilder()
+    // Construct using org.y1000.connection.gen.MoveEventPacket.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -283,36 +305,37 @@ private static final long serialVersionUID = 0L;
     private void maybeForceBuilderInitialization() {
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
-        getInterpolationFieldBuilder();
+        getInputFieldBuilder();
       }
     }
     @java.lang.Override
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      interpolation_ = null;
-      if (interpolationBuilder_ != null) {
-        interpolationBuilder_.dispose();
-        interpolationBuilder_ = null;
+      input_ = null;
+      if (inputBuilder_ != null) {
+        inputBuilder_.dispose();
+        inputBuilder_ = null;
       }
-      type_ = 0;
+      happenedAtX_ = 0;
+      happenedAtY_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor;
+      return org.y1000.connection.gen.Message.internal_static_org_y1000_connection_gen_MoveEventPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.connection.gen.ShowCreaturePacket getDefaultInstanceForType() {
-      return org.y1000.connection.gen.ShowCreaturePacket.getDefaultInstance();
+    public org.y1000.connection.gen.MoveEventPacket getDefaultInstanceForType() {
+      return org.y1000.connection.gen.MoveEventPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.connection.gen.ShowCreaturePacket build() {
-      org.y1000.connection.gen.ShowCreaturePacket result = buildPartial();
+    public org.y1000.connection.gen.MoveEventPacket build() {
+      org.y1000.connection.gen.MoveEventPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -320,24 +343,27 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.connection.gen.ShowCreaturePacket buildPartial() {
-      org.y1000.connection.gen.ShowCreaturePacket result = new org.y1000.connection.gen.ShowCreaturePacket(this);
+    public org.y1000.connection.gen.MoveEventPacket buildPartial() {
+      org.y1000.connection.gen.MoveEventPacket result = new org.y1000.connection.gen.MoveEventPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.connection.gen.ShowCreaturePacket result) {
+    private void buildPartial0(org.y1000.connection.gen.MoveEventPacket result) {
       int from_bitField0_ = bitField0_;
       int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.interpolation_ = interpolationBuilder_ == null
-            ? interpolation_
-            : interpolationBuilder_.build();
+        result.input_ = inputBuilder_ == null
+            ? input_
+            : inputBuilder_.build();
         to_bitField0_ |= 0x00000001;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.type_ = type_;
+        result.happenedAtX_ = happenedAtX_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.happenedAtY_ = happenedAtY_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -376,21 +402,24 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.connection.gen.ShowCreaturePacket) {
-        return mergeFrom((org.y1000.connection.gen.ShowCreaturePacket)other);
+      if (other instanceof org.y1000.connection.gen.MoveEventPacket) {
+        return mergeFrom((org.y1000.connection.gen.MoveEventPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.connection.gen.ShowCreaturePacket other) {
-      if (other == org.y1000.connection.gen.ShowCreaturePacket.getDefaultInstance()) return this;
-      if (other.hasInterpolation()) {
-        mergeInterpolation(other.getInterpolation());
+    public Builder mergeFrom(org.y1000.connection.gen.MoveEventPacket other) {
+      if (other == org.y1000.connection.gen.MoveEventPacket.getDefaultInstance()) return this;
+      if (other.hasInput()) {
+        mergeInput(other.getInput());
       }
-      if (other.getType() != 0) {
-        setType(other.getType());
+      if (other.getHappenedAtX() != 0) {
+        setHappenedAtX(other.getHappenedAtX());
+      }
+      if (other.getHappenedAtY() != 0) {
+        setHappenedAtY(other.getHappenedAtY());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -420,16 +449,21 @@ private static final long serialVersionUID = 0L;
               break;
             case 10: {
               input.readMessage(
-                  getInterpolationFieldBuilder().getBuilder(),
+                  getInputFieldBuilder().getBuilder(),
                   extensionRegistry);
               bitField0_ |= 0x00000001;
               break;
             } // case 10
             case 16: {
-              type_ = input.readInt32();
+              happenedAtX_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
+            case 24: {
+              happenedAtY_ = input.readInt32();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 24
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -447,155 +481,187 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private org.y1000.connection.gen.InterpolationPacket interpolation_;
+    private org.y1000.connection.gen.InputPacket input_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.connection.gen.InterpolationPacket, org.y1000.connection.gen.InterpolationPacket.Builder, org.y1000.connection.gen.InterpolationPacketOrBuilder> interpolationBuilder_;
+        org.y1000.connection.gen.InputPacket, org.y1000.connection.gen.InputPacket.Builder, org.y1000.connection.gen.InputPacketOrBuilder> inputBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
-     * @return Whether the interpolation field is set.
+     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * @return Whether the input field is set.
      */
-    public boolean hasInterpolation() {
+    public boolean hasInput() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
-     * @return The interpolation.
+     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * @return The input.
      */
-    public org.y1000.connection.gen.InterpolationPacket getInterpolation() {
-      if (interpolationBuilder_ == null) {
-        return interpolation_ == null ? org.y1000.connection.gen.InterpolationPacket.getDefaultInstance() : interpolation_;
+    public org.y1000.connection.gen.InputPacket getInput() {
+      if (inputBuilder_ == null) {
+        return input_ == null ? org.y1000.connection.gen.InputPacket.getDefaultInstance() : input_;
       } else {
-        return interpolationBuilder_.getMessage();
+        return inputBuilder_.getMessage();
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
      */
-    public Builder setInterpolation(org.y1000.connection.gen.InterpolationPacket value) {
-      if (interpolationBuilder_ == null) {
+    public Builder setInput(org.y1000.connection.gen.InputPacket value) {
+      if (inputBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
-        interpolation_ = value;
+        input_ = value;
       } else {
-        interpolationBuilder_.setMessage(value);
+        inputBuilder_.setMessage(value);
       }
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
      */
-    public Builder setInterpolation(
-        org.y1000.connection.gen.InterpolationPacket.Builder builderForValue) {
-      if (interpolationBuilder_ == null) {
-        interpolation_ = builderForValue.build();
+    public Builder setInput(
+        org.y1000.connection.gen.InputPacket.Builder builderForValue) {
+      if (inputBuilder_ == null) {
+        input_ = builderForValue.build();
       } else {
-        interpolationBuilder_.setMessage(builderForValue.build());
+        inputBuilder_.setMessage(builderForValue.build());
       }
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
      */
-    public Builder mergeInterpolation(org.y1000.connection.gen.InterpolationPacket value) {
-      if (interpolationBuilder_ == null) {
+    public Builder mergeInput(org.y1000.connection.gen.InputPacket value) {
+      if (inputBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0) &&
-          interpolation_ != null &&
-          interpolation_ != org.y1000.connection.gen.InterpolationPacket.getDefaultInstance()) {
-          getInterpolationBuilder().mergeFrom(value);
+          input_ != null &&
+          input_ != org.y1000.connection.gen.InputPacket.getDefaultInstance()) {
+          getInputBuilder().mergeFrom(value);
         } else {
-          interpolation_ = value;
+          input_ = value;
         }
       } else {
-        interpolationBuilder_.mergeFrom(value);
+        inputBuilder_.mergeFrom(value);
       }
-      if (interpolation_ != null) {
+      if (input_ != null) {
         bitField0_ |= 0x00000001;
         onChanged();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
      */
-    public Builder clearInterpolation() {
+    public Builder clearInput() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      interpolation_ = null;
-      if (interpolationBuilder_ != null) {
-        interpolationBuilder_.dispose();
-        interpolationBuilder_ = null;
+      input_ = null;
+      if (inputBuilder_ != null) {
+        inputBuilder_.dispose();
+        inputBuilder_ = null;
       }
       onChanged();
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
      */
-    public org.y1000.connection.gen.InterpolationPacket.Builder getInterpolationBuilder() {
+    public org.y1000.connection.gen.InputPacket.Builder getInputBuilder() {
       bitField0_ |= 0x00000001;
       onChanged();
-      return getInterpolationFieldBuilder().getBuilder();
+      return getInputFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
      */
-    public org.y1000.connection.gen.InterpolationPacketOrBuilder getInterpolationOrBuilder() {
-      if (interpolationBuilder_ != null) {
-        return interpolationBuilder_.getMessageOrBuilder();
+    public org.y1000.connection.gen.InputPacketOrBuilder getInputOrBuilder() {
+      if (inputBuilder_ != null) {
+        return inputBuilder_.getMessageOrBuilder();
       } else {
-        return interpolation_ == null ?
-            org.y1000.connection.gen.InterpolationPacket.getDefaultInstance() : interpolation_;
+        return input_ == null ?
+            org.y1000.connection.gen.InputPacket.getDefaultInstance() : input_;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.connection.gen.InterpolationPacket, org.y1000.connection.gen.InterpolationPacket.Builder, org.y1000.connection.gen.InterpolationPacketOrBuilder> 
-        getInterpolationFieldBuilder() {
-      if (interpolationBuilder_ == null) {
-        interpolationBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.connection.gen.InterpolationPacket, org.y1000.connection.gen.InterpolationPacket.Builder, org.y1000.connection.gen.InterpolationPacketOrBuilder>(
-                getInterpolation(),
+        org.y1000.connection.gen.InputPacket, org.y1000.connection.gen.InputPacket.Builder, org.y1000.connection.gen.InputPacketOrBuilder> 
+        getInputFieldBuilder() {
+      if (inputBuilder_ == null) {
+        inputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.connection.gen.InputPacket, org.y1000.connection.gen.InputPacket.Builder, org.y1000.connection.gen.InputPacketOrBuilder>(
+                getInput(),
                 getParentForChildren(),
                 isClean());
-        interpolation_ = null;
+        input_ = null;
       }
-      return interpolationBuilder_;
+      return inputBuilder_;
     }
 
-    private int type_ ;
+    private int happenedAtX_ ;
     /**
-     * <code>int32 type = 2;</code>
-     * @return The type.
+     * <code>int32 happenedAtX = 2;</code>
+     * @return The happenedAtX.
      */
     @java.lang.Override
-    public int getType() {
-      return type_;
+    public int getHappenedAtX() {
+      return happenedAtX_;
     }
     /**
-     * <code>int32 type = 2;</code>
-     * @param value The type to set.
+     * <code>int32 happenedAtX = 2;</code>
+     * @param value The happenedAtX to set.
      * @return This builder for chaining.
      */
-    public Builder setType(int value) {
+    public Builder setHappenedAtX(int value) {
 
-      type_ = value;
+      happenedAtX_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 type = 2;</code>
+     * <code>int32 happenedAtX = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearType() {
+    public Builder clearHappenedAtX() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      type_ = 0;
+      happenedAtX_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int happenedAtY_ ;
+    /**
+     * <code>int32 happenedAtY = 3;</code>
+     * @return The happenedAtY.
+     */
+    @java.lang.Override
+    public int getHappenedAtY() {
+      return happenedAtY_;
+    }
+    /**
+     * <code>int32 happenedAtY = 3;</code>
+     * @param value The happenedAtY to set.
+     * @return This builder for chaining.
+     */
+    public Builder setHappenedAtY(int value) {
+
+      happenedAtY_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 happenedAtY = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearHappenedAtY() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      happenedAtY_ = 0;
       onChanged();
       return this;
     }
@@ -612,23 +678,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.ShowCreaturePacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.MoveEventPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.ShowCreaturePacket)
-  private static final org.y1000.connection.gen.ShowCreaturePacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.MoveEventPacket)
+  private static final org.y1000.connection.gen.MoveEventPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.connection.gen.ShowCreaturePacket();
+    DEFAULT_INSTANCE = new org.y1000.connection.gen.MoveEventPacket();
   }
 
-  public static org.y1000.connection.gen.ShowCreaturePacket getDefaultInstance() {
+  public static org.y1000.connection.gen.MoveEventPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ShowCreaturePacket>
-      PARSER = new com.google.protobuf.AbstractParser<ShowCreaturePacket>() {
+  private static final com.google.protobuf.Parser<MoveEventPacket>
+      PARSER = new com.google.protobuf.AbstractParser<MoveEventPacket>() {
     @java.lang.Override
-    public ShowCreaturePacket parsePartialFrom(
+    public MoveEventPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -647,17 +713,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<ShowCreaturePacket> parser() {
+  public static com.google.protobuf.Parser<MoveEventPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ShowCreaturePacket> getParserForType() {
+  public com.google.protobuf.Parser<MoveEventPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.connection.gen.ShowCreaturePacket getDefaultInstanceForType() {
+  public org.y1000.connection.gen.MoveEventPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

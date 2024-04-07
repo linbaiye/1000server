@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.y1000.message.*;
+import org.y1000.message.clientevent.CharacterMovementEvent;
+import org.y1000.message.input.AbstractRightClick;
 import org.y1000.message.input.RightMouseClick;
 import org.y1000.message.input.RightMousePressedMotion;
 
@@ -26,6 +28,14 @@ final class PlayerIdleState implements PlayerState {
     public List<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
         var msg = Mover.onRightClick(player, click);
         return Collections.singletonList(msg);
+    }
+
+    @Override
+    public List<I2ClientMessage> handleMovementEvent(PlayerImpl player, CharacterMovementEvent event) {
+        if (event.inputMessage() instanceof AbstractRightClick rightClick) {
+            return Collections.singletonList(Mover.onRightClick(player, rightClick));
+        }
+        return Collections.emptyList();
     }
 
     @Override

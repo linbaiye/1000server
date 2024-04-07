@@ -102,10 +102,10 @@ public class Realm implements Runnable, ConnectionEventListener  {
                 handleConnectionEvents();
                 long current = System.currentTimeMillis();
                 if (timeMillis <= current) {
-                    playerManager.update(STEP_MILLIS, realmElapsedMillis);
+                    playerManager.update(STEP_MILLIS);
                     timeMillis += STEP_MILLIS;
                     realmElapsedMillis += STEP_MILLIS;
-                    playerManager.syncState();
+                    //playerManager.syncState();
                 } else {
                     Thread.sleep(timeMillis - current);
                 }

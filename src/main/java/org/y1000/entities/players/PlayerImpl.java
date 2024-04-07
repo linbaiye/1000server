@@ -3,6 +3,8 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.message.*;
+import org.y1000.message.clientevent.CharacterMovementEvent;
+import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.input.InputMessage;
 import org.y1000.message.input.RightMouseClick;
 import org.y1000.message.input.RightMousePressedMotion;
@@ -62,17 +64,21 @@ class PlayerImpl implements Player {
         coordinate = newCoordinate;
     }
 
-    private List<I2ClientMessage> handleInputMessage(InputMessage inputMessage) {
-        return switch (inputMessage.type()) {
-            case MOUSE_RIGHT_CLICK -> state.onRightMouseClicked(this, (RightMouseClick) inputMessage);
-            case MOUSE_RIGHT_RELEASE -> state.onRightMouseReleased(this, (RightMouseRelease) inputMessage);
-            case MOUSE_RIGHT_MOTION -> state.OnRightMousePressedMotion(this, (RightMousePressedMotion) inputMessage);
-        };
+    private List<I2ClientMessage> handleInputMessage(ClientEvent inputMessage) {
+        if (!(inputMessage instanceof CharacterMovementEvent movementEvent)) {
+            return Collections.emptyList();
+        }
+        return state.handleMovementEvent(this, movementEvent);
+//        return switch (movementEvent.inputMessage().type()) {
+//            case MOUSE_RIGHT_CLICK -> state.onRightMouseClicked(this, (RightMouseClick) inputMessage);
+//            case MOUSE_RIGHT_RELEASE -> state.onRightMouseReleased(this, (RightMouseRelease) inputMessage);
+//            case MOUSE_RIGHT_MOTION -> state.OnRightMousePressedMotion(this, (RightMousePressedMotion) inputMessage);
+//        };
     }
 
-    public List<I2ClientMessage> handle(List<InputMessage> messages) {
+    public List<I2ClientMessage> handle(List<ClientEvent> messages) {
         List<I2ClientMessage> result = new ArrayList<>();
-        for (InputMessage message : messages) {
+        for (ClientEvent message : messages) {
             result.addAll(handleInputMessage(message));
         }
         return result;

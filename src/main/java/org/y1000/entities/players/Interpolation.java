@@ -1,6 +1,8 @@
 package org.y1000.entities.players;
 
 import org.y1000.connection.gen.InterpolationPacket;
+import org.y1000.entities.Direction;
+import org.y1000.util.Coordinate;
 
 public interface Interpolation {
     long id();
@@ -9,9 +11,9 @@ public interface Interpolation {
 
     short duration();
 
-    long stateStartAtMillis();
+    Coordinate coordinate();
 
-    long interpolationStartAtMillis();
+    Direction direction();
 
     InterpolationPacket toPacket();
 }

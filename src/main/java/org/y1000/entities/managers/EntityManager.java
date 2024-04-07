@@ -10,5 +10,5 @@ public interface EntityManager<T extends Entity> {
 
     T findOne(Coordinate coordinate);
 
-    List<I2ClientMessage> update(long delta, long timeMillis);
+    void update(long delta);
 }

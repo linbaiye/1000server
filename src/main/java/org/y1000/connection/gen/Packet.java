@@ -47,10 +47,10 @@ private static final long serialVersionUID = 0L;
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     POSITIONPACKET(1),
     SHOWCREATUREPACKET(2),
-    INPUTPACKET(3),
     LOGINPACKET(4),
     INTERPOLATIONS(5),
     RESPONSEPACKET(6),
+    PLAYERINTERPOLATION(7),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -70,10 +70,10 @@ private static final long serialVersionUID = 0L;
       switch (value) {
         case 1: return POSITIONPACKET;
         case 2: return SHOWCREATUREPACKET;
-        case 3: return INPUTPACKET;
         case 4: return LOGINPACKET;
         case 5: return INTERPOLATIONS;
         case 6: return RESPONSEPACKET;
+        case 7: return PLAYERINTERPOLATION;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -149,37 +149,6 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.connection.gen.ShowCreaturePacket) typedPacket_;
     }
     return org.y1000.connection.gen.ShowCreaturePacket.getDefaultInstance();
-  }
-
-  public static final int INPUTPACKET_FIELD_NUMBER = 3;
-  /**
-   * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-   * @return Whether the inputPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasInputPacket() {
-    return typedPacketCase_ == 3;
-  }
-  /**
-   * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-   * @return The inputPacket.
-   */
-  @java.lang.Override
-  public org.y1000.connection.gen.InputPacket getInputPacket() {
-    if (typedPacketCase_ == 3) {
-       return (org.y1000.connection.gen.InputPacket) typedPacket_;
-    }
-    return org.y1000.connection.gen.InputPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-   */
-  @java.lang.Override
-  public org.y1000.connection.gen.InputPacketOrBuilder getInputPacketOrBuilder() {
-    if (typedPacketCase_ == 3) {
-       return (org.y1000.connection.gen.InputPacket) typedPacket_;
-    }
-    return org.y1000.connection.gen.InputPacket.getDefaultInstance();
   }
 
   public static final int LOGINPACKET_FIELD_NUMBER = 4;
@@ -275,6 +244,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.connection.gen.InputResponsePacket.getDefaultInstance();
   }
 
+  public static final int PLAYERINTERPOLATION_FIELD_NUMBER = 7;
+  /**
+   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   * @return Whether the playerInterpolation field is set.
+   */
+  @java.lang.Override
+  public boolean hasPlayerInterpolation() {
+    return typedPacketCase_ == 7;
+  }
+  /**
+   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   * @return The playerInterpolation.
+   */
+  @java.lang.Override
+  public org.y1000.connection.gen.PlayerInterpolationPacket getPlayerInterpolation() {
+    if (typedPacketCase_ == 7) {
+       return (org.y1000.connection.gen.PlayerInterpolationPacket) typedPacket_;
+    }
+    return org.y1000.connection.gen.PlayerInterpolationPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   */
+  @java.lang.Override
+  public org.y1000.connection.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder() {
+    if (typedPacketCase_ == 7) {
+       return (org.y1000.connection.gen.PlayerInterpolationPacket) typedPacket_;
+    }
+    return org.y1000.connection.gen.PlayerInterpolationPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -295,9 +295,6 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 2) {
       output.writeMessage(2, (org.y1000.connection.gen.ShowCreaturePacket) typedPacket_);
     }
-    if (typedPacketCase_ == 3) {
-      output.writeMessage(3, (org.y1000.connection.gen.InputPacket) typedPacket_);
-    }
     if (typedPacketCase_ == 4) {
       output.writeMessage(4, (org.y1000.connection.gen.LoginPacket) typedPacket_);
     }
@@ -306,6 +303,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 6) {
       output.writeMessage(6, (org.y1000.connection.gen.InputResponsePacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 7) {
+      output.writeMessage(7, (org.y1000.connection.gen.PlayerInterpolationPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -324,10 +324,6 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(2, (org.y1000.connection.gen.ShowCreaturePacket) typedPacket_);
     }
-    if (typedPacketCase_ == 3) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, (org.y1000.connection.gen.InputPacket) typedPacket_);
-    }
     if (typedPacketCase_ == 4) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(4, (org.y1000.connection.gen.LoginPacket) typedPacket_);
@@ -339,6 +335,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 6) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(6, (org.y1000.connection.gen.InputResponsePacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 7) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(7, (org.y1000.connection.gen.PlayerInterpolationPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -365,10 +365,6 @@ private static final long serialVersionUID = 0L;
         if (!getShowCreaturePacket()
             .equals(other.getShowCreaturePacket())) return false;
         break;
-      case 3:
-        if (!getInputPacket()
-            .equals(other.getInputPacket())) return false;
-        break;
       case 4:
         if (!getLoginPacket()
             .equals(other.getLoginPacket())) return false;
@@ -380,6 +376,10 @@ private static final long serialVersionUID = 0L;
       case 6:
         if (!getResponsePacket()
             .equals(other.getResponsePacket())) return false;
+        break;
+      case 7:
+        if (!getPlayerInterpolation()
+            .equals(other.getPlayerInterpolation())) return false;
         break;
       case 0:
       default:
@@ -404,10 +404,6 @@ private static final long serialVersionUID = 0L;
         hash = (37 * hash) + SHOWCREATUREPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getShowCreaturePacket().hashCode();
         break;
-      case 3:
-        hash = (37 * hash) + INPUTPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getInputPacket().hashCode();
-        break;
       case 4:
         hash = (37 * hash) + LOGINPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getLoginPacket().hashCode();
@@ -419,6 +415,10 @@ private static final long serialVersionUID = 0L;
       case 6:
         hash = (37 * hash) + RESPONSEPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getResponsePacket().hashCode();
+        break;
+      case 7:
+        hash = (37 * hash) + PLAYERINTERPOLATION_FIELD_NUMBER;
+        hash = (53 * hash) + getPlayerInterpolation().hashCode();
         break;
       case 0:
       default:
@@ -560,9 +560,6 @@ private static final long serialVersionUID = 0L;
       if (showCreaturePacketBuilder_ != null) {
         showCreaturePacketBuilder_.clear();
       }
-      if (inputPacketBuilder_ != null) {
-        inputPacketBuilder_.clear();
-      }
       if (loginPacketBuilder_ != null) {
         loginPacketBuilder_.clear();
       }
@@ -571,6 +568,9 @@ private static final long serialVersionUID = 0L;
       }
       if (responsePacketBuilder_ != null) {
         responsePacketBuilder_.clear();
+      }
+      if (playerInterpolationBuilder_ != null) {
+        playerInterpolationBuilder_.clear();
       }
       typedPacketCase_ = 0;
       typedPacket_ = null;
@@ -621,10 +621,6 @@ private static final long serialVersionUID = 0L;
           showCreaturePacketBuilder_ != null) {
         result.typedPacket_ = showCreaturePacketBuilder_.build();
       }
-      if (typedPacketCase_ == 3 &&
-          inputPacketBuilder_ != null) {
-        result.typedPacket_ = inputPacketBuilder_.build();
-      }
       if (typedPacketCase_ == 4 &&
           loginPacketBuilder_ != null) {
         result.typedPacket_ = loginPacketBuilder_.build();
@@ -636,6 +632,10 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 6 &&
           responsePacketBuilder_ != null) {
         result.typedPacket_ = responsePacketBuilder_.build();
+      }
+      if (typedPacketCase_ == 7 &&
+          playerInterpolationBuilder_ != null) {
+        result.typedPacket_ = playerInterpolationBuilder_.build();
       }
     }
 
@@ -692,10 +692,6 @@ private static final long serialVersionUID = 0L;
           mergeShowCreaturePacket(other.getShowCreaturePacket());
           break;
         }
-        case INPUTPACKET: {
-          mergeInputPacket(other.getInputPacket());
-          break;
-        }
         case LOGINPACKET: {
           mergeLoginPacket(other.getLoginPacket());
           break;
@@ -706,6 +702,10 @@ private static final long serialVersionUID = 0L;
         }
         case RESPONSEPACKET: {
           mergeResponsePacket(other.getResponsePacket());
+          break;
+        }
+        case PLAYERINTERPOLATION: {
+          mergePlayerInterpolation(other.getPlayerInterpolation());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -752,13 +752,6 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 2;
               break;
             } // case 18
-            case 26: {
-              input.readMessage(
-                  getInputPacketFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typedPacketCase_ = 3;
-              break;
-            } // case 26
             case 34: {
               input.readMessage(
                   getLoginPacketFieldBuilder().getBuilder(),
@@ -780,6 +773,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 6;
               break;
             } // case 50
+            case 58: {
+              input.readMessage(
+                  getPlayerInterpolationFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 7;
+              break;
+            } // case 58
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1094,148 +1094,6 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 2;
       onChanged();
       return showCreaturePacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.connection.gen.InputPacket, org.y1000.connection.gen.InputPacket.Builder, org.y1000.connection.gen.InputPacketOrBuilder> inputPacketBuilder_;
-    /**
-     * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-     * @return Whether the inputPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasInputPacket() {
-      return typedPacketCase_ == 3;
-    }
-    /**
-     * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-     * @return The inputPacket.
-     */
-    @java.lang.Override
-    public org.y1000.connection.gen.InputPacket getInputPacket() {
-      if (inputPacketBuilder_ == null) {
-        if (typedPacketCase_ == 3) {
-          return (org.y1000.connection.gen.InputPacket) typedPacket_;
-        }
-        return org.y1000.connection.gen.InputPacket.getDefaultInstance();
-      } else {
-        if (typedPacketCase_ == 3) {
-          return inputPacketBuilder_.getMessage();
-        }
-        return org.y1000.connection.gen.InputPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-     */
-    public Builder setInputPacket(org.y1000.connection.gen.InputPacket value) {
-      if (inputPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        typedPacket_ = value;
-        onChanged();
-      } else {
-        inputPacketBuilder_.setMessage(value);
-      }
-      typedPacketCase_ = 3;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-     */
-    public Builder setInputPacket(
-        org.y1000.connection.gen.InputPacket.Builder builderForValue) {
-      if (inputPacketBuilder_ == null) {
-        typedPacket_ = builderForValue.build();
-        onChanged();
-      } else {
-        inputPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typedPacketCase_ = 3;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-     */
-    public Builder mergeInputPacket(org.y1000.connection.gen.InputPacket value) {
-      if (inputPacketBuilder_ == null) {
-        if (typedPacketCase_ == 3 &&
-            typedPacket_ != org.y1000.connection.gen.InputPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.connection.gen.InputPacket.newBuilder((org.y1000.connection.gen.InputPacket) typedPacket_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          typedPacket_ = value;
-        }
-        onChanged();
-      } else {
-        if (typedPacketCase_ == 3) {
-          inputPacketBuilder_.mergeFrom(value);
-        } else {
-          inputPacketBuilder_.setMessage(value);
-        }
-      }
-      typedPacketCase_ = 3;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-     */
-    public Builder clearInputPacket() {
-      if (inputPacketBuilder_ == null) {
-        if (typedPacketCase_ == 3) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-          onChanged();
-        }
-      } else {
-        if (typedPacketCase_ == 3) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-        }
-        inputPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-     */
-    public org.y1000.connection.gen.InputPacket.Builder getInputPacketBuilder() {
-      return getInputPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-     */
-    @java.lang.Override
-    public org.y1000.connection.gen.InputPacketOrBuilder getInputPacketOrBuilder() {
-      if ((typedPacketCase_ == 3) && (inputPacketBuilder_ != null)) {
-        return inputPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typedPacketCase_ == 3) {
-          return (org.y1000.connection.gen.InputPacket) typedPacket_;
-        }
-        return org.y1000.connection.gen.InputPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.connection.gen.InputPacket inputPacket = 3;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.connection.gen.InputPacket, org.y1000.connection.gen.InputPacket.Builder, org.y1000.connection.gen.InputPacketOrBuilder> 
-        getInputPacketFieldBuilder() {
-      if (inputPacketBuilder_ == null) {
-        if (!(typedPacketCase_ == 3)) {
-          typedPacket_ = org.y1000.connection.gen.InputPacket.getDefaultInstance();
-        }
-        inputPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.connection.gen.InputPacket, org.y1000.connection.gen.InputPacket.Builder, org.y1000.connection.gen.InputPacketOrBuilder>(
-                (org.y1000.connection.gen.InputPacket) typedPacket_,
-                getParentForChildren(),
-                isClean());
-        typedPacket_ = null;
-      }
-      typedPacketCase_ = 3;
-      onChanged();
-      return inputPacketBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -1662,6 +1520,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 6;
       onChanged();
       return responsePacketBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.connection.gen.PlayerInterpolationPacket, org.y1000.connection.gen.PlayerInterpolationPacket.Builder, org.y1000.connection.gen.PlayerInterpolationPacketOrBuilder> playerInterpolationBuilder_;
+    /**
+     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * @return Whether the playerInterpolation field is set.
+     */
+    @java.lang.Override
+    public boolean hasPlayerInterpolation() {
+      return typedPacketCase_ == 7;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * @return The playerInterpolation.
+     */
+    @java.lang.Override
+    public org.y1000.connection.gen.PlayerInterpolationPacket getPlayerInterpolation() {
+      if (playerInterpolationBuilder_ == null) {
+        if (typedPacketCase_ == 7) {
+          return (org.y1000.connection.gen.PlayerInterpolationPacket) typedPacket_;
+        }
+        return org.y1000.connection.gen.PlayerInterpolationPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 7) {
+          return playerInterpolationBuilder_.getMessage();
+        }
+        return org.y1000.connection.gen.PlayerInterpolationPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     */
+    public Builder setPlayerInterpolation(org.y1000.connection.gen.PlayerInterpolationPacket value) {
+      if (playerInterpolationBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        playerInterpolationBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 7;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     */
+    public Builder setPlayerInterpolation(
+        org.y1000.connection.gen.PlayerInterpolationPacket.Builder builderForValue) {
+      if (playerInterpolationBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        playerInterpolationBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 7;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     */
+    public Builder mergePlayerInterpolation(org.y1000.connection.gen.PlayerInterpolationPacket value) {
+      if (playerInterpolationBuilder_ == null) {
+        if (typedPacketCase_ == 7 &&
+            typedPacket_ != org.y1000.connection.gen.PlayerInterpolationPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.connection.gen.PlayerInterpolationPacket.newBuilder((org.y1000.connection.gen.PlayerInterpolationPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 7) {
+          playerInterpolationBuilder_.mergeFrom(value);
+        } else {
+          playerInterpolationBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 7;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     */
+    public Builder clearPlayerInterpolation() {
+      if (playerInterpolationBuilder_ == null) {
+        if (typedPacketCase_ == 7) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 7) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        playerInterpolationBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     */
+    public org.y1000.connection.gen.PlayerInterpolationPacket.Builder getPlayerInterpolationBuilder() {
+      return getPlayerInterpolationFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     */
+    @java.lang.Override
+    public org.y1000.connection.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder() {
+      if ((typedPacketCase_ == 7) && (playerInterpolationBuilder_ != null)) {
+        return playerInterpolationBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 7) {
+          return (org.y1000.connection.gen.PlayerInterpolationPacket) typedPacket_;
+        }
+        return org.y1000.connection.gen.PlayerInterpolationPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.connection.gen.PlayerInterpolationPacket, org.y1000.connection.gen.PlayerInterpolationPacket.Builder, org.y1000.connection.gen.PlayerInterpolationPacketOrBuilder> 
+        getPlayerInterpolationFieldBuilder() {
+      if (playerInterpolationBuilder_ == null) {
+        if (!(typedPacketCase_ == 7)) {
+          typedPacket_ = org.y1000.connection.gen.PlayerInterpolationPacket.getDefaultInstance();
+        }
+        playerInterpolationBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.connection.gen.PlayerInterpolationPacket, org.y1000.connection.gen.PlayerInterpolationPacket.Builder, org.y1000.connection.gen.PlayerInterpolationPacketOrBuilder>(
+                (org.y1000.connection.gen.PlayerInterpolationPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 7;
+      onChanged();
+      return playerInterpolationBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

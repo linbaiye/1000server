@@ -2,7 +2,6 @@ package org.y1000.entities.players;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.y1000.entities.Direction;
 import org.y1000.message.InputResponseMessage;
 import org.y1000.message.MoveMessage;
 import org.y1000.message.TurnMessage;

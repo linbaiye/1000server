@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.connection.gen.ClientPacket;
 import org.y1000.connection.gen.Packet;
 
 @Slf4j
@@ -22,6 +23,6 @@ public final class LengthBasedMessageDecoder extends LengthFieldBasedFrameDecode
         }
         byte[] bytes = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(bytes);
-        return Packet.parseFrom(bytes);
+        return ClientPacket.parseFrom(bytes);
     }
 }
