@@ -1,8 +1,7 @@
 package org.y1000.connection;
 
-import org.y1000.message.I2ClientMessage;
+import org.y1000.message.ServerEvent;
 import org.y1000.message.clientevent.ClientEvent;
-import org.y1000.message.input.InputMessage;
 
 import java.util.List;
 
@@ -10,9 +9,9 @@ public interface Connection {
 
     List<ClientEvent> takeMessages();
 
-    void write(I2ClientMessage message);
+    void write(ServerEvent message);
 
-    void writeAndFlush(I2ClientMessage message);
+    void writeAndFlush(ServerEvent message);
 
     default void flush() {};
 

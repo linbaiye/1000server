@@ -6,7 +6,7 @@ import org.y1000.entities.players.Interpolation;
 
 import java.util.Collection;
 
-public class InterpolationsMessage implements I2ClientMessage {
+public class InterpolationsMessage implements ServerEvent {
 
     private final Collection<Interpolation> interpolations;
 

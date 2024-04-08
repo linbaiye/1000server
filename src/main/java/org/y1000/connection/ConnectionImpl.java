@@ -1,8 +1,7 @@
 package org.y1000.connection;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.repository.PlayerRepository;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.message.ServerEvent;
 
 @Slf4j
 public final class ConnectionImpl extends AbstractConnection {
@@ -13,7 +12,7 @@ public final class ConnectionImpl extends AbstractConnection {
 
 
     @Override
-    public void write(I2ClientMessage message) {
+    public void write(ServerEvent message) {
         var context = getContext();
         if (context == null) {
             return;
@@ -22,7 +21,7 @@ public final class ConnectionImpl extends AbstractConnection {
     }
 
     @Override
-    public void writeAndFlush(I2ClientMessage message) {
+    public void writeAndFlush(ServerEvent message) {
         write(message);
         flush();
     }

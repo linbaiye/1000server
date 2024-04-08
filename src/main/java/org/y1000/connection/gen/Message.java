@@ -115,7 +115,7 @@ public final class Message {
       "onPacket\022\014\n\004type\030\002 \001(\005\"o\n\031PlayerInterpol" +
       "ationPacket\022D\n\rinterpolation\030\001 \001(\0132-.org" +
       ".y1000.connection.gen.InterpolationPacke" +
-      "t\022\014\n\004type\030\002 \001(\005B\034\n\030org.y1000.connection." +
+      "t\022\014\n\004male\030\002 \001(\010B\034\n\030org.y1000.connection." +
       "genP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
@@ -187,7 +187,7 @@ public final class Message {
     internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_descriptor,
-        new java.lang.String[] { "Interpolation", "Type", });
+        new java.lang.String[] { "Interpolation", "Male", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

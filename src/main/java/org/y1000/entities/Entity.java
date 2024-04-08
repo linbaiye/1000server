@@ -1,13 +1,12 @@
 package org.y1000.entities;
 
-import org.y1000.message.I2ClientMessage;
+import org.y1000.message.ServerEvent;
 
 import java.util.List;
 
 public interface Entity {
     long id();
 
-    List<I2ClientMessage> update(long delta, long timeMilli);
-
+    List<ServerEvent> update(long delta);
 
 }

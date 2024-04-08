@@ -24,8 +24,8 @@ public interface PlayerInterpolationPacketOrBuilder extends
   org.y1000.connection.gen.InterpolationPacketOrBuilder getInterpolationOrBuilder();
 
   /**
-   * <code>int32 type = 2;</code>
-   * @return The type.
+   * <code>bool male = 2;</code>
+   * @return The male.
    */
-  int getType();
+  boolean getMale();
 }

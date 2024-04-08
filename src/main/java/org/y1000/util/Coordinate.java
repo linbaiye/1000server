@@ -23,6 +23,10 @@ public record Coordinate(int x, int y) {
         return result;
     }
 
+    public Coordinate move(int x, int y) {
+        return new Coordinate(x() + x, y() + y);
+    }
+
     public static Coordinate xy(int x, int y) {
         return new Coordinate(x, y);
     }

@@ -66,15 +66,15 @@ private static final long serialVersionUID = 0L;
     return interpolation_ == null ? org.y1000.connection.gen.InterpolationPacket.getDefaultInstance() : interpolation_;
   }
 
-  public static final int TYPE_FIELD_NUMBER = 2;
-  private int type_ = 0;
+  public static final int MALE_FIELD_NUMBER = 2;
+  private boolean male_ = false;
   /**
-   * <code>int32 type = 2;</code>
-   * @return The type.
+   * <code>bool male = 2;</code>
+   * @return The male.
    */
   @java.lang.Override
-  public int getType() {
-    return type_;
+  public boolean getMale() {
+    return male_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -94,8 +94,8 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000001) != 0)) {
       output.writeMessage(1, getInterpolation());
     }
-    if (type_ != 0) {
-      output.writeInt32(2, type_);
+    if (male_ != false) {
+      output.writeBool(2, male_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -110,9 +110,9 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(1, getInterpolation());
     }
-    if (type_ != 0) {
+    if (male_ != false) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, type_);
+        .computeBoolSize(2, male_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -134,8 +134,8 @@ private static final long serialVersionUID = 0L;
       if (!getInterpolation()
           .equals(other.getInterpolation())) return false;
     }
-    if (getType()
-        != other.getType()) return false;
+    if (getMale()
+        != other.getMale()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -151,8 +151,9 @@ private static final long serialVersionUID = 0L;
       hash = (37 * hash) + INTERPOLATION_FIELD_NUMBER;
       hash = (53 * hash) + getInterpolation().hashCode();
     }
-    hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + getType();
+    hash = (37 * hash) + MALE_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getMale());
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -295,7 +296,7 @@ private static final long serialVersionUID = 0L;
         interpolationBuilder_.dispose();
         interpolationBuilder_ = null;
       }
-      type_ = 0;
+      male_ = false;
       return this;
     }
 
@@ -337,7 +338,7 @@ private static final long serialVersionUID = 0L;
         to_bitField0_ |= 0x00000001;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.type_ = type_;
+        result.male_ = male_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -389,8 +390,8 @@ private static final long serialVersionUID = 0L;
       if (other.hasInterpolation()) {
         mergeInterpolation(other.getInterpolation());
       }
-      if (other.getType() != 0) {
-        setType(other.getType());
+      if (other.getMale() != false) {
+        setMale(other.getMale());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -426,7 +427,7 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 10
             case 16: {
-              type_ = input.readInt32();
+              male_ = input.readBool();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
@@ -568,34 +569,34 @@ private static final long serialVersionUID = 0L;
       return interpolationBuilder_;
     }
 
-    private int type_ ;
+    private boolean male_ ;
     /**
-     * <code>int32 type = 2;</code>
-     * @return The type.
+     * <code>bool male = 2;</code>
+     * @return The male.
      */
     @java.lang.Override
-    public int getType() {
-      return type_;
+    public boolean getMale() {
+      return male_;
     }
     /**
-     * <code>int32 type = 2;</code>
-     * @param value The type to set.
+     * <code>bool male = 2;</code>
+     * @param value The male to set.
      * @return This builder for chaining.
      */
-    public Builder setType(int value) {
+    public Builder setMale(boolean value) {
 
-      type_ = value;
+      male_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 type = 2;</code>
+     * <code>bool male = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearType() {
+    public Builder clearMale() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      type_ = 0;
+      male_ = false;
       onChanged();
       return this;
     }

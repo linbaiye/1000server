@@ -2,10 +2,9 @@ package org.y1000.message;
 
 import org.y1000.connection.gen.LoginPacket;
 import org.y1000.connection.gen.Packet;
-import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 
-public record LoginMessage(long id, Coordinate coordinate) implements I2ClientMessage {
+public record LoginMessage(long id, Coordinate coordinate) implements ServerEvent {
 
     @Override
     public Packet toPacket() {

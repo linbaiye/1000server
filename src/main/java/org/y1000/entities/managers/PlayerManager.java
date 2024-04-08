@@ -2,13 +2,9 @@ package org.y1000.entities.managers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.connection.Connection;
-import org.y1000.entities.players.Interpolation;
 import org.y1000.entities.players.Player;
-import org.y1000.message.I2ClientMessage;
-import org.y1000.message.InterpolationsMessage;
-import org.y1000.message.LoginMessage;
+import org.y1000.message.ServerEvent;
 import org.y1000.message.clientevent.ClientEvent;
-import org.y1000.message.input.InputMessage;
 
 import java.util.*;
 
@@ -19,21 +15,28 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
 
     private final Map<Player, Connection> playerConnectionMap;
 
+    private final Map<Player, PlayerVisibleScope> scopeMap;
 
     public PlayerManager() {
-        connectionPlayerMap = new HashMap<>();
-        playerConnectionMap = new HashMap<>();
+        connectionPlayerMap = new HashMap<>(512);
+        playerConnectionMap = new HashMap<>(512);
+        scopeMap = new HashMap<>(512);
     }
 
     public void add(Connection connection, Player player) {
         if (!connectionPlayerMap.containsKey(connection)) {
             indexCoordinate(player);
             connectionPlayerMap.put(connection, player);
+            scopeMap.put(player, new PlayerVisibleScope(player));
         }
     }
 
     public void remove(Connection connection) {
-        connectionPlayerMap.remove(connection);
+        Player removed = connectionPlayerMap.remove(connection);
+        if (removed != null) {
+            scopeMap.remove(removed);
+            playerConnectionMap.remove(removed);
+        }
     }
 
 
@@ -53,18 +56,33 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
     }
 
 
-    private void updatePlayers(long delta, long timeMillis) {
+    private void UpdateScope() {
+        for (Player player1 : scopeMap.keySet()) {
+            PlayerVisibleScope player1Scope = scopeMap.get(player1);
+            player1Scope.update();
+            for (Player player2 : scopeMap.keySet()) {
+                if (player1.equals(player2)) {
+                    continue;
+                }
+                player1Scope.addIfVisible(player2);
+            }
+        }
+    }
+
+    private Map<Player, List<ServerEvent>> updatePlayers(long delta) {
+        Map<Player, List<ServerEvent>> result = new HashMap<>();
         for (Map.Entry<Connection, Player> entry : connectionPlayerMap.entrySet()) {
+            List<ServerEvent> playerEvents = new ArrayList<>();
             Connection connection = entry.getKey();
             Player player = entry.getValue();
             List<ClientEvent> unprocessedMessages = connection.takeMessages();
             if (!unprocessedMessages.isEmpty()) {
-                List<I2ClientMessage> ret = player.handle(unprocessedMessages);
-                //ret.forEach(connection::write);
+                playerEvents.addAll(player.handle(unprocessedMessages));
             }
-            List<I2ClientMessage> updatedMessages = player.update(delta, timeMillis);
-            //updatedMessages.forEach(connection::write);
+            playerEvents.addAll(player.update(delta));
+            result.put(entry.getValue(), playerEvents);
         }
+        return result;
     }
 
 
@@ -87,8 +105,10 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
         }
     }
 
+    private void
+
     @Override
-    public void update(long delta, long timeMillis) {
-        updatePlayers(delta, timeMillis);
+    public void update(long delta) {
+        Map<Player, List<ServerEvent>> events = updatePlayers(delta);
     }
 }

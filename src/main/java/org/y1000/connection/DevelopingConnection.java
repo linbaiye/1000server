@@ -2,14 +2,12 @@ package org.y1000.connection;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.repository.PlayerRepository;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.message.ServerEvent;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * An implementation that introduces 200ms latency, for development only.
@@ -17,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Slf4j
 public final class DevelopingConnection extends AbstractConnection implements Runnable {
 
-    private final Deque<I2ClientMessage> messages;
+    private final Deque<ServerEvent> messages;
 
     public final Thread sender;
 
@@ -49,14 +47,14 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
     }
 
     @Override
-    public void write(I2ClientMessage message) {
+    public void write(ServerEvent message) {
         synchronized (messages) {
             messages.addLast(message);
         }
     }
 
     @Override
-    public void writeAndFlush(I2ClientMessage message) {
+    public void writeAndFlush(ServerEvent message) {
         write(message);
         flush();
     }
@@ -88,7 +86,7 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
             if (messages.isEmpty()) {
                 return;
             }
-            I2ClientMessage message = messages.pollFirst();
+            ServerEvent message = messages.pollFirst();
             context.channel().writeAndFlush(message);
         }
     }

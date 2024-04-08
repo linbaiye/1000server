@@ -24,22 +24,8 @@ final class PlayerWalkState implements PlayerState {
         walkedMillis = 0;
     }
 
-    private List<I2ClientMessage> takeInput(InputMessage input) {
-        return Collections.emptyList();
-    }
-
     @Override
-    public List<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
-        return takeInput(click);
-    }
-
-    @Override
-    public List<I2ClientMessage> onRightMouseReleased(PlayerImpl player, RightMouseRelease release) {
-        return takeInput(release);
-    }
-
-    @Override
-    public List<I2ClientMessage> handleMovementEvent(PlayerImpl player, CharacterMovementEvent event) {
+    public List<ServerEvent> handleMovementEvent(PlayerImpl player, CharacterMovementEvent event) {
         lastReceived = event;
         return Collections.emptyList();
     }
@@ -49,16 +35,13 @@ final class PlayerWalkState implements PlayerState {
         return State.WALK;
     }
 
-
     @Override
-    public List<I2ClientMessage> OnRightMousePressedMotion(PlayerImpl player,
-                                                           RightMousePressedMotion motion) {
-        return takeInput(motion);
+    public long elapsedMillis() {
+        return walkedMillis;
     }
 
-
     @Override
-    public List<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
+    public List<ServerEvent> update(PlayerImpl player, long deltaMillis) {
         if (walkedMillis == 0) {
             player.changeDirection(currentInput.direction());
         }
@@ -86,10 +69,5 @@ final class PlayerWalkState implements PlayerState {
             return Collections.singletonList(new InputResponseMessage(lastReceived.inputMessage().sequence(), SetPositionMessage.fromPlayer(player)));
         }
         return Collections.emptyList();
-    }
-
-    @Override
-    public Interpolation captureInterpolation(PlayerImpl player, long stateStartedAtMillis) {
-        return null;
     }
 }

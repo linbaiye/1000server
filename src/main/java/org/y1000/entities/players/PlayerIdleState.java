@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.y1000.message.*;
 import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.input.AbstractRightClick;
-import org.y1000.message.input.RightMouseClick;
-import org.y1000.message.input.RightMousePressedMotion;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,25 +22,16 @@ final class PlayerIdleState implements PlayerState {
     public PlayerIdleState() {
     }
 
-    @Override
-    public List<I2ClientMessage> onRightMouseClicked(PlayerImpl player, RightMouseClick click) {
-        var msg = Mover.onRightClick(player, click);
-        return Collections.singletonList(msg);
-    }
 
     @Override
-    public List<I2ClientMessage> handleMovementEvent(PlayerImpl player, CharacterMovementEvent event) {
+    public List<ServerEvent> handleMovementEvent(PlayerImpl player, CharacterMovementEvent event) {
         if (event.inputMessage() instanceof AbstractRightClick rightClick) {
             return Collections.singletonList(Mover.onRightClick(player, rightClick));
         }
         return Collections.emptyList();
     }
 
-    @Override
-    public List<I2ClientMessage> OnRightMousePressedMotion(PlayerImpl player, RightMousePressedMotion motion) {
-        var msg = Mover.onRightClick(player, motion);
-        return Collections.singletonList(msg);
-    }
+
 
     @Override
     public State getState() {
@@ -50,27 +39,16 @@ final class PlayerIdleState implements PlayerState {
     }
 
     @Override
-    public List<I2ClientMessage> update(PlayerImpl player, long deltaMillis) {
+    public long elapsedMillis() {
+        return elapsedMillis;
+    }
+
+    @Override
+    public List<ServerEvent> update(PlayerImpl player, long deltaMillis) {
         elapsedMillis += deltaMillis;
         if (elapsedMillis >= STATE_MILLIS)
             elapsedMillis = 0;
         return Collections.emptyList();
     }
 
-    @Override
-    public Interpolation captureInterpolation(PlayerImpl player, long stateStartedAtMillis) {
-        if (elapsedMillis == 0) {
-            return null;
-        }
-        long interpolationStartAt = (stateStartedAtMillis + (elapsedMillis - player.getRealm().stepMillis()));
-        /*return IdleInterpolation.builder()
-                .coordinate(player.coordinate())
-                .length((short) elapsedMillis)
-                .id(player.id())
-                .stateStartAtMillis(stateStartedAtMillis)
-                .interpolationStart(interpolationStartAt)
-                .direction(player.direction())
-                .build();*/
-        return null;
-    }
 }
