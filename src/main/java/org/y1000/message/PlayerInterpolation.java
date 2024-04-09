@@ -15,6 +15,14 @@ public class PlayerInterpolation implements ServerEvent {
     }
 
     @Override
+    public String toString() {
+        return "PlayerInterpolation{" +
+                "interpolation=" + interpolation +
+                ", male=" + male +
+                '}';
+    }
+
+    @Override
     public Packet toPacket() {
         return Packet.newBuilder()
                 .setPlayerInterpolation(PlayerInterpolationPacket.newBuilder()

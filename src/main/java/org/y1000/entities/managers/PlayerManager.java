@@ -28,6 +28,7 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
             indexCoordinate(player);
             connectionPlayerMap.put(connection, player);
             scopeMap.put(player, new PlayerVisibleScope(player));
+            playerConnectionMap.put(player, connection);
         }
     }
 
@@ -39,26 +40,10 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
         }
     }
 
-
-    private Map<Connection, Player> findVisiblePlayers(Player source) {
-        Map<Connection, Player> result = new HashMap<>();
-        for (Map.Entry<Connection, Player> connectionPlayerEntry : connectionPlayerMap.entrySet()) {
-            Player player = connectionPlayerEntry.getValue();
-            if (player.id() == source.id()) {
-                continue;
-            }
-            if (Math.abs(player.coordinate().x() - source.coordinate().x()) <= 32 ||
-                    Math.abs(player.coordinate().y() - source.coordinate().y()) <= 32) {
-                result.put(connectionPlayerEntry.getKey(), connectionPlayerEntry.getValue());
-            }
-        }
-        return result;
-    }
-
-
-    private void UpdateScope() {
+    private void updateScopes() {
         for (Player player1 : scopeMap.keySet()) {
             PlayerVisibleScope player1Scope = scopeMap.get(player1);
+            player1Scope.clearNewlyAdded();
             player1Scope.update();
             for (Player player2 : scopeMap.keySet()) {
                 if (player1.equals(player2)) {
@@ -86,29 +71,45 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
     }
 
 
+    public void sendEvents(Map<Player, List<ServerEvent>> events) {
+        for (Player player : events.keySet()) {
+            Connection connection = playerConnectionMap.get(player);
+            List<ServerEvent> messages = events.get(player);
+            connection.write(messages);
+            events.get(player).forEach(e -> {
+                log.debug("Wrote message {} to player {}.", e, player.id());
+            });
+        }
+    }
 
-    public void syncState() {
-        for (Player source : connectionPlayerMap.values()) {
-//            if (source.interpolationDuration() < 700) {
-//                continue;
-//            }
-//            List<Interpolation> interpolations = source.drainInterpolations(500);
-//            if (interpolations.isEmpty()) {
-//                continue;
-//            }
-            Map<Connection, Player> visiblePlayers = findVisiblePlayers(source);
-            for (Map.Entry<Connection, Player> cv: visiblePlayers.entrySet()) {
-                Connection connection = cv.getKey();
-                //connection.write(InterpolationsMessage.wrap(interpolations));
-                //connection.flush();
+    private void updatePlayerEvents(Map<Player, List<ServerEvent>> events) {
+        for (Player player : scopeMap.keySet()) {
+            PlayerVisibleScope scope = scopeMap.get(player);
+            for (Player newlyAddedPlayer : scope.getNewlyAddedPlayers()) {
+                events.computeIfAbsent(newlyAddedPlayer, p -> new ArrayList<>());
+                events.get(newlyAddedPlayer).add(player.captureInterpolation());
+            }
+        }
+
+        for (Player player: events.keySet()) {
+            PlayerVisibleScope scope = scopeMap.get(player);
+            Set<Player> visiblePlayers = scope.getNonNewlyAddedPlayers();
+            List<ServerEvent> currentPlayerEvents = events.get(player);
+            for (Player another: visiblePlayers) {
+                events.computeIfAbsent(another, p -> new ArrayList<>());
+                List<ServerEvent> anotherPlayerEvents = events.get(another);
+                currentPlayerEvents.forEach(e ->
+                        e.eventToPlayer(another.id()).ifPresent(anotherPlayerEvents::add)
+                );
             }
         }
     }
 
-    private void
-
     @Override
     public void update(long delta) {
         Map<Player, List<ServerEvent>> events = updatePlayers(delta);
+        updateScopes();
+        updatePlayerEvents(events);
+        sendEvents(events);
     }
 }

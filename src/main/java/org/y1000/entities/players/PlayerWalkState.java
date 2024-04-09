@@ -11,7 +11,7 @@ import java.util.*;
 @Slf4j
 final class PlayerWalkState implements PlayerState {
 
-    private static final long MILLIS_TO_WALK_ONE_UNIT = 900;
+    private static final long MILLIS_TO_WALK_ONE_UNIT = 600;
 
     private final AbstractRightClick currentInput;
 

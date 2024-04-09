@@ -14,7 +14,6 @@ public class MessageEncoder extends MessageToByteEncoder<ServerEvent> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, ServerEvent message, ByteBuf byteBuf) throws Exception {
-        log.debug("Sending message {}.", message);
         byteBuf.writeBytes(message.toPacket().toByteArray());
     }
 }

@@ -11,6 +11,11 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private static long id = 0;
 
+    private Coordinate compute()
+    {
+        return new Coordinate(39 + (int)id, 27);
+    }
+
     @Override
     public Player load(long id) {
         return Player.create(id, usableCoordinates.getOrDefault(id, new Coordinate(39,27)));
@@ -18,7 +23,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     @Override
     public Player load() {
-        var ret = Player.create(id, usableCoordinates.getOrDefault(id, new Coordinate(39,27)));
+        var ret = Player.create(id, compute());
         id++;
         return ret;
     }

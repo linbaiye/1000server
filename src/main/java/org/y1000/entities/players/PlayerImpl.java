@@ -49,6 +49,7 @@ class PlayerImpl implements Player {
         if (!(inputMessage instanceof CharacterMovementEvent movementEvent)) {
             return Collections.emptyList();
         }
+        log.debug("Handling message {}.", inputMessage);
         return state.handleMovementEvent(this, movementEvent);
 //        return switch (movementEvent.inputMessage().type()) {
 //            case MOUSE_RIGHT_CLICK -> state.onRightMouseClicked(this, (RightMouseClick) inputMessage);

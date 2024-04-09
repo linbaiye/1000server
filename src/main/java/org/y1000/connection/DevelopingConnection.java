@@ -4,10 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.message.ServerEvent;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An implementation that introduces 200ms latency, for development only.
@@ -15,7 +12,7 @@ import java.util.Set;
 @Slf4j
 public final class DevelopingConnection extends AbstractConnection implements Runnable {
 
-    private final Deque<ServerEvent> messages;
+    private final List<ServerEvent> messages;
 
     public final Thread sender;
 
@@ -25,7 +22,7 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
 
     public DevelopingConnection(ConnectionEventListener listener) {
         super(listener);
-        messages = new ArrayDeque<>();
+        messages = new ArrayList<>();
         sender = new Thread(this);
         sender.start();
     }
@@ -49,7 +46,7 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
     @Override
     public void write(ServerEvent message) {
         synchronized (messages) {
-            messages.addLast(message);
+            messages.add(message);
         }
     }
 
@@ -57,6 +54,13 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
     public void writeAndFlush(ServerEvent message) {
         write(message);
         flush();
+    }
+
+    @Override
+    public void write(List<ServerEvent> messages) {
+        synchronized (this.messages) {
+            this.messages.addAll(messages);
+        }
     }
 
     @Override
@@ -86,8 +90,9 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
             if (messages.isEmpty()) {
                 return;
             }
-            ServerEvent message = messages.pollFirst();
-            context.channel().writeAndFlush(message);
+            messages.forEach(context.channel()::write);
+            context.channel().flush();
+            messages.clear();
         }
     }
 
@@ -96,7 +101,7 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
         while (true) {
             try {
                 handleMessages();
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 break;
             }

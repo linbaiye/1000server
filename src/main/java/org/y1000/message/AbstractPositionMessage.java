@@ -5,6 +5,8 @@ import org.y1000.connection.gen.PositionPacket;
 import org.y1000.entities.Direction;
 import org.y1000.util.Coordinate;
 
+import java.util.Optional;
+
 public abstract class AbstractPositionMessage implements CreatureMessage {
 
     private final long id;
@@ -12,6 +14,8 @@ public abstract class AbstractPositionMessage implements CreatureMessage {
     private final Direction direction;
 
     private final Coordinate coordinate;
+
+    private Packet packet;
 
     public AbstractPositionMessage(long id, Direction direction, Coordinate coordinate) {
         this.id = id;
@@ -28,15 +32,23 @@ public abstract class AbstractPositionMessage implements CreatureMessage {
 
     @Override
     public Packet toPacket() {
-        return Packet.newBuilder()
-                .setPositionPacket(PositionPacket.newBuilder()
-                        .setType(getType().value())
-                        .setY(coordinate.y())
-                        .setX(coordinate.x())
-                        .setDirection(direction.value())
-                        .setId(id)
-                        .build())
-                .build();
+        if (packet == null) {
+            packet = Packet.newBuilder()
+                    .setPositionPacket(PositionPacket.newBuilder()
+                            .setType(getType().value())
+                            .setY(coordinate.y())
+                            .setX(coordinate.x())
+                            .setDirection(direction.value())
+                            .setId(id)
+                            .build())
+                    .build();
+        }
+        return packet;
+    }
+
+    @Override
+    public Optional<ServerEvent> eventToPlayer(long id) {
+        return Optional.of(this);
     }
 
     @Override

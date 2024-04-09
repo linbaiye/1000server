@@ -31,31 +31,24 @@ public class IdleInterpolation implements Interpolation {
     }
 
     @Override
-    public short duration() {
-        return length;
+    public Coordinate coordinate() {
+        return null;
     }
 
     @Override
-    public long stateStartAtMillis() {
-        return stateStartAtMillis;
+    public Direction direction() {
+        return null;
     }
 
-    @Override
-    public long interpolationStartAtMillis() {
-        return interpolationStart;
-    }
 
     @Override
     public InterpolationPacket toPacket() {
         return InterpolationPacket.newBuilder()
-                .setDuration(duration())
                 .setState(state().value())
                 .setDirection(direction.value())
                 .setX(coordinate.x())
                 .setY(coordinate.y())
                 .setId(id())
-                .setStateStart(stateStartAtMillis())
-                .setInterpolationStart(interpolationStartAtMillis())
                 .build();
     }
 }

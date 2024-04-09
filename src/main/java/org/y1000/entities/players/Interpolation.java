@@ -9,8 +9,6 @@ public interface Interpolation {
 
     State state();
 
-    short duration();
-
     Coordinate coordinate();
 
     Direction direction();

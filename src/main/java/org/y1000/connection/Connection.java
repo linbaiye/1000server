@@ -11,6 +11,10 @@ public interface Connection {
 
     void write(ServerEvent message);
 
+    default void write(List<ServerEvent> messages) {
+
+    }
+
     void writeAndFlush(ServerEvent message);
 
     default void flush() {};

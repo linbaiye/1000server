@@ -29,14 +29,6 @@ public class Realm implements Runnable, ConnectionEventListener  {
 
     private final RealmMap realmMap;
 
-    public long stepMillis() {
-        return STEP_MILLIS;
-    }
-
-    public long timeMillis() {
-        return realmElapsedMillis;
-    }
-
     public Realm(PlayerRepository playerRepository, RealmMap map) {
         this.playerRepository = playerRepository;
         playerManager = new PlayerManager();
