@@ -4,9 +4,9 @@ import org.y1000.connection.gen.Packet;
 
 import java.util.Optional;
 
-public interface ServerEvent {
+public interface ServerEvent extends ServerMessage {
 
-    Packet toPacket();
+    void accept(ServerEventVisitor visitor);
 
     default Optional<ServerEvent> eventToPlayer(long id) {
         return Optional.empty();

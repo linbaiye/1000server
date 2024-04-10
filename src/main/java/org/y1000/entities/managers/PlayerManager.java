@@ -3,13 +3,14 @@ package org.y1000.entities.managers;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.connection.Connection;
 import org.y1000.entities.players.Player;
-import org.y1000.message.ServerEvent;
-import org.y1000.message.clientevent.ClientEvent;
+import org.y1000.message.*;
 
 import java.util.*;
 
 @Slf4j
-public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
+public final class PlayerManager extends AbstractPhysicalEntityManager<Player> implements
+        ServerEventListener<ServerEvent>,
+        ServerEventVisitor {
 
     private final Map<Connection, Player> connectionPlayerMap;
 
@@ -17,18 +18,21 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
 
     private final Map<Player, PlayerVisibleScope> scopeMap;
 
+    private final Map<Long, Player> id2Player;
+
     public PlayerManager() {
         connectionPlayerMap = new HashMap<>(512);
         playerConnectionMap = new HashMap<>(512);
         scopeMap = new HashMap<>(512);
+        id2Player = new HashMap<>(512);
     }
 
     public void add(Connection connection, Player player) {
         if (!connectionPlayerMap.containsKey(connection)) {
             indexCoordinate(player);
             connectionPlayerMap.put(connection, player);
-            scopeMap.put(player, new PlayerVisibleScope(player));
             playerConnectionMap.put(player, connection);
+            id2Player.put(player.id(), player);
         }
     }
 
@@ -41,17 +45,7 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
     }
 
     private void updateScopes() {
-        for (Player player1 : scopeMap.keySet()) {
-            PlayerVisibleScope player1Scope = scopeMap.get(player1);
-            player1Scope.clearNewlyAdded();
-            player1Scope.update();
-            for (Player player2 : scopeMap.keySet()) {
-                if (player1.equals(player2)) {
-                    continue;
-                }
-                player1Scope.addIfVisible(player2);
-            }
-        }
+
     }
 
     private Map<Player, List<ServerEvent>> updatePlayers(long delta) {
@@ -60,11 +54,13 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
             List<ServerEvent> playerEvents = new ArrayList<>();
             Connection connection = entry.getKey();
             Player player = entry.getValue();
-            List<ClientEvent> unprocessedMessages = connection.takeMessages();
-            if (!unprocessedMessages.isEmpty()) {
-                playerEvents.addAll(player.handle(unprocessedMessages));
-            }
-            playerEvents.addAll(player.update(delta));
+//            List<ClientEvent> unprocessedMessages = connection.takeMessages();
+            player.addAll(connection.takeMessages());
+            player.update(delta);
+//            if (!unprocessedMessages.isEmpty()) {
+//                playerEvents.addAll(player.handle(unprocessedMessages));
+//            }
+//            playerEvents.addAll(player.update(delta));
             result.put(entry.getValue(), playerEvents);
         }
         return result;
@@ -105,11 +101,63 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> {
         }
     }
 
+    private void broadcastAppearance(Player source) {
+        for (Player another: scopeMap.keySet()) {
+            if (another.equals(source)) {
+                continue;
+            }
+            PlayerVisibleScope playerVisibleScope = scopeMap.get(another);
+            if (playerVisibleScope.addIfVisible(source)) {
+                log.debug("Players {} and {} see each other now.", source, another);
+                playerConnectionMap.get(another).write(source.captureInterpolation());
+                playerConnectionMap.get(source).write(another.captureInterpolation());
+            }
+        }
+    }
+
+    @Override
+    public void visit(LoginMessage loginMessage) {
+        if (id2Player.containsKey(loginMessage.id())) {
+            Player player = id2Player.get(loginMessage.id());
+            scopeMap.put(player, new PlayerVisibleScope(player));
+            broadcastAppearance(player);
+        }
+    }
+
+    @Override
+    public void visit(InputResponseMessage inputResponseMessage) {
+        playerConnectionMap.get(inputResponseMessage.player())
+                .write(inputResponseMessage);
+        visit(inputResponseMessage.positionMessage());
+    }
+
+    @Override
+    public void visit(AbstractPositionEvent positionEvent) {
+        for (Player player: scopeMap.keySet()) {
+            if (player.equals(positionEvent.source())) {
+                continue;
+            }
+            PlayerVisibleScope playerVisibleScope = scopeMap.get(player);
+            if (playerVisibleScope.removeIfOutOfView(positionEvent.source())) {
+                //
+            } else if (playerVisibleScope.contains(positionEvent.source())){
+                playerConnectionMap.get(player).write(positionEvent);
+            } else if (playerVisibleScope.addIfVisible(positionEvent.source())) {
+            }
+        }
+    }
+
     @Override
     public void update(long delta) {
         Map<Player, List<ServerEvent>> events = updatePlayers(delta);
         updateScopes();
         updatePlayerEvents(events);
         sendEvents(events);
+        connectionPlayerMap.keySet().forEach(Connection::flush);
+    }
+
+    @Override
+    public void OnEvent(ServerEvent event) {
+        event.accept(this);
     }
 }

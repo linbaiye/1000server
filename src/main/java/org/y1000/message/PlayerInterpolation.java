@@ -2,8 +2,9 @@ package org.y1000.message;
 
 import org.y1000.connection.gen.Packet;
 import org.y1000.connection.gen.PlayerInterpolationPacket;
+import org.y1000.entities.Entity;
 
-public class PlayerInterpolation implements ServerEvent {
+public class PlayerInterpolation implements ServerMessage {
 
     private final Interpolation interpolation;
 

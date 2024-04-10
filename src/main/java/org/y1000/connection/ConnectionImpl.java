@@ -2,6 +2,7 @@ package org.y1000.connection;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.message.ServerEvent;
+import org.y1000.message.ServerMessage;
 
 @Slf4j
 public final class ConnectionImpl extends AbstractConnection {
@@ -12,7 +13,7 @@ public final class ConnectionImpl extends AbstractConnection {
 
 
     @Override
-    public void write(ServerEvent message) {
+    public void write(ServerMessage message) {
         var context = getContext();
         if (context == null) {
             return;
@@ -21,7 +22,7 @@ public final class ConnectionImpl extends AbstractConnection {
     }
 
     @Override
-    public void writeAndFlush(ServerEvent message) {
+    public void writeAndFlush(ServerMessage message) {
         write(message);
         flush();
     }

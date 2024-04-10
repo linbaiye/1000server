@@ -9,13 +9,5 @@ import java.util.Set;
 
 public interface Creature extends PhysicalEntity {
 
-    Coordinate coordinate();
-
     Direction direction();
-
-    @Override
-    default Set<Coordinate> occupyingCoordinates() {
-        return Set.of(coordinate());
-    }
-
 }

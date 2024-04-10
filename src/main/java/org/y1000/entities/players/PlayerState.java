@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import org.y1000.message.ServerEvent;
 import org.y1000.message.clientevent.CharacterMovementEvent;
+import org.y1000.message.clientevent.ClientEvent;
 
 import java.util.List;
 

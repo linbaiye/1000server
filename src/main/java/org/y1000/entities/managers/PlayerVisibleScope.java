@@ -1,6 +1,6 @@
 package org.y1000.entities.managers;
 
-import org.y1000.entities.GroundEntity;
+import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 
@@ -21,9 +21,9 @@ public final class PlayerVisibleScope {
 
     private static final int Y_RANGE = 15;
 
-    private final Set<GroundEntity> visibleEntities;
+    private final Set<Entity> visibleEntities;
 
-    private final Set<GroundEntity> added;
+    private final Set<Entity> added;
 
     public PlayerVisibleScope(Player player) {
         this.player = player;
@@ -33,20 +33,21 @@ public final class PlayerVisibleScope {
         added = new HashSet<>();
     }
 
-    private boolean outOfScope(GroundEntity entity) {
-        return entity.coordinates().stream().anyMatch(c -> start.x() > c.x() || end.x() < c.x() || start.y() > c.y() || end.y() < c.y());
+    public boolean outOfScope(Entity entity) {
+        return Set.of(entity.coordinate()).stream().anyMatch(c -> start.x() > c.x() || end.x() < c.x() || start.y() > c.y() || end.y() < c.y());
     }
 
 
-    public void addIfVisible(GroundEntity entity) {
+    public boolean addIfVisible(Entity entity) {
         if (outOfScope(entity) || visibleEntities.contains(entity)) {
-            return ;
+            return false;
         }
         visibleEntities.add(entity);
         added.add(entity);
+        return true;
     }
 
-    private Set<Player> filterPlayer(Set<GroundEntity> entities) {
+    private Set<Player> filterPlayer(Set<Entity> entities) {
         return entities.stream().filter(e -> e instanceof Player).map(Player.class::cast).collect(Collectors.toSet());
     }
 
@@ -62,13 +63,26 @@ public final class PlayerVisibleScope {
         added.clear();
     }
 
+    private Entity findById(long id) {
+        for (Entity visibleEntity : visibleEntities) {
+            if (visibleEntity.id() == id) {
+                return visibleEntity;
+            }
+        }
+        return null;
+    }
+
+    public boolean contains(Entity entity) {
+        return visibleEntities.contains(entity);
+    }
+
     public void update() {
         var newStart = player.coordinate().move(-X_RANGE, -Y_RANGE);
         if (!newStart.equals(start)) {
             end = player.coordinate().move(X_RANGE, Y_RANGE);
             start = newStart;
         }
-        List<GroundEntity> outOfScopeEntities = visibleEntities.stream().filter(this::outOfScope).toList();
+        List<Entity> outOfScopeEntities = visibleEntities.stream().filter(this::outOfScope).toList();
         outOfScopeEntities.forEach(visibleEntities::remove);
     }
 
@@ -76,4 +90,8 @@ public final class PlayerVisibleScope {
         return filterPlayer(visibleEntities);
     }
 
+    public boolean removeIfOutOfView(Entity entity) {
+        return outOfScope(entity) &&
+                visibleEntities.remove(entity);
+    }
 }

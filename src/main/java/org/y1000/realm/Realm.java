@@ -17,8 +17,6 @@ public class Realm implements Runnable, ConnectionEventListener  {
 
     private static final long STEP_MILLIS = 50;
 
-    private long realmElapsedMillis;
-
     private final PlayerManager playerManager;
 
     private final List<Connection> closingConnections;
@@ -35,7 +33,6 @@ public class Realm implements Runnable, ConnectionEventListener  {
         realmMap = map;
         closingConnections = new ArrayList<>();
         joiningPlayers = new HashMap<>();
-        realmElapsedMillis = 0;
     }
 
     public RealmMap map() {
@@ -80,9 +77,8 @@ public class Realm implements Runnable, ConnectionEventListener  {
         }
         deadConnections.forEach(playerManager::remove);
         newPlayers.forEach((c, p) -> {
-            p.joinReam(this, realmElapsedMillis);
             playerManager.add(c, p);
-            c.write(new LoginMessage(p.id(), p.coordinate()));
+            p.joinReam(this);
         });
     }
 
@@ -96,8 +92,6 @@ public class Realm implements Runnable, ConnectionEventListener  {
                 if (timeMillis <= current) {
                     playerManager.update(STEP_MILLIS);
                     timeMillis += STEP_MILLIS;
-                    realmElapsedMillis += STEP_MILLIS;
-                    //playerManager.syncState();
                 } else {
                     Thread.sleep(timeMillis - current);
                 }

@@ -3,11 +3,11 @@ package org.y1000.message;
 import org.y1000.connection.gen.Packet;
 import org.y1000.connection.gen.PositionPacket;
 import org.y1000.entities.Direction;
+import org.y1000.entities.Entity;
 import org.y1000.util.Coordinate;
-
 import java.util.Optional;
 
-public abstract class AbstractPositionMessage implements CreatureMessage {
+public abstract class AbstractPositionEvent implements EntityEvent {
 
     private final long id;
 
@@ -15,17 +15,27 @@ public abstract class AbstractPositionMessage implements CreatureMessage {
 
     private final Coordinate coordinate;
 
+    private final Entity source;
+
     private Packet packet;
 
-    public AbstractPositionMessage(long id, Direction direction, Coordinate coordinate) {
-        this.id = id;
+
+    public AbstractPositionEvent(Entity source, Direction direction, Coordinate coordinate) {
+        this.id = source.id();
         this.direction = direction;
         this.coordinate = coordinate;
+        this.source = source;
     }
+
 
     @Override
     public long id() {
         return id;
+    }
+
+    @Override
+    public Entity source() {
+        return this.source;
     }
 
     protected abstract PositionType getType();

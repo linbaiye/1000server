@@ -21,6 +21,11 @@ public class InterpolationsMessage implements ServerEvent {
                 .build()).build();
     }
 
+    @Override
+    public void accept(ServerEventVisitor visitor) {
+
+    }
+
     public static InterpolationsMessage wrap(Collection<Interpolation> interpolations) {
         return new InterpolationsMessage(interpolations);
     }

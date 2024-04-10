@@ -3,6 +3,7 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.message.*;
 import org.y1000.message.clientevent.CharacterMovementEvent;
+import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.input.*;
 import org.y1000.util.Coordinate;
 
@@ -40,6 +41,20 @@ final class PlayerWalkState implements PlayerState {
         return walkedMillis;
     }
 
+
+    private void handleEvent(PlayerImpl player, ClientEvent clientEvent) {
+        if (clientEvent instanceof CharacterMovementEvent movementEvent) {
+            if (movementEvent.inputMessage() instanceof AbstractRightClick rightClick) {
+                player.emitEvent(Mover.onRightClick(player, rightClick));
+            } else if (lastReceived.inputMessage() instanceof RightMouseRelease rightMouseRelease) {
+                player.emitEvent(new InputResponseMessage(rightMouseRelease.sequence(), SetPositionEvent.fromPlayer(player)));
+            }
+        } else {
+            log.warn("Not a handleable event {}", clientEvent);
+        }
+    }
+
+
     @Override
     public List<ServerEvent> update(PlayerImpl player, long deltaMillis) {
         if (walkedMillis == 0) {
@@ -51,22 +66,20 @@ final class PlayerWalkState implements PlayerState {
         }
         Coordinate newCoordinate = player.coordinate().moveBy(player.direction());
         if (!player.getRealm().canMoveTo(newCoordinate)) {
+            // May conflict with something.
             player.changeState(new PlayerIdleState());
-            return Collections.singletonList(SetPositionMessage.fromPlayer(player));
+            player.emitEvent(SetPositionEvent.fromPlayer(player));
+            return Collections.emptyList();
         }
         player.changeCoordinate(newCoordinate);
         log.debug("Moved to coordinate {}", newCoordinate);
-        if (lastReceived == null) {
-            log.debug("No more input, back to idle.");
+        var clientEvent = player.takeClientEvent();
+        if (clientEvent == null) {
+            log.debug("No more input, back to idle waiting for next input.");
             player.changeState(new PlayerIdleState());
             return Collections.emptyList();
-        } else if (lastReceived.inputMessage() instanceof AbstractRightClick click) {
-            log.debug("Continue moving due to event: {}.", lastReceived);
-            return Collections.singletonList(Mover.onRightClick(player, click));
-        } else if (lastReceived.inputMessage() instanceof RightMouseRelease) {
-            log.debug("Go back to idle, event: {}.", lastReceived);
-            player.changeState(new PlayerIdleState());
-            return Collections.singletonList(new InputResponseMessage(lastReceived.inputMessage().sequence(), SetPositionMessage.fromPlayer(player)));
+        } else {
+            handleEvent(player, clientEvent);
         }
         return Collections.emptyList();
     }

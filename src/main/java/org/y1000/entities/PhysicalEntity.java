@@ -7,11 +7,6 @@ import java.util.Set;
 /**
  * Entities that will occupy coordinates hence prevent creatures moving.
  */
-public interface PhysicalEntity extends GroundEntity {
+public interface PhysicalEntity extends Entity {
 
-   Set<Coordinate> occupyingCoordinates();
-
-   default Set<Coordinate> coordinates() {
-      return occupyingCoordinates();
-   }
 }

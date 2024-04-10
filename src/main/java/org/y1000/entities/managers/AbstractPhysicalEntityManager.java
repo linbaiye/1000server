@@ -15,8 +15,7 @@ public abstract class AbstractPhysicalEntityManager<T extends PhysicalEntity> im
     }
 
     void indexCoordinate(T entity) {
-        Set<Coordinate> coordinates = entity.occupyingCoordinates();
-        coordinates.forEach(c -> coordinateIndex.put(c, entity));
+        entity.coordinates().forEach(c -> coordinateIndex.put(c, entity));
     }
 
     @Override

@@ -2,9 +2,11 @@ package org.y1000.message;
 
 import org.y1000.connection.gen.LoginPacket;
 import org.y1000.connection.gen.Packet;
+import org.y1000.entities.Entity;
+import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 
-public record LoginMessage(long id, Coordinate coordinate) implements ServerEvent {
+public record LoginMessage(Player player, Coordinate coordinate) implements EntityEvent {
 
     @Override
     public Packet toPacket() {
@@ -15,5 +17,15 @@ public record LoginMessage(long id, Coordinate coordinate) implements ServerEven
                         .setId(id())
                         .build()
         ).build();
+    }
+
+    @Override
+    public void accept(ServerEventVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public Entity source() {
+        return player;
     }
 }

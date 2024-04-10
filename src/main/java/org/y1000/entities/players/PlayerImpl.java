@@ -24,13 +24,27 @@ class PlayerImpl implements Player {
 
     private final long id;
 
+    private final List<ServerEventListener<EntityEvent>> eventListeners;
+
+    private final Queue<ClientEvent> eventQueue;
+
     PlayerImpl(long id, Coordinate coordinate) {
         this.id = id;
         this.coordinate = coordinate;
+        this.eventListeners = new ArrayList<>();
+        eventQueue = new ArrayDeque<>();
     }
 
     void changeDirection(Direction newDirection) {
         direction = newDirection;
+    }
+
+    boolean hasClientEvent() {
+        return !eventQueue.isEmpty();
+    }
+
+    ClientEvent takeClientEvent() {
+        return eventQueue.poll();
     }
 
     Realm getRealm() {
@@ -58,6 +72,10 @@ class PlayerImpl implements Player {
 //        };
     }
 
+    void emitEvent(EntityEvent event) {
+        eventListeners.forEach(listener -> listener.OnEvent(event));
+    }
+
     public List<ServerEvent> handle(List<ClientEvent> messages) {
         List<ServerEvent> result = new ArrayList<>();
         for (ClientEvent message : messages) {
@@ -67,21 +85,32 @@ class PlayerImpl implements Player {
     }
 
     @Override
+    public void addAll(List<ClientEvent> clientEvents) {
+        eventQueue.addAll(clientEvents);
+    }
+
+    @Override
     public State state() {
         return state.getState();
     }
 
     @Override
-    public void joinReam(Realm realm, long joinedAtMillis) {
+    public void joinReam(Realm realm) {
         this.realm = realm;
         direction = Direction.DOWN;
         this.state = new PlayerIdleState();
+        emitEvent(new LoginMessage(this, coordinate()));
     }
 
     @Override
     public PlayerInterpolation captureInterpolation() {
-        Interpolation interpolation = new Interpolation(coordinate(), state(), direction(), state.elapsedMillis(), id());
+        Interpolation interpolation = new Interpolation(coordinate(), state(), direction(), state.elapsedMillis(), this);
         return new PlayerInterpolation(interpolation, true);
+    }
+
+    @Override
+    public void registerListener(ServerEventListener<EntityEvent> listener) {
+        eventListeners.add(listener);
     }
 
 
@@ -94,6 +123,8 @@ class PlayerImpl implements Player {
     public List<ServerEvent> update(long delta) {
         return state.update(this, delta);
     }
+
+
 
     boolean CanMoveOneUnit(Direction direction) {
         var nextCoordinate = coordinate().moveBy(direction);
