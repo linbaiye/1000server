@@ -5,14 +5,12 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.players.State;
 import org.y1000.util.Coordinate;
 
-public record Interpolation(Coordinate coordinate, State state, Direction direction, long elapsedMillis, long id) {
+public record Interpolation(Coordinate coordinate, State state, Direction direction, long elapsedMillis) {
 
-    public InterpolationPacket ToPacket()
-    {
+    public InterpolationPacket ToPacket() {
         return InterpolationPacket.newBuilder()
                 .setY(coordinate.y())
                 .setX(coordinate.x())
-                .setId(id())
                 .setState(state.value())
                 .setElapsedMillis(elapsedMillis)
                 .setDirection(direction.value())
@@ -26,7 +24,6 @@ public record Interpolation(Coordinate coordinate, State state, Direction direct
                 ", state=" + state +
                 ", direction=" + direction +
                 ", elapsedMillis=" + elapsedMillis +
-                ", id=" + id() +
                 '}';
     }
 }

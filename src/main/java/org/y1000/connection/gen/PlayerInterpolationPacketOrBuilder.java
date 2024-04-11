@@ -24,7 +24,13 @@ public interface PlayerInterpolationPacketOrBuilder extends
   org.y1000.connection.gen.InterpolationPacketOrBuilder getInterpolationOrBuilder();
 
   /**
-   * <code>bool male = 2;</code>
+   * <code>int64 id = 2;</code>
+   * @return The id.
+   */
+  long getId();
+
+  /**
+   * <code>bool male = 3;</code>
    * @return The male.
    */
   boolean getMale();

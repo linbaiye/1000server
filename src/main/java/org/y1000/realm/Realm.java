@@ -78,6 +78,7 @@ public class Realm implements Runnable, ConnectionEventListener  {
         deadConnections.forEach(playerManager::remove);
         newPlayers.forEach((c, p) -> {
             playerManager.add(c, p);
+            p.registerListener(playerManager);
             p.joinReam(this);
         });
     }

@@ -2,33 +2,33 @@ package org.y1000.message;
 
 import org.y1000.connection.gen.Packet;
 import org.y1000.connection.gen.PlayerInterpolationPacket;
-import org.y1000.entities.Entity;
+import org.y1000.entities.Direction;
+import org.y1000.entities.players.Player;
+import org.y1000.entities.players.State;
+import org.y1000.util.Coordinate;
 
-public class PlayerInterpolation implements ServerMessage {
-
-    private final Interpolation interpolation;
+public class PlayerInterpolation extends AbstractInterpolation {
 
     private final boolean male;
 
-    public PlayerInterpolation(Interpolation interpolation, boolean male) {
-        this.interpolation = interpolation;
+    private PlayerInterpolation(long id, Coordinate coordinate, State state, Direction direction, long elapsedMillis, boolean male) {
+        super(id, coordinate, state, direction, elapsedMillis);
         this.male = male;
     }
 
-    @Override
-    public String toString() {
-        return "PlayerInterpolation{" +
-                "interpolation=" + interpolation +
-                ", male=" + male +
-                '}';
-    }
 
     @Override
     public Packet toPacket() {
         return Packet.newBuilder()
                 .setPlayerInterpolation(PlayerInterpolationPacket.newBuilder()
-                        .setInterpolation(interpolation.ToPacket())
+                        .setInterpolation(interpolationPacket())
+                        .setId(getId())
                         .setMale(male))
                 .build();
     }
+
+    public static PlayerInterpolation FromPlayer(Player player, long elapsedMillis) {
+        return new PlayerInterpolation(player.id(), player.coordinate(), player.state(), player.direction(), elapsedMillis, player.isMale());
+    }
+
 }

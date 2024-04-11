@@ -7,6 +7,7 @@ import org.y1000.message.*;
 import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.input.AbstractRightClick;
+import org.y1000.message.input.RightMouseRelease;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,16 +26,6 @@ final class PlayerIdleState implements PlayerState {
     }
 
     @Override
-    public List<ServerEvent> handleMovementEvent(PlayerImpl player, CharacterMovementEvent event) {
-        if (event.inputMessage() instanceof AbstractRightClick rightClick) {
-            InputResponseMessage message = Mover.onRightClick(player, rightClick);
-            player.emitEvent(message.positionMessage());
-        }
-        return Collections.emptyList();
-    }
-
-
-    @Override
     public State getState() {
         return State.IDLE;
     }
@@ -47,25 +38,26 @@ final class PlayerIdleState implements PlayerState {
     private boolean handleMovementEvent(PlayerImpl player, ClientEvent clientEvent) {
         if (clientEvent instanceof CharacterMovementEvent movementEvent) {
             if (movementEvent.inputMessage() instanceof AbstractRightClick rightClick) {
-                InputResponseMessage message = Mover.onRightClick(player, rightClick);
-                player.emitEvent(message.positionMessage());
+                player.emitEvent(Mover.onRightClick(player, rightClick));
+            } else if (movementEvent.inputMessage() instanceof RightMouseRelease rightMouseRelease) {
+                player.emitEvent(new InputResponseMessage(rightMouseRelease.sequence(), SetPositionEvent.fromPlayer(player)));
             }
+            log.debug("Handling event {} at {}.", clientEvent, player.coordinate());
             return true;
         }
         return false;
     }
 
     @Override
-    public List<ServerEvent> update(PlayerImpl player, long deltaMillis) {
-        elapsedMillis += deltaMillis;
+    public void update(PlayerImpl player, long deltaMillis) {
         if (elapsedMillis >= STATE_MILLIS)
             elapsedMillis = 0;
+        elapsedMillis += deltaMillis;
         while (player.hasClientEvent()) {
             ClientEvent clientEvent = player.takeClientEvent();
             if (handleMovementEvent(player, clientEvent))
                 break;
         }
-        return Collections.emptyList();
     }
 
 }

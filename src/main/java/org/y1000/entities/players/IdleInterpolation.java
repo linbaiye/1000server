@@ -48,7 +48,6 @@ public class IdleInterpolation implements Interpolation {
                 .setDirection(direction.value())
                 .setX(coordinate.x())
                 .setY(coordinate.y())
-                .setId(id())
                 .build();
     }
 }

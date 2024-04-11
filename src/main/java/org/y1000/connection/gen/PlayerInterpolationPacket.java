@@ -66,10 +66,21 @@ private static final long serialVersionUID = 0L;
     return interpolation_ == null ? org.y1000.connection.gen.InterpolationPacket.getDefaultInstance() : interpolation_;
   }
 
-  public static final int MALE_FIELD_NUMBER = 2;
+  public static final int ID_FIELD_NUMBER = 2;
+  private long id_ = 0L;
+  /**
+   * <code>int64 id = 2;</code>
+   * @return The id.
+   */
+  @java.lang.Override
+  public long getId() {
+    return id_;
+  }
+
+  public static final int MALE_FIELD_NUMBER = 3;
   private boolean male_ = false;
   /**
-   * <code>bool male = 2;</code>
+   * <code>bool male = 3;</code>
    * @return The male.
    */
   @java.lang.Override
@@ -94,8 +105,11 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000001) != 0)) {
       output.writeMessage(1, getInterpolation());
     }
+    if (id_ != 0L) {
+      output.writeInt64(2, id_);
+    }
     if (male_ != false) {
-      output.writeBool(2, male_);
+      output.writeBool(3, male_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -110,9 +124,13 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(1, getInterpolation());
     }
+    if (id_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(2, id_);
+    }
     if (male_ != false) {
       size += com.google.protobuf.CodedOutputStream
-        .computeBoolSize(2, male_);
+        .computeBoolSize(3, male_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -134,6 +152,8 @@ private static final long serialVersionUID = 0L;
       if (!getInterpolation()
           .equals(other.getInterpolation())) return false;
     }
+    if (getId()
+        != other.getId()) return false;
     if (getMale()
         != other.getMale()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
@@ -151,6 +171,9 @@ private static final long serialVersionUID = 0L;
       hash = (37 * hash) + INTERPOLATION_FIELD_NUMBER;
       hash = (53 * hash) + getInterpolation().hashCode();
     }
+    hash = (37 * hash) + ID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getId());
     hash = (37 * hash) + MALE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
         getMale());
@@ -296,6 +319,7 @@ private static final long serialVersionUID = 0L;
         interpolationBuilder_.dispose();
         interpolationBuilder_ = null;
       }
+      id_ = 0L;
       male_ = false;
       return this;
     }
@@ -338,6 +362,9 @@ private static final long serialVersionUID = 0L;
         to_bitField0_ |= 0x00000001;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.id_ = id_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
         result.male_ = male_;
       }
       result.bitField0_ |= to_bitField0_;
@@ -390,6 +417,9 @@ private static final long serialVersionUID = 0L;
       if (other.hasInterpolation()) {
         mergeInterpolation(other.getInterpolation());
       }
+      if (other.getId() != 0L) {
+        setId(other.getId());
+      }
       if (other.getMale() != false) {
         setMale(other.getMale());
       }
@@ -427,10 +457,15 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 10
             case 16: {
-              male_ = input.readBool();
+              id_ = input.readInt64();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
+            case 24: {
+              male_ = input.readBool();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 24
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -569,9 +604,41 @@ private static final long serialVersionUID = 0L;
       return interpolationBuilder_;
     }
 
+    private long id_ ;
+    /**
+     * <code>int64 id = 2;</code>
+     * @return The id.
+     */
+    @java.lang.Override
+    public long getId() {
+      return id_;
+    }
+    /**
+     * <code>int64 id = 2;</code>
+     * @param value The id to set.
+     * @return This builder for chaining.
+     */
+    public Builder setId(long value) {
+
+      id_ = value;
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 id = 2;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearId() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      id_ = 0L;
+      onChanged();
+      return this;
+    }
+
     private boolean male_ ;
     /**
-     * <code>bool male = 2;</code>
+     * <code>bool male = 3;</code>
      * @return The male.
      */
     @java.lang.Override
@@ -579,23 +646,23 @@ private static final long serialVersionUID = 0L;
       return male_;
     }
     /**
-     * <code>bool male = 2;</code>
+     * <code>bool male = 3;</code>
      * @param value The male to set.
      * @return This builder for chaining.
      */
     public Builder setMale(boolean value) {
 
       male_ = value;
-      bitField0_ |= 0x00000002;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
     /**
-     * <code>bool male = 2;</code>
+     * <code>bool male = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearMale() {
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000004);
       male_ = false;
       onChanged();
       return this;

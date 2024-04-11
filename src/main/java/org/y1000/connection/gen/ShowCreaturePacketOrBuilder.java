@@ -24,7 +24,13 @@ public interface ShowCreaturePacketOrBuilder extends
   org.y1000.connection.gen.InterpolationPacketOrBuilder getInterpolationOrBuilder();
 
   /**
-   * <code>int32 type = 2;</code>
+   * <code>int64 id = 2;</code>
+   * @return The id.
+   */
+  long getId();
+
+  /**
+   * <code>int32 type = 3;</code>
    * @return The type.
    */
   int getType();

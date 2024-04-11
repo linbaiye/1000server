@@ -1,9 +1,8 @@
 package org.y1000.entities;
 
-import org.y1000.message.ServerEvent;
+import org.y1000.message.AbstractInterpolation;
 import org.y1000.util.Coordinate;
 
-import java.util.List;
 import java.util.Set;
 
 public interface Entity {
@@ -15,5 +14,7 @@ public interface Entity {
         return Set.of(coordinate());
     }
 
-    List<ServerEvent> update(long delta);
+    void update(long delta);
+
+    AbstractInterpolation captureInterpolation();
 }

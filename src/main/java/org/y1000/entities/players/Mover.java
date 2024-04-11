@@ -15,6 +15,7 @@ final class Mover {
             player.changeState(new PlayerWalkState(click));
             return new InputResponseMessage(click.sequence(), MoveEvent.movingTo(player, click.direction()));
         } else {
+            log.debug("Can't move to {}", player.coordinate().moveBy(click.direction()));
             player.changeDirection(click.direction());
             player.changeState(new PlayerIdleState());
             return new InputResponseMessage(click.sequence(), TurnEvent.fromPlayer(player));

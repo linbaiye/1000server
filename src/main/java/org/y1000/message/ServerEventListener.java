@@ -1,5 +1,5 @@
 package org.y1000.message;
 
-public interface ServerEventListener<E extends ServerEvent> {
-    void OnEvent(E event);
+public interface ServerEventListener {
+    void OnEvent(ServerEvent event);
 }

@@ -86,12 +86,12 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
         if (context == null) {
             return;
         }
-        long curMilli = System.currentTimeMillis();
         synchronized (messages) {
             if (messages.isEmpty()) {
                 return;
             }
             messages.forEach(context.channel()::write);
+            messages.forEach(m -> log.debug("Sent message {}.", m));
             context.channel().flush();
             messages.clear();
         }

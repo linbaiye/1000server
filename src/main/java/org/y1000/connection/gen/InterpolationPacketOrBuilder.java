@@ -9,12 +9,6 @@ public interface InterpolationPacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int64 id = 1;</code>
-   * @return The id.
-   */
-  long getId();
-
-  /**
    * <code>int32 state = 2;</code>
    * @return The state.
    */

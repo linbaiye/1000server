@@ -18,18 +18,11 @@ final class PlayerWalkState implements PlayerState {
 
     private long walkedMillis;
 
-    private CharacterMovementEvent lastReceived;
-
     public PlayerWalkState(AbstractRightClick trigger) {
         currentInput = trigger;
         walkedMillis = 0;
     }
 
-    @Override
-    public List<ServerEvent> handleMovementEvent(PlayerImpl player, CharacterMovementEvent event) {
-        lastReceived = event;
-        return Collections.emptyList();
-    }
 
     @Override
     public State getState() {
@@ -44,9 +37,11 @@ final class PlayerWalkState implements PlayerState {
 
     private void handleEvent(PlayerImpl player, ClientEvent clientEvent) {
         if (clientEvent instanceof CharacterMovementEvent movementEvent) {
+            log.warn("Handling event {} at {}.", clientEvent, player.coordinate());
             if (movementEvent.inputMessage() instanceof AbstractRightClick rightClick) {
                 player.emitEvent(Mover.onRightClick(player, rightClick));
-            } else if (lastReceived.inputMessage() instanceof RightMouseRelease rightMouseRelease) {
+            } else if (movementEvent.inputMessage() instanceof RightMouseRelease rightMouseRelease) {
+                player.changeState(new PlayerIdleState());
                 player.emitEvent(new InputResponseMessage(rightMouseRelease.sequence(), SetPositionEvent.fromPlayer(player)));
             }
         } else {
@@ -56,20 +51,20 @@ final class PlayerWalkState implements PlayerState {
 
 
     @Override
-    public List<ServerEvent> update(PlayerImpl player, long deltaMillis) {
+    public void update(PlayerImpl player, long deltaMillis) {
         if (walkedMillis == 0) {
             player.changeDirection(currentInput.direction());
         }
         walkedMillis += deltaMillis;
         if (walkedMillis < MILLIS_TO_WALK_ONE_UNIT) {
-            return Collections.emptyList();
+            return;
         }
         Coordinate newCoordinate = player.coordinate().moveBy(player.direction());
         if (!player.getRealm().canMoveTo(newCoordinate)) {
             // May conflict with something.
             player.changeState(new PlayerIdleState());
-            player.emitEvent(SetPositionEvent.fromPlayer(player));
-            return Collections.emptyList();
+            player.emitEvent(new InputResponseMessage(currentInput.sequence(), SetPositionEvent.fromPlayer(player)));
+            return;
         }
         player.changeCoordinate(newCoordinate);
         log.debug("Moved to coordinate {}", newCoordinate);
@@ -77,10 +72,8 @@ final class PlayerWalkState implements PlayerState {
         if (clientEvent == null) {
             log.debug("No more input, back to idle waiting for next input.");
             player.changeState(new PlayerIdleState());
-            return Collections.emptyList();
         } else {
             handleEvent(player, clientEvent);
         }
-        return Collections.emptyList();
     }
 }

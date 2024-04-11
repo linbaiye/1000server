@@ -3,8 +3,6 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.message.*;
-import org.y1000.message.Interpolation;
-import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
@@ -24,7 +22,7 @@ class PlayerImpl implements Player {
 
     private final long id;
 
-    private final List<ServerEventListener<EntityEvent>> eventListeners;
+    private final List<ServerEventListener> eventListeners;
 
     private final Queue<ClientEvent> eventQueue;
 
@@ -59,29 +57,8 @@ class PlayerImpl implements Player {
         coordinate = newCoordinate;
     }
 
-    private List<ServerEvent> handleInputMessage(ClientEvent inputMessage) {
-        if (!(inputMessage instanceof CharacterMovementEvent movementEvent)) {
-            return Collections.emptyList();
-        }
-        log.debug("Handling message {}.", inputMessage);
-        return state.handleMovementEvent(this, movementEvent);
-//        return switch (movementEvent.inputMessage().type()) {
-//            case MOUSE_RIGHT_CLICK -> state.onRightMouseClicked(this, (RightMouseClick) inputMessage);
-//            case MOUSE_RIGHT_RELEASE -> state.onRightMouseReleased(this, (RightMouseRelease) inputMessage);
-//            case MOUSE_RIGHT_MOTION -> state.OnRightMousePressedMotion(this, (RightMousePressedMotion) inputMessage);
-//        };
-    }
-
     void emitEvent(EntityEvent event) {
         eventListeners.forEach(listener -> listener.OnEvent(event));
-    }
-
-    public List<ServerEvent> handle(List<ClientEvent> messages) {
-        List<ServerEvent> result = new ArrayList<>();
-        for (ClientEvent message : messages) {
-            result.addAll(handleInputMessage(message));
-        }
-        return result;
     }
 
     @Override
@@ -104,12 +81,11 @@ class PlayerImpl implements Player {
 
     @Override
     public PlayerInterpolation captureInterpolation() {
-        Interpolation interpolation = new Interpolation(coordinate(), state(), direction(), state.elapsedMillis(), this);
-        return new PlayerInterpolation(interpolation, true);
+        return PlayerInterpolation.FromPlayer(this, state.elapsedMillis());
     }
 
     @Override
-    public void registerListener(ServerEventListener<EntityEvent> listener) {
+    public void registerListener(ServerEventListener listener) {
         eventListeners.add(listener);
     }
 
@@ -120,10 +96,9 @@ class PlayerImpl implements Player {
     }
 
     @Override
-    public List<ServerEvent> update(long delta) {
-        return state.update(this, delta);
+    public void update(long delta) {
+        state.update(this, delta);
     }
-
 
 
     boolean CanMoveOneUnit(Direction direction) {
@@ -131,6 +106,16 @@ class PlayerImpl implements Player {
         return realm.canMoveTo(nextCoordinate);
     }
 
+
+    @Override
+    public String toString() {
+        return "PlayerImpl{" +
+                "id=" + id +
+                ", coordinate=" + coordinate +
+                ", direction=" + direction +
+                ", state=" + state.getState() +
+                '}';
+    }
 
     @Override
     public Coordinate coordinate() {
