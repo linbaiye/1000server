@@ -39,6 +39,7 @@ private static final long serialVersionUID = 0L;
             org.y1000.connection.gen.PositionPacket.class, org.y1000.connection.gen.PositionPacket.Builder.class);
   }
 
+  private int bitField0_;
   public static final int X_FIELD_NUMBER = 1;
   private int x_ = 0;
   /**
@@ -94,6 +95,25 @@ private static final long serialVersionUID = 0L;
     return type_;
   }
 
+  public static final int STATE_FIELD_NUMBER = 6;
+  private int state_ = 0;
+  /**
+   * <code>optional int32 state = 6;</code>
+   * @return Whether the state field is set.
+   */
+  @java.lang.Override
+  public boolean hasState() {
+    return ((bitField0_ & 0x00000001) != 0);
+  }
+  /**
+   * <code>optional int32 state = 6;</code>
+   * @return The state.
+   */
+  @java.lang.Override
+  public int getState() {
+    return state_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -122,6 +142,9 @@ private static final long serialVersionUID = 0L;
     }
     if (type_ != 0) {
       output.writeInt32(5, type_);
+    }
+    if (((bitField0_ & 0x00000001) != 0)) {
+      output.writeInt32(6, state_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -152,6 +175,10 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(5, type_);
     }
+    if (((bitField0_ & 0x00000001) != 0)) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(6, state_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -177,6 +204,11 @@ private static final long serialVersionUID = 0L;
         != other.getId()) return false;
     if (getType()
         != other.getType()) return false;
+    if (hasState() != other.hasState()) return false;
+    if (hasState()) {
+      if (getState()
+          != other.getState()) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -199,6 +231,10 @@ private static final long serialVersionUID = 0L;
         getId());
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType();
+    if (hasState()) {
+      hash = (37 * hash) + STATE_FIELD_NUMBER;
+      hash = (53 * hash) + getState();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -335,6 +371,7 @@ private static final long serialVersionUID = 0L;
       direction_ = 0;
       id_ = 0L;
       type_ = 0;
+      state_ = 0;
       return this;
     }
 
@@ -383,6 +420,12 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000010) != 0)) {
         result.type_ = type_;
       }
+      int to_bitField0_ = 0;
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.state_ = state_;
+        to_bitField0_ |= 0x00000001;
+      }
+      result.bitField0_ |= to_bitField0_;
     }
 
     @java.lang.Override
@@ -444,6 +487,9 @@ private static final long serialVersionUID = 0L;
       if (other.getType() != 0) {
         setType(other.getType());
       }
+      if (other.hasState()) {
+        setState(other.getState());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -495,6 +541,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000010;
               break;
             } // case 40
+            case 48: {
+              state_ = input.readInt32();
+              bitField0_ |= 0x00000020;
+              break;
+            } // case 48
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -668,6 +719,46 @@ private static final long serialVersionUID = 0L;
     public Builder clearType() {
       bitField0_ = (bitField0_ & ~0x00000010);
       type_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int state_ ;
+    /**
+     * <code>optional int32 state = 6;</code>
+     * @return Whether the state field is set.
+     */
+    @java.lang.Override
+    public boolean hasState() {
+      return ((bitField0_ & 0x00000020) != 0);
+    }
+    /**
+     * <code>optional int32 state = 6;</code>
+     * @return The state.
+     */
+    @java.lang.Override
+    public int getState() {
+      return state_;
+    }
+    /**
+     * <code>optional int32 state = 6;</code>
+     * @param value The state to set.
+     * @return This builder for chaining.
+     */
+    public Builder setState(int value) {
+
+      state_ = value;
+      bitField0_ |= 0x00000020;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional int32 state = 6;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearState() {
+      bitField0_ = (bitField0_ & ~0x00000020);
+      state_ = 0;
       onChanged();
       return this;
     }

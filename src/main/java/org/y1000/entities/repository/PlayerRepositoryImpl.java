@@ -11,8 +11,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private static long id = 0;
 
-    private Coordinate compute()
-    {
+    private Coordinate compute() {
         return new Coordinate(39 + (int)id, 27);
     }
 

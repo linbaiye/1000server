@@ -24,19 +24,19 @@ public interface PacketOrBuilder extends
   org.y1000.connection.gen.PositionPacketOrBuilder getPositionPacketOrBuilder();
 
   /**
-   * <code>.org.y1000.connection.gen.ShowCreaturePacket showCreaturePacket = 2;</code>
-   * @return Whether the showCreaturePacket field is set.
+   * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+   * @return Whether the creatureInterpolation field is set.
    */
-  boolean hasShowCreaturePacket();
+  boolean hasCreatureInterpolation();
   /**
-   * <code>.org.y1000.connection.gen.ShowCreaturePacket showCreaturePacket = 2;</code>
-   * @return The showCreaturePacket.
+   * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+   * @return The creatureInterpolation.
    */
-  org.y1000.connection.gen.ShowCreaturePacket getShowCreaturePacket();
+  org.y1000.connection.gen.CreatureInterpolationPacket getCreatureInterpolation();
   /**
-   * <code>.org.y1000.connection.gen.ShowCreaturePacket showCreaturePacket = 2;</code>
+   * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
    */
-  org.y1000.connection.gen.ShowCreaturePacketOrBuilder getShowCreaturePacketOrBuilder();
+  org.y1000.connection.gen.CreatureInterpolationPacketOrBuilder getCreatureInterpolationOrBuilder();
 
   /**
    * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
@@ -97,6 +97,21 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
    */
   org.y1000.connection.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder();
+
+  /**
+   * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+   * @return Whether the removeEntity field is set.
+   */
+  boolean hasRemoveEntity();
+  /**
+   * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+   * @return The removeEntity.
+   */
+  org.y1000.connection.gen.RemoveEntityPacket getRemoveEntity();
+  /**
+   * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+   */
+  org.y1000.connection.gen.RemoveEntityPacketOrBuilder getRemoveEntityOrBuilder();
 
   org.y1000.connection.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

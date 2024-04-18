@@ -37,4 +37,15 @@ public interface PositionPacketOrBuilder extends
    * @return The type.
    */
   int getType();
+
+  /**
+   * <code>optional int32 state = 6;</code>
+   * @return Whether the state field is set.
+   */
+  boolean hasState();
+  /**
+   * <code>optional int32 state = 6;</code>
+   * @return The state.
+   */
+  int getState();
 }

@@ -1,19 +1,17 @@
 package org.y1000.message;
 
-public enum PositionType implements ValueEnum{
+public enum MovementType implements ValueEnum{
     MOVE(1),
-    TURN(2),
     SET(3),
+    RUN(4),
+    FLY(5),
     ;
     private final int v;
-    PositionType(int v) {
+    MovementType(int v) {
         this.v = v;
     }
     @Override
     public int value() {
         return v;
     }
-
-
-
 }

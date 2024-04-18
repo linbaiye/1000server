@@ -1,15 +1,17 @@
-package org.y1000.entities.managers;
+package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.connection.Connection;
-import org.y1000.entities.players.Player;
+import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.managers.AbstractEntityManager;
 import org.y1000.message.*;
+import org.y1000.message.serverevent.*;
 import java.util.*;
 
 @Slf4j
-public final class PlayerManager extends AbstractPhysicalEntityManager<Player> implements
-        ServerEventListener,
-        ServerEventVisitor {
+public final class PlayerManager extends AbstractEntityManager<Player> implements
+        EntityEventListener,
+        PlayerEventHandler {
 
     private final Map<Connection, Player> connectionPlayerMap;
     private final Map<Player, Connection> playerConnectionMap;
@@ -48,6 +50,9 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> i
         }
     }
 
+    public Optional<PlayerVisibleScope> getVisibleScope(Player player) {
+        return Optional.ofNullable(scopeMap.get(player));
+    }
 
 
     private void broadcastAppearance(Player source) {
@@ -67,7 +72,7 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> i
 
 
     @Override
-    public void visit(LoginMessage loginMessage) {
+    public void handle(LoginMessage loginMessage) {
         if (!scopeMap.containsKey(loginMessage.player())) {
             log.debug("Logged in player {}.", loginMessage.player());
             scopeMap.put(loginMessage.player(), new PlayerVisibleScope(loginMessage.player()));
@@ -78,15 +83,23 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> i
 
 
     @Override
-    public void visit(InputResponseMessage inputResponseMessage) {
+    public void handle(InputResponseMessage inputResponseMessage) {
         playerConnectionMap.get(inputResponseMessage.player())
                 .write(inputResponseMessage);
-        visit(inputResponseMessage.positionMessage());
+        handle(inputResponseMessage.positionMessage());
+    }
+
+
+    public void sendVisibleCreatures(Player player, Set<Creature> creatures) {
+        Connection connection = playerConnectionMap.get(player);
+        creatures.stream()
+                .map(Creature::captureInterpolation)
+                .forEach(connection::write);
     }
 
 
     @Override
-    public void visit(AbstractPositionEvent positionEvent) {
+    public void handle(AbstractPositionEvent positionEvent) {
         for (Player player: scopeMap.keySet()) {
             if (player.equals(positionEvent.source())) {
                 continue;
@@ -107,8 +120,9 @@ public final class PlayerManager extends AbstractPhysicalEntityManager<Player> i
         connectionPlayerMap.keySet().forEach(Connection::flush);
     }
 
+
     @Override
-    public void OnEvent(ServerEvent event) {
-        event.accept(this);
+    public void OnEvent(EntityEvent entityEvent) {
+        entityEvent.accept(this);
     }
 }

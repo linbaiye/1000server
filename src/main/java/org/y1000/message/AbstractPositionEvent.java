@@ -4,8 +4,9 @@ import org.y1000.connection.gen.Packet;
 import org.y1000.connection.gen.PositionPacket;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
+import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.message.serverevent.EntityEventHandler;
 import org.y1000.util.Coordinate;
-import java.util.Optional;
 
 public abstract class AbstractPositionEvent implements EntityEvent {
 
@@ -38,7 +39,7 @@ public abstract class AbstractPositionEvent implements EntityEvent {
         return this.source;
     }
 
-    protected abstract PositionType getType();
+    protected abstract MovementType getType();
 
     @Override
     public Packet toPacket() {
@@ -56,10 +57,6 @@ public abstract class AbstractPositionEvent implements EntityEvent {
         return packet;
     }
 
-    @Override
-    public Optional<ServerEvent> eventToPlayer(long id) {
-        return Optional.of(this);
-    }
 
     @Override
     public String toString() {

@@ -61,15 +61,20 @@ public final class Message {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_org_y1000_connection_gen_Packet_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor;
+    internal_static_org_y1000_connection_gen_CreatureInterpolationPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_ShowCreaturePacket_fieldAccessorTable;
+      internal_static_org_y1000_connection_gen_CreatureInterpolationPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
     internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_org_y1000_connection_gen_RemoveEntityPacket_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_org_y1000_connection_gen_RemoveEntityPacket_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -80,43 +85,47 @@ public final class Message {
   static {
     java.lang.String[] descriptorData = {
       "\n\rmessage.proto\022\030org.y1000.connection.ge" +
-      "n\"S\n\016PositionPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(" +
+      "n\"q\n\016PositionPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(" +
       "\005\022\021\n\tdirection\030\003 \001(\005\022\n\n\002id\030\004 \001(\003\022\014\n\004type" +
-      "\030\005 \001(\005\"i\n\023InputResponsePacket\022\020\n\010sequenc" +
-      "e\030\001 \001(\003\022@\n\016positionPacket\030\002 \001(\0132(.org.y1" +
-      "000.connection.gen.PositionPacket\"G\n\013Inp" +
-      "utPacket\022\014\n\004type\030\001 \001(\005\022\020\n\010sequence\030\002 \001(\003" +
-      "\022\030\n\020clickedDirection\030\003 \001(\005\"q\n\017MoveEventP" +
-      "acket\0224\n\005input\030\001 \001(\0132%.org.y1000.connect" +
-      "ion.gen.InputPacket\022\023\n\013happenedAtX\030\002 \001(\005" +
-      "\022\023\n\013happenedAtY\030\003 \001(\005\"\\\n\014ClientPacket\022D\n" +
-      "\017moveEventPacket\030\001 \001(\0132).org.y1000.conne" +
-      "ction.gen.MoveEventPacketH\000B\006\n\004Type\"d\n\023I" +
-      "nterpolationPacket\022\r\n\005state\030\002 \001(\005\022\025\n\rela" +
-      "psedMillis\030\005 \001(\003\022\021\n\tdirection\030\007 \001(\005\022\t\n\001x" +
-      "\030\010 \001(\005\022\t\n\001y\030\t \001(\005\"]\n\024InterpolationsPacke" +
-      "t\022E\n\016interpolations\030\001 \003(\0132-.org.y1000.co" +
-      "nnection.gen.InterpolationPacket\"/\n\013Logi" +
-      "nPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002id\030\003 \001(" +
-      "\003\"\314\003\n\006Packet\022B\n\016positionPacket\030\001 \001(\0132(.o" +
-      "rg.y1000.connection.gen.PositionPacketH\000" +
-      "\022J\n\022showCreaturePacket\030\002 \001(\0132,.org.y1000" +
-      ".connection.gen.ShowCreaturePacketH\000\022<\n\013" +
-      "loginPacket\030\004 \001(\0132%.org.y1000.connection" +
-      ".gen.LoginPacketH\000\022H\n\016interpolations\030\005 \001" +
-      "(\0132..org.y1000.connection.gen.Interpolat" +
-      "ionsPacketH\000\022G\n\016responsePacket\030\006 \001(\0132-.o" +
-      "rg.y1000.connection.gen.InputResponsePac" +
-      "ketH\000\022R\n\023playerInterpolation\030\007 \001(\01323.org" +
-      ".y1000.connection.gen.PlayerInterpolatio" +
-      "nPacketH\000B\r\n\013TypedPacket\"t\n\022ShowCreature" +
-      "Packet\022D\n\rinterpolation\030\001 \001(\0132-.org.y100" +
-      "0.connection.gen.InterpolationPacket\022\n\n\002" +
-      "id\030\002 \001(\003\022\014\n\004type\030\003 \001(\005\"{\n\031PlayerInterpol" +
-      "ationPacket\022D\n\rinterpolation\030\001 \001(\0132-.org" +
-      ".y1000.connection.gen.InterpolationPacke" +
-      "t\022\n\n\002id\030\002 \001(\003\022\014\n\004male\030\003 \001(\010B\034\n\030org.y1000" +
-      ".connection.genP\001b\006proto3"
+      "\030\005 \001(\005\022\022\n\005state\030\006 \001(\005H\000\210\001\001B\010\n\006_state\"i\n\023" +
+      "InputResponsePacket\022\020\n\010sequence\030\001 \001(\003\022@\n" +
+      "\016positionPacket\030\002 \001(\0132(.org.y1000.connec" +
+      "tion.gen.PositionPacket\"G\n\013InputPacket\022\014" +
+      "\n\004type\030\001 \001(\005\022\020\n\010sequence\030\002 \001(\003\022\030\n\020clicke" +
+      "dDirection\030\003 \001(\005\"q\n\017MoveEventPacket\0224\n\005i" +
+      "nput\030\001 \001(\0132%.org.y1000.connection.gen.In" +
+      "putPacket\022\023\n\013happenedAtX\030\002 \001(\005\022\023\n\013happen" +
+      "edAtY\030\003 \001(\005\"\\\n\014ClientPacket\022D\n\017moveEvent" +
+      "Packet\030\001 \001(\0132).org.y1000.connection.gen." +
+      "MoveEventPacketH\000B\006\n\004Type\"d\n\023Interpolati" +
+      "onPacket\022\r\n\005state\030\002 \001(\005\022\025\n\relapsedMillis" +
+      "\030\005 \001(\003\022\021\n\tdirection\030\007 \001(\005\022\t\n\001x\030\010 \001(\005\022\t\n\001" +
+      "y\030\t \001(\005\"]\n\024InterpolationsPacket\022E\n\016inter" +
+      "polations\030\001 \003(\0132-.org.y1000.connection.g" +
+      "en.InterpolationPacket\"/\n\013LoginPacket\022\t\n" +
+      "\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002id\030\003 \001(\003\"\236\004\n\006Pack" +
+      "et\022B\n\016positionPacket\030\001 \001(\0132(.org.y1000.c" +
+      "onnection.gen.PositionPacketH\000\022V\n\025creatu" +
+      "reInterpolation\030\002 \001(\01325.org.y1000.connec" +
+      "tion.gen.CreatureInterpolationPacketH\000\022<" +
+      "\n\013loginPacket\030\004 \001(\0132%.org.y1000.connecti" +
+      "on.gen.LoginPacketH\000\022H\n\016interpolations\030\005" +
+      " \001(\0132..org.y1000.connection.gen.Interpol" +
+      "ationsPacketH\000\022G\n\016responsePacket\030\006 \001(\0132-" +
+      ".org.y1000.connection.gen.InputResponseP" +
+      "acketH\000\022R\n\023playerInterpolation\030\007 \001(\01323.o" +
+      "rg.y1000.connection.gen.PlayerInterpolat" +
+      "ionPacketH\000\022D\n\014removeEntity\030\010 \001(\0132,.org." +
+      "y1000.connection.gen.RemoveEntityPacketH" +
+      "\000B\r\n\013TypedPacket\"}\n\033CreatureInterpolatio" +
+      "nPacket\022D\n\rinterpolation\030\001 \001(\0132-.org.y10" +
+      "00.connection.gen.InterpolationPacket\022\n\n" +
+      "\002id\030\002 \001(\003\022\014\n\004name\030\003 \001(\t\"{\n\031PlayerInterpo" +
+      "lationPacket\022D\n\rinterpolation\030\001 \001(\0132-.or" +
+      "g.y1000.connection.gen.InterpolationPack" +
+      "et\022\n\n\002id\030\002 \001(\003\022\014\n\004male\030\003 \001(\010\" \n\022RemoveEn" +
+      "tityPacket\022\n\n\002id\030\001 \001(\003B\034\n\030org.y1000.conn" +
+      "ection.genP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -127,7 +136,7 @@ public final class Message {
     internal_static_org_y1000_connection_gen_PositionPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_PositionPacket_descriptor,
-        new java.lang.String[] { "X", "Y", "Direction", "Id", "Type", });
+        new java.lang.String[] { "X", "Y", "Direction", "Id", "Type", "State", });
     internal_static_org_y1000_connection_gen_InputResponsePacket_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_org_y1000_connection_gen_InputResponsePacket_fieldAccessorTable = new
@@ -175,19 +184,25 @@ public final class Message {
     internal_static_org_y1000_connection_gen_Packet_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_Packet_descriptor,
-        new java.lang.String[] { "PositionPacket", "ShowCreaturePacket", "LoginPacket", "Interpolations", "ResponsePacket", "PlayerInterpolation", "TypedPacket", });
-    internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor =
+        new java.lang.String[] { "PositionPacket", "CreatureInterpolation", "LoginPacket", "Interpolations", "ResponsePacket", "PlayerInterpolation", "RemoveEntity", "TypedPacket", });
+    internal_static_org_y1000_connection_gen_CreatureInterpolationPacket_descriptor =
       getDescriptor().getMessageTypes().get(9);
-    internal_static_org_y1000_connection_gen_ShowCreaturePacket_fieldAccessorTable = new
+    internal_static_org_y1000_connection_gen_CreatureInterpolationPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_ShowCreaturePacket_descriptor,
-        new java.lang.String[] { "Interpolation", "Id", "Type", });
+        internal_static_org_y1000_connection_gen_CreatureInterpolationPacket_descriptor,
+        new java.lang.String[] { "Interpolation", "Id", "Name", });
     internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_descriptor =
       getDescriptor().getMessageTypes().get(10);
     internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_descriptor,
         new java.lang.String[] { "Interpolation", "Id", "Male", });
+    internal_static_org_y1000_connection_gen_RemoveEntityPacket_descriptor =
+      getDescriptor().getMessageTypes().get(11);
+    internal_static_org_y1000_connection_gen_RemoveEntityPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_org_y1000_connection_gen_RemoveEntityPacket_descriptor,
+        new java.lang.String[] { "Id", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

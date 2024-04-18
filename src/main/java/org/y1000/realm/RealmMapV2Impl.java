@@ -3,12 +3,13 @@ package org.y1000.realm;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.creatures.Creature;
 import org.y1000.util.Coordinate;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 public final class RealmMapV2Impl implements RealmMap {
@@ -29,6 +30,9 @@ public final class RealmMapV2Impl implements RealmMap {
     private final int height;
     private final int width;
 
+    private final Map<Coordinate, Creature> occupyingCreatures;
+    private final Map<Creature, Coordinate> creatureCoordinateMap;
+
     public RealmMapV2Impl(byte[][] movableMask) {
         if (movableMask.length == 0) {
             throw new IllegalArgumentException();
@@ -39,6 +43,8 @@ public final class RealmMapV2Impl implements RealmMap {
         this.movableMask = movableMask;
         this.height = movableMask.length;
         this.width = movableMask[0].length;
+        occupyingCreatures = new HashMap<>();
+        creatureCoordinateMap = new HashMap<>();
     }
 
     private boolean IsInRange(Coordinate coordinate) {
@@ -53,6 +59,18 @@ public final class RealmMapV2Impl implements RealmMap {
         }
         var cell = movableMask[coordinate.y()][coordinate.x()];
         return ((cell & 0x1) == 0) && ((cell & 0x2) == 0);
+    }
+
+    public void occupy(Creature creature) {
+        occupyingCreatures.put(creature.coordinate(), creature);
+        creatureCoordinateMap.put(creature, creature.coordinate());
+    }
+
+    public void free(Creature creature) {
+        var c = creatureCoordinateMap.get(creature);
+        if (c != null) {
+            occupyingCreatures.remove(c);
+        }
     }
 
 
@@ -81,11 +99,11 @@ public final class RealmMapV2Impl implements RealmMap {
 
 
     public static Optional<RealmMap> read(String name) {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         String mapName = name.endsWith(".map") ? name : name + ".map";
         if (!mapName.startsWith("maps/")) {
             mapName = "maps/" + mapName;
         }
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         try (InputStream is = classloader.getResourceAsStream(mapName)) {
             if (is == null) {
                 log.error("Map {} does not exist.", mapName);

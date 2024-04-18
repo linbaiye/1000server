@@ -1,5 +1,6 @@
-package org.y1000.entities.managers;
+package org.y1000.entities.players;
 
+import lombok.Getter;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Getter
 public final class PlayerVisibleScope {
 
     private final Player player;
@@ -35,6 +37,10 @@ public final class PlayerVisibleScope {
 
     public boolean outOfScope(Entity entity) {
         return Set.of(entity.coordinate()).stream().anyMatch(c -> start.x() > c.x() || end.x() < c.x() || start.y() > c.y() || end.y() < c.y());
+    }
+
+    public boolean withinScope(Entity entity) {
+        return !outOfScope(entity);
     }
 
 

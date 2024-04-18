@@ -1,6 +1,5 @@
 package org.y1000.connection;
 
-import org.y1000.message.ServerEvent;
 import org.y1000.message.ServerMessage;
 import org.y1000.message.clientevent.ClientEvent;
 

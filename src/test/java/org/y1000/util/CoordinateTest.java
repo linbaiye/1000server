@@ -39,4 +39,5 @@ class CoordinateTest {
     public static void main(String[] args) {
         System.out.println(isLeft(new Point(165,140), new Point(167, 142), new Point(164, 142)));
     }
+
 }

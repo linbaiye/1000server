@@ -2,14 +2,17 @@ package org.y1000.realm;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.y1000.message.ServerMessage;
 import org.y1000.util.Coordinate;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RealmMapV2ImplTest {
+class RealmMapV2ImplTest implements Serializable {
+    private final transient String name = "test";
 
     private RealmMap realmMap;
     byte[][] cells = new byte[10][10];

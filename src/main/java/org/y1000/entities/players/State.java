@@ -6,6 +6,10 @@ public enum State implements ValueEnum {
     IDLE(1),
 
     WALK(2),
+
+    RUN(3),
+
+    FLY(11),
     ;
 
     private final int v;

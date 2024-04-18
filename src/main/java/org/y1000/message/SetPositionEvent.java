@@ -3,6 +3,7 @@ package org.y1000.message;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
+import org.y1000.message.serverevent.EntityEventHandler;
 import org.y1000.util.Coordinate;
 
 public class SetPositionEvent extends AbstractPositionEvent {
@@ -12,8 +13,8 @@ public class SetPositionEvent extends AbstractPositionEvent {
     }
 
     @Override
-    protected PositionType getType() {
-        return PositionType.SET;
+    protected MovementType getType() {
+        return MovementType.SET;
     }
 
     public static SetPositionEvent fromPlayer(Player player) {
@@ -21,7 +22,7 @@ public class SetPositionEvent extends AbstractPositionEvent {
     }
 
     @Override
-    public void accept(ServerEventVisitor visitor) {
-        visitor.visit(this);
+    public void accept(EntityEventHandler visitor) {
+        visitor.handle(this);
     }
 }

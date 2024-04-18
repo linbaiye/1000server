@@ -3,6 +3,7 @@ package org.y1000.util;
 import org.y1000.entities.Direction;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public record Coordinate(int x, int y) {
@@ -15,13 +16,31 @@ public record Coordinate(int x, int y) {
         return new Coordinate(x + coordinate.x, y + coordinate.y);
     }
 
-    public Set<Coordinate> neibours() {
+    public Set<Coordinate> neighbours() {
         Set<Coordinate> result = new HashSet<>(Direction.values().length);
         for (Direction value : Direction.values()) {
             result.add(moveBy(value));
         }
         return result;
     }
+
+    public Optional<Direction> computeDirection(Coordinate another) {
+        if (another.equals(this)) {
+            return Optional.empty();
+        }
+        var ydiff = another.y() - this.y();
+        var xdiff = another.x() - this.x();
+        if (ydiff < 0) {
+            return xdiff < 0 ? Optional.of(Direction.UP_LEFT):
+                    Optional.of(xdiff > 0 ? Direction.UP_RIGHT : Direction.UP);
+        } else if (ydiff == 0) {
+            return Optional.of(xdiff > 0 ? Direction.RIGHT: Direction.LEFT);
+        } else {
+            return xdiff < 0 ? Optional.of(Direction.DOWN_LEFT):
+                    Optional.of(xdiff > 0 ? Direction.DOWN_RIGHT: Direction.DOWN);
+        }
+    }
+
 
     public Coordinate move(int x, int y) {
         return new Coordinate(x() + x, y() + y);

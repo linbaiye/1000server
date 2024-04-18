@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.0-rc2
 package org.y1000.connection.gen;
 
-public interface ShowCreaturePacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.ShowCreaturePacket)
+public interface CreatureInterpolationPacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.CreatureInterpolationPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -30,8 +30,14 @@ public interface ShowCreaturePacketOrBuilder extends
   long getId();
 
   /**
-   * <code>int32 type = 3;</code>
-   * @return The type.
+   * <code>string name = 3;</code>
+   * @return The name.
    */
-  int getType();
+  java.lang.String getName();
+  /**
+   * <code>string name = 3;</code>
+   * @return The bytes for name.
+   */
+  com.google.protobuf.ByteString
+      getNameBytes();
 }

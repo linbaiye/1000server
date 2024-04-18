@@ -1,5 +1,6 @@
 package org.y1000.message;
 
+@SuppressWarnings("ALL")
 public interface ValueEnum {
 
     int value();

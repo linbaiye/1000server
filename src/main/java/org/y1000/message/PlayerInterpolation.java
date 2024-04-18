@@ -11,6 +11,7 @@ public class PlayerInterpolation extends AbstractInterpolation {
 
     private final boolean male;
 
+
     private PlayerInterpolation(long id, Coordinate coordinate, State state, Direction direction, long elapsedMillis, boolean male) {
         super(id, coordinate, state, direction, elapsedMillis);
         this.male = male;
@@ -27,8 +28,11 @@ public class PlayerInterpolation extends AbstractInterpolation {
                 .build();
     }
 
+
     public static PlayerInterpolation FromPlayer(Player player, long elapsedMillis) {
-        return new PlayerInterpolation(player.id(), player.coordinate(), player.state(), player.direction(), elapsedMillis, player.isMale());
+        return new PlayerInterpolation(player.id(), player.coordinate(),
+                player.stateEnum(), player.direction(),
+                elapsedMillis, player.isMale());
     }
 
 }

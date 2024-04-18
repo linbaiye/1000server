@@ -2,40 +2,32 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.AbstractCreature;
+import org.y1000.entities.players.magic.FootMagic;
 import org.y1000.message.*;
 import org.y1000.message.clientevent.ClientEvent;
-import org.y1000.realm.Realm;
+import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
 
 @Slf4j
-class PlayerImpl implements Player {
+class PlayerImpl extends AbstractCreature implements Player {
 
-    private Coordinate coordinate;
-
-    private Direction direction;
-
-    private Realm realm;
+    private RealmMap realmMap;
 
     private PlayerState state;
 
-    private final long id;
-
-    private final List<ServerEventListener> eventListeners;
-
     private final Queue<ClientEvent> eventQueue;
 
-    PlayerImpl(long id, Coordinate coordinate) {
-        this.id = id;
-        this.coordinate = coordinate;
-        this.eventListeners = new ArrayList<>();
+    private FootMagic footMagic;
+
+    public PlayerImpl(long id, Coordinate coordinate, Direction direction, String name) {
+        super(id, coordinate, direction, name);
         eventQueue = new ArrayDeque<>();
+        footMagic = null;
     }
 
-    void changeDirection(Direction newDirection) {
-        direction = newDirection;
-    }
 
     boolean hasClientEvent() {
         return !eventQueue.isEmpty();
@@ -45,20 +37,17 @@ class PlayerImpl implements Player {
         return eventQueue.poll();
     }
 
-    Realm getRealm() {
-        return realm;
+    RealmMap realmMap() {
+        return realmMap;
+    }
+
+    @Override
+    public Optional<FootMagic> footMagic() {
+        return Optional.ofNullable(footMagic);
     }
 
     void changeState(PlayerState newState) {
         state = newState;
-    }
-
-    void changeCoordinate(Coordinate newCoordinate) {
-        coordinate = newCoordinate;
-    }
-
-    void emitEvent(EntityEvent event) {
-        eventListeners.forEach(listener -> listener.OnEvent(event));
     }
 
     @Override
@@ -67,14 +56,19 @@ class PlayerImpl implements Player {
     }
 
     @Override
-    public State state() {
-        return state.getState();
+    public State stateEnum() {
+        return state.stateEnum();
     }
 
+
     @Override
-    public void joinReam(Realm realm) {
-        this.realm = realm;
-        direction = Direction.DOWN;
+    public void joinReam(RealmMap realm) {
+        if (realmMap != null) {
+            realmMap.free(this);
+        }
+        this.realmMap = realm;
+        realmMap.occupy(this);
+        changeDirection(Direction.DOWN);
         this.state = new PlayerIdleState();
         emitEvent(new LoginMessage(this, coordinate()));
     }
@@ -84,16 +78,6 @@ class PlayerImpl implements Player {
         return PlayerInterpolation.FromPlayer(this, state.elapsedMillis());
     }
 
-    @Override
-    public void registerListener(ServerEventListener listener) {
-        eventListeners.add(listener);
-    }
-
-
-    @Override
-    public long id() {
-        return id;
-    }
 
     @Override
     public void update(long delta) {
@@ -103,28 +87,23 @@ class PlayerImpl implements Player {
 
     boolean CanMoveOneUnit(Direction direction) {
         var nextCoordinate = coordinate().moveBy(direction);
-        return realm.canMoveTo(nextCoordinate);
+        return realmMap().movable(nextCoordinate);
     }
 
 
     @Override
     public String toString() {
         return "PlayerImpl{" +
-                "id=" + id +
-                ", coordinate=" + coordinate +
-                ", direction=" + direction +
-                ", state=" + state.getState() +
+                "id=" + id() +
+                ", coordinate=" + coordinate() +
+                ", direction=" + direction() +
+                ", state=" + state.stateEnum() +
                 '}';
     }
 
     @Override
-    public Coordinate coordinate() {
-        return coordinate;
-    }
-
-    @Override
-    public Direction direction() {
-        return direction;
+    public String name() {
+        return "";
     }
 
     @Override
@@ -132,11 +111,11 @@ class PlayerImpl implements Player {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerImpl player = (PlayerImpl) o;
-        return id == player.id;
+        return id() == player.id();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id());
     }
 }

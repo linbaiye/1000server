@@ -4,8 +4,9 @@ import org.y1000.connection.gen.InputResponsePacket;
 import org.y1000.connection.gen.Packet;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-
-import java.util.Optional;
+import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.message.serverevent.EntityEventHandler;
+import org.y1000.message.serverevent.PlayerEventHandler;
 
 public record InputResponseMessage(long sequence, AbstractPositionEvent positionMessage) implements EntityEvent {
 
@@ -16,17 +17,6 @@ public record InputResponseMessage(long sequence, AbstractPositionEvent position
                         .setPositionPacket(positionMessage.toPacket().getPositionPacket())
                         .setSequence(sequence)
                 ).build();
-    }
-
-    @Override
-    public void accept(ServerEventVisitor visitor) {
-        visitor.visit(this);
-    }
-
-    @Override
-    public Optional<ServerEvent> eventToPlayer(long id) {
-        return id != this.positionMessage().id() ?
-            Optional.of(positionMessage) : Optional.empty();
     }
 
     public Player player() {
@@ -41,5 +31,12 @@ public record InputResponseMessage(long sequence, AbstractPositionEvent position
     @Override
     public long id() {
         return positionMessage.id();
+    }
+
+    @Override
+    public void accept(EntityEventHandler visitor) {
+        if (visitor instanceof PlayerEventHandler playerEventVisitor) {
+            playerEventVisitor.handle(this);
+        }
     }
 }

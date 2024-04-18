@@ -4,6 +4,9 @@ import org.y1000.connection.gen.LoginPacket;
 import org.y1000.connection.gen.Packet;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
+import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.message.serverevent.EntityEventHandler;
+import org.y1000.message.serverevent.PlayerEventHandler;
 import org.y1000.util.Coordinate;
 
 public record LoginMessage(Player player, Coordinate coordinate) implements EntityEvent {
@@ -20,8 +23,10 @@ public record LoginMessage(Player player, Coordinate coordinate) implements Enti
     }
 
     @Override
-    public void accept(ServerEventVisitor visitor) {
-        visitor.visit(this);
+    public void accept(EntityEventHandler visitor) {
+        if (visitor instanceof PlayerEventHandler playerEventHandler) {
+            playerEventHandler.handle(this);
+        }
     }
 
     @Override

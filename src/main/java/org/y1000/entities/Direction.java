@@ -2,6 +2,10 @@ package org.y1000.entities;
 
 import org.y1000.util.Coordinate;
 
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Direction {
 
     UP(new Coordinate(0, -1), 1),
@@ -25,6 +29,20 @@ public enum Direction {
 
     private final int value;
 
+    private static final Map<Direction, Direction[]> NEIBOURS_MAP = new HashMap<>() {
+        {
+            put(Direction.UP, new Direction[]{Direction.UP_LEFT, Direction.UP_RIGHT});
+            put(Direction.UP_LEFT, new Direction[]{Direction.UP, Direction.LEFT});
+            put(Direction.UP_RIGHT, new Direction[]{Direction.UP, Direction.RIGHT});
+            put(Direction.LEFT, new Direction[]{Direction.UP_LEFT, Direction.DOWN_LEFT});
+            put(Direction.DOWN_LEFT, new Direction[]{Direction.LEFT, Direction.DOWN});
+            put(Direction.DOWN, new Direction[]{Direction.DOWN_RIGHT, Direction.DOWN_LEFT});
+            put(Direction.DOWN_RIGHT, new Direction[]{Direction.RIGHT, Direction.DOWN});
+            put(Direction.RIGHT, new Direction[]{Direction.UP_RIGHT, Direction.DOWN_RIGHT});
+        }
+    };
+
+
     Direction(Coordinate offset, int value) {
         this.offset = offset;
         this.value = value;
@@ -36,6 +54,10 @@ public enum Direction {
 
     public int value() {
         return value;
+    }
+
+    public Direction[] neighbours() {
+        return NEIBOURS_MAP.get(this);
     }
 
     public static Direction fromValue(int v) {

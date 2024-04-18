@@ -2,7 +2,6 @@ package org.y1000.connection;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.message.ServerEvent;
 import org.y1000.message.ServerMessage;
 
 import java.util.*;
@@ -102,7 +101,7 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
         while (true) {
             try {
                 handleMessages();
-                Thread.sleep(10);
+                Thread.sleep(120);
             } catch (InterruptedException e) {
                 break;
             }
