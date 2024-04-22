@@ -15,63 +15,85 @@ final class PassiveMonsterAI {
 
     private final ThreadLocalRandom random;
 
+    private Behaviour behaviour;
+
+    private interface Behaviour {
+
+        void behave(PassiveMonster monster);
+
+    }
+
+    private class IdleBehaviour implements Behaviour {
+        private int count = -1;
+        private void turn() {
+            Direction[] values = monster.direction().neighbours();
+            var index = random.nextInt(0, values.length);
+            Direction direction = values[index];
+            monster.changeDirection(direction);
+            monster.changeState(PassiveMonsterIdleState.buffalo());
+            monster.emitEvent(MoveEvent.setPosition(monster));
+        }
+
+        private void moveOrTurn( ) {
+            Direction towards = monster.direction();
+            var next = monster.coordinate().moveBy(towards);
+            if (wanderingArea.contains(next) && monster.realmMap().movable(next)) {
+                monster.changeState(PassiveMonsterMoveState.buffalo(towards));
+                monster.emitEvent(MoveEvent.movingTo(monster, towards));
+                behaviour = new MoveBehaviour();
+            } else {
+                turn();
+            }
+        }
+
+        @Override
+        public void behave(PassiveMonster monster) {
+            if (count >= 5) {
+                moveOrTurn();
+                count = 0;
+                return;
+            }
+            count++;
+            var nextInt = random.nextInt(0, 2);
+            if (nextInt == 0) {
+                monster.changeState(PassiveMonsterIdleState.buffalo());
+            } else {
+                turn();
+            }
+        }
+    }
+
+    private class MoveBehaviour implements Behaviour {
+
+        private int count = 0;
+
+        @Override
+        public void behave(PassiveMonster monster) {
+            if (count++ == 0) {
+                monster.changeState(PassiveMonsterIdleState.buffalo());
+                monster.emitEvent(MoveEvent.setPosition(monster));
+            }
+            if (count > 1) {
+                if ((random.nextInt() & 1) != 0) {
+                    behaviour = new IdleBehaviour();
+                }
+            }
+        }
+    }
+
+
+
     PassiveMonsterAI(PassiveMonster monster) {
         this.monster = monster;
         this.wanderingArea = new Rectangle(monster.coordinate().move(-10, -10),
                 monster.coordinate().move(10, 10));
         random = ThreadLocalRandom.current();
+        behaviour = new IdleBehaviour();
     }
 
-    private State randState() {
-        if (random.nextInt() % 2 == 1) {
-            return State.IDLE;
-        } else {
-            return State.WALK;
-        }
-    }
 
-    private void walkOrTurn(Direction direction) {
-        if (monster.direction() == direction) {
-            monster.changeState(PassiveMonsterMoveState.buffalo(direction));
-            monster.emitEvent(MoveEvent.movingTo(monster, direction));
-        } else {
-            monster.changeDirection(direction);
-            monster.emitEvent(MoveEvent.setPosition(monster));
-        }
-    }
 
-    private void walk() {
-        monster.coordinate().neighbours().stream()
-                .filter(wanderingArea::contains)
-                .filter(monster.realmMap()::movable)
-                .findFirst()
-                .flatMap(monster.coordinate()::computeDirection)
-                .ifPresent(this::walkOrTurn);
-    }
-
-    private void turn() {
-        if (random.nextInt() % 2 == 1) {
-            monster.changeState(PassiveMonsterIdleState.buffalo());
-            return;
-        }
-        Direction[] values = monster.direction().neighbours();
-        var index = random.nextInt(0, values.length);
-        Direction direction = values[index];
-        monster.changeDirection(direction);
-        monster.changeState(PassiveMonsterIdleState.buffalo());
-        monster.emitEvent(MoveEvent.setPosition(monster));
-    }
-
-    void nextMove() {
-//        if (monster.state().stateEnum() == State.WALK) {
-            turn();
-            return;
-//        }
-//        var state = randState();
-//        if (state == State.WALK) {
-//            walk();
-//        } else {
-//            turn();
-//        }
+    public void nextMove() {
+        behaviour.behave(monster);
     }
 }

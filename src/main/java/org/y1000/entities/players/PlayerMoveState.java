@@ -28,6 +28,10 @@ final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implem
     private void handleEvent(PlayerImpl player, ClientEvent clientEvent) {
         if (clientEvent instanceof CharacterMovementEvent movementEvent) {
             log.warn("Handling event {} at {}.", clientEvent, player.coordinate());
+            if (!movementEvent.happenedAt().equals(player.coordinate())) {
+                player.reset(movementEvent.inputMessage().sequence());
+                return;
+            }
             if (movementEvent.inputMessage() instanceof AbstractRightClick rightClick) {
                 player.emitEvent(Mover.onRightClick(player, rightClick));
             } else if (movementEvent.inputMessage() instanceof RightMouseRelease rightMouseRelease) {

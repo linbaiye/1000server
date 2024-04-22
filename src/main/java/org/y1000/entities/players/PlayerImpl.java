@@ -5,6 +5,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreature;
 import org.y1000.entities.players.magic.FootMagic;
 import org.y1000.message.*;
+import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -82,6 +83,13 @@ class PlayerImpl extends AbstractCreature implements Player {
     @Override
     public void update(long delta) {
         state.update(this, delta);
+    }
+
+    public void reset(long sequence) {
+        log.debug("Reset player {}.", id());
+        eventQueue.clear();
+        emitEvent(new InputResponseMessage(sequence, SetPositionEvent.fromPlayer(this)));
+        realmMap.occupy(this);
     }
 
 

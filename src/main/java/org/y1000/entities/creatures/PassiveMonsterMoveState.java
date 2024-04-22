@@ -19,6 +19,6 @@ public class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMo
     }
 
     public static PassiveMonsterMoveState buffalo(Direction towards) {
-        return new PassiveMonsterMoveState(700, towards);
+        return new PassiveMonsterMoveState(1050, towards);
     }
 }

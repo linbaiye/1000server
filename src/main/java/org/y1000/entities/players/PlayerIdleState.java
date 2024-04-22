@@ -19,6 +19,10 @@ final class PlayerIdleState extends AbstractCreatureIdleState<PlayerImpl>
 
     private boolean handleMovementEvent(PlayerImpl player, ClientEvent clientEvent) {
         if (clientEvent instanceof CharacterMovementEvent movementEvent) {
+            if (!movementEvent.happenedAt().equals(player.coordinate())) {
+                player.reset(movementEvent.inputMessage().sequence());
+                return true;
+            }
             if (movementEvent.inputMessage() instanceof AbstractRightClick rightClick) {
                 player.emitEvent(Mover.onRightClick(player, rightClick));
             } else if (movementEvent.inputMessage() instanceof RightMouseRelease rightMouseRelease) {

@@ -57,11 +57,15 @@ public final class RealmMapV2Impl implements RealmMap {
         if (!IsInRange(coordinate)) {
             return false;
         }
+        if (occupyingCreatures.containsKey(coordinate)) {
+            return false;
+        }
         var cell = movableMask[coordinate.y()][coordinate.x()];
         return ((cell & 0x1) == 0) && ((cell & 0x2) == 0);
     }
 
     public void occupy(Creature creature) {
+        free(creature);
         occupyingCreatures.put(creature.coordinate(), creature);
         creatureCoordinateMap.put(creature, creature.coordinate());
     }
@@ -70,6 +74,7 @@ public final class RealmMapV2Impl implements RealmMap {
         var c = creatureCoordinateMap.get(creature);
         if (c != null) {
             occupyingCreatures.remove(c);
+            creatureCoordinateMap.remove(creature);
         }
     }
 
