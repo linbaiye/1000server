@@ -71,10 +71,9 @@ public final class RealmMapV2Impl implements RealmMap {
     }
 
     public void free(Creature creature) {
-        var c = creatureCoordinateMap.get(creature);
+        var c = creatureCoordinateMap.remove(creature);
         if (c != null) {
             occupyingCreatures.remove(c);
-            creatureCoordinateMap.remove(creature);
         }
     }
 

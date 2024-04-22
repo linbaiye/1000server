@@ -49,7 +49,6 @@ public abstract class AbstractCreature implements Creature {
         eventListeners.add(listener);
     }
 
-
     @Override
     public long id() {
         return id;

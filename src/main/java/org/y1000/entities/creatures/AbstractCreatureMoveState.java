@@ -34,7 +34,6 @@ public abstract class AbstractCreatureMoveState<C extends AbstractCreature> exte
     protected boolean tryChangeCoordinate(C c, RealmMap realmMap) {
         Coordinate next = c.coordinate().moveBy(towards);
         if (realmMap.movable(next)) {
-            realmMap.free(c);
             c.changeCoordinate(next);
             realmMap.occupy(c);
             return true;

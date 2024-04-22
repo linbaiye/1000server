@@ -16,7 +16,7 @@ import java.util.*;
 
 
 @Slf4j
-public class Realm implements Runnable, ConnectionEventListener {
+public final class Realm implements Runnable, ConnectionEventListener {
 
     private static final long STEP_MILLIS = 50;
 
@@ -87,7 +87,6 @@ public class Realm implements Runnable, ConnectionEventListener {
             }
             notifyAll();
         }
-
         deadConnections.forEach(playerManager::remove);
         newPlayers.forEach((c, p) -> {
             playerManager.add(c, p);
