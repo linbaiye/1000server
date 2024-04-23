@@ -8,4 +8,6 @@ public interface PlayerRepository {
 
     Player load();
 
+    void save(Player player);
+
 }

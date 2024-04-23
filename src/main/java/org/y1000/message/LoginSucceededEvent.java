@@ -9,7 +9,7 @@ import org.y1000.message.serverevent.EntityEventHandler;
 import org.y1000.message.serverevent.PlayerEventHandler;
 import org.y1000.util.Coordinate;
 
-public record LoginMessage(Player player, Coordinate coordinate) implements EntityEvent {
+public record LoginSucceededEvent(Player player, Coordinate coordinate) implements EntityEvent {
 
     @Override
     public Packet toPacket() {

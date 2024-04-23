@@ -28,6 +28,14 @@ message InputPacket {
   int32 clickedDirection = 3;
 }
 
+message ClickPacket {
+  int64 id = 1;
+}
+
+message PlayerLoginPacket {
+
+}
+
 
 message MoveEventPacket {
   InputPacket input = 1;
@@ -38,6 +46,7 @@ message MoveEventPacket {
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
+    ClickPacket clickPacket = 2;
   }
 }
 

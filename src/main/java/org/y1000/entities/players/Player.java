@@ -23,6 +23,8 @@ public interface Player extends Creature {
 
     void joinReam(RealmMap realm);
 
+    void leaveRealm();
+
     default Optional<FootMagic> footMagic() {
         return Optional.empty();
     }

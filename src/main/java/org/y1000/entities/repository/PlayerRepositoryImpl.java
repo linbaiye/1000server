@@ -3,27 +3,37 @@ package org.y1000.entities.repository;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public final class PlayerRepositoryImpl implements PlayerRepository {
 
-    private final Map<Long,Coordinate> usableCoordinates = Map.of(0L, new Coordinate(39, 30), 1L, new Coordinate(35, 30));
-
-    private static long id = 0;
-
-    private Coordinate compute() {
-        return new Coordinate(39 + (int)id, 27);
-    }
+    private static final int[] slots = new int[]{-1, -1, 1,-1,-1,-1,-1,-1,-1,-1};
 
     @Override
     public Player load(long id) {
-        return Player.create(id, usableCoordinates.getOrDefault(id, new Coordinate(39,27)));
+        return Player.create(id, new Coordinate(39,27));
+    }
+
+    private int findSlot() {
+        for (int i = 0; i < slots.length; i++) {
+            if (slots[i] == -1) {
+                slots[i] = 0;
+                return i;
+            }
+        }
+        return 0;
     }
 
     @Override
     public Player load() {
-        var ret = Player.create(id, compute());
-        id++;
-        return ret;
+        int slot = findSlot();
+        return Player.create(slot, new Coordinate(39 + slot, 27));
     }
+
+    @Override
+    public void save(Player player) {
+        slots[(int)player.id()] = -1;
+    }
+
 }

@@ -5,8 +5,8 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreature;
 import org.y1000.entities.players.magic.FootMagic;
 import org.y1000.message.*;
-import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.clientevent.ClientEvent;
+import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -65,13 +65,21 @@ class PlayerImpl extends AbstractCreature implements Player {
     @Override
     public void joinReam(RealmMap realm) {
         if (realmMap != null) {
-            realmMap.free(this);
+            leaveRealm();
         }
         this.realmMap = realm;
         realmMap.occupy(this);
         changeDirection(Direction.DOWN);
         this.state = new PlayerIdleState();
-        emitEvent(new LoginMessage(this, coordinate()));
+        emitEvent(new LoginSucceededEvent(this, coordinate()));
+    }
+
+    @Override
+    public void leaveRealm() {
+        if (realmMap != null) {
+            realmMap.free(this);
+        }
+        emitEvent(new PlayerLeftEvent(this));
     }
 
     @Override

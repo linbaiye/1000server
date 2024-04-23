@@ -12,7 +12,6 @@ public abstract class AbstractInterpolation implements ServerMessage {
     private final State state;
     private final Direction direction;
     private final long elapsedMillis;
-
     private InterpolationPacket interpolationPacket;
 
     public AbstractInterpolation(long id, Coordinate coordinate, State state, Direction direction, long elapsedMillis) {

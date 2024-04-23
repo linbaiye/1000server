@@ -2,7 +2,7 @@ package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.managers.AbstractEntityManager;
-import org.y1000.entities.players.PlayerVisibleScope;
+import org.y1000.entities.RelevanceScope;
 import org.y1000.message.serverevent.*;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -37,7 +37,7 @@ public final class CreatureManager extends AbstractEntityManager<Creature> imple
     }
 
 
-    public Set<Creature> visibleCreatures(PlayerVisibleScope scope) {
+    public Set<Creature> visibleCreatures(RelevanceScope scope) {
         return passiveMonsters.stream().filter(scope::withinScope)
                 .collect(Collectors.toSet());
     }

@@ -5,7 +5,5 @@ import org.y1000.util.Coordinate;
 
 public interface EntityManager<T extends Entity> {
 
-    T findOne(Coordinate coordinate);
-
     void update(long delta);
 }

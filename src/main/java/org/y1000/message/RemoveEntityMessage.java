@@ -1,18 +1,29 @@
 package org.y1000.message;
 
 import org.y1000.connection.gen.Packet;
+import org.y1000.connection.gen.RemoveEntityPacket;
 
 
-public class RemoveEntityMessage implements ServerMessage {
+public class RemoveEntityMessage extends AbstractServerMessage{
+
     private final long id;
 
     public RemoveEntityMessage(long id) {
         this.id = id;
     }
 
-    @Override
-    public Packet toPacket() {
+    public static Packet createPacket(long id) {
         return Packet.newBuilder()
-                .build();
+                .setRemoveEntity(
+                        RemoveEntityPacket.newBuilder()
+                                .setId(id)
+                                .build()
+
+                ).build();
+    }
+
+    @Override
+    protected Packet buildPacket() {
+        return createPacket(id);
     }
 }

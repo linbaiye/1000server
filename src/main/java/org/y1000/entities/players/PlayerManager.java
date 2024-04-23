@@ -2,20 +2,23 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.connection.Connection;
+import org.y1000.entities.RelevanceScope;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.managers.AbstractEntityManager;
+import org.y1000.entities.managers.EntityManager;
 import org.y1000.message.*;
 import org.y1000.message.serverevent.*;
 import java.util.*;
 
 @Slf4j
-public final class PlayerManager extends AbstractEntityManager<Player> implements
+public final class PlayerManager implements
+        EntityManager<Player>,
         EntityEventListener,
         PlayerEventHandler {
 
     private final Map<Connection, Player> connectionPlayerMap;
     private final Map<Player, Connection> playerConnectionMap;
-    private final Map<Player, PlayerVisibleScope> scopeMap;
+    private final Map<Player, RelevanceScope> scopeMap;
+
 
     public PlayerManager() {
         int initialCapacity = 512;
@@ -26,7 +29,6 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
 
     public void add(Connection connection, Player player) {
         if (!connectionPlayerMap.containsKey(connection)) {
-            indexCoordinate(player);
             connectionPlayerMap.put(connection, player);
             playerConnectionMap.put(player, connection);
         }
@@ -35,7 +37,7 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
     public void remove(Connection connection) {
         Player removed = connectionPlayerMap.remove(connection);
         if (removed != null) {
-            scopeMap.remove(removed);
+            removed.leaveRealm();
             playerConnectionMap.remove(removed);
         }
     }
@@ -50,7 +52,7 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
         }
     }
 
-    public Optional<PlayerVisibleScope> getVisibleScope(Player player) {
+    public Optional<RelevanceScope> getVisibleScope(Player player) {
         return Optional.ofNullable(scopeMap.get(player));
     }
 
@@ -60,8 +62,8 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
             if (another.equals(source)) {
                 continue;
             }
-            PlayerVisibleScope playerVisibleScope = scopeMap.get(another);
-            if (playerVisibleScope.addIfVisible(source)) {
+            RelevanceScope relevanceScope = scopeMap.get(another);
+            if (relevanceScope.addIfVisible(source)) {
                 log.debug("Players {} and {} see each other now.", source.id(), another.id());
                 scopeMap.get(source).addIfVisible(another);
                 playerConnectionMap.get(another).write(source.captureInterpolation());
@@ -72,10 +74,10 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
 
 
     @Override
-    public void handle(LoginMessage loginMessage) {
+    public void handle(LoginSucceededEvent loginMessage) {
         if (!scopeMap.containsKey(loginMessage.player())) {
             log.debug("Logged in player {}.", loginMessage.player());
-            scopeMap.put(loginMessage.player(), new PlayerVisibleScope(loginMessage.player()));
+            scopeMap.put(loginMessage.player(), new RelevanceScope(loginMessage.player()));
             broadcastAppearance(loginMessage.player());
             playerConnectionMap.get(loginMessage.player()).write(loginMessage);
         }
@@ -104,12 +106,13 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
             if (player.equals(positionEvent.source())) {
                 continue;
             }
-            PlayerVisibleScope playerVisibleScope = scopeMap.get(player);
-            if (playerVisibleScope.removeIfOutOfView(positionEvent.source())) {
-                // send out of view.
-            } else if (playerVisibleScope.contains(positionEvent.source())){
+            RelevanceScope relevanceScope = scopeMap.get(player);
+            if (relevanceScope.removeIfOutOfView(positionEvent.source())) {
+                playerConnectionMap.get(player).write(new RemoveEntityMessage(positionEvent.id()));
+            } else if (relevanceScope.contains(positionEvent.source())){
                 playerConnectionMap.get(player).write(positionEvent);
-            } else if (playerVisibleScope.addIfVisible(positionEvent.source())) {
+            } else if (relevanceScope.addIfVisible(positionEvent.source())) {
+                playerConnectionMap.get(player).write(positionEvent);
             }
         }
     }

@@ -8,9 +8,8 @@ import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.CreatureManager;
 import org.y1000.entities.players.PlayerManager;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.PlayerVisibleScope;
+import org.y1000.entities.RelevanceScope;
 import org.y1000.entities.repository.PlayerRepository;
-import org.y1000.util.Coordinate;
 
 import java.util.*;
 
@@ -46,19 +45,8 @@ public final class Realm implements Runnable, ConnectionEventListener {
         return realmMap;
     }
 
-    public boolean hasPhysicalEntityAt(Coordinate coordinate) {
-        return playerManager.findOne(coordinate) != null;
-    }
-
-    public boolean canMoveTo(Coordinate coordinate) {
-        return map().movable(coordinate) && !hasPhysicalEntityAt(coordinate);
-    }
-
-    public void onConnectionEstablished(Connection connection) {
-        Player player = playerRepository.load();
-        synchronized (this) {
-            joiningPlayers.put(connection, player);
-        }
+    public synchronized void playerConnected(Connection connection, Player player) {
+        joiningPlayers.put(connection, player);
         notify();
     }
 
@@ -68,10 +56,12 @@ public final class Realm implements Runnable, ConnectionEventListener {
     }
 
 
-    private void sendVisibleCreatures(PlayerVisibleScope scope) {
+    private void sendVisibleCreatures(RelevanceScope scope) {
         Set<Creature> creatures = creatureManager.visibleCreatures(scope);
-        playerManager.sendVisibleCreatures(scope.getPlayer(), creatures);
+        playerManager.sendVisibleCreatures(scope.getSource(), creatures);
     }
+
+
 
     private void handleConnectionEvents() {
         List<Connection> deadConnections = Collections.emptyList();
@@ -117,12 +107,11 @@ public final class Realm implements Runnable, ConnectionEventListener {
         }
     }
 
-
     @Override
     public void OnEvent(ConnectionEventType type,
                         Connection connection) {
         if (type == ConnectionEventType.ESTABLISHED) {
-            onConnectionEstablished(connection);
+            playerConnected(connection, playerRepository.load());
         } else if (type == ConnectionEventType.CLOSED) {
             onConnectionClosed(connection);
         }

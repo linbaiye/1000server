@@ -23,5 +23,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.connection.gen.MoveEventPacketOrBuilder getMoveEventPacketOrBuilder();
 
+  /**
+   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   * @return Whether the clickPacket field is set.
+   */
+  boolean hasClickPacket();
+  /**
+   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   * @return The clickPacket.
+   */
+  org.y1000.connection.gen.ClickPacket getClickPacket();
+  /**
+   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   */
+  org.y1000.connection.gen.ClickPacketOrBuilder getClickPacketOrBuilder();
+
   org.y1000.connection.gen.ClientPacket.TypeCase getTypeCase();
 }

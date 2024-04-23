@@ -46,6 +46,7 @@ private static final long serialVersionUID = 0L;
       implements com.google.protobuf.Internal.EnumLite,
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     MOVEEVENTPACKET(1),
+    CLICKPACKET(2),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -64,6 +65,7 @@ private static final long serialVersionUID = 0L;
     public static TypeCase forNumber(int value) {
       switch (value) {
         case 1: return MOVEEVENTPACKET;
+        case 2: return CLICKPACKET;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -110,6 +112,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.connection.gen.MoveEventPacket.getDefaultInstance();
   }
 
+  public static final int CLICKPACKET_FIELD_NUMBER = 2;
+  /**
+   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   * @return Whether the clickPacket field is set.
+   */
+  @java.lang.Override
+  public boolean hasClickPacket() {
+    return typeCase_ == 2;
+  }
+  /**
+   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   * @return The clickPacket.
+   */
+  @java.lang.Override
+  public org.y1000.connection.gen.ClickPacket getClickPacket() {
+    if (typeCase_ == 2) {
+       return (org.y1000.connection.gen.ClickPacket) type_;
+    }
+    return org.y1000.connection.gen.ClickPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   */
+  @java.lang.Override
+  public org.y1000.connection.gen.ClickPacketOrBuilder getClickPacketOrBuilder() {
+    if (typeCase_ == 2) {
+       return (org.y1000.connection.gen.ClickPacket) type_;
+    }
+    return org.y1000.connection.gen.ClickPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -127,6 +160,9 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 1) {
       output.writeMessage(1, (org.y1000.connection.gen.MoveEventPacket) type_);
     }
+    if (typeCase_ == 2) {
+      output.writeMessage(2, (org.y1000.connection.gen.ClickPacket) type_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -139,6 +175,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 1) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(1, (org.y1000.connection.gen.MoveEventPacket) type_);
+    }
+    if (typeCase_ == 2) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(2, (org.y1000.connection.gen.ClickPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -161,6 +201,10 @@ private static final long serialVersionUID = 0L;
         if (!getMoveEventPacket()
             .equals(other.getMoveEventPacket())) return false;
         break;
+      case 2:
+        if (!getClickPacket()
+            .equals(other.getClickPacket())) return false;
+        break;
       case 0:
       default:
     }
@@ -179,6 +223,10 @@ private static final long serialVersionUID = 0L;
       case 1:
         hash = (37 * hash) + MOVEEVENTPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getMoveEventPacket().hashCode();
+        break;
+      case 2:
+        hash = (37 * hash) + CLICKPACKET_FIELD_NUMBER;
+        hash = (53 * hash) + getClickPacket().hashCode();
         break;
       case 0:
       default:
@@ -317,6 +365,9 @@ private static final long serialVersionUID = 0L;
       if (moveEventPacketBuilder_ != null) {
         moveEventPacketBuilder_.clear();
       }
+      if (clickPacketBuilder_ != null) {
+        clickPacketBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -361,6 +412,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 1 &&
           moveEventPacketBuilder_ != null) {
         result.type_ = moveEventPacketBuilder_.build();
+      }
+      if (typeCase_ == 2 &&
+          clickPacketBuilder_ != null) {
+        result.type_ = clickPacketBuilder_.build();
       }
     }
 
@@ -413,6 +468,10 @@ private static final long serialVersionUID = 0L;
           mergeMoveEventPacket(other.getMoveEventPacket());
           break;
         }
+        case CLICKPACKET: {
+          mergeClickPacket(other.getClickPacket());
+          break;
+        }
         case TYPE_NOT_SET: {
           break;
         }
@@ -450,6 +509,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 1;
               break;
             } // case 10
+            case 18: {
+              input.readMessage(
+                  getClickPacketFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 2;
+              break;
+            } // case 18
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -622,6 +688,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 1;
       onChanged();
       return moveEventPacketBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.connection.gen.ClickPacket, org.y1000.connection.gen.ClickPacket.Builder, org.y1000.connection.gen.ClickPacketOrBuilder> clickPacketBuilder_;
+    /**
+     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * @return Whether the clickPacket field is set.
+     */
+    @java.lang.Override
+    public boolean hasClickPacket() {
+      return typeCase_ == 2;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * @return The clickPacket.
+     */
+    @java.lang.Override
+    public org.y1000.connection.gen.ClickPacket getClickPacket() {
+      if (clickPacketBuilder_ == null) {
+        if (typeCase_ == 2) {
+          return (org.y1000.connection.gen.ClickPacket) type_;
+        }
+        return org.y1000.connection.gen.ClickPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 2) {
+          return clickPacketBuilder_.getMessage();
+        }
+        return org.y1000.connection.gen.ClickPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     */
+    public Builder setClickPacket(org.y1000.connection.gen.ClickPacket value) {
+      if (clickPacketBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        clickPacketBuilder_.setMessage(value);
+      }
+      typeCase_ = 2;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     */
+    public Builder setClickPacket(
+        org.y1000.connection.gen.ClickPacket.Builder builderForValue) {
+      if (clickPacketBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        clickPacketBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 2;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     */
+    public Builder mergeClickPacket(org.y1000.connection.gen.ClickPacket value) {
+      if (clickPacketBuilder_ == null) {
+        if (typeCase_ == 2 &&
+            type_ != org.y1000.connection.gen.ClickPacket.getDefaultInstance()) {
+          type_ = org.y1000.connection.gen.ClickPacket.newBuilder((org.y1000.connection.gen.ClickPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 2) {
+          clickPacketBuilder_.mergeFrom(value);
+        } else {
+          clickPacketBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 2;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     */
+    public Builder clearClickPacket() {
+      if (clickPacketBuilder_ == null) {
+        if (typeCase_ == 2) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 2) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        clickPacketBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     */
+    public org.y1000.connection.gen.ClickPacket.Builder getClickPacketBuilder() {
+      return getClickPacketFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     */
+    @java.lang.Override
+    public org.y1000.connection.gen.ClickPacketOrBuilder getClickPacketOrBuilder() {
+      if ((typeCase_ == 2) && (clickPacketBuilder_ != null)) {
+        return clickPacketBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 2) {
+          return (org.y1000.connection.gen.ClickPacket) type_;
+        }
+        return org.y1000.connection.gen.ClickPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.connection.gen.ClickPacket, org.y1000.connection.gen.ClickPacket.Builder, org.y1000.connection.gen.ClickPacketOrBuilder> 
+        getClickPacketFieldBuilder() {
+      if (clickPacketBuilder_ == null) {
+        if (!(typeCase_ == 2)) {
+          type_ = org.y1000.connection.gen.ClickPacket.getDefaultInstance();
+        }
+        clickPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.connection.gen.ClickPacket, org.y1000.connection.gen.ClickPacket.Builder, org.y1000.connection.gen.ClickPacketOrBuilder>(
+                (org.y1000.connection.gen.ClickPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 2;
+      onChanged();
+      return clickPacketBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(
