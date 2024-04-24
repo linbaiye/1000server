@@ -17,9 +17,5 @@ public abstract class AbstractEntityManager<E extends Entity> implements EntityM
         //entity.coordinates().forEach(c -> coordinateIndex.put(c, entity));
     }
 
-    @Override
-    public E findOne(Coordinate coordinate) {
-        return coordinateIndex.get(coordinate);
-    }
 
 }

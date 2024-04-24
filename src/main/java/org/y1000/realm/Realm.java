@@ -1,21 +1,21 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.connection.Connection;
-import org.y1000.connection.ConnectionEventListener;
-import org.y1000.connection.ConnectionEventType;
+import org.y1000.network.Connection;
+import org.y1000.network.NetworkEventListener;
+import org.y1000.network.ConnectionEventType;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.CreatureManager;
 import org.y1000.entities.players.PlayerManager;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.RelevanceScope;
+import org.y1000.entities.PlayerVisibleScope;
 import org.y1000.entities.repository.PlayerRepository;
 
 import java.util.*;
 
 
 @Slf4j
-public final class Realm implements Runnable, ConnectionEventListener {
+public final class Realm implements Runnable, NetworkEventListener {
 
     private static final long STEP_MILLIS = 50;
 
@@ -31,6 +31,12 @@ public final class Realm implements Runnable, ConnectionEventListener {
 
     private final RealmMap realmMap;
 
+    private final List<Player> waitingPlayers;
+    private final List<Player> leavingPlayers;
+
+
+    private final
+
     public Realm(PlayerRepository playerRepository,
                  RealmMap map) {
         this.playerRepository = playerRepository;
@@ -39,6 +45,8 @@ public final class Realm implements Runnable, ConnectionEventListener {
         closingConnections = new ArrayList<>();
         joiningPlayers = new HashMap<>();
         creatureManager = new CreatureManager(playerManager, realmMap);
+        waitingPlayers = new ArrayList<>(32);
+        leavingPlayers = new ArrayList<>(32);
     }
 
     public RealmMap map() {
@@ -56,11 +64,10 @@ public final class Realm implements Runnable, ConnectionEventListener {
     }
 
 
-    private void sendVisibleCreatures(RelevanceScope scope) {
+    private void sendVisibleCreatures(PlayerVisibleScope scope) {
         Set<Creature> creatures = creatureManager.visibleCreatures(scope);
         playerManager.sendVisibleCreatures(scope.getSource(), creatures);
     }
-
 
 
     private void handleConnectionEvents() {
@@ -87,19 +94,29 @@ public final class Realm implements Runnable, ConnectionEventListener {
         });
     }
 
+
     @Override
     public void run() {
         try {
             long timeMillis = System.currentTimeMillis();
             while (true) {
-                handleConnectionEvents();
+                //handleConnectionEvents();
                 long current = System.currentTimeMillis();
                 if (timeMillis <= current) {
                     playerManager.update(STEP_MILLIS);
                     creatureManager.update(STEP_MILLIS);
                     timeMillis += STEP_MILLIS;
                 } else {
-                    Thread.sleep(timeMillis - current);
+                    synchronized (this) {
+                        while (waitingPlayers.isEmpty() && leavingPlayers.isEmpty() &&
+                                current < timeMillis) {
+                            wait(timeMillis - current);
+                            current = System.currentTimeMillis();
+                        }
+                        leavingPlayers.forEach(Player::leaveRealm);
+                        waitingPlayers.forEach(player -> player.joinReam(realmMap));
+                        notify();
+                    }
                 }
             }
         } catch (InterruptedException e) {
@@ -115,6 +132,16 @@ public final class Realm implements Runnable, ConnectionEventListener {
         } else if (type == ConnectionEventType.CLOSED) {
             onConnectionClosed(connection);
         }
+    }
+
+    public synchronized void addPlayer(Player player) {
+        waitingPlayers.add(player);
+        notifyAll();
+    }
+
+    public synchronized void removePlayer(Player player) {
+        leavingPlayers.add(player);
+        notifyAll();
     }
 
     public static Optional<Realm> create(String name

@@ -1,11 +1,10 @@
 package org.y1000.message;
 
-import org.y1000.connection.gen.Packet;
-import org.y1000.connection.gen.PositionPacket;
+import org.y1000.network.gen.Packet;
+import org.y1000.network.gen.PositionPacket;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.message.serverevent.EntityEvent;
-import org.y1000.message.serverevent.EntityEventHandler;
 import org.y1000.util.Coordinate;
 
 public abstract class AbstractPositionEvent implements EntityEvent {

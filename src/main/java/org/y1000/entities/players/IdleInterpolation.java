@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import lombok.Builder;
-import org.y1000.connection.gen.*;
+import org.y1000.network.gen.*;
 import org.y1000.entities.Direction;
 import org.y1000.util.Coordinate;
 

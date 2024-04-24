@@ -1,7 +1,6 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.connection.gen.Packet;
-import org.y1000.connection.gen.RemoveEntityPacket;
+import org.y1000.network.gen.Packet;
 import org.y1000.entities.players.Player;
 import org.y1000.message.RemoveEntityMessage;
 

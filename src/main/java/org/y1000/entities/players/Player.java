@@ -1,10 +1,10 @@
 package org.y1000.entities.players;
 
+import org.y1000.network.Connection;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.players.magic.FootMagic;
 import org.y1000.message.clientevent.ClientEvent;
-import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -21,6 +21,9 @@ public interface Player extends Creature {
         return true;
     }
 
+    Connection connection();
+
+
     void joinReam(RealmMap realm);
 
     void leaveRealm();
@@ -30,6 +33,6 @@ public interface Player extends Creature {
     }
 
     static Player create(long id, Coordinate coordinate) {
-        return new PlayerImpl(id, coordinate, Direction.DOWN, "杨过");
+        return new PlayerImpl(id, coordinate, Direction.DOWN, "杨过", null);
     }
 }

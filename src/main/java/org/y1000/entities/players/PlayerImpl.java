@@ -1,6 +1,9 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.network.ClientEventListener;
+import org.y1000.network.Connection;
+import org.y1000.network.NetworkEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreature;
 import org.y1000.entities.players.magic.FootMagic;
@@ -11,9 +14,11 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Slf4j
-class PlayerImpl extends AbstractCreature implements Player {
+class PlayerImpl extends AbstractCreature implements Player,
+        ClientEventListener {
 
     private RealmMap realmMap;
 
@@ -23,10 +28,14 @@ class PlayerImpl extends AbstractCreature implements Player {
 
     private FootMagic footMagic;
 
-    public PlayerImpl(long id, Coordinate coordinate, Direction direction, String name) {
+
+    public PlayerImpl(long id, Coordinate coordinate,
+                      Direction direction,
+                      String name, Connection connection) {
         super(id, coordinate, direction, name);
-        eventQueue = new ArrayDeque<>();
+        eventQueue = new ConcurrentLinkedDeque<>();
         footMagic = null;
+        connection.registerClientEventListener(this);
     }
 
 
@@ -59,6 +68,11 @@ class PlayerImpl extends AbstractCreature implements Player {
     @Override
     public State stateEnum() {
         return state.stateEnum();
+    }
+
+    @Override
+    public Connection connection() {
+        return null;
     }
 
 
@@ -133,5 +147,10 @@ class PlayerImpl extends AbstractCreature implements Player {
     @Override
     public int hashCode() {
         return Objects.hash(id());
+    }
+
+    @Override
+    public void OnEvent(ClientEvent clientEvent) {
+        eventQueue.add(clientEvent);
     }
 }

@@ -1,7 +1,7 @@
 package org.y1000.message;
 
-import org.y1000.connection.gen.Packet;
-import org.y1000.connection.gen.RemoveEntityPacket;
+import org.y1000.network.gen.Packet;
+import org.y1000.network.gen.RemoveEntityPacket;
 
 
 public class RemoveEntityMessage extends AbstractServerMessage{

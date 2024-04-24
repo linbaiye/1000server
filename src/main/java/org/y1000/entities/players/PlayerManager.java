@@ -1,8 +1,8 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.connection.Connection;
-import org.y1000.entities.RelevanceScope;
+import org.y1000.network.Connection;
+import org.y1000.entities.PlayerVisibleScope;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.managers.EntityManager;
 import org.y1000.message.*;
@@ -17,7 +17,7 @@ public final class PlayerManager implements
 
     private final Map<Connection, Player> connectionPlayerMap;
     private final Map<Player, Connection> playerConnectionMap;
-    private final Map<Player, RelevanceScope> scopeMap;
+    private final Map<Player, PlayerVisibleScope> scopeMap;
 
 
     public PlayerManager() {
@@ -27,12 +27,14 @@ public final class PlayerManager implements
         scopeMap = new HashMap<>(initialCapacity);
     }
 
+
     public void add(Connection connection, Player player) {
         if (!connectionPlayerMap.containsKey(connection)) {
             connectionPlayerMap.put(connection, player);
             playerConnectionMap.put(player, connection);
         }
     }
+
 
     public void remove(Connection connection) {
         Player removed = connectionPlayerMap.remove(connection);
@@ -52,7 +54,7 @@ public final class PlayerManager implements
         }
     }
 
-    public Optional<RelevanceScope> getVisibleScope(Player player) {
+    public Optional<PlayerVisibleScope> getVisibleScope(Player player) {
         return Optional.ofNullable(scopeMap.get(player));
     }
 
@@ -62,8 +64,8 @@ public final class PlayerManager implements
             if (another.equals(source)) {
                 continue;
             }
-            RelevanceScope relevanceScope = scopeMap.get(another);
-            if (relevanceScope.addIfVisible(source)) {
+            PlayerVisibleScope playerVisibleScope = scopeMap.get(another);
+            if (playerVisibleScope.addIfVisible(source)) {
                 log.debug("Players {} and {} see each other now.", source.id(), another.id());
                 scopeMap.get(source).addIfVisible(another);
                 playerConnectionMap.get(another).write(source.captureInterpolation());
@@ -77,7 +79,7 @@ public final class PlayerManager implements
     public void handle(LoginSucceededEvent loginMessage) {
         if (!scopeMap.containsKey(loginMessage.player())) {
             log.debug("Logged in player {}.", loginMessage.player());
-            scopeMap.put(loginMessage.player(), new RelevanceScope(loginMessage.player()));
+            scopeMap.put(loginMessage.player(), new PlayerVisibleScope(loginMessage.player()));
             broadcastAppearance(loginMessage.player());
             playerConnectionMap.get(loginMessage.player()).write(loginMessage);
         }
@@ -106,12 +108,12 @@ public final class PlayerManager implements
             if (player.equals(positionEvent.source())) {
                 continue;
             }
-            RelevanceScope relevanceScope = scopeMap.get(player);
-            if (relevanceScope.removeIfOutOfView(positionEvent.source())) {
+            PlayerVisibleScope playerVisibleScope = scopeMap.get(player);
+            if (playerVisibleScope.removeIfOutOfView(positionEvent.source())) {
                 playerConnectionMap.get(player).write(new RemoveEntityMessage(positionEvent.id()));
-            } else if (relevanceScope.contains(positionEvent.source())){
+            } else if (playerVisibleScope.contains(positionEvent.source())){
                 playerConnectionMap.get(player).write(positionEvent);
-            } else if (relevanceScope.addIfVisible(positionEvent.source())) {
+            } else if (playerVisibleScope.addIfVisible(positionEvent.source())) {
                 playerConnectionMap.get(player).write(positionEvent);
             }
         }

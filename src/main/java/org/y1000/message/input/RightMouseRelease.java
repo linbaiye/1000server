@@ -1,6 +1,6 @@
 package org.y1000.message.input;
 
-import org.y1000.connection.gen.InputPacket;
+import org.y1000.network.gen.InputPacket;
 
 public record RightMouseRelease(long sequence) implements InputMessage {
 

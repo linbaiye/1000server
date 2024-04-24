@@ -1,7 +1,7 @@
 package org.y1000.message;
 
-import org.y1000.connection.gen.Packet;
-import org.y1000.connection.gen.PlayerInterpolationPacket;
+import org.y1000.network.gen.Packet;
+import org.y1000.network.gen.PlayerInterpolationPacket;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.State;
