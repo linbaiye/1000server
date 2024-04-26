@@ -30,16 +30,20 @@ public final class RealmMapV2Impl implements RealmMap {
     private final int height;
     private final int width;
 
+    private final String name;
+
     private final Map<Coordinate, Creature> occupyingCreatures;
     private final Map<Creature, Coordinate> creatureCoordinateMap;
 
-    public RealmMapV2Impl(byte[][] movableMask) {
+    public RealmMapV2Impl(byte[][] movableMask, String name) {
+        Objects.requireNonNull(name);
         if (movableMask.length == 0) {
             throw new IllegalArgumentException();
         }
         if (movableMask[0].length == 0) {
             throw new IllegalArgumentException();
         }
+        this.name = name;
         this.movableMask = movableMask;
         this.height = movableMask.length;
         this.width = movableMask[0].length;
@@ -75,6 +79,11 @@ public final class RealmMapV2Impl implements RealmMap {
         if (c != null) {
             occupyingCreatures.remove(c);
         }
+    }
+
+    @Override
+    public String name() {
+        return name;
     }
 
 
@@ -138,7 +147,7 @@ public final class RealmMapV2Impl implements RealmMap {
                     }
                 }
             }
-            return Optional.of(new RealmMapV2Impl(cellMasks));
+            return Optional.of(new RealmMapV2Impl(cellMasks, name));
         } catch (Exception e) {
             log.error("Failed to read map {}.", mapName, e);
         }

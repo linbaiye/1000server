@@ -5,11 +5,11 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.ClientPacket}
+ * Protobuf type {@code org.y1000.network.gen.ClientPacket}
  */
 public final class ClientPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.ClientPacket)
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ClientPacket)
     ClientPacketOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use ClientPacket.newBuilder() to construct.
@@ -28,13 +28,13 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_ClientPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ClientPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_ClientPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ClientPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             org.y1000.network.gen.ClientPacket.class, org.y1000.network.gen.ClientPacket.Builder.class);
   }
@@ -47,6 +47,7 @@ private static final long serialVersionUID = 0L;
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     MOVEEVENTPACKET(1),
     CLICKPACKET(2),
+    LOGINPACKET(3),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -66,6 +67,7 @@ private static final long serialVersionUID = 0L;
       switch (value) {
         case 1: return MOVEEVENTPACKET;
         case 2: return CLICKPACKET;
+        case 3: return LOGINPACKET;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -83,7 +85,7 @@ private static final long serialVersionUID = 0L;
 
   public static final int MOVEEVENTPACKET_FIELD_NUMBER = 1;
   /**
-   * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+   * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
    * @return Whether the moveEventPacket field is set.
    */
   @java.lang.Override
@@ -91,7 +93,7 @@ private static final long serialVersionUID = 0L;
     return typeCase_ == 1;
   }
   /**
-   * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+   * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
    * @return The moveEventPacket.
    */
   @java.lang.Override
@@ -102,7 +104,7 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.MoveEventPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+   * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.MoveEventPacketOrBuilder getMoveEventPacketOrBuilder() {
@@ -114,7 +116,7 @@ private static final long serialVersionUID = 0L;
 
   public static final int CLICKPACKET_FIELD_NUMBER = 2;
   /**
-   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
    * @return Whether the clickPacket field is set.
    */
   @java.lang.Override
@@ -122,7 +124,7 @@ private static final long serialVersionUID = 0L;
     return typeCase_ == 2;
   }
   /**
-   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
    * @return The clickPacket.
    */
   @java.lang.Override
@@ -133,7 +135,7 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClickPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.ClickPacketOrBuilder getClickPacketOrBuilder() {
@@ -141,6 +143,37 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.ClickPacket) type_;
     }
     return org.y1000.network.gen.ClickPacket.getDefaultInstance();
+  }
+
+  public static final int LOGINPACKET_FIELD_NUMBER = 3;
+  /**
+   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+   * @return Whether the loginPacket field is set.
+   */
+  @java.lang.Override
+  public boolean hasLoginPacket() {
+    return typeCase_ == 3;
+  }
+  /**
+   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+   * @return The loginPacket.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.PlayerLoginPacket getLoginPacket() {
+    if (typeCase_ == 3) {
+       return (org.y1000.network.gen.PlayerLoginPacket) type_;
+    }
+    return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.PlayerLoginPacketOrBuilder getLoginPacketOrBuilder() {
+    if (typeCase_ == 3) {
+       return (org.y1000.network.gen.PlayerLoginPacket) type_;
+    }
+    return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -163,6 +196,9 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 2) {
       output.writeMessage(2, (org.y1000.network.gen.ClickPacket) type_);
     }
+    if (typeCase_ == 3) {
+      output.writeMessage(3, (org.y1000.network.gen.PlayerLoginPacket) type_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -179,6 +215,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 2) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(2, (org.y1000.network.gen.ClickPacket) type_);
+    }
+    if (typeCase_ == 3) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(3, (org.y1000.network.gen.PlayerLoginPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -205,6 +245,10 @@ private static final long serialVersionUID = 0L;
         if (!getClickPacket()
             .equals(other.getClickPacket())) return false;
         break;
+      case 3:
+        if (!getLoginPacket()
+            .equals(other.getLoginPacket())) return false;
+        break;
       case 0:
       default:
     }
@@ -227,6 +271,10 @@ private static final long serialVersionUID = 0L;
       case 2:
         hash = (37 * hash) + CLICKPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getClickPacket().hashCode();
+        break;
+      case 3:
+        hash = (37 * hash) + LOGINPACKET_FIELD_NUMBER;
+        hash = (53 * hash) + getLoginPacket().hashCode();
         break;
       case 0:
       default:
@@ -329,26 +377,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.ClientPacket}
+   * Protobuf type {@code org.y1000.network.gen.ClientPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.ClientPacket)
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ClientPacket)
       org.y1000.network.gen.ClientPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_ClientPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ClientPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_ClientPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ClientPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.y1000.network.gen.ClientPacket.class, org.y1000.network.gen.ClientPacket.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.ClientPacket.newBuilder()
+    // Construct using org.y1000.network.gen.ClientPacket.newBuilder()
     private Builder() {
 
     }
@@ -368,6 +416,9 @@ private static final long serialVersionUID = 0L;
       if (clickPacketBuilder_ != null) {
         clickPacketBuilder_.clear();
       }
+      if (loginPacketBuilder_ != null) {
+        loginPacketBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -376,7 +427,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_ClientPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ClientPacket_descriptor;
     }
 
     @java.lang.Override
@@ -416,6 +467,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 2 &&
           clickPacketBuilder_ != null) {
         result.type_ = clickPacketBuilder_.build();
+      }
+      if (typeCase_ == 3 &&
+          loginPacketBuilder_ != null) {
+        result.type_ = loginPacketBuilder_.build();
       }
     }
 
@@ -472,6 +527,10 @@ private static final long serialVersionUID = 0L;
           mergeClickPacket(other.getClickPacket());
           break;
         }
+        case LOGINPACKET: {
+          mergeLoginPacket(other.getLoginPacket());
+          break;
+        }
         case TYPE_NOT_SET: {
           break;
         }
@@ -516,6 +575,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 2;
               break;
             } // case 18
+            case 26: {
+              input.readMessage(
+                  getLoginPacketFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 3;
+              break;
+            } // case 26
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -551,7 +617,7 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.MoveEventPacket, org.y1000.network.gen.MoveEventPacket.Builder, org.y1000.network.gen.MoveEventPacketOrBuilder> moveEventPacketBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
      * @return Whether the moveEventPacket field is set.
      */
     @java.lang.Override
@@ -559,7 +625,7 @@ private static final long serialVersionUID = 0L;
       return typeCase_ == 1;
     }
     /**
-     * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
      * @return The moveEventPacket.
      */
     @java.lang.Override
@@ -577,7 +643,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
      */
     public Builder setMoveEventPacket(org.y1000.network.gen.MoveEventPacket value) {
       if (moveEventPacketBuilder_ == null) {
@@ -593,7 +659,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
      */
     public Builder setMoveEventPacket(
         org.y1000.network.gen.MoveEventPacket.Builder builderForValue) {
@@ -607,7 +673,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
      */
     public Builder mergeMoveEventPacket(org.y1000.network.gen.MoveEventPacket value) {
       if (moveEventPacketBuilder_ == null) {
@@ -630,7 +696,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
      */
     public Builder clearMoveEventPacket() {
       if (moveEventPacketBuilder_ == null) {
@@ -649,13 +715,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
      */
     public org.y1000.network.gen.MoveEventPacket.Builder getMoveEventPacketBuilder() {
       return getMoveEventPacketFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
      */
     @java.lang.Override
     public org.y1000.network.gen.MoveEventPacketOrBuilder getMoveEventPacketOrBuilder() {
@@ -669,10 +735,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.MoveEventPacket, org.y1000.network.gen.MoveEventPacket.Builder, org.y1000.network.gen.MoveEventPacketOrBuilder>
+        org.y1000.network.gen.MoveEventPacket, org.y1000.network.gen.MoveEventPacket.Builder, org.y1000.network.gen.MoveEventPacketOrBuilder> 
         getMoveEventPacketFieldBuilder() {
       if (moveEventPacketBuilder_ == null) {
         if (!(typeCase_ == 1)) {
@@ -693,7 +759,7 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.ClickPacket, org.y1000.network.gen.ClickPacket.Builder, org.y1000.network.gen.ClickPacketOrBuilder> clickPacketBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
      * @return Whether the clickPacket field is set.
      */
     @java.lang.Override
@@ -701,7 +767,7 @@ private static final long serialVersionUID = 0L;
       return typeCase_ == 2;
     }
     /**
-     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
      * @return The clickPacket.
      */
     @java.lang.Override
@@ -719,7 +785,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
      */
     public Builder setClickPacket(org.y1000.network.gen.ClickPacket value) {
       if (clickPacketBuilder_ == null) {
@@ -735,7 +801,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
      */
     public Builder setClickPacket(
         org.y1000.network.gen.ClickPacket.Builder builderForValue) {
@@ -749,7 +815,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
      */
     public Builder mergeClickPacket(org.y1000.network.gen.ClickPacket value) {
       if (clickPacketBuilder_ == null) {
@@ -772,7 +838,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
      */
     public Builder clearClickPacket() {
       if (clickPacketBuilder_ == null) {
@@ -791,13 +857,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
      */
     public org.y1000.network.gen.ClickPacket.Builder getClickPacketBuilder() {
       return getClickPacketFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
      */
     @java.lang.Override
     public org.y1000.network.gen.ClickPacketOrBuilder getClickPacketOrBuilder() {
@@ -811,10 +877,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClickPacket, org.y1000.network.gen.ClickPacket.Builder, org.y1000.network.gen.ClickPacketOrBuilder>
+        org.y1000.network.gen.ClickPacket, org.y1000.network.gen.ClickPacket.Builder, org.y1000.network.gen.ClickPacketOrBuilder> 
         getClickPacketFieldBuilder() {
       if (clickPacketBuilder_ == null) {
         if (!(typeCase_ == 2)) {
@@ -831,6 +897,148 @@ private static final long serialVersionUID = 0L;
       onChanged();
       return clickPacketBuilder_;
     }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.PlayerLoginPacket, org.y1000.network.gen.PlayerLoginPacket.Builder, org.y1000.network.gen.PlayerLoginPacketOrBuilder> loginPacketBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+     * @return Whether the loginPacket field is set.
+     */
+    @java.lang.Override
+    public boolean hasLoginPacket() {
+      return typeCase_ == 3;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+     * @return The loginPacket.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.PlayerLoginPacket getLoginPacket() {
+      if (loginPacketBuilder_ == null) {
+        if (typeCase_ == 3) {
+          return (org.y1000.network.gen.PlayerLoginPacket) type_;
+        }
+        return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 3) {
+          return loginPacketBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+     */
+    public Builder setLoginPacket(org.y1000.network.gen.PlayerLoginPacket value) {
+      if (loginPacketBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        loginPacketBuilder_.setMessage(value);
+      }
+      typeCase_ = 3;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+     */
+    public Builder setLoginPacket(
+        org.y1000.network.gen.PlayerLoginPacket.Builder builderForValue) {
+      if (loginPacketBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        loginPacketBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 3;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+     */
+    public Builder mergeLoginPacket(org.y1000.network.gen.PlayerLoginPacket value) {
+      if (loginPacketBuilder_ == null) {
+        if (typeCase_ == 3 &&
+            type_ != org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.PlayerLoginPacket.newBuilder((org.y1000.network.gen.PlayerLoginPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 3) {
+          loginPacketBuilder_.mergeFrom(value);
+        } else {
+          loginPacketBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 3;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+     */
+    public Builder clearLoginPacket() {
+      if (loginPacketBuilder_ == null) {
+        if (typeCase_ == 3) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 3) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        loginPacketBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+     */
+    public org.y1000.network.gen.PlayerLoginPacket.Builder getLoginPacketBuilder() {
+      return getLoginPacketFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.PlayerLoginPacketOrBuilder getLoginPacketOrBuilder() {
+      if ((typeCase_ == 3) && (loginPacketBuilder_ != null)) {
+        return loginPacketBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 3) {
+          return (org.y1000.network.gen.PlayerLoginPacket) type_;
+        }
+        return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.PlayerLoginPacket, org.y1000.network.gen.PlayerLoginPacket.Builder, org.y1000.network.gen.PlayerLoginPacketOrBuilder> 
+        getLoginPacketFieldBuilder() {
+      if (loginPacketBuilder_ == null) {
+        if (!(typeCase_ == 3)) {
+          type_ = org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
+        }
+        loginPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.PlayerLoginPacket, org.y1000.network.gen.PlayerLoginPacket.Builder, org.y1000.network.gen.PlayerLoginPacketOrBuilder>(
+                (org.y1000.network.gen.PlayerLoginPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 3;
+      onChanged();
+      return loginPacketBuilder_;
+    }
     @java.lang.Override
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -844,10 +1052,10 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.ClientPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClientPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.ClientPacket)
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ClientPacket)
   private static final org.y1000.network.gen.ClientPacket DEFAULT_INSTANCE;
   static {
     DEFAULT_INSTANCE = new org.y1000.network.gen.ClientPacket();

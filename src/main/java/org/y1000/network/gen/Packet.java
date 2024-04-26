@@ -5,11 +5,11 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.Packet}
+ * Protobuf type {@code org.y1000.network.gen.Packet}
  */
 public final class Packet extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.Packet)
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.Packet)
     PacketOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use Packet.newBuilder() to construct.
@@ -28,13 +28,13 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_Packet_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_Packet_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_Packet_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_Packet_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             org.y1000.network.gen.Packet.class, org.y1000.network.gen.Packet.Builder.class);
   }
@@ -93,7 +93,7 @@ private static final long serialVersionUID = 0L;
 
   public static final int POSITIONPACKET_FIELD_NUMBER = 1;
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
    * @return Whether the positionPacket field is set.
    */
   @java.lang.Override
@@ -101,7 +101,7 @@ private static final long serialVersionUID = 0L;
     return typedPacketCase_ == 1;
   }
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
    * @return The positionPacket.
    */
   @java.lang.Override
@@ -112,7 +112,7 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.PositionPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.PositionPacketOrBuilder getPositionPacketOrBuilder() {
@@ -124,7 +124,7 @@ private static final long serialVersionUID = 0L;
 
   public static final int CREATUREINTERPOLATION_FIELD_NUMBER = 2;
   /**
-   * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
    * @return Whether the creatureInterpolation field is set.
    */
   @java.lang.Override
@@ -132,7 +132,7 @@ private static final long serialVersionUID = 0L;
     return typedPacketCase_ == 2;
   }
   /**
-   * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
    * @return The creatureInterpolation.
    */
   @java.lang.Override
@@ -143,7 +143,7 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.CreatureInterpolationPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.CreatureInterpolationPacketOrBuilder getCreatureInterpolationOrBuilder() {
@@ -155,7 +155,7 @@ private static final long serialVersionUID = 0L;
 
   public static final int LOGINPACKET_FIELD_NUMBER = 4;
   /**
-   * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
    * @return Whether the loginPacket field is set.
    */
   @java.lang.Override
@@ -163,7 +163,7 @@ private static final long serialVersionUID = 0L;
     return typedPacketCase_ == 4;
   }
   /**
-   * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
    * @return The loginPacket.
    */
   @java.lang.Override
@@ -174,7 +174,7 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.LoginPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.LoginPacketOrBuilder getLoginPacketOrBuilder() {
@@ -186,7 +186,7 @@ private static final long serialVersionUID = 0L;
 
   public static final int INTERPOLATIONS_FIELD_NUMBER = 5;
   /**
-   * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+   * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
    * @return Whether the interpolations field is set.
    */
   @java.lang.Override
@@ -194,7 +194,7 @@ private static final long serialVersionUID = 0L;
     return typedPacketCase_ == 5;
   }
   /**
-   * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+   * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
    * @return The interpolations.
    */
   @java.lang.Override
@@ -205,7 +205,7 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.InterpolationsPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+   * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.InterpolationsPacketOrBuilder getInterpolationsOrBuilder() {
@@ -217,7 +217,7 @@ private static final long serialVersionUID = 0L;
 
   public static final int RESPONSEPACKET_FIELD_NUMBER = 6;
   /**
-   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
    * @return Whether the responsePacket field is set.
    */
   @java.lang.Override
@@ -225,7 +225,7 @@ private static final long serialVersionUID = 0L;
     return typedPacketCase_ == 6;
   }
   /**
-   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
    * @return The responsePacket.
    */
   @java.lang.Override
@@ -236,7 +236,7 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.InputResponsePacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.InputResponsePacketOrBuilder getResponsePacketOrBuilder() {
@@ -248,7 +248,7 @@ private static final long serialVersionUID = 0L;
 
   public static final int PLAYERINTERPOLATION_FIELD_NUMBER = 7;
   /**
-   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
    * @return Whether the playerInterpolation field is set.
    */
   @java.lang.Override
@@ -256,7 +256,7 @@ private static final long serialVersionUID = 0L;
     return typedPacketCase_ == 7;
   }
   /**
-   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
    * @return The playerInterpolation.
    */
   @java.lang.Override
@@ -267,7 +267,7 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.PlayerInterpolationPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder() {
@@ -279,7 +279,7 @@ private static final long serialVersionUID = 0L;
 
   public static final int REMOVEENTITY_FIELD_NUMBER = 8;
   /**
-   * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+   * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
    * @return Whether the removeEntity field is set.
    */
   @java.lang.Override
@@ -287,7 +287,7 @@ private static final long serialVersionUID = 0L;
     return typedPacketCase_ == 8;
   }
   /**
-   * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+   * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
    * @return The removeEntity.
    */
   @java.lang.Override
@@ -298,7 +298,7 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.RemoveEntityPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+   * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.RemoveEntityPacketOrBuilder getRemoveEntityOrBuilder() {
@@ -569,26 +569,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.Packet}
+   * Protobuf type {@code org.y1000.network.gen.Packet}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.Packet)
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.Packet)
       org.y1000.network.gen.PacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_Packet_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_Packet_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_Packet_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_Packet_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.y1000.network.gen.Packet.class, org.y1000.network.gen.Packet.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.Packet.newBuilder()
+    // Construct using org.y1000.network.gen.Packet.newBuilder()
     private Builder() {
 
     }
@@ -631,7 +631,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_Packet_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_Packet_descriptor;
     }
 
     @java.lang.Override
@@ -881,7 +881,7 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.PositionPacket, org.y1000.network.gen.PositionPacket.Builder, org.y1000.network.gen.PositionPacketOrBuilder> positionPacketBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
      * @return Whether the positionPacket field is set.
      */
     @java.lang.Override
@@ -889,7 +889,7 @@ private static final long serialVersionUID = 0L;
       return typedPacketCase_ == 1;
     }
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
      * @return The positionPacket.
      */
     @java.lang.Override
@@ -907,7 +907,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
      */
     public Builder setPositionPacket(org.y1000.network.gen.PositionPacket value) {
       if (positionPacketBuilder_ == null) {
@@ -923,7 +923,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
      */
     public Builder setPositionPacket(
         org.y1000.network.gen.PositionPacket.Builder builderForValue) {
@@ -937,7 +937,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
      */
     public Builder mergePositionPacket(org.y1000.network.gen.PositionPacket value) {
       if (positionPacketBuilder_ == null) {
@@ -960,7 +960,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
      */
     public Builder clearPositionPacket() {
       if (positionPacketBuilder_ == null) {
@@ -979,13 +979,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
      */
     public org.y1000.network.gen.PositionPacket.Builder getPositionPacketBuilder() {
       return getPositionPacketFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
      */
     @java.lang.Override
     public org.y1000.network.gen.PositionPacketOrBuilder getPositionPacketOrBuilder() {
@@ -999,10 +999,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PositionPacket, org.y1000.network.gen.PositionPacket.Builder, org.y1000.network.gen.PositionPacketOrBuilder>
+        org.y1000.network.gen.PositionPacket, org.y1000.network.gen.PositionPacket.Builder, org.y1000.network.gen.PositionPacketOrBuilder> 
         getPositionPacketFieldBuilder() {
       if (positionPacketBuilder_ == null) {
         if (!(typedPacketCase_ == 1)) {
@@ -1023,7 +1023,7 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.CreatureInterpolationPacket, org.y1000.network.gen.CreatureInterpolationPacket.Builder, org.y1000.network.gen.CreatureInterpolationPacketOrBuilder> creatureInterpolationBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
      * @return Whether the creatureInterpolation field is set.
      */
     @java.lang.Override
@@ -1031,7 +1031,7 @@ private static final long serialVersionUID = 0L;
       return typedPacketCase_ == 2;
     }
     /**
-     * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
      * @return The creatureInterpolation.
      */
     @java.lang.Override
@@ -1049,7 +1049,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
      */
     public Builder setCreatureInterpolation(org.y1000.network.gen.CreatureInterpolationPacket value) {
       if (creatureInterpolationBuilder_ == null) {
@@ -1065,7 +1065,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
      */
     public Builder setCreatureInterpolation(
         org.y1000.network.gen.CreatureInterpolationPacket.Builder builderForValue) {
@@ -1079,7 +1079,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
      */
     public Builder mergeCreatureInterpolation(org.y1000.network.gen.CreatureInterpolationPacket value) {
       if (creatureInterpolationBuilder_ == null) {
@@ -1102,7 +1102,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
      */
     public Builder clearCreatureInterpolation() {
       if (creatureInterpolationBuilder_ == null) {
@@ -1121,13 +1121,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
      */
     public org.y1000.network.gen.CreatureInterpolationPacket.Builder getCreatureInterpolationBuilder() {
       return getCreatureInterpolationFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
      */
     @java.lang.Override
     public org.y1000.network.gen.CreatureInterpolationPacketOrBuilder getCreatureInterpolationOrBuilder() {
@@ -1141,10 +1141,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.CreatureInterpolationPacket, org.y1000.network.gen.CreatureInterpolationPacket.Builder, org.y1000.network.gen.CreatureInterpolationPacketOrBuilder>
+        org.y1000.network.gen.CreatureInterpolationPacket, org.y1000.network.gen.CreatureInterpolationPacket.Builder, org.y1000.network.gen.CreatureInterpolationPacketOrBuilder> 
         getCreatureInterpolationFieldBuilder() {
       if (creatureInterpolationBuilder_ == null) {
         if (!(typedPacketCase_ == 2)) {
@@ -1165,7 +1165,7 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.LoginPacket, org.y1000.network.gen.LoginPacket.Builder, org.y1000.network.gen.LoginPacketOrBuilder> loginPacketBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
      * @return Whether the loginPacket field is set.
      */
     @java.lang.Override
@@ -1173,7 +1173,7 @@ private static final long serialVersionUID = 0L;
       return typedPacketCase_ == 4;
     }
     /**
-     * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
      * @return The loginPacket.
      */
     @java.lang.Override
@@ -1191,7 +1191,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
      */
     public Builder setLoginPacket(org.y1000.network.gen.LoginPacket value) {
       if (loginPacketBuilder_ == null) {
@@ -1207,7 +1207,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
      */
     public Builder setLoginPacket(
         org.y1000.network.gen.LoginPacket.Builder builderForValue) {
@@ -1221,7 +1221,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
      */
     public Builder mergeLoginPacket(org.y1000.network.gen.LoginPacket value) {
       if (loginPacketBuilder_ == null) {
@@ -1244,7 +1244,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
      */
     public Builder clearLoginPacket() {
       if (loginPacketBuilder_ == null) {
@@ -1263,13 +1263,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
      */
     public org.y1000.network.gen.LoginPacket.Builder getLoginPacketBuilder() {
       return getLoginPacketFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
      */
     @java.lang.Override
     public org.y1000.network.gen.LoginPacketOrBuilder getLoginPacketOrBuilder() {
@@ -1283,10 +1283,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.LoginPacket, org.y1000.network.gen.LoginPacket.Builder, org.y1000.network.gen.LoginPacketOrBuilder>
+        org.y1000.network.gen.LoginPacket, org.y1000.network.gen.LoginPacket.Builder, org.y1000.network.gen.LoginPacketOrBuilder> 
         getLoginPacketFieldBuilder() {
       if (loginPacketBuilder_ == null) {
         if (!(typedPacketCase_ == 4)) {
@@ -1307,7 +1307,7 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.InterpolationsPacket, org.y1000.network.gen.InterpolationsPacket.Builder, org.y1000.network.gen.InterpolationsPacketOrBuilder> interpolationsBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+     * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
      * @return Whether the interpolations field is set.
      */
     @java.lang.Override
@@ -1315,7 +1315,7 @@ private static final long serialVersionUID = 0L;
       return typedPacketCase_ == 5;
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+     * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
      * @return The interpolations.
      */
     @java.lang.Override
@@ -1333,7 +1333,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+     * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
      */
     public Builder setInterpolations(org.y1000.network.gen.InterpolationsPacket value) {
       if (interpolationsBuilder_ == null) {
@@ -1349,7 +1349,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+     * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
      */
     public Builder setInterpolations(
         org.y1000.network.gen.InterpolationsPacket.Builder builderForValue) {
@@ -1363,7 +1363,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+     * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
      */
     public Builder mergeInterpolations(org.y1000.network.gen.InterpolationsPacket value) {
       if (interpolationsBuilder_ == null) {
@@ -1386,7 +1386,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+     * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
      */
     public Builder clearInterpolations() {
       if (interpolationsBuilder_ == null) {
@@ -1405,13 +1405,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+     * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
      */
     public org.y1000.network.gen.InterpolationsPacket.Builder getInterpolationsBuilder() {
       return getInterpolationsFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+     * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
      */
     @java.lang.Override
     public org.y1000.network.gen.InterpolationsPacketOrBuilder getInterpolationsOrBuilder() {
@@ -1425,10 +1425,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+     * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.InterpolationsPacket, org.y1000.network.gen.InterpolationsPacket.Builder, org.y1000.network.gen.InterpolationsPacketOrBuilder>
+        org.y1000.network.gen.InterpolationsPacket, org.y1000.network.gen.InterpolationsPacket.Builder, org.y1000.network.gen.InterpolationsPacketOrBuilder> 
         getInterpolationsFieldBuilder() {
       if (interpolationsBuilder_ == null) {
         if (!(typedPacketCase_ == 5)) {
@@ -1449,7 +1449,7 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.InputResponsePacket, org.y1000.network.gen.InputResponsePacket.Builder, org.y1000.network.gen.InputResponsePacketOrBuilder> responsePacketBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
      * @return Whether the responsePacket field is set.
      */
     @java.lang.Override
@@ -1457,7 +1457,7 @@ private static final long serialVersionUID = 0L;
       return typedPacketCase_ == 6;
     }
     /**
-     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
      * @return The responsePacket.
      */
     @java.lang.Override
@@ -1475,7 +1475,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
      */
     public Builder setResponsePacket(org.y1000.network.gen.InputResponsePacket value) {
       if (responsePacketBuilder_ == null) {
@@ -1491,7 +1491,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
      */
     public Builder setResponsePacket(
         org.y1000.network.gen.InputResponsePacket.Builder builderForValue) {
@@ -1505,7 +1505,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
      */
     public Builder mergeResponsePacket(org.y1000.network.gen.InputResponsePacket value) {
       if (responsePacketBuilder_ == null) {
@@ -1528,7 +1528,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
      */
     public Builder clearResponsePacket() {
       if (responsePacketBuilder_ == null) {
@@ -1547,13 +1547,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
      */
     public org.y1000.network.gen.InputResponsePacket.Builder getResponsePacketBuilder() {
       return getResponsePacketFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
      */
     @java.lang.Override
     public org.y1000.network.gen.InputResponsePacketOrBuilder getResponsePacketOrBuilder() {
@@ -1567,10 +1567,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+     * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.InputResponsePacket, org.y1000.network.gen.InputResponsePacket.Builder, org.y1000.network.gen.InputResponsePacketOrBuilder>
+        org.y1000.network.gen.InputResponsePacket, org.y1000.network.gen.InputResponsePacket.Builder, org.y1000.network.gen.InputResponsePacketOrBuilder> 
         getResponsePacketFieldBuilder() {
       if (responsePacketBuilder_ == null) {
         if (!(typedPacketCase_ == 6)) {
@@ -1591,7 +1591,7 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.PlayerInterpolationPacket, org.y1000.network.gen.PlayerInterpolationPacket.Builder, org.y1000.network.gen.PlayerInterpolationPacketOrBuilder> playerInterpolationBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
      * @return Whether the playerInterpolation field is set.
      */
     @java.lang.Override
@@ -1599,7 +1599,7 @@ private static final long serialVersionUID = 0L;
       return typedPacketCase_ == 7;
     }
     /**
-     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
      * @return The playerInterpolation.
      */
     @java.lang.Override
@@ -1617,7 +1617,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
      */
     public Builder setPlayerInterpolation(org.y1000.network.gen.PlayerInterpolationPacket value) {
       if (playerInterpolationBuilder_ == null) {
@@ -1633,7 +1633,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
      */
     public Builder setPlayerInterpolation(
         org.y1000.network.gen.PlayerInterpolationPacket.Builder builderForValue) {
@@ -1647,7 +1647,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
      */
     public Builder mergePlayerInterpolation(org.y1000.network.gen.PlayerInterpolationPacket value) {
       if (playerInterpolationBuilder_ == null) {
@@ -1670,7 +1670,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
      */
     public Builder clearPlayerInterpolation() {
       if (playerInterpolationBuilder_ == null) {
@@ -1689,13 +1689,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
      */
     public org.y1000.network.gen.PlayerInterpolationPacket.Builder getPlayerInterpolationBuilder() {
       return getPlayerInterpolationFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
      */
     @java.lang.Override
     public org.y1000.network.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder() {
@@ -1709,10 +1709,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PlayerInterpolationPacket, org.y1000.network.gen.PlayerInterpolationPacket.Builder, org.y1000.network.gen.PlayerInterpolationPacketOrBuilder>
+        org.y1000.network.gen.PlayerInterpolationPacket, org.y1000.network.gen.PlayerInterpolationPacket.Builder, org.y1000.network.gen.PlayerInterpolationPacketOrBuilder> 
         getPlayerInterpolationFieldBuilder() {
       if (playerInterpolationBuilder_ == null) {
         if (!(typedPacketCase_ == 7)) {
@@ -1733,7 +1733,7 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.RemoveEntityPacket, org.y1000.network.gen.RemoveEntityPacket.Builder, org.y1000.network.gen.RemoveEntityPacketOrBuilder> removeEntityBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+     * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
      * @return Whether the removeEntity field is set.
      */
     @java.lang.Override
@@ -1741,7 +1741,7 @@ private static final long serialVersionUID = 0L;
       return typedPacketCase_ == 8;
     }
     /**
-     * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+     * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
      * @return The removeEntity.
      */
     @java.lang.Override
@@ -1759,7 +1759,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+     * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
      */
     public Builder setRemoveEntity(org.y1000.network.gen.RemoveEntityPacket value) {
       if (removeEntityBuilder_ == null) {
@@ -1775,7 +1775,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+     * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
      */
     public Builder setRemoveEntity(
         org.y1000.network.gen.RemoveEntityPacket.Builder builderForValue) {
@@ -1789,7 +1789,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+     * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
      */
     public Builder mergeRemoveEntity(org.y1000.network.gen.RemoveEntityPacket value) {
       if (removeEntityBuilder_ == null) {
@@ -1812,7 +1812,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+     * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
      */
     public Builder clearRemoveEntity() {
       if (removeEntityBuilder_ == null) {
@@ -1831,13 +1831,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+     * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
      */
     public org.y1000.network.gen.RemoveEntityPacket.Builder getRemoveEntityBuilder() {
       return getRemoveEntityFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+     * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
      */
     @java.lang.Override
     public org.y1000.network.gen.RemoveEntityPacketOrBuilder getRemoveEntityOrBuilder() {
@@ -1851,10 +1851,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+     * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.RemoveEntityPacket, org.y1000.network.gen.RemoveEntityPacket.Builder, org.y1000.network.gen.RemoveEntityPacketOrBuilder>
+        org.y1000.network.gen.RemoveEntityPacket, org.y1000.network.gen.RemoveEntityPacket.Builder, org.y1000.network.gen.RemoveEntityPacketOrBuilder> 
         getRemoveEntityFieldBuilder() {
       if (removeEntityBuilder_ == null) {
         if (!(typedPacketCase_ == 8)) {
@@ -1884,10 +1884,10 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.Packet)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.Packet)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.Packet)
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.Packet)
   private static final org.y1000.network.gen.Packet DEFAULT_INSTANCE;
   static {
     DEFAULT_INSTANCE = new org.y1000.network.gen.Packet();

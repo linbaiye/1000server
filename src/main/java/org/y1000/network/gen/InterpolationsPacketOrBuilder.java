@@ -5,29 +5,29 @@
 package org.y1000.network.gen;
 
 public interface InterpolationsPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.InterpolationsPacket)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.InterpolationsPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+   * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
    */
-  java.util.List<org.y1000.network.gen.InterpolationPacket>
+  java.util.List<org.y1000.network.gen.InterpolationPacket> 
       getInterpolationsList();
   /**
-   * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+   * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
    */
   org.y1000.network.gen.InterpolationPacket getInterpolations(int index);
   /**
-   * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+   * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
    */
   int getInterpolationsCount();
   /**
-   * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+   * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
    */
-  java.util.List<? extends org.y1000.network.gen.InterpolationPacketOrBuilder>
+  java.util.List<? extends org.y1000.network.gen.InterpolationPacketOrBuilder> 
       getInterpolationsOrBuilderList();
   /**
-   * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+   * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
    */
   org.y1000.network.gen.InterpolationPacketOrBuilder getInterpolationsOrBuilder(
       int index);

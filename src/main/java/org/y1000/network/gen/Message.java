@@ -16,70 +16,75 @@ public final class Message {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_PositionPacket_descriptor;
+    internal_static_org_y1000_network_gen_PositionPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_PositionPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_PositionPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_InputResponsePacket_descriptor;
+    internal_static_org_y1000_network_gen_InputResponsePacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_InputResponsePacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_InputResponsePacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_InputPacket_descriptor;
+    internal_static_org_y1000_network_gen_InputPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_InputPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_InputPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_ClickPacket_descriptor;
+    internal_static_org_y1000_network_gen_ClickPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_ClickPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_ClickPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_MoveEventPacket_descriptor;
+    internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_MoveEventPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_PlayerLoginPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_ClientPacket_descriptor;
+    internal_static_org_y1000_network_gen_MoveEventPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_ClientPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_MoveEventPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_InterpolationPacket_descriptor;
+    internal_static_org_y1000_network_gen_ClientPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_InterpolationPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_ClientPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_InterpolationsPacket_descriptor;
+    internal_static_org_y1000_network_gen_InterpolationPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_InterpolationsPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_InterpolationPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_LoginPacket_descriptor;
+    internal_static_org_y1000_network_gen_InterpolationsPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_LoginPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_InterpolationsPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_Packet_descriptor;
+    internal_static_org_y1000_network_gen_LoginPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_Packet_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_LoginPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_CreatureInterpolationPacket_descriptor;
+    internal_static_org_y1000_network_gen_Packet_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_CreatureInterpolationPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_Packet_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_descriptor;
+    internal_static_org_y1000_network_gen_CreatureInterpolationPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_CreatureInterpolationPacket_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_org_y1000_connection_gen_RemoveEntityPacket_descriptor;
+    internal_static_org_y1000_network_gen_PlayerInterpolationPacket_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_org_y1000_connection_gen_RemoveEntityPacket_fieldAccessorTable;
+      internal_static_org_y1000_network_gen_PlayerInterpolationPacket_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_org_y1000_network_gen_RemoveEntityPacket_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -89,132 +94,140 @@ public final class Message {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\rmessage.proto\022\030org.y1000.connection.ge" +
-      "n\"q\n\016PositionPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(" +
-      "\005\022\021\n\tdirection\030\003 \001(\005\022\n\n\002id\030\004 \001(\003\022\014\n\004type" +
-      "\030\005 \001(\005\022\022\n\005state\030\006 \001(\005H\000\210\001\001B\010\n\006_state\"i\n\023" +
-      "InputResponsePacket\022\020\n\010sequence\030\001 \001(\003\022@\n" +
-      "\016positionPacket\030\002 \001(\0132(.org.y1000.connec" +
-      "tion.gen.PositionPacket\"G\n\013InputPacket\022\014" +
-      "\n\004type\030\001 \001(\005\022\020\n\010sequence\030\002 \001(\003\022\030\n\020clicke" +
-      "dDirection\030\003 \001(\005\"\031\n\013ClickPacket\022\n\n\002id\030\001 " +
-      "\001(\003\"q\n\017MoveEventPacket\0224\n\005input\030\001 \001(\0132%." +
-      "org.y1000.connection.gen.InputPacket\022\023\n\013" +
-      "happenedAtX\030\002 \001(\005\022\023\n\013happenedAtY\030\003 \001(\005\"\232" +
-      "\001\n\014ClientPacket\022D\n\017moveEventPacket\030\001 \001(\013" +
-      "2).org.y1000.connection.gen.MoveEventPac" +
-      "ketH\000\022<\n\013clickPacket\030\002 \001(\0132%.org.y1000.c" +
-      "onnection.gen.ClickPacketH\000B\006\n\004Type\"d\n\023I" +
-      "nterpolationPacket\022\r\n\005state\030\002 \001(\005\022\025\n\rela" +
-      "psedMillis\030\005 \001(\003\022\021\n\tdirection\030\007 \001(\005\022\t\n\001x" +
-      "\030\010 \001(\005\022\t\n\001y\030\t \001(\005\"]\n\024InterpolationsPacke" +
-      "t\022E\n\016interpolations\030\001 \003(\0132-.org.y1000.co" +
-      "nnection.gen.InterpolationPacket\"/\n\013Logi" +
-      "nPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002id\030\003 \001(" +
-      "\003\"\236\004\n\006Packet\022B\n\016positionPacket\030\001 \001(\0132(.o" +
-      "rg.y1000.connection.gen.PositionPacketH\000" +
-      "\022V\n\025creatureInterpolation\030\002 \001(\01325.org.y1" +
-      "000.connection.gen.CreatureInterpolation" +
-      "PacketH\000\022<\n\013loginPacket\030\004 \001(\0132%.org.y100" +
-      "0.connection.gen.LoginPacketH\000\022H\n\016interp" +
-      "olations\030\005 \001(\0132..org.y1000.connection.ge" +
-      "n.InterpolationsPacketH\000\022G\n\016responsePack" +
-      "et\030\006 \001(\0132-.org.y1000.connection.gen.Inpu" +
-      "tResponsePacketH\000\022R\n\023playerInterpolation" +
-      "\030\007 \001(\01323.org.y1000.connection.gen.Player" +
-      "InterpolationPacketH\000\022D\n\014removeEntity\030\010 " +
-      "\001(\0132,.org.y1000.connection.gen.RemoveEnt" +
-      "ityPacketH\000B\r\n\013TypedPacket\"}\n\033CreatureIn" +
-      "terpolationPacket\022D\n\rinterpolation\030\001 \001(\013" +
-      "2-.org.y1000.connection.gen.Interpolatio" +
-      "nPacket\022\n\n\002id\030\002 \001(\003\022\014\n\004name\030\003 \001(\t\"{\n\031Pla" +
-      "yerInterpolationPacket\022D\n\rinterpolation\030" +
-      "\001 \001(\0132-.org.y1000.connection.gen.Interpo" +
-      "lationPacket\022\n\n\002id\030\002 \001(\003\022\014\n\004male\030\003 \001(\010\" " +
-      "\n\022RemoveEntityPacket\022\n\n\002id\030\001 \001(\003B\034\n\030org." +
-      "y1000.connection.genP\001b\006proto3"
+      "\n\rmessage.proto\022\025org.y1000.network.gen\"q" +
+      "\n\016PositionPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\021" +
+      "\n\tdirection\030\003 \001(\005\022\n\n\002id\030\004 \001(\003\022\014\n\004type\030\005 " +
+      "\001(\005\022\022\n\005state\030\006 \001(\005H\000\210\001\001B\010\n\006_state\"f\n\023Inp" +
+      "utResponsePacket\022\020\n\010sequence\030\001 \001(\003\022=\n\016po" +
+      "sitionPacket\030\002 \001(\0132%.org.y1000.network.g" +
+      "en.PositionPacket\"G\n\013InputPacket\022\014\n\004type" +
+      "\030\001 \001(\005\022\020\n\010sequence\030\002 \001(\003\022\030\n\020clickedDirec" +
+      "tion\030\003 \001(\005\"\031\n\013ClickPacket\022\n\n\002id\030\001 \001(\003\"\"\n" +
+      "\021PlayerLoginPacket\022\r\n\005token\030\001 \001(\t\"n\n\017Mov" +
+      "eEventPacket\0221\n\005input\030\001 \001(\0132\".org.y1000." +
+      "network.gen.InputPacket\022\023\n\013happenedAtX\030\002" +
+      " \001(\005\022\023\n\013happenedAtY\030\003 \001(\005\"\325\001\n\014ClientPack" +
+      "et\022A\n\017moveEventPacket\030\001 \001(\0132&.org.y1000." +
+      "network.gen.MoveEventPacketH\000\0229\n\013clickPa" +
+      "cket\030\002 \001(\0132\".org.y1000.network.gen.Click" +
+      "PacketH\000\022?\n\013loginPacket\030\003 \001(\0132(.org.y100" +
+      "0.network.gen.PlayerLoginPacketH\000B\006\n\004Typ" +
+      "e\"d\n\023InterpolationPacket\022\r\n\005state\030\002 \001(\005\022" +
+      "\025\n\relapsedMillis\030\005 \001(\003\022\021\n\tdirection\030\007 \001(" +
+      "\005\022\t\n\001x\030\010 \001(\005\022\t\n\001y\030\t \001(\005\"Z\n\024Interpolation" +
+      "sPacket\022B\n\016interpolations\030\001 \003(\0132*.org.y1" +
+      "000.network.gen.InterpolationPacket\"/\n\013L" +
+      "oginPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002id\030\003" +
+      " \001(\003\"\211\004\n\006Packet\022?\n\016positionPacket\030\001 \001(\0132" +
+      "%.org.y1000.network.gen.PositionPacketH\000" +
+      "\022S\n\025creatureInterpolation\030\002 \001(\01322.org.y1" +
+      "000.network.gen.CreatureInterpolationPac" +
+      "ketH\000\0229\n\013loginPacket\030\004 \001(\0132\".org.y1000.n" +
+      "etwork.gen.LoginPacketH\000\022E\n\016interpolatio" +
+      "ns\030\005 \001(\0132+.org.y1000.network.gen.Interpo" +
+      "lationsPacketH\000\022D\n\016responsePacket\030\006 \001(\0132" +
+      "*.org.y1000.network.gen.InputResponsePac" +
+      "ketH\000\022O\n\023playerInterpolation\030\007 \001(\01320.org" +
+      ".y1000.network.gen.PlayerInterpolationPa" +
+      "cketH\000\022A\n\014removeEntity\030\010 \001(\0132).org.y1000" +
+      ".network.gen.RemoveEntityPacketH\000B\r\n\013Typ" +
+      "edPacket\"z\n\033CreatureInterpolationPacket\022" +
+      "A\n\rinterpolation\030\001 \001(\0132*.org.y1000.netwo" +
+      "rk.gen.InterpolationPacket\022\n\n\002id\030\002 \001(\003\022\014" +
+      "\n\004name\030\003 \001(\t\"x\n\031PlayerInterpolationPacke" +
+      "t\022A\n\rinterpolation\030\001 \001(\0132*.org.y1000.net" +
+      "work.gen.InterpolationPacket\022\n\n\002id\030\002 \001(\003" +
+      "\022\014\n\004male\030\003 \001(\010\" \n\022RemoveEntityPacket\022\n\n\002" +
+      "id\030\001 \001(\003B\031\n\025org.y1000.network.genP\001b\006pro" +
+      "to3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_org_y1000_connection_gen_PositionPacket_descriptor =
+    internal_static_org_y1000_network_gen_PositionPacket_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_org_y1000_connection_gen_PositionPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_PositionPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_PositionPacket_descriptor,
+        internal_static_org_y1000_network_gen_PositionPacket_descriptor,
         new java.lang.String[] { "X", "Y", "Direction", "Id", "Type", "State", });
-    internal_static_org_y1000_connection_gen_InputResponsePacket_descriptor =
+    internal_static_org_y1000_network_gen_InputResponsePacket_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_org_y1000_connection_gen_InputResponsePacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_InputResponsePacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_InputResponsePacket_descriptor,
+        internal_static_org_y1000_network_gen_InputResponsePacket_descriptor,
         new java.lang.String[] { "Sequence", "PositionPacket", });
-    internal_static_org_y1000_connection_gen_InputPacket_descriptor =
+    internal_static_org_y1000_network_gen_InputPacket_descriptor =
       getDescriptor().getMessageTypes().get(2);
-    internal_static_org_y1000_connection_gen_InputPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_InputPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_InputPacket_descriptor,
+        internal_static_org_y1000_network_gen_InputPacket_descriptor,
         new java.lang.String[] { "Type", "Sequence", "ClickedDirection", });
-    internal_static_org_y1000_connection_gen_ClickPacket_descriptor =
+    internal_static_org_y1000_network_gen_ClickPacket_descriptor =
       getDescriptor().getMessageTypes().get(3);
-    internal_static_org_y1000_connection_gen_ClickPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_ClickPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_ClickPacket_descriptor,
+        internal_static_org_y1000_network_gen_ClickPacket_descriptor,
         new java.lang.String[] { "Id", });
-    internal_static_org_y1000_connection_gen_MoveEventPacket_descriptor =
+    internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor =
       getDescriptor().getMessageTypes().get(4);
-    internal_static_org_y1000_connection_gen_MoveEventPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_PlayerLoginPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_MoveEventPacket_descriptor,
-        new java.lang.String[] { "Input", "HappenedAtX", "HappenedAtY", });
-    internal_static_org_y1000_connection_gen_ClientPacket_descriptor =
+        internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor,
+        new java.lang.String[] { "Token", });
+    internal_static_org_y1000_network_gen_MoveEventPacket_descriptor =
       getDescriptor().getMessageTypes().get(5);
-    internal_static_org_y1000_connection_gen_ClientPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_MoveEventPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_ClientPacket_descriptor,
-        new java.lang.String[] { "MoveEventPacket", "ClickPacket", "Type", });
-    internal_static_org_y1000_connection_gen_InterpolationPacket_descriptor =
+        internal_static_org_y1000_network_gen_MoveEventPacket_descriptor,
+        new java.lang.String[] { "Input", "HappenedAtX", "HappenedAtY", });
+    internal_static_org_y1000_network_gen_ClientPacket_descriptor =
       getDescriptor().getMessageTypes().get(6);
-    internal_static_org_y1000_connection_gen_InterpolationPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_ClientPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_InterpolationPacket_descriptor,
-        new java.lang.String[] { "State", "ElapsedMillis", "Direction", "X", "Y", });
-    internal_static_org_y1000_connection_gen_InterpolationsPacket_descriptor =
+        internal_static_org_y1000_network_gen_ClientPacket_descriptor,
+        new java.lang.String[] { "MoveEventPacket", "ClickPacket", "LoginPacket", "Type", });
+    internal_static_org_y1000_network_gen_InterpolationPacket_descriptor =
       getDescriptor().getMessageTypes().get(7);
-    internal_static_org_y1000_connection_gen_InterpolationsPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_InterpolationPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_InterpolationsPacket_descriptor,
-        new java.lang.String[] { "Interpolations", });
-    internal_static_org_y1000_connection_gen_LoginPacket_descriptor =
+        internal_static_org_y1000_network_gen_InterpolationPacket_descriptor,
+        new java.lang.String[] { "State", "ElapsedMillis", "Direction", "X", "Y", });
+    internal_static_org_y1000_network_gen_InterpolationsPacket_descriptor =
       getDescriptor().getMessageTypes().get(8);
-    internal_static_org_y1000_connection_gen_LoginPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_InterpolationsPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_LoginPacket_descriptor,
-        new java.lang.String[] { "X", "Y", "Id", });
-    internal_static_org_y1000_connection_gen_Packet_descriptor =
+        internal_static_org_y1000_network_gen_InterpolationsPacket_descriptor,
+        new java.lang.String[] { "Interpolations", });
+    internal_static_org_y1000_network_gen_LoginPacket_descriptor =
       getDescriptor().getMessageTypes().get(9);
-    internal_static_org_y1000_connection_gen_Packet_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_LoginPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_Packet_descriptor,
-        new java.lang.String[] { "PositionPacket", "CreatureInterpolation", "LoginPacket", "Interpolations", "ResponsePacket", "PlayerInterpolation", "RemoveEntity", "TypedPacket", });
-    internal_static_org_y1000_connection_gen_CreatureInterpolationPacket_descriptor =
+        internal_static_org_y1000_network_gen_LoginPacket_descriptor,
+        new java.lang.String[] { "X", "Y", "Id", });
+    internal_static_org_y1000_network_gen_Packet_descriptor =
       getDescriptor().getMessageTypes().get(10);
-    internal_static_org_y1000_connection_gen_CreatureInterpolationPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_Packet_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_CreatureInterpolationPacket_descriptor,
-        new java.lang.String[] { "Interpolation", "Id", "Name", });
-    internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_descriptor =
+        internal_static_org_y1000_network_gen_Packet_descriptor,
+        new java.lang.String[] { "PositionPacket", "CreatureInterpolation", "LoginPacket", "Interpolations", "ResponsePacket", "PlayerInterpolation", "RemoveEntity", "TypedPacket", });
+    internal_static_org_y1000_network_gen_CreatureInterpolationPacket_descriptor =
       getDescriptor().getMessageTypes().get(11);
-    internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_CreatureInterpolationPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_PlayerInterpolationPacket_descriptor,
-        new java.lang.String[] { "Interpolation", "Id", "Male", });
-    internal_static_org_y1000_connection_gen_RemoveEntityPacket_descriptor =
+        internal_static_org_y1000_network_gen_CreatureInterpolationPacket_descriptor,
+        new java.lang.String[] { "Interpolation", "Id", "Name", });
+    internal_static_org_y1000_network_gen_PlayerInterpolationPacket_descriptor =
       getDescriptor().getMessageTypes().get(12);
-    internal_static_org_y1000_connection_gen_RemoveEntityPacket_fieldAccessorTable = new
+    internal_static_org_y1000_network_gen_PlayerInterpolationPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_org_y1000_connection_gen_RemoveEntityPacket_descriptor,
+        internal_static_org_y1000_network_gen_PlayerInterpolationPacket_descriptor,
+        new java.lang.String[] { "Interpolation", "Id", "Male", });
+    internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor =
+      getDescriptor().getMessageTypes().get(13);
+    internal_static_org_y1000_network_gen_RemoveEntityPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor,
         new java.lang.String[] { "Id", });
   }
 

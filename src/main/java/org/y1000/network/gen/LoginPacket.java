@@ -5,11 +5,11 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.LoginPacket}
+ * Protobuf type {@code org.y1000.network.gen.LoginPacket}
  */
 public final class LoginPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.LoginPacket)
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.LoginPacket)
     LoginPacketOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use LoginPacket.newBuilder() to construct.
@@ -28,13 +28,13 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_LoginPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_LoginPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_LoginPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_LoginPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             org.y1000.network.gen.LoginPacket.class, org.y1000.network.gen.LoginPacket.Builder.class);
   }
@@ -253,26 +253,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.LoginPacket}
+   * Protobuf type {@code org.y1000.network.gen.LoginPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.LoginPacket)
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.LoginPacket)
       org.y1000.network.gen.LoginPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_LoginPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_LoginPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_LoginPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_LoginPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.y1000.network.gen.LoginPacket.class, org.y1000.network.gen.LoginPacket.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.LoginPacket.newBuilder()
+    // Construct using org.y1000.network.gen.LoginPacket.newBuilder()
     private Builder() {
 
     }
@@ -295,7 +295,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_LoginPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_LoginPacket_descriptor;
     }
 
     @java.lang.Override
@@ -552,10 +552,10 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.LoginPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.LoginPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.LoginPacket)
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.LoginPacket)
   private static final org.y1000.network.gen.LoginPacket DEFAULT_INSTANCE;
   static {
     DEFAULT_INSTANCE = new org.y1000.network.gen.LoginPacket();

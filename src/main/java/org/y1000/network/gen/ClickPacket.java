@@ -5,11 +5,11 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.ClickPacket}
+ * Protobuf type {@code org.y1000.network.gen.ClickPacket}
  */
 public final class ClickPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.ClickPacket)
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ClickPacket)
     ClickPacketOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use ClickPacket.newBuilder() to construct.
@@ -28,13 +28,13 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_ClickPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ClickPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_ClickPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ClickPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             org.y1000.network.gen.ClickPacket.class, org.y1000.network.gen.ClickPacket.Builder.class);
   }
@@ -209,26 +209,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.ClickPacket}
+   * Protobuf type {@code org.y1000.network.gen.ClickPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.ClickPacket)
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ClickPacket)
       org.y1000.network.gen.ClickPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_ClickPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ClickPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_ClickPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ClickPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.y1000.network.gen.ClickPacket.class, org.y1000.network.gen.ClickPacket.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.ClickPacket.newBuilder()
+    // Construct using org.y1000.network.gen.ClickPacket.newBuilder()
     private Builder() {
 
     }
@@ -249,7 +249,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_ClickPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ClickPacket_descriptor;
     }
 
     @java.lang.Override
@@ -420,10 +420,10 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.ClickPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClickPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.ClickPacket)
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ClickPacket)
   private static final org.y1000.network.gen.ClickPacket DEFAULT_INSTANCE;
   static {
     DEFAULT_INSTANCE = new org.y1000.network.gen.ClickPacket();

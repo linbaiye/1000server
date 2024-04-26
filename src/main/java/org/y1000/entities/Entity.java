@@ -13,5 +13,5 @@ public interface Entity {
 
     AbstractInterpolation captureInterpolation();
 
-    void registerEventListener(EntityEventListener listener);
+    void registerOrderedEventListener(EntityEventListener listener);
 }

@@ -5,21 +5,21 @@
 package org.y1000.network.gen;
 
 public interface CreatureInterpolationPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.CreatureInterpolationPacket)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.CreatureInterpolationPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+   * <code>.org.y1000.network.gen.InterpolationPacket interpolation = 1;</code>
    * @return Whether the interpolation field is set.
    */
   boolean hasInterpolation();
   /**
-   * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+   * <code>.org.y1000.network.gen.InterpolationPacket interpolation = 1;</code>
    * @return The interpolation.
    */
   org.y1000.network.gen.InterpolationPacket getInterpolation();
   /**
-   * <code>.org.y1000.connection.gen.InterpolationPacket interpolation = 1;</code>
+   * <code>.org.y1000.network.gen.InterpolationPacket interpolation = 1;</code>
    */
   org.y1000.network.gen.InterpolationPacketOrBuilder getInterpolationOrBuilder();
 

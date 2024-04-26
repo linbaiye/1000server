@@ -25,7 +25,6 @@ public final class CreatureManager extends AbstractEntityManager<Creature> imple
     }
 
 
-
     @Override
     public void update(long delta) {
         passiveMonsters.forEach(m -> m.update(delta));
@@ -44,8 +43,8 @@ public final class CreatureManager extends AbstractEntityManager<Creature> imple
 
     private void initializeCreatures() {
         var monster = new PassiveMonster(3L, new Coordinate(39, 30), Direction.DOWN, "牛", realmMap);
-        monster.registerEventListener(eventListener);
-        monster.registerEventListener(this);
+        monster.registerOrderedEventListener(eventListener);
+        monster.registerOrderedEventListener(this);
         passiveMonsters.add(monster);
     }
 

@@ -15,6 +15,8 @@ public interface RealmMap {
 
     void free(Creature creature);
 
+    String name();
+
     static Optional<RealmMap> Load(String name) {
         return RealmMapV2Impl.read(name);
     }

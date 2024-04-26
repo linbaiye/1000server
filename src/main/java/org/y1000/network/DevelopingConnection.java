@@ -20,8 +20,8 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
 
     private static final Set<Long> IDs = new HashSet<>();
 
-    public DevelopingConnection(NetworkEventListener listener) {
-        super(listener);
+    public DevelopingConnection(ConnectionManager connectionManager) {
+        super(connectionManager);
         messages = new ArrayList<>();
         sender = new Thread(this);
         sender.start();

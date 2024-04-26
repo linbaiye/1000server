@@ -1,6 +1,7 @@
 package org.y1000.entities.repository;
 
 import org.y1000.entities.players.Player;
+import org.y1000.network.Connection;
 import org.y1000.util.Coordinate;
 
 import java.util.HashMap;
@@ -12,7 +13,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     @Override
     public Player load(long id) {
-        return Player.create(id, new Coordinate(39,27));
+        return Player.create(id, new Coordinate(39,27), null);
     }
 
     private int findSlot() {
@@ -26,9 +27,9 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     }
 
     @Override
-    public Player load() {
+    public Player load(Connection connection) {
         int slot = findSlot();
-        return Player.create(slot, new Coordinate(39 + slot, 27));
+        return Player.create(slot, new Coordinate(39 + slot, 27), connection);
     }
 
     @Override

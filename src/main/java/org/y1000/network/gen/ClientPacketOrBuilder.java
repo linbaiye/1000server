@@ -5,38 +5,53 @@
 package org.y1000.network.gen;
 
 public interface ClientPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.ClientPacket)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ClientPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+   * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
    * @return Whether the moveEventPacket field is set.
    */
   boolean hasMoveEventPacket();
   /**
-   * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+   * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
    * @return The moveEventPacket.
    */
   org.y1000.network.gen.MoveEventPacket getMoveEventPacket();
   /**
-   * <code>.org.y1000.connection.gen.MoveEventPacket moveEventPacket = 1;</code>
+   * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
    */
   org.y1000.network.gen.MoveEventPacketOrBuilder getMoveEventPacketOrBuilder();
 
   /**
-   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
    * @return Whether the clickPacket field is set.
    */
   boolean hasClickPacket();
   /**
-   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
    * @return The clickPacket.
    */
   org.y1000.network.gen.ClickPacket getClickPacket();
   /**
-   * <code>.org.y1000.connection.gen.ClickPacket clickPacket = 2;</code>
+   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
    */
   org.y1000.network.gen.ClickPacketOrBuilder getClickPacketOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+   * @return Whether the loginPacket field is set.
+   */
+  boolean hasLoginPacket();
+  /**
+   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+   * @return The loginPacket.
+   */
+  org.y1000.network.gen.PlayerLoginPacket getLoginPacket();
+  /**
+   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
+   */
+  org.y1000.network.gen.PlayerLoginPacketOrBuilder getLoginPacketOrBuilder();
 
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

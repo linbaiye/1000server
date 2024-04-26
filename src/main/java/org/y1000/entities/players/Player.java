@@ -23,7 +23,6 @@ public interface Player extends Creature {
 
     Connection connection();
 
-
     void joinReam(RealmMap realm);
 
     void leaveRealm();
@@ -32,7 +31,7 @@ public interface Player extends Creature {
         return Optional.empty();
     }
 
-    static Player create(long id, Coordinate coordinate) {
-        return new PlayerImpl(id, coordinate, Direction.DOWN, "杨过", null);
+    static Player create(long id, Coordinate coordinate, Connection connection) {
+        return new PlayerImpl(id, coordinate, Direction.DOWN, "杨过", connection);
     }
 }

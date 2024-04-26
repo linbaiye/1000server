@@ -49,7 +49,6 @@ public final class PlayerManager implements
         for (Map.Entry<Connection, Player> entry : connectionPlayerMap.entrySet()) {
             Connection connection = entry.getKey();
             Player player = entry.getValue();
-            player.addAll(connection.takeMessages());
             player.update(delta);
         }
     }
@@ -76,7 +75,7 @@ public final class PlayerManager implements
 
 
     @Override
-    public void handle(LoginSucceededEvent loginMessage) {
+    public void handle(JoinedRealmEvent loginMessage) {
         if (!scopeMap.containsKey(loginMessage.player())) {
             log.debug("Logged in player {}.", loginMessage.player());
             scopeMap.put(loginMessage.player(), new PlayerVisibleScope(loginMessage.player()));

@@ -6,8 +6,8 @@ import org.y1000.message.ServerMessage;
 @Slf4j
 public final class ConnectionImpl extends AbstractConnection {
 
-    public ConnectionImpl(NetworkEventListener listener) {
-        super(listener);
+    public ConnectionImpl(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
 

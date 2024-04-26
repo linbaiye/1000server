@@ -5,11 +5,11 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.PositionPacket}
+ * Protobuf type {@code org.y1000.network.gen.PositionPacket}
  */
 public final class PositionPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.PositionPacket)
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.PositionPacket)
     PositionPacketOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use PositionPacket.newBuilder() to construct.
@@ -28,13 +28,13 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_PositionPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_PositionPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_PositionPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_PositionPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             org.y1000.network.gen.PositionPacket.class, org.y1000.network.gen.PositionPacket.Builder.class);
   }
@@ -333,26 +333,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.PositionPacket}
+   * Protobuf type {@code org.y1000.network.gen.PositionPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.PositionPacket)
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.PositionPacket)
       org.y1000.network.gen.PositionPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_PositionPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_PositionPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_PositionPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_PositionPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.y1000.network.gen.PositionPacket.class, org.y1000.network.gen.PositionPacket.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.PositionPacket.newBuilder()
+    // Construct using org.y1000.network.gen.PositionPacket.newBuilder()
     private Builder() {
 
     }
@@ -378,7 +378,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_PositionPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_PositionPacket_descriptor;
     }
 
     @java.lang.Override
@@ -775,10 +775,10 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.PositionPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.PositionPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.PositionPacket)
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.PositionPacket)
   private static final org.y1000.network.gen.PositionPacket DEFAULT_INSTANCE;
   static {
     DEFAULT_INSTANCE = new org.y1000.network.gen.PositionPacket();

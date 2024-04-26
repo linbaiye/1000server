@@ -1,122 +1,71 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.network.Connection;
-import org.y1000.network.NetworkEventListener;
-import org.y1000.network.ConnectionEventType;
-import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.CreatureManager;
-import org.y1000.entities.players.PlayerManager;
+import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.PassiveMonster;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.PlayerVisibleScope;
-import org.y1000.entities.repository.PlayerRepository;
+import org.y1000.util.Coordinate;
 
 import java.util.*;
 
 
 @Slf4j
-public final class Realm implements Runnable, NetworkEventListener {
+public final class Realm implements Runnable {
 
     private static final long STEP_MILLIS = 50;
-
-    private final PlayerManager playerManager;
-
-    private final CreatureManager creatureManager;
-
-    private final List<Connection> closingConnections;
-
-    private final Map<Connection, Player> joiningPlayers;
-
-    private final PlayerRepository playerRepository;
 
     private final RealmMap realmMap;
 
     private final List<Player> waitingPlayers;
-    private final List<Player> leavingPlayers;
 
+    private final RealmEntityManager entityManager;
 
-    private final
+    private volatile boolean shutdown;
 
-    public Realm(PlayerRepository playerRepository,
-                 RealmMap map) {
-        this.playerRepository = playerRepository;
-        playerManager = new PlayerManager();
+    public Realm(RealmMap map) {
         realmMap = map;
-        closingConnections = new ArrayList<>();
-        joiningPlayers = new HashMap<>();
-        creatureManager = new CreatureManager(playerManager, realmMap);
         waitingPlayers = new ArrayList<>(32);
-        leavingPlayers = new ArrayList<>(32);
+        entityManager = new RealmEntityManager();
+        shutdown = false;
     }
 
     public RealmMap map() {
         return realmMap;
     }
 
-    public synchronized void playerConnected(Connection connection, Player player) {
-        joiningPlayers.put(connection, player);
-        notify();
+    private void joinPlayer(Player player) {
+        entityManager.add(player);
+        player.joinReam(realmMap);
     }
 
-    public synchronized void onConnectionClosed(Connection connection) {
-        closingConnections.add(connection);
-        notify();
-    }
-
-
-    private void sendVisibleCreatures(PlayerVisibleScope scope) {
-        Set<Creature> creatures = creatureManager.visibleCreatures(scope);
-        playerManager.sendVisibleCreatures(scope.getSource(), creatures);
+    private void initEntities() {
+        List<PassiveMonster> monsters = List.of(new PassiveMonster(3L, new Coordinate(39, 30), Direction.DOWN, "牛", realmMap));
+        monsters.forEach(entityManager::add);
     }
 
 
-    private void handleConnectionEvents() {
-        List<Connection> deadConnections = Collections.emptyList();
-        Map<Connection, Player> newPlayers = new HashMap<>();
-        synchronized (this) {
-            if (!closingConnections.isEmpty()) {
-                deadConnections = new ArrayList<>(closingConnections);
-                closingConnections.clear();
-            }
-            if (!joiningPlayers.isEmpty()) {
-                newPlayers.putAll(joiningPlayers);
-                joiningPlayers.clear();
-            }
-            notifyAll();
-        }
-        deadConnections.forEach(playerManager::remove);
-        newPlayers.forEach((c, p) -> {
-            playerManager.add(c, p);
-            p.registerEventListener(playerManager);
-            p.joinReam(realmMap);
-            playerManager.getVisibleScope(p)
-                    .ifPresent(this::sendVisibleCreatures);
-        });
-    }
-
-
-    @Override
-    public void run() {
+    private void step() {
         try {
             long timeMillis = System.currentTimeMillis();
-            while (true) {
-                //handleConnectionEvents();
+            while (!shutdown) {
                 long current = System.currentTimeMillis();
                 if (timeMillis <= current) {
-                    playerManager.update(STEP_MILLIS);
-                    creatureManager.update(STEP_MILLIS);
+                    entityManager.updateEntities(STEP_MILLIS);
                     timeMillis += STEP_MILLIS;
                 } else {
+                    List<Player> tmp = Collections.emptyList();
                     synchronized (this) {
-                        while (waitingPlayers.isEmpty() && leavingPlayers.isEmpty() &&
-                                current < timeMillis) {
+                        while (waitingPlayers.isEmpty() && current < timeMillis) {
                             wait(timeMillis - current);
                             current = System.currentTimeMillis();
                         }
-                        leavingPlayers.forEach(Player::leaveRealm);
-                        waitingPlayers.forEach(player -> player.joinReam(realmMap));
+                        if (!waitingPlayers.isEmpty()) {
+                            tmp = new ArrayList<>(waitingPlayers);
+                            waitingPlayers.clear();
+                        }
                         notify();
                     }
+                    tmp.forEach(this::joinPlayer);
                 }
             }
         } catch (InterruptedException e) {
@@ -125,13 +74,9 @@ public final class Realm implements Runnable, NetworkEventListener {
     }
 
     @Override
-    public void OnEvent(ConnectionEventType type,
-                        Connection connection) {
-        if (type == ConnectionEventType.ESTABLISHED) {
-            playerConnected(connection, playerRepository.load());
-        } else if (type == ConnectionEventType.CLOSED) {
-            onConnectionClosed(connection);
-        }
+    public void run() {
+        initEntities();
+        step();
     }
 
     public synchronized void addPlayer(Player player) {
@@ -139,14 +84,7 @@ public final class Realm implements Runnable, NetworkEventListener {
         notifyAll();
     }
 
-    public synchronized void removePlayer(Player player) {
-        leavingPlayers.add(player);
-        notifyAll();
-    }
-
-    public static Optional<Realm> create(String name
-            , PlayerRepository playerRepository) {
-        Optional<RealmMap> mapOptional = RealmMap.Load(name);
-        return mapOptional.map(map -> new Realm(playerRepository, map));
+    public void shutdown() {
+        this.shutdown = true;
     }
 }

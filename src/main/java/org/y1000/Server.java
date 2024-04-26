@@ -8,12 +8,11 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
-import org.y1000.network.DevelopingConnection;
-import org.y1000.network.LengthBasedMessageDecoder;
-import org.y1000.network.MessageEncoder;
+import org.y1000.network.*;
 import org.y1000.entities.repository.PlayerRepository;
 import org.y1000.entities.repository.PlayerRepositoryImpl;
 import org.y1000.realm.Realm;
+import org.y1000.realm.RealmManager;
 
 import java.util.Optional;
 
@@ -27,28 +26,31 @@ public class Server {
 
     private final EventLoopGroup serverGroup;
 
-    private Realm realm;
+    private final ConnectionManager connectionManager;
+
+    private final RealmManager realmManager = RealmManager.create();
 
     public Server(int port) {
         this.port = port;
         workerGroup = new NioEventLoopGroup();
         serverGroup = new NioEventLoopGroup();
         bootstrap = new ServerBootstrap();
+        connectionManager = new ConnectionManager(createPlayerRepository(), realmManager);
     }
 
     private PlayerRepository createPlayerRepository() {
         return new PlayerRepositoryImpl();
     }
 
-    private void startRealms() {
-        Optional<Realm> realmOptional = Realm.create("start", createPlayerRepository());
-        if (realmOptional.isPresent()) {
-            realm = realmOptional.get();
-            new Thread(realm).start();
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
+//    private void startRealms() {
+//        Optional<Realm> realmOptional = Realm.create("start", createPlayerRepository());
+//        if (realmOptional.isPresent()) {
+//            realm = realmOptional.get();
+//            new Thread(realm).start();
+//        } else {
+//            throw new IllegalArgumentException();
+//        }
+//    }
 
     private void startNetworking() {
         try {
@@ -62,7 +64,7 @@ public class Server {
                         protected void initChannel(NioSocketChannel channel) throws Exception {
                             channel.pipeline()
                                     .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                    .addLast("packetHandler", new DevelopingConnection(realm))
+                                    .addLast("packetHandler", new DevelopingConnection(connectionManager))
                                     .addLast("packetLengthAppender", new LengthFieldPrepender(4))
                                     .addLast("packetEncoder", MessageEncoder.ENCODER);
                         }
@@ -74,9 +76,13 @@ public class Server {
         }
     }
 
+    private void startRealms() {
+        realmManager.start();
+    }
+
     public static void main(String[] args) {
         Server server = new Server(9999);
         server.startRealms();
-        server.startNetworking();;
+        server.startNetworking();
     }
 }

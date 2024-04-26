@@ -26,4 +26,11 @@ public class RemoveEntityMessage extends AbstractServerMessage{
     protected Packet buildPacket() {
         return createPacket(id);
     }
+
+    @Override
+    public String toString() {
+        return "RemoveEntityMessage{" +
+                "id=" + id +
+                '}';
+    }
 }

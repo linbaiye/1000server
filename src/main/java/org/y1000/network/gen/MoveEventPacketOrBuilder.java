@@ -5,21 +5,21 @@
 package org.y1000.network.gen;
 
 public interface MoveEventPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.MoveEventPacket)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.MoveEventPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+   * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
    * @return Whether the input field is set.
    */
   boolean hasInput();
   /**
-   * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+   * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
    * @return The input.
    */
   org.y1000.network.gen.InputPacket getInput();
   /**
-   * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+   * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
    */
   org.y1000.network.gen.InputPacketOrBuilder getInputOrBuilder();
 

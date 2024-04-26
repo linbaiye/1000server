@@ -5,7 +5,7 @@
 package org.y1000.network.gen;
 
 public interface LoginPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.LoginPacket)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.LoginPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**

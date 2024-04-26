@@ -5,7 +5,7 @@
 package org.y1000.network.gen;
 
 public interface InterpolationPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.InterpolationPacket)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.InterpolationPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**

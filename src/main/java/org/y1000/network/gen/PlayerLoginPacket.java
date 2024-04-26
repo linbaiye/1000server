@@ -5,49 +5,78 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.RemoveEntityPacket}
+ * Protobuf type {@code org.y1000.network.gen.PlayerLoginPacket}
  */
-public final class RemoveEntityPacket extends
+public final class PlayerLoginPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.RemoveEntityPacket)
-    RemoveEntityPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.PlayerLoginPacket)
+    PlayerLoginPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use RemoveEntityPacket.newBuilder() to construct.
-  private RemoveEntityPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use PlayerLoginPacket.newBuilder() to construct.
+  private PlayerLoginPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private RemoveEntityPacket() {
+  private PlayerLoginPacket() {
+    token_ = "";
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new RemoveEntityPacket();
+    return new PlayerLoginPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_RemoveEntityPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_PlayerLoginPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.RemoveEntityPacket.class, org.y1000.network.gen.RemoveEntityPacket.Builder.class);
+            org.y1000.network.gen.PlayerLoginPacket.class, org.y1000.network.gen.PlayerLoginPacket.Builder.class);
   }
 
-  public static final int ID_FIELD_NUMBER = 1;
-  private long id_ = 0L;
+  public static final int TOKEN_FIELD_NUMBER = 1;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object token_ = "";
   /**
-   * <code>int64 id = 1;</code>
-   * @return The id.
+   * <code>string token = 1;</code>
+   * @return The token.
    */
   @java.lang.Override
-  public long getId() {
-    return id_;
+  public java.lang.String getToken() {
+    java.lang.Object ref = token_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      token_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string token = 1;</code>
+   * @return The bytes for token.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getTokenBytes() {
+    java.lang.Object ref = token_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      token_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
   private byte memoizedIsInitialized = -1;
@@ -64,8 +93,8 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (id_ != 0L) {
-      output.writeInt64(1, id_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, token_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -76,9 +105,8 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (id_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, id_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, token_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -90,13 +118,13 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.RemoveEntityPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.PlayerLoginPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.RemoveEntityPacket other = (org.y1000.network.gen.RemoveEntityPacket) obj;
+    org.y1000.network.gen.PlayerLoginPacket other = (org.y1000.network.gen.PlayerLoginPacket) obj;
 
-    if (getId()
-        != other.getId()) return false;
+    if (!getToken()
+        .equals(other.getToken())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -108,52 +136,51 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + ID_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getId());
+    hash = (37 * hash) + TOKEN_FIELD_NUMBER;
+    hash = (53 * hash) + getToken().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -161,26 +188,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.RemoveEntityPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.PlayerLoginPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.RemoveEntityPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.PlayerLoginPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -193,7 +220,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.RemoveEntityPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.PlayerLoginPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -209,26 +236,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.RemoveEntityPacket}
+   * Protobuf type {@code org.y1000.network.gen.PlayerLoginPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.RemoveEntityPacket)
-      org.y1000.network.gen.RemoveEntityPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.PlayerLoginPacket)
+      org.y1000.network.gen.PlayerLoginPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_RemoveEntityPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_PlayerLoginPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.RemoveEntityPacket.class, org.y1000.network.gen.RemoveEntityPacket.Builder.class);
+              org.y1000.network.gen.PlayerLoginPacket.class, org.y1000.network.gen.PlayerLoginPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.RemoveEntityPacket.newBuilder()
+    // Construct using org.y1000.network.gen.PlayerLoginPacket.newBuilder()
     private Builder() {
 
     }
@@ -242,24 +269,24 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      id_ = 0L;
+      token_ = "";
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.RemoveEntityPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.RemoveEntityPacket.getDefaultInstance();
+    public org.y1000.network.gen.PlayerLoginPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.RemoveEntityPacket build() {
-      org.y1000.network.gen.RemoveEntityPacket result = buildPartial();
+    public org.y1000.network.gen.PlayerLoginPacket build() {
+      org.y1000.network.gen.PlayerLoginPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -267,17 +294,17 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.RemoveEntityPacket buildPartial() {
-      org.y1000.network.gen.RemoveEntityPacket result = new org.y1000.network.gen.RemoveEntityPacket(this);
+    public org.y1000.network.gen.PlayerLoginPacket buildPartial() {
+      org.y1000.network.gen.PlayerLoginPacket result = new org.y1000.network.gen.PlayerLoginPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.RemoveEntityPacket result) {
+    private void buildPartial0(org.y1000.network.gen.PlayerLoginPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.id_ = id_;
+        result.token_ = token_;
       }
     }
 
@@ -315,18 +342,20 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.RemoveEntityPacket) {
-        return mergeFrom((org.y1000.network.gen.RemoveEntityPacket)other);
+      if (other instanceof org.y1000.network.gen.PlayerLoginPacket) {
+        return mergeFrom((org.y1000.network.gen.PlayerLoginPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.RemoveEntityPacket other) {
-      if (other == org.y1000.network.gen.RemoveEntityPacket.getDefaultInstance()) return this;
-      if (other.getId() != 0L) {
-        setId(other.getId());
+    public Builder mergeFrom(org.y1000.network.gen.PlayerLoginPacket other) {
+      if (other == org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance()) return this;
+      if (!other.getToken().isEmpty()) {
+        token_ = other.token_;
+        bitField0_ |= 0x00000001;
+        onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -354,11 +383,11 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 8: {
-              id_ = input.readInt64();
+            case 10: {
+              token_ = input.readStringRequireUtf8();
               bitField0_ |= 0x00000001;
               break;
-            } // case 8
+            } // case 10
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -376,34 +405,74 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private long id_ ;
+    private java.lang.Object token_ = "";
     /**
-     * <code>int64 id = 1;</code>
-     * @return The id.
+     * <code>string token = 1;</code>
+     * @return The token.
      */
-    @java.lang.Override
-    public long getId() {
-      return id_;
+    public java.lang.String getToken() {
+      java.lang.Object ref = token_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        token_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
     }
     /**
-     * <code>int64 id = 1;</code>
-     * @param value The id to set.
+     * <code>string token = 1;</code>
+     * @return The bytes for token.
+     */
+    public com.google.protobuf.ByteString
+        getTokenBytes() {
+      java.lang.Object ref = token_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        token_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string token = 1;</code>
+     * @param value The token to set.
      * @return This builder for chaining.
      */
-    public Builder setId(long value) {
-
-      id_ = value;
+    public Builder setToken(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      token_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>int64 id = 1;</code>
+     * <code>string token = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder clearId() {
+    public Builder clearToken() {
+      token_ = getDefaultInstance().getToken();
       bitField0_ = (bitField0_ & ~0x00000001);
-      id_ = 0L;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string token = 1;</code>
+     * @param value The bytes for token to set.
+     * @return This builder for chaining.
+     */
+    public Builder setTokenBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      token_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -420,23 +489,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.RemoveEntityPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.PlayerLoginPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.RemoveEntityPacket)
-  private static final org.y1000.network.gen.RemoveEntityPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.PlayerLoginPacket)
+  private static final org.y1000.network.gen.PlayerLoginPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.RemoveEntityPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.PlayerLoginPacket();
   }
 
-  public static org.y1000.network.gen.RemoveEntityPacket getDefaultInstance() {
+  public static org.y1000.network.gen.PlayerLoginPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<RemoveEntityPacket>
-      PARSER = new com.google.protobuf.AbstractParser<RemoveEntityPacket>() {
+  private static final com.google.protobuf.Parser<PlayerLoginPacket>
+      PARSER = new com.google.protobuf.AbstractParser<PlayerLoginPacket>() {
     @java.lang.Override
-    public RemoveEntityPacket parsePartialFrom(
+    public PlayerLoginPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -455,17 +524,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<RemoveEntityPacket> parser() {
+  public static com.google.protobuf.Parser<PlayerLoginPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<RemoveEntityPacket> getParserForType() {
+  public com.google.protobuf.Parser<PlayerLoginPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.RemoveEntityPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.PlayerLoginPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

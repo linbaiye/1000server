@@ -5,11 +5,11 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.MoveEventPacket}
+ * Protobuf type {@code org.y1000.network.gen.MoveEventPacket}
  */
 public final class MoveEventPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.MoveEventPacket)
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.MoveEventPacket)
     MoveEventPacketOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use MoveEventPacket.newBuilder() to construct.
@@ -28,13 +28,13 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_MoveEventPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_MoveEventPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_MoveEventPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_MoveEventPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             org.y1000.network.gen.MoveEventPacket.class, org.y1000.network.gen.MoveEventPacket.Builder.class);
   }
@@ -43,7 +43,7 @@ private static final long serialVersionUID = 0L;
   public static final int INPUT_FIELD_NUMBER = 1;
   private org.y1000.network.gen.InputPacket input_;
   /**
-   * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+   * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
    * @return Whether the input field is set.
    */
   @java.lang.Override
@@ -51,7 +51,7 @@ private static final long serialVersionUID = 0L;
     return ((bitField0_ & 0x00000001) != 0);
   }
   /**
-   * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+   * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
    * @return The input.
    */
   @java.lang.Override
@@ -59,7 +59,7 @@ private static final long serialVersionUID = 0L;
     return input_ == null ? org.y1000.network.gen.InputPacket.getDefaultInstance() : input_;
   }
   /**
-   * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+   * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.InputPacketOrBuilder getInputOrBuilder() {
@@ -273,26 +273,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.MoveEventPacket}
+   * Protobuf type {@code org.y1000.network.gen.MoveEventPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.MoveEventPacket)
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.MoveEventPacket)
       org.y1000.network.gen.MoveEventPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_MoveEventPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_MoveEventPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_MoveEventPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_MoveEventPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.y1000.network.gen.MoveEventPacket.class, org.y1000.network.gen.MoveEventPacket.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.MoveEventPacket.newBuilder()
+    // Construct using org.y1000.network.gen.MoveEventPacket.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -325,7 +325,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_MoveEventPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_MoveEventPacket_descriptor;
     }
 
     @java.lang.Override
@@ -485,14 +485,14 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.InputPacket, org.y1000.network.gen.InputPacket.Builder, org.y1000.network.gen.InputPacketOrBuilder> inputBuilder_;
     /**
-     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
      * @return Whether the input field is set.
      */
     public boolean hasInput() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
-     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
      * @return The input.
      */
     public org.y1000.network.gen.InputPacket getInput() {
@@ -503,7 +503,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
      */
     public Builder setInput(org.y1000.network.gen.InputPacket value) {
       if (inputBuilder_ == null) {
@@ -519,7 +519,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
      */
     public Builder setInput(
         org.y1000.network.gen.InputPacket.Builder builderForValue) {
@@ -533,7 +533,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
      */
     public Builder mergeInput(org.y1000.network.gen.InputPacket value) {
       if (inputBuilder_ == null) {
@@ -554,7 +554,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
      */
     public Builder clearInput() {
       bitField0_ = (bitField0_ & ~0x00000001);
@@ -567,7 +567,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
      */
     public org.y1000.network.gen.InputPacket.Builder getInputBuilder() {
       bitField0_ |= 0x00000001;
@@ -575,7 +575,7 @@ private static final long serialVersionUID = 0L;
       return getInputFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
      */
     public org.y1000.network.gen.InputPacketOrBuilder getInputOrBuilder() {
       if (inputBuilder_ != null) {
@@ -586,10 +586,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.org.y1000.connection.gen.InputPacket input = 1;</code>
+     * <code>.org.y1000.network.gen.InputPacket input = 1;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.InputPacket, org.y1000.network.gen.InputPacket.Builder, org.y1000.network.gen.InputPacketOrBuilder>
+        org.y1000.network.gen.InputPacket, org.y1000.network.gen.InputPacket.Builder, org.y1000.network.gen.InputPacketOrBuilder> 
         getInputFieldBuilder() {
       if (inputBuilder_ == null) {
         inputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -678,10 +678,10 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.MoveEventPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.MoveEventPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.MoveEventPacket)
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.MoveEventPacket)
   private static final org.y1000.network.gen.MoveEventPacket DEFAULT_INSTANCE;
   static {
     DEFAULT_INSTANCE = new org.y1000.network.gen.MoveEventPacket();

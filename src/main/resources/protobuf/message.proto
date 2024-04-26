@@ -1,8 +1,8 @@
 
 syntax = "proto3";
 
-package org.y1000.connection.gen;
-option java_package ="org.y1000.connection.gen";
+package org.y1000.network.gen;
+option java_package ="org.y1000.network.gen";
 option java_multiple_files = true;
 
 
@@ -33,7 +33,7 @@ message ClickPacket {
 }
 
 message PlayerLoginPacket {
-
+  string token = 1;
 }
 
 
@@ -47,6 +47,7 @@ message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
     ClickPacket clickPacket = 2;
+    PlayerLoginPacket loginPacket = 3;
   }
 }
 

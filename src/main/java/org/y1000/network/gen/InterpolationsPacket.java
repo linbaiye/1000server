@@ -5,11 +5,11 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.InterpolationsPacket}
+ * Protobuf type {@code org.y1000.network.gen.InterpolationsPacket}
  */
 public final class InterpolationsPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.InterpolationsPacket)
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.InterpolationsPacket)
     InterpolationsPacketOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use InterpolationsPacket.newBuilder() to construct.
@@ -29,13 +29,13 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_InterpolationsPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationsPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_InterpolationsPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationsPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             org.y1000.network.gen.InterpolationsPacket.class, org.y1000.network.gen.InterpolationsPacket.Builder.class);
   }
@@ -44,36 +44,36 @@ private static final long serialVersionUID = 0L;
   @SuppressWarnings("serial")
   private java.util.List<org.y1000.network.gen.InterpolationPacket> interpolations_;
   /**
-   * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+   * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
    */
   @java.lang.Override
   public java.util.List<org.y1000.network.gen.InterpolationPacket> getInterpolationsList() {
     return interpolations_;
   }
   /**
-   * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+   * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
    */
   @java.lang.Override
-  public java.util.List<? extends org.y1000.network.gen.InterpolationPacketOrBuilder>
+  public java.util.List<? extends org.y1000.network.gen.InterpolationPacketOrBuilder> 
       getInterpolationsOrBuilderList() {
     return interpolations_;
   }
   /**
-   * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+   * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
    */
   @java.lang.Override
   public int getInterpolationsCount() {
     return interpolations_.size();
   }
   /**
-   * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+   * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.InterpolationPacket getInterpolations(int index) {
     return interpolations_.get(index);
   }
   /**
-   * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+   * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
    */
   @java.lang.Override
   public org.y1000.network.gen.InterpolationPacketOrBuilder getInterpolationsOrBuilder(
@@ -241,26 +241,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.InterpolationsPacket}
+   * Protobuf type {@code org.y1000.network.gen.InterpolationsPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.InterpolationsPacket)
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.InterpolationsPacket)
       org.y1000.network.gen.InterpolationsPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_InterpolationsPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationsPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_InterpolationsPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationsPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.y1000.network.gen.InterpolationsPacket.class, org.y1000.network.gen.InterpolationsPacket.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.InterpolationsPacket.newBuilder()
+    // Construct using org.y1000.network.gen.InterpolationsPacket.newBuilder()
     private Builder() {
 
     }
@@ -287,7 +287,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_InterpolationsPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationsPacket_descriptor;
     }
 
     @java.lang.Override
@@ -468,7 +468,7 @@ private static final long serialVersionUID = 0L;
         org.y1000.network.gen.InterpolationPacket, org.y1000.network.gen.InterpolationPacket.Builder, org.y1000.network.gen.InterpolationPacketOrBuilder> interpolationsBuilder_;
 
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public java.util.List<org.y1000.network.gen.InterpolationPacket> getInterpolationsList() {
       if (interpolationsBuilder_ == null) {
@@ -478,7 +478,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public int getInterpolationsCount() {
       if (interpolationsBuilder_ == null) {
@@ -488,7 +488,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public org.y1000.network.gen.InterpolationPacket getInterpolations(int index) {
       if (interpolationsBuilder_ == null) {
@@ -498,7 +498,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public Builder setInterpolations(
         int index, org.y1000.network.gen.InterpolationPacket value) {
@@ -515,7 +515,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public Builder setInterpolations(
         int index, org.y1000.network.gen.InterpolationPacket.Builder builderForValue) {
@@ -529,7 +529,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public Builder addInterpolations(org.y1000.network.gen.InterpolationPacket value) {
       if (interpolationsBuilder_ == null) {
@@ -545,7 +545,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public Builder addInterpolations(
         int index, org.y1000.network.gen.InterpolationPacket value) {
@@ -562,7 +562,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public Builder addInterpolations(
         org.y1000.network.gen.InterpolationPacket.Builder builderForValue) {
@@ -576,7 +576,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public Builder addInterpolations(
         int index, org.y1000.network.gen.InterpolationPacket.Builder builderForValue) {
@@ -590,7 +590,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public Builder addAllInterpolations(
         java.lang.Iterable<? extends org.y1000.network.gen.InterpolationPacket> values) {
@@ -605,7 +605,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public Builder clearInterpolations() {
       if (interpolationsBuilder_ == null) {
@@ -618,7 +618,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public Builder removeInterpolations(int index) {
       if (interpolationsBuilder_ == null) {
@@ -631,14 +631,14 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public org.y1000.network.gen.InterpolationPacket.Builder getInterpolationsBuilder(
         int index) {
       return getInterpolationsFieldBuilder().getBuilder(index);
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public org.y1000.network.gen.InterpolationPacketOrBuilder getInterpolationsOrBuilder(
         int index) {
@@ -648,9 +648,9 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
-    public java.util.List<? extends org.y1000.network.gen.InterpolationPacketOrBuilder>
+    public java.util.List<? extends org.y1000.network.gen.InterpolationPacketOrBuilder> 
          getInterpolationsOrBuilderList() {
       if (interpolationsBuilder_ != null) {
         return interpolationsBuilder_.getMessageOrBuilderList();
@@ -659,14 +659,14 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public org.y1000.network.gen.InterpolationPacket.Builder addInterpolationsBuilder() {
       return getInterpolationsFieldBuilder().addBuilder(
           org.y1000.network.gen.InterpolationPacket.getDefaultInstance());
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
     public org.y1000.network.gen.InterpolationPacket.Builder addInterpolationsBuilder(
         int index) {
@@ -674,14 +674,14 @@ private static final long serialVersionUID = 0L;
           index, org.y1000.network.gen.InterpolationPacket.getDefaultInstance());
     }
     /**
-     * <code>repeated .org.y1000.connection.gen.InterpolationPacket interpolations = 1;</code>
+     * <code>repeated .org.y1000.network.gen.InterpolationPacket interpolations = 1;</code>
      */
-    public java.util.List<org.y1000.network.gen.InterpolationPacket.Builder>
+    public java.util.List<org.y1000.network.gen.InterpolationPacket.Builder> 
          getInterpolationsBuilderList() {
       return getInterpolationsFieldBuilder().getBuilderList();
     }
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        org.y1000.network.gen.InterpolationPacket, org.y1000.network.gen.InterpolationPacket.Builder, org.y1000.network.gen.InterpolationPacketOrBuilder>
+        org.y1000.network.gen.InterpolationPacket, org.y1000.network.gen.InterpolationPacket.Builder, org.y1000.network.gen.InterpolationPacketOrBuilder> 
         getInterpolationsFieldBuilder() {
       if (interpolationsBuilder_ == null) {
         interpolationsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -707,10 +707,10 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.InterpolationsPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.InterpolationsPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.InterpolationsPacket)
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.InterpolationsPacket)
   private static final org.y1000.network.gen.InterpolationsPacket DEFAULT_INSTANCE;
   static {
     DEFAULT_INSTANCE = new org.y1000.network.gen.InterpolationsPacket();

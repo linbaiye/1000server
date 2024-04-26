@@ -5,111 +5,111 @@
 package org.y1000.network.gen;
 
 public interface PacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.Packet)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.Packet)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
    * @return Whether the positionPacket field is set.
    */
   boolean hasPositionPacket();
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
    * @return The positionPacket.
    */
   org.y1000.network.gen.PositionPacket getPositionPacket();
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 1;</code>
+   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
    */
   org.y1000.network.gen.PositionPacketOrBuilder getPositionPacketOrBuilder();
 
   /**
-   * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
    * @return Whether the creatureInterpolation field is set.
    */
   boolean hasCreatureInterpolation();
   /**
-   * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
    * @return The creatureInterpolation.
    */
   org.y1000.network.gen.CreatureInterpolationPacket getCreatureInterpolation();
   /**
-   * <code>.org.y1000.connection.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
+   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
    */
   org.y1000.network.gen.CreatureInterpolationPacketOrBuilder getCreatureInterpolationOrBuilder();
 
   /**
-   * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
    * @return Whether the loginPacket field is set.
    */
   boolean hasLoginPacket();
   /**
-   * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
    * @return The loginPacket.
    */
   org.y1000.network.gen.LoginPacket getLoginPacket();
   /**
-   * <code>.org.y1000.connection.gen.LoginPacket loginPacket = 4;</code>
+   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
    */
   org.y1000.network.gen.LoginPacketOrBuilder getLoginPacketOrBuilder();
 
   /**
-   * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+   * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
    * @return Whether the interpolations field is set.
    */
   boolean hasInterpolations();
   /**
-   * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+   * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
    * @return The interpolations.
    */
   org.y1000.network.gen.InterpolationsPacket getInterpolations();
   /**
-   * <code>.org.y1000.connection.gen.InterpolationsPacket interpolations = 5;</code>
+   * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
    */
   org.y1000.network.gen.InterpolationsPacketOrBuilder getInterpolationsOrBuilder();
 
   /**
-   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
    * @return Whether the responsePacket field is set.
    */
   boolean hasResponsePacket();
   /**
-   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
    * @return The responsePacket.
    */
   org.y1000.network.gen.InputResponsePacket getResponsePacket();
   /**
-   * <code>.org.y1000.connection.gen.InputResponsePacket responsePacket = 6;</code>
+   * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
    */
   org.y1000.network.gen.InputResponsePacketOrBuilder getResponsePacketOrBuilder();
 
   /**
-   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
    * @return Whether the playerInterpolation field is set.
    */
   boolean hasPlayerInterpolation();
   /**
-   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
    * @return The playerInterpolation.
    */
   org.y1000.network.gen.PlayerInterpolationPacket getPlayerInterpolation();
   /**
-   * <code>.org.y1000.connection.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
+   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
    */
   org.y1000.network.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder();
 
   /**
-   * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+   * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
    * @return Whether the removeEntity field is set.
    */
   boolean hasRemoveEntity();
   /**
-   * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+   * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
    * @return The removeEntity.
    */
   org.y1000.network.gen.RemoveEntityPacket getRemoveEntity();
   /**
-   * <code>.org.y1000.connection.gen.RemoveEntityPacket removeEntity = 8;</code>
+   * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
    */
   org.y1000.network.gen.RemoveEntityPacketOrBuilder getRemoveEntityOrBuilder();
 

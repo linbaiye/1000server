@@ -7,17 +7,15 @@ import java.util.List;
 
 public interface Connection {
 
-    List<ClientEvent> takeMessages();
-
     void write(ServerMessage message);
-
-    void registerConnectionEventListener(ConnectionEventListener listener);
 
     void registerClientEventListener(ClientEventListener clientEventListener);
 
     default void write(List<ServerMessage> messages) {
 
     }
+
+    void close();
 
 
     void writeAndFlush(ServerMessage message);

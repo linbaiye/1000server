@@ -44,8 +44,12 @@ public abstract class AbstractCreature implements Creature {
         eventListeners.forEach(listener -> listener.OnEvent(event));
     }
 
+    void ClearListeners() {
+        eventListeners.clear();
+    }
+
     @Override
-    public void registerEventListener(EntityEventListener listener) {
+    public void registerOrderedEventListener(EntityEventListener listener) {
         eventListeners.add(listener);
     }
 

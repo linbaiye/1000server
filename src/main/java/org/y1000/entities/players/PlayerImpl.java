@@ -1,9 +1,9 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.players.magic.UnnamedBufa;
 import org.y1000.network.ClientEventListener;
 import org.y1000.network.Connection;
-import org.y1000.network.NetworkEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreature;
 import org.y1000.entities.players.magic.FootMagic;
@@ -28,14 +28,19 @@ class PlayerImpl extends AbstractCreature implements Player,
 
     private FootMagic footMagic;
 
+    private final Connection connection;
+
 
     public PlayerImpl(long id, Coordinate coordinate,
                       Direction direction,
                       String name, Connection connection) {
         super(id, coordinate, direction, name);
         eventQueue = new ConcurrentLinkedDeque<>();
-        footMagic = null;
-        connection.registerClientEventListener(this);
+        this.footMagic = new UnnamedBufa(90.91f);
+        this.state = new PlayerIdleState();
+        changeDirection(Direction.DOWN);
+        this.connection = connection;
+        this.connection.registerClientEventListener(this);
     }
 
 
@@ -72,9 +77,8 @@ class PlayerImpl extends AbstractCreature implements Player,
 
     @Override
     public Connection connection() {
-        return null;
+        return connection;
     }
-
 
     @Override
     public void joinReam(RealmMap realm) {
@@ -83,9 +87,9 @@ class PlayerImpl extends AbstractCreature implements Player,
         }
         this.realmMap = realm;
         realmMap.occupy(this);
-        changeDirection(Direction.DOWN);
         this.state = new PlayerIdleState();
-        emitEvent(new LoginSucceededEvent(this, coordinate()));
+        changeDirection(Direction.DOWN);
+        emitEvent(new JoinedRealmEvent(this, coordinate()));
     }
 
     @Override
@@ -108,7 +112,6 @@ class PlayerImpl extends AbstractCreature implements Player,
     }
 
     public void reset(long sequence) {
-        log.debug("Reset player {}.", id());
         eventQueue.clear();
         emitEvent(new InputResponseMessage(sequence, SetPositionEvent.fromPlayer(this)));
         realmMap.occupy(this);

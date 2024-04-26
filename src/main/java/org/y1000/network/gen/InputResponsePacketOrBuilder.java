@@ -5,7 +5,7 @@
 package org.y1000.network.gen;
 
 public interface InputResponsePacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.InputResponsePacket)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.InputResponsePacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -15,17 +15,17 @@ public interface InputResponsePacketOrBuilder extends
   long getSequence();
 
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
    * @return Whether the positionPacket field is set.
    */
   boolean hasPositionPacket();
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
    * @return The positionPacket.
    */
   org.y1000.network.gen.PositionPacket getPositionPacket();
   /**
-   * <code>.org.y1000.connection.gen.PositionPacket positionPacket = 2;</code>
+   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
    */
   org.y1000.network.gen.PositionPacketOrBuilder getPositionPacketOrBuilder();
 }

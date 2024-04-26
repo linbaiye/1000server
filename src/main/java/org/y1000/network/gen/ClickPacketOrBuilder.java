@@ -5,7 +5,7 @@
 package org.y1000.network.gen;
 
 public interface ClickPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.ClickPacket)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ClickPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**

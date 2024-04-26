@@ -5,7 +5,7 @@
 package org.y1000.network.gen;
 
 public interface PositionPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.PositionPacket)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.PositionPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**

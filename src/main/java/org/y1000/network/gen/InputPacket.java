@@ -5,11 +5,11 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.connection.gen.InputPacket}
+ * Protobuf type {@code org.y1000.network.gen.InputPacket}
  */
 public final class InputPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.connection.gen.InputPacket)
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.InputPacket)
     InputPacketOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use InputPacket.newBuilder() to construct.
@@ -28,13 +28,13 @@ private static final long serialVersionUID = 0L;
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_InputPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InputPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_InputPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InputPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             org.y1000.network.gen.InputPacket.class, org.y1000.network.gen.InputPacket.Builder.class);
   }
@@ -253,26 +253,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.connection.gen.InputPacket}
+   * Protobuf type {@code org.y1000.network.gen.InputPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.connection.gen.InputPacket)
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.InputPacket)
       org.y1000.network.gen.InputPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_InputPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InputPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_InputPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InputPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.y1000.network.gen.InputPacket.class, org.y1000.network.gen.InputPacket.Builder.class);
     }
 
-    // Construct using org.y1000.connection.gen.InputPacket.newBuilder()
+    // Construct using org.y1000.network.gen.InputPacket.newBuilder()
     private Builder() {
 
     }
@@ -295,7 +295,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_connection_gen_InputPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InputPacket_descriptor;
     }
 
     @java.lang.Override
@@ -552,10 +552,10 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.connection.gen.InputPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.InputPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.connection.gen.InputPacket)
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.InputPacket)
   private static final org.y1000.network.gen.InputPacket DEFAULT_INSTANCE;
   static {
     DEFAULT_INSTANCE = new org.y1000.network.gen.InputPacket();

@@ -5,7 +5,7 @@
 package org.y1000.network.gen;
 
 public interface InputPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.connection.gen.InputPacket)
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.InputPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
