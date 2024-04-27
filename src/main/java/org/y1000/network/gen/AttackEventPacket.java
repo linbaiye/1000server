@@ -5,41 +5,40 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.InputResponsePacket}
+ * Protobuf type {@code org.y1000.network.gen.AttackEventPacket}
  */
-public final class InputResponsePacket extends
+public final class AttackEventPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.InputResponsePacket)
-    InputResponsePacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.AttackEventPacket)
+    AttackEventPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use InputResponsePacket.newBuilder() to construct.
-  private InputResponsePacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use AttackEventPacket.newBuilder() to construct.
+  private AttackEventPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private InputResponsePacket() {
+  private AttackEventPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new InputResponsePacket();
+    return new AttackEventPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InputResponsePacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_AttackEventPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InputResponsePacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_AttackEventPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.InputResponsePacket.class, org.y1000.network.gen.InputResponsePacket.Builder.class);
+            org.y1000.network.gen.AttackEventPacket.class, org.y1000.network.gen.AttackEventPacket.Builder.class);
   }
 
-  private int bitField0_;
   public static final int SEQUENCE_FIELD_NUMBER = 1;
   private long sequence_ = 0L;
   /**
@@ -51,30 +50,26 @@ private static final long serialVersionUID = 0L;
     return sequence_;
   }
 
-  public static final int POSITIONPACKET_FIELD_NUMBER = 2;
-  private org.y1000.network.gen.PositionPacket positionPacket_;
+  public static final int TARGETID_FIELD_NUMBER = 2;
+  private long targetId_ = 0L;
   /**
-   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
-   * @return Whether the positionPacket field is set.
+   * <code>int64 targetId = 2;</code>
+   * @return The targetId.
    */
   @java.lang.Override
-  public boolean hasPositionPacket() {
-    return ((bitField0_ & 0x00000001) != 0);
+  public long getTargetId() {
+    return targetId_;
   }
+
+  public static final int BELOW50_FIELD_NUMBER = 3;
+  private boolean below50_ = false;
   /**
-   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
-   * @return The positionPacket.
+   * <code>bool below50 = 3;</code>
+   * @return The below50.
    */
   @java.lang.Override
-  public org.y1000.network.gen.PositionPacket getPositionPacket() {
-    return positionPacket_ == null ? org.y1000.network.gen.PositionPacket.getDefaultInstance() : positionPacket_;
-  }
-  /**
-   * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PositionPacketOrBuilder getPositionPacketOrBuilder() {
-    return positionPacket_ == null ? org.y1000.network.gen.PositionPacket.getDefaultInstance() : positionPacket_;
+  public boolean getBelow50() {
+    return below50_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -94,8 +89,11 @@ private static final long serialVersionUID = 0L;
     if (sequence_ != 0L) {
       output.writeInt64(1, sequence_);
     }
-    if (((bitField0_ & 0x00000001) != 0)) {
-      output.writeMessage(2, getPositionPacket());
+    if (targetId_ != 0L) {
+      output.writeInt64(2, targetId_);
+    }
+    if (below50_ != false) {
+      output.writeBool(3, below50_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -110,9 +108,13 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(1, sequence_);
     }
-    if (((bitField0_ & 0x00000001) != 0)) {
+    if (targetId_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, getPositionPacket());
+        .computeInt64Size(2, targetId_);
+    }
+    if (below50_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(3, below50_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -124,18 +126,17 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.InputResponsePacket)) {
+    if (!(obj instanceof org.y1000.network.gen.AttackEventPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.InputResponsePacket other = (org.y1000.network.gen.InputResponsePacket) obj;
+    org.y1000.network.gen.AttackEventPacket other = (org.y1000.network.gen.AttackEventPacket) obj;
 
     if (getSequence()
         != other.getSequence()) return false;
-    if (hasPositionPacket() != other.hasPositionPacket()) return false;
-    if (hasPositionPacket()) {
-      if (!getPositionPacket()
-          .equals(other.getPositionPacket())) return false;
-    }
+    if (getTargetId()
+        != other.getTargetId()) return false;
+    if (getBelow50()
+        != other.getBelow50()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -150,53 +151,55 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + SEQUENCE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getSequence());
-    if (hasPositionPacket()) {
-      hash = (37 * hash) + POSITIONPACKET_FIELD_NUMBER;
-      hash = (53 * hash) + getPositionPacket().hashCode();
-    }
+    hash = (37 * hash) + TARGETID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getTargetId());
+    hash = (37 * hash) + BELOW50_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getBelow50());
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.InputResponsePacket parseFrom(
+  public static org.y1000.network.gen.AttackEventPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.InputResponsePacket parseFrom(
+  public static org.y1000.network.gen.AttackEventPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.InputResponsePacket parseFrom(
+  public static org.y1000.network.gen.AttackEventPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.InputResponsePacket parseFrom(
+  public static org.y1000.network.gen.AttackEventPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.InputResponsePacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.AttackEventPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.InputResponsePacket parseFrom(
+  public static org.y1000.network.gen.AttackEventPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.InputResponsePacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.AttackEventPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.InputResponsePacket parseFrom(
+  public static org.y1000.network.gen.AttackEventPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -204,26 +207,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.InputResponsePacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.AttackEventPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.InputResponsePacket parseDelimitedFrom(
+  public static org.y1000.network.gen.AttackEventPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.InputResponsePacket parseFrom(
+  public static org.y1000.network.gen.AttackEventPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.InputResponsePacket parseFrom(
+  public static org.y1000.network.gen.AttackEventPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -236,7 +239,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.InputResponsePacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.AttackEventPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -252,68 +255,59 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.InputResponsePacket}
+   * Protobuf type {@code org.y1000.network.gen.AttackEventPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.InputResponsePacket)
-      org.y1000.network.gen.InputResponsePacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.AttackEventPacket)
+      org.y1000.network.gen.AttackEventPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InputResponsePacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_AttackEventPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InputResponsePacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_AttackEventPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.InputResponsePacket.class, org.y1000.network.gen.InputResponsePacket.Builder.class);
+              org.y1000.network.gen.AttackEventPacket.class, org.y1000.network.gen.AttackEventPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.InputResponsePacket.newBuilder()
+    // Construct using org.y1000.network.gen.AttackEventPacket.newBuilder()
     private Builder() {
-      maybeForceBuilderInitialization();
+
     }
 
     private Builder(
         com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
-      maybeForceBuilderInitialization();
-    }
-    private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
-        getPositionPacketFieldBuilder();
-      }
+
     }
     @java.lang.Override
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
       sequence_ = 0L;
-      positionPacket_ = null;
-      if (positionPacketBuilder_ != null) {
-        positionPacketBuilder_.dispose();
-        positionPacketBuilder_ = null;
-      }
+      targetId_ = 0L;
+      below50_ = false;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InputResponsePacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_AttackEventPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.InputResponsePacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.InputResponsePacket.getDefaultInstance();
+    public org.y1000.network.gen.AttackEventPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.AttackEventPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.InputResponsePacket build() {
-      org.y1000.network.gen.InputResponsePacket result = buildPartial();
+    public org.y1000.network.gen.AttackEventPacket build() {
+      org.y1000.network.gen.AttackEventPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -321,26 +315,24 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.InputResponsePacket buildPartial() {
-      org.y1000.network.gen.InputResponsePacket result = new org.y1000.network.gen.InputResponsePacket(this);
+    public org.y1000.network.gen.AttackEventPacket buildPartial() {
+      org.y1000.network.gen.AttackEventPacket result = new org.y1000.network.gen.AttackEventPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.InputResponsePacket result) {
+    private void buildPartial0(org.y1000.network.gen.AttackEventPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.sequence_ = sequence_;
       }
-      int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.positionPacket_ = positionPacketBuilder_ == null
-            ? positionPacket_
-            : positionPacketBuilder_.build();
-        to_bitField0_ |= 0x00000001;
+        result.targetId_ = targetId_;
       }
-      result.bitField0_ |= to_bitField0_;
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.below50_ = below50_;
+      }
     }
 
     @java.lang.Override
@@ -377,21 +369,24 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.InputResponsePacket) {
-        return mergeFrom((org.y1000.network.gen.InputResponsePacket)other);
+      if (other instanceof org.y1000.network.gen.AttackEventPacket) {
+        return mergeFrom((org.y1000.network.gen.AttackEventPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.InputResponsePacket other) {
-      if (other == org.y1000.network.gen.InputResponsePacket.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.y1000.network.gen.AttackEventPacket other) {
+      if (other == org.y1000.network.gen.AttackEventPacket.getDefaultInstance()) return this;
       if (other.getSequence() != 0L) {
         setSequence(other.getSequence());
       }
-      if (other.hasPositionPacket()) {
-        mergePositionPacket(other.getPositionPacket());
+      if (other.getTargetId() != 0L) {
+        setTargetId(other.getTargetId());
+      }
+      if (other.getBelow50() != false) {
+        setBelow50(other.getBelow50());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -424,13 +419,16 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000001;
               break;
             } // case 8
-            case 18: {
-              input.readMessage(
-                  getPositionPacketFieldBuilder().getBuilder(),
-                  extensionRegistry);
+            case 16: {
+              targetId_ = input.readInt64();
               bitField0_ |= 0x00000002;
               break;
-            } // case 18
+            } // case 16
+            case 24: {
+              below50_ = input.readBool();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 24
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -480,125 +478,68 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private org.y1000.network.gen.PositionPacket positionPacket_;
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PositionPacket, org.y1000.network.gen.PositionPacket.Builder, org.y1000.network.gen.PositionPacketOrBuilder> positionPacketBuilder_;
+    private long targetId_ ;
     /**
-     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
-     * @return Whether the positionPacket field is set.
+     * <code>int64 targetId = 2;</code>
+     * @return The targetId.
      */
-    public boolean hasPositionPacket() {
-      return ((bitField0_ & 0x00000002) != 0);
+    @java.lang.Override
+    public long getTargetId() {
+      return targetId_;
     }
     /**
-     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
-     * @return The positionPacket.
+     * <code>int64 targetId = 2;</code>
+     * @param value The targetId to set.
+     * @return This builder for chaining.
      */
-    public org.y1000.network.gen.PositionPacket getPositionPacket() {
-      if (positionPacketBuilder_ == null) {
-        return positionPacket_ == null ? org.y1000.network.gen.PositionPacket.getDefaultInstance() : positionPacket_;
-      } else {
-        return positionPacketBuilder_.getMessage();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
-     */
-    public Builder setPositionPacket(org.y1000.network.gen.PositionPacket value) {
-      if (positionPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        positionPacket_ = value;
-      } else {
-        positionPacketBuilder_.setMessage(value);
-      }
+    public Builder setTargetId(long value) {
+
+      targetId_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
+     * <code>int64 targetId = 2;</code>
+     * @return This builder for chaining.
      */
-    public Builder setPositionPacket(
-        org.y1000.network.gen.PositionPacket.Builder builderForValue) {
-      if (positionPacketBuilder_ == null) {
-        positionPacket_ = builderForValue.build();
-      } else {
-        positionPacketBuilder_.setMessage(builderForValue.build());
-      }
-      bitField0_ |= 0x00000002;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
-     */
-    public Builder mergePositionPacket(org.y1000.network.gen.PositionPacket value) {
-      if (positionPacketBuilder_ == null) {
-        if (((bitField0_ & 0x00000002) != 0) &&
-          positionPacket_ != null &&
-          positionPacket_ != org.y1000.network.gen.PositionPacket.getDefaultInstance()) {
-          getPositionPacketBuilder().mergeFrom(value);
-        } else {
-          positionPacket_ = value;
-        }
-      } else {
-        positionPacketBuilder_.mergeFrom(value);
-      }
-      if (positionPacket_ != null) {
-        bitField0_ |= 0x00000002;
-        onChanged();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
-     */
-    public Builder clearPositionPacket() {
+    public Builder clearTargetId() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      positionPacket_ = null;
-      if (positionPacketBuilder_ != null) {
-        positionPacketBuilder_.dispose();
-        positionPacketBuilder_ = null;
-      }
+      targetId_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private boolean below50_ ;
+    /**
+     * <code>bool below50 = 3;</code>
+     * @return The below50.
+     */
+    @java.lang.Override
+    public boolean getBelow50() {
+      return below50_;
+    }
+    /**
+     * <code>bool below50 = 3;</code>
+     * @param value The below50 to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBelow50(boolean value) {
+
+      below50_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
+     * <code>bool below50 = 3;</code>
+     * @return This builder for chaining.
      */
-    public org.y1000.network.gen.PositionPacket.Builder getPositionPacketBuilder() {
-      bitField0_ |= 0x00000002;
+    public Builder clearBelow50() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      below50_ = false;
       onChanged();
-      return getPositionPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
-     */
-    public org.y1000.network.gen.PositionPacketOrBuilder getPositionPacketOrBuilder() {
-      if (positionPacketBuilder_ != null) {
-        return positionPacketBuilder_.getMessageOrBuilder();
-      } else {
-        return positionPacket_ == null ?
-            org.y1000.network.gen.PositionPacket.getDefaultInstance() : positionPacket_;
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PositionPacket positionPacket = 2;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PositionPacket, org.y1000.network.gen.PositionPacket.Builder, org.y1000.network.gen.PositionPacketOrBuilder> 
-        getPositionPacketFieldBuilder() {
-      if (positionPacketBuilder_ == null) {
-        positionPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.PositionPacket, org.y1000.network.gen.PositionPacket.Builder, org.y1000.network.gen.PositionPacketOrBuilder>(
-                getPositionPacket(),
-                getParentForChildren(),
-                isClean());
-        positionPacket_ = null;
-      }
-      return positionPacketBuilder_;
+      return this;
     }
     @java.lang.Override
     public final Builder setUnknownFields(
@@ -613,23 +554,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.InputResponsePacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.AttackEventPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.InputResponsePacket)
-  private static final org.y1000.network.gen.InputResponsePacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.AttackEventPacket)
+  private static final org.y1000.network.gen.AttackEventPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.InputResponsePacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.AttackEventPacket();
   }
 
-  public static org.y1000.network.gen.InputResponsePacket getDefaultInstance() {
+  public static org.y1000.network.gen.AttackEventPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<InputResponsePacket>
-      PARSER = new com.google.protobuf.AbstractParser<InputResponsePacket>() {
+  private static final com.google.protobuf.Parser<AttackEventPacket>
+      PARSER = new com.google.protobuf.AbstractParser<AttackEventPacket>() {
     @java.lang.Override
-    public InputResponsePacket parsePartialFrom(
+    public AttackEventPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -648,17 +589,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<InputResponsePacket> parser() {
+  public static com.google.protobuf.Parser<AttackEventPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<InputResponsePacket> getParserForType() {
+  public com.google.protobuf.Parser<AttackEventPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.InputResponsePacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.AttackEventPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

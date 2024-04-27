@@ -1,11 +1,11 @@
-package org.y1000.entities.players.magic;
+package org.y1000.entities.players.kungfu;
 
-public abstract class AbstractFootMagic implements FootMagic {
+public abstract class AbstractFootKungFu implements FootKungFu {
 
     private final String name;
     private float level;
 
-    public AbstractFootMagic(String name, float level) {
+    public AbstractFootKungFu(String name, float level) {
         this.name = name;
         this.level = level;
     }

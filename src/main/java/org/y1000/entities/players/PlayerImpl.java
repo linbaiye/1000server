@@ -1,12 +1,15 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.players.magic.UnnamedBufa;
+import org.y1000.entities.players.equipment.weapon.Weapon;
+import org.y1000.entities.players.kungfu.attack.AttackKungFu;
+import org.y1000.entities.players.kungfu.UnnamedBufa;
+import org.y1000.entities.players.kungfu.attack.basic.UnnamedQuanFa;
 import org.y1000.network.ClientEventListener;
 import org.y1000.network.Connection;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreature;
-import org.y1000.entities.players.magic.FootMagic;
+import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
@@ -17,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Slf4j
-class PlayerImpl extends AbstractCreature implements Player,
+final class PlayerImpl extends AbstractCreature implements Player,
         ClientEventListener {
 
     private RealmMap realmMap;
@@ -26,20 +29,28 @@ class PlayerImpl extends AbstractCreature implements Player,
 
     private final Queue<ClientEvent> eventQueue;
 
-    private FootMagic footMagic;
-
     private final Connection connection;
 
+    private AttackKungFu attackKungFu;
+
+    private FootKungFu footKungfu;
+
+    private Weapon weapon;
 
     public PlayerImpl(long id, Coordinate coordinate,
                       Direction direction,
                       String name, Connection connection) {
         super(id, coordinate, direction, name);
         eventQueue = new ConcurrentLinkedDeque<>();
-        this.footMagic = new UnnamedBufa(90.91f);
         this.state = new PlayerIdleState();
         changeDirection(Direction.DOWN);
         this.connection = connection;
+        this.footKungfu = new UnnamedBufa(98.91f);
+        attackKungFu = UnnamedQuanFa.builder()
+                .level(55f)
+                .bodyArmor(1)
+                .build();
+        //attackKungFu = UnnamedQuanFa.create();
         this.connection.registerClientEventListener(this);
     }
 
@@ -57,17 +68,17 @@ class PlayerImpl extends AbstractCreature implements Player,
     }
 
     @Override
-    public Optional<FootMagic> footMagic() {
-        return Optional.ofNullable(footMagic);
+    public Optional<FootKungFu> footKungFu() {
+        return Optional.ofNullable(footKungfu);
+    }
+
+    @Override
+    public Optional<AttackKungFu> attackKungFu() {
+        return Optional.ofNullable(attackKungFu);
     }
 
     void changeState(PlayerState newState) {
         state = newState;
-    }
-
-    @Override
-    public void addAll(List<ClientEvent> clientEvents) {
-        eventQueue.addAll(clientEvents);
     }
 
     @Override

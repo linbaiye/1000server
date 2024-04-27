@@ -4,7 +4,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.PassiveMonster;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.magic.FootMagic;
+import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.serverevent.EntityEventHandler;
 import org.y1000.util.Coordinate;
 
@@ -21,7 +21,7 @@ public class MoveEvent extends AbstractPositionEvent {
 
     public static MoveEvent movingTo(Player player,
                                      Direction direction) {
-        Optional<FootMagic> footMagic = player.footMagic();
+        Optional<FootKungFu> footMagic = player.footKungFu();
         MovementType type = footMagic.map(magic -> magic.canFly() ? MovementType.FLY : MovementType.RUN)
                 .orElse(MovementType.MOVE);
         return new MoveEvent(player, direction, player.coordinate(), type);

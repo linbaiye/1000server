@@ -2,12 +2,11 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
-import org.y1000.entities.players.magic.FootMagic;
+import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
 import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.input.*;
-import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
@@ -71,7 +70,7 @@ final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implem
     }
 
     public static PlayerMoveState move(Player player, AbstractRightClick trigger) {
-        Optional<FootMagic> footMagic = player.footMagic();
+        Optional<FootKungFu> footMagic = player.footKungFu();
         return footMagic.map(magic -> new PlayerMoveState(trigger, MILLIS_TO_RUN_ONE_UNIT, magic.canFly()? State.FLY : State.RUN))
                 .orElse(new PlayerMoveState(trigger, MILLIS_TO_WALK_ONE_UNIT, State.WALK));
     }

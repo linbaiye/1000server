@@ -3,6 +3,7 @@ package org.y1000.network;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.message.clientevent.AttackEntityEvent;
 import org.y1000.message.clientevent.LoginEvent;
 import org.y1000.network.gen.ClientPacket;
 import org.y1000.message.clientevent.CharacterMovementEvent;
@@ -38,6 +39,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         return switch (clientPacket.getTypeCase()) {
             case MOVEEVENTPACKET -> CharacterMovementEvent.fromPacket(clientPacket);
             case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
+            case ATTACKEVENTPACKET -> AttackEntityEvent.fromPacket(clientPacket.getAttackEventPacket());
             default -> throw new IllegalArgumentException();
         };
     }
