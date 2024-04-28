@@ -10,5 +10,4 @@ public interface Creature extends Entity {
     void changeDirection(Direction newDirection);
 
     String name();
-
 }

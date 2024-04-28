@@ -6,7 +6,7 @@ import org.y1000.network.Connection;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.players.kungfu.FootKungFu;
-import org.y1000.realm.RealmMap;
+import org.y1000.realm.RealmImpl;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
@@ -21,7 +21,8 @@ public interface Player extends Creature {
 
     Connection connection();
 
-    void joinReam(RealmMap realm);
+    void joinReam(RealmImpl realm);
+
 
     void leaveRealm();
 

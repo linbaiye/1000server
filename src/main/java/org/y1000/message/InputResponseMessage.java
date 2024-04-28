@@ -8,7 +8,8 @@ import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.message.serverevent.EntityEventHandler;
 import org.y1000.message.serverevent.PlayerEventHandler;
 
-public record InputResponseMessage(long sequence, AbstractPositionEvent positionMessage) implements EntityEvent {
+public record InputResponseMessage(long sequence, AbstractPositionEvent positionMessage) implements EntityEvent,
+        ServerMessage {
 
     @Override
     public Packet toPacket() {

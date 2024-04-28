@@ -24,21 +24,22 @@ public record Coordinate(int x, int y) {
         return result;
     }
 
-    public Optional<Direction> computeDirection(Coordinate another) {
-        if (another.equals(this)) {
-            return Optional.empty();
-        }
+    public Direction computeDirection(Coordinate another) {
         var ydiff = another.y() - this.y();
         var xdiff = another.x() - this.x();
         if (ydiff < 0) {
-            return xdiff < 0 ? Optional.of(Direction.UP_LEFT):
-                    Optional.of(xdiff > 0 ? Direction.UP_RIGHT : Direction.UP);
+            return xdiff < 0 ? Direction.UP_LEFT :
+                    xdiff > 0 ? Direction.UP_RIGHT : Direction.UP;
         } else if (ydiff == 0) {
-            return Optional.of(xdiff > 0 ? Direction.RIGHT: Direction.LEFT);
+            return xdiff > 0 ? Direction.RIGHT: Direction.LEFT;
         } else {
-            return xdiff < 0 ? Optional.of(Direction.DOWN_LEFT):
-                    Optional.of(xdiff > 0 ? Direction.DOWN_RIGHT: Direction.DOWN);
+            return xdiff < 0 ? Direction.DOWN_LEFT:
+                    xdiff > 0 ? Direction.DOWN_RIGHT: Direction.DOWN;
         }
+    }
+
+    public int distance(Coordinate another) {
+        return Math.max(Math.abs(another.x() - this.x()), Math.abs(another.y() - this.y()));
     }
 
 

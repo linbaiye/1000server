@@ -1,18 +1,21 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
+import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.CharacterMovementEvent;
-import org.y1000.message.clientevent.ClientEvent;
+import org.y1000.message.clientevent.ClientEventHandler;
 import org.y1000.message.input.*;
 
 import java.util.Optional;
 
 
 @Slf4j
-final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements PlayerState {
+final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements
+        PlayerState, ClientEventHandler {
 
     private static final long MILLIS_TO_WALK_ONE_UNIT = 900;
     private static final long MILLIS_TO_RUN_ONE_UNIT = 450;
@@ -24,30 +27,9 @@ final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implem
         this.currentInput = currentInput;
     }
 
-    private void handleEvent(PlayerImpl player, ClientEvent clientEvent) {
-        if (clientEvent instanceof CharacterMovementEvent movementEvent) {
-            log.warn("Handling event {} at {}.", clientEvent, player.coordinate());
-            if (!movementEvent.happenedAt().equals(player.coordinate())) {
-                player.reset(movementEvent.inputMessage().sequence());
-                return;
-            }
-            if (movementEvent.inputMessage() instanceof AbstractRightClick rightClick) {
-                player.emitEvent(Mover.onRightClick(player, rightClick));
-            } else if (movementEvent.inputMessage() instanceof RightMouseRelease rightMouseRelease) {
-                player.changeState(new PlayerIdleState());
-                player.emitEvent(new InputResponseMessage(rightMouseRelease.sequence(), SetPositionEvent.fromPlayer(player)));
-            }
-        } else {
-            log.warn("Not a handleable event {}", clientEvent);
-        }
-    }
-
 
     private void handleInput(PlayerImpl player) {
-        var clientEvent = player.takeClientEvent();
-        if (clientEvent != null) {
-            handleEvent(player, clientEvent);
-        }
+        player.takeClientEvent().ifPresent(e -> e.accept(player, this));
     }
 
     @Override
@@ -69,9 +51,30 @@ final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implem
         }
     }
 
+
     public static PlayerMoveState move(Player player, AbstractRightClick trigger) {
         Optional<FootKungFu> footMagic = player.footKungFu();
         return footMagic.map(magic -> new PlayerMoveState(trigger, MILLIS_TO_RUN_ONE_UNIT, magic.canFly()? State.FLY : State.RUN))
                 .orElse(new PlayerMoveState(trigger, MILLIS_TO_WALK_ONE_UNIT, State.WALK));
+    }
+
+    @Override
+    public void handle(PlayerImpl player, ClientAttackEvent event) {
+    }
+
+    @Override
+    public void handle(PlayerImpl player, CharacterMovementEvent movementEvent) {
+        log.warn("Handling event {} at {}.", movementEvent, player.coordinate());
+        if (!movementEvent.happenedAt().equals(player.coordinate())) {
+            player.reset(movementEvent.inputMessage().sequence());
+            return;
+        }
+        if (movementEvent.inputMessage() instanceof AbstractRightClick rightClick) {
+            player.emitEvent(Mover.onRightClick(player, rightClick));
+        } else if (movementEvent.inputMessage() instanceof RightMouseRelease rightMouseRelease) {
+            player.changeState(new PlayerIdleState());
+            player.emitEvent(new InputResponseMessage(rightMouseRelease.sequence(),
+                    SetPositionEvent.fromPlayer(player)));
+        }
     }
 }

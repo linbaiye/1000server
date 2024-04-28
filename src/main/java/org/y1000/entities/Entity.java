@@ -11,6 +11,10 @@ public interface Entity {
 
     void update(long delta);
 
+    default void hit(Entity attacker) {
+
+    }
+
     AbstractInterpolation captureInterpolation();
 
     void registerOrderedEventListener(EntityEventListener listener);

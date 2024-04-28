@@ -8,11 +8,11 @@ import java.util.concurrent.*;
 
 
 public final class RealmManager {
-    private final Map<String, Realm> realms;
+    private final Map<String, RealmImpl> realms;
 
     private final ExecutorService executorService;
 
-    public RealmManager(Map<String, Realm> realms) {
+    public RealmManager(Map<String, RealmImpl> realms) {
         this.realms = realms;
         executorService = Executors.newFixedThreadPool(realms.size());
     }
@@ -27,7 +27,7 @@ public final class RealmManager {
     }
 
 
-    public Realm load(String name) {
+    public RealmImpl load(String name) {
         return null;
     }
 
@@ -42,9 +42,9 @@ public final class RealmManager {
     }
 
     public static RealmManager create() {
-        Map<String, Realm> realmMap = new HashMap<>();
-        Realm realm = RealmMap.Load("start")
-                .map(Realm::new)
+        Map<String, RealmImpl> realmMap = new HashMap<>();
+        RealmImpl realm = RealmMap.Load("start")
+                .map(RealmImpl::new)
                 .orElseThrow(() -> new IllegalArgumentException("Map not found."));
         realmMap.put(realm.map().name(), realm);
         return new RealmManager(realmMap);

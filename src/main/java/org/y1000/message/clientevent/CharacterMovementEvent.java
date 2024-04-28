@@ -1,5 +1,6 @@
 package org.y1000.message.clientevent;
 
+import org.y1000.entities.players.PlayerImpl;
 import org.y1000.network.gen.ClientPacket;
 import org.y1000.network.gen.MoveEventPacket;
 import org.y1000.message.ValueEnum;
@@ -25,7 +26,12 @@ public record CharacterMovementEvent(InputMessage inputMessage, Coordinate happe
             case MOUSE_RIGHT_CLICK -> new CharacterMovementEvent(RightMouseClick.fromPacket(moveEventPacket.getInput()), coor);
             case MOUSE_RIGHT_RELEASE -> new CharacterMovementEvent(RightMouseRelease.fromPacket(moveEventPacket.getInput()), coor);
             case MOUSE_RIGHT_MOTION -> new CharacterMovementEvent(RightMousePressedMotion.fromPacket(moveEventPacket.getInput()), coor);
-            default -> throw new IllegalArgumentException();
         };
+    }
+
+
+    @Override
+    public void accept(PlayerImpl player, ClientEventHandler handler) {
+        handler.handle(player, this);
     }
 }

@@ -2,7 +2,7 @@ package org.y1000.message.serverevent;
 
 import org.y1000.entities.players.Player;
 
-public abstract class AbstractPlayerEvent extends AbstractEntityEvent {
+public abstract class AbstractPlayerEvent extends AbstractSerializableEntityEvent {
     public AbstractPlayerEvent(Player source) {
         super(source);
     }

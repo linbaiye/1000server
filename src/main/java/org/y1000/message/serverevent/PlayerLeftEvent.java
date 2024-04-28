@@ -4,7 +4,7 @@ import org.y1000.network.gen.Packet;
 import org.y1000.entities.players.Player;
 import org.y1000.message.RemoveEntityMessage;
 
-public class PlayerLeftEvent extends AbstractPlayerEvent {
+public final class PlayerLeftEvent extends AbstractPlayerEvent {
     public PlayerLeftEvent(Player source) {
         super(source);
     }

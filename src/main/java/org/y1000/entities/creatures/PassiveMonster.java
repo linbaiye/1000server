@@ -2,13 +2,16 @@ package org.y1000.entities.creatures;
 
 
 import org.y1000.entities.Direction;
+import org.y1000.entities.Entity;
 import org.y1000.message.AbstractInterpolation;
 import org.y1000.message.CreatureInterpolation;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
+import java.util.Objects;
 
-public class PassiveMonster extends AbstractCreature {
+
+public final class PassiveMonster extends AbstractCreature {
 
     private CreatureState<PassiveMonster> state;
 
@@ -50,5 +53,21 @@ public class PassiveMonster extends AbstractCreature {
         return new CreatureInterpolation(id(), coordinate(), state.stateEnum(), direction(), state.elapsedMillis(), name());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id());
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        return obj == this || ((PassiveMonster) obj).id() == id();
+    }
+
+    @Override
+    public void attack(Entity target) {
+
+    }
 }

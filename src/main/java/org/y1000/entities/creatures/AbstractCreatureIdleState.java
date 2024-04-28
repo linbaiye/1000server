@@ -23,4 +23,5 @@ public abstract class AbstractCreatureIdleState<E extends Creature> extends Abst
         elapse(deltaMillis);
         return elapsedMillis() >= lengthMillis;
     }
+
 }

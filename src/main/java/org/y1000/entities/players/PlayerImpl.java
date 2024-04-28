@@ -4,7 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.players.equipment.weapon.Weapon;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.UnnamedBufa;
-import org.y1000.entities.players.kungfu.attack.basic.UnnamedQuanFa;
+import org.y1000.entities.players.kungfu.attack.unnamed.UnnamedQuanFa;
+import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.network.ClientEventListener;
 import org.y1000.network.Connection;
 import org.y1000.entities.Direction;
@@ -13,6 +14,8 @@ import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
+import org.y1000.realm.Realm;
+import org.y1000.realm.RealmImpl;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -20,10 +23,10 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Slf4j
-final class PlayerImpl extends AbstractCreature implements Player,
+public final class PlayerImpl extends AbstractCreature implements Player,
         ClientEventListener {
 
-    private RealmMap realmMap;
+    private Realm realm;
 
     private PlayerState state;
 
@@ -50,21 +53,16 @@ final class PlayerImpl extends AbstractCreature implements Player,
                 .level(55f)
                 .bodyArmor(1)
                 .build();
-        //attackKungFu = UnnamedQuanFa.create();
         this.connection.registerClientEventListener(this);
     }
 
-
-    boolean hasClientEvent() {
-        return !eventQueue.isEmpty();
-    }
-
-    ClientEvent takeClientEvent() {
-        return eventQueue.poll();
+    Optional<ClientEvent> takeClientEvent() {
+        ClientEvent event = eventQueue.poll();
+        return Optional.ofNullable(event);
     }
 
     RealmMap realmMap() {
-        return realmMap;
+        return realm.map();
     }
 
     @Override
@@ -77,7 +75,7 @@ final class PlayerImpl extends AbstractCreature implements Player,
         return Optional.ofNullable(attackKungFu);
     }
 
-    void changeState(PlayerState newState) {
+    public void changeState(PlayerState newState) {
         state = newState;
     }
 
@@ -92,21 +90,25 @@ final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     @Override
-    public void joinReam(RealmMap realm) {
-        if (realmMap != null) {
+    public void joinReam(RealmImpl realm) {
+        if (realm != null) {
             leaveRealm();
         }
-        this.realmMap = realm;
-        realmMap.occupy(this);
+        this.realm = realm;
+        realmMap().occupy(this);
         this.state = new PlayerIdleState();
         changeDirection(Direction.DOWN);
         emitEvent(new JoinedRealmEvent(this, coordinate()));
     }
 
+    Realm realm() {
+        return realm;
+    }
+
     @Override
     public void leaveRealm() {
-        if (realmMap != null) {
-            realmMap.free(this);
+        if (realm != null) {
+            realmMap().free(this);
         }
         emitEvent(new PlayerLeftEvent(this));
     }
@@ -125,7 +127,7 @@ final class PlayerImpl extends AbstractCreature implements Player,
     public void reset(long sequence) {
         eventQueue.clear();
         emitEvent(new InputResponseMessage(sequence, SetPositionEvent.fromPlayer(this)));
-        realmMap.occupy(this);
+        realmMap().occupy(this);
     }
 
 
@@ -149,6 +151,7 @@ final class PlayerImpl extends AbstractCreature implements Player,
     public String name() {
         return "";
     }
+
 
     @Override
     public boolean equals(Object o) {

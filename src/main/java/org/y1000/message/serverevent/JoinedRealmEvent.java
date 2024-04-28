@@ -1,7 +1,8 @@
-package org.y1000.message;
+package org.y1000.message.serverevent;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.y1000.message.ServerMessage;
 import org.y1000.network.gen.LoginPacket;
 import org.y1000.network.gen.Packet;
 import org.y1000.entities.Entity;
@@ -13,7 +14,7 @@ import org.y1000.util.Coordinate;
 
 @Builder
 @AllArgsConstructor
-public class JoinedRealmEvent implements EntityEvent {
+public class JoinedRealmEvent implements EntityEvent, ServerMessage {
 
     private final Player player;
 

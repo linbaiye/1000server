@@ -3,12 +3,12 @@ package org.y1000.message.serverevent;
 import org.y1000.entities.Entity;
 import org.y1000.message.AbstractServerMessage;
 
-public abstract class AbstractEntityEvent extends AbstractServerMessage
+public abstract class AbstractSerializableEntityEvent extends AbstractServerMessage
         implements EntityEvent {
 
     private final Entity source;
 
-    public AbstractEntityEvent(Entity source) {
+    public AbstractSerializableEntityEvent(Entity source) {
         this.source = source;
     }
 
@@ -16,5 +16,4 @@ public abstract class AbstractEntityEvent extends AbstractServerMessage
     public Entity source() {
         return source;
     }
-
 }

@@ -7,7 +7,7 @@ import org.y1000.entities.Entity;
 import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.util.Coordinate;
 
-public abstract class AbstractPositionEvent implements EntityEvent {
+public abstract class AbstractPositionEvent implements EntityEvent, ServerMessage {
 
     private final long id;
 

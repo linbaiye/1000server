@@ -5,10 +5,11 @@ import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.message.AbstractPositionEvent;
 import org.y1000.message.InputResponseMessage;
-import org.y1000.message.JoinedRealmEvent;
+import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.serverevent.*;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -83,6 +84,11 @@ public final class RealmEntityManager implements EntityEventListener,
 
     public void updateEntities(long delta) {
         scopeManager.getAllEntities().forEach(e -> e.update(delta));
+    }
+
+    public Optional<Entity> findInsight(Entity source, long id) {
+        Set<Entity> entities = scopeManager.filterVisibleEntities(source, Entity.class);
+        return entities.stream().filter(e -> e.id() == id).findFirst();
     }
 
     public void add(Entity entity) {

@@ -10,6 +10,8 @@ public enum State implements ValueEnum {
     RUN(3),
 
     FLY(11),
+
+    ATTACK(12),
     ;
 
     private final int v;
