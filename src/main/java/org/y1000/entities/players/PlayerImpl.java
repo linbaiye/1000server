@@ -20,7 +20,7 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
 public final class PlayerImpl extends AbstractCreature implements Player,
@@ -44,7 +44,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
                       Direction direction,
                       String name, Connection connection) {
         super(id, coordinate, direction, name);
-        eventQueue = new ConcurrentLinkedDeque<>();
+        eventQueue = new ConcurrentLinkedQueue<>();
         this.state = new PlayerIdleState();
         changeDirection(Direction.DOWN);
         this.connection = connection;
@@ -57,8 +57,8 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     Optional<ClientEvent> takeClientEvent() {
-        ClientEvent event = eventQueue.poll();
-        return Optional.ofNullable(event);
+        return eventQueue.peek() != null ? Optional.empty() :
+                Optional.ofNullable(eventQueue.poll());
     }
 
     RealmMap realmMap() {
@@ -91,7 +91,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
     @Override
     public void joinReam(RealmImpl realm) {
-        if (realm != null) {
+        if (this.realm != null) {
             leaveRealm();
         }
         this.realm = realm;
@@ -102,7 +102,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     Realm realm() {
-        return realm;
+        return this.realm;
     }
 
     @Override

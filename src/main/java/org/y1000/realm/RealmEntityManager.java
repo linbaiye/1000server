@@ -75,6 +75,7 @@ public final class RealmEntityManager implements EntityEventListener,
                 .filter(entity -> entity instanceof Player)
                 .map(Player.class::cast)
                 .forEach(player -> player.connection().write(event));
+        log.info("Player {} left realm.", event.player());
     }
 
     @Override
@@ -89,6 +90,10 @@ public final class RealmEntityManager implements EntityEventListener,
     public Optional<Entity> findInsight(Entity source, long id) {
         Set<Entity> entities = scopeManager.filterVisibleEntities(source, Entity.class);
         return entities.stream().filter(e -> e.id() == id).findFirst();
+    }
+
+    public boolean contains(Player player) {
+        return scopeManager.contains(player);
     }
 
     public void add(Entity entity) {

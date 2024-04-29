@@ -19,6 +19,8 @@ public final class RealmImpl implements Runnable, Realm {
 
     private final List<Player> waitingPlayers;
 
+    private final List<Player> leavingPlayers;
+
     private final RealmEntityManager entityManager;
 
     private volatile boolean shutdown;
@@ -26,6 +28,7 @@ public final class RealmImpl implements Runnable, Realm {
     public RealmImpl(RealmMap map) {
         realmMap = map;
         waitingPlayers = new ArrayList<>(32);
+        leavingPlayers = new ArrayList<>(32);
         entityManager = new RealmEntityManager();
         shutdown = false;
     }
@@ -41,7 +44,7 @@ public final class RealmImpl implements Runnable, Realm {
 
 
     private void initEntities() {
-        List<PassiveMonster> monsters = List.of(new PassiveMonster(3L, new Coordinate(39, 30), Direction.DOWN, "牛", realmMap));
+        List<PassiveMonster> monsters = List.of(new PassiveMonster(1000L, new Coordinate(39, 30), Direction.DOWN, "牛", realmMap));
         monsters.forEach(entityManager::add);
     }
 
@@ -55,19 +58,26 @@ public final class RealmImpl implements Runnable, Realm {
                     entityManager.updateEntities(STEP_MILLIS);
                     timeMillis += STEP_MILLIS;
                 } else {
-                    List<Player> tmp = Collections.emptyList();
+                    List<Player> join = Collections.emptyList();
+                    List<Player> leaving = Collections.emptyList();
                     synchronized (this) {
-                        while (waitingPlayers.isEmpty() && current < timeMillis) {
+                        while (waitingPlayers.isEmpty() && current < timeMillis &&
+                                leavingPlayers.isEmpty()) {
                             wait(timeMillis - current);
                             current = System.currentTimeMillis();
                         }
                         if (!waitingPlayers.isEmpty()) {
-                            tmp = new ArrayList<>(waitingPlayers);
+                            join = new ArrayList<>(waitingPlayers);
                             waitingPlayers.clear();
                         }
-                        notify();
+                        if (!leavingPlayers.isEmpty()) {
+                            leaving = new ArrayList<>(leavingPlayers);
+                            leavingPlayers.clear();
+                        }
+                        notifyAll();
                     }
-                    tmp.forEach(this::joinPlayer);
+                    join.forEach(this::joinPlayer);
+                    leaving.forEach(Player::leaveRealm);
                 }
             }
         } catch (InterruptedException e) {
@@ -81,8 +91,14 @@ public final class RealmImpl implements Runnable, Realm {
         step();
     }
 
+
     public synchronized void addPlayer(Player player) {
         waitingPlayers.add(player);
+        notifyAll();
+    }
+
+    public synchronized void removePlayer(Player player) {
+        leavingPlayers.add(player);
         notifyAll();
     }
 

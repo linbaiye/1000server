@@ -39,6 +39,10 @@ public final class RelevantScopeManager {
         return relevantScopeMap.keySet();
     }
 
+    public boolean contains(Entity entity) {
+        return relevantScopeMap.containsKey(entity);
+    }
+
 
     public <E extends Entity> Set<E> filterVisibleEntities(Entity entity, Class<E> type) {
         RelevantScope relevantScope = relevantScopeMap.get(entity);

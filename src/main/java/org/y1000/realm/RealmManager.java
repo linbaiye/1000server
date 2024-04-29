@@ -10,11 +10,14 @@ import java.util.concurrent.*;
 public final class RealmManager {
     private final Map<String, RealmImpl> realms;
 
+    private final Map<Player, RealmImpl> playerRealmMap;
+
     private final ExecutorService executorService;
 
     public RealmManager(Map<String, RealmImpl> realms) {
         this.realms = realms;
         executorService = Executors.newFixedThreadPool(realms.size());
+        playerRealmMap = new HashMap<>();
     }
 
     public void start() {
@@ -33,12 +36,18 @@ public final class RealmManager {
 
     public void onPlayerConnected(Player player, String realmName) {
         if (realms.containsKey(realmName)) {
-            realms.get(realmName).addPlayer(player);
+            RealmImpl realm = realms.get(realmName);
+            playerRealmMap.put(player, realm);
+            realm.addPlayer(player);
         }
     }
 
     public void onPlayerDisconnected(Player player) {
-        player.leaveRealm();
+        RealmImpl realm = playerRealmMap.get(player);
+        if (realm != null) {
+            realm.removePlayer(player);
+            playerRealmMap.remove(player);
+        }
     }
 
     public static RealmManager create() {
