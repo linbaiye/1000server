@@ -5,8 +5,8 @@ import org.y1000.network.gen.Packet;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.EntityEvent;
-import org.y1000.message.serverevent.EntityEventHandler;
-import org.y1000.message.serverevent.PlayerEventHandler;
+import org.y1000.message.serverevent.EntityEventVisitor;
+import org.y1000.message.serverevent.PlayerEventVisitor;
 
 public record InputResponseMessage(long sequence, AbstractPositionEvent positionMessage) implements EntityEvent,
         ServerMessage {
@@ -29,15 +29,11 @@ public record InputResponseMessage(long sequence, AbstractPositionEvent position
         return positionMessage().source();
     }
 
-    @Override
-    public long id() {
-        return positionMessage.id();
-    }
 
     @Override
-    public void accept(EntityEventHandler visitor) {
-        if (visitor instanceof PlayerEventHandler playerEventVisitor) {
-            playerEventVisitor.handle(this);
+    public void accept(EntityEventVisitor visitor) {
+        if (visitor instanceof PlayerEventVisitor playerEventVisitor) {
+            playerEventVisitor.visit(this);
         }
     }
 }

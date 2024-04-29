@@ -1,13 +1,12 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.CharacterMovementEvent;
-import org.y1000.message.clientevent.ClientEventHandler;
+import org.y1000.message.clientevent.ClientEventVisitor;
 import org.y1000.message.input.*;
 
 import java.util.Optional;
@@ -15,7 +14,7 @@ import java.util.Optional;
 
 @Slf4j
 final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements
-        PlayerState, ClientEventHandler {
+        PlayerState, ClientEventVisitor {
 
     private static final long MILLIS_TO_WALK_ONE_UNIT = 900;
     private static final long MILLIS_TO_RUN_ONE_UNIT = 450;
@@ -59,11 +58,11 @@ final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implem
     }
 
     @Override
-    public void handle(PlayerImpl player, ClientAttackEvent event) {
+    public void visit(PlayerImpl player, ClientAttackEvent event) {
     }
 
     @Override
-    public void handle(PlayerImpl player, CharacterMovementEvent movementEvent) {
+    public void visit(PlayerImpl player, CharacterMovementEvent movementEvent) {
         log.warn("Handling event {} at {}.", movementEvent, player.coordinate());
         if (!movementEvent.happenedAt().equals(player.coordinate())) {
             player.reset(movementEvent.inputMessage().sequence());

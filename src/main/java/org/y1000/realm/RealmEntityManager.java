@@ -2,9 +2,13 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Entity;
+import org.y1000.entities.creatures.event.CreatureAttackEvent;
+import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.message.AbstractPositionEvent;
 import org.y1000.message.InputResponseMessage;
+import org.y1000.message.ServerMessage;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.serverevent.*;
@@ -14,14 +18,14 @@ import java.util.Set;
 
 @Slf4j
 public final class RealmEntityManager implements EntityEventListener,
-        PlayerEventHandler {
+        PlayerEventVisitor {
 
     private final RelevantScopeManager scopeManager = new RelevantScopeManager();
 
     @Override
-    public void handle(InputResponseMessage inputResponseMessage) {
+    public void visit(InputResponseMessage inputResponseMessage) {
         inputResponseMessage.player().connection().write(inputResponseMessage);
-        handle(inputResponseMessage.positionMessage());
+        visit(inputResponseMessage.positionMessage());
     }
 
     private void notifyPlayerJoined(Player joined, Entity entity) {
@@ -53,29 +57,47 @@ public final class RealmEntityManager implements EntityEventListener,
 
 
     @Override
-    public void handle(AbstractPositionEvent positionEvent) {
+    public void visit(AbstractPositionEvent positionEvent) {
         Entity source = positionEvent.source();
         Set<Entity> affectedEntities = scopeManager.update(source);
         affectedEntities.forEach(entity -> notifyOutsightOrInsight(source, entity));
-        Set<Player> players = scopeManager.filterVisibleEntities(source, Player.class);
-        players.forEach(p -> p.connection().write(positionEvent));
+        notifyVisiblePlayers(source, positionEvent);
     }
 
     @Override
-    public void handle(JoinedRealmEvent loginMessage) {
+    public void visit(JoinedRealmEvent loginMessage) {
         loginMessage.player().connection().write(loginMessage);
         var visibleEntities = scopeManager.filterVisibleEntities(loginMessage.source(), Entity.class);
         visibleEntities.forEach(entity -> notifyPlayerJoined(loginMessage.player(), entity));
     }
 
     @Override
-    public void handle(PlayerLeftEvent event) {
+    public void visit(PlayerLeftEvent event) {
         Set<Entity> affected = scopeManager.remove(event.player());
         affected.stream()
                 .filter(entity -> entity instanceof Player)
                 .map(Player.class::cast)
                 .forEach(player -> player.connection().write(event));
-        log.info("Player {} left realm.", event.player());
+    }
+
+    @Override
+    public void visit(PlayerAttackEventResponse event) {
+        event.player().connection().write(event);
+    }
+
+    private void notifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
+        scopeManager.filterVisibleEntities(source, Player.class)
+                .forEach(player -> player.connection().write(serverMessage));
+    }
+
+    @Override
+    public void visit(CreatureAttackEvent event) {
+        notifyVisiblePlayers(event.source(), event);
+    }
+
+    @Override
+    public void visit(CreatureHurtEvent event) {
+        notifyVisiblePlayers(event.source(), event);
     }
 
     @Override

@@ -5,12 +5,12 @@ import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.PassiveMonster;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.kungfu.FootKungFu;
-import org.y1000.message.serverevent.EntityEventHandler;
+import org.y1000.message.serverevent.EntityEventVisitor;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
-public class MoveEvent extends AbstractPositionEvent {
+public final class MoveEvent extends AbstractPositionEvent {
 
     private final MovementType movementType;
 
@@ -33,8 +33,8 @@ public class MoveEvent extends AbstractPositionEvent {
     }
 
     @Override
-    public void accept(EntityEventHandler visitor) {
-        visitor.handle(this);
+    public void accept(EntityEventVisitor visitor) {
+        visitor.visit(this);
     }
 
     public static MoveEvent movingTo(PassiveMonster monster, Direction direction) {

@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.0-rc2
 package org.y1000.network.gen;
 
-public interface RemoveEntityPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.RemoveEntityPacket)
+public interface CreatureHurtEventPacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.CreatureHurtEventPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**

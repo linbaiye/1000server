@@ -5,38 +5,38 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.RemoveEntityPacket}
+ * Protobuf type {@code org.y1000.network.gen.CreatureAttackEventPacket}
  */
-public final class RemoveEntityPacket extends
+public final class CreatureAttackEventPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.RemoveEntityPacket)
-    RemoveEntityPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.CreatureAttackEventPacket)
+    CreatureAttackEventPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use RemoveEntityPacket.newBuilder() to construct.
-  private RemoveEntityPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use CreatureAttackEventPacket.newBuilder() to construct.
+  private CreatureAttackEventPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private RemoveEntityPacket() {
+  private CreatureAttackEventPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new RemoveEntityPacket();
+    return new CreatureAttackEventPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_CreatureAttackEventPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_RemoveEntityPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_CreatureAttackEventPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.RemoveEntityPacket.class, org.y1000.network.gen.RemoveEntityPacket.Builder.class);
+            org.y1000.network.gen.CreatureAttackEventPacket.class, org.y1000.network.gen.CreatureAttackEventPacket.Builder.class);
   }
 
   public static final int ID_FIELD_NUMBER = 1;
@@ -48,6 +48,39 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public long getId() {
     return id_;
+  }
+
+  public static final int DIRECTION_FIELD_NUMBER = 2;
+  private int direction_ = 0;
+  /**
+   * <code>int32 direction = 2;</code>
+   * @return The direction.
+   */
+  @java.lang.Override
+  public int getDirection() {
+    return direction_;
+  }
+
+  public static final int BELOW50_FIELD_NUMBER = 3;
+  private boolean below50_ = false;
+  /**
+   * <code>bool below50 = 3;</code>
+   * @return The below50.
+   */
+  @java.lang.Override
+  public boolean getBelow50() {
+    return below50_;
+  }
+
+  public static final int SPRITEMILLIS_FIELD_NUMBER = 4;
+  private int spriteMillis_ = 0;
+  /**
+   * <code>int32 spriteMillis = 4;</code>
+   * @return The spriteMillis.
+   */
+  @java.lang.Override
+  public int getSpriteMillis() {
+    return spriteMillis_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -67,6 +100,15 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0L) {
       output.writeInt64(1, id_);
     }
+    if (direction_ != 0) {
+      output.writeInt32(2, direction_);
+    }
+    if (below50_ != false) {
+      output.writeBool(3, below50_);
+    }
+    if (spriteMillis_ != 0) {
+      output.writeInt32(4, spriteMillis_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -80,6 +122,18 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(1, id_);
     }
+    if (direction_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(2, direction_);
+    }
+    if (below50_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(3, below50_);
+    }
+    if (spriteMillis_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(4, spriteMillis_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -90,13 +144,19 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.RemoveEntityPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.CreatureAttackEventPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.RemoveEntityPacket other = (org.y1000.network.gen.RemoveEntityPacket) obj;
+    org.y1000.network.gen.CreatureAttackEventPacket other = (org.y1000.network.gen.CreatureAttackEventPacket) obj;
 
     if (getId()
         != other.getId()) return false;
+    if (getDirection()
+        != other.getDirection()) return false;
+    if (getBelow50()
+        != other.getBelow50()) return false;
+    if (getSpriteMillis()
+        != other.getSpriteMillis()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -111,49 +171,56 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getId());
+    hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
+    hash = (53 * hash) + getDirection();
+    hash = (37 * hash) + BELOW50_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getBelow50());
+    hash = (37 * hash) + SPRITEMILLIS_FIELD_NUMBER;
+    hash = (53 * hash) + getSpriteMillis();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -161,26 +228,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.RemoveEntityPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.RemoveEntityPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.RemoveEntityPacket parseFrom(
+  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -193,7 +260,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.RemoveEntityPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.CreatureAttackEventPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -209,26 +276,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.RemoveEntityPacket}
+   * Protobuf type {@code org.y1000.network.gen.CreatureAttackEventPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.RemoveEntityPacket)
-      org.y1000.network.gen.RemoveEntityPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.CreatureAttackEventPacket)
+      org.y1000.network.gen.CreatureAttackEventPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_CreatureAttackEventPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_RemoveEntityPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_CreatureAttackEventPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.RemoveEntityPacket.class, org.y1000.network.gen.RemoveEntityPacket.Builder.class);
+              org.y1000.network.gen.CreatureAttackEventPacket.class, org.y1000.network.gen.CreatureAttackEventPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.RemoveEntityPacket.newBuilder()
+    // Construct using org.y1000.network.gen.CreatureAttackEventPacket.newBuilder()
     private Builder() {
 
     }
@@ -243,23 +310,26 @@ private static final long serialVersionUID = 0L;
       super.clear();
       bitField0_ = 0;
       id_ = 0L;
+      direction_ = 0;
+      below50_ = false;
+      spriteMillis_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_CreatureAttackEventPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.RemoveEntityPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.RemoveEntityPacket.getDefaultInstance();
+    public org.y1000.network.gen.CreatureAttackEventPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.CreatureAttackEventPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.RemoveEntityPacket build() {
-      org.y1000.network.gen.RemoveEntityPacket result = buildPartial();
+    public org.y1000.network.gen.CreatureAttackEventPacket build() {
+      org.y1000.network.gen.CreatureAttackEventPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -267,17 +337,26 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.RemoveEntityPacket buildPartial() {
-      org.y1000.network.gen.RemoveEntityPacket result = new org.y1000.network.gen.RemoveEntityPacket(this);
+    public org.y1000.network.gen.CreatureAttackEventPacket buildPartial() {
+      org.y1000.network.gen.CreatureAttackEventPacket result = new org.y1000.network.gen.CreatureAttackEventPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.RemoveEntityPacket result) {
+    private void buildPartial0(org.y1000.network.gen.CreatureAttackEventPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.id_ = id_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.direction_ = direction_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.below50_ = below50_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.spriteMillis_ = spriteMillis_;
       }
     }
 
@@ -315,18 +394,27 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.RemoveEntityPacket) {
-        return mergeFrom((org.y1000.network.gen.RemoveEntityPacket)other);
+      if (other instanceof org.y1000.network.gen.CreatureAttackEventPacket) {
+        return mergeFrom((org.y1000.network.gen.CreatureAttackEventPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.RemoveEntityPacket other) {
-      if (other == org.y1000.network.gen.RemoveEntityPacket.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.y1000.network.gen.CreatureAttackEventPacket other) {
+      if (other == org.y1000.network.gen.CreatureAttackEventPacket.getDefaultInstance()) return this;
       if (other.getId() != 0L) {
         setId(other.getId());
+      }
+      if (other.getDirection() != 0) {
+        setDirection(other.getDirection());
+      }
+      if (other.getBelow50() != false) {
+        setBelow50(other.getBelow50());
+      }
+      if (other.getSpriteMillis() != 0) {
+        setSpriteMillis(other.getSpriteMillis());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -359,6 +447,21 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000001;
               break;
             } // case 8
+            case 16: {
+              direction_ = input.readInt32();
+              bitField0_ |= 0x00000002;
+              break;
+            } // case 16
+            case 24: {
+              below50_ = input.readBool();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 24
+            case 32: {
+              spriteMillis_ = input.readInt32();
+              bitField0_ |= 0x00000008;
+              break;
+            } // case 32
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -407,6 +510,102 @@ private static final long serialVersionUID = 0L;
       onChanged();
       return this;
     }
+
+    private int direction_ ;
+    /**
+     * <code>int32 direction = 2;</code>
+     * @return The direction.
+     */
+    @java.lang.Override
+    public int getDirection() {
+      return direction_;
+    }
+    /**
+     * <code>int32 direction = 2;</code>
+     * @param value The direction to set.
+     * @return This builder for chaining.
+     */
+    public Builder setDirection(int value) {
+
+      direction_ = value;
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 direction = 2;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearDirection() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      direction_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private boolean below50_ ;
+    /**
+     * <code>bool below50 = 3;</code>
+     * @return The below50.
+     */
+    @java.lang.Override
+    public boolean getBelow50() {
+      return below50_;
+    }
+    /**
+     * <code>bool below50 = 3;</code>
+     * @param value The below50 to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBelow50(boolean value) {
+
+      below50_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>bool below50 = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearBelow50() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      below50_ = false;
+      onChanged();
+      return this;
+    }
+
+    private int spriteMillis_ ;
+    /**
+     * <code>int32 spriteMillis = 4;</code>
+     * @return The spriteMillis.
+     */
+    @java.lang.Override
+    public int getSpriteMillis() {
+      return spriteMillis_;
+    }
+    /**
+     * <code>int32 spriteMillis = 4;</code>
+     * @param value The spriteMillis to set.
+     * @return This builder for chaining.
+     */
+    public Builder setSpriteMillis(int value) {
+
+      spriteMillis_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 spriteMillis = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearSpriteMillis() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      spriteMillis_ = 0;
+      onChanged();
+      return this;
+    }
     @java.lang.Override
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -420,23 +619,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.RemoveEntityPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.CreatureAttackEventPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.RemoveEntityPacket)
-  private static final org.y1000.network.gen.RemoveEntityPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.CreatureAttackEventPacket)
+  private static final org.y1000.network.gen.CreatureAttackEventPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.RemoveEntityPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.CreatureAttackEventPacket();
   }
 
-  public static org.y1000.network.gen.RemoveEntityPacket getDefaultInstance() {
+  public static org.y1000.network.gen.CreatureAttackEventPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<RemoveEntityPacket>
-      PARSER = new com.google.protobuf.AbstractParser<RemoveEntityPacket>() {
+  private static final com.google.protobuf.Parser<CreatureAttackEventPacket>
+      PARSER = new com.google.protobuf.AbstractParser<CreatureAttackEventPacket>() {
     @java.lang.Override
-    public RemoveEntityPacket parsePartialFrom(
+    public CreatureAttackEventPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -455,17 +654,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<RemoveEntityPacket> parser() {
+  public static com.google.protobuf.Parser<CreatureAttackEventPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<RemoveEntityPacket> getParserForType() {
+  public com.google.protobuf.Parser<CreatureAttackEventPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.RemoveEntityPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.CreatureAttackEventPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

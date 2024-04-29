@@ -28,10 +28,6 @@ public abstract class AbstractPositionEvent implements EntityEvent, ServerMessag
     }
 
 
-    @Override
-    public long id() {
-        return id;
-    }
 
     @Override
     public Entity source() {

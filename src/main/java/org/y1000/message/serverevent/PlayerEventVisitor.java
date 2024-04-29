@@ -1,0 +1,23 @@
+package org.y1000.message.serverevent;
+
+import org.y1000.entities.players.event.PlayerAttackEventResponse;
+import org.y1000.message.InputResponseMessage;
+
+public interface PlayerEventVisitor extends EntityEventVisitor {
+
+    default void visit(JoinedRealmEvent loginMessage) {
+
+    }
+
+    default void visit(InputResponseMessage inputResponseMessage) {
+
+    }
+
+    default void visit(PlayerLeftEvent event) {
+
+    }
+
+    default void visit(PlayerAttackEventResponse event) {
+
+    }
+}

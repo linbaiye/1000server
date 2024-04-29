@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
+import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.players.PlayerAttackState;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.event.PlayerAttackEvent;
+import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.entities.players.kungfu.attack.AbstractAttackKungFu;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
 import org.y1000.message.clientevent.ClientAttackEvent;
@@ -36,15 +38,14 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
     @Override
     public void attack(PlayerImpl player, ClientAttackEvent event, Entity target) {
         int distance = player.coordinate().distance(target.coordinate());
-        Direction direction = player.coordinate().computeDirection(target.coordinate());
+        Direction direction = event.direction();
         player.changeDirection(direction);
         player.changeState(new PlayerAttackState(fistLengthMillis, target));
+        player.emitEvent(new PlayerAttackEventResponse(player, event.sequence(), true));
         if (distance <= 1) {
             target.hit(player);
-            player.emitEvent(new PlayerAttackEvent(player,  target, event.below50() ? 320 : 225));
-        } else {
-            player.emitEvent(new PlayerAttackEvent(player, null, 0));
         }
+        player.emitEvent(new CreatureAttackEvent(player, event.below50(), 0));
     }
 
     @Override

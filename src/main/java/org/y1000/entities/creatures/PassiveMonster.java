@@ -2,6 +2,7 @@ package org.y1000.entities.creatures;
 
 
 import org.y1000.entities.Direction;
+import org.y1000.entities.players.State;
 import org.y1000.message.AbstractInterpolation;
 import org.y1000.message.CreatureInterpolation;
 import org.y1000.realm.RealmMap;
@@ -63,5 +64,10 @@ public final class PassiveMonster extends AbstractCreature {
             return false;
         }
         return obj == this || ((PassiveMonster) obj).id() == id();
+    }
+
+    @Override
+    public State stateEnum() {
+        return state.stateEnum();
     }
 }

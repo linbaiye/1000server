@@ -57,8 +57,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     Optional<ClientEvent> takeClientEvent() {
-        return eventQueue.peek() != null ? Optional.empty() :
-                Optional.ofNullable(eventQueue.poll());
+        return Optional.ofNullable(eventQueue.poll());
     }
 
     RealmMap realmMap() {

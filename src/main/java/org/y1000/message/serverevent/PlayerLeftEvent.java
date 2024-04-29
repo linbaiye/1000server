@@ -1,5 +1,6 @@
 package org.y1000.message.serverevent;
 
+import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.network.gen.Packet;
 import org.y1000.entities.players.Player;
 import org.y1000.message.RemoveEntityMessage;
@@ -15,7 +16,7 @@ public final class PlayerLeftEvent extends AbstractPlayerEvent {
     }
 
     @Override
-    protected void accept(PlayerEventHandler playerEventHandler) {
-        playerEventHandler.handle(this);
+    protected void accept(PlayerEventVisitor playerEventHandler) {
+        playerEventHandler.visit(this);
     }
 }

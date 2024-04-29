@@ -15,7 +15,6 @@ public class LoginEvent implements ClientEvent {
     }
 
     @Override
-    public void accept(PlayerImpl player, ClientEventHandler handler) {
-        throw new IllegalStateException();
+    public void accept(PlayerImpl player, ClientEventVisitor handler) {
     }
 }

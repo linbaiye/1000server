@@ -2,8 +2,7 @@ package org.y1000.entities.players.event;
 
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-import org.y1000.message.serverevent.AbstractPlayerEvent;
-import org.y1000.message.serverevent.PlayerEventHandler;
+import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 
 public final class PlayerAttackEvent extends AbstractPlayerEvent {
@@ -24,6 +23,7 @@ public final class PlayerAttackEvent extends AbstractPlayerEvent {
     }
 
     @Override
-    protected void accept(PlayerEventHandler playerEventHandler) {
+    protected void accept(PlayerEventVisitor playerEventVisitor) {
+        playerEventVisitor.visit(this);
     }
 }

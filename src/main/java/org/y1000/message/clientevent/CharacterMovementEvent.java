@@ -31,7 +31,7 @@ public record CharacterMovementEvent(InputMessage inputMessage, Coordinate happe
 
 
     @Override
-    public void accept(PlayerImpl player, ClientEventHandler handler) {
-        handler.handle(player, this);
+    public void accept(PlayerImpl player, ClientEventVisitor handler) {
+        handler.visit(player, this);
     }
 }

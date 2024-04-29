@@ -6,13 +6,13 @@ import org.y1000.entities.creatures.AbstractCreatureIdleState;
 import org.y1000.message.*;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.CharacterMovementEvent;
-import org.y1000.message.clientevent.ClientEventHandler;
+import org.y1000.message.clientevent.ClientEventVisitor;
 import org.y1000.message.input.AbstractRightClick;
 import org.y1000.message.input.RightMouseRelease;
 
 @Slf4j
 final class PlayerIdleState extends AbstractCreatureIdleState<PlayerImpl>
-        implements PlayerState, ClientEventHandler {
+        implements PlayerState, ClientEventVisitor {
     private static final long STATE_MILLIS = 3000;
 
     public PlayerIdleState() {
@@ -31,14 +31,15 @@ final class PlayerIdleState extends AbstractCreatureIdleState<PlayerImpl>
     }
 
     @Override
-    public void handle(PlayerImpl player,
-                       ClientAttackEvent event) {
+    public void visit(PlayerImpl player,
+                      ClientAttackEvent event) {
         player.realm().findInsight(player, event.entityId())
                 .ifPresent(target -> doAttack(player, event, target));
     }
 
     @Override
-    public void handle(PlayerImpl player, CharacterMovementEvent movementEvent) {
+    public void visit(PlayerImpl player, CharacterMovementEvent movementEvent) {
+        log.debug("Handling event {} at {}.", movementEvent, player.coordinate());
         if (!movementEvent.happenedAt().equals(player.coordinate())) {
             player.reset(movementEvent.inputMessage().sequence());
             return;
@@ -48,6 +49,6 @@ final class PlayerIdleState extends AbstractCreatureIdleState<PlayerImpl>
         } else if (movementEvent.inputMessage() instanceof RightMouseRelease rightMouseRelease) {
             player.emitEvent(new InputResponseMessage(rightMouseRelease.sequence(), SetPositionEvent.fromPlayer(player)));
         }
-        log.debug("Handling event {} at {}.", movementEvent, player.coordinate());
+        log.debug("Handled event {} at {}.", movementEvent, player.coordinate());
     }
 }

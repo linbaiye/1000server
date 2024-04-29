@@ -7,9 +7,5 @@ public interface EntityEvent {
 
     Entity source();
 
-    default long id() {
-        return source().id();
-    }
-
-    void accept(EntityEventHandler visitor);
+    void accept(EntityEventVisitor visitor);
 }

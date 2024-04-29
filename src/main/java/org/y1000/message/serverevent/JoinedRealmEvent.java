@@ -7,9 +7,6 @@ import org.y1000.network.gen.LoginPacket;
 import org.y1000.network.gen.Packet;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-import org.y1000.message.serverevent.EntityEvent;
-import org.y1000.message.serverevent.EntityEventHandler;
-import org.y1000.message.serverevent.PlayerEventHandler;
 import org.y1000.util.Coordinate;
 
 @Builder
@@ -25,7 +22,7 @@ public class JoinedRealmEvent implements EntityEvent, ServerMessage {
         LoginPacket.Builder builder = LoginPacket.newBuilder()
                 .setX(coordinate.x())
                 .setY(coordinate.y())
-                .setId(id());
+                .setId(source().id());
         player.weapon().ifPresent(weapon -> builder.setWeaponShapeId(weapon.shapeId()));
         player.attackKungFu().ifPresent(attackKungFu -> builder.setAttackKungFuName(attackKungFu.name()).setAttackKungFuLevel(attackKungFu.level()));
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuLevel(footKungFu.level()).setFootKungFuName(footKungFu.name()));
@@ -36,9 +33,9 @@ public class JoinedRealmEvent implements EntityEvent, ServerMessage {
 
 
     @Override
-    public void accept(EntityEventHandler visitor) {
-        if (visitor instanceof PlayerEventHandler playerEventHandler) {
-            playerEventHandler.handle(this);
+    public void accept(EntityEventVisitor visitor) {
+        if (visitor instanceof PlayerEventVisitor playerEventHandler) {
+            playerEventHandler.visit(this);
         }
     }
 

@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class CreatureManager extends AbstractEntityManager<Creature> implements
-        EntityEventListener, EntityEventHandler {
+        EntityEventListener, EntityEventVisitor {
     private final Set<PassiveMonster> passiveMonsters;
     private final EntityEventListener eventListener;
     private final RealmMap realmMap;

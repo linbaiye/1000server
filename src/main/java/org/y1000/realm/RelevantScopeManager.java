@@ -43,7 +43,6 @@ public final class RelevantScopeManager {
         return relevantScopeMap.containsKey(entity);
     }
 
-
     public <E extends Entity> Set<E> filterVisibleEntities(Entity entity, Class<E> type) {
         RelevantScope relevantScope = relevantScopeMap.get(entity);
         if (relevantScope == null) {
@@ -51,7 +50,6 @@ public final class RelevantScopeManager {
         }
         return relevantScope.filter(type);
     }
-
 
 
     public boolean outOfScope(Entity source, Entity target) {

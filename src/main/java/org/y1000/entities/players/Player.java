@@ -13,7 +13,6 @@ import java.util.Optional;
 
 public interface Player extends Creature {
 
-    State stateEnum();
 
     default boolean isMale() {
         return true;
