@@ -45,7 +45,7 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
         if (distance <= 1) {
             target.hit(player);
         }
-        player.emitEvent(new CreatureAttackEvent(player, event.below50(), 0));
+        player.emitEvent(new CreatureAttackEvent(player, event.below50(), event.below50() ? 90 : 75));
     }
 
     @Override
