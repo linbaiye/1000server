@@ -15,6 +15,8 @@ public interface AttackKungFu extends LevelKungFu {
 
     void attack(PlayerImpl player, ClientAttackEvent event, Entity target);
 
+    void attack(PlayerImpl player, Entity target);
+
     AttackKungFuType getType();
 
 }

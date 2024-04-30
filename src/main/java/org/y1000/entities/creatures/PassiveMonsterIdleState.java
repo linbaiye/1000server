@@ -8,13 +8,13 @@ import org.y1000.entities.Entity;
 public final class PassiveMonsterIdleState extends AbstractCreatureIdleState<PassiveMonster> {
 
 
-    public PassiveMonsterIdleState(long length) {
+    public PassiveMonsterIdleState(int length) {
         super(length);
     }
 
     @Override
     public void update(PassiveMonster passiveMonster,
-                       long delta) {
+                       int delta) {
         if (resetIfElapsedLength(delta)) {
             passiveMonster.AI().nextMove();
         }

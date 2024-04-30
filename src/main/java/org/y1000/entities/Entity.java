@@ -9,7 +9,7 @@ public interface Entity {
 
     Coordinate coordinate();
 
-    void update(long delta);
+    void update(int delta);
 
     default void hit(Entity attacker) {
 

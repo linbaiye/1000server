@@ -16,23 +16,22 @@ import java.util.Optional;
 final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements
         PlayerState, ClientEventVisitor {
 
-    private static final long MILLIS_TO_WALK_ONE_UNIT = 900;
-    private static final long MILLIS_TO_RUN_ONE_UNIT = 450;
+    private static final int MILLIS_TO_WALK_ONE_UNIT = 900;
+    private static final int MILLIS_TO_RUN_ONE_UNIT = 450;
 
     private final AbstractRightClick currentInput;
 
-    public PlayerMoveState(AbstractRightClick currentInput, long millisPerUnit, State state) {
+    public PlayerMoveState(AbstractRightClick currentInput, int millisPerUnit, State state) {
         super(state, millisPerUnit, currentInput.direction());
         this.currentInput = currentInput;
     }
-
 
     private void handleInput(PlayerImpl player) {
         player.takeClientEvent().ifPresent(e -> e.accept(player, this));
     }
 
     @Override
-    public void update(PlayerImpl player, long deltaMillis) {
+    public void update(PlayerImpl player, int deltaMillis) {
         if (elapsedMillis() >= millisPerUnit()) {
             handleInput(player);
             return;

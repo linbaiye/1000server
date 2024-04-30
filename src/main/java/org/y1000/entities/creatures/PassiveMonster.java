@@ -44,7 +44,7 @@ public final class PassiveMonster extends AbstractCreature {
     }
 
     @Override
-    public void update(long delta) {
+    public void update(int delta) {
         state.update(this, delta);
     }
 

@@ -6,12 +6,12 @@ import org.y1000.entities.players.State;
 
 public class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMonster> {
 
-    public PassiveMonsterMoveState(long millisPerUnit, Direction towards) {
+    public PassiveMonsterMoveState(int millisPerUnit, Direction towards) {
         super(State.WALK, millisPerUnit, towards);
     }
 
     @Override
-    public void update(PassiveMonster monster, long delta) {
+    public void update(PassiveMonster monster, int delta) {
         walkMillis(monster, delta);
         if (elapsedMillis() >= millisPerUnit()) {
             tryChangeCoordinate(monster, monster.realmMap());

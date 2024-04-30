@@ -13,14 +13,14 @@ import org.y1000.message.input.RightMouseRelease;
 @Slf4j
 final class PlayerIdleState extends AbstractCreatureIdleState<PlayerImpl>
         implements PlayerState, ClientEventVisitor {
-    private static final long STATE_MILLIS = 3000;
+    private static final int STATE_MILLIS = 3000;
 
     public PlayerIdleState() {
         super(STATE_MILLIS);
     }
 
     @Override
-    public void update(PlayerImpl player, long deltaMillis) {
+    public void update(PlayerImpl player, int deltaMillis) {
         resetIfElapsedLength(deltaMillis);
         player.takeClientEvent().ifPresent(e -> e.accept(player, this));
     }

@@ -5,9 +5,9 @@ import org.y1000.entities.players.State;
 public abstract class AbstractCreatureIdleState<E extends Creature> extends AbstractCreateState<E> {
 
     // How long does this state last.
-    private final long lengthMillis;
+    private final int lengthMillis;
 
-    public AbstractCreatureIdleState(long length) {
+    public AbstractCreatureIdleState(int length) {
         this.lengthMillis = length;
     }
 
@@ -16,7 +16,7 @@ public abstract class AbstractCreatureIdleState<E extends Creature> extends Abst
         return State.IDLE;
     }
 
-    protected boolean resetIfElapsedLength(long deltaMillis) {
+    protected boolean resetIfElapsedLength(int deltaMillis) {
         if (elapsedMillis() >= lengthMillis) {
             resetElapsedMillis();
         }

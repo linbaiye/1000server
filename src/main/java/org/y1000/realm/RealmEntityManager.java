@@ -105,7 +105,7 @@ public final class RealmEntityManager implements EntityEventListener,
         entityEvent.accept(this);
     }
 
-    public void updateEntities(long delta) {
+    public void updateEntities(int delta) {
         scopeManager.getAllEntities().forEach(e -> e.update(delta));
     }
 

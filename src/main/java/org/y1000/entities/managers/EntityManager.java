@@ -4,5 +4,5 @@ import org.y1000.entities.Entity;
 
 public interface EntityManager<T extends Entity> {
 
-    void update(long delta);
+    void update(int delta);
 }

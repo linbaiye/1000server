@@ -8,7 +8,7 @@ public interface CreatureState<E extends Creature> {
 
     long elapsedMillis();
 
-    void update(E e, long delta);
+    void update(E e, int delta);
 
     default void attack(Entity target) {
 

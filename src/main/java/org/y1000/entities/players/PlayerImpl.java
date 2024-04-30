@@ -119,7 +119,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
 
     @Override
-    public void update(long delta) {
+    public void update(int delta) {
         state.update(this, delta);
     }
 

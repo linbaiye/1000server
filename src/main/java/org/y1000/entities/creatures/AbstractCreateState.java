@@ -2,7 +2,7 @@ package org.y1000.entities.creatures;
 
 
 public abstract class AbstractCreateState<C extends Creature> implements CreatureState<C> {
-    private long elapsedMillis;
+    private int elapsedMillis;
 
     public AbstractCreateState() {
         elapsedMillis = 0;
@@ -13,7 +13,7 @@ public abstract class AbstractCreateState<C extends Creature> implements Creatur
         return elapsedMillis;
     }
 
-    protected void elapse(long delta) {
+    protected void elapse(int delta) {
         elapsedMillis += delta;
     }
     protected void resetElapsedMillis() {
