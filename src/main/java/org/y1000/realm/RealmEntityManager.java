@@ -2,9 +2,9 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.message.AbstractPositionEvent;
 import org.y1000.message.InputResponseMessage;
@@ -28,7 +28,7 @@ public final class RealmEntityManager implements EntityEventListener,
         visit(inputResponseMessage.positionMessage());
     }
 
-    private void notifyPlayerJoined(Player joined, Entity entity) {
+    private void notifyInterpolation(Player joined, Entity entity) {
         joined.connection().write(entity.captureInterpolation());
         if (entity instanceof Player another) {
             another.connection().write(joined.captureInterpolation());
@@ -65,10 +65,11 @@ public final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
-    public void visit(JoinedRealmEvent loginMessage) {
-        loginMessage.player().connection().write(loginMessage);
-        var visibleEntities = scopeManager.filterVisibleEntities(loginMessage.source(), Entity.class);
-        visibleEntities.forEach(entity -> notifyPlayerJoined(loginMessage.player(), entity));
+    public void visit(JoinedRealmEvent joinedRealmEvent) {
+        add(joinedRealmEvent.source());
+        joinedRealmEvent.player().connection().write(joinedRealmEvent);
+        var visibleEntities = scopeManager.filterVisibleEntities(joinedRealmEvent.source(), Entity.class);
+        visibleEntities.forEach(entity -> notifyInterpolation(joinedRealmEvent.player(), entity));
     }
 
     @Override
@@ -83,6 +84,9 @@ public final class RealmEntityManager implements EntityEventListener,
     @Override
     public void visit(PlayerAttackEventResponse event) {
         event.player().connection().write(event);
+        if (event.isAccepted()) {
+            notifyVisiblePlayers(event.source(), event.toPlayerAttackEvent());
+        }
     }
 
     private void notifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
@@ -91,9 +95,11 @@ public final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
-    public void visit(CreatureAttackEvent event) {
+    public void visit(PlayerAttackEvent event) {
+        event.player().connection().write(event);
         notifyVisiblePlayers(event.source(), event);
     }
+
 
     @Override
     public void visit(CreatureHurtEvent event) {

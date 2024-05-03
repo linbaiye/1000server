@@ -17,6 +17,8 @@ public interface AttackKungFu extends LevelKungFu {
 
     void attack(PlayerImpl player, Entity target);
 
+    int millisPerSprite(boolean below50);
+
     AttackKungFuType getType();
 
 }

@@ -2,10 +2,12 @@ package org.y1000.message;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
+import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.PassiveMonster;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.serverevent.EntityEventVisitor;
+import org.y1000.network.gen.PositionPacket;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
@@ -14,7 +16,7 @@ public final class MoveEvent extends AbstractPositionEvent {
 
     private final MovementType movementType;
 
-    public MoveEvent(Entity entity, Direction direction, Coordinate coordinate, MovementType movementType) {
+    public MoveEvent(Creature entity, Direction direction, Coordinate coordinate, MovementType movementType) {
         super(entity, direction, coordinate);
         this.movementType = movementType;
     }
@@ -31,6 +33,7 @@ public final class MoveEvent extends AbstractPositionEvent {
     protected MovementType getType() {
         return movementType;
     }
+
 
     @Override
     public void accept(EntityEventVisitor visitor) {

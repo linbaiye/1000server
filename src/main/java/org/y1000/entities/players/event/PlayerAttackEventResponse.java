@@ -1,30 +1,42 @@
 package org.y1000.entities.players.event;
 
+import lombok.Getter;
 import org.y1000.entities.players.Player;
+import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.ClientAttackResponsePacket;
 import org.y1000.network.gen.Packet;
 
 public class PlayerAttackEventResponse extends AbstractPlayerEvent {
 
-    private final long seq;
-    private final boolean ok;
-    public PlayerAttackEventResponse(Player source, long seq, boolean ok) {
+    private final ClientAttackEvent clientAttackEvent;
+    @Getter
+    private final boolean accepted;
 
+    private final int millis;
+
+    public PlayerAttackEventResponse(Player source, ClientAttackEvent clientEvent, boolean ok, int millis) {
         super(source);
-        this.seq = seq;
-        this.ok = ok;
+        clientAttackEvent = clientEvent;
+        this.accepted = ok;
+        this.millis = millis;
     }
 
     @Override
     protected Packet buildPacket() {
         return Packet.newBuilder()
                 .setAttackEventResponsePacket(ClientAttackResponsePacket.newBuilder()
-                        .setAccepted(ok)
-                        .setSequence(seq)
+                        .setAccepted(accepted)
+                        .setSequence(clientAttackEvent.sequence())
                         .build())
                 .build();
     }
+
+
+    public PlayerAttackEvent toPlayerAttackEvent() {
+        return new PlayerAttackEvent(player(), millis, clientAttackEvent.below50());
+    }
+
 
     @Override
     protected void accept(PlayerEventVisitor playerEventHandler) {

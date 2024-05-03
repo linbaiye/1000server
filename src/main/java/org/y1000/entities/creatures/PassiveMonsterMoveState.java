@@ -1,7 +1,6 @@
 package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
-import org.y1000.entities.Entity;
 import org.y1000.entities.players.State;
 
 public class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMonster> {
@@ -19,10 +18,6 @@ public class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMo
         }
     }
 
-    @Override
-    public void attack(Entity target) {
-
-    }
 
     public static PassiveMonsterMoveState buffalo(Direction towards) {
         return new PassiveMonsterMoveState(1050, towards);

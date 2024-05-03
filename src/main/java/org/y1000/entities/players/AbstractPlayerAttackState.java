@@ -35,8 +35,6 @@ public abstract class AbstractPlayerAttackState extends AbstractCreateState<Play
 
     @Override
     public void visit(PlayerImpl player, ClientAttackEvent event) {
-         player.realm().findInsight(player, event.entityId())
-                         .ifPresent(entity -> target = entity);
     }
 
 }

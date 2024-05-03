@@ -6,7 +6,7 @@ import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.ClientEventVisitor;
 
-public class PlayerCooldownState extends AbstractCreatureCooldownState<PlayerImpl> implements PlayerState, ClientEventVisitor {
+public final class PlayerCooldownState extends AbstractCreatureCooldownState<PlayerImpl> implements PlayerState, ClientEventVisitor {
 
     private final int length;
 
@@ -18,15 +18,14 @@ public class PlayerCooldownState extends AbstractCreatureCooldownState<PlayerImp
     }
 
     public void attackAgain(PlayerImpl player) {
-        player.attackKungFu().ifPresent(attackKungFu -> attackKungFu.attack(player, target, ));
+        player.attackKungFu().ifPresent(attackKungFu -> attackKungFu.attack(player, target));
     }
-
 
     @Override
     public void update(PlayerImpl player, int delta) {
         elapse(delta);
         if (elapsedMillis() >= length) {
-
+            attackAgain(player);
         } else {
             player.takeClientEvent().ifPresent(e -> e.accept(player, this));
         }
@@ -34,7 +33,7 @@ public class PlayerCooldownState extends AbstractCreatureCooldownState<PlayerImp
 
     @Override
     public void visit(PlayerImpl player, ClientAttackEvent event) {
-
+        attackIfHasKungfu(player, event);
     }
 
     @Override

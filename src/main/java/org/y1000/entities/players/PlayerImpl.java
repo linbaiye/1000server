@@ -88,6 +88,10 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         return connection;
     }
 
+    public PlayerState currentState() {
+        return state;
+    }
+
     @Override
     public void joinReam(RealmImpl realm) {
         if (this.realm != null) {
@@ -100,7 +104,8 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         emitEvent(new JoinedRealmEvent(this, coordinate()));
     }
 
-    Realm realm() {
+    @Override
+    public Realm getRealm() {
         return this.realm;
     }
 
@@ -127,12 +132,6 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         eventQueue.clear();
         emitEvent(new InputResponseMessage(sequence, SetPositionEvent.fromPlayer(this)));
         realmMap().occupy(this);
-    }
-
-
-    boolean CanMoveOneUnit(Direction direction) {
-        var nextCoordinate = coordinate().moveBy(direction);
-        return realmMap().movable(nextCoordinate);
     }
 
 

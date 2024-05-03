@@ -35,8 +35,13 @@ public final class PassiveMonster extends AbstractCreature {
         return creatureAI;
     }
 
-    RealmMap realmMap() {
+    public RealmMap realmMap() {
         return realmMap;
+    }
+
+    @Override
+    public void hit(Creature attacker) {
+        state.hit(attacker);
     }
 
     CreatureState<PassiveMonster> state() {

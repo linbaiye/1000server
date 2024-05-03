@@ -1,5 +1,6 @@
 package org.y1000.message.clientevent;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.network.gen.ClientPacket;
 import org.y1000.network.gen.MoveEventPacket;
@@ -7,12 +8,13 @@ import org.y1000.message.ValueEnum;
 import org.y1000.message.input.*;
 import org.y1000.util.Coordinate;
 
-public record CharacterMovementEvent(InputMessage inputMessage, Coordinate happenedAt) implements ClientEvent {
+@Slf4j
+public record CharacterMovementEvent(MoveInput moveInput, Coordinate happenedAt) implements ClientEvent {
 
     @Override
     public String toString() {
         return "CharacterMovementEvent{" +
-                "inputMessage=" + inputMessage +
+                "moveInput=" + moveInput +
                 ", happenedAt=" + happenedAt +
                 '}';
     }
@@ -27,6 +29,15 @@ public record CharacterMovementEvent(InputMessage inputMessage, Coordinate happe
             case MOUSE_RIGHT_RELEASE -> new CharacterMovementEvent(RightMouseRelease.fromPacket(moveEventPacket.getInput()), coor);
             case MOUSE_RIGHT_MOTION -> new CharacterMovementEvent(RightMousePressedMotion.fromPacket(moveEventPacket.getInput()), coor);
         };
+    }
+
+    public void resetOrMove(PlayerImpl player) {
+        if (!happenedAt().equals(player.coordinate())) {
+            log.warn("Need to reset player {}.", player);
+            player.reset(moveInput().sequence());
+        } else {
+            moveInput().move(player);
+        }
     }
 
 
