@@ -1,9 +1,8 @@
 package org.y1000.message;
 
-import lombok.experimental.SuperBuilder;
 import org.y1000.network.gen.InterpolationPacket;
 import org.y1000.entities.Direction;
-import org.y1000.entities.players.State;
+import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
 public abstract class AbstractInterpolation implements ServerMessage {

@@ -1,7 +1,6 @@
 package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
-import org.y1000.entities.players.State;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 

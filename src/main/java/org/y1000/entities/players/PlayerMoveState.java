@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
+import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
 import org.y1000.message.clientevent.CharacterMovementEvent;

@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures;
 
-public class PassiveMonsterHurtState extends AbstractCreatureHurtState<PassiveMonster> {
+public final class PassiveMonsterHurtState extends AbstractCreatureHurtState<PassiveMonster> {
 
     private final Creature attacker;
 
@@ -18,11 +18,12 @@ public class PassiveMonsterHurtState extends AbstractCreatureHurtState<PassiveMo
         total = spriteNumber * millisPerSprite;
     }
 
+    public Creature attacker() {
+        return attacker;
+    }
+
     @Override
     public void update(PassiveMonster monster, int delta) {
-        if (elapsedMillis() >= total) {
-            return;
-        }
         elapse(delta);
         if (elapsedMillis() >= total) {
             monster.AI().nextMove();

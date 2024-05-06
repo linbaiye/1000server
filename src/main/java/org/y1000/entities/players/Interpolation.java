@@ -1,5 +1,6 @@
 package org.y1000.entities.players;
 
+import org.y1000.entities.creatures.State;
 import org.y1000.network.gen.InterpolationPacket;
 import org.y1000.entities.Direction;
 import org.y1000.util.Coordinate;

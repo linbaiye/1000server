@@ -21,4 +21,9 @@ public final class PassiveMonsterIdleState extends AbstractCreatureIdleState<Pas
     public static PassiveMonsterIdleState buffalo() {
         return new PassiveMonsterIdleState(2000);
     }
+
+    @Override
+    public void getAttacked(PassiveMonster monster, Creature attacker) {
+        monster.getAttacked(attacker);
+    }
 }

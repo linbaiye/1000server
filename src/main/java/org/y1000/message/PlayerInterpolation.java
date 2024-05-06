@@ -8,7 +8,7 @@ import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerInterpolationPacket;
 import org.y1000.entities.Direction;
-import org.y1000.entities.players.State;
+import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
 public class PlayerInterpolation extends AbstractInterpolation {

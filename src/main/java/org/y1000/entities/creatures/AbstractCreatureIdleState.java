@@ -1,7 +1,5 @@
 package org.y1000.entities.creatures;
 
-import org.y1000.entities.players.State;
-
 public abstract class AbstractCreatureIdleState<E extends Creature> extends AbstractCreateState<E> {
 
     // How long does this state last.
@@ -23,5 +21,4 @@ public abstract class AbstractCreatureIdleState<E extends Creature> extends Abst
         elapse(deltaMillis);
         return elapsedMillis() >= lengthMillis;
     }
-
 }

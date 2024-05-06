@@ -2,7 +2,7 @@ package org.y1000.message;
 
 import org.y1000.network.gen.InterpolationPacket;
 import org.y1000.entities.Direction;
-import org.y1000.entities.players.State;
+import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
 public record Interpolation(Coordinate coordinate, State state, Direction direction, long elapsedMillis) {

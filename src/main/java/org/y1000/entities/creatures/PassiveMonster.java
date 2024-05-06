@@ -2,7 +2,9 @@ package org.y1000.entities.creatures;
 
 
 import org.y1000.entities.Direction;
-import org.y1000.entities.players.State;
+import org.y1000.entities.attribute.ArmorAttribute;
+import org.y1000.entities.attribute.DamageAttribute;
+import org.y1000.entities.attribute.HarhAttribute;
 import org.y1000.message.AbstractInterpolation;
 import org.y1000.message.CreatureInterpolation;
 import org.y1000.realm.RealmMap;
@@ -19,12 +21,21 @@ public final class PassiveMonster extends AbstractCreature {
 
     private final RealmMap realmMap;
 
+    private final ArmorAttribute armorAttribute;
+
+    private final DamageAttribute damageAttribute;
+
+    private final HarhAttribute harhAttribute;
+
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap) {
         super(id, coordinate, direction, name);
         state = PassiveMonsterIdleState.buffalo();
         creatureAI = new PassiveMonsterAI(this);
         this.realmMap = realmMap;
+        armorAttribute = ArmorAttribute.DEFAULT;
+        damageAttribute = DamageAttribute.DEFAULT;
+        harhAttribute = HarhAttribute.DEFAULT;
     }
 
     void changeState(CreatureState<PassiveMonster> newState) {
@@ -40,8 +51,8 @@ public final class PassiveMonster extends AbstractCreature {
     }
 
     @Override
-    public void hit(Creature attacker) {
-        state.hit(attacker);
+    public void getAttacked(Creature attacker) {
+        state.getAttacked(this, attacker);
     }
 
     CreatureState<PassiveMonster> state() {

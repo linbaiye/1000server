@@ -20,7 +20,7 @@ public interface Entity {
         return true;
     }
 
-    default void hit(Creature attacker) {
+    default void getAttacked(Creature attacker) {
 
     }
 

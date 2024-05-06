@@ -1,7 +1,6 @@
 package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
-import org.y1000.entities.players.State;
 import org.y1000.message.MoveEvent;
 import org.y1000.util.Rectangle;
 
@@ -81,6 +80,19 @@ final class PassiveMonsterAI {
         }
     }
 
+    private class AttackBehaviour implements Behaviour {
+
+        private final Creature target;
+
+        private AttackBehaviour(Creature target) {
+            this.target = target;
+        }
+
+        @Override
+        public void behave(PassiveMonster monster) {
+            //monster.emitEvent();
+        }
+    }
 
 
     PassiveMonsterAI(PassiveMonster monster) {
@@ -91,6 +103,12 @@ final class PassiveMonsterAI {
         behaviour = new IdleBehaviour();
     }
 
+    public void getAttacked(Creature attacker) {
+        if (!monster.harhAttribute().randomHit(attacker.harhAttribute())) {
+            return;
+        }
+        monster.amorArribute().armArmor();
+    }
 
 
     public void nextMove() {

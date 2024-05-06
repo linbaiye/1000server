@@ -1,4 +1,4 @@
-package org.y1000.entities.players;
+package org.y1000.entities.creatures;
 
 import org.y1000.message.ValueEnum;
 

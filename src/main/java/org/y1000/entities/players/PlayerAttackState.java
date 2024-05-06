@@ -3,6 +3,7 @@ package org.y1000.entities.players;
 import lombok.Getter;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.AbstractCreateState;
+import org.y1000.entities.creatures.State;
 
 public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> implements PlayerState {
     private final int length;
