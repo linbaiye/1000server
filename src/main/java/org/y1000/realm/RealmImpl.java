@@ -13,7 +13,7 @@ import java.util.*;
 @Slf4j
 public final class RealmImpl implements Runnable, Realm {
 
-    private static final int STEP_MILLIS = 10;
+    public static final int STEP_MILLIS = 10;
 
     private final RealmMap realmMap;
 
