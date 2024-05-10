@@ -107,6 +107,7 @@ final class PassiveMonsterAI {
         if (!monster.harhAttribute().randomHit(attacker.harhAttribute())) {
             return;
         }
+        monster.changeState(new PassiveMonsterHurtState(attacker, monster.harhAttribute().recovery()));
         monster.amorArribute().armArmor();
     }
 
