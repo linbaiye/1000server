@@ -3,9 +3,9 @@ package org.y1000.entities.players.kungfu;
 public abstract class AbstractFootKungFu implements FootKungFu {
 
     private final String name;
-    private float level;
+    private int level;
 
-    public AbstractFootKungFu(String name, float level) {
+    public AbstractFootKungFu(String name, int level) {
         this.name = name;
         this.level = level;
     }
@@ -16,7 +16,7 @@ public abstract class AbstractFootKungFu implements FootKungFu {
     }
 
     @Override
-    public float level() {
+    public int level() {
         return level;
     }
 }

@@ -2,7 +2,7 @@ package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
 
-public class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMonster> {
+public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMonster> {
 
     public PassiveMonsterMoveState(int millisPerUnit, Direction towards) {
         super(State.WALK, millisPerUnit, towards);
@@ -16,7 +16,6 @@ public class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMo
             monster.AI().nextMove();
         }
     }
-
 
     public static PassiveMonsterMoveState buffalo(Direction towards) {
         return new PassiveMonsterMoveState(1050, towards);

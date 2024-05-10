@@ -16,7 +16,7 @@ public class PlayerInterpolation extends AbstractInterpolation {
     private final boolean male;
 
     @Setter(AccessLevel.PRIVATE)
-    private AttackKungFuType attackKungFu = AttackKungFuType.FIST;
+    private AttackKungFuType attackKungFu = AttackKungFuType.QUANFA;
 
     @Setter(AccessLevel.PRIVATE)
     private boolean below50 = false;

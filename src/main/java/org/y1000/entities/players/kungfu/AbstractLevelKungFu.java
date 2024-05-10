@@ -1,15 +1,13 @@
 package org.y1000.entities.players.kungfu;
 
-import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 public abstract class AbstractLevelKungFu implements LevelKungFu {
 
-    private float level;
+    private int level;
 
-    public float level() {
+    public int level() {
         return level;
     }
-
 }

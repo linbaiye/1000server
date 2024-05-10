@@ -13,4 +13,10 @@ public abstract class AbstractEntityTest {
         when(entity.coordinate()).thenReturn(coordinate);
         return entity;
     }
+
+    public static void main(String[] args) {
+        int n = 0;
+        var k = new int[n][n];
+        System.out.println(k.length);
+    }
 }

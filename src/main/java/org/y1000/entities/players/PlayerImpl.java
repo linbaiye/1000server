@@ -49,9 +49,9 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         this.state = new PlayerIdleState();
         changeDirection(Direction.DOWN);
         this.connection = connection;
-        this.footKungfu = new UnnamedBufa(98.91f);
+        this.footKungfu = new UnnamedBufa(8500);
         attackKungFu = UnnamedQuanFa.builder()
-                .level(55f)
+                .level(5501)
                 .bodyArmor(1)
                 .build();
         this.connection.registerClientEventListener(this);

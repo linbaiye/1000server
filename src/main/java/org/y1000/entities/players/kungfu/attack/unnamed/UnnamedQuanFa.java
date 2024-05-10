@@ -33,7 +33,7 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
     public static UnnamedQuanFa start() {
          return UnnamedQuanFa.builder()
                 .bodyDamage(163)
-                .level(0.0f)
+                .level(100)
                 .bodyArmor(32)
                 .build();
     }
@@ -71,6 +71,6 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
 
     @Override
     public AttackKungFuType getType() {
-        return AttackKungFuType.FIST;
+        return AttackKungFuType.QUANFA;
     }
 }

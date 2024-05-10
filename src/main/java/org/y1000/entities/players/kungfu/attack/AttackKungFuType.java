@@ -4,7 +4,7 @@ import org.y1000.message.ValueEnum;
 
 public enum AttackKungFuType implements ValueEnum {
 
-    FIST(0),
+    QUANFA(0),
 
     SWORD(1),
 
