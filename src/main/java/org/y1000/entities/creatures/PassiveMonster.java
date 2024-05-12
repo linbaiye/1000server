@@ -5,19 +5,20 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.ArmorAttribute;
 import org.y1000.entities.attribute.DamageAttribute;
 import org.y1000.entities.attribute.HarhAttribute;
+import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.message.AbstractInterpolation;
 import org.y1000.message.CreatureInterpolation;
+import org.y1000.realm.RealmImpl;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
+import org.y1000.util.Rectangle;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
-public final class PassiveMonster extends AbstractCreature {
-
-    private CreatureState<PassiveMonster> state;
-
-    private final PassiveMonsterAI creatureAI;
+public final class PassiveMonster extends AbstractCreature<PassiveMonster> {
 
     private final RealmMap realmMap;
 
@@ -27,46 +28,90 @@ public final class PassiveMonster extends AbstractCreature {
 
     private final HarhAttribute harhAttribute;
 
+    private final Map<State, Integer> stateMillis;
+
+    private int recoveryCooldown;
+    private int attackCooldown;
+    private final Rectangle wanderingArea;
+
+    private static final Map<State, Integer> BAFFULO_STATE_MILLIS = new HashMap<>() {
+        {
+            put(State.IDLE, 2000);
+            put(State.WALK, 1050);
+            put(State.HURT, 300);
+            put(State.ATTACK, 500);
+        }
+    };
+
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap) {
         super(id, coordinate, direction, name);
-        state = PassiveMonsterIdleState.buffalo();
-        creatureAI = new PassiveMonsterAI(this);
         this.realmMap = realmMap;
         armorAttribute = ArmorAttribute.DEFAULT;
         damageAttribute = DamageAttribute.DEFAULT;
-        harhAttribute = HarhAttribute.DEFAULT;
+        harhAttribute = new HarhAttribute(0, 25, 100, 0, 200);
+        stateMillis = BAFFULO_STATE_MILLIS;
+        recoveryCooldown = 0;
+        attackCooldown = 0;
+        this.wanderingArea = new Rectangle(coordinate.move(-10, -10),
+                coordinate.move(10, 10));
+        changeState(new PassiveMonsterIdleState(stateMillis.get(State.IDLE)));
     }
 
-    void changeState(CreatureState<PassiveMonster> newState) {
-        state = newState;
-    }
-
-    PassiveMonsterAI AI() {
-        return creatureAI;
-    }
 
     public RealmMap realmMap() {
         return realmMap;
     }
 
-    @Override
-    public void getAttacked(Creature attacker) {
-        state.getAttacked(this, attacker);
+    public Rectangle wanderingArea() {
+        return wanderingArea;
     }
 
-    CreatureState<PassiveMonster> state() {
-        return state;
+
+    public void cooldownRecovery() {
+        recoveryCooldown = harhAttribute.recovery()  * RealmImpl.STEP_MILLIS;
+    }
+
+    public void cooldownAttack() {
+        attackCooldown = harhAttribute.attackSpeed() * RealmImpl.STEP_MILLIS;
+    }
+
+    public int recoveryCooldown() {
+        return recoveryCooldown;
+    }
+
+    public int attackCooldown() {
+        return attackCooldown;
+    }
+
+
+    int getStateMillis(State state) {
+        return stateMillis.get(state);
     }
 
     @Override
     public void update(int delta) {
-        state.update(this, delta);
+        recoveryCooldown = recoveryCooldown > delta ? recoveryCooldown - delta : 0;
+        attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
+        state().update(this, delta);
+    }
+
+    @Override
+    public void attackedBy(Creature attacker) {
+        if (!state().attackable()) {
+            return;
+        }
+        if (!attacker.harhAttribute().randomHit(this.harhAttribute)) {
+            return;
+        }
+        cooldownRecovery();
+        changeState(PassiveMonsterHurtState.attacked(this, attacker));
+        emitEvent(new CreatureHurtEvent(this));
     }
 
     @Override
     public AbstractInterpolation captureInterpolation() {
-        return new CreatureInterpolation(id(), coordinate(), state.stateEnum(), direction(), state.elapsedMillis(), name());
+        return new CreatureInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name());
     }
 
     @Override
@@ -80,10 +125,5 @@ public final class PassiveMonster extends AbstractCreature {
             return false;
         }
         return obj == this || ((PassiveMonster) obj).id() == id();
-    }
-
-    @Override
-    public State stateEnum() {
-        return state.stateEnum();
     }
 }

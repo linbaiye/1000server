@@ -2,6 +2,7 @@ package org.y1000.entities.players.kungfu.attack.unnamed;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.PlayerAttackState;
@@ -12,16 +13,18 @@ import org.y1000.entities.players.kungfu.attack.AbstractAttackKungFu;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.realm.RealmImpl;
+
 import java.util.concurrent.ThreadLocalRandom;
 
+@Slf4j
 @Getter
 @SuperBuilder
 public final class UnnamedQuanFa extends AbstractAttackKungFu {
 
+    private final int fistLengthMillis = 100 * 5;
 
-    private final int fistLengthMillis = 90 * 5;
-
-    private final int kickLengthMillis = 75 * 6;
+    private final int kickLengthMillis = 100 * 6;
 
     private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
@@ -30,10 +33,12 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
         return "无名拳法";
     }
 
+
     public static UnnamedQuanFa start() {
          return UnnamedQuanFa.builder()
                 .bodyDamage(163)
                 .level(100)
+                .attackSpeed(40)
                 .bodyArmor(32)
                 .build();
     }
@@ -42,10 +47,14 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
         int distance = player.coordinate().distance(target.coordinate());
         Direction direction = player.coordinate().computeDirection(target.coordinate());
         player.changeDirection(direction);
-        if (distance <= 1 && target.canBeHit()) {
-            player.changeState(new PlayerAttackState(fistLengthMillis, target, 500, below50));
+        if (distance <= 1 && target.attackable()) {
+            var length = player.attackSpeed() * RealmImpl.STEP_MILLIS;
+            var cooldown = below50 ? length - fistLengthMillis : length - kickLengthMillis ;
+            target.attackedBy(player);
+            player.changeState(PlayerAttackState.attack(target, below50, length, cooldown));
             player.emitEvent(event);
         } else {
+            log.debug("Too far to attack.");
             player.emitEvent(event);
         }
     }

@@ -16,11 +16,11 @@ public interface Entity {
      * Return true if we can be hit.
      * @return true/false.
      */
-    default boolean canBeHit() {
+    default boolean attackable() {
         return true;
     }
 
-    default void getAttacked(Creature attacker) {
+    default void attackedBy(Creature attacker) {
 
     }
 

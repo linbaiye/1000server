@@ -3,13 +3,13 @@ package org.y1000.entities.creatures;
 import org.y1000.entities.Direction;
 import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.message.serverevent.EntityEventListener;
-import org.y1000.realm.RealmMap;
+import org.y1000.realm.RealmImpl;
 import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractCreature implements Creature {
+public abstract class AbstractCreature<C extends AbstractCreature<C>> implements Creature {
 
     private final long id;
 
@@ -21,6 +21,15 @@ public abstract class AbstractCreature implements Creature {
 
     private final List<EntityEventListener> eventListeners;
 
+    private CreatureState<C> state;
+
+    private int recoveryCooldown;
+    private int attackCooldown;
+
+    public void changeState(CreatureState<C> newState) {
+        state = newState;
+    }
+
     public AbstractCreature(long id,
                             Coordinate coordinate,
                             Direction direction,
@@ -30,6 +39,8 @@ public abstract class AbstractCreature implements Creature {
         this.direction = direction;
         this.name = name;
         this.eventListeners = new ArrayList<>();
+        recoveryCooldown = 0;
+        attackCooldown = 0;
     }
 
     public void changeDirection(Direction newdir) {
@@ -40,6 +51,10 @@ public abstract class AbstractCreature implements Creature {
         coordinate = newCoor;
     }
 
+    public CreatureState<C> state() {
+        return state;
+    }
+
     public void emitEvent(EntityEvent event) {
         eventListeners.forEach(listener -> listener.OnEvent(event));
     }
@@ -47,6 +62,7 @@ public abstract class AbstractCreature implements Creature {
     void ClearListeners() {
         eventListeners.clear();
     }
+
 
     @Override
     public void registerOrderedEventListener(EntityEventListener listener) {
@@ -71,5 +87,10 @@ public abstract class AbstractCreature implements Creature {
     @Override
     public String name() {
         return name;
+    }
+
+    @Override
+    public State stateEnum() {
+        return state().stateEnum();
     }
 }

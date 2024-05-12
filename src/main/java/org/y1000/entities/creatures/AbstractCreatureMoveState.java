@@ -8,15 +8,12 @@ public abstract class AbstractCreatureMoveState<C extends AbstractCreature> exte
 
     private final State state;
 
-    private final int millisPerUnit;
-
     private final Direction towards;
-
 
     public AbstractCreatureMoveState(State state,
                                      int millisPerUnit, Direction towards) {
+        super(millisPerUnit);
         this.state = state;
-        this.millisPerUnit = millisPerUnit;
         this.towards = towards;
     }
 
@@ -26,7 +23,7 @@ public abstract class AbstractCreatureMoveState<C extends AbstractCreature> exte
     }
 
     protected int millisPerUnit() {
-        return millisPerUnit;
+        return getTotalMillis();
     }
 
 
@@ -44,7 +41,7 @@ public abstract class AbstractCreatureMoveState<C extends AbstractCreature> exte
         if (elapsedMillis() == 0) {
             c.changeDirection(towards);
         }
-        if (elapsedMillis() < millisPerUnit)
+        if (elapsedMillis() < millisPerUnit())
             elapse(delta);
     }
 }

@@ -2,6 +2,7 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Entity;
+import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttackEvent;
@@ -66,7 +67,6 @@ public final class RealmEntityManager implements EntityEventListener,
 
     @Override
     public void visit(JoinedRealmEvent joinedRealmEvent) {
-        add(joinedRealmEvent.source());
         joinedRealmEvent.player().connection().write(joinedRealmEvent);
         var visibleEntities = scopeManager.filterVisibleEntities(joinedRealmEvent.source(), Entity.class);
         visibleEntities.forEach(entity -> notifyInterpolation(joinedRealmEvent.player(), entity));
@@ -79,6 +79,11 @@ public final class RealmEntityManager implements EntityEventListener,
                 .filter(entity -> entity instanceof Player)
                 .map(Player.class::cast)
                 .forEach(player -> player.connection().write(event));
+    }
+
+    @Override
+    public void visit(CreatureAttackEvent event) {
+        notifyVisiblePlayers(event.source(), event);
     }
 
     @Override

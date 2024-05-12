@@ -60,7 +60,7 @@ public class PlayerInterpolation extends AbstractInterpolation {
                 player.stateEnum(), player.direction(),
                 elapsedMillis, player.isMale());
         playerInterpolation.setName(player.name());
-        if (player.currentState() instanceof PlayerAttackState attackState) {
+        if (player.state() instanceof PlayerAttackState attackState) {
             playerInterpolation.attachKungFu(player, attackState);
         }
         return playerInterpolation;

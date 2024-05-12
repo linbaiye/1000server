@@ -27,6 +27,8 @@ public interface Player extends Creature {
 
     void leaveRealm();
 
+    int attackSpeed();
+
     default Optional<FootKungFu> footKungFu() {
         return Optional.empty();
     }

@@ -8,12 +8,10 @@ import org.y1000.message.clientevent.ClientEventVisitor;
 
 public final class PlayerCooldownState extends AbstractCreatureCooldownState<PlayerImpl> implements PlayerState, ClientEventVisitor {
 
-    private final int length;
-
     private final Entity target;
 
     public PlayerCooldownState(int length, Entity target) {
-        this.length = length;
+        super(length);
         this.target = target;
     }
 
@@ -23,8 +21,7 @@ public final class PlayerCooldownState extends AbstractCreatureCooldownState<Pla
 
     @Override
     public void update(PlayerImpl player, int delta) {
-        elapse(delta);
-        if (elapsedMillis() >= length) {
+        if (elapse(delta)) {
             attackAgain(player);
         } else {
             player.takeClientEvent().ifPresent(e -> e.accept(player, this));

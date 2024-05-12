@@ -1,7 +1,9 @@
 package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.message.MoveEvent;
+import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Rectangle;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -29,7 +31,7 @@ final class PassiveMonsterAI {
             var index = random.nextInt(0, values.length);
             Direction direction = values[index];
             monster.changeDirection(direction);
-            monster.changeState(PassiveMonsterIdleState.buffalo());
+            monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
             monster.emitEvent(MoveEvent.setPosition(monster));
         }
 
@@ -55,7 +57,7 @@ final class PassiveMonsterAI {
             count++;
             var nextInt = random.nextInt(0, 2);
             if (nextInt == 0) {
-                monster.changeState(PassiveMonsterIdleState.buffalo());
+                monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
             } else {
                 turn();
             }
@@ -69,7 +71,7 @@ final class PassiveMonsterAI {
         @Override
         public void behave(PassiveMonster monster) {
             if (count++ == 0) {
-                monster.changeState(PassiveMonsterIdleState.buffalo());
+                monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
                 monster.emitEvent(MoveEvent.setPosition(monster));
             }
             if (count > 1) {
@@ -90,7 +92,34 @@ final class PassiveMonsterAI {
 
         @Override
         public void behave(PassiveMonster monster) {
-            //monster.emitEvent();
+        }
+    }
+
+    private class FightAi implements Behaviour {
+        private final Creature target;
+
+        private FightAi(Creature target) {
+            this.target = target;
+        }
+
+        private void behaveAfterHurt(PassiveMonsterHurtState hurtState) {
+
+        }
+
+        @Override
+        public void behave(PassiveMonster monster) {
+            if (!(monster.state() instanceof PassiveMonsterHurtState hurtState)) {
+                return;
+            }
+            if (monster.coordinate().moveBy(monster.direction()).equals(target.coordinate())) {
+                monster.changeDirection(monster.coordinate().computeDirection(target.coordinate()));
+                if (monster.recoveryCooldown() > 0) {
+                    monster.changeState(PassiveMonsterIdleState.recovery(monster.recoveryCooldown()));
+                    monster.emitEvent(SetPositionEvent.fromCreature(monster));
+                } else {
+                }
+            } else {
+            }
         }
     }
 
@@ -107,8 +136,7 @@ final class PassiveMonsterAI {
         if (!monster.harhAttribute().randomHit(attacker.harhAttribute())) {
             return;
         }
-        monster.changeState(new PassiveMonsterHurtState(attacker, monster.harhAttribute().recovery()));
-        monster.amorArribute().armArmor();
+        behaviour = new FightAi(attacker);
     }
 
 

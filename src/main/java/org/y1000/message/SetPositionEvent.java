@@ -22,9 +22,11 @@ public class SetPositionEvent extends AbstractPositionEvent {
     }
 
 
-    public static SetPositionEvent fromPlayer(Player player) {
-        return new SetPositionEvent(player, player.direction(), player.coordinate(), player.stateEnum());
+    public static SetPositionEvent fromCreature(Creature creature) {
+        return new SetPositionEvent(creature, creature.direction(), creature.coordinate(), creature.stateEnum());
     }
+
+
 
     @Override
     public void accept(EntityEventVisitor visitor) {

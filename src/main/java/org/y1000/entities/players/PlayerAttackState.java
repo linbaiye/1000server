@@ -6,23 +6,24 @@ import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
 
 public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> implements PlayerState {
-    private final int length;
+
     private final Entity target;
-    private final int cooldownLength;
 
     @Getter
     private final boolean below50;
 
+    private final int cooldownLength;
+
+
     public PlayerAttackState(int length,
                              Entity target,
-                             int cooldownMillisPerSprite,
-                             boolean below50) {
-        this.length = length;
+                             boolean below50,
+                             int cooldownLength) {
+        super(length);
         this.target = target;
-        this.cooldownLength = cooldownMillisPerSprite * 3;
         this.below50 = below50;
+        this.cooldownLength = cooldownLength;
     }
-
 
     @Override
     public State stateEnum() {
@@ -32,9 +33,21 @@ public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> imp
     @Override
     public void update(PlayerImpl player, int delta) {
         elapse(delta);
-        if (elapsedMillis() < length) {
+        if (elapsedMillis() < getTotalMillis()) {
             return;
         }
-        player.changeState(new PlayerCooldownState(cooldownLength, target));
+        if (cooldownLength > 0) {
+            player.changeState(new PlayerCooldownState(cooldownLength, target));
+        } else {
+            player.attackKungFu().ifPresent(attackKungFu -> attackKungFu.attack(player, target));
+        }
     }
+
+    public static PlayerAttackState attack(Entity target, boolean below50, int length, int cooldown) {
+        if (cooldown < 0) {
+            cooldown = 0;
+        }
+        return new PlayerAttackState(length, target, below50, cooldown);
+    }
+
 }

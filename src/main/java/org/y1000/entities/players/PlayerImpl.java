@@ -24,12 +24,10 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
-public final class PlayerImpl extends AbstractCreature implements Player,
+public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Player,
         ClientEventListener {
 
     private Realm realm;
-
-    private PlayerState state;
 
     private final Queue<ClientEvent> eventQueue;
 
@@ -41,18 +39,24 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
     private Weapon weapon;
 
+    private int recoveryCooldown;
+
+    private int attackCooldown;
+
+
     public PlayerImpl(long id, Coordinate coordinate,
                       Direction direction,
                       String name, Connection connection) {
         super(id, coordinate, direction, name);
         eventQueue = new ConcurrentLinkedQueue<>();
-        this.state = new PlayerIdleState();
+        changeState(new PlayerIdleState());
         changeDirection(Direction.DOWN);
         this.connection = connection;
         this.footKungfu = new UnnamedBufa(8500);
         attackKungFu = UnnamedQuanFa.builder()
                 .level(5501)
                 .bodyArmor(1)
+                .attackSpeed(40)
                 .build();
         this.connection.registerClientEventListener(this);
     }
@@ -75,23 +79,12 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         return Optional.ofNullable(attackKungFu);
     }
 
-    public void changeState(PlayerState newState) {
-        state = newState;
-    }
-
-    @Override
-    public State stateEnum() {
-        return state.stateEnum();
-    }
 
     @Override
     public Connection connection() {
         return connection;
     }
 
-    public PlayerState currentState() {
-        return state;
-    }
 
     @Override
     public void joinReam(RealmImpl realm) {
@@ -100,7 +93,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         }
         this.realm = realm;
         realmMap().occupy(this);
-        this.state = new PlayerIdleState();
+        changeState(new PlayerIdleState());
         changeDirection(Direction.DOWN);
         emitEvent(new JoinedRealmEvent(this, coordinate()));
     }
@@ -119,19 +112,27 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     @Override
+    public int attackSpeed() {
+        int kungfuSpeed = attackKungFu != null ? attackKungFu.getAttackSpeed() : 0;
+        return kungfuSpeed + harhAttribute().attackSpeed();
+    }
+
+    @Override
     public PlayerInterpolation captureInterpolation() {
-        return PlayerInterpolation.FromPlayer(this, state.elapsedMillis());
+        return PlayerInterpolation.FromPlayer(this, state().elapsedMillis());
     }
 
 
     @Override
     public void update(int delta) {
-        state.update(this, delta);
+        recoveryCooldown = recoveryCooldown > delta ? recoveryCooldown - delta : 0;
+        attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
+        state().update(this, delta);
     }
 
     public void reset(long sequence) {
         eventQueue.clear();
-        emitEvent(new InputResponseMessage(sequence, SetPositionEvent.fromPlayer(this)));
+        emitEvent(new InputResponseMessage(sequence, SetPositionEvent.fromCreature(this)));
         realmMap().occupy(this);
     }
 
@@ -142,7 +143,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
                 "id=" + id() +
                 ", coordinate=" + coordinate() +
                 ", direction=" + direction() +
-                ", state=" + state.stateEnum() +
+                ", state=" + stateEnum() +
                 '}';
     }
 

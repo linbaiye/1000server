@@ -45,7 +45,7 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
             handleInput(player);
         } else {
             player.changeState(new PlayerIdleState());
-            player.emitEvent(new InputResponseMessage(currentInput.sequence(), SetPositionEvent.fromPlayer(player)));
+            player.emitEvent(new InputResponseMessage(currentInput.sequence(), SetPositionEvent.fromCreature(player)));
         }
     }
 

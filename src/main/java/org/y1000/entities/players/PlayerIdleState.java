@@ -17,7 +17,9 @@ public final class PlayerIdleState extends AbstractCreatureIdleState<PlayerImpl>
 
     @Override
     public void update(PlayerImpl player, int deltaMillis) {
-        resetIfElapsedLength(deltaMillis);
+        if (elapse(deltaMillis)) {
+            reset();
+        }
         player.takeClientEvent().ifPresent(e -> e.accept(player, this));
     }
 

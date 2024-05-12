@@ -2,23 +2,12 @@ package org.y1000.entities.creatures;
 
 public abstract class AbstractCreatureIdleState<E extends Creature> extends AbstractCreateState<E> {
 
-    // How long does this state last.
-    private final int lengthMillis;
-
     public AbstractCreatureIdleState(int length) {
-        this.lengthMillis = length;
+        super(length);
     }
 
     @Override
     public State stateEnum() {
         return State.IDLE;
-    }
-
-    protected boolean resetIfElapsedLength(int deltaMillis) {
-        if (elapsedMillis() >= lengthMillis) {
-            resetElapsedMillis();
-        }
-        elapse(deltaMillis);
-        return elapsedMillis() >= lengthMillis;
     }
 }

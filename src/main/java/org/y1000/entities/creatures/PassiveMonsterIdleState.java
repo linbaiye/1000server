@@ -2,28 +2,61 @@ package org.y1000.entities.creatures;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.Direction;
+import org.y1000.message.MoveEvent;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
-public final class PassiveMonsterIdleState extends AbstractCreatureIdleState<PassiveMonster> {
+public final class PassiveMonsterIdleState extends AbstractMonsterState {
+
+    private int idleCounter = -1;
 
     public PassiveMonsterIdleState(int length) {
-        super(length);
+        super(length, State.IDLE);
     }
 
-    @Override
-    public void update(PassiveMonster passiveMonster,
-                       int delta) {
-        if (resetIfElapsedLength(delta)) {
-            passiveMonster.AI().nextMove();
+    private void moveOrTurn(PassiveMonster monster) {
+        Direction towards = monster.direction();
+        var next = monster.coordinate().moveBy(towards);
+        if (monster.wanderingArea().contains(next) && monster.realmMap().movable(next)) {
+            monster.changeState(PassiveMonsterMoveState.of(monster, towards));
+            monster.emitEvent(MoveEvent.movingTo(monster, towards));
+        } else {
+            turn(monster);
         }
     }
 
-    public static PassiveMonsterIdleState buffalo() {
-        return new PassiveMonsterIdleState(2000);
+    private void turn(PassiveMonster monster) {
+        Direction[] values = monster.direction().neighbours();
+        var index = ThreadLocalRandom.current().nextInt(0, values.length);
+        Direction direction = values[index];
+        monster.changeDirection(direction);
+        monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
+        monster.emitEvent(MoveEvent.setPosition(monster));
     }
 
     @Override
-    public void getAttacked(PassiveMonster monster, Creature attacker) {
-        monster.getAttacked(attacker);
+    protected void nextMove(PassiveMonster monster) {
+        if (idleCounter >= 4) {
+            moveOrTurn(monster);
+            idleCounter = -1;
+            return;
+        }
+        idleCounter++;
+        var nextInt = ThreadLocalRandom.current().nextInt(0, 2);
+        if (nextInt == 0) {
+            monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
+        } else {
+            turn(monster);
+        }
+    }
+
+    public static PassiveMonsterIdleState ofMonster(PassiveMonster monster) {
+        return new PassiveMonsterIdleState(monster.getStateMillis(State.IDLE));
+    }
+
+    public static PassiveMonsterIdleState recovery(int len) {
+        return new PassiveMonsterIdleState(len);
     }
 }

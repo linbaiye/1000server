@@ -55,8 +55,12 @@ public final class RealmImpl implements Runnable, Realm {
             while (!shutdown) {
                 long current = System.currentTimeMillis();
                 if (timeMillis <= current) {
-                    entityManager.updateEntities(STEP_MILLIS);
-                    timeMillis += STEP_MILLIS;
+                    try {
+                        entityManager.updateEntities(STEP_MILLIS);
+                        timeMillis += STEP_MILLIS;
+                    } catch (RuntimeException e) {
+                        log.error("Excpetion: ", e);
+                    }
                 } else {
                     List<Player> join = Collections.emptyList();
                     List<Player> leaving = Collections.emptyList();

@@ -48,7 +48,7 @@ public final class ConnectionManager {
         if (event instanceof LoginEvent) {
             pending.remove(connection);
             Player player = playerRepository.load(connection);
-            log.info("Player {} logged in.", player);
+            log.info("Player {} connected.", player);
             connectionPlayerMap.put(connection, player);
             realmManager.onPlayerConnected(player, "start");
         } else {

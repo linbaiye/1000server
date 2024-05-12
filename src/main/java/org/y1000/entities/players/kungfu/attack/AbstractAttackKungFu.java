@@ -12,4 +12,6 @@ public abstract class AbstractAttackKungFu extends AbstractLevelKungFu implement
 
     private int bodyArmor;
 
+    private int attackSpeed;
+
 }

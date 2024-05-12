@@ -11,6 +11,6 @@ public interface MoveInput extends InputMessage {
 
     default void changeToIdle(PlayerImpl player) {
         player.changeState(new PlayerIdleState());
-        player.emitEvent(new InputResponseMessage(sequence(), SetPositionEvent.fromPlayer(player)));
+        player.emitEvent(new InputResponseMessage(sequence(), SetPositionEvent.fromCreature(player)));
     }
 }

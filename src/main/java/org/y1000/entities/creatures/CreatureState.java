@@ -7,8 +7,7 @@ public interface CreatureState<C extends Creature> {
 
     void update(C c, int delta);
 
-    default void getAttacked(C c, Creature attacker) {
-
+    default boolean attackable() {
+        return true;
     }
-
 }

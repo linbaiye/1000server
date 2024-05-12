@@ -7,12 +7,10 @@ import org.y1000.message.clientevent.ClientEventVisitor;
 
 public abstract class AbstractPlayerAttackState extends AbstractCreateState<PlayerImpl> implements
         ClientEventVisitor {
-    private final int length;
-
     private Entity target;
 
     public AbstractPlayerAttackState(int length, Entity target) {
-        this.length = length;
+        super(length);
         this.target = target;
     }
 
@@ -24,11 +22,11 @@ public abstract class AbstractPlayerAttackState extends AbstractCreateState<Play
 
     @Override
     public void update(PlayerImpl player, int delta) {
-        if (elapsedMillis() >= length) {
+        if (elapsedMillis() >= getTotalMillis()) {
             return;
         }
         elapse(delta);
-        if (elapsedMillis() >= length) {
+        if (elapsedMillis() >= getTotalMillis()) {
             onElapsed();
         }
     }

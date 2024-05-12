@@ -3,8 +3,10 @@ package org.y1000.entities.creatures;
 
 public abstract class AbstractCreateState<C extends Creature> implements CreatureState<C> {
     private int elapsedMillis;
+    private final int totalMillis;
 
-    public AbstractCreateState() {
+    public AbstractCreateState(int totalMillis) {
+        this.totalMillis = totalMillis;
         elapsedMillis = 0;
     }
 
@@ -13,10 +15,17 @@ public abstract class AbstractCreateState<C extends Creature> implements Creatur
         return elapsedMillis;
     }
 
-    protected void elapse(int delta) {
-        elapsedMillis += delta;
-    }
-    protected void resetElapsedMillis() {
+    protected void reset() {
         elapsedMillis = 0;
     }
+
+    protected boolean elapse(int delta) {
+        elapsedMillis += delta;
+        return elapsedMillis >= totalMillis;
+    }
+
+    protected int getTotalMillis() {
+        return totalMillis;
+    }
 }
+
