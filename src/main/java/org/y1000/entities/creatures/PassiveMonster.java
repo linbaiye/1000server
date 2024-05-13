@@ -34,10 +34,11 @@ public final class PassiveMonster extends AbstractCreature<PassiveMonster> {
 
     private static final Map<State, Integer> BAFFULO_STATE_MILLIS = new HashMap<>() {
         {
-            put(State.IDLE, 2000);
-            put(State.WALK, 1050);
-            put(State.HURT, 300);
-            put(State.ATTACK, 500);
+            put(State.IDLE, 1000);
+            put(State.WALK, 770);
+            put(State.HURT, 540);
+            put(State.ATTACK, 700);
+            put(State.DIE, 700);
         }
     };
 
@@ -89,6 +90,7 @@ public final class PassiveMonster extends AbstractCreature<PassiveMonster> {
         state().update(this, delta);
     }
 
+
     @Override
     public void attackedBy(Creature attacker) {
         if (!state().attackable()) {
@@ -101,6 +103,7 @@ public final class PassiveMonster extends AbstractCreature<PassiveMonster> {
         changeState(PassiveMonsterHurtState.attacked(this, attacker));
         emitEvent(new CreatureHurtEvent(this));
     }
+
 
     @Override
     public AbstractInterpolation captureInterpolation() {

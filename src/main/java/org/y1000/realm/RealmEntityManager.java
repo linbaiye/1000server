@@ -109,6 +109,9 @@ public final class RealmEntityManager implements EntityEventListener,
     @Override
     public void visit(CreatureHurtEvent event) {
         notifyVisiblePlayers(event.source(), event);
+        if (event.source() instanceof Player player) {
+            player.connection().write(event);
+        }
     }
 
     @Override

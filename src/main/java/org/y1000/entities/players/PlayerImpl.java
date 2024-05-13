@@ -1,7 +1,11 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.attribute.HarhAttribute;
+import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.creatures.PassiveMonsterHurtState;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.equipment.weapon.Weapon;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.UnnamedBufa;
@@ -43,14 +47,17 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
 
     private int attackCooldown;
 
+    private final HarhAttribute harhAttribute;
+
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
-        put(State.WALK, 800);
-        put(State.RUN, 400);
+        put(State.WALK, 840);
+        put(State.RUN, 420);
         put(State.FLY, 360);
         put(State.COOLDOWN, 1400);
         put(State.FIST, 400);
         put(State.KICK, 560);
+        put(State.HURT, 280);
     }};
 
 
@@ -67,9 +74,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
         attackKungFu = UnnamedQuanFa.builder()
                 .level(5501)
                 .bodyArmor(1)
+                .recovery(50)
                 .attackSpeed(40)
                 .build();
         this.connection.registerClientEventListener(this);
+        this.harhAttribute = HarhAttribute.DEFAULT;
     }
 
     Optional<ClientEvent> takeClientEvent() {
@@ -128,6 +137,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
         return kungfuSpeed + harhAttribute().attackSpeed();
     }
 
+    public void cooldownAttack() {
+        attackCooldown = attackSpeed() * RealmImpl.STEP_MILLIS;
+    }
+
     @Override
     public PlayerInterpolation captureInterpolation() {
         return PlayerInterpolation.FromPlayer(this, state().elapsedMillis());
@@ -145,6 +158,37 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
         eventQueue.clear();
         emitEvent(new InputResponseMessage(sequence, SetPositionEvent.fromCreature(this)));
         realmMap().occupy(this);
+    }
+
+    private int recovery() {
+        int kfr = attackKungFu != null ? attackKungFu.getRecovery() : 0;
+        return harhAttribute.recovery() + kfr;
+    }
+
+    private void cooldownRecovery() {
+        recoveryCooldown = recovery() * RealmImpl.STEP_MILLIS;
+    }
+
+    public int getRecoveryCooldown() {
+        return recoveryCooldown;
+    }
+
+    public int getAttackCooldown() {
+        return attackCooldown;
+    }
+
+    @Override
+    public void attackedBy(Creature attacker) {
+        if (!state().attackable()) {
+            return;
+        }
+        if (!attacker.harhAttribute().randomHit(this.harhAttribute)) {
+            return;
+        }
+        cooldownRecovery();
+        changeState(PlayerHurtState.attackedBy(this, attacker));
+        emitEvent(new CreatureHurtEvent(this));
+        log.debug("Player was attacked.");
     }
 
 

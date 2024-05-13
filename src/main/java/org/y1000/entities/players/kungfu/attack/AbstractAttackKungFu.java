@@ -14,4 +14,6 @@ public abstract class AbstractAttackKungFu extends AbstractLevelKungFu implement
 
     private int attackSpeed;
 
+    private int recovery;
+
 }

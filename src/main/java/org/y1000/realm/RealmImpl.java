@@ -44,8 +44,8 @@ public final class RealmImpl implements Runnable, Realm {
 
 
     private void initEntities() {
-        //List<PassiveMonster> monsters = List.of(new PassiveMonster(1000L, new Coordinate(39, 30), Direction.DOWN, "牛", realmMap));
-        //monsters.forEach(entityManager::add);
+        List<PassiveMonster> monsters = List.of(new PassiveMonster(1000L, new Coordinate(39, 30), Direction.DOWN, "牛", realmMap));
+        monsters.forEach(entityManager::add);
     }
 
 

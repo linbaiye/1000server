@@ -53,6 +53,7 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
         return new PlayerMoveState(trigger, player.getStateMillis(state), state);
     }
 
+
     @Override
     public void visit(PlayerImpl player, CharacterMovementEvent movementEvent) {
         movementEvent.resetOrMove(player);

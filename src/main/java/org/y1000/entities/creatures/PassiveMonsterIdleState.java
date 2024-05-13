@@ -16,9 +16,15 @@ public final class PassiveMonsterIdleState extends AbstractMonsterState {
         super(length, State.IDLE);
     }
 
+    private PassiveMonsterIdleState(int length, int idleCounter){
+        this(length);
+        this.idleCounter = idleCounter;
+    }
+
     private void moveOrTurn(PassiveMonster monster) {
         Direction towards = monster.direction();
         var next = monster.coordinate().moveBy(towards);
+        log.debug("Wandering {}, movable {}.", monster.wanderingArea().contains(next), monster.realmMap().movable(next));
         if (monster.wanderingArea().contains(next) && monster.realmMap().movable(next)) {
             monster.changeState(PassiveMonsterMoveState.of(monster, towards));
             monster.emitEvent(MoveEvent.movingTo(monster, towards));
@@ -32,7 +38,7 @@ public final class PassiveMonsterIdleState extends AbstractMonsterState {
         var index = ThreadLocalRandom.current().nextInt(0, values.length);
         Direction direction = values[index];
         monster.changeDirection(direction);
-        monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
+        monster.changeState(new PassiveMonsterIdleState(monster.getStateMillis(State.IDLE), idleCounter));
         monster.emitEvent(MoveEvent.setPosition(monster));
     }
 
@@ -46,7 +52,7 @@ public final class PassiveMonsterIdleState extends AbstractMonsterState {
         idleCounter++;
         var nextInt = ThreadLocalRandom.current().nextInt(0, 2);
         if (nextInt == 0) {
-            monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
+            monster.changeState(new PassiveMonsterIdleState(monster.getStateMillis(State.IDLE), idleCounter));
         } else {
             turn(monster);
         }

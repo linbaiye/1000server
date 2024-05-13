@@ -51,6 +51,7 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
             var length = player.attackSpeed() * RealmImpl.STEP_MILLIS;
             var cooldown = below50 ? length - fistLengthMillis : length - kickLengthMillis ;
             target.attackedBy(player);
+            player.cooldownAttack();
             player.changeState(PlayerAttackState.attack(target, below50, length, cooldown));
             player.emitEvent(event);
         } else {

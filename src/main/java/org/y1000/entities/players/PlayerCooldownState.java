@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.AbstractCreatureCooldownState;
+import org.y1000.entities.creatures.Creature;
 import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.ClientEventVisitor;
@@ -29,12 +30,12 @@ public final class PlayerCooldownState extends AbstractCreatureCooldownState<Pla
     }
 
     @Override
-    public void visit(PlayerImpl player, ClientAttackEvent event) {
-        attackIfHasKungfu(player, event);
-    }
-
-    @Override
     public void visit(PlayerImpl player, CharacterMovementEvent event) {
 
+    }
+
+    public static PlayerCooldownState cooldown(PlayerImpl player, Creature attacker) {
+        int len = Math.max(player.getAttackCooldown(), player.getRecoveryCooldown());
+        return new PlayerCooldownState(len, attacker);
     }
 }
