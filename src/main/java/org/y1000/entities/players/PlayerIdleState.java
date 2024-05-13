@@ -9,7 +9,7 @@ import org.y1000.message.clientevent.ClientEventVisitor;
 @Slf4j
 public final class PlayerIdleState extends AbstractCreatureIdleState<PlayerImpl>
         implements PlayerState, ClientEventVisitor {
-    private static final int STATE_MILLIS = 3000;
+    private static final int STATE_MILLIS = 2200;
 
     public PlayerIdleState() {
         super(STATE_MILLIS);

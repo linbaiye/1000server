@@ -3,11 +3,11 @@ package org.y1000.entities.creatures;
 import org.y1000.entities.Direction;
 import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.message.serverevent.EntityEventListener;
-import org.y1000.realm.RealmImpl;
 import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractCreature<C extends AbstractCreature<C>> implements Creature {
 
@@ -23,8 +23,7 @@ public abstract class AbstractCreature<C extends AbstractCreature<C>> implements
 
     private CreatureState<C> state;
 
-    private int recoveryCooldown;
-    private int attackCooldown;
+    private final Map<State, Integer> stateMillis;
 
     public void changeState(CreatureState<C> newState) {
         state = newState;
@@ -33,14 +32,14 @@ public abstract class AbstractCreature<C extends AbstractCreature<C>> implements
     public AbstractCreature(long id,
                             Coordinate coordinate,
                             Direction direction,
-                            String name) {
+                            String name,
+                            Map<State, Integer> stateMillis) {
         this.id = id;
         this.coordinate = coordinate;
         this.direction = direction;
         this.name = name;
         this.eventListeners = new ArrayList<>();
-        recoveryCooldown = 0;
-        attackCooldown = 0;
+        this.stateMillis = stateMillis;
     }
 
     public void changeDirection(Direction newdir) {
@@ -49,6 +48,10 @@ public abstract class AbstractCreature<C extends AbstractCreature<C>> implements
 
     public void changeCoordinate(Coordinate newCoor) {
         coordinate = newCoor;
+    }
+
+    public int getStateMillis(State state) {
+        return stateMillis.get(state);
     }
 
     public CreatureState<C> state() {

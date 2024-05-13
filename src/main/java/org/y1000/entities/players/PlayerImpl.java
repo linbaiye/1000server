@@ -43,11 +43,22 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
 
     private int attackCooldown;
 
+    private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
+        put(State.IDLE, 2200);
+        put(State.WALK, 800);
+        put(State.RUN, 400);
+        put(State.FLY, 360);
+        put(State.COOLDOWN, 1400);
+        put(State.FIST, 400);
+        put(State.KICK, 560);
+    }};
+
+
 
     public PlayerImpl(long id, Coordinate coordinate,
                       Direction direction,
                       String name, Connection connection) {
-        super(id, coordinate, direction, name);
+        super(id, coordinate, direction, name, STATE_MILLIS);
         eventQueue = new ConcurrentLinkedQueue<>();
         changeState(new PlayerIdleState());
         changeDirection(Direction.DOWN);

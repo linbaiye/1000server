@@ -28,8 +28,6 @@ public final class PassiveMonster extends AbstractCreature<PassiveMonster> {
 
     private final HarhAttribute harhAttribute;
 
-    private final Map<State, Integer> stateMillis;
-
     private int recoveryCooldown;
     private int attackCooldown;
     private final Rectangle wanderingArea;
@@ -45,17 +43,16 @@ public final class PassiveMonster extends AbstractCreature<PassiveMonster> {
 
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap) {
-        super(id, coordinate, direction, name);
+        super(id, coordinate, direction, name, BAFFULO_STATE_MILLIS);
         this.realmMap = realmMap;
         armorAttribute = ArmorAttribute.DEFAULT;
         damageAttribute = DamageAttribute.DEFAULT;
         harhAttribute = new HarhAttribute(0, 25, 100, 0, 200);
-        stateMillis = BAFFULO_STATE_MILLIS;
         recoveryCooldown = 0;
         attackCooldown = 0;
         this.wanderingArea = new Rectangle(coordinate.move(-10, -10),
                 coordinate.move(10, 10));
-        changeState(new PassiveMonsterIdleState(stateMillis.get(State.IDLE)));
+        changeState(new PassiveMonsterIdleState(getStateMillis(State.IDLE)));
     }
 
 
@@ -84,10 +81,6 @@ public final class PassiveMonster extends AbstractCreature<PassiveMonster> {
         return attackCooldown;
     }
 
-
-    int getStateMillis(State state) {
-        return stateMillis.get(state);
-    }
 
     @Override
     public void update(int delta) {

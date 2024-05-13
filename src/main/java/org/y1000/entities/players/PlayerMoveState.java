@@ -16,9 +16,6 @@ import java.util.Optional;
 public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements
         PlayerState, ClientEventVisitor {
 
-    private static final int MILLIS_TO_WALK_ONE_UNIT = 900;
-    private static final int MILLIS_TO_RUN_ONE_UNIT = 450;
-
     private final AbstractRightClick currentInput;
 
     public PlayerMoveState(AbstractRightClick currentInput, int millisPerUnit, State state) {
@@ -41,7 +38,6 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
             return;
         }
         if (tryChangeCoordinate(player, player.realmMap())) {
-            log.debug("Moved to coordinate {}", player.coordinate());
             handleInput(player);
         } else {
             player.changeState(new PlayerIdleState());
@@ -50,10 +46,11 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
     }
 
 
-    public static PlayerMoveState move(Player player, AbstractRightClick trigger) {
+    public static PlayerMoveState move(PlayerImpl player, AbstractRightClick trigger) {
         Optional<FootKungFu> footMagic = player.footKungFu();
-        return footMagic.map(magic -> new PlayerMoveState(trigger, MILLIS_TO_RUN_ONE_UNIT, magic.canFly()? State.FLY : State.RUN))
-                .orElse(new PlayerMoveState(trigger, MILLIS_TO_WALK_ONE_UNIT, State.WALK));
+        State state = footMagic.map(magic -> magic.canFly() ? State.FLY : State.RUN)
+                .orElse(State.WALK);
+        return new PlayerMoveState(trigger, player.getStateMillis(state), state);
     }
 
     @Override
