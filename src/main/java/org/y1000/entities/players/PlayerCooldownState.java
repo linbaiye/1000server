@@ -16,14 +16,11 @@ public final class PlayerCooldownState extends AbstractCreatureCooldownState<Pla
         this.target = target;
     }
 
-    public void attackAgain(PlayerImpl player) {
-        player.attackKungFu().ifPresent(attackKungFu -> attackKungFu.attack(player, target));
-    }
 
     @Override
     public void update(PlayerImpl player, int delta) {
         if (elapse(delta)) {
-            attackAgain(player);
+            player.attackKungFu().ifPresent(attackKungFu -> attackKungFu.attack(player, target));
         } else {
             player.takeClientEvent().ifPresent(e -> e.accept(player, this));
         }

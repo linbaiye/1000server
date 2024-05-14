@@ -21,10 +21,10 @@ public interface ClientAttackEventPacketOrBuilder extends
   long getTargetId();
 
   /**
-   * <code>bool below50 = 3;</code>
-   * @return The below50.
+   * <code>int32 state = 3;</code>
+   * @return The state.
    */
-  boolean getBelow50();
+  int getState();
 
   /**
    * <code>int32 direction = 4;</code>

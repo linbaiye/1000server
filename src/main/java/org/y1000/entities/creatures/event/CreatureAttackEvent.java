@@ -2,20 +2,18 @@ package org.y1000.entities.creatures.event;
 
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.PassiveMonster;
+import org.y1000.entities.creatures.State;
 import org.y1000.message.serverevent.EntityEventVisitor;
 import org.y1000.network.gen.CreatureAttackEventPacket;
 import org.y1000.network.gen.Packet;
 
 public final class CreatureAttackEvent extends AbstractCreatureEvent {
 
-    private final boolean below50;
+    private final State attackState;
 
-    private final int millis;
-
-    public CreatureAttackEvent(Creature source, boolean below50, int millis) {
+    public CreatureAttackEvent(Creature source, State state) {
         super(source);
-        this.below50 = below50;
-        this.millis = millis;
+        attackState = state;
     }
 
     @Override
@@ -29,15 +27,14 @@ public final class CreatureAttackEvent extends AbstractCreatureEvent {
                 .setAttackEventPacket(
                         CreatureAttackEventPacket.newBuilder()
                                 .setDirection(creature().direction().value())
-                                .setBelow50(below50)
+                                .setState(attackState.value())
                                 .setPlayer(false)
-                                .setSpriteMillis(millis)
                                 .setId(source().id())
                                 .build())
                 .build();
     }
 
     public static CreatureAttackEvent ofMonster(PassiveMonster monster) {
-        return new CreatureAttackEvent(monster, false, 0);
+        return new CreatureAttackEvent(monster, State.ATTACK);
     }
 }

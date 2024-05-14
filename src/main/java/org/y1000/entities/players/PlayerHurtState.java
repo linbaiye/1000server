@@ -2,12 +2,12 @@ package org.y1000.entities.players;
 import org.y1000.entities.creatures.*;
 
 public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl> implements PlayerState {
+    private final CreatureState<PlayerImpl> afterRecover;
 
-    private final Creature attacker;
 
-    public PlayerHurtState(int totalMillis, Creature attacker) {
+    public PlayerHurtState(int totalMillis, CreatureState<PlayerImpl> afterRecover) {
         super(totalMillis);
-        this.attacker = attacker;
+        this.afterRecover = afterRecover;
     }
 
     @Override
@@ -15,15 +15,11 @@ public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl>
         if (!elapse(delta)) {
             return;
         }
-        if (player.getRecoveryCooldown() > 0 || player.getAttackCooldown() > 0) {
-            player.changeState(PlayerCooldownState.cooldown(player, attacker));
-        } else {
-            player.attackKungFu().ifPresent(attackKungFu -> attackKungFu.attack(player, attacker));
-        }
+        player.changeState(afterRecover);
     }
 
-    public static PlayerHurtState attackedBy(PlayerImpl player, Creature attacker) {
+    public static PlayerHurtState attackedBy(PlayerImpl player, CreatureState<PlayerImpl> after) {
         int stateMillis = player.getStateMillis(State.HURT);
-        return new PlayerHurtState(stateMillis, attacker);
+        return new PlayerHurtState(stateMillis, after);
     }
 }

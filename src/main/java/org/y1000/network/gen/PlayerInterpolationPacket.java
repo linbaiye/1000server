@@ -128,39 +128,6 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int KUNGFUTYPE_FIELD_NUMBER = 5;
-  private int kungFuType_ = 0;
-  /**
-   * <code>int32 kungFuType = 5;</code>
-   * @return The kungFuType.
-   */
-  @java.lang.Override
-  public int getKungFuType() {
-    return kungFuType_;
-  }
-
-  public static final int KUNGFUBELOW50_FIELD_NUMBER = 6;
-  private boolean kungFuBelow50_ = false;
-  /**
-   * <code>bool kungFuBelow50 = 6;</code>
-   * @return The kungFuBelow50.
-   */
-  @java.lang.Override
-  public boolean getKungFuBelow50() {
-    return kungFuBelow50_;
-  }
-
-  public static final int KUNGFUSPRITEMILLIS_FIELD_NUMBER = 7;
-  private int kungFuSpriteMillis_ = 0;
-  /**
-   * <code>int32 kungFuSpriteMillis = 7;</code>
-   * @return The kungFuSpriteMillis.
-   */
-  @java.lang.Override
-  public int getKungFuSpriteMillis() {
-    return kungFuSpriteMillis_;
-  }
-
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -187,15 +154,6 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 4, name_);
     }
-    if (kungFuType_ != 0) {
-      output.writeInt32(5, kungFuType_);
-    }
-    if (kungFuBelow50_ != false) {
-      output.writeBool(6, kungFuBelow50_);
-    }
-    if (kungFuSpriteMillis_ != 0) {
-      output.writeInt32(7, kungFuSpriteMillis_);
-    }
     getUnknownFields().writeTo(output);
   }
 
@@ -219,18 +177,6 @@ private static final long serialVersionUID = 0L;
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, name_);
-    }
-    if (kungFuType_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(5, kungFuType_);
-    }
-    if (kungFuBelow50_ != false) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeBoolSize(6, kungFuBelow50_);
-    }
-    if (kungFuSpriteMillis_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(7, kungFuSpriteMillis_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -258,12 +204,6 @@ private static final long serialVersionUID = 0L;
         != other.getMale()) return false;
     if (!getName()
         .equals(other.getName())) return false;
-    if (getKungFuType()
-        != other.getKungFuType()) return false;
-    if (getKungFuBelow50()
-        != other.getKungFuBelow50()) return false;
-    if (getKungFuSpriteMillis()
-        != other.getKungFuSpriteMillis()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -287,13 +227,6 @@ private static final long serialVersionUID = 0L;
         getMale());
     hash = (37 * hash) + NAME_FIELD_NUMBER;
     hash = (53 * hash) + getName().hashCode();
-    hash = (37 * hash) + KUNGFUTYPE_FIELD_NUMBER;
-    hash = (53 * hash) + getKungFuType();
-    hash = (37 * hash) + KUNGFUBELOW50_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-        getKungFuBelow50());
-    hash = (37 * hash) + KUNGFUSPRITEMILLIS_FIELD_NUMBER;
-    hash = (53 * hash) + getKungFuSpriteMillis();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -439,9 +372,6 @@ private static final long serialVersionUID = 0L;
       id_ = 0L;
       male_ = false;
       name_ = "";
-      kungFuType_ = 0;
-      kungFuBelow50_ = false;
-      kungFuSpriteMillis_ = 0;
       return this;
     }
 
@@ -490,15 +420,6 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000008) != 0)) {
         result.name_ = name_;
-      }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
-        result.kungFuType_ = kungFuType_;
-      }
-      if (((from_bitField0_ & 0x00000020) != 0)) {
-        result.kungFuBelow50_ = kungFuBelow50_;
-      }
-      if (((from_bitField0_ & 0x00000040) != 0)) {
-        result.kungFuSpriteMillis_ = kungFuSpriteMillis_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -561,15 +482,6 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000008;
         onChanged();
       }
-      if (other.getKungFuType() != 0) {
-        setKungFuType(other.getKungFuType());
-      }
-      if (other.getKungFuBelow50() != false) {
-        setKungFuBelow50(other.getKungFuBelow50());
-      }
-      if (other.getKungFuSpriteMillis() != 0) {
-        setKungFuSpriteMillis(other.getKungFuSpriteMillis());
-      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -618,21 +530,6 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000008;
               break;
             } // case 34
-            case 40: {
-              kungFuType_ = input.readInt32();
-              bitField0_ |= 0x00000010;
-              break;
-            } // case 40
-            case 48: {
-              kungFuBelow50_ = input.readBool();
-              bitField0_ |= 0x00000020;
-              break;
-            } // case 48
-            case 56: {
-              kungFuSpriteMillis_ = input.readInt32();
-              bitField0_ |= 0x00000040;
-              break;
-            } // case 56
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -903,102 +800,6 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       name_ = value;
       bitField0_ |= 0x00000008;
-      onChanged();
-      return this;
-    }
-
-    private int kungFuType_ ;
-    /**
-     * <code>int32 kungFuType = 5;</code>
-     * @return The kungFuType.
-     */
-    @java.lang.Override
-    public int getKungFuType() {
-      return kungFuType_;
-    }
-    /**
-     * <code>int32 kungFuType = 5;</code>
-     * @param value The kungFuType to set.
-     * @return This builder for chaining.
-     */
-    public Builder setKungFuType(int value) {
-
-      kungFuType_ = value;
-      bitField0_ |= 0x00000010;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 kungFuType = 5;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearKungFuType() {
-      bitField0_ = (bitField0_ & ~0x00000010);
-      kungFuType_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private boolean kungFuBelow50_ ;
-    /**
-     * <code>bool kungFuBelow50 = 6;</code>
-     * @return The kungFuBelow50.
-     */
-    @java.lang.Override
-    public boolean getKungFuBelow50() {
-      return kungFuBelow50_;
-    }
-    /**
-     * <code>bool kungFuBelow50 = 6;</code>
-     * @param value The kungFuBelow50 to set.
-     * @return This builder for chaining.
-     */
-    public Builder setKungFuBelow50(boolean value) {
-
-      kungFuBelow50_ = value;
-      bitField0_ |= 0x00000020;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>bool kungFuBelow50 = 6;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearKungFuBelow50() {
-      bitField0_ = (bitField0_ & ~0x00000020);
-      kungFuBelow50_ = false;
-      onChanged();
-      return this;
-    }
-
-    private int kungFuSpriteMillis_ ;
-    /**
-     * <code>int32 kungFuSpriteMillis = 7;</code>
-     * @return The kungFuSpriteMillis.
-     */
-    @java.lang.Override
-    public int getKungFuSpriteMillis() {
-      return kungFuSpriteMillis_;
-    }
-    /**
-     * <code>int32 kungFuSpriteMillis = 7;</code>
-     * @param value The kungFuSpriteMillis to set.
-     * @return This builder for chaining.
-     */
-    public Builder setKungFuSpriteMillis(int value) {
-
-      kungFuSpriteMillis_ = value;
-      bitField0_ |= 0x00000040;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 kungFuSpriteMillis = 7;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearKungFuSpriteMillis() {
-      bitField0_ = (bitField0_ & ~0x00000040);
-      kungFuSpriteMillis_ = 0;
       onChanged();
       return this;
     }

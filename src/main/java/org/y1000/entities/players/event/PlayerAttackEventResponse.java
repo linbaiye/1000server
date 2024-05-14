@@ -10,16 +10,14 @@ import org.y1000.network.gen.Packet;
 public class PlayerAttackEventResponse extends AbstractPlayerEvent {
 
     private final ClientAttackEvent clientAttackEvent;
+
     @Getter
     private final boolean accepted;
 
-    private final int millis;
-
-    public PlayerAttackEventResponse(Player source, ClientAttackEvent clientEvent, boolean ok, int millis) {
+    public PlayerAttackEventResponse(Player source, ClientAttackEvent clientEvent, boolean ok) {
         super(source);
         clientAttackEvent = clientEvent;
         this.accepted = ok;
-        this.millis = millis;
     }
 
     @Override
@@ -34,7 +32,7 @@ public class PlayerAttackEventResponse extends AbstractPlayerEvent {
 
 
     public PlayerAttackEvent toPlayerAttackEvent() {
-        return new PlayerAttackEvent(player(), millis, clientAttackEvent.below50());
+        return new PlayerAttackEvent(player(), clientAttackEvent.attackState());
     }
 
 

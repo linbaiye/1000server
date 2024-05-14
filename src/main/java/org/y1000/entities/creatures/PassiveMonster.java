@@ -93,15 +93,9 @@ public final class PassiveMonster extends AbstractCreature<PassiveMonster> {
 
     @Override
     public void attackedBy(Creature attacker) {
-        if (!state().attackable()) {
-            return;
+        if (state().attackable()) {
+            state().attackedBy(this, attacker);
         }
-        if (!attacker.harhAttribute().randomHit(this.harhAttribute)) {
-            return;
-        }
-        cooldownRecovery();
-        changeState(PassiveMonsterHurtState.attacked(this, attacker));
-        emitEvent(new CreatureHurtEvent(this));
     }
 
 

@@ -3,6 +3,7 @@ package org.y1000.entities.creatures;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.message.MoveEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -56,6 +57,21 @@ public final class PassiveMonsterIdleState extends AbstractMonsterState {
         } else {
             turn(monster);
         }
+    }
+
+    private void afterHurt(PassiveMonster monster, Creature attacker) {
+
+    }
+
+
+    @Override
+    public void attackedBy(PassiveMonster monster, Creature attacker) {
+        if (!attacker.harhAttribute().randomHit(monster.harhAttribute())) {
+            return;
+        }
+        monster.cooldownRecovery();
+        monster.changeState(new PassiveMonsterHurtState(attacker, monster.getStateMillis(State.HURT), this::afterHurt));
+        monster.emitEvent(new CreatureHurtEvent(monster));
     }
 
     public static PassiveMonsterIdleState ofMonster(PassiveMonster monster) {

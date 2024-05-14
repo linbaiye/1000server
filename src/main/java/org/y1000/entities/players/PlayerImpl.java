@@ -3,12 +3,12 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.attribute.HarhAttribute;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.PassiveMonsterHurtState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.equipment.weapon.Weapon;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.UnnamedBufa;
+import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
 import org.y1000.entities.players.kungfu.attack.unnamed.UnnamedQuanFa;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.network.ClientEventListener;
@@ -55,11 +55,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
         put(State.RUN, 420);
         put(State.FLY, 360);
         put(State.COOLDOWN, 1400);
-        put(State.FIST, 400);
-        put(State.KICK, 560);
+        put(State.FIST, AttackKungFuType.QUANFA.below50Millis());
+        put(State.KICK, AttackKungFuType.QUANFA.above50Millis());
         put(State.HURT, 280);
     }};
-
 
 
     public PlayerImpl(long id, Coordinate coordinate,
@@ -67,7 +66,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
                       String name, Connection connection) {
         super(id, coordinate, direction, name, STATE_MILLIS);
         eventQueue = new ConcurrentLinkedQueue<>();
-        changeState(new PlayerIdleState());
+        changeState(new PlayerIdleState(getStateMillis(State.IDLE)));
         changeDirection(Direction.DOWN);
         this.connection = connection;
         this.footKungfu = new UnnamedBufa(8500);
@@ -113,7 +112,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
         }
         this.realm = realm;
         realmMap().occupy(this);
-        changeState(new PlayerIdleState());
+        changeState(new PlayerIdleState(getStateMillis(State.IDLE)));
         changeDirection(Direction.DOWN);
         emitEvent(new JoinedRealmEvent(this, coordinate()));
     }
@@ -186,9 +185,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
             return;
         }
         cooldownRecovery();
-        changeState(PlayerHurtState.attackedBy(this, attacker));
+        changeState(PlayerHurtState.attackedBy(this, attacker, state()));
         emitEvent(new CreatureHurtEvent(this));
-        log.debug("Player was attacked.");
     }
 
 

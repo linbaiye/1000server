@@ -21,19 +21,13 @@ public interface CreatureAttackEventPacketOrBuilder extends
   int getDirection();
 
   /**
-   * <code>bool below50 = 3;</code>
-   * @return The below50.
+   * <code>int32 state = 3;</code>
+   * @return The state.
    */
-  boolean getBelow50();
+  int getState();
 
   /**
-   * <code>int32 spriteMillis = 4;</code>
-   * @return The spriteMillis.
-   */
-  int getSpriteMillis();
-
-  /**
-   * <code>bool player = 5;</code>
+   * <code>bool player = 4;</code>
    * @return The player.
    */
   boolean getPlayer();

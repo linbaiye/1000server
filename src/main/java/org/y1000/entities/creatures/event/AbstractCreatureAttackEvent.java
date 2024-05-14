@@ -6,11 +6,8 @@ import org.y1000.network.gen.Packet;
 
 public abstract class AbstractCreatureAttackEvent extends AbstractCreatureEvent {
 
-    private final int millisPerSprite;
-
-    protected AbstractCreatureAttackEvent(Creature source, int millisPerSprite) {
+    protected AbstractCreatureAttackEvent(Creature source) {
         super(source);
-        this.millisPerSprite = millisPerSprite;
     }
 
 
@@ -25,14 +22,8 @@ public abstract class AbstractCreatureAttackEvent extends AbstractCreatureEvent 
                         setCreatureSpecificFields(
                                 CreatureAttackEventPacket.newBuilder()
                                 .setDirection(creature().direction().value())
-                                .setSpriteMillis(getMillisPerSprite())
                                 .setId(source().id()))
                                 .build())
                 .build();
-    }
-
-
-    protected int getMillisPerSprite() {
-        return millisPerSprite;
     }
 }

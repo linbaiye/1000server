@@ -40,7 +40,7 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
         if (tryChangeCoordinate(player, player.realmMap())) {
             handleInput(player);
         } else {
-            player.changeState(new PlayerIdleState());
+            player.changeState(new PlayerIdleState(player.getStateMillis(State.IDLE)));
             player.emitEvent(new InputResponseMessage(currentInput.sequence(), SetPositionEvent.fromCreature(player)));
         }
     }

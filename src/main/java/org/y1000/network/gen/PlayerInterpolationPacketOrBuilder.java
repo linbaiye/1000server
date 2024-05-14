@@ -46,22 +46,4 @@ public interface PlayerInterpolationPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getNameBytes();
-
-  /**
-   * <code>int32 kungFuType = 5;</code>
-   * @return The kungFuType.
-   */
-  int getKungFuType();
-
-  /**
-   * <code>bool kungFuBelow50 = 6;</code>
-   * @return The kungFuBelow50.
-   */
-  boolean getKungFuBelow50();
-
-  /**
-   * <code>int32 kungFuSpriteMillis = 7;</code>
-   * @return The kungFuSpriteMillis.
-   */
-  int getKungFuSpriteMillis();
 }

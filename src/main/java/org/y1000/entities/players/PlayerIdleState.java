@@ -9,10 +9,9 @@ import org.y1000.message.clientevent.ClientEventVisitor;
 @Slf4j
 public final class PlayerIdleState extends AbstractCreatureIdleState<PlayerImpl>
         implements PlayerState, ClientEventVisitor {
-    private static final int STATE_MILLIS = 2200;
 
-    public PlayerIdleState() {
-        super(STATE_MILLIS);
+    public PlayerIdleState(int millis) {
+        super(millis);
     }
 
     @Override
@@ -27,7 +26,7 @@ public final class PlayerIdleState extends AbstractCreatureIdleState<PlayerImpl>
     @Override
     public void visit(PlayerImpl player,
                       ClientAttackEvent event) {
-        attackIfHasKungfu(player, event);
+        attackIfInsight(player, event);
     }
 
     @Override

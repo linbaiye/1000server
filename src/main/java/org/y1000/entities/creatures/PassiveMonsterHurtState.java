@@ -1,21 +1,22 @@
 package org.y1000.entities.creatures;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.event.CreatureAttackEvent;
-import org.y1000.message.SetPositionEvent;
 
 @Slf4j
-public final class PassiveMonsterHurtState extends AbstractMonsterState {
+public final class PassiveMonsterHurtState extends AbstractCreatureHurtState<PassiveMonster> {
 
-    private final Creature attacker;
-
-    public PassiveMonsterHurtState(Creature attacker, int totalMillis) {
-        super(totalMillis, State.HURT);
-        this.attacker = attacker;
+    public PassiveMonsterHurtState(Creature attacker, int totalMillis, AfterHurtAction<PassiveMonster> after) {
+        super(totalMillis, after, attacker);
     }
 
     @Override
-    protected void nextMove(PassiveMonster monster) {
+    public void attackedBy(PassiveMonster monster, Creature attacker) {
+        if (attacker.equals(getAttacker())) {
+
+        }
+    }
+
+    /*protected void nextMove(PassiveMonster monster) {
         if (monster.coordinate().distance(attacker.coordinate()) <= 1)  {
             monster.changeDirection(monster.coordinate().computeDirection(attacker.coordinate()));
             if (monster.recoveryCooldown() > 0 || monster.attackCooldown() > 0) {
@@ -30,9 +31,9 @@ public final class PassiveMonsterHurtState extends AbstractMonsterState {
             monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
             monster.emitEvent(SetPositionEvent.fromCreature(monster));
         }
-    }
+    }*/
 
     public static PassiveMonsterHurtState attacked(PassiveMonster monster, Creature attacker) {
-        return new PassiveMonsterHurtState(attacker, monster.getStateMillis(State.HURT));
+        return null;
     }
 }

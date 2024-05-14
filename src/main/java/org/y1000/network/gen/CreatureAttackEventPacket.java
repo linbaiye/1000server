@@ -61,32 +61,21 @@ private static final long serialVersionUID = 0L;
     return direction_;
   }
 
-  public static final int BELOW50_FIELD_NUMBER = 3;
-  private boolean below50_ = false;
+  public static final int STATE_FIELD_NUMBER = 3;
+  private int state_ = 0;
   /**
-   * <code>bool below50 = 3;</code>
-   * @return The below50.
+   * <code>int32 state = 3;</code>
+   * @return The state.
    */
   @java.lang.Override
-  public boolean getBelow50() {
-    return below50_;
+  public int getState() {
+    return state_;
   }
 
-  public static final int SPRITEMILLIS_FIELD_NUMBER = 4;
-  private int spriteMillis_ = 0;
-  /**
-   * <code>int32 spriteMillis = 4;</code>
-   * @return The spriteMillis.
-   */
-  @java.lang.Override
-  public int getSpriteMillis() {
-    return spriteMillis_;
-  }
-
-  public static final int PLAYER_FIELD_NUMBER = 5;
+  public static final int PLAYER_FIELD_NUMBER = 4;
   private boolean player_ = false;
   /**
-   * <code>bool player = 5;</code>
+   * <code>bool player = 4;</code>
    * @return The player.
    */
   @java.lang.Override
@@ -114,14 +103,11 @@ private static final long serialVersionUID = 0L;
     if (direction_ != 0) {
       output.writeInt32(2, direction_);
     }
-    if (below50_ != false) {
-      output.writeBool(3, below50_);
-    }
-    if (spriteMillis_ != 0) {
-      output.writeInt32(4, spriteMillis_);
+    if (state_ != 0) {
+      output.writeInt32(3, state_);
     }
     if (player_ != false) {
-      output.writeBool(5, player_);
+      output.writeBool(4, player_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -140,17 +126,13 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(2, direction_);
     }
-    if (below50_ != false) {
+    if (state_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeBoolSize(3, below50_);
-    }
-    if (spriteMillis_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(4, spriteMillis_);
+        .computeInt32Size(3, state_);
     }
     if (player_ != false) {
       size += com.google.protobuf.CodedOutputStream
-        .computeBoolSize(5, player_);
+        .computeBoolSize(4, player_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -171,10 +153,8 @@ private static final long serialVersionUID = 0L;
         != other.getId()) return false;
     if (getDirection()
         != other.getDirection()) return false;
-    if (getBelow50()
-        != other.getBelow50()) return false;
-    if (getSpriteMillis()
-        != other.getSpriteMillis()) return false;
+    if (getState()
+        != other.getState()) return false;
     if (getPlayer()
         != other.getPlayer()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
@@ -193,11 +173,8 @@ private static final long serialVersionUID = 0L;
         getId());
     hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
     hash = (53 * hash) + getDirection();
-    hash = (37 * hash) + BELOW50_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-        getBelow50());
-    hash = (37 * hash) + SPRITEMILLIS_FIELD_NUMBER;
-    hash = (53 * hash) + getSpriteMillis();
+    hash = (37 * hash) + STATE_FIELD_NUMBER;
+    hash = (53 * hash) + getState();
     hash = (37 * hash) + PLAYER_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
         getPlayer());
@@ -334,8 +311,7 @@ private static final long serialVersionUID = 0L;
       bitField0_ = 0;
       id_ = 0L;
       direction_ = 0;
-      below50_ = false;
-      spriteMillis_ = 0;
+      state_ = 0;
       player_ = false;
       return this;
     }
@@ -377,12 +353,9 @@ private static final long serialVersionUID = 0L;
         result.direction_ = direction_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.below50_ = below50_;
+        result.state_ = state_;
       }
       if (((from_bitField0_ & 0x00000008) != 0)) {
-        result.spriteMillis_ = spriteMillis_;
-      }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
         result.player_ = player_;
       }
     }
@@ -437,11 +410,8 @@ private static final long serialVersionUID = 0L;
       if (other.getDirection() != 0) {
         setDirection(other.getDirection());
       }
-      if (other.getBelow50() != false) {
-        setBelow50(other.getBelow50());
-      }
-      if (other.getSpriteMillis() != 0) {
-        setSpriteMillis(other.getSpriteMillis());
+      if (other.getState() != 0) {
+        setState(other.getState());
       }
       if (other.getPlayer() != false) {
         setPlayer(other.getPlayer());
@@ -483,20 +453,15 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 16
             case 24: {
-              below50_ = input.readBool();
+              state_ = input.readInt32();
               bitField0_ |= 0x00000004;
               break;
             } // case 24
             case 32: {
-              spriteMillis_ = input.readInt32();
+              player_ = input.readBool();
               bitField0_ |= 0x00000008;
               break;
             } // case 32
-            case 40: {
-              player_ = input.readBool();
-              bitField0_ |= 0x00000010;
-              break;
-            } // case 40
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -578,73 +543,41 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private boolean below50_ ;
+    private int state_ ;
     /**
-     * <code>bool below50 = 3;</code>
-     * @return The below50.
+     * <code>int32 state = 3;</code>
+     * @return The state.
      */
     @java.lang.Override
-    public boolean getBelow50() {
-      return below50_;
+    public int getState() {
+      return state_;
     }
     /**
-     * <code>bool below50 = 3;</code>
-     * @param value The below50 to set.
+     * <code>int32 state = 3;</code>
+     * @param value The state to set.
      * @return This builder for chaining.
      */
-    public Builder setBelow50(boolean value) {
+    public Builder setState(int value) {
 
-      below50_ = value;
+      state_ = value;
       bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
     /**
-     * <code>bool below50 = 3;</code>
+     * <code>int32 state = 3;</code>
      * @return This builder for chaining.
      */
-    public Builder clearBelow50() {
+    public Builder clearState() {
       bitField0_ = (bitField0_ & ~0x00000004);
-      below50_ = false;
-      onChanged();
-      return this;
-    }
-
-    private int spriteMillis_ ;
-    /**
-     * <code>int32 spriteMillis = 4;</code>
-     * @return The spriteMillis.
-     */
-    @java.lang.Override
-    public int getSpriteMillis() {
-      return spriteMillis_;
-    }
-    /**
-     * <code>int32 spriteMillis = 4;</code>
-     * @param value The spriteMillis to set.
-     * @return This builder for chaining.
-     */
-    public Builder setSpriteMillis(int value) {
-
-      spriteMillis_ = value;
-      bitField0_ |= 0x00000008;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 spriteMillis = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearSpriteMillis() {
-      bitField0_ = (bitField0_ & ~0x00000008);
-      spriteMillis_ = 0;
+      state_ = 0;
       onChanged();
       return this;
     }
 
     private boolean player_ ;
     /**
-     * <code>bool player = 5;</code>
+     * <code>bool player = 4;</code>
      * @return The player.
      */
     @java.lang.Override
@@ -652,23 +585,23 @@ private static final long serialVersionUID = 0L;
       return player_;
     }
     /**
-     * <code>bool player = 5;</code>
+     * <code>bool player = 4;</code>
      * @param value The player to set.
      * @return This builder for chaining.
      */
     public Builder setPlayer(boolean value) {
 
       player_ = value;
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
     /**
-     * <code>bool player = 5;</code>
+     * <code>bool player = 4;</code>
      * @return This builder for chaining.
      */
     public Builder clearPlayer() {
-      bitField0_ = (bitField0_ & ~0x00000010);
+      bitField0_ = (bitField0_ & ~0x00000008);
       player_ = false;
       onChanged();
       return this;

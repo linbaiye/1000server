@@ -10,30 +10,28 @@ public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> imp
     private final Entity target;
 
     @Getter
-    private final boolean below50;
+    private final State state;
 
     private final int cooldownLength;
 
-
     public PlayerAttackState(int length,
                              Entity target,
-                             boolean below50,
+                             State state,
                              int cooldownLength) {
         super(length);
         this.target = target;
-        this.below50 = below50;
+        this.state = state;
         this.cooldownLength = cooldownLength;
     }
 
     @Override
     public State stateEnum() {
-        return State.ATTACK;
+        return state;
     }
 
     @Override
     public void update(PlayerImpl player, int delta) {
-        elapse(delta);
-        if (elapsedMillis() < getTotalMillis()) {
+        if (!elapse(delta)) {
             return;
         }
         if (cooldownLength > 0) {
@@ -43,11 +41,11 @@ public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> imp
         }
     }
 
-    public static PlayerAttackState attack(Entity target, boolean below50, int length, int cooldown) {
+    public static PlayerAttackState attack(Entity target, State state, int length, int cooldown) {
         if (cooldown < 0) {
             cooldown = 0;
         }
-        return new PlayerAttackState(length, target, below50, cooldown);
+        return new PlayerAttackState(length, target, state, cooldown);
     }
 
 }

@@ -5,6 +5,7 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
+import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerAttackState;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.event.PlayerAttackEvent;
@@ -21,10 +22,6 @@ import java.util.concurrent.ThreadLocalRandom;
 @Getter
 @SuperBuilder
 public final class UnnamedQuanFa extends AbstractAttackKungFu {
-
-    private final int fistLengthMillis = 100 * 5;
-
-    private final int kickLengthMillis = 100 * 6;
 
     private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
@@ -43,16 +40,16 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
                 .build();
     }
 
-    private void attack(PlayerImpl player, Entity target, EntityEvent event, boolean below50) {
+    private void attack(PlayerImpl player, Entity target, EntityEvent event, State attackState) {
         int distance = player.coordinate().distance(target.coordinate());
         Direction direction = player.coordinate().computeDirection(target.coordinate());
         player.changeDirection(direction);
         if (distance <= 1 && target.attackable()) {
             var length = player.attackSpeed() * RealmImpl.STEP_MILLIS;
-            var cooldown = below50 ? length - fistLengthMillis : length - kickLengthMillis ;
+            var cooldown = attackState == State.FIST ? length - getType().below50Millis(): length - getType().above50Millis();
             target.attackedBy(player);
             player.cooldownAttack();
-            player.changeState(PlayerAttackState.attack(target, below50, length, cooldown));
+            player.changeState(PlayerAttackState.attack(target, attackState, length, cooldown));
             player.emitEvent(event);
         } else {
             log.debug("Too far to attack.");
@@ -62,21 +59,17 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
 
     @Override
     public void attack(PlayerImpl player, ClientAttackEvent event, Entity target) {
-        attack(player, target, new PlayerAttackEventResponse(player, event, true, millisPerSprite(event.below50())), event.below50());
+        attack(player, target, new PlayerAttackEventResponse(player, event, true), event.attackState());
     }
 
-    private boolean diceBelow50() {
-        return level() < 50 || RANDOM.nextInt() % 2 == 1;
-    }
-
-    public int millisPerSprite(boolean below50) {
-        return below50 ? 90 : 75;
+    private State randomState() {
+        return level() < 50 || RANDOM.nextInt() % 2 == 1 ? State.FIST : State.KICK;
     }
 
     @Override
     public void attack(PlayerImpl player, Entity target) {
-        boolean b = diceBelow50();
-        attack(player, target, new PlayerAttackEvent(player, millisPerSprite(b), b), b);
+        var st = randomState();
+        attack(player, target, new PlayerAttackEvent(player, st), st);
     }
 
     @Override

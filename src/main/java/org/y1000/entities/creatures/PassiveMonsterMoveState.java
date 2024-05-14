@@ -5,6 +5,8 @@ import org.y1000.message.SetPositionEvent;
 
 public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMonster> {
 
+    private Creature attacker;
+
     public PassiveMonsterMoveState(int millisPerUnit, Direction towards) {
         super(State.WALK, millisPerUnit, towards);
     }
@@ -22,6 +24,19 @@ public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<Pas
         }
         tryChangeCoordinate(monster, monster.realmMap());
         nextMove(monster);
+    }
+
+    private void afterAttacked(PassiveMonster monster, Creature attacker) {
+        if (this.attacker != null) {
+            this.attacker = attacker;
+        }
+    }
+
+    @Override
+    public void attackedBy(PassiveMonster monster, Creature attacker) {
+        if (!attacker.harhAttribute().randomHit(monster.harhAttribute())) {
+            return;
+        }
     }
 
     public static PassiveMonsterMoveState buffalo(Direction towards) {

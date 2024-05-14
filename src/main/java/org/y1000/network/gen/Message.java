@@ -123,63 +123,61 @@ public final class Message {
       "et\"G\n\013InputPacket\022\014\n\004type\030\001 \001(\005\022\020\n\010seque" +
       "nce\030\002 \001(\003\022\030\n\020clickedDirection\030\003 \001(\005\"\031\n\013C" +
       "lickPacket\022\n\n\002id\030\001 \001(\003\"\"\n\021PlayerLoginPac" +
-      "ket\022\r\n\005token\030\001 \001(\t\"q\n\031CreatureAttackEven" +
-      "tPacket\022\n\n\002id\030\001 \001(\003\022\021\n\tdirection\030\002 \001(\005\022\017" +
-      "\n\007below50\030\003 \001(\010\022\024\n\014spriteMillis\030\004 \001(\005\022\016\n" +
-      "\006player\030\005 \001(\010\"%\n\027CreatureHurtEventPacket" +
-      "\022\n\n\002id\030\001 \001(\003\"n\n\017MoveEventPacket\0221\n\005input" +
-      "\030\001 \001(\0132\".org.y1000.network.gen.InputPack" +
-      "et\022\023\n\013happenedAtX\030\002 \001(\005\022\023\n\013happenedAtY\030\003" +
-      " \001(\005\"a\n\027ClientAttackEventPacket\022\020\n\010seque" +
-      "nce\030\001 \001(\003\022\020\n\010targetId\030\002 \001(\003\022\017\n\007below50\030\003" +
-      " \001(\010\022\021\n\tdirection\030\004 \001(\005\"@\n\032ClientAttackR" +
-      "esponsePacket\022\020\n\010sequence\030\001 \001(\003\022\020\n\010accep" +
-      "ted\030\002 \001(\010\"\242\002\n\014ClientPacket\022A\n\017moveEventP" +
-      "acket\030\001 \001(\0132&.org.y1000.network.gen.Move" +
-      "EventPacketH\000\0229\n\013clickPacket\030\002 \001(\0132\".org" +
-      ".y1000.network.gen.ClickPacketH\000\022?\n\013logi" +
-      "nPacket\030\003 \001(\0132(.org.y1000.network.gen.Pl" +
-      "ayerLoginPacketH\000\022K\n\021attackEventPacket\030\004" +
-      " \001(\0132..org.y1000.network.gen.ClientAttac" +
-      "kEventPacketH\000B\006\n\004Type\"d\n\023InterpolationP" +
-      "acket\022\r\n\005state\030\002 \001(\005\022\025\n\relapsedMillis\030\005 " +
-      "\001(\003\022\021\n\tdirection\030\007 \001(\005\022\t\n\001x\030\010 \001(\005\022\t\n\001y\030\t" +
-      " \001(\005\"Z\n\024InterpolationsPacket\022B\n\016interpol" +
-      "ations\030\001 \003(\0132*.org.y1000.network.gen.Int" +
-      "erpolationPacket\"\254\001\n\013LoginPacket\022\t\n\001x\030\001 " +
-      "\001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002id\030\003 \001(\003\022\025\n\rweaponShap" +
-      "eId\030\004 \001(\005\022\031\n\021attackKungFuLevel\030\005 \001(\005\022\030\n\020" +
-      "attackKungFuName\030\006 \001(\t\022\027\n\017footKungFuLeve" +
-      "l\030\007 \001(\005\022\026\n\016footKungFuName\030\010 \001(\t\"\373\005\n\006Pack" +
-      "et\022?\n\016positionPacket\030\001 \001(\0132%.org.y1000.n" +
-      "etwork.gen.PositionPacketH\000\022S\n\025creatureI" +
-      "nterpolation\030\002 \001(\01322.org.y1000.network.g" +
-      "en.CreatureInterpolationPacketH\000\0229\n\013logi" +
-      "nPacket\030\004 \001(\0132\".org.y1000.network.gen.Lo" +
-      "ginPacketH\000\022E\n\016interpolations\030\005 \001(\0132+.or" +
-      "g.y1000.network.gen.InterpolationsPacket" +
-      "H\000\022D\n\016responsePacket\030\006 \001(\0132*.org.y1000.n" +
-      "etwork.gen.InputResponsePacketH\000\022O\n\023play" +
-      "erInterpolation\030\007 \001(\01320.org.y1000.networ" +
-      "k.gen.PlayerInterpolationPacketH\000\022A\n\014rem" +
-      "oveEntity\030\010 \001(\0132).org.y1000.network.gen." +
-      "RemoveEntityPacketH\000\022V\n\031attackEventRespo" +
-      "nsePacket\030\t \001(\01321.org.y1000.network.gen." +
-      "ClientAttackResponsePacketH\000\022M\n\021attackEv" +
-      "entPacket\030\n \001(\01320.org.y1000.network.gen." +
-      "CreatureAttackEventPacketH\000\022I\n\017hurtEvent" +
-      "Packet\030\013 \001(\0132..org.y1000.network.gen.Cre" +
-      "atureHurtEventPacketH\000B\r\n\013TypedPacket\"z\n" +
-      "\033CreatureInterpolationPacket\022A\n\rinterpol" +
-      "ation\030\001 \001(\0132*.org.y1000.network.gen.Inte" +
-      "rpolationPacket\022\n\n\002id\030\002 \001(\003\022\014\n\004name\030\003 \001(" +
-      "\t\"\315\001\n\031PlayerInterpolationPacket\022A\n\rinter" +
-      "polation\030\001 \001(\0132*.org.y1000.network.gen.I" +
-      "nterpolationPacket\022\n\n\002id\030\002 \001(\003\022\014\n\004male\030\003" +
-      " \001(\010\022\014\n\004name\030\004 \001(\t\022\022\n\nkungFuType\030\005 \001(\005\022\025" +
-      "\n\rkungFuBelow50\030\006 \001(\010\022\032\n\022kungFuSpriteMil" +
-      "lis\030\007 \001(\005\" \n\022RemoveEntityPacket\022\n\n\002id\030\001 " +
-      "\001(\003B\031\n\025org.y1000.network.genP\001b\006proto3"
+      "ket\022\r\n\005token\030\001 \001(\t\"Y\n\031CreatureAttackEven" +
+      "tPacket\022\n\n\002id\030\001 \001(\003\022\021\n\tdirection\030\002 \001(\005\022\r" +
+      "\n\005state\030\003 \001(\005\022\016\n\006player\030\004 \001(\010\"%\n\027Creatur" +
+      "eHurtEventPacket\022\n\n\002id\030\001 \001(\003\"n\n\017MoveEven" +
+      "tPacket\0221\n\005input\030\001 \001(\0132\".org.y1000.netwo" +
+      "rk.gen.InputPacket\022\023\n\013happenedAtX\030\002 \001(\005\022" +
+      "\023\n\013happenedAtY\030\003 \001(\005\"_\n\027ClientAttackEven" +
+      "tPacket\022\020\n\010sequence\030\001 \001(\003\022\020\n\010targetId\030\002 " +
+      "\001(\003\022\r\n\005state\030\003 \001(\005\022\021\n\tdirection\030\004 \001(\005\"@\n" +
+      "\032ClientAttackResponsePacket\022\020\n\010sequence\030" +
+      "\001 \001(\003\022\020\n\010accepted\030\002 \001(\010\"\242\002\n\014ClientPacket" +
+      "\022A\n\017moveEventPacket\030\001 \001(\0132&.org.y1000.ne" +
+      "twork.gen.MoveEventPacketH\000\0229\n\013clickPack" +
+      "et\030\002 \001(\0132\".org.y1000.network.gen.ClickPa" +
+      "cketH\000\022?\n\013loginPacket\030\003 \001(\0132(.org.y1000." +
+      "network.gen.PlayerLoginPacketH\000\022K\n\021attac" +
+      "kEventPacket\030\004 \001(\0132..org.y1000.network.g" +
+      "en.ClientAttackEventPacketH\000B\006\n\004Type\"d\n\023" +
+      "InterpolationPacket\022\r\n\005state\030\002 \001(\005\022\025\n\rel" +
+      "apsedMillis\030\005 \001(\003\022\021\n\tdirection\030\007 \001(\005\022\t\n\001" +
+      "x\030\010 \001(\005\022\t\n\001y\030\t \001(\005\"Z\n\024InterpolationsPack" +
+      "et\022B\n\016interpolations\030\001 \003(\0132*.org.y1000.n" +
+      "etwork.gen.InterpolationPacket\"\254\001\n\013Login" +
+      "Packet\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002id\030\003 \001(\003" +
+      "\022\025\n\rweaponShapeId\030\004 \001(\005\022\031\n\021attackKungFuL" +
+      "evel\030\005 \001(\005\022\030\n\020attackKungFuName\030\006 \001(\t\022\027\n\017" +
+      "footKungFuLevel\030\007 \001(\005\022\026\n\016footKungFuName\030" +
+      "\010 \001(\t\"\373\005\n\006Packet\022?\n\016positionPacket\030\001 \001(\013" +
+      "2%.org.y1000.network.gen.PositionPacketH" +
+      "\000\022S\n\025creatureInterpolation\030\002 \001(\01322.org.y" +
+      "1000.network.gen.CreatureInterpolationPa" +
+      "cketH\000\0229\n\013loginPacket\030\004 \001(\0132\".org.y1000." +
+      "network.gen.LoginPacketH\000\022E\n\016interpolati" +
+      "ons\030\005 \001(\0132+.org.y1000.network.gen.Interp" +
+      "olationsPacketH\000\022D\n\016responsePacket\030\006 \001(\013" +
+      "2*.org.y1000.network.gen.InputResponsePa" +
+      "cketH\000\022O\n\023playerInterpolation\030\007 \001(\01320.or" +
+      "g.y1000.network.gen.PlayerInterpolationP" +
+      "acketH\000\022A\n\014removeEntity\030\010 \001(\0132).org.y100" +
+      "0.network.gen.RemoveEntityPacketH\000\022V\n\031at" +
+      "tackEventResponsePacket\030\t \001(\01321.org.y100" +
+      "0.network.gen.ClientAttackResponsePacket" +
+      "H\000\022M\n\021attackEventPacket\030\n \001(\01320.org.y100" +
+      "0.network.gen.CreatureAttackEventPacketH" +
+      "\000\022I\n\017hurtEventPacket\030\013 \001(\0132..org.y1000.n" +
+      "etwork.gen.CreatureHurtEventPacketH\000B\r\n\013" +
+      "TypedPacket\"z\n\033CreatureInterpolationPack" +
+      "et\022A\n\rinterpolation\030\001 \001(\0132*.org.y1000.ne" +
+      "twork.gen.InterpolationPacket\022\n\n\002id\030\002 \001(" +
+      "\003\022\014\n\004name\030\003 \001(\t\"\206\001\n\031PlayerInterpolationP" +
+      "acket\022A\n\rinterpolation\030\001 \001(\0132*.org.y1000" +
+      ".network.gen.InterpolationPacket\022\n\n\002id\030\002" +
+      " \001(\003\022\014\n\004male\030\003 \001(\010\022\014\n\004name\030\004 \001(\t\" \n\022Remo" +
+      "veEntityPacket\022\n\n\002id\030\001 \001(\003B\031\n\025org.y1000." +
+      "network.genP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -220,7 +218,7 @@ public final class Message {
     internal_static_org_y1000_network_gen_CreatureAttackEventPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_CreatureAttackEventPacket_descriptor,
-        new java.lang.String[] { "Id", "Direction", "Below50", "SpriteMillis", "Player", });
+        new java.lang.String[] { "Id", "Direction", "State", "Player", });
     internal_static_org_y1000_network_gen_CreatureHurtEventPacket_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_org_y1000_network_gen_CreatureHurtEventPacket_fieldAccessorTable = new
@@ -238,7 +236,7 @@ public final class Message {
     internal_static_org_y1000_network_gen_ClientAttackEventPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_ClientAttackEventPacket_descriptor,
-        new java.lang.String[] { "Sequence", "TargetId", "Below50", "Direction", });
+        new java.lang.String[] { "Sequence", "TargetId", "State", "Direction", });
     internal_static_org_y1000_network_gen_ClientAttackResponsePacket_descriptor =
       getDescriptor().getMessageTypes().get(9);
     internal_static_org_y1000_network_gen_ClientAttackResponsePacket_fieldAccessorTable = new
@@ -286,7 +284,7 @@ public final class Message {
     internal_static_org_y1000_network_gen_PlayerInterpolationPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_PlayerInterpolationPacket_descriptor,
-        new java.lang.String[] { "Interpolation", "Id", "Male", "Name", "KungFuType", "KungFuBelow50", "KungFuSpriteMillis", });
+        new java.lang.String[] { "Interpolation", "Id", "Male", "Name", });
     internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor =
       getDescriptor().getMessageTypes().get(17);
     internal_static_org_y1000_network_gen_RemoveEntityPacket_fieldAccessorTable = new

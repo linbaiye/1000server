@@ -61,15 +61,15 @@ private static final long serialVersionUID = 0L;
     return targetId_;
   }
 
-  public static final int BELOW50_FIELD_NUMBER = 3;
-  private boolean below50_ = false;
+  public static final int STATE_FIELD_NUMBER = 3;
+  private int state_ = 0;
   /**
-   * <code>bool below50 = 3;</code>
-   * @return The below50.
+   * <code>int32 state = 3;</code>
+   * @return The state.
    */
   @java.lang.Override
-  public boolean getBelow50() {
-    return below50_;
+  public int getState() {
+    return state_;
   }
 
   public static final int DIRECTION_FIELD_NUMBER = 4;
@@ -103,8 +103,8 @@ private static final long serialVersionUID = 0L;
     if (targetId_ != 0L) {
       output.writeInt64(2, targetId_);
     }
-    if (below50_ != false) {
-      output.writeBool(3, below50_);
+    if (state_ != 0) {
+      output.writeInt32(3, state_);
     }
     if (direction_ != 0) {
       output.writeInt32(4, direction_);
@@ -126,9 +126,9 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(2, targetId_);
     }
-    if (below50_ != false) {
+    if (state_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeBoolSize(3, below50_);
+        .computeInt32Size(3, state_);
     }
     if (direction_ != 0) {
       size += com.google.protobuf.CodedOutputStream
@@ -153,8 +153,8 @@ private static final long serialVersionUID = 0L;
         != other.getSequence()) return false;
     if (getTargetId()
         != other.getTargetId()) return false;
-    if (getBelow50()
-        != other.getBelow50()) return false;
+    if (getState()
+        != other.getState()) return false;
     if (getDirection()
         != other.getDirection()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
@@ -174,9 +174,8 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + TARGETID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getTargetId());
-    hash = (37 * hash) + BELOW50_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-        getBelow50());
+    hash = (37 * hash) + STATE_FIELD_NUMBER;
+    hash = (53 * hash) + getState();
     hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
     hash = (53 * hash) + getDirection();
     hash = (29 * hash) + getUnknownFields().hashCode();
@@ -312,7 +311,7 @@ private static final long serialVersionUID = 0L;
       bitField0_ = 0;
       sequence_ = 0L;
       targetId_ = 0L;
-      below50_ = false;
+      state_ = 0;
       direction_ = 0;
       return this;
     }
@@ -354,7 +353,7 @@ private static final long serialVersionUID = 0L;
         result.targetId_ = targetId_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.below50_ = below50_;
+        result.state_ = state_;
       }
       if (((from_bitField0_ & 0x00000008) != 0)) {
         result.direction_ = direction_;
@@ -411,8 +410,8 @@ private static final long serialVersionUID = 0L;
       if (other.getTargetId() != 0L) {
         setTargetId(other.getTargetId());
       }
-      if (other.getBelow50() != false) {
-        setBelow50(other.getBelow50());
+      if (other.getState() != 0) {
+        setState(other.getState());
       }
       if (other.getDirection() != 0) {
         setDirection(other.getDirection());
@@ -454,7 +453,7 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 16
             case 24: {
-              below50_ = input.readBool();
+              state_ = input.readInt32();
               bitField0_ |= 0x00000004;
               break;
             } // case 24
@@ -544,34 +543,34 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private boolean below50_ ;
+    private int state_ ;
     /**
-     * <code>bool below50 = 3;</code>
-     * @return The below50.
+     * <code>int32 state = 3;</code>
+     * @return The state.
      */
     @java.lang.Override
-    public boolean getBelow50() {
-      return below50_;
+    public int getState() {
+      return state_;
     }
     /**
-     * <code>bool below50 = 3;</code>
-     * @param value The below50 to set.
+     * <code>int32 state = 3;</code>
+     * @param value The state to set.
      * @return This builder for chaining.
      */
-    public Builder setBelow50(boolean value) {
+    public Builder setState(int value) {
 
-      below50_ = value;
+      state_ = value;
       bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
     /**
-     * <code>bool below50 = 3;</code>
+     * <code>int32 state = 3;</code>
      * @return This builder for chaining.
      */
-    public Builder clearBelow50() {
+    public Builder clearState() {
       bitField0_ = (bitField0_ & ~0x00000004);
-      below50_ = false;
+      state_ = 0;
       onChanged();
       return this;
     }
