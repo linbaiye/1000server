@@ -24,9 +24,9 @@ public record Coordinate(int x, int y) {
         return result;
     }
 
-    public Direction computeDirection(Coordinate another) {
-        var ydiff = another.y() - this.y();
-        var xdiff = another.x() - this.x();
+    public Direction computeDirection(Coordinate to) {
+        var ydiff = to.y() - this.y();
+        var xdiff = to.x() - this.x();
         if (ydiff < 0) {
             return xdiff < 0 ? Direction.UP_LEFT :
                     xdiff > 0 ? Direction.UP_RIGHT : Direction.UP;

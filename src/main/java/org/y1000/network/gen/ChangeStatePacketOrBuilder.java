@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.1
 package org.y1000.network.gen;
 
-public interface CreatureHurtEventPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.CreatureHurtEventPacket)
+public interface ChangeStatePacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ChangeStatePacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -13,4 +13,10 @@ public interface CreatureHurtEventPacketOrBuilder extends
    * @return The id.
    */
   long getId();
+
+  /**
+   * <code>int32 state = 2;</code>
+   * @return The state.
+   */
+  int getState();
 }

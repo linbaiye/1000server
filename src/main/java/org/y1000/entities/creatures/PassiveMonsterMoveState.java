@@ -11,9 +11,18 @@ public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<Pas
         super(State.WALK, millisPerUnit, towards);
     }
 
+    public PassiveMonsterMoveState(int millisPerUnit, Direction towards, Creature attacker) {
+        super(State.WALK, millisPerUnit, towards);
+        this.attacker = attacker;
+    }
+
     private void nextMove(PassiveMonster monster) {
-        monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
-        monster.emitEvent(SetPositionEvent.fromCreature(monster));
+        if (attacker != null) {
+            monster.retaliate(attacker);
+        } else {
+            monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
+            monster.emitEvent(SetPositionEvent.ofCreature(monster));
+        }
     }
 
     @Override
@@ -26,24 +35,17 @@ public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<Pas
         nextMove(monster);
     }
 
-    private void afterAttacked(PassiveMonster monster, Creature attacker) {
+    @Override
+    public void afterAttacked(PassiveMonster monster, Creature attacker) {
         if (this.attacker != null) {
             this.attacker = attacker;
         }
     }
 
-    @Override
-    public void attackedBy(PassiveMonster monster, Creature attacker) {
-        if (!attacker.harhAttribute().randomHit(monster.harhAttribute())) {
-            return;
-        }
-    }
-
-    public static PassiveMonsterMoveState buffalo(Direction towards) {
-        return new PassiveMonsterMoveState(1050, towards);
-    }
-
     public static PassiveMonsterMoveState of(PassiveMonster monster, Direction towords) {
         return new PassiveMonsterMoveState(monster.getStateMillis(State.WALK), towords);
+    }
+    public static PassiveMonsterMoveState towardsAttacker(int millis, Direction towords, Creature attacker) {
+        return new PassiveMonsterMoveState(millis, towords, attacker);
     }
 }

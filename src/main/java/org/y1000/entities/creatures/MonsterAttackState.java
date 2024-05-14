@@ -19,7 +19,7 @@ public final class MonsterAttackState extends AbstractCreatureAttackState<Passiv
         }
         if (elapse(delta)) {
             monster.changeState(MonsterCooldownState.of(monster, target));
-            monster.emitEvent(SetPositionEvent.fromCreature(monster));
+            monster.emitEvent(SetPositionEvent.ofCreature(monster));
         }
     }
 

@@ -4,7 +4,7 @@ import org.y1000.entities.Direction;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
-public abstract class AbstractCreatureMoveState<C extends AbstractCreature> extends AbstractCreateState<C> {
+public abstract class AbstractCreatureMoveState<C extends AbstractCreature<C>> extends AbstractCreateState<C> {
 
     private final State state;
 

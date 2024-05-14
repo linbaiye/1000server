@@ -46,6 +46,11 @@ message CreatureHurtEventPacket {
   int64 id = 1;
 }
 
+message ChangeStatePacket {
+  int64 id = 1;
+  int32 state = 2;
+}
+
 
 message MoveEventPacket {
   InputPacket input = 1;
@@ -77,7 +82,7 @@ message ClientPacket {
 
 message InterpolationPacket {
   int32 state = 2;
-  int64 elapsedMillis = 5;
+  int32 elapsedMillis = 5;
   int32 direction = 7;
   int32 x = 8;
   int32 y = 9;
@@ -110,6 +115,7 @@ message Packet {
     ClientAttackResponsePacket attackEventResponsePacket = 9;
     CreatureAttackEventPacket attackEventPacket = 10;
     CreatureHurtEventPacket hurtEventPacket = 11;
+    ChangeStatePacket changeStatePacket = 12;
   }
 }
 

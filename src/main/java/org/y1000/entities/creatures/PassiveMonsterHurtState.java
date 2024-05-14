@@ -10,10 +10,8 @@ public final class PassiveMonsterHurtState extends AbstractCreatureHurtState<Pas
     }
 
     @Override
-    public void attackedBy(PassiveMonster monster, Creature attacker) {
-        if (attacker.equals(getAttacker())) {
-
-        }
+    public void afterAttacked(PassiveMonster monster, Creature attacker) {
+        monster.changeState(new PassiveMonsterHurtState(getAttacker(), monster.getStateMillis(State.HURT), getAction()));
     }
 
     /*protected void nextMove(PassiveMonster monster) {
@@ -32,8 +30,4 @@ public final class PassiveMonsterHurtState extends AbstractCreatureHurtState<Pas
             monster.emitEvent(SetPositionEvent.fromCreature(monster));
         }
     }*/
-
-    public static PassiveMonsterHurtState attacked(PassiveMonster monster, Creature attacker) {
-        return null;
-    }
 }

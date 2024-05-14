@@ -11,7 +11,7 @@ public interface CreatureState<C extends Creature> {
         return true;
     }
 
-    default void attackedBy(C c, Creature attacker) {
+    default void afterAttacked(C c, Creature attacker) {
 
     }
 }

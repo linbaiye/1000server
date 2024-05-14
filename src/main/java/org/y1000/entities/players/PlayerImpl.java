@@ -1,11 +1,14 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.Entity;
 import org.y1000.entities.attribute.HarhAttribute;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.equipment.weapon.Weapon;
+import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.UnnamedBufa;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
@@ -145,6 +148,29 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
         return PlayerInterpolation.FromPlayer(this, state().elapsedMillis());
     }
 
+    private int getCooldown() {
+        return Math.max(attackCooldown, recoveryCooldown);
+    }
+    public void attack(Entity target) {
+        if (recoveryCooldown > 0 || attackCooldown > 0) {
+            changeState(new PlayerCooldownState(getCooldown(), target));
+            return;
+        }
+        int distance = coordinate().distance(target.coordinate());
+        Direction direction = coordinate().computeDirection(coordinate());
+        changeDirection(direction);
+        if (distance <= 1 && target.attackable()) {
+            var length = attackSpeed() * RealmImpl.STEP_MILLIS;
+            State attackState = attackKungFu.randomAttackState();
+            var cooldown = length - attackKungFu.attackActionLength(attackState);
+            cooldownAttack();
+            target.attackedBy(this);
+            changeState(PlayerAttackState.attack(target, attackState, length, cooldown));
+            emitEvent(new PlayerAttackEvent(this, attackState));
+        } else {
+            changeState(PlayerCooldownState.cooldown(get));
+        }
+    }
 
     @Override
     public void update(int delta) {
@@ -155,7 +181,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
 
     public void reset(long sequence) {
         eventQueue.clear();
-        emitEvent(new InputResponseMessage(sequence, SetPositionEvent.fromCreature(this)));
+        emitEvent(new InputResponseMessage(sequence, SetPositionEvent.ofCreature(this)));
         realmMap().occupy(this);
     }
 
@@ -178,17 +204,14 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
 
     @Override
     public void attackedBy(Creature attacker) {
-        if (!state().attackable()) {
-            return;
-        }
-        if (!attacker.harhAttribute().randomHit(this.harhAttribute)) {
+        if (!state().attackable() ||
+                !attacker.harhAttribute().randomHit(harhAttribute)) {
             return;
         }
         cooldownRecovery();
-        changeState(PlayerHurtState.attackedBy(this, attacker, state()));
+        changeState(new PlayerHurtState(attacker, getStateMillis(State.HURT), state()::afterAttacked));
         emitEvent(new CreatureHurtEvent(this));
     }
-
 
     @Override
     public String toString() {

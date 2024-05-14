@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
+import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
@@ -41,10 +42,14 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
             handleInput(player);
         } else {
             player.changeState(new PlayerIdleState(player.getStateMillis(State.IDLE)));
-            player.emitEvent(new InputResponseMessage(currentInput.sequence(), SetPositionEvent.fromCreature(player)));
+            player.emitEvent(new InputResponseMessage(currentInput.sequence(), SetPositionEvent.ofCreature(player)));
         }
     }
 
+    @Override
+    public void afterAttacked(PlayerImpl player, Creature attacker) {
+        player.changeState(this);
+    }
 
     public static PlayerMoveState move(PlayerImpl player, AbstractRightClick trigger) {
         Optional<FootKungFu> footMagic = player.footKungFu();

@@ -15,6 +15,10 @@ public abstract class AbstractCreatureHurtState<C extends Creature> extends Abst
         this.attacker = attacker;
     }
 
+    protected AfterHurtAction<C> getAction() {
+        return action;
+    }
+
 
     @FunctionalInterface
     public interface AfterHurtAction<C> {

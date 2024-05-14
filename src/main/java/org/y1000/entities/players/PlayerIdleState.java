@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.AbstractCreatureIdleState;
+import org.y1000.entities.creatures.Creature;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.CharacterMovementEvent;
 import org.y1000.message.clientevent.ClientEventVisitor;
@@ -22,6 +23,10 @@ public final class PlayerIdleState extends AbstractCreatureIdleState<PlayerImpl>
         player.takeClientEvent().ifPresent(e -> e.accept(player, this));
     }
 
+    @Override
+    public void afterAttacked(PlayerImpl player, Creature attacker) {
+        player.changeState(this);
+    }
 
     @Override
     public void visit(PlayerImpl player,

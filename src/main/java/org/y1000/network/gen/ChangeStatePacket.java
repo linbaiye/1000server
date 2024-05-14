@@ -5,38 +5,49 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.InterpolationPacket}
+ * Protobuf type {@code org.y1000.network.gen.ChangeStatePacket}
  */
-public final class InterpolationPacket extends
+public final class ChangeStatePacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.InterpolationPacket)
-    InterpolationPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ChangeStatePacket)
+    ChangeStatePacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use InterpolationPacket.newBuilder() to construct.
-  private InterpolationPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use ChangeStatePacket.newBuilder() to construct.
+  private ChangeStatePacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private InterpolationPacket() {
+  private ChangeStatePacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new InterpolationPacket();
+    return new ChangeStatePacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ChangeStatePacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ChangeStatePacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.InterpolationPacket.class, org.y1000.network.gen.InterpolationPacket.Builder.class);
+            org.y1000.network.gen.ChangeStatePacket.class, org.y1000.network.gen.ChangeStatePacket.Builder.class);
+  }
+
+  public static final int ID_FIELD_NUMBER = 1;
+  private long id_ = 0L;
+  /**
+   * <code>int64 id = 1;</code>
+   * @return The id.
+   */
+  @java.lang.Override
+  public long getId() {
+    return id_;
   }
 
   public static final int STATE_FIELD_NUMBER = 2;
@@ -48,50 +59,6 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public int getState() {
     return state_;
-  }
-
-  public static final int ELAPSEDMILLIS_FIELD_NUMBER = 5;
-  private int elapsedMillis_ = 0;
-  /**
-   * <code>int32 elapsedMillis = 5;</code>
-   * @return The elapsedMillis.
-   */
-  @java.lang.Override
-  public int getElapsedMillis() {
-    return elapsedMillis_;
-  }
-
-  public static final int DIRECTION_FIELD_NUMBER = 7;
-  private int direction_ = 0;
-  /**
-   * <code>int32 direction = 7;</code>
-   * @return The direction.
-   */
-  @java.lang.Override
-  public int getDirection() {
-    return direction_;
-  }
-
-  public static final int X_FIELD_NUMBER = 8;
-  private int x_ = 0;
-  /**
-   * <code>int32 x = 8;</code>
-   * @return The x.
-   */
-  @java.lang.Override
-  public int getX() {
-    return x_;
-  }
-
-  public static final int Y_FIELD_NUMBER = 9;
-  private int y_ = 0;
-  /**
-   * <code>int32 y = 9;</code>
-   * @return The y.
-   */
-  @java.lang.Override
-  public int getY() {
-    return y_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -108,20 +75,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    if (id_ != 0L) {
+      output.writeInt64(1, id_);
+    }
     if (state_ != 0) {
       output.writeInt32(2, state_);
-    }
-    if (elapsedMillis_ != 0) {
-      output.writeInt32(5, elapsedMillis_);
-    }
-    if (direction_ != 0) {
-      output.writeInt32(7, direction_);
-    }
-    if (x_ != 0) {
-      output.writeInt32(8, x_);
-    }
-    if (y_ != 0) {
-      output.writeInt32(9, y_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -132,25 +90,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
+    if (id_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(1, id_);
+    }
     if (state_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(2, state_);
-    }
-    if (elapsedMillis_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(5, elapsedMillis_);
-    }
-    if (direction_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(7, direction_);
-    }
-    if (x_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(8, x_);
-    }
-    if (y_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(9, y_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -162,21 +108,15 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.InterpolationPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.ChangeStatePacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.InterpolationPacket other = (org.y1000.network.gen.InterpolationPacket) obj;
+    org.y1000.network.gen.ChangeStatePacket other = (org.y1000.network.gen.ChangeStatePacket) obj;
 
+    if (getId()
+        != other.getId()) return false;
     if (getState()
         != other.getState()) return false;
-    if (getElapsedMillis()
-        != other.getElapsedMillis()) return false;
-    if (getDirection()
-        != other.getDirection()) return false;
-    if (getX()
-        != other.getX()) return false;
-    if (getY()
-        != other.getY()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -188,59 +128,54 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (37 * hash) + ID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getId());
     hash = (37 * hash) + STATE_FIELD_NUMBER;
     hash = (53 * hash) + getState();
-    hash = (37 * hash) + ELAPSEDMILLIS_FIELD_NUMBER;
-    hash = (53 * hash) + getElapsedMillis();
-    hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
-    hash = (53 * hash) + getDirection();
-    hash = (37 * hash) + X_FIELD_NUMBER;
-    hash = (53 * hash) + getX();
-    hash = (37 * hash) + Y_FIELD_NUMBER;
-    hash = (53 * hash) + getY();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.ChangeStatePacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.ChangeStatePacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.ChangeStatePacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.ChangeStatePacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.ChangeStatePacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.ChangeStatePacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ChangeStatePacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.ChangeStatePacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -248,26 +183,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.InterpolationPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ChangeStatePacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.InterpolationPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.ChangeStatePacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.ChangeStatePacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.ChangeStatePacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -280,7 +215,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.InterpolationPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.ChangeStatePacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -296,26 +231,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.InterpolationPacket}
+   * Protobuf type {@code org.y1000.network.gen.ChangeStatePacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.InterpolationPacket)
-      org.y1000.network.gen.InterpolationPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ChangeStatePacket)
+      org.y1000.network.gen.ChangeStatePacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ChangeStatePacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ChangeStatePacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.InterpolationPacket.class, org.y1000.network.gen.InterpolationPacket.Builder.class);
+              org.y1000.network.gen.ChangeStatePacket.class, org.y1000.network.gen.ChangeStatePacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.InterpolationPacket.newBuilder()
+    // Construct using org.y1000.network.gen.ChangeStatePacket.newBuilder()
     private Builder() {
 
     }
@@ -329,28 +264,25 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
+      id_ = 0L;
       state_ = 0;
-      elapsedMillis_ = 0;
-      direction_ = 0;
-      x_ = 0;
-      y_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ChangeStatePacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.InterpolationPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.InterpolationPacket.getDefaultInstance();
+    public org.y1000.network.gen.ChangeStatePacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.ChangeStatePacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.InterpolationPacket build() {
-      org.y1000.network.gen.InterpolationPacket result = buildPartial();
+    public org.y1000.network.gen.ChangeStatePacket build() {
+      org.y1000.network.gen.ChangeStatePacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -358,29 +290,20 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.InterpolationPacket buildPartial() {
-      org.y1000.network.gen.InterpolationPacket result = new org.y1000.network.gen.InterpolationPacket(this);
+    public org.y1000.network.gen.ChangeStatePacket buildPartial() {
+      org.y1000.network.gen.ChangeStatePacket result = new org.y1000.network.gen.ChangeStatePacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.InterpolationPacket result) {
+    private void buildPartial0(org.y1000.network.gen.ChangeStatePacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.state_ = state_;
+        result.id_ = id_;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.elapsedMillis_ = elapsedMillis_;
-      }
-      if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.direction_ = direction_;
-      }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
-        result.x_ = x_;
-      }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
-        result.y_ = y_;
+        result.state_ = state_;
       }
     }
 
@@ -418,30 +341,21 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.InterpolationPacket) {
-        return mergeFrom((org.y1000.network.gen.InterpolationPacket)other);
+      if (other instanceof org.y1000.network.gen.ChangeStatePacket) {
+        return mergeFrom((org.y1000.network.gen.ChangeStatePacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.InterpolationPacket other) {
-      if (other == org.y1000.network.gen.InterpolationPacket.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.y1000.network.gen.ChangeStatePacket other) {
+      if (other == org.y1000.network.gen.ChangeStatePacket.getDefaultInstance()) return this;
+      if (other.getId() != 0L) {
+        setId(other.getId());
+      }
       if (other.getState() != 0) {
         setState(other.getState());
-      }
-      if (other.getElapsedMillis() != 0) {
-        setElapsedMillis(other.getElapsedMillis());
-      }
-      if (other.getDirection() != 0) {
-        setDirection(other.getDirection());
-      }
-      if (other.getX() != 0) {
-        setX(other.getX());
-      }
-      if (other.getY() != 0) {
-        setY(other.getY());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -469,31 +383,16 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 16: {
-              state_ = input.readInt32();
+            case 8: {
+              id_ = input.readInt64();
               bitField0_ |= 0x00000001;
               break;
-            } // case 16
-            case 40: {
-              elapsedMillis_ = input.readInt32();
+            } // case 8
+            case 16: {
+              state_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
-            } // case 40
-            case 56: {
-              direction_ = input.readInt32();
-              bitField0_ |= 0x00000004;
-              break;
-            } // case 56
-            case 64: {
-              x_ = input.readInt32();
-              bitField0_ |= 0x00000008;
-              break;
-            } // case 64
-            case 72: {
-              y_ = input.readInt32();
-              bitField0_ |= 0x00000010;
-              break;
-            } // case 72
+            } // case 16
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -510,6 +409,38 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     private int bitField0_;
+
+    private long id_ ;
+    /**
+     * <code>int64 id = 1;</code>
+     * @return The id.
+     */
+    @java.lang.Override
+    public long getId() {
+      return id_;
+    }
+    /**
+     * <code>int64 id = 1;</code>
+     * @param value The id to set.
+     * @return This builder for chaining.
+     */
+    public Builder setId(long value) {
+
+      id_ = value;
+      bitField0_ |= 0x00000001;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 id = 1;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearId() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      id_ = 0L;
+      onChanged();
+      return this;
+    }
 
     private int state_ ;
     /**
@@ -528,7 +459,7 @@ private static final long serialVersionUID = 0L;
     public Builder setState(int value) {
 
       state_ = value;
-      bitField0_ |= 0x00000001;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -537,136 +468,8 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearState() {
-      bitField0_ = (bitField0_ & ~0x00000001);
-      state_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int elapsedMillis_ ;
-    /**
-     * <code>int32 elapsedMillis = 5;</code>
-     * @return The elapsedMillis.
-     */
-    @java.lang.Override
-    public int getElapsedMillis() {
-      return elapsedMillis_;
-    }
-    /**
-     * <code>int32 elapsedMillis = 5;</code>
-     * @param value The elapsedMillis to set.
-     * @return This builder for chaining.
-     */
-    public Builder setElapsedMillis(int value) {
-
-      elapsedMillis_ = value;
-      bitField0_ |= 0x00000002;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 elapsedMillis = 5;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearElapsedMillis() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      elapsedMillis_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int direction_ ;
-    /**
-     * <code>int32 direction = 7;</code>
-     * @return The direction.
-     */
-    @java.lang.Override
-    public int getDirection() {
-      return direction_;
-    }
-    /**
-     * <code>int32 direction = 7;</code>
-     * @param value The direction to set.
-     * @return This builder for chaining.
-     */
-    public Builder setDirection(int value) {
-
-      direction_ = value;
-      bitField0_ |= 0x00000004;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 direction = 7;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearDirection() {
-      bitField0_ = (bitField0_ & ~0x00000004);
-      direction_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int x_ ;
-    /**
-     * <code>int32 x = 8;</code>
-     * @return The x.
-     */
-    @java.lang.Override
-    public int getX() {
-      return x_;
-    }
-    /**
-     * <code>int32 x = 8;</code>
-     * @param value The x to set.
-     * @return This builder for chaining.
-     */
-    public Builder setX(int value) {
-
-      x_ = value;
-      bitField0_ |= 0x00000008;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 x = 8;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearX() {
-      bitField0_ = (bitField0_ & ~0x00000008);
-      x_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int y_ ;
-    /**
-     * <code>int32 y = 9;</code>
-     * @return The y.
-     */
-    @java.lang.Override
-    public int getY() {
-      return y_;
-    }
-    /**
-     * <code>int32 y = 9;</code>
-     * @param value The y to set.
-     * @return This builder for chaining.
-     */
-    public Builder setY(int value) {
-
-      y_ = value;
-      bitField0_ |= 0x00000010;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 y = 9;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearY() {
-      bitField0_ = (bitField0_ & ~0x00000010);
-      y_ = 0;
+      state_ = 0;
       onChanged();
       return this;
     }
@@ -683,23 +486,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.InterpolationPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ChangeStatePacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.InterpolationPacket)
-  private static final org.y1000.network.gen.InterpolationPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ChangeStatePacket)
+  private static final org.y1000.network.gen.ChangeStatePacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.InterpolationPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.ChangeStatePacket();
   }
 
-  public static org.y1000.network.gen.InterpolationPacket getDefaultInstance() {
+  public static org.y1000.network.gen.ChangeStatePacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<InterpolationPacket>
-      PARSER = new com.google.protobuf.AbstractParser<InterpolationPacket>() {
+  private static final com.google.protobuf.Parser<ChangeStatePacket>
+      PARSER = new com.google.protobuf.AbstractParser<ChangeStatePacket>() {
     @java.lang.Override
-    public InterpolationPacket parsePartialFrom(
+    public ChangeStatePacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -718,17 +521,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<InterpolationPacket> parser() {
+  public static com.google.protobuf.Parser<ChangeStatePacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<InterpolationPacket> getParserForType() {
+  public com.google.protobuf.Parser<ChangeStatePacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.InterpolationPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.ChangeStatePacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

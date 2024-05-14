@@ -5,9 +5,12 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.ArmorAttribute;
 import org.y1000.entities.attribute.DamageAttribute;
 import org.y1000.entities.attribute.HarhAttribute;
+import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.message.AbstractInterpolation;
 import org.y1000.message.CreatureInterpolation;
+import org.y1000.message.MoveEvent;
+import org.y1000.message.SetPositionEvent;
 import org.y1000.realm.RealmImpl;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -83,6 +86,7 @@ public final class PassiveMonster extends AbstractCreature<PassiveMonster> {
     }
 
 
+
     @Override
     public void update(int delta) {
         recoveryCooldown = recoveryCooldown > delta ? recoveryCooldown - delta : 0;
@@ -93,9 +97,34 @@ public final class PassiveMonster extends AbstractCreature<PassiveMonster> {
 
     @Override
     public void attackedBy(Creature attacker) {
-        if (state().attackable()) {
-            state().attackedBy(this, attacker);
+        if (!state().attackable() ||
+                !attacker.harhAttribute().randomHit(harhAttribute)) {
+            return;
         }
+        cooldownRecovery();
+        changeState(new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterAttacked));
+        emitEvent(new CreatureHurtEvent(this));
+    }
+
+    private void moveTowardsAttacker(Creature attacker) {
+        Direction towards = coordinate().computeDirection(attacker.coordinate());
+        changeState(PassiveMonsterMoveState.towardsAttacker(getStateMillis(State.WALK), towards, attacker));
+        emitEvent(MoveEvent.movingTo(this, towards));
+    }
+
+    public void retaliate(Creature attacker) {
+        if (attacker.coordinate().distance(coordinate()) > 1) {
+            moveTowardsAttacker(attacker);
+            return;
+        }
+        if (recoveryCooldown() > 0 || attackCooldown() > 0) {
+            int max = Math.max(recoveryCooldown, attackCooldown);
+            changeState(new MonsterCooldownState(max, attacker));
+            emitEvent(SetPositionEvent.ofCreature(this));
+            return;
+        }
+        changeState(MonsterAttackState.attack(this, attacker));
+        emitEvent(CreatureAttackEvent.ofMonster(this));
     }
 
 

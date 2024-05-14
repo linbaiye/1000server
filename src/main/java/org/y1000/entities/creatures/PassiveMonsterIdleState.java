@@ -3,7 +3,6 @@ package org.y1000.entities.creatures;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.message.MoveEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,7 +16,7 @@ public final class PassiveMonsterIdleState extends AbstractMonsterState {
         super(length, State.IDLE);
     }
 
-    private PassiveMonsterIdleState(int length, int idleCounter){
+    private PassiveMonsterIdleState(int length, int idleCounter) {
         this(length);
         this.idleCounter = idleCounter;
     }
@@ -59,20 +58,12 @@ public final class PassiveMonsterIdleState extends AbstractMonsterState {
         }
     }
 
-    private void afterHurt(PassiveMonster monster, Creature attacker) {
-
-    }
-
 
     @Override
-    public void attackedBy(PassiveMonster monster, Creature attacker) {
-        if (!attacker.harhAttribute().randomHit(monster.harhAttribute())) {
-            return;
-        }
-        monster.cooldownRecovery();
-        monster.changeState(new PassiveMonsterHurtState(attacker, monster.getStateMillis(State.HURT), this::afterHurt));
-        monster.emitEvent(new CreatureHurtEvent(monster));
+    public void afterAttacked(PassiveMonster monster, Creature attacker) {
+        monster.retaliate(attacker);
     }
+
 
     public static PassiveMonsterIdleState ofMonster(PassiveMonster monster) {
         return new PassiveMonsterIdleState(monster.getStateMillis(State.IDLE));

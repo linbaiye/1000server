@@ -62,13 +62,20 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
         attack(player, target, new PlayerAttackEventResponse(player, event, true), event.attackState());
     }
 
-    private State randomState() {
+    @Override
+    public State randomAttackState() {
         return level() < 50 || RANDOM.nextInt() % 2 == 1 ? State.FIST : State.KICK;
     }
 
     @Override
+    public int attackActionLength(State state) {
+        assert state == State.FIST || state == State.KICK;
+        return state == State.FIST ? AttackKungFuType.QUANFA.below50Millis() : AttackKungFuType.QUANFA.above50Millis();
+    }
+
+    @Override
     public void attack(PlayerImpl player, Entity target) {
-        var st = randomState();
+        var st = randomAttackState();
         attack(player, target, new PlayerAttackEvent(player, st), st);
     }
 
