@@ -3,7 +3,7 @@ package org.y1000.message.clientevent;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.network.gen.PlayerLoginPacket;
 
-public class LoginEvent implements ClientEvent {
+public final class LoginEvent implements ClientEvent {
     private final String token;
 
     public LoginEvent(String token) {

@@ -25,10 +25,6 @@ public abstract class AbstractCreature<C extends AbstractCreature<C>> implements
 
     private final Map<State, Integer> stateMillis;
 
-    public void changeState(CreatureState<C> newState) {
-        state = newState;
-    }
-
     public AbstractCreature(long id,
                             Coordinate coordinate,
                             Direction direction,
@@ -66,7 +62,6 @@ public abstract class AbstractCreature<C extends AbstractCreature<C>> implements
         eventListeners.clear();
     }
 
-
     @Override
     public void registerOrderedEventListener(EntityEventListener listener) {
         eventListeners.add(listener);
@@ -95,5 +90,13 @@ public abstract class AbstractCreature<C extends AbstractCreature<C>> implements
     @Override
     public State stateEnum() {
         return state().stateEnum();
+    }
+
+    public void changeState(CreatureState<C> newState) {
+        state = newState;
+    }
+    @Override
+    public boolean attackable() {
+        return state().attackable();
     }
 }

@@ -1,26 +1,23 @@
 package org.y1000.entities.creatures;
 
-import org.y1000.message.SetPositionEvent;
 
-public final class MonsterAttackState extends AbstractCreatureAttackState<PassiveMonster> {
+public final class MonsterAttackState extends AbstractMonsterState {
 
     private final Creature target;
 
     public MonsterAttackState(int lengthMillis, Creature target) {
-        super(lengthMillis);
+        super(lengthMillis, State.ATTACK);
         this.target = target;
     }
 
     @Override
-    public void update(PassiveMonster monster, int delta) {
-        if (elapsedMillis() == 0) {
-            monster.cooldownAttack();
-            target.attackedBy(monster);
-        }
-        if (elapse(delta)) {
-            monster.changeState(MonsterCooldownState.of(monster, target));
-            monster.emitEvent(SetPositionEvent.ofCreature(monster));
-        }
+    protected void nextMove(PassiveMonster monster) {
+        monster.retaliate(target);
+    }
+
+    @Override
+    public void afterAttacked(PassiveMonster monster, Creature attacker) {
+        monster.changeState(new MonsterCooldownState(monster.cooldown(), target));
     }
 
     public static MonsterAttackState attack(PassiveMonster monster, Creature target) {

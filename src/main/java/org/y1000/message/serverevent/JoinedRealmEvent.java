@@ -22,13 +22,13 @@ public class JoinedRealmEvent implements EntityEvent, ServerMessage {
         LoginPacket.Builder builder = LoginPacket.newBuilder()
                 .setX(coordinate.x())
                 .setY(coordinate.y())
-                .setId(source().id());
+                .setId(source().id())
+                .setAttackKungFuLevel(player.attackKungFu().level())
+                .setAttackKungFuName(player.attackKungFu().name())
+                ;
         player.weapon().ifPresent(weapon -> builder.setWeaponShapeId(weapon.shapeId()));
-        player.attackKungFu().ifPresent(attackKungFu -> builder.setAttackKungFuName(attackKungFu.name()).setAttackKungFuLevel(attackKungFu.level()));
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuLevel(footKungFu.level()).setFootKungFuName(footKungFu.name()));
-        return Packet.newBuilder().setLoginPacket(
-                builder.build()
-        ).build();
+        return Packet.newBuilder().setLoginPacket(builder.build()).build();
     }
 
 

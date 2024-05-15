@@ -5,19 +5,19 @@ import org.y1000.entities.creatures.Creature;
 import org.y1000.message.serverevent.EntityEventVisitor;
 import org.y1000.util.Coordinate;
 
-public class SetPositionEvent extends AbstractPositionEvent {
+public final class SetPositionEvent extends AbstractPositionEvent {
 
     public SetPositionEvent(Creature entity, Direction direction, Coordinate coordinate) {
         super(entity, direction, coordinate);
     }
 
     @Override
-    protected MovementType getType() {
-        return MovementType.SET;
+    protected PositionType getType() {
+        return PositionType.SET;
     }
 
 
-    public static SetPositionEvent ofCreature(Creature creature) {
+    public static SetPositionEvent of(Creature creature) {
         return new SetPositionEvent(creature, creature.direction(), creature.coordinate());
     }
 

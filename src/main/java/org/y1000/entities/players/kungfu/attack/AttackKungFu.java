@@ -17,14 +17,9 @@ public interface AttackKungFu extends LevelKungFu {
 
     int getRecovery();
 
-    void attack(PlayerImpl player, ClientAttackEvent event, Entity target);
-
-    void attack(PlayerImpl player, Entity target);
-
     State randomAttackState();
 
-    int attackActionLength(State state);
+    int attackActionMillis(State state);
 
     AttackKungFuType getType();
-
 }

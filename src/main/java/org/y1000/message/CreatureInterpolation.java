@@ -9,7 +9,7 @@ import org.y1000.util.Coordinate;
 public final class CreatureInterpolation extends AbstractNamedInterpolation {
 
     public CreatureInterpolation(long id, Coordinate coordinate, State state,
-                                 Direction direction, long elapsedMillis, String name) {
+                                 Direction direction, int elapsedMillis, String name) {
         super(id, coordinate, state, direction, elapsedMillis, name);
     }
 

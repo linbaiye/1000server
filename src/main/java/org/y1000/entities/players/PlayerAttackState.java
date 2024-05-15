@@ -6,28 +6,24 @@ import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 
-public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> implements PlayerState {
+public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> implements AttackableState {
 
     private final Entity target;
 
     @Getter
-    private final State state;
-
-    private final int cooldownLength;
+    private final State attackState;
 
     public PlayerAttackState(int length,
                              Entity target,
-                             State state,
-                             int cooldownLength) {
+                             State state) {
         super(length);
         this.target = target;
-        this.state = state;
-        this.cooldownLength = cooldownLength;
+        this.attackState = state;
     }
 
     @Override
     public State stateEnum() {
-        return state;
+        return attackState;
     }
 
     @Override
@@ -40,18 +36,16 @@ public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> imp
         if (!elapse(delta)) {
             return;
         }
-        if (cooldownLength > 0) {
-            player.changeState(new PlayerCooldownState(cooldownLength, target));
+        int cooldown = player.cooldown();
+        if (cooldown > 0) {
+            player.changeState(new PlayerCooldownState(cooldown, target));
         } else {
             player.attack(target);
         }
     }
 
-    public static PlayerAttackState attack(Entity target, State state, int length, int cooldown) {
-        if (cooldown < 0) {
-            cooldown = 0;
-        }
-        return new PlayerAttackState(length, target, state, cooldown);
+    public static PlayerAttackState attack(Entity target, State state, int length) {
+        return new PlayerAttackState(length, target, state );
     }
 
 }

@@ -3,7 +3,7 @@ package org.y1000.entities.creatures;
 public interface CreatureState<C extends Creature> {
     State stateEnum();
 
-    long elapsedMillis();
+    int elapsedMillis();
 
     void update(C c, int delta);
 

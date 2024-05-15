@@ -7,7 +7,9 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.ClientAttackResponsePacket;
 import org.y1000.network.gen.Packet;
 
-public class PlayerAttackEventResponse extends AbstractPlayerEvent {
+import java.util.Optional;
+
+public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
 
     private final ClientAttackEvent clientAttackEvent;
 
@@ -31,8 +33,8 @@ public class PlayerAttackEventResponse extends AbstractPlayerEvent {
     }
 
 
-    public PlayerAttackEvent toPlayerAttackEvent() {
-        return new PlayerAttackEvent(player(), clientAttackEvent.attackState());
+    public Optional<PlayerAttackEvent> toPlayerAttackEvent() {
+        return accepted ? Optional.of(new PlayerAttackEvent(player(), clientAttackEvent.attackState())) : Optional.empty();
     }
 
 

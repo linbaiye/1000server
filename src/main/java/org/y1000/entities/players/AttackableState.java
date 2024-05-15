@@ -7,15 +7,16 @@ import org.y1000.message.clientevent.ClientAttackEvent;
 
 import java.util.Optional;
 
-public interface PlayerState extends CreatureState<PlayerImpl> {
+interface AttackableState extends CreatureState<PlayerImpl> {
 
     default void attackIfInsight(PlayerImpl player, ClientAttackEvent event) {
         Optional<Entity> insight = player.getRealm().findInsight(player, event.entityId());
         if (insight.isEmpty()) {
             player.emitEvent(new PlayerAttackEventResponse(player, event, false));
-            return;
+        } else {
+            player.attack(insight.get());
+            player.emitEvent(new PlayerAttackEventResponse(player, event, true));
         }
-        player.attackKungFu().ifPresent(attackKungFu -> attackKungFu.attack(player, event, insight.get()));
     }
 }
 

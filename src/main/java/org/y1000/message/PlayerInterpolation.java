@@ -9,14 +9,14 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
-public class PlayerInterpolation extends AbstractInterpolation {
+public final class PlayerInterpolation extends AbstractInterpolation {
 
     private final boolean male;
 
     @Setter(AccessLevel.PRIVATE)
     private String name = "";
 
-    private PlayerInterpolation(long id, Coordinate coordinate, State state, Direction direction, long elapsedMillis, boolean male) {
+    private PlayerInterpolation(long id, Coordinate coordinate, State state, Direction direction, int elapsedMillis, boolean male) {
         super(id, coordinate, state, direction, elapsedMillis);
         this.male = male;
     }
@@ -33,7 +33,7 @@ public class PlayerInterpolation extends AbstractInterpolation {
                 .build();
     }
 
-    public static PlayerInterpolation FromPlayer(PlayerImpl player, long elapsedMillis) {
+    public static PlayerInterpolation FromPlayer(PlayerImpl player, int elapsedMillis) {
         PlayerInterpolation playerInterpolation = new PlayerInterpolation(player.id(), player.coordinate(),
                 player.stateEnum(), player.direction(),
                 elapsedMillis, player.isMale());

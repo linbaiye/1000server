@@ -51,7 +51,6 @@ message ChangeStatePacket {
   int32 state = 2;
 }
 
-
 message MoveEventPacket {
   InputPacket input = 1;
   int32 happenedAtX = 2;

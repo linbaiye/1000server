@@ -1,7 +1,9 @@
 package org.y1000.message.serverevent;
 
+import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
+import org.y1000.entities.players.event.RewindEvent;
 import org.y1000.message.*;
 
 public interface EntityEventVisitor {
@@ -27,5 +29,13 @@ public interface EntityEventVisitor {
 
     default void visit(SetPositionEvent setPositionEvent) {
         visit((AbstractPositionEvent)setPositionEvent);
+    }
+
+    default void visit(ChangeStateEvent event) {
+        visit((EntityEvent) event);
+    }
+
+    default void Visit(RewindEvent event) {
+        visit((EntityEvent) event);
     }
 }

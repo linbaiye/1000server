@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.LoginEvent;
 import org.y1000.network.gen.ClientPacket;
-import org.y1000.message.clientevent.CharacterMovementEvent;
+import org.y1000.message.clientevent.ClientMovementEvent;
 import org.y1000.message.clientevent.ClientEvent;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     private ClientEvent createMessage(ClientPacket clientPacket) {
         return switch (clientPacket.getTypeCase()) {
-            case MOVEEVENTPACKET -> CharacterMovementEvent.fromPacket(clientPacket);
+            case MOVEEVENTPACKET -> ClientMovementEvent.fromPacket(clientPacket);
             case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
             case ATTACKEVENTPACKET -> ClientAttackEvent.fromPacket(clientPacket.getAttackEventPacket());
             default -> throw new IllegalArgumentException();

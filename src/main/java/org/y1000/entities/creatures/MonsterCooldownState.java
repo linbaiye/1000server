@@ -1,12 +1,15 @@
 package org.y1000.entities.creatures;
 
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public final class MonsterCooldownState extends AbstractMonsterState {
 
     private final Creature attacker;
 
     public MonsterCooldownState(int totalMillis, Creature attacker) {
-        super(totalMillis, State.COOLDOWN);
+        super(totalMillis, State.IDLE);
         this.attacker = attacker;
     }
 
@@ -15,7 +18,8 @@ public final class MonsterCooldownState extends AbstractMonsterState {
         monster.retaliate(attacker);
     }
 
-    public static MonsterCooldownState of(PassiveMonster monster, Creature attacker) {
-        return new MonsterCooldownState(Math.max(monster.recoveryCooldown(), monster.attackCooldown()), attacker);
+    @Override
+    public void afterAttacked(PassiveMonster monster, Creature attacker) {
+        monster.changeState(new MonsterCooldownState(monster.cooldown(), this.attacker));
     }
 }

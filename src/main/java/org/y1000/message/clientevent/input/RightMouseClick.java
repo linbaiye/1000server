@@ -1,10 +1,10 @@
-package org.y1000.message.input;
+package org.y1000.message.clientevent.input;
 
 
 import org.y1000.network.gen.InputPacket;
 import org.y1000.entities.Direction;
 
-public class RightMouseClick extends AbstractRightClick implements MoveInput {
+public final class RightMouseClick extends AbstractRightClick {
     public RightMouseClick(long sequence, Direction direction) {
         super(sequence, direction);
     }

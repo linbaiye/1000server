@@ -2,11 +2,9 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Entity;
-import org.y1000.entities.attribute.HarhAttribute;
-import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureAttackEvent;
-import org.y1000.entities.creatures.event.CreatureHurtEvent;
+import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.creatures.*;
+import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.entities.players.equipment.weapon.Weapon;
 import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
@@ -17,7 +15,6 @@ import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.network.ClientEventListener;
 import org.y1000.network.Connection;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.AbstractCreature;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
 import org.y1000.message.clientevent.ClientEvent;
@@ -31,7 +28,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
-public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Player,
+public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl> implements Player,
         ClientEventListener {
 
     private Realm realm;
@@ -45,12 +42,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
     private FootKungFu footKungfu;
 
     private Weapon weapon;
-
-    private int recoveryCooldown;
-
-    private int attackCooldown;
-
-    private final HarhAttribute harhAttribute;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
@@ -80,7 +71,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
                 .attackSpeed(40)
                 .build();
         this.connection.registerClientEventListener(this);
-        this.harhAttribute = HarhAttribute.DEFAULT;
     }
 
     Optional<ClientEvent> takeClientEvent() {
@@ -97,10 +87,9 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
     }
 
     @Override
-    public Optional<AttackKungFu> attackKungFu() {
-        return Optional.ofNullable(attackKungFu);
+    public AttackKungFu attackKungFu() {
+        return attackKungFu;
     }
-
 
     @Override
     public Connection connection() {
@@ -130,17 +119,19 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
         if (realm != null) {
             realmMap().free(this);
         }
+        changeState(PlayerFrozenState.Instance);
         emitEvent(new PlayerLeftEvent(this));
     }
 
     @Override
     public int attackSpeed() {
         int kungfuSpeed = attackKungFu != null ? attackKungFu.getAttackSpeed() : 0;
-        return kungfuSpeed + harhAttribute().attackSpeed();
+        return kungfuSpeed + 70;
     }
 
-    public void cooldownAttack() {
-        attackCooldown = attackSpeed() * RealmImpl.STEP_MILLIS;
+    @Override
+    protected CreatureState<PlayerImpl> createHurtState(ViolentCreature attacker) {
+        return new PlayerHurtState(attacker, getStateMillis(State.HURT), state()::afterAttacked);
     }
 
     @Override
@@ -148,69 +139,56 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl> implements Pl
         return PlayerInterpolation.FromPlayer(this, state().elapsedMillis());
     }
 
-    private int getCooldown() {
-        return Math.max(attackCooldown, recoveryCooldown);
-    }
     public void attack(Entity target) {
-        if (recoveryCooldown > 0 || attackCooldown > 0) {
-            changeState(new PlayerCooldownState(getCooldown(), target));
+        if (!target.attackable()) {
             return;
         }
+        int cooldown = cooldown();
+        if (cooldown > 0) {
+            changeState(new PlayerCooldownState(cooldown, target));
+            emitEvent(ChangeStateEvent.of(this));
+            return;
+        }
+        Direction direction = coordinate().computeDirection(target.coordinate());
+        if (direction != direction()) {
+            changeDirection(direction);
+        }
         int distance = coordinate().distance(target.coordinate());
-        Direction direction = coordinate().computeDirection(coordinate());
-        changeDirection(direction);
-        if (distance <= 1 && target.attackable()) {
-            var length = attackSpeed() * RealmImpl.STEP_MILLIS;
-            State attackState = attackKungFu.randomAttackState();
-            var cooldown = length - attackKungFu.attackActionLength(attackState);
+        if (distance <= 1) {
             cooldownAttack();
+            var actionMillis = attackSpeed() * RealmImpl.STEP_MILLIS;
+            State attackState = attackKungFu.randomAttackState();
+            changeState(PlayerAttackState.attack(target, attackState, actionMillis));
             target.attackedBy(this);
-            changeState(PlayerAttackState.attack(target, attackState, length, cooldown));
-            emitEvent(new PlayerAttackEvent(this, attackState));
+            emitEvent(new PlayerAttackEvent(this));
         } else {
-            changeState(PlayerCooldownState.cooldown(get));
+            //changeState(PlayerCooldownState.cooldown(get));
         }
     }
 
     @Override
     public void update(int delta) {
-        recoveryCooldown = recoveryCooldown > delta ? recoveryCooldown - delta : 0;
-        attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
+        cooldown(delta);
         state().update(this, delta);
     }
 
-    public void reset(long sequence) {
-        eventQueue.clear();
-        emitEvent(new InputResponseMessage(sequence, SetPositionEvent.ofCreature(this)));
-        realmMap().occupy(this);
+    public void clearEventQueue() {
+        eventQueue.clear();;
     }
 
-    private int recovery() {
+    public int recovery() {
         int kfr = attackKungFu != null ? attackKungFu.getRecovery() : 0;
-        return harhAttribute.recovery() + kfr;
-    }
-
-    private void cooldownRecovery() {
-        recoveryCooldown = recovery() * RealmImpl.STEP_MILLIS;
-    }
-
-    public int getRecoveryCooldown() {
-        return recoveryCooldown;
-    }
-
-    public int getAttackCooldown() {
-        return attackCooldown;
+        return 50 + kfr;
     }
 
     @Override
-    public void attackedBy(Creature attacker) {
-        if (!state().attackable() ||
-                !attacker.harhAttribute().randomHit(harhAttribute)) {
-            return;
-        }
-        cooldownRecovery();
-        changeState(new PlayerHurtState(attacker, getStateMillis(State.HURT), state()::afterAttacked));
-        emitEvent(new CreatureHurtEvent(this));
+    public int hit() {
+        return 0;
+    }
+
+    @Override
+    public Damage damage() {
+        return null;
     }
 
     @Override

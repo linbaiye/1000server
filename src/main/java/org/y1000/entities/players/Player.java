@@ -1,5 +1,6 @@
 package org.y1000.entities.players;
 
+import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.equipment.weapon.Weapon;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.network.Connection;
@@ -12,8 +13,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
-public interface Player extends Creature {
-
+public interface Player extends ViolentCreature {
 
     default boolean isMale() {
         return true;
@@ -27,8 +27,6 @@ public interface Player extends Creature {
 
     void leaveRealm();
 
-    int attackSpeed();
-
     default Optional<FootKungFu> footKungFu() {
         return Optional.empty();
     }
@@ -37,9 +35,7 @@ public interface Player extends Creature {
         return Optional.empty();
     }
 
-    default Optional<AttackKungFu> attackKungFu() {
-        return Optional.empty();
-    }
+    AttackKungFu attackKungFu();
 
     static Player create(long id, Coordinate coordinate, Connection connection) {
         return new PlayerImpl(id, coordinate, Direction.DOWN, "杨过", connection);

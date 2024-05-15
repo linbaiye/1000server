@@ -2,11 +2,13 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Entity;
+import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
+import org.y1000.entities.players.event.RewindEvent;
 import org.y1000.message.AbstractPositionEvent;
 import org.y1000.message.InputResponseMessage;
 import org.y1000.message.ServerMessage;
@@ -87,11 +89,16 @@ public final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
+    public void Visit(RewindEvent event) {
+        event.player().connection().write(event);
+        notifyVisiblePlayers(event.source(), event.toSetPosition());
+    }
+
+    @Override
     public void visit(PlayerAttackEventResponse event) {
         event.player().connection().write(event);
-        if (event.isAccepted()) {
-            notifyVisiblePlayers(event.source(), event.toPlayerAttackEvent());
-        }
+        event.toPlayerAttackEvent()
+                .ifPresent(e -> notifyVisiblePlayers(event.source(), e));
     }
 
     private void notifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
@@ -101,17 +108,25 @@ public final class RealmEntityManager implements EntityEventListener,
 
     @Override
     public void visit(PlayerAttackEvent event) {
-        event.player().connection().write(event);
-        notifyVisiblePlayers(event.source(), event);
+        notifyVisiblePlayersAndSelf(event.source(), event);
     }
-
 
     @Override
     public void visit(CreatureHurtEvent event) {
-        notifyVisiblePlayers(event.source(), event);
-        if (event.source() instanceof Player player) {
-            player.connection().write(event);
+        notifyVisiblePlayersAndSelf(event.source(), event);
+    }
+
+    private void notifyVisiblePlayersAndSelf(Entity source,
+                                             ServerMessage message) {
+        notifyVisiblePlayers(source, message);
+        if (source instanceof Player player) {
+            player.connection().write(message);
         }
+    }
+
+    @Override
+    public void visit(ChangeStateEvent event) {
+        notifyVisiblePlayersAndSelf(event.source(), event);
     }
 
     @Override

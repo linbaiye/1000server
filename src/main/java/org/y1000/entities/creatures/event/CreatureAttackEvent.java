@@ -5,15 +5,11 @@ import org.y1000.entities.creatures.PassiveMonster;
 import org.y1000.entities.creatures.State;
 import org.y1000.message.serverevent.EntityEventVisitor;
 import org.y1000.network.gen.CreatureAttackEventPacket;
-import org.y1000.network.gen.Packet;
 
-public final class CreatureAttackEvent extends AbstractCreatureEvent {
+public final class CreatureAttackEvent extends AbstractCreatureAttackEvent {
 
-    private final State attackState;
-
-    public CreatureAttackEvent(Creature source, State state) {
+    public CreatureAttackEvent(Creature source) {
         super(source);
-        attackState = state;
     }
 
     @Override
@@ -22,19 +18,11 @@ public final class CreatureAttackEvent extends AbstractCreatureEvent {
     }
 
     @Override
-    protected Packet buildPacket() {
-        return Packet.newBuilder()
-                .setAttackEventPacket(
-                        CreatureAttackEventPacket.newBuilder()
-                                .setDirection(creature().direction().value())
-                                .setState(attackState.value())
-                                .setPlayer(false)
-                                .setId(source().id())
-                                .build())
-                .build();
+    protected CreatureAttackEventPacket.Builder setCreatureSpecificFields(CreatureAttackEventPacket.Builder builder) {
+        return builder.setState(State.ATTACK.value()).setPlayer(false);
     }
 
     public static CreatureAttackEvent ofMonster(PassiveMonster monster) {
-        return new CreatureAttackEvent(monster, State.ATTACK);
+        return new CreatureAttackEvent(monster);
     }
 }

@@ -9,7 +9,7 @@ import org.y1000.util.Coordinate;
 public abstract class AbstractNamedInterpolation extends AbstractInterpolation {
     private final String name;
     public AbstractNamedInterpolation(long id, Coordinate coordinate, State state, Direction direction,
-                                      long elapsedMillis,
+                                      int elapsedMillis,
                                       String name) {
         super(id, coordinate, state, direction, elapsedMillis);
         this.name = name;

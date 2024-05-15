@@ -1,4 +1,4 @@
-package org.y1000.message.input;
+package org.y1000.message.clientevent.input;
 
 public abstract class AbstractInput implements InputMessage {
 

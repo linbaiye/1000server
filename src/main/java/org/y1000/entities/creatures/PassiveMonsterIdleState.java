@@ -24,7 +24,6 @@ public final class PassiveMonsterIdleState extends AbstractMonsterState {
     private void moveOrTurn(PassiveMonster monster) {
         Direction towards = monster.direction();
         var next = monster.coordinate().moveBy(towards);
-        log.debug("Wandering {}, movable {}.", monster.wanderingArea().contains(next), monster.realmMap().movable(next));
         if (monster.wanderingArea().contains(next) && monster.realmMap().movable(next)) {
             monster.changeState(PassiveMonsterMoveState.of(monster, towards));
             monster.emitEvent(MoveEvent.movingTo(monster, towards));
@@ -61,15 +60,12 @@ public final class PassiveMonsterIdleState extends AbstractMonsterState {
 
     @Override
     public void afterAttacked(PassiveMonster monster, Creature attacker) {
+        log.debug("Returned from hurt.");
         monster.retaliate(attacker);
     }
 
 
-    public static PassiveMonsterIdleState ofMonster(PassiveMonster monster) {
+    public static PassiveMonsterIdleState of(PassiveMonster monster) {
         return new PassiveMonsterIdleState(monster.getStateMillis(State.IDLE));
-    }
-
-    public static PassiveMonsterIdleState recovery(int len) {
-        return new PassiveMonsterIdleState(len);
     }
 }

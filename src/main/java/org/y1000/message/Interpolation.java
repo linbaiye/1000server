@@ -5,7 +5,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
-public record Interpolation(Coordinate coordinate, State state, Direction direction, long elapsedMillis) {
+public record Interpolation(Coordinate coordinate, State state, Direction direction, int elapsedMillis) {
 
     public InterpolationPacket ToPacket() {
         return InterpolationPacket.newBuilder()

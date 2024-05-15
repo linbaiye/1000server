@@ -11,7 +11,7 @@ public abstract class AbstractCreateState<C extends Creature> implements Creatur
     }
 
     @Override
-    public long elapsedMillis() {
+    public int elapsedMillis() {
         return elapsedMillis;
     }
 

@@ -2,37 +2,35 @@ package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
 import org.y1000.message.SetPositionEvent;
+import org.y1000.util.Coordinate;
 
 public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMonster> {
-
     private Creature attacker;
 
-    public PassiveMonsterMoveState(int millisPerUnit, Direction towards) {
-        super(State.WALK, millisPerUnit, towards);
+    public PassiveMonsterMoveState(Coordinate start, Direction towards, int millisPerUnit) {
+        this(start, towards, millisPerUnit, null);
     }
 
-    public PassiveMonsterMoveState(int millisPerUnit, Direction towards, Creature attacker) {
-        super(State.WALK, millisPerUnit, towards);
+    public PassiveMonsterMoveState(Coordinate start, Direction towards, int millisPerUnit, Creature attacker) {
+        super(State.WALK, start, towards, millisPerUnit);
         this.attacker = attacker;
-    }
-
-    private void nextMove(PassiveMonster monster) {
-        if (attacker != null) {
-            monster.retaliate(attacker);
-        } else {
-            monster.changeState(PassiveMonsterIdleState.ofMonster(monster));
-            monster.emitEvent(SetPositionEvent.ofCreature(monster));
-        }
     }
 
     @Override
     public void update(PassiveMonster monster, int delta) {
         walkMillis(monster, delta);
-        if (elapsedMillis() < millisPerUnit()) {
+        if (elapsedMillis() < getTotalMillis()) {
             return;
         }
-        tryChangeCoordinate(monster, monster.realmMap());
-        nextMove(monster);
+        if (!tryChangeCoordinate(monster, monster.realmMap())) {
+            monster.changeCoordinate(getStart());
+        }
+        if (attacker != null) {
+            monster.retaliate(attacker);
+        } else {
+            monster.changeState(PassiveMonsterIdleState.of(monster));
+            monster.emitEvent(SetPositionEvent.of(monster));
+        }
     }
 
     @Override
@@ -42,10 +40,11 @@ public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<Pas
         }
     }
 
-    public static PassiveMonsterMoveState of(PassiveMonster monster, Direction towords) {
-        return new PassiveMonsterMoveState(monster.getStateMillis(State.WALK), towords);
+    public static PassiveMonsterMoveState of(PassiveMonster monster, Direction towards) {
+        return new PassiveMonsterMoveState(monster.coordinate(), towards, monster.getStateMillis(State.WALK));
     }
-    public static PassiveMonsterMoveState towardsAttacker(int millis, Direction towords, Creature attacker) {
-        return new PassiveMonsterMoveState(millis, towords, attacker);
+
+    public static PassiveMonsterMoveState towardsAttacker(int millis, Coordinate start, Direction towards, Creature attacker) {
+        return new PassiveMonsterMoveState(start, towards, millis, attacker);
     }
 }

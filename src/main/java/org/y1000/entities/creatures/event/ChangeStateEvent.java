@@ -6,11 +6,11 @@ import org.y1000.message.serverevent.EntityEventVisitor;
 import org.y1000.network.gen.ChangeStatePacket;
 import org.y1000.network.gen.Packet;
 
-public final class ChangeCreatureStateEvent extends AbstractCreatureEvent {
+public final class ChangeStateEvent extends AbstractCreatureEvent {
 
     private final State state;
 
-    public ChangeCreatureStateEvent(Creature source, State state) {
+    public ChangeStateEvent(Creature source, State state) {
         super(source);
         this.state = state;
     }
@@ -26,6 +26,10 @@ public final class ChangeCreatureStateEvent extends AbstractCreatureEvent {
 
     @Override
     public void accept(EntityEventVisitor visitor) {
+        visitor.visit(this);
+    }
 
+    public static ChangeStateEvent of(Creature source) {
+        return new ChangeStateEvent(source, source.stateEnum());
     }
 }

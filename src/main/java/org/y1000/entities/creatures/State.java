@@ -59,4 +59,8 @@ public enum State implements ValueEnum {
     public int value() {
         return v;
     }
+
+    public static State valueOf(int v) {
+        return ValueEnum.fromValueOrThrow(State.values(), v);
+    }
 }

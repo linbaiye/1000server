@@ -12,6 +12,11 @@ public final class PlayerAttackEvent extends AbstractCreatureAttackEvent
 
     private final State attackState;
 
+    public PlayerAttackEvent(Player source) {
+        super(source);
+        this.attackState = source.stateEnum();
+    }
+
     public PlayerAttackEvent(Player source, State attackState) {
         super(source);
         this.attackState = attackState;

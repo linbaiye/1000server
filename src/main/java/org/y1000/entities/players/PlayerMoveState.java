@@ -1,27 +1,29 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
 import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.players.kungfu.FootKungFu;
-import org.y1000.message.*;
-import org.y1000.message.clientevent.CharacterMovementEvent;
+import org.y1000.entities.players.event.RewindEvent;
+import org.y1000.message.clientevent.ClientMovementEvent;
 import org.y1000.message.clientevent.ClientEventVisitor;
-import org.y1000.message.input.*;
+import org.y1000.util.Coordinate;
 
-import java.util.Optional;
+import java.util.Set;
 
 
 @Slf4j
-public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements
-        PlayerState, ClientEventVisitor {
+public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
+        implements ClientEventVisitor, MovableState {
 
-    private final AbstractRightClick currentInput;
+    private static final Set<State> MOVE_STATES = Set.of(
+            State.WALK, State.RUN, State.FLY, State.ENFIGHT_WALK
+    );
 
-    public PlayerMoveState(AbstractRightClick currentInput, int millisPerUnit, State state) {
-        super(state, millisPerUnit, currentInput.direction());
-        this.currentInput = currentInput;
+    private PlayerMoveState(State state, Coordinate start, Direction towards,  int millisPerUnit) {
+        super(state, start, towards, millisPerUnit);
     }
 
     private void handleInput(PlayerImpl player) {
@@ -30,20 +32,22 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
 
     @Override
     public void update(PlayerImpl player, int deltaMillis) {
-        if (elapsedMillis() >= millisPerUnit()) {
+        if (elapsedMillis() >= getTotalMillis()) {
             handleInput(player);
             return;
         }
         walkMillis(player, deltaMillis);
-        if (elapsedMillis() < millisPerUnit()) {
+        if (elapsedMillis() < getTotalMillis()) {
             return;
         }
         if (tryChangeCoordinate(player, player.realmMap())) {
             handleInput(player);
-        } else {
-            player.changeState(new PlayerIdleState(player.getStateMillis(State.IDLE)));
-            player.emitEvent(new InputResponseMessage(currentInput.sequence(), SetPositionEvent.ofCreature(player)));
+            return;
         }
+        player.changeCoordinate(getStart());
+        player.changeState(stateForRewind(player));
+        player.clearEventQueue();
+        player.emitEvent(RewindEvent.of(player));
     }
 
     @Override
@@ -51,16 +55,30 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
         player.changeState(this);
     }
 
-    public static PlayerMoveState move(PlayerImpl player, AbstractRightClick trigger) {
-        Optional<FootKungFu> footMagic = player.footKungFu();
-        State state = footMagic.map(magic -> magic.canFly() ? State.FLY : State.RUN)
-                .orElse(State.WALK);
-        return new PlayerMoveState(trigger, player.getStateMillis(state), state);
+    @Override
+    public void visit(PlayerImpl player, ClientMovementEvent event) {
+        move(player, event);
     }
 
 
     @Override
-    public void visit(PlayerImpl player, CharacterMovementEvent movementEvent) {
-        movementEvent.resetOrMove(player);
+    public CreatureState<PlayerImpl> stateForStopMoving(PlayerImpl player) {
+        if (stateEnum() == State.ENFIGHT_WALK) {
+            return new PlayerCooldownState(player.getStateMillis(State.COOLDOWN), null);
+        } else {
+            return PlayerIdleState.of(player);
+        }
+    }
+
+    @Override
+    public CreatureState<PlayerImpl> stateForMove(PlayerImpl player, Direction direction) {
+        return moveBy(player, stateEnum(), direction);
+    }
+
+    public static PlayerMoveState moveBy(PlayerImpl player, State state, Direction direction) {
+        if (!MOVE_STATES.contains(state)) {
+            throw new IllegalArgumentException("Not a move state: " + state);
+        }
+        return new PlayerMoveState(state, player.coordinate(), direction, player.getStateMillis(state));
     }
 }

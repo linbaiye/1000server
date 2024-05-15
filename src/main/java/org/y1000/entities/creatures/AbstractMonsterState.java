@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures;
 
 public abstract class AbstractMonsterState extends AbstractCreateState<PassiveMonster> {
+
     private final State stat;
 
     public AbstractMonsterState(int totalMillis, State stat) {
@@ -17,9 +18,8 @@ public abstract class AbstractMonsterState extends AbstractCreateState<PassiveMo
 
     @Override
     public void update(PassiveMonster monster, int delta) {
-        if (!elapse(delta)) {
-            return;
+        if (elapse(delta)) {
+            nextMove(monster);
         }
-        nextMove(monster);
     }
 }

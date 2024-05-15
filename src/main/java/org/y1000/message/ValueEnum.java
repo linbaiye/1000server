@@ -8,8 +8,9 @@ public interface ValueEnum {
     static <E extends Enum<E> & ValueEnum> E fromValueOrThrow(ValueEnum[] values, int v) {
         for (var value : values) {
             if (value.value() == v)
-                return (E)value;
+                return (E) value;
         }
         throw new IllegalArgumentException("Unknown value " + v);
     }
+
 }

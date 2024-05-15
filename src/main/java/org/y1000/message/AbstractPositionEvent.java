@@ -34,7 +34,15 @@ public abstract class AbstractPositionEvent implements EntityEvent, ServerMessag
         return this.source;
     }
 
-    protected abstract MovementType getType();
+    protected Direction direction() {
+        return direction;
+    }
+
+    protected Coordinate coordinate() {
+        return coordinate;
+    }
+
+    protected abstract PositionType getType();
 
 
     @Override

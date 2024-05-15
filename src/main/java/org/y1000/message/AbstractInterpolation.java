@@ -11,10 +11,10 @@ public abstract class AbstractInterpolation implements ServerMessage {
     private final Coordinate coordinate;
     private final State state;
     private final Direction direction;
-    private final long elapsedMillis;
+    private final int elapsedMillis;
     private InterpolationPacket interpolationPacket;
 
-    public AbstractInterpolation(long id, Coordinate coordinate, State state, Direction direction, long elapsedMillis) {
+    public AbstractInterpolation(long id, Coordinate coordinate, State state, Direction direction, int elapsedMillis) {
         this.id = id;
         this.coordinate = coordinate;
         this.state = state;

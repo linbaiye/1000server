@@ -10,11 +10,15 @@ public abstract class AbstractCreatureMoveState<C extends AbstractCreature<C>> e
 
     private final Direction towards;
 
+    private final Coordinate start;
+
     public AbstractCreatureMoveState(State state,
-                                     int millisPerUnit, Direction towards) {
+                                     Coordinate start,
+                                     Direction towards, int millisPerUnit) {
         super(millisPerUnit);
         this.state = state;
         this.towards = towards;
+        this.start = start;
     }
 
     @Override
@@ -22,10 +26,9 @@ public abstract class AbstractCreatureMoveState<C extends AbstractCreature<C>> e
         return state;
     }
 
-    protected int millisPerUnit() {
-        return getTotalMillis();
+    protected Coordinate getStart() {
+        return start;
     }
-
 
     protected boolean tryChangeCoordinate(C c, RealmMap realmMap) {
         Coordinate next = c.coordinate().moveBy(towards);
@@ -41,7 +44,7 @@ public abstract class AbstractCreatureMoveState<C extends AbstractCreature<C>> e
         if (elapsedMillis() == 0) {
             c.changeDirection(towards);
         }
-        if (elapsedMillis() < millisPerUnit())
+        if (elapsedMillis() < getTotalMillis())
             elapse(delta);
     }
 }

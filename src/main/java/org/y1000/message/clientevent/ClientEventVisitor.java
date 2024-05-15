@@ -6,5 +6,5 @@ public interface ClientEventVisitor {
 
     default void visit(PlayerImpl player, ClientAttackEvent event) {}
 
-    void visit(PlayerImpl player, CharacterMovementEvent event);
+    default void visit(PlayerImpl player, ClientMovementEvent event) {}
 }
