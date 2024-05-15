@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractCreature<C extends AbstractCreature<C>> implements Creature {
+public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S extends CreatureState<C>> implements Creature {
 
     private final long id;
 
@@ -21,7 +21,7 @@ public abstract class AbstractCreature<C extends AbstractCreature<C>> implements
 
     private final List<EntityEventListener> eventListeners;
 
-    private CreatureState<C> state;
+    private S state;
 
     private final Map<State, Integer> stateMillis;
 
@@ -50,7 +50,7 @@ public abstract class AbstractCreature<C extends AbstractCreature<C>> implements
         return stateMillis.get(state);
     }
 
-    public CreatureState<C> state() {
+    public S state() {
         return state;
     }
 
@@ -92,7 +92,7 @@ public abstract class AbstractCreature<C extends AbstractCreature<C>> implements
         return state().stateEnum();
     }
 
-    public void changeState(CreatureState<C> newState) {
+    public void changeState(S newState) {
         state = newState;
     }
     @Override

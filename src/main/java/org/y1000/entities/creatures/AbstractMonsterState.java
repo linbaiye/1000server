@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures;
 
-public abstract class AbstractMonsterState extends AbstractCreateState<PassiveMonster> {
+public abstract class AbstractMonsterState extends AbstractCreateState<PassiveMonster>
+        implements MonsterState<PassiveMonster> {
 
     private final State stat;
 

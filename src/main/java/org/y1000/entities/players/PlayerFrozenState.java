@@ -1,9 +1,8 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
 
-public final class PlayerFrozenState implements CreatureState<PlayerImpl> {
+public final class PlayerFrozenState implements PlayerState {
     public static final PlayerFrozenState Instance = new PlayerFrozenState();
 
     private PlayerFrozenState() {}

@@ -21,7 +21,7 @@ import java.util.Objects;
 
 
 @Slf4j
-public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster> {
+public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster, MonsterState<PassiveMonster>> {
 
     private final RealmMap realmMap;
 
@@ -144,7 +144,7 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
     }
 
     @Override
-    protected CreatureState<PassiveMonster> createHurtState(ViolentCreature attacker) {
+    protected MonsterState<PassiveMonster> createHurtState(ViolentCreature attacker) {
         return new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterAttacked);
     }
 }

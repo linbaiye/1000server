@@ -4,7 +4,8 @@ import org.y1000.entities.Direction;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
 
-public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMonster> {
+public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMonster> implements
+        MonsterState<PassiveMonster> {
     private Creature attacker;
 
     public PassiveMonsterMoveState(Coordinate start, Direction towards, int millisPerUnit) {

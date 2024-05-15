@@ -16,7 +16,7 @@ import java.util.Set;
 
 @Slf4j
 public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
-        implements ClientEventVisitor, MovableState {
+        implements ClientEventVisitor, MovableState, PlayerState {
 
     private static final Set<State> MOVE_STATES = Set.of(
             State.WALK, State.RUN, State.FLY, State.ENFIGHT_WALK
@@ -50,10 +50,6 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
         player.emitEvent(RewindEvent.of(player));
     }
 
-    @Override
-    public void afterAttacked(PlayerImpl player, Creature attacker) {
-        player.changeState(this);
-    }
 
     @Override
     public void visit(PlayerImpl player, ClientMovementEvent event) {
@@ -62,7 +58,7 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
 
 
     @Override
-    public CreatureState<PlayerImpl> stateForStopMoving(PlayerImpl player) {
+    public PlayerState stateForStopMoving(PlayerImpl player) {
         if (stateEnum() == State.ENFIGHT_WALK) {
             return new PlayerCooldownState(player.getStateMillis(State.COOLDOWN), null);
         } else {
@@ -71,7 +67,7 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
     }
 
     @Override
-    public CreatureState<PlayerImpl> stateForMove(PlayerImpl player, Direction direction) {
+    public PlayerState stateForMove(PlayerImpl player, Direction direction) {
         return moveBy(player, stateEnum(), direction);
     }
 
@@ -80,5 +76,10 @@ public final class PlayerMoveState extends AbstractCreatureMoveState<PlayerImpl>
             throw new IllegalArgumentException("Not a move state: " + state);
         }
         return new PlayerMoveState(state, player.coordinate(), direction, player.getStateMillis(state));
+    }
+
+    @Override
+    public void afterAttacked(PlayerImpl player) {
+        player.changeState(this);
     }
 }

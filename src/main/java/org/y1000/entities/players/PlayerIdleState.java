@@ -3,8 +3,6 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreateState;
-import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.clientevent.ClientAttackEvent;
@@ -15,7 +13,7 @@ import java.util.Optional;
 
 @Slf4j
 public final class PlayerIdleState extends AbstractCreateState<PlayerImpl>
-        implements AttackableState, MovableState, ClientEventVisitor {
+        implements AttackableState, MovableState, ClientEventVisitor, PlayerState {
 
     public PlayerIdleState(int millis) {
         super(millis);
@@ -35,11 +33,6 @@ public final class PlayerIdleState extends AbstractCreateState<PlayerImpl>
     }
 
     @Override
-    public void afterAttacked(PlayerImpl player, Creature attacker) {
-        player.changeState(this);
-    }
-
-    @Override
     public void visit(PlayerImpl player,
                       ClientAttackEvent event) {
         attackIfInsight(player, event);
@@ -51,12 +44,12 @@ public final class PlayerIdleState extends AbstractCreateState<PlayerImpl>
     }
 
     @Override
-    public CreatureState<PlayerImpl> stateForStopMoving(PlayerImpl player) {
+    public PlayerState stateForStopMoving(PlayerImpl player) {
         return new PlayerIdleState(player.getStateMillis(State.IDLE));
     }
 
     @Override
-    public CreatureState<PlayerImpl> stateForMove(PlayerImpl player, Direction direction) {
+    public PlayerState stateForMove(PlayerImpl player, Direction direction) {
         Optional<FootKungFu> footMagic = player.footKungFu();
         State state = footMagic.map(magic -> magic.canFly() ? State.FLY : State.RUN)
                 .orElse(State.WALK);
@@ -65,5 +58,10 @@ public final class PlayerIdleState extends AbstractCreateState<PlayerImpl>
 
     public static PlayerIdleState of(PlayerImpl player) {
         return new PlayerIdleState(player.getStateMillis(State.IDLE));
+    }
+
+    @Override
+    public void afterAttacked(PlayerImpl player) {
+        player.changeState(this);
     }
 }

@@ -5,9 +5,11 @@ import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.event.RewindEvent;
+import org.y1000.message.clientevent.ClientEventVisitor;
+import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.util.Coordinate;
 
-public class PlayerEnfightWalkState extends AbstractCreatureMoveState<PlayerImpl> {
+public class PlayerEnfightWalkState extends AbstractCreatureMoveState<PlayerImpl> implements ClientEventVisitor {
 
     private final Entity target;
 
@@ -19,6 +21,7 @@ public class PlayerEnfightWalkState extends AbstractCreatureMoveState<PlayerImpl
     private void handleInput(PlayerImpl player) {
         player.takeClientEvent().ifPresent(e -> e.accept(player, this));
     }
+
     @Override
     public void update(PlayerImpl player, int delta) {
         if (elapsedMillis() >= getTotalMillis()) {
@@ -34,7 +37,6 @@ public class PlayerEnfightWalkState extends AbstractCreatureMoveState<PlayerImpl
             return;
         }
         player.changeCoordinate(getStart());
-        player.changeState(stateForRewind(player));
         player.clearEventQueue();
         player.emitEvent(RewindEvent.of(player));
     }

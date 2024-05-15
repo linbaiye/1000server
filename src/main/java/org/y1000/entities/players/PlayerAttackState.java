@@ -3,10 +3,9 @@ package org.y1000.entities.players;
 import lombok.Getter;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.AbstractCreateState;
-import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 
-public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> implements AttackableState {
+public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> implements AttackableState, PlayerState {
 
     private final Entity target;
 
@@ -27,8 +26,8 @@ public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> imp
     }
 
     @Override
-    public void afterAttacked(PlayerImpl player, Creature attacker) {
-        player.attack(attacker);
+    public void afterAttacked(PlayerImpl player) {
+        player.attack(target);
     }
 
     @Override

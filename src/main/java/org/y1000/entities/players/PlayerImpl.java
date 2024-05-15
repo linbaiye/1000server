@@ -28,7 +28,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
-public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl> implements Player,
+public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player,
         ClientEventListener {
 
     private Realm realm;
@@ -130,7 +130,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl> implem
     }
 
     @Override
-    protected CreatureState<PlayerImpl> createHurtState(ViolentCreature attacker) {
+    protected PlayerState createHurtState(ViolentCreature attacker) {
         return new PlayerHurtState(attacker, getStateMillis(State.HURT), state()::afterAttacked);
     }
 
@@ -173,7 +173,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl> implem
     }
 
     public void clearEventQueue() {
-        eventQueue.clear();;
+        eventQueue.clear();
     }
 
     public int recovery() {

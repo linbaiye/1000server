@@ -2,34 +2,29 @@ package org.y1000.entities.creatures;
 
 import lombok.Getter;
 
+@Getter
 public abstract class AbstractCreatureHurtState<C extends Creature> extends AbstractCreateState<C>{
 
-    private final AfterHurtAction<C> action;
 
-    @Getter
     private final Creature attacker;
 
-    protected AbstractCreatureHurtState(int totalMillis, AfterHurtAction<C> action, Creature attacker) {
+    protected AbstractCreatureHurtState(int totalMillis,  Creature attacker) {
         super(totalMillis);
-        this.action = action;
         this.attacker = attacker;
     }
 
-    protected AfterHurtAction<C> getAction() {
-        return action;
-    }
-
-
-    @FunctionalInterface
-    public interface AfterHurtAction<C> {
-        void apply(C c, Creature attacker);
-    }
+    protected abstract void recovery(C c);
 
     @Override
     public void update(C c, int delta) {
         if (elapse(delta)) {
-            action.apply(c, attacker);
+            recovery(c);
         }
+    }
+
+    @Override
+    public boolean attackable() {
+        return false;
     }
 
     @Override

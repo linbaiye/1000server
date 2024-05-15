@@ -10,8 +10,4 @@ public interface CreatureState<C extends Creature> {
     default boolean attackable() {
         return true;
     }
-
-    default void afterAttacked(C c, Creature attacker) {
-
-    }
 }

@@ -13,13 +13,13 @@ import org.y1000.util.Coordinate;
 
 interface MovableState {
 
-    default CreatureState<PlayerImpl> stateForRewind(PlayerImpl player) {
+    default PlayerState stateForRewind(PlayerImpl player) {
         return stateForStopMoving(player);
     }
 
-    CreatureState<PlayerImpl> stateForStopMoving(PlayerImpl player);
+    PlayerState stateForStopMoving(PlayerImpl player);
 
-    CreatureState<PlayerImpl> stateForMove(PlayerImpl player, Direction direction);
+    PlayerState stateForMove(PlayerImpl player, Direction direction);
 
     private void handleRightClick(PlayerImpl player, AbstractRightClick rightClick) {
         Coordinate targetCoordinate = player.coordinate().moveBy(rightClick.direction());

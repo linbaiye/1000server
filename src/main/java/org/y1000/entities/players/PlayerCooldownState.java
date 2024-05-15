@@ -3,7 +3,6 @@ package org.y1000.entities.players;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.AbstractCreateState;
-import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.message.clientevent.ClientMovementEvent;
@@ -12,7 +11,7 @@ import org.y1000.message.clientevent.ClientEventVisitor;
 
 
 public final class PlayerCooldownState extends AbstractCreateState<PlayerImpl> implements
-        AttackableState, MovableState, ClientEventVisitor {
+        AttackableState, MovableState, ClientEventVisitor, PlayerState {
 
     private final Entity target;
 
@@ -36,16 +35,6 @@ public final class PlayerCooldownState extends AbstractCreateState<PlayerImpl> i
     }
 
     @Override
-    public void afterAttacked(PlayerImpl player, Creature attacker) {
-        int cooldown = player.cooldown();
-        if (cooldown > 0) {
-            player.changeState(new PlayerCooldownState(0, attacker));
-        } else {
-            player.attack(target);
-        }
-    }
-
-    @Override
     public void visit(PlayerImpl player, ClientMovementEvent event) {
         move(player, event);
     }
@@ -56,12 +45,22 @@ public final class PlayerCooldownState extends AbstractCreateState<PlayerImpl> i
     }
 
     @Override
-    public CreatureState<PlayerImpl> stateForStopMoving(PlayerImpl player) {
+    public PlayerState stateForStopMoving(PlayerImpl player) {
         return new PlayerCooldownState(player.getStateMillis(stateEnum()), target);
     }
 
     @Override
-    public CreatureState<PlayerImpl> stateForMove(PlayerImpl player, Direction direction) {
+    public PlayerState stateForMove(PlayerImpl player, Direction direction) {
         return PlayerMoveState.moveBy(player, State.ENFIGHT_WALK, direction);
+    }
+
+    @Override
+    public void afterAttacked(PlayerImpl player) {
+        int cooldown = player.cooldown();
+        if (cooldown > 0) {
+            player.changeState(new PlayerCooldownState(0, target));
+        } else {
+            player.attack(target);
+        }
     }
 }

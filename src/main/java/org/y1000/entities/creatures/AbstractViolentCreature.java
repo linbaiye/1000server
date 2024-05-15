@@ -8,7 +8,7 @@ import org.y1000.util.Coordinate;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<C>> extends AbstractCreature<C>
+public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<C, S>, S extends CreatureState<C>> extends AbstractCreature<C, S>
         implements ViolentCreature {
 
     private int recoveryCooldown;
@@ -39,7 +39,7 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
         attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
     }
 
-    protected abstract CreatureState<C> createHurtState(ViolentCreature attacker);
+    protected abstract S createHurtState(ViolentCreature attacker);
 
     @Override
     public void attackedBy(ViolentCreature attacker) {
