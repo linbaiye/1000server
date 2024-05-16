@@ -14,7 +14,7 @@ public final class RealmManager {
 
     private final ExecutorService executorService;
 
-    public RealmManager(Map<String, RealmImpl> realms) {
+    private RealmManager(Map<String, RealmImpl> realms) {
         this.realms = realms;
         executorService = Executors.newFixedThreadPool(realms.size());
         playerRealmMap = new HashMap<>();
@@ -29,10 +29,6 @@ public final class RealmManager {
         return executorService.awaitTermination(10, TimeUnit.SECONDS);
     }
 
-
-    public RealmImpl load(String name) {
-        return null;
-    }
 
     public void onPlayerConnected(Player player, String realmName) {
         if (realms.containsKey(realmName)) {

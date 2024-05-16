@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
-public final class RealmEntityManager implements EntityEventListener,
+final class RealmEntityManager implements EntityEventListener,
         PlayerEventVisitor {
 
     private final RelevantScopeManager scopeManager = new RelevantScopeManager();
@@ -141,10 +141,6 @@ public final class RealmEntityManager implements EntityEventListener,
     public Optional<Entity> findInsight(Entity source, long id) {
         Set<Entity> entities = scopeManager.filterVisibleEntities(source, Entity.class);
         return entities.stream().filter(e -> e.id() == id).findFirst();
-    }
-
-    public boolean contains(Player player) {
-        return scopeManager.contains(player);
     }
 
     public void add(Entity entity) {

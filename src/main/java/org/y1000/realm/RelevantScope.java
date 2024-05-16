@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public final class RelevantScope {
+final class RelevantScope {
     private final Entity source;
 
     private final Set<Entity> entities;

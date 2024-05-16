@@ -19,8 +19,7 @@ public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<Pas
 
     @Override
     public void update(PassiveMonster monster, int delta) {
-        walkMillis(monster, delta);
-        if (elapsedMillis() < getTotalMillis()) {
+        if (!walkMillis(monster, delta)) {
             return;
         }
         if (!tryChangeCoordinate(monster, monster.realmMap())) {
@@ -35,7 +34,7 @@ public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<Pas
     }
 
     @Override
-    public void afterAttacked(PassiveMonster monster, Creature attacker) {
+    public void afterHurt(PassiveMonster monster, Creature attacker) {
         if (this.attacker != null) {
             this.attacker = attacker;
         }

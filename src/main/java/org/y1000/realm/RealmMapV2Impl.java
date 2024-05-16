@@ -12,7 +12,7 @@ import java.nio.ByteOrder;
 import java.util.*;
 
 @Slf4j
-public final class RealmMapV2Impl implements RealmMap {
+final class RealmMapV2Impl implements RealmMap {
 
     private static final int HEADER_SIZE = 28;
 

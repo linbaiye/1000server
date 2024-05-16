@@ -13,7 +13,7 @@ import org.y1000.entities.repository.PlayerRepository;
 import org.y1000.entities.repository.PlayerRepositoryImpl;
 import org.y1000.realm.RealmManager;
 
-public class Server {
+public final class Server {
 
     private final ServerBootstrap bootstrap;
 

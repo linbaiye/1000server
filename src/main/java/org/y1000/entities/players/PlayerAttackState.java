@@ -5,7 +5,7 @@ import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
 
-public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> implements AttackableState, PlayerState {
+final class PlayerAttackState extends AbstractCreateState<PlayerImpl> implements AttackableState, PlayerState {
 
     private final Entity target;
 
@@ -26,7 +26,7 @@ public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> imp
     }
 
     @Override
-    public void afterAttacked(PlayerImpl player) {
+    public void afterHurt(PlayerImpl player) {
         player.attack(target);
     }
 
@@ -35,16 +35,10 @@ public final class PlayerAttackState extends AbstractCreateState<PlayerImpl> imp
         if (!elapse(delta)) {
             return;
         }
-        int cooldown = player.cooldown();
-        if (cooldown > 0) {
-            player.changeState(new PlayerCooldownState(cooldown, target));
-        } else {
-            player.attack(target);
-        }
+        player.attack(target);
     }
 
     public static PlayerAttackState attack(Entity target, State state, int length) {
         return new PlayerAttackState(length, target, state );
     }
-
 }

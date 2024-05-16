@@ -145,6 +145,6 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
 
     @Override
     protected MonsterState<PassiveMonster> createHurtState(ViolentCreature attacker) {
-        return new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterAttacked);
+        return new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt);
     }
 }

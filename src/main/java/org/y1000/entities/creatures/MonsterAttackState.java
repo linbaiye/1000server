@@ -16,7 +16,7 @@ public final class MonsterAttackState extends AbstractMonsterState {
     }
 
     @Override
-    public void afterAttacked(PassiveMonster monster, Creature attacker) {
+    public void afterHurt(PassiveMonster monster, Creature attacker) {
         monster.changeState(new MonsterCooldownState(monster.cooldown(), target));
     }
 

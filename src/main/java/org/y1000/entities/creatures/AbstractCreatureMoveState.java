@@ -40,11 +40,12 @@ public abstract class AbstractCreatureMoveState<C extends Creature> extends Abst
         return false;
     }
 
-    protected void walkMillis(C c, int delta) {
+    protected boolean walkMillis(C c, int delta) {
         if (elapsedMillis() == 0) {
             c.changeDirection(towards);
         }
         if (elapsedMillis() < getTotalMillis())
             elapse(delta);
+        return elapsedMillis() >= getTotalMillis();
     }
 }

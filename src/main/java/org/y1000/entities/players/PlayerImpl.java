@@ -20,7 +20,6 @@ import org.y1000.message.*;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.realm.Realm;
-import org.y1000.realm.RealmImpl;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -98,7 +97,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
 
     @Override
-    public void joinReam(RealmImpl realm) {
+    public void joinReam(Realm realm) {
         if (this.realm != null) {
             leaveRealm();
         }
@@ -131,7 +130,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     protected PlayerState createHurtState(ViolentCreature attacker) {
-        return new PlayerHurtState(attacker, getStateMillis(State.HURT), state()::afterAttacked);
+        return new PlayerHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt);
     }
 
     @Override
@@ -141,6 +140,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     public void attack(Entity target) {
         if (!target.attackable()) {
+            changeState(PlayerIdleState.chillOut(this));
+            emitEvent(ChangeStateEvent.of(this));
             return;
         }
         int cooldown = cooldown();
@@ -156,13 +157,14 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         int distance = coordinate().distance(target.coordinate());
         if (distance <= 1) {
             cooldownAttack();
-            var actionMillis = attackSpeed() * RealmImpl.STEP_MILLIS;
+            var actionMillis = attackSpeed() * Realm.STEP_MILLIS;
             State attackState = attackKungFu.randomAttackState();
             changeState(PlayerAttackState.attack(target, attackState, actionMillis));
             target.attackedBy(this);
             emitEvent(new PlayerAttackEvent(this));
         } else {
-            //changeState(PlayerCooldownState.cooldown(get));
+            changeState(new PlayerEnfightState(getStateMillis(State.COOLDOWN), target));
+            emitEvent(ChangeStateEvent.of(this));
         }
     }
 

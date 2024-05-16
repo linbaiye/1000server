@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-public final class RelevantScopeManager {
+final class RelevantScopeManager {
     private final Map<Entity, RelevantScope> relevantScopeMap;
 
     public RelevantScopeManager() {

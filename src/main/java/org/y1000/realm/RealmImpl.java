@@ -11,7 +11,7 @@ import java.util.*;
 
 
 @Slf4j
-public final class RealmImpl implements Runnable, Realm {
+final class RealmImpl implements Runnable, Realm {
 
     public static final int STEP_MILLIS = 10;
 

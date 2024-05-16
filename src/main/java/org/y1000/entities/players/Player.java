@@ -5,10 +5,8 @@ import org.y1000.entities.players.equipment.weapon.Weapon;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.network.Connection;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.realm.Realm;
-import org.y1000.realm.RealmImpl;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
@@ -21,7 +19,7 @@ public interface Player extends ViolentCreature {
 
     Connection connection();
 
-    void joinReam(RealmImpl realm);
+    void joinReam(Realm realm);
 
     Realm getRealm();
 

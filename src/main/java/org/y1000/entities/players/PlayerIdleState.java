@@ -2,54 +2,31 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.kungfu.FootKungFu;
-import org.y1000.message.clientevent.ClientAttackEvent;
-import org.y1000.message.clientevent.ClientMovementEvent;
-import org.y1000.message.clientevent.ClientEventVisitor;
-
 import java.util.Optional;
 
 @Slf4j
-public final class PlayerIdleState extends AbstractCreateState<PlayerImpl>
-        implements AttackableState, MovableState, ClientEventVisitor, PlayerState {
+final class PlayerIdleState extends AbstractPlayerIdleState {
 
     public PlayerIdleState(int millis) {
-        super(millis);
+        this(millis, State.IDLE);
     }
 
-    @Override
-    public State stateEnum() {
-        return State.IDLE;
+    public PlayerIdleState(int millis, State state) {
+        super(millis, state);
     }
 
     @Override
     public void update(PlayerImpl player, int deltaMillis) {
-        if (elapse(deltaMillis)) {
-            reset();
-        }
-        player.takeClientEvent().ifPresent(e -> e.accept(player, this));
-    }
-
-    @Override
-    public void visit(PlayerImpl player,
-                      ClientAttackEvent event) {
-        attackIfInsight(player, event);
-    }
-
-    @Override
-    public void visit(PlayerImpl player, ClientMovementEvent movementEvent) {
-        move(player, movementEvent);
-    }
-
-    @Override
-    public PlayerState stateForStopMoving(PlayerImpl player) {
-        return new PlayerIdleState(player.getStateMillis(State.IDLE));
+        elapseAndHandleInput(player, deltaMillis);
     }
 
     @Override
     public PlayerState stateForMove(PlayerImpl player, Direction direction) {
+        if (stateEnum() == State.COOLDOWN) {
+            return PlayerMoveState.moveBy(player, State.ENFIGHT_WALK, direction);
+        }
         Optional<FootKungFu> footMagic = player.footKungFu();
         State state = footMagic.map(magic -> magic.canFly() ? State.FLY : State.RUN)
                 .orElse(State.WALK);
@@ -60,8 +37,7 @@ public final class PlayerIdleState extends AbstractCreateState<PlayerImpl>
         return new PlayerIdleState(player.getStateMillis(State.IDLE));
     }
 
-    @Override
-    public void afterAttacked(PlayerImpl player) {
-        player.changeState(this);
+    public static PlayerIdleState chillOut(PlayerImpl player) {
+        return new PlayerIdleState(player.getStateMillis(State.COOLDOWN));
     }
 }

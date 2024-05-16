@@ -6,6 +6,7 @@ import org.y1000.entities.players.Player;
 import java.util.Optional;
 
 public interface Realm {
+    int STEP_MILLIS = 10;
 
     void addPlayer(Player player);
 

@@ -2,14 +2,14 @@ package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
-import org.y1000.realm.RealmImpl;
+import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<C, S>, S extends CreatureState<C>> extends AbstractCreature<C, S>
-        implements ViolentCreature {
+public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<C, S>, S extends CreatureState<C>>
+        extends AbstractCreature<C, S> implements ViolentCreature {
 
     private int recoveryCooldown;
 
@@ -52,11 +52,11 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
     }
 
     protected void cooldownRecovery() {
-        recoveryCooldown = recovery() * RealmImpl.STEP_MILLIS;
+        recoveryCooldown = recovery() * Realm.STEP_MILLIS;
     }
 
     protected void cooldownAttack() {
-        attackCooldown = attackSpeed() * RealmImpl.STEP_MILLIS;
+        attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
 }
 

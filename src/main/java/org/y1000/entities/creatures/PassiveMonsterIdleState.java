@@ -59,7 +59,7 @@ public final class PassiveMonsterIdleState extends AbstractMonsterState {
 
 
     @Override
-    public void afterAttacked(PassiveMonster monster, Creature attacker) {
+    public void afterHurt(PassiveMonster monster, Creature attacker) {
         log.debug("Returned from hurt.");
         monster.retaliate(attacker);
     }
