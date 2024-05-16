@@ -1,6 +1,7 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.kungfu.FootKungFu;
@@ -20,6 +21,11 @@ final class PlayerIdleState extends AbstractPlayerIdleState {
     @Override
     public void update(PlayerImpl player, int deltaMillis) {
         elapseAndHandleInput(player, deltaMillis);
+    }
+
+    @Override
+    public Logger logger() {
+        return log;
     }
 
     @Override

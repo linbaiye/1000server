@@ -1,28 +1,21 @@
 package org.y1000.entities.players;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
-import org.y1000.message.clientevent.ClientMovementEvent;
-import org.y1000.message.clientevent.ClientAttackEvent;
-import org.y1000.message.clientevent.ClientEventVisitor;
 
-
-final class PlayerCooldownState extends AbstractCreateState<PlayerImpl> implements
-        AttackableState, MovableState, ClientEventVisitor, PlayerState {
+@Slf4j
+final class PlayerCooldownState extends AbstractPlayerIdleState {
 
     private final Entity target;
 
     public PlayerCooldownState(int length, Entity target) {
-        super(length);
+        super(length, State.COOLDOWN);
         this.target = target;
     }
 
-    @Override
-    public State stateEnum() {
-        return State.COOLDOWN;
-    }
 
     @Override
     public void update(PlayerImpl player, int delta) {
@@ -34,13 +27,8 @@ final class PlayerCooldownState extends AbstractCreateState<PlayerImpl> implemen
     }
 
     @Override
-    public void visit(PlayerImpl player, ClientMovementEvent event) {
-        move(player, event);
-    }
-
-    @Override
-    public void visit(PlayerImpl player, ClientAttackEvent event) {
-        attackIfInsight(player, event);
+    public Logger logger() {
+        return log;
     }
 
     @Override
@@ -50,16 +38,6 @@ final class PlayerCooldownState extends AbstractCreateState<PlayerImpl> implemen
 
     @Override
     public PlayerState stateForMove(PlayerImpl player, Direction direction) {
-        return PlayerMoveState.moveBy(player, State.ENFIGHT_WALK, direction);
-    }
-
-    @Override
-    public void afterHurt(PlayerImpl player) {
-        int cooldown = player.cooldown();
-        if (cooldown > 0) {
-            player.changeState(new PlayerCooldownState(cooldown, target));
-        } else {
-            player.attack(target);
-        }
+        return PlayerEnfightWalkState.move(player, direction, target);
     }
 }

@@ -76,9 +76,7 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
     }
 
     public void retaliate(Creature attacker) {
-        log.debug("Retaliate start.");
         if (!attacker.attackable()) {
-            log.debug("Attacker not attackable, back to idle.");
             changeState(PassiveMonsterIdleState.of(this));
             emitEvent(ChangeStateEvent.of(this));
             return;
@@ -92,12 +90,10 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
             changeDirection(towards);
         }
         if (cooldown() > 0) {
-            log.debug("Need to cooldown for {}.", cooldown());
             changeState(new MonsterCooldownState(cooldown(), attacker));
             emitEvent(SetPositionEvent.of(this));
             return;
         }
-        log.debug("Monster attacking.");
         cooldownAttack();
         changeState(MonsterAttackState.attack(this, attacker));
         attacker.attackedBy(this);

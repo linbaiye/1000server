@@ -1,5 +1,6 @@
 package org.y1000.entities.players;
 
+import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.players.event.RewindEvent;
@@ -12,6 +13,8 @@ import org.y1000.message.clientevent.input.RightMouseRelease;
 import org.y1000.util.Coordinate;
 
 interface MovableState {
+
+    Logger logger();
 
     default PlayerState stateForRewind(PlayerImpl player) {
         return stateForStopMoving(player);
@@ -34,6 +37,7 @@ interface MovableState {
     }
 
     private void rewind(PlayerImpl player, ClientMovementEvent event) {
+        logger().debug("Rewind occurred, server coordinate {}, client coordinate {}.", player.coordinate(), event.happenedAt());
         player.changeState(stateForRewind(player));
         player.clearEventQueue();
         player.emitEvent(new InputResponseMessage(event.moveInput().sequence(), RewindEvent.of(player)));

@@ -51,6 +51,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         put(State.FIST, AttackKungFuType.QUANFA.below50Millis());
         put(State.KICK, AttackKungFuType.QUANFA.above50Millis());
         put(State.HURT, 280);
+        put(State.ENFIGHT_WALK, 840);
     }};
 
 
@@ -146,7 +147,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
         int cooldown = cooldown();
         if (cooldown > 0) {
-            changeState(new PlayerCooldownState(cooldown, target));
+            changeState(new PlayerCooldownState(getStateMillis(State.COOLDOWN), target));
             emitEvent(ChangeStateEvent.of(this));
             return;
         }
@@ -163,6 +164,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             target.attackedBy(this);
             emitEvent(new PlayerAttackEvent(this));
         } else {
+            log.debug("Change to enfight.");
             changeState(new PlayerEnfightState(getStateMillis(State.COOLDOWN), target));
             emitEvent(ChangeStateEvent.of(this));
         }

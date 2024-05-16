@@ -4,6 +4,7 @@ package org.y1000.entities.creatures;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.message.MoveEvent;
+import org.y1000.message.SetPositionEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -38,7 +39,7 @@ public final class PassiveMonsterIdleState extends AbstractMonsterState {
         Direction direction = values[index];
         monster.changeDirection(direction);
         monster.changeState(new PassiveMonsterIdleState(monster.getStateMillis(State.IDLE), idleCounter));
-        monster.emitEvent(MoveEvent.setPosition(monster));
+        monster.emitEvent(SetPositionEvent.of(monster));
     }
 
     @Override

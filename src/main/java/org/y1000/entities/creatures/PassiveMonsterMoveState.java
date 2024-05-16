@@ -1,9 +1,11 @@
 package org.y1000.entities.creatures;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
 
+@Slf4j
 public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<PassiveMonster> implements
         MonsterState<PassiveMonster> {
     private Creature attacker;
@@ -36,8 +38,11 @@ public final class PassiveMonsterMoveState extends AbstractCreatureMoveState<Pas
     @Override
     public void afterHurt(PassiveMonster monster, Creature attacker) {
         if (this.attacker != null) {
+            log.debug("Attacked, record attacker.");
             this.attacker = attacker;
         }
+        log.debug("Back to move.");
+        monster.changeState(this);
     }
 
     public static PassiveMonsterMoveState of(PassiveMonster monster, Direction towards) {
