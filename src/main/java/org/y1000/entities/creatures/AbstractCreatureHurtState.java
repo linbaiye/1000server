@@ -6,11 +6,8 @@ import lombok.Getter;
 public abstract class AbstractCreatureHurtState<C extends Creature> extends AbstractCreateState<C>{
 
 
-    private final Creature attacker;
-
-    protected AbstractCreatureHurtState(int totalMillis,  Creature attacker) {
+    protected AbstractCreatureHurtState(int totalMillis) {
         super(totalMillis);
-        this.attacker = attacker;
     }
 
     protected abstract void recovery(C c);

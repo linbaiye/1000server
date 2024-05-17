@@ -27,7 +27,7 @@ final class PlayerAttackState extends AbstractCreateState<PlayerImpl> implements
 
     @Override
     public void afterHurt(PlayerImpl player) {
-        player.attack(target);
+        player.changeState(new PlayerCooldownState(player.cooldown(), target));
     }
 
     @Override

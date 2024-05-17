@@ -131,7 +131,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     protected PlayerState createHurtState(ViolentCreature attacker) {
-        return new PlayerHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt);
+        return PlayerHurtState.interruptCurrentState(this);
+        //return new PlayerHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt);
     }
 
     @Override
