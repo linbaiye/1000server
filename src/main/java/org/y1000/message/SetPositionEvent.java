@@ -8,7 +8,7 @@ import org.y1000.util.Coordinate;
 public final class SetPositionEvent extends AbstractPositionEvent {
 
     public SetPositionEvent(Creature entity, Direction direction, Coordinate coordinate) {
-        super(entity, direction, coordinate);
+        super(entity, direction, coordinate, entity.stateEnum());
     }
 
     @Override

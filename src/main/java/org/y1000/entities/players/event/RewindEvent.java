@@ -12,7 +12,7 @@ import org.y1000.util.Coordinate;
 
 public final class RewindEvent extends AbstractPositionEvent {
     private RewindEvent(Player source, Direction direction, Coordinate coordinate) {
-        super(source, direction, coordinate);
+        super(source, direction, coordinate, source.stateEnum());
     }
 
 

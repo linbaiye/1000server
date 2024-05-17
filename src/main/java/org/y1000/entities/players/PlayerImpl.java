@@ -162,7 +162,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             State attackState = attackKungFu.randomAttackState();
             changeState(PlayerAttackState.attack(target, attackState, actionMillis));
             target.attackedBy(this);
-            emitEvent(new PlayerAttackEvent(this));
+            emitEvent(PlayerAttackEvent.of(this));
         } else {
             log.debug("Change to enfight.");
             changeState(new PlayerEnfightState(getStateMillis(State.COOLDOWN), target));

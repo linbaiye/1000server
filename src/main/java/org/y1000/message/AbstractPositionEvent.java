@@ -1,6 +1,7 @@
 package org.y1000.message;
 
 import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.creatures.State;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PositionPacket;
 import org.y1000.entities.Direction;
@@ -18,14 +19,17 @@ public abstract class AbstractPositionEvent implements EntityEvent, ServerMessag
 
     private final Creature source;
 
+    private final State state;
+
     private Packet packet;
 
 
-    public AbstractPositionEvent(Creature source, Direction direction, Coordinate coordinate) {
+    public AbstractPositionEvent(Creature source, Direction direction, Coordinate coordinate, State state) {
         this.id = source.id();
         this.direction = direction;
         this.coordinate = coordinate;
         this.source = source;
+        this.state = state;
     }
 
 
@@ -50,7 +54,7 @@ public abstract class AbstractPositionEvent implements EntityEvent, ServerMessag
         if (packet == null) {
             packet = Packet.newBuilder()
                     .setPositionPacket(PositionPacket.newBuilder()
-                            .setState(source.stateEnum().value())
+                            .setState(state.value())
                             .setType(getType().value())
                             .setY(coordinate.y())
                             .setX(coordinate.x())
@@ -70,6 +74,7 @@ public abstract class AbstractPositionEvent implements EntityEvent, ServerMessag
                 ", direction=" + direction +
                 ", coordinate=" + coordinate +
                 ", type=" + getType().name() +
+                ", state=" + state +
                 '}';
     }
 }

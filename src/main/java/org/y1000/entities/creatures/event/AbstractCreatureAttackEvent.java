@@ -1,13 +1,23 @@
 package org.y1000.entities.creatures.event;
 
+import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.network.gen.CreatureAttackEventPacket;
 import org.y1000.network.gen.Packet;
+import org.y1000.util.Coordinate;
 
 public abstract class AbstractCreatureAttackEvent extends AbstractCreatureEvent {
 
-    protected AbstractCreatureAttackEvent(Creature source) {
+    private final Coordinate coordinate;
+
+    private final Direction direction;
+
+    protected AbstractCreatureAttackEvent(Creature source,
+                                          Coordinate coordinate,
+                                          Direction direction) {
         super(source);
+        this.coordinate = coordinate;
+        this.direction = direction;
     }
 
 
@@ -21,7 +31,7 @@ public abstract class AbstractCreatureAttackEvent extends AbstractCreatureEvent 
                 .setAttackEventPacket(
                         setCreatureSpecificFields(
                                 CreatureAttackEventPacket.newBuilder()
-                                .setDirection(creature().direction().value())
+                                .setDirection(direction.value())
                                 .setId(source().id()))
                                 .build())
                 .build();

@@ -29,7 +29,7 @@ interface MovableState {
         if (!player.realmMap().movable(targetCoordinate)) {
             player.changeDirection(rightClick.direction());
             player.changeState(stateForStopMoving(player));
-            player.emitEvent(new InputResponseMessage(rightClick.sequence(), SetPositionEvent.of(player)));
+            player.emitEvent(new InputResponseMessage(rightClick.sequence(), RewindEvent.of(player)));
         } else {
             player.changeState(stateForMove(player, rightClick.direction()));
             player.emitEvent(new InputResponseMessage(rightClick.sequence(), MoveEvent.movingTo(player, rightClick.direction())));

@@ -11,7 +11,7 @@ import org.y1000.util.Coordinate;
 public final class MoveEvent extends AbstractPositionEvent {
 
     public MoveEvent(Creature entity, Direction direction, Coordinate coordinate) {
-        super(entity, direction, coordinate);
+        super(entity, direction, coordinate, entity.stateEnum());
     }
 
     public static MoveEvent movingTo(Player player,

@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 import org.y1000.entities.creatures.*;
 
-final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl> implements AttackableState, PlayerState {
+final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl> implements  PlayerState {
 
     @FunctionalInterface
     public interface AfterHurtAction {

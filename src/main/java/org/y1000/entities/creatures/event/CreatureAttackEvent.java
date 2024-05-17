@@ -9,7 +9,7 @@ import org.y1000.network.gen.CreatureAttackEventPacket;
 public final class CreatureAttackEvent extends AbstractCreatureAttackEvent {
 
     public CreatureAttackEvent(Creature source) {
-        super(source);
+        super(source, source.coordinate(), source.direction());
     }
 
     @Override
