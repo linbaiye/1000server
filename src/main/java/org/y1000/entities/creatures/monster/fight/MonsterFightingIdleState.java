@@ -1,0 +1,38 @@
+package org.y1000.entities.creatures.monster.fight;
+
+import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.creatures.monster.PassiveMonster;
+import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.ChangeStateEvent;
+import org.y1000.entities.creatures.monster.AbstractMonsterIdleState;
+import org.y1000.util.Coordinate;
+
+public final class MonsterFightingIdleState extends AbstractMonsterIdleState implements MonsterFightingState {
+
+    private final Creature target;
+
+    public MonsterFightingIdleState(int totalMillis, Creature target, Coordinate from) {
+        super(totalMillis, from);
+        this.target = target;
+    }
+
+    @Override
+    protected void nextMove(PassiveMonster monster) {
+        monster.changeState(MonsterFightingFrozenState.freeze(monster, target, getFrom()));
+        monster.emitEvent(ChangeStateEvent.of(monster));
+    }
+
+    @Override
+    public Creature currentTarget() {
+        return target;
+    }
+
+
+    public static MonsterFightingIdleState hunt(PassiveMonster monster, Creature attacker) {
+        return new MonsterFightingIdleState(monster.getStateMillis(State.IDLE), attacker, new Coordinate(0, 0));
+    }
+
+    public static MonsterFightingIdleState continueHunting(PassiveMonster monster, Creature attacker, Coordinate from) {
+        return new MonsterFightingIdleState(monster.getStateMillis(State.IDLE), attacker, from);
+    }
+}

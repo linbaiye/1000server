@@ -1,0 +1,49 @@
+package org.y1000.entities.players.fight;
+
+import org.y1000.entities.Entity;
+import org.y1000.entities.creatures.AbstractCreateState;
+import org.y1000.entities.creatures.State;
+import org.y1000.entities.players.MovableState;
+import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.players.PlayerState;
+import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.clientevent.ClientEventVisitor;
+import org.y1000.message.clientevent.ClientMovementEvent;
+
+public abstract class AbstractPlayerAttackState extends AbstractCreateState<PlayerImpl> implements AttackableState,
+        PlayerState, ClientEventVisitor, MovableState {
+
+    private final State state;
+
+    private final Entity target;
+
+    public AbstractPlayerAttackState(int totalMillis, Entity target, State state) {
+        super(totalMillis);
+        this.state = state;
+        this.target = target;
+    }
+
+    protected Entity getTarget() {
+        return target;
+    }
+
+    @Override
+    public State stateEnum() {
+        return state;
+    }
+
+    @Override
+    public State decideAfterHurtState() {
+        return State.COOLDOWN;
+    }
+
+    @Override
+    public void visit(PlayerImpl player, ClientAttackEvent event) {
+        handleAttackEvent(player, event);
+    }
+
+    @Override
+    public void visit(PlayerImpl player, ClientMovementEvent event) {
+        move(player, event);
+    }
+}

@@ -7,4 +7,5 @@ public interface PlayerState extends CreatureState<PlayerImpl> {
     default void afterHurt(PlayerImpl player) {
 
     }
+
 }

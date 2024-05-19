@@ -3,7 +3,6 @@ package org.y1000.util;
 import org.y1000.entities.Direction;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 public record Coordinate(int x, int y) {
@@ -38,8 +37,12 @@ public record Coordinate(int x, int y) {
         }
     }
 
-    public int distance(Coordinate another) {
+    public int directDistance(Coordinate another) {
         return Math.max(Math.abs(another.x() - this.x()), Math.abs(another.y() - this.y()));
+    }
+
+    public int distance(Coordinate another) {
+        return (another.x() - x) * (another.x() - x) + (another.y() - y) * (another.y() - y);
     }
 
 

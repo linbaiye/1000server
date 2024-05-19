@@ -18,10 +18,14 @@ final class PlayerMoveState extends AbstractPlayerMoveState {
     }
 
     @Override
-    protected PlayerState stopMovingState(PlayerImpl player) {
-        return PlayerIdleState.of(player);
+    protected PlayerState rewindState(PlayerImpl player) {
+        return stateEnum() == State.ENFIGHT_WALK ? PlayerStillState.chillOut(player) : PlayerStillState.idle(player);
     }
 
+    @Override
+    protected void onMoved(PlayerImpl player) {
+        player.changeState(rewindState(player));
+    }
 
     public static PlayerMoveState moveBy(PlayerImpl player, State state, Direction direction) {
         if (!MOVE_STATES.contains(state)) {

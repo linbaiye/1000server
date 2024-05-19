@@ -90,7 +90,7 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
                 return;
             }
             messages.forEach(context.channel()::write);
-            messages.forEach(m -> log.debug("Sent message {}.", m));
+            // messages.forEach(m -> log.debug("Sent message {}.", m));
             context.channel().flush();
             messages.clear();
         }

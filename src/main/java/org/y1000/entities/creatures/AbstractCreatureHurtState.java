@@ -20,11 +20,6 @@ public abstract class AbstractCreatureHurtState<C extends Creature> extends Abst
     }
 
     @Override
-    public boolean attackable() {
-        return false;
-    }
-
-    @Override
     public State stateEnum() {
         return State.HURT;
     }

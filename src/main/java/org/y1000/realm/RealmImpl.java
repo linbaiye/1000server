@@ -3,7 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.PassiveMonster;
+import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 

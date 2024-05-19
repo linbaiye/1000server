@@ -12,7 +12,9 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
         super(state, start, towards, millisPerUnit);
     }
 
-    protected abstract PlayerState stopMovingState(PlayerImpl player);
+    protected abstract PlayerState rewindState(PlayerImpl player);
+
+    protected abstract void onMoved(PlayerImpl player);
 
     @Override
     public void update(PlayerImpl player, int delta) {
@@ -20,18 +22,32 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
             return;
         }
         if (tryChangeCoordinate(player, player.realmMap())) {
-            player.changeState(stopMovingState(player));
-            // no event here since we should receive more following inputs immediately.
+            onMoved(player);
         } else {
             player.changeCoordinate(getStart());
-            player.changeState(stopMovingState(player));
             player.clearEventQueue();
+            player.changeState(rewindState(player));
             player.emitEvent(RewindEvent.of(player));
         }
     }
 
     @Override
+    public void moveToHurtCoordinate(PlayerImpl creature) {
+        tryChangeCoordinate(creature, creature.realmMap());
+    }
+
+    @Override
+    public State decideAfterHurtState() {
+        return stateEnum() == State.ENFIGHT_WALK ? State.COOLDOWN : State.IDLE;
+    }
+
+    @Override
     public void afterHurt(PlayerImpl player) {
-        player.changeState(this);
+        player.changeState(rewindState(player));
+    }
+
+    @Override
+    public String toString() {
+        return "Move[" + stateEnum() + "]";
     }
 }

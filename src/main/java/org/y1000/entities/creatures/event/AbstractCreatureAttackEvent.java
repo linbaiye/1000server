@@ -33,6 +33,8 @@ public abstract class AbstractCreatureAttackEvent extends AbstractCreatureEvent 
                                 CreatureAttackEventPacket.newBuilder()
                                 .setDirection(direction.value())
                                 .setId(source().id()))
+                                .setX(coordinate.x())
+                                .setY(coordinate.y())
                                 .build())
                 .build();
     }

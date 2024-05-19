@@ -1,4 +1,7 @@
-package org.y1000.entities.creatures;
+package org.y1000.entities.creatures.monster;
+
+import org.y1000.entities.creatures.AbstractCreateState;
+import org.y1000.entities.creatures.State;
 
 public abstract class AbstractMonsterState extends AbstractCreateState<PassiveMonster>
         implements MonsterState<PassiveMonster> {

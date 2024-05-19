@@ -1,6 +1,5 @@
 package org.y1000.entities;
 
-import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.message.AbstractInterpolation;
 import org.y1000.message.serverevent.EntityEventListener;

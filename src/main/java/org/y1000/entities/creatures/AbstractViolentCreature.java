@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures;
 
+import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.realm.Realm;
@@ -7,6 +8,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Supplier;
 
 public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<C, S>, S extends CreatureState<C>>
         extends AbstractCreature<C, S> implements ViolentCreature {
@@ -34,28 +36,30 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
         return attackCooldown;
     }
 
+    protected abstract Logger log();
+
     protected void cooldown(int delta) {
         recoveryCooldown = recoveryCooldown > delta ? recoveryCooldown - delta : 0;
         attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
     }
 
-    protected abstract S createHurtState(ViolentCreature attacker);
-
-    @Override
-    public void attackedBy(ViolentCreature attacker) {
+    protected boolean handleAttacked(C creature, ViolentCreature attacker, Supplier<S> hurtStateSupplier) {
         if (!state().attackable() || randomAvoidance(attacker.hit())) {
-            return;
+            return false;
         }
         cooldownRecovery();
-        changeState(createHurtState(attacker));
-        emitEvent(new CreatureHurtEvent(this));
+        state().moveToHurtCoordinate(creature);
+        State afterHurtState = state().decideAfterHurtState();
+        changeState(hurtStateSupplier.get());
+        emitEvent(new CreatureHurtEvent(this, afterHurtState));
+        return true;
     }
 
-    protected void cooldownRecovery() {
+    public void cooldownRecovery() {
         recoveryCooldown = recovery() * Realm.STEP_MILLIS;
     }
 
-    protected void cooldownAttack() {
+    public void cooldownAttack() {
         attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
 }

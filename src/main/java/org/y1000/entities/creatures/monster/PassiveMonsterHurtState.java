@@ -1,9 +1,12 @@
-package org.y1000.entities.creatures;
+package org.y1000.entities.creatures.monster;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.creatures.AbstractCreatureHurtState;
+import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.creatures.State;
 
 @Slf4j
-final class PassiveMonsterHurtState extends AbstractCreatureHurtState<PassiveMonster>
+public final class PassiveMonsterHurtState extends AbstractCreatureHurtState<PassiveMonster>
         implements MonsterState<PassiveMonster> {
 
     private final AfterHurtAction<PassiveMonster> action;
@@ -19,6 +22,12 @@ final class PassiveMonsterHurtState extends AbstractCreatureHurtState<PassiveMon
     @Override
     protected void recovery(PassiveMonster monster) {
         action.apply(monster, attacker);
+    }
+
+    @Override
+    public void afterHurt(PassiveMonster passiveMonster, Creature attacker) {
+        reset();
+        passiveMonster.changeState(this);
     }
 
     @FunctionalInterface

@@ -37,12 +37,6 @@ public final class UnnamedQuanFa extends AbstractAttackKungFu {
     }
 
     @Override
-    public int attackActionMillis(State state) {
-        assert state == State.FIST || state == State.KICK;
-        return state == State.FIST ? AttackKungFuType.QUANFA.below50Millis() : AttackKungFuType.QUANFA.above50Millis();
-    }
-
-    @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.QUANFA;
     }

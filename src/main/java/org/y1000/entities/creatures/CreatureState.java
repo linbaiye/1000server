@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures;
 
+
 public interface CreatureState<C extends Creature> {
     State stateEnum();
 
@@ -9,5 +10,13 @@ public interface CreatureState<C extends Creature> {
 
     default boolean attackable() {
         return true;
+    }
+
+    default void moveToHurtCoordinate(C creature) {
+
+    }
+
+    default State decideAfterHurtState() {
+        return State.IDLE;
     }
 }

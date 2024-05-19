@@ -2,7 +2,6 @@ package org.y1000.entities.players;
 
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.players.event.RewindEvent;
 import org.y1000.message.InputResponseMessage;
 import org.y1000.message.MoveEvent;
@@ -12,7 +11,7 @@ import org.y1000.message.clientevent.input.AbstractRightClick;
 import org.y1000.message.clientevent.input.RightMouseRelease;
 import org.y1000.util.Coordinate;
 
-interface MovableState {
+public interface MovableState {
 
     Logger logger();
 
@@ -37,8 +36,9 @@ interface MovableState {
     }
 
     private void rewind(PlayerImpl player, ClientMovementEvent event) {
-        logger().debug("Rewind occurred, server coordinate {}, client coordinate {}.", player.coordinate(), event.happenedAt());
-        player.changeState(stateForRewind(player));
+        PlayerState newState = stateForRewind(player);
+        logger().debug("Rewind to state {}, server coordinate {}, client coordinate {} for id {}.", newState.stateEnum(), player.coordinate(), event.happenedAt(), event.moveInput().sequence());
+        player.changeState(newState);
         player.clearEventQueue();
         player.emitEvent(new InputResponseMessage(event.moveInput().sequence(), RewindEvent.of(player)));
     }
@@ -49,6 +49,7 @@ interface MovableState {
     }
 
     default void move(PlayerImpl player, ClientMovementEvent event) {
+        logger().debug("Handling input at state [{}, {}], id {}.", player.state(), player.stateEnum(), event.moveInput().sequence());
         if (!event.happenedAt().equals(player.coordinate())) {
             rewind(player, event);
             return;

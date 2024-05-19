@@ -47,6 +47,8 @@ public enum State implements ValueEnum {
 
     THROW(23),
 
+    FROZEN(24),
+
     ;
 
     private final int v;

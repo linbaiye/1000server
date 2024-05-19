@@ -1,15 +1,23 @@
-package org.y1000.entities.creatures;
+package org.y1000.entities.creatures.monster;
 
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.ArmorAttribute;
 import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.creatures.AbstractViolentCreature;
+import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
+import org.y1000.entities.creatures.monster.fight.MonsterCooldownState;
+import org.y1000.entities.creatures.monster.fight.MonsterFightingIdleState;
+import org.y1000.entities.creatures.monster.wander.MonsterWanderingIdleState;
 import org.y1000.message.AbstractInterpolation;
 import org.y1000.message.CreatureInterpolation;
-import org.y1000.message.MoveEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -29,7 +37,11 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
 
     private final Damage damage;
 
+    @Getter
     private final Rectangle wanderingArea;
+
+    @Getter
+    private final Coordinate spwanCoordinate;
 
     private static final Map<State, Integer> BAFFULO_STATE_MILLIS = new HashMap<>() {
         {
@@ -38,8 +50,10 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
             put(State.HURT, 540);
             put(State.ATTACK, 700);
             put(State.DIE, 700);
+            put(State.FROZEN, 900);
         }
     };
+
 
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap) {
@@ -47,9 +61,10 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
         this.realmMap = realmMap;
         armorAttribute = ArmorAttribute.DEFAULT;
         damage = Damage.DEFAULT;
+        spwanCoordinate = coordinate;
         this.wanderingArea = new Rectangle(coordinate.move(-10, -10),
                 coordinate.move(10, 10));
-        changeState(new PassiveMonsterIdleState(getStateMillis(State.IDLE)));
+        changeState(MonsterWanderingIdleState.start(getStateMillis(State.IDLE), wanderingArea.random(coordinate)));
     }
 
 
@@ -68,20 +83,25 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
         state().update(this, delta);
     }
 
-
-    private void moveTowardsAttacker(Creature attacker) {
-        Direction towards = coordinate().computeDirection(attacker.coordinate());
-        changeState(PassiveMonsterMoveState.towardsAttacker(getStateMillis(State.WALK), coordinate(), towards, attacker));
-        emitEvent(MoveEvent.movingTo(this, towards));
+    @Override
+    public void attackedBy(ViolentCreature attacker) {
+        handleAttacked(this, attacker, () ->  new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt));
     }
 
-    public void retaliate(Creature attacker) {
+    private void moveTowardsAttacker(Creature attacker) {
+        changeState(MonsterFightingIdleState.hunt(this, attacker));
+        emitEvent(ChangeStateEvent.of(this));
+    }
+
+    public void attack(Creature attacker) {
         if (!attacker.attackable()) {
-            changeState(PassiveMonsterIdleState.of(this));
+            log.trace("Not attackable, back to idle.");
+            changeState(MonsterWanderingIdleState.reroll(this));
             emitEvent(ChangeStateEvent.of(this));
             return;
         }
-        if (attacker.coordinate().distance(coordinate()) > 1) {
+        if (attacker.coordinate().directDistance(coordinate()) > 1) {
+            log.trace("Moving to attacker.");
             moveTowardsAttacker(attacker);
             return;
         }
@@ -89,14 +109,17 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
         if (towards != direction()) {
             changeDirection(towards);
         }
-        if (cooldown() > 0) {
-            changeState(new MonsterCooldownState(cooldown(), attacker));
+        int cooldown = cooldown();
+        if (cooldown > 0) {
+            log.trace("Need to cooldown for {} millis.", cooldown);
+            changeState(new MonsterCooldownState(cooldown, attacker));
             emitEvent(SetPositionEvent.of(this));
             return;
         }
+        log.trace("Attack.");
         cooldownAttack();
-        changeState(MonsterAttackState.attack(this, attacker));
         attacker.attackedBy(this);
+        changeState(MonsterAttackState.attack(this, attacker));
         emitEvent(CreatureAttackEvent.ofMonster(this));
     }
 
@@ -140,7 +163,7 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
     }
 
     @Override
-    protected MonsterState<PassiveMonster> createHurtState(ViolentCreature attacker) {
-        return new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt);
+    protected Logger log() {
+        return log;
     }
 }

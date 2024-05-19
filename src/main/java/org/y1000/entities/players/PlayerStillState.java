@@ -8,13 +8,13 @@ import org.y1000.entities.players.kungfu.FootKungFu;
 import java.util.Optional;
 
 @Slf4j
-final class PlayerIdleState extends AbstractPlayerIdleState {
+public final class PlayerStillState extends AbstractPlayerStillState {
 
-    public PlayerIdleState(int millis) {
+    public PlayerStillState(int millis) {
         this(millis, State.IDLE);
     }
 
-    public PlayerIdleState(int millis, State state) {
+    public PlayerStillState(int millis, State state) {
         super(millis, state);
     }
 
@@ -39,11 +39,17 @@ final class PlayerIdleState extends AbstractPlayerIdleState {
         return PlayerMoveState.moveBy(player, state, direction);
     }
 
-    public static PlayerIdleState of(PlayerImpl player) {
-        return new PlayerIdleState(player.getStateMillis(State.IDLE));
+    public static PlayerStillState idle(PlayerImpl player) {
+        return new PlayerStillState(player.getStateMillis(State.IDLE));
     }
 
-    public static PlayerIdleState chillOut(PlayerImpl player) {
-        return new PlayerIdleState(player.getStateMillis(State.COOLDOWN));
+    public static PlayerStillState chillOut(PlayerImpl player) {
+        return new PlayerStillState(player.getStateMillis(State.COOLDOWN), State.COOLDOWN);
     }
+
+    @Override
+    public String toString() {
+        return stateEnum().name();
+    }
+
 }

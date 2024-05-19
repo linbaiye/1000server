@@ -1,5 +1,9 @@
-package org.y1000.entities.creatures;
+package org.y1000.entities.creatures.monster;
 
+
+import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.monster.fight.MonsterCooldownState;
 
 public final class MonsterAttackState extends AbstractMonsterState {
 
@@ -12,7 +16,7 @@ public final class MonsterAttackState extends AbstractMonsterState {
 
     @Override
     protected void nextMove(PassiveMonster monster) {
-        monster.retaliate(target);
+        monster.attack(target);
     }
 
     @Override

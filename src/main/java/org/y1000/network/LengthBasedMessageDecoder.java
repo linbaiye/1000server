@@ -22,6 +22,7 @@ public final class LengthBasedMessageDecoder extends LengthFieldBasedFrameDecode
         }
         byte[] bytes = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(bytes);
+        byteBuf.release();
         return ClientPacket.parseFrom(bytes);
     }
 }

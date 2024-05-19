@@ -1,5 +1,7 @@
 package org.y1000.util;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 import org.y1000.entities.Direction;
 
@@ -8,6 +10,16 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CoordinateTest {
+
+    @Getter
+    @AllArgsConstructor
+    private static class Testing {
+        private Direction direction;
+
+        public void change() {
+            direction = Direction.DOWN;
+        }
+    }
 
     @org.junit.jupiter.api.Test
     void move() {
@@ -37,7 +49,11 @@ class CoordinateTest {
     }
 
     public static void main(String[] args) {
-        System.out.println(isLeft(new Point(165,140), new Point(167, 142), new Point(164, 142)));
+        Testing a = new Testing(Direction.LEFT);
+        Direction v = a.direction;
+        a.change();
+        System.out.println(v);
+        System.out.println(a.getDirection());
     }
 
 }

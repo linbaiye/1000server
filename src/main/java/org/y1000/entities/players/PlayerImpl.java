@@ -1,15 +1,20 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.y1000.entities.Entity;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.entities.players.equipment.weapon.Weapon;
 import org.y1000.entities.players.event.PlayerAttackEvent;
+import org.y1000.entities.players.fight.PlayerMeleeAttackState;
+import org.y1000.entities.players.fight.PlayerMeleeCooldownState;
+import org.y1000.entities.players.fight.PlayerMeleeAttackReadyState;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.UnnamedBufa;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
+import org.y1000.entities.players.kungfu.attack.bow.UnnamedBow;
 import org.y1000.entities.players.kungfu.attack.unnamed.UnnamedQuanFa;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.network.ClientEventListener;
@@ -52,6 +57,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         put(State.KICK, AttackKungFuType.QUANFA.above50Millis());
         put(State.HURT, 280);
         put(State.ENFIGHT_WALK, 840);
+        put(State.BOW, AttackKungFuType.BOW.above50Millis());
     }};
 
 
@@ -60,20 +66,26 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                       String name, Connection connection) {
         super(id, coordinate, direction, name, STATE_MILLIS);
         eventQueue = new ConcurrentLinkedQueue<>();
-        changeState(new PlayerIdleState(getStateMillis(State.IDLE)));
+        changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         changeDirection(Direction.DOWN);
         this.connection = connection;
         this.footKungfu = new UnnamedBufa(8500);
-        attackKungFu = UnnamedQuanFa.builder()
+        /*attackKungFu = UnnamedQuanFa.builder()
                 .level(5501)
                 .bodyArmor(1)
                 .recovery(50)
                 .attackSpeed(40)
+                .build();*/
+        attackKungFu = UnnamedBow.builder().level(4000)
+                .attackSpeed(80)
+                .recovery(80)
+                .bodyArmor(1)
+                .bodyArmor(1)
                 .build();
         this.connection.registerClientEventListener(this);
     }
 
-    Optional<ClientEvent> takeClientEvent() {
+    public Optional<ClientEvent> takeClientEvent() {
         return Optional.ofNullable(eventQueue.poll());
     }
 
@@ -96,6 +108,10 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return connection;
     }
 
+    @Override
+    public void changeState(PlayerState newState) {
+        super.changeState(newState);
+    }
 
     @Override
     public void joinReam(Realm realm) {
@@ -104,9 +120,16 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
         this.realm = realm;
         realmMap().occupy(this);
-        changeState(new PlayerIdleState(getStateMillis(State.IDLE)));
+        changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         changeDirection(Direction.DOWN);
         emitEvent(new JoinedRealmEvent(this, coordinate()));
+    }
+
+    @Override
+    public void attackedBy(ViolentCreature attacker) {
+        if (handleAttacked(this, attacker, () -> PlayerHurtState.hurt(this))) {
+            eventQueue.clear();
+        }
     }
 
     @Override
@@ -129,47 +152,13 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return kungfuSpeed + 70;
     }
 
-    @Override
-    protected PlayerState createHurtState(ViolentCreature attacker) {
-        return PlayerHurtState.interruptCurrentState(this);
-        //return new PlayerHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt);
-    }
+
 
     @Override
     public PlayerInterpolation captureInterpolation() {
         return PlayerInterpolation.FromPlayer(this, state().elapsedMillis());
     }
 
-    public void attack(Entity target) {
-        if (!target.attackable()) {
-            changeState(PlayerIdleState.chillOut(this));
-            emitEvent(ChangeStateEvent.of(this));
-            return;
-        }
-        int cooldown = cooldown();
-        if (cooldown > 0) {
-            changeState(new PlayerCooldownState(getStateMillis(State.COOLDOWN), target));
-            emitEvent(ChangeStateEvent.of(this));
-            return;
-        }
-        Direction direction = coordinate().computeDirection(target.coordinate());
-        if (direction != direction()) {
-            changeDirection(direction);
-        }
-        int distance = coordinate().distance(target.coordinate());
-        if (distance <= 1) {
-            cooldownAttack();
-            var actionMillis = attackSpeed() * Realm.STEP_MILLIS;
-            State attackState = attackKungFu.randomAttackState();
-            changeState(PlayerAttackState.attack(target, attackState, actionMillis));
-            target.attackedBy(this);
-            emitEvent(PlayerAttackEvent.of(this));
-        } else {
-            log.debug("Change to enfight.");
-            changeState(new PlayerEnfightState(getStateMillis(State.COOLDOWN), target));
-            emitEvent(ChangeStateEvent.of(this));
-        }
-    }
 
     @Override
     public void update(int delta) {
@@ -228,5 +217,10 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     @Override
     public void OnEvent(ClientEvent clientEvent) {
         eventQueue.add(clientEvent);
+    }
+
+    @Override
+    protected Logger log() {
+        return log;
     }
 }

@@ -40,6 +40,7 @@ public abstract class AbstractCreatureMoveState<C extends Creature> extends Abst
         return false;
     }
 
+
     protected boolean walkMillis(C c, int delta) {
         if (elapsedMillis() == 0) {
             c.changeDirection(towards);
