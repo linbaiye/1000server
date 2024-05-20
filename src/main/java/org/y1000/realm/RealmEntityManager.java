@@ -2,9 +2,11 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Entity;
+import org.y1000.entities.Projectile;
 import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
+import org.y1000.entities.creatures.event.CreatureShootEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
@@ -16,6 +18,8 @@ import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.serverevent.*;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,6 +28,8 @@ final class RealmEntityManager implements EntityEventListener,
         PlayerEventVisitor {
 
     private final RelevantScopeManager scopeManager = new RelevantScopeManager();
+
+    private final Set<Projectile> projectiles = new HashSet<>();
 
     @Override
     public void visit(InputResponseMessage inputResponseMessage) {
@@ -89,7 +95,7 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
-    public void Visit(RewindEvent event) {
+    public void visit(RewindEvent event) {
         event.player().connection().write(event);
         notifyVisiblePlayers(event.source(), event.toSetPosition());
     }
@@ -134,8 +140,36 @@ final class RealmEntityManager implements EntityEventListener,
         entityEvent.accept(this);
     }
 
+    @Override
+    public void visit(CreatureShootEvent event) {
+        projectiles.add(event.projectile());
+    }
+
+    private void update(Entity entity, int delta) {
+        try {
+            entity.update(delta);
+        } catch (Exception e) {
+            log.error("Exception when updating {}.", entity, e);
+        }
+    }
+
+    private void updateProjectiles(int delta) {
+        for (Iterator<Projectile> iterator = projectiles.iterator(); iterator.hasNext();) {
+            Projectile projectile = iterator.next();
+            try {
+                if (projectile.update(delta)) {
+                    iterator.remove();
+                }
+            } catch (Exception e) {
+                iterator.remove();
+                log.error("Exception when updating {}.", projectile, e);
+            }
+        }
+    }
+
     public void updateEntities(int delta) {
-        scopeManager.getAllEntities().forEach(e -> e.update(delta));
+        scopeManager.getAllEntities().forEach(e -> update(e, delta));
+        updateProjectiles(delta);
     }
 
     public Optional<Entity> findInsight(Entity source, long id) {

@@ -24,7 +24,11 @@ public final class PlayerBowEnfightWalkState extends AbstractEnfightWalkState im
 
     @Override
     protected void onMoved(PlayerImpl player) {
-        attack(player, getTarget());
+        if (player.cooldown() > 0) {
+            player.changeState(PlayerBowCooldownState.cooldown(player, getTarget(), attackedCounter));
+        } else {
+            rangedAttack(player, getTarget(), attackedCounter);
+        }
     }
 
     public static PlayerBowEnfightWalkState walk(PlayerImpl player, Direction direction, Entity target, int attackedCounter) {

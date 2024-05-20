@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
+import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.ArmorAttribute;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.AbstractViolentCreature;
@@ -83,9 +84,18 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
         state().update(this, delta);
     }
 
+    private void attackedBy(ViolentCreature attacker, int hit) {
+        handleAttacked(this, hit, () ->  new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt));
+    }
+
     @Override
     public void attackedBy(ViolentCreature attacker) {
-        handleAttacked(this, attacker, () ->  new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt));
+        attackedBy(attacker, attacker.hit());
+    }
+
+    @Override
+    public void attackedBy(Projectile projectile) {
+        attackedBy(projectile.getShooter(), projectile.getHit());
     }
 
     private void moveTowardsAttacker(Creature attacker) {

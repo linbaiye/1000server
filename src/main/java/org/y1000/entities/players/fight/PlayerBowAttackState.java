@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
+import org.y1000.entities.Projectile;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.CreatureShootEvent;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
 import org.y1000.entities.players.PlayerStillState;
@@ -12,13 +14,10 @@ import org.y1000.entities.players.PlayerStillState;
 @Slf4j
 public final class PlayerBowAttackState extends AbstractPlayerAttackState {
 
-    private int arrowFlyingMillis;
-
     private final int counter;
 
-    private PlayerBowAttackState(int totalMillis, Entity target, State state, int arrowFlyingMillis, int counter) {
+    private PlayerBowAttackState(int totalMillis, Entity target, State state, int counter) {
         super(totalMillis, target, state);
-        this.arrowFlyingMillis = arrowFlyingMillis;
         this.counter = counter;
     }
 
@@ -29,20 +28,19 @@ public final class PlayerBowAttackState extends AbstractPlayerAttackState {
 
     @Override
     public void update(PlayerImpl player, int delta) {
-        elapse(delta);
-        if (elapsedMillis() >= arrowFlyingMillis) {
-            getTarget().attackedBy(player);
-            arrowFlyingMillis = Integer.MAX_VALUE;
+        if (elapsedMillis() == 0) {
+            player.cooldownAttack();
         }
+        elapse(delta);
         player.takeClientEvent().ifPresent(e -> e.accept(player, this));
         if (elapsedMillis() < getTotalMillis()) {
             return;
         }
+        player.emitEvent(new CreatureShootEvent(new Projectile(player, getTarget(), arrowFlyingMillis(player, getTarget()))));
         if (counter <= 0) {
-            log.debug("Bow ended.");
             player.changeState(PlayerStillState.chillOut(player));
         } else {
-            attack(player, getTarget());
+            player.changeState(PlayerBowCooldownState.cooldown(player, getTarget(), counter - 1));
         }
     }
 
@@ -62,20 +60,20 @@ public final class PlayerBowAttackState extends AbstractPlayerAttackState {
     }
 
     @Override
-    public PlayerState remoteCooldownState(PlayerImpl player, Entity target) {
+    public PlayerState rangedCooldownState(PlayerImpl player, Entity target) {
         return PlayerBowCooldownState.cooldown(player, getTarget(), counter - 1);
     }
 
     public static PlayerBowAttackState bow(PlayerImpl player, Entity target, int counter) {
-        return new PlayerBowAttackState(player.getStateMillis(State.BOW), target, State.BOW, arrowFlyingMillis(player, target), counter);
+        return new PlayerBowAttackState(player.getStateMillis(State.BOW), target, State.BOW,  counter);
     }
 
     private static int arrowFlyingMillis(PlayerImpl player, Entity target) {
         int dist = player.coordinate().directDistance(target.coordinate());
-        return dist * 50;
+        return dist * 30;
     }
 
     public static PlayerBowAttackState bow(PlayerImpl player, Entity target) {
-        return new PlayerBowAttackState(player.getStateMillis(State.BOW), target, State.BOW, arrowFlyingMillis(player, target), 5);
+        return new PlayerBowAttackState(player.getStateMillis(State.BOW), target, State.BOW, 5);
     }
 }

@@ -33,12 +33,21 @@ public final class MonsterFightingMoveState extends AbstractMonsterMoveState
         }
     }
 
-    public static MonsterFightingMoveState move(PassiveMonster monster, Creature target) {
-        return new MonsterFightingMoveState(monster.coordinate(), monster.direction(), monster.getStateMillis(State.WALK), target);
+    @Override
+    public Creature currentTarget() {
+        return null;
     }
 
     @Override
-    public Creature currentTarget() {
-        return target;
+    public void afterHurt(PassiveMonster passiveMonster, Creature attacker) {
+        if (target.coordinate().distance(passiveMonster.coordinate()) > 1) {
+            passiveMonster.attack(attacker);
+        } else {
+            passiveMonster.attack(target);
+        }
+    }
+
+    public static MonsterFightingMoveState move(PassiveMonster monster, Creature target) {
+        return new MonsterFightingMoveState(monster.coordinate(), monster.direction(), monster.getStateMillis(State.WALK), target);
     }
 }

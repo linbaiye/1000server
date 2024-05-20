@@ -1,0 +1,39 @@
+package org.y1000.entities;
+
+
+import lombok.Getter;
+import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.creatures.ViolentCreature;
+public final class Projectile {
+    @Getter
+    private final ViolentCreature shooter;
+
+    private final Entity target;
+
+    private final int flyingMillis;
+
+    private final Damage damage;
+
+    @Getter
+    private final int hit;
+
+    private int elapsed;
+
+    public Projectile(ViolentCreature shooter,
+                      Entity target, int flyingMillis) {
+        this.damage = shooter.damage();
+        this.target = target;
+        this.flyingMillis = flyingMillis;
+        this.shooter = shooter;
+        this.hit = shooter.hit();
+    }
+
+    public boolean update(int delta) {
+        elapsed += delta;
+        if (elapsed < flyingMillis) {
+            return false;
+        }
+        target.attackedBy(this);
+        return true;
+    }
+}

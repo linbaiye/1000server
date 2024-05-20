@@ -43,8 +43,8 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
         attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
     }
 
-    protected boolean handleAttacked(C creature, ViolentCreature attacker, Supplier<S> hurtStateSupplier) {
-        if (!state().attackable() || randomAvoidance(attacker.hit())) {
+    protected boolean handleAttacked(C creature, int hit, Supplier<S> hurtStateSupplier) {
+        if (!state().attackable() || randomAvoidance(hit)) {
             return false;
         }
         cooldownRecovery();

@@ -3,6 +3,7 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Entity;
+import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.ChangeStateEvent;
@@ -125,11 +126,20 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         emitEvent(new JoinedRealmEvent(this, coordinate()));
     }
 
-    @Override
-    public void attackedBy(ViolentCreature attacker) {
-        if (handleAttacked(this, attacker, () -> PlayerHurtState.hurt(this))) {
+    private void attackedBy(int hit) {
+        if (handleAttacked(this, hit, () -> PlayerHurtState.hurt(this))) {
             eventQueue.clear();
         }
+    }
+
+    @Override
+    public void attackedBy(ViolentCreature attacker) {
+        attackedBy(attacker.hit());
+    }
+
+    @Override
+    public void attackedBy(Projectile projectile) {
+        attackedBy(projectile.getHit());
     }
 
     @Override

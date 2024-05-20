@@ -6,7 +6,9 @@ import org.y1000.entities.creatures.monster.PassiveMonster;
 
 interface MonsterFightingState extends MonsterState<PassiveMonster> {
 
-    Creature currentTarget();
+    default Creature currentTarget() {
+        return null;
+    }
 
     @Override
     default void afterHurt(PassiveMonster monster, Creature attacker) {

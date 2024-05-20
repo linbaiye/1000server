@@ -9,7 +9,7 @@ import org.y1000.util.Coordinate;
 
 public final class MonsterFightingIdleState extends AbstractMonsterIdleState implements MonsterFightingState {
 
-    private final Creature target;
+    private Creature target;
 
     public MonsterFightingIdleState(int totalMillis, Creature target, Coordinate from) {
         super(totalMillis, from);
@@ -23,8 +23,13 @@ public final class MonsterFightingIdleState extends AbstractMonsterIdleState imp
     }
 
     @Override
-    public Creature currentTarget() {
-        return target;
+    public void afterHurt(PassiveMonster monster, Creature attacker) {
+        if (target.coordinate().distance(monster.coordinate()) > 1) {
+            target = attacker;
+            monster.changeState(this);
+        } else {
+            monster.changeState(new MonsterCooldownState(monster.cooldown(), target));
+        }
     }
 
 

@@ -16,12 +16,19 @@ import java.util.Optional;
 
 public interface AttackableState extends CreatureState<PlayerImpl> {
 
-    default PlayerState remoteCooldownState(PlayerImpl player, Entity target) {
+    default PlayerState rangedCooldownState(PlayerImpl player, Entity target) {
         return new PlayerMeleeCooldownState(player.getStateMillis(State.COOLDOWN), target);
     }
 
-    default PlayerState remoteAttackState(PlayerImpl player, Entity target) {
+    default PlayerState rangedAttackState(PlayerImpl player, Entity target) {
         return PlayerBowAttackState.bow(player, target);
+    }
+
+    default void rangedAttack(PlayerImpl player, Entity target, int counter) {
+        var direction = player.coordinate().computeDirection(target.coordinate());
+        player.changeDirection(direction);
+        player.changeState(PlayerBowAttackState.bow(player, target, counter));
+        player.emitEvent(PlayerAttackEvent.of(player, target.id()));
     }
 
     default void attack(PlayerImpl player, Entity target) {
@@ -31,20 +38,19 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
             return;
         }
         Direction direction = player.coordinate().computeDirection(target.coordinate());
-        player.changeDirection(direction);
         boolean rangedAttack = player.attackKungFu().isRanged();
         if (player.cooldown() > 0) {
-            var cdState = rangedAttack ? remoteCooldownState(player, target) :
+            var cdState = rangedAttack ? rangedCooldownState(player, target) :
                     new PlayerMeleeCooldownState(player.getStateMillis(State.COOLDOWN), target);
             player.changeState(cdState);
             player.emitEvent(ChangeStateEvent.of(player));
             return;
         }
         var dist = player.coordinate().directDistance(target.coordinate());
+        player.changeDirection(direction);
         if (rangedAttack || dist <= 1) {
-            player.cooldownAttack();
             State state = player.attackKungFu().randomAttackState();
-            var attackState = rangedAttack ? remoteAttackState(player, target) :
+            var attackState = rangedAttack ? rangedAttackState(player, target) :
                     PlayerMeleeAttackState.attack(target, state, player.getStateMillis(state));
             player.changeState(attackState);
             player.emitEvent(PlayerAttackEvent.of(player, target.id()));

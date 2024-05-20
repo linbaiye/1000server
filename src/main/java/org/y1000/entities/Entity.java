@@ -11,7 +11,6 @@ public interface Entity {
     Coordinate coordinate();
 
     void update(int delta);
-
     /**
      * Return true if we can be hit.
      * @return true/false.
@@ -21,6 +20,10 @@ public interface Entity {
     }
 
     default void attackedBy(ViolentCreature attacker) {
+
+    }
+
+    default void attackedBy(Projectile projectile) {
 
     }
 

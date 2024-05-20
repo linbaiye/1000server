@@ -30,7 +30,7 @@ public final class PlayerBowCooldownState extends AbstractCooldownState {
     }
 
     @Override
-    public PlayerState remoteAttackState(PlayerImpl player, Entity target) {
+    public PlayerState rangedAttackState(PlayerImpl player, Entity target) {
         return PlayerBowAttackState.bow(player, target, attackedCounter);
     }
 
