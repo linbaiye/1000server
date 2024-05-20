@@ -6,7 +6,7 @@ public enum AttackKungFuType implements ValueEnum {
 
     QUANFA(0, 400, 560),
 
-    SWORD(1, 0, 0),
+    SWORD(1, 720, 110),
 
     BLADE(2, 0, 0),
 

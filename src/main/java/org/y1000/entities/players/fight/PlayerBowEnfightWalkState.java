@@ -1,5 +1,7 @@
 package org.y1000.entities.players.fight;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.State;
@@ -7,6 +9,7 @@ import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
 import org.y1000.util.Coordinate;
 
+@Slf4j
 public final class PlayerBowEnfightWalkState extends AbstractEnfightWalkState implements AttackableState {
 
     private final int attackedCounter;
@@ -33,5 +36,10 @@ public final class PlayerBowEnfightWalkState extends AbstractEnfightWalkState im
 
     public static PlayerBowEnfightWalkState walk(PlayerImpl player, Direction direction, Entity target, int attackedCounter) {
         return new PlayerBowEnfightWalkState(player.coordinate(), direction, player.getStateMillis(State.ENFIGHT_WALK), target, attackedCounter);
+    }
+
+    @Override
+    public Logger logger() {
+        return log;
     }
 }

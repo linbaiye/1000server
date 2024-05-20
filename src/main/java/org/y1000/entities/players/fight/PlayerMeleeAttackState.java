@@ -26,6 +26,7 @@ public final class PlayerMeleeAttackState extends AbstractPlayerAttackState {
     public void update(PlayerImpl player, int delta) {
         if (elapsedMillis() == 0) {
             player.cooldownAttack();
+            getTarget().attackedBy(player);
         }
         player.takeClientEvent().ifPresent(e -> e.accept(player, this));
         if (elapse(delta)) {

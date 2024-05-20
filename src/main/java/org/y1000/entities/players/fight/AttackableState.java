@@ -1,5 +1,6 @@
 package org.y1000.entities.players.fight;
 
+import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.CreatureState;
@@ -16,8 +17,11 @@ import java.util.Optional;
 
 public interface AttackableState extends CreatureState<PlayerImpl> {
 
+
+    Logger logger();
+
     default PlayerState rangedCooldownState(PlayerImpl player, Entity target) {
-        return new PlayerMeleeCooldownState(player.getStateMillis(State.COOLDOWN), target);
+        return PlayerBowCooldownState.cooldown(player.getStateMillis(State.COOLDOWN), target, 1);
     }
 
     default PlayerState rangedAttackState(PlayerImpl player, Entity target) {

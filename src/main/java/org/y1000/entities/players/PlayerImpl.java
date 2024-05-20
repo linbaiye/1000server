@@ -16,6 +16,7 @@ import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.UnnamedBufa;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
 import org.y1000.entities.players.kungfu.attack.bow.UnnamedBow;
+import org.y1000.entities.players.kungfu.attack.sword.UnamedSword;
 import org.y1000.entities.players.kungfu.attack.unnamed.UnnamedQuanFa;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.network.ClientEventListener;
@@ -59,6 +60,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         put(State.HURT, 280);
         put(State.ENFIGHT_WALK, 840);
         put(State.BOW, AttackKungFuType.BOW.above50Millis());
+        put(State.SWORD2H, AttackKungFuType.SWORD.above50Millis());
+        put(State.SWORD, AttackKungFuType.SWORD.below50Millis());
     }};
 
 
@@ -77,7 +80,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                 .recovery(50)
                 .attackSpeed(40)
                 .build();*/
-        attackKungFu = UnnamedBow.builder().level(4000)
+        attackKungFu = UnamedSword.builder().level(5010)
                 .attackSpeed(80)
                 .recovery(80)
                 .bodyArmor(1)
@@ -111,6 +114,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public void changeState(PlayerState newState) {
+        log().debug("Change state from {} to {}.", state(), newState);
         super.changeState(newState);
     }
 
