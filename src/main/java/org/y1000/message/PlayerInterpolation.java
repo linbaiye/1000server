@@ -2,6 +2,7 @@ package org.y1000.message;
 
 import lombok.AccessLevel;
 import lombok.Setter;
+import org.y1000.entities.item.Weapon;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerInterpolationPacket;
@@ -16,6 +17,9 @@ public final class PlayerInterpolation extends AbstractInterpolation {
     @Setter(AccessLevel.PRIVATE)
     private String name = "";
 
+    @Setter(AccessLevel.PRIVATE)
+    private String weaponName;
+
     private PlayerInterpolation(long id, Coordinate coordinate, State state, Direction direction, int elapsedMillis, boolean male) {
         super(id, coordinate, state, direction, elapsedMillis);
         this.male = male;
@@ -29,15 +33,19 @@ public final class PlayerInterpolation extends AbstractInterpolation {
                         .setInterpolation(interpolationPacket())
                         .setId(getId())
                         .setName(name)
+                        .setWeaponName(weaponName)
                         .setMale(male))
                 .build();
     }
 
     public static PlayerInterpolation FromPlayer(PlayerImpl player, int elapsedMillis) {
+
         PlayerInterpolation playerInterpolation = new PlayerInterpolation(player.id(), player.coordinate(),
                 player.stateEnum(), player.direction(),
                 elapsedMillis, player.isMale());
         playerInterpolation.setName(player.name());
+        var weaponName = player.weapon().map(Weapon::name).orElse(null);
+        playerInterpolation.setWeaponName(weaponName);
         return playerInterpolation;
     }
 }

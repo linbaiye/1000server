@@ -145,7 +145,7 @@ message PlayerInterpolationPacket {
   int64 id = 2;
   bool male = 3;
   string name = 4;
-  optional string weaponName = 6;
+  optional string weaponName = 5;
 }
 
 message RemoveEntityPacket {

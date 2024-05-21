@@ -25,7 +25,7 @@ public final class Inventory {
         if (isFull()) {
             throw new IndexOutOfBoundsException();
         }
-        for (int i = 0; i < MAX_SIZE; i++) {
+        for (int i = 1; i <= MAX_SIZE; i++) {
             if (!items.containsKey(i)) {
                 items.put(i, item);
                 break;
