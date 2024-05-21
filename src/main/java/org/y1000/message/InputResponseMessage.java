@@ -2,7 +2,7 @@ package org.y1000.message;
 
 import org.y1000.network.gen.InputResponsePacket;
 import org.y1000.network.gen.Packet;
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.message.serverevent.EntityEventVisitor;
@@ -25,7 +25,7 @@ public record InputResponseMessage(long sequence, AbstractPositionEvent position
     }
 
     @Override
-    public Entity source() {
+    public PhysicalEntity source() {
         return positionMessage().source();
     }
 

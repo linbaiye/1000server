@@ -5,93 +5,122 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.InterpolationPacket}
+ * Protobuf type {@code org.y1000.network.gen.InventoryItemPacket}
  */
-public final class InterpolationPacket extends
+public final class InventoryItemPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.InterpolationPacket)
-    InterpolationPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.InventoryItemPacket)
+    InventoryItemPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use InterpolationPacket.newBuilder() to construct.
-  private InterpolationPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use InventoryItemPacket.newBuilder() to construct.
+  private InventoryItemPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private InterpolationPacket() {
+  private InventoryItemPacket() {
+    name_ = "";
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new InterpolationPacket();
+    return new InventoryItemPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InventoryItemPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InventoryItemPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.InterpolationPacket.class, org.y1000.network.gen.InterpolationPacket.Builder.class);
+            org.y1000.network.gen.InventoryItemPacket.class, org.y1000.network.gen.InventoryItemPacket.Builder.class);
   }
 
-  public static final int STATE_FIELD_NUMBER = 2;
-  private int state_ = 0;
+  public static final int ID_FIELD_NUMBER = 1;
+  private long id_ = 0L;
   /**
-   * <code>int32 state = 2;</code>
-   * @return The state.
+   * <code>int64 id = 1;</code>
+   * @return The id.
    */
   @java.lang.Override
-  public int getState() {
-    return state_;
+  public long getId() {
+    return id_;
   }
 
-  public static final int ELAPSEDMILLIS_FIELD_NUMBER = 5;
-  private int elapsedMillis_ = 0;
+  public static final int NAME_FIELD_NUMBER = 2;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
-   * <code>int32 elapsedMillis = 5;</code>
-   * @return The elapsedMillis.
+   * <code>string name = 2;</code>
+   * @return The name.
    */
   @java.lang.Override
-  public int getElapsedMillis() {
-    return elapsedMillis_;
+  public java.lang.String getName() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      name_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string name = 2;</code>
+   * @return The bytes for name.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getNameBytes() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      name_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
-  public static final int DIRECTION_FIELD_NUMBER = 7;
-  private int direction_ = 0;
+  public static final int SHAPEID_FIELD_NUMBER = 3;
+  private int shapeId_ = 0;
   /**
-   * <code>int32 direction = 7;</code>
-   * @return The direction.
+   * <code>int32 shapeId = 3;</code>
+   * @return The shapeId.
    */
   @java.lang.Override
-  public int getDirection() {
-    return direction_;
+  public int getShapeId() {
+    return shapeId_;
   }
 
-  public static final int X_FIELD_NUMBER = 8;
-  private int x_ = 0;
+  public static final int ITEMTYPE_FIELD_NUMBER = 4;
+  private int itemType_ = 0;
   /**
-   * <code>int32 x = 8;</code>
-   * @return The x.
+   * <code>int32 itemType = 4;</code>
+   * @return The itemType.
    */
   @java.lang.Override
-  public int getX() {
-    return x_;
+  public int getItemType() {
+    return itemType_;
   }
 
-  public static final int Y_FIELD_NUMBER = 9;
-  private int y_ = 0;
+  public static final int SLOTID_FIELD_NUMBER = 5;
+  private int slotId_ = 0;
   /**
-   * <code>int32 y = 9;</code>
-   * @return The y.
+   * <code>int32 slotId = 5;</code>
+   * @return The slotId.
    */
   @java.lang.Override
-  public int getY() {
-    return y_;
+  public int getSlotId() {
+    return slotId_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -108,20 +137,20 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (state_ != 0) {
-      output.writeInt32(2, state_);
+    if (id_ != 0L) {
+      output.writeInt64(1, id_);
     }
-    if (elapsedMillis_ != 0) {
-      output.writeInt32(5, elapsedMillis_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, name_);
     }
-    if (direction_ != 0) {
-      output.writeInt32(7, direction_);
+    if (shapeId_ != 0) {
+      output.writeInt32(3, shapeId_);
     }
-    if (x_ != 0) {
-      output.writeInt32(8, x_);
+    if (itemType_ != 0) {
+      output.writeInt32(4, itemType_);
     }
-    if (y_ != 0) {
-      output.writeInt32(9, y_);
+    if (slotId_ != 0) {
+      output.writeInt32(5, slotId_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -132,25 +161,24 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (state_ != 0) {
+    if (id_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, state_);
+        .computeInt64Size(1, id_);
     }
-    if (elapsedMillis_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(5, elapsedMillis_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, name_);
     }
-    if (direction_ != 0) {
+    if (shapeId_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(7, direction_);
+        .computeInt32Size(3, shapeId_);
     }
-    if (x_ != 0) {
+    if (itemType_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(8, x_);
+        .computeInt32Size(4, itemType_);
     }
-    if (y_ != 0) {
+    if (slotId_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(9, y_);
+        .computeInt32Size(5, slotId_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -162,21 +190,21 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.InterpolationPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.InventoryItemPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.InterpolationPacket other = (org.y1000.network.gen.InterpolationPacket) obj;
+    org.y1000.network.gen.InventoryItemPacket other = (org.y1000.network.gen.InventoryItemPacket) obj;
 
-    if (getState()
-        != other.getState()) return false;
-    if (getElapsedMillis()
-        != other.getElapsedMillis()) return false;
-    if (getDirection()
-        != other.getDirection()) return false;
-    if (getX()
-        != other.getX()) return false;
-    if (getY()
-        != other.getY()) return false;
+    if (getId()
+        != other.getId()) return false;
+    if (!getName()
+        .equals(other.getName())) return false;
+    if (getShapeId()
+        != other.getShapeId()) return false;
+    if (getItemType()
+        != other.getItemType()) return false;
+    if (getSlotId()
+        != other.getSlotId()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -188,59 +216,60 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + STATE_FIELD_NUMBER;
-    hash = (53 * hash) + getState();
-    hash = (37 * hash) + ELAPSEDMILLIS_FIELD_NUMBER;
-    hash = (53 * hash) + getElapsedMillis();
-    hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
-    hash = (53 * hash) + getDirection();
-    hash = (37 * hash) + X_FIELD_NUMBER;
-    hash = (53 * hash) + getX();
-    hash = (37 * hash) + Y_FIELD_NUMBER;
-    hash = (53 * hash) + getY();
+    hash = (37 * hash) + ID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getId());
+    hash = (37 * hash) + NAME_FIELD_NUMBER;
+    hash = (53 * hash) + getName().hashCode();
+    hash = (37 * hash) + SHAPEID_FIELD_NUMBER;
+    hash = (53 * hash) + getShapeId();
+    hash = (37 * hash) + ITEMTYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getItemType();
+    hash = (37 * hash) + SLOTID_FIELD_NUMBER;
+    hash = (53 * hash) + getSlotId();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.InventoryItemPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.InventoryItemPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.InventoryItemPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.InventoryItemPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.InventoryItemPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.InventoryItemPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.InventoryItemPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.InventoryItemPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -248,26 +277,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.InterpolationPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.InventoryItemPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.InterpolationPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.InventoryItemPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.InventoryItemPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.InterpolationPacket parseFrom(
+  public static org.y1000.network.gen.InventoryItemPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -280,7 +309,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.InterpolationPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.InventoryItemPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -296,26 +325,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.InterpolationPacket}
+   * Protobuf type {@code org.y1000.network.gen.InventoryItemPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.InterpolationPacket)
-      org.y1000.network.gen.InterpolationPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.InventoryItemPacket)
+      org.y1000.network.gen.InventoryItemPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InventoryItemPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InventoryItemPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.InterpolationPacket.class, org.y1000.network.gen.InterpolationPacket.Builder.class);
+              org.y1000.network.gen.InventoryItemPacket.class, org.y1000.network.gen.InventoryItemPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.InterpolationPacket.newBuilder()
+    // Construct using org.y1000.network.gen.InventoryItemPacket.newBuilder()
     private Builder() {
 
     }
@@ -329,28 +358,28 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      state_ = 0;
-      elapsedMillis_ = 0;
-      direction_ = 0;
-      x_ = 0;
-      y_ = 0;
+      id_ = 0L;
+      name_ = "";
+      shapeId_ = 0;
+      itemType_ = 0;
+      slotId_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InterpolationPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_InventoryItemPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.InterpolationPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.InterpolationPacket.getDefaultInstance();
+    public org.y1000.network.gen.InventoryItemPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.InventoryItemPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.InterpolationPacket build() {
-      org.y1000.network.gen.InterpolationPacket result = buildPartial();
+    public org.y1000.network.gen.InventoryItemPacket build() {
+      org.y1000.network.gen.InventoryItemPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -358,29 +387,29 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.InterpolationPacket buildPartial() {
-      org.y1000.network.gen.InterpolationPacket result = new org.y1000.network.gen.InterpolationPacket(this);
+    public org.y1000.network.gen.InventoryItemPacket buildPartial() {
+      org.y1000.network.gen.InventoryItemPacket result = new org.y1000.network.gen.InventoryItemPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.InterpolationPacket result) {
+    private void buildPartial0(org.y1000.network.gen.InventoryItemPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.state_ = state_;
+        result.id_ = id_;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.elapsedMillis_ = elapsedMillis_;
+        result.name_ = name_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.direction_ = direction_;
+        result.shapeId_ = shapeId_;
       }
       if (((from_bitField0_ & 0x00000008) != 0)) {
-        result.x_ = x_;
+        result.itemType_ = itemType_;
       }
       if (((from_bitField0_ & 0x00000010) != 0)) {
-        result.y_ = y_;
+        result.slotId_ = slotId_;
       }
     }
 
@@ -418,30 +447,32 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.InterpolationPacket) {
-        return mergeFrom((org.y1000.network.gen.InterpolationPacket)other);
+      if (other instanceof org.y1000.network.gen.InventoryItemPacket) {
+        return mergeFrom((org.y1000.network.gen.InventoryItemPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.InterpolationPacket other) {
-      if (other == org.y1000.network.gen.InterpolationPacket.getDefaultInstance()) return this;
-      if (other.getState() != 0) {
-        setState(other.getState());
+    public Builder mergeFrom(org.y1000.network.gen.InventoryItemPacket other) {
+      if (other == org.y1000.network.gen.InventoryItemPacket.getDefaultInstance()) return this;
+      if (other.getId() != 0L) {
+        setId(other.getId());
       }
-      if (other.getElapsedMillis() != 0) {
-        setElapsedMillis(other.getElapsedMillis());
+      if (!other.getName().isEmpty()) {
+        name_ = other.name_;
+        bitField0_ |= 0x00000002;
+        onChanged();
       }
-      if (other.getDirection() != 0) {
-        setDirection(other.getDirection());
+      if (other.getShapeId() != 0) {
+        setShapeId(other.getShapeId());
       }
-      if (other.getX() != 0) {
-        setX(other.getX());
+      if (other.getItemType() != 0) {
+        setItemType(other.getItemType());
       }
-      if (other.getY() != 0) {
-        setY(other.getY());
+      if (other.getSlotId() != 0) {
+        setSlotId(other.getSlotId());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -469,31 +500,31 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 16: {
-              state_ = input.readInt32();
+            case 8: {
+              id_ = input.readInt64();
               bitField0_ |= 0x00000001;
               break;
-            } // case 16
-            case 40: {
-              elapsedMillis_ = input.readInt32();
+            } // case 8
+            case 18: {
+              name_ = input.readStringRequireUtf8();
               bitField0_ |= 0x00000002;
               break;
-            } // case 40
-            case 56: {
-              direction_ = input.readInt32();
+            } // case 18
+            case 24: {
+              shapeId_ = input.readInt32();
               bitField0_ |= 0x00000004;
               break;
-            } // case 56
-            case 64: {
-              x_ = input.readInt32();
+            } // case 24
+            case 32: {
+              itemType_ = input.readInt32();
               bitField0_ |= 0x00000008;
               break;
-            } // case 64
-            case 72: {
-              y_ = input.readInt32();
+            } // case 32
+            case 40: {
+              slotId_ = input.readInt32();
               bitField0_ |= 0x00000010;
               break;
-            } // case 72
+            } // case 40
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -511,162 +542,202 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private int state_ ;
+    private long id_ ;
     /**
-     * <code>int32 state = 2;</code>
-     * @return The state.
+     * <code>int64 id = 1;</code>
+     * @return The id.
      */
     @java.lang.Override
-    public int getState() {
-      return state_;
+    public long getId() {
+      return id_;
     }
     /**
-     * <code>int32 state = 2;</code>
-     * @param value The state to set.
+     * <code>int64 id = 1;</code>
+     * @param value The id to set.
      * @return This builder for chaining.
      */
-    public Builder setState(int value) {
+    public Builder setId(long value) {
 
-      state_ = value;
+      id_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 state = 2;</code>
+     * <code>int64 id = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder clearState() {
+    public Builder clearId() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      state_ = 0;
+      id_ = 0L;
       onChanged();
       return this;
     }
 
-    private int elapsedMillis_ ;
+    private java.lang.Object name_ = "";
     /**
-     * <code>int32 elapsedMillis = 5;</code>
-     * @return The elapsedMillis.
+     * <code>string name = 2;</code>
+     * @return The name.
      */
-    @java.lang.Override
-    public int getElapsedMillis() {
-      return elapsedMillis_;
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
     }
     /**
-     * <code>int32 elapsedMillis = 5;</code>
-     * @param value The elapsedMillis to set.
+     * <code>string name = 2;</code>
+     * @return The bytes for name.
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string name = 2;</code>
+     * @param value The name to set.
      * @return This builder for chaining.
      */
-    public Builder setElapsedMillis(int value) {
-
-      elapsedMillis_ = value;
+    public Builder setName(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      name_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 elapsedMillis = 5;</code>
+     * <code>string name = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearElapsedMillis() {
+    public Builder clearName() {
+      name_ = getDefaultInstance().getName();
       bitField0_ = (bitField0_ & ~0x00000002);
-      elapsedMillis_ = 0;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string name = 2;</code>
+     * @param value The bytes for name to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      name_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
 
-    private int direction_ ;
+    private int shapeId_ ;
     /**
-     * <code>int32 direction = 7;</code>
-     * @return The direction.
+     * <code>int32 shapeId = 3;</code>
+     * @return The shapeId.
      */
     @java.lang.Override
-    public int getDirection() {
-      return direction_;
+    public int getShapeId() {
+      return shapeId_;
     }
     /**
-     * <code>int32 direction = 7;</code>
-     * @param value The direction to set.
+     * <code>int32 shapeId = 3;</code>
+     * @param value The shapeId to set.
      * @return This builder for chaining.
      */
-    public Builder setDirection(int value) {
+    public Builder setShapeId(int value) {
 
-      direction_ = value;
+      shapeId_ = value;
       bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 direction = 7;</code>
+     * <code>int32 shapeId = 3;</code>
      * @return This builder for chaining.
      */
-    public Builder clearDirection() {
+    public Builder clearShapeId() {
       bitField0_ = (bitField0_ & ~0x00000004);
-      direction_ = 0;
+      shapeId_ = 0;
       onChanged();
       return this;
     }
 
-    private int x_ ;
+    private int itemType_ ;
     /**
-     * <code>int32 x = 8;</code>
-     * @return The x.
+     * <code>int32 itemType = 4;</code>
+     * @return The itemType.
      */
     @java.lang.Override
-    public int getX() {
-      return x_;
+    public int getItemType() {
+      return itemType_;
     }
     /**
-     * <code>int32 x = 8;</code>
-     * @param value The x to set.
+     * <code>int32 itemType = 4;</code>
+     * @param value The itemType to set.
      * @return This builder for chaining.
      */
-    public Builder setX(int value) {
+    public Builder setItemType(int value) {
 
-      x_ = value;
+      itemType_ = value;
       bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 x = 8;</code>
+     * <code>int32 itemType = 4;</code>
      * @return This builder for chaining.
      */
-    public Builder clearX() {
+    public Builder clearItemType() {
       bitField0_ = (bitField0_ & ~0x00000008);
-      x_ = 0;
+      itemType_ = 0;
       onChanged();
       return this;
     }
 
-    private int y_ ;
+    private int slotId_ ;
     /**
-     * <code>int32 y = 9;</code>
-     * @return The y.
+     * <code>int32 slotId = 5;</code>
+     * @return The slotId.
      */
     @java.lang.Override
-    public int getY() {
-      return y_;
+    public int getSlotId() {
+      return slotId_;
     }
     /**
-     * <code>int32 y = 9;</code>
-     * @param value The y to set.
+     * <code>int32 slotId = 5;</code>
+     * @param value The slotId to set.
      * @return This builder for chaining.
      */
-    public Builder setY(int value) {
+    public Builder setSlotId(int value) {
 
-      y_ = value;
+      slotId_ = value;
       bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 y = 9;</code>
+     * <code>int32 slotId = 5;</code>
      * @return This builder for chaining.
      */
-    public Builder clearY() {
+    public Builder clearSlotId() {
       bitField0_ = (bitField0_ & ~0x00000010);
-      y_ = 0;
+      slotId_ = 0;
       onChanged();
       return this;
     }
@@ -683,23 +754,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.InterpolationPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.InventoryItemPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.InterpolationPacket)
-  private static final org.y1000.network.gen.InterpolationPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.InventoryItemPacket)
+  private static final org.y1000.network.gen.InventoryItemPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.InterpolationPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.InventoryItemPacket();
   }
 
-  public static org.y1000.network.gen.InterpolationPacket getDefaultInstance() {
+  public static org.y1000.network.gen.InventoryItemPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<InterpolationPacket>
-      PARSER = new com.google.protobuf.AbstractParser<InterpolationPacket>() {
+  private static final com.google.protobuf.Parser<InventoryItemPacket>
+      PARSER = new com.google.protobuf.AbstractParser<InventoryItemPacket>() {
     @java.lang.Override
-    public InterpolationPacket parsePartialFrom(
+    public InventoryItemPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -718,17 +789,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<InterpolationPacket> parser() {
+  public static com.google.protobuf.Parser<InventoryItemPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<InterpolationPacket> getParserForType() {
+  public com.google.protobuf.Parser<InventoryItemPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.InterpolationPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.InventoryItemPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

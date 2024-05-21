@@ -1,8 +1,10 @@
-package org.y1000.inventory;
+package org.y1000.entities.item;
 
 public interface Item {
     long id();
+
     String name();
 
-    int shapeId();
+    ItemType type();
+
 }

@@ -8,7 +8,7 @@ public final class Projectile {
     @Getter
     private final ViolentCreature shooter;
 
-    private final Entity target;
+    private final PhysicalEntity target;
 
     private final int flyingMillis;
 
@@ -20,7 +20,7 @@ public final class Projectile {
     private int elapsed;
 
     public Projectile(ViolentCreature shooter,
-                      Entity target, int flyingMillis) {
+                      PhysicalEntity target, int flyingMillis) {
         this.damage = shooter.damage();
         this.target = target;
         this.flyingMillis = flyingMillis;

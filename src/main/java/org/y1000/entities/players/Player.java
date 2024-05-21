@@ -1,13 +1,12 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.players.equipment.weapon.Weapon;
+import org.y1000.entities.item.Weapon;
+import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.network.Connection;
-import org.y1000.entities.Direction;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.realm.Realm;
-import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
@@ -29,13 +28,11 @@ public interface Player extends ViolentCreature {
         return Optional.empty();
     }
 
+    Inventory inventory();
+
     default Optional<Weapon> weapon() {
         return Optional.empty();
     }
 
     AttackKungFu attackKungFu();
-
-    static Player create(long id, Coordinate coordinate, Connection connection) {
-        return new PlayerImpl(id, coordinate, Direction.DOWN, "杨过", connection);
-    }
 }

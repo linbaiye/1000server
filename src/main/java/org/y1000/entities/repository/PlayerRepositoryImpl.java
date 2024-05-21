@@ -1,20 +1,18 @@
 package org.y1000.entities.repository;
 
+import org.y1000.entities.item.Weapon;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.entities.players.kungfu.attack.AttackKungFu;
+import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
+import org.y1000.entities.players.kungfu.attack.sword.UnamedSword;
 import org.y1000.network.Connection;
 import org.y1000.util.Coordinate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private static final int[] slots = new int[]{-1, -1, 1,-1,-1,-1,-1,-1,-1,-1};
-
-    @Override
-    public Player load(long id) {
-        return Player.create(id, new Coordinate(39,27), null);
-    }
 
     private int findSlot() {
         for (int i = 0; i < slots.length; i++) {
@@ -26,10 +24,49 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         return 0;
     }
 
+    private Inventory loadInventory() {
+        Inventory inventory = new Inventory();
+        inventory.add(Weapon.builder()
+                .attackKungFuType(AttackKungFuType.BLADE)
+                .name("长刀").build());
+        inventory.add(Weapon.builder()
+                .attackKungFuType(AttackKungFuType.BOW)
+                .name("木弓").build());
+        return inventory;
+    }
+
+
+    private Weapon weapon() {
+        return Weapon
+                .builder()
+                .name("长剑")
+                .attackKungFuType(AttackKungFuType.SWORD)
+                .build();
+    }
+
+    private AttackKungFu loadKungFu(Weapon weapon) {
+        return UnamedSword.builder()
+                .level(85)
+                .attackSpeed(35)
+                .recovery(50)
+                .bodyArmor(1)
+                .bodyDamage(1)
+                .build();
+    }
+
     @Override
     public Player load(Connection connection) {
         int slot = findSlot();
-        return Player.create(slot, new Coordinate(39 + slot, 27), connection);
+        Weapon weapon = weapon();
+        return PlayerImpl.builder()
+                .id(slot)
+                .name("杨过")
+                .coordinate(new Coordinate(39 + slot, 27))
+                .connection(connection)
+                .weapon(weapon)
+                .attackKungFu(loadKungFu(weapon))
+                .inventory(loadInventory())
+                .build();
     }
 
     @Override

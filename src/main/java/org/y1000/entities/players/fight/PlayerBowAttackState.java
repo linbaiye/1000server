@@ -3,7 +3,7 @@ package org.y1000.entities.players.fight;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.Projectile;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureShootEvent;
@@ -16,7 +16,7 @@ public final class PlayerBowAttackState extends AbstractPlayerAttackState {
 
     private final int counter;
 
-    private PlayerBowAttackState(int totalMillis, Entity target, State state, int counter) {
+    private PlayerBowAttackState(int totalMillis, PhysicalEntity target, State state, int counter) {
         super(totalMillis, target, state);
         this.counter = counter;
     }
@@ -60,20 +60,20 @@ public final class PlayerBowAttackState extends AbstractPlayerAttackState {
     }
 
     @Override
-    public PlayerState rangedCooldownState(PlayerImpl player, Entity target) {
+    public PlayerState rangedCooldownState(PlayerImpl player, PhysicalEntity target) {
         return PlayerBowCooldownState.cooldown(player, getTarget(), counter - 1);
     }
 
-    public static PlayerBowAttackState bow(PlayerImpl player, Entity target, int counter) {
+    public static PlayerBowAttackState bow(PlayerImpl player, PhysicalEntity target, int counter) {
         return new PlayerBowAttackState(player.getStateMillis(State.BOW), target, State.BOW,  counter);
     }
 
-    private static int arrowFlyingMillis(PlayerImpl player, Entity target) {
+    private static int arrowFlyingMillis(PlayerImpl player, PhysicalEntity target) {
         int dist = player.coordinate().directDistance(target.coordinate());
         return dist * 30;
     }
 
-    public static PlayerBowAttackState bow(PlayerImpl player, Entity target) {
+    public static PlayerBowAttackState bow(PlayerImpl player, PhysicalEntity target) {
         return new PlayerBowAttackState(player.getStateMillis(State.BOW), target, State.BOW, 5);
     }
 }

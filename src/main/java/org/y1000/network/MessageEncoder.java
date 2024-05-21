@@ -14,7 +14,11 @@ public final class MessageEncoder extends MessageToByteEncoder<ServerMessage> {
     public static final MessageEncoder ENCODER = new MessageEncoder();
 
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, ServerMessage message, ByteBuf byteBuf) throws Exception {
-        byteBuf.writeBytes(message.toPacket().toByteArray());
+    protected void encode(ChannelHandlerContext channelHandlerContext, ServerMessage message, ByteBuf byteBuf) {
+        try {
+            byteBuf.writeBytes(message.toPacket().toByteArray());
+        } catch (Exception e) {
+            log.error("Exception ", e);
+        }
     }
 }

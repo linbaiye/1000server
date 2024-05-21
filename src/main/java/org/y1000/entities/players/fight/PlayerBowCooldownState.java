@@ -3,7 +3,7 @@ package org.y1000.entities.players.fight;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
 
@@ -13,7 +13,7 @@ public final class PlayerBowCooldownState extends AbstractCooldownState {
     private final int attackedCounter;
 
     public PlayerBowCooldownState(int length,
-                                  Entity target,
+                                  PhysicalEntity target,
                                   int attackedCounter) {
         super(length, target);
         this.attackedCounter = attackedCounter;
@@ -30,15 +30,15 @@ public final class PlayerBowCooldownState extends AbstractCooldownState {
     }
 
     @Override
-    public PlayerState rangedAttackState(PlayerImpl player, Entity target) {
+    public PlayerState rangedAttackState(PlayerImpl player, PhysicalEntity target) {
         return PlayerBowAttackState.bow(player, target, attackedCounter);
     }
 
-    public static PlayerBowCooldownState cooldown(PlayerImpl player, Entity target, int attackedCounter) {
+    public static PlayerBowCooldownState cooldown(PlayerImpl player, PhysicalEntity target, int attackedCounter) {
         return new PlayerBowCooldownState(player.cooldown(), target, attackedCounter);
     }
 
-    public static PlayerBowCooldownState cooldown(int millis, Entity target, int attackedCounter) {
+    public static PlayerBowCooldownState cooldown(int millis, PhysicalEntity target, int attackedCounter) {
         return new PlayerBowCooldownState(millis, target, attackedCounter);
     }
 }

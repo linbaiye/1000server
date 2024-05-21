@@ -1,7 +1,7 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.Projectile;
 import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
@@ -37,15 +37,15 @@ final class RealmEntityManager implements EntityEventListener,
         visit(inputResponseMessage.positionMessage());
     }
 
-    private void notifyInterpolation(Player joined, Entity entity) {
+    private void notifyInterpolation(Player joined, PhysicalEntity entity) {
         joined.connection().write(entity.captureInterpolation());
         if (entity instanceof Player another) {
             another.connection().write(joined.captureInterpolation());
         }
     }
 
-    private void notifyOutsightOrInsight(Entity moved,
-                                         Entity affected) {
+    private void notifyOutsightOrInsight(PhysicalEntity moved,
+                                         PhysicalEntity affected) {
         boolean outOfView = scopeManager.outOfScope(moved, affected);
         if (outOfView) {
             if (moved instanceof Player movedPlayer) {
@@ -67,8 +67,8 @@ final class RealmEntityManager implements EntityEventListener,
 
     @Override
     public void visit(AbstractPositionEvent positionEvent) {
-        Entity source = positionEvent.source();
-        Set<Entity> affectedEntities = scopeManager.update(source);
+        PhysicalEntity source = positionEvent.source();
+        Set<PhysicalEntity> affectedEntities = scopeManager.update(source);
         affectedEntities.forEach(entity -> notifyOutsightOrInsight(source, entity));
         notifyVisiblePlayers(source, positionEvent);
     }
@@ -76,13 +76,13 @@ final class RealmEntityManager implements EntityEventListener,
     @Override
     public void visit(JoinedRealmEvent joinedRealmEvent) {
         joinedRealmEvent.player().connection().write(joinedRealmEvent);
-        var visibleEntities = scopeManager.filterVisibleEntities(joinedRealmEvent.source(), Entity.class);
+        var visibleEntities = scopeManager.filterVisibleEntities(joinedRealmEvent.source(), PhysicalEntity.class);
         visibleEntities.forEach(entity -> notifyInterpolation(joinedRealmEvent.player(), entity));
     }
 
     @Override
     public void visit(PlayerLeftEvent event) {
-        Set<Entity> affected = scopeManager.remove(event.player());
+        Set<PhysicalEntity> affected = scopeManager.remove(event.player());
         affected.stream()
                 .filter(entity -> entity instanceof Player)
                 .map(Player.class::cast)
@@ -107,7 +107,7 @@ final class RealmEntityManager implements EntityEventListener,
                 .ifPresent(e -> notifyVisiblePlayers(event.source(), e));
     }
 
-    private void notifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
+    private void notifyVisiblePlayers(PhysicalEntity source, ServerMessage serverMessage) {
         scopeManager.filterVisibleEntities(source, Player.class)
                 .forEach(player -> player.connection().write(serverMessage));
     }
@@ -122,7 +122,7 @@ final class RealmEntityManager implements EntityEventListener,
         notifyVisiblePlayersAndSelf(event.source(), event);
     }
 
-    private void notifyVisiblePlayersAndSelf(Entity source,
+    private void notifyVisiblePlayersAndSelf(PhysicalEntity source,
                                              ServerMessage message) {
         notifyVisiblePlayers(source, message);
         if (source instanceof Player player) {
@@ -145,7 +145,7 @@ final class RealmEntityManager implements EntityEventListener,
         projectiles.add(event.projectile());
     }
 
-    private void update(Entity entity, int delta) {
+    private void update(PhysicalEntity entity, int delta) {
         try {
             entity.update(delta);
         } catch (Exception e) {
@@ -172,12 +172,12 @@ final class RealmEntityManager implements EntityEventListener,
         updateProjectiles(delta);
     }
 
-    public Optional<Entity> findInsight(Entity source, long id) {
-        Set<Entity> entities = scopeManager.filterVisibleEntities(source, Entity.class);
+    public Optional<PhysicalEntity> findInsight(PhysicalEntity source, long id) {
+        Set<PhysicalEntity> entities = scopeManager.filterVisibleEntities(source, PhysicalEntity.class);
         return entities.stream().filter(e -> e.id() == id).findFirst();
     }
 
-    public void add(Entity entity) {
+    public void add(PhysicalEntity entity) {
         if (scopeManager.getAllEntities().contains(entity)) {
             return;
         }

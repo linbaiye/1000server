@@ -1,18 +1,17 @@
 package org.y1000.realm;
 
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.util.Coordinate;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 final class RelevantScope {
-    private final Entity source;
+    private final PhysicalEntity source;
 
-    private final Set<Entity> entities;
+    private final Set<PhysicalEntity> entities;
 
     private Coordinate start;
 
@@ -26,11 +25,11 @@ final class RelevantScope {
 
     private final int yrange;
 
-    public RelevantScope(Entity source) {
+    public RelevantScope(PhysicalEntity source) {
         this(source, X_RANGE, Y_RANGE);
     }
 
-    public RelevantScope(Entity source, int xrange, int yrange) {
+    public RelevantScope(PhysicalEntity source, int xrange, int yrange) {
         Objects.requireNonNull(source);
         this.source = source;
         entities = new HashSet<>();
@@ -39,7 +38,7 @@ final class RelevantScope {
         computeStartEnd();
     }
 
-    public Entity source() {
+    public PhysicalEntity source() {
         return source;
     }
 
@@ -48,14 +47,14 @@ final class RelevantScope {
         end = source.coordinate().move(xrange, yrange);
     }
 
-    public boolean outOfScope(Entity entity) {
+    public boolean outOfScope(PhysicalEntity entity) {
         Objects.requireNonNull(entity);
         var c = entity.coordinate();
         return start.x() > c.x() || end.x() < c.x()
                 || start.y() > c.y() || end.y() < c.y();
     }
 
-    public boolean addIfVisible(Entity another) {
+    public boolean addIfVisible(PhysicalEntity another) {
         if (another == null ||
                 source.equals(another) || entities.contains(another)) {
             return false;
@@ -67,7 +66,7 @@ final class RelevantScope {
         return false;
     }
 
-    public <E extends Entity> Set<E> filter(Class<E> type) {
+    public <E extends PhysicalEntity> Set<E> filter(Class<E> type) {
         Objects.requireNonNull(type);
         return entities.stream()
                 .filter(entity -> type.isAssignableFrom(entity.getClass()))
@@ -75,20 +74,20 @@ final class RelevantScope {
                 .collect(Collectors.toSet());
     }
 
-    public Set<Entity> update() {
+    public Set<PhysicalEntity> update() {
         computeStartEnd();
-        Set<Entity> result = entities.stream().filter(this::outOfScope)
+        Set<PhysicalEntity> result = entities.stream().filter(this::outOfScope)
                 .collect(Collectors.toSet());
         entities.removeAll(result);
         return result;
     }
 
-    public void remove(Entity another) {
+    public void remove(PhysicalEntity another) {
         Objects.requireNonNull(another);
         entities.remove(another);
     }
 
-    public boolean removeIfNotVisible(Entity another) {
+    public boolean removeIfNotVisible(PhysicalEntity another) {
         Objects.requireNonNull(another);
         return outOfScope(another) && entities.remove(another);
     }

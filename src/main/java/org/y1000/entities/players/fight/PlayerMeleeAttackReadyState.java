@@ -3,7 +3,7 @@ package org.y1000.entities.players.fight;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.AbstractPlayerStillState;
 import org.y1000.entities.players.PlayerImpl;
@@ -11,9 +11,9 @@ import org.y1000.entities.players.PlayerState;
 
 @Slf4j
 public final class PlayerMeleeAttackReadyState extends AbstractPlayerStillState {
-    private final Entity target;
+    private final PhysicalEntity target;
 
-    public PlayerMeleeAttackReadyState(int totalMillis, Entity target) {
+    public PlayerMeleeAttackReadyState(int totalMillis, PhysicalEntity target) {
         super(totalMillis, State.COOLDOWN);
         this.target = target;
     }
@@ -37,7 +37,7 @@ public final class PlayerMeleeAttackReadyState extends AbstractPlayerStillState 
         return PlayerMeleeEnfightWalkState.move(player, direction, target);
     }
 
-    public static PlayerMeleeAttackReadyState prepareSwing(PlayerImpl player, Entity target) {
+    public static PlayerMeleeAttackReadyState prepareSwing(PlayerImpl player, PhysicalEntity target) {
         return new PlayerMeleeAttackReadyState(player.getStateMillis(State.COOLDOWN), target);
     }
 }

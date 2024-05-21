@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures;
 
+import lombok.experimental.SuperBuilder;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;

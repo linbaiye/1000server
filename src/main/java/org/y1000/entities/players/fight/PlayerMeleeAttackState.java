@@ -3,7 +3,7 @@ package org.y1000.entities.players.fight;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
@@ -12,7 +12,7 @@ import org.y1000.entities.players.PlayerState;
 public final class PlayerMeleeAttackState extends AbstractPlayerAttackState {
 
     public PlayerMeleeAttackState(int length,
-                                  Entity target,
+                                  PhysicalEntity target,
                                   State state) {
         super(length, target, state);
     }
@@ -34,7 +34,7 @@ public final class PlayerMeleeAttackState extends AbstractPlayerAttackState {
         }
     }
 
-    public static PlayerMeleeAttackState attack(Entity target, State state, int length) {
+    public static PlayerMeleeAttackState attack(PhysicalEntity target, State state, int length) {
         return new PlayerMeleeAttackState(length, target, state );
     }
 

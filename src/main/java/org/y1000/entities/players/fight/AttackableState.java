@@ -2,7 +2,7 @@ package org.y1000.entities.players.fight;
 
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.ChangeStateEvent;
@@ -20,22 +20,22 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
 
     Logger logger();
 
-    default PlayerState rangedCooldownState(PlayerImpl player, Entity target) {
+    default PlayerState rangedCooldownState(PlayerImpl player, PhysicalEntity target) {
         return PlayerBowCooldownState.cooldown(player.getStateMillis(State.COOLDOWN), target, 1);
     }
 
-    default PlayerState rangedAttackState(PlayerImpl player, Entity target) {
+    default PlayerState rangedAttackState(PlayerImpl player, PhysicalEntity target) {
         return PlayerBowAttackState.bow(player, target);
     }
 
-    default void rangedAttack(PlayerImpl player, Entity target, int counter) {
+    default void rangedAttack(PlayerImpl player, PhysicalEntity target, int counter) {
         var direction = player.coordinate().computeDirection(target.coordinate());
         player.changeDirection(direction);
         player.changeState(PlayerBowAttackState.bow(player, target, counter));
         player.emitEvent(PlayerAttackEvent.of(player, target.id()));
     }
 
-    default void attack(PlayerImpl player, Entity target) {
+    default void attack(PlayerImpl player, PhysicalEntity target) {
         if (!target.attackable()) {
             player.changeState(PlayerStillState.chillOut(player));
             player.emitEvent(ChangeStateEvent.of(player));
@@ -65,12 +65,12 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
     }
 
     default void handleAttackEvent(PlayerImpl player, ClientAttackEvent event) {
-        Optional<Entity> insight = player.getRealm().findInsight(player, event.entityId());
+        Optional<PhysicalEntity> insight = player.getRealm().findInsight(player, event.entityId());
         if (insight.isEmpty()) {
             player.emitEvent(new PlayerAttackEventResponse(player, event, false));
             return;
         }
-        Entity target = insight.get();
+        PhysicalEntity target = insight.get();
         if (!target.attackable()) {
             player.emitEvent(new PlayerAttackEventResponse(player, event, false));
             return;

@@ -1,6 +1,6 @@
 package org.y1000.entities.players.fight;
 
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.MovableState;
@@ -15,15 +15,15 @@ public abstract class AbstractPlayerAttackState extends AbstractCreateState<Play
 
     private final State state;
 
-    private final Entity target;
+    private final PhysicalEntity target;
 
-    public AbstractPlayerAttackState(int totalMillis, Entity target, State state) {
+    public AbstractPlayerAttackState(int totalMillis, PhysicalEntity target, State state) {
         super(totalMillis);
         this.state = state;
         this.target = target;
     }
 
-    protected Entity getTarget() {
+    protected PhysicalEntity getTarget() {
         return target;
     }
 

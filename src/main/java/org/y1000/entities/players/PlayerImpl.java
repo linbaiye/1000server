@@ -1,23 +1,15 @@
 package org.y1000.entities.players;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.Entity;
 import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
-import org.y1000.entities.creatures.event.ChangeStateEvent;
-import org.y1000.entities.players.equipment.weapon.Weapon;
-import org.y1000.entities.players.event.PlayerAttackEvent;
-import org.y1000.entities.players.fight.PlayerMeleeAttackState;
-import org.y1000.entities.players.fight.PlayerMeleeCooldownState;
-import org.y1000.entities.players.fight.PlayerMeleeAttackReadyState;
+import org.y1000.entities.item.Weapon;
+import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
-import org.y1000.entities.players.kungfu.UnnamedBufa;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
-import org.y1000.entities.players.kungfu.attack.bow.UnnamedBow;
-import org.y1000.entities.players.kungfu.attack.sword.UnamedSword;
-import org.y1000.entities.players.kungfu.attack.unnamed.UnnamedQuanFa;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.network.ClientEventListener;
 import org.y1000.network.Connection;
@@ -49,6 +41,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private Weapon weapon;
 
+    private final Inventory inventory;
+
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
         put(State.WALK, 840);
@@ -65,28 +59,22 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }};
 
 
-    public PlayerImpl(long id, Coordinate coordinate,
-                      Direction direction,
-                      String name, Connection connection) {
-        super(id, coordinate, direction, name, STATE_MILLIS);
-        eventQueue = new ConcurrentLinkedQueue<>();
-        changeState(new PlayerStillState(getStateMillis(State.IDLE)));
-        changeDirection(Direction.DOWN);
+    @Builder
+    public PlayerImpl(long id,
+                      Coordinate coordinate,
+                      String name,
+                      Connection connection,
+                      Inventory inventory,
+                      Weapon weapon,
+                      AttackKungFu attackKungFu) {
+        super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
+        this.inventory = inventory;
         this.connection = connection;
-        this.footKungfu = new UnnamedBufa(8500);
-        /*attackKungFu = UnnamedQuanFa.builder()
-                .level(5501)
-                .bodyArmor(1)
-                .recovery(50)
-                .attackSpeed(40)
-                .build();*/
-        attackKungFu = UnamedSword.builder().level(5010)
-                .attackSpeed(80)
-                .recovery(80)
-                .bodyArmor(1)
-                .bodyArmor(1)
-                .build();
+        this.attackKungFu = attackKungFu;
+        this.weapon = weapon;
         this.connection.registerClientEventListener(this);
+        changeState(new PlayerStillState(getStateMillis(State.IDLE)));
+        eventQueue = new ConcurrentLinkedQueue<>();
     }
 
     public Optional<ClientEvent> takeClientEvent() {
@@ -137,6 +125,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     @Override
+    public Inventory inventory() {
+        return inventory;
+    }
+
+    @Override
     public void attackedBy(ViolentCreature attacker) {
         attackedBy(attacker.hit());
     }
@@ -166,6 +159,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return kungfuSpeed + 70;
     }
 
+    public Optional<Weapon> weapon() {
+        return Optional.ofNullable(weapon);
+    }
 
 
     @Override

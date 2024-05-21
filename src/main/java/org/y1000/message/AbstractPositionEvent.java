@@ -5,7 +5,7 @@ import org.y1000.entities.creatures.State;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PositionPacket;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.util.Coordinate;
 
@@ -34,7 +34,7 @@ public abstract class AbstractPositionEvent implements EntityEvent, ServerMessag
 
 
     @Override
-    public Entity source() {
+    public PhysicalEntity source() {
         return this.source;
     }
 

@@ -2,7 +2,7 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Entity;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
@@ -107,7 +107,7 @@ final class RealmImpl implements Runnable, Realm {
     }
 
     @Override
-    public Optional<Entity> findInsight(Entity source, long id) {
+    public Optional<PhysicalEntity> findInsight(PhysicalEntity source, long id) {
         return entityManager.findInsight(source, id);
     }
 }
