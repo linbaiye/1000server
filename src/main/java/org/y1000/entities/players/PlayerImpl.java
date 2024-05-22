@@ -6,13 +6,18 @@ import org.slf4j.Logger;
 import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
+import org.y1000.entities.item.Item;
 import org.y1000.entities.item.Weapon;
+import org.y1000.entities.players.event.ChangeWeaponEvent;
+import org.y1000.entities.players.event.InventorySlotSwappedEvent;
 import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.entities.players.kungfu.KungFuBook;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
+import org.y1000.message.clientevent.ClientClickedInventorySlotEvent;
+import org.y1000.message.clientevent.ClientInventoryEvent;
+import org.y1000.message.clientevent.ClientSwapInventoryEvent;
 import org.y1000.message.serverevent.JoinedRealmEvent;
-import org.y1000.network.ClientEventListener;
-import org.y1000.network.Connection;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
@@ -21,19 +26,15 @@ import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
-public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player,
-        ClientEventListener {
+public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player {
 
     private Realm realm;
 
     private final Queue<ClientEvent> eventQueue;
-
-    private final Connection connection;
 
     private AttackKungFu attackKungFu;
 
@@ -42,6 +43,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     private Weapon weapon;
 
     private final Inventory inventory;
+
+
+    private final KungFuBook kungFuBook;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
@@ -58,21 +62,19 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         put(State.SWORD, AttackKungFuType.SWORD.below50Millis());
     }};
 
-
     @Builder
     public PlayerImpl(long id,
                       Coordinate coordinate,
                       String name,
-                      Connection connection,
                       Inventory inventory,
                       Weapon weapon,
-                      AttackKungFu attackKungFu) {
+                      AttackKungFu attackKungFu,
+                      KungFuBook kungFuBook) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
         this.inventory = inventory;
-        this.connection = connection;
         this.attackKungFu = attackKungFu;
         this.weapon = weapon;
-        this.connection.registerClientEventListener(this);
+        this.kungFuBook = kungFuBook;
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         eventQueue = new ConcurrentLinkedQueue<>();
     }
@@ -95,10 +97,27 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return attackKungFu;
     }
 
-    @Override
-    public Connection connection() {
-        return connection;
+    private void handleInventoryEvent(ClientInventoryEvent inventoryEvent) {
+        if (!state().canHandle(inventoryEvent)) {
+            return;
+        }
+        if (inventoryEvent instanceof ClientSwapInventoryEvent swapInventoryEvent &&
+                inventory.swap(swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot())) {
+            emitEvent(new InventorySlotSwappedEvent(this, swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot()));
+        } else if (inventoryEvent instanceof ClientClickedInventorySlotEvent slotEvent) {
+            Item item = inventory.getItem(slotEvent.sourceSlot());
+        }
     }
+
+    @Override
+    public void handleEvent(ClientEvent clientEvent) {
+        if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
+            handleInventoryEvent(inventoryEvent);
+        } else {
+            eventQueue.add(clientEvent);
+        }
+    }
+
 
     @Override
     public void changeState(PlayerState newState) {
@@ -151,6 +170,27 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
         changeState(PlayerFrozenState.Instance);
         emitEvent(new PlayerLeftEvent(this));
+    }
+
+    @Override
+    public void equipWeapon(Weapon weapon) {
+        if (stateEnum() == State.DIE) {
+            return;
+        }
+        int slot = inventory.remove(weapon);
+        if (this.weapon != null) {
+            inventory.put(slot, this.weapon);
+        }
+        this.weapon = weapon;
+        if (attackKungFu.getType() != weapon.kungFuType()) {
+            this.attackKungFu = kungFuBook.findBasic(weapon.kungFuType());
+        }
+        emitEvent(new ChangeWeaponEvent(this, slot));
+    }
+
+    @Override
+    public void changeAttackKungFu(AttackKungFu attackKungFu) {
+
     }
 
     @Override
@@ -222,11 +262,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     @Override
     public int hashCode() {
         return Objects.hash(id());
-    }
-
-    @Override
-    public void OnEvent(ClientEvent clientEvent) {
-        eventQueue.add(clientEvent);
     }
 
     @Override

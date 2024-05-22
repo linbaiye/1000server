@@ -1,8 +1,25 @@
 package org.y1000.entities.players.kungfu;
 
-public interface FootKungFu extends LevelKungFu {
+import lombok.experimental.SuperBuilder;
 
-    default boolean canFly() {
+@SuperBuilder
+public final class FootKungFu extends AbstractLevelKungFu {
+
+    private final String name;
+
+    public boolean canFly() {
         return level() >= 8501;
+    }
+
+    @Override
+    public String name() {
+        return name;
+    }
+
+    public static FootKungFu unnamed() {
+        return FootKungFu.builder()
+                .name("无名步法")
+                .level(100)
+                .build();
     }
 }

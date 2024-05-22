@@ -5,7 +5,7 @@ import org.y1000.network.Connection;
 
 public interface PlayerRepository {
 
-    Player load(Connection connection);
+    Player load(String token);
 
     void save(Player player);
 

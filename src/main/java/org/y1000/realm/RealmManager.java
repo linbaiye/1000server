@@ -1,48 +1,108 @@
 package org.y1000.realm;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.players.Player;
+import org.y1000.network.Connection;
+import org.y1000.network.ConnectionEventType;
+import org.y1000.network.event.ConnectionDataEvent;
+import org.y1000.network.event.ConnectionEstablishedEvent;
+import org.y1000.network.event.ConnectionEvent;
+import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.realm.event.PlayerDisconnectedEvent;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 
-public final class RealmManager {
+@Slf4j
+public final class RealmManager implements Runnable {
     private final Map<String, RealmImpl> realms;
 
     private final Map<Player, RealmImpl> playerRealmMap;
 
+    private final Map<Connection, Player> connectionPlayerMap;
+
     private final ExecutorService executorService;
+
+    private final Queue<ConnectionEvent> eventQueue;
+
+    private volatile boolean shutdown;
 
     private RealmManager(Map<String, RealmImpl> realms) {
         this.realms = realms;
         executorService = Executors.newFixedThreadPool(realms.size());
         playerRealmMap = new HashMap<>();
+        eventQueue = new ArrayDeque<>(100);
+        connectionPlayerMap = new HashMap<>(500);
+        shutdown = false;
     }
 
-    public void start() {
+    public void startRealms() {
         realms.values().forEach(executorService::submit);
     }
 
-    public boolean shut() throws InterruptedException {
-        executorService.shutdown();
-        return executorService.awaitTermination(10, TimeUnit.SECONDS);
+    private String getPlayerLastRealm(Player player) {
+        return "start";
     }
 
+    private void handleNewConnection(ConnectionEstablishedEvent event) {
+        if (playerRealmMap.containsKey(event.player())) {
+            // need to close current connection.
+            return;
+        }
+        String playerLastRealm = getPlayerLastRealm(event.player());
+        RealmImpl realm = realms.get(playerLastRealm);
+        if (realm == null) {
+            log.error("Realm {} does not exist.", playerLastRealm);
+            event.connection().close();
+            return;
+        }
+        connectionPlayerMap.put(event.connection(), event.player());
+        playerRealmMap.put(event.player(), realm);
+        realm.handle(event);
+        log.debug("New connection event sent to realm.");
+    }
 
-    public void onPlayerConnected(Player player, String realmName) {
-        if (realms.containsKey(realmName)) {
-            RealmImpl realm = realms.get(realmName);
-            playerRealmMap.put(player, realm);
-            realm.addPlayer(player);
+    private void sendDataToRealm(ConnectionDataEvent dataEvent) {
+        Player player = connectionPlayerMap.get(dataEvent.connection());
+        if (player == null) {
+            log.warn("Close stray connection.");
+            dataEvent.connection().close();
+            return;
+        }
+        playerRealmMap.get(player).handle(new PlayerDataEvent(player, dataEvent.data()));
+    }
+
+    private void handleDisconnection(Connection connection) {
+        Player removed = connectionPlayerMap.remove(connection);
+        if (removed != null) {
+            RealmImpl realm = playerRealmMap.remove(removed);
+            realm.handle(new PlayerDisconnectedEvent(removed));
         }
     }
 
-    public void onPlayerDisconnected(Player player) {
-        RealmImpl realm = playerRealmMap.get(player);
-        if (realm != null) {
-            realm.removePlayer(player);
-            playerRealmMap.remove(player);
+    private void handle(ConnectionEvent event) {
+        log.debug("Handling event {}.", event);
+        if (event.type() == ConnectionEventType.ESTABLISHED) {
+            handleNewConnection((ConnectionEstablishedEvent)event);
+        } else if (event.type() == ConnectionEventType.CLOSED) {
+            handleDisconnection(event.connection());
+        } else if (event.type() == ConnectionEventType.DATA) {
+            sendDataToRealm((ConnectionDataEvent)event);
+        }
+    }
+
+
+    public boolean shut() throws InterruptedException {
+        executorService.shutdown();
+        shutdown = true;
+        return executorService.awaitTermination(60, TimeUnit.SECONDS);
+    }
+
+    public void queueEvent(ConnectionEvent event) {
+        synchronized (eventQueue) {
+            eventQueue.add(event);
+            eventQueue.notifyAll();
         }
     }
 
@@ -53,5 +113,25 @@ public final class RealmManager {
                 .orElseThrow(() -> new IllegalArgumentException("Map not found."));
         realmMap.put(realm.map().name(), realm);
         return new RealmManager(realmMap);
+    }
+
+    @Override
+    public void run() {
+        while (!shutdown) {
+            try {
+                ConnectionEvent event;
+                log.debug("Wait for event.");
+                synchronized (eventQueue) {
+                    while (eventQueue.isEmpty()) {
+                        eventQueue.wait();
+                    }
+                    event = eventQueue.poll();
+                    eventQueue.notifyAll();
+                }
+                handle(event);
+            } catch (Exception e) {
+                log.error("Exception ", e);
+            }
+        }
     }
 }

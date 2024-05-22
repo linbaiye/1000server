@@ -3,14 +3,14 @@ package org.y1000.network;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.message.clientevent.ClientAttackEvent;
-import org.y1000.message.clientevent.LoginEvent;
+import org.y1000.entities.repository.PlayerRepository;
+import org.y1000.message.clientevent.*;
+import org.y1000.network.event.ConnectionClosedEvent;
+import org.y1000.network.event.ConnectionDataEvent;
+import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.gen.ClientPacket;
-import org.y1000.message.clientevent.ClientMovementEvent;
-import org.y1000.message.clientevent.ClientEvent;
+import org.y1000.realm.RealmManager;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
@@ -18,39 +18,44 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     private final AtomicReference<ChannelHandlerContext> context;
 
-    private final List<ClientEventListener> clientEventListeners;
+    private final PlayerRepository playerRepository;
 
-    private final ConnectionManager connectionManager;
+    private final RealmManager realmManager;
 
-    public AbstractConnection(ConnectionManager connectionManager) {
+    public AbstractConnection(RealmManager realmManager, PlayerRepository playerRepository) {
+        this.realmManager = realmManager;
         context = new AtomicReference<>();
-        clientEventListeners = new ArrayList<>();
-        this.connectionManager = connectionManager;
+        this.playerRepository = playerRepository;
     }
-
-
-    @Override
-    public void registerClientEventListener(ClientEventListener clientEventListener) {
-        clientEventListeners.add(clientEventListener);
-    }
-
 
     private ClientEvent createMessage(ClientPacket clientPacket) {
         return switch (clientPacket.getTypeCase()) {
             case MOVEEVENTPACKET -> ClientMovementEvent.fromPacket(clientPacket);
             case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
             case ATTACKEVENTPACKET -> ClientAttackEvent.fromPacket(clientPacket.getAttackEventPacket());
+            case SWAPINVENTORYSLOTPACKET -> ClientSwapInventoryEvent.fromPacket(clientPacket.getSwapInventorySlotPacket());
             default -> throw new IllegalArgumentException();
         };
     }
 
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (msg instanceof ClientPacket packet) {
-            var message = createMessage(packet);
-            log.debug("Received message {}.", message);
-            connectionManager.onClientEvent(this, message);
-            clientEventListeners.forEach(clientEventListener -> clientEventListener.OnEvent(message));
+            try {
+                var message = createMessage(packet);
+                if (message instanceof LoginEvent loginEvent) {
+                    var player = playerRepository.load(loginEvent.getToken());
+                    realmManager.queueEvent(new ConnectionEstablishedEvent(player, this));
+                } else {
+                    realmManager.queueEvent(new ConnectionDataEvent(this, message));
+                }
+                log.debug("Received message {}.", message);
+            } catch (Exception e) {
+                log.error("Exception ", e);
+
+            }
+            //clientEventListeners.forEach(clientEventListener -> clientEventListener.OnEvent(message));
         }
     }
 
@@ -61,13 +66,12 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.info("Channel closed.");
-        connectionManager.onClosed(this);
+        realmManager.queueEvent(new ConnectionClosedEvent(this));
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (!ctx.channel().isActive()) {
-            connectionManager.onClosed(this);
             context.get().close();
         }
     }
@@ -75,7 +79,6 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         context.set(ctx);
-        connectionManager.onEstablished(this);
     }
 
     @Override

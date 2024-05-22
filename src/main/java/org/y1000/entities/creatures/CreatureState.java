@@ -1,6 +1,9 @@
 package org.y1000.entities.creatures;
 
 
+import org.y1000.message.clientevent.ClientEvent;
+import org.y1000.message.clientevent.ClientInventoryEvent;
+
 public interface CreatureState<C extends Creature> {
     State stateEnum();
 
@@ -14,6 +17,10 @@ public interface CreatureState<C extends Creature> {
 
     default void moveToHurtCoordinate(C creature) {
 
+    }
+
+    default boolean canHandle(ClientEvent event) {
+        return true;
     }
 
     default State decideAfterHurtState() {

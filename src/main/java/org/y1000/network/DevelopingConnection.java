@@ -2,7 +2,9 @@ package org.y1000.network;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.repository.PlayerRepository;
 import org.y1000.message.ServerMessage;
+import org.y1000.realm.RealmManager;
 
 import java.util.*;
 
@@ -20,8 +22,8 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
 
     private static final Set<Long> IDs = new HashSet<>();
 
-    public DevelopingConnection(ConnectionManager connectionManager) {
-        super(connectionManager);
+    public DevelopingConnection(PlayerRepository playerRepository, RealmManager realmManager) {
+        super(realmManager, playerRepository);
         messages = new ArrayList<>();
         sender = new Thread(this);
         sender.start();

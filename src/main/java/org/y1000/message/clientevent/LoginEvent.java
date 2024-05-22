@@ -1,8 +1,10 @@
 package org.y1000.message.clientevent;
 
+import lombok.Getter;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.network.gen.PlayerLoginPacket;
 
+@Getter
 public final class LoginEvent implements ClientEvent {
     private final String token;
 
@@ -15,6 +17,6 @@ public final class LoginEvent implements ClientEvent {
     }
 
     @Override
-    public void accept(PlayerImpl player, ClientEventVisitor handler) {
+    public void accept(PlayerImpl player, BiClientEventVisitor handler) {
     }
 }

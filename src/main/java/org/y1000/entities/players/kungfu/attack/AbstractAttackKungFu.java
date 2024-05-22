@@ -8,6 +8,8 @@ import org.y1000.entities.players.kungfu.AbstractLevelKungFu;
 @SuperBuilder
 public abstract class AbstractAttackKungFu extends AbstractLevelKungFu implements AttackKungFu {
 
+    private final String name;
+
     private int bodyDamage;
 
     private int bodyArmor;
@@ -16,4 +18,7 @@ public abstract class AbstractAttackKungFu extends AbstractLevelKungFu implement
 
     private int recovery;
 
+    public String name() {
+        return this.name;
+    }
 }

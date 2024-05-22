@@ -4,7 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.monster.PassiveMonster;
-import org.y1000.entities.players.Player;
+import org.y1000.realm.event.PlayerConnectedEvent;
+import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.realm.event.PlayerDisconnectedEvent;
+import org.y1000.realm.event.RealmEvent;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
@@ -17,9 +20,7 @@ final class RealmImpl implements Runnable, Realm {
 
     private final RealmMap realmMap;
 
-    private final List<Player> waitingPlayers;
-
-    private final List<Player> leavingPlayers;
+    private final List<RealmEvent> pendingEvents;
 
     private final RealmEntityManager entityManager;
 
@@ -27,61 +28,63 @@ final class RealmImpl implements Runnable, Realm {
 
     public RealmImpl(RealmMap map) {
         realmMap = map;
-        waitingPlayers = new ArrayList<>(32);
-        leavingPlayers = new ArrayList<>(32);
         entityManager = new RealmEntityManager();
         shutdown = false;
+        pendingEvents = new ArrayList<>(100);
     }
 
     public RealmMap map() {
         return realmMap;
     }
 
-    private void joinPlayer(Player player) {
-        entityManager.add(player);
-        player.joinReam(this);
-    }
-
-
     private void initEntities() {
         List<PassiveMonster> monsters = List.of(new PassiveMonster(1000L, new Coordinate(39, 30), Direction.DOWN, "牛", realmMap));
         monsters.forEach(entityManager::add);
     }
 
-
-    private void step() {
+    private void dispatchEvent(RealmEvent event) {
         try {
-            long timeMillis = System.currentTimeMillis();
+            if (event instanceof PlayerConnectedEvent connectedEvent) {
+                if (entityManager.contains(connectedEvent.player())) {
+                    log.warn("Player {} already existed.", connectedEvent.player());
+                    connectedEvent.player().leaveRealm();
+                    entityManager.remove(event.player());
+                }
+                entityManager.add(connectedEvent.player(), connectedEvent.connection());
+                connectedEvent.player().joinReam(this);
+            } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
+                disconnectedEvent.player().leaveRealm();
+            } else if (event instanceof PlayerDataEvent dataEvent) {
+                dataEvent.player().handleEvent(dataEvent.data());
+            }
+        } catch (Exception e) {
+            log.error("Exception when handling event .", e);
+        }
+    }
+
+
+    private void startRealm() {
+        long accumulatedMillis = System.currentTimeMillis();
+        try {
             while (!shutdown) {
                 long current = System.currentTimeMillis();
-                if (timeMillis <= current) {
-                    try {
-                        entityManager.updateEntities(STEP_MILLIS);
-                        timeMillis += STEP_MILLIS;
-                    } catch (RuntimeException e) {
-                        log.error("Excpetion: ", e);
-                    }
+                if (accumulatedMillis <= current) {
+                    entityManager.updateEntities(STEP_MILLIS);
+                    accumulatedMillis += STEP_MILLIS;
                 } else {
-                    List<Player> join = Collections.emptyList();
-                    List<Player> leaving = Collections.emptyList();
-                    synchronized (this) {
-                        while (waitingPlayers.isEmpty() && current < timeMillis &&
-                                leavingPlayers.isEmpty()) {
-                            wait(timeMillis - current);
+                    List<RealmEvent> events = Collections.emptyList();
+                    synchronized (pendingEvents) {
+                        while (pendingEvents.isEmpty() && current < accumulatedMillis) {
+                            pendingEvents.wait(accumulatedMillis - current);
                             current = System.currentTimeMillis();
                         }
-                        if (!waitingPlayers.isEmpty()) {
-                            join = new ArrayList<>(waitingPlayers);
-                            waitingPlayers.clear();
+                        if (!pendingEvents.isEmpty()) {
+                            events = new ArrayList<>(pendingEvents);
+                            pendingEvents.clear();
                         }
-                        if (!leavingPlayers.isEmpty()) {
-                            leaving = new ArrayList<>(leavingPlayers);
-                            leavingPlayers.clear();
-                        }
-                        notifyAll();
+                        pendingEvents.notify();
                     }
-                    join.forEach(this::joinPlayer);
-                    leaving.forEach(Player::leaveRealm);
+                    events.forEach(this::dispatchEvent);
                 }
             }
         } catch (InterruptedException e) {
@@ -92,22 +95,19 @@ final class RealmImpl implements Runnable, Realm {
     @Override
     public void run() {
         initEntities();
-        step();
-    }
-
-
-    public synchronized void addPlayer(Player player) {
-        waitingPlayers.add(player);
-        notifyAll();
-    }
-
-    public synchronized void removePlayer(Player player) {
-        leavingPlayers.add(player);
-        notifyAll();
+        startRealm();
     }
 
     @Override
     public Optional<PhysicalEntity> findInsight(PhysicalEntity source, long id) {
         return entityManager.findInsight(source, id);
+    }
+
+    @Override
+    public void handle(RealmEvent event) {
+        synchronized (pendingEvents) {
+            pendingEvents.add(event);
+            pendingEvents.notify();
+        }
     }
 }

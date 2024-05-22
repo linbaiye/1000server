@@ -23,7 +23,7 @@ public final class Server {
 
     private final EventLoopGroup serverGroup;
 
-    private final ConnectionManager connectionManager;
+    private final PlayerRepository playerRepository;
 
     private final RealmManager realmManager = RealmManager.create();
 
@@ -32,7 +32,7 @@ public final class Server {
         workerGroup = new NioEventLoopGroup();
         serverGroup = new NioEventLoopGroup();
         bootstrap = new ServerBootstrap();
-        connectionManager = new ConnectionManager(createPlayerRepository(), realmManager);
+        playerRepository = createPlayerRepository();
     }
 
     private PlayerRepository createPlayerRepository() {
@@ -61,7 +61,7 @@ public final class Server {
                         protected void initChannel(NioSocketChannel channel) throws Exception {
                             channel.pipeline()
                                     .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                    .addLast("packetHandler", new DevelopingConnection(connectionManager))
+                                    .addLast("packetHandler", new DevelopingConnection(playerRepository, realmManager))
                                     .addLast("packetLengthAppender", new LengthFieldPrepender(4))
                                     .addLast("packetEncoder", MessageEncoder.ENCODER);
                         }
@@ -74,12 +74,18 @@ public final class Server {
     }
 
     private void startRealms() {
-        realmManager.start();
+        realmManager.startRealms();
     }
+
+    public void loopEvent() {
+        new Thread(realmManager).start();
+    }
+
 
     public static void main(String[] args) {
         Server server = new Server(9999);
         server.startRealms();
+        server.loopEvent();
         server.startNetworking();
     }
 }

@@ -1,13 +1,15 @@
 package org.y1000.network;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.repository.PlayerRepository;
 import org.y1000.message.ServerMessage;
+import org.y1000.realm.RealmManager;
 
 @Slf4j
 public final class ConnectionImpl extends AbstractConnection {
 
-    public ConnectionImpl(ConnectionManager connectionManager) {
-        super(connectionManager);
+    public ConnectionImpl(PlayerRepository playerRepository, RealmManager realmManager) {
+        super(realmManager, playerRepository);
     }
 
 

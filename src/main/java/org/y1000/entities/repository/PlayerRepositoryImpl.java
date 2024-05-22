@@ -54,15 +54,15 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .build();
     }
 
+
     @Override
-    public Player load(Connection connection) {
+    public Player load(String token) {
         int slot = findSlot();
         Weapon weapon = weapon();
         return PlayerImpl.builder()
                 .id(slot)
                 .name("杨过")
                 .coordinate(new Coordinate(39 + slot, 27))
-                .connection(connection)
                 .weapon(weapon)
                 .attackKungFu(loadKungFu(weapon))
                 .inventory(loadInventory())

@@ -4,14 +4,14 @@ import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.fight.AttackableState;
 import org.y1000.message.clientevent.ClientAttackEvent;
-import org.y1000.message.clientevent.ClientEventVisitor;
+import org.y1000.message.clientevent.BiClientEventVisitor;
 import org.y1000.message.clientevent.ClientMovementEvent;
 
 /**
  * State that does not move.
  */
 public abstract class AbstractPlayerStillState extends AbstractCreateState<PlayerImpl> implements
-        ClientEventVisitor, AttackableState, MovableState, PlayerState {
+        BiClientEventVisitor, AttackableState, MovableState, PlayerState {
     private final State state;
 
     public AbstractPlayerStillState(int totalMillis, State state) {

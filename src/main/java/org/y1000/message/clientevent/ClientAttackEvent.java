@@ -3,7 +3,6 @@ package org.y1000.message.clientevent;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerImpl;
-import org.y1000.message.ValueEnum;
 import org.y1000.network.gen.ClientAttackEventPacket;
 
 public record ClientAttackEvent(long sequence, long entityId, State attackState, Direction direction) implements ClientEvent {
@@ -13,7 +12,7 @@ public record ClientAttackEvent(long sequence, long entityId, State attackState,
     }
 
     @Override
-    public void accept(PlayerImpl player, ClientEventVisitor handler) {
+    public void accept(PlayerImpl player, BiClientEventVisitor handler) {
         handler.visit(player, this);
     }
 }

@@ -9,8 +9,6 @@ public interface Connection {
 
     void write(ServerMessage message);
 
-    void registerClientEventListener(ClientEventListener clientEventListener);
-
     default void write(List<ServerMessage> messages) {
 
     }

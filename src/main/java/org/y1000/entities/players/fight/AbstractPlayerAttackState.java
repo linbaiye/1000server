@@ -7,11 +7,11 @@ import org.y1000.entities.players.MovableState;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
 import org.y1000.message.clientevent.ClientAttackEvent;
-import org.y1000.message.clientevent.ClientEventVisitor;
+import org.y1000.message.clientevent.BiClientEventVisitor;
 import org.y1000.message.clientevent.ClientMovementEvent;
 
 public abstract class AbstractPlayerAttackState extends AbstractCreateState<PlayerImpl> implements AttackableState,
-        PlayerState, ClientEventVisitor, MovableState {
+        PlayerState, BiClientEventVisitor, MovableState {
 
     private final State state;
 

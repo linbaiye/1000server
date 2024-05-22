@@ -5,6 +5,8 @@ import org.y1000.entities.players.PlayerImpl;
 
 public interface ClientEvent {
 
-    void accept(PlayerImpl player, ClientEventVisitor handler);
+    default void accept(PlayerImpl player, BiClientEventVisitor handler) {
+
+    }
 
 }
