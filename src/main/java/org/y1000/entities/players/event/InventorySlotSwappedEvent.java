@@ -3,6 +3,7 @@ package org.y1000.entities.players.event;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
+import org.y1000.network.gen.SwapInventorySlotPacket;
 
 public class InventorySlotSwappedEvent extends AbstractPlayerEvent {
     private final int slot1;
@@ -21,6 +22,13 @@ public class InventorySlotSwappedEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
-        return null;
+        return Packet.newBuilder()
+                .setSwapInventorySlotPacket(
+                        SwapInventorySlotPacket.newBuilder()
+                                .setSlot1(slot1)
+                                .setSlot2(slot2)
+                                .build()
+                ).build();
+
     }
 }

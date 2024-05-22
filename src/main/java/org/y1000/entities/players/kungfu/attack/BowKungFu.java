@@ -16,6 +16,11 @@ public final class BowKungFu extends AbstractAttackKungFu  {
         return AttackKungFuType.BOW;
     }
 
+    @Override
+    public boolean isRanged() {
+        return true;
+    }
+
     public static BowKungFu unnamed() {
         return BowKungFu.builder()
                 .name("无名弓术")

@@ -24,13 +24,9 @@ public interface Player extends ViolentCreature {
 
     void equipWeapon(Weapon weapon);
 
-    void changeAttackKungFu(AttackKungFu attackKungFu);
-
     default Optional<FootKungFu> footKungFu() {
         return Optional.empty();
     }
-
-    Inventory inventory();
 
     default Optional<Weapon> weapon() {
         return Optional.empty();

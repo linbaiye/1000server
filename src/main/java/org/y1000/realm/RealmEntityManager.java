@@ -8,9 +8,7 @@ import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.CreatureShootEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerAttackEvent;
-import org.y1000.entities.players.event.PlayerAttackEventResponse;
-import org.y1000.entities.players.event.RewindEvent;
+import org.y1000.entities.players.event.*;
 import org.y1000.message.AbstractPositionEvent;
 import org.y1000.message.InputResponseMessage;
 import org.y1000.message.ServerMessage;
@@ -147,6 +145,17 @@ final class RealmEntityManager implements EntityEventListener,
     @Override
     public void visit(CreatureShootEvent event) {
         projectiles.add(event.projectile());
+    }
+
+    @Override
+    public void visit(InventorySlotSwappedEvent event) {
+        sendMessage(event.player(), event);
+    }
+
+    @Override
+    public void visit(CharacterChangeWeaponEvent event) {
+        sendMessage(event.player(), event);
+        notifyVisiblePlayers(event.source(), event.packetForOtherPlayers());
     }
 
     private void update(PhysicalEntity entity, int delta) {

@@ -41,7 +41,6 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
             player.emitEvent(ChangeStateEvent.of(player));
             return;
         }
-        Direction direction = player.coordinate().computeDirection(target.coordinate());
         boolean rangedAttack = player.attackKungFu().isRanged();
         if (player.cooldown() > 0) {
             var cdState = rangedAttack ? rangedCooldownState(player, target) :
@@ -51,11 +50,12 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
             return;
         }
         var dist = player.coordinate().directDistance(target.coordinate());
-        player.changeDirection(direction);
         if (rangedAttack || dist <= 1) {
             State state = player.attackKungFu().randomAttackState();
             var attackState = rangedAttack ? rangedAttackState(player, target) :
                     PlayerMeleeAttackState.attack(target, state, player.getStateMillis(state));
+            Direction direction = player.coordinate().computeDirection(target.coordinate());
+            player.changeDirection(direction);
             player.changeState(attackState);
             player.emitEvent(PlayerAttackEvent.of(player, target.id()));
         } else {
@@ -76,6 +76,8 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
             return;
         }
         player.emitEvent(new PlayerAttackEventResponse(player, event, true));
+        Direction direction = player.coordinate().computeDirection(target.coordinate());
+        player.changeDirection(direction);
         attack(player, target);
     }
 }

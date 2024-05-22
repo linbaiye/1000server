@@ -14,19 +14,19 @@ import org.y1000.util.Coordinate;
 
 @Builder
 @AllArgsConstructor
-public class JoinedRealmEvent implements EntityEvent, ServerMessage {
+public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
 
     private final Player player;
 
     private final Coordinate coordinate;
 
+    private final Inventory playerInventory;
 
     private InventoryItemPacket toPacket(int index, Item item) {
         return InventoryItemPacket.newBuilder()
                 .setItemType(item.type().value())
                 .setName(item.name())
                 .setSlotId(index)
-                .setId(item.id())
                 .build();
     }
 
@@ -38,10 +38,11 @@ public class JoinedRealmEvent implements EntityEvent, ServerMessage {
                 .setY(coordinate.y())
                 .setId(source().id())
                 .setAttackKungFuLevel(player.attackKungFu().level())
-                .setAttackKungFuName(player.attackKungFu().name());
+                .setAttackKungFuName(player.attackKungFu().name())
+                .setAttackKungFuType(player.attackKungFu().getType().value());
         player.weapon().ifPresent(weapon -> builder.setWeaponName(weapon.name()));
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuLevel(footKungFu.level()).setFootKungFuName(footKungFu.name()));
-        player.inventory().foreach((index, item) -> builder.addInventoryItems(toPacket(index, item)));
+        playerInventory.foreach((index, item) -> builder.addInventoryItems(toPacket(index, item)));
         return Packet.newBuilder().setLoginPacket(builder.build()).build();
     }
 

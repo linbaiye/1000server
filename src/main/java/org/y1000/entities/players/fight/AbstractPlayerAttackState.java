@@ -27,6 +27,10 @@ public abstract class AbstractPlayerAttackState extends AbstractCreateState<Play
         return target;
     }
 
+
+    public abstract void weaponChanged(PlayerImpl player);
+
+
     @Override
     public State stateEnum() {
         return state;

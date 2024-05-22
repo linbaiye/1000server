@@ -23,26 +23,29 @@ public final class Inventory {
         items.forEach(consumer);
     }
 
-    public void add(Item item) {
+    public boolean add(Item item) {
         if (isFull()) {
-            throw new IndexOutOfBoundsException();
+            return false;
         }
         for (int i = 1; i <= MAX_SIZE; i++) {
             if (!items.containsKey(i)) {
                 items.put(i, item);
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     public boolean swap(int from, int to) {
-        if (!items.containsKey(from) || !items.containsKey(to)) {
+        if (!items.containsKey(from) && !items.containsKey(to)) {
             return false;
         }
         Item fromItem = items.remove(from);
         Item toItem = items.remove(to);
-        items.put(to, fromItem);
-        items.put(from, toItem);
+        if (fromItem != null)
+            items.put(to, fromItem);
+        if (toItem != null)
+            items.put(from, toItem);
         return true;
     }
 
@@ -76,11 +79,12 @@ public final class Inventory {
         return -1;
     }
 
-    public void add(Collection<Item> items) {
+    public boolean add(Collection<Item> items) {
         if (items.size() + this.items.size() > MAX_SIZE) {
-            throw new IndexOutOfBoundsException();
+            return false;
         }
         items.forEach(this::add);
+        return true;
     }
 
     public int maxSize() {

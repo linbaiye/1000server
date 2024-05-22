@@ -60,7 +60,6 @@ public final class RealmManager implements Runnable {
         connectionPlayerMap.put(event.connection(), event.player());
         playerRealmMap.put(event.player(), realm);
         realm.handle(event);
-        log.debug("New connection event sent to realm.");
     }
 
     private void sendDataToRealm(ConnectionDataEvent dataEvent) {
@@ -82,7 +81,6 @@ public final class RealmManager implements Runnable {
     }
 
     private void handle(ConnectionEvent event) {
-        log.debug("Handling event {}.", event);
         if (event.type() == ConnectionEventType.ESTABLISHED) {
             handleNewConnection((ConnectionEstablishedEvent)event);
         } else if (event.type() == ConnectionEventType.CLOSED) {
@@ -120,7 +118,6 @@ public final class RealmManager implements Runnable {
         while (!shutdown) {
             try {
                 ConnectionEvent event;
-                log.debug("Wait for event.");
                 synchronized (eventQueue) {
                     while (eventQueue.isEmpty()) {
                         eventQueue.wait();

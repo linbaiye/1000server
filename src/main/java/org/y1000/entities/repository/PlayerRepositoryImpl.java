@@ -4,10 +4,10 @@ import org.y1000.entities.item.Weapon;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.entities.players.kungfu.KungFuBook;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
-import org.y1000.entities.players.kungfu.attack.sword.UnamedSword;
-import org.y1000.network.Connection;
+import org.y1000.entities.players.kungfu.attack.BladeKungFu;
 import org.y1000.util.Coordinate;
 
 public final class PlayerRepositoryImpl implements PlayerRepository {
@@ -27,8 +27,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     private Inventory loadInventory() {
         Inventory inventory = new Inventory();
         inventory.add(Weapon.builder()
-                .attackKungFuType(AttackKungFuType.BLADE)
-                .name("长刀").build());
+                .attackKungFuType(AttackKungFuType.SWORD)
+                .name("长剑").build());
         inventory.add(Weapon.builder()
                 .attackKungFuType(AttackKungFuType.BOW)
                 .name("木弓").build());
@@ -39,16 +39,17 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     private Weapon weapon() {
         return Weapon
                 .builder()
-                .name("长剑")
-                .attackKungFuType(AttackKungFuType.SWORD)
+                .name("长刀")
+                .attackKungFuType(AttackKungFuType.BLADE)
                 .build();
     }
 
     private AttackKungFu loadKungFu(Weapon weapon) {
-        return UnamedSword.builder()
+        return BladeKungFu.builder()
                 .level(85)
                 .attackSpeed(35)
                 .recovery(50)
+                .name("无名刀法")
                 .bodyArmor(1)
                 .bodyDamage(1)
                 .build();
@@ -65,6 +66,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .coordinate(new Coordinate(39 + slot, 27))
                 .weapon(weapon)
                 .attackKungFu(loadKungFu(weapon))
+                .kungFuBook(KungFuBook.newInstance())
                 .inventory(loadInventory())
                 .build();
     }

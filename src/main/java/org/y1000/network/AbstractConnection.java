@@ -34,6 +34,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
             case ATTACKEVENTPACKET -> ClientAttackEvent.fromPacket(clientPacket.getAttackEventPacket());
             case SWAPINVENTORYSLOTPACKET -> ClientSwapInventoryEvent.fromPacket(clientPacket.getSwapInventorySlotPacket());
+            case DOUBLECLICKINVENTORYSLOTPACKET -> new ClientDoubleClickSlotEvent(clientPacket.getDoubleClickInventorySlotPacket().getSlot());
             default -> throw new IllegalArgumentException();
         };
     }

@@ -8,20 +8,18 @@ import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.item.Item;
 import org.y1000.entities.item.Weapon;
-import org.y1000.entities.players.event.ChangeWeaponEvent;
+import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
 import org.y1000.entities.players.event.InventorySlotSwappedEvent;
+import org.y1000.entities.players.fight.AbstractPlayerAttackState;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.kungfu.KungFuBook;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
-import org.y1000.message.clientevent.ClientClickedInventorySlotEvent;
-import org.y1000.message.clientevent.ClientInventoryEvent;
-import org.y1000.message.clientevent.ClientSwapInventoryEvent;
+import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
-import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
@@ -44,7 +42,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private final Inventory inventory;
 
-
     private final KungFuBook kungFuBook;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
@@ -60,6 +57,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         put(State.BOW, AttackKungFuType.BOW.above50Millis());
         put(State.SWORD2H, AttackKungFuType.SWORD.above50Millis());
         put(State.SWORD, AttackKungFuType.SWORD.below50Millis());
+        put(State.BLADE2H, AttackKungFuType.BLADE.above50Millis());
+        put(State.BLADE, AttackKungFuType.BLADE.below50Millis());
     }};
 
     @Builder
@@ -104,8 +103,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (inventoryEvent instanceof ClientSwapInventoryEvent swapInventoryEvent &&
                 inventory.swap(swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot())) {
             emitEvent(new InventorySlotSwappedEvent(this, swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot()));
-        } else if (inventoryEvent instanceof ClientClickedInventorySlotEvent slotEvent) {
+        } else if (inventoryEvent instanceof ClientDoubleClickSlotEvent slotEvent) {
             Item item = inventory.getItem(slotEvent.sourceSlot());
+            if (item != null) {
+                item.doubleClicked(this);
+            }
         }
     }
 
@@ -134,18 +136,13 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         realmMap().occupy(this);
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         changeDirection(Direction.DOWN);
-        emitEvent(new JoinedRealmEvent(this, coordinate()));
+        emitEvent(new JoinedRealmEvent(this, coordinate(), inventory));
     }
 
     private void attackedBy(int hit) {
         if (handleAttacked(this, hit, () -> PlayerHurtState.hurt(this))) {
             eventQueue.clear();
         }
-    }
-
-    @Override
-    public Inventory inventory() {
-        return inventory;
     }
 
     @Override
@@ -174,6 +171,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public void equipWeapon(Weapon weapon) {
+        if (weapon == null) {
+            throw new IllegalStateException();
+        }
         if (stateEnum() == State.DIE) {
             return;
         }
@@ -182,16 +182,20 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             inventory.put(slot, this.weapon);
         }
         this.weapon = weapon;
-        if (attackKungFu.getType() != weapon.kungFuType()) {
-            this.attackKungFu = kungFuBook.findBasic(weapon.kungFuType());
+        if (attackKungFu.getType() == weapon.kungFuType()) {
+            emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), this.weapon.name()));
+            return;
         }
-        emitEvent(new ChangeWeaponEvent(this, slot));
+        boolean stateChanged = false;
+        if (state() instanceof AbstractPlayerAttackState attackState) {
+            attackState.weaponChanged(this);
+            stateChanged = true;
+        }
+        log.debug("Use weapon {} to replace weapon {}.", weapon.name(), this.weapon != null ? this.weapon.name() : "");
+        this.attackKungFu = kungFuBook.findBasic(weapon.kungFuType());
+        emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), this.weapon.name(), this.attackKungFu));
     }
 
-    @Override
-    public void changeAttackKungFu(AttackKungFu attackKungFu) {
-
-    }
 
     @Override
     public int attackSpeed() {
