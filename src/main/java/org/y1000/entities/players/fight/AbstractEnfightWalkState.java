@@ -4,6 +4,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.AbstractPlayerMoveState;
+import org.y1000.entities.players.PlayerImpl;
 import org.y1000.util.Coordinate;
 
 public abstract class AbstractEnfightWalkState  extends AbstractPlayerMoveState {

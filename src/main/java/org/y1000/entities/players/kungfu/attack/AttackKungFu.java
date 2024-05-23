@@ -16,6 +16,8 @@ public interface AttackKungFu extends LevelKungFu {
 
     State randomAttackState();
 
+    boolean hasState(State state);
+
     AttackKungFuType getType();
 
     default boolean isRanged() {

@@ -8,6 +8,7 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.AbstractPlayerStillState;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
+import org.y1000.entities.players.PlayerStillState;
 
 @Slf4j
 public final class PlayerMeleeAttackReadyState extends AbstractPlayerStillState {
@@ -18,10 +19,11 @@ public final class PlayerMeleeAttackReadyState extends AbstractPlayerStillState 
         this.target = target;
     }
 
+
     @Override
     public void update(PlayerImpl player, int delta) {
         if (target.coordinate().directDistance(player.coordinate()) <= 1) {
-            attack(player, target);
+            fireAttack(player, target, PlayerMeleeAttackState.meleeAttackState(player, target));
         } else {
             elapseAndHandleInput(player, delta);
         }
@@ -39,5 +41,14 @@ public final class PlayerMeleeAttackReadyState extends AbstractPlayerStillState 
 
     public static PlayerMeleeAttackReadyState prepareSwing(PlayerImpl player, PhysicalEntity target) {
         return new PlayerMeleeAttackReadyState(player.getStateMillis(State.COOLDOWN), target);
+    }
+
+    @Override
+    public void attackKungFuTypeChanged(PlayerImpl player) {
+        if (player.attackKungFu().isRanged()) {
+            player.changeState(PlayerRangedCooldownState.cooldown(player, target, 1));
+        } else {
+            player.changeState(new PlayerMeleeCooldownState(player.cooldown(), target));
+        }
     }
 }

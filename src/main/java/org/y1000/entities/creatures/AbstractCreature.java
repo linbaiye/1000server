@@ -8,6 +8,7 @@ import org.y1000.util.Coordinate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S extends CreatureState<C>> implements Creature {
 
@@ -30,6 +31,9 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
                             Direction direction,
                             String name,
                             Map<State, Integer> stateMillis) {
+        Objects.requireNonNull(coordinate, "coordinate can't be null.");
+        Objects.requireNonNull(direction, "direction can't be null.");
+        Objects.requireNonNull(name, "name can't be null.");
         this.id = id;
         this.coordinate = coordinate;
         this.direction = direction;

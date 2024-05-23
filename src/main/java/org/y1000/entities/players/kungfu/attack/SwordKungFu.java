@@ -15,6 +15,11 @@ public final class SwordKungFu extends AbstractAttackKungFu {
     }
 
     @Override
+    public boolean hasState(State state) {
+        return state == State.SWORD || state == State.SWORD2H;
+    }
+
+    @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.SWORD;
     }

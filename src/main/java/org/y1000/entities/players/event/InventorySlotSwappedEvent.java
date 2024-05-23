@@ -5,7 +5,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.SwapInventorySlotPacket;
 
-public class InventorySlotSwappedEvent extends AbstractPlayerEvent {
+public final class InventorySlotSwappedEvent extends AbstractPlayerEvent {
     private final int slot1;
     private final int slot2;
 

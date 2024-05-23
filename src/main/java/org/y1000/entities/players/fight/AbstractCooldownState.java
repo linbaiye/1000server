@@ -19,6 +19,7 @@ public abstract class AbstractCooldownState extends AbstractPlayerStillState {
         return target;
     }
 
+
     @Override
     public void update(PlayerImpl player, int delta) {
         if (elapse(delta)) {

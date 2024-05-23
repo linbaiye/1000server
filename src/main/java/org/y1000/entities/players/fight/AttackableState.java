@@ -21,19 +21,20 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
     Logger logger();
 
     default PlayerState rangedCooldownState(PlayerImpl player, PhysicalEntity target) {
-        return PlayerBowCooldownState.cooldown(player.getStateMillis(State.COOLDOWN), target, 1);
+        return PlayerRangedCooldownState.cooldown(player.cooldown(), target, 1);
     }
 
-    default PlayerState rangedAttackState(PlayerImpl player, PhysicalEntity target) {
-        return PlayerBowAttackState.bow(player, target);
+    default AbstractPlayerAttackState rangedAttackState(PlayerImpl player, PhysicalEntity target) {
+        return PlayerRangedAttackState.rangedAttack(player, target);
     }
 
-    default void rangedAttack(PlayerImpl player, PhysicalEntity target, int counter) {
-        var direction = player.coordinate().computeDirection(target.coordinate());
+    default void fireAttack(PlayerImpl player, PhysicalEntity target, AbstractPlayerAttackState attackState) {
+        Direction direction = player.coordinate().computeDirection(target.coordinate());
         player.changeDirection(direction);
-        player.changeState(PlayerBowAttackState.bow(player, target, counter));
+        player.changeState(attackState);
         player.emitEvent(PlayerAttackEvent.of(player, target.id()));
     }
+
 
     default void attack(PlayerImpl player, PhysicalEntity target) {
         if (!target.attackable()) {
@@ -44,20 +45,16 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
         boolean rangedAttack = player.attackKungFu().isRanged();
         if (player.cooldown() > 0) {
             var cdState = rangedAttack ? rangedCooldownState(player, target) :
-                    new PlayerMeleeCooldownState(player.getStateMillis(State.COOLDOWN), target);
+                    new PlayerMeleeCooldownState(player.cooldown(), target);
             player.changeState(cdState);
             player.emitEvent(ChangeStateEvent.of(player));
             return;
         }
         var dist = player.coordinate().directDistance(target.coordinate());
         if (rangedAttack || dist <= 1) {
-            State state = player.attackKungFu().randomAttackState();
             var attackState = rangedAttack ? rangedAttackState(player, target) :
-                    PlayerMeleeAttackState.attack(target, state, player.getStateMillis(state));
-            Direction direction = player.coordinate().computeDirection(target.coordinate());
-            player.changeDirection(direction);
-            player.changeState(attackState);
-            player.emitEvent(PlayerAttackEvent.of(player, target.id()));
+                    PlayerMeleeAttackState.meleeAttackState(player, target);
+            fireAttack(player, target, attackState);;
         } else {
             player.changeState(PlayerMeleeAttackReadyState.prepareSwing(player, target));
             player.emitEvent(ChangeStateEvent.of(player));

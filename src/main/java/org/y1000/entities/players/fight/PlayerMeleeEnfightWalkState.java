@@ -12,7 +12,7 @@ import org.y1000.util.Coordinate;
 @Slf4j
 public final class PlayerMeleeEnfightWalkState extends AbstractEnfightWalkState implements AttackableState {
 
-    public PlayerMeleeEnfightWalkState(Coordinate start, Direction towards, int millisPerUnit, PhysicalEntity target) {
+    private PlayerMeleeEnfightWalkState(Coordinate start, Direction towards, int millisPerUnit, PhysicalEntity target) {
         super(start, towards, millisPerUnit, target);
     }
 

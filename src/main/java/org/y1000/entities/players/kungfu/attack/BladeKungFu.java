@@ -14,6 +14,11 @@ public final class BladeKungFu extends AbstractAttackKungFu {
     }
 
     @Override
+    public boolean hasState(State state) {
+        return state == State.BLADE || state == State.BLADE2H;
+    }
+
+    @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.BLADE;
     }

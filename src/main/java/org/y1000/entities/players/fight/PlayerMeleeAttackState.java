@@ -11,10 +11,20 @@ import org.y1000.entities.players.PlayerState;
 @Slf4j
 public final class PlayerMeleeAttackState extends AbstractPlayerAttackState {
 
-    public PlayerMeleeAttackState(int length,
+    private PlayerMeleeAttackState(int length,
                                   PhysicalEntity target,
                                   State state) {
         super(length, target, state);
+    }
+
+
+    @Override
+    public void attackKungFuTypeChanged(PlayerImpl player) {
+        if (player.attackKungFu().isRanged()) {
+            player.changeState(PlayerRangedCooldownState.cooldown(player, getTarget(), 1));
+        } else {
+            player.changeState(new PlayerMeleeCooldownState(player.cooldown(), getTarget()));
+        }
     }
 
     @Override
@@ -34,9 +44,11 @@ public final class PlayerMeleeAttackState extends AbstractPlayerAttackState {
         }
     }
 
-    public static PlayerMeleeAttackState attack(PhysicalEntity target, State state, int length) {
-        return new PlayerMeleeAttackState(length, target, state );
+    public static PlayerMeleeAttackState meleeAttackState(PlayerImpl player, PhysicalEntity target) {
+        State state = player.attackKungFu().randomAttackState();
+        return new PlayerMeleeAttackState(player.getStateMillis(state), target, state);
     }
+
 
     @Override
     public Logger logger() {

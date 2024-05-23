@@ -10,7 +10,6 @@ import org.y1000.entities.item.Item;
 import org.y1000.entities.item.Weapon;
 import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
 import org.y1000.entities.players.event.InventorySlotSwappedEvent;
-import org.y1000.entities.players.fight.AbstractPlayerAttackState;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.kungfu.KungFuBook;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
@@ -70,6 +69,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                       AttackKungFu attackKungFu,
                       KungFuBook kungFuBook) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
+        Objects.requireNonNull(kungFuBook, "kungFuBook can't be null.");
+        Objects.requireNonNull(attackKungFu, "attackKungFu can't be null.");
+        Objects.requireNonNull(inventory, "inventory can't be null.");
         this.inventory = inventory;
         this.attackKungFu = attackKungFu;
         this.weapon = weapon;
@@ -181,18 +183,15 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (this.weapon != null) {
             inventory.put(slot, this.weapon);
         }
+        log.debug("Use weapon {} to replace weapon {}.", weapon.name(), this.weapon != null ? this.weapon.name() : "");
         this.weapon = weapon;
         if (attackKungFu.getType() == weapon.kungFuType()) {
             emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), this.weapon.name()));
             return;
         }
-        boolean stateChanged = false;
-        if (state() instanceof AbstractPlayerAttackState attackState) {
-            attackState.weaponChanged(this);
-            stateChanged = true;
-        }
-        log.debug("Use weapon {} to replace weapon {}.", weapon.name(), this.weapon != null ? this.weapon.name() : "");
         this.attackKungFu = kungFuBook.findBasic(weapon.kungFuType());
+        cooldownAttack();
+        state().attackKungFuTypeChanged(this);
         emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), this.weapon.name(), this.attackKungFu));
     }
 

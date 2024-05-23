@@ -15,6 +15,8 @@ public enum AttackKungFuType implements ValueEnum {
     AXE(4, 0, 0),
 
     BOW(5, 600, 600),
+
+    THROW(6, 600, 600),
     ;
 
     private final int v;

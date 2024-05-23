@@ -12,6 +12,11 @@ public final class BowKungFu extends AbstractAttackKungFu  {
     }
 
     @Override
+    public boolean hasState(State state) {
+        return state == State.BOW;
+    }
+
+    @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.BOW;
     }

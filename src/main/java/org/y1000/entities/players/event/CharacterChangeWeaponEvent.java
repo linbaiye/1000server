@@ -22,6 +22,8 @@ public final class CharacterChangeWeaponEvent extends AbstractPlayerEvent {
 
     private final AttackKungFuType currentKungFuType;
 
+    private final int currentState;
+
     public CharacterChangeWeaponEvent(Player source, int slot, Item item, String name, AttackKungFu attackKungFu) {
         super(source);
         weaponName = name;
@@ -31,6 +33,7 @@ public final class CharacterChangeWeaponEvent extends AbstractPlayerEvent {
         this.currentKungFuName = attackKungFu.name();
         this.currentKungFuLevel = attackKungFu.level();
         this.currentKungFuType = attackKungFu.getType();
+        this.currentState = source.stateEnum().value();
     }
 
     public CharacterChangeWeaponEvent(Player source, int slot, Item item, String name) {
@@ -42,6 +45,7 @@ public final class CharacterChangeWeaponEvent extends AbstractPlayerEvent {
         this.currentKungFuName = null;
         this.currentKungFuLevel = 0;
         this.currentKungFuType = null;
+        this.currentState = source.stateEnum().value();
     }
 
     @Override
@@ -50,14 +54,16 @@ public final class CharacterChangeWeaponEvent extends AbstractPlayerEvent {
     }
 
     public ChangeWeaponEvent packetForOtherPlayers() {
-        return new ChangeWeaponEvent(source().id(), weaponName);
+        return new ChangeWeaponEvent(source().id(), weaponName, currentState);
     }
 
     @Override
     protected Packet buildPacket() {
         CharacterChangeWeaponPacket.Builder builder = CharacterChangeWeaponPacket.newBuilder()
                 .setName(weaponName)
-                .setAffectedSlot(affectedSlot);
+                .setAffectedSlot(affectedSlot)
+                .setState(currentState)
+                ;
         if (slotNewItemName != null) {
             builder.setSlotNewItemName(slotNewItemName)
                     .setSlotNewItemType(slotnewItemType);

@@ -40,4 +40,9 @@ public final class Weapon implements Item {
         }
         player.equipWeapon(this);
     }
+
+    public boolean isRanged () {
+        return attackKungFuType == AttackKungFuType.BOW ||
+               attackKungFuType == AttackKungFuType.THROW;
+    }
 }

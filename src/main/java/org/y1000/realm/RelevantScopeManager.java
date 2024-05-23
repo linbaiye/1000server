@@ -75,6 +75,9 @@ final class RelevantScopeManager {
     public Set<PhysicalEntity> remove(PhysicalEntity entity) {
         Objects.requireNonNull(entity);
         RelevantScope removed = relevantScopeMap.remove(entity);
+        if (removed == null)  {
+            return Collections.emptySet();
+        }
         Set<PhysicalEntity> entities = removed.filter(PhysicalEntity.class);
         entities.stream().map(relevantScopeMap::get)
                 .filter(Objects::nonNull)
