@@ -37,7 +37,9 @@ final class RealmEntityManager implements EntityEventListener,
 
     private void notifyInterpolation(Player joined, PhysicalEntity entity) {
         sendMessage(joined, entity.captureInterpolation());
+        log.debug("Notified player {} of player {}", joined.id(), entity.id());
         if (entity instanceof Player another) {
+            log.debug("Notified player {} of player {}", another.id(), joined.id());
             sendMessage(another, joined.captureInterpolation());
         }
     }

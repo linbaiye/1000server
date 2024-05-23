@@ -1,5 +1,7 @@
 package org.y1000.entities.repository;
 
+import org.y1000.entities.item.ItemType;
+import org.y1000.entities.item.StackItem;
 import org.y1000.entities.item.Weapon;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
@@ -32,6 +34,10 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(Weapon.builder()
                 .attackKungFuType(AttackKungFuType.BOW)
                 .name("木弓").build());
+        inventory.add(StackItem.builder()
+                .name("箭").number(10000)
+                .build());
+
         return inventory;
     }
 

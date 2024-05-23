@@ -5,24 +5,16 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
 
-@Builder
-public final class Weapon implements Item {
-
-    private final long id;
-
-    private final String name;
+public final class Weapon extends AbstractItem {
 
     private final AttackKungFuType attackKungFuType;
 
-    @Override
-    public long id() {
-        return id;
+    @Builder
+    public Weapon(long id, String name, ItemType type, AttackKungFuType attackKungFuType) {
+        super(id, name, type);
+        this.attackKungFuType = attackKungFuType;
     }
 
-    @Override
-    public String name() {
-        return name;
-    }
 
     public AttackKungFuType kungFuType() {
         return attackKungFuType;

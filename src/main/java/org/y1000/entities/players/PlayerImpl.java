@@ -248,11 +248,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                 '}';
     }
 
-    @Override
-    public String name() {
-        return "";
-    }
-
 
     @Override
     public boolean equals(Object o) {

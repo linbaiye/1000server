@@ -3,6 +3,7 @@ package org.y1000.message.serverevent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.y1000.entities.item.Item;
+import org.y1000.entities.item.StackItem;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.message.ServerMessage;
 import org.y1000.network.gen.InventoryItemPacket;
@@ -23,11 +24,14 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
     private final Inventory playerInventory;
 
     private InventoryItemPacket toPacket(int index, Item item) {
-        return InventoryItemPacket.newBuilder()
+        InventoryItemPacket.Builder builder = InventoryItemPacket.newBuilder()
                 .setItemType(item.type().value())
                 .setName(item.name())
-                .setSlotId(index)
-                .build();
+                .setSlotId(index);
+        if (item instanceof StackItem stackItem) {
+            builder.setNumber(stackItem.number());
+        }
+        return builder.build();
     }
 
 
@@ -37,6 +41,7 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
                 .setX(coordinate.x())
                 .setY(coordinate.y())
                 .setId(source().id())
+                .setName(player().name())
                 .setAttackKungFuLevel(player.attackKungFu().level())
                 .setAttackKungFuName(player.attackKungFu().name())
                 .setAttackKungFuType(player.attackKungFu().getType().value());

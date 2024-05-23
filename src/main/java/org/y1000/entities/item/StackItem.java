@@ -1,9 +1,32 @@
 package org.y1000.entities.item;
 
-public interface StackItem extends Item {
-    int number();
+import lombok.Builder;
+import org.apache.commons.lang3.Validate;
 
-    void stack(Item item);
+public final class StackItem extends AbstractItem {
+    private int number;
+    private static final int MAX_NUMBER = 100000000;
 
-    boolean canStack(Item item);
+    @Builder
+    public StackItem(long id, String name, int number) {
+        super(id, name, ItemType.STACK);
+        Validate.isTrue(number > 0, "number must > 0");
+        this.number = number;
+    }
+
+    public int number() {
+        return number;
+    }
+
+    public boolean stack(Item item) {
+        if (canStack(item)) {
+            number += ((StackItem)item).number;
+            return true;
+        }
+        return false;
+    }
+    public boolean canStack(Item item) {
+        return item instanceof StackItem && item.name().equals(name());
+    }
+
 }
