@@ -6,10 +6,8 @@ import org.slf4j.Logger;
 import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
-import org.y1000.entities.item.Item;
 import org.y1000.entities.item.Weapon;
 import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
-import org.y1000.entities.players.event.InventorySlotSwappedEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.kungfu.KungFuBook;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
@@ -98,25 +96,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return attackKungFu;
     }
 
-    private void handleInventoryEvent(ClientInventoryEvent inventoryEvent) {
-        if (!state().canHandle(inventoryEvent)) {
-            return;
-        }
-        if (inventoryEvent instanceof ClientSwapInventoryEvent swapInventoryEvent &&
-                inventory.swap(swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot())) {
-            emitEvent(new InventorySlotSwappedEvent(this, swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot()));
-        } else if (inventoryEvent instanceof ClientDoubleClickSlotEvent slotEvent) {
-            Item item = inventory.getItem(slotEvent.sourceSlot());
-            if (item != null) {
-                item.doubleClicked(this);
-            }
-        }
-    }
 
     @Override
     public void handleEvent(ClientEvent clientEvent) {
         if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
-            handleInventoryEvent(inventoryEvent);
+            inventory.handleClientEvent(this, inventoryEvent);
         } else {
             eventQueue.add(clientEvent);
         }

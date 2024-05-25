@@ -1,14 +1,20 @@
 package org.y1000.entities.players.inventory;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.item.Item;
 import org.y1000.entities.item.StackItem;
+import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.players.event.InventorySlotSwappedEvent;
+import org.y1000.message.PlayerDropItemEvent;
+import org.y1000.message.clientevent.ClientDoubleClickSlotEvent;
+import org.y1000.message.clientevent.ClientDropItemEvent;
+import org.y1000.message.clientevent.ClientInventoryEvent;
+import org.y1000.message.clientevent.ClientSwapInventoryEvent;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
+@Slf4j
 public final class Inventory {
 
     private static final int MAX_SIZE = 30;
@@ -91,4 +97,40 @@ public final class Inventory {
         return MAX_SIZE;
     }
 
+    private boolean dropItem(int slot, int number) {
+        Item item = items.get(slot);
+        if (!(item instanceof StackItem stackItem)) {
+            items.remove(slot);
+            return true;
+        }
+        if (stackItem.number() < number) {
+            return false;
+        }
+        stackItem.decrease(number);
+        if (stackItem.number() == 0) {
+            items.remove(slot);
+        }
+        return true;
+    }
+
+    public void handleClientEvent(PlayerImpl player, ClientInventoryEvent inventoryEvent) {
+        if (inventoryEvent instanceof ClientSwapInventoryEvent swapInventoryEvent &&
+                swap(swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot())) {
+            player.emitEvent(new InventorySlotSwappedEvent(player, swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot()));
+        } else if (inventoryEvent instanceof ClientDoubleClickSlotEvent slotEvent) {
+            Item item = getItem(slotEvent.sourceSlot());
+            if (item != null) {
+                item.doubleClicked(player);
+            }
+        } else if (inventoryEvent instanceof ClientDropItemEvent dropItemEvent) {
+            if (dropItem(dropItemEvent.sourceSlot(), dropItemEvent.number())) {
+                Item item = getItem(dropItemEvent.sourceSlot());
+                if (item == null) {
+                    return;
+                }
+                log.debug("Dropped item {}", getItem(dropItemEvent.sourceSlot()).name());
+                player.emitEvent(new PlayerDropItemEvent(player, dropItemEvent, getItem(dropItemEvent.sourceSlot())));
+            }
+        }
+    }
 }

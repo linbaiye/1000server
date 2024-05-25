@@ -4,6 +4,7 @@ import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
 import org.y1000.entities.players.event.InventorySlotSwappedEvent;
 import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
+import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.InputResponseMessage;
 
 public interface PlayerEventVisitor extends EntityEventVisitor {
@@ -33,6 +34,10 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     }
 
     default void visit(CharacterChangeWeaponEvent event) {
+
+    }
+
+    default void visit(PlayerDropItemEvent event) {
 
     }
 }

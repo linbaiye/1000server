@@ -4,12 +4,14 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.repository.PlayerRepository;
+import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.clientevent.*;
 import org.y1000.network.event.ConnectionClosedEvent;
 import org.y1000.network.event.ConnectionDataEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.gen.ClientPacket;
 import org.y1000.realm.RealmManager;
+import org.y1000.util.Coordinate;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -35,6 +37,9 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case ATTACKEVENTPACKET -> ClientAttackEvent.fromPacket(clientPacket.getAttackEventPacket());
             case SWAPINVENTORYSLOTPACKET -> ClientSwapInventoryEvent.fromPacket(clientPacket.getSwapInventorySlotPacket());
             case DOUBLECLICKINVENTORYSLOTPACKET -> new ClientDoubleClickSlotEvent(clientPacket.getDoubleClickInventorySlotPacket().getSlot());
+            case DROPITEM -> new ClientDropItemEvent(clientPacket.getDropItem().getNumber(), clientPacket.getDropItem().getSlot(),
+                    clientPacket.getDropItem().getX(), clientPacket.getDropItem().getY(),
+                    new Coordinate(clientPacket.getDropItem().getCoordinateX(), clientPacket.getDropItem().getCoordinateY()));
             default -> throw new IllegalArgumentException();
         };
     }

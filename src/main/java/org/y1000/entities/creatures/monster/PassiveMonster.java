@@ -2,7 +2,6 @@ package org.y1000.entities.creatures.monster;
 
 
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
@@ -18,7 +17,7 @@ import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.monster.fight.MonsterCooldownState;
 import org.y1000.entities.creatures.monster.fight.MonsterFightingIdleState;
 import org.y1000.entities.creatures.monster.wander.MonsterWanderingIdleState;
-import org.y1000.message.AbstractInterpolation;
+import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.message.CreatureInterpolation;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.realm.RealmMap;
@@ -136,7 +135,7 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
 
 
     @Override
-    public AbstractInterpolation captureInterpolation() {
+    public AbstractCreatureInterpolation captureInterpolation() {
         return new CreatureInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name());
     }
 

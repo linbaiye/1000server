@@ -2,6 +2,7 @@ package org.y1000.entities.item;
 
 import lombok.Builder;
 import org.apache.commons.lang3.Validate;
+import org.y1000.message.ValueEnum;
 
 public final class StackItem extends AbstractItem {
     private int number;
@@ -16,6 +17,13 @@ public final class StackItem extends AbstractItem {
 
     public int number() {
         return number;
+    }
+
+    public void decrease(int n) {
+        if (n >= number) {
+            number = 0;
+        }
+        number -= n;
     }
 
     public boolean stack(Item item) {

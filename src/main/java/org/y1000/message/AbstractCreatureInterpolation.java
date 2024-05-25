@@ -5,7 +5,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
-public abstract class AbstractInterpolation implements ServerMessage {
+public abstract class AbstractCreatureInterpolation implements ServerMessage {
 
     private final long id;
     private final Coordinate coordinate;
@@ -14,7 +14,7 @@ public abstract class AbstractInterpolation implements ServerMessage {
     private final int elapsedMillis;
     private InterpolationPacket interpolationPacket;
 
-    public AbstractInterpolation(long id, Coordinate coordinate, State state, Direction direction, int elapsedMillis) {
+    public AbstractCreatureInterpolation(long id, Coordinate coordinate, State state, Direction direction, int elapsedMillis) {
         this.id = id;
         this.coordinate = coordinate;
         this.state = state;

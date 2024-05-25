@@ -10,7 +10,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
-public final class PlayerInterpolation extends AbstractInterpolation {
+public final class PlayerInterpolation extends AbstractCreatureInterpolation {
 
     private final boolean male;
 

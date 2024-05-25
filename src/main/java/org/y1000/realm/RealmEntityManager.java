@@ -9,11 +9,8 @@ import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.CreatureShootEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
-import org.y1000.message.AbstractPositionEvent;
-import org.y1000.message.InputResponseMessage;
-import org.y1000.message.ServerMessage;
+import org.y1000.message.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
-import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.serverevent.*;
 import org.y1000.network.Connection;
 
@@ -151,6 +148,11 @@ final class RealmEntityManager implements EntityEventListener,
 
     @Override
     public void visit(InventorySlotSwappedEvent event) {
+        sendMessage(event.player(), event);
+    }
+
+    @Override
+    public void visit(PlayerDropItemEvent event) {
         sendMessage(event.player(), event);
     }
 

@@ -91,6 +91,32 @@ message DoubleClickInventorySlotPacket {
   int32 slot = 1;
 }
 
+message DropItemPacket {
+  int32 slot = 1;
+  int32 x = 2;
+  int32 y = 3;
+  int32 number = 4;
+  int32 coordinateX = 5;
+  int32 coordinateY = 6;
+}
+
+message DropItemConfirmPacket {
+  int32 slot = 1;
+  int32 numberLeft = 2;
+}
+
+
+message ShowItemPacket {
+  int32 id = 1;
+  int32 x = 2;
+  int32 y = 3;
+  optional int32 number = 4;
+  int32 coordinateX = 5;
+  int32 coordinateY = 6;
+  string name = 7;
+  int32 itemType = 8;
+}
+
 message CharacterChangeWeaponPacket {
   string name = 1;
   int32 affectedSlot = 2;
@@ -116,6 +142,7 @@ message ClientPacket {
     ClientAttackEventPacket attackEventPacket = 4;
     SwapInventorySlotPacket swapInventorySlotPacket = 5;
     DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;
+    DropItemPacket dropItem = 7;
   }
 }
 
@@ -169,6 +196,8 @@ message Packet {
     SwapInventorySlotPacket swapInventorySlotPacket = 13;
     CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;
     ChangeWeaponPacket changeWeaponPacket = 15;
+    DropItemConfirmPacket dropItem = 16;
+    ShowItemPacket showItem = 17;
   }
 }
 

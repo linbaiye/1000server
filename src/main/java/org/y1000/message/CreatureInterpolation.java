@@ -6,7 +6,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
-public final class CreatureInterpolation extends AbstractNamedInterpolation {
+public final class CreatureInterpolation extends AbstractNamedCreatureInterpolation {
 
     public CreatureInterpolation(long id, Coordinate coordinate, State state,
                                  Direction direction, int elapsedMillis, String name) {

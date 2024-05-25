@@ -1,11 +1,9 @@
 package org.y1000.entities;
 
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.message.AbstractInterpolation;
 import org.y1000.message.serverevent.EntityEventListener;
-import org.y1000.util.Coordinate;
 
-public interface PhysicalEntity extends Entity{
+public interface PhysicalEntity extends Entity {
     /**
      * Return true if we can be hit.
      * @return true/false.

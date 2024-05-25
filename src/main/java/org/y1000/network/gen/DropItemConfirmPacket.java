@@ -5,38 +5,38 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.DoubleClickInventorySlotPacket}
+ * Protobuf type {@code org.y1000.network.gen.DropItemConfirmPacket}
  */
-public final class DoubleClickInventorySlotPacket extends
+public final class DropItemConfirmPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.DoubleClickInventorySlotPacket)
-    DoubleClickInventorySlotPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.DropItemConfirmPacket)
+    DropItemConfirmPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use DoubleClickInventorySlotPacket.newBuilder() to construct.
-  private DoubleClickInventorySlotPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use DropItemConfirmPacket.newBuilder() to construct.
+  private DropItemConfirmPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private DoubleClickInventorySlotPacket() {
+  private DropItemConfirmPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new DoubleClickInventorySlotPacket();
+    return new DropItemConfirmPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_DoubleClickInventorySlotPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_DropItemConfirmPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_DoubleClickInventorySlotPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_DropItemConfirmPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.DoubleClickInventorySlotPacket.class, org.y1000.network.gen.DoubleClickInventorySlotPacket.Builder.class);
+            org.y1000.network.gen.DropItemConfirmPacket.class, org.y1000.network.gen.DropItemConfirmPacket.Builder.class);
   }
 
   public static final int SLOT_FIELD_NUMBER = 1;
@@ -48,6 +48,17 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public int getSlot() {
     return slot_;
+  }
+
+  public static final int NUMBERLEFT_FIELD_NUMBER = 2;
+  private int numberLeft_ = 0;
+  /**
+   * <code>int32 numberLeft = 2;</code>
+   * @return The numberLeft.
+   */
+  @java.lang.Override
+  public int getNumberLeft() {
+    return numberLeft_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -67,6 +78,9 @@ private static final long serialVersionUID = 0L;
     if (slot_ != 0) {
       output.writeInt32(1, slot_);
     }
+    if (numberLeft_ != 0) {
+      output.writeInt32(2, numberLeft_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -80,6 +94,10 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(1, slot_);
     }
+    if (numberLeft_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(2, numberLeft_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -90,13 +108,15 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.DoubleClickInventorySlotPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.DropItemConfirmPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.DoubleClickInventorySlotPacket other = (org.y1000.network.gen.DoubleClickInventorySlotPacket) obj;
+    org.y1000.network.gen.DropItemConfirmPacket other = (org.y1000.network.gen.DropItemConfirmPacket) obj;
 
     if (getSlot()
         != other.getSlot()) return false;
+    if (getNumberLeft()
+        != other.getNumberLeft()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -110,49 +130,51 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + SLOT_FIELD_NUMBER;
     hash = (53 * hash) + getSlot();
+    hash = (37 * hash) + NUMBERLEFT_FIELD_NUMBER;
+    hash = (53 * hash) + getNumberLeft();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseFrom(
+  public static org.y1000.network.gen.DropItemConfirmPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseFrom(
+  public static org.y1000.network.gen.DropItemConfirmPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseFrom(
+  public static org.y1000.network.gen.DropItemConfirmPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseFrom(
+  public static org.y1000.network.gen.DropItemConfirmPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.DropItemConfirmPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseFrom(
+  public static org.y1000.network.gen.DropItemConfirmPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.DropItemConfirmPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseFrom(
+  public static org.y1000.network.gen.DropItemConfirmPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -160,26 +182,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.DropItemConfirmPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.DropItemConfirmPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseFrom(
+  public static org.y1000.network.gen.DropItemConfirmPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket parseFrom(
+  public static org.y1000.network.gen.DropItemConfirmPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -192,7 +214,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.DoubleClickInventorySlotPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.DropItemConfirmPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -208,26 +230,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.DoubleClickInventorySlotPacket}
+   * Protobuf type {@code org.y1000.network.gen.DropItemConfirmPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.DoubleClickInventorySlotPacket)
-      org.y1000.network.gen.DoubleClickInventorySlotPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.DropItemConfirmPacket)
+      org.y1000.network.gen.DropItemConfirmPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_DoubleClickInventorySlotPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_DropItemConfirmPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_DoubleClickInventorySlotPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_DropItemConfirmPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.DoubleClickInventorySlotPacket.class, org.y1000.network.gen.DoubleClickInventorySlotPacket.Builder.class);
+              org.y1000.network.gen.DropItemConfirmPacket.class, org.y1000.network.gen.DropItemConfirmPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.DoubleClickInventorySlotPacket.newBuilder()
+    // Construct using org.y1000.network.gen.DropItemConfirmPacket.newBuilder()
     private Builder() {
 
     }
@@ -242,23 +264,24 @@ private static final long serialVersionUID = 0L;
       super.clear();
       bitField0_ = 0;
       slot_ = 0;
+      numberLeft_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_DoubleClickInventorySlotPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_DropItemConfirmPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.DoubleClickInventorySlotPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.DoubleClickInventorySlotPacket.getDefaultInstance();
+    public org.y1000.network.gen.DropItemConfirmPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.DropItemConfirmPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.DoubleClickInventorySlotPacket build() {
-      org.y1000.network.gen.DoubleClickInventorySlotPacket result = buildPartial();
+    public org.y1000.network.gen.DropItemConfirmPacket build() {
+      org.y1000.network.gen.DropItemConfirmPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -266,17 +289,20 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.DoubleClickInventorySlotPacket buildPartial() {
-      org.y1000.network.gen.DoubleClickInventorySlotPacket result = new org.y1000.network.gen.DoubleClickInventorySlotPacket(this);
+    public org.y1000.network.gen.DropItemConfirmPacket buildPartial() {
+      org.y1000.network.gen.DropItemConfirmPacket result = new org.y1000.network.gen.DropItemConfirmPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.DoubleClickInventorySlotPacket result) {
+    private void buildPartial0(org.y1000.network.gen.DropItemConfirmPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.slot_ = slot_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.numberLeft_ = numberLeft_;
       }
     }
 
@@ -314,18 +340,21 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.DoubleClickInventorySlotPacket) {
-        return mergeFrom((org.y1000.network.gen.DoubleClickInventorySlotPacket)other);
+      if (other instanceof org.y1000.network.gen.DropItemConfirmPacket) {
+        return mergeFrom((org.y1000.network.gen.DropItemConfirmPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.DoubleClickInventorySlotPacket other) {
-      if (other == org.y1000.network.gen.DoubleClickInventorySlotPacket.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.y1000.network.gen.DropItemConfirmPacket other) {
+      if (other == org.y1000.network.gen.DropItemConfirmPacket.getDefaultInstance()) return this;
       if (other.getSlot() != 0) {
         setSlot(other.getSlot());
+      }
+      if (other.getNumberLeft() != 0) {
+        setNumberLeft(other.getNumberLeft());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -358,6 +387,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000001;
               break;
             } // case 8
+            case 16: {
+              numberLeft_ = input.readInt32();
+              bitField0_ |= 0x00000002;
+              break;
+            } // case 16
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -406,6 +440,38 @@ private static final long serialVersionUID = 0L;
       onChanged();
       return this;
     }
+
+    private int numberLeft_ ;
+    /**
+     * <code>int32 numberLeft = 2;</code>
+     * @return The numberLeft.
+     */
+    @java.lang.Override
+    public int getNumberLeft() {
+      return numberLeft_;
+    }
+    /**
+     * <code>int32 numberLeft = 2;</code>
+     * @param value The numberLeft to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNumberLeft(int value) {
+
+      numberLeft_ = value;
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 numberLeft = 2;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearNumberLeft() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      numberLeft_ = 0;
+      onChanged();
+      return this;
+    }
     @java.lang.Override
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -419,23 +485,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.DoubleClickInventorySlotPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.DropItemConfirmPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.DoubleClickInventorySlotPacket)
-  private static final org.y1000.network.gen.DoubleClickInventorySlotPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.DropItemConfirmPacket)
+  private static final org.y1000.network.gen.DropItemConfirmPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.DoubleClickInventorySlotPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.DropItemConfirmPacket();
   }
 
-  public static org.y1000.network.gen.DoubleClickInventorySlotPacket getDefaultInstance() {
+  public static org.y1000.network.gen.DropItemConfirmPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<DoubleClickInventorySlotPacket>
-      PARSER = new com.google.protobuf.AbstractParser<DoubleClickInventorySlotPacket>() {
+  private static final com.google.protobuf.Parser<DropItemConfirmPacket>
+      PARSER = new com.google.protobuf.AbstractParser<DropItemConfirmPacket>() {
     @java.lang.Override
-    public DoubleClickInventorySlotPacket parsePartialFrom(
+    public DropItemConfirmPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -454,17 +520,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<DoubleClickInventorySlotPacket> parser() {
+  public static com.google.protobuf.Parser<DropItemConfirmPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<DoubleClickInventorySlotPacket> getParserForType() {
+  public com.google.protobuf.Parser<DropItemConfirmPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.DoubleClickInventorySlotPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.DropItemConfirmPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

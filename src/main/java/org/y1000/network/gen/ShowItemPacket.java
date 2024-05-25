@@ -5,89 +5,57 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.CreatureAttackEventPacket}
+ * Protobuf type {@code org.y1000.network.gen.ShowItemPacket}
  */
-public final class CreatureAttackEventPacket extends
+public final class ShowItemPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.CreatureAttackEventPacket)
-    CreatureAttackEventPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ShowItemPacket)
+    ShowItemPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use CreatureAttackEventPacket.newBuilder() to construct.
-  private CreatureAttackEventPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use ShowItemPacket.newBuilder() to construct.
+  private ShowItemPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private CreatureAttackEventPacket() {
+  private ShowItemPacket() {
+    name_ = "";
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new CreatureAttackEventPacket();
+    return new ShowItemPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_CreatureAttackEventPacket_descriptor;
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ShowItemPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_CreatureAttackEventPacket_fieldAccessorTable
+    return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ShowItemPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.CreatureAttackEventPacket.class, org.y1000.network.gen.CreatureAttackEventPacket.Builder.class);
+            org.y1000.network.gen.ShowItemPacket.class, org.y1000.network.gen.ShowItemPacket.Builder.class);
   }
 
   private int bitField0_;
   public static final int ID_FIELD_NUMBER = 1;
-  private long id_ = 0L;
+  private int id_ = 0;
   /**
-   * <code>int64 id = 1;</code>
+   * <code>int32 id = 1;</code>
    * @return The id.
    */
   @java.lang.Override
-  public long getId() {
+  public int getId() {
     return id_;
   }
 
-  public static final int DIRECTION_FIELD_NUMBER = 2;
-  private int direction_ = 0;
-  /**
-   * <code>int32 direction = 2;</code>
-   * @return The direction.
-   */
-  @java.lang.Override
-  public int getDirection() {
-    return direction_;
-  }
-
-  public static final int STATE_FIELD_NUMBER = 3;
-  private int state_ = 0;
-  /**
-   * <code>int32 state = 3;</code>
-   * @return The state.
-   */
-  @java.lang.Override
-  public int getState() {
-    return state_;
-  }
-
-  public static final int PLAYER_FIELD_NUMBER = 4;
-  private boolean player_ = false;
-  /**
-   * <code>bool player = 4;</code>
-   * @return The player.
-   */
-  @java.lang.Override
-  public boolean getPlayer() {
-    return player_;
-  }
-
-  public static final int X_FIELD_NUMBER = 5;
+  public static final int X_FIELD_NUMBER = 2;
   private int x_ = 0;
   /**
-   * <code>int32 x = 5;</code>
+   * <code>int32 x = 2;</code>
    * @return The x.
    */
   @java.lang.Override
@@ -95,10 +63,10 @@ private static final long serialVersionUID = 0L;
     return x_;
   }
 
-  public static final int Y_FIELD_NUMBER = 6;
+  public static final int Y_FIELD_NUMBER = 3;
   private int y_ = 0;
   /**
-   * <code>int32 y = 6;</code>
+   * <code>int32 y = 3;</code>
    * @return The y.
    */
   @java.lang.Override
@@ -106,23 +74,95 @@ private static final long serialVersionUID = 0L;
     return y_;
   }
 
-  public static final int TARGETID_FIELD_NUMBER = 7;
-  private long targetId_ = 0L;
+  public static final int NUMBER_FIELD_NUMBER = 4;
+  private int number_ = 0;
   /**
-   * <code>optional int64 targetId = 7;</code>
-   * @return Whether the targetId field is set.
+   * <code>optional int32 number = 4;</code>
+   * @return Whether the number field is set.
    */
   @java.lang.Override
-  public boolean hasTargetId() {
+  public boolean hasNumber() {
     return ((bitField0_ & 0x00000001) != 0);
   }
   /**
-   * <code>optional int64 targetId = 7;</code>
-   * @return The targetId.
+   * <code>optional int32 number = 4;</code>
+   * @return The number.
    */
   @java.lang.Override
-  public long getTargetId() {
-    return targetId_;
+  public int getNumber() {
+    return number_;
+  }
+
+  public static final int COORDINATEX_FIELD_NUMBER = 5;
+  private int coordinateX_ = 0;
+  /**
+   * <code>int32 coordinateX = 5;</code>
+   * @return The coordinateX.
+   */
+  @java.lang.Override
+  public int getCoordinateX() {
+    return coordinateX_;
+  }
+
+  public static final int COORDINATEY_FIELD_NUMBER = 6;
+  private int coordinateY_ = 0;
+  /**
+   * <code>int32 coordinateY = 6;</code>
+   * @return The coordinateY.
+   */
+  @java.lang.Override
+  public int getCoordinateY() {
+    return coordinateY_;
+  }
+
+  public static final int NAME_FIELD_NUMBER = 7;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
+  /**
+   * <code>string name = 7;</code>
+   * @return The name.
+   */
+  @java.lang.Override
+  public java.lang.String getName() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      name_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string name = 7;</code>
+   * @return The bytes for name.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getNameBytes() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      name_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int ITEMTYPE_FIELD_NUMBER = 8;
+  private int itemType_ = 0;
+  /**
+   * <code>int32 itemType = 8;</code>
+   * @return The itemType.
+   */
+  @java.lang.Override
+  public int getItemType() {
+    return itemType_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -139,26 +179,29 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (id_ != 0L) {
-      output.writeInt64(1, id_);
-    }
-    if (direction_ != 0) {
-      output.writeInt32(2, direction_);
-    }
-    if (state_ != 0) {
-      output.writeInt32(3, state_);
-    }
-    if (player_ != false) {
-      output.writeBool(4, player_);
+    if (id_ != 0) {
+      output.writeInt32(1, id_);
     }
     if (x_ != 0) {
-      output.writeInt32(5, x_);
+      output.writeInt32(2, x_);
     }
     if (y_ != 0) {
-      output.writeInt32(6, y_);
+      output.writeInt32(3, y_);
     }
     if (((bitField0_ & 0x00000001) != 0)) {
-      output.writeInt64(7, targetId_);
+      output.writeInt32(4, number_);
+    }
+    if (coordinateX_ != 0) {
+      output.writeInt32(5, coordinateX_);
+    }
+    if (coordinateY_ != 0) {
+      output.writeInt32(6, coordinateY_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 7, name_);
+    }
+    if (itemType_ != 0) {
+      output.writeInt32(8, itemType_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -169,33 +212,36 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (id_ != 0L) {
+    if (id_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, id_);
-    }
-    if (direction_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, direction_);
-    }
-    if (state_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, state_);
-    }
-    if (player_ != false) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeBoolSize(4, player_);
+        .computeInt32Size(1, id_);
     }
     if (x_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(5, x_);
+        .computeInt32Size(2, x_);
     }
     if (y_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(6, y_);
+        .computeInt32Size(3, y_);
     }
     if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(7, targetId_);
+        .computeInt32Size(4, number_);
+    }
+    if (coordinateX_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(5, coordinateX_);
+    }
+    if (coordinateY_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(6, coordinateY_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, name_);
+    }
+    if (itemType_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(8, itemType_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -207,28 +253,30 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.CreatureAttackEventPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.ShowItemPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.CreatureAttackEventPacket other = (org.y1000.network.gen.CreatureAttackEventPacket) obj;
+    org.y1000.network.gen.ShowItemPacket other = (org.y1000.network.gen.ShowItemPacket) obj;
 
     if (getId()
         != other.getId()) return false;
-    if (getDirection()
-        != other.getDirection()) return false;
-    if (getState()
-        != other.getState()) return false;
-    if (getPlayer()
-        != other.getPlayer()) return false;
     if (getX()
         != other.getX()) return false;
     if (getY()
         != other.getY()) return false;
-    if (hasTargetId() != other.hasTargetId()) return false;
-    if (hasTargetId()) {
-      if (getTargetId()
-          != other.getTargetId()) return false;
+    if (hasNumber() != other.hasNumber()) return false;
+    if (hasNumber()) {
+      if (getNumber()
+          != other.getNumber()) return false;
     }
+    if (getCoordinateX()
+        != other.getCoordinateX()) return false;
+    if (getCoordinateY()
+        != other.getCoordinateY()) return false;
+    if (!getName()
+        .equals(other.getName())) return false;
+    if (getItemType()
+        != other.getItemType()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -241,67 +289,66 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getId());
-    hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
-    hash = (53 * hash) + getDirection();
-    hash = (37 * hash) + STATE_FIELD_NUMBER;
-    hash = (53 * hash) + getState();
-    hash = (37 * hash) + PLAYER_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-        getPlayer());
+    hash = (53 * hash) + getId();
     hash = (37 * hash) + X_FIELD_NUMBER;
     hash = (53 * hash) + getX();
     hash = (37 * hash) + Y_FIELD_NUMBER;
     hash = (53 * hash) + getY();
-    if (hasTargetId()) {
-      hash = (37 * hash) + TARGETID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getTargetId());
+    if (hasNumber()) {
+      hash = (37 * hash) + NUMBER_FIELD_NUMBER;
+      hash = (53 * hash) + getNumber();
     }
+    hash = (37 * hash) + COORDINATEX_FIELD_NUMBER;
+    hash = (53 * hash) + getCoordinateX();
+    hash = (37 * hash) + COORDINATEY_FIELD_NUMBER;
+    hash = (53 * hash) + getCoordinateY();
+    hash = (37 * hash) + NAME_FIELD_NUMBER;
+    hash = (53 * hash) + getName().hashCode();
+    hash = (37 * hash) + ITEMTYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getItemType();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
+  public static org.y1000.network.gen.ShowItemPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
+  public static org.y1000.network.gen.ShowItemPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
+  public static org.y1000.network.gen.ShowItemPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
+  public static org.y1000.network.gen.ShowItemPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.ShowItemPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
+  public static org.y1000.network.gen.ShowItemPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ShowItemPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
+  public static org.y1000.network.gen.ShowItemPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -309,26 +356,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ShowItemPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.ShowItemPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
+  public static org.y1000.network.gen.ShowItemPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.CreatureAttackEventPacket parseFrom(
+  public static org.y1000.network.gen.ShowItemPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -341,7 +388,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.CreatureAttackEventPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.ShowItemPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -357,26 +404,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.CreatureAttackEventPacket}
+   * Protobuf type {@code org.y1000.network.gen.ShowItemPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.CreatureAttackEventPacket)
-      org.y1000.network.gen.CreatureAttackEventPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ShowItemPacket)
+      org.y1000.network.gen.ShowItemPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_CreatureAttackEventPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ShowItemPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_CreatureAttackEventPacket_fieldAccessorTable
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ShowItemPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.CreatureAttackEventPacket.class, org.y1000.network.gen.CreatureAttackEventPacket.Builder.class);
+              org.y1000.network.gen.ShowItemPacket.class, org.y1000.network.gen.ShowItemPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.CreatureAttackEventPacket.newBuilder()
+    // Construct using org.y1000.network.gen.ShowItemPacket.newBuilder()
     private Builder() {
 
     }
@@ -390,30 +437,31 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      id_ = 0L;
-      direction_ = 0;
-      state_ = 0;
-      player_ = false;
+      id_ = 0;
       x_ = 0;
       y_ = 0;
-      targetId_ = 0L;
+      number_ = 0;
+      coordinateX_ = 0;
+      coordinateY_ = 0;
+      name_ = "";
+      itemType_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_CreatureAttackEventPacket_descriptor;
+      return org.y1000.network.gen.Message.internal_static_org_y1000_network_gen_ShowItemPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.CreatureAttackEventPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.CreatureAttackEventPacket.getDefaultInstance();
+    public org.y1000.network.gen.ShowItemPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.ShowItemPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.CreatureAttackEventPacket build() {
-      org.y1000.network.gen.CreatureAttackEventPacket result = buildPartial();
+    public org.y1000.network.gen.ShowItemPacket build() {
+      org.y1000.network.gen.ShowItemPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -421,37 +469,40 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.CreatureAttackEventPacket buildPartial() {
-      org.y1000.network.gen.CreatureAttackEventPacket result = new org.y1000.network.gen.CreatureAttackEventPacket(this);
+    public org.y1000.network.gen.ShowItemPacket buildPartial() {
+      org.y1000.network.gen.ShowItemPacket result = new org.y1000.network.gen.ShowItemPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.CreatureAttackEventPacket result) {
+    private void buildPartial0(org.y1000.network.gen.ShowItemPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.id_ = id_;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.direction_ = direction_;
-      }
-      if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.state_ = state_;
-      }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
-        result.player_ = player_;
-      }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
         result.x_ = x_;
       }
-      if (((from_bitField0_ & 0x00000020) != 0)) {
+      if (((from_bitField0_ & 0x00000004) != 0)) {
         result.y_ = y_;
       }
       int to_bitField0_ = 0;
-      if (((from_bitField0_ & 0x00000040) != 0)) {
-        result.targetId_ = targetId_;
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.number_ = number_;
         to_bitField0_ |= 0x00000001;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.coordinateX_ = coordinateX_;
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.coordinateY_ = coordinateY_;
+      }
+      if (((from_bitField0_ & 0x00000040) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        result.itemType_ = itemType_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -490,27 +541,18 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.CreatureAttackEventPacket) {
-        return mergeFrom((org.y1000.network.gen.CreatureAttackEventPacket)other);
+      if (other instanceof org.y1000.network.gen.ShowItemPacket) {
+        return mergeFrom((org.y1000.network.gen.ShowItemPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.CreatureAttackEventPacket other) {
-      if (other == org.y1000.network.gen.CreatureAttackEventPacket.getDefaultInstance()) return this;
-      if (other.getId() != 0L) {
+    public Builder mergeFrom(org.y1000.network.gen.ShowItemPacket other) {
+      if (other == org.y1000.network.gen.ShowItemPacket.getDefaultInstance()) return this;
+      if (other.getId() != 0) {
         setId(other.getId());
-      }
-      if (other.getDirection() != 0) {
-        setDirection(other.getDirection());
-      }
-      if (other.getState() != 0) {
-        setState(other.getState());
-      }
-      if (other.getPlayer() != false) {
-        setPlayer(other.getPlayer());
       }
       if (other.getX() != 0) {
         setX(other.getX());
@@ -518,8 +560,22 @@ private static final long serialVersionUID = 0L;
       if (other.getY() != 0) {
         setY(other.getY());
       }
-      if (other.hasTargetId()) {
-        setTargetId(other.getTargetId());
+      if (other.hasNumber()) {
+        setNumber(other.getNumber());
+      }
+      if (other.getCoordinateX() != 0) {
+        setCoordinateX(other.getCoordinateX());
+      }
+      if (other.getCoordinateY() != 0) {
+        setCoordinateY(other.getCoordinateY());
+      }
+      if (!other.getName().isEmpty()) {
+        name_ = other.name_;
+        bitField0_ |= 0x00000040;
+        onChanged();
+      }
+      if (other.getItemType() != 0) {
+        setItemType(other.getItemType());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -548,40 +604,45 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              id_ = input.readInt64();
+              id_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
             case 16: {
-              direction_ = input.readInt32();
+              x_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
             case 24: {
-              state_ = input.readInt32();
+              y_ = input.readInt32();
               bitField0_ |= 0x00000004;
               break;
             } // case 24
             case 32: {
-              player_ = input.readBool();
+              number_ = input.readInt32();
               bitField0_ |= 0x00000008;
               break;
             } // case 32
             case 40: {
-              x_ = input.readInt32();
+              coordinateX_ = input.readInt32();
               bitField0_ |= 0x00000010;
               break;
             } // case 40
             case 48: {
-              y_ = input.readInt32();
+              coordinateY_ = input.readInt32();
               bitField0_ |= 0x00000020;
               break;
             } // case 48
-            case 56: {
-              targetId_ = input.readInt64();
+            case 58: {
+              name_ = input.readStringRequireUtf8();
               bitField0_ |= 0x00000040;
               break;
-            } // case 56
+            } // case 58
+            case 64: {
+              itemType_ = input.readInt32();
+              bitField0_ |= 0x00000080;
+              break;
+            } // case 64
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -599,21 +660,21 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private long id_ ;
+    private int id_ ;
     /**
-     * <code>int64 id = 1;</code>
+     * <code>int32 id = 1;</code>
      * @return The id.
      */
     @java.lang.Override
-    public long getId() {
+    public int getId() {
       return id_;
     }
     /**
-     * <code>int64 id = 1;</code>
+     * <code>int32 id = 1;</code>
      * @param value The id to set.
      * @return This builder for chaining.
      */
-    public Builder setId(long value) {
+    public Builder setId(int value) {
 
       id_ = value;
       bitField0_ |= 0x00000001;
@@ -621,115 +682,19 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 id = 1;</code>
+     * <code>int32 id = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearId() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      id_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private int direction_ ;
-    /**
-     * <code>int32 direction = 2;</code>
-     * @return The direction.
-     */
-    @java.lang.Override
-    public int getDirection() {
-      return direction_;
-    }
-    /**
-     * <code>int32 direction = 2;</code>
-     * @param value The direction to set.
-     * @return This builder for chaining.
-     */
-    public Builder setDirection(int value) {
-
-      direction_ = value;
-      bitField0_ |= 0x00000002;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 direction = 2;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearDirection() {
-      bitField0_ = (bitField0_ & ~0x00000002);
-      direction_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int state_ ;
-    /**
-     * <code>int32 state = 3;</code>
-     * @return The state.
-     */
-    @java.lang.Override
-    public int getState() {
-      return state_;
-    }
-    /**
-     * <code>int32 state = 3;</code>
-     * @param value The state to set.
-     * @return This builder for chaining.
-     */
-    public Builder setState(int value) {
-
-      state_ = value;
-      bitField0_ |= 0x00000004;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 state = 3;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearState() {
-      bitField0_ = (bitField0_ & ~0x00000004);
-      state_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private boolean player_ ;
-    /**
-     * <code>bool player = 4;</code>
-     * @return The player.
-     */
-    @java.lang.Override
-    public boolean getPlayer() {
-      return player_;
-    }
-    /**
-     * <code>bool player = 4;</code>
-     * @param value The player to set.
-     * @return This builder for chaining.
-     */
-    public Builder setPlayer(boolean value) {
-
-      player_ = value;
-      bitField0_ |= 0x00000008;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>bool player = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearPlayer() {
-      bitField0_ = (bitField0_ & ~0x00000008);
-      player_ = false;
+      id_ = 0;
       onChanged();
       return this;
     }
 
     private int x_ ;
     /**
-     * <code>int32 x = 5;</code>
+     * <code>int32 x = 2;</code>
      * @return The x.
      */
     @java.lang.Override
@@ -737,23 +702,23 @@ private static final long serialVersionUID = 0L;
       return x_;
     }
     /**
-     * <code>int32 x = 5;</code>
+     * <code>int32 x = 2;</code>
      * @param value The x to set.
      * @return This builder for chaining.
      */
     public Builder setX(int value) {
 
       x_ = value;
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 x = 5;</code>
+     * <code>int32 x = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearX() {
-      bitField0_ = (bitField0_ & ~0x00000010);
+      bitField0_ = (bitField0_ & ~0x00000002);
       x_ = 0;
       onChanged();
       return this;
@@ -761,7 +726,7 @@ private static final long serialVersionUID = 0L;
 
     private int y_ ;
     /**
-     * <code>int32 y = 6;</code>
+     * <code>int32 y = 3;</code>
      * @return The y.
      */
     @java.lang.Override
@@ -769,64 +734,232 @@ private static final long serialVersionUID = 0L;
       return y_;
     }
     /**
-     * <code>int32 y = 6;</code>
+     * <code>int32 y = 3;</code>
      * @param value The y to set.
      * @return This builder for chaining.
      */
     public Builder setY(int value) {
 
       y_ = value;
-      bitField0_ |= 0x00000020;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 y = 6;</code>
+     * <code>int32 y = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearY() {
-      bitField0_ = (bitField0_ & ~0x00000020);
+      bitField0_ = (bitField0_ & ~0x00000004);
       y_ = 0;
       onChanged();
       return this;
     }
 
-    private long targetId_ ;
+    private int number_ ;
     /**
-     * <code>optional int64 targetId = 7;</code>
-     * @return Whether the targetId field is set.
+     * <code>optional int32 number = 4;</code>
+     * @return Whether the number field is set.
      */
     @java.lang.Override
-    public boolean hasTargetId() {
-      return ((bitField0_ & 0x00000040) != 0);
+    public boolean hasNumber() {
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
-     * <code>optional int64 targetId = 7;</code>
-     * @return The targetId.
+     * <code>optional int32 number = 4;</code>
+     * @return The number.
      */
     @java.lang.Override
-    public long getTargetId() {
-      return targetId_;
+    public int getNumber() {
+      return number_;
     }
     /**
-     * <code>optional int64 targetId = 7;</code>
-     * @param value The targetId to set.
+     * <code>optional int32 number = 4;</code>
+     * @param value The number to set.
      * @return This builder for chaining.
      */
-    public Builder setTargetId(long value) {
+    public Builder setNumber(int value) {
 
-      targetId_ = value;
+      number_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional int32 number = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearNumber() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      number_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int coordinateX_ ;
+    /**
+     * <code>int32 coordinateX = 5;</code>
+     * @return The coordinateX.
+     */
+    @java.lang.Override
+    public int getCoordinateX() {
+      return coordinateX_;
+    }
+    /**
+     * <code>int32 coordinateX = 5;</code>
+     * @param value The coordinateX to set.
+     * @return This builder for chaining.
+     */
+    public Builder setCoordinateX(int value) {
+
+      coordinateX_ = value;
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 coordinateX = 5;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearCoordinateX() {
+      bitField0_ = (bitField0_ & ~0x00000010);
+      coordinateX_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int coordinateY_ ;
+    /**
+     * <code>int32 coordinateY = 6;</code>
+     * @return The coordinateY.
+     */
+    @java.lang.Override
+    public int getCoordinateY() {
+      return coordinateY_;
+    }
+    /**
+     * <code>int32 coordinateY = 6;</code>
+     * @param value The coordinateY to set.
+     * @return This builder for chaining.
+     */
+    public Builder setCoordinateY(int value) {
+
+      coordinateY_ = value;
+      bitField0_ |= 0x00000020;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 coordinateY = 6;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearCoordinateY() {
+      bitField0_ = (bitField0_ & ~0x00000020);
+      coordinateY_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object name_ = "";
+    /**
+     * <code>string name = 7;</code>
+     * @return The name.
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string name = 7;</code>
+     * @return The bytes for name.
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string name = 7;</code>
+     * @param value The name to set.
+     * @return This builder for chaining.
+     */
+    public Builder setName(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      name_ = value;
       bitField0_ |= 0x00000040;
       onChanged();
       return this;
     }
     /**
-     * <code>optional int64 targetId = 7;</code>
+     * <code>string name = 7;</code>
      * @return This builder for chaining.
      */
-    public Builder clearTargetId() {
+    public Builder clearName() {
+      name_ = getDefaultInstance().getName();
       bitField0_ = (bitField0_ & ~0x00000040);
-      targetId_ = 0L;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string name = 7;</code>
+     * @param value The bytes for name to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      name_ = value;
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+
+    private int itemType_ ;
+    /**
+     * <code>int32 itemType = 8;</code>
+     * @return The itemType.
+     */
+    @java.lang.Override
+    public int getItemType() {
+      return itemType_;
+    }
+    /**
+     * <code>int32 itemType = 8;</code>
+     * @param value The itemType to set.
+     * @return This builder for chaining.
+     */
+    public Builder setItemType(int value) {
+
+      itemType_ = value;
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 itemType = 8;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearItemType() {
+      bitField0_ = (bitField0_ & ~0x00000080);
+      itemType_ = 0;
       onChanged();
       return this;
     }
@@ -843,23 +976,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.CreatureAttackEventPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ShowItemPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.CreatureAttackEventPacket)
-  private static final org.y1000.network.gen.CreatureAttackEventPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ShowItemPacket)
+  private static final org.y1000.network.gen.ShowItemPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.CreatureAttackEventPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.ShowItemPacket();
   }
 
-  public static org.y1000.network.gen.CreatureAttackEventPacket getDefaultInstance() {
+  public static org.y1000.network.gen.ShowItemPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<CreatureAttackEventPacket>
-      PARSER = new com.google.protobuf.AbstractParser<CreatureAttackEventPacket>() {
+  private static final com.google.protobuf.Parser<ShowItemPacket>
+      PARSER = new com.google.protobuf.AbstractParser<ShowItemPacket>() {
     @java.lang.Override
-    public CreatureAttackEventPacket parsePartialFrom(
+    public ShowItemPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -878,17 +1011,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<CreatureAttackEventPacket> parser() {
+  public static com.google.protobuf.Parser<ShowItemPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<CreatureAttackEventPacket> getParserForType() {
+  public com.google.protobuf.Parser<ShowItemPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.CreatureAttackEventPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.ShowItemPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

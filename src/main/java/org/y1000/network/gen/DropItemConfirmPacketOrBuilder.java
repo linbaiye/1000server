@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.0-rc2
 package org.y1000.network.gen;
 
-public interface DoubleClickInventorySlotPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.DoubleClickInventorySlotPacket)
+public interface DropItemConfirmPacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.DropItemConfirmPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -13,4 +13,10 @@ public interface DoubleClickInventorySlotPacketOrBuilder extends
    * @return The slot.
    */
   int getSlot();
+
+  /**
+   * <code>int32 numberLeft = 2;</code>
+   * @return The numberLeft.
+   */
+  int getNumberLeft();
 }

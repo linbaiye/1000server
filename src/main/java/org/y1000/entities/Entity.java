@@ -1,6 +1,6 @@
 package org.y1000.entities;
 
-import org.y1000.message.AbstractInterpolation;
+import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.util.Coordinate;
 
 /**
@@ -14,5 +14,5 @@ public interface Entity {
 
     void update(int delta);
 
-    AbstractInterpolation captureInterpolation();
+    AbstractCreatureInterpolation captureInterpolation();
 }
