@@ -10,9 +10,9 @@ public enum AttackKungFuType implements ValueEnum {
 
     BLADE(2, 720, 630),
 
-    SPEAR(3, 0, 0),
+    SPEAR(4, 0, 0),
 
-    AXE(4, 0, 0),
+    AXE(3, 0, 0),
 
     BOW(5, 600, 600),
 
@@ -43,5 +43,9 @@ public enum AttackKungFuType implements ValueEnum {
 
     public int above50Millis() {
         return above50;
+    }
+
+    public static AttackKungFuType fromValue(int v) {
+        return ValueEnum.fromValueOrThrow(values(), v);
     }
 }

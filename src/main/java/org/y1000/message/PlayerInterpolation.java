@@ -2,7 +2,7 @@ package org.y1000.message;
 
 import lombok.AccessLevel;
 import lombok.Setter;
-import org.y1000.entities.item.Weapon;
+import org.y1000.item.Weapon;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerInterpolationPacket;

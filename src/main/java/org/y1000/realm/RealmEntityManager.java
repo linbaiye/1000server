@@ -1,14 +1,18 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.Entity;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.Projectile;
 import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.CreatureShootEvent;
+import org.y1000.entities.GroundedItem;
+import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
+import org.y1000.entities.repository.ItemRepository;
 import org.y1000.message.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.*;
@@ -26,13 +30,26 @@ final class RealmEntityManager implements EntityEventListener,
 
     private final Map<Player, Connection> playerConnectionMap = new HashMap<>(100);
 
+    private int temporaryEntityId = 1;
+
+    private final ItemRepository itemRepository;
+
+    private final ItemFactory itemFactory;
+
+    RealmEntityManager(ItemRepository itemRepository,
+                       ItemFactory itemFactory) {
+        this.itemRepository = itemRepository;
+        this.itemFactory = itemFactory;
+    }
+
+
     @Override
     public void visit(InputResponseMessage inputResponseMessage) {
         sendMessage(inputResponseMessage.player(), inputResponseMessage);
         visit(inputResponseMessage.positionMessage());
     }
 
-    private void notifyInterpolation(Player joined, PhysicalEntity entity) {
+    private void notifyInterpolation(Player joined, Entity entity) {
         sendMessage(joined, entity.captureInterpolation());
         log.debug("Notified player {} of player {}", joined.id(), entity.id());
         if (entity instanceof Player another) {
@@ -154,12 +171,34 @@ final class RealmEntityManager implements EntityEventListener,
     @Override
     public void visit(PlayerDropItemEvent event) {
         sendMessage(event.player(), event);
+        GroundedItem groundedItem = event.createGroundedItem(temporaryEntityId++);
+        add(groundedItem);
+        notifyVisiblePlayers(groundedItem, groundedItem.captureInterpolation());
     }
 
     @Override
     public void visit(CharacterChangeWeaponEvent event) {
         sendMessage(event.player(), event);
         notifyVisiblePlayers(event.source(), event.packetForOtherPlayers());
+    }
+
+    @Override
+    public void visit(PlayerPickedItemEvent event) {
+        sendMessage(event.player(), event);
+        notifyVisiblePlayers(event.groundedItem(), new RemoveEntityMessage(event.groundedItem().getId()));
+        scopeManager.remove(event.groundedItem());
+        //itemRepository.save(event.player().id(), event, currentItemInSlot);
+    }
+
+    @Override
+    public void visit(PlayerTextEvent event) {
+        sendMessage(event.player(), event);
+    }
+
+    @Override
+    public void visit(GetGroundItemEvent event) {
+        GroundedItem pickingItem = event.getPickingItem();
+        event.player().pickItem(itemFactory.createItem(pickingItem), pickingItem);
     }
 
     private void update(PhysicalEntity entity, int delta) {

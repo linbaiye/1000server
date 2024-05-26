@@ -6,6 +6,8 @@ import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.InputResponseMessage;
+import org.y1000.message.GetGroundItemEvent;
+import org.y1000.message.PlayerTextEvent;
 
 public interface PlayerEventVisitor extends EntityEventVisitor {
 
@@ -38,6 +40,18 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     }
 
     default void visit(PlayerDropItemEvent event) {
+
+    }
+
+    default void visit(GetGroundItemEvent event) {
+
+    }
+
+    default void visit(PlayerPickedItemEvent event) {
+
+    }
+
+    default void visit(PlayerTextEvent event) {
 
     }
 }

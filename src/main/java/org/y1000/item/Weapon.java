@@ -1,28 +1,22 @@
-package org.y1000.entities.item;
+package org.y1000.item;
 
 import lombok.Builder;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
 
-public final class Weapon extends AbstractItem {
+public final class Weapon extends AbstractEquipment {
 
     private final AttackKungFuType attackKungFuType;
 
     @Builder
-    public Weapon(long id, String name, ItemType type, AttackKungFuType attackKungFuType) {
-        super(id, name, type);
+    public Weapon(String name, AttackKungFuType attackKungFuType) {
+        super(name);
         this.attackKungFuType = attackKungFuType;
     }
 
-
     public AttackKungFuType kungFuType() {
         return attackKungFuType;
-    }
-
-    @Override
-    public ItemType type() {
-        return ItemType.WEAPON;
     }
 
     @Override
@@ -31,10 +25,5 @@ public final class Weapon extends AbstractItem {
             return;
         }
         player.equipWeapon(this);
-    }
-
-    public boolean isRanged () {
-        return attackKungFuType == AttackKungFuType.BOW ||
-               attackKungFuType == AttackKungFuType.THROW;
     }
 }

@@ -40,6 +40,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case DROPITEM -> new ClientDropItemEvent(clientPacket.getDropItem().getNumber(), clientPacket.getDropItem().getSlot(),
                     clientPacket.getDropItem().getX(), clientPacket.getDropItem().getY(),
                     new Coordinate(clientPacket.getDropItem().getCoordinateX(), clientPacket.getDropItem().getCoordinateY()));
+            case PICKITEM -> new ClientPickItemEvent(clientPacket.getPickItem().getId());
             default -> throw new IllegalArgumentException();
         };
     }

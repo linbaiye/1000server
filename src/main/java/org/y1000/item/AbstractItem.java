@@ -1,24 +1,17 @@
-package org.y1000.entities.item;
+package org.y1000.item;
 
 import org.apache.commons.lang3.Validate;
 
 
-public abstract  class AbstractItem implements Item{
-    private final long id;
+public abstract class AbstractItem implements Item {
     private final String name;
     private final ItemType type;
 
-    public AbstractItem(long id, String name, ItemType type) {
+    public AbstractItem(String name, ItemType type) {
         Validate.notNull(name, "name must not be null.");
-        Validate.notNull(name, "type must not be null.");
-        this.id = id;
+        Validate.notNull(type, "type must not be null.");
         this.name = name;
         this.type = type;
-    }
-
-    @Override
-    public long id() {
-        return id;
     }
 
     @Override

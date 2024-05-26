@@ -8,6 +8,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
+import org.y1000.item.ItemConfig;
+import org.y1000.entities.repository.ItemRepository;
+import org.y1000.entities.repository.ItemRepositoryImpl;
 import org.y1000.network.*;
 import org.y1000.entities.repository.PlayerRepository;
 import org.y1000.entities.repository.PlayerRepositoryImpl;
@@ -19,24 +22,35 @@ public final class Server {
 
     private final int port;
 
-    private final EventLoopGroup workerGroup;
+    private EventLoopGroup workerGroup;
 
-    private final EventLoopGroup serverGroup;
+    private EventLoopGroup serverGroup;
 
-    private final PlayerRepository playerRepository;
+    private PlayerRepository playerRepository;
 
-    private final RealmManager realmManager = RealmManager.create();
+    private RealmManager realmManager;
+
+    private ItemRepository itemRepository;
 
     public Server(int port) {
         this.port = port;
         workerGroup = new NioEventLoopGroup();
         serverGroup = new NioEventLoopGroup();
         bootstrap = new ServerBootstrap();
-        playerRepository = createPlayerRepository();
+
+        ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemConfig.read());
+        playerRepository = new PlayerRepositoryImpl(repository);
+        itemRepository = repository;
+        realmManager = RealmManager.create(repository, itemRepository);
     }
 
-    private PlayerRepository createPlayerRepository() {
-        return new PlayerRepositoryImpl();
+
+    private ItemRepository createItemRepository() {
+        return null;
+    }
+
+    private void create() {
+        ItemRepository itemRepository = new ItemRepositoryImpl(ItemConfig.read());
     }
 
 //    private void startRealms() {
@@ -80,7 +94,6 @@ public final class Server {
     public void loopEvent() {
         new Thread(realmManager).start();
     }
-
 
     public static void main(String[] args) {
         Server server = new Server(9999);

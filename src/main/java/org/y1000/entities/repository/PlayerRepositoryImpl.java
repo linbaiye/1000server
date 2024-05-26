@@ -1,20 +1,28 @@
 package org.y1000.entities.repository;
 
-import org.y1000.entities.item.ItemType;
-import org.y1000.entities.item.StackItem;
-import org.y1000.entities.item.Weapon;
+import org.y1000.item.Chest;
+import org.y1000.item.Hat;
+import org.y1000.item.ItemFactory;
+import org.y1000.item.Weapon;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.kungfu.KungFuBook;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
-import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
 import org.y1000.entities.players.kungfu.attack.BladeKungFu;
 import org.y1000.util.Coordinate;
 
 public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private static final int[] slots = new int[]{-1, -1, 1,-1,-1,-1,-1,-1,-1,-1};
+
+    private static final long playerIdStart = 1000000000;
+
+    private final ItemFactory itemFactory;
+
+    public PlayerRepositoryImpl(ItemFactory itemFactory) {
+        this.itemFactory = itemFactory;
+    }
 
     private int findSlot() {
         for (int i = 0; i < slots.length; i++) {
@@ -28,26 +36,14 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private Inventory loadInventory() {
         Inventory inventory = new Inventory();
-        inventory.add(Weapon.builder()
-                .attackKungFuType(AttackKungFuType.SWORD)
-                .name("长剑").build());
-        inventory.add(Weapon.builder()
-                .attackKungFuType(AttackKungFuType.BOW)
-                .name("木弓").build());
-        inventory.add(StackItem.builder()
-                .name("箭").number(10000)
-                .build());
-
+        inventory.pick(itemFactory.createItem("长剑"));
+        inventory.pick(itemFactory.createItem("木弓"));
+        inventory.pick(itemFactory.createItem("箭", 10000));
         return inventory;
     }
 
-
     private Weapon weapon() {
-        return Weapon
-                .builder()
-                .name("长刀")
-                .attackKungFuType(AttackKungFuType.BLADE)
-                .build();
+        return (Weapon) itemFactory.createItem("长刀");
     }
 
     private AttackKungFu loadKungFu(Weapon weapon) {
@@ -67,13 +63,16 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         int slot = findSlot();
         Weapon weapon = weapon();
         return PlayerImpl.builder()
-                .id(slot)
+                .id(slot + playerIdStart)
                 .name("杨过")
                 .coordinate(new Coordinate(39 + slot, 27))
                 .weapon(weapon)
                 .attackKungFu(loadKungFu(weapon))
                 .kungFuBook(KungFuBook.newInstance())
                 .inventory(loadInventory())
+                .male(false)
+                .hat(new Hat("女子雨中客斗笠"))
+                .chest(new Chest("女子雨中客道袍"))
                 .build();
     }
 

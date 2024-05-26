@@ -1,10 +1,12 @@
-package org.y1000.entities.item;
+package org.y1000.item;
 
 import org.y1000.message.ValueEnum;
 
 public enum ItemType implements ValueEnum  {
-    WEAPON(1),
-    STACK(2),
+    EQUIPMENT(6),
+
+    ARROW(7),
+
             ;
 
     private final int v;

@@ -1,6 +1,6 @@
 package org.y1000.entities.players.event;
 
-import org.y1000.entities.item.Item;
+import org.y1000.item.Item;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;

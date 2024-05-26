@@ -1,11 +1,4 @@
-
 syntax = "proto3";
-
-package org.y1000.network.gen;
-option java_package ="org.y1000.network.gen";
-option java_multiple_files = true;
-
-
 
 message PositionPacket {
   int32 x = 1;
@@ -29,6 +22,10 @@ message InputPacket {
 
 message ClickPacket {
   int64 id = 1;
+}
+
+message PickItemPacket {
+  int32 id = 1;
 }
 
 message PlayerLoginPacket {
@@ -114,7 +111,6 @@ message ShowItemPacket {
   int32 coordinateX = 5;
   int32 coordinateY = 6;
   string name = 7;
-  int32 itemType = 8;
 }
 
 message CharacterChangeWeaponPacket {
@@ -127,6 +123,7 @@ message CharacterChangeWeaponPacket {
   optional int32 attackKungFuType = 8;
   int32 state = 9;
 }
+
 
 message CharacterKungFuPacket {
   string attackKungFuName = 1;
@@ -143,6 +140,7 @@ message ClientPacket {
     SwapInventorySlotPacket swapInventorySlotPacket = 5;
     DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;
     DropItemPacket dropItem = 7;
+    PickItemPacket pickItem = 8;
   }
 }
 
@@ -159,11 +157,13 @@ message InterpolationsPacket {
 }
 
 message InventoryItemPacket {
-  string name = 2;
-  int32 shapeId = 3;
-  int32 itemType = 4;
-  int32 slotId = 5;
-  optional int32 number = 6;
+  string name = 1;
+  int32 slotId = 2;
+  optional int32 number = 3;
+}
+
+message TextMessagePacket {
+  string text = 1;
 }
 
 message LoginPacket {
@@ -178,6 +178,9 @@ message LoginPacket {
   repeated InventoryItemPacket inventoryItems = 9;
   int32 attackKungFuType = 10;
   string name = 11;
+  bool male = 12;
+  optional string hatName = 13;
+  optional string chestName = 14;
 }
 
 message Packet {
@@ -198,6 +201,8 @@ message Packet {
     ChangeWeaponPacket changeWeaponPacket = 15;
     DropItemConfirmPacket dropItem = 16;
     ShowItemPacket showItem = 17;
+    InventoryItemPacket updateSlot = 18;
+    TextMessagePacket text = 19;
   }
 }
 

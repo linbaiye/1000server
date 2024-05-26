@@ -1,7 +1,9 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.repository.ItemRepository;
 import org.y1000.network.Connection;
 import org.y1000.network.ConnectionEventType;
 import org.y1000.network.event.ConnectionDataEvent;
@@ -104,10 +106,10 @@ public final class RealmManager implements Runnable {
         }
     }
 
-    public static RealmManager create() {
+    public static RealmManager create(ItemFactory itemFactory, ItemRepository itemRepository) {
         Map<String, RealmImpl> realmMap = new HashMap<>();
         RealmImpl realm = RealmMap.Load("start")
-                .map(RealmImpl::new)
+                .map(m -> new RealmImpl(m, itemRepository, itemFactory))
                 .orElseThrow(() -> new IllegalArgumentException("Map not found."));
         realmMap.put(realm.map().name(), realm);
         return new RealmManager(realmMap);

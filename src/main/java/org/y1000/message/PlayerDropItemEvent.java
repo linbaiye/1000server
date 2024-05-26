@@ -1,24 +1,46 @@
 package org.y1000.message;
 
-import org.y1000.entities.item.Item;
-import org.y1000.entities.item.StackItem;
+import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.message.clientevent.ClientDropItemEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.DropItemConfirmPacket;
 import org.y1000.network.gen.Packet;
+import org.y1000.util.Coordinate;
 
-public class PlayerDropItemEvent extends AbstractPlayerEvent {
+public final class PlayerDropItemEvent extends AbstractPlayerEvent {
 
     private final ClientDropItemEvent clientDropItemEvent;
 
-    private final Item currentSlot;
+    private final String droppedItemName;
 
-    public PlayerDropItemEvent(Player source, ClientDropItemEvent clientDropItemEvent, Item currentSlot) {
+    private final Integer numberOnGround;
+
+    private final int numberLeft;
+
+    public PlayerDropItemEvent(Player source, ClientDropItemEvent clientDropItemEvent,
+                               String droppedItemName,
+                               Integer ground, int numberLeft) {
         super(source);
         this.clientDropItemEvent = clientDropItemEvent;
-        this.currentSlot = currentSlot;
+        this.droppedItemName = droppedItemName;
+        numberOnGround = ground;
+        this.numberLeft = numberLeft;
+    }
+
+
+    public GroundedItem createGroundedItem(long id) {
+        Coordinate coordinate = clientDropItemEvent.coordinate();
+        GroundedItem.GroundedItemBuilder builder = GroundedItem.builder()
+                .y(clientDropItemEvent.y())
+                .x(clientDropItemEvent.x())
+                .coordinate(coordinate)
+                .name(droppedItemName)
+                .id(id)
+                .number(numberOnGround)
+                ;
+        return builder.build();
     }
 
     @Override
@@ -28,11 +50,10 @@ public class PlayerDropItemEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
-        var number = currentSlot instanceof StackItem stackItem ? stackItem.number() : 0;
         return Packet.newBuilder()
                 .setDropItem(DropItemConfirmPacket.newBuilder()
                         .setSlot(clientDropItemEvent.sourceSlot())
-                        .setNumberLeft(number)
+                        .setNumberLeft(numberLeft)
                         .build())
                 .build();
     }

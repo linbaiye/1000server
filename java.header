@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package org.y1000.network.gen;
+option java_package ="org.y1000.network.gen";
+option java_multiple_files = true;
+
+

@@ -45,6 +45,15 @@ public record Coordinate(int x, int y) {
         return (another.x() - x) * (another.x() - x) + (another.y() - y) * (another.y() - y);
     }
 
+    public int xDistance(int x) {
+        return Math.abs(x() - x);
+    }
+
+    public int yDistance(int y) {
+        return Math.abs(y() - y);
+    }
+
+
 
     public Coordinate move(int x, int y) {
         return new Coordinate(x() + x, y() + y);

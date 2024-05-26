@@ -3,10 +3,15 @@ package org.y1000.entities.players;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
-import org.y1000.entities.item.Weapon;
+import org.y1000.entities.GroundedItem;
+import org.y1000.item.Chest;
+import org.y1000.item.Hat;
+import org.y1000.item.Item;
+import org.y1000.item.Weapon;
 import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.kungfu.KungFuBook;
@@ -18,6 +23,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.message.*;
 import org.y1000.message.serverevent.PlayerLeftEvent;
+import org.y1000.message.serverevent.PlayerPickedItemEvent;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -25,7 +31,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
-public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player {
+public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player, EventEmiter {
 
     private Realm realm;
 
@@ -40,6 +46,12 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     private final Inventory inventory;
 
     private final KungFuBook kungFuBook;
+
+    private Chest chest;
+
+    private Hat hat;
+
+    private final boolean male;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
@@ -65,7 +77,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                       Inventory inventory,
                       Weapon weapon,
                       AttackKungFu attackKungFu,
-                      KungFuBook kungFuBook) {
+                      KungFuBook kungFuBook,
+                      boolean male,
+                      Hat hat,
+                      Chest chest
+                      ) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
         Objects.requireNonNull(kungFuBook, "kungFuBook can't be null.");
         Objects.requireNonNull(attackKungFu, "attackKungFu can't be null.");
@@ -74,8 +90,16 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         this.attackKungFu = attackKungFu;
         this.weapon = weapon;
         this.kungFuBook = kungFuBook;
+        this.male = male;
+        this.chest = chest;
+        this.hat = hat;
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         eventQueue = new ConcurrentLinkedQueue<>();
+    }
+
+    @Override
+    public boolean isMale() {
+        return male;
     }
 
     public Optional<ClientEvent> takeClientEvent() {
@@ -92,18 +116,54 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     @Override
+    public void pickItem(Item item, GroundedItem groundedItem){
+        int slot = inventory.pick(item);
+        if (slot > 0) {
+            log.info("Picked grounded item {}.", groundedItem);
+            emitEvent(new PlayerPickedItemEvent(this, slot, inventory.get(slot), groundedItem));
+        }
+    }
+
+
+    @Override
     public AttackKungFu attackKungFu() {
         return attackKungFu;
+    }
+
+    private void handlePickItem(PhysicalEntity entity) {
+        if (!(entity instanceof GroundedItem groundedItem)) {
+            return;
+        }
+        if (!groundedItem.canPickAt(coordinate())) {
+            log.warn("Tried pick item {} from {}.", groundedItem, coordinate());
+            emitEvent(PlayerTextEvent.tooFarAway(this));
+            return;
+        }
+        if (inventory.canPick(groundedItem)) {
+            emitEvent(new GetGroundItemEvent(this, groundedItem));
+        }
     }
 
 
     @Override
     public void handleEvent(ClientEvent clientEvent) {
         if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
-            inventory.handleClientEvent(this, inventoryEvent);
+            inventory.handleClientEvent(this, inventoryEvent, this);
+        } else if (clientEvent instanceof ClientPickItemEvent pickItemEvent) {
+            realm.findInsight(this, pickItemEvent.id()).ifPresent(this::handlePickItem);
         } else {
             eventQueue.add(clientEvent);
         }
+    }
+
+    @Override
+    public Optional<Hat> hat() {
+        return Optional.ofNullable(hat);
+    }
+
+    @Override
+    public Optional<Chest> chest() {
+        return Optional.ofNullable(chest);
     }
 
 

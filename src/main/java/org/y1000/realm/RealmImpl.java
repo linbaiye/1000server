@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.monster.PassiveMonster;
+import org.y1000.item.ItemFactory;
+import org.y1000.entities.repository.ItemRepository;
 import org.y1000.realm.event.PlayerConnectedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
@@ -23,12 +25,11 @@ final class RealmImpl implements Runnable, Realm {
     private final List<RealmEvent> pendingEvents;
 
     private final RealmEntityManager entityManager;
-
     private volatile boolean shutdown;
 
-    public RealmImpl(RealmMap map) {
+    public RealmImpl(RealmMap map, ItemRepository itemRepository, ItemFactory itemFactory) {
         realmMap = map;
-        entityManager = new RealmEntityManager();
+        entityManager = new RealmEntityManager(itemRepository, itemFactory);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
     }
@@ -41,6 +42,7 @@ final class RealmImpl implements Runnable, Realm {
         List<PassiveMonster> monsters = List.of(new PassiveMonster(1000L, new Coordinate(39, 30), Direction.DOWN, "牛", realmMap));
         monsters.forEach(entityManager::add);
     }
+
 
     private void dispatchEvent(RealmEvent event) {
         try {
@@ -71,21 +73,21 @@ final class RealmImpl implements Runnable, Realm {
                 if (accumulatedMillis <= current) {
                     entityManager.updateEntities(STEP_MILLIS);
                     accumulatedMillis += STEP_MILLIS;
-                } else {
-                    List<RealmEvent> events = Collections.emptyList();
-                    synchronized (pendingEvents) {
-                        while (pendingEvents.isEmpty() && current < accumulatedMillis) {
-                            pendingEvents.wait(accumulatedMillis - current);
-                            current = System.currentTimeMillis();
-                        }
-                        if (!pendingEvents.isEmpty()) {
-                            events = new ArrayList<>(pendingEvents);
-                            pendingEvents.clear();
-                        }
-                        pendingEvents.notify();
-                    }
-                    events.forEach(this::dispatchEvent);
+                    continue;
                 }
+                List<RealmEvent> events = Collections.emptyList();
+                synchronized (pendingEvents) {
+                    while (pendingEvents.isEmpty() && current < accumulatedMillis) {
+                        pendingEvents.wait(accumulatedMillis - current);
+                        current = System.currentTimeMillis();
+                    }
+                    if (!pendingEvents.isEmpty()) {
+                        events = new ArrayList<>(pendingEvents);
+                        pendingEvents.clear();
+                    }
+                    pendingEvents.notify();
+                }
+                events.forEach(this::dispatchEvent);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

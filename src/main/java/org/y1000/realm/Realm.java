@@ -11,6 +11,7 @@ public interface Realm {
 
     Optional<PhysicalEntity> findInsight(PhysicalEntity source, long id);
 
+
     void handle(RealmEvent event);
 
     RealmMap map();
