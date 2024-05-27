@@ -1,5 +1,11 @@
 syntax = "proto3";
 
+package org.y1000.network.gen;
+option java_package ="org.y1000.network.gen";
+option java_multiple_files = true;
+
+
+
 message PositionPacket {
   int32 x = 1;
   int32 y = 2;
@@ -218,7 +224,6 @@ message PlayerInterpolationPacket {
   bool male = 3;
   string name = 4;
   optional string weaponName = 5;
-  optional string chestName = 6;
 }
 
 message RemoveEntityPacket {

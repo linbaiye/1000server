@@ -1,4 +1,5 @@
 syntax = "proto3";
+package Source.Networking.Protobuf;
 
 message PositionPacket {
   int32 x = 1;
@@ -218,7 +219,6 @@ message PlayerInterpolationPacket {
   bool male = 3;
   string name = 4;
   optional string weaponName = 5;
-  optional string chestName = 6;
 }
 
 message RemoveEntityPacket {
