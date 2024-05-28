@@ -183,7 +183,12 @@ message LoginPacket {
   int32 attackKungFuType = 10;
 }
 
-
+message PlayerUnequipPacket {
+  int64 id = 1;
+  int32 equipmentType = 2;
+  optional int32 changedToState = 3;
+  optional int32 basicQuanfaLevel = 4;
+}
 
 message Packet {
   oneof TypedPacket {
@@ -205,6 +210,7 @@ message Packet {
     ShowItemPacket showItem = 17;
     InventoryItemPacket updateSlot = 18;
     TextMessagePacket text = 19;
+    PlayerUnequipPacket unequip = 20;
   }
 }
 

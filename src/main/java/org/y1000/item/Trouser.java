@@ -6,4 +6,9 @@ public final class Trouser extends AbstractEquipment {
         super(name);
     }
 
+    @Override
+    public EquipmentType equipmentType() {
+        return EquipmentType.TROUSER;
+    }
+
 }

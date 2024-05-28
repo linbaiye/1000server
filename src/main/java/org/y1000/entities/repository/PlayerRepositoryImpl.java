@@ -1,6 +1,5 @@
 package org.y1000.entities.repository;
 
-import com.sun.jdi.BooleanType;
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.entities.players.kungfu.attack.AxeKungFu;
 import org.y1000.item.*;
@@ -9,7 +8,6 @@ import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.kungfu.KungFuBook;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
-import org.y1000.entities.players.kungfu.attack.BladeKungFu;
 import org.y1000.util.Coordinate;
 
 public final class PlayerRepositoryImpl implements PlayerRepository {
@@ -36,9 +34,9 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private Inventory loadInventory() {
         Inventory inventory = new Inventory();
-        inventory.pick(itemFactory.createItem("长剑"));
-        inventory.pick(itemFactory.createItem("木弓"));
-        inventory.pick(itemFactory.createItem("箭", 10000));
+        inventory.add(itemFactory.createItem("长剑"));
+        inventory.add(itemFactory.createItem("木弓"));
+        inventory.add(itemFactory.createItem("箭", 10000));
         return inventory;
     }
 

@@ -5,77 +5,45 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.PositionPacket}
+ * Protobuf type {@code org.y1000.network.gen.PlayerUnequipPacket}
  */
-public final class PositionPacket extends
+public final class PlayerUnequipPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.PositionPacket)
-    PositionPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.PlayerUnequipPacket)
+    PlayerUnequipPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use PositionPacket.newBuilder() to construct.
-  private PositionPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use PlayerUnequipPacket.newBuilder() to construct.
+  private PlayerUnequipPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private PositionPacket() {
+  private PlayerUnequipPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new PositionPacket();
+    return new PlayerUnequipPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PositionPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerUnequipPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PositionPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerUnequipPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.PositionPacket.class, org.y1000.network.gen.PositionPacket.Builder.class);
+            org.y1000.network.gen.PlayerUnequipPacket.class, org.y1000.network.gen.PlayerUnequipPacket.Builder.class);
   }
 
-  public static final int X_FIELD_NUMBER = 1;
-  private int x_ = 0;
-  /**
-   * <code>int32 x = 1;</code>
-   * @return The x.
-   */
-  @java.lang.Override
-  public int getX() {
-    return x_;
-  }
-
-  public static final int Y_FIELD_NUMBER = 2;
-  private int y_ = 0;
-  /**
-   * <code>int32 y = 2;</code>
-   * @return The y.
-   */
-  @java.lang.Override
-  public int getY() {
-    return y_;
-  }
-
-  public static final int DIRECTION_FIELD_NUMBER = 3;
-  private int direction_ = 0;
-  /**
-   * <code>int32 direction = 3;</code>
-   * @return The direction.
-   */
-  @java.lang.Override
-  public int getDirection() {
-    return direction_;
-  }
-
-  public static final int ID_FIELD_NUMBER = 4;
+  private int bitField0_;
+  public static final int ID_FIELD_NUMBER = 1;
   private long id_ = 0L;
   /**
-   * <code>int64 id = 4;</code>
+   * <code>int64 id = 1;</code>
    * @return The id.
    */
   @java.lang.Override
@@ -83,26 +51,53 @@ private static final long serialVersionUID = 0L;
     return id_;
   }
 
-  public static final int TYPE_FIELD_NUMBER = 5;
-  private int type_ = 0;
+  public static final int EQUIPMENTTYPE_FIELD_NUMBER = 2;
+  private int equipmentType_ = 0;
   /**
-   * <code>int32 type = 5;</code>
-   * @return The type.
+   * <code>int32 equipmentType = 2;</code>
+   * @return The equipmentType.
    */
   @java.lang.Override
-  public int getType() {
-    return type_;
+  public int getEquipmentType() {
+    return equipmentType_;
   }
 
-  public static final int STATE_FIELD_NUMBER = 6;
-  private int state_ = 0;
+  public static final int CHANGEDTOSTATE_FIELD_NUMBER = 3;
+  private int changedToState_ = 0;
   /**
-   * <code>int32 state = 6;</code>
-   * @return The state.
+   * <code>optional int32 changedToState = 3;</code>
+   * @return Whether the changedToState field is set.
    */
   @java.lang.Override
-  public int getState() {
-    return state_;
+  public boolean hasChangedToState() {
+    return ((bitField0_ & 0x00000001) != 0);
+  }
+  /**
+   * <code>optional int32 changedToState = 3;</code>
+   * @return The changedToState.
+   */
+  @java.lang.Override
+  public int getChangedToState() {
+    return changedToState_;
+  }
+
+  public static final int BASICQUANFALEVEL_FIELD_NUMBER = 4;
+  private int basicQuanfaLevel_ = 0;
+  /**
+   * <code>optional int32 basicQuanfaLevel = 4;</code>
+   * @return Whether the basicQuanfaLevel field is set.
+   */
+  @java.lang.Override
+  public boolean hasBasicQuanfaLevel() {
+    return ((bitField0_ & 0x00000002) != 0);
+  }
+  /**
+   * <code>optional int32 basicQuanfaLevel = 4;</code>
+   * @return The basicQuanfaLevel.
+   */
+  @java.lang.Override
+  public int getBasicQuanfaLevel() {
+    return basicQuanfaLevel_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -119,23 +114,17 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (x_ != 0) {
-      output.writeInt32(1, x_);
-    }
-    if (y_ != 0) {
-      output.writeInt32(2, y_);
-    }
-    if (direction_ != 0) {
-      output.writeInt32(3, direction_);
-    }
     if (id_ != 0L) {
-      output.writeInt64(4, id_);
+      output.writeInt64(1, id_);
     }
-    if (type_ != 0) {
-      output.writeInt32(5, type_);
+    if (equipmentType_ != 0) {
+      output.writeInt32(2, equipmentType_);
     }
-    if (state_ != 0) {
-      output.writeInt32(6, state_);
+    if (((bitField0_ & 0x00000001) != 0)) {
+      output.writeInt32(3, changedToState_);
+    }
+    if (((bitField0_ & 0x00000002) != 0)) {
+      output.writeInt32(4, basicQuanfaLevel_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -146,29 +135,21 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (x_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(1, x_);
-    }
-    if (y_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, y_);
-    }
-    if (direction_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, direction_);
-    }
     if (id_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(4, id_);
+        .computeInt64Size(1, id_);
     }
-    if (type_ != 0) {
+    if (equipmentType_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(5, type_);
+        .computeInt32Size(2, equipmentType_);
     }
-    if (state_ != 0) {
+    if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(6, state_);
+        .computeInt32Size(3, changedToState_);
+    }
+    if (((bitField0_ & 0x00000002) != 0)) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(4, basicQuanfaLevel_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -180,23 +161,25 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.PositionPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.PlayerUnequipPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.PositionPacket other = (org.y1000.network.gen.PositionPacket) obj;
+    org.y1000.network.gen.PlayerUnequipPacket other = (org.y1000.network.gen.PlayerUnequipPacket) obj;
 
-    if (getX()
-        != other.getX()) return false;
-    if (getY()
-        != other.getY()) return false;
-    if (getDirection()
-        != other.getDirection()) return false;
     if (getId()
         != other.getId()) return false;
-    if (getType()
-        != other.getType()) return false;
-    if (getState()
-        != other.getState()) return false;
+    if (getEquipmentType()
+        != other.getEquipmentType()) return false;
+    if (hasChangedToState() != other.hasChangedToState()) return false;
+    if (hasChangedToState()) {
+      if (getChangedToState()
+          != other.getChangedToState()) return false;
+    }
+    if (hasBasicQuanfaLevel() != other.hasBasicQuanfaLevel()) return false;
+    if (hasBasicQuanfaLevel()) {
+      if (getBasicQuanfaLevel()
+          != other.getBasicQuanfaLevel()) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -208,62 +191,62 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + X_FIELD_NUMBER;
-    hash = (53 * hash) + getX();
-    hash = (37 * hash) + Y_FIELD_NUMBER;
-    hash = (53 * hash) + getY();
-    hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
-    hash = (53 * hash) + getDirection();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getId());
-    hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + getType();
-    hash = (37 * hash) + STATE_FIELD_NUMBER;
-    hash = (53 * hash) + getState();
+    hash = (37 * hash) + EQUIPMENTTYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getEquipmentType();
+    if (hasChangedToState()) {
+      hash = (37 * hash) + CHANGEDTOSTATE_FIELD_NUMBER;
+      hash = (53 * hash) + getChangedToState();
+    }
+    if (hasBasicQuanfaLevel()) {
+      hash = (37 * hash) + BASICQUANFALEVEL_FIELD_NUMBER;
+      hash = (53 * hash) + getBasicQuanfaLevel();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.PositionPacket parseFrom(
+  public static org.y1000.network.gen.PlayerUnequipPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.PositionPacket parseFrom(
+  public static org.y1000.network.gen.PlayerUnequipPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.PositionPacket parseFrom(
+  public static org.y1000.network.gen.PlayerUnequipPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.PositionPacket parseFrom(
+  public static org.y1000.network.gen.PlayerUnequipPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.PositionPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.PlayerUnequipPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.PositionPacket parseFrom(
+  public static org.y1000.network.gen.PlayerUnequipPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.PositionPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.PlayerUnequipPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.PositionPacket parseFrom(
+  public static org.y1000.network.gen.PlayerUnequipPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -271,26 +254,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.PositionPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.PlayerUnequipPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.PositionPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.PlayerUnequipPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.PositionPacket parseFrom(
+  public static org.y1000.network.gen.PlayerUnequipPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.PositionPacket parseFrom(
+  public static org.y1000.network.gen.PlayerUnequipPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -303,7 +286,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.PositionPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.PlayerUnequipPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -319,26 +302,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.PositionPacket}
+   * Protobuf type {@code org.y1000.network.gen.PlayerUnequipPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.PositionPacket)
-      org.y1000.network.gen.PositionPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.PlayerUnequipPacket)
+      org.y1000.network.gen.PlayerUnequipPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PositionPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerUnequipPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PositionPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerUnequipPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.PositionPacket.class, org.y1000.network.gen.PositionPacket.Builder.class);
+              org.y1000.network.gen.PlayerUnequipPacket.class, org.y1000.network.gen.PlayerUnequipPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.PositionPacket.newBuilder()
+    // Construct using org.y1000.network.gen.PlayerUnequipPacket.newBuilder()
     private Builder() {
 
     }
@@ -352,29 +335,27 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      x_ = 0;
-      y_ = 0;
-      direction_ = 0;
       id_ = 0L;
-      type_ = 0;
-      state_ = 0;
+      equipmentType_ = 0;
+      changedToState_ = 0;
+      basicQuanfaLevel_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PositionPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerUnequipPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.PositionPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.PositionPacket.getDefaultInstance();
+    public org.y1000.network.gen.PlayerUnequipPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.PlayerUnequipPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.PositionPacket build() {
-      org.y1000.network.gen.PositionPacket result = buildPartial();
+    public org.y1000.network.gen.PlayerUnequipPacket build() {
+      org.y1000.network.gen.PlayerUnequipPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -382,33 +363,31 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.PositionPacket buildPartial() {
-      org.y1000.network.gen.PositionPacket result = new org.y1000.network.gen.PositionPacket(this);
+    public org.y1000.network.gen.PlayerUnequipPacket buildPartial() {
+      org.y1000.network.gen.PlayerUnequipPacket result = new org.y1000.network.gen.PlayerUnequipPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.PositionPacket result) {
+    private void buildPartial0(org.y1000.network.gen.PlayerUnequipPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.x_ = x_;
-      }
-      if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.y_ = y_;
-      }
-      if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.direction_ = direction_;
-      }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
         result.id_ = id_;
       }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
-        result.type_ = type_;
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.equipmentType_ = equipmentType_;
       }
-      if (((from_bitField0_ & 0x00000020) != 0)) {
-        result.state_ = state_;
+      int to_bitField0_ = 0;
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.changedToState_ = changedToState_;
+        to_bitField0_ |= 0x00000001;
       }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.basicQuanfaLevel_ = basicQuanfaLevel_;
+        to_bitField0_ |= 0x00000002;
+      }
+      result.bitField0_ |= to_bitField0_;
     }
 
     @java.lang.Override
@@ -445,33 +424,27 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.PositionPacket) {
-        return mergeFrom((org.y1000.network.gen.PositionPacket)other);
+      if (other instanceof org.y1000.network.gen.PlayerUnequipPacket) {
+        return mergeFrom((org.y1000.network.gen.PlayerUnequipPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.PositionPacket other) {
-      if (other == org.y1000.network.gen.PositionPacket.getDefaultInstance()) return this;
-      if (other.getX() != 0) {
-        setX(other.getX());
-      }
-      if (other.getY() != 0) {
-        setY(other.getY());
-      }
-      if (other.getDirection() != 0) {
-        setDirection(other.getDirection());
-      }
+    public Builder mergeFrom(org.y1000.network.gen.PlayerUnequipPacket other) {
+      if (other == org.y1000.network.gen.PlayerUnequipPacket.getDefaultInstance()) return this;
       if (other.getId() != 0L) {
         setId(other.getId());
       }
-      if (other.getType() != 0) {
-        setType(other.getType());
+      if (other.getEquipmentType() != 0) {
+        setEquipmentType(other.getEquipmentType());
       }
-      if (other.getState() != 0) {
-        setState(other.getState());
+      if (other.hasChangedToState()) {
+        setChangedToState(other.getChangedToState());
+      }
+      if (other.hasBasicQuanfaLevel()) {
+        setBasicQuanfaLevel(other.getBasicQuanfaLevel());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -500,35 +473,25 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              x_ = input.readInt32();
+              id_ = input.readInt64();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
             case 16: {
-              y_ = input.readInt32();
+              equipmentType_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
             case 24: {
-              direction_ = input.readInt32();
+              changedToState_ = input.readInt32();
               bitField0_ |= 0x00000004;
               break;
             } // case 24
             case 32: {
-              id_ = input.readInt64();
+              basicQuanfaLevel_ = input.readInt32();
               bitField0_ |= 0x00000008;
               break;
             } // case 32
-            case 40: {
-              type_ = input.readInt32();
-              bitField0_ |= 0x00000010;
-              break;
-            } // case 40
-            case 48: {
-              state_ = input.readInt32();
-              bitField0_ |= 0x00000020;
-              break;
-            } // case 48
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -546,105 +509,9 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private int x_ ;
-    /**
-     * <code>int32 x = 1;</code>
-     * @return The x.
-     */
-    @java.lang.Override
-    public int getX() {
-      return x_;
-    }
-    /**
-     * <code>int32 x = 1;</code>
-     * @param value The x to set.
-     * @return This builder for chaining.
-     */
-    public Builder setX(int value) {
-
-      x_ = value;
-      bitField0_ |= 0x00000001;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 x = 1;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearX() {
-      bitField0_ = (bitField0_ & ~0x00000001);
-      x_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int y_ ;
-    /**
-     * <code>int32 y = 2;</code>
-     * @return The y.
-     */
-    @java.lang.Override
-    public int getY() {
-      return y_;
-    }
-    /**
-     * <code>int32 y = 2;</code>
-     * @param value The y to set.
-     * @return This builder for chaining.
-     */
-    public Builder setY(int value) {
-
-      y_ = value;
-      bitField0_ |= 0x00000002;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 y = 2;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearY() {
-      bitField0_ = (bitField0_ & ~0x00000002);
-      y_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int direction_ ;
-    /**
-     * <code>int32 direction = 3;</code>
-     * @return The direction.
-     */
-    @java.lang.Override
-    public int getDirection() {
-      return direction_;
-    }
-    /**
-     * <code>int32 direction = 3;</code>
-     * @param value The direction to set.
-     * @return This builder for chaining.
-     */
-    public Builder setDirection(int value) {
-
-      direction_ = value;
-      bitField0_ |= 0x00000004;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 direction = 3;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearDirection() {
-      bitField0_ = (bitField0_ & ~0x00000004);
-      direction_ = 0;
-      onChanged();
-      return this;
-    }
-
     private long id_ ;
     /**
-     * <code>int64 id = 4;</code>
+     * <code>int64 id = 1;</code>
      * @return The id.
      */
     @java.lang.Override
@@ -652,88 +519,136 @@ private static final long serialVersionUID = 0L;
       return id_;
     }
     /**
-     * <code>int64 id = 4;</code>
+     * <code>int64 id = 1;</code>
      * @param value The id to set.
      * @return This builder for chaining.
      */
     public Builder setId(long value) {
 
       id_ = value;
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>int64 id = 4;</code>
+     * <code>int64 id = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearId() {
-      bitField0_ = (bitField0_ & ~0x00000008);
+      bitField0_ = (bitField0_ & ~0x00000001);
       id_ = 0L;
       onChanged();
       return this;
     }
 
-    private int type_ ;
+    private int equipmentType_ ;
     /**
-     * <code>int32 type = 5;</code>
-     * @return The type.
+     * <code>int32 equipmentType = 2;</code>
+     * @return The equipmentType.
      */
     @java.lang.Override
-    public int getType() {
-      return type_;
+    public int getEquipmentType() {
+      return equipmentType_;
     }
     /**
-     * <code>int32 type = 5;</code>
-     * @param value The type to set.
+     * <code>int32 equipmentType = 2;</code>
+     * @param value The equipmentType to set.
      * @return This builder for chaining.
      */
-    public Builder setType(int value) {
+    public Builder setEquipmentType(int value) {
 
-      type_ = value;
-      bitField0_ |= 0x00000010;
+      equipmentType_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 type = 5;</code>
+     * <code>int32 equipmentType = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearType() {
-      bitField0_ = (bitField0_ & ~0x00000010);
-      type_ = 0;
+    public Builder clearEquipmentType() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      equipmentType_ = 0;
       onChanged();
       return this;
     }
 
-    private int state_ ;
+    private int changedToState_ ;
     /**
-     * <code>int32 state = 6;</code>
-     * @return The state.
+     * <code>optional int32 changedToState = 3;</code>
+     * @return Whether the changedToState field is set.
      */
     @java.lang.Override
-    public int getState() {
-      return state_;
+    public boolean hasChangedToState() {
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
-     * <code>int32 state = 6;</code>
-     * @param value The state to set.
+     * <code>optional int32 changedToState = 3;</code>
+     * @return The changedToState.
+     */
+    @java.lang.Override
+    public int getChangedToState() {
+      return changedToState_;
+    }
+    /**
+     * <code>optional int32 changedToState = 3;</code>
+     * @param value The changedToState to set.
      * @return This builder for chaining.
      */
-    public Builder setState(int value) {
+    public Builder setChangedToState(int value) {
 
-      state_ = value;
-      bitField0_ |= 0x00000020;
+      changedToState_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 state = 6;</code>
+     * <code>optional int32 changedToState = 3;</code>
      * @return This builder for chaining.
      */
-    public Builder clearState() {
-      bitField0_ = (bitField0_ & ~0x00000020);
-      state_ = 0;
+    public Builder clearChangedToState() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      changedToState_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int basicQuanfaLevel_ ;
+    /**
+     * <code>optional int32 basicQuanfaLevel = 4;</code>
+     * @return Whether the basicQuanfaLevel field is set.
+     */
+    @java.lang.Override
+    public boolean hasBasicQuanfaLevel() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <code>optional int32 basicQuanfaLevel = 4;</code>
+     * @return The basicQuanfaLevel.
+     */
+    @java.lang.Override
+    public int getBasicQuanfaLevel() {
+      return basicQuanfaLevel_;
+    }
+    /**
+     * <code>optional int32 basicQuanfaLevel = 4;</code>
+     * @param value The basicQuanfaLevel to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBasicQuanfaLevel(int value) {
+
+      basicQuanfaLevel_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional int32 basicQuanfaLevel = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearBasicQuanfaLevel() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      basicQuanfaLevel_ = 0;
       onChanged();
       return this;
     }
@@ -750,23 +665,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.PositionPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.PlayerUnequipPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.PositionPacket)
-  private static final org.y1000.network.gen.PositionPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.PlayerUnequipPacket)
+  private static final org.y1000.network.gen.PlayerUnequipPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.PositionPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.PlayerUnequipPacket();
   }
 
-  public static org.y1000.network.gen.PositionPacket getDefaultInstance() {
+  public static org.y1000.network.gen.PlayerUnequipPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<PositionPacket>
-      PARSER = new com.google.protobuf.AbstractParser<PositionPacket>() {
+  private static final com.google.protobuf.Parser<PlayerUnequipPacket>
+      PARSER = new com.google.protobuf.AbstractParser<PlayerUnequipPacket>() {
     @java.lang.Override
-    public PositionPacket parsePartialFrom(
+    public PlayerUnequipPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -785,17 +700,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<PositionPacket> parser() {
+  public static com.google.protobuf.Parser<PlayerUnequipPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<PositionPacket> getParserForType() {
+  public com.google.protobuf.Parser<PlayerUnequipPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.PositionPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.PlayerUnequipPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

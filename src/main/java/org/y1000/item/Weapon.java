@@ -20,10 +20,7 @@ public final class Weapon extends AbstractEquipment {
     }
 
     @Override
-    public void doubleClicked(Player player) {
-        if (player.stateEnum() == State.DIE) {
-            return;
-        }
-        player.equipWeapon(this);
+    public EquipmentType equipmentType() {
+        return EquipmentType.WEAPON;
     }
 }

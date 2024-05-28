@@ -49,7 +49,7 @@ public final class Inventory {
     }
 
 
-    public int pick(Item item) {
+    public int add(Item item) {
         if (item instanceof StackItem stackItem) {
             for (int slot : items.keySet()) {
                 Item slotItem = items.get(slot);
@@ -180,11 +180,6 @@ public final class Inventory {
         if (inventoryEvent instanceof ClientSwapInventoryEvent swapInventoryEvent &&
                 swap(swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot())) {
             eventEmiter.emitEvent(new InventorySlotSwappedEvent(player, swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot()));
-        } else if (inventoryEvent instanceof ClientDoubleClickSlotEvent slotEvent) {
-            Item item = getItem(slotEvent.sourceSlot());
-            if (item != null) {
-                item.doubleClicked(player);
-            }
         } else if (inventoryEvent instanceof ClientDropItemEvent dropItemEvent) {
             handleDropEvent(player, dropItemEvent, eventEmiter);
         }

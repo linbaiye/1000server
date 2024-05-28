@@ -29,7 +29,7 @@ public final class CharacterChangeWeaponEvent extends AbstractPlayerEvent {
         weaponName = name;
         this.affectedSlot = slot;
         this.slotNewItemName = item != null ? item.name() : null;
-        this.slotnewItemType = item != null ? item.type().value() : 0;
+        this.slotnewItemType = item != null ? item.itemType().value() : 0;
         this.currentKungFuName = attackKungFu.name();
         this.currentKungFuLevel = attackKungFu.level();
         this.currentKungFuType = attackKungFu.getType();
@@ -41,7 +41,7 @@ public final class CharacterChangeWeaponEvent extends AbstractPlayerEvent {
         weaponName = name;
         this.affectedSlot = slot;
         this.slotNewItemName = item != null ? item.name() : null;
-        this.slotnewItemType = item != null ? item.type().value() : 0;
+        this.slotnewItemType = item != null ? item.itemType().value() : 0;
         this.currentKungFuName = null;
         this.currentKungFuLevel = 0;
         this.currentKungFuType = null;

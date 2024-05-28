@@ -1,9 +1,6 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
-import org.y1000.entities.players.event.InventorySlotSwappedEvent;
-import org.y1000.entities.players.event.PlayerAttackEvent;
-import org.y1000.entities.players.event.PlayerAttackEventResponse;
+import org.y1000.entities.players.event.*;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.InputResponseMessage;
 import org.y1000.message.GetGroundItemEvent;
@@ -52,6 +49,14 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     }
 
     default void visit(PlayerTextEvent event) {
+
+    }
+
+    default void visit(UpdateInventorySlotEvent event) {
+
+    }
+
+    default void visit(PlayerUnequipEvent event) {
 
     }
 }

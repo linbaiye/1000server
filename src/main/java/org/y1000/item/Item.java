@@ -5,10 +5,6 @@ import org.y1000.entities.players.Player;
 public interface Item {
     String name();
 
-    ItemType type();
-
-    default void doubleClicked(Player player) {
-
-    }
+    ItemType itemType();
 
 }

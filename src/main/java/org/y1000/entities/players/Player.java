@@ -22,8 +22,6 @@ public interface Player extends ViolentCreature {
 
     void leaveRealm();
 
-    void equipWeapon(Weapon weapon);
-
     default Optional<FootKungFu> footKungFu() {
         return Optional.empty();
     }

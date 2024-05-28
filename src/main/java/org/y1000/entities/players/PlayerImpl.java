@@ -8,7 +8,7 @@ import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.GroundedItem;
-import org.y1000.entities.creatures.event.ChangeStateEvent;
+import org.y1000.entities.players.event.PlayerUnequipEvent;
 import org.y1000.item.*;
 import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
 import org.y1000.entities.players.inventory.Inventory;
@@ -16,6 +16,7 @@ import org.y1000.entities.players.kungfu.KungFuBook;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
 import org.y1000.message.clientevent.*;
+import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.kungfu.FootKungFu;
@@ -24,11 +25,10 @@ import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.message.serverevent.PlayerPickedItemEvent;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 @Slf4j
 public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player, EventEmiter {
@@ -140,7 +140,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public void pickItem(Item item, GroundedItem groundedItem){
-        int slot = inventory.pick(item);
+        int slot = inventory.add(item);
         if (slot > 0) {
             log.info("Picked grounded item {}.", groundedItem);
             emitEvent(new PlayerPickedItemEvent(this, slot, inventory.get(slot), groundedItem));
@@ -169,14 +169,25 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
 
     private void unequipWeapon(Weapon weapon) {
-        inventory.pick(weapon);
-        attackKungFu = kungFuBook.findBasic(AttackKungFuType.QUANFA);
-        cooldownAttack();
+        int slot = inventory.add(weapon);
+        State st = null;
+        this.weapon = null;
         if (weapon.kungFuType() != AttackKungFuType.QUANFA) {
+            cooldownAttack();
+            attackKungFu = kungFuBook.findBasic(AttackKungFuType.QUANFA);
             state().attackKungFuTypeChanged(this);
-            emitEvent(ChangeStateEvent.of(this));
+            st = stateEnum();
         }
-        emitEvent();
+        emitEvent(new PlayerUnequipEvent(this, EquipmentType.WEAPON, st, attackKungFu.level()));
+        emitEvent(new UpdateInventorySlotEvent(this, slot, weapon));
+    }
+
+
+    private void unequipArmor(AbstractEquipment equipment, Action action) {
+        int slot = inventory.add(equipment);
+        action.invoke();
+        emitEvent(new PlayerUnequipEvent(this, equipment.equipmentType(), null, 0));
+        emitEvent(new UpdateInventorySlotEvent(this, slot, equipment));
     }
 
 
@@ -186,49 +197,38 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             return;
         }
         switch (type) {
-            case CHEST:
-                chest().ifPresent(inventory::pick);
-                chest = null;
-                break;
-            case BOOT:
-                boot().ifPresent(inventory::pick);
-                boot = null;
-                break;
-            case CLOTHING:
-                clothing().ifPresent(inventory::pick);
-                clothing = null;
-                break;
-            case HAIR:
-                hair().ifPresent(inventory::pick);
-                hair = null;
-            case WRIST:
-            case WRIST_CHESTED:
-                wrist().ifPresent(inventory::pick);
-                wrist = null;
-                break;
-            case HAT:
-                hat().ifPresent(inventory::pick);
-                hat = null;
-                break;
-            case TROUSER:
-                trouser().ifPresent(inventory::pick);
-                trouser = null;
-                break;
-            case WEAPON:
-                weapon().ifPresent(this::unequipWeapon);
-                break;
+            case CHEST -> chest().ifPresent(c -> unequipArmor(c, () -> chest = null));
+            case BOOT -> boot().ifPresent(b -> unequipArmor(b, () -> boot= null));
+            case CLOTHING -> clothing().ifPresent(cl -> unequipArmor(cl, () -> clothing = null));
+            case HAIR -> hair().ifPresent(h -> unequipArmor(h, () -> hair = null));
+            case WRIST, WRIST_CHESTED -> wrist().ifPresent(w -> unequipArmor(w, () -> wrist = null));
+            case HAT -> hat().ifPresent(ha -> unequipArmor(ha, () -> hat = null));
+            case TROUSER -> trouser().ifPresent(t -> unequipArmor(t, () -> trouser = null));
+            case WEAPON -> weapon().ifPresent(this::unequipWeapon);
         }
+    }
 
+    private void handleInventorySlotDoubleClick(int slotId) {
+        Item item = inventory.getItem(slotId);
+        if (item == null) {
+            return;
+        }
+        if (item instanceof AbstractEquipment equipment) {
+            equip(slotId, equipment);
+        }
     }
 
 
     @Override
     public void handleEvent(ClientEvent clientEvent) {
-        if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
+        if (clientEvent instanceof ClientDoubleClickSlotEvent doubleClickSlotEvent) {
+            handleInventorySlotDoubleClick(doubleClickSlotEvent.sourceSlot());
+        } else if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
             inventory.handleClientEvent(this, inventoryEvent, this);
         } else if (clientEvent instanceof ClientPickItemEvent pickItemEvent) {
             realm.findInsight(this, pickItemEvent.id()).ifPresent(this::handlePickItem);
         } else if (clientEvent instanceof ClientUnequipEvent unequipEvent) {
+            log.debug("Received unequip type {}.", unequipEvent.type());
             unequip(unequipEvent.type());
         } else {
             eventQueue.add(clientEvent);
@@ -318,8 +318,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         emitEvent(new PlayerLeftEvent(this));
     }
 
-    @Override
-    public void equipWeapon(Weapon weapon) {
+    private void equipWeapon(Weapon weapon) {
         if (weapon == null) {
             throw new IllegalStateException();
         }
@@ -342,6 +341,18 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), this.weapon.name(), this.attackKungFu));
     }
 
+    private void equip(int slotId, AbstractEquipment equipment) {
+        switch (equipment.equipmentType()) {
+            case CHEST -> chest().ifPresent(c -> unequipArmor(c, () -> chest = null));
+            case BOOT -> boot().ifPresent(b -> unequipArmor(b, () -> boot= null));
+            case CLOTHING -> clothing().ifPresent(cl -> unequipArmor(cl, () -> clothing = null));
+            case HAIR -> hair().ifPresent(h -> unequipArmor(h, () -> hair = null));
+            case WRIST, WRIST_CHESTED -> wrist().ifPresent(w -> unequipArmor(w, () -> wrist = null));
+            case HAT -> hat().ifPresent(ha -> unequipArmor(ha, () -> hat = null));
+            case TROUSER -> trouser().ifPresent(t -> unequipArmor(t, () -> trouser = null));
+            case WEAPON -> equipWeapon((Weapon)equipment);
+        }
+    }
 
     @Override
     public int attackSpeed() {

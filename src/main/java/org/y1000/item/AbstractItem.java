@@ -20,7 +20,7 @@ public abstract class AbstractItem implements Item {
     }
 
     @Override
-    public ItemType type() {
+    public ItemType itemType() {
         return type;
     }
 }
