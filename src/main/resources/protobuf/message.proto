@@ -169,19 +169,16 @@ message TextMessagePacket {
 message LoginPacket {
   int32 x = 1;
   int32 y = 2;
-  int64 id = 3;
-  optional string weaponName = 4;
+  PlayerInfoPacket info = 3;
   int32 attackKungFuLevel = 5;
   string attackKungFuName = 6;
   optional int32 footKungFuLevel = 7;
   optional string footKungFuName = 8;
   repeated InventoryItemPacket inventoryItems = 9;
   int32 attackKungFuType = 10;
-  string name = 11;
-  bool male = 12;
-  optional string hatName = 13;
-  optional string chestName = 14;
 }
+
+
 
 message Packet {
   oneof TypedPacket {
@@ -212,13 +209,23 @@ message CreatureInterpolationPacket {
   string name = 3;
 }
 
-message PlayerInterpolationPacket {
-  InterpolationPacket interpolation = 1;
+
+message PlayerInfoPacket {
   int64 id = 2;
   bool male = 3;
   string name = 4;
   optional string weaponName = 5;
   optional string chestName = 6;
+  optional string hairName = 7;
+  optional string hatName = 8;
+  optional string wristName = 9;
+  optional string bootName = 10;
+}
+
+
+message PlayerInterpolationPacket {
+  InterpolationPacket interpolation = 1;
+  PlayerInfoPacket info = 2;
 }
 
 message RemoveEntityPacket {

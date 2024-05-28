@@ -8,10 +8,7 @@ import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.GroundedItem;
-import org.y1000.item.Chest;
-import org.y1000.item.Hat;
-import org.y1000.item.Item;
-import org.y1000.item.Weapon;
+import org.y1000.item.*;
 import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.kungfu.KungFuBook;
@@ -51,6 +48,12 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private Hat hat;
 
+    private Hair hair;
+
+    private Wrist wrist;
+
+    private Boot boot;
+
     private final boolean male;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
@@ -68,6 +71,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         put(State.SWORD, AttackKungFuType.SWORD.below50Millis());
         put(State.BLADE2H, AttackKungFuType.BLADE.above50Millis());
         put(State.BLADE, AttackKungFuType.BLADE.below50Millis());
+        put(State.AXE, AttackKungFuType.AXE.below50Millis());
     }};
 
     @Builder
@@ -80,7 +84,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                       KungFuBook kungFuBook,
                       boolean male,
                       Hat hat,
-                      Chest chest
+                      Chest chest,
+                      Hair hair,
+                      Wrist wrist,
+                      Boot boot,
+                      FootKungFu footKungfu
                       ) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
         Objects.requireNonNull(kungFuBook, "kungFuBook can't be null.");
@@ -93,6 +101,10 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         this.male = male;
         this.chest = chest;
         this.hat = hat;
+        this.hair = hair;
+        this.wrist = wrist;
+        this.boot = boot;
+        this.footKungfu = footKungfu;
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         eventQueue = new ConcurrentLinkedQueue<>();
     }
@@ -164,6 +176,21 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     @Override
     public Optional<Chest> chest() {
         return Optional.ofNullable(chest);
+    }
+
+    @Override
+    public Optional<Hair> hair() {
+        return Optional.ofNullable(hair);
+    }
+
+    @Override
+    public Optional<Wrist> wrist() {
+        return Optional.ofNullable(wrist);
+    }
+
+    @Override
+    public Optional<Boot> boot() {
+        return Optional.ofNullable(boot);
     }
 
 

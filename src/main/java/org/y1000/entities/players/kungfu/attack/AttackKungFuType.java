@@ -10,9 +10,9 @@ public enum AttackKungFuType implements ValueEnum {
 
     BLADE(2, 720, 630),
 
-    SPEAR(4, 0, 0),
+    SPEAR(4, 800, 800),
 
-    AXE(3, 0, 0),
+    AXE(3, 800, 800),
 
     BOW(5, 600, 600),
 
