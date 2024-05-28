@@ -1,7 +1,6 @@
 package org.y1000.network;
 
 import org.y1000.message.ServerMessage;
-import org.y1000.message.clientevent.ClientEvent;
 
 import java.util.List;
 

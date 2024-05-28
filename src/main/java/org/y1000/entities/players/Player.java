@@ -47,4 +47,8 @@ public interface Player extends ViolentCreature {
     Optional<Wrist> wrist();
 
     Optional<Boot> boot();
+
+    Optional<Clothing> clothing();
+
+    Optional<Trouser> trouser();
 }

@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.repository.PlayerRepository;
+import org.y1000.item.EquipmentType;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.clientevent.*;
 import org.y1000.network.event.ConnectionClosedEvent;
@@ -41,6 +42,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
                     clientPacket.getDropItem().getX(), clientPacket.getDropItem().getY(),
                     new Coordinate(clientPacket.getDropItem().getCoordinateX(), clientPacket.getDropItem().getCoordinateY()));
             case PICKITEM -> new ClientPickItemEvent(clientPacket.getPickItem().getId());
+            case UNEQUIP -> new ClientUnequipEvent(EquipmentType.fromValue(clientPacket.getUnequip().getType()));
             default -> throw new IllegalArgumentException();
         };
     }

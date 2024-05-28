@@ -16,6 +16,8 @@ public class PlayerInfo {
         player.hair().ifPresent(h -> builder.setHairName(h.name()));
         player.wrist().ifPresent(w -> builder.setWristName(w.name()));
         player.boot().ifPresent(b -> builder.setBootName(b.name()));
+        player.trouser().ifPresent(t -> builder.setTrouserName(t.name()));
+        player.clothing().ifPresent(c -> builder.setClothingName(c.name()));
         return builder.build();
     }
 }

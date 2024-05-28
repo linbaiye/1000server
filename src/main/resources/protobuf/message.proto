@@ -79,6 +79,10 @@ message ClientAttackResponsePacket {
   bool accepted = 2;
 }
 
+message ClientUnequipPacket {
+  int32 type = 1;
+}
+
 message SwapInventorySlotPacket {
   int32 slot1 = 1;
   int32 slot2 = 2;
@@ -141,6 +145,7 @@ message ClientPacket {
     DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;
     DropItemPacket dropItem = 7;
     PickItemPacket pickItem = 8;
+    ClientUnequipPacket unequip = 9;
   }
 }
 
@@ -220,6 +225,8 @@ message PlayerInfoPacket {
   optional string hatName = 8;
   optional string wristName = 9;
   optional string bootName = 10;
+  optional string clothingName = 11;
+  optional string trouserName = 12;
 }
 
 

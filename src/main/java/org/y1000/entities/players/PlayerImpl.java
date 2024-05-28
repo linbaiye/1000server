@@ -8,6 +8,7 @@ import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.GroundedItem;
+import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.item.*;
 import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
 import org.y1000.entities.players.inventory.Inventory;
@@ -26,6 +27,8 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 @Slf4j
 public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player, EventEmiter {
@@ -53,6 +56,10 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     private Wrist wrist;
 
     private Boot boot;
+
+    private Trouser trouser;
+
+    private Clothing clothing;
 
     private final boolean male;
 
@@ -88,6 +95,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                       Hair hair,
                       Wrist wrist,
                       Boot boot,
+                      Trouser trouser,
+                      Clothing clothing,
                       FootKungFu footKungfu
                       ) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
@@ -104,6 +113,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         this.hair = hair;
         this.wrist = wrist;
         this.boot = boot;
+        this.trouser = trouser;
+        this.clothing = clothing;
         this.footKungfu = footKungfu;
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         eventQueue = new ConcurrentLinkedQueue<>();
@@ -157,12 +168,68 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
 
+    private void unequipWeapon(Weapon weapon) {
+        inventory.pick(weapon);
+        attackKungFu = kungFuBook.findBasic(AttackKungFuType.QUANFA);
+        cooldownAttack();
+        if (weapon.kungFuType() != AttackKungFuType.QUANFA) {
+            state().attackKungFuTypeChanged(this);
+            emitEvent(ChangeStateEvent.of(this));
+        }
+        emitEvent();
+    }
+
+
+    private void unequip(EquipmentType type) {
+        if (inventory.isFull()) {
+            emitEvent(PlayerTextEvent.inventoryFull(this));
+            return;
+        }
+        switch (type) {
+            case CHEST:
+                chest().ifPresent(inventory::pick);
+                chest = null;
+                break;
+            case BOOT:
+                boot().ifPresent(inventory::pick);
+                boot = null;
+                break;
+            case CLOTHING:
+                clothing().ifPresent(inventory::pick);
+                clothing = null;
+                break;
+            case HAIR:
+                hair().ifPresent(inventory::pick);
+                hair = null;
+            case WRIST:
+            case WRIST_CHESTED:
+                wrist().ifPresent(inventory::pick);
+                wrist = null;
+                break;
+            case HAT:
+                hat().ifPresent(inventory::pick);
+                hat = null;
+                break;
+            case TROUSER:
+                trouser().ifPresent(inventory::pick);
+                trouser = null;
+                break;
+            case WEAPON:
+                weapon().ifPresent(this::unequipWeapon);
+                break;
+        }
+
+    }
+
+
     @Override
     public void handleEvent(ClientEvent clientEvent) {
         if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
             inventory.handleClientEvent(this, inventoryEvent, this);
         } else if (clientEvent instanceof ClientPickItemEvent pickItemEvent) {
             realm.findInsight(this, pickItemEvent.id()).ifPresent(this::handlePickItem);
+        } else if (clientEvent instanceof ClientUnequipEvent unequipEvent) {
+            unequip(unequipEvent.type());
         } else {
             eventQueue.add(clientEvent);
         }
@@ -193,6 +260,15 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return Optional.ofNullable(boot);
     }
 
+    @Override
+    public Optional<Clothing> clothing() {
+        return Optional.ofNullable(clothing);
+    }
+
+    @Override
+    public Optional<Trouser> trouser() {
+        return Optional.ofNullable(trouser);
+    }
 
     @Override
     public void changeState(PlayerState newState) {

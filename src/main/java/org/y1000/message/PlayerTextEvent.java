@@ -32,4 +32,8 @@ public class PlayerTextEvent extends AbstractPlayerEvent  {
     public static PlayerTextEvent tooFarAway(Player player) {
         return new PlayerTextEvent(player, "距离过远");
     }
+
+    public static PlayerTextEvent inventoryFull(Player player) {
+        return new PlayerTextEvent(player, "物品栏已满");
+    }
 }
