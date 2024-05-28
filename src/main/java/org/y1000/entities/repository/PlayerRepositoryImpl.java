@@ -1,9 +1,9 @@
 package org.y1000.entities.repository;
 
-import org.y1000.item.Chest;
-import org.y1000.item.Hat;
-import org.y1000.item.ItemFactory;
-import org.y1000.item.Weapon;
+import com.sun.jdi.BooleanType;
+import org.y1000.entities.players.kungfu.FootKungFu;
+import org.y1000.entities.players.kungfu.attack.AxeKungFu;
+import org.y1000.item.*;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
@@ -43,18 +43,22 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     }
 
     private Weapon weapon() {
-        return (Weapon) itemFactory.createItem("长刀");
+        return (Weapon) itemFactory.createItem("太极斧");
     }
 
     private AttackKungFu loadKungFu(Weapon weapon) {
-        return BladeKungFu.builder()
+        return AxeKungFu.builder()
                 .level(85)
                 .attackSpeed(35)
                 .recovery(50)
-                .name("无名刀法")
+                .name("无名锤法")
                 .bodyArmor(1)
                 .bodyDamage(1)
                 .build();
+    }
+
+    private FootKungFu footKungFu() {
+        return FootKungFu.unnamed();
     }
 
 
@@ -69,10 +73,18 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .weapon(weapon)
                 .attackKungFu(loadKungFu(weapon))
                 .kungFuBook(KungFuBook.newInstance())
+                .footKungfu(footKungFu())
                 .inventory(loadInventory())
                 .male(false)
+               // .hat(new Hat("女子血魔头盔"))
+                //.chest(new Chest("女子太极道袍"))
+                //.chest(new Chest("女子血魔道袍"))
                 .hat(new Hat("女子雨中客斗笠"))
+                //.chest(new Chest("女子黄龙弓服"))
                 .chest(new Chest("女子雨中客道袍"))
+                .boot(new Boot("女子魔人战靴"))
+                .hair(new Hair("女子麻花辫"))
+                .wrist(new Wrist("女子太极护腕"))
                 .build();
     }
 

@@ -30,6 +30,12 @@ public final class KungFuBook {
         map.put(bow.name(), bow);
         var bufa = FootKungFu.unnamed();
         map.put(bufa.name(), bufa);
+        var axe = AxeKungFu.unnamed();
+        map.put(axe.name(), axe);
+        var spear = SpearKungFu.unnamed();
+        map.put(spear.name(), spear);
+        var fist = QuanfaKungFu.unnamed();
+        map.put(fist.name(), fist);
         return new KungFuBook(map);
     }
 }
