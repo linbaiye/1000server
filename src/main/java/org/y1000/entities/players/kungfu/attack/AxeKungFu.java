@@ -4,7 +4,7 @@ import lombok.experimental.SuperBuilder;
 import org.y1000.entities.creatures.State;
 
 @SuperBuilder
-public final class AxeKungFu extends AbstractAttackKungFu{
+public final class AxeKungFu extends AbstractAttackKungFu {
 
     @Override
     public State randomAttackState() {

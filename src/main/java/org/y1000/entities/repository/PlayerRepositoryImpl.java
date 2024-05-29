@@ -80,11 +80,11 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 //.boot(new Boot("女子魔人战靴"))
                // .hat(new Hat("女子血魔头盔"))
                 //.chest(new Chest("女子太极道袍"))
-                .chest(new Chest("女子黄金铠甲"))
+               // .chest(new Chest("女子黄金铠甲"))
                 //.chest(new Chest("女子血魔道袍"))
                 .hat(new Hat("女子雨中客斗笠"))
                 //.chest(new Chest("女子黄龙弓服"))
-                //.chest(new Chest("女子雨中客道袍"))
+                .chest(new Chest("女子雨中客道袍"))
                 .hair(new Hair("女子麻花辫"))
                 .wrist(new Wrist("女子太极护腕"))
                 .build();

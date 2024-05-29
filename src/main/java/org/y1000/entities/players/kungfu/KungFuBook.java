@@ -2,17 +2,22 @@ package org.y1000.entities.players.kungfu;
 import org.y1000.entities.players.kungfu.attack.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 public final class KungFuBook {
 
-    private final Map<String, KungFu> basic;
+    private final Map<Integer, KungFu> unnamed;
 
-    public KungFuBook(Map<String, KungFu> kungFuSet) {
-        this.basic = kungFuSet;
+    public KungFuBook(Map<Integer, KungFu> kungFuSet) {
+        this.unnamed = kungFuSet;
     }
 
-    public AttackKungFu findBasic(AttackKungFuType type) {
-        for (KungFu kungFu : basic.values()) {
+    public void foreachUnnamed(BiConsumer<Integer, KungFu> kungFuBiConsumer) {
+        unnamed.forEach(kungFuBiConsumer);
+    }
+
+    public AttackKungFu findUnnamed(AttackKungFuType type) {
+        for (KungFu kungFu : unnamed.values()) {
             if (kungFu instanceof AttackKungFu attackKungFu && attackKungFu.getType() == type) {
                 return attackKungFu;
             }
@@ -21,21 +26,21 @@ public final class KungFuBook {
     }
 
     public static KungFuBook newInstance() {
-        Map<String, KungFu> map = new HashMap<>();
-        var sword = SwordKungFu.unnamed();
-        map.put(sword.name(), sword);
-        var blade = BladeKungFu.unnamed();
-        map.put(blade.name(), blade);
-        var bow = BowKungFu.unnamed();
-        map.put(bow.name(), bow);
-        var bufa = FootKungFu.unnamed();
-        map.put(bufa.name(), bufa);
-        var axe = AxeKungFu.unnamed();
-        map.put(axe.name(), axe);
-        var spear = SpearKungFu.unnamed();
-        map.put(spear.name(), spear);
+        Map<Integer, KungFu> map = new HashMap<>();
         var fist = QuanfaKungFu.unnamed();
-        map.put(fist.name(), fist);
+        map.put(1, fist);
+        var sword = SwordKungFu.unnamed();
+        map.put(2, sword);
+        var blade = BladeKungFu.unnamed();
+        map.put(3, blade);
+        var axe = AxeKungFu.unnamed();
+        map.put(4, axe);
+        var spear = SpearKungFu.unnamed();
+        map.put(5, spear);
+        var bow = BowKungFu.unnamed();
+        map.put(6, bow);
+        var bufa = FootKungFu.unnamed();
+        map.put(8, bufa);
         return new KungFuBook(map);
     }
 }

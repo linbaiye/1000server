@@ -21,7 +21,9 @@ public final class PlayerEquipEvent extends AbstractPlayerEvent {
     @Override
     protected Packet buildPacket() {
         return Packet.newBuilder()
-                .setEquip(PlayerEquipPacket.newBuilder().setEquipmentName(equipmentName))
+                .setEquip(PlayerEquipPacket.newBuilder()
+                        .setId(source().id())
+                        .setEquipmentName(equipmentName))
                 .build();
     }
 }

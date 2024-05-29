@@ -165,7 +165,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (equipped instanceof Weapon weapon) {
             cooldownAttack();
             if (weapon.kungFuType() != AttackKungFuType.QUANFA) {
-                attackKungFu = kungFuBook.findBasic(AttackKungFuType.QUANFA);
+                attackKungFu = kungFuBook.findUnnamed(AttackKungFuType.QUANFA);
                 state().attackKungFuTypeChanged(this);
                 st = stateEnum();
                 log.debug("Changed to state {}.", st);
@@ -300,7 +300,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), weaponToEquip.name()));
             return;
         }
-        this.attackKungFu = kungFuBook.findBasic(weaponToEquip.kungFuType());
+        this.attackKungFu = kungFuBook.findUnnamed(weaponToEquip.kungFuType());
         cooldownAttack();
         state().attackKungFuTypeChanged(this);
         emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), weaponToEquip.name(), this.attackKungFu));
@@ -349,6 +349,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     public int recovery() {
         int kfr = attackKungFu != null ? attackKungFu.getRecovery() : 0;
         return 50 + kfr;
+    }
+
+    @Override
+    public KungFuBook kungFuBook() {
+        return kungFuBook;
     }
 
     @Override

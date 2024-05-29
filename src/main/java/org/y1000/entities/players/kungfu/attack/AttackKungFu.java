@@ -2,9 +2,10 @@ package org.y1000.entities.players.kungfu.attack;
 
 
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.players.kungfu.KungFu;
 import org.y1000.entities.players.kungfu.LevelKungFu;
 
-public interface AttackKungFu extends LevelKungFu {
+public interface AttackKungFu extends KungFu {
 
     int getBodyDamage();
 

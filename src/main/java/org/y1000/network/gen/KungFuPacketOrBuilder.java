@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.1
 package org.y1000.network.gen;
 
-public interface InventoryItemPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.InventoryItemPacket)
+public interface KungFuPacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.KungFuPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -21,19 +21,14 @@ public interface InventoryItemPacketOrBuilder extends
       getNameBytes();
 
   /**
-   * <code>int32 slotId = 2;</code>
-   * @return The slotId.
+   * <code>int32 level = 2;</code>
+   * @return The level.
    */
-  int getSlotId();
+  int getLevel();
 
   /**
-   * <code>optional int32 number = 3;</code>
-   * @return Whether the number field is set.
+   * <code>int32 slot = 3;</code>
+   * @return The slot.
    */
-  boolean hasNumber();
-  /**
-   * <code>optional int32 number = 3;</code>
-   * @return The number.
-   */
-  int getNumber();
+  int getSlot();
 }

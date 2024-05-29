@@ -3,7 +3,7 @@ package org.y1000.entities.players.kungfu;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-public final class FootKungFu extends AbstractLevelKungFu {
+public final class FootKungFu extends AbstractKungFu {
 
     private final String name;
 

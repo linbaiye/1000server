@@ -167,6 +167,12 @@ message InventoryItemPacket {
   optional int32 number = 3;
 }
 
+message KungFuPacket {
+  string name = 1;
+  int32 level = 2;
+  int32 slot = 3;
+}
+
 message TextMessagePacket {
   string text = 1;
 }
@@ -181,6 +187,8 @@ message LoginPacket {
   optional string footKungFuName = 8;
   repeated InventoryItemPacket inventoryItems = 9;
   int32 attackKungFuType = 10;
+  repeated KungFuPacket unnamedKungFuList = 11;
+  repeated KungFuPacket basicKungFuList = 12;
 }
 
 message PlayerUnequipPacket {

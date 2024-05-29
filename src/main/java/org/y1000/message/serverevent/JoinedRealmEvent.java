@@ -1,11 +1,13 @@
 package org.y1000.message.serverevent;
 
+import org.y1000.entities.players.kungfu.KungFu;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.message.PlayerInfo;
 import org.y1000.message.ServerMessage;
 import org.y1000.network.gen.InventoryItemPacket;
+import org.y1000.network.gen.KungFuPacket;
 import org.y1000.network.gen.LoginPacket;
 import org.y1000.network.gen.Packet;
 import org.y1000.entities.PhysicalEntity;
@@ -36,6 +38,14 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
         return builder.build();
     }
 
+    private KungFuPacket toPacket(int index, KungFu kungFu) {
+        return KungFuPacket.newBuilder()
+                .setName(kungFu.name())
+                .setLevel(kungFu.level())
+                .setSlot(index)
+                .build();
+    }
+
     @Override
     public Packet toPacket() {
         LoginPacket.Builder builder = LoginPacket.newBuilder()
@@ -48,6 +58,7 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
                 ;
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuLevel(footKungFu.level()).setFootKungFuName(footKungFu.name()));
         playerInventory.foreach((index, item) -> builder.addInventoryItems(toPacket(index, item)));
+        player.kungFuBook().foreachUnnamed((slot, kungFu) -> builder.addUnnamedKungFuList(toPacket(slot, kungFu)));
         return Packet.newBuilder().setLoginPacket(builder.build()).build();
     }
 

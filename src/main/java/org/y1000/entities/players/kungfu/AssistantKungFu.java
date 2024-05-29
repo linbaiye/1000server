@@ -4,7 +4,7 @@ import lombok.experimental.SuperBuilder;
 import org.y1000.entities.players.PlayerImpl;
 
 @SuperBuilder
-public final class AssistantKungFu extends AbstractLevelKungFu {
+public final class AssistantKungFu extends AbstractKungFu {
 
     private boolean eightDirection;
 

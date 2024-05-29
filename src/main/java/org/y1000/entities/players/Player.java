@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.GroundedItem;
+import org.y1000.entities.players.kungfu.KungFuBook;
 import org.y1000.item.*;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.kungfu.FootKungFu;
@@ -49,4 +50,6 @@ public interface Player extends ViolentCreature {
     Optional<Clothing> clothing();
 
     Optional<Trouser> trouser();
+
+    KungFuBook kungFuBook();
 }
