@@ -190,6 +190,11 @@ message PlayerUnequipPacket {
   optional int32 basicQuanfaLevel = 4;
 }
 
+message PlayerEquipPacket {
+  int64 id = 1;
+  string equipmentName = 2;
+}
+
 message Packet {
   oneof TypedPacket {
     PositionPacket positionPacket = 1;
@@ -211,6 +216,7 @@ message Packet {
     InventoryItemPacket updateSlot = 18;
     TextMessagePacket text = 19;
     PlayerUnequipPacket unequip = 20;
+    PlayerEquipPacket equip = 21;
   }
 }
 

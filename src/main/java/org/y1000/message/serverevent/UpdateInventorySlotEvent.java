@@ -27,7 +27,7 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
     protected Packet buildPacket() {
         InventoryItemPacket.Builder builder = InventoryItemPacket.newBuilder()
                 .setSlotId(slot)
-                .setName(item.name());
+                .setName(item != null ? item.name() : "");
         var number = item instanceof StackItem stackItem ? stackItem.number() : null;
         if (number != null) {
             builder.setNumber(number);

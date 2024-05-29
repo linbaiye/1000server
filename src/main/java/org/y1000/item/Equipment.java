@@ -1,6 +1,6 @@
 package org.y1000.item;
 
-public interface Equipment {
+public interface Equipment extends Item {
 
-    EquipmentType type();
+    EquipmentType equipmentType();
 }

@@ -9,7 +9,6 @@ import org.y1000.entities.players.EventEmiter;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.InventorySlotSwappedEvent;
 import org.y1000.message.PlayerDropItemEvent;
-import org.y1000.message.clientevent.ClientDoubleClickSlotEvent;
 import org.y1000.message.clientevent.ClientDropItemEvent;
 import org.y1000.message.clientevent.ClientInventoryEvent;
 import org.y1000.message.clientevent.ClientSwapInventoryEvent;
@@ -76,8 +75,8 @@ public final class Inventory {
         return 0;
     }
 
-    public Item get(int slot) {
-        return items.get(slot);
+    public Item remove(int slot) {
+        return items.remove(slot);
     }
 
     public boolean swap(int from, int to) {
@@ -107,17 +106,6 @@ public final class Inventory {
         throw new UnsupportedOperationException("Slot " + slot  + " has item already.");
     }
 
-    public int remove(Item item) {
-        Iterator<Map.Entry<Integer, Item>> iterator = items.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Integer, Item> next = iterator.next();
-            if (next.getValue().equals(item)) {
-                iterator.remove();
-                return next.getKey();
-            }
-        }
-        return -1;
-    }
 
     private void assertRange(int slot){
         Validate.isTrue(slot >= 1 && slot <= maxCapacity(), "Slot out of range.");

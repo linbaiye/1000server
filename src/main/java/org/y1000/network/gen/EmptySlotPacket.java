@@ -5,78 +5,49 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.PlayerLoginPacket}
+ * Protobuf type {@code org.y1000.network.gen.EmptySlotPacket}
  */
-public final class PlayerLoginPacket extends
+public final class EmptySlotPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.PlayerLoginPacket)
-    PlayerLoginPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.EmptySlotPacket)
+    EmptySlotPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use PlayerLoginPacket.newBuilder() to construct.
-  private PlayerLoginPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use EmptySlotPacket.newBuilder() to construct.
+  private EmptySlotPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private PlayerLoginPacket() {
-    token_ = "";
+  private EmptySlotPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new PlayerLoginPacket();
+    return new EmptySlotPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_EmptySlotPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerLoginPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_EmptySlotPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.PlayerLoginPacket.class, org.y1000.network.gen.PlayerLoginPacket.Builder.class);
+            org.y1000.network.gen.EmptySlotPacket.class, org.y1000.network.gen.EmptySlotPacket.Builder.class);
   }
 
-  public static final int TOKEN_FIELD_NUMBER = 1;
-  @SuppressWarnings("serial")
-  private volatile java.lang.Object token_ = "";
+  public static final int SLOTID_FIELD_NUMBER = 1;
+  private int slotId_ = 0;
   /**
-   * <code>string token = 1;</code>
-   * @return The token.
+   * <code>int32 slotId = 1;</code>
+   * @return The slotId.
    */
   @java.lang.Override
-  public java.lang.String getToken() {
-    java.lang.Object ref = token_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      token_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string token = 1;</code>
-   * @return The bytes for token.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString
-      getTokenBytes() {
-    java.lang.Object ref = token_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      token_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public int getSlotId() {
+    return slotId_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -93,8 +64,8 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, token_);
+    if (slotId_ != 0) {
+      output.writeInt32(1, slotId_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -105,8 +76,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, token_);
+    if (slotId_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(1, slotId_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -118,13 +90,13 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.PlayerLoginPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.EmptySlotPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.PlayerLoginPacket other = (org.y1000.network.gen.PlayerLoginPacket) obj;
+    org.y1000.network.gen.EmptySlotPacket other = (org.y1000.network.gen.EmptySlotPacket) obj;
 
-    if (!getToken()
-        .equals(other.getToken())) return false;
+    if (getSlotId()
+        != other.getSlotId()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -136,51 +108,51 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + TOKEN_FIELD_NUMBER;
-    hash = (53 * hash) + getToken().hashCode();
+    hash = (37 * hash) + SLOTID_FIELD_NUMBER;
+    hash = (53 * hash) + getSlotId();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.EmptySlotPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.EmptySlotPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.EmptySlotPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.EmptySlotPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.EmptySlotPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.EmptySlotPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.EmptySlotPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.EmptySlotPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -188,26 +160,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.PlayerLoginPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.EmptySlotPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.PlayerLoginPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.EmptySlotPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.EmptySlotPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.EmptySlotPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -220,7 +192,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.PlayerLoginPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.EmptySlotPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -236,26 +208,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.PlayerLoginPacket}
+   * Protobuf type {@code org.y1000.network.gen.EmptySlotPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.PlayerLoginPacket)
-      org.y1000.network.gen.PlayerLoginPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.EmptySlotPacket)
+      org.y1000.network.gen.EmptySlotPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_EmptySlotPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerLoginPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_EmptySlotPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.PlayerLoginPacket.class, org.y1000.network.gen.PlayerLoginPacket.Builder.class);
+              org.y1000.network.gen.EmptySlotPacket.class, org.y1000.network.gen.EmptySlotPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.PlayerLoginPacket.newBuilder()
+    // Construct using org.y1000.network.gen.EmptySlotPacket.newBuilder()
     private Builder() {
 
     }
@@ -269,24 +241,24 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      token_ = "";
+      slotId_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_EmptySlotPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.PlayerLoginPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
+    public org.y1000.network.gen.EmptySlotPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.EmptySlotPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.PlayerLoginPacket build() {
-      org.y1000.network.gen.PlayerLoginPacket result = buildPartial();
+    public org.y1000.network.gen.EmptySlotPacket build() {
+      org.y1000.network.gen.EmptySlotPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -294,17 +266,17 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.PlayerLoginPacket buildPartial() {
-      org.y1000.network.gen.PlayerLoginPacket result = new org.y1000.network.gen.PlayerLoginPacket(this);
+    public org.y1000.network.gen.EmptySlotPacket buildPartial() {
+      org.y1000.network.gen.EmptySlotPacket result = new org.y1000.network.gen.EmptySlotPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.PlayerLoginPacket result) {
+    private void buildPartial0(org.y1000.network.gen.EmptySlotPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.token_ = token_;
+        result.slotId_ = slotId_;
       }
     }
 
@@ -342,20 +314,18 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.PlayerLoginPacket) {
-        return mergeFrom((org.y1000.network.gen.PlayerLoginPacket)other);
+      if (other instanceof org.y1000.network.gen.EmptySlotPacket) {
+        return mergeFrom((org.y1000.network.gen.EmptySlotPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.PlayerLoginPacket other) {
-      if (other == org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance()) return this;
-      if (!other.getToken().isEmpty()) {
-        token_ = other.token_;
-        bitField0_ |= 0x00000001;
-        onChanged();
+    public Builder mergeFrom(org.y1000.network.gen.EmptySlotPacket other) {
+      if (other == org.y1000.network.gen.EmptySlotPacket.getDefaultInstance()) return this;
+      if (other.getSlotId() != 0) {
+        setSlotId(other.getSlotId());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -383,11 +353,11 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 10: {
-              token_ = input.readStringRequireUtf8();
+            case 8: {
+              slotId_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
-            } // case 10
+            } // case 8
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -405,74 +375,34 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private java.lang.Object token_ = "";
+    private int slotId_ ;
     /**
-     * <code>string token = 1;</code>
-     * @return The token.
+     * <code>int32 slotId = 1;</code>
+     * @return The slotId.
      */
-    public java.lang.String getToken() {
-      java.lang.Object ref = token_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        token_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
+    @java.lang.Override
+    public int getSlotId() {
+      return slotId_;
     }
     /**
-     * <code>string token = 1;</code>
-     * @return The bytes for token.
-     */
-    public com.google.protobuf.ByteString
-        getTokenBytes() {
-      java.lang.Object ref = token_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        token_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string token = 1;</code>
-     * @param value The token to set.
+     * <code>int32 slotId = 1;</code>
+     * @param value The slotId to set.
      * @return This builder for chaining.
      */
-    public Builder setToken(
-        java.lang.String value) {
-      if (value == null) { throw new NullPointerException(); }
-      token_ = value;
+    public Builder setSlotId(int value) {
+
+      slotId_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>string token = 1;</code>
+     * <code>int32 slotId = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder clearToken() {
-      token_ = getDefaultInstance().getToken();
+    public Builder clearSlotId() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string token = 1;</code>
-     * @param value The bytes for token to set.
-     * @return This builder for chaining.
-     */
-    public Builder setTokenBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      token_ = value;
-      bitField0_ |= 0x00000001;
+      slotId_ = 0;
       onChanged();
       return this;
     }
@@ -489,23 +419,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.PlayerLoginPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.EmptySlotPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.PlayerLoginPacket)
-  private static final org.y1000.network.gen.PlayerLoginPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.EmptySlotPacket)
+  private static final org.y1000.network.gen.EmptySlotPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.PlayerLoginPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.EmptySlotPacket();
   }
 
-  public static org.y1000.network.gen.PlayerLoginPacket getDefaultInstance() {
+  public static org.y1000.network.gen.EmptySlotPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<PlayerLoginPacket>
-      PARSER = new com.google.protobuf.AbstractParser<PlayerLoginPacket>() {
+  private static final com.google.protobuf.Parser<EmptySlotPacket>
+      PARSER = new com.google.protobuf.AbstractParser<EmptySlotPacket>() {
     @java.lang.Override
-    public PlayerLoginPacket parsePartialFrom(
+    public EmptySlotPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -524,17 +454,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<PlayerLoginPacket> parser() {
+  public static com.google.protobuf.Parser<EmptySlotPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<PlayerLoginPacket> getParserForType() {
+  public com.google.protobuf.Parser<EmptySlotPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.PlayerLoginPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.EmptySlotPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

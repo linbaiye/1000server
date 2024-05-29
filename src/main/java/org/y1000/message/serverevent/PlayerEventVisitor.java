@@ -59,4 +59,7 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     default void visit(PlayerUnequipEvent event) {
 
     }
+
+    default void visit(PlayerEquipEvent event) {
+    }
 }
