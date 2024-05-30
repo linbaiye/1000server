@@ -3,11 +3,11 @@ package org.y1000.entities.players.inventory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.entities.players.EventEmiter;
 import org.y1000.entities.players.Player;
 import org.y1000.message.clientevent.ClientDropItemEvent;
 import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.util.Coordinate;
+import org.y1000.util.UnaryAction;
 
 class InventoryTest {
 
@@ -15,18 +15,14 @@ class InventoryTest {
 
     private Player player;
 
-    private EventEmiter eventEmiter;
+    private UnaryAction<EntityEvent> eventEmiter;
 
-    private static class EventSaver implements EventEmiter {
+    private static class EventSaver implements UnaryAction<EntityEvent> {
         private EntityEvent entityEvent;
 
         @Override
-        public void emitEvent(EntityEvent event) {
-            entityEvent = event;
-        }
-
-        public EntityEvent entityEvent() {
-            return entityEvent;
+        public void invoke(EntityEvent entityEvent) {
+            this.entityEvent = entityEvent;
         }
     }
 

@@ -18,7 +18,7 @@ public final class PlayerPickedItemEvent extends UpdateInventorySlotEvent {
     }
 
     @Override
-    protected void accept(PlayerEventVisitor playerEventHandler) {
+    public void accept(PlayerEventVisitor playerEventHandler) {
         playerEventHandler.visit(this);
     }
 }

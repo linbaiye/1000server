@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
-public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player, EventEmiter {
+public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player {
 
     private Realm realm;
 
@@ -192,7 +192,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (clientEvent instanceof ClientDoubleClickSlotEvent doubleClickSlotEvent) {
             handleInventorySlotDoubleClick(doubleClickSlotEvent.sourceSlot());
         } else if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
-            inventory.handleClientEvent(this, inventoryEvent, this);
+            inventory.handleClientEvent(this, inventoryEvent, this::emitEvent);
         } else if (clientEvent instanceof ClientPickItemEvent pickItemEvent) {
             realm.findInsight(this, pickItemEvent.id()).ifPresent(this::handlePickItem);
         } else if (clientEvent instanceof ClientUnequipEvent unequipEvent) {
@@ -354,6 +354,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     @Override
     public KungFuBook kungFuBook() {
         return kungFuBook;
+    }
+
+    @Override
+    public Inventory inventory() {
+        return inventory;
     }
 
     @Override

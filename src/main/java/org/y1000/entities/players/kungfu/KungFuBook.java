@@ -22,7 +22,7 @@ public final class KungFuBook {
                 return attackKungFu;
             }
         }
-        throw new IllegalStateException("Basic kungfu for type " + type + " does not exist.");
+        throw new IllegalStateException("Unnamed kungfu for type " + type + " does not exist.");
     }
 
     public static KungFuBook newInstance() {

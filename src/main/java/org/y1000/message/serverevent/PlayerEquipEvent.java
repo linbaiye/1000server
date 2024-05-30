@@ -13,10 +13,6 @@ public final class PlayerEquipEvent extends AbstractPlayerEvent {
         this.equipmentName = equipmentName;
     }
 
-    @Override
-    protected void accept(PlayerEventVisitor playerEventHandler) {
-        playerEventHandler.visit(this);
-    }
 
     @Override
     protected Packet buildPacket() {
@@ -25,5 +21,10 @@ public final class PlayerEquipEvent extends AbstractPlayerEvent {
                         .setId(source().id())
                         .setEquipmentName(equipmentName))
                 .build();
+    }
+
+    @Override
+    public void accept(PlayerEventVisitor playerEventHandler) {
+        playerEventHandler.visit(this);
     }
 }

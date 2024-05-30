@@ -5,78 +5,69 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.PlayerLoginPacket}
+ * Protobuf type {@code org.y1000.network.gen.TradeWindowPacket}
  */
-public final class PlayerLoginPacket extends
+public final class TradeWindowPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.PlayerLoginPacket)
-    PlayerLoginPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.TradeWindowPacket)
+    TradeWindowPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use PlayerLoginPacket.newBuilder() to construct.
-  private PlayerLoginPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use TradeWindowPacket.newBuilder() to construct.
+  private TradeWindowPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private PlayerLoginPacket() {
-    token_ = "";
+  private TradeWindowPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new PlayerLoginPacket();
+    return new TradeWindowPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_TradeWindowPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerLoginPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_TradeWindowPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.PlayerLoginPacket.class, org.y1000.network.gen.PlayerLoginPacket.Builder.class);
+            org.y1000.network.gen.TradeWindowPacket.class, org.y1000.network.gen.TradeWindowPacket.Builder.class);
   }
 
-  public static final int TOKEN_FIELD_NUMBER = 1;
-  @SuppressWarnings("serial")
-  private volatile java.lang.Object token_ = "";
+  private int bitField0_;
+  public static final int OPEN_FIELD_NUMBER = 1;
+  private boolean open_ = false;
   /**
-   * <code>string token = 1;</code>
-   * @return The token.
+   * <code>bool open = 1;</code>
+   * @return The open.
    */
   @java.lang.Override
-  public java.lang.String getToken() {
-    java.lang.Object ref = token_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      token_ = s;
-      return s;
-    }
+  public boolean getOpen() {
+    return open_;
+  }
+
+  public static final int INTPUTSLOT_FIELD_NUMBER = 2;
+  private int intputSlot_ = 0;
+  /**
+   * <code>optional int32 intputSlot = 2;</code>
+   * @return Whether the intputSlot field is set.
+   */
+  @java.lang.Override
+  public boolean hasIntputSlot() {
+    return ((bitField0_ & 0x00000001) != 0);
   }
   /**
-   * <code>string token = 1;</code>
-   * @return The bytes for token.
+   * <code>optional int32 intputSlot = 2;</code>
+   * @return The intputSlot.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getTokenBytes() {
-    java.lang.Object ref = token_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      token_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public int getIntputSlot() {
+    return intputSlot_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -93,8 +84,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, token_);
+    if (open_ != false) {
+      output.writeBool(1, open_);
+    }
+    if (((bitField0_ & 0x00000001) != 0)) {
+      output.writeInt32(2, intputSlot_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -105,8 +99,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, token_);
+    if (open_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(1, open_);
+    }
+    if (((bitField0_ & 0x00000001) != 0)) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(2, intputSlot_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -118,13 +117,18 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.PlayerLoginPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.TradeWindowPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.PlayerLoginPacket other = (org.y1000.network.gen.PlayerLoginPacket) obj;
+    org.y1000.network.gen.TradeWindowPacket other = (org.y1000.network.gen.TradeWindowPacket) obj;
 
-    if (!getToken()
-        .equals(other.getToken())) return false;
+    if (getOpen()
+        != other.getOpen()) return false;
+    if (hasIntputSlot() != other.hasIntputSlot()) return false;
+    if (hasIntputSlot()) {
+      if (getIntputSlot()
+          != other.getIntputSlot()) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -136,51 +140,56 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + TOKEN_FIELD_NUMBER;
-    hash = (53 * hash) + getToken().hashCode();
+    hash = (37 * hash) + OPEN_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getOpen());
+    if (hasIntputSlot()) {
+      hash = (37 * hash) + INTPUTSLOT_FIELD_NUMBER;
+      hash = (53 * hash) + getIntputSlot();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.TradeWindowPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.TradeWindowPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -188,26 +197,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.PlayerLoginPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.TradeWindowPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.PlayerLoginPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.TradeWindowPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.PlayerLoginPacket parseFrom(
+  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -220,7 +229,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.PlayerLoginPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.TradeWindowPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -236,26 +245,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.PlayerLoginPacket}
+   * Protobuf type {@code org.y1000.network.gen.TradeWindowPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.PlayerLoginPacket)
-      org.y1000.network.gen.PlayerLoginPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.TradeWindowPacket)
+      org.y1000.network.gen.TradeWindowPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_TradeWindowPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerLoginPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_TradeWindowPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.PlayerLoginPacket.class, org.y1000.network.gen.PlayerLoginPacket.Builder.class);
+              org.y1000.network.gen.TradeWindowPacket.class, org.y1000.network.gen.TradeWindowPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.PlayerLoginPacket.newBuilder()
+    // Construct using org.y1000.network.gen.TradeWindowPacket.newBuilder()
     private Builder() {
 
     }
@@ -269,24 +278,25 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      token_ = "";
+      open_ = false;
+      intputSlot_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_PlayerLoginPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_TradeWindowPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.PlayerLoginPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
+    public org.y1000.network.gen.TradeWindowPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.TradeWindowPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.PlayerLoginPacket build() {
-      org.y1000.network.gen.PlayerLoginPacket result = buildPartial();
+    public org.y1000.network.gen.TradeWindowPacket build() {
+      org.y1000.network.gen.TradeWindowPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -294,18 +304,24 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.PlayerLoginPacket buildPartial() {
-      org.y1000.network.gen.PlayerLoginPacket result = new org.y1000.network.gen.PlayerLoginPacket(this);
+    public org.y1000.network.gen.TradeWindowPacket buildPartial() {
+      org.y1000.network.gen.TradeWindowPacket result = new org.y1000.network.gen.TradeWindowPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.PlayerLoginPacket result) {
+    private void buildPartial0(org.y1000.network.gen.TradeWindowPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.token_ = token_;
+        result.open_ = open_;
       }
+      int to_bitField0_ = 0;
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.intputSlot_ = intputSlot_;
+        to_bitField0_ |= 0x00000001;
+      }
+      result.bitField0_ |= to_bitField0_;
     }
 
     @java.lang.Override
@@ -342,20 +358,21 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.PlayerLoginPacket) {
-        return mergeFrom((org.y1000.network.gen.PlayerLoginPacket)other);
+      if (other instanceof org.y1000.network.gen.TradeWindowPacket) {
+        return mergeFrom((org.y1000.network.gen.TradeWindowPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.PlayerLoginPacket other) {
-      if (other == org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance()) return this;
-      if (!other.getToken().isEmpty()) {
-        token_ = other.token_;
-        bitField0_ |= 0x00000001;
-        onChanged();
+    public Builder mergeFrom(org.y1000.network.gen.TradeWindowPacket other) {
+      if (other == org.y1000.network.gen.TradeWindowPacket.getDefaultInstance()) return this;
+      if (other.getOpen() != false) {
+        setOpen(other.getOpen());
+      }
+      if (other.hasIntputSlot()) {
+        setIntputSlot(other.getIntputSlot());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -383,11 +400,16 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 10: {
-              token_ = input.readStringRequireUtf8();
+            case 8: {
+              open_ = input.readBool();
               bitField0_ |= 0x00000001;
               break;
-            } // case 10
+            } // case 8
+            case 16: {
+              intputSlot_ = input.readInt32();
+              bitField0_ |= 0x00000002;
+              break;
+            } // case 16
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -405,74 +427,74 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private java.lang.Object token_ = "";
+    private boolean open_ ;
     /**
-     * <code>string token = 1;</code>
-     * @return The token.
+     * <code>bool open = 1;</code>
+     * @return The open.
      */
-    public java.lang.String getToken() {
-      java.lang.Object ref = token_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        token_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
+    @java.lang.Override
+    public boolean getOpen() {
+      return open_;
     }
     /**
-     * <code>string token = 1;</code>
-     * @return The bytes for token.
-     */
-    public com.google.protobuf.ByteString
-        getTokenBytes() {
-      java.lang.Object ref = token_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        token_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string token = 1;</code>
-     * @param value The token to set.
+     * <code>bool open = 1;</code>
+     * @param value The open to set.
      * @return This builder for chaining.
      */
-    public Builder setToken(
-        java.lang.String value) {
-      if (value == null) { throw new NullPointerException(); }
-      token_ = value;
+    public Builder setOpen(boolean value) {
+
+      open_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>string token = 1;</code>
+     * <code>bool open = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder clearToken() {
-      token_ = getDefaultInstance().getToken();
+    public Builder clearOpen() {
       bitField0_ = (bitField0_ & ~0x00000001);
+      open_ = false;
+      onChanged();
+      return this;
+    }
+
+    private int intputSlot_ ;
+    /**
+     * <code>optional int32 intputSlot = 2;</code>
+     * @return Whether the intputSlot field is set.
+     */
+    @java.lang.Override
+    public boolean hasIntputSlot() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>optional int32 intputSlot = 2;</code>
+     * @return The intputSlot.
+     */
+    @java.lang.Override
+    public int getIntputSlot() {
+      return intputSlot_;
+    }
+    /**
+     * <code>optional int32 intputSlot = 2;</code>
+     * @param value The intputSlot to set.
+     * @return This builder for chaining.
+     */
+    public Builder setIntputSlot(int value) {
+
+      intputSlot_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>string token = 1;</code>
-     * @param value The bytes for token to set.
+     * <code>optional int32 intputSlot = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder setTokenBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      token_ = value;
-      bitField0_ |= 0x00000001;
+    public Builder clearIntputSlot() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      intputSlot_ = 0;
       onChanged();
       return this;
     }
@@ -489,23 +511,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.PlayerLoginPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.TradeWindowPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.PlayerLoginPacket)
-  private static final org.y1000.network.gen.PlayerLoginPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.TradeWindowPacket)
+  private static final org.y1000.network.gen.TradeWindowPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.PlayerLoginPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.TradeWindowPacket();
   }
 
-  public static org.y1000.network.gen.PlayerLoginPacket getDefaultInstance() {
+  public static org.y1000.network.gen.TradeWindowPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<PlayerLoginPacket>
-      PARSER = new com.google.protobuf.AbstractParser<PlayerLoginPacket>() {
+  private static final com.google.protobuf.Parser<TradeWindowPacket>
+      PARSER = new com.google.protobuf.AbstractParser<TradeWindowPacket>() {
     @java.lang.Override
-    public PlayerLoginPacket parsePartialFrom(
+    public TradeWindowPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -524,17 +546,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<PlayerLoginPacket> parser() {
+  public static com.google.protobuf.Parser<TradeWindowPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<PlayerLoginPacket> getParserForType() {
+  public com.google.protobuf.Parser<TradeWindowPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.PlayerLoginPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.TradeWindowPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

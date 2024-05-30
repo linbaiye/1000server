@@ -16,6 +16,17 @@ public final class StackItem extends AbstractItem {
         this.number = number;
     }
 
+    public boolean canSplit(int number) {
+        return this.number >= number && number > 0;
+    }
+
+    public StackItem split(int number) {
+        if (number > this.number) {
+        }
+        drop(number);
+        return new StackItem(name(), number, itemType());
+    }
+
     public boolean increase(int n) {
         if (n < 0) {
             return false;
@@ -24,11 +35,6 @@ public final class StackItem extends AbstractItem {
             number += n;
         }
         return true;
-    }
-
-    public boolean canMerge(Item item) {
-        return item instanceof StackItem stackItem && item.name().equals(name())
-                && stackItem.hasMoreCapacity(stackItem.number());
     }
 
 

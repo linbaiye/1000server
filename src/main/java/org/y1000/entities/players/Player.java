@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.GroundedItem;
+import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.kungfu.KungFuBook;
 import org.y1000.item.*;
 import org.y1000.entities.players.kungfu.attack.AttackKungFu;
@@ -27,6 +28,7 @@ public interface Player extends ViolentCreature {
         return Optional.empty();
     }
 
+
     void pickItem(Item item, GroundedItem groundedItem);
 
     default Optional<Weapon> weapon() {
@@ -34,6 +36,13 @@ public interface Player extends ViolentCreature {
     }
 
     AttackKungFu attackKungFu();
+
+    default boolean tradeEnabled() {
+        return true;
+    }
+
+    Inventory inventory();
+
 
     void handleEvent(ClientEvent clientEvent);
 

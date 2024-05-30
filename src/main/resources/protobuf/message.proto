@@ -167,6 +167,12 @@ message InventoryItemPacket {
   optional int32 number = 3;
 }
 
+message TradeWindowPacket {
+  bool open = 1;
+  optional int32 intputSlot = 2;
+}
+
+
 message KungFuPacket {
   string name = 1;
   int32 level = 2;
@@ -225,6 +231,7 @@ message Packet {
     TextMessagePacket text = 19;
     PlayerUnequipPacket unequip = 20;
     PlayerEquipPacket equip = 21;
+    TradeWindowPacket tradeWindow = 22;
   }
 }
 

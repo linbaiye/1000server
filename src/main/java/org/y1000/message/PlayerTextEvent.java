@@ -7,7 +7,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.TextMessagePacket;
 
-public class PlayerTextEvent extends AbstractPlayerEvent  {
+public class PlayerTextEvent extends AbstractPlayerEvent {
 
     private final String text;
 
@@ -35,5 +35,9 @@ public class PlayerTextEvent extends AbstractPlayerEvent  {
 
     public static PlayerTextEvent inventoryFull(Player player) {
         return new PlayerTextEvent(player, "物品栏已满");
+    }
+
+    public static PlayerTextEvent tradeDisabled(Player player) {
+        return new PlayerTextEvent(player, "对方拒绝交易");
     }
 }

@@ -19,7 +19,7 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
     }
 
     @Override
-    protected void accept(PlayerEventVisitor playerEventHandler) {
+    public void accept(PlayerEventVisitor playerEventHandler) {
         playerEventHandler.visit(this);
     }
 

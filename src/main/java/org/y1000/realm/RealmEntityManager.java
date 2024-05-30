@@ -36,10 +36,13 @@ final class RealmEntityManager implements EntityEventListener,
 
     private final ItemFactory itemFactory;
 
+    private final TradeManager tradeManager;
+
     RealmEntityManager(ItemRepository itemRepository,
                        ItemFactory itemFactory) {
         this.itemRepository = itemRepository;
         this.itemFactory = itemFactory;
+        tradeManager = new TradeManager();
     }
 
 
@@ -208,6 +211,18 @@ final class RealmEntityManager implements EntityEventListener,
     @Override
     public void visit(PlayerTextEvent event) {
         sendMessage(event.player(), event);
+    }
+
+    @Override
+    public void visit(OpenTradeWindowEvent event) {
+        sendMessage(event.player(), event);
+    }
+
+    @Override
+    public void visit(PlayerStartTradeEvent event) {
+        Optional<Player> insight = findInsight(event.source(), event.targetPlayerId())
+                .filter(entity -> entity instanceof Player).map(Player.class::cast);
+        insight.ifPresent(another -> tradeManager.handle(event, another, this::OnEvent));
     }
 
     @Override

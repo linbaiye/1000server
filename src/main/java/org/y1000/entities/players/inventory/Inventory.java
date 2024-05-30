@@ -3,15 +3,16 @@ package org.y1000.entities.players.inventory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
+import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
-import org.y1000.entities.players.EventEmiter;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.InventorySlotSwappedEvent;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.clientevent.ClientDropItemEvent;
 import org.y1000.message.clientevent.ClientInventoryEvent;
 import org.y1000.message.clientevent.ClientSwapInventoryEvent;
+import org.y1000.util.UnaryAction;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -22,6 +23,8 @@ public final class Inventory {
     private static final int MAX_CAP = 30;
 
     private final Map<Integer, Item> items = new HashMap<>(30);
+
+    private final Map<Integer, Item> tradingItems = new HashMap<>(30);
 
     public boolean isFull() {
         return items.size() >= MAX_CAP;
@@ -37,6 +40,29 @@ public final class Inventory {
 
     public int count() {
         return items.size();
+    }
+
+    public void foreachTrading(BiConsumer<Integer, Item> consumer) {
+        tradingItems.forEach(consumer);
+    }
+
+    public boolean tradeItem(int slot, int number) {
+        if (!items.containsKey(slot) || tradingItems.containsKey(slot)) {
+            return false;
+        }
+        Item item = items.get(slot);
+        if (!(item instanceof StackItem stackItem)) {
+            tradingItems.put(slot, item);
+            return true;
+        }
+        if (stackItem.canSplit(number)) {
+            StackItem split = stackItem.split(number);
+            tradingItems.put(slot, split);
+        }
+        if (stackItem.number() == 0) {
+            items.remove(slot);
+        }
+        return true;
     }
 
 
@@ -148,7 +174,8 @@ public final class Inventory {
         return !isFull();
     }
 
-    private void handleDropEvent(Player player, ClientDropItemEvent dropItemEvent, EventEmiter eventEmiter) {
+
+    private void handleDropEvent(Player player, ClientDropItemEvent dropItemEvent, UnaryAction<? super PlayerEvent> eventSender) {
         assertRange(dropItemEvent.sourceSlot());
         Item item = getItem(dropItemEvent.sourceSlot());
         if (item == null) {
@@ -158,18 +185,19 @@ public final class Inventory {
         if (dropItem(dropItemEvent.sourceSlot(), dropItemEvent.number())) {
             log.debug("Dropped item {}", item);
             var numberLeft = item instanceof StackItem stackItem ? stackItem.number() : 0;
-            eventEmiter.emitEvent(new PlayerDropItemEvent(player, dropItemEvent, item.name(),
-                    item instanceof StackItem ? dropItemEvent.number() : null, numberLeft));
+            PlayerDropItemEvent event = new PlayerDropItemEvent(player, dropItemEvent, item.name(),
+                    item instanceof StackItem ? dropItemEvent.number() : null, numberLeft);
+            eventSender.invoke(event);
         }
     }
 
 
-    public void handleClientEvent(Player player, ClientInventoryEvent inventoryEvent, EventEmiter eventEmiter) {
+    public void handleClientEvent(Player player, ClientInventoryEvent inventoryEvent, UnaryAction<? super PlayerEvent> eventSender) {
         if (inventoryEvent instanceof ClientSwapInventoryEvent swapInventoryEvent &&
                 swap(swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot())) {
-            eventEmiter.emitEvent(new InventorySlotSwappedEvent(player, swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot()));
+            eventSender.invoke(new InventorySlotSwappedEvent(player, swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot()));
         } else if (inventoryEvent instanceof ClientDropItemEvent dropItemEvent) {
-            handleDropEvent(player, dropItemEvent, eventEmiter);
+            handleDropEvent(player, dropItemEvent, eventSender);
         }
     }
 }

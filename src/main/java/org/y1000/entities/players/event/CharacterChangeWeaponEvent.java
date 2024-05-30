@@ -49,7 +49,7 @@ public final class CharacterChangeWeaponEvent extends AbstractPlayerEvent {
     }
 
     @Override
-    protected void accept(PlayerEventVisitor playerEventHandler) {
+    public void accept(PlayerEventVisitor playerEventHandler) {
         playerEventHandler.visit(this);
     }
 
