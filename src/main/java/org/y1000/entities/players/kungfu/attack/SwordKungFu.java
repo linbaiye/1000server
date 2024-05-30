@@ -29,6 +29,7 @@ public final class SwordKungFu extends AbstractAttackKungFu {
                 .name("无名剑法")
                 .bodyArmor(1)
                 .bodyDamage(1)
+                .level(100)
                 .attackSpeed(50)
                 .recovery(50)
                 .build();

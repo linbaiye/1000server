@@ -251,9 +251,4 @@ MaxCount,        最多持有数量；
         }
     }
 
-    public static void main(String[] args) {
-        ItemConfig itemConfig = ItemConfig.read();
-        String name = "女子黄金铠甲";
-        System.out.println(itemConfig.get(name, "WearShape"));
-    }
 }

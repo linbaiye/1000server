@@ -4,33 +4,31 @@ import lombok.experimental.SuperBuilder;
 import org.y1000.entities.creatures.State;
 
 @SuperBuilder
-public final class AxeKungFu extends AbstractAttackKungFu {
+public class ThrowKungFu extends AbstractAttackKungFu {
 
     @Override
     public State randomAttackState() {
-        return State.AXE;
+        return State.THROW;
     }
 
     @Override
     public boolean hasState(State state) {
-        return state == State.AXE;
+        return state == State.THROW;
     }
 
     @Override
     public AttackKungFuType getType() {
-        return AttackKungFuType.AXE;
+        return AttackKungFuType.THROW;
     }
 
-
-    public static AxeKungFu unnamed() {
-        return AxeKungFu.builder()
-                .name("无名槌法")
-                .level(100)
-                .recovery(100)
-                .attackSpeed(100)
-                .bodyArmor(1)
+    public static ThrowKungFu unnamed() {
+        return ThrowKungFu.builder()
                 .bodyDamage(1)
+                .attackSpeed(100)
+                .name("无名投法")
+                .level(100)
+                .bodyArmor(0)
+                .recovery(100)
                 .build();
     }
-
 }

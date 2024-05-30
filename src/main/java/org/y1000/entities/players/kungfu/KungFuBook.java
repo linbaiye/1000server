@@ -1,5 +1,8 @@
 package org.y1000.entities.players.kungfu;
 import org.y1000.entities.players.kungfu.attack.*;
+import org.y1000.entities.players.kungfu.breath.BreathKungFu;
+import org.y1000.entities.players.kungfu.protect.ProtectKungFu;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -39,8 +42,12 @@ public final class KungFuBook {
         map.put(5, spear);
         var bow = BowKungFu.unnamed();
         map.put(6, bow);
+        var thr = ThrowKungFu.unnamed();
+        map.put(7, thr);
         var bufa = FootKungFu.unnamed();
         map.put(8, bufa);
+        map.put(9, BreathKungFu.unnamed());
+        map.put(10, ProtectKungFu.unnamed());
         return new KungFuBook(map);
     }
 }

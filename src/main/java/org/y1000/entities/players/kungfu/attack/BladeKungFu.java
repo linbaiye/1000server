@@ -28,6 +28,7 @@ public final class BladeKungFu extends AbstractAttackKungFu {
                 .name("无名刀法")
                 .bodyArmor(1)
                 .bodyDamage(1)
+                .level(100)
                 .attackSpeed(50)
                 .recovery(50)
                 .build();

@@ -2,6 +2,7 @@ package org.y1000.entities.repository;
 
 import org.y1000.entities.players.kungfu.FootKungFu;
 import org.y1000.entities.players.kungfu.attack.AxeKungFu;
+import org.y1000.entities.players.kungfu.attack.SwordKungFu;
 import org.y1000.item.*;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
@@ -41,22 +42,23 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     }
 
     private Weapon weapon() {
-        return (Weapon) itemFactory.createItem("太极斧");
+        return (Weapon) itemFactory.createItem("护国神剑");
+        //return (Weapon) itemFactory.createItem("太极斧");
     }
 
     private AttackKungFu loadKungFu(Weapon weapon) {
-        return AxeKungFu.builder()
+        return SwordKungFu.builder()
                 .level(85)
                 .attackSpeed(35)
                 .recovery(50)
-                .name("无名锤法")
+                .name("无名剑法")
                 .bodyArmor(1)
                 .bodyDamage(1)
                 .build();
     }
 
     private FootKungFu footKungFu() {
-        return FootKungFu.unnamed();
+        return FootKungFu.builder().name("无名步法").level(9000).build();
     }
 
 
