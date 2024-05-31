@@ -7,7 +7,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.TextMessagePacket;
 
-public class PlayerTextEvent extends AbstractPlayerEvent {
+public final class PlayerTextEvent extends AbstractPlayerEvent {
 
     private final String text;
 

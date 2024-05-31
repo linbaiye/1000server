@@ -22,6 +22,9 @@ private static final long serialVersionUID = 0L;
     inventoryItems_ = java.util.Collections.emptyList();
     unnamedKungFuList_ = java.util.Collections.emptyList();
     basicKungFuList_ = java.util.Collections.emptyList();
+    protectionKungFu_ = "";
+    assistantKungFu_ = "";
+    breathKungFu_ = "";
   }
 
   @java.lang.Override
@@ -343,6 +346,166 @@ private static final long serialVersionUID = 0L;
     return basicKungFuList_.get(index);
   }
 
+  public static final int PROTECTIONKUNGFU_FIELD_NUMBER = 13;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object protectionKungFu_ = "";
+  /**
+   * <code>optional string protectionKungFu = 13;</code>
+   * @return Whether the protectionKungFu field is set.
+   */
+  @java.lang.Override
+  public boolean hasProtectionKungFu() {
+    return ((bitField0_ & 0x00000008) != 0);
+  }
+  /**
+   * <code>optional string protectionKungFu = 13;</code>
+   * @return The protectionKungFu.
+   */
+  @java.lang.Override
+  public java.lang.String getProtectionKungFu() {
+    java.lang.Object ref = protectionKungFu_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      protectionKungFu_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string protectionKungFu = 13;</code>
+   * @return The bytes for protectionKungFu.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getProtectionKungFuBytes() {
+    java.lang.Object ref = protectionKungFu_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      protectionKungFu_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int ASSISTANTKUNGFU_FIELD_NUMBER = 14;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object assistantKungFu_ = "";
+  /**
+   * <code>optional string assistantKungFu = 14;</code>
+   * @return Whether the assistantKungFu field is set.
+   */
+  @java.lang.Override
+  public boolean hasAssistantKungFu() {
+    return ((bitField0_ & 0x00000010) != 0);
+  }
+  /**
+   * <code>optional string assistantKungFu = 14;</code>
+   * @return The assistantKungFu.
+   */
+  @java.lang.Override
+  public java.lang.String getAssistantKungFu() {
+    java.lang.Object ref = assistantKungFu_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      assistantKungFu_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string assistantKungFu = 14;</code>
+   * @return The bytes for assistantKungFu.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getAssistantKungFuBytes() {
+    java.lang.Object ref = assistantKungFu_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      assistantKungFu_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int BREATHKUNGFU_FIELD_NUMBER = 15;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object breathKungFu_ = "";
+  /**
+   * <code>optional string breathKungFu = 15;</code>
+   * @return Whether the breathKungFu field is set.
+   */
+  @java.lang.Override
+  public boolean hasBreathKungFu() {
+    return ((bitField0_ & 0x00000020) != 0);
+  }
+  /**
+   * <code>optional string breathKungFu = 15;</code>
+   * @return The breathKungFu.
+   */
+  @java.lang.Override
+  public java.lang.String getBreathKungFu() {
+    java.lang.Object ref = breathKungFu_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      breathKungFu_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string breathKungFu = 15;</code>
+   * @return The bytes for breathKungFu.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getBreathKungFuBytes() {
+    java.lang.Object ref = breathKungFu_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      breathKungFu_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int BREATHKUNGFULEVEL_FIELD_NUMBER = 16;
+  private int breathKungFuLevel_ = 0;
+  /**
+   * <code>optional int32 breathKungFuLevel = 16;</code>
+   * @return Whether the breathKungFuLevel field is set.
+   */
+  @java.lang.Override
+  public boolean hasBreathKungFuLevel() {
+    return ((bitField0_ & 0x00000040) != 0);
+  }
+  /**
+   * <code>optional int32 breathKungFuLevel = 16;</code>
+   * @return The breathKungFuLevel.
+   */
+  @java.lang.Override
+  public int getBreathKungFuLevel() {
+    return breathKungFuLevel_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -389,6 +552,18 @@ private static final long serialVersionUID = 0L;
     }
     for (int i = 0; i < basicKungFuList_.size(); i++) {
       output.writeMessage(12, basicKungFuList_.get(i));
+    }
+    if (((bitField0_ & 0x00000008) != 0)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 13, protectionKungFu_);
+    }
+    if (((bitField0_ & 0x00000010) != 0)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 14, assistantKungFu_);
+    }
+    if (((bitField0_ & 0x00000020) != 0)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 15, breathKungFu_);
+    }
+    if (((bitField0_ & 0x00000040) != 0)) {
+      output.writeInt32(16, breathKungFuLevel_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -441,6 +616,19 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(12, basicKungFuList_.get(i));
     }
+    if (((bitField0_ & 0x00000008) != 0)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(13, protectionKungFu_);
+    }
+    if (((bitField0_ & 0x00000010) != 0)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(14, assistantKungFu_);
+    }
+    if (((bitField0_ & 0x00000020) != 0)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(15, breathKungFu_);
+    }
+    if (((bitField0_ & 0x00000040) != 0)) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(16, breathKungFuLevel_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -487,6 +675,26 @@ private static final long serialVersionUID = 0L;
         .equals(other.getUnnamedKungFuListList())) return false;
     if (!getBasicKungFuListList()
         .equals(other.getBasicKungFuListList())) return false;
+    if (hasProtectionKungFu() != other.hasProtectionKungFu()) return false;
+    if (hasProtectionKungFu()) {
+      if (!getProtectionKungFu()
+          .equals(other.getProtectionKungFu())) return false;
+    }
+    if (hasAssistantKungFu() != other.hasAssistantKungFu()) return false;
+    if (hasAssistantKungFu()) {
+      if (!getAssistantKungFu()
+          .equals(other.getAssistantKungFu())) return false;
+    }
+    if (hasBreathKungFu() != other.hasBreathKungFu()) return false;
+    if (hasBreathKungFu()) {
+      if (!getBreathKungFu()
+          .equals(other.getBreathKungFu())) return false;
+    }
+    if (hasBreathKungFuLevel() != other.hasBreathKungFuLevel()) return false;
+    if (hasBreathKungFuLevel()) {
+      if (getBreathKungFuLevel()
+          != other.getBreathKungFuLevel()) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -531,6 +739,22 @@ private static final long serialVersionUID = 0L;
     if (getBasicKungFuListCount() > 0) {
       hash = (37 * hash) + BASICKUNGFULIST_FIELD_NUMBER;
       hash = (53 * hash) + getBasicKungFuListList().hashCode();
+    }
+    if (hasProtectionKungFu()) {
+      hash = (37 * hash) + PROTECTIONKUNGFU_FIELD_NUMBER;
+      hash = (53 * hash) + getProtectionKungFu().hashCode();
+    }
+    if (hasAssistantKungFu()) {
+      hash = (37 * hash) + ASSISTANTKUNGFU_FIELD_NUMBER;
+      hash = (53 * hash) + getAssistantKungFu().hashCode();
+    }
+    if (hasBreathKungFu()) {
+      hash = (37 * hash) + BREATHKUNGFU_FIELD_NUMBER;
+      hash = (53 * hash) + getBreathKungFu().hashCode();
+    }
+    if (hasBreathKungFuLevel()) {
+      hash = (37 * hash) + BREATHKUNGFULEVEL_FIELD_NUMBER;
+      hash = (53 * hash) + getBreathKungFuLevel();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -705,6 +929,10 @@ private static final long serialVersionUID = 0L;
         basicKungFuListBuilder_.clear();
       }
       bitField0_ = (bitField0_ & ~0x00000400);
+      protectionKungFu_ = "";
+      assistantKungFu_ = "";
+      breathKungFu_ = "";
+      breathKungFuLevel_ = 0;
       return this;
     }
 
@@ -798,6 +1026,22 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000100) != 0)) {
         result.attackKungFuType_ = attackKungFuType_;
+      }
+      if (((from_bitField0_ & 0x00000800) != 0)) {
+        result.protectionKungFu_ = protectionKungFu_;
+        to_bitField0_ |= 0x00000008;
+      }
+      if (((from_bitField0_ & 0x00001000) != 0)) {
+        result.assistantKungFu_ = assistantKungFu_;
+        to_bitField0_ |= 0x00000010;
+      }
+      if (((from_bitField0_ & 0x00002000) != 0)) {
+        result.breathKungFu_ = breathKungFu_;
+        to_bitField0_ |= 0x00000020;
+      }
+      if (((from_bitField0_ & 0x00004000) != 0)) {
+        result.breathKungFuLevel_ = breathKungFuLevel_;
+        to_bitField0_ |= 0x00000040;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -952,6 +1196,24 @@ private static final long serialVersionUID = 0L;
           }
         }
       }
+      if (other.hasProtectionKungFu()) {
+        protectionKungFu_ = other.protectionKungFu_;
+        bitField0_ |= 0x00000800;
+        onChanged();
+      }
+      if (other.hasAssistantKungFu()) {
+        assistantKungFu_ = other.assistantKungFu_;
+        bitField0_ |= 0x00001000;
+        onChanged();
+      }
+      if (other.hasBreathKungFu()) {
+        breathKungFu_ = other.breathKungFu_;
+        bitField0_ |= 0x00002000;
+        onChanged();
+      }
+      if (other.hasBreathKungFuLevel()) {
+        setBreathKungFuLevel(other.getBreathKungFuLevel());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -1059,6 +1321,26 @@ private static final long serialVersionUID = 0L;
               }
               break;
             } // case 98
+            case 106: {
+              protectionKungFu_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00000800;
+              break;
+            } // case 106
+            case 114: {
+              assistantKungFu_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00001000;
+              break;
+            } // case 114
+            case 122: {
+              breathKungFu_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00002000;
+              break;
+            } // case 122
+            case 128: {
+              breathKungFuLevel_ = input.readInt32();
+              bitField0_ |= 0x00004000;
+              break;
+            } // case 128
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -2234,6 +2516,283 @@ private static final long serialVersionUID = 0L;
         basicKungFuList_ = null;
       }
       return basicKungFuListBuilder_;
+    }
+
+    private java.lang.Object protectionKungFu_ = "";
+    /**
+     * <code>optional string protectionKungFu = 13;</code>
+     * @return Whether the protectionKungFu field is set.
+     */
+    public boolean hasProtectionKungFu() {
+      return ((bitField0_ & 0x00000800) != 0);
+    }
+    /**
+     * <code>optional string protectionKungFu = 13;</code>
+     * @return The protectionKungFu.
+     */
+    public java.lang.String getProtectionKungFu() {
+      java.lang.Object ref = protectionKungFu_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        protectionKungFu_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string protectionKungFu = 13;</code>
+     * @return The bytes for protectionKungFu.
+     */
+    public com.google.protobuf.ByteString
+        getProtectionKungFuBytes() {
+      java.lang.Object ref = protectionKungFu_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        protectionKungFu_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string protectionKungFu = 13;</code>
+     * @param value The protectionKungFu to set.
+     * @return This builder for chaining.
+     */
+    public Builder setProtectionKungFu(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      protectionKungFu_ = value;
+      bitField0_ |= 0x00000800;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string protectionKungFu = 13;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearProtectionKungFu() {
+      protectionKungFu_ = getDefaultInstance().getProtectionKungFu();
+      bitField0_ = (bitField0_ & ~0x00000800);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string protectionKungFu = 13;</code>
+     * @param value The bytes for protectionKungFu to set.
+     * @return This builder for chaining.
+     */
+    public Builder setProtectionKungFuBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      protectionKungFu_ = value;
+      bitField0_ |= 0x00000800;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object assistantKungFu_ = "";
+    /**
+     * <code>optional string assistantKungFu = 14;</code>
+     * @return Whether the assistantKungFu field is set.
+     */
+    public boolean hasAssistantKungFu() {
+      return ((bitField0_ & 0x00001000) != 0);
+    }
+    /**
+     * <code>optional string assistantKungFu = 14;</code>
+     * @return The assistantKungFu.
+     */
+    public java.lang.String getAssistantKungFu() {
+      java.lang.Object ref = assistantKungFu_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        assistantKungFu_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string assistantKungFu = 14;</code>
+     * @return The bytes for assistantKungFu.
+     */
+    public com.google.protobuf.ByteString
+        getAssistantKungFuBytes() {
+      java.lang.Object ref = assistantKungFu_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        assistantKungFu_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string assistantKungFu = 14;</code>
+     * @param value The assistantKungFu to set.
+     * @return This builder for chaining.
+     */
+    public Builder setAssistantKungFu(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      assistantKungFu_ = value;
+      bitField0_ |= 0x00001000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string assistantKungFu = 14;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearAssistantKungFu() {
+      assistantKungFu_ = getDefaultInstance().getAssistantKungFu();
+      bitField0_ = (bitField0_ & ~0x00001000);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string assistantKungFu = 14;</code>
+     * @param value The bytes for assistantKungFu to set.
+     * @return This builder for chaining.
+     */
+    public Builder setAssistantKungFuBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      assistantKungFu_ = value;
+      bitField0_ |= 0x00001000;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object breathKungFu_ = "";
+    /**
+     * <code>optional string breathKungFu = 15;</code>
+     * @return Whether the breathKungFu field is set.
+     */
+    public boolean hasBreathKungFu() {
+      return ((bitField0_ & 0x00002000) != 0);
+    }
+    /**
+     * <code>optional string breathKungFu = 15;</code>
+     * @return The breathKungFu.
+     */
+    public java.lang.String getBreathKungFu() {
+      java.lang.Object ref = breathKungFu_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        breathKungFu_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string breathKungFu = 15;</code>
+     * @return The bytes for breathKungFu.
+     */
+    public com.google.protobuf.ByteString
+        getBreathKungFuBytes() {
+      java.lang.Object ref = breathKungFu_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        breathKungFu_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string breathKungFu = 15;</code>
+     * @param value The breathKungFu to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBreathKungFu(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      breathKungFu_ = value;
+      bitField0_ |= 0x00002000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string breathKungFu = 15;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearBreathKungFu() {
+      breathKungFu_ = getDefaultInstance().getBreathKungFu();
+      bitField0_ = (bitField0_ & ~0x00002000);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string breathKungFu = 15;</code>
+     * @param value The bytes for breathKungFu to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBreathKungFuBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      breathKungFu_ = value;
+      bitField0_ |= 0x00002000;
+      onChanged();
+      return this;
+    }
+
+    private int breathKungFuLevel_ ;
+    /**
+     * <code>optional int32 breathKungFuLevel = 16;</code>
+     * @return Whether the breathKungFuLevel field is set.
+     */
+    @java.lang.Override
+    public boolean hasBreathKungFuLevel() {
+      return ((bitField0_ & 0x00004000) != 0);
+    }
+    /**
+     * <code>optional int32 breathKungFuLevel = 16;</code>
+     * @return The breathKungFuLevel.
+     */
+    @java.lang.Override
+    public int getBreathKungFuLevel() {
+      return breathKungFuLevel_;
+    }
+    /**
+     * <code>optional int32 breathKungFuLevel = 16;</code>
+     * @param value The breathKungFuLevel to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBreathKungFuLevel(int value) {
+
+      breathKungFuLevel_ = value;
+      bitField0_ |= 0x00004000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional int32 breathKungFuLevel = 16;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearBreathKungFuLevel() {
+      bitField0_ = (bitField0_ & ~0x00004000);
+      breathKungFuLevel_ = 0;
+      onChanged();
+      return this;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

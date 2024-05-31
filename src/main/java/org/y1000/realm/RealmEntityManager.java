@@ -12,7 +12,7 @@ import org.y1000.entities.GroundedItem;
 import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
-import org.y1000.entities.repository.ItemRepository;
+import org.y1000.repository.ItemRepository;
 import org.y1000.message.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.*;
@@ -229,6 +229,11 @@ final class RealmEntityManager implements EntityEventListener,
     public void visit(GetGroundItemEvent event) {
         GroundedItem pickingItem = event.getPickingItem();
         event.player().pickItem(itemFactory.createItem(pickingItem), pickingItem);
+    }
+
+    @Override
+    public void visit(PlayerToggleKungFuEvent event) {
+        notifyVisiblePlayersAndSelf(event.player(), event);
     }
 
     private void update(PhysicalEntity entity, int delta) {

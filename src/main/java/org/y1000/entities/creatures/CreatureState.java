@@ -2,7 +2,6 @@ package org.y1000.entities.creatures;
 
 
 import org.y1000.message.clientevent.ClientEvent;
-import org.y1000.message.clientevent.ClientInventoryEvent;
 
 public interface CreatureState<C extends Creature> {
     State stateEnum();

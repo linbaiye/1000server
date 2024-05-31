@@ -323,5 +323,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.TradeWindowPacketOrBuilder getTradeWindowOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ToggleKungFuPacket toggleKungFu = 23;</code>
+   * @return Whether the toggleKungFu field is set.
+   */
+  boolean hasToggleKungFu();
+  /**
+   * <code>.org.y1000.network.gen.ToggleKungFuPacket toggleKungFu = 23;</code>
+   * @return The toggleKungFu.
+   */
+  org.y1000.network.gen.ToggleKungFuPacket getToggleKungFu();
+  /**
+   * <code>.org.y1000.network.gen.ToggleKungFuPacket toggleKungFu = 23;</code>
+   */
+  org.y1000.network.gen.ToggleKungFuPacketOrBuilder getToggleKungFuOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

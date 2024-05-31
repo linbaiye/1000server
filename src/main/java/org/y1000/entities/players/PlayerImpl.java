@@ -8,21 +8,27 @@ import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.GroundedItem;
+import org.y1000.entities.players.event.PlayerToggleKungFuEvent;
 import org.y1000.entities.players.event.PlayerUnequipEvent;
 import org.y1000.item.*;
 import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.entities.players.kungfu.KungFuBook;
-import org.y1000.entities.players.kungfu.attack.AttackKungFu;
-import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
+import org.y1000.kungfu.AssistantKungFu;
+import org.y1000.kungfu.KungFu;
+import org.y1000.kungfu.KungFuBook;
+import org.y1000.kungfu.attack.AttackKungFu;
+import org.y1000.kungfu.attack.AttackKungFuType;
+import org.y1000.kungfu.breath.BreathKungFu;
+import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.*;
 import org.y1000.entities.Direction;
-import org.y1000.entities.players.kungfu.FootKungFu;
+import org.y1000.kungfu.FootKungFu;
 import org.y1000.message.*;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -36,6 +42,12 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     private AttackKungFu attackKungFu;
 
     private FootKungFu footKungfu;
+
+    private ProtectKungFu protectKungFu;
+
+    private BreathKungFu breathKungFu;
+
+    private AssistantKungFu assistantKungFu;
 
     private final Inventory inventory;
 
@@ -79,7 +91,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                       Boot boot,
                       Trouser trouser,
                       Clothing clothing,
-                      FootKungFu footKungfu
+                      FootKungFu footKungfu,
+                      ProtectKungFu protectKungFu,
+                      BreathKungFu breathKungFu
                       ) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
         Objects.requireNonNull(kungFuBook, "kungFuBook can't be null.");
@@ -90,6 +104,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         this.kungFuBook = kungFuBook;
         this.male = male;
         this.footKungfu = footKungfu;
+        initProtectKungFu(protectKungFu);
+        initBreathKungFu(breathKungFu);
         this.equippedEquipments = new HashMap<>();
         equippedEquipments.put(EquipmentType.HAT, hat);
         equippedEquipments.put(EquipmentType.WEAPON, weapon);
@@ -101,6 +117,20 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         equippedEquipments.put(EquipmentType.HAIR, hair);
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         eventQueue = new ConcurrentLinkedQueue<>();
+    }
+
+    private void initProtectKungFu(ProtectKungFu protectKungFu) {
+        if (protectKungFu != null && breathKungFu != null) {
+            throw new IllegalStateException("BreathKungFu is not null.");
+        }
+        this.protectKungFu = protectKungFu;
+    }
+
+    private void initBreathKungFu(BreathKungFu breathKungFu) {
+        if (protectKungFu != null && breathKungFu != null) {
+            throw new IllegalStateException("BreathKungFu is not null.");
+        }
+        this.breathKungFu = breathKungFu;
     }
 
     @Override
@@ -120,6 +150,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     public Optional<FootKungFu> footKungFu() {
         return Optional.ofNullable(footKungfu);
     }
+
 
     @Override
     public void pickItem(Item item, GroundedItem groundedItem){
@@ -152,6 +183,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
 
     private void unequip(EquipmentType type) {
+        log.debug("Received unequip type {}.", type);
         if (inventory.isFull()) {
             emitEvent(PlayerTextEvent.inventoryFull(this));
             return;
@@ -186,6 +218,55 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
     }
 
+    private void changeAttackKungFu(AttackKungFu newAttack) {
+        if (this.attackKungFu.name().equals(newAttack.name())) {
+            return;
+        }
+        this.attackKungFu = newAttack;
+        if (this.attackKungFu.getType() == newAttack.getType()) {
+            return;
+        }
+        cooldown();
+        state().attackKungFuTypeChanged(this);
+        State state = null;
+    }
+
+
+    private void toggleFootKungFu(FootKungFu newKungFu) {
+        if (this.footKungfu != null && newKungFu.name().equals(this.footKungfu.name())) {
+            this.footKungfu = null;
+            emitEvent(new PlayerToggleKungFuEvent(this, newKungFu.name()));
+        } else {
+            this.footKungfu = newKungFu;
+            this.breathKungFu = null;
+            emitEvent(new PlayerToggleKungFuEvent(this, this.footKungfu));
+        }
+    }
+
+    private void useKungFu(KungFu kungFu) {
+        if (kungFu instanceof FootKungFu newKungFu) {
+            toggleFootKungFu(newKungFu);
+        } else if (kungFu instanceof ProtectKungFu newProtectKungFu) {
+            if (this.protectKungFu != null && this.protectKungFu.name().equals(newProtectKungFu.name())) {
+                this.protectKungFu = null;
+                emitEvent(new PlayerToggleKungFuEvent(this, kungFu.name()));
+            } else {
+                this.protectKungFu = newProtectKungFu;
+                emitEvent(new PlayerToggleKungFuEvent(this, this.protectKungFu));
+            }
+        } else if (kungFu instanceof AssistantKungFu newAssistant) {
+            if (this.assistantKungFu != null && this.assistantKungFu.name().equals(newAssistant.name())) {
+                this.assistantKungFu = null;
+                emitEvent(new PlayerToggleKungFuEvent(this, kungFu.name()));
+            } else {
+                this.assistantKungFu = newAssistant;
+                emitEvent(new PlayerToggleKungFuEvent(this, this.assistantKungFu));
+            }
+        } else if (kungFu instanceof AttackKungFu newAttack) {
+            changeAttackKungFu(newAttack);
+        }
+    }
+
 
     @Override
     public void handleEvent(ClientEvent clientEvent) {
@@ -196,8 +277,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         } else if (clientEvent instanceof ClientPickItemEvent pickItemEvent) {
             realm.findInsight(this, pickItemEvent.id()).ifPresent(this::handlePickItem);
         } else if (clientEvent instanceof ClientUnequipEvent unequipEvent) {
-            log.debug("Received unequip type {}.", unequipEvent.type());
             unequip(unequipEvent.type());
+        } else if (clientEvent instanceof ClientToggleKungFuEvent useKungFuEvent) {
+            kungFuBook().findKungFu(useKungFuEvent.tab(), useKungFuEvent.slot()).ifPresent(this::useKungFu);
         } else {
             eventQueue.add(clientEvent);
         }
@@ -354,6 +436,21 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     @Override
     public KungFuBook kungFuBook() {
         return kungFuBook;
+    }
+
+    @Override
+    public Optional<ProtectKungFu> protectKungFu() {
+        return Optional.ofNullable(protectKungFu);
+    }
+
+    @Override
+    public Optional<BreathKungFu> breathKungFu() {
+        return Optional.ofNullable(breathKungFu);
+    }
+
+    @Override
+    public Optional<AssistantKungFu> assistantKungFu() {
+        return Optional.ofNullable(assistantKungFu);
     }
 
     @Override

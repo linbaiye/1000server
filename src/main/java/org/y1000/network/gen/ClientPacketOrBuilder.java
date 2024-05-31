@@ -143,5 +143,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientUnequipPacketOrBuilder getUnequipOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+   * @return Whether the toggleKungFu field is set.
+   */
+  boolean hasToggleKungFu();
+  /**
+   * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+   * @return The toggleKungFu.
+   */
+  org.y1000.network.gen.ClientToggleKungFuPacket getToggleKungFu();
+  /**
+   * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+   */
+  org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder getToggleKungFuOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

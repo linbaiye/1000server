@@ -3,10 +3,13 @@ package org.y1000.entities.players;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.entities.players.kungfu.KungFuBook;
+import org.y1000.kungfu.AssistantKungFu;
+import org.y1000.kungfu.KungFuBook;
 import org.y1000.item.*;
-import org.y1000.entities.players.kungfu.attack.AttackKungFu;
-import org.y1000.entities.players.kungfu.FootKungFu;
+import org.y1000.kungfu.attack.AttackKungFu;
+import org.y1000.kungfu.FootKungFu;
+import org.y1000.kungfu.breath.BreathKungFu;
+import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.realm.Realm;
 
@@ -43,7 +46,6 @@ public interface Player extends ViolentCreature {
 
     Inventory inventory();
 
-
     void handleEvent(ClientEvent clientEvent);
 
     Optional<Hat> hat();
@@ -61,4 +63,11 @@ public interface Player extends ViolentCreature {
     Optional<Trouser> trouser();
 
     KungFuBook kungFuBook();
+
+    Optional<ProtectKungFu> protectKungFu();
+
+    Optional<BreathKungFu> breathKungFu();
+
+    Optional<AssistantKungFu> assistantKungFu();
+
 }

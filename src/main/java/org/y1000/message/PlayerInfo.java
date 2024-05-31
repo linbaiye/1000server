@@ -3,7 +3,7 @@ package org.y1000.message;
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.PlayerInfoPacket;
 
-public class PlayerInfo {
+public final class PlayerInfo {
 
     public static PlayerInfoPacket toPacket(Player player) {
         PlayerInfoPacket.Builder builder = PlayerInfoPacket.newBuilder()

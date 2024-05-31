@@ -5,7 +5,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.item.ItemFactory;
-import org.y1000.entities.repository.ItemRepository;
+import org.y1000.repository.ItemRepository;
 import org.y1000.realm.event.PlayerConnectedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
@@ -27,7 +27,9 @@ final class RealmImpl implements Runnable, Realm {
     private final RealmEntityManager entityManager;
     private volatile boolean shutdown;
 
-    public RealmImpl(RealmMap map, ItemRepository itemRepository, ItemFactory itemFactory) {
+    public RealmImpl(RealmMap map,
+                     ItemRepository itemRepository,
+                     ItemFactory itemFactory) {
         realmMap = map;
         entityManager = new RealmEntityManager(itemRepository, itemFactory);
         shutdown = false;

@@ -1,6 +1,6 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.entities.players.kungfu.KungFu;
+import org.y1000.kungfu.KungFu;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
 import org.y1000.entities.players.inventory.Inventory;

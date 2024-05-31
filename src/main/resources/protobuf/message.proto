@@ -83,6 +83,12 @@ message ClientUnequipPacket {
   int32 type = 1;
 }
 
+message ClientToggleKungFuPacket {
+  int32 tab = 1;
+  int32 slot = 2;
+}
+
+
 message SwapInventorySlotPacket {
   int32 slot1 = 1;
   int32 slot2 = 2;
@@ -146,6 +152,7 @@ message ClientPacket {
     DropItemPacket dropItem = 7;
     PickItemPacket pickItem = 8;
     ClientUnequipPacket unequip = 9;
+    ClientToggleKungFuPacket toggleKungFu = 10;
   }
 }
 
@@ -183,6 +190,12 @@ message TextMessagePacket {
   string text = 1;
 }
 
+message ToggleKungFuPacket {
+  string name = 1;
+  optional int32 level = 2;
+  int64 id = 3;
+}
+
 message LoginPacket {
   int32 x = 1;
   int32 y = 2;
@@ -195,6 +208,10 @@ message LoginPacket {
   int32 attackKungFuType = 10;
   repeated KungFuPacket unnamedKungFuList = 11;
   repeated KungFuPacket basicKungFuList = 12;
+  optional string protectionKungFu = 13;
+  optional string assistantKungFu = 14;
+  optional string breathKungFu = 15;
+  optional int32 breathKungFuLevel = 16;
 }
 
 message PlayerUnequipPacket {
@@ -232,6 +249,7 @@ message Packet {
     PlayerUnequipPacket unequip = 20;
     PlayerEquipPacket equip = 21;
     TradeWindowPacket tradeWindow = 22;
+    ToggleKungFuPacket toggleKungFu = 23;
   }
 }
 

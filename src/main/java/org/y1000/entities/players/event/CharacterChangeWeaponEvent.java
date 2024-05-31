@@ -2,8 +2,8 @@ package org.y1000.entities.players.event;
 
 import org.y1000.item.Item;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.kungfu.attack.AttackKungFu;
-import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
+import org.y1000.kungfu.attack.AttackKungFu;
+import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.ChangeWeaponEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.CharacterChangeWeaponPacket;

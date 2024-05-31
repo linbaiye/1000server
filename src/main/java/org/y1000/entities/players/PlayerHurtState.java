@@ -3,7 +3,6 @@ import org.y1000.entities.creatures.*;
 
 public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl> implements PlayerState {
 
-
     @FunctionalInterface
     public interface AfterHurtAction {
         void apply(PlayerImpl player);

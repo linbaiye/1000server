@@ -158,4 +158,66 @@ public interface LoginPacketOrBuilder extends
    */
   org.y1000.network.gen.KungFuPacketOrBuilder getBasicKungFuListOrBuilder(
       int index);
+
+  /**
+   * <code>optional string protectionKungFu = 13;</code>
+   * @return Whether the protectionKungFu field is set.
+   */
+  boolean hasProtectionKungFu();
+  /**
+   * <code>optional string protectionKungFu = 13;</code>
+   * @return The protectionKungFu.
+   */
+  java.lang.String getProtectionKungFu();
+  /**
+   * <code>optional string protectionKungFu = 13;</code>
+   * @return The bytes for protectionKungFu.
+   */
+  com.google.protobuf.ByteString
+      getProtectionKungFuBytes();
+
+  /**
+   * <code>optional string assistantKungFu = 14;</code>
+   * @return Whether the assistantKungFu field is set.
+   */
+  boolean hasAssistantKungFu();
+  /**
+   * <code>optional string assistantKungFu = 14;</code>
+   * @return The assistantKungFu.
+   */
+  java.lang.String getAssistantKungFu();
+  /**
+   * <code>optional string assistantKungFu = 14;</code>
+   * @return The bytes for assistantKungFu.
+   */
+  com.google.protobuf.ByteString
+      getAssistantKungFuBytes();
+
+  /**
+   * <code>optional string breathKungFu = 15;</code>
+   * @return Whether the breathKungFu field is set.
+   */
+  boolean hasBreathKungFu();
+  /**
+   * <code>optional string breathKungFu = 15;</code>
+   * @return The breathKungFu.
+   */
+  java.lang.String getBreathKungFu();
+  /**
+   * <code>optional string breathKungFu = 15;</code>
+   * @return The bytes for breathKungFu.
+   */
+  com.google.protobuf.ByteString
+      getBreathKungFuBytes();
+
+  /**
+   * <code>optional int32 breathKungFuLevel = 16;</code>
+   * @return Whether the breathKungFuLevel field is set.
+   */
+  boolean hasBreathKungFuLevel();
+  /**
+   * <code>optional int32 breathKungFuLevel = 16;</code>
+   * @return The breathKungFuLevel.
+   */
+  int getBreathKungFuLevel();
 }

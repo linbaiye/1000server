@@ -70,4 +70,8 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     default void visit(OpenTradeWindowEvent event) {
 
     }
+
+    default void visit(PlayerToggleKungFuEvent event) {
+
+    }
 }

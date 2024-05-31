@@ -1,9 +1,7 @@
 package org.y1000.item;
 
 import lombok.Builder;
-import org.y1000.entities.creatures.State;
-import org.y1000.entities.players.Player;
-import org.y1000.entities.players.kungfu.attack.AttackKungFuType;
+import org.y1000.kungfu.attack.AttackKungFuType;
 
 public final class Weapon extends AbstractEquipment {
 

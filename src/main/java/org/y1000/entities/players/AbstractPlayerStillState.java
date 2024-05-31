@@ -2,9 +2,13 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.entities.players.fight.AttackableState;
+import org.y1000.kungfu.KungFu;
+import org.y1000.kungfu.KungFuType;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.BiClientEventVisitor;
+import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.clientevent.ClientMovementEvent;
 
 /**
@@ -51,6 +55,12 @@ public abstract class AbstractPlayerStillState extends AbstractCreateState<Playe
     @Override
     public State decideAfterHurtState() {
         return stateEnum();
+    }
+
+    @Override
+    public void handleSit(PlayerImpl player) {
+        player.changeState(PlayerStillState.sit(player));
+        player.emitEvent(ChangeStateEvent.of(player));
     }
 
     @Override

@@ -54,6 +54,7 @@ private static final long serialVersionUID = 0L;
     DROPITEM(7),
     PICKITEM(8),
     UNEQUIP(9),
+    TOGGLEKUNGFU(10),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -80,6 +81,7 @@ private static final long serialVersionUID = 0L;
         case 7: return DROPITEM;
         case 8: return PICKITEM;
         case 9: return UNEQUIP;
+        case 10: return TOGGLEKUNGFU;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -374,6 +376,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientUnequipPacket.getDefaultInstance();
   }
 
+  public static final int TOGGLEKUNGFU_FIELD_NUMBER = 10;
+  /**
+   * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+   * @return Whether the toggleKungFu field is set.
+   */
+  @java.lang.Override
+  public boolean hasToggleKungFu() {
+    return typeCase_ == 10;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+   * @return The toggleKungFu.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientToggleKungFuPacket getToggleKungFu() {
+    if (typeCase_ == 10) {
+       return (org.y1000.network.gen.ClientToggleKungFuPacket) type_;
+    }
+    return org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder getToggleKungFuOrBuilder() {
+    if (typeCase_ == 10) {
+       return (org.y1000.network.gen.ClientToggleKungFuPacket) type_;
+    }
+    return org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -414,6 +447,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 9) {
       output.writeMessage(9, (org.y1000.network.gen.ClientUnequipPacket) type_);
+    }
+    if (typeCase_ == 10) {
+      output.writeMessage(10, (org.y1000.network.gen.ClientToggleKungFuPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -459,6 +495,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 9) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(9, (org.y1000.network.gen.ClientUnequipPacket) type_);
+    }
+    if (typeCase_ == 10) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(10, (org.y1000.network.gen.ClientToggleKungFuPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -513,6 +553,10 @@ private static final long serialVersionUID = 0L;
         if (!getUnequip()
             .equals(other.getUnequip())) return false;
         break;
+      case 10:
+        if (!getToggleKungFu()
+            .equals(other.getToggleKungFu())) return false;
+        break;
       case 0:
       default:
     }
@@ -563,6 +607,10 @@ private static final long serialVersionUID = 0L;
       case 9:
         hash = (37 * hash) + UNEQUIP_FIELD_NUMBER;
         hash = (53 * hash) + getUnequip().hashCode();
+        break;
+      case 10:
+        hash = (37 * hash) + TOGGLEKUNGFU_FIELD_NUMBER;
+        hash = (53 * hash) + getToggleKungFu().hashCode();
         break;
       case 0:
       default:
@@ -725,6 +773,9 @@ private static final long serialVersionUID = 0L;
       if (unequipBuilder_ != null) {
         unequipBuilder_.clear();
       }
+      if (toggleKungFuBuilder_ != null) {
+        toggleKungFuBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -801,6 +852,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 9 &&
           unequipBuilder_ != null) {
         result.type_ = unequipBuilder_.build();
+      }
+      if (typeCase_ == 10 &&
+          toggleKungFuBuilder_ != null) {
+        result.type_ = toggleKungFuBuilder_.build();
       }
     }
 
@@ -883,6 +938,10 @@ private static final long serialVersionUID = 0L;
         }
         case UNEQUIP: {
           mergeUnequip(other.getUnequip());
+          break;
+        }
+        case TOGGLEKUNGFU: {
+          mergeToggleKungFu(other.getToggleKungFu());
           break;
         }
         case TYPE_NOT_SET: {
@@ -978,6 +1037,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 9;
               break;
             } // case 74
+            case 82: {
+              input.readMessage(
+                  getToggleKungFuFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 10;
+              break;
+            } // case 82
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -2286,6 +2352,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 9;
       onChanged();
       return unequipBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientToggleKungFuPacket, org.y1000.network.gen.ClientToggleKungFuPacket.Builder, org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder> toggleKungFuBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     * @return Whether the toggleKungFu field is set.
+     */
+    @java.lang.Override
+    public boolean hasToggleKungFu() {
+      return typeCase_ == 10;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     * @return The toggleKungFu.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientToggleKungFuPacket getToggleKungFu() {
+      if (toggleKungFuBuilder_ == null) {
+        if (typeCase_ == 10) {
+          return (org.y1000.network.gen.ClientToggleKungFuPacket) type_;
+        }
+        return org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 10) {
+          return toggleKungFuBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     */
+    public Builder setToggleKungFu(org.y1000.network.gen.ClientToggleKungFuPacket value) {
+      if (toggleKungFuBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        toggleKungFuBuilder_.setMessage(value);
+      }
+      typeCase_ = 10;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     */
+    public Builder setToggleKungFu(
+        org.y1000.network.gen.ClientToggleKungFuPacket.Builder builderForValue) {
+      if (toggleKungFuBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        toggleKungFuBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 10;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     */
+    public Builder mergeToggleKungFu(org.y1000.network.gen.ClientToggleKungFuPacket value) {
+      if (toggleKungFuBuilder_ == null) {
+        if (typeCase_ == 10 &&
+            type_ != org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientToggleKungFuPacket.newBuilder((org.y1000.network.gen.ClientToggleKungFuPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 10) {
+          toggleKungFuBuilder_.mergeFrom(value);
+        } else {
+          toggleKungFuBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 10;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     */
+    public Builder clearToggleKungFu() {
+      if (toggleKungFuBuilder_ == null) {
+        if (typeCase_ == 10) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 10) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        toggleKungFuBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     */
+    public org.y1000.network.gen.ClientToggleKungFuPacket.Builder getToggleKungFuBuilder() {
+      return getToggleKungFuFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder getToggleKungFuOrBuilder() {
+      if ((typeCase_ == 10) && (toggleKungFuBuilder_ != null)) {
+        return toggleKungFuBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 10) {
+          return (org.y1000.network.gen.ClientToggleKungFuPacket) type_;
+        }
+        return org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientToggleKungFuPacket, org.y1000.network.gen.ClientToggleKungFuPacket.Builder, org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder> 
+        getToggleKungFuFieldBuilder() {
+      if (toggleKungFuBuilder_ == null) {
+        if (!(typeCase_ == 10)) {
+          type_ = org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+        }
+        toggleKungFuBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientToggleKungFuPacket, org.y1000.network.gen.ClientToggleKungFuPacket.Builder, org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder>(
+                (org.y1000.network.gen.ClientToggleKungFuPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 10;
+      onChanged();
+      return toggleKungFuBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

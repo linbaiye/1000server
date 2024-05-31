@@ -2,7 +2,7 @@ package org.y1000.network;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.repository.PlayerRepository;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.message.ServerMessage;
 import org.y1000.realm.RealmManager;
 
