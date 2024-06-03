@@ -7,7 +7,7 @@ import org.y1000.util.Coordinate;
 import java.util.Set;
 
 @Slf4j
-final class PlayerMoveState extends AbstractPlayerMoveState {
+public final class PlayerMoveState extends AbstractPlayerMoveState {
 
     private static final Set<State> MOVE_STATES = Set.of(
             State.WALK, State.RUN, State.FLY, State.ENFIGHT_WALK

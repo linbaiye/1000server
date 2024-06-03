@@ -17,9 +17,6 @@ public final class FootKungFu extends AbstractKungFu {
         return name;
     }
 
-    @Override
-    public void use(Player player) {
-    }
 
     @Override
     public KungFuType kungFuType() {

@@ -2,6 +2,8 @@ package org.y1000.kungfu.attack;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
+import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.players.PlayerImpl;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.KungFuType;
 

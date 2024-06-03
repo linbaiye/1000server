@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.monster;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.ChangeStateEvent;
+import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
 import org.y1000.message.MoveEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
@@ -39,7 +39,7 @@ public abstract class AbstractMonsterFrozenState extends AbstractMonsterState {
         }
         if (towards == null) {
             monster.changeState(stateForNoPath(monster));
-            monster.emitEvent(ChangeStateEvent.of(monster));
+            monster.emitEvent(CreatureChangeStateEvent.of(monster));
             return;
         }
         if (towards != monster.direction()) {

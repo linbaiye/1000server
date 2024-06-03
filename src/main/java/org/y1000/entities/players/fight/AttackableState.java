@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.CreatureState;
-import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.ChangeStateEvent;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
 import org.y1000.entities.players.PlayerStillState;
@@ -39,7 +37,7 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
     default void attack(PlayerImpl player, PhysicalEntity target) {
         if (!target.attackable()) {
             player.changeState(PlayerStillState.chillOut(player));
-            player.emitEvent(ChangeStateEvent.of(player));
+            //player.emitEvent(ChangeStateEvent.of(player));
             return;
         }
         boolean rangedAttack = player.attackKungFu().isRanged();
@@ -47,7 +45,7 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
             var cdState = rangedAttack ? rangedCooldownState(player, target) :
                     new PlayerMeleeCooldownState(player.cooldown(), target);
             player.changeState(cdState);
-            player.emitEvent(ChangeStateEvent.of(player));
+            //player.emitEvent(ChangeStateEvent.of(player));
             return;
         }
         var dist = player.coordinate().directDistance(target.coordinate());
@@ -57,7 +55,7 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
             fireAttack(player, target, attackState);
         } else {
             player.changeState(PlayerMeleeAttackReadyState.prepareSwing(player, target));
-            player.emitEvent(ChangeStateEvent.of(player));
+            //player.emitEvent(ChangeStateEvent.of(player));
         }
     }
 
@@ -78,9 +76,10 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
         Direction direction = event.direction();
         player.setFightingEntity(target);
         player.disableFootKungFu();
+        player.disableBreathKungFu();
         player.changeDirection(direction);
         if (player.cooldown() > 0) {
-            var cdState = rangedAttack ? rangedCooldownState(player, target) :
+            var cdState = rangedAttack ? PlayerRangedCooldownState.cooldown(player.cooldown(), target, 3) :
                     new PlayerMeleeCooldownState(player.cooldown(), target);
             player.changeState(cdState);
             player.emitEvent(new PlayerAttackEventResponse(player, event, true));
@@ -88,7 +87,7 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
         }
         var dist = player.coordinate().directDistance(target.coordinate());
         if (rangedAttack || dist <= 1) {
-            var attackState = rangedAttack ? rangedAttackState(player, target) :
+            var attackState = rangedAttack ? PlayerRangedAttackState.rangedAttack(player, target) :
                     PlayerMeleeAttackState.meleeAttackState(player, target);
             player.changeState(attackState);
         } else {

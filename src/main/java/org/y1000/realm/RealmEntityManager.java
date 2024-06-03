@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Entity;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.Projectile;
-import org.y1000.entities.creatures.event.ChangeStateEvent;
+import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.CreatureShootEvent;
@@ -156,7 +156,7 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
-    public void visit(ChangeStateEvent event) {
+    public void visit(CreatureChangeStateEvent event) {
         notifyVisiblePlayers(event.source(), event);
     }
 
@@ -251,6 +251,11 @@ final class RealmEntityManager implements EntityEventListener,
         if (event.isIncludeSelf()) {
             sendMessage(event.player(), event);
         }
+    }
+
+    @Override
+    public void visit(PlayerCooldownEvent event) {
+        notifyVisiblePlayersAndSelf(event.player(), event);
     }
 
     private void update(PhysicalEntity entity, int delta) {

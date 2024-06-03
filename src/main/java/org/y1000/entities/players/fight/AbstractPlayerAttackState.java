@@ -6,11 +6,9 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.MovableState;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
-import org.y1000.message.clientevent.BiClientEventVisitor;
-import org.y1000.message.clientevent.ClientMovementEvent;
 
 public abstract class AbstractPlayerAttackState extends AbstractCreateState<PlayerImpl> implements AttackableState,
-        PlayerState, BiClientEventVisitor, MovableState {
+        PlayerState, MovableState {
 
     private final State state;
 
@@ -34,12 +32,5 @@ public abstract class AbstractPlayerAttackState extends AbstractCreateState<Play
     @Override
     public State stateEnum() {
         return state;
-    }
-
-
-
-    @Override
-    public void visit(PlayerImpl player, ClientMovementEvent event) {
-        move(player, event);
     }
 }

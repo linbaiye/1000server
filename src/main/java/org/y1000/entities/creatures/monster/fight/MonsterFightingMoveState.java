@@ -4,7 +4,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.ChangeStateEvent;
+import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterIdleState;
 import org.y1000.entities.creatures.monster.AbstractMonsterMoveState;
 import org.y1000.util.Coordinate;
@@ -29,7 +29,7 @@ public final class MonsterFightingMoveState extends AbstractMonsterMoveState
             monster.attack(target);
         } else {
             monster.changeState(MonsterFightingIdleState.continueHunting(monster, target, getStart()));
-            monster.emitEvent(ChangeStateEvent.of(monster));
+            monster.emitEvent(CreatureChangeStateEvent.of(monster));
         }
     }
 

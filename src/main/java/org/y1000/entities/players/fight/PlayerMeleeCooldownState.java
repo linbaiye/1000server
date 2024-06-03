@@ -19,7 +19,7 @@ public final class PlayerMeleeCooldownState extends AbstractCooldownState {
     }
 
     @Override
-    public PlayerState stateForStopMoving(PlayerImpl player) {
+    public PlayerState stateForStuckMoving(PlayerImpl player) {
         return new PlayerMeleeCooldownState(player.getStateMillis(stateEnum()), getTarget());
     }
 

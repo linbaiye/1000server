@@ -252,6 +252,10 @@ message PlayerStandUpPacket {
   int64 id = 1;
 }
 
+message PlayerCooldownPacket {
+  int64 id = 1;
+}
+
 message Packet {
   oneof TypedPacket {
     PositionPacket positionPacket = 1;
@@ -278,6 +282,7 @@ message Packet {
     ToggleKungFuPacket toggleKungFu = 23;
     PlayerSitDownPacket sitDown = 24;
     PlayerStandUpPacket standUp = 25;
+    PlayerCooldownPacket cooldown = 26;
   }
 }
 

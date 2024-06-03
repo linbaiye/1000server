@@ -38,7 +38,6 @@ public final class PlayerMeleeAttackState extends AbstractPlayerAttackState {
             player.cooldownAttack();
             getTarget().attackedBy(player);
         }
-        player.takeClientEvent().ifPresent(e -> e.accept(player, this));
         if (elapse(delta)) {
             attack(player, getTarget());
         }
@@ -56,7 +55,7 @@ public final class PlayerMeleeAttackState extends AbstractPlayerAttackState {
     }
 
     @Override
-    public PlayerState stateForStopMoving(PlayerImpl player) {
+    public PlayerState stateForStuckMoving(PlayerImpl player) {
         return new PlayerMeleeCooldownState(player.getStateMillis(State.COOLDOWN), getTarget());
     }
 

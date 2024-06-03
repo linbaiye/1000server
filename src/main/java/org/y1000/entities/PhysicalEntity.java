@@ -20,5 +20,8 @@ public interface PhysicalEntity extends Entity {
 
     }
 
+
     void registerOrderedEventListener(EntityEventListener listener);
+
+    void deregisterEventListener(EntityEventListener listener);
 }

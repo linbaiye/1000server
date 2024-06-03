@@ -24,8 +24,6 @@ public abstract class AbstractCooldownState extends AbstractPlayerStillState {
     public void update(PlayerImpl player, int delta) {
         if (elapse(delta)) {
             attack(player, target);
-        } else {
-            player.takeClientEvent().ifPresent(e -> e.accept(player, this));
         }
     }
 }

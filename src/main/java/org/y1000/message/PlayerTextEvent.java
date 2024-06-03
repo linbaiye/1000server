@@ -33,6 +33,12 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         return new PlayerTextEvent(player, "距离过远");
     }
 
+
+    public static PlayerTextEvent unableToAttack(Player player) {
+        return new PlayerTextEvent(player, "无法攻击");
+    }
+
+
     public static PlayerTextEvent inventoryFull(Player player) {
         return new PlayerTextEvent(player, "物品栏已满");
     }

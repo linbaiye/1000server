@@ -72,6 +72,11 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
     }
 
     @Override
+    public void deregisterEventListener(EntityEventListener listener) {
+        eventListeners.remove(listener);
+    }
+
+    @Override
     public long id() {
         return id;
     }

@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import lombok.Builder;
-import lombok.Setter;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.*;
@@ -9,6 +9,7 @@ import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.AttackableState;
+import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.AssistantKungFu;
@@ -30,7 +31,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
-public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player {
+public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player, EntityEventListener {
 
     private Realm realm;
 
@@ -54,7 +55,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private final Map<EquipmentType, Equipment> equippedEquipments;
 
-    @Setter
+    @Getter
     private PhysicalEntity fightingEntity;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
@@ -143,9 +144,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return male;
     }
 
-    public Optional<ClientEvent> takeClientEvent() {
-        return Optional.ofNullable(eventQueue.poll());
-    }
 
     RealmMap realmMap() {
         return realm.map();
@@ -164,6 +162,14 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             log.info("Picked grounded item {}.", groundedItem);
             emitEvent(new PlayerPickedItemEvent(this, slot, inventory.getItem(slot), groundedItem));
         }
+    }
+
+    public void setFightingEntity(PhysicalEntity entity){
+        if (this.fightingEntity != null) {
+            this.fightingEntity.deregisterEventListener(this);
+        }
+        this.fightingEntity = entity;
+        this.fightingEntity.registerOrderedEventListener(this);
     }
 
 
@@ -244,12 +250,17 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (this.attackKungFu.getType() == newAttack.getType()) {
             return;
         }
-        cooldown();
-        state().attackKungFuTypeChanged(this);
+        cooldownAttack();
+        if (isFighting()) {
+            changeState(new PlayerCooldownState(cooldown()));
+        }
     }
 
 
     private void toggleFootKungFu(FootKungFu newKungFu) {
+        if (!state().canUseFootKungFu()) {
+            return;
+        }
         fightingEntity = null;
         if (this.footKungfu != null ){
             if (newKungFu.name().equals(this.footKungfu.name())) {
@@ -260,9 +271,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                 this.footKungfu = newKungFu;
                 emitEvent(PlayerToggleKungFuEvent.enable(this, this.footKungfu));
             }
-            return;
-        }
-        if (!state().canUseFootKungFu()) {
             return;
         }
         if (stateEnum() == State.SIT) {
@@ -329,6 +337,12 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
     }
 
+    private void move(ClientMovementEvent event) {
+        if (state() instanceof MovableState movableState) {
+            movableState.move(this, event);
+        }
+    }
+
     @Override
     public void handleClientEvent(ClientEvent clientEvent) {
         if (clientEvent instanceof ClientDoubleClickSlotEvent doubleClickSlotEvent) {
@@ -347,6 +361,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             standUp();
         } else if (clientEvent instanceof ClientAttackEvent attackEvent) {
             attack(attackEvent);
+        } else if (clientEvent instanceof ClientMovementEvent movementEvent) {
+            move(movementEvent);
         } else {
             eventQueue.add(clientEvent);
         }
@@ -562,5 +578,15 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     @Override
     protected Logger log() {
         return log;
+    }
+
+    @Override
+    public void OnEvent(EntityEvent entityEvent) {
+        if (!entityEvent.source().equals(fightingEntity)) {
+            return;
+        }
+        if (!entityEvent.source().attackable()) {
+            this.fightingEntity = null;
+        }
     }
 }

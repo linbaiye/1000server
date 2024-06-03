@@ -12,7 +12,7 @@ import org.y1000.entities.creatures.AbstractViolentCreature;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.event.ChangeStateEvent;
+import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.monster.fight.MonsterCooldownState;
 import org.y1000.entities.creatures.monster.fight.MonsterFightingIdleState;
@@ -100,14 +100,14 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
 
     private void moveTowardsAttacker(Creature attacker) {
         changeState(MonsterFightingIdleState.hunt(this, attacker));
-        emitEvent(ChangeStateEvent.of(this));
+        emitEvent(CreatureChangeStateEvent.of(this));
     }
 
     public void attack(Creature attacker) {
         if (!attacker.attackable()) {
             log.trace("Not attackable, back to idle.");
             changeState(MonsterWanderingIdleState.reroll(this));
-            emitEvent(ChangeStateEvent.of(this));
+            emitEvent(CreatureChangeStateEvent.of(this));
             return;
         }
         if (attacker.coordinate().directDistance(coordinate()) > 1) {

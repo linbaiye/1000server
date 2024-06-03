@@ -83,4 +83,8 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     default void visit(PlayerStandUpEvent event) {
 
     }
+
+    default void visit(PlayerCooldownEvent event) {
+
+    }
 }

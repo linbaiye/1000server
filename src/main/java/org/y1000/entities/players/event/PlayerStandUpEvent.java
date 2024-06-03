@@ -14,9 +14,9 @@ public class PlayerStandUpEvent extends AbstractPlayerEvent {
         this.includeSelf = false;
     }
 
-    public PlayerStandUpEvent(Player source, boolean toSelf) {
+    public PlayerStandUpEvent(Player source, boolean includeSelf) {
         super(source);
-        this.includeSelf = toSelf;
+        this.includeSelf = includeSelf;
     }
 
     @Override

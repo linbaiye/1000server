@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.monster.fight;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.ChangeStateEvent;
+import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterIdleState;
 import org.y1000.util.Coordinate;
 
@@ -19,7 +19,7 @@ public final class MonsterFightingIdleState extends AbstractMonsterIdleState imp
     @Override
     protected void nextMove(PassiveMonster monster) {
         monster.changeState(MonsterFightingFrozenState.freeze(monster, target, getFrom()));
-        monster.emitEvent(ChangeStateEvent.of(monster));
+        monster.emitEvent(CreatureChangeStateEvent.of(monster));
     }
 
     @Override

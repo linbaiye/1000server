@@ -27,7 +27,6 @@ public final class PlayerRangedAttackState extends AbstractPlayerAttackState {
             player.cooldownAttack();
         }
         elapse(delta);
-        player.takeClientEvent().ifPresent(e -> e.accept(player, this));
         if (elapsedMillis() < getTotalMillis()) {
             return;
         }
@@ -45,7 +44,7 @@ public final class PlayerRangedAttackState extends AbstractPlayerAttackState {
     }
 
     @Override
-    public PlayerState stateForStopMoving(PlayerImpl player) {
+    public PlayerState stateForStuckMoving(PlayerImpl player) {
         return PlayerRangedCooldownState.cooldown(player, getTarget(), counter - 1);
     }
 

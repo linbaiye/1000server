@@ -1,16 +1,16 @@
 package org.y1000.entities.creatures.event;
 
-import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.message.serverevent.EntityEventVisitor;
 import org.y1000.network.gen.ChangeStatePacket;
 import org.y1000.network.gen.Packet;
 
-public final class ChangeStateEvent extends AbstractCreatureEvent {
+public final class CreatureChangeStateEvent extends AbstractCreatureEvent {
 
     private final State state;
 
-    public ChangeStateEvent(Creature source, State state) {
+    public CreatureChangeStateEvent(PassiveMonster source, State state) {
         super(source);
         this.state = state;
     }
@@ -29,7 +29,7 @@ public final class ChangeStateEvent extends AbstractCreatureEvent {
         visitor.visit(this);
     }
 
-    public static ChangeStateEvent of(Creature source) {
-        return new ChangeStateEvent(source, source.stateEnum());
+    public static CreatureChangeStateEvent of(PassiveMonster source) {
+        return new CreatureChangeStateEvent(source, source.stateEnum());
     }
 }
