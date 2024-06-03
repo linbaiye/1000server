@@ -1,20 +1,19 @@
 package org.y1000.kungfu.attack;
 
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.y1000.entities.creatures.State;
 
+@Slf4j
 @SuperBuilder
-public class ThrowKungFu extends AbstractAttackKungFu {
+public class ThrowKungFu extends AbstractRangedKungFu {
 
     @Override
     public State randomAttackState() {
         return State.THROW;
     }
 
-    @Override
-    public boolean hasState(State state) {
-        return state == State.THROW;
-    }
 
     @Override
     public AttackKungFuType getType() {
@@ -30,5 +29,10 @@ public class ThrowKungFu extends AbstractAttackKungFu {
                 .bodyArmor(0)
                 .recovery(100)
                 .build();
+    }
+
+    @Override
+    protected Logger logger() {
+        return log;
     }
 }

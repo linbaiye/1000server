@@ -68,7 +68,8 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
 
     @Override
     public void registerOrderedEventListener(EntityEventListener listener) {
-        eventListeners.add(listener);
+        if (!eventListeners.contains(listener))
+            eventListeners.add(listener);
     }
 
     @Override

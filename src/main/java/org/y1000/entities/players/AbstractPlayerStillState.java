@@ -34,7 +34,7 @@ public abstract class AbstractPlayerStillState extends AbstractCreateState<Playe
     }
 
     @Override
-    public PlayerState stateForStuckMoving(PlayerImpl player) {
+    public PlayerState stateForNotMovable(PlayerImpl player) {
         reset();
         return this;
     }

@@ -20,11 +20,7 @@ public final class PlayerFightWalkState extends AbstractPlayerMoveState {
 
     @Override
     protected void onMoved(PlayerImpl player) {
-        if (player.cooldown() > 0) {
-            player.changeState(new PlayerCooldownState(player.cooldown()));
-        } else {
-            player.changeState(PlayerAttackState.of(player));
-        }
+        player.attackKungFu().attackAgain(player);
     }
 
     public static PlayerFightWalkState walk(PlayerImpl player, Direction towards) {

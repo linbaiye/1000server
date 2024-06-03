@@ -44,7 +44,7 @@ public final class PlayerRangedAttackState extends AbstractPlayerAttackState {
     }
 
     @Override
-    public PlayerState stateForStuckMoving(PlayerImpl player) {
+    public PlayerState stateForNotMovable(PlayerImpl player) {
         return PlayerRangedCooldownState.cooldown(player, getTarget(), counter - 1);
     }
 

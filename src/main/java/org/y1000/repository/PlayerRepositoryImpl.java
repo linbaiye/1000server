@@ -45,6 +45,10 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("长剑"));
         inventory.add(itemFactory.createItem("木弓"));
         inventory.add(itemFactory.createItem("箭", 10000));
+        inventory.add(itemFactory.createItem("太极斧"));
+        inventory.add(itemFactory.createItem("太极神枪"));
+        inventory.add(itemFactory.createItem("三叉戟"));
+        inventory.add(itemFactory.createItem("黄金手套"));
         return inventory;
     }
 
@@ -76,6 +80,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .male(false)
                 .trouser(new Trouser("女子短裙"))
                 .clothing(new Clothing("女子上衣"))
+                //.boot(new Boot("女子长靴"))
                 .boot(new Boot("女子皮鞋"))
                 //.boot(new Boot("女子魔人战靴"))
                 // .hat(new Hat("女子血魔头盔"))

@@ -8,8 +8,9 @@ import org.y1000.entities.*;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.players.event.*;
-import org.y1000.entities.players.fight.AttackableState;
+import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
+import org.y1000.entities.players.fight.PlayerWaitDistanceState;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.AssistantKungFu;
@@ -75,6 +76,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         put(State.BLADE2H, AttackKungFuType.BLADE.above50Millis());
         put(State.BLADE, AttackKungFuType.BLADE.below50Millis());
         put(State.AXE, AttackKungFuType.AXE.below50Millis());
+        put(State.SPEAR, AttackKungFuType.SPEAR.below50Millis());
         put(State.SIT, 750);
         put(State.STANDUP, 750);
         put(State.DIE, 1500);
@@ -165,11 +167,20 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     public void setFightingEntity(PhysicalEntity entity){
+        Objects.requireNonNull(entity, "entity can't be null");
         if (this.fightingEntity != null) {
             this.fightingEntity.deregisterEventListener(this);
         }
         this.fightingEntity = entity;
         this.fightingEntity.registerOrderedEventListener(this);
+    }
+
+
+    public void clearFightingEntity() {
+        if (this.fightingEntity != null) {
+            this.fightingEntity.deregisterEventListener(this);
+        }
+        this.fightingEntity = null;
     }
 
 
@@ -222,9 +233,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             cooldownAttack();
             if (weapon.kungFuType() != AttackKungFuType.QUANFA) {
                 attackKungFu = kungFuBook.findUnnamed(AttackKungFuType.QUANFA);
-                state().attackKungFuTypeChanged(this);
+                changeState(new PlayerCooldownState(cooldown()));
                 st = stateEnum();
-                log.debug("Changed to state {}.", st);
             }
         }
         emitEvent(new PlayerUnequipEvent(this, equipped.equipmentType(), st, attackKungFu.level()));
@@ -261,7 +271,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (!state().canUseFootKungFu()) {
             return;
         }
-        fightingEntity = null;
+        clearFightingEntity();
         if (this.footKungfu != null ){
             if (newKungFu.name().equals(this.footKungfu.name())) {
                 log.debug("Disable bufa.");
@@ -331,10 +341,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
     }
 
-    private void attack(ClientAttackEvent event) {
-        if (state().canAttack() && state() instanceof AttackableState attackableState) {
-            attackableState.handleAttackEvent(this, event);
-        }
+    private void startAttack(ClientAttackEvent event) {
+        realm.findInsight(this, event.entityId())
+                .ifPresent(target -> attackKungFu.startAttack(this,event, target));
     }
 
     private void move(ClientMovementEvent event) {
@@ -360,7 +369,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         } else if (clientEvent instanceof ClientStandUpEvent) {
             standUp();
         } else if (clientEvent instanceof ClientAttackEvent attackEvent) {
-            attack(attackEvent);
+            startAttack(attackEvent);
         } else if (clientEvent instanceof ClientMovementEvent movementEvent) {
             move(movementEvent);
         } else {
@@ -465,9 +474,12 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), weaponToEquip.name()));
             return;
         }
-        this.attackKungFu = kungFuBook.findUnnamed(weaponToEquip.kungFuType());
+        attackKungFu = kungFuBook.findUnnamed(weaponToEquip.kungFuType());
         cooldownAttack();
-        state().attackKungFuTypeChanged(this);
+        if (state() instanceof PlayerAttackState) {
+            changeState(new PlayerCooldownState(cooldown()));
+            emitEvent(new PlayerCooldownEvent(this));
+        }
         emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), weaponToEquip.name(), this.attackKungFu));
     }
 
@@ -585,8 +597,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (!entityEvent.source().equals(fightingEntity)) {
             return;
         }
-        if (!entityEvent.source().attackable()) {
-            this.fightingEntity = null;
+        if (state() instanceof PlayerWaitDistanceState waitDistanceState) {
+            waitDistanceState.onTargetEvent(this);
         }
     }
 }

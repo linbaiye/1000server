@@ -12,10 +12,10 @@ public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl>
 
     private final State afterHurtState;
 
-    public PlayerHurtState(int totalMillis, AfterHurtAction afterHurt, State afterHurtState) {
+    private PlayerHurtState(int totalMillis, AfterHurtAction afterHurt, State returnState) {
         super(totalMillis);
         this.afterHurtAction = afterHurt;
-        this.afterHurtState = afterHurtState;
+        this.afterHurtState = returnState;
     }
 
     @Override
@@ -29,7 +29,7 @@ public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl>
 
     @Override
     public State decideAfterHurtState(PlayerImpl player) {
-        return afterHurtState;
+        return this.afterHurtState;
     }
 
     @Override

@@ -10,7 +10,7 @@ import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
 
 @Slf4j
-public final class PlayerCooldownState extends AbstractCreateState<PlayerImpl> implements PlayerState, MovableState {
+public final class PlayerCooldownState extends AbstractFightingState {
 
     public PlayerCooldownState(int totalMillis) {
         super(totalMillis);
@@ -23,23 +23,13 @@ public final class PlayerCooldownState extends AbstractCreateState<PlayerImpl> i
 
     @Override
     public void update(PlayerImpl player, int delta) {
-        if (!elapse(delta)) {
-            player.changeState(PlayerAttackState.of(player));
+        if (elapse(delta)) {
+            player.attackKungFu().attackAgain(player);
         }
     }
 
     @Override
     public Logger logger() {
         return log;
-    }
-
-    @Override
-    public PlayerState stateForStuckMoving(PlayerImpl player) {
-        return this;
-    }
-
-    @Override
-    public PlayerState stateForMove(PlayerImpl player, Direction direction) {
-        return PlayerFightWalkState.walk(player, direction);
     }
 }

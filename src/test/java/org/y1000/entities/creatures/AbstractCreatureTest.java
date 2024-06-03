@@ -25,6 +25,13 @@ class AbstractCreatureTest {
             receivedEvent = entityEvent;
         }
     }
+    private static class TestingCountEventListener implements EntityEventListener {
+        public int count = 0;
+        @Override
+        public void OnEvent(EntityEvent entityEvent) {
+            count++;
+        }
+    }
 
     @BeforeEach
     void setUp() {
@@ -41,6 +48,11 @@ class AbstractCreatureTest {
         monster1.emitEvent(event);
         assertSame(event, listener1.receivedEvent);
         assertSame(event, listener2.receivedEvent);
+        TestingCountEventListener testingCountEventListener = new TestingCountEventListener();
+        monster1.registerOrderedEventListener(testingCountEventListener);
+        monster1.registerOrderedEventListener(testingCountEventListener);
+        monster1.emitEvent(event);
+        assertEquals(1, testingCountEventListener.count);
     }
 
     @Test

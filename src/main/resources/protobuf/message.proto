@@ -147,7 +147,6 @@ message CharacterChangeWeaponPacket {
   optional string attackKungFuName = 6;
   optional int32 attackKungFuLevel = 7;
   optional int32 attackKungFuType = 8;
-  int32 state = 9;
 }
 
 

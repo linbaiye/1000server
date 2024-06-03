@@ -62,7 +62,6 @@ public final class CharacterChangeWeaponEvent extends AbstractPlayerEvent {
         CharacterChangeWeaponPacket.Builder builder = CharacterChangeWeaponPacket.newBuilder()
                 .setName(weaponName)
                 .setAffectedSlot(affectedSlot)
-                .setState(currentState)
                 ;
         if (slotNewItemName != null) {
             builder.setSlotNewItemName(slotNewItemName)

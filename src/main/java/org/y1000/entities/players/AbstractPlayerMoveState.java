@@ -41,7 +41,6 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
     }
 
 
-
     @Override
     public void afterHurt(PlayerImpl player) {
         player.changeState(rewindState(player));

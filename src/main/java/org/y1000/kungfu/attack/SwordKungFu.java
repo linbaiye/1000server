@@ -1,22 +1,21 @@
 package org.y1000.kungfu.attack;
 
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.y1000.entities.creatures.State;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+@Slf4j
 @SuperBuilder
-public final class SwordKungFu extends AbstractAttackKungFu {
+public final class SwordKungFu extends AbstractMeleeKungFu {
 
     @Override
     public State randomAttackState() {
         return level() < 50 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.SWORD : State.SWORD2H;
     }
 
-    @Override
-    public boolean hasState(State state) {
-        return state == State.SWORD || state == State.SWORD2H;
-    }
 
     @Override
     public AttackKungFuType getType() {
@@ -32,5 +31,10 @@ public final class SwordKungFu extends AbstractAttackKungFu {
                 .attackSpeed(50)
                 .recovery(50)
                 .build();
+    }
+
+    @Override
+    protected Logger logger() {
+        return log;
     }
 }

@@ -16,12 +16,10 @@ public interface MovableState {
     Logger logger();
 
     default PlayerState stateForRewind(PlayerImpl player) {
-        return stateForStuckMoving(player);
+        return stateForNotMovable(player);
     }
 
-    default PlayerState stateForStuckMoving(PlayerImpl player) {
-        return player.state();
-    }
+    PlayerState stateForNotMovable(PlayerImpl player);
 
     PlayerState stateForMove(PlayerImpl player, Direction direction);
 
@@ -30,7 +28,7 @@ public interface MovableState {
         if (!player.realmMap().movable(targetCoordinate)) {
             player.changeDirection(rightClick.direction());
             PlayerState playerState = player.footKungFu().map(footKungFu ->
-                            (PlayerState)PlayerStillState.idle(player)).orElse(stateForStuckMoving(player));
+                            (PlayerState)PlayerStillState.idle(player)).orElse(stateForNotMovable(player));
             player.changeState(playerState);
             player.emitEvent(new InputResponseMessage(rightClick.sequence(), RewindEvent.of(player)));
         } else {
@@ -52,7 +50,7 @@ public interface MovableState {
     }
 
     private void handleRelease(PlayerImpl player, RightMouseRelease release) {
-        player.changeState(stateForStuckMoving(player));
+        player.changeState(stateForNotMovable(player));
         player.emitEvent(new InputResponseMessage(release.sequence(), SetPositionEvent.of(player)));
     }
 

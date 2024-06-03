@@ -55,7 +55,7 @@ public final class PlayerMeleeAttackState extends AbstractPlayerAttackState {
     }
 
     @Override
-    public PlayerState stateForStuckMoving(PlayerImpl player) {
+    public PlayerState stateForNotMovable(PlayerImpl player) {
         return new PlayerMeleeCooldownState(player.getStateMillis(State.COOLDOWN), getTarget());
     }
 

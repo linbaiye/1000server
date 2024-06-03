@@ -1,9 +1,11 @@
 package org.y1000.kungfu.attack;
 
 
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.kungfu.KungFu;
+import org.y1000.message.clientevent.ClientAttackEvent;
 
 public interface AttackKungFu extends KungFu {
 
@@ -17,8 +19,6 @@ public interface AttackKungFu extends KungFu {
 
     State randomAttackState();
 
-    boolean hasState(State state);
-
     AttackKungFuType getType();
 
 
@@ -26,8 +26,9 @@ public interface AttackKungFu extends KungFu {
 
     }
 
+    default void startAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target) {
 
-    default boolean isRanged() {
-        return false;
     }
+
+    boolean isRanged();
 }
