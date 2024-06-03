@@ -6,7 +6,6 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.MovableState;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
-import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.BiClientEventVisitor;
 import org.y1000.message.clientevent.ClientMovementEvent;
 
@@ -28,19 +27,16 @@ public abstract class AbstractPlayerAttackState extends AbstractCreateState<Play
     }
 
     @Override
+    public boolean canSitDown() {
+        return true;
+    }
+
+    @Override
     public State stateEnum() {
         return state;
     }
 
-    @Override
-    public State decideAfterHurtState() {
-        return State.COOLDOWN;
-    }
 
-    @Override
-    public void visit(PlayerImpl player, ClientAttackEvent event) {
-        handleAttackEvent(player, event);
-    }
 
     @Override
     public void visit(PlayerImpl player, ClientMovementEvent event) {

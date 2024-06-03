@@ -2,7 +2,9 @@ package org.y1000.sdb;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -68,31 +70,32 @@ public abstract class AbstractSdbReader {
 
     public void read(String name) {
         try {
-            URL resource = Thread.currentThread().getContextClassLoader().getResource("sdb/" + name);
-            if (resource == null) {
-                throw new NoSuchElementException("cant get db: " + name);
-            }
-            URI uri = resource.toURI();
-            List<String> lines = Files.readAllLines(Paths.get(uri), Charset.forName("GBK"));
-            if (lines.isEmpty()) {
-                throw new NoSuchElementException("Empty sdb: " + name);
-            }
-            String[] header = lines.get(0).split(",");
-            if (header.length == 0) {
-                throw new NoSuchElementException("Empty sdb: " + name);
-            }
-            for (int i = 0; i < header.length; i++) {
-                headerIndex.put(header[i], i);
-            }
-            for (int i = 1; i < lines.size(); i++) {
-                String item = lines.get(i);
-                String[] values = item.split(",");
-                if (values.length == 0 || StringUtils.isBlank(values[0])) {
-                    continue;
+            try (var inputstream = getClass().getResourceAsStream("/sdb/" + name)) {
+                if (inputstream == null) {
+                    throw new NoSuchElementException("Sdb does not exist, " + name);
                 }
-                this.values.put(values[0], values);
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream, Charset.forName("GBK")));
+                List<String> lines = bufferedReader.lines().toList();
+                if (lines.isEmpty()) {
+                    throw new NoSuchElementException("Empty sdb: " + name);
+                }
+                String[] header = lines.get(0).split(",");
+                if (header.length == 0) {
+                    throw new NoSuchElementException("Empty sdb: " + name);
+                }
+                for (int i = 0; i < header.length; i++) {
+                    headerIndex.put(header[i], i);
+                }
+                for (int i = 1; i < lines.size(); i++) {
+                    String item = lines.get(i);
+                    String[] values = item.split(",");
+                    if (values.length == 0 || StringUtils.isBlank(values[0])) {
+                        continue;
+                    }
+                    this.values.put(values[0], values);
+                }
             }
-        } catch (URISyntaxException | IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

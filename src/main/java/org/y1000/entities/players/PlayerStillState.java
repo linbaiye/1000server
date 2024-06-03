@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.kungfu.FootKungFu;
+
 import java.util.Optional;
 
 @Slf4j
@@ -39,17 +40,15 @@ public final class PlayerStillState extends AbstractPlayerStillState {
         return PlayerMoveState.moveBy(player, state, direction);
     }
 
+
     public static PlayerStillState idle(PlayerImpl player) {
         return new PlayerStillState(player.getStateMillis(State.IDLE));
-    }
-
-    public static PlayerStillState sit(PlayerImpl player) {
-        return new PlayerStillState(player.getStateMillis(State.SIT));
     }
 
     public static PlayerStillState chillOut(PlayerImpl player) {
         return new PlayerStillState(player.getStateMillis(State.COOLDOWN), State.COOLDOWN);
     }
+
 
     @Override
     public String toString() {

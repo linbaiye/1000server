@@ -41,11 +41,6 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
     }
 
 
-    @Override
-    public State decideAfterHurtState() {
-        return stateEnum() == State.ENFIGHT_WALK ? State.COOLDOWN : State.IDLE;
-    }
-
 
     @Override
     public void afterHurt(PlayerImpl player) {

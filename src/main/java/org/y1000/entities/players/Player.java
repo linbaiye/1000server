@@ -46,7 +46,7 @@ public interface Player extends ViolentCreature {
 
     Inventory inventory();
 
-    void handleEvent(ClientEvent clientEvent);
+    void handleClientEvent(ClientEvent clientEvent);
 
     Optional<Hat> hat();
 

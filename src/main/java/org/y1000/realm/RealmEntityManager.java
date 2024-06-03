@@ -92,7 +92,11 @@ final class RealmEntityManager implements EntityEventListener,
         Set<PhysicalEntity> affectedEntities = scopeManager.update(source);
         affectedEntities.forEach(entity -> notifyOutsightOrInsight(source, entity));
         notifyVisiblePlayers(source, positionEvent);
+        if (positionEvent.source() instanceof Player player) {
+            sendMessage(player, positionEvent);
+        }
     }
+
 
     @Override
     public void visit(JoinedRealmEvent joinedRealmEvent) {
@@ -153,7 +157,7 @@ final class RealmEntityManager implements EntityEventListener,
 
     @Override
     public void visit(ChangeStateEvent event) {
-        notifyVisiblePlayersAndSelf(event.source(), event);
+        notifyVisiblePlayers(event.source(), event);
     }
 
     @Override
@@ -234,6 +238,19 @@ final class RealmEntityManager implements EntityEventListener,
     @Override
     public void visit(PlayerToggleKungFuEvent event) {
         notifyVisiblePlayersAndSelf(event.player(), event);
+    }
+
+    @Override
+    public void visit(PlayerSitDownEvent event) {
+        notifyVisiblePlayers(event.source(), event);
+    }
+
+    @Override
+    public void visit(PlayerStandUpEvent event) {
+        notifyVisiblePlayers(event.source(), event);
+        if (event.isIncludeSelf()) {
+            sendMessage(event.player(), event);
+        }
     }
 
     private void update(PhysicalEntity entity, int delta) {

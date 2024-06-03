@@ -21,6 +21,15 @@ public class PlayerToggleKungFuEvent extends AbstractPlayerEvent {
         this.level = null;
     }
 
+
+    public static PlayerToggleKungFuEvent enable(Player player, KungFu kungFu) {
+        return new PlayerToggleKungFuEvent(player, kungFu);
+    }
+
+    public static PlayerToggleKungFuEvent disable(Player player, KungFu kungFu) {
+        return new PlayerToggleKungFuEvent(player, kungFu.name());
+    }
+
     @Override
     public void accept(PlayerEventVisitor playerEventHandler) {
         playerEventHandler.visit(this);

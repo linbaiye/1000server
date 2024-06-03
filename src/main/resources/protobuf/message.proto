@@ -24,6 +24,12 @@ message ClickPacket {
   int64 id = 1;
 }
 
+message ClientKeyPressedPacket {
+  int32 key = 1;
+  int32 x = 2;
+  int32 y = 3;
+}
+
 message PickItemPacket {
   int32 id = 1;
 }
@@ -86,6 +92,16 @@ message ClientUnequipPacket {
 message ClientToggleKungFuPacket {
   int32 tab = 1;
   int32 slot = 2;
+}
+
+message ClientSitDownPacket {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+
+message ClientStandUpPacket {
+  bool padding = 1;
 }
 
 
@@ -153,6 +169,8 @@ message ClientPacket {
     PickItemPacket pickItem = 8;
     ClientUnequipPacket unequip = 9;
     ClientToggleKungFuPacket toggleKungFu = 10;
+    ClientSitDownPacket sitDown = 11;
+    ClientStandUpPacket standUp = 12;
   }
 }
 
@@ -226,6 +244,14 @@ message PlayerEquipPacket {
   string equipmentName = 2;
 }
 
+message PlayerSitDownPacket {
+  int64 id = 1;
+}
+
+message PlayerStandUpPacket {
+  int64 id = 1;
+}
+
 message Packet {
   oneof TypedPacket {
     PositionPacket positionPacket = 1;
@@ -250,6 +276,8 @@ message Packet {
     PlayerEquipPacket equip = 21;
     TradeWindowPacket tradeWindow = 22;
     ToggleKungFuPacket toggleKungFu = 23;
+    PlayerSitDownPacket sitDown = 24;
+    PlayerStandUpPacket standUp = 25;
   }
 }
 

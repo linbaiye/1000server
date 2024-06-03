@@ -2,6 +2,7 @@ package org.y1000.kungfu.breath;
 
 import lombok.experimental.SuperBuilder;
 import org.y1000.kungfu.AbstractKungFu;
+import org.y1000.kungfu.KungFuType;
 
 @SuperBuilder
 public class BreathKungFu extends AbstractKungFu {
@@ -12,5 +13,10 @@ public class BreathKungFu extends AbstractKungFu {
                 .level(100)
                 .name("无名心法")
                 .build();
+    }
+
+    @Override
+    public KungFuType kungFuType() {
+        return KungFuType.BREATHING;
     }
 }

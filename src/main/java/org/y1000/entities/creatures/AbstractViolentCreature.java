@@ -1,6 +1,5 @@
 package org.y1000.entities.creatures;
 
-import lombok.experimental.SuperBuilder;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
@@ -9,6 +8,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<C, S>, S extends CreatureState<C>>
@@ -44,14 +44,14 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
         attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
     }
 
-    protected boolean handleAttacked(C creature, int hit, Supplier<S> hurtStateSupplier) {
+    protected boolean handleAttacked(C creature, int hit, Function<State, S> hurtStateSupplier) {
         if (!state().attackable() || randomAvoidance(hit)) {
             return false;
         }
         cooldownRecovery();
         state().moveToHurtCoordinate(creature);
-        State afterHurtState = state().decideAfterHurtState();
-        changeState(hurtStateSupplier.get());
+        State afterHurtState = state().decideAfterHurtState(creature);
+        changeState(hurtStateSupplier.apply(afterHurtState));
         emitEvent(new CreatureHurtEvent(this, afterHurtState));
         return true;
     }

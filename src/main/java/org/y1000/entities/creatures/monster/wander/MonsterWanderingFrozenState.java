@@ -21,7 +21,7 @@ public final class MonsterWanderingFrozenState extends AbstractMonsterFrozenStat
     @Override
     protected void nextMove(PassiveMonster monster) {
         if (!monster.realmMap().movable(destination) || destination.equals(monster.coordinate())) {
-            log.debug("Destination {} not movable, restart.", destination);
+          //  log.debug("Destination {} not movable, restart.", destination);
             monster.changeState(MonsterWanderingIdleState.reroll(monster));
             monster.emitEvent(ChangeStateEvent.of(monster));
         } else {

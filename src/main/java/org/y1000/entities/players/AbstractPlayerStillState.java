@@ -28,10 +28,6 @@ public abstract class AbstractPlayerStillState extends AbstractCreateState<Playe
         return state;
     }
 
-    @Override
-    public void visit(PlayerImpl player, ClientAttackEvent event) {
-        handleAttackEvent(player, event);
-    }
 
     @Override
     public void visit(PlayerImpl player, ClientMovementEvent event) {
@@ -45,6 +41,10 @@ public abstract class AbstractPlayerStillState extends AbstractCreateState<Playe
         player.takeClientEvent().ifPresent(e -> e.accept(player, this));
     }
 
+    @Override
+    public boolean canSitDown() {
+        return true;
+    }
 
     @Override
     public PlayerState stateForStopMoving(PlayerImpl player) {
@@ -52,16 +52,6 @@ public abstract class AbstractPlayerStillState extends AbstractCreateState<Playe
         return this;
     }
 
-    @Override
-    public State decideAfterHurtState() {
-        return stateEnum();
-    }
-
-    @Override
-    public void handleSit(PlayerImpl player) {
-        player.changeState(PlayerStillState.sit(player));
-        player.emitEvent(ChangeStateEvent.of(player));
-    }
 
     @Override
     public void afterHurt(PlayerImpl player) {

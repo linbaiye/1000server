@@ -33,4 +33,9 @@ final class PlayerMoveState extends AbstractPlayerMoveState {
         }
         return new PlayerMoveState(state, player.coordinate(), direction, player.getStateMillis(state));
     }
+
+    public static PlayerMoveState moveBy(PlayerImpl player, Direction direction) {
+        State state = player.footKungFu().map(kf -> kf.canFly() ? State.FLY : State.RUN).orElse(State.WALK);
+        return moveBy(player, state, direction);
+    }
 }

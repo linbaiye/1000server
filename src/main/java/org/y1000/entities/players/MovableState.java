@@ -27,16 +27,22 @@ public interface MovableState {
         Coordinate targetCoordinate = player.coordinate().moveBy(rightClick.direction());
         if (!player.realmMap().movable(targetCoordinate)) {
             player.changeDirection(rightClick.direction());
-            player.changeState(stateForStopMoving(player));
+            PlayerState playerState = player.footKungFu().map(footKungFu ->
+                            (PlayerState)PlayerStillState.idle(player)).orElse(stateForStopMoving(player));
+            player.changeState(playerState);
             player.emitEvent(new InputResponseMessage(rightClick.sequence(), RewindEvent.of(player)));
         } else {
-            player.changeState(stateForMove(player, rightClick.direction()));
+            PlayerState playerState = player.footKungFu().map(footKungFu ->
+                    (PlayerState)PlayerMoveState.moveBy(player, rightClick.direction()))
+                    .orElse(stateForMove(player, rightClick.direction()));
+            player.changeState(playerState);
             player.emitEvent(new InputResponseMessage(rightClick.sequence(), MoveEvent.movingTo(player, rightClick.direction())));
         }
     }
 
     private void rewind(PlayerImpl player, ClientMovementEvent event) {
-        PlayerState newState = stateForRewind(player);
+        PlayerState newState = player.footKungFu().map(footKungFu ->
+                (PlayerState)PlayerStillState.idle(player)).orElse(stateForRewind(player));
         logger().debug("Rewind to state {}, server coordinate {}, client coordinate {} for id {}.", newState.stateEnum(), player.coordinate(), event.happenedAt(), event.moveInput().sequence());
         player.changeState(newState);
         player.clearEventQueue();

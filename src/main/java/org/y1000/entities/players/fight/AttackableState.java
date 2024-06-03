@@ -54,7 +54,7 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
         if (rangedAttack || dist <= 1) {
             var attackState = rangedAttack ? rangedAttackState(player, target) :
                     PlayerMeleeAttackState.meleeAttackState(player, target);
-            fireAttack(player, target, attackState);;
+            fireAttack(player, target, attackState);
         } else {
             player.changeState(PlayerMeleeAttackReadyState.prepareSwing(player, target));
             player.emitEvent(ChangeStateEvent.of(player));
@@ -64,18 +64,37 @@ public interface AttackableState extends CreatureState<PlayerImpl> {
     default void handleAttackEvent(PlayerImpl player, ClientAttackEvent event) {
         Optional<PhysicalEntity> insight = player.getRealm().findInsight(player, event.entityId());
         if (insight.isEmpty()) {
+            logger().warn("Attack out of sight creature from {}", player.id());
             player.emitEvent(new PlayerAttackEventResponse(player, event, false));
             return;
         }
         PhysicalEntity target = insight.get();
         if (!target.attackable()) {
+            logger().warn("Target not attackable {}", target.id());
             player.emitEvent(new PlayerAttackEventResponse(player, event, false));
             return;
         }
-        player.emitEvent(new PlayerAttackEventResponse(player, event, true));
-        Direction direction = player.coordinate().computeDirection(target.coordinate());
+        boolean rangedAttack = player.attackKungFu().isRanged();
+        Direction direction = event.direction();
+        player.setFightingEntity(target);
+        player.disableFootKungFu();
         player.changeDirection(direction);
-        attack(player, target);
+        if (player.cooldown() > 0) {
+            var cdState = rangedAttack ? rangedCooldownState(player, target) :
+                    new PlayerMeleeCooldownState(player.cooldown(), target);
+            player.changeState(cdState);
+            player.emitEvent(new PlayerAttackEventResponse(player, event, true));
+            return;
+        }
+        var dist = player.coordinate().directDistance(target.coordinate());
+        if (rangedAttack || dist <= 1) {
+            var attackState = rangedAttack ? rangedAttackState(player, target) :
+                    PlayerMeleeAttackState.meleeAttackState(player, target);
+            player.changeState(attackState);
+        } else {
+            player.changeState(PlayerMeleeAttackReadyState.prepareSwing(player, target));
+        }
+        player.emitEvent(new PlayerAttackEventResponse(player, event, true));
     }
 }
 

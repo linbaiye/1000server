@@ -21,6 +21,9 @@ public abstract class AbstractCreateState<C extends Creature> implements Creatur
 
     protected boolean elapse(int delta) {
         elapsedMillis += delta;
+        if (elapsedMillis > totalMillis) {
+            elapsedMillis = totalMillis;
+        }
         return elapsedMillis >= totalMillis;
     }
 

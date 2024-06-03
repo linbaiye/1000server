@@ -85,7 +85,7 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
     }
 
     private void attackedBy(ViolentCreature attacker, int hit) {
-        handleAttacked(this, hit, () ->  new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt));
+        handleAttacked(this, hit, (s) ->  new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt));
     }
 
     @Override
@@ -176,4 +176,5 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
     protected Logger log() {
         return log;
     }
+
 }

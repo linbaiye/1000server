@@ -2,6 +2,7 @@ package org.y1000.kungfu.attack;
 
 import lombok.experimental.SuperBuilder;
 import org.y1000.entities.creatures.State;
+import org.y1000.kungfu.KungFuType;
 
 @SuperBuilder
 public final class AxeKungFu extends AbstractAttackKungFu {

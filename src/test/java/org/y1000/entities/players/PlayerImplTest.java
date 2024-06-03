@@ -52,7 +52,7 @@ class PlayerImplTest implements EntityEventListener {
         int slot = inventory.add(new Hat("test"));
         player = builder().inventory(inventory).build();
         player.registerOrderedEventListener(this);
-        player.handleEvent(new ClientDoubleClickSlotEvent(slot));
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         PlayerEquipEvent first = (PlayerEquipEvent)events.poll();
         assertEquals(first.player(), player);
         assertEquals(first.toPacket().getEquip().getEquipmentName(), "test");

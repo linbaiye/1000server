@@ -48,10 +48,10 @@ public final class KungFuBook {
     }
 
     public Optional<KungFu> findKungFu(int page, int slot) {
-        Validate.isTrue(page > 1, "Page must be greater than 0");
-        Validate.isTrue(slot > 1, "Slot must be greater than 0");
+        Validate.isTrue(page > 0, "Page must be greater than 0");
+        Validate.isTrue(slot > 0, "Slot must be greater than 0");
         if (page == 1) {
-            Optional.ofNullable(unnamed.get(slot));
+            return Optional.ofNullable(unnamed.get(slot));
         }
         return Optional.empty();
     }

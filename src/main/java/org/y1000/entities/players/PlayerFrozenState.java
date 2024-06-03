@@ -20,6 +20,12 @@ final class PlayerFrozenState implements PlayerState {
     public boolean attackable() {
         return false;
     }
+
+    @Override
+    public boolean canAttack() {
+        return false;
+    }
+
     @Override
     public void update(PlayerImpl player, int delta) {
 

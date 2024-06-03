@@ -3,6 +3,7 @@ package org.y1000.kungfu.attack;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.y1000.kungfu.AbstractKungFu;
+import org.y1000.kungfu.KungFuType;
 
 @Getter
 @SuperBuilder
@@ -24,4 +25,9 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     private int avoidance;
 
+
+    @Override
+    public KungFuType kungFuType() {
+        return getType().toKungFuType();
+    }
 }

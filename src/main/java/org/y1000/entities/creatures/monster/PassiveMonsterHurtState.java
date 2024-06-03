@@ -3,7 +3,6 @@ package org.y1000.entities.creatures.monster;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.AbstractCreatureHurtState;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.State;
 
 @Slf4j
 public final class PassiveMonsterHurtState extends AbstractCreatureHurtState<PassiveMonster>

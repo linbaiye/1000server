@@ -1,6 +1,7 @@
 package org.y1000.kungfu;
 
 import lombok.experimental.SuperBuilder;
+import org.y1000.entities.players.Player;
 
 @SuperBuilder
 public final class FootKungFu extends AbstractKungFu {
@@ -14,6 +15,10 @@ public final class FootKungFu extends AbstractKungFu {
     @Override
     public String name() {
         return name;
+    }
+
+    @Override
+    public void use(Player player) {
     }
 
     @Override

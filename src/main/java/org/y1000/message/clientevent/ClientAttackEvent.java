@@ -11,8 +11,4 @@ public record ClientAttackEvent(long sequence, long entityId, State attackState,
         return new ClientAttackEvent(packet.getSequence(), packet.getTargetId(), State.valueOf(packet.getState()), Direction.fromValue(packet.getDirection()));
     }
 
-    @Override
-    public void accept(PlayerImpl player, BiClientEventVisitor handler) {
-        handler.visit(player, this);
-    }
 }

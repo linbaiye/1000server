@@ -10,9 +10,12 @@ public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl>
 
     private final AfterHurtAction afterHurtAction;
 
-    public PlayerHurtState(int totalMillis, AfterHurtAction afterHurt) {
+    private final State afterHurtState;
+
+    public PlayerHurtState(int totalMillis, AfterHurtAction afterHurt, State afterHurtState) {
         super(totalMillis);
         this.afterHurtAction = afterHurt;
+        this.afterHurtState = afterHurtState;
     }
 
     @Override
@@ -20,8 +23,13 @@ public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl>
         afterHurtAction.apply(player);
     }
 
-    public static PlayerHurtState hurt(PlayerImpl player) {
-        return new PlayerHurtState(player.getStateMillis(State.HURT), player.state()::afterHurt);
+    public static PlayerHurtState hurt(PlayerImpl player, State afterHurt) {
+        return new PlayerHurtState(player.getStateMillis(State.HURT), player.state()::afterHurt, afterHurt);
+    }
+
+    @Override
+    public State decideAfterHurtState(PlayerImpl player) {
+        return afterHurtState;
     }
 
     @Override

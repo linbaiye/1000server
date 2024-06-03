@@ -59,7 +59,7 @@ final class RealmImpl implements Runnable, Realm {
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
                 disconnectedEvent.player().leaveRealm();
             } else if (event instanceof PlayerDataEvent dataEvent) {
-                dataEvent.player().handleEvent(dataEvent.data());
+                dataEvent.player().handleClientEvent(dataEvent.data());
             }
         } catch (Exception e) {
             log.error("Exception when handling event .", e);

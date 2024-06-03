@@ -1,8 +1,6 @@
 package org.y1000.entities.creatures;
 
 
-import org.y1000.message.clientevent.ClientEvent;
-
 public interface CreatureState<C extends Creature> {
     State stateEnum();
 
@@ -18,11 +16,7 @@ public interface CreatureState<C extends Creature> {
 
     }
 
-    default boolean canHandle(ClientEvent event) {
-        return true;
-    }
-
-    default State decideAfterHurtState() {
+    default State decideAfterHurtState(C creature) {
         return State.IDLE;
     }
 }

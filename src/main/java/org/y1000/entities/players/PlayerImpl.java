@@ -1,17 +1,15 @@
 package org.y1000.entities.players;
 
 import lombok.Builder;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.PhysicalEntity;
-import org.y1000.entities.Projectile;
+import org.y1000.entities.*;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
-import org.y1000.entities.GroundedItem;
-import org.y1000.entities.players.event.PlayerToggleKungFuEvent;
-import org.y1000.entities.players.event.PlayerUnequipEvent;
+import org.y1000.entities.players.event.*;
+import org.y1000.entities.players.fight.AttackableState;
 import org.y1000.item.*;
-import org.y1000.entities.players.event.CharacterChangeWeaponEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.KungFu;
@@ -22,7 +20,6 @@ import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.*;
-import org.y1000.entities.Direction;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.message.*;
 import org.y1000.realm.Realm;
@@ -57,6 +54,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private final Map<EquipmentType, Equipment> equippedEquipments;
 
+    @Setter
+    private PhysicalEntity fightingEntity;
+
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
         put(State.WALK, 840);
@@ -68,11 +68,16 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         put(State.HURT, 280);
         put(State.ENFIGHT_WALK, 840);
         put(State.BOW, AttackKungFuType.BOW.above50Millis());
+        put(State.THROW, AttackKungFuType.THROW.above50Millis());
         put(State.SWORD2H, AttackKungFuType.SWORD.above50Millis());
         put(State.SWORD, AttackKungFuType.SWORD.below50Millis());
         put(State.BLADE2H, AttackKungFuType.BLADE.above50Millis());
         put(State.BLADE, AttackKungFuType.BLADE.below50Millis());
         put(State.AXE, AttackKungFuType.AXE.below50Millis());
+        put(State.SIT, 750);
+        put(State.STANDUP, 750);
+        put(State.DIE, 1500);
+        put(State.HELLO, 750);
     }};
 
     @Builder
@@ -182,6 +187,19 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
 
+    public boolean isFighting() {
+        return fightingEntity != null;
+    }
+
+    public void disableFootKungFu() {
+        this.footKungfu = null;
+    }
+
+    public void disableBreathKungFu() {
+        this.breathKungFu = null;
+    }
+
+
     private void unequip(EquipmentType type) {
         log.debug("Received unequip type {}.", type);
         if (inventory.isFull()) {
@@ -228,22 +246,42 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
         cooldown();
         state().attackKungFuTypeChanged(this);
-        State state = null;
     }
 
 
     private void toggleFootKungFu(FootKungFu newKungFu) {
-        if (this.footKungfu != null && newKungFu.name().equals(this.footKungfu.name())) {
-            this.footKungfu = null;
-            emitEvent(new PlayerToggleKungFuEvent(this, newKungFu.name()));
-        } else {
-            this.footKungfu = newKungFu;
-            this.breathKungFu = null;
-            emitEvent(new PlayerToggleKungFuEvent(this, this.footKungfu));
+        fightingEntity = null;
+        if (this.footKungfu != null ){
+            if (newKungFu.name().equals(this.footKungfu.name())) {
+                log.debug("Disable bufa.");
+                emitEvent(PlayerToggleKungFuEvent.disable(this, this.footKungfu));
+                this.footKungfu = null;
+            } else {
+                this.footKungfu = newKungFu;
+                emitEvent(PlayerToggleKungFuEvent.enable(this, this.footKungfu));
+            }
+            return;
         }
+        if (!state().canUseFootKungFu()) {
+            return;
+        }
+        if (stateEnum() == State.SIT) {
+            changeState(new PlayerStandUpState(this));
+            emitEvent(new PlayerStandUpEvent(this, true));
+        } else if (stateEnum() != State.WALK && stateEnum() != State.ENFIGHT_WALK) {
+            log.debug("Enable bufa.");
+            changeState(PlayerStillState.idle(this));
+            emitEvent(new SetPositionEvent(this, direction(), coordinate()));
+        }
+        this.breathKungFu = null;
+        this.footKungfu = newKungFu;
+        emitEvent(new PlayerToggleKungFuEvent(this, this.footKungfu));
     }
 
     private void useKungFu(KungFu kungFu) {
+        if (stateEnum() == State.DIE) {
+            return;
+        }
         if (kungFu instanceof FootKungFu newKungFu) {
             toggleFootKungFu(newKungFu);
         } else if (kungFu instanceof ProtectKungFu newProtectKungFu) {
@@ -267,9 +305,32 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
     }
 
+    private void sitDown() {
+        if (!state().canSitDown()) {
+            log.debug("Cant sit down in state {}.", state().stateEnum());
+            return;
+        }
+        footKungfu = null;
+        changeState(PlayerSitDownState.sit(this));
+        emitEvent(new PlayerSitDownEvent(this));
+    }
+
+    private void standUp() {
+        if (state().canStandUp()) {
+            breathKungFu = null;
+            changeState(new PlayerStandUpState(this));
+            emitEvent(new PlayerStandUpEvent(this));
+        }
+    }
+
+    private void attack(ClientAttackEvent event) {
+        if (state().canAttack() && state() instanceof AttackableState attackableState) {
+            attackableState.handleAttackEvent(this, event);
+        }
+    }
 
     @Override
-    public void handleEvent(ClientEvent clientEvent) {
+    public void handleClientEvent(ClientEvent clientEvent) {
         if (clientEvent instanceof ClientDoubleClickSlotEvent doubleClickSlotEvent) {
             handleInventorySlotDoubleClick(doubleClickSlotEvent.sourceSlot());
         } else if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
@@ -280,6 +341,12 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             unequip(unequipEvent.type());
         } else if (clientEvent instanceof ClientToggleKungFuEvent useKungFuEvent) {
             kungFuBook().findKungFu(useKungFuEvent.tab(), useKungFuEvent.slot()).ifPresent(this::useKungFu);
+        } else if (clientEvent instanceof ClientSitDownEvent) {
+            sitDown();
+        } else if (clientEvent instanceof ClientStandUpEvent) {
+            standUp();
+        } else if (clientEvent instanceof ClientAttackEvent attackEvent) {
+            attack(attackEvent);
         } else {
             eventQueue.add(clientEvent);
         }
@@ -345,7 +412,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     private void attackedBy(int hit) {
-        if (handleAttacked(this, hit, () -> PlayerHurtState.hurt(this))) {
+        if (handleAttacked(this, hit, (afterHurt) -> PlayerHurtState.hurt(this, afterHurt))) {
             eventQueue.clear();
         }
     }

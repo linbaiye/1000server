@@ -1,5 +1,6 @@
 package org.y1000.message.serverevent;
 
+import org.y1000.entities.players.PlayerStandUpState;
 import org.y1000.entities.players.event.*;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.InputResponseMessage;
@@ -72,6 +73,14 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     }
 
     default void visit(PlayerToggleKungFuEvent event) {
+
+    }
+
+    default void visit(PlayerSitDownEvent event) {
+
+    }
+
+    default void visit(PlayerStandUpEvent event) {
 
     }
 }

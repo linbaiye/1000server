@@ -3,6 +3,7 @@ package org.y1000.realm;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.Server;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.util.Coordinate;
 
@@ -113,11 +114,10 @@ final class RealmMapV2Impl implements RealmMap {
 
     public static Optional<RealmMap> read(String name) {
         String mapName = name.endsWith(".map") ? name : name + ".map";
-        if (!mapName.startsWith("maps/")) {
-            mapName = "maps/" + mapName;
+        if (!mapName.startsWith("/maps/")) {
+            mapName = "/maps/" + mapName;
         }
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        try (InputStream is = classloader.getResourceAsStream(mapName)) {
+        try (InputStream is = Server.class.getResourceAsStream(mapName)) {
             if (is == null) {
                 log.error("Map {} does not exist.", mapName);
                 return Optional.empty();

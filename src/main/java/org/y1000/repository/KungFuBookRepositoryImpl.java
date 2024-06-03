@@ -115,6 +115,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             case FOOT -> createFootKungFu(name);
             case BREATHING -> breathKungFu(name);
             case PROTECTION -> protectKungFu(name);
+            case ASSISTANT ->  AssistantKungFu.builder().name(name).level(100).build();
         };
     }
 
