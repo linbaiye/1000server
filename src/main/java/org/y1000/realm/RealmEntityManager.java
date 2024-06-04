@@ -254,6 +254,11 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
+    public void visit(PlayerUseWeaponEvent event) {
+        notifyVisiblePlayersAndSelf(event.player(), event);
+    }
+
+    @Override
     public void visit(PlayerCooldownEvent event) {
         notifyVisiblePlayersAndSelf(event.player(), event);
     }

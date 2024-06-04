@@ -35,7 +35,7 @@ public final class MonsterFightingMoveState extends AbstractMonsterMoveState
 
     @Override
     public Creature currentTarget() {
-        return null;
+        return target;
     }
 
     @Override

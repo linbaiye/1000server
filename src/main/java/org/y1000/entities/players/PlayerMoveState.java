@@ -38,4 +38,9 @@ public final class PlayerMoveState extends AbstractPlayerMoveState {
         State state = player.footKungFu().map(kf -> kf.canFly() ? State.FLY : State.RUN).orElse(State.WALK);
         return moveBy(player, state, direction);
     }
+
+    @Override
+    public State decideAfterHurtState() {
+        return stateEnum() == State.ENFIGHT_WALK ? State.COOLDOWN: State.IDLE;
+    }
 }

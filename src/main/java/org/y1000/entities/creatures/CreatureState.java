@@ -6,6 +6,8 @@ public interface CreatureState<C extends Creature> {
 
     int elapsedMillis();
 
+    int totalMillis();
+
     void update(C c, int delta);
 
     default boolean attackable() {
@@ -16,7 +18,7 @@ public interface CreatureState<C extends Creature> {
 
     }
 
-    default State decideAfterHurtState(C creature) {
+    default State decideAfterHurtState() {
         return State.IDLE;
     }
 }

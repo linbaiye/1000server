@@ -15,55 +15,45 @@ public interface MovableState {
 
     Logger logger();
 
-    default PlayerState stateForRewind(PlayerImpl player) {
-        return stateForNotMovable(player);
-    }
+    PlayerState rewindState(PlayerImpl player);
 
-    PlayerState stateForNotMovable(PlayerImpl player);
+    PlayerState moveState(PlayerImpl player, Direction direction);
 
-    PlayerState stateForMove(PlayerImpl player, Direction direction);
 
     private void handleRightClick(PlayerImpl player, AbstractRightClick rightClick) {
         Coordinate targetCoordinate = player.coordinate().moveBy(rightClick.direction());
         if (!player.realmMap().movable(targetCoordinate)) {
+            logger().debug("Destination conflicted, rewind player {} back to {}", player.id(), player.coordinate());
             player.changeDirection(rightClick.direction());
-            PlayerState playerState = player.footKungFu().map(footKungFu ->
-                            (PlayerState)PlayerStillState.idle(player)).orElse(stateForNotMovable(player));
-            player.changeState(playerState);
-            player.emitEvent(new InputResponseMessage(rightClick.sequence(), RewindEvent.of(player)));
+            rewind(player, rightClick.sequence());
         } else {
             PlayerState playerState = player.footKungFu().map(footKungFu ->
                     (PlayerState)PlayerMoveState.moveBy(player, rightClick.direction()))
-                    .orElse(stateForMove(player, rightClick.direction()));
+                    .orElse(moveState(player, rightClick.direction()));
             player.changeState(playerState);
             player.emitEvent(new InputResponseMessage(rightClick.sequence(), MoveEvent.movingTo(player, rightClick.direction())));
         }
     }
 
-    private void rewind(PlayerImpl player, ClientMovementEvent event) {
+    private void rewind(PlayerImpl player, long seq) {
         PlayerState newState = player.footKungFu().map(footKungFu ->
-                (PlayerState)PlayerStillState.idle(player)).orElse(stateForRewind(player));
-        logger().debug("Rewind to state {}, server coordinate {}, client coordinate {} for id {}.", newState.stateEnum(), player.coordinate(), event.happenedAt(), event.moveInput().sequence());
+                (PlayerState)PlayerStillState.idle(player)).orElse(rewindState(player));
         player.changeState(newState);
-        player.clearEventQueue();
-        player.emitEvent(new InputResponseMessage(event.moveInput().sequence(), RewindEvent.of(player)));
+        player.emitEvent(new InputResponseMessage(seq, RewindEvent.of(player)));
     }
 
-    private void handleRelease(PlayerImpl player, RightMouseRelease release) {
-        player.changeState(stateForNotMovable(player));
-        player.emitEvent(new InputResponseMessage(release.sequence(), SetPositionEvent.of(player)));
-    }
 
     default void move(PlayerImpl player, ClientMovementEvent event) {
         logger().debug("Handling input at state [{}, {}], id {}.", player.state(), player.stateEnum(), event.moveInput().sequence());
         if (!event.happenedAt().equals(player.coordinate())) {
-            rewind(player, event);
+            logger().debug("Rewind because of coordinate mismatch, client: {}, server: {}.", event.happenedAt(), player.coordinate());
+            rewind(player, event.moveInput().sequence());
             return;
         }
         if (event.moveInput() instanceof AbstractRightClick rightClick) {
             handleRightClick(player, rightClick);
         } else if (event.moveInput() instanceof RightMouseRelease release) {
-            handleRelease(player, release);
+            player.emitEvent(new InputResponseMessage(release.sequence(), SetPositionEvent.of(player)));
         }
     }
 }

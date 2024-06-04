@@ -28,7 +28,7 @@ public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl>
     }
 
     @Override
-    public State decideAfterHurtState(PlayerImpl player) {
+    public State decideAfterHurtState() {
         return this.afterHurtState;
     }
 

@@ -1,13 +1,11 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.players.fight.AttackableState;
 
 @Slf4j
-public class PlayerSitDownState extends AbstractCreateState<PlayerImpl> implements PlayerState, AttackableState {
+public final class PlayerSitDownState extends AbstractCreateState<PlayerImpl> implements PlayerState {
 
     public PlayerSitDownState(int totalMillis) {
         super(totalMillis);
@@ -20,7 +18,7 @@ public class PlayerSitDownState extends AbstractCreateState<PlayerImpl> implemen
 
     @Override
     public void update(PlayerImpl player, int delta) {
-        if (elapsedMillis() >= getTotalMillis()) {
+        if (elapsedMillis() >= totalMillis()) {
             return;
         }
         elapse(delta);
@@ -29,12 +27,12 @@ public class PlayerSitDownState extends AbstractCreateState<PlayerImpl> implemen
 
     @Override
     public boolean canStandUp() {
-        return elapsedMillis() >= getTotalMillis();
+        return elapsedMillis() >= totalMillis();
     }
 
     @Override
     public boolean canUseFootKungFu() {
-        return elapsedMillis() >= getTotalMillis();
+        return elapsedMillis() >= totalMillis();
     }
 
     @Override
@@ -48,12 +46,7 @@ public class PlayerSitDownState extends AbstractCreateState<PlayerImpl> implemen
     }
 
     @Override
-    public State decideAfterHurtState(PlayerImpl player) {
+    public State decideAfterHurtState() {
         return State.SIT;
-    }
-
-    @Override
-    public Logger logger() {
-        return log;
     }
 }

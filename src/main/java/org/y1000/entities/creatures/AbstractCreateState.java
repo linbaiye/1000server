@@ -27,7 +27,7 @@ public abstract class AbstractCreateState<C extends Creature> implements Creatur
         return elapsedMillis >= totalMillis;
     }
 
-    protected int getTotalMillis() {
+    public int totalMillis() {
         return totalMillis;
     }
 }

@@ -29,14 +29,11 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
 public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player, EntityEventListener {
 
     private Realm realm;
-
-    private final Queue<ClientEvent> eventQueue;
 
     private AttackKungFu attackKungFu;
 
@@ -124,7 +121,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         equippedEquipments.put(EquipmentType.TROUSER, trouser);
         equippedEquipments.put(EquipmentType.HAIR, hair);
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
-        eventQueue = new ConcurrentLinkedQueue<>();
     }
 
     private void initProtectKungFu(ProtectKungFu protectKungFu) {
@@ -204,7 +200,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
 
-    public boolean isFighting() {
+    public boolean hasFightingEntity() {
         return fightingEntity != null;
     }
 
@@ -256,12 +252,20 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (this.attackKungFu.name().equals(newAttack.name())) {
             return;
         }
-        this.attackKungFu = newAttack;
-        if (this.attackKungFu.getType() == newAttack.getType()) {
-            return;
+        Equipment equipment = equippedEquipments.get(EquipmentType.WEAPON);
+        if (equipment instanceof Weapon equippedWeapon &&
+                equippedWeapon.kungFuType() == newAttack.getType()) {
+            Weapon weapon = inventory.findWeapon(newAttack.getType()).orElse(null);
+            if (weapon == null) {
+                emitEvent(PlayerTextEvent.noWeapon(this));
+                return;
+            } else {
+            }
         }
+        emitEvent(PlayerToggleKungFuEvent.enable(this, newAttack));
+        this.attackKungFu = newAttack;
         cooldownAttack();
-        if (isFighting()) {
+        if (hasFightingEntity()) {
             changeState(new PlayerCooldownState(cooldown()));
         }
     }
@@ -329,6 +333,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             return;
         }
         footKungfu = null;
+        clearFightingEntity();
         changeState(PlayerSitDownState.sit(this));
         emitEvent(new PlayerSitDownEvent(this));
     }
@@ -342,6 +347,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     private void startAttack(ClientAttackEvent event) {
+        if (stateEnum() == State.DIE) {
+            return;
+        }
         realm.findInsight(this, event.entityId())
                 .ifPresent(target -> attackKungFu.startAttack(this,event, target));
     }
@@ -372,8 +380,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             startAttack(attackEvent);
         } else if (clientEvent instanceof ClientMovementEvent movementEvent) {
             move(movementEvent);
-        } else {
-            eventQueue.add(clientEvent);
         }
     }
 
@@ -431,15 +437,13 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
         this.realm = realm;
         realmMap().occupy(this);
-        changeState(new PlayerStillState(getStateMillis(State.IDLE)));
+        changeState(PlayerStillState.idle(this));
         changeDirection(Direction.DOWN);
         emitEvent(new JoinedRealmEvent(this, coordinate(), inventory));
     }
 
     private void attackedBy(int hit) {
-        if (handleAttacked(this, hit, (afterHurt) -> PlayerHurtState.hurt(this, afterHurt))) {
-            eventQueue.clear();
-        }
+        handleAttacked(this, hit, (afterHurt) -> PlayerHurtState.hurt(this, afterHurt));
     }
 
     @Override
@@ -468,19 +472,25 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private void equipWeaponFromSlot(int slot, Weapon weaponToEquip) {
         inventory.remove(slot);
-        weapon().ifPresent(weapon -> inventory.put(slot, weapon));
+        emitEvent(UpdateInventorySlotEvent.remove(this, slot));
+        weapon().ifPresent(equippedWeapon -> {
+            inventory.put(slot, equippedWeapon);
+            emitEvent(new UpdateInventorySlotEvent(this, slot, equippedWeapon));
+            log.debug("Put equipped weapon {} back to inventory.", equippedWeapon.name());
+        });
         equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
+        emitEvent(new PlayerEquipEvent(this, weaponToEquip.name()));
+        log.debug("Equipped weapon {}.", weaponToEquip.name());
         if (attackKungFu.getType() == weaponToEquip.kungFuType()) {
-            emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), weaponToEquip.name()));
             return;
         }
-        attackKungFu = kungFuBook.findUnnamed(weaponToEquip.kungFuType());
+        this.attackKungFu = kungFuBook.findUnnamed(weaponToEquip.kungFuType());
         cooldownAttack();
-        if (state() instanceof PlayerAttackState) {
+        if (hasFightingEntity()) {
             changeState(new PlayerCooldownState(cooldown()));
             emitEvent(new PlayerCooldownEvent(this));
         }
-        emitEvent(new CharacterChangeWeaponEvent(this, slot, inventory.getItem(slot), weaponToEquip.name(), this.attackKungFu));
+        emitEvent(PlayerToggleKungFuEvent.enable(this, attackKungFu));
     }
 
     private void equip(int slotId, AbstractEquipment equipmentInSlot) {
@@ -499,8 +509,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public int attackSpeed() {
-        int kungfuSpeed = attackKungFu != null ? attackKungFu.getAttackSpeed() : 0;
-        return kungfuSpeed + 70;
+        return 70 + attackKungFu.getAttackSpeed();
     }
 
     public Optional<Weapon> weapon() {
@@ -517,10 +526,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     public void update(int delta) {
         cooldown(delta);
         state().update(this, delta);
-    }
-
-    public void clearEventQueue() {
-        eventQueue.clear();
     }
 
     public int recovery() {
@@ -599,6 +604,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
         if (state() instanceof PlayerWaitDistanceState waitDistanceState) {
             waitDistanceState.onTargetEvent(this);
+        }
+        if (!canAttack(entityEvent.source())) {
+            clearFightingEntity();
         }
     }
 }

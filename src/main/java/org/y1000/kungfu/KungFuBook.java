@@ -32,8 +32,6 @@ public final class KungFuBook {
     }
 
 
-
-
     public AttackKungFu findUnnamed(AttackKungFuType type) {
         return findUnnamed(kungFu -> kungFu.getType() == type, AttackKungFu.class);
     }
@@ -54,28 +52,5 @@ public final class KungFuBook {
             return Optional.ofNullable(unnamed.get(slot));
         }
         return Optional.empty();
-    }
-
-    public static KungFuBook newInstance() {
-        Map<Integer, KungFu> map = new HashMap<>();
-        var fist = QuanfaKungFu.unnamed();
-        map.put(1, fist);
-        var sword = SwordKungFu.unnamed();
-        map.put(2, sword);
-        var blade = BladeKungFu.unnamed();
-        map.put(3, blade);
-        var axe = AxeKungFu.unnamed();
-        map.put(4, axe);
-        var spear = SpearKungFu.unnamed();
-        map.put(5, spear);
-        var bow = BowKungFu.unnamed();
-        map.put(6, bow);
-        var thr = ThrowKungFu.unnamed();
-        map.put(7, thr);
-        var bufa = FootKungFu.unnamed();
-        map.put(8, bufa);
-        map.put(9, BreathKungFu.unnamed());
-        map.put(10, ProtectKungFu.unnamed());
-        return new KungFuBook(map);
     }
 }

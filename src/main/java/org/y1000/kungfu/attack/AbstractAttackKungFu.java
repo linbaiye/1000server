@@ -47,7 +47,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         }
         if (!hasEnoughResources(player)) {
             logger().debug("Not enough resource.");
-            player.changeState(new PlayerWaitResourceState(player.getStateMillis(State.COOLDOWN)));
+            player.changeState(new PlayerCooldownState(player.getStateMillis(State.COOLDOWN)));
             player.emitEvent(PlayerTextEvent.unableToAttack(player));
             return false;
         }
@@ -58,14 +58,16 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         useResources(player);
         player.changeDirection(direction);
         player.cooldownAttack();
-        PlayerAttackState newState = PlayerAttackState.of(player);
-        player.changeState(newState);
+        if (!isRanged()) {
+            player.getFightingEntity().attackedBy(player);
+        }
+        player.changeState(PlayerAttackState.of(player));
         return true;
     }
 
     @Override
     public void attackAgain(PlayerImpl player) {
-        if (player.getFightingEntity() == null || !player.getFightingEntity().attackable()) {
+        if (player.getFightingEntity() == null || !player.canAttack(player.getFightingEntity())) {
             player.changeState(PlayerStillState.chillOut(player));
             return;
         }
@@ -77,7 +79,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     @Override
     public void startAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target) {
-        if (!target.attackable()) {
+        if (!player.canAttack(target)) {
             player.emitEvent(new PlayerAttackEventResponse(player, event, false));
             return;
         }

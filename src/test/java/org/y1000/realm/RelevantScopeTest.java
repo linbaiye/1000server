@@ -3,54 +3,60 @@ package org.y1000.realm;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractEntityTest;
 import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.util.Coordinate;
 
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 class RelevantScopeTest extends AbstractEntityTest {
 
+
+    private PassiveMonster createMonster(int x, int y) {
+        return createMonster(Coordinate.xy(x, y));
+    }
+
     @Test
     void outOfScope() {
-        PhysicalEntity entity = mockEntity(new Coordinate(0, 0));
-        RelevantScope relevantScope = new RelevantScope(entity, 1, 1);
-        assertTrue(relevantScope.outOfScope(mockEntity(new Coordinate(2, 2))));
-        assertFalse(relevantScope.outOfScope(mockEntity(new Coordinate(1, 1))));
+        PhysicalEntity entity = createMonster(0, 0);
+        RelevantScope relevantScope = new RelevantScope(entity);
+        PhysicalEntity another = createMonster(16, 16);
+        assertTrue(relevantScope.outOfScope(another));
+        another = createMonster(15, 15);
+        assertFalse(relevantScope.outOfScope(another));
     }
 
     @Test
     void addIfVisible() {
-        PhysicalEntity entity = mockEntity(new Coordinate(0, 0));
-        RelevantScope relevantScope = new RelevantScope(entity, 1, 1);
-        assertFalse(relevantScope.addIfVisible(mockEntity(new Coordinate(2, 2))));
-        PhysicalEntity another = mockEntity(new Coordinate(1, 1));
+        PhysicalEntity entity = createMonster(0, 0);
+        RelevantScope relevantScope = new RelevantScope(entity);
+        assertFalse(relevantScope.addIfVisible(createMonster(new Coordinate(16, 16))));
+        PhysicalEntity another = createMonster(new Coordinate(15, 15));
         assertTrue(relevantScope.addIfVisible(another));
         assertFalse(relevantScope.addIfVisible(another));
     }
 
     @Test
     void removeIfNotVisible() {
-        PhysicalEntity entity = mockEntity(new Coordinate(0, 0));
-        RelevantScope relevantScope = new RelevantScope(entity, 2, 2);
-        assertFalse(relevantScope.removeIfNotVisible(mockEntity(new Coordinate(2, 2))));
-        PhysicalEntity entity1 = mockEntity(new Coordinate(1, 2));
+        PhysicalEntity entity = createMonster(new Coordinate(0, 0));
+        RelevantScope relevantScope = new RelevantScope(entity);
+        PassiveMonster entity1 = createMonster(new Coordinate(1, 2));
         relevantScope.addIfVisible(entity1);
-        when(entity1.coordinate()).thenReturn(new Coordinate(3, 3));
+        entity1.changeCoordinate(new Coordinate(15, 16));
         assertTrue(relevantScope.removeIfNotVisible(entity1));
     }
 
     @Test
     void update() {
-        PhysicalEntity entity = mockEntity(new Coordinate(0, 0));
-        RelevantScope relevantScope = new RelevantScope(entity, 2, 2);
-        PhysicalEntity entity1 = mockEntity(new Coordinate(1, 2));
+        PhysicalEntity entity = createMonster(new Coordinate(0, 0));
+        RelevantScope relevantScope = new RelevantScope(entity);
+        PhysicalEntity entity1 = createMonster(new Coordinate(1, 2));
         relevantScope.addIfVisible(entity1);
-        PhysicalEntity entity2 = mockEntity(new Coordinate(2, 2));
+        PassiveMonster entity2 = createMonster(new Coordinate(2, 2));
         relevantScope.addIfVisible(entity2);
         assertEquals(2, relevantScope.filter(PhysicalEntity.class).size());
-        when(entity2.coordinate()).thenReturn(new Coordinate(2, 3));
+        entity2.changeCoordinate(new Coordinate(16, 16));
         Set<PhysicalEntity> removed = relevantScope.update();
         assertTrue(removed.contains(entity2));
         assertEquals(1, relevantScope.filter(PhysicalEntity.class).size());

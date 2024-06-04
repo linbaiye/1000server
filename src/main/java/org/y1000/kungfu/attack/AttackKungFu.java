@@ -21,14 +21,10 @@ public interface AttackKungFu extends KungFu {
 
     AttackKungFuType getType();
 
+    void attackAgain(PlayerImpl player);
 
-    default void attackAgain(PlayerImpl player) {
+    void startAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target);
 
-    }
-
-    default void startAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target) {
-
-    }
 
     boolean isRanged();
 }

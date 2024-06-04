@@ -104,7 +104,7 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
     }
 
     public void attack(Creature attacker) {
-        if (!attacker.attackable()) {
+        if (canAttack(attacker)) {
             log.trace("Not attackable, back to idle.");
             changeState(MonsterWanderingIdleState.reroll(this));
             emitEvent(CreatureChangeStateEvent.of(this));

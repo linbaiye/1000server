@@ -15,7 +15,7 @@ public final class PlayerFightWalkState extends AbstractPlayerMoveState {
 
     @Override
     protected PlayerState rewindState(PlayerImpl player) {
-        return new PlayerCooldownState(player.cooldown());
+        return new PlayerCooldownState(player.getStateMillis(State.COOLDOWN));
     }
 
     @Override
@@ -25,5 +25,10 @@ public final class PlayerFightWalkState extends AbstractPlayerMoveState {
 
     public static PlayerFightWalkState walk(PlayerImpl player, Direction towards) {
         return new PlayerFightWalkState(player.coordinate(), towards, player.getStateMillis(State.ENFIGHT_WALK));
+    }
+
+    @Override
+    public State decideAfterHurtState() {
+        return State.COOLDOWN;
     }
 }

@@ -20,6 +20,7 @@ public interface Creature extends PhysicalEntity {
 
     String name();
 
+
     default int armor() {
         return 0;
     }

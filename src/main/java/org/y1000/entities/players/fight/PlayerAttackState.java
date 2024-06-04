@@ -6,6 +6,7 @@ import org.y1000.entities.Projectile;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureShootEvent;
 import org.y1000.entities.players.PlayerImpl;
+import org.y1000.realm.Realm;
 
 @Slf4j
 public final class PlayerAttackState extends AbstractFightingState {
@@ -22,12 +23,13 @@ public final class PlayerAttackState extends AbstractFightingState {
         return attackingState;
     }
 
+
     @Override
     public void update(PlayerImpl player, int delta) {
         if (!elapse(delta)) {
             return;
         }
-        if (player.attackKungFu().isRanged() && player.isFighting()) {
+        if (player.hasFightingEntity() && player.attackKungFu().isRanged()) {
             int dist = player.coordinate().directDistance(player.getFightingEntity().coordinate());
             player.emitEvent(new CreatureShootEvent(new Projectile(player, player.getFightingEntity(), dist * 30)));
         }
@@ -41,6 +43,7 @@ public final class PlayerAttackState extends AbstractFightingState {
 
     public static PlayerAttackState of(PlayerImpl player) {
         State state = player.attackKungFu().randomAttackState();
-        return new PlayerAttackState(player.getStateMillis(state), state);
+        int stateMillis = Math.min(player.getStateMillis(state), player.attackSpeed() * Realm.STEP_MILLIS);
+        return new PlayerAttackState(stateMillis, state);
     }
 }

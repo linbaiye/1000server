@@ -45,8 +45,8 @@ public abstract class AbstractCreatureMoveState<C extends Creature> extends Abst
         if (elapsedMillis() == 0) {
             c.changeDirection(towards);
         }
-        if (elapsedMillis() < getTotalMillis())
+        if (elapsedMillis() < totalMillis())
             elapse(delta);
-        return elapsedMillis() >= getTotalMillis();
+        return elapsedMillis() >= totalMillis();
     }
 }

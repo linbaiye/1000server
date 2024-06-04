@@ -62,10 +62,6 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
         eventListeners.forEach(listener -> listener.OnEvent(event));
     }
 
-    void ClearListeners() {
-        eventListeners.clear();
-    }
-
     @Override
     public void registerOrderedEventListener(EntityEventListener listener) {
         if (!eventListeners.contains(listener))

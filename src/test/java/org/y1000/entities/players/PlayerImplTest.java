@@ -2,47 +2,39 @@ package org.y1000.entities.players;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.y1000.AbstractUnitTestFixture;
+import org.y1000.TestingPlayerEventListener;
+import org.y1000.entities.players.event.PlayerToggleKungFuEvent;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.kungfu.KungFuBook;
-import org.y1000.kungfu.attack.QuanfaKungFu;
+import org.y1000.item.Weapon;
+import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.item.Hat;
 import org.y1000.message.clientevent.ClientDoubleClickSlotEvent;
-import org.y1000.message.serverevent.EntityEvent;
-import org.y1000.message.serverevent.EntityEventListener;
 import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
-import org.y1000.util.Coordinate;
-
-import java.util.ArrayDeque;
-import java.util.Queue;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlayerImplTest implements EntityEventListener {
+class PlayerImplTest extends AbstractUnitTestFixture {
 
-    private Player player;
+    private PlayerImpl player;
 
-    private Queue<EntityEvent> events;
+    private TestingPlayerEventListener eventListener;
+
+    private Inventory inventory;
 
     @BeforeEach
     public void setup() {
-        events = new ArrayDeque<>();
-    }
-
-    private PlayerImpl.PlayerImplBuilder builder() {
-        return PlayerImpl.builder()
-                .id(1L)
-                .coordinate(new Coordinate(1, 1))
-                .name("test")
-                .kungFuBook(KungFuBook.newInstance())
-                .attackKungFu(QuanfaKungFu.unnamed())
-                .inventory(new Inventory());
+        eventListener = new TestingPlayerEventListener();
+        inventory = new Inventory();
+        player = playerBuilder().inventory(inventory).build();
+        player.registerOrderedEventListener(eventListener);
     }
 
 
     @Test
     void hat() {
-        player = builder().hat(new Hat("test")).build();
+        player = playerBuilder().hat(new Hat("test")).build();
         assertEquals("test", player.hat().get().name());
     }
 
@@ -50,19 +42,52 @@ class PlayerImplTest implements EntityEventListener {
     void equipHatEvent() {
         Inventory inventory = new Inventory();
         int slot = inventory.add(new Hat("test"));
-        player = builder().inventory(inventory).build();
-        player.registerOrderedEventListener(this);
+        player = playerBuilder().inventory(inventory).build();
+        player.registerOrderedEventListener(eventListener);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
-        PlayerEquipEvent first = (PlayerEquipEvent)events.poll();
+        PlayerEquipEvent first = eventListener.dequeue(PlayerEquipEvent.class);
         assertEquals(first.player(), player);
         assertEquals(first.toPacket().getEquip().getEquipmentName(), "test");
-        UpdateInventorySlotEvent second = (UpdateInventorySlotEvent)events.poll();
+        UpdateInventorySlotEvent second = eventListener.dequeue(UpdateInventorySlotEvent.class);
         assertEquals(second.toPacket().getUpdateSlot().getSlotId(), slot);
         assertEquals(second.toPacket().getUpdateSlot().getName(), "");
     }
 
-    @Override
-    public void OnEvent(EntityEvent entityEvent) {
-        events.add(entityEvent);
+    @Test
+    void equipNotSameTypeWeapon() {
+        Weapon test = new Weapon("sword", AttackKungFuType.SWORD);
+        int slot = inventory.add(test);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertTrue(player.weapon().isPresent());
+        assertSame(player.attackKungFu().getType(), AttackKungFuType.SWORD);
+        assertTrue(player.cooldown() != 0);
+        var removeInventorySlotEvent = eventListener.dequeue(UpdateInventorySlotEvent.class);
+        assertEquals(removeInventorySlotEvent.toPacket().getUpdateSlot().getSlotId(), slot);
+        PlayerEquipEvent equipEvent = eventListener.dequeue(PlayerEquipEvent.class);
+        assertEquals(equipEvent.toPacket().getEquip().getEquipmentName(), "sword");
+        PlayerToggleKungFuEvent kungFuEvent = eventListener.dequeue(PlayerToggleKungFuEvent.class);
+        assertEquals(kungFuEvent.toPacket().getToggleKungFu().getName(), player.kungFuBook().findUnnamed(AttackKungFuType.SWORD).name());
+        assertNull(inventory.getItem(slot));
+    }
+
+    @Test
+    void equipWeapon_switchEquipped() {
+        Weapon sword = new Weapon("sword", AttackKungFuType.SWORD);
+        int slot1 = inventory.add(sword);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot1));
+        eventListener.clearEvents();
+        var axe = new Weapon("axe", AttackKungFuType.AXE);
+        int slot2 = inventory.add(axe);
+
+        // act
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot2));
+        assertEquals(player.attackKungFu().name(), player.kungFuBook().findUnnamed(AttackKungFuType.AXE).name());
+        assertSame(inventory.getItem(slot2), sword);
+        assertTrue(player.weapon().isPresent());
+        player.weapon().ifPresent(weapon -> assertSame(axe, weapon));
+        var removeItemEvent = eventListener.dequeue(UpdateInventorySlotEvent.class);
+        assertEquals(removeItemEvent.toPacket().getUpdateSlot().getSlotId(), slot2);
+        var putItemEvent = eventListener.dequeue(UpdateInventorySlotEvent.class);
+        //assertEquals(pu);
     }
 }

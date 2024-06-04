@@ -6,7 +6,7 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerImpl;
 
 @Slf4j
-public class PlayerWaitDistanceState extends AbstractFightingState {
+public final class PlayerWaitDistanceState extends AbstractFightingState {
 
     public PlayerWaitDistanceState(int totalMillis) {
         super(totalMillis);
@@ -20,7 +20,7 @@ public class PlayerWaitDistanceState extends AbstractFightingState {
     @Override
     public void update(PlayerImpl player, int delta) {
         if (elapse(delta)) {
-            player.attackKungFu().attackAgain(player);
+            reset();
         }
     }
 

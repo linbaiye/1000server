@@ -1,0 +1,98 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AttackKungFu</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.kungfu.attack</a>
+</div>
+
+<h1>Coverage Summary for Class: AttackKungFu (org.y1000.kungfu.attack)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">AttackKungFu</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.kungfu.attack;
+&nbsp;
+&nbsp;
+&nbsp;import org.y1000.entities.PhysicalEntity;
+&nbsp;import org.y1000.entities.creatures.State;
+&nbsp;import org.y1000.entities.players.PlayerImpl;
+&nbsp;import org.y1000.kungfu.KungFu;
+&nbsp;import org.y1000.message.clientevent.ClientAttackEvent;
+&nbsp;
+&nbsp;public interface AttackKungFu extends KungFu {
+&nbsp;
+&nbsp;    int getBodyDamage();
+&nbsp;
+&nbsp;    int getBodyArmor();
+&nbsp;
+&nbsp;    int getAttackSpeed();
+&nbsp;
+&nbsp;    int getRecovery();
+&nbsp;
+&nbsp;    State randomAttackState();
+&nbsp;
+&nbsp;    AttackKungFuType getType();
+&nbsp;
+&nbsp;    void attackAgain(PlayerImpl player);
+&nbsp;
+&nbsp;    void startAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target);
+&nbsp;
+&nbsp;
+&nbsp;    boolean isRanged();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-04 13:45</div>
+</div>
+</body>
+</html>

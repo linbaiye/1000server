@@ -36,4 +36,12 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
                 .setUpdateSlot(builder)
                 .build();
     }
+
+    public static UpdateInventorySlotEvent remove(Player player, int slotId) {
+        return new UpdateInventorySlotEvent(player, slotId, null);
+    }
+
+    public static UpdateInventorySlotEvent update(Player player, int slotId, Item item) {
+        return new UpdateInventorySlotEvent(player, slotId, item);
+    }
 }

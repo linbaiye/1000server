@@ -2,14 +2,13 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.players.fight.AttackableState;
 ;
 
 /**
  * State that does not move.
  */
 public abstract class AbstractPlayerStillState extends AbstractCreateState<PlayerImpl> implements
-        AttackableState, MovableState, PlayerState {
+        MovableState, PlayerState {
     private final State state;
 
     public AbstractPlayerStillState(int totalMillis, State state) {
@@ -34,7 +33,7 @@ public abstract class AbstractPlayerStillState extends AbstractCreateState<Playe
     }
 
     @Override
-    public PlayerState stateForNotMovable(PlayerImpl player) {
+    public PlayerState rewindState(PlayerImpl player) {
         reset();
         return this;
     }

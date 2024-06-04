@@ -4,10 +4,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.players.Player;
+import org.y1000.item.Weapon;
+import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.clientevent.ClientDropItemEvent;
 import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InventoryTest {
 
@@ -31,6 +38,14 @@ class InventoryTest {
         inventory = new Inventory();
         player = Mockito.mock(Player.class);
         eventEmiter = new EventSaver();
+    }
+
+    @Test
+    void findByType() {
+        inventory.add(new Weapon("test", AttackKungFuType.SWORD));
+        Optional<Weapon> weapon = inventory.findWeapon(AttackKungFuType.SWORD);
+        assertTrue(weapon.isPresent());
+        weapon.ifPresent(w -> assertEquals(w.kungFuType(), AttackKungFuType.SWORD));
     }
 
     private ClientDropItemEvent createDropEvent(int slot, int number) {

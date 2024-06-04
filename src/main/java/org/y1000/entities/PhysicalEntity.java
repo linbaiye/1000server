@@ -20,6 +20,11 @@ public interface PhysicalEntity extends Entity {
 
     }
 
+    default boolean canAttack(PhysicalEntity target) {
+        return target != null &&
+                target.canBeSeenAt(coordinate()) &&
+                target.attackable();
+    }
 
     void registerOrderedEventListener(EntityEventListener listener);
 

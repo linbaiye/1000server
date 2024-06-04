@@ -8,6 +8,8 @@ import org.y1000.item.Item;
 import org.y1000.item.StackItem;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.InventorySlotSwappedEvent;
+import org.y1000.item.Weapon;
+import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.clientevent.ClientDropItemEvent;
 import org.y1000.message.clientevent.ClientInventoryEvent;
@@ -16,6 +18,7 @@ import org.y1000.util.UnaryAction;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
 @Slf4j
 public final class Inventory {
@@ -130,6 +133,24 @@ public final class Inventory {
             return;
         }
         throw new UnsupportedOperationException("Slot " + slot  + " has item already.");
+    }
+
+    private <T extends Item> Optional<T> findFirst(Predicate<T> predicate, Class<T> type)  {
+        return items.values().stream()
+                .filter(i -> type.isAssignableFrom(i.getClass()))
+                .map(type::cast)
+                .filter(predicate)
+                .findFirst();
+    }
+
+    public Optional<Weapon> findWeapon(AttackKungFuType type) {
+        Objects.requireNonNull(type, "type can't be null.");
+        return findFirst(weapon -> weapon.kungFuType() == type, Weapon.class);
+    }
+
+    public Optional<Weapon> findSlot(AttackKungFuType type) {
+        Objects.requireNonNull(type, "type can't be null.");
+        return findFirst(weapon -> weapon.kungFuType() == type, Weapon.class);
     }
 
 

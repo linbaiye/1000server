@@ -149,7 +149,6 @@ message CharacterChangeWeaponPacket {
   optional int32 attackKungFuType = 8;
 }
 
-
 message CharacterKungFuPacket {
   string attackKungFuName = 1;
   int32 attackKungFuLevel = 2;

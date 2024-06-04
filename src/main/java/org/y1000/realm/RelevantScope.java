@@ -13,45 +13,20 @@ final class RelevantScope {
 
     private final Set<PhysicalEntity> entities;
 
-    private Coordinate start;
-
-    private Coordinate end;
-
-    public static final int X_RANGE = 15;
-
-    public static final int Y_RANGE = 15;
-
-    private final int xrange;
-
-    private final int yrange;
 
     public RelevantScope(PhysicalEntity source) {
-        this(source, X_RANGE, Y_RANGE);
-    }
-
-    public RelevantScope(PhysicalEntity source, int xrange, int yrange) {
-        Objects.requireNonNull(source);
         this.source = source;
         entities = new HashSet<>();
-        this.xrange = xrange;
-        this.yrange = yrange;
-        computeStartEnd();
     }
+
 
     public PhysicalEntity source() {
         return source;
     }
 
-    private void computeStartEnd() {
-        start = source.coordinate().move(-xrange, -yrange);
-        end = source.coordinate().move(xrange, yrange);
-    }
 
     public boolean outOfScope(PhysicalEntity entity) {
-        Objects.requireNonNull(entity);
-        var c = entity.coordinate();
-        return start.x() > c.x() || end.x() < c.x()
-                || start.y() > c.y() || end.y() < c.y();
+        return !entity.canBeSeenAt(source.coordinate());
     }
 
     public boolean addIfVisible(PhysicalEntity another) {
@@ -75,7 +50,6 @@ final class RelevantScope {
     }
 
     public Set<PhysicalEntity> update() {
-        computeStartEnd();
         Set<PhysicalEntity> result = entities.stream().filter(this::outOfScope)
                 .collect(Collectors.toSet());
         entities.removeAll(result);

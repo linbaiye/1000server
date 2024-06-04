@@ -3,9 +3,7 @@ package org.y1000.entities.players;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.event.RewindEvent;
-import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.util.Coordinate;
 
 public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements PlayerState {
@@ -27,7 +25,6 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
             onMoved(player);
         } else {
             player.changeCoordinate(getStart());
-            player.clearEventQueue();
             player.changeState(rewindState(player));
             player.emitEvent(RewindEvent.of(player));
         }
@@ -35,7 +32,7 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
 
     @Override
     public void moveToHurtCoordinate(PlayerImpl creature) {
-        if (elapsedMillis() > getTotalMillis() / 2) {
+        if (elapsedMillis() > totalMillis() / 2) {
             tryChangeCoordinate(creature, creature.realmMap());
         }
     }

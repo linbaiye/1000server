@@ -9,7 +9,6 @@ import org.y1000.util.Coordinate;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<C, S>, S extends CreatureState<C>>
         extends AbstractCreature<C, S> implements ViolentCreature {
@@ -50,7 +49,7 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
         }
         cooldownRecovery();
         state().moveToHurtCoordinate(creature);
-        State afterHurtState = state().decideAfterHurtState(creature);
+        State afterHurtState = state().decideAfterHurtState();
         changeState(hurtStateSupplier.apply(afterHurtState));
         emitEvent(new CreatureHurtEvent(this, afterHurtState));
         return true;

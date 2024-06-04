@@ -30,7 +30,7 @@ public final class PlayerStillState extends AbstractPlayerStillState {
     }
 
     @Override
-    public PlayerState stateForMove(PlayerImpl player, Direction direction) {
+    public PlayerState moveState(PlayerImpl player, Direction direction) {
         if (stateEnum() == State.COOLDOWN) {
             return PlayerMoveState.moveBy(player, State.ENFIGHT_WALK, direction);
         }
@@ -55,4 +55,8 @@ public final class PlayerStillState extends AbstractPlayerStillState {
         return stateEnum().name();
     }
 
+    @Override
+    public State decideAfterHurtState() {
+        return stateEnum();
+    }
 }

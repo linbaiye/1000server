@@ -17,17 +17,22 @@ final class PlayerFrozenState implements PlayerState {
     }
 
     @Override
-    public boolean attackable() {
-        return false;
+    public int totalMillis() {
+        return 0;
     }
 
     @Override
-    public boolean canAttack() {
+    public boolean attackable() {
         return false;
     }
 
     @Override
     public void update(PlayerImpl player, int delta) {
 
+    }
+
+    @Override
+    public State decideAfterHurtState() {
+        return State.FROZEN;
     }
 }
