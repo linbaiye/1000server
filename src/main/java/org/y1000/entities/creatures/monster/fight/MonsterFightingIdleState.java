@@ -23,6 +23,11 @@ public final class MonsterFightingIdleState extends AbstractMonsterIdleState imp
     }
 
     @Override
+    public Creature currentTarget() {
+        return target;
+    }
+
+    @Override
     public void afterHurt(PassiveMonster monster, Creature attacker) {
         if (target.coordinate().distance(monster.coordinate()) > 1) {
             target = attacker;

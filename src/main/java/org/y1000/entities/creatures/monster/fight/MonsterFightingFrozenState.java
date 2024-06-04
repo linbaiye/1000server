@@ -22,6 +22,11 @@ public final class MonsterFightingFrozenState extends AbstractMonsterFrozenState
     }
 
     @Override
+    public Creature currentTarget() {
+        return target;
+    }
+
+    @Override
     public void afterHurt(PassiveMonster monster, Creature attacker) {
         if (target.coordinate().distance(monster.coordinate()) > 1) {
             target = attacker;

@@ -24,6 +24,11 @@ public final class MonsterCooldownState extends AbstractMonsterState implements 
     }
 
     @Override
+    public Creature currentTarget() {
+        return currentAttacker;
+    }
+
+    @Override
     public void afterHurt(PassiveMonster passiveMonster, Creature attacker) {
         passiveMonster.attack(attacker);
     }
