@@ -1,6 +1,8 @@
 package org.y1000;
 
 import org.mockito.Mockito;
+import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.KungFuBook;
@@ -18,6 +20,8 @@ public abstract class AbstractUnitTestFixture {
 
     protected final KungFuBookFactory kungFuBookFactory = new KungFuBookRepositoryImpl();
 
+    private int id;
+
     protected Realm mockAllFlatRealm() {
         Realm mock = Mockito.mock(Realm.class);
         RealmMap map = Mockito.mock(RealmMap.class);
@@ -33,7 +37,12 @@ public abstract class AbstractUnitTestFixture {
                 .coordinate(new Coordinate(1, 1))
                 .name("test")
                 .kungFuBook(kungFuBook)
-                .attackKungFu(kungFuBook.findUnnamed(AttackKungFuType.QUANFA))
+                .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA))
                 .inventory(new Inventory());
+    }
+
+
+    protected PassiveMonster createMonster(Coordinate coordinate) {
+        return new PassiveMonster(id++, coordinate, Direction.UP, "test", Mockito.mock(RealmMap.class));
     }
 }

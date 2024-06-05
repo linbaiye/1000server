@@ -57,7 +57,7 @@ class PlayerAttackStateTest extends AbstractUnitTestFixture {
     @Test
     void emitProjectileEvent() {
         TestingPlayerEventListener eventListener = new TestingPlayerEventListener();
-        player = playerBuilder().attackKungFu(kungFuBookFactory.create().findUnnamed(AttackKungFuType.BOW)).build();
+        player = playerBuilder().attackKungFu(kungFuBookFactory.create().findUnnamedAttack(AttackKungFuType.BOW)).build();
         player.setFightingEntity(new PassiveMonster(1L, new Coordinate(2, 2), Direction.UP, "test", Mockito.mock(RealmMap.class)));
         player.registerOrderedEventListener(eventListener);
         var state = PlayerAttackState.of(player);

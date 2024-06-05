@@ -39,7 +39,6 @@ private static final long serialVersionUID = 0L;
             org.y1000.network.gen.PlayerUnequipPacket.class, org.y1000.network.gen.PlayerUnequipPacket.Builder.class);
   }
 
-  private int bitField0_;
   public static final int ID_FIELD_NUMBER = 1;
   private long id_ = 0L;
   /**
@@ -62,44 +61,6 @@ private static final long serialVersionUID = 0L;
     return equipmentType_;
   }
 
-  public static final int CHANGEDTOSTATE_FIELD_NUMBER = 3;
-  private int changedToState_ = 0;
-  /**
-   * <code>optional int32 changedToState = 3;</code>
-   * @return Whether the changedToState field is set.
-   */
-  @java.lang.Override
-  public boolean hasChangedToState() {
-    return ((bitField0_ & 0x00000001) != 0);
-  }
-  /**
-   * <code>optional int32 changedToState = 3;</code>
-   * @return The changedToState.
-   */
-  @java.lang.Override
-  public int getChangedToState() {
-    return changedToState_;
-  }
-
-  public static final int BASICQUANFALEVEL_FIELD_NUMBER = 4;
-  private int basicQuanfaLevel_ = 0;
-  /**
-   * <code>optional int32 basicQuanfaLevel = 4;</code>
-   * @return Whether the basicQuanfaLevel field is set.
-   */
-  @java.lang.Override
-  public boolean hasBasicQuanfaLevel() {
-    return ((bitField0_ & 0x00000002) != 0);
-  }
-  /**
-   * <code>optional int32 basicQuanfaLevel = 4;</code>
-   * @return The basicQuanfaLevel.
-   */
-  @java.lang.Override
-  public int getBasicQuanfaLevel() {
-    return basicQuanfaLevel_;
-  }
-
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -120,12 +81,6 @@ private static final long serialVersionUID = 0L;
     if (equipmentType_ != 0) {
       output.writeInt32(2, equipmentType_);
     }
-    if (((bitField0_ & 0x00000001) != 0)) {
-      output.writeInt32(3, changedToState_);
-    }
-    if (((bitField0_ & 0x00000002) != 0)) {
-      output.writeInt32(4, basicQuanfaLevel_);
-    }
     getUnknownFields().writeTo(output);
   }
 
@@ -142,14 +97,6 @@ private static final long serialVersionUID = 0L;
     if (equipmentType_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(2, equipmentType_);
-    }
-    if (((bitField0_ & 0x00000001) != 0)) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, changedToState_);
-    }
-    if (((bitField0_ & 0x00000002) != 0)) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(4, basicQuanfaLevel_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -170,16 +117,6 @@ private static final long serialVersionUID = 0L;
         != other.getId()) return false;
     if (getEquipmentType()
         != other.getEquipmentType()) return false;
-    if (hasChangedToState() != other.hasChangedToState()) return false;
-    if (hasChangedToState()) {
-      if (getChangedToState()
-          != other.getChangedToState()) return false;
-    }
-    if (hasBasicQuanfaLevel() != other.hasBasicQuanfaLevel()) return false;
-    if (hasBasicQuanfaLevel()) {
-      if (getBasicQuanfaLevel()
-          != other.getBasicQuanfaLevel()) return false;
-    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -196,14 +133,6 @@ private static final long serialVersionUID = 0L;
         getId());
     hash = (37 * hash) + EQUIPMENTTYPE_FIELD_NUMBER;
     hash = (53 * hash) + getEquipmentType();
-    if (hasChangedToState()) {
-      hash = (37 * hash) + CHANGEDTOSTATE_FIELD_NUMBER;
-      hash = (53 * hash) + getChangedToState();
-    }
-    if (hasBasicQuanfaLevel()) {
-      hash = (37 * hash) + BASICQUANFALEVEL_FIELD_NUMBER;
-      hash = (53 * hash) + getBasicQuanfaLevel();
-    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -337,8 +266,6 @@ private static final long serialVersionUID = 0L;
       bitField0_ = 0;
       id_ = 0L;
       equipmentType_ = 0;
-      changedToState_ = 0;
-      basicQuanfaLevel_ = 0;
       return this;
     }
 
@@ -378,16 +305,6 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.equipmentType_ = equipmentType_;
       }
-      int to_bitField0_ = 0;
-      if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.changedToState_ = changedToState_;
-        to_bitField0_ |= 0x00000001;
-      }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
-        result.basicQuanfaLevel_ = basicQuanfaLevel_;
-        to_bitField0_ |= 0x00000002;
-      }
-      result.bitField0_ |= to_bitField0_;
     }
 
     @java.lang.Override
@@ -440,12 +357,6 @@ private static final long serialVersionUID = 0L;
       if (other.getEquipmentType() != 0) {
         setEquipmentType(other.getEquipmentType());
       }
-      if (other.hasChangedToState()) {
-        setChangedToState(other.getChangedToState());
-      }
-      if (other.hasBasicQuanfaLevel()) {
-        setBasicQuanfaLevel(other.getBasicQuanfaLevel());
-      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -482,16 +393,6 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000002;
               break;
             } // case 16
-            case 24: {
-              changedToState_ = input.readInt32();
-              bitField0_ |= 0x00000004;
-              break;
-            } // case 24
-            case 32: {
-              basicQuanfaLevel_ = input.readInt32();
-              bitField0_ |= 0x00000008;
-              break;
-            } // case 32
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -569,86 +470,6 @@ private static final long serialVersionUID = 0L;
     public Builder clearEquipmentType() {
       bitField0_ = (bitField0_ & ~0x00000002);
       equipmentType_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int changedToState_ ;
-    /**
-     * <code>optional int32 changedToState = 3;</code>
-     * @return Whether the changedToState field is set.
-     */
-    @java.lang.Override
-    public boolean hasChangedToState() {
-      return ((bitField0_ & 0x00000004) != 0);
-    }
-    /**
-     * <code>optional int32 changedToState = 3;</code>
-     * @return The changedToState.
-     */
-    @java.lang.Override
-    public int getChangedToState() {
-      return changedToState_;
-    }
-    /**
-     * <code>optional int32 changedToState = 3;</code>
-     * @param value The changedToState to set.
-     * @return This builder for chaining.
-     */
-    public Builder setChangedToState(int value) {
-
-      changedToState_ = value;
-      bitField0_ |= 0x00000004;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional int32 changedToState = 3;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearChangedToState() {
-      bitField0_ = (bitField0_ & ~0x00000004);
-      changedToState_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int basicQuanfaLevel_ ;
-    /**
-     * <code>optional int32 basicQuanfaLevel = 4;</code>
-     * @return Whether the basicQuanfaLevel field is set.
-     */
-    @java.lang.Override
-    public boolean hasBasicQuanfaLevel() {
-      return ((bitField0_ & 0x00000008) != 0);
-    }
-    /**
-     * <code>optional int32 basicQuanfaLevel = 4;</code>
-     * @return The basicQuanfaLevel.
-     */
-    @java.lang.Override
-    public int getBasicQuanfaLevel() {
-      return basicQuanfaLevel_;
-    }
-    /**
-     * <code>optional int32 basicQuanfaLevel = 4;</code>
-     * @param value The basicQuanfaLevel to set.
-     * @return This builder for chaining.
-     */
-    public Builder setBasicQuanfaLevel(int value) {
-
-      basicQuanfaLevel_ = value;
-      bitField0_ |= 0x00000008;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional int32 basicQuanfaLevel = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearBasicQuanfaLevel() {
-      bitField0_ = (bitField0_ & ~0x00000008);
-      basicQuanfaLevel_ = 0;
       onChanged();
       return this;
     }

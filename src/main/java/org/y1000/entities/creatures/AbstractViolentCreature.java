@@ -43,16 +43,15 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
         attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
     }
 
-    protected boolean handleAttacked(C creature, int hit, Function<State, S> hurtStateSupplier) {
+    protected void handleAttacked(C creature, int hit, Function<State, S> hurtStateSupplier) {
         if (!state().attackable() || randomAvoidance(hit)) {
-            return false;
+            return;
         }
         cooldownRecovery();
         state().moveToHurtCoordinate(creature);
         State afterHurtState = state().decideAfterHurtState();
         changeState(hurtStateSupplier.apply(afterHurtState));
         emitEvent(new CreatureHurtEvent(this, afterHurtState));
-        return true;
     }
 
     public void cooldownRecovery() {

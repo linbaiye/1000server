@@ -5,7 +5,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerCooldownPacket;
 
-public class PlayerCooldownEvent extends AbstractPlayerEvent {
+public final class PlayerCooldownEvent extends AbstractPlayerEvent {
 
     public PlayerCooldownEvent(Player source) {
         super(source);
@@ -18,7 +18,7 @@ public class PlayerCooldownEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
-        return Packet.newBuilder().setCooldown(PlayerCooldownPacket.newBuilder().setId(source().id()).build()).build();
+        return Packet.newBuilder().setCooldown(PlayerCooldownPacket.newBuilder().setId(source().id())).build();
     }
 
     public static PlayerCooldownEvent of(Player player) {

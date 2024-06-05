@@ -48,6 +48,14 @@ class InventoryTest {
         weapon.ifPresent(w -> assertEquals(w.kungFuType(), AttackKungFuType.SWORD));
     }
 
+    @Test
+    void findSlot() {
+        inventory.add(new Weapon("test", AttackKungFuType.SWORD));
+        int weaponSlot = inventory.findWeaponSlot(AttackKungFuType.SWORD);
+        assertEquals(1, weaponSlot);
+        assertEquals(0, inventory.findWeaponSlot(AttackKungFuType.AXE));
+    }
+
     private ClientDropItemEvent createDropEvent(int slot, int number) {
         return new ClientDropItemEvent(number, slot, 1, 1, new Coordinate(2, 2));
     }

@@ -56,6 +56,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     @Getter
     private PhysicalEntity fightingEntity;
 
+    public static final int INNATE_ATTACKSPEED = 70;
+
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
         put(State.WALK, 840);
@@ -224,16 +226,10 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             log.error("Trying to unequip from non equipped slot {}", type);
             return;
         }
-        State st = null;
-        if (equipped instanceof Weapon weapon) {
-            cooldownAttack();
-            if (weapon.kungFuType() != AttackKungFuType.QUANFA) {
-                attackKungFu = kungFuBook.findUnnamed(AttackKungFuType.QUANFA);
-                changeState(new PlayerCooldownState(cooldown()));
-                st = stateEnum();
-            }
+        if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.QUANFA) {
+            changeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA));
         }
-        emitEvent(new PlayerUnequipEvent(this, equipped.equipmentType(), st, attackKungFu.level()));
+        emitEvent(new PlayerUnequipEvent(this, equipped.equipmentType()));
         int slot = inventory.add(equipped);
         emitEvent(new UpdateInventorySlotEvent(this, slot, equipped));
     }
@@ -248,28 +244,63 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
     }
 
-    private void changeAttackKungFu(AttackKungFu newAttack) {
+    private void handleClickAttackKungFu(AttackKungFu newAttack) {
         if (this.attackKungFu.name().equals(newAttack.name())) {
             return;
         }
-        Equipment equipment = equippedEquipments.get(EquipmentType.WEAPON);
-        if (equipment instanceof Weapon equippedWeapon &&
-                equippedWeapon.kungFuType() == newAttack.getType()) {
-            Weapon weapon = inventory.findWeapon(newAttack.getType()).orElse(null);
-            if (weapon == null) {
-                emitEvent(PlayerTextEvent.noWeapon(this));
-                return;
-            } else {
-            }
+        if (this.attackKungFu.getType() == newAttack.getType()) {
+            this.attackKungFu = newAttack;
+            cooldownAttack();
+            emitEvent(PlayerToggleKungFuEvent.enable(this, this.attackKungFu));
+            return;
         }
-        emitEvent(PlayerToggleKungFuEvent.enable(this, newAttack));
-        this.attackKungFu = newAttack;
-        cooldownAttack();
-        if (hasFightingEntity()) {
-            changeState(new PlayerCooldownState(cooldown()));
+        int slot = inventory.findWeaponSlot(newAttack.getType());
+        if (slot == 0) {
+            emitEvent(PlayerTextEvent.noWeapon(this));
+            return;
         }
+        equipWeaponFromSlot(slot, (Weapon) inventory.getItem(slot));
+        changeAttackKungFu(newAttack);
     }
 
+
+    private void toggleProtectionKungFu(ProtectKungFu newProtection) {
+        if (breathKungFu != null) {
+            emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, breathKungFu));
+            breathKungFu = null;
+        }
+        if (protectKungFu != null && protectKungFu.name().equals(newProtection.name())) {
+            emitEvent(PlayerToggleKungFuEvent.disable(this, protectKungFu));
+            protectKungFu = null;
+            return;
+        }
+        protectKungFu = newProtection;
+        emitEvent(PlayerToggleKungFuEvent.enable(this, protectKungFu));
+    }
+
+    private void toggleBreathingKungFu(BreathKungFu newBreath) {
+        if (breathKungFu != null) {
+            if (breathKungFu.name().equals(newBreath.name())) {
+                this.breathKungFu = null;
+                emitEvent(PlayerToggleKungFuEvent.disable(this, newBreath));
+            } else {
+                this.breathKungFu = newBreath;
+                emitEvent(PlayerToggleKungFuEvent.enable(this, newBreath));
+            }
+            return;
+        }
+        if (state().canSitDown()) {
+            sitDown(true);
+        }
+        if (stateEnum() == State.SIT) {
+            if (this.protectKungFu != null) {
+                emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, protectKungFu));
+                this.protectKungFu = null;
+            }
+            this.breathKungFu = newBreath;
+            emitEvent(PlayerToggleKungFuEvent.enable(this, newBreath));
+        }
+    }
 
     private void toggleFootKungFu(FootKungFu newKungFu) {
         if (!state().canUseFootKungFu()) {
@@ -295,10 +326,14 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             changeState(PlayerStillState.idle(this));
             emitEvent(new SetPositionEvent(this, direction(), coordinate()));
         }
-        this.breathKungFu = null;
+        if (this.breathKungFu != null) {
+            emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, this.breathKungFu));
+            this.breathKungFu = null;
+        }
         this.footKungfu = newKungFu;
         emitEvent(new PlayerToggleKungFuEvent(this, this.footKungfu));
     }
+
 
     private void useKungFu(KungFu kungFu) {
         if (stateEnum() == State.DIE) {
@@ -307,13 +342,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (kungFu instanceof FootKungFu newKungFu) {
             toggleFootKungFu(newKungFu);
         } else if (kungFu instanceof ProtectKungFu newProtectKungFu) {
-            if (this.protectKungFu != null && this.protectKungFu.name().equals(newProtectKungFu.name())) {
-                this.protectKungFu = null;
-                emitEvent(new PlayerToggleKungFuEvent(this, kungFu.name()));
-            } else {
-                this.protectKungFu = newProtectKungFu;
-                emitEvent(new PlayerToggleKungFuEvent(this, this.protectKungFu));
-            }
+            toggleProtectionKungFu(newProtectKungFu);
+        } else if (kungFu instanceof BreathKungFu newBreath) {
+            toggleBreathingKungFu(newBreath);
         } else if (kungFu instanceof AssistantKungFu newAssistant) {
             if (this.assistantKungFu != null && this.assistantKungFu.name().equals(newAssistant.name())) {
                 this.assistantKungFu = null;
@@ -323,19 +354,22 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                 emitEvent(new PlayerToggleKungFuEvent(this, this.assistantKungFu));
             }
         } else if (kungFu instanceof AttackKungFu newAttack) {
-            changeAttackKungFu(newAttack);
+            handleClickAttackKungFu(newAttack);
         }
     }
 
-    private void sitDown() {
+    private void sitDown(boolean includeSelf) {
         if (!state().canSitDown()) {
             log.debug("Cant sit down in state {}.", state().stateEnum());
             return;
         }
-        footKungfu = null;
+        if (footKungfu != null) {
+            emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, footKungfu));
+            footKungfu = null;
+        }
         clearFightingEntity();
         changeState(PlayerSitDownState.sit(this));
-        emitEvent(new PlayerSitDownEvent(this));
+        emitEvent(new PlayerSitDownEvent(this, includeSelf));
     }
 
     private void standUp() {
@@ -373,7 +407,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         } else if (clientEvent instanceof ClientToggleKungFuEvent useKungFuEvent) {
             kungFuBook().findKungFu(useKungFuEvent.tab(), useKungFuEvent.slot()).ifPresent(this::useKungFu);
         } else if (clientEvent instanceof ClientSitDownEvent) {
-            sitDown();
+            sitDown(false);
         } else if (clientEvent instanceof ClientStandUpEvent) {
             standUp();
         } else if (clientEvent instanceof ClientAttackEvent attackEvent) {
@@ -470,6 +504,16 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         emitEvent(new PlayerLeftEvent(this));
     }
 
+    private void changeAttackKungFu(AttackKungFu newKungFu) {
+        this.attackKungFu = newKungFu;
+        cooldownAttack();
+        if (state() instanceof PlayerAttackState) {
+            changeState(new PlayerCooldownState(cooldown()));
+            emitEvent(new PlayerCooldownEvent(this));
+        }
+        emitEvent(PlayerToggleKungFuEvent.enable(this, attackKungFu));
+    }
+
     private void equipWeaponFromSlot(int slot, Weapon weaponToEquip) {
         inventory.remove(slot);
         emitEvent(UpdateInventorySlotEvent.remove(this, slot));
@@ -481,21 +525,15 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
         emitEvent(new PlayerEquipEvent(this, weaponToEquip.name()));
         log.debug("Equipped weapon {}.", weaponToEquip.name());
-        if (attackKungFu.getType() == weaponToEquip.kungFuType()) {
-            return;
-        }
-        this.attackKungFu = kungFuBook.findUnnamed(weaponToEquip.kungFuType());
-        cooldownAttack();
-        if (hasFightingEntity()) {
-            changeState(new PlayerCooldownState(cooldown()));
-            emitEvent(new PlayerCooldownEvent(this));
-        }
-        emitEvent(PlayerToggleKungFuEvent.enable(this, attackKungFu));
     }
 
     private void equip(int slotId, AbstractEquipment equipmentInSlot) {
         if (equipmentInSlot.equipmentType() == EquipmentType.WEAPON) {
-            equipWeaponFromSlot(slotId, (Weapon) equipmentInSlot);
+            Weapon weaponInSlot = (Weapon) equipmentInSlot;
+            equipWeaponFromSlot(slotId, weaponInSlot);
+            if (attackKungFu.getType() != weaponInSlot.kungFuType()) {
+                changeAttackKungFu(kungFuBook.findUnnamedAttack(weaponInSlot.kungFuType()));
+            }
             return;
         }
         inventory.remove(slotId);
@@ -509,7 +547,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public int attackSpeed() {
-        return 70 + attackKungFu.getAttackSpeed();
+        return INNATE_ATTACKSPEED + attackKungFu.getAttackSpeed();
     }
 
     public Optional<Weapon> weapon() {

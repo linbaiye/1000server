@@ -183,11 +183,6 @@ final class RealmEntityManager implements EntityEventListener,
         notifyVisiblePlayers(groundedItem, groundedItem.captureInterpolation());
     }
 
-    @Override
-    public void visit(CharacterChangeWeaponEvent event) {
-        sendMessage(event.player(), event);
-        notifyVisiblePlayers(event.source(), event.packetForOtherPlayers());
-    }
 
     @Override
     public void visit(PlayerPickedItemEvent event) {
@@ -243,6 +238,9 @@ final class RealmEntityManager implements EntityEventListener,
     @Override
     public void visit(PlayerSitDownEvent event) {
         notifyVisiblePlayers(event.source(), event);
+        if (event.isIncludeSelf()) {
+            sendMessage(event.player(), event);
+        }
     }
 
     @Override
@@ -254,12 +252,8 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
-    public void visit(PlayerUseWeaponEvent event) {
-        notifyVisiblePlayersAndSelf(event.player(), event);
-    }
-
-    @Override
     public void visit(PlayerCooldownEvent event) {
+        log.debug("Sending cooldown.");
         notifyVisiblePlayersAndSelf(event.player(), event);
     }
 

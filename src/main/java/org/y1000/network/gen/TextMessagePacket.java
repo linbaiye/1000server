@@ -40,11 +40,31 @@ private static final long serialVersionUID = 0L;
             org.y1000.network.gen.TextMessagePacket.class, org.y1000.network.gen.TextMessagePacket.Builder.class);
   }
 
-  public static final int TEXT_FIELD_NUMBER = 1;
+  private int bitField0_;
+  public static final int TYPE_FIELD_NUMBER = 1;
+  private int type_ = 0;
+  /**
+   * <code>int32 type = 1;</code>
+   * @return The type.
+   */
+  @java.lang.Override
+  public int getType() {
+    return type_;
+  }
+
+  public static final int TEXT_FIELD_NUMBER = 2;
   @SuppressWarnings("serial")
   private volatile java.lang.Object text_ = "";
   /**
-   * <code>string text = 1;</code>
+   * <code>optional string text = 2;</code>
+   * @return Whether the text field is set.
+   */
+  @java.lang.Override
+  public boolean hasText() {
+    return ((bitField0_ & 0x00000001) != 0);
+  }
+  /**
+   * <code>optional string text = 2;</code>
    * @return The text.
    */
   @java.lang.Override
@@ -61,7 +81,7 @@ private static final long serialVersionUID = 0L;
     }
   }
   /**
-   * <code>string text = 1;</code>
+   * <code>optional string text = 2;</code>
    * @return The bytes for text.
    */
   @java.lang.Override
@@ -93,8 +113,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(text_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, text_);
+    if (type_ != 0) {
+      output.writeInt32(1, type_);
+    }
+    if (((bitField0_ & 0x00000001) != 0)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, text_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -105,8 +128,12 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(text_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, text_);
+    if (type_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(1, type_);
+    }
+    if (((bitField0_ & 0x00000001) != 0)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, text_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -123,8 +150,13 @@ private static final long serialVersionUID = 0L;
     }
     org.y1000.network.gen.TextMessagePacket other = (org.y1000.network.gen.TextMessagePacket) obj;
 
-    if (!getText()
-        .equals(other.getText())) return false;
+    if (getType()
+        != other.getType()) return false;
+    if (hasText() != other.hasText()) return false;
+    if (hasText()) {
+      if (!getText()
+          .equals(other.getText())) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -136,8 +168,12 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + TEXT_FIELD_NUMBER;
-    hash = (53 * hash) + getText().hashCode();
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType();
+    if (hasText()) {
+      hash = (37 * hash) + TEXT_FIELD_NUMBER;
+      hash = (53 * hash) + getText().hashCode();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -269,6 +305,7 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
+      type_ = 0;
       text_ = "";
       return this;
     }
@@ -304,8 +341,14 @@ private static final long serialVersionUID = 0L;
     private void buildPartial0(org.y1000.network.gen.TextMessagePacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.text_ = text_;
+        result.type_ = type_;
       }
+      int to_bitField0_ = 0;
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.text_ = text_;
+        to_bitField0_ |= 0x00000001;
+      }
+      result.bitField0_ |= to_bitField0_;
     }
 
     @java.lang.Override
@@ -352,9 +395,12 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(org.y1000.network.gen.TextMessagePacket other) {
       if (other == org.y1000.network.gen.TextMessagePacket.getDefaultInstance()) return this;
-      if (!other.getText().isEmpty()) {
+      if (other.getType() != 0) {
+        setType(other.getType());
+      }
+      if (other.hasText()) {
         text_ = other.text_;
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -383,11 +429,16 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 10: {
-              text_ = input.readStringRequireUtf8();
+            case 8: {
+              type_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
-            } // case 10
+            } // case 8
+            case 18: {
+              text_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00000002;
+              break;
+            } // case 18
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -405,9 +456,48 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
+    private int type_ ;
+    /**
+     * <code>int32 type = 1;</code>
+     * @return The type.
+     */
+    @java.lang.Override
+    public int getType() {
+      return type_;
+    }
+    /**
+     * <code>int32 type = 1;</code>
+     * @param value The type to set.
+     * @return This builder for chaining.
+     */
+    public Builder setType(int value) {
+
+      type_ = value;
+      bitField0_ |= 0x00000001;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 type = 1;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearType() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      type_ = 0;
+      onChanged();
+      return this;
+    }
+
     private java.lang.Object text_ = "";
     /**
-     * <code>string text = 1;</code>
+     * <code>optional string text = 2;</code>
+     * @return Whether the text field is set.
+     */
+    public boolean hasText() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>optional string text = 2;</code>
      * @return The text.
      */
     public java.lang.String getText() {
@@ -423,7 +513,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string text = 1;</code>
+     * <code>optional string text = 2;</code>
      * @return The bytes for text.
      */
     public com.google.protobuf.ByteString
@@ -440,7 +530,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string text = 1;</code>
+     * <code>optional string text = 2;</code>
      * @param value The text to set.
      * @return This builder for chaining.
      */
@@ -448,22 +538,22 @@ private static final long serialVersionUID = 0L;
         java.lang.String value) {
       if (value == null) { throw new NullPointerException(); }
       text_ = value;
-      bitField0_ |= 0x00000001;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>string text = 1;</code>
+     * <code>optional string text = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearText() {
       text_ = getDefaultInstance().getText();
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
     /**
-     * <code>string text = 1;</code>
+     * <code>optional string text = 2;</code>
      * @param value The bytes for text to set.
      * @return This builder for chaining.
      */
@@ -472,7 +562,7 @@ private static final long serialVersionUID = 0L;
       if (value == null) { throw new NullPointerException(); }
       checkByteStringIsUtf8(value);
       text_ = value;
-      bitField0_ |= 0x00000001;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }

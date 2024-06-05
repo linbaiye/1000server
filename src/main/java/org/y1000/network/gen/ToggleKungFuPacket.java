@@ -110,6 +110,17 @@ private static final long serialVersionUID = 0L;
     return id_;
   }
 
+  public static final int QUIETLY_FIELD_NUMBER = 4;
+  private boolean quietly_ = false;
+  /**
+   * <code>bool quietly = 4;</code>
+   * @return The quietly.
+   */
+  @java.lang.Override
+  public boolean getQuietly() {
+    return quietly_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -133,6 +144,9 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0L) {
       output.writeInt64(3, id_);
     }
+    if (quietly_ != false) {
+      output.writeBool(4, quietly_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -152,6 +166,10 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(3, id_);
+    }
+    if (quietly_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(4, quietly_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -177,6 +195,8 @@ private static final long serialVersionUID = 0L;
     }
     if (getId()
         != other.getId()) return false;
+    if (getQuietly()
+        != other.getQuietly()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -197,6 +217,9 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getId());
+    hash = (37 * hash) + QUIETLY_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getQuietly());
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -331,6 +354,7 @@ private static final long serialVersionUID = 0L;
       name_ = "";
       level_ = 0;
       id_ = 0L;
+      quietly_ = false;
       return this;
     }
 
@@ -374,6 +398,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
         result.id_ = id_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.quietly_ = quietly_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -433,6 +460,9 @@ private static final long serialVersionUID = 0L;
       if (other.getId() != 0L) {
         setId(other.getId());
       }
+      if (other.getQuietly() != false) {
+        setQuietly(other.getQuietly());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -474,6 +504,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000004;
               break;
             } // case 24
+            case 32: {
+              quietly_ = input.readBool();
+              bitField0_ |= 0x00000008;
+              break;
+            } // case 32
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -631,6 +666,38 @@ private static final long serialVersionUID = 0L;
     public Builder clearId() {
       bitField0_ = (bitField0_ & ~0x00000004);
       id_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private boolean quietly_ ;
+    /**
+     * <code>bool quietly = 4;</code>
+     * @return The quietly.
+     */
+    @java.lang.Override
+    public boolean getQuietly() {
+      return quietly_;
+    }
+    /**
+     * <code>bool quietly = 4;</code>
+     * @param value The quietly to set.
+     * @return This builder for chaining.
+     */
+    public Builder setQuietly(boolean value) {
+
+      quietly_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>bool quietly = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearQuietly() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      quietly_ = false;
       onChanged();
       return this;
     }

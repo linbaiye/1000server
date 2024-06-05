@@ -1,15 +1,11 @@
 package org.y1000.repository;
 
-import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.KungFuBookFactory;
-import org.y1000.kungfu.attack.SwordKungFu;
 import org.y1000.item.*;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.KungFuBook;
-import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.util.Coordinate;
 
 public final class PlayerRepositoryImpl implements PlayerRepository {
@@ -73,7 +69,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .coordinate(new Coordinate(39 + slot, 27))
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)
-                .attackKungFu(kungFuBook.findUnnamed(weapon.kungFuType()))
+                .attackKungFu(kungFuBook.findUnnamedAttack(weapon.kungFuType()))
                 .footKungfu(kungFuBook.getUnnamedFoot())
                 .protectKungFu(kungFuBook.getUnnamedProtection())
                 .inventory(loadInventory())

@@ -42,7 +42,9 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
     public PlayerTextEvent(Player source, String text, TextType type) {
         super(source);
-        Validate.isTrue(text != null && text.length() <= 30);
+        if (type == TextType.CUSTOM) {
+            Validate.isTrue(text != null && text.length() <= 30);
+        }
         this.text = text;
         this.type = type;
     }
@@ -54,30 +56,34 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
+        TextMessagePacket.Builder buider = TextMessagePacket.newBuilder().setType(type.value());
+        if (text != null) {
+            buider.setText(text);
+        }
         return Packet.newBuilder()
-                .setText(TextMessagePacket.newBuilder().setText(text))
+                .setText(buider)
                 .build();
     }
 
     public static PlayerTextEvent tooFarAway(Player player) {
-        return new PlayerTextEvent(player, "距离过远", TextType.FARAWAY);
+        return new PlayerTextEvent(player, null, TextType.FARAWAY);
     }
 
 
     public static PlayerTextEvent unableToAttack(Player player) {
-        return new PlayerTextEvent(player, "无法攻击", TextType.CANT_ATTACK);
+        return new PlayerTextEvent(player, null, TextType.CANT_ATTACK);
     }
 
 
     public static PlayerTextEvent inventoryFull(Player player) {
-        return new PlayerTextEvent(player, "物品栏已满", TextType.INVENTORY_FULL);
+        return new PlayerTextEvent(player, null, TextType.INVENTORY_FULL);
     }
 
     public static PlayerTextEvent tradeDisabled(Player player) {
-        return new PlayerTextEvent(player, "对方拒绝交易", TextType.TRADE_REJECTED);
+        return new PlayerTextEvent(player, null, TextType.TRADE_REJECTED);
     }
 
     public static PlayerTextEvent noWeapon(Player player) {
-        return new PlayerTextEvent(player, "没有对应的武器", TextType.NO_WEAPON);
+        return new PlayerTextEvent(player, null, TextType.NO_WEAPON);
     }
 }

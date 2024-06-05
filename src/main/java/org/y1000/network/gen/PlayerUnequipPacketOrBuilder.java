@@ -19,26 +19,4 @@ public interface PlayerUnequipPacketOrBuilder extends
    * @return The equipmentType.
    */
   int getEquipmentType();
-
-  /**
-   * <code>optional int32 changedToState = 3;</code>
-   * @return Whether the changedToState field is set.
-   */
-  boolean hasChangedToState();
-  /**
-   * <code>optional int32 changedToState = 3;</code>
-   * @return The changedToState.
-   */
-  int getChangedToState();
-
-  /**
-   * <code>optional int32 basicQuanfaLevel = 4;</code>
-   * @return Whether the basicQuanfaLevel field is set.
-   */
-  boolean hasBasicQuanfaLevel();
-  /**
-   * <code>optional int32 basicQuanfaLevel = 4;</code>
-   * @return The basicQuanfaLevel.
-   */
-  int getBasicQuanfaLevel();
 }

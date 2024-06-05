@@ -148,9 +148,14 @@ public final class Inventory {
         return findFirst(weapon -> weapon.kungFuType() == type, Weapon.class);
     }
 
-    public Optional<Weapon> findSlot(AttackKungFuType type) {
+    public int findWeaponSlot(AttackKungFuType type) {
         Objects.requireNonNull(type, "type can't be null.");
-        return findFirst(weapon -> weapon.kungFuType() == type, Weapon.class);
+        for (Integer i : items.keySet()) {
+            if (items.get(i) instanceof Weapon weapon && weapon.kungFuType() == type) {
+                return i;
+            }
+        }
+        return 0;
     }
 
 

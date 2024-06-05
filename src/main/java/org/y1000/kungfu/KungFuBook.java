@@ -4,7 +4,6 @@ import org.y1000.kungfu.attack.*;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -32,14 +31,18 @@ public final class KungFuBook {
     }
 
 
-    public AttackKungFu findUnnamed(AttackKungFuType type) {
+    public AttackKungFu findUnnamedAttack(AttackKungFuType type) {
         return findUnnamed(kungFu -> kungFu.getType() == type, AttackKungFu.class);
     }
-
 
     public ProtectKungFu getUnnamedProtection() {
         return findUnnamed(kungFu -> true, ProtectKungFu.class);
     }
+
+    public BreathKungFu getUnnamedBreath() {
+        return findUnnamed(kungFu -> true, BreathKungFu.class);
+    }
+
 
     public FootKungFu getUnnamedFoot() {
         return findUnnamed(kungFu -> true, FootKungFu.class);

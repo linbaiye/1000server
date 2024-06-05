@@ -46,6 +46,7 @@ final class RealmImpl implements Runnable, Realm {
     }
 
 
+
     private void dispatchEvent(RealmEvent event) {
         try {
             if (event instanceof PlayerConnectedEvent connectedEvent) {

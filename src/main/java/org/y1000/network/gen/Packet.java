@@ -57,8 +57,6 @@ private static final long serialVersionUID = 0L;
     HURTEVENTPACKET(11),
     CHANGESTATEPACKET(12),
     SWAPINVENTORYSLOTPACKET(13),
-    CHARACTERCHANGEWEAPONPACKET(14),
-    CHANGEWEAPONPACKET(15),
     DROPITEM(16),
     SHOWITEM(17),
     UPDATESLOT(18),
@@ -70,7 +68,6 @@ private static final long serialVersionUID = 0L;
     SITDOWN(24),
     STANDUP(25),
     COOLDOWN(26),
-    USEWEAPON(27),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -100,8 +97,6 @@ private static final long serialVersionUID = 0L;
         case 11: return HURTEVENTPACKET;
         case 12: return CHANGESTATEPACKET;
         case 13: return SWAPINVENTORYSLOTPACKET;
-        case 14: return CHARACTERCHANGEWEAPONPACKET;
-        case 15: return CHANGEWEAPONPACKET;
         case 16: return DROPITEM;
         case 17: return SHOWITEM;
         case 18: return UPDATESLOT;
@@ -113,7 +108,6 @@ private static final long serialVersionUID = 0L;
         case 24: return SITDOWN;
         case 25: return STANDUP;
         case 26: return COOLDOWN;
-        case 27: return USEWEAPON;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -501,68 +495,6 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
   }
 
-  public static final int CHARACTERCHANGEWEAPONPACKET_FIELD_NUMBER = 14;
-  /**
-   * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-   * @return Whether the characterChangeWeaponPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasCharacterChangeWeaponPacket() {
-    return typedPacketCase_ == 14;
-  }
-  /**
-   * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-   * @return The characterChangeWeaponPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.CharacterChangeWeaponPacket getCharacterChangeWeaponPacket() {
-    if (typedPacketCase_ == 14) {
-       return (org.y1000.network.gen.CharacterChangeWeaponPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.CharacterChangeWeaponPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.CharacterChangeWeaponPacketOrBuilder getCharacterChangeWeaponPacketOrBuilder() {
-    if (typedPacketCase_ == 14) {
-       return (org.y1000.network.gen.CharacterChangeWeaponPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.CharacterChangeWeaponPacket.getDefaultInstance();
-  }
-
-  public static final int CHANGEWEAPONPACKET_FIELD_NUMBER = 15;
-  /**
-   * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-   * @return Whether the changeWeaponPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasChangeWeaponPacket() {
-    return typedPacketCase_ == 15;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-   * @return The changeWeaponPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ChangeWeaponPacket getChangeWeaponPacket() {
-    if (typedPacketCase_ == 15) {
-       return (org.y1000.network.gen.ChangeWeaponPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.ChangeWeaponPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ChangeWeaponPacketOrBuilder getChangeWeaponPacketOrBuilder() {
-    if (typedPacketCase_ == 15) {
-       return (org.y1000.network.gen.ChangeWeaponPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.ChangeWeaponPacket.getDefaultInstance();
-  }
-
   public static final int DROPITEM_FIELD_NUMBER = 16;
   /**
    * <code>.org.y1000.network.gen.DropItemConfirmPacket dropItem = 16;</code>
@@ -904,37 +836,6 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.PlayerCooldownPacket.getDefaultInstance();
   }
 
-  public static final int USEWEAPON_FIELD_NUMBER = 27;
-  /**
-   * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-   * @return Whether the useWeapon field is set.
-   */
-  @java.lang.Override
-  public boolean hasUseWeapon() {
-    return typedPacketCase_ == 27;
-  }
-  /**
-   * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-   * @return The useWeapon.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PlayerUseWeaponPacket getUseWeapon() {
-    if (typedPacketCase_ == 27) {
-       return (org.y1000.network.gen.PlayerUseWeaponPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.PlayerUseWeaponPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PlayerUseWeaponPacketOrBuilder getUseWeaponOrBuilder() {
-    if (typedPacketCase_ == 27) {
-       return (org.y1000.network.gen.PlayerUseWeaponPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.PlayerUseWeaponPacket.getDefaultInstance();
-  }
-
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -985,12 +886,6 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 13) {
       output.writeMessage(13, (org.y1000.network.gen.SwapInventorySlotPacket) typedPacket_);
     }
-    if (typedPacketCase_ == 14) {
-      output.writeMessage(14, (org.y1000.network.gen.CharacterChangeWeaponPacket) typedPacket_);
-    }
-    if (typedPacketCase_ == 15) {
-      output.writeMessage(15, (org.y1000.network.gen.ChangeWeaponPacket) typedPacket_);
-    }
     if (typedPacketCase_ == 16) {
       output.writeMessage(16, (org.y1000.network.gen.DropItemConfirmPacket) typedPacket_);
     }
@@ -1023,9 +918,6 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 26) {
       output.writeMessage(26, (org.y1000.network.gen.PlayerCooldownPacket) typedPacket_);
-    }
-    if (typedPacketCase_ == 27) {
-      output.writeMessage(27, (org.y1000.network.gen.PlayerUseWeaponPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1084,14 +976,6 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(13, (org.y1000.network.gen.SwapInventorySlotPacket) typedPacket_);
     }
-    if (typedPacketCase_ == 14) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(14, (org.y1000.network.gen.CharacterChangeWeaponPacket) typedPacket_);
-    }
-    if (typedPacketCase_ == 15) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(15, (org.y1000.network.gen.ChangeWeaponPacket) typedPacket_);
-    }
     if (typedPacketCase_ == 16) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(16, (org.y1000.network.gen.DropItemConfirmPacket) typedPacket_);
@@ -1135,10 +1019,6 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 26) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(26, (org.y1000.network.gen.PlayerCooldownPacket) typedPacket_);
-    }
-    if (typedPacketCase_ == 27) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(27, (org.y1000.network.gen.PlayerUseWeaponPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1205,14 +1085,6 @@ private static final long serialVersionUID = 0L;
         if (!getSwapInventorySlotPacket()
             .equals(other.getSwapInventorySlotPacket())) return false;
         break;
-      case 14:
-        if (!getCharacterChangeWeaponPacket()
-            .equals(other.getCharacterChangeWeaponPacket())) return false;
-        break;
-      case 15:
-        if (!getChangeWeaponPacket()
-            .equals(other.getChangeWeaponPacket())) return false;
-        break;
       case 16:
         if (!getDropItem()
             .equals(other.getDropItem())) return false;
@@ -1256,10 +1128,6 @@ private static final long serialVersionUID = 0L;
       case 26:
         if (!getCooldown()
             .equals(other.getCooldown())) return false;
-        break;
-      case 27:
-        if (!getUseWeapon()
-            .equals(other.getUseWeapon())) return false;
         break;
       case 0:
       default:
@@ -1324,14 +1192,6 @@ private static final long serialVersionUID = 0L;
         hash = (37 * hash) + SWAPINVENTORYSLOTPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getSwapInventorySlotPacket().hashCode();
         break;
-      case 14:
-        hash = (37 * hash) + CHARACTERCHANGEWEAPONPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getCharacterChangeWeaponPacket().hashCode();
-        break;
-      case 15:
-        hash = (37 * hash) + CHANGEWEAPONPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getChangeWeaponPacket().hashCode();
-        break;
       case 16:
         hash = (37 * hash) + DROPITEM_FIELD_NUMBER;
         hash = (53 * hash) + getDropItem().hashCode();
@@ -1375,10 +1235,6 @@ private static final long serialVersionUID = 0L;
       case 26:
         hash = (37 * hash) + COOLDOWN_FIELD_NUMBER;
         hash = (53 * hash) + getCooldown().hashCode();
-        break;
-      case 27:
-        hash = (37 * hash) + USEWEAPON_FIELD_NUMBER;
-        hash = (53 * hash) + getUseWeapon().hashCode();
         break;
       case 0:
       default:
@@ -1550,12 +1406,6 @@ private static final long serialVersionUID = 0L;
       if (swapInventorySlotPacketBuilder_ != null) {
         swapInventorySlotPacketBuilder_.clear();
       }
-      if (characterChangeWeaponPacketBuilder_ != null) {
-        characterChangeWeaponPacketBuilder_.clear();
-      }
-      if (changeWeaponPacketBuilder_ != null) {
-        changeWeaponPacketBuilder_.clear();
-      }
       if (dropItemBuilder_ != null) {
         dropItemBuilder_.clear();
       }
@@ -1588,9 +1438,6 @@ private static final long serialVersionUID = 0L;
       }
       if (cooldownBuilder_ != null) {
         cooldownBuilder_.clear();
-      }
-      if (useWeaponBuilder_ != null) {
-        useWeaponBuilder_.clear();
       }
       typedPacketCase_ = 0;
       typedPacket_ = null;
@@ -1681,14 +1528,6 @@ private static final long serialVersionUID = 0L;
           swapInventorySlotPacketBuilder_ != null) {
         result.typedPacket_ = swapInventorySlotPacketBuilder_.build();
       }
-      if (typedPacketCase_ == 14 &&
-          characterChangeWeaponPacketBuilder_ != null) {
-        result.typedPacket_ = characterChangeWeaponPacketBuilder_.build();
-      }
-      if (typedPacketCase_ == 15 &&
-          changeWeaponPacketBuilder_ != null) {
-        result.typedPacket_ = changeWeaponPacketBuilder_.build();
-      }
       if (typedPacketCase_ == 16 &&
           dropItemBuilder_ != null) {
         result.typedPacket_ = dropItemBuilder_.build();
@@ -1732,10 +1571,6 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 26 &&
           cooldownBuilder_ != null) {
         result.typedPacket_ = cooldownBuilder_.build();
-      }
-      if (typedPacketCase_ == 27 &&
-          useWeaponBuilder_ != null) {
-        result.typedPacket_ = useWeaponBuilder_.build();
       }
     }
 
@@ -1832,14 +1667,6 @@ private static final long serialVersionUID = 0L;
           mergeSwapInventorySlotPacket(other.getSwapInventorySlotPacket());
           break;
         }
-        case CHARACTERCHANGEWEAPONPACKET: {
-          mergeCharacterChangeWeaponPacket(other.getCharacterChangeWeaponPacket());
-          break;
-        }
-        case CHANGEWEAPONPACKET: {
-          mergeChangeWeaponPacket(other.getChangeWeaponPacket());
-          break;
-        }
         case DROPITEM: {
           mergeDropItem(other.getDropItem());
           break;
@@ -1882,10 +1709,6 @@ private static final long serialVersionUID = 0L;
         }
         case COOLDOWN: {
           mergeCooldown(other.getCooldown());
-          break;
-        }
-        case USEWEAPON: {
-          mergeUseWeapon(other.getUseWeapon());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -2002,20 +1825,6 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 13;
               break;
             } // case 106
-            case 114: {
-              input.readMessage(
-                  getCharacterChangeWeaponPacketFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typedPacketCase_ = 14;
-              break;
-            } // case 114
-            case 122: {
-              input.readMessage(
-                  getChangeWeaponPacketFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typedPacketCase_ = 15;
-              break;
-            } // case 122
             case 130: {
               input.readMessage(
                   getDropItemFieldBuilder().getBuilder(),
@@ -2093,13 +1902,6 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 26;
               break;
             } // case 210
-            case 218: {
-              input.readMessage(
-                  getUseWeaponFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typedPacketCase_ = 27;
-              break;
-            } // case 218
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -3837,290 +3639,6 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.CharacterChangeWeaponPacket, org.y1000.network.gen.CharacterChangeWeaponPacket.Builder, org.y1000.network.gen.CharacterChangeWeaponPacketOrBuilder> characterChangeWeaponPacketBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-     * @return Whether the characterChangeWeaponPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasCharacterChangeWeaponPacket() {
-      return typedPacketCase_ == 14;
-    }
-    /**
-     * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-     * @return The characterChangeWeaponPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.CharacterChangeWeaponPacket getCharacterChangeWeaponPacket() {
-      if (characterChangeWeaponPacketBuilder_ == null) {
-        if (typedPacketCase_ == 14) {
-          return (org.y1000.network.gen.CharacterChangeWeaponPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.CharacterChangeWeaponPacket.getDefaultInstance();
-      } else {
-        if (typedPacketCase_ == 14) {
-          return characterChangeWeaponPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.CharacterChangeWeaponPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-     */
-    public Builder setCharacterChangeWeaponPacket(org.y1000.network.gen.CharacterChangeWeaponPacket value) {
-      if (characterChangeWeaponPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        typedPacket_ = value;
-        onChanged();
-      } else {
-        characterChangeWeaponPacketBuilder_.setMessage(value);
-      }
-      typedPacketCase_ = 14;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-     */
-    public Builder setCharacterChangeWeaponPacket(
-        org.y1000.network.gen.CharacterChangeWeaponPacket.Builder builderForValue) {
-      if (characterChangeWeaponPacketBuilder_ == null) {
-        typedPacket_ = builderForValue.build();
-        onChanged();
-      } else {
-        characterChangeWeaponPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typedPacketCase_ = 14;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-     */
-    public Builder mergeCharacterChangeWeaponPacket(org.y1000.network.gen.CharacterChangeWeaponPacket value) {
-      if (characterChangeWeaponPacketBuilder_ == null) {
-        if (typedPacketCase_ == 14 &&
-            typedPacket_ != org.y1000.network.gen.CharacterChangeWeaponPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.network.gen.CharacterChangeWeaponPacket.newBuilder((org.y1000.network.gen.CharacterChangeWeaponPacket) typedPacket_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          typedPacket_ = value;
-        }
-        onChanged();
-      } else {
-        if (typedPacketCase_ == 14) {
-          characterChangeWeaponPacketBuilder_.mergeFrom(value);
-        } else {
-          characterChangeWeaponPacketBuilder_.setMessage(value);
-        }
-      }
-      typedPacketCase_ = 14;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-     */
-    public Builder clearCharacterChangeWeaponPacket() {
-      if (characterChangeWeaponPacketBuilder_ == null) {
-        if (typedPacketCase_ == 14) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-          onChanged();
-        }
-      } else {
-        if (typedPacketCase_ == 14) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-        }
-        characterChangeWeaponPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-     */
-    public org.y1000.network.gen.CharacterChangeWeaponPacket.Builder getCharacterChangeWeaponPacketBuilder() {
-      return getCharacterChangeWeaponPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.CharacterChangeWeaponPacketOrBuilder getCharacterChangeWeaponPacketOrBuilder() {
-      if ((typedPacketCase_ == 14) && (characterChangeWeaponPacketBuilder_ != null)) {
-        return characterChangeWeaponPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typedPacketCase_ == 14) {
-          return (org.y1000.network.gen.CharacterChangeWeaponPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.CharacterChangeWeaponPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.CharacterChangeWeaponPacket, org.y1000.network.gen.CharacterChangeWeaponPacket.Builder, org.y1000.network.gen.CharacterChangeWeaponPacketOrBuilder> 
-        getCharacterChangeWeaponPacketFieldBuilder() {
-      if (characterChangeWeaponPacketBuilder_ == null) {
-        if (!(typedPacketCase_ == 14)) {
-          typedPacket_ = org.y1000.network.gen.CharacterChangeWeaponPacket.getDefaultInstance();
-        }
-        characterChangeWeaponPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.CharacterChangeWeaponPacket, org.y1000.network.gen.CharacterChangeWeaponPacket.Builder, org.y1000.network.gen.CharacterChangeWeaponPacketOrBuilder>(
-                (org.y1000.network.gen.CharacterChangeWeaponPacket) typedPacket_,
-                getParentForChildren(),
-                isClean());
-        typedPacket_ = null;
-      }
-      typedPacketCase_ = 14;
-      onChanged();
-      return characterChangeWeaponPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ChangeWeaponPacket, org.y1000.network.gen.ChangeWeaponPacket.Builder, org.y1000.network.gen.ChangeWeaponPacketOrBuilder> changeWeaponPacketBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-     * @return Whether the changeWeaponPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasChangeWeaponPacket() {
-      return typedPacketCase_ == 15;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-     * @return The changeWeaponPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ChangeWeaponPacket getChangeWeaponPacket() {
-      if (changeWeaponPacketBuilder_ == null) {
-        if (typedPacketCase_ == 15) {
-          return (org.y1000.network.gen.ChangeWeaponPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.ChangeWeaponPacket.getDefaultInstance();
-      } else {
-        if (typedPacketCase_ == 15) {
-          return changeWeaponPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ChangeWeaponPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-     */
-    public Builder setChangeWeaponPacket(org.y1000.network.gen.ChangeWeaponPacket value) {
-      if (changeWeaponPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        typedPacket_ = value;
-        onChanged();
-      } else {
-        changeWeaponPacketBuilder_.setMessage(value);
-      }
-      typedPacketCase_ = 15;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-     */
-    public Builder setChangeWeaponPacket(
-        org.y1000.network.gen.ChangeWeaponPacket.Builder builderForValue) {
-      if (changeWeaponPacketBuilder_ == null) {
-        typedPacket_ = builderForValue.build();
-        onChanged();
-      } else {
-        changeWeaponPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typedPacketCase_ = 15;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-     */
-    public Builder mergeChangeWeaponPacket(org.y1000.network.gen.ChangeWeaponPacket value) {
-      if (changeWeaponPacketBuilder_ == null) {
-        if (typedPacketCase_ == 15 &&
-            typedPacket_ != org.y1000.network.gen.ChangeWeaponPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.network.gen.ChangeWeaponPacket.newBuilder((org.y1000.network.gen.ChangeWeaponPacket) typedPacket_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          typedPacket_ = value;
-        }
-        onChanged();
-      } else {
-        if (typedPacketCase_ == 15) {
-          changeWeaponPacketBuilder_.mergeFrom(value);
-        } else {
-          changeWeaponPacketBuilder_.setMessage(value);
-        }
-      }
-      typedPacketCase_ = 15;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-     */
-    public Builder clearChangeWeaponPacket() {
-      if (changeWeaponPacketBuilder_ == null) {
-        if (typedPacketCase_ == 15) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-          onChanged();
-        }
-      } else {
-        if (typedPacketCase_ == 15) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-        }
-        changeWeaponPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-     */
-    public org.y1000.network.gen.ChangeWeaponPacket.Builder getChangeWeaponPacketBuilder() {
-      return getChangeWeaponPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ChangeWeaponPacketOrBuilder getChangeWeaponPacketOrBuilder() {
-      if ((typedPacketCase_ == 15) && (changeWeaponPacketBuilder_ != null)) {
-        return changeWeaponPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typedPacketCase_ == 15) {
-          return (org.y1000.network.gen.ChangeWeaponPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.ChangeWeaponPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ChangeWeaponPacket, org.y1000.network.gen.ChangeWeaponPacket.Builder, org.y1000.network.gen.ChangeWeaponPacketOrBuilder> 
-        getChangeWeaponPacketFieldBuilder() {
-      if (changeWeaponPacketBuilder_ == null) {
-        if (!(typedPacketCase_ == 15)) {
-          typedPacket_ = org.y1000.network.gen.ChangeWeaponPacket.getDefaultInstance();
-        }
-        changeWeaponPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ChangeWeaponPacket, org.y1000.network.gen.ChangeWeaponPacket.Builder, org.y1000.network.gen.ChangeWeaponPacketOrBuilder>(
-                (org.y1000.network.gen.ChangeWeaponPacket) typedPacket_,
-                getParentForChildren(),
-                isClean());
-        typedPacket_ = null;
-      }
-      typedPacketCase_ = 15;
-      onChanged();
-      return changeWeaponPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.DropItemConfirmPacket, org.y1000.network.gen.DropItemConfirmPacket.Builder, org.y1000.network.gen.DropItemConfirmPacketOrBuilder> dropItemBuilder_;
     /**
      * <code>.org.y1000.network.gen.DropItemConfirmPacket dropItem = 16;</code>
@@ -5680,148 +5198,6 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 26;
       onChanged();
       return cooldownBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PlayerUseWeaponPacket, org.y1000.network.gen.PlayerUseWeaponPacket.Builder, org.y1000.network.gen.PlayerUseWeaponPacketOrBuilder> useWeaponBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-     * @return Whether the useWeapon field is set.
-     */
-    @java.lang.Override
-    public boolean hasUseWeapon() {
-      return typedPacketCase_ == 27;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-     * @return The useWeapon.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.PlayerUseWeaponPacket getUseWeapon() {
-      if (useWeaponBuilder_ == null) {
-        if (typedPacketCase_ == 27) {
-          return (org.y1000.network.gen.PlayerUseWeaponPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.PlayerUseWeaponPacket.getDefaultInstance();
-      } else {
-        if (typedPacketCase_ == 27) {
-          return useWeaponBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.PlayerUseWeaponPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-     */
-    public Builder setUseWeapon(org.y1000.network.gen.PlayerUseWeaponPacket value) {
-      if (useWeaponBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        typedPacket_ = value;
-        onChanged();
-      } else {
-        useWeaponBuilder_.setMessage(value);
-      }
-      typedPacketCase_ = 27;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-     */
-    public Builder setUseWeapon(
-        org.y1000.network.gen.PlayerUseWeaponPacket.Builder builderForValue) {
-      if (useWeaponBuilder_ == null) {
-        typedPacket_ = builderForValue.build();
-        onChanged();
-      } else {
-        useWeaponBuilder_.setMessage(builderForValue.build());
-      }
-      typedPacketCase_ = 27;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-     */
-    public Builder mergeUseWeapon(org.y1000.network.gen.PlayerUseWeaponPacket value) {
-      if (useWeaponBuilder_ == null) {
-        if (typedPacketCase_ == 27 &&
-            typedPacket_ != org.y1000.network.gen.PlayerUseWeaponPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.network.gen.PlayerUseWeaponPacket.newBuilder((org.y1000.network.gen.PlayerUseWeaponPacket) typedPacket_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          typedPacket_ = value;
-        }
-        onChanged();
-      } else {
-        if (typedPacketCase_ == 27) {
-          useWeaponBuilder_.mergeFrom(value);
-        } else {
-          useWeaponBuilder_.setMessage(value);
-        }
-      }
-      typedPacketCase_ = 27;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-     */
-    public Builder clearUseWeapon() {
-      if (useWeaponBuilder_ == null) {
-        if (typedPacketCase_ == 27) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-          onChanged();
-        }
-      } else {
-        if (typedPacketCase_ == 27) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-        }
-        useWeaponBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-     */
-    public org.y1000.network.gen.PlayerUseWeaponPacket.Builder getUseWeaponBuilder() {
-      return getUseWeaponFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.PlayerUseWeaponPacketOrBuilder getUseWeaponOrBuilder() {
-      if ((typedPacketCase_ == 27) && (useWeaponBuilder_ != null)) {
-        return useWeaponBuilder_.getMessageOrBuilder();
-      } else {
-        if (typedPacketCase_ == 27) {
-          return (org.y1000.network.gen.PlayerUseWeaponPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.PlayerUseWeaponPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PlayerUseWeaponPacket, org.y1000.network.gen.PlayerUseWeaponPacket.Builder, org.y1000.network.gen.PlayerUseWeaponPacketOrBuilder> 
-        getUseWeaponFieldBuilder() {
-      if (useWeaponBuilder_ == null) {
-        if (!(typedPacketCase_ == 27)) {
-          typedPacket_ = org.y1000.network.gen.PlayerUseWeaponPacket.getDefaultInstance();
-        }
-        useWeaponBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.PlayerUseWeaponPacket, org.y1000.network.gen.PlayerUseWeaponPacket.Builder, org.y1000.network.gen.PlayerUseWeaponPacketOrBuilder>(
-                (org.y1000.network.gen.PlayerUseWeaponPacket) typedPacket_,
-                getParentForChildren(),
-                isClean());
-        typedPacket_ = null;
-      }
-      typedPacketCase_ = 27;
-      onChanged();
-      return useWeaponBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

@@ -189,36 +189,6 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.SwapInventorySlotPacketOrBuilder getSwapInventorySlotPacketOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-   * @return Whether the characterChangeWeaponPacket field is set.
-   */
-  boolean hasCharacterChangeWeaponPacket();
-  /**
-   * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-   * @return The characterChangeWeaponPacket.
-   */
-  org.y1000.network.gen.CharacterChangeWeaponPacket getCharacterChangeWeaponPacket();
-  /**
-   * <code>.org.y1000.network.gen.CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;</code>
-   */
-  org.y1000.network.gen.CharacterChangeWeaponPacketOrBuilder getCharacterChangeWeaponPacketOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-   * @return Whether the changeWeaponPacket field is set.
-   */
-  boolean hasChangeWeaponPacket();
-  /**
-   * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-   * @return The changeWeaponPacket.
-   */
-  org.y1000.network.gen.ChangeWeaponPacket getChangeWeaponPacket();
-  /**
-   * <code>.org.y1000.network.gen.ChangeWeaponPacket changeWeaponPacket = 15;</code>
-   */
-  org.y1000.network.gen.ChangeWeaponPacketOrBuilder getChangeWeaponPacketOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.DropItemConfirmPacket dropItem = 16;</code>
    * @return Whether the dropItem field is set.
    */
@@ -382,21 +352,6 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.network.gen.PlayerCooldownPacket cooldown = 26;</code>
    */
   org.y1000.network.gen.PlayerCooldownPacketOrBuilder getCooldownOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-   * @return Whether the useWeapon field is set.
-   */
-  boolean hasUseWeapon();
-  /**
-   * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-   * @return The useWeapon.
-   */
-  org.y1000.network.gen.PlayerUseWeaponPacket getUseWeapon();
-  /**
-   * <code>.org.y1000.network.gen.PlayerUseWeaponPacket useWeapon = 27;</code>
-   */
-  org.y1000.network.gen.PlayerUseWeaponPacketOrBuilder getUseWeaponOrBuilder();
 
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

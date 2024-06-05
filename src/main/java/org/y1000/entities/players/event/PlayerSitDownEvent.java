@@ -1,14 +1,22 @@
 package org.y1000.entities.players.event;
 
+import lombok.Getter;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerSitDownPacket;
 
-public class PlayerSitDownEvent extends AbstractPlayerEvent {
+@Getter
+public final class PlayerSitDownEvent extends AbstractPlayerEvent {
+
+    private final boolean includeSelf;
 
     public PlayerSitDownEvent(Player source) {
+        this(source, false);
+    }
+    public PlayerSitDownEvent(Player source, boolean includeSelf) {
         super(source);
+        this.includeSelf = includeSelf;
     }
 
     @Override

@@ -9,12 +9,23 @@ public interface TextMessagePacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string text = 1;</code>
+   * <code>int32 type = 1;</code>
+   * @return The type.
+   */
+  int getType();
+
+  /**
+   * <code>optional string text = 2;</code>
+   * @return Whether the text field is set.
+   */
+  boolean hasText();
+  /**
+   * <code>optional string text = 2;</code>
    * @return The text.
    */
   java.lang.String getText();
   /**
-   * <code>string text = 1;</code>
+   * <code>optional string text = 2;</code>
    * @return The bytes for text.
    */
   com.google.protobuf.ByteString

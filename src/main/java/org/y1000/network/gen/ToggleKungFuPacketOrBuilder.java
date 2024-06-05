@@ -36,4 +36,10 @@ public interface ToggleKungFuPacketOrBuilder extends
    * @return The id.
    */
   long getId();
+
+  /**
+   * <code>bool quietly = 4;</code>
+   * @return The quietly.
+   */
+  boolean getQuietly();
 }

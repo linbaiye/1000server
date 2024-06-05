@@ -7,7 +7,8 @@ import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerStandUpPacket;
 
 @Getter
-public class PlayerStandUpEvent extends AbstractPlayerEvent {
+public final class PlayerStandUpEvent extends AbstractPlayerEvent {
+
     private final boolean includeSelf;
     public PlayerStandUpEvent(Player source) {
         super(source);

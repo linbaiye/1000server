@@ -61,11 +61,6 @@ message ChangeStatePacket {
   int32 state = 2;
 }
 
-message ChangeWeaponPacket {
-  int64 id = 1;
-  string name = 2;
-  int32 state = 3;
-}
 
 message MoveEventPacket {
   InputPacket input = 1;
@@ -139,15 +134,6 @@ message ShowItemPacket {
   string name = 7;
 }
 
-message CharacterChangeWeaponPacket {
-  string name = 1;
-  int32 affectedSlot = 2;
-  optional string slotNewItemName = 4;
-  optional int32 slotNewItemType = 5;
-  optional string attackKungFuName = 6;
-  optional int32 attackKungFuLevel = 7;
-  optional int32 attackKungFuType = 8;
-}
 
 message CharacterKungFuPacket {
   string attackKungFuName = 1;
@@ -203,13 +189,15 @@ message KungFuPacket {
 }
 
 message TextMessagePacket {
-  string text = 1;
+  int32 type = 1;
+  optional string text = 2;
 }
 
 message ToggleKungFuPacket {
   string name = 1;
   optional int32 level = 2;
   int64 id = 3;
+  bool quietly = 4;
 }
 
 message LoginPacket {
@@ -233,8 +221,6 @@ message LoginPacket {
 message PlayerUnequipPacket {
   int64 id = 1;
   int32 equipmentType = 2;
-  optional int32 changedToState = 3;
-  optional int32 basicQuanfaLevel = 4;
 }
 
 message PlayerEquipPacket {
@@ -268,8 +254,6 @@ message Packet {
     CreatureHurtEventPacket hurtEventPacket = 11;
     ChangeStatePacket changeStatePacket = 12;
     SwapInventorySlotPacket swapInventorySlotPacket = 13;
-    CharacterChangeWeaponPacket characterChangeWeaponPacket = 14;
-    ChangeWeaponPacket changeWeaponPacket = 15;
     DropItemConfirmPacket dropItem = 16;
     ShowItemPacket showItem = 17;
     InventoryItemPacket updateSlot = 18;

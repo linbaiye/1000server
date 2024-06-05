@@ -6,28 +6,38 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ToggleKungFuPacket;
 
-public class PlayerToggleKungFuEvent extends AbstractPlayerEvent {
+public final class PlayerToggleKungFuEvent extends AbstractPlayerEvent {
     private final Integer level;
     private final String name;
+    private final boolean quietly;
+
     public PlayerToggleKungFuEvent(Player source, KungFu kungFu) {
-        super(source);
-        name = kungFu.name();
-        level = kungFu.level();
+        this(source, kungFu.name(), kungFu.level(), false);
     }
 
-    public PlayerToggleKungFuEvent(Player source, String name) {
+    public PlayerToggleKungFuEvent(Player source, String name, Integer level, boolean quietly) {
         super(source);
         this.name = name;
-        this.level = null;
+        this.level = level;
+        this.quietly = quietly;
+    }
+
+
+    public PlayerToggleKungFuEvent(Player source, String name) {
+        this(source, name, null, false);
     }
 
 
     public static PlayerToggleKungFuEvent enable(Player player, KungFu kungFu) {
-        return new PlayerToggleKungFuEvent(player, kungFu);
+        return new PlayerToggleKungFuEvent(player, kungFu.name(), kungFu.level(), false);
     }
 
     public static PlayerToggleKungFuEvent disable(Player player, KungFu kungFu) {
-        return new PlayerToggleKungFuEvent(player, kungFu.name());
+        return new PlayerToggleKungFuEvent(player, kungFu.name(), null, false);
+    }
+
+    public static PlayerToggleKungFuEvent disableQuietly(Player player, KungFu kungFu) {
+        return new PlayerToggleKungFuEvent(player, kungFu.name(), null, true);
     }
 
     @Override
@@ -37,7 +47,9 @@ public class PlayerToggleKungFuEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
-        ToggleKungFuPacket.Builder builder = ToggleKungFuPacket.newBuilder().setName(name)
+        ToggleKungFuPacket.Builder builder = ToggleKungFuPacket.newBuilder()
+                .setName(name)
+                .setQuietly(quietly)
                 .setId(source().id());
         if (level != null) {
             builder.setLevel(level);

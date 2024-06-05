@@ -5,7 +5,7 @@ import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ShowItemPacket;
 import org.y1000.util.Coordinate;
 
-public class GroundedItemInterpolation extends AbstractEntityInterpolation {
+public final class GroundedItemInterpolation extends AbstractEntityInterpolation {
     private final String name;
     private final int x;
     private final int y;

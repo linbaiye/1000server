@@ -33,10 +33,6 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
 
     }
 
-    default void visit(CharacterChangeWeaponEvent event) {
-
-    }
-
     default void visit(PlayerDropItemEvent event) {
 
     }
@@ -85,10 +81,6 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     }
 
     default void visit(PlayerCooldownEvent event) {
-
-    }
-
-    default void visit(PlayerUseWeaponEvent event) {
 
     }
 }

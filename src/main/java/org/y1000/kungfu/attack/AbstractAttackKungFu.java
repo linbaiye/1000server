@@ -32,21 +32,19 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     private int attackSpeed;
 
-    private int recovery;
+    private final int recovery;
 
-    private int avoidance;
+    private final int avoidance;
 
     protected abstract Logger logger();
 
     private boolean doAttack(PlayerImpl player, Direction direction) {
         int cooldown = player.cooldown();
         if (cooldown > 0) {
-            logger().debug("Cooling down for {}.", cooldown);
             player.changeState(new PlayerCooldownState(cooldown));
             return false;
         }
         if (!hasEnoughResources(player)) {
-            logger().debug("Not enough resource.");
             player.changeState(new PlayerCooldownState(player.getStateMillis(State.COOLDOWN)));
             player.emitEvent(PlayerTextEvent.unableToAttack(player));
             return false;
