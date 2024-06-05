@@ -42,6 +42,19 @@ public enum Direction {
         }
     };
 
+    private static final Map<Direction, Direction> OPPOSITE = new HashMap<>() {
+        {
+            put(UP, DOWN);
+            put(DOWN, UP);
+            put(LEFT, RIGHT);
+            put(RIGHT, LEFT);
+            put(UP_LEFT, DOWN_RIGHT);
+            put(UP_RIGHT, DOWN_LEFT);
+            put(DOWN_RIGHT, UP_LEFT);
+            put(DOWN_LEFT, UP_RIGHT);
+        }
+    };
+
 
     Direction(Coordinate offset, int value) {
         this.offset = offset;
@@ -58,6 +71,10 @@ public enum Direction {
 
     public Direction[] neighbours() {
         return NEIBOURS_MAP.get(this);
+    }
+
+    public Direction opposite() {
+        return OPPOSITE.get(this);
     }
 
     public static Direction fromValue(int v) {

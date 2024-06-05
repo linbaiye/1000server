@@ -253,8 +253,13 @@ final class RealmEntityManager implements EntityEventListener,
 
     @Override
     public void visit(PlayerCooldownEvent event) {
-        log.debug("Sending cooldown.");
         notifyVisiblePlayersAndSelf(event.player(), event);
+    }
+
+    @Override
+    public void visit(PlayerAttackAoeEvent event) {
+        Set<PhysicalEntity> entities = scopeManager.filterVisibleEntities(event.source(), PhysicalEntity.class);
+        event.affect(entities);
     }
 
     private void update(PhysicalEntity entity, int delta) {

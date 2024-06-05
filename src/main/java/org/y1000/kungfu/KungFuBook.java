@@ -4,6 +4,7 @@ import org.y1000.kungfu.attack.*;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -12,13 +13,34 @@ import java.util.function.Predicate;
 public final class KungFuBook {
 
     private final Map<Integer, KungFu> unnamed;
+    private final Map<Integer, KungFu> basic;
+
+    private static final int BASIC_MAX = 30;
 
     public KungFuBook(Map<Integer, KungFu> unnamed) {
         this.unnamed = unnamed;
+        this.basic = new HashMap<>();
+    }
+
+    public boolean addToBasic(KungFu kungFu) {
+        if (basic.size() == BASIC_MAX) {
+            return false;
+        }
+        for (int i = 1; i <= BASIC_MAX; i++) {
+            if (!basic.containsKey(i)) {
+                basic.put(i, kungFu);
+                break;
+            }
+        }
+        return true;
     }
 
     public void foreachUnnamed(BiConsumer<Integer, KungFu> kungFuBiConsumer) {
         unnamed.forEach(kungFuBiConsumer);
+    }
+
+    public void foreachBasic(BiConsumer<Integer, KungFu> kungFuBiConsumer) {
+        basic.forEach(kungFuBiConsumer);
     }
 
     private <T extends KungFu> T findUnnamed(Predicate<T> predicate, Class<T> type) {
@@ -29,7 +51,6 @@ public final class KungFuBook {
         }
         throw new IllegalStateException("Unnamed kungfu for type " + type + " does not exist.");
     }
-
 
     public AttackKungFu findUnnamedAttack(AttackKungFuType type) {
         return findUnnamed(kungFu -> kungFu.getType() == type, AttackKungFu.class);

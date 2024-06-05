@@ -125,6 +125,9 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         for (int i = 1; i <= UNNAMED_NAMES.size(); i++ ){
             unnamed.put(i, create(UNNAMED_NAMES.get(i - 1)));
         }
-        return new KungFuBook(unnamed);
+        KungFuBook kungFuBook = new KungFuBook(unnamed);
+        kungFuBook.addToBasic(AssistantKungFu.builder().name("风灵旋").level(100).eightDirection(false).build());
+        kungFuBook.addToBasic(AssistantKungFu.builder().name("灵动八方").level(100).eightDirection(true).build());
+        return kungFuBook;
     }
 }

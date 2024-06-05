@@ -15,8 +15,4 @@ public final class LoginEvent implements ClientEvent {
     public static LoginEvent fromPacket(PlayerLoginPacket packet) {
         return new LoginEvent(packet.getToken());
     }
-
-    @Override
-    public void accept(PlayerImpl player, BiClientEventVisitor handler) {
-    }
 }

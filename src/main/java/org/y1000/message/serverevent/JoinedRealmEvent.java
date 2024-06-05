@@ -58,8 +58,10 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
                 ;
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuLevel(footKungFu.level()).setFootKungFuName(footKungFu.name()));
         player.protectKungFu().ifPresent(protectKungFu -> builder.setProtectionKungFu(protectKungFu.name()));
+        player.assistantKungFu().ifPresent(assistantKungFu -> builder.setAssistantKungFu(assistantKungFu.name()));
         playerInventory.foreach((index, item) -> builder.addInventoryItems(toPacket(index, item)));
         player.kungFuBook().foreachUnnamed((slot, kungFu) -> builder.addUnnamedKungFuList(toPacket(slot, kungFu)));
+        player.kungFuBook().foreachBasic((slot, kungFu) -> builder.addBasicKungFuList(toPacket(slot, kungFu)));
         return Packet.newBuilder().setLoginPacket(builder.build()).build();
     }
 

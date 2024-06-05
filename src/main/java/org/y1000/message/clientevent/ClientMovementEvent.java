@@ -31,8 +31,4 @@ public record ClientMovementEvent(InputMessage moveInput, Coordinate happenedAt)
         };
     }
 
-    @Override
-    public void accept(PlayerImpl player, BiClientEventVisitor handler) {
-        handler.visit(player, this);
-    }
 }
