@@ -39,7 +39,7 @@ public final class MonsterFightingIdleState extends AbstractMonsterIdleState imp
 
 
     public static MonsterFightingIdleState hunt(PassiveMonster monster, Creature attacker) {
-        return new MonsterFightingIdleState(monster.getStateMillis(State.IDLE), attacker, new Coordinate(0, 0));
+        return new MonsterFightingIdleState(monster.getStateMillis(State.IDLE), attacker, monster.coordinate());
     }
 
     public static MonsterFightingIdleState continueHunting(PassiveMonster monster, Creature attacker, Coordinate from) {

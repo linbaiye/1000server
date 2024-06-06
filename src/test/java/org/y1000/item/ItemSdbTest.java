@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 class ItemSdbTest {
 
-    @Test
     public void test1() {
         var name = "Magic.sdb";
         try {

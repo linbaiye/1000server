@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.monster.fight;
 
+import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.State;

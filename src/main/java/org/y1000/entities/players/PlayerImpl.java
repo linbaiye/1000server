@@ -1,7 +1,6 @@
 package org.y1000.entities.players;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.*;
@@ -31,7 +30,7 @@ import org.y1000.util.Coordinate;
 import java.util.*;
 
 @Slf4j
-public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player, EntityEventListener {
+public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player {
 
     private Realm realm;
 
@@ -52,9 +51,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     private final boolean male;
 
     private final Map<EquipmentType, Equipment> equippedEquipments;
-
-    @Getter
-    private PhysicalEntity fightingEntity;
 
     public static final int INNATE_ATTACKSPEED = 70;
 
@@ -154,7 +150,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return Optional.ofNullable(footKungfu);
     }
 
-
     @Override
     public void pickItem(Item item, GroundedItem groundedItem){
         int slot = inventory.add(item);
@@ -163,24 +158,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             emitEvent(new PlayerPickedItemEvent(this, slot, inventory.getItem(slot), groundedItem));
         }
     }
-
-    public void setFightingEntity(PhysicalEntity entity){
-        Objects.requireNonNull(entity, "entity can't be null");
-        if (this.fightingEntity != null) {
-            this.fightingEntity.deregisterEventListener(this);
-        }
-        this.fightingEntity = entity;
-        this.fightingEntity.registerOrderedEventListener(this);
-    }
-
-
-    public void clearFightingEntity() {
-        if (this.fightingEntity != null) {
-            this.fightingEntity.deregisterEventListener(this);
-        }
-        this.fightingEntity = null;
-    }
-
 
     @Override
     public AttackKungFu attackKungFu() {
@@ -201,9 +178,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
     }
 
-
     public boolean hasFightingEntity() {
-        return fightingEntity != null;
+        return getFightingEntity() != null;
     }
 
     public void disableFootKungFu() {
@@ -334,6 +310,17 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         emitEvent(new PlayerToggleKungFuEvent(this, this.footKungfu));
     }
 
+    private void toggleAssistantKungFu(AssistantKungFu newAssistant) {
+        if (this.assistantKungFu != null &&
+                this.assistantKungFu.name().equals(newAssistant.name())) {
+            emitEvent(PlayerToggleKungFuEvent.disable(this, this.assistantKungFu));
+            this.assistantKungFu = null;
+        } else {
+            this.assistantKungFu = newAssistant;
+            emitEvent(PlayerToggleKungFuEvent.enable(this, this.assistantKungFu));
+        }
+    }
+
 
     private void useKungFu(KungFu kungFu) {
         if (stateEnum() == State.DIE) {
@@ -346,17 +333,12 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         } else if (kungFu instanceof BreathKungFu newBreath) {
             toggleBreathingKungFu(newBreath);
         } else if (kungFu instanceof AssistantKungFu newAssistant) {
-            if (this.assistantKungFu != null && this.assistantKungFu.name().equals(newAssistant.name())) {
-                this.assistantKungFu = null;
-                emitEvent(new PlayerToggleKungFuEvent(this, kungFu.name()));
-            } else {
-                this.assistantKungFu = newAssistant;
-                emitEvent(new PlayerToggleKungFuEvent(this, this.assistantKungFu));
-            }
+            toggleAssistantKungFu(newAssistant);
         } else if (kungFu instanceof AttackKungFu newAttack) {
             handleClickAttackKungFu(newAttack);
         }
     }
+
 
     private void sitDown(boolean includeSelf) {
         if (!state().canSitDown()) {
@@ -502,6 +484,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
         changeState(PlayerFrozenState.Instance);
         emitEvent(new PlayerLeftEvent(this));
+        clearFightingEntity();
     }
 
     private void changeAttackKungFu(AttackKungFu newKungFu) {
@@ -636,15 +619,15 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     @Override
-    public void OnEvent(EntityEvent entityEvent) {
-        if (!entityEvent.source().equals(fightingEntity)) {
+    public void onEvent(EntityEvent entityEvent) {
+        if (!entityEvent.source().equals(getFightingEntity())) {
             return;
-        }
-        if (state() instanceof PlayerWaitDistanceState waitDistanceState) {
-            waitDistanceState.onTargetEvent(this);
         }
         if (!canAttack(entityEvent.source())) {
             clearFightingEntity();
+        }
+        if (state() instanceof PlayerWaitDistanceState waitDistanceState) {
+            waitDistanceState.onTargetEvent(this);
         }
     }
 }

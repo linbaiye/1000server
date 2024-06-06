@@ -50,7 +50,7 @@ public final class TradeManager implements EntityEventListener {
     }
 
     @Override
-    public void OnEvent(EntityEvent entityEvent) {
+    public void onEvent(EntityEvent entityEvent) {
 
     }
 }

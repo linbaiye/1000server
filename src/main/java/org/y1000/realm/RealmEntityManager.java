@@ -161,7 +161,7 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
-    public void OnEvent(EntityEvent entityEvent) {
+    public void onEvent(EntityEvent entityEvent) {
         entityEvent.accept(this);
     }
 
@@ -221,7 +221,7 @@ final class RealmEntityManager implements EntityEventListener,
     public void visit(PlayerStartTradeEvent event) {
         Optional<Player> insight = findInsight(event.source(), event.targetPlayerId())
                 .filter(entity -> entity instanceof Player).map(Player.class::cast);
-        insight.ifPresent(another -> tradeManager.handle(event, another, this::OnEvent));
+        insight.ifPresent(another -> tradeManager.handle(event, another, this::onEvent));
     }
 
     @Override

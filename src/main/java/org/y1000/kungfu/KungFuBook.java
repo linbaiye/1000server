@@ -74,6 +74,8 @@ public final class KungFuBook {
         Validate.isTrue(slot > 0, "Slot must be greater than 0");
         if (page == 1) {
             return Optional.ofNullable(unnamed.get(slot));
+        } else if (page == 2) {
+            return Optional.ofNullable(basic.get(slot));
         }
         return Optional.empty();
     }

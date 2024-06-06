@@ -12,7 +12,7 @@ public class TestingPlayerEventListener implements EntityEventListener {
     private final List<EntityEvent> entityEvents = new ArrayList<>();
 
     @Override
-    public void OnEvent(EntityEvent entityEvent) {
+    public void onEvent(EntityEvent entityEvent) {
         this.entityEvents.add(entityEvent);
     }
 

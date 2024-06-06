@@ -10,6 +10,7 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerStillState;
+import org.y1000.entities.players.event.PlayerAttackAoeEvent;
 import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.entities.players.fight.PlayerAttackState;
@@ -17,6 +18,7 @@ import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.clientevent.ClientToggleKungFuEvent;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.repository.KungFuBookRepositoryImpl;
@@ -78,6 +80,20 @@ class MeleeAttackKungFuTest {
         assertTrue(player.state() instanceof PlayerAttackState);
         assertEquals(player.cooldown(), (70 + kungFu.getAttackSpeed()) * Realm.STEP_MILLIS);
     }
+
+    @Test
+    void startAttackAssistantEnabled() {
+        PassiveMonster monster = new PassiveMonster(1L, player.coordinate().moveBy(clientAttackEvent.direction()), Direction.UP, "test", Mockito.mock(RealmMap.class));
+        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("test").level(100).eightDirection(true).build());
+        player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
+        kungFu.startAttack(player, clientAttackEvent, monster);
+        assertEquals(player.getFightingEntity(), monster);
+        PlayerAttackEventResponse entityEvent = playerEventListener.removeFirst(PlayerAttackEventResponse.class);
+        assertTrue(entityEvent.isAccepted());
+        var aoeEvent = playerEventListener.removeFirst(PlayerAttackAoeEvent.class);
+        assertNotNull(aoeEvent);
+    }
+
 
     @Test
     void startAttack_noEffectWhenOutOfView() {

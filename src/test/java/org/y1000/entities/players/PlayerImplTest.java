@@ -3,9 +3,13 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingPlayerEventListener;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.event.PlayerCooldownEvent;
 import org.y1000.entities.players.event.PlayerSitDownEvent;
 import org.y1000.entities.players.event.PlayerToggleKungFuEvent;
@@ -15,6 +19,7 @@ import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.EquipmentType;
 import org.y1000.item.Weapon;
+import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.KungFuType;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.item.Hat;
@@ -22,10 +27,12 @@ import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.kungfu.attack.SwordKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
+import org.y1000.message.MoveEvent;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientDoubleClickSlotEvent;
 import org.y1000.message.clientevent.ClientToggleKungFuEvent;
 import org.y1000.message.clientevent.ClientUnequipEvent;
+import org.y1000.message.serverevent.EntityEventListener;
 import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.realm.Realm;
@@ -33,6 +40,7 @@ import org.y1000.util.Coordinate;
 
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @Slf4j
 class PlayerImplTest extends AbstractUnitTestFixture {
@@ -284,5 +292,38 @@ class PlayerImplTest extends AbstractUnitTestFixture {
         }
         assertTrue(foundDisableProtection);
         assertTrue(event.toPacket().getToggleKungFu().getQuietly());
+    }
+
+    @Test
+    void useAssistantKungFu() {
+        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("feng").level(100).build());
+        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("feng1").level(100).build());
+        player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
+        var kungFuEvent = eventListener.removeFirst(PlayerToggleKungFuEvent.class);
+        assertEquals(kungFuEvent.toPacket().getToggleKungFu().getName(), "feng");
+        assertTrue(kungFuEvent.toPacket().getToggleKungFu().hasLevel());
+        assertTrue(player.assistantKungFu().isPresent());
+
+        eventListener.clearEvents();
+        player.handleClientEvent(new ClientToggleKungFuEvent(2, 2));
+        kungFuEvent = eventListener.removeFirst(PlayerToggleKungFuEvent.class);
+        assertEquals(kungFuEvent.toPacket().getToggleKungFu().getName(), "feng1");
+        assertTrue(kungFuEvent.toPacket().getToggleKungFu().hasLevel());
+        assertTrue(player.assistantKungFu().isPresent());
+
+        player.handleClientEvent(new ClientToggleKungFuEvent(2, 2));
+        kungFuEvent = eventListener.dequeue(PlayerToggleKungFuEvent.class);
+        assertEquals(kungFuEvent.toPacket().getToggleKungFu().getName(), "feng1");
+        assertFalse(kungFuEvent.toPacket().getToggleKungFu().hasLevel());
+        assertFalse(player.assistantKungFu().isPresent());
+    }
+
+    @Test
+    void monitorFightingTarget() {
+        PhysicalEntity mock = Mockito.mock(PhysicalEntity.class);
+        player.setFightingEntity(mock);
+        Mockito.verify(mock, Mockito.times(1)).registerOrderedEventListener(player);
+        player.leaveRealm();
+        Mockito.verify(mock, Mockito.times(1)).deregisterEventListener(player);
     }
 }

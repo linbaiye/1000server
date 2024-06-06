@@ -1,5 +1,6 @@
 package org.y1000.repository;
 
+import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.item.*;
 import org.y1000.entities.players.Player;
@@ -54,7 +55,10 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     }
 
     private KungFuBook loadKungFuBook() {
-        return kungFuBookFactory.create();
+        KungFuBook kungFuBook = kungFuBookFactory.create();
+        kungFuBook.addToBasic(AssistantKungFu.builder().name("风灵旋").level(100).eightDirection(false).build());
+        kungFuBook.addToBasic(AssistantKungFu.builder().name("灵动八方").level(100).eightDirection(true).build());
+        return kungFuBook;
     }
 
 

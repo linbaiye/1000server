@@ -21,14 +21,14 @@ class AbstractCreatureTest {
     private static class TestingEventListener implements EntityEventListener  {
         public EntityEvent receivedEvent;
         @Override
-        public void OnEvent(EntityEvent entityEvent) {
+        public void onEvent(EntityEvent entityEvent) {
             receivedEvent = entityEvent;
         }
     }
     private static class TestingCountEventListener implements EntityEventListener {
         public int count = 0;
         @Override
-        public void OnEvent(EntityEvent entityEvent) {
+        public void onEvent(EntityEvent entityEvent) {
             count++;
         }
     }
@@ -40,6 +40,12 @@ class AbstractCreatureTest {
 
     @Test
     void registerOrderedEventListener() {
+        try {
+            monster1.registerOrderedEventListener(null);
+            fail("null is not allowed.");
+        } catch (Exception e) {
+            //ignored.
+        }
         TestingEventListener listener1 = new TestingEventListener();
         TestingEventListener listener2 = new TestingEventListener();
         monster1.registerOrderedEventListener(listener1);
@@ -63,6 +69,7 @@ class AbstractCreatureTest {
         monster1.registerOrderedEventListener(listener2);
         monster1.deregisterEventListener(listener2);
         monster1.deregisterEventListener(listener2);
+        monster1.deregisterEventListener(null);
         MoveEvent event = new MoveEvent(monster1, Direction.DOWN, monster1.coordinate());
         monster1.emitEvent(event);
         assertSame(event, listener1.receivedEvent);

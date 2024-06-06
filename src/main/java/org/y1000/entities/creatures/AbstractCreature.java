@@ -59,7 +59,7 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
     }
 
     public void emitEvent(EntityEvent event) {
-        eventListeners.forEach(listener -> listener.OnEvent(event));
+        eventListeners.forEach(listener -> listener.onEvent(event));
     }
 
     @Override

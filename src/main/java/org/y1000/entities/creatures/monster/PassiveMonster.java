@@ -5,21 +5,19 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.Projectile;
 import org.y1000.entities.attribute.ArmorAttribute;
 import org.y1000.entities.attribute.Damage;
-import org.y1000.entities.creatures.AbstractViolentCreature;
-import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
-import org.y1000.entities.creatures.monster.fight.MonsterCooldownState;
-import org.y1000.entities.creatures.monster.fight.MonsterFightingIdleState;
+import org.y1000.entities.creatures.monster.fight.*;
 import org.y1000.entities.creatures.monster.wander.MonsterWanderingIdleState;
 import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.message.CreatureInterpolation;
 import org.y1000.message.SetPositionEvent;
+import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
@@ -27,10 +25,11 @@ import org.y1000.util.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Slf4j
-public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster, MonsterState<PassiveMonster>> {
+public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster, CreatureState<PassiveMonster>> {
 
     private final RealmMap realmMap;
 
@@ -84,8 +83,15 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
         state().update(this, delta);
     }
 
+
     private void attackedBy(ViolentCreature attacker, int hit) {
-        handleAttacked(this, hit, (s) ->  new PassiveMonsterHurtState(attacker, getStateMillis(State.HURT), state()::afterHurt));
+        if (!handleAttacked(this, hit, (s) -> new MonsterHurtState(getStateMillis(State.HURT)))) {
+            return;
+        }
+        if (getFightingEntity() == null ||
+                getFightingEntity().coordinate().directDistance(coordinate()) > 1) {
+            setFightingEntity(attacker);
+        }
     }
 
     @Override
@@ -101,6 +107,35 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
     private void moveTowardsAttacker(Creature attacker) {
         changeState(MonsterFightingIdleState.hunt(this, attacker));
         emitEvent(CreatureChangeStateEvent.of(this));
+    }
+
+
+    public void nextHuntMove() {
+        if (getFightingEntity() == null) {
+            changeState(MonsterWanderingIdleState.reroll(this));
+            emitEvent(CreatureChangeStateEvent.of(this));
+            return;
+        }
+        var entity = getFightingEntity();
+        if (entity.coordinate().directDistance(coordinate()) > 1) {
+            changeState(MonsterFightIdleState.start(this));
+            emitEvent(CreatureChangeStateEvent.of(this));
+            return;
+        }
+        int cooldown = cooldown();
+        if (cooldown > 0) {
+            changeState(MonsterFightCooldownState.cooldown(cooldown));
+            emitEvent(CreatureChangeStateEvent.of(this));
+            return;
+        }
+        Direction towards = coordinate().computeDirection(entity.coordinate());
+        if (towards != direction()) {
+            changeDirection(towards);
+        }
+        cooldownAttack();
+        entity.attackedBy(this);
+        changeState(MonsterFightAttackState.of(this));
+        emitEvent(CreatureAttackEvent.ofMonster(this));
     }
 
     public void attack(Creature attacker) {
@@ -125,7 +160,6 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
             emitEvent(SetPositionEvent.of(this));
             return;
         }
-        log.trace("Attack.");
         cooldownAttack();
         attacker.attackedBy(this);
         changeState(MonsterAttackState.attack(this, attacker));
@@ -176,4 +210,15 @@ public final class PassiveMonster extends AbstractViolentCreature<PassiveMonster
         return log;
     }
 
+
+    @Override
+    public void onEvent(EntityEvent entityEvent) {
+        if (entityEvent == null || !entityEvent.source().equals(getFightingEntity())) {
+            log.error("Invalid event received.");
+            return;
+        }
+        if (!canAttack(getFightingEntity())) {
+            clearFightingEntity();
+        }
+    }
 }

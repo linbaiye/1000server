@@ -8,6 +8,7 @@ import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerStillState;
+import org.y1000.entities.players.event.PlayerAttackAoeEvent;
 import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.entities.players.fight.*;
@@ -58,6 +59,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         player.cooldownAttack();
         if (!isRanged()) {
             player.getFightingEntity().attackedBy(player);
+            player.assistantKungFu().ifPresent(assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, assistantKungFu)));
         }
         player.changeState(PlayerAttackState.of(player));
         return true;
@@ -71,7 +73,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         }
         Direction direction = player.coordinate().computeDirection(player.getFightingEntity().coordinate());
         if (doAttack(player, direction)) {
-            player.emitEvent(new PlayerAttackEvent(player, player.stateEnum()));
+            player.emitEvent(PlayerAttackEvent.of(player, player.getFightingEntity().id()));
         }
     }
 
