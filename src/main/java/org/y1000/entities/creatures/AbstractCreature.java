@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
+import org.y1000.entities.EventListeners;
 import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.message.serverevent.EntityEventListener;
 import org.y1000.util.Coordinate;
@@ -20,7 +21,7 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
 
     private final String name;
 
-    private final List<EntityEventListener> eventListeners;
+    private final EventListeners eventListeners;
 
     private S state;
 
@@ -38,7 +39,7 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
         this.coordinate = coordinate;
         this.direction = direction;
         this.name = name;
-        this.eventListeners = new ArrayList<>();
+        this.eventListeners = new EventListeners();
         this.stateMillis = stateMillis;
     }
 
@@ -59,18 +60,17 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
     }
 
     public void emitEvent(EntityEvent event) {
-        eventListeners.forEach(listener -> listener.onEvent(event));
+        eventListeners.notifyListeners(event);
     }
 
     @Override
     public void registerOrderedEventListener(EntityEventListener listener) {
-        if (!eventListeners.contains(listener))
-            eventListeners.add(listener);
+        eventListeners.register(listener);
     }
 
     @Override
     public void deregisterEventListener(EntityEventListener listener) {
-        eventListeners.remove(listener);
+        eventListeners.deregister(listener);
     }
 
     @Override

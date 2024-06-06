@@ -85,8 +85,8 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         }
         Direction direction = event.direction();
         player.setFightingEntity(target);
-        player.disableFootKungFu();
-        player.disableBreathKungFu();
+        player.disableFootKungFuQuietly();
+        player.disableBreathKungFuQuietly();
         doAttack(player, direction);
         player.changeDirection(direction);
         player.emitEvent(new PlayerAttackEventResponse(player, event, true));

@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures.monster.wander;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.creatures.monster.MonsterState;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
@@ -8,7 +9,7 @@ import org.y1000.entities.creatures.monster.AbstractMonsterIdleState;
 import org.y1000.util.Coordinate;
 
 @Slf4j
-public final class MonsterWanderingIdleState extends AbstractMonsterIdleState implements MonsterWanderingState {
+public final class MonsterWanderingIdleState extends AbstractMonsterIdleState implements MonsterState<PassiveMonster> {
 
     private final Coordinate destination;
 

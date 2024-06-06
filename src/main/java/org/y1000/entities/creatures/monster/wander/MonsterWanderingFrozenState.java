@@ -9,7 +9,7 @@ import org.y1000.entities.creatures.monster.MonsterState;
 import org.y1000.util.Coordinate;
 
 @Slf4j
-public final class MonsterWanderingFrozenState extends AbstractMonsterFrozenState implements MonsterWanderingState {
+public final class MonsterWanderingFrozenState extends AbstractMonsterFrozenState implements MonsterState<PassiveMonster> {
 
     private final Coordinate destination;
 
@@ -21,7 +21,6 @@ public final class MonsterWanderingFrozenState extends AbstractMonsterFrozenStat
     @Override
     protected void nextMove(PassiveMonster monster) {
         if (!monster.realmMap().movable(destination) || destination.equals(monster.coordinate())) {
-          //  log.debug("Destination {} not movable, restart.", destination);
             monster.changeState(MonsterWanderingIdleState.reroll(monster));
             monster.emitEvent(CreatureChangeStateEvent.of(monster));
         } else {

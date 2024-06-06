@@ -13,7 +13,8 @@ public final class QuanfaKungFu extends AbstractMeleeKungFu {
 
     @Override
     public State randomAttackState() {
-        return level() < 5000 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.FIST: State.KICK;
+        return level() < 50 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.FIST: State.KICK;
+        //return level() < 5000 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.FIST: State.KICK;
     }
 
 

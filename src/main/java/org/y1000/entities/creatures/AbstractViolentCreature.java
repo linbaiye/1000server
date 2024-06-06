@@ -5,15 +5,12 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
-import org.y1000.entities.players.fight.PlayerWaitDistanceState;
-import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.message.serverevent.EntityEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 

@@ -182,12 +182,18 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return getFightingEntity() != null;
     }
 
-    public void disableFootKungFu() {
-        this.footKungfu = null;
+    public void disableFootKungFuQuietly() {
+        if (footKungfu != null) {
+            emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, footKungfu));
+        }
+        footKungfu = null;
     }
 
-    public void disableBreathKungFu() {
-        this.breathKungFu = null;
+    public void disableBreathKungFuQuietly() {
+        if (breathKungFu != null) {
+            emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, breathKungFu));
+        }
+        breathKungFu = null;
     }
 
 
@@ -241,10 +247,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
 
     private void toggleProtectionKungFu(ProtectKungFu newProtection) {
-        if (breathKungFu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, breathKungFu));
-            breathKungFu = null;
-        }
+        disableBreathKungFuQuietly();
         if (protectKungFu != null && protectKungFu.name().equals(newProtection.name())) {
             emitEvent(PlayerToggleKungFuEvent.disable(this, protectKungFu));
             protectKungFu = null;
@@ -302,10 +305,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             changeState(PlayerStillState.idle(this));
             emitEvent(new SetPositionEvent(this, direction(), coordinate()));
         }
-        if (this.breathKungFu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, this.breathKungFu));
-            this.breathKungFu = null;
-        }
+        disableBreathKungFuQuietly();
         this.footKungfu = newKungFu;
         emitEvent(new PlayerToggleKungFuEvent(this, this.footKungfu));
     }

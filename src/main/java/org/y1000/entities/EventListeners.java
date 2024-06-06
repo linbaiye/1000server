@@ -1,4 +1,4 @@
-package org.y1000;
+package org.y1000.entities;
 
 import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.message.serverevent.EntityEventListener;
@@ -30,9 +30,11 @@ public final class EventListeners {
         iterating = false;
         if (!deregistering.isEmpty()) {
             listeners.removeAll(deregistering);
+            deregistering.clear();
         }
         if (!registering.isEmpty()) {
             listeners.addAll(registering);
+            registering.clear();
         }
     }
 
