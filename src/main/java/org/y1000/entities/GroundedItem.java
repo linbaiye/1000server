@@ -100,7 +100,7 @@ public final class GroundedItem implements PhysicalEntity {
     }
 
     @Override
-    public void registerOrderedEventListener(EntityEventListener listener) {
+    public void registerEventListener(EntityEventListener listener) {
         this.listener = listener;
     }
 

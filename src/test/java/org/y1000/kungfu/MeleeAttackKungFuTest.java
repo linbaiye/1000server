@@ -3,7 +3,7 @@ package org.y1000.kungfu;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.TestingPlayerEventListener;
+import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.State;
@@ -36,7 +36,7 @@ class MeleeAttackKungFuTest {
 
     private ClientAttackEvent clientAttackEvent;
 
-    private TestingPlayerEventListener playerEventListener;
+    private TestingEventListener playerEventListener;
 
 
     @BeforeEach
@@ -64,8 +64,8 @@ class MeleeAttackKungFuTest {
                 .coordinate(new Coordinate(1, 1))
                 .build();
         clientAttackEvent = new ClientAttackEvent(1L, 1L, kungFu.randomAttackState(), Direction.UP);
-        playerEventListener = new TestingPlayerEventListener();
-        player.registerOrderedEventListener(playerEventListener);
+        playerEventListener = new TestingEventListener();
+        player.registerEventListener(playerEventListener);
     }
 
 

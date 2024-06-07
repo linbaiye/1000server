@@ -308,7 +308,7 @@ final class RealmEntityManager implements EntityEventListener,
             return;
         }
         scopeManager.add(entity);
-        entity.registerOrderedEventListener(this);
+        entity.registerEventListener(this);
     }
 
     public void remove(Player player) {

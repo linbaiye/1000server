@@ -26,6 +26,7 @@ public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
         return switch (itemSdb.getEquipmentType(name)) {
             case WEAPON -> new Weapon(name, itemSdb.getAttackKungFuType(name));
             case HAT -> new Hat(name);
+            case CHEST -> new Chest(name);
             default -> throw new NotImplementedException();
         };
     }

@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.monster.wander;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.monster.MonsterState;
+import org.y1000.entities.creatures.monster.AbstractMonster;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
@@ -9,7 +9,7 @@ import org.y1000.entities.creatures.monster.AbstractMonsterIdleState;
 import org.y1000.util.Coordinate;
 
 @Slf4j
-public final class MonsterWanderingIdleState extends AbstractMonsterIdleState implements MonsterState<PassiveMonster> {
+public final class MonsterWanderingIdleState extends AbstractMonsterIdleState implements WanderingState {
 
     private final Coordinate destination;
 
@@ -22,7 +22,7 @@ public final class MonsterWanderingIdleState extends AbstractMonsterIdleState im
         this.destination = target;
     }
 
-    public static MonsterWanderingIdleState again(PassiveMonster monster, Coordinate destination, Coordinate from) {
+    public static MonsterWanderingIdleState again(AbstractMonster monster, Coordinate destination, Coordinate from) {
         return new MonsterWanderingIdleState(monster.getStateMillis(State.IDLE), destination, from);
     }
 
@@ -30,13 +30,13 @@ public final class MonsterWanderingIdleState extends AbstractMonsterIdleState im
         return new MonsterWanderingIdleState(millis, dest);
     }
 
-    public static MonsterWanderingIdleState reroll(PassiveMonster monster) {
+    public static MonsterWanderingIdleState reroll(AbstractMonster monster) {
         Coordinate random = monster.wanderingArea().random(monster.coordinate());
         return new MonsterWanderingIdleState(monster.getStateMillis(State.IDLE), random);
     }
 
     @Override
-    protected void nextMove(PassiveMonster monster) {
+    protected void nextMove(AbstractMonster monster) {
         monster.changeState(MonsterWanderingFrozenState.Freeze(monster, destination, getFrom()));
         monster.emitEvent(CreatureChangeStateEvent.of(monster));
     }

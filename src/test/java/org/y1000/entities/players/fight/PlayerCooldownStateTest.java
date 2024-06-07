@@ -4,7 +4,7 @@ package org.y1000.entities.players.fight;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.TestingPlayerEventListener;
+import org.y1000.TestingEventListener;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerImpl;
 
@@ -14,13 +14,13 @@ class PlayerCooldownStateTest extends AbstractUnitTestFixture {
 
     private PlayerImpl player;
 
-    private TestingPlayerEventListener eventListener;
+    private TestingEventListener eventListener;
 
     @BeforeEach
     void setUp() {
         player = playerBuilder().build();
-        eventListener = new TestingPlayerEventListener();
-        player.registerOrderedEventListener(eventListener);
+        eventListener = new TestingEventListener();
+        player.registerEventListener(eventListener);
     }
 
     @Test

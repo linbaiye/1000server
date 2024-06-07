@@ -28,6 +28,10 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
         super(id, coordinate, direction, name, stateMillis);
     }
 
+    protected AbstractViolentCreature(long id, Coordinate coordinate, Direction direction, String name, int avoidance, Map<State, Integer> stateMillis) {
+        super(id, coordinate, direction, name, avoidance, stateMillis);
+    }
+
     protected boolean randomAvoidance(int attackerHit) {
         var rand = ThreadLocalRandom.current().nextInt(attackerHit + 75 + avoidance());
         return rand < avoidance();
@@ -76,7 +80,7 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
             this.fightingEntity.deregisterEventListener(this);
         }
         this.fightingEntity = entity;
-        this.fightingEntity.registerOrderedEventListener(this);
+        this.fightingEntity.registerEventListener(this);
     }
 
 

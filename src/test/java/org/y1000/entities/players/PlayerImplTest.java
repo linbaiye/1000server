@@ -3,13 +3,11 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.TestingPlayerEventListener;
+import org.y1000.TestingEventListener;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.event.PlayerCooldownEvent;
 import org.y1000.entities.players.event.PlayerSitDownEvent;
 import org.y1000.entities.players.event.PlayerToggleKungFuEvent;
@@ -27,12 +25,10 @@ import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.kungfu.attack.SwordKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
-import org.y1000.message.MoveEvent;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientDoubleClickSlotEvent;
 import org.y1000.message.clientevent.ClientToggleKungFuEvent;
 import org.y1000.message.clientevent.ClientUnequipEvent;
-import org.y1000.message.serverevent.EntityEventListener;
 import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.realm.Realm;
@@ -47,7 +43,7 @@ class PlayerImplTest extends AbstractUnitTestFixture {
 
     private PlayerImpl player;
 
-    private TestingPlayerEventListener eventListener;
+    private TestingEventListener eventListener;
 
     private Inventory inventory;
 
@@ -59,9 +55,9 @@ class PlayerImplTest extends AbstractUnitTestFixture {
 
 
     private void attachListener(PlayerImpl.PlayerImplBuilder builder) {
-        eventListener = new TestingPlayerEventListener();
+        eventListener = new TestingEventListener();
         player = builder.build();
-        player.registerOrderedEventListener(eventListener);
+        player.registerEventListener(eventListener);
     }
 
 
@@ -76,7 +72,7 @@ class PlayerImplTest extends AbstractUnitTestFixture {
         Inventory inventory = new Inventory();
         int slot = inventory.add(new Hat("test"));
         player = playerBuilder().inventory(inventory).build();
-        player.registerOrderedEventListener(eventListener);
+        player.registerEventListener(eventListener);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         PlayerEquipEvent first = eventListener.dequeue(PlayerEquipEvent.class);
         assertEquals(first.player(), player);
@@ -322,7 +318,7 @@ class PlayerImplTest extends AbstractUnitTestFixture {
     void monitorFightingTarget() {
         PhysicalEntity mock = Mockito.mock(PhysicalEntity.class);
         player.setFightingEntity(mock);
-        Mockito.verify(mock, Mockito.times(1)).registerOrderedEventListener(player);
+        Mockito.verify(mock, Mockito.times(1)).registerEventListener(player);
         player.leaveRealm();
         Mockito.verify(mock, Mockito.times(1)).deregisterEventListener(player);
     }

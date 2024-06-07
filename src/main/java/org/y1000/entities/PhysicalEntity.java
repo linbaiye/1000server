@@ -26,7 +26,7 @@ public interface PhysicalEntity extends Entity {
                 target.attackable();
     }
 
-    void registerOrderedEventListener(EntityEventListener listener);
+    void registerEventListener(EntityEventListener listener);
 
     void deregisterEventListener(EntityEventListener listener);
 }

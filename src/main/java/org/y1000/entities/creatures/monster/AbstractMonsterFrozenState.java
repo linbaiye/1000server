@@ -20,13 +20,18 @@ public abstract class AbstractMonsterFrozenState extends AbstractMonsterState {
         return from;
     }
 
-    protected abstract MonsterState<PassiveMonster> stateForNoPath(PassiveMonster monster);
+    /**
+     *  What to do if the coordinate just in front of the monster not movable.
+     * @param monster
+     * @return state.
+     */
+    protected abstract MonsterState<AbstractMonster> frontNotMovable(AbstractMonster monster);
 
-    protected abstract MonsterState<PassiveMonster> stateForTurn(PassiveMonster monster, Coordinate destination);
+    protected abstract MonsterState<AbstractMonster> stateForTurn(AbstractMonster monster, Coordinate destination);
 
-    protected abstract MonsterState<PassiveMonster> stateForMove(PassiveMonster monster, Coordinate destination);
+    protected abstract MonsterState<AbstractMonster> stateForMove(AbstractMonster monster, Coordinate destination);
 
-    protected void tryMoveCloser(PassiveMonster monster, Coordinate destination) {
+    protected void tryMoveCloser(AbstractMonster monster, Coordinate destination) {
         int minDist = Integer.MAX_VALUE;
         Direction towards = null;
         for (Direction direction : Direction.values()) {
@@ -38,7 +43,7 @@ public abstract class AbstractMonsterFrozenState extends AbstractMonsterState {
             }
         }
         if (towards == null) {
-            monster.changeState(stateForNoPath(monster));
+            monster.changeState(frontNotMovable(monster));
             monster.emitEvent(CreatureChangeStateEvent.of(monster));
             return;
         }

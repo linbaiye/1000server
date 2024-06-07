@@ -1,6 +1,7 @@
 package org.y1000.entities;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.ViolentCreature;
@@ -19,6 +20,7 @@ public final class Projectile {
 
     private int elapsed;
 
+    @Builder
     public Projectile(ViolentCreature shooter,
                       PhysicalEntity target, int flyingMillis) {
         this.damage = shooter.damage();

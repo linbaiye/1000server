@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TestingPlayerEventListener implements EntityEventListener {
+public class TestingEventListener implements EntityEventListener {
 
     private final List<EntityEvent> entityEvents = new ArrayList<>();
 

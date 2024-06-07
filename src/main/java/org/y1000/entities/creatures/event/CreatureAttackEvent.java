@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures.event;
 
 import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.creatures.monster.AbstractMonster;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.State;
 import org.y1000.message.serverevent.EntityEventVisitor;
@@ -22,7 +23,7 @@ public final class CreatureAttackEvent extends AbstractCreatureAttackEvent {
         return builder.setState(State.ATTACK.value()).setPlayer(false);
     }
 
-    public static CreatureAttackEvent ofMonster(PassiveMonster monster) {
+    public static CreatureAttackEvent ofMonster(AbstractMonster monster) {
         return new CreatureAttackEvent(monster);
     }
 }

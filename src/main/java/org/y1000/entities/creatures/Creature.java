@@ -14,14 +14,7 @@ public interface Creature extends PhysicalEntity {
 
     void changeCoordinate(Coordinate coordinate);
 
-    default int avoidance() {
-        return 25;
-    }
+    int avoidance();
 
     String name();
-
-
-    default int armor() {
-        return 0;
-    }
 }

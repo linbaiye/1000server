@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.TestingPlayerEventListener;
+import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureShootEvent;
@@ -24,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlayerAttackStateTest extends AbstractUnitTestFixture {
     private PlayerImpl player;
 
-    private TestingPlayerEventListener eventListener;
+    private TestingEventListener eventListener;
 
     @BeforeEach
     public void setup() {
         player = playerBuilder().build();
-        eventListener = new TestingPlayerEventListener();
-        player.registerOrderedEventListener(eventListener);
+        eventListener = new TestingEventListener();
+        player.registerEventListener(eventListener);
     }
 
     @Test
@@ -56,10 +56,10 @@ class PlayerAttackStateTest extends AbstractUnitTestFixture {
 
     @Test
     void emitProjectileEvent() {
-        TestingPlayerEventListener eventListener = new TestingPlayerEventListener();
+        TestingEventListener eventListener = new TestingEventListener();
         player = playerBuilder().attackKungFu(kungFuBookFactory.create().findUnnamedAttack(AttackKungFuType.BOW)).build();
         player.setFightingEntity(new PassiveMonster(1L, new Coordinate(2, 2), Direction.UP, "test", Mockito.mock(RealmMap.class)));
-        player.registerOrderedEventListener(eventListener);
+        player.registerEventListener(eventListener);
         var state = PlayerAttackState.of(player);
         state.update(player, state.totalMillis());
         CreatureShootEvent dequeue = eventListener.dequeue(CreatureShootEvent.class);
@@ -89,8 +89,4 @@ class PlayerAttackStateTest extends AbstractUnitTestFixture {
         assertTrue(state.canUseFootKungFu());
     }
 
-    @Test
-    void rewindMove() {
-
-    }
 }

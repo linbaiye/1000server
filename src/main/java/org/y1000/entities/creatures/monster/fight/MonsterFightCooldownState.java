@@ -1,8 +1,8 @@
 package org.y1000.entities.creatures.monster.fight;
 
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.monster.AbstractMonster;
 import org.y1000.entities.creatures.monster.AbstractMonsterState;
-import org.y1000.entities.creatures.monster.PassiveMonster;
 
 public class MonsterFightCooldownState extends AbstractMonsterState {
 
@@ -11,11 +11,16 @@ public class MonsterFightCooldownState extends AbstractMonsterState {
     }
 
     @Override
-    protected void nextMove(PassiveMonster monster) {
-        monster.nextHuntMove();
+    protected void nextMove(AbstractMonster monster) {
+        monster.fight();
     }
 
     public static MonsterFightCooldownState cooldown(int cooldown) {
         return new MonsterFightCooldownState(cooldown);
+    }
+
+    @Override
+    public void afterHurt(AbstractMonster creature) {
+        creature.fight();
     }
 }

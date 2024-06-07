@@ -3,8 +3,8 @@ package org.y1000.entities.creatures.monster;
 import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
 
-public abstract class AbstractMonsterState extends AbstractCreateState<PassiveMonster>
-        implements MonsterState<PassiveMonster> {
+public abstract class AbstractMonsterState extends AbstractCreateState<AbstractMonster>
+        implements MonsterState<AbstractMonster> {
 
     private final State stat;
 
@@ -18,10 +18,10 @@ public abstract class AbstractMonsterState extends AbstractCreateState<PassiveMo
         return stat;
     }
 
-    protected abstract void nextMove(PassiveMonster monster);
+    protected abstract void nextMove(AbstractMonster monster);
 
     @Override
-    public void update(PassiveMonster monster, int delta) {
+    public void update(AbstractMonster monster, int delta) {
         if (elapse(delta)) {
             nextMove(monster);
         }

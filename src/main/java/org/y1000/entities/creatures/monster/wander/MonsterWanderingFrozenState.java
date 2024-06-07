@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.monster.wander;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.monster.PassiveMonster;
+import org.y1000.entities.creatures.monster.AbstractMonster;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterFrozenState;
@@ -9,7 +9,7 @@ import org.y1000.entities.creatures.monster.MonsterState;
 import org.y1000.util.Coordinate;
 
 @Slf4j
-public final class MonsterWanderingFrozenState extends AbstractMonsterFrozenState implements MonsterState<PassiveMonster> {
+public final class MonsterWanderingFrozenState extends AbstractMonsterFrozenState implements WanderingState {
 
     private final Coordinate destination;
 
@@ -19,7 +19,7 @@ public final class MonsterWanderingFrozenState extends AbstractMonsterFrozenStat
     }
 
     @Override
-    protected void nextMove(PassiveMonster monster) {
+    protected void nextMove(AbstractMonster monster) {
         if (!monster.realmMap().movable(destination) || destination.equals(monster.coordinate())) {
             monster.changeState(MonsterWanderingIdleState.reroll(monster));
             monster.emitEvent(CreatureChangeStateEvent.of(monster));
@@ -29,22 +29,22 @@ public final class MonsterWanderingFrozenState extends AbstractMonsterFrozenStat
     }
 
 
-    public static MonsterWanderingFrozenState Freeze(PassiveMonster monster, Coordinate dest, Coordinate from) {
+    public static MonsterWanderingFrozenState Freeze(AbstractMonster monster, Coordinate dest, Coordinate from) {
         return new MonsterWanderingFrozenState(monster.getStateMillis(State.FROZEN), dest, from);
     }
 
     @Override
-    protected MonsterState<PassiveMonster> stateForNoPath(PassiveMonster monster) {
+    protected MonsterState<AbstractMonster> frontNotMovable(AbstractMonster monster) {
         return MonsterWanderingIdleState.reroll(monster);
     }
 
     @Override
-    protected MonsterState<PassiveMonster> stateForTurn(PassiveMonster monster, Coordinate destination) {
+    protected MonsterState<AbstractMonster> stateForTurn(AbstractMonster monster, Coordinate destination) {
         return MonsterWanderingIdleState.again(monster, destination, getFrom());
     }
 
     @Override
-    protected MonsterState<PassiveMonster> stateForMove(PassiveMonster monster, Coordinate destination) {
+    protected MonsterState<AbstractMonster> stateForMove(AbstractMonster monster, Coordinate destination) {
         return MonsterWanderingMoveState.move(monster, destination);
     }
 }

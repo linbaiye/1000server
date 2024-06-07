@@ -2,6 +2,7 @@ package org.y1000.message;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.creatures.monster.AbstractMonster;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.EntityEventVisitor;
@@ -29,7 +30,7 @@ public final class MoveEvent extends AbstractPositionEvent {
         visitor.visit(this);
     }
 
-    public static MoveEvent movingTo(PassiveMonster monster, Direction direction) {
+    public static MoveEvent movingTo(AbstractMonster monster, Direction direction) {
         return new MoveEvent(monster, direction, monster.coordinate());
     }
 }

@@ -41,8 +41,17 @@ public abstract class AbstractUnitTestFixture {
                 .inventory(new Inventory());
     }
 
+    protected int nextId() {
+        return id++;
+    }
 
     protected PassiveMonster createMonster(Coordinate coordinate) {
-        return new PassiveMonster(id++, coordinate, Direction.UP, "test", Mockito.mock(RealmMap.class));
+        return PassiveMonster.builder().id(id++)
+                .coordinate(coordinate)
+                .direction(Direction.UP)
+                .name("test")
+                .realmMap(Mockito.mock(RealmMap.class))
+                .avoidance(0)
+                .build();
     }
 }
