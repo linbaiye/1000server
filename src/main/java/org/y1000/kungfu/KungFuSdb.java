@@ -69,4 +69,12 @@ public final class KungFuSdb extends AbstractSdbReader {
     public KungFuType getMagicType(String name) {
         return getEnum(name, "MagicType", KungFuType::fromValue);
     }
+
+    public static void main(String[] args) {
+        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
+        System.out.println(INSTANCE.get("无名剑法", "SoundStrike"));
+
+        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
+        System.out.println(INSTANCE.get("无名剑法", "SoundStrike"));
+    }
 }

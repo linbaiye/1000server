@@ -31,7 +31,7 @@ public final class MonsterWanderingIdleState extends AbstractMonsterIdleState im
     }
 
     public static MonsterWanderingIdleState reroll(AbstractMonster monster) {
-        Coordinate random = monster.wanderingArea().random(monster.coordinate());
+        Coordinate random = monster.wanderingArea().random(monster.getSpwanCoordinate());
         return new MonsterWanderingIdleState(monster.getStateMillis(State.IDLE), random);
     }
 
