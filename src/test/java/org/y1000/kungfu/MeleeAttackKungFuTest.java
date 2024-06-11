@@ -75,27 +75,27 @@ class MeleeAttackKungFuTest {
                 .id(1L)
                 .coordinate(coordinate)
                 .direction(Direction.UP)
-                        .name("test")
-                .realmMap()
-                        .r
-                        .Mockito.mock(RealmMap.class));
+                .name("test")
+                .realmMap(Mockito.mock(RealmMap.class))
+                .wanderingRange(10)
+                .build();
     }
 
     @Test
     void startAttack() {
-        PassiveMonster monster = new PassiveMonster(1L, player.coordinate().moveBy(clientAttackEvent.direction()), Direction.UP, "test", Mockito.mock(RealmMap.class));
+        PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, monster);
         assertEquals(player.getFightingEntity(), monster);
         PlayerAttackEventResponse entityEvent = playerEventListener.dequeue(PlayerAttackEventResponse.class);
         assertEquals(player.direction(), clientAttackEvent.direction());
         assertTrue(entityEvent.isAccepted());
-        assertTrue(player.state() instanceof PlayerAttackState);
+        assertInstanceOf(PlayerAttackState.class, player.state());
         assertEquals(player.cooldown(), (70 + kungFu.getAttackSpeed()) * Realm.STEP_MILLIS);
     }
 
     @Test
     void startAttackAssistantEnabled() {
-        PassiveMonster monster = new PassiveMonster(1L, player.coordinate().moveBy(clientAttackEvent.direction()), Direction.UP, "test", Mockito.mock(RealmMap.class));
+        PassiveMonster monster =  createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         player.kungFuBook().addToBasic(AssistantKungFu.builder().name("test").level(100).eightDirection(true).build());
         player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
         kungFu.startAttack(player, clientAttackEvent, monster);
@@ -109,7 +109,7 @@ class MeleeAttackKungFuTest {
 
     @Test
     void startAttack_noEffectWhenOutOfView() {
-        var monster = new PassiveMonster(1L, player.coordinate().move(0, Entity.VISIBLE_Y_RANGE + 1), Direction.UP, "test", Mockito.mock(RealmMap.class));
+        var monster = createMonster(player.coordinate().move(0, Entity.VISIBLE_Y_RANGE + 1));
         kungFu.startAttack(player, clientAttackEvent, monster);
         assertNull(player.getFightingEntity());
         var entityEvent = playerEventListener.dequeue(PlayerAttackEventResponse.class);
@@ -120,11 +120,11 @@ class MeleeAttackKungFuTest {
 
     @Test
     void startAttack_changeTarget() {
-        PassiveMonster monster = new PassiveMonster(1L, player.coordinate().moveBy(clientAttackEvent.direction()), Direction.UP, "test", Mockito.mock(RealmMap.class));
+        PassiveMonster monster = createMonster( player.coordinate().moveBy(clientAttackEvent.direction()));
         player.setFightingEntity(monster);
         player.cooldownAttack();
 
-        PassiveMonster another = new PassiveMonster(1L, player.coordinate().moveBy(clientAttackEvent.direction()), Direction.UP, "test", Mockito.mock(RealmMap.class));
+        PassiveMonster another = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, another);
         assertEquals(player.getFightingEntity(), another);
         assertTrue(player.state() instanceof PlayerCooldownState);
@@ -132,7 +132,7 @@ class MeleeAttackKungFuTest {
 
     @Test
     void attackAgain() {
-        PassiveMonster monster = new PassiveMonster(1L, player.coordinate().moveBy(clientAttackEvent.direction()), Direction.UP, "test", Mockito.mock(RealmMap.class));
+        PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         player.setFightingEntity(monster);
         kungFu.attackAgain(player);
         PlayerAttackEvent event = playerEventListener.dequeue(PlayerAttackEvent.class);
@@ -144,7 +144,7 @@ class MeleeAttackKungFuTest {
 
     @Test
     void attackAgain_whenTargetOutOfView() {
-        PassiveMonster monster = new PassiveMonster(1L, player.coordinate().move(Entity.VISIBLE_X_RANGE + 1, 0), Direction.UP, "test", Mockito.mock(RealmMap.class));
+        PassiveMonster monster = createMonster( player.coordinate().move(Entity.VISIBLE_X_RANGE + 1, 0));
         player.setFightingEntity(monster);
         kungFu.attackAgain(player);
         assertSame(player.stateEnum(), State.COOLDOWN);
@@ -153,7 +153,7 @@ class MeleeAttackKungFuTest {
 
     @Test
     void attackAgain_whenStillCooldown() {
-        PassiveMonster monster = new PassiveMonster(1L, player.coordinate().moveBy(clientAttackEvent.direction()), Direction.UP, "test", Mockito.mock(RealmMap.class));
+        PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         player.setFightingEntity(monster);
         player.cooldownAttack();
         kungFu.attackAgain(player);

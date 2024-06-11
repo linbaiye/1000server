@@ -4,18 +4,31 @@ public final class MonsterSdb extends AbstractSdbReader {
 
     public static final MonsterSdb INSTANCE = Load();
 
-    private MonsterSdb() {}
+    private MonsterSdb() {
+    }
 
 
     public int getRecovery(String name) {
         return getInt(name, "Recovery");
     }
 
+    public int getType(String name) {
+        return getInt(name, "Recovery");
+    }
+
+
     private static MonsterSdb Load() {
         MonsterSdb monsterSdb = new MonsterSdb();
         monsterSdb.read("Monster.sdb");
         return monsterSdb;
     }
+
+    public static void main(String[] args) {
+        MonsterSdb monsterSdb = INSTANCE;
+        System.out.println(monsterSdb.get("牛", "Shape"));
+        System.out.println(monsterSdb.get("牛", "Animate"));
+    }
+}
 
     /*
     Name,                怪物名称；
@@ -107,5 +120,3 @@ FirstDir,        #作用不详；
 QuestNum,        #作用不详；
 QuestHaveItem,        #作用不详；
      */
-
-}

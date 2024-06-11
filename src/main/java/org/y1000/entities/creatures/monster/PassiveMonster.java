@@ -15,10 +15,6 @@ import java.util.Objects;
 @Slf4j
 public final class PassiveMonster extends AbstractMonster {
 
-    public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
-                          RealmMap realmMap) {
-        this(id, coordinate, direction, name, realmMap, 0, 100, 200, 0, 10);
-    }
 
     @Builder
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,

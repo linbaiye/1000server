@@ -47,7 +47,9 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("三叉戟"));
         inventory.add(itemFactory.createItem("黄金手套"));
         inventory.add(itemFactory.createItem("北海连环弓"));
-        inventory.add(itemFactory.createItem("女子血魔道袍"));
+        /*inventory.add(itemFactory.createItem("女子血魔道袍"));
+        inventory.add(itemFactory.createItem("血化戟"));
+        inventory.add(itemFactory.createItem("血皇斧"));*/
         return inventory;
     }
 

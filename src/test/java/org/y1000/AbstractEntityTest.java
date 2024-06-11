@@ -14,6 +14,13 @@ public abstract class AbstractEntityTest {
     private int id = 0;
 
     protected PassiveMonster createMonster(Coordinate coordinate) {
-        return new PassiveMonster(id++, coordinate, Direction.UP, "test", Mockito.mock(RealmMap.class));
+        return PassiveMonster.builder()
+                .id(id++)
+                .coordinate(coordinate)
+                .direction(Direction.UP)
+                .name("test")
+                .realmMap(Mockito.mock(RealmMap.class))
+                .wanderingRange(10)
+                .build();
     }
 }
