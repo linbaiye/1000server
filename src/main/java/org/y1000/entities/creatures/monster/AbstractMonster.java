@@ -38,6 +38,15 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
 
     private final int attackSpeed;
 
+    private final int avoidance;
+
+    private int currentLife;
+
+    private final int maxLife;
+
+    private final int armor;
+
+
     private static final Map<State, Integer> BAFFULO_STATE_MILLIS = new HashMap<>() {
         {
             put(State.IDLE, 1000);
@@ -51,14 +60,19 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
 
 
     protected AbstractMonster(long id, Coordinate coordinate, Direction direction, String name,
-                           RealmMap realmMap, int avoidance, int recovery, int attackSpeed) {
-        super(id, coordinate, direction, name, avoidance, BAFFULO_STATE_MILLIS);
+                           RealmMap realmMap, int avoidance, int recovery, int attackSpeed, int life,
+                              int wanderingRange, int armor) {
+        super(id, coordinate, direction, name, BAFFULO_STATE_MILLIS);
         this.realmMap = realmMap;
-        damage = Damage.DEFAULT;
-        spwanCoordinate = coordinate;
         this.recovery = recovery;
         this.attackSpeed = attackSpeed;
-        wanderingArea = new Rectangle(coordinate.move(-10, -10), coordinate.move(10, 10));
+        this.avoidance = avoidance;
+        damage = Damage.DEFAULT;
+        spwanCoordinate = coordinate;
+        wanderingArea = new Rectangle(coordinate.move(-wanderingRange, -wanderingRange), coordinate.move(wanderingRange, wanderingRange));
+        maxLife = life;
+        currentLife = life;
+        this.armor = armor;
         changeState(MonsterWanderingIdleState.start(getStateMillis(State.IDLE), wanderingArea.random(coordinate)));
     }
 
@@ -147,6 +161,11 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     @Override
     public int hit() {
         return 0;
+    }
+
+    @Override
+    public int avoidance() {
+        return avoidance;
     }
 
     @Override

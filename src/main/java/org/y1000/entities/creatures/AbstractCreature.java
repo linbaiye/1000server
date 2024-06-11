@@ -27,21 +27,11 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
 
     private final Map<State, Integer> stateMillis;
 
-    private final int avoidance;
 
     public AbstractCreature(long id,
                             Coordinate coordinate,
                             Direction direction,
                             String name,
-                            Map<State, Integer> stateMillis) {
-        this(id, coordinate, direction, name, 25, stateMillis);
-    }
-
-    public AbstractCreature(long id,
-                            Coordinate coordinate,
-                            Direction direction,
-                            String name,
-                            int avoidance,
                             Map<State, Integer> stateMillis) {
         Objects.requireNonNull(coordinate, "coordinate can't be null.");
         Objects.requireNonNull(direction, "direction can't be null.");
@@ -52,7 +42,6 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
         this.name = name;
         this.eventListeners = new EventListeners();
         this.stateMillis = stateMillis;
-        this.avoidance = avoidance;
     }
 
     public void changeDirection(Direction newdir) {
@@ -103,11 +92,6 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
     @Override
     public String name() {
         return name;
-    }
-
-    @Override
-    public int avoidance() {
-        return avoidance;
     }
 
     @Override

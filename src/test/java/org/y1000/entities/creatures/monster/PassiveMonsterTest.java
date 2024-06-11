@@ -17,7 +17,7 @@ import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PassiveMonsterTest extends AbstractUnitTestFixture {
+class PassiveMonsterTest extends AbstractMonsterUnitTestFixture{
 
     private TestingEventListener listener;
 
@@ -28,7 +28,7 @@ class PassiveMonsterTest extends AbstractUnitTestFixture {
     @BeforeEach
     void setUp() {
         listener = new TestingEventListener();
-        monster = createMonster(Coordinate.xy(1, 1));
+        monster = monsterBuilder().coordinate(Coordinate.xy(1, 1)).build();
         monster.registerEventListener(listener);
         player = playerBuilder().build();
     }

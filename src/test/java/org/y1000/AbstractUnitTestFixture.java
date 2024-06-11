@@ -45,13 +45,4 @@ public abstract class AbstractUnitTestFixture {
         return id++;
     }
 
-    protected PassiveMonster createMonster(Coordinate coordinate) {
-        return PassiveMonster.builder().id(id++)
-                .coordinate(coordinate)
-                .direction(Direction.UP)
-                .name("test")
-                .realmMap(Mockito.mock(RealmMap.class))
-                .avoidance(0)
-                .build();
-    }
 }

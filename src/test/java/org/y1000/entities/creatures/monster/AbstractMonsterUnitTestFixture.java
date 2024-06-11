@@ -27,6 +27,9 @@ public abstract class AbstractMonsterUnitTestFixture extends AbstractUnitTestFix
                 .realmMap(Mockito.mock(RealmMap.class))
                 .attackSpeed(200)
                 .recovery(100)
-                .avoidance(0);
+                .avoidance(0)
+                .life(100)
+                .wanderingRange(10)
+                ;
     }
 }

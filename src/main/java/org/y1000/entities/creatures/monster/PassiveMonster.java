@@ -17,13 +17,14 @@ public final class PassiveMonster extends AbstractMonster {
 
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap) {
-        this(id, coordinate, direction, name, realmMap, 0, 100, 200);
+        this(id, coordinate, direction, name, realmMap, 0, 100, 200, 0, 10);
     }
 
     @Builder
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
-                          RealmMap realmMap, int avoidance, int recovery, int attackSpeed) {
-        super(id, coordinate, direction, name, realmMap, avoidance, recovery, attackSpeed);
+                          RealmMap realmMap, int avoidance, int recovery, int attackSpeed,
+                          int life, int wanderingRange, int armor) {
+        super(id, coordinate, direction, name, realmMap, avoidance, recovery, attackSpeed, life, wanderingRange, armor);
     }
 
 

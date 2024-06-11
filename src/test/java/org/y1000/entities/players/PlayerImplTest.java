@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
+import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.event.PlayerCooldownEvent;
 import org.y1000.entities.players.event.PlayerSitDownEvent;
 import org.y1000.entities.players.event.PlayerToggleKungFuEvent;
@@ -32,11 +34,11 @@ import org.y1000.message.clientevent.ClientUnequipEvent;
 import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.realm.Realm;
+import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 
 @Slf4j
 class PlayerImplTest extends AbstractUnitTestFixture {
@@ -60,6 +62,16 @@ class PlayerImplTest extends AbstractUnitTestFixture {
         player.registerEventListener(eventListener);
     }
 
+    private PassiveMonster createMonster(Coordinate coordinate) {
+        return PassiveMonster.builder().id(2L)
+                .coordinate(coordinate)
+                .direction(Direction.UP)
+                .name("test")
+                .realmMap(Mockito.mock(RealmMap.class))
+                .avoidance(0)
+                .wanderingRange(10)
+                .build();
+    }
 
     @Test
     void hat() {

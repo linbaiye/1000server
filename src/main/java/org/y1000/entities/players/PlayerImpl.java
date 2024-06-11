@@ -630,4 +630,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             waitDistanceState.onTargetEvent(this);
         }
     }
+
+    @Override
+    public int avoidance() {
+        return 0;
+    }
 }

@@ -69,6 +69,18 @@ class MeleeAttackKungFuTest {
     }
 
 
+
+    private PassiveMonster createMonster(Coordinate coordinate) {
+        return PassiveMonster.builder()
+                .id(1L)
+                .coordinate(coordinate)
+                .direction(Direction.UP)
+                        .name("test")
+                .realmMap()
+                        .r
+                        .Mockito.mock(RealmMap.class));
+    }
+
     @Test
     void startAttack() {
         PassiveMonster monster = new PassiveMonster(1L, player.coordinate().moveBy(clientAttackEvent.direction()), Direction.UP, "test", Mockito.mock(RealmMap.class));
