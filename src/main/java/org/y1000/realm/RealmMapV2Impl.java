@@ -77,7 +77,7 @@ final class RealmMapV2Impl implements RealmMap {
         free(creature);
         occupyingCreatures.put(creature.coordinate(), creature);
         creatureCoordinateMap.put(creature, creature.coordinate());
-        log.debug("{} occupied {}.", creature.id(), creature.coordinate());
+        //log.debug("{} occupied {}.", creature.id(), creature.coordinate());
     }
 
     public void free(PhysicalEntity creature) {

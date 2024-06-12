@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.monster;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
@@ -7,6 +8,7 @@ import org.y1000.message.MoveEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
 
+@Slf4j
 public abstract class AbstractMonsterFrozenState extends AbstractMonsterState {
 
     private final Coordinate from;
@@ -55,7 +57,7 @@ public abstract class AbstractMonsterFrozenState extends AbstractMonsterState {
         }
         if (monster.realmMap().movable(monster.coordinate().moveBy(towards))) {
             monster.changeState(stateForMove(monster, destination));
-            monster.emitEvent(MoveEvent.movingTo(monster, monster.direction()));
+            monster.emitEvent(MoveEvent.movingTo(monster, towards));
         } else {
             monster.changeState(frontNotMovable(monster));
             monster.emitEvent(CreatureChangeStateEvent.of(monster));

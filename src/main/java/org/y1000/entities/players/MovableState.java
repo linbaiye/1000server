@@ -44,7 +44,7 @@ public interface MovableState {
 
 
     default void move(PlayerImpl player, ClientMovementEvent event) {
-        logger().debug("Handling input at state [{}, {}], id {}.", player.state(), player.stateEnum(), event.moveInput().sequence());
+        logger().debug("Received input at state {}, coordinate {}, seq {}.", player.state(), player.coordinate(), event.moveInput().sequence());
         if (!event.happenedAt().equals(player.coordinate())) {
             logger().debug("Rewind because of coordinate mismatch, client: {}, server: {}.", event.happenedAt(), player.coordinate());
             rewind(player, event.moveInput().sequence());
