@@ -18,6 +18,9 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
 
     @Override
     public void update(PlayerImpl player, int delta) {
+        if (elapsedMillis() == 0) {
+            player.realmMap().free(player);
+        }
         if (!walkMillis(player, delta)) {
             return;
         }

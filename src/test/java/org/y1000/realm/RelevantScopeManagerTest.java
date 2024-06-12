@@ -2,7 +2,7 @@ package org.y1000.realm;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.y1000.AbstractEntityTest;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.Entity;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.monster.PassiveMonster;
@@ -12,11 +12,15 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RelevantScopeManagerTest extends AbstractEntityTest {
+class RelevantScopeManagerTest extends AbstractUnitTestFixture  {
     private RelevantScopeManager relevantScopeManager;
     @BeforeEach
     void setUp() {
         relevantScopeManager = new RelevantScopeManager();
+    }
+
+    private PassiveMonster createMonster(Coordinate coordinate) {
+        return monsterBuilder().coordinate(coordinate).build();
     }
 
 

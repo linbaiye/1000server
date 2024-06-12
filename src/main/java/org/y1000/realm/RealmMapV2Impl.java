@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.Server;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.util.Coordinate;
 
@@ -33,8 +34,8 @@ final class RealmMapV2Impl implements RealmMap {
 
     private final String name;
 
-    private final Map<Coordinate, Creature> occupyingCreatures;
-    private final Map<Creature, Coordinate> creatureCoordinateMap;
+    private final Map<Coordinate, PhysicalEntity> occupyingCreatures;
+    private final Map<PhysicalEntity, Coordinate> creatureCoordinateMap;
 
     public RealmMapV2Impl(byte[][] movableMask, String name) {
         Objects.requireNonNull(name);
@@ -52,14 +53,14 @@ final class RealmMapV2Impl implements RealmMap {
         creatureCoordinateMap = new HashMap<>();
     }
 
-    private boolean IsInRange(Coordinate coordinate) {
+    private boolean isInRange(Coordinate coordinate) {
         return coordinate.x() >= 0 && coordinate.x() <= width
                 && coordinate.y() >= 0 && coordinate.y() <= height;
     }
 
     @Override
     public boolean movable(Coordinate coordinate) {
-        if (!IsInRange(coordinate)) {
+        if (!isInRange(coordinate)) {
             return false;
         }
         if (occupyingCreatures.containsKey(coordinate)) {
@@ -69,13 +70,17 @@ final class RealmMapV2Impl implements RealmMap {
         return ((cell & 0x1) == 0) && ((cell & 0x2) == 0);
     }
 
-    public void occupy(Creature creature) {
+    public void occupy(PhysicalEntity creature) {
+        if (!isInRange(creature.coordinate())) {
+            throw new IllegalArgumentException("Invalid coordinate " + creature.coordinate());
+        }
         free(creature);
         occupyingCreatures.put(creature.coordinate(), creature);
         creatureCoordinateMap.put(creature, creature.coordinate());
+        log.debug("{} occupied {}.", creature.id(), creature.coordinate());
     }
 
-    public void free(Creature creature) {
+    public void free(PhysicalEntity creature) {
         var c = creatureCoordinateMap.remove(creature);
         if (c != null) {
             occupyingCreatures.remove(c);

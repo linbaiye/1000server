@@ -2,6 +2,7 @@ package org.y1000;
 
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
@@ -12,6 +13,9 @@ import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.util.Coordinate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -28,6 +32,33 @@ public abstract class AbstractUnitTestFixture {
         when (map.movable(any(Coordinate.class))).thenReturn(true);
         when(mock.map()).thenReturn(map);
         return mock;
+    }
+
+    private static final Map<State, Integer> BAFFULO_STATE_MILLIS = new HashMap<>() {
+        {
+            put(State.IDLE, 1000);
+            put(State.WALK, 770);
+            put(State.HURT, 540);
+            put(State.ATTACK, 700);
+            put(State.DIE, 700);
+            put(State.FROZEN, 900);
+        }
+    };
+
+
+    protected PassiveMonster.PassiveMonsterBuilder monsterBuilder() {
+        return PassiveMonster.builder().id(nextId())
+                .coordinate(Coordinate.xy(1, 1))
+                .direction(Direction.UP)
+                .name("test")
+                .realmMap(Mockito.mock(RealmMap.class))
+                .attackSpeed(200)
+                .recovery(100)
+                .avoidance(0)
+                .life(100)
+                .wanderingRange(10)
+                .stateMillis(BAFFULO_STATE_MILLIS)
+                ;
     }
 
     protected PlayerImpl.PlayerImplBuilder playerBuilder() {

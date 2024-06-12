@@ -3,6 +3,8 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.creatures.monster.AbstractMonster;
+import org.y1000.entities.creatures.monster.MonsterFactory;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.item.ItemFactory;
 import org.y1000.repository.ItemRepository;
@@ -27,13 +29,17 @@ final class RealmImpl implements Runnable, Realm {
     private final RealmEntityManager entityManager;
     private volatile boolean shutdown;
 
+    private final MonsterFactory monsterFactory;
+
     public RealmImpl(RealmMap map,
                      ItemRepository itemRepository,
-                     ItemFactory itemFactory) {
+                     ItemFactory itemFactory,
+                     MonsterFactory monsterFactory) {
         realmMap = map;
         entityManager = new RealmEntityManager(itemRepository, itemFactory);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
+        this.monsterFactory = monsterFactory;
     }
 
     public RealmMap map() {
@@ -41,14 +47,18 @@ final class RealmImpl implements Runnable, Realm {
     }
 
     private void initEntities() {
-        List<PassiveMonster> monsters = List.of(
-                PassiveMonster.builder().id(1000L).coordinate(new Coordinate(39, 30)).direction(Direction.DOWN).name("老虎").realmMap(realmMap).wanderingRange(10)
-                        .attackSpeed(150)
-                        .recovery(200)
-                        .build());
-        monsters.forEach(entityManager::add);
-    }
+        try {
 
+            List<AbstractMonster> monsters = List.of(
+                    //monsterFactory.createMonster("犀牛", entityManager.generateEntityId(), map(), new Coordinate(39, 30)),
+                    monsterFactory.createMonster("牛", entityManager.generateEntityId(), map(), new Coordinate(39, 31))
+                    //monsterFactory.createMonster("鹿", entityManager.generateEntityId(), map(), new Coordinate(39, 32))
+            );
+            monsters.forEach(entityManager::add);
+        } catch (Exception e) {
+            log.error("Exception ", e);
+        }
+    }
 
 
     private void dispatchEvent(RealmEvent event) {

@@ -9,6 +9,7 @@ import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.CreatureShootEvent;
 import org.y1000.entities.GroundedItem;
+import org.y1000.entities.creatures.monster.MonsterFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
@@ -43,6 +44,10 @@ final class RealmEntityManager implements EntityEventListener,
         this.itemRepository = itemRepository;
         this.itemFactory = itemFactory;
         tradeManager = new TradeManager();
+    }
+
+    public int generateEntityId() {
+        return temporaryEntityId++;
     }
 
 

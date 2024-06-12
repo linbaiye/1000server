@@ -12,10 +12,39 @@ public final class MonsterSdb extends AbstractSdbReader {
         return getInt(name, "Recovery");
     }
 
-    public int getType(String name) {
-        return getInt(name, "Recovery");
+
+    public String getAnimate(String name) {
+        return get(name, "Animate");
     }
 
+    public int getAvoid(String name) {
+        return getIntOrZero(name, "Avoid");
+    }
+
+    public int getAttackSpeed(String name) {
+        return getInt(name, "AttackSpeed");
+    }
+
+    public int getLife(String name) {
+        return getInt(name, "Life");
+    }
+
+    public int getDamage(String name) {
+        return getIntOrZero(name, "Damage");
+    }
+
+    public int getArmor(String name) {
+        return getIntOrZero(name, "Armor");
+    }
+
+    public int getActionWidth(String name) {
+        return getInt(name, "ActionWidth");
+    }
+
+    public boolean isPassive(String name) {
+        String s = get(name, "boGoodHeart");
+        return "TRUE".equals(s);
+    }
 
     private static MonsterSdb Load() {
         MonsterSdb monsterSdb = new MonsterSdb();
@@ -25,8 +54,8 @@ public final class MonsterSdb extends AbstractSdbReader {
 
     public static void main(String[] args) {
         MonsterSdb monsterSdb = INSTANCE;
-        System.out.println(monsterSdb.get("牛", "Shape"));
-        System.out.println(monsterSdb.get("牛", "Animate"));
+        //System.out.println(monsterSdb.get("熊", "boGoodHeart"));
+        System.out.println(monsterSdb.get("牛", "WalkSpeed"));
     }
 }
 

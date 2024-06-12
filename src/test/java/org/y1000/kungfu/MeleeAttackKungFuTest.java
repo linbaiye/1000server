@@ -7,6 +7,7 @@ import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerStillState;
@@ -26,7 +27,7 @@ import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MeleeAttackKungFuTest {
+class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
 
     private QuanfaKungFu kungFu;
 
@@ -71,14 +72,7 @@ class MeleeAttackKungFuTest {
 
 
     private PassiveMonster createMonster(Coordinate coordinate) {
-        return PassiveMonster.builder()
-                .id(1L)
-                .coordinate(coordinate)
-                .direction(Direction.UP)
-                .name("test")
-                .realmMap(Mockito.mock(RealmMap.class))
-                .wanderingRange(10)
-                .build();
+        return monsterBuilder().coordinate(coordinate).build();
     }
 
     @Test

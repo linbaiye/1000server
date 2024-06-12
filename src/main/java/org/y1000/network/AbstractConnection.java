@@ -61,7 +61,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
                 } else {
                     realmManager.queueEvent(new ConnectionDataEvent(this, message));
                 }
-                log.debug("Received message {}.", message);
+                //log.debug("Received message {}.", message);
             } catch (Exception e) {
                 log.error("Exception ", e);
 

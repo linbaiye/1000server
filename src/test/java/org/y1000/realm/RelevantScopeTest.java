@@ -1,8 +1,8 @@
 package org.y1000.realm;
 
 import org.junit.jupiter.api.Test;
-import org.y1000.AbstractEntityTest;
 import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.util.Coordinate;
 
@@ -10,12 +10,17 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RelevantScopeTest extends AbstractEntityTest {
+class RelevantScopeTest extends AbstractMonsterUnitTestFixture {
 
 
     private PassiveMonster createMonster(int x, int y) {
-        return createMonster(Coordinate.xy(x, y));
+        return monsterBuilder().coordinate(Coordinate.xy(x, y)).build();
     }
+
+    private PassiveMonster createMonster(Coordinate coordinate) {
+        return monsterBuilder().coordinate(coordinate).build();
+    }
+
 
     @Test
     void outOfScope() {

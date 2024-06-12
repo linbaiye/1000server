@@ -51,9 +51,14 @@ public abstract class AbstractMonsterFrozenState extends AbstractMonsterState {
             monster.changeDirection(towards);
             monster.changeState(stateForTurn(monster, destination));
             monster.emitEvent(SetPositionEvent.of(monster));
-        } else {
+            return;
+        }
+        if (monster.realmMap().movable(monster.coordinate().moveBy(towards))) {
             monster.changeState(stateForMove(monster, destination));
             monster.emitEvent(MoveEvent.movingTo(monster, monster.direction()));
+        } else {
+            monster.changeState(frontNotMovable(monster));
+            monster.emitEvent(CreatureChangeStateEvent.of(monster));
         }
     }
 }

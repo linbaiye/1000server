@@ -10,6 +10,7 @@ import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class MonsterWanderingMoveStateTest extends AbstractMonsterUnitTestFixture {
@@ -31,6 +32,8 @@ class MonsterWanderingMoveStateTest extends AbstractMonsterUnitTestFixture {
         assertTrue(monster.state() instanceof MonsterWanderingIdleState);
         CreatureChangeStateEvent dequeue = eventListener.dequeue(CreatureChangeStateEvent.class);
         assertEquals(dequeue.toPacket().getChangeStatePacket().getState(), State.IDLE.value());
+        verify(monster.realmMap()).free(monster);
+        verify(monster.realmMap()).occupy(monster);
     }
 
     @Test

@@ -442,7 +442,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public void changeState(PlayerState newState) {
-        log().debug("Change state from {} to {}.", state(), newState);
+        //log().debug("Change state from {} to {}.", state(), newState);
         super.changeState(newState);
     }
 

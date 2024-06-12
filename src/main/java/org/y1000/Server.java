@@ -8,11 +8,15 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
+import org.y1000.entities.creatures.monster.MonsterFactory;
+import org.y1000.entities.creatures.monster.MonsterFactoryImpl;
 import org.y1000.item.ItemSdb;
 import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.repository.*;
 import org.y1000.network.*;
 import org.y1000.realm.RealmManager;
+import org.y1000.sdb.ActionSdb;
+import org.y1000.sdb.MonsterSdb;
 
 public final class Server {
 
@@ -30,6 +34,8 @@ public final class Server {
 
     private ItemRepository itemRepository;
 
+    private MonsterFactory monsterFactory;
+
     public Server(int port) {
         this.port = port;
         workerGroup = new NioEventLoopGroup();
@@ -39,7 +45,8 @@ public final class Server {
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdb.INSTANCE);
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl);
         itemRepository = repository;
-        realmManager = RealmManager.create(repository, itemRepository);
+        monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonsterSdb.INSTANCE);
+        realmManager = RealmManager.create(repository, itemRepository, monsterFactory);
     }
 
 

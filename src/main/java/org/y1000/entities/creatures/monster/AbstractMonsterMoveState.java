@@ -19,6 +19,9 @@ public abstract class AbstractMonsterMoveState extends AbstractCreatureMoveState
 
     @Override
     public void update(AbstractMonster monster, int delta) {
+        if (elapsedMillis() == 0) {
+            monster.realmMap().free(monster);
+        }
         if (!elapse(delta)) {
             return;
         }

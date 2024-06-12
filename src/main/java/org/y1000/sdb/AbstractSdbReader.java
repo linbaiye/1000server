@@ -28,8 +28,8 @@ public abstract class AbstractSdbReader {
         headerIndex = new HashMap<>();
     }
 
-    public boolean contains(String itemName) {
-        return values.containsKey(itemName);
+    public boolean contains(String name) {
+        return values.containsKey(name);
     }
 
     protected <E extends Enum<E>> E getEnum(String itemName, String key, Function<Integer, E> creator) {
@@ -47,7 +47,7 @@ public abstract class AbstractSdbReader {
         }
     }
 
-    public Integer getInt(String name, String key) {
+    protected Integer getInt(String name, String key) {
         String[] strings = values.get(name);
         if (strings == null) {
             return null;
@@ -56,8 +56,12 @@ public abstract class AbstractSdbReader {
         return index != null ? Integer.parseInt(strings[index]) : null;
     }
 
+    protected Integer getIntOrZero(String name, String key) {
+        Integer anInt = getInt(name, key);
+        return anInt != null ? anInt : 0;
+    }
 
-    public String get(String itemName, String key) {
+    protected String get(String itemName, String key) {
         String[] strings = values.get(itemName);
         if (strings == null) {
             return null;
@@ -67,8 +71,7 @@ public abstract class AbstractSdbReader {
     }
 
 
-
-    public void read(String name) {
+    protected void read(String name) {
         try {
             try (var inputstream = getClass().getResourceAsStream("/sdb/" + name)) {
                 if (inputstream == null) {
@@ -79,7 +82,8 @@ public abstract class AbstractSdbReader {
                 if (lines.isEmpty()) {
                     throw new NoSuchElementException("Empty sdb: " + name);
                 }
-                String[] header = lines.get(0).split(",");
+                String headerLine = lines.get(0).trim();
+                String[] header = headerLine.split(",");
                 if (header.length == 0) {
                     throw new NoSuchElementException("Empty sdb: " + name);
                 }
@@ -87,7 +91,7 @@ public abstract class AbstractSdbReader {
                     headerIndex.put(header[i], i);
                 }
                 for (int i = 1; i < lines.size(); i++) {
-                    String item = lines.get(i);
+                    String item = lines.get(i).trim();
                     String[] values = item.split(",");
                     if (values.length == 0 || StringUtils.isBlank(values[0])) {
                         continue;

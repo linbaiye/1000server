@@ -7,6 +7,8 @@ import java.util.Set;
 
 public record Coordinate(int x, int y) {
 
+    public static final Coordinate Empty = new Coordinate(0, 0);
+
     public Coordinate moveBy(Direction direction) {
         return add(direction.offset());
     }
@@ -22,6 +24,7 @@ public record Coordinate(int x, int y) {
         }
         return result;
     }
+
 
     public Direction computeDirection(Coordinate to) {
         var ydiff = to.y() - this.y();
