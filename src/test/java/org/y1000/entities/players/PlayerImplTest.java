@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
+import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
@@ -26,17 +27,23 @@ import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.kungfu.attack.SwordKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
+import org.y1000.message.InputResponseMessage;
 import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.PositionType;
 import org.y1000.message.clientevent.ClientDoubleClickSlotEvent;
+import org.y1000.message.clientevent.ClientMovementEvent;
 import org.y1000.message.clientevent.ClientToggleKungFuEvent;
 import org.y1000.message.clientevent.ClientUnequipEvent;
+import org.y1000.message.clientevent.input.RightMouseClick;
 import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.realm.Realm;
+import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @Slf4j
 class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
@@ -327,6 +334,26 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
     }
 
     @Test
-    void name() {
+    void handleMoveEventWhenIdle() {
+        RealmMap map = Mockito.mock(RealmMap.class);
+        Realm realm = Mockito.mock(Realm.class);
+        when(realm.map()).thenReturn(map);
+        player.joinReam(realm);
+        eventListener.clearEvents();
+        when(map.movable(player.coordinate().moveBy(Direction.DOWN))).thenReturn(true);
+        player.handleClientEvent(new ClientMovementEvent(new RightMouseClick(1, Direction.DOWN), player.coordinate()));
+        InputResponseMessage responseMessage = eventListener.dequeue(InputResponseMessage.class);
+        assertEquals(PositionType.MOVE.value(), responseMessage.toPacket().getResponsePacket().getPositionPacket().getType());
+        assertTrue(player.state() instanceof AbstractPlayerMoveState);
+
+        player = playerBuilder().build();
+        player.registerEventListener(eventListener);
+        player.joinReam(realm);
+        eventListener.clearEvents();
+        Mockito.reset(map);
+        when(map.movable(player.coordinate().moveBy(Direction.UP))).thenReturn(false);
+        player.handleClientEvent(new ClientMovementEvent(new RightMouseClick(1, Direction.UP), player.coordinate()));
+        responseMessage = eventListener.dequeue(InputResponseMessage.class);
+        assertEquals(PositionType.REWIND.value(), responseMessage.toPacket().getResponsePacket().getPositionPacket().getType());
     }
 }
