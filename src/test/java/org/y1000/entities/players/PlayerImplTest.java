@@ -325,4 +325,8 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
         player.leaveRealm();
         Mockito.verify(mock, Mockito.times(1)).deregisterEventListener(player);
     }
+
+    @Test
+    void name() {
+    }
 }

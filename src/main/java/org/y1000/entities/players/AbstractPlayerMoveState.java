@@ -4,9 +4,14 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.event.RewindEvent;
+import org.y1000.message.clientevent.ClientMovementEvent;
+import org.y1000.message.clientevent.input.AbstractRightClick;
 import org.y1000.util.Coordinate;
 
 public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements PlayerState {
+
+    private ClientMovementEvent event;
+
     protected AbstractPlayerMoveState(State state, Coordinate start,
                                    Direction towards, int millisPerUnit) {
         super(state, start, towards, millisPerUnit);
@@ -26,6 +31,9 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
         }
         if (tryChangeCoordinate(player, player.realmMap())) {
             onMoved(player);
+            if (event != null && player.state() instanceof MovableState movableState) {
+                movableState.move(player, event);
+            }
         } else {
             player.changeCoordinate(getStart());
             player.changeState(rewindState(player));
@@ -40,6 +48,9 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
         }
     }
 
+    public void onMoveEvent(ClientMovementEvent event) {
+        this.event = event;
+    }
 
     @Override
     public void afterHurt(PlayerImpl player) {

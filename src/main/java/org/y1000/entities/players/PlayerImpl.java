@@ -373,6 +373,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     private void move(ClientMovementEvent event) {
         if (state() instanceof MovableState movableState) {
             movableState.move(this, event);
+        } else if (state() instanceof AbstractPlayerMoveState moveState) {
+            moveState.onMoveEvent(event);
         }
     }
 
