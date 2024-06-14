@@ -2,6 +2,7 @@ package org.y1000;
 
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
+import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.PlayerImpl;
@@ -55,7 +56,7 @@ public abstract class AbstractUnitTestFixture {
                 .attackSpeed(200)
                 .recovery(100)
                 .avoidance(0)
-                .life(100)
+                .life(1000)
                 .wanderingRange(10)
                 .stateMillis(BAFFULO_STATE_MILLIS)
                 ;
@@ -69,6 +70,8 @@ public abstract class AbstractUnitTestFixture {
                 .name("test")
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA))
+                .innateAttackSpeed(PlayerImpl.INNATE_ATTACKSPEED)
+                .innateDamage(new Damage(41, 41, 41,41))
                 .inventory(new Inventory());
     }
 

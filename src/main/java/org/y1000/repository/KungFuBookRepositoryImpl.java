@@ -31,8 +31,6 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         builder.name(name);
         builder.level(100);
         builder.attackSpeed(kungFuSdb.getAttackSpeed(name));
-        builder.avoidance(kungFuSdb.getAvoidance(name));
-        builder.recovery(kungFuSdb.getRecovery(name));
         builder.bodyDamage(kungFuSdb.getDamageBody(name));
         builder.headDamage(kungFuSdb.getDamageHead(name));
         builder.armDamage(kungFuSdb.getDamageArm(name));
@@ -41,6 +39,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         builder.headArmor(kungFuSdb.getArmorHead(name));
         builder.armArmor(kungFuSdb.getArmorArm(name));
         builder.legArmor(kungFuSdb.getArmorLeg(name));
+        builder.parameters(new AttackKungFuParametersImpl(name, kungFuSdb));
     }
 
 

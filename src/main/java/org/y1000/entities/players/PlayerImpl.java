@@ -53,6 +53,45 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     private final Map<EquipmentType, Equipment> equippedEquipments;
 
     public static final int INNATE_ATTACKSPEED = 70;
+    public static final int INNATE_RECOVERY = 50;
+    public static final int INNATE_AVOIDANCE = 25;
+
+    private int currentLife;
+
+    private int age;
+
+    private int innerPower;
+
+    private int outerPower;
+
+    private int power;
+
+    private int maxPower;
+
+    private int maxInnerPower;
+
+    private int maxOuterPower;
+
+    private int energy;
+
+    private int maxEnergy;
+
+    private int currentLeg;
+    private int currentHead;
+
+    private int currentArm;
+
+    private final int innateAvoidance;
+
+    private final int innateAttackSpeed;
+
+    private final int innateRecovery;
+
+    private final int innateLife;
+
+    private final int innateHit;
+
+    private final Damage innateDamage;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
@@ -96,8 +135,22 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                       Clothing clothing,
                       FootKungFu footKungfu,
                       ProtectKungFu protectKungFu,
-                      BreathKungFu breathKungFu
-                      ) {
+                      BreathKungFu breathKungFu,
+                      int innateAvoidance,
+                      int innateAttackSpeed,
+                      int innateRecovery,
+                      Damage innateDamage,
+                      int innateLife,
+                      int power,
+                      int maxPower,
+                      int innerPower,
+                      int outerPower,
+                      int maxInnerPower,
+                      int maxOuterPower,
+                      int age,
+                      int innateHit,
+                      int energy,
+                      int maxEnergy) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
         Objects.requireNonNull(kungFuBook, "kungFuBook can't be null.");
         Objects.requireNonNull(attackKungFu, "attackKungFu can't be null.");
@@ -107,6 +160,17 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         this.kungFuBook = kungFuBook;
         this.male = male;
         this.footKungfu = footKungfu;
+        this.innateAvoidance = innateAvoidance;
+        this.innateRecovery = innateRecovery;
+        this.innateAttackSpeed = innateAttackSpeed;
+        this.power = power;
+        this.maxPower = maxPower == 0 ? power : maxPower;
+        this.innerPower = innerPower;
+        this.maxInnerPower = maxInnerPower == 0 ? innerPower : maxInnerPower;
+        this.outerPower = outerPower;
+        this.maxOuterPower = maxOuterPower == 0 ? outerPower : maxOuterPower;
+        this.innateLife = innateLife;
+        this.age = age;
         initProtectKungFu(protectKungFu);
         initBreathKungFu(breathKungFu);
         this.equippedEquipments = new HashMap<>();
@@ -118,6 +182,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         equippedEquipments.put(EquipmentType.WRIST, wrist);
         equippedEquipments.put(EquipmentType.TROUSER, trouser);
         equippedEquipments.put(EquipmentType.HAIR, hair);
+        currentLife = this.innateLife + this.age;
+        this.innateDamage = innateDamage;
+        this.innateHit = innateHit == 0 ? 75 : innateHit;
+        this.energy = energy;
+        this.maxEnergy = maxEnergy != 0 ? maxEnergy : energy;
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
     }
 
@@ -231,9 +300,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             return;
         }
         if (this.attackKungFu.getType() == newAttack.getType()) {
-            this.attackKungFu = newAttack;
-            cooldownAttack();
-            emitEvent(PlayerToggleKungFuEvent.enable(this, this.attackKungFu));
+            changeAttackKungFu(newAttack);
             return;
         }
         int slot = inventory.findWeaponSlot(newAttack.getType());
@@ -460,18 +527,21 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         emitEvent(new JoinedRealmEvent(this, coordinate(), inventory));
     }
 
-    private void attackedBy(int hit) {
-        handleAttacked(this, hit, (afterHurt) -> PlayerHurtState.hurt(this, afterHurt));
+    private void applyDamage(Damage damage) {
+        int bodyDamage = damage.bodyDamage() - armor();
+        bodyDamage = bodyDamage > 0 ? bodyDamage : 1;
+        currentLife -= bodyDamage;
     }
+
 
     @Override
     public void attackedBy(ViolentCreature attacker) {
-        attackedBy(attacker.hit());
+        handleAttacked(attacker, (afterHurt) -> PlayerHurtState.hurt(this, afterHurt), this::applyDamage);
     }
 
     @Override
     public void attackedBy(Projectile projectile) {
-        attackedBy(projectile.getHit());
+        handleAttacked(projectile.getShooter(), (afterHurt) -> PlayerHurtState.hurt(this, afterHurt), this::applyDamage);
     }
 
     @Override
@@ -490,9 +560,10 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     private void changeAttackKungFu(AttackKungFu newKungFu) {
+        boolean needCooldownState = newKungFu.getType() != this.attackKungFu.getType();
         this.attackKungFu = newKungFu;
         cooldownAttack();
-        if (state() instanceof PlayerAttackState) {
+        if (needCooldownState && state() instanceof PlayerAttackState) {
             changeState(new PlayerCooldownState(cooldown()));
             emitEvent(new PlayerCooldownEvent(this));
         }
@@ -532,7 +603,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public int attackSpeed() {
-        return INNATE_ATTACKSPEED + attackKungFu.getAttackSpeed();
+        return innateAttackSpeed + attackKungFu.getAttackSpeed();
     }
 
     public Optional<Weapon> weapon() {
@@ -553,7 +624,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     public int recovery() {
         int kfr = attackKungFu != null ? attackKungFu.getRecovery() : 0;
-        return 50 + kfr;
+        return innateRecovery + kfr;
     }
 
     @Override
@@ -577,18 +648,92 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     @Override
+    public int age() {
+        return age;
+    }
+
+    @Override
+    public int power() {
+        return power;
+    }
+
+    @Override
+    public int maxPower() {
+        return maxPower;
+    }
+
+    @Override
+    public int innerPower() {
+        return innerPower;
+    }
+
+    @Override
+    public int maxInnerPower() {
+        return maxInnerPower;
+    }
+
+    @Override
+    public int outerPower() {
+        return outerPower;
+    }
+
+    @Override
+    public int maxOuterPower() {
+        return maxOuterPower;
+    }
+
+    @Override
+    public int maxEnergy() {
+        return maxEnergy;
+    }
+
+    @Override
+    public int energy() {
+        return energy;
+    }
+
+    @Override
+    public void consumePower(int amount) {
+        if (amount > 0)
+            power = Math.max(power - amount, 0);
+    }
+
+    @Override
+    public void consumeInnerPower(int amount) {
+        if (amount > 0)
+            innerPower = Math.max(innerPower - amount, 0);
+    }
+
+    @Override
+    public void consumeOuterPower(int amount) {
+        if (amount > 0)
+            outerPower = Math.max(outerPower - amount, 0);
+    }
+
+    @Override
+    public void consumeLife(int amount) {
+        if (amount <= 0) {
+            return;
+        }
+        currentLife = Math.max(currentLife - amount, 0);
+        if (currentLife == 0) {
+            // die fool.
+        }
+    }
+
+    @Override
     public Inventory inventory() {
         return inventory;
     }
 
     @Override
     public int hit() {
-        return 0;
+        return innateHit;
     }
 
     @Override
     public Damage damage() {
-        return null;
+        return innateDamage;
     }
 
     @Override
@@ -635,6 +780,22 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public int avoidance() {
+        return innateAvoidance;
+    }
+
+
+    @Override
+    public int maxLife() {
+        return innateLife + age;
+    }
+
+    @Override
+    public int currentLife() {
+        return currentLife;
+    }
+
+    @Override
+    public int armor() {
         return 0;
     }
 }

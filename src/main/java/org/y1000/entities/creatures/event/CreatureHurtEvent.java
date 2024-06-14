@@ -12,12 +12,16 @@ public final class CreatureHurtEvent extends AbstractCreatureEvent {
     private final State afterHurtState;
     private final Direction direction;
     private final Coordinate coordinate;
+    private final int currentLife;
+    private final int maxLife;
 
     public CreatureHurtEvent(Creature source, State afterHurtState) {
         super(source);
         this.afterHurtState = afterHurtState;
         this.direction = source.direction();
         this.coordinate = source.coordinate();
+        this.maxLife = source.maxLife();
+        this.currentLife = source.currentLife();
     }
 
     @Override
@@ -30,6 +34,8 @@ public final class CreatureHurtEvent extends AbstractCreatureEvent {
                         .setDirection(direction.value())
                         .setX(coordinate.x())
                         .setY(coordinate.y())
+                        .setCurrentLife(currentLife)
+                        .setMaxLife(maxLife)
                         .build())
                 .build();
     }

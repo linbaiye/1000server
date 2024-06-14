@@ -14,12 +14,68 @@ public final class KungFuSdb extends AbstractSdbReader {
         return sdb;
     }
 
+    // 5Energy,5InPower,5OutPower,5Magic,5Life
+
+    public int get5Energy(String name) {
+        return getInt(name, "5Energy");
+    }
+
+    public int get5InPower(String name) {
+        return getInt(name, "5InPower");
+    }
+
+    public int get5OutPower(String name) {
+        return getInt(name, "5OutPower");
+    }
+
+    public int get5Magic(String name) {
+        return getInt(name, "5Magic");
+    }
+
+    public int getEEnergy(String name) {
+        return getInt(name, "eEnergy");
+    }
+
+    public int getEInPower(String name) {
+        return getInt(name, "eInPower");
+    }
+
+    public int getEOutPower(String name) {
+        return getInt(name, "eOutPower");
+    }
+
+    public int getEMagic(String name) {
+        return getInt(name, "eMagic");
+    }
+
+    public int getELife(String name) {
+        return getInt(name, "eLife");
+    }
+
+    //kEnergy,kInPower,kOutPower,kMagic
+    public int getKEnergy(String name) {
+        return getInt(name, "kEnergy");
+    }
+
+    public int getKInPower(String name) {
+        return getInt(name, "kInPower");
+    }
+
+    public int getKOutPower(String name) {
+        return getInt(name, "kOutPower");
+    }
+
+    public int getKLife(String name) {
+        return getInt(name, "kLife");
+    }
+
+    public int getKMagic(String name) {
+        return getInt(name, "kMagic");
+    }
+
     public int getAttackSpeed(String name) {
         return getInt(name, "AttackSpeed");
     }
-    /*
-    AttackSpeed,Recovery,KeepRecovery,Avoid,accuracy,DamageBody,DamageHead,DamageArm,DamageLeg,DamageEnergy,ArmorBody,ArmorHead,ArmorArm,ArmorLeg
-     */
 
     public int getRecovery(String name) {
         return getInt(name, "Recovery");
@@ -71,10 +127,9 @@ public final class KungFuSdb extends AbstractSdbReader {
     }
 
     public static void main(String[] args) {
-        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
-        System.out.println(INSTANCE.get("无名剑法", "SoundStrike"));
+//        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
+//        System.out.println(INSTANCE.get("无名剑法", "SoundStrike"));
 
-        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
-        System.out.println(INSTANCE.get("无名剑法", "SoundStrike"));
+        System.out.println(INSTANCE.get("无名步法", "5InPower"));
     }
 }

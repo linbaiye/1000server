@@ -23,16 +23,7 @@ public final class QuanfaKungFu extends AbstractMeleeKungFu {
         return AttackKungFuType.QUANFA;
     }
 
-    public static QuanfaKungFu unnamed() {
-        return QuanfaKungFu.builder()
-                .name("无名拳法")
-                .level(100)
-                .recovery(100)
-                .attackSpeed(100)
-                .bodyArmor(1)
-                .bodyDamage(1)
-                .build();
-    }
+
 
     @Override
     protected Logger logger() {

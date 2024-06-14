@@ -16,11 +16,11 @@ import org.y1000.entities.creatures.monster.fight.MonsterHurtState;
 import org.y1000.entities.creatures.monster.wander.MonsterWanderingIdleState;
 import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.message.CreatureInterpolation;
+import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMonster, MonsterState<AbstractMonster>> {
@@ -46,6 +46,8 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
 
     private final int armor;
 
+    private final int hit;
+
     private final String attackSound;
 
 
@@ -64,9 +66,31 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         maxLife = life;
         currentLife = life;
         this.armor = armor;
-        this.realmMap.occupy(this);
         this.attackSound = attackSound;
         changeState(MonsterWanderingIdleState.start(getStateMillis(State.IDLE), wanderingArea.random(coordinate)));
+        this.realmMap.occupy(this);
+        this.hit = 0;
+    }
+
+    protected AbstractMonster(long id, Coordinate coordinate, Direction direction, String name,
+                              RealmMap realmMap, Map<State, Integer> stateMillis,
+                              AttributeProvider attributeProvider) {
+        super(id, coordinate, direction, name, stateMillis);
+        this.realmMap = realmMap;
+        this.recovery = attributeProvider.recovery();
+        this.attackSpeed = attributeProvider.attackSpeed();
+        this.avoidance = attributeProvider.avoidance();
+        spwanCoordinate = coordinate;
+        int range = attributeProvider.wanderingRange();
+        wanderingArea = new Rectangle(coordinate.move(-range, -range), coordinate.move(range, range));
+        maxLife = attributeProvider.life();
+        currentLife = attributeProvider.life();
+        this.armor = attributeProvider.armor();
+        this.attackSound = attributeProvider.attackSound();
+        changeState(MonsterWanderingIdleState.start(getStateMillis(State.IDLE), wanderingArea.random(coordinate)));
+        this.hit = attributeProvider.hit();
+        this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
+        this.realmMap.occupy(this);
     }
 
 
@@ -85,9 +109,20 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         state().update(this, delta);
     }
 
+    private void applyDamage(Damage damage) {
+        int bodyDamage = damage.bodyDamage() - armor();
+        bodyDamage = bodyDamage > 0 ? bodyDamage : 1;
+        currentLife -= bodyDamage;
+        if (currentLife < 0) {
+            currentLife = 0;
+        }
+    }
 
-    private void attackedBy(ViolentCreature attacker, int hit) {
-        if (!handleAttacked(this, hit, (s) -> new MonsterHurtState(getStateMillis(State.HURT), state()))) {
+    @Override
+    public void attackedBy(ViolentCreature attacker) {
+        if (!handleAttacked(attacker,
+                (s) -> new MonsterHurtState(getStateMillis(State.HURT), state()),
+                this::applyDamage)) {
             return;
         }
         if (getFightingEntity() == null ||
@@ -97,13 +132,8 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     }
 
     @Override
-    public void attackedBy(ViolentCreature attacker) {
-        attackedBy(attacker, attacker.hit());
-    }
-
-    @Override
     public void attackedBy(Projectile projectile) {
-        attackedBy(projectile.getShooter(), projectile.getHit());
+        attackedBy(projectile.getShooter());
     }
 
     public void fight() {
@@ -153,7 +183,7 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
 
     @Override
     public int hit() {
-        return 0;
+        return hit;
     }
 
     @Override
@@ -164,5 +194,31 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     @Override
     public Damage damage() {
         return damage;
+    }
+
+    @Override
+    public int maxLife() {
+        return maxLife;
+    }
+
+    @Override
+    public int currentLife() {
+        return currentLife;
+    }
+
+    @Override
+    public int armor() {
+        return armor;
+    }
+
+    @Override
+    public void onEvent(EntityEvent entityEvent) {
+        if (getFightingEntity() == null) {
+            log().error("Invalid event received.");
+            return;
+        }
+        if (!canAttack(getFightingEntity())) {
+            clearFightingEntity();
+        }
     }
 }

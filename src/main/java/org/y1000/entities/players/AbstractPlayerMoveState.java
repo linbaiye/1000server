@@ -43,9 +43,7 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
 
     @Override
     public void moveToHurtCoordinate(PlayerImpl creature) {
-        if (elapsedMillis() > totalMillis() / 2) {
-            tryChangeCoordinate(creature, creature.realmMap());
-        }
+        tryChangeCoordinate(creature, creature.realmMap());
     }
 
     public void onMoveEvent(ClientMovementEvent event) {

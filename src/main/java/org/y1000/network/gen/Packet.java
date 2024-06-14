@@ -68,6 +68,7 @@ private static final long serialVersionUID = 0L;
     SITDOWN(24),
     STANDUP(25),
     COOLDOWN(26),
+    ATTRIBUTE(27),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -108,6 +109,7 @@ private static final long serialVersionUID = 0L;
         case 24: return SITDOWN;
         case 25: return STANDUP;
         case 26: return COOLDOWN;
+        case 27: return ATTRIBUTE;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -836,6 +838,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.PlayerCooldownPacket.getDefaultInstance();
   }
 
+  public static final int ATTRIBUTE_FIELD_NUMBER = 27;
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+   * @return Whether the attribute field is set.
+   */
+  @java.lang.Override
+  public boolean hasAttribute() {
+    return typedPacketCase_ == 27;
+  }
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+   * @return The attribute.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AttributePacket getAttribute() {
+    if (typedPacketCase_ == 27) {
+       return (org.y1000.network.gen.AttributePacket) typedPacket_;
+    }
+    return org.y1000.network.gen.AttributePacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AttributePacketOrBuilder getAttributeOrBuilder() {
+    if (typedPacketCase_ == 27) {
+       return (org.y1000.network.gen.AttributePacket) typedPacket_;
+    }
+    return org.y1000.network.gen.AttributePacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -918,6 +951,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 26) {
       output.writeMessage(26, (org.y1000.network.gen.PlayerCooldownPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 27) {
+      output.writeMessage(27, (org.y1000.network.gen.AttributePacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1019,6 +1055,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 26) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(26, (org.y1000.network.gen.PlayerCooldownPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 27) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(27, (org.y1000.network.gen.AttributePacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1129,6 +1169,10 @@ private static final long serialVersionUID = 0L;
         if (!getCooldown()
             .equals(other.getCooldown())) return false;
         break;
+      case 27:
+        if (!getAttribute()
+            .equals(other.getAttribute())) return false;
+        break;
       case 0:
       default:
     }
@@ -1235,6 +1279,10 @@ private static final long serialVersionUID = 0L;
       case 26:
         hash = (37 * hash) + COOLDOWN_FIELD_NUMBER;
         hash = (53 * hash) + getCooldown().hashCode();
+        break;
+      case 27:
+        hash = (37 * hash) + ATTRIBUTE_FIELD_NUMBER;
+        hash = (53 * hash) + getAttribute().hashCode();
         break;
       case 0:
       default:
@@ -1439,6 +1487,9 @@ private static final long serialVersionUID = 0L;
       if (cooldownBuilder_ != null) {
         cooldownBuilder_.clear();
       }
+      if (attributeBuilder_ != null) {
+        attributeBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -1571,6 +1622,10 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 26 &&
           cooldownBuilder_ != null) {
         result.typedPacket_ = cooldownBuilder_.build();
+      }
+      if (typedPacketCase_ == 27 &&
+          attributeBuilder_ != null) {
+        result.typedPacket_ = attributeBuilder_.build();
       }
     }
 
@@ -1709,6 +1764,10 @@ private static final long serialVersionUID = 0L;
         }
         case COOLDOWN: {
           mergeCooldown(other.getCooldown());
+          break;
+        }
+        case ATTRIBUTE: {
+          mergeAttribute(other.getAttribute());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -1902,6 +1961,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 26;
               break;
             } // case 210
+            case 218: {
+              input.readMessage(
+                  getAttributeFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 27;
+              break;
+            } // case 218
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -5198,6 +5264,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 26;
       onChanged();
       return cooldownBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AttributePacket, org.y1000.network.gen.AttributePacket.Builder, org.y1000.network.gen.AttributePacketOrBuilder> attributeBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+     * @return Whether the attribute field is set.
+     */
+    @java.lang.Override
+    public boolean hasAttribute() {
+      return typedPacketCase_ == 27;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+     * @return The attribute.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.AttributePacket getAttribute() {
+      if (attributeBuilder_ == null) {
+        if (typedPacketCase_ == 27) {
+          return (org.y1000.network.gen.AttributePacket) typedPacket_;
+        }
+        return org.y1000.network.gen.AttributePacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 27) {
+          return attributeBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.AttributePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+     */
+    public Builder setAttribute(org.y1000.network.gen.AttributePacket value) {
+      if (attributeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        attributeBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 27;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+     */
+    public Builder setAttribute(
+        org.y1000.network.gen.AttributePacket.Builder builderForValue) {
+      if (attributeBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        attributeBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 27;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+     */
+    public Builder mergeAttribute(org.y1000.network.gen.AttributePacket value) {
+      if (attributeBuilder_ == null) {
+        if (typedPacketCase_ == 27 &&
+            typedPacket_ != org.y1000.network.gen.AttributePacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.AttributePacket.newBuilder((org.y1000.network.gen.AttributePacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 27) {
+          attributeBuilder_.mergeFrom(value);
+        } else {
+          attributeBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 27;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+     */
+    public Builder clearAttribute() {
+      if (attributeBuilder_ == null) {
+        if (typedPacketCase_ == 27) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 27) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        attributeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+     */
+    public org.y1000.network.gen.AttributePacket.Builder getAttributeBuilder() {
+      return getAttributeFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.AttributePacketOrBuilder getAttributeOrBuilder() {
+      if ((typedPacketCase_ == 27) && (attributeBuilder_ != null)) {
+        return attributeBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 27) {
+          return (org.y1000.network.gen.AttributePacket) typedPacket_;
+        }
+        return org.y1000.network.gen.AttributePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AttributePacket, org.y1000.network.gen.AttributePacket.Builder, org.y1000.network.gen.AttributePacketOrBuilder> 
+        getAttributeFieldBuilder() {
+      if (attributeBuilder_ == null) {
+        if (!(typedPacketCase_ == 27)) {
+          typedPacket_ = org.y1000.network.gen.AttributePacket.getDefaultInstance();
+        }
+        attributeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.AttributePacket, org.y1000.network.gen.AttributePacket.Builder, org.y1000.network.gen.AttributePacketOrBuilder>(
+                (org.y1000.network.gen.AttributePacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 27;
+      onChanged();
+      return attributeBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

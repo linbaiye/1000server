@@ -30,7 +30,6 @@ public final class SwordKungFu extends AbstractMeleeKungFu {
                 .bodyDamage(1)
                 .level(100)
                 .attackSpeed(50)
-                .recovery(50)
                 .build();
     }
 

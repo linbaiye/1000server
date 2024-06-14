@@ -506,6 +506,32 @@ private static final long serialVersionUID = 0L;
     return breathKungFuLevel_;
   }
 
+  public static final int ATTRIBUTE_FIELD_NUMBER = 17;
+  private org.y1000.network.gen.AttributePacket attribute_;
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+   * @return Whether the attribute field is set.
+   */
+  @java.lang.Override
+  public boolean hasAttribute() {
+    return ((bitField0_ & 0x00000080) != 0);
+  }
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+   * @return The attribute.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AttributePacket getAttribute() {
+    return attribute_ == null ? org.y1000.network.gen.AttributePacket.getDefaultInstance() : attribute_;
+  }
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AttributePacketOrBuilder getAttributeOrBuilder() {
+    return attribute_ == null ? org.y1000.network.gen.AttributePacket.getDefaultInstance() : attribute_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -564,6 +590,9 @@ private static final long serialVersionUID = 0L;
     }
     if (((bitField0_ & 0x00000040) != 0)) {
       output.writeInt32(16, breathKungFuLevel_);
+    }
+    if (((bitField0_ & 0x00000080) != 0)) {
+      output.writeMessage(17, getAttribute());
     }
     getUnknownFields().writeTo(output);
   }
@@ -628,6 +657,10 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000040) != 0)) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(16, breathKungFuLevel_);
+    }
+    if (((bitField0_ & 0x00000080) != 0)) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(17, getAttribute());
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -695,6 +728,11 @@ private static final long serialVersionUID = 0L;
       if (getBreathKungFuLevel()
           != other.getBreathKungFuLevel()) return false;
     }
+    if (hasAttribute() != other.hasAttribute()) return false;
+    if (hasAttribute()) {
+      if (!getAttribute()
+          .equals(other.getAttribute())) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -755,6 +793,10 @@ private static final long serialVersionUID = 0L;
     if (hasBreathKungFuLevel()) {
       hash = (37 * hash) + BREATHKUNGFULEVEL_FIELD_NUMBER;
       hash = (53 * hash) + getBreathKungFuLevel();
+    }
+    if (hasAttribute()) {
+      hash = (37 * hash) + ATTRIBUTE_FIELD_NUMBER;
+      hash = (53 * hash) + getAttribute().hashCode();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -890,6 +932,7 @@ private static final long serialVersionUID = 0L;
         getInventoryItemsFieldBuilder();
         getUnnamedKungFuListFieldBuilder();
         getBasicKungFuListFieldBuilder();
+        getAttributeFieldBuilder();
       }
     }
     @java.lang.Override
@@ -933,6 +976,11 @@ private static final long serialVersionUID = 0L;
       assistantKungFu_ = "";
       breathKungFu_ = "";
       breathKungFuLevel_ = 0;
+      attribute_ = null;
+      if (attributeBuilder_ != null) {
+        attributeBuilder_.dispose();
+        attributeBuilder_ = null;
+      }
       return this;
     }
 
@@ -1042,6 +1090,12 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00004000) != 0)) {
         result.breathKungFuLevel_ = breathKungFuLevel_;
         to_bitField0_ |= 0x00000040;
+      }
+      if (((from_bitField0_ & 0x00008000) != 0)) {
+        result.attribute_ = attributeBuilder_ == null
+            ? attribute_
+            : attributeBuilder_.build();
+        to_bitField0_ |= 0x00000080;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -1214,6 +1268,9 @@ private static final long serialVersionUID = 0L;
       if (other.hasBreathKungFuLevel()) {
         setBreathKungFuLevel(other.getBreathKungFuLevel());
       }
+      if (other.hasAttribute()) {
+        mergeAttribute(other.getAttribute());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -1341,6 +1398,13 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00004000;
               break;
             } // case 128
+            case 138: {
+              input.readMessage(
+                  getAttributeFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              bitField0_ |= 0x00008000;
+              break;
+            } // case 138
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -2793,6 +2857,127 @@ private static final long serialVersionUID = 0L;
       breathKungFuLevel_ = 0;
       onChanged();
       return this;
+    }
+
+    private org.y1000.network.gen.AttributePacket attribute_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AttributePacket, org.y1000.network.gen.AttributePacket.Builder, org.y1000.network.gen.AttributePacketOrBuilder> attributeBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+     * @return Whether the attribute field is set.
+     */
+    public boolean hasAttribute() {
+      return ((bitField0_ & 0x00008000) != 0);
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+     * @return The attribute.
+     */
+    public org.y1000.network.gen.AttributePacket getAttribute() {
+      if (attributeBuilder_ == null) {
+        return attribute_ == null ? org.y1000.network.gen.AttributePacket.getDefaultInstance() : attribute_;
+      } else {
+        return attributeBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+     */
+    public Builder setAttribute(org.y1000.network.gen.AttributePacket value) {
+      if (attributeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        attribute_ = value;
+      } else {
+        attributeBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00008000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+     */
+    public Builder setAttribute(
+        org.y1000.network.gen.AttributePacket.Builder builderForValue) {
+      if (attributeBuilder_ == null) {
+        attribute_ = builderForValue.build();
+      } else {
+        attributeBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00008000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+     */
+    public Builder mergeAttribute(org.y1000.network.gen.AttributePacket value) {
+      if (attributeBuilder_ == null) {
+        if (((bitField0_ & 0x00008000) != 0) &&
+          attribute_ != null &&
+          attribute_ != org.y1000.network.gen.AttributePacket.getDefaultInstance()) {
+          getAttributeBuilder().mergeFrom(value);
+        } else {
+          attribute_ = value;
+        }
+      } else {
+        attributeBuilder_.mergeFrom(value);
+      }
+      if (attribute_ != null) {
+        bitField0_ |= 0x00008000;
+        onChanged();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+     */
+    public Builder clearAttribute() {
+      bitField0_ = (bitField0_ & ~0x00008000);
+      attribute_ = null;
+      if (attributeBuilder_ != null) {
+        attributeBuilder_.dispose();
+        attributeBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+     */
+    public org.y1000.network.gen.AttributePacket.Builder getAttributeBuilder() {
+      bitField0_ |= 0x00008000;
+      onChanged();
+      return getAttributeFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+     */
+    public org.y1000.network.gen.AttributePacketOrBuilder getAttributeOrBuilder() {
+      if (attributeBuilder_ != null) {
+        return attributeBuilder_.getMessageOrBuilder();
+      } else {
+        return attribute_ == null ?
+            org.y1000.network.gen.AttributePacket.getDefaultInstance() : attribute_;
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AttributePacket, org.y1000.network.gen.AttributePacket.Builder, org.y1000.network.gen.AttributePacketOrBuilder> 
+        getAttributeFieldBuilder() {
+      if (attributeBuilder_ == null) {
+        attributeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.AttributePacket, org.y1000.network.gen.AttributePacket.Builder, org.y1000.network.gen.AttributePacketOrBuilder>(
+                getAttribute(),
+                getParentForChildren(),
+                isClean());
+        attribute_ = null;
+      }
+      return attributeBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

@@ -17,6 +17,8 @@ import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.kungfu.attack.AttackKungFuParameters;
+import org.y1000.kungfu.attack.AttackKungFuParametersImpl;
 import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.ClientToggleKungFuEvent;
@@ -39,12 +41,67 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
 
     private TestingEventListener playerEventListener;
 
+    private static class NoCostParameters implements AttackKungFuParameters {
+
+        @Override
+        public int powerToSwing() {
+            return 0;
+        }
+
+        @Override
+        public int innerPowerToSwing() {
+            return 0;
+        }
+
+        @Override
+        public int recovery() {
+            return 0;
+        }
+
+        @Override
+        public int outerPowerToSwing() {
+            return 0;
+        }
+
+        @Override
+        public int lifeToSwing() {
+            return 0;
+        }
+    }
+
+    private static class TwoCostParameters implements AttackKungFuParameters {
+
+        @Override
+        public int powerToSwing() {
+            return 2;
+        }
+
+        @Override
+        public int innerPowerToSwing() {
+            return 2;
+        }
+
+        @Override
+        public int recovery() {
+            return 2;
+        }
+
+        @Override
+        public int outerPowerToSwing() {
+            return 2;
+        }
+
+        @Override
+        public int lifeToSwing() {
+            return 2;
+        }
+    }
+
 
     @BeforeEach
     void setUp() {
         kungFu = QuanfaKungFu.builder()
                 .attackSpeed(100)
-                .recovery(100)
                 .bodyArmor(1)
                 .bodyDamage(1)
                 .level(100)
@@ -55,12 +112,9 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
                 .armDamage(1)
                 .legArmor(1)
                 .legDamage(1)
+                .parameters(new NoCostParameters())
                 .build();
-        player = PlayerImpl.builder()
-                .id(1L)
-                .name("test")
-                .kungFuBook(kungFuBookFactory.create())
-                .inventory(new Inventory())
+        player = playerBuilder()
                 .attackKungFu(kungFu)
                 .coordinate(new Coordinate(1, 1))
                 .build();
@@ -68,6 +122,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         playerEventListener = new TestingEventListener();
         player.registerEventListener(playerEventListener);
     }
+
 
 
 
@@ -153,5 +208,9 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         kungFu.attackAgain(player);
         assertEquals(player.cooldown(), (70 + kungFu.getAttackSpeed()) * Realm.STEP_MILLIS);
         assertTrue(player.state() instanceof PlayerCooldownState);
+    }
+
+    @Test
+    void attackPower() {
     }
 }

@@ -22,16 +22,6 @@ public final class AxeKungFu extends AbstractMeleeKungFu {
     }
 
 
-    public static AxeKungFu unnamed() {
-        return AxeKungFu.builder()
-                .name("无名槌法")
-                .level(100)
-                .recovery(100)
-                .attackSpeed(100)
-                .bodyArmor(1)
-                .bodyDamage(1)
-                .build();
-    }
 
     @Override
     protected Logger logger() {

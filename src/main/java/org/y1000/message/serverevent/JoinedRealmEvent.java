@@ -1,5 +1,6 @@
 package org.y1000.message.serverevent;
 
+import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.kungfu.KungFu;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
@@ -55,6 +56,7 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
                 .setAttackKungFuType(player.attackKungFu().getType().value())
                 .setAttackKungFuLevel(player.attackKungFu().level())
                 .setInfo(PlayerInfo.toPacket(player))
+                .setAttribute(PlayerAttributeEvent.makeAttributePacket(player))
                 ;
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuLevel(footKungFu.level()).setFootKungFuName(footKungFu.name()));
         player.protectKungFu().ifPresent(protectKungFu -> builder.setProtectionKungFu(protectKungFu.name()));

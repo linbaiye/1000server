@@ -356,4 +356,17 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
         responseMessage = eventListener.dequeue(InputResponseMessage.class);
         assertEquals(PositionType.REWIND.value(), responseMessage.toPacket().getResponsePacket().getPositionPacket().getType());
     }
+
+    @Test
+    void consumeAttributes() {
+        player = playerBuilder().innerPower(100)
+                .outerPower(50).power(20)
+                .innateLife(10).build();
+        player.consumePower(1);
+        player.consumeInnerPower(1);
+        player.consumeOuterPower(1);
+        assertEquals(19, player.power());
+        assertEquals(49, player.outerPower());
+        assertEquals(99, player.innerPower());
+    }
 }

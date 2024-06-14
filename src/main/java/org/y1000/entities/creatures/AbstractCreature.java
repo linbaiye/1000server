@@ -60,6 +60,7 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
         return state;
     }
 
+
     public void emitEvent(EntityEvent event) {
         eventListeners.notifyListeners(event);
     }

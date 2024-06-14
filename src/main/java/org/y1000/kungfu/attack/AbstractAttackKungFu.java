@@ -11,6 +11,7 @@ import org.y1000.entities.players.PlayerStillState;
 import org.y1000.entities.players.event.PlayerAttackAoeEvent;
 import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
+import org.y1000.entities.players.event.PlayerCooldownEvent;
 import org.y1000.entities.players.fight.*;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.KungFuType;
@@ -33,11 +34,37 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     private int attackSpeed;
 
-    private final int recovery;
-
-    private final int avoidance;
+    private final AttackKungFuParameters parameters;
 
     protected abstract Logger logger();
+
+    private boolean usePower(PlayerImpl player) {
+        if (player.power() < parameters.powerToSwing()) {
+            player.emitEvent(PlayerTextEvent.noPower(player));
+            return false;
+        }
+        if (player.innerPower() < parameters.innerPowerToSwing()) {
+            player.emitEvent(PlayerTextEvent.noInnerPower(player));
+            return false;
+        }
+        if (player.outerPower() < parameters.outerPowerToSwing()) {
+            player.emitEvent(PlayerTextEvent.noOuterPower(player));
+            return false;
+        }
+        int lifeToSwing = parameters.lifeToSwing();
+        if (player.currentLife() < lifeToSwing) {
+            player.emitEvent(PlayerTextEvent.noLife(player));
+            return false;
+        }
+        if (player.currentLife() == lifeToSwing) {
+            lifeToSwing -= 1;
+        }
+        player.consumeLife(lifeToSwing);
+        player.consumeOuterPower(parameters.outerPowerToSwing());
+        player.consumeInnerPower(parameters.innerPowerToSwing());
+        player.consumePower(parameters.powerToSwing());
+        return true;
+    }
 
     private boolean doAttack(PlayerImpl player, Direction direction) {
         int cooldown = player.cooldown();
@@ -45,16 +72,15 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             player.changeState(new PlayerCooldownState(cooldown));
             return false;
         }
-        if (!hasEnoughResources(player)) {
-            player.changeState(new PlayerCooldownState(player.getStateMillis(State.COOLDOWN)));
-            player.emitEvent(PlayerTextEvent.unableToAttack(player));
-            return false;
-        }
         if (!isRanged() && player.getFightingEntity().coordinate().directDistance(player.coordinate()) > 1) {
             player.changeState(new PlayerWaitDistanceState(player.getStateMillis(State.COOLDOWN)));
             return false;
         }
-        useResources(player);
+        if (!usePower(player)) {
+            player.changeState(new PlayerCooldownState(player.getStateMillis(State.COOLDOWN)));
+            player.emitEvent(PlayerCooldownEvent.of(player));
+            return false;
+        }
         player.changeDirection(direction);
         player.cooldownAttack();
         if (!isRanged()) {
@@ -98,6 +124,30 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
     @Override
+    public int getRecovery() {
+        return parameters.recovery();
+    }
+
+    //    @Override
+//    public void setConsumingPowerTimer() {
+//        consumingPowerTime = 5000;
+//    }
+//
+//    @Override
+//    public void consumePowerIfTimeUp(Player player, int delta) {
+//        consumingPowerTime -= delta;
+//        if (consumingPowerTime > 0) {
+//            return;
+//        }
+//        setConsumingPowerTimer();
+//        player.consumeLife(parameters.lifePer5Seconds());
+//        player.consumePower(parameters.powerPer5Seconds());
+//        player.consumeInnerPower(parameters.innerPowerPer5Seconds());
+//        player.consumeOuterPower(parameters.outerPowerPer5Seconds());
+//    }
+
+
+    @Override
     public String toString() {
         return "KungFu {" +
                 "name=" + name() +
@@ -110,8 +160,6 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
                 ", armArmor=" + armArmor +
                 ", legArmor=" + legArmor +
                 ", attackSpeed=" + attackSpeed +
-                ", recovery=" + recovery +
-                ", avoidance=" + avoidance +
                 '}';
     }
 }

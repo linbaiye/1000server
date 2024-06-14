@@ -70,4 +70,29 @@ public interface Player extends ViolentCreature {
 
     Optional<AssistantKungFu> assistantKungFu();
 
+    int age();
+
+    int power();
+
+    int maxPower();
+
+    int innerPower();
+
+    int maxInnerPower();
+
+    int outerPower();
+
+    int maxOuterPower();
+
+    int maxEnergy();
+
+    int energy();
+
+    void consumePower(int amount);
+
+    void consumeInnerPower(int amount);
+
+    void consumeOuterPower(int amount);
+
+    void consumeLife(int amount);
 }

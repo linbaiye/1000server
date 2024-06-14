@@ -25,6 +25,6 @@ public interface AttackKungFu extends KungFu {
 
     void startAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target);
 
-
     boolean isRanged();
+
 }

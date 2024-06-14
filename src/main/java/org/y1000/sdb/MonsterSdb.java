@@ -33,6 +33,10 @@ public final class MonsterSdb extends AbstractSdbReader {
         return getInt(name, "Life");
     }
 
+    public int getAccuracy(String name) {
+        return getIntOrZero(name, "Accuracy");
+    }
+
     public int getDamage(String name) {
         return getIntOrZero(name, "Damage");
     }
@@ -56,11 +60,11 @@ public final class MonsterSdb extends AbstractSdbReader {
         return monsterSdb;
     }
 
-/*public static void main(String[] args) {
+    public static void main(String[] args) {
         MonsterSdb monsterSdb = INSTANCE;
         //System.out.println(monsterSdb.get("熊", "boGoodHeart"));
-        System.out.println(monsterSdb.get("忍者", "Recovery"));
-    }*/
+        System.out.println(monsterSdb.get("牛", "Life"));
+    }
 }
 
     /*

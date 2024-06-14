@@ -220,4 +220,19 @@ public interface LoginPacketOrBuilder extends
    * @return The breathKungFuLevel.
    */
   int getBreathKungFuLevel();
+
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+   * @return Whether the attribute field is set.
+   */
+  boolean hasAttribute();
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+   * @return The attribute.
+   */
+  org.y1000.network.gen.AttributePacket getAttribute();
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 17;</code>
+   */
+  org.y1000.network.gen.AttributePacketOrBuilder getAttributeOrBuilder();
 }

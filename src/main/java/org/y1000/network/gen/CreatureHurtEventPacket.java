@@ -94,6 +94,28 @@ private static final long serialVersionUID = 0L;
     return afterHurtState_;
   }
 
+  public static final int CURRENTLIFE_FIELD_NUMBER = 6;
+  private int currentLife_ = 0;
+  /**
+   * <code>int32 currentLife = 6;</code>
+   * @return The currentLife.
+   */
+  @java.lang.Override
+  public int getCurrentLife() {
+    return currentLife_;
+  }
+
+  public static final int MAXLIFE_FIELD_NUMBER = 7;
+  private int maxLife_ = 0;
+  /**
+   * <code>int32 maxLife = 7;</code>
+   * @return The maxLife.
+   */
+  @java.lang.Override
+  public int getMaxLife() {
+    return maxLife_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -122,6 +144,12 @@ private static final long serialVersionUID = 0L;
     }
     if (afterHurtState_ != 0) {
       output.writeInt32(5, afterHurtState_);
+    }
+    if (currentLife_ != 0) {
+      output.writeInt32(6, currentLife_);
+    }
+    if (maxLife_ != 0) {
+      output.writeInt32(7, maxLife_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -152,6 +180,14 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(5, afterHurtState_);
     }
+    if (currentLife_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(6, currentLife_);
+    }
+    if (maxLife_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(7, maxLife_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -177,6 +213,10 @@ private static final long serialVersionUID = 0L;
         != other.getY()) return false;
     if (getAfterHurtState()
         != other.getAfterHurtState()) return false;
+    if (getCurrentLife()
+        != other.getCurrentLife()) return false;
+    if (getMaxLife()
+        != other.getMaxLife()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -199,6 +239,10 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getY();
     hash = (37 * hash) + AFTERHURTSTATE_FIELD_NUMBER;
     hash = (53 * hash) + getAfterHurtState();
+    hash = (37 * hash) + CURRENTLIFE_FIELD_NUMBER;
+    hash = (53 * hash) + getCurrentLife();
+    hash = (37 * hash) + MAXLIFE_FIELD_NUMBER;
+    hash = (53 * hash) + getMaxLife();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -335,6 +379,8 @@ private static final long serialVersionUID = 0L;
       x_ = 0;
       y_ = 0;
       afterHurtState_ = 0;
+      currentLife_ = 0;
+      maxLife_ = 0;
       return this;
     }
 
@@ -382,6 +428,12 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000010) != 0)) {
         result.afterHurtState_ = afterHurtState_;
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.currentLife_ = currentLife_;
+      }
+      if (((from_bitField0_ & 0x00000040) != 0)) {
+        result.maxLife_ = maxLife_;
       }
     }
 
@@ -444,6 +496,12 @@ private static final long serialVersionUID = 0L;
       if (other.getAfterHurtState() != 0) {
         setAfterHurtState(other.getAfterHurtState());
       }
+      if (other.getCurrentLife() != 0) {
+        setCurrentLife(other.getCurrentLife());
+      }
+      if (other.getMaxLife() != 0) {
+        setMaxLife(other.getMaxLife());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -495,6 +553,16 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000010;
               break;
             } // case 40
+            case 48: {
+              currentLife_ = input.readInt32();
+              bitField0_ |= 0x00000020;
+              break;
+            } // case 48
+            case 56: {
+              maxLife_ = input.readInt32();
+              bitField0_ |= 0x00000040;
+              break;
+            } // case 56
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -668,6 +736,70 @@ private static final long serialVersionUID = 0L;
     public Builder clearAfterHurtState() {
       bitField0_ = (bitField0_ & ~0x00000010);
       afterHurtState_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int currentLife_ ;
+    /**
+     * <code>int32 currentLife = 6;</code>
+     * @return The currentLife.
+     */
+    @java.lang.Override
+    public int getCurrentLife() {
+      return currentLife_;
+    }
+    /**
+     * <code>int32 currentLife = 6;</code>
+     * @param value The currentLife to set.
+     * @return This builder for chaining.
+     */
+    public Builder setCurrentLife(int value) {
+
+      currentLife_ = value;
+      bitField0_ |= 0x00000020;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 currentLife = 6;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearCurrentLife() {
+      bitField0_ = (bitField0_ & ~0x00000020);
+      currentLife_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int maxLife_ ;
+    /**
+     * <code>int32 maxLife = 7;</code>
+     * @return The maxLife.
+     */
+    @java.lang.Override
+    public int getMaxLife() {
+      return maxLife_;
+    }
+    /**
+     * <code>int32 maxLife = 7;</code>
+     * @param value The maxLife to set.
+     * @return This builder for chaining.
+     */
+    public Builder setMaxLife(int value) {
+
+      maxLife_ = value;
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 maxLife = 7;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearMaxLife() {
+      bitField0_ = (bitField0_ & ~0x00000040);
+      maxLife_ = 0;
       onChanged();
       return this;
     }

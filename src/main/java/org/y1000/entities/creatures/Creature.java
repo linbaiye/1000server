@@ -17,4 +17,10 @@ public interface Creature extends PhysicalEntity {
     int avoidance();
 
     String name();
+
+    int maxLife();
+
+    int currentLife();
+
+    int armor();
 }

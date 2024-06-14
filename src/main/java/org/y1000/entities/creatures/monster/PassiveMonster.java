@@ -6,11 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
-import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,6 +24,13 @@ public final class PassiveMonster extends AbstractMonster {
         super(id, coordinate, direction, name, realmMap, avoidance, recovery, attackSpeed, life, wanderingRange, armor, stateMillis, attackSound);
     }
 
+
+    @Builder
+    public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
+                          RealmMap realmMap, Map<State, Integer> stateMillis,
+                          AttributeProvider attributeProvider) {
+        super(id, coordinate, direction, name, realmMap, stateMillis, attributeProvider);
+    }
 
 
     @Override
@@ -48,14 +53,5 @@ public final class PassiveMonster extends AbstractMonster {
     }
 
 
-    @Override
-    public void onEvent(EntityEvent entityEvent) {
-        if (getFightingEntity() == null) {
-            log.error("Invalid event received.");
-            return;
-        }
-        if (!canAttack(getFightingEntity())) {
-            clearFightingEntity();
-        }
-    }
+
 }

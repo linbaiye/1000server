@@ -353,5 +353,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.PlayerCooldownPacketOrBuilder getCooldownOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+   * @return Whether the attribute field is set.
+   */
+  boolean hasAttribute();
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+   * @return The attribute.
+   */
+  org.y1000.network.gen.AttributePacket getAttribute();
+  /**
+   * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
+   */
+  org.y1000.network.gen.AttributePacketOrBuilder getAttributeOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

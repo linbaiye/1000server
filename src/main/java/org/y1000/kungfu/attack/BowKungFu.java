@@ -21,17 +21,6 @@ public final class BowKungFu extends AbstractRangedKungFu {
     }
 
 
-    public static BowKungFu unnamed() {
-        return BowKungFu.builder()
-                .name("无名弓术")
-                .level(100)
-                .recovery(100)
-                .attackSpeed(100)
-                .bodyArmor(1)
-                .bodyDamage(1)
-                .build();
-    }
-
     @Override
     protected Logger logger() {
         return log;

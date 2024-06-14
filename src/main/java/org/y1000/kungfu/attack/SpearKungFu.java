@@ -20,17 +20,6 @@ public final class SpearKungFu extends AbstractMeleeKungFu {
         return AttackKungFuType.SPEAR;
     }
 
-    public static SpearKungFu unnamed() {
-        return SpearKungFu.builder()
-                .name("无名枪术")
-                .level(100)
-                .recovery(100)
-                .attackSpeed(100)
-                .bodyArmor(1)
-                .bodyDamage(1)
-                .build();
-    }
-
     @Override
     protected Logger logger() {
         return log;

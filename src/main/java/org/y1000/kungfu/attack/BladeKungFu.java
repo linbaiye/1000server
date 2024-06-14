@@ -22,16 +22,6 @@ public final class BladeKungFu extends AbstractMeleeKungFu {
         return AttackKungFuType.BLADE;
     }
 
-    public static BladeKungFu unnamed() {
-        return BladeKungFu.builder()
-                .name("无名刀法")
-                .bodyArmor(1)
-                .bodyDamage(1)
-                .level(100)
-                .attackSpeed(50)
-                .recovery(50)
-                .build();
-    }
 
     @Override
     protected Logger logger() {

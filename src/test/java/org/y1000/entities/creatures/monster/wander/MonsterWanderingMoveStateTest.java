@@ -2,6 +2,7 @@ package org.y1000.entities.creatures.monster.wander;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
@@ -24,6 +25,7 @@ class MonsterWanderingMoveStateTest extends AbstractMonsterUnitTestFixture {
     @Test
     void move() {
         Coordinate coordinate = monster.coordinate();
+        Mockito.reset(monster.realmMap());
         when(monster.realmMap().movable(any(Coordinate.class))).thenReturn(true);
         MonsterWanderingMoveState moveState = MonsterWanderingMoveState.move(monster, monster.coordinate().moveBy(monster.direction()));
         monster.changeState(moveState);

@@ -52,7 +52,10 @@ final class RealmImpl implements Runnable, Realm {
             List<AbstractMonster> monsters = List.of(
                     //monsterFactory.createMonster("犀牛", entityManager.generateEntityId(), map(), new Coordinate(39, 30)),
                     monsterFactory.createMonster("牛", entityManager.generateEntityId(), map(), new Coordinate(39, 31)),
-                    monsterFactory.createMonster("老虎", entityManager.generateEntityId(), map(), new Coordinate(39, 32))
+                    monsterFactory.createMonster("老虎", entityManager.generateEntityId(), map(), new Coordinate(39, 32)),
+                    monsterFactory.createMonster("忍者", entityManager.generateEntityId(), map(), new Coordinate(39, 33)),
+                    monsterFactory.createMonster("白狐狸", entityManager.generateEntityId(), map(), new Coordinate(39, 35)),
+                    monsterFactory.createMonster("太极公子", entityManager.generateEntityId(), map(), new Coordinate(39, 36))
                     //monsterFactory.createMonster("鹿", entityManager.generateEntityId(), map(), new Coordinate(39, 32))
             );
             monsters.forEach(entityManager::add);

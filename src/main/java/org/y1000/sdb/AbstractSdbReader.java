@@ -53,7 +53,11 @@ public abstract class AbstractSdbReader {
             return null;
         }
         Integer index = headerIndex.get(key);
-        return index != null ? Integer.parseInt(strings[index]) : null;
+        if (index == null) {
+            return null;
+        }
+        String u = strings[index];
+        return StringUtils.isEmpty(u) ? null : Integer.parseInt(u);
     }
 
     protected Integer getIntOrZero(String name, String key) {

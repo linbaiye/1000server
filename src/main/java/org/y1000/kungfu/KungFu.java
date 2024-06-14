@@ -7,13 +7,7 @@ public interface KungFu {
 
     int level();
 
-    default boolean hasEnoughResources(PlayerImpl player) {
-        return true;
-    }
-
-    default boolean useResources(PlayerImpl player) {
-        return true;
-    }
 
     KungFuType kungFuType();
+
 }

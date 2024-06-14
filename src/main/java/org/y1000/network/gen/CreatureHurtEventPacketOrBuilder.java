@@ -37,4 +37,16 @@ public interface CreatureHurtEventPacketOrBuilder extends
    * @return The afterHurtState.
    */
   int getAfterHurtState();
+
+  /**
+   * <code>int32 currentLife = 6;</code>
+   * @return The currentLife.
+   */
+  int getCurrentLife();
+
+  /**
+   * <code>int32 maxLife = 7;</code>
+   * @return The maxLife.
+   */
+  int getMaxLife();
 }

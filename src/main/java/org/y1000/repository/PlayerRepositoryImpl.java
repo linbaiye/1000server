@@ -1,5 +1,6 @@
 package org.y1000.repository;
 
+import org.y1000.entities.attribute.Damage;
 import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.item.*;
@@ -66,6 +67,14 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     }
 
 
+    /*
+       AttribData.cEnergy   := GetLevel (AttribData.Energy) + 500;     // 기본원기 = 5.00
+   AttribData.cInPower  := GetLevel (AttribData.InPower) + 1000;   // 기본내공 = 10.00
+   AttribData.cOutPower := GetLevel (AttribData.OutPower) + 1000;  // 기본외공 = 10.00
+   AttribData.cMagic    := GetLevel (AttribData.Magic) + 500;      // 기본무공 = 5.00
+   AttribData.cLife     := GetLevel (AttribData.Life) + 2000;      // 기본활력 = 20.00
+     */
+
     @Override
     public Player load(String token) {
         int slot = findSlot();
@@ -73,7 +82,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         KungFuBook kungFuBook = loadKungFuBook();
         return PlayerImpl.builder()
                 .id(slot + playerIdStart)
-                .name("杨过")
+                .name("雨诗妾")
                 .coordinate(new Coordinate(39 + slot, 27))
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)
@@ -84,18 +93,20 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .male(false)
                 .trouser(new Trouser("女子短裙"))
                 .clothing(new Clothing("女子上衣"))
-                //.boot(new Boot("女子长靴"))
                 .boot(new Boot("女子皮鞋"))
-                //.boot(new Boot("女子魔人战靴"))
-                 .hat(new Hat("女子血魔头盔"))
-               // .chest(new Chest("女子太极道袍"))
-                // .chest(new Chest("女子黄金铠甲"))
-                //.chest(new Chest("女子血魔道袍"))
-                //.hat(new Hat("女子雨中客斗笠"))
-                //.chest(new Chest("女子黄龙弓服"))
+                .hat(new Hat("女子血魔头盔"))
                 .chest(new Chest("女子雨中客道袍"))
                 .hair(new Hair("女子麻花辫"))
                 .wrist(new Wrist("女子太极护腕"))
+                .innateAttackSpeed(PlayerImpl.INNATE_ATTACKSPEED)
+                .innateRecovery(PlayerImpl.INNATE_RECOVERY)
+                .innateAvoidance(PlayerImpl.INNATE_AVOIDANCE)
+                .innateLife(2000)
+                .innerPower(1000)
+                .outerPower(1000)
+                .power(500)
+                .energy(500)
+                .innateDamage(new Damage(41, 41, 41, 41))
                 .build();
     }
 

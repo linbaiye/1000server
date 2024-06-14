@@ -20,16 +20,6 @@ public class ThrowKungFu extends AbstractRangedKungFu {
         return AttackKungFuType.THROW;
     }
 
-    public static ThrowKungFu unnamed() {
-        return ThrowKungFu.builder()
-                .bodyDamage(1)
-                .attackSpeed(100)
-                .name("无名投法")
-                .level(100)
-                .bodyArmor(0)
-                .recovery(100)
-                .build();
-    }
 
     @Override
     protected Logger logger() {

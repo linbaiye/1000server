@@ -4,10 +4,13 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.message.serverevent.EntityEventListener;
 import org.y1000.realm.Realm;
+import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
+import org.y1000.util.UnaryAction;
 
 import java.util.Map;
 import java.util.Objects;
@@ -33,6 +36,25 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
         return rand < avoidance();
     }
 
+    protected boolean handleAttacked(ViolentCreature attacker,
+                                     Function<State, S> hurtStateSupplier,
+                                     UnaryAction<Damage> damageUnaryAction) {
+        if (!state().attackable() || randomAvoidance(attacker.hit())) {
+            return false;
+        }
+        cooldownRecovery();
+        damageUnaryAction.invoke(attacker.damage());
+        if (currentLife() > 0) {
+            state().moveToHurtCoordinate((C)this);
+            State afterHurtState = state().decideAfterHurtState();
+            changeState(hurtStateSupplier.apply(afterHurtState));
+            emitEvent(new CreatureHurtEvent(this, afterHurtState));
+        } else {
+            //changeState();
+        }
+        return true;
+    }
+
     @Override
     public int recoveryCooldown() {
         return recoveryCooldown;
@@ -50,17 +72,7 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
         attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
     }
 
-    protected boolean handleAttacked(C creature, int hit, Function<State, S> hurtStateSupplier) {
-        if (!state().attackable() || randomAvoidance(hit)) {
-            return false;
-        }
-        cooldownRecovery();
-        state().moveToHurtCoordinate(creature);
-        State afterHurtState = state().decideAfterHurtState();
-        changeState(hurtStateSupplier.apply(afterHurtState));
-        emitEvent(new CreatureHurtEvent(this, afterHurtState));
-        return true;
-    }
+
 
     public void cooldownRecovery() {
         recoveryCooldown = recovery() * Realm.STEP_MILLIS;
