@@ -11,7 +11,6 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import org.y1000.entities.creatures.monster.MonsterFactory;
 import org.y1000.entities.creatures.monster.MonsterFactoryImpl;
 import org.y1000.item.ItemSdb;
-import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.repository.*;
 import org.y1000.network.*;
 import org.y1000.realm.RealmManager;

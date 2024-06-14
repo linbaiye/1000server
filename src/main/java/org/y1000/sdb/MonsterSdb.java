@@ -25,6 +25,10 @@ public final class MonsterSdb extends AbstractSdbReader {
         return getInt(name, "AttackSpeed");
     }
 
+    public String getSoundAttack(String name) {
+        return get(name, "SoundAttack");
+    }
+
     public int getLife(String name) {
         return getInt(name, "Life");
     }
@@ -52,11 +56,11 @@ public final class MonsterSdb extends AbstractSdbReader {
         return monsterSdb;
     }
 
-    public static void main(String[] args) {
+/*public static void main(String[] args) {
         MonsterSdb monsterSdb = INSTANCE;
         //System.out.println(monsterSdb.get("熊", "boGoodHeart"));
-        System.out.println(monsterSdb.get("牛", "WalkSpeed"));
-    }
+        System.out.println(monsterSdb.get("忍者", "Recovery"));
+    }*/
 }
 
     /*

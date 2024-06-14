@@ -46,11 +46,13 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
 
     private final int armor;
 
+    private final String attackSound;
 
 
     protected AbstractMonster(long id, Coordinate coordinate, Direction direction, String name,
                               RealmMap realmMap, int avoidance, int recovery, int attackSpeed, int life,
-                              int wanderingRange, int armor, Map<State, Integer> stateMillis) {
+                              int wanderingRange, int armor, Map<State, Integer> stateMillis,
+                              String attackSound) {
         super(id, coordinate, direction, name, stateMillis);
         this.realmMap = realmMap;
         this.recovery = recovery;
@@ -63,6 +65,7 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         currentLife = life;
         this.armor = armor;
         this.realmMap.occupy(this);
+        this.attackSound = attackSound;
         changeState(MonsterWanderingIdleState.start(getStateMillis(State.IDLE), wanderingArea.random(coordinate)));
     }
 

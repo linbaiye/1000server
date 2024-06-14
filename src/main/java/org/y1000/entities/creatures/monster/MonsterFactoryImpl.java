@@ -5,7 +5,6 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.ActionSdb;
-import org.y1000.sdb.MonsterSdb;
 import org.y1000.util.Coordinate;
 
 import java.util.HashMap;
@@ -40,6 +39,26 @@ public class MonsterFactoryImpl implements MonsterFactory {
         return result;
     }
 
+    private AggressiveMonster createAggresiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
+        return AggressiveMonster.builder()
+                .id(id)
+                .name(name)
+                .recovery(monsterSdb.getRecovery(name))
+                .avoidance(monsterSdb.getAvoid(name))
+                .life(monsterSdb.getLife(name))
+                .attackSpeed(150)
+                .recovery(70)
+                .avoidance(25)
+                .armor(monsterSdb.getArmor(name))
+                .realmMap(map)
+                .wanderingRange(monsterSdb.getActionWidth(name))
+                .coordinate(coordinate)
+                .direction(Direction.DOWN)
+                .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
+                .attackSound(monsterSdb.getSoundAttack(name))
+                .build();
+    }
+
     private PassiveMonster createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
         return PassiveMonster.builder()
                 .id(id)
@@ -47,13 +66,16 @@ public class MonsterFactoryImpl implements MonsterFactory {
                 .recovery(monsterSdb.getRecovery(name))
                 .avoidance(monsterSdb.getAvoid(name))
                 .life(monsterSdb.getLife(name))
-                .attackSpeed(monsterSdb.getAttackSpeed(name))
+                .attackSpeed(150 + monsterSdb.getAttackSpeed(name))
+                .recovery(70)
+                .avoidance(25)
                 .armor(monsterSdb.getArmor(name))
                 .realmMap(map)
                 .wanderingRange(monsterSdb.getActionWidth(name))
                 .coordinate(coordinate)
                 .direction(Direction.DOWN)
                 .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
+                .attackSound(monsterSdb.getSoundAttack(name))
                 .build();
     }
 
@@ -66,6 +88,6 @@ public class MonsterFactoryImpl implements MonsterFactory {
             throw new NotImplementedException(name + " has no action sdb.");
         }
         boolean passive = monsterSdb.isPassive(name);
-        return passive ? createPassiveCreature(name, id, realmMap, coordinate) : null;
+        return passive ? createPassiveCreature(name, id, realmMap, coordinate) : createAggresiveCreature(name, id, realmMap, coordinate);
     }
 }

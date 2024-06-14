@@ -14,8 +14,8 @@ public class AggressiveMonster extends AbstractMonster{
     @Builder
     public AggressiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap, int avoidance, int recovery, int attackSpeed,
-                          int life, int wanderingRange, int armor, Map<State, Integer> stateMillis) {
-        super(id, coordinate, direction, name, realmMap, avoidance, recovery, attackSpeed, life, wanderingRange, armor, stateMillis);
+                          int life, int wanderingRange, int armor, Map<State, Integer> stateMillis, String attackSound) {
+        super(id, coordinate, direction, name, realmMap, avoidance, recovery, attackSpeed, life, wanderingRange, armor, stateMillis, attackSound);
     }
 
     @Override
