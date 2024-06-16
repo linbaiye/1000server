@@ -2,6 +2,7 @@ package org.y1000.kungfu.attack;
 
 
 import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.kungfu.KungFu;
@@ -9,13 +10,21 @@ import org.y1000.message.clientevent.ClientAttackEvent;
 
 public interface AttackKungFu extends KungFu {
 
-    int getBodyDamage();
+    int bodyDamage();
 
-    int getBodyArmor();
+    int bodyArmor();
 
-    int getAttackSpeed();
+    int headArmor();
 
-    int getRecovery();
+    int armArmor();
+
+    int legArmor();
+
+    int attackSpeed();
+
+    int recovery();
+
+    int avoidance();
 
     State randomAttackState();
 
@@ -26,5 +35,13 @@ public interface AttackKungFu extends KungFu {
     void startAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target);
 
     boolean isRanged();
+
+    int headDamage();
+
+    int armDamage();
+
+    int legDamage();
+
+    Damage damage();
 
 }

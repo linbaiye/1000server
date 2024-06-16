@@ -6,6 +6,9 @@ import org.slf4j.Logger;
 import org.y1000.entities.*;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
+import org.y1000.entities.creatures.event.CreatureDieEvent;
+import org.y1000.entities.creatures.event.CreatureHurtEvent;
+import org.y1000.entities.creatures.event.CreatureSoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
@@ -91,7 +94,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private final int innateHit;
 
+    private int revival;
+
     private final Damage innateDamage;
+
+    private int timeToRegenerate;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
@@ -150,7 +157,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                       int age,
                       int innateHit,
                       int energy,
-                      int maxEnergy) {
+                      int maxEnergy,
+                      int revival) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
         Objects.requireNonNull(kungFuBook, "kungFuBook can't be null.");
         Objects.requireNonNull(attackKungFu, "attackKungFu can't be null.");
@@ -187,7 +195,15 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         this.innateHit = innateHit == 0 ? 75 : innateHit;
         this.energy = energy;
         this.maxEnergy = maxEnergy != 0 ? maxEnergy : energy;
+        this.revival = revival != 0 ? revival : 100;
+        currentArm = currentLife();
+        currentLeg = currentLife();
+        currentHead = currentLife();
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
+    }
+
+    private void setRegenerateTimer() {
+        timeToRegenerate = 9 * 1000;
     }
 
     private void initProtectKungFu(ProtectKungFu protectKungFu) {
@@ -317,11 +333,13 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         disableBreathKungFuQuietly();
         if (protectKungFu != null && protectKungFu.name().equals(newProtection.name())) {
             emitEvent(PlayerToggleKungFuEvent.disable(this, protectKungFu));
+            emitEvent(new CreatureSoundEvent(this, protectKungFu.disableSound()));
             protectKungFu = null;
             return;
         }
         protectKungFu = newProtection;
         emitEvent(PlayerToggleKungFuEvent.enable(this, protectKungFu));
+        emitEvent(new CreatureSoundEvent(this, protectKungFu.enableSound()));
     }
 
     private void toggleBreathingKungFu(BreathKungFu newBreath) {
@@ -447,6 +465,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public void handleClientEvent(ClientEvent clientEvent) {
+        if (stateEnum() == State.DIE) {
+            return;
+        }
         if (clientEvent instanceof ClientDoubleClickSlotEvent doubleClickSlotEvent) {
             handleInventorySlotDoubleClick(doubleClickSlotEvent.sourceSlot());
         } else if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
@@ -527,21 +548,42 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         emitEvent(new JoinedRealmEvent(this, coordinate(), inventory));
     }
 
-    private void applyDamage(Damage damage) {
-        int bodyDamage = damage.bodyDamage() - armor();
-        bodyDamage = bodyDamage > 0 ? bodyDamage : 1;
-        currentLife -= bodyDamage;
+    private void takeDamage(int damage) {
+
+    }
+
+
+    private void onKilled() {
+        disableFootKungFuQuietly();
+        changeState(PlayerDeadState.die(this));
+        emitEvent(new CreatureDieEvent(this));
+        log().debug("Player dead.");
     }
 
 
     @Override
-    public void attackedBy(ViolentCreature attacker) {
-        handleAttacked(attacker, (afterHurt) -> PlayerHurtState.hurt(this, afterHurt), this::applyDamage);
+    public boolean attackedBy(ViolentCreature attacker) {
+        if (!state().attackable() || randomAvoidance(attacker.hit())) {
+            return false;
+        }
+        cooldownRecovery();
+        int bodyDamage = attacker.damage().bodyDamage() - bodyArmor();
+        bodyDamage = bodyDamage > 0 ? bodyDamage : 1;
+        consumeLife(bodyDamage);
+        if (currentLife() > 0) {
+            state().moveToHurtCoordinate(this);
+            State afterHurtState = state().decideAfterHurtState();
+            changeState(PlayerHurtState.hurt(this, afterHurtState));
+            emitEvent(new CreatureHurtEvent(this, afterHurtState));
+        } else {
+            onKilled();
+        }
+        return true;
     }
 
     @Override
     public void attackedBy(Projectile projectile) {
-        handleAttacked(projectile.getShooter(), (afterHurt) -> PlayerHurtState.hurt(this, afterHurt), this::applyDamage);
+        attackedBy(projectile.getShooter());
     }
 
     @Override
@@ -603,7 +645,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public int attackSpeed() {
-        return innateAttackSpeed + attackKungFu.getAttackSpeed();
+        return innateAttackSpeed + attackKungFu.attackSpeed();
     }
 
     public Optional<Weapon> weapon() {
@@ -616,14 +658,69 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
 
+
+
+    private void regenerate(int delta) {
+        timeToRegenerate -= delta;
+        if (timeToRegenerate > 0) {
+            return;
+        }
+        setRegenerateTimer();
+        /*if (stateEnum() == State.DIE) {
+            regenRate = 300;
+        } else if (stateEnum() == State.SIT) {
+            regenRate = 150;
+        }
+        case FFeatureState of
+        wfs_normal   : n := 80;
+        wfs_care     : n := 10;
+        wfs_sitdown  : n := 150;
+        wfs_die      : n := 300;
+         else n :=50;
+        end;
+        n := n + n * AttribData.crevival div 10000;*/
+        var regen = state().regenerate();
+        int regenValue = regen + (regen * revival) / 10000;
+        gainLife(regenValue);
+        gainPower(regenValue);
+        gainOuterPower(regenValue);
+        gainInnerPower(regenValue);
+        emitEvent(new PlayerAttributeEvent(this));
+    }
+
+    private void gainPower(int v) {
+        if (v > 0) {
+            power = Math.min(maxPower, power + v);
+        }
+    }
+
+    private void gainInnerPower(int v) {
+        if (v > 0) {
+            innerPower = Math.min(maxInnerPower, innerPower + v);
+        }
+    }
+
+    private void gainOuterPower(int v) {
+        if (v > 0) {
+            outerPower = Math.min(maxOuterPower, outerPower + v);
+        }
+    }
+
+    private void gainLife(int v) {
+        if (v > 0) {
+            currentLife = Math.min(maxLife(), currentLife + v);
+        }
+    }
+
     @Override
     public void update(int delta) {
         cooldown(delta);
+        regenerate(delta);
         state().update(this, delta);
     }
 
     public int recovery() {
-        int kfr = attackKungFu != null ? attackKungFu.getRecovery() : 0;
+        int kfr = attackKungFu != null ? attackKungFu.recovery() : 0;
         return innateRecovery + kfr;
     }
 
@@ -693,6 +790,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     @Override
+    public int armLife() {
+        return currentArm;
+    }
+
+    @Override
     public void consumePower(int amount) {
         if (amount > 0)
             power = Math.max(power - amount, 0);
@@ -721,6 +823,21 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
     }
 
+
+    @Override
+    public void gainAttackExp(int amount) {
+        if (amount <= 0) {
+            return;
+        }
+        if (armLife() * 100 / maxLife() <= 50) {
+            emitEvent(PlayerTextEvent.armLifeTooLowToExp(this));
+            return;
+        }
+        if (attackKungFu.gainExp(amount)) {
+            emitEvent(new PlayerGainExpEvent(this, attackKungFu.name(), attackKungFu.level()));
+        }
+    }
+
     @Override
     public Inventory inventory() {
         return inventory;
@@ -733,7 +850,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public Damage damage() {
-        return innateDamage;
+        return innateDamage.add(attackKungFu.damage());
     }
 
     @Override
@@ -771,6 +888,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             return;
         }
         if (!canAttack(entityEvent.source())) {
+            log.debug("Target not attackable.");
             clearFightingEntity();
         }
         if (state() instanceof PlayerWaitDistanceState waitDistanceState) {
@@ -795,7 +913,25 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     @Override
-    public int armor() {
+    public int bodyArmor() {
         return 0;
+    }
+
+
+    // mandieNew 2003, ManDieOld 2005, womanDieNew 2203, womanDieOld 2205.
+
+    @Override
+    public Optional<String> hurtSound() {
+        return Optional.of(age() < 6000 ?
+                (isMale() ? "2002" : "2202") :
+                (isMale() ? "2004" : "2204") );
+    }
+
+
+    @Override
+    public Optional<String> dieSound() {
+        return Optional.of(age() < 6000 ?
+                (isMale() ? "2003" : "2203") :
+                (isMale() ? "2005" : "2205") );
     }
 }

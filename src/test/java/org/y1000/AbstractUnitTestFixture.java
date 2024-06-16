@@ -47,6 +47,7 @@ public abstract class AbstractUnitTestFixture {
     };
 
 
+
     protected PassiveMonster.PassiveMonsterBuilder monsterBuilder() {
         return PassiveMonster.builder().id(nextId())
                 .coordinate(Coordinate.xy(1, 1))
@@ -71,6 +72,7 @@ public abstract class AbstractUnitTestFixture {
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA))
                 .innateAttackSpeed(PlayerImpl.INNATE_ATTACKSPEED)
+                .innateLife(2000)
                 .innateDamage(new Damage(41, 41, 41,41))
                 .inventory(new Inventory());
     }

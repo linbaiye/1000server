@@ -19,4 +19,8 @@ public interface PlayerState extends CreatureState<PlayerImpl> {
     default boolean canStandUp() {
         return false;
     }
+
+    default int regenerate() {
+        return 100;
+    }
 }

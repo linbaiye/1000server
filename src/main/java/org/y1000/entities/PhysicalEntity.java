@@ -1,6 +1,7 @@
 package org.y1000.entities;
 
 import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.EntityEventListener;
 
 public interface PhysicalEntity extends Entity {
@@ -12,8 +13,12 @@ public interface PhysicalEntity extends Entity {
         return true;
     }
 
-    default void attackedBy(ViolentCreature attacker) {
+    default boolean attackedBy(ViolentCreature attacker) {
+        return false;
+    }
 
+    default boolean attackedBy(Player attacker) {
+        return false;
     }
 
     default void attackedBy(Projectile projectile) {

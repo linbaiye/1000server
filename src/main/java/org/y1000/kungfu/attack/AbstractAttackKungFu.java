@@ -5,38 +5,60 @@ import lombok.experimental.SuperBuilder;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.CreatureSoundEvent;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerStillState;
-import org.y1000.entities.players.event.PlayerAttackAoeEvent;
-import org.y1000.entities.players.event.PlayerAttackEvent;
-import org.y1000.entities.players.event.PlayerAttackEventResponse;
-import org.y1000.entities.players.event.PlayerCooldownEvent;
+import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.*;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.KungFuType;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
 
+import java.util.List;
+
 @Getter
 @SuperBuilder
 public abstract class AbstractAttackKungFu extends AbstractKungFu implements AttackKungFu {
 
-    private int bodyDamage;
-    private int headDamage;
-    private int armDamage;
-    private int legDamage;
 
-    private int bodyArmor;
-    private int headArmor;
-    private int armArmor;
-    private int legArmor;
+    private record DamageMultiplier(int levelStart, int levelEnd, int multiplier) {
+        public boolean contains(int skillLevel) {
+            return levelEnd >= skillLevel && levelStart <= skillLevel;
+        }
 
-    private int attackSpeed;
+        public int multiply(int damage) {
+            return damage + multiplier * damage / 100;
+        }
+    }
 
-    private final AttackKungFuParameters parameters;
+    private static final List<DamageMultiplier> DAMAGE_MULTIPLIERS = List.of(
+            new DamageMultiplier(0,4999,0),
+            new DamageMultiplier(5000,5999,2),
+            new DamageMultiplier(6000,6999,6),
+            new DamageMultiplier(7000,7999,10),
+            new DamageMultiplier(8000,8999,15),
+            new DamageMultiplier(9000,9998,20),
+            new DamageMultiplier(9999,9999,25)
+    );
+
+    private static final int INIT_SKILL_DIV_DAMAGE = 5000;
+
+    private static final int INIT_SKILL_DIV_ATTACKSPEED = 25000;
+
+    private static final int INIT_SKILL_DIV_ARMOR = 5000;
+
+    /*
+    p^.rLifeData.damageBody + p^.rLifeData.damageBody * p^.rcSkillLevel div INI_SKILL_DIV_DAMAGE;
+     */
+
+    private final AttackKungFuFixedParameters parameters;
 
     protected abstract Logger logger();
+
+
 
     private boolean usePower(PlayerImpl player) {
         if (player.power() < parameters.powerToSwing()) {
@@ -53,7 +75,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         }
         int lifeToSwing = parameters.lifeToSwing();
         if (player.currentLife() < lifeToSwing) {
-            player.emitEvent(PlayerTextEvent.noLife(player));
+            player.emitEvent(PlayerTextEvent.insufficientLife(player));
             return false;
         }
         if (player.currentLife() == lifeToSwing) {
@@ -63,32 +85,55 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         player.consumeOuterPower(parameters.outerPowerToSwing());
         player.consumeInnerPower(parameters.innerPowerToSwing());
         player.consumePower(parameters.powerToSwing());
+        player.emitEvent(new PlayerAttributeEvent(player));
         return true;
     }
 
-    private boolean doAttack(PlayerImpl player, Direction direction) {
+
+    private String computeSound(int nr) {
+        if (level() < 5000) {
+            return String.valueOf(nr);
+        }
+        return level() < 5000 ? String.valueOf(nr) :
+                String.valueOf(level() > 8999 ? nr + 4 : nr + 2);
+    }
+
+    private String strikeSound() {
+        return computeSound(parameters.strikeSound());
+    }
+
+    private String swingSound() {
+        return computeSound(parameters.swingSound());
+    }
+
+
+    private void doAttack(PlayerImpl player, Direction direction, boolean sendAttackEvent) {
         int cooldown = player.cooldown();
         if (cooldown > 0) {
             player.changeState(new PlayerCooldownState(cooldown));
-            return false;
+            return;
         }
         if (!isRanged() && player.getFightingEntity().coordinate().directDistance(player.coordinate()) > 1) {
             player.changeState(new PlayerWaitDistanceState(player.getStateMillis(State.COOLDOWN)));
-            return false;
+            return;
         }
         if (!usePower(player)) {
             player.changeState(new PlayerCooldownState(player.getStateMillis(State.COOLDOWN)));
             player.emitEvent(PlayerCooldownEvent.of(player));
-            return false;
+            return;
         }
         player.changeDirection(direction);
         player.cooldownAttack();
-        if (!isRanged()) {
-            player.getFightingEntity().attackedBy(player);
-            player.assistantKungFu().ifPresent(assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, assistantKungFu)));
-        }
         player.changeState(PlayerAttackState.of(player));
-        return true;
+        if (sendAttackEvent)
+            player.emitEvent(PlayerAttackEvent.of(player, player.getFightingEntity().id()));
+        if (!isRanged()) {
+            var hit = player.getFightingEntity().attackedBy(player);
+            player.emitEvent(new CreatureSoundEvent(player, hit ? strikeSound() : swingSound()));
+            player.assistantKungFu().ifPresent(assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, assistantKungFu)));
+        } else {
+            player.emitEvent(new CreatureSoundEvent(player, swingSound()));
+        }
     }
 
     @Override
@@ -98,9 +143,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             return;
         }
         Direction direction = player.coordinate().computeDirection(player.getFightingEntity().coordinate());
-        if (doAttack(player, direction)) {
-            player.emitEvent(PlayerAttackEvent.of(player, player.getFightingEntity().id()));
-        }
+        doAttack(player, direction, true);
     }
 
     @Override
@@ -113,7 +156,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         player.setFightingEntity(target);
         player.disableFootKungFuQuietly();
         player.disableBreathKungFuQuietly();
-        doAttack(player, direction);
+        doAttack(player, direction, false);
         player.changeDirection(direction);
         player.emitEvent(new PlayerAttackEventResponse(player, event, true));
     }
@@ -124,42 +167,90 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
     @Override
-    public int getRecovery() {
+    public int recovery() {
         return parameters.recovery();
     }
 
-    //    @Override
-//    public void setConsumingPowerTimer() {
-//        consumingPowerTime = 5000;
-//    }
-//
-//    @Override
-//    public void consumePowerIfTimeUp(Player player, int delta) {
-//        consumingPowerTime -= delta;
-//        if (consumingPowerTime > 0) {
-//            return;
-//        }
-//        setConsumingPowerTimer();
-//        player.consumeLife(parameters.lifePer5Seconds());
-//        player.consumePower(parameters.powerPer5Seconds());
-//        player.consumeInnerPower(parameters.innerPowerPer5Seconds());
-//        player.consumeOuterPower(parameters.outerPowerPer5Seconds());
-//    }
+    @Override
+    public int attackSpeed() {
+        var innate = parameters.attackSpeed();
+        return innate - innate * level() / INIT_SKILL_DIV_ATTACKSPEED;
+    }
+
+    @Override
+    public int bodyArmor() {
+        return applyLevelToArmor(parameters.bodyArmor());
+    }
+
+    @Override
+    public int avoidance() {
+        return parameters.avoidance();
+    }
 
 
     @Override
-    public String toString() {
-        return "KungFu {" +
-                "name=" + name() +
-                "bodyDamage=" + bodyDamage +
-                ", headDamage=" + headDamage +
-                ", armDamage=" + armDamage +
-                ", legDamage=" + legDamage +
-                ", bodyArmor=" + bodyArmor +
-                ", headArmor=" + headArmor +
-                ", armArmor=" + armArmor +
-                ", legArmor=" + legArmor +
-                ", attackSpeed=" + attackSpeed +
-                '}';
+    public int bodyDamage() {
+        /*
+              rcLifeData.DamageBody   := rLifeData.damageBody  + rLifeData.damageBody * rcSkillLevel div INI_SKILL_DIV_DAMAGE;
+      rcLifeData.DamageHead   := rLifeData.DamageHead  + rLifeData.damageHead * rcSkillLevel div INI_SKILL_DIV_DAMAGE;
+      rcLifeData.DamageArm    := rLifeData.DamageArm   + rLifeData.damageArm  * rcSkillLevel div INI_SKILL_DIV_DAMAGE;
+      rcLifeData.DamageLeg    := rLifeData.DamageLeg   + rLifeData.damageLeg  * rcSkillLevel div INI_SKILL_DIV_DAMAGE;
+      rcLifeData.AttackSpeed  := rLifeData.AttackSpeed - rLifeData.AttackSpeed * rcSkillLevel div INI_SKILL_DIV_ATTACKSPEED;
+      rcLifeData.avoid        := rLifeData.avoid   ;//    + rLifeData.avoid;
+      rcLifeData.recovery     := rLifeData.recovery;//    + rLifeData.recovery;
+      rcLifeData.armorBody    := rLifeData.armorBody   + rLifeData.armorBody * rcSkillLevel div INI_SKILL_DIV_ARMOR;
+      rcLifeData.armorHead    := rLifeData.armorHead   + rLifeData.armorHead * rcSkillLevel div INI_SKILL_DIV_ARMOR;
+      rcLifeData.armorArm     := rLifeData.armorArm    + rLifeData.armorArm  * rcSkillLevel div INI_SKILL_DIV_ARMOR;
+      rcLifeData.armorLeg     := rLifeData.armorLeg    + rLifeData.armorLeg  * rcSkillLevel div INI_SKILL_DIV_ARMOR;
+         */
+        int val = applyLevelToDamage(parameters.bodyDamage());
+        return DAMAGE_MULTIPLIERS.stream()
+                .filter(m -> m.contains(level()))
+                .findAny()
+                .map(m -> m.multiply(val))
+                .orElse(val);
+    }
+
+    private int applyLevelToDamage(int damage) {
+        return damage + damage * level() / INIT_SKILL_DIV_DAMAGE;
+    }
+
+    private int applyLevelToArmor(int armor) {
+        return armor + armor * level() / INIT_SKILL_DIV_ARMOR;
+    }
+
+    @Override
+    public int headDamage() {
+        return applyLevelToDamage(parameters.headDamage());
+    }
+
+    @Override
+    public int legDamage() {
+        return applyLevelToDamage(parameters.legDamage());
+    }
+
+    @Override
+    public int armDamage() {
+        return applyLevelToDamage(parameters.armDamage());
+    }
+
+    @Override
+    public int headArmor() {
+        return applyLevelToArmor(parameters.headArmor());
+    }
+
+    @Override
+    public int armArmor() {
+        return applyLevelToArmor(parameters.armArmor());
+    }
+
+    @Override
+    public int legArmor() {
+        return applyLevelToArmor(parameters.legArmor());
+    }
+
+    @Override
+    public Damage damage() {
+        return new Damage(bodyDamage(), headDamage(), armDamage(), legDamage());
     }
 }

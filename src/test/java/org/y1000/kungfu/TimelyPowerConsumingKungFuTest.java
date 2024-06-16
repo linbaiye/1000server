@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.Player;
-import org.y1000.kungfu.attack.AttackKungFuParametersImpl;
+import org.y1000.kungfu.attack.AttackKungFuFixedParametersImpl;
 import org.y1000.kungfu.attack.QuanfaKungFu;
 
 class TimelyPowerConsumingKungFuTest extends AbstractUnitTestFixture {
@@ -15,7 +15,7 @@ class TimelyPowerConsumingKungFuTest extends AbstractUnitTestFixture {
     @BeforeEach
     void setUp() {
         quanfaKungFu = QuanfaKungFu.builder()
-                .parameters(new AttackKungFuParametersImpl("无名拳法", KungFuSdb.INSTANCE))
+                .parameters(new AttackKungFuFixedParametersImpl("无名拳法", KungFuSdb.INSTANCE))
                 .name("无名拳法")
                 .build();
     }

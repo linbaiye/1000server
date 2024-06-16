@@ -1,5 +1,6 @@
 package org.y1000.message.serverevent;
 
+import org.y1000.entities.EntityLeftRealmEvent;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.players.event.RewindEvent;
 import org.y1000.message.*;
@@ -42,6 +43,13 @@ public interface EntityEventVisitor {
     }
 
     default void visit(CreatureDieEvent event) {
+        visit((EntityEvent) event);
+    }
+    default void visit(CreatureSoundEvent event) {
+        visit((EntityEvent) event);
+    }
+
+    default void visit(EntityLeftRealmEvent event) {
         visit((EntityEvent) event);
     }
 }

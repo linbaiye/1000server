@@ -10,6 +10,7 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureShootEvent;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.PlayerImpl;
+import org.y1000.kungfu.attack.AttackKungFuFixedParameters;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.message.InputResponseMessage;
@@ -25,6 +26,45 @@ class PlayerAttackStateTest extends AbstractUnitTestFixture {
     private PlayerImpl player;
 
     private TestingEventListener eventListener;
+
+    private static class TestKungFuParameters implements AttackKungFuFixedParameters {
+
+        public TestKungFuParameters(int attackSpeed) {
+            this.attackSpeed = attackSpeed;
+        }
+
+        private int attackSpeed;
+
+        @Override
+        public int powerToSwing() {
+            return 0;
+        }
+
+        @Override
+        public int innerPowerToSwing() {
+            return 0;
+        }
+
+        @Override
+        public int recovery() {
+            return 0;
+        }
+
+        @Override
+        public int outerPowerToSwing() {
+            return 0;
+        }
+
+        @Override
+        public int lifeToSwing() {
+            return 0;
+        }
+
+        @Override
+        public int attackSpeed() {
+            return attackSpeed;
+        }
+    }
 
     @BeforeEach
     public void setup() {
@@ -46,10 +86,10 @@ class PlayerAttackStateTest extends AbstractUnitTestFixture {
 
     @Test
     void considerAttackSpeed() {
-        player = playerBuilder().attackKungFu(QuanfaKungFu.builder().attackSpeed(-60).name("test").level(100).build()).build();
+        player = playerBuilder().attackKungFu(QuanfaKungFu.builder().parameters(new TestKungFuParameters(-60)).name("test").level(100).build()).build();
         var state = PlayerAttackState.of(player);
         assertEquals(100, state.totalMillis());
-        player = playerBuilder().attackKungFu(QuanfaKungFu.builder().attackSpeed(160).name("test").level(100).build()).build();
+        player = playerBuilder().attackKungFu(QuanfaKungFu.builder().parameters(new TestKungFuParameters(160)).name("test").level(100).build()).build();
         state = PlayerAttackState.of(player);
         assertEquals(player.getStateMillis(state.stateEnum()), state.totalMillis());
     }

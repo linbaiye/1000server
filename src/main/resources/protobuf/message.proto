@@ -38,6 +38,11 @@ message PlayerLoginPacket {
   string token = 1;
 }
 
+message CreatureDieEventPacket {
+  int64 id = 1;
+  string sound = 2;
+}
+
 message CreatureAttackEventPacket {
   int64 id = 1;
   int32 direction = 2;
@@ -48,6 +53,11 @@ message CreatureAttackEventPacket {
   optional int64 targetId = 7;
 }
 
+message CreatureSoundEventPacket {
+  int64 id = 1;
+  string sound = 2;
+}
+
 message CreatureHurtEventPacket {
   int64 id = 1;
   int32 direction = 2;
@@ -56,6 +66,7 @@ message CreatureHurtEventPacket {
   int32 afterHurtState = 5;
   int32 currentLife = 6;
   int32 maxLife = 7;
+  string sound = 8;
 }
 
 message ChangeStatePacket {
@@ -188,6 +199,7 @@ message KungFuPacket {
   string name = 1;
   int32 level = 2;
   int32 slot = 3;
+  int32 type = 4;
 }
 
 message TextMessagePacket {
@@ -206,35 +218,31 @@ message LoginPacket {
   int32 x = 1;
   int32 y = 2;
   PlayerInfoPacket info = 3;
-  int32 attackKungFuLevel = 5;
   string attackKungFuName = 6;
-  optional int32 footKungFuLevel = 7;
   optional string footKungFuName = 8;
   repeated InventoryItemPacket inventoryItems = 9;
-  int32 attackKungFuType = 10;
   repeated KungFuPacket unnamedKungFuList = 11;
   repeated KungFuPacket basicKungFuList = 12;
   optional string protectionKungFu = 13;
   optional string assistantKungFu = 14;
   optional string breathKungFu = 15;
-  optional int32 breathKungFuLevel = 16;
   AttributePacket attribute = 17;
 }
 
 message AttributePacket {
-  optional int32 curLife = 1;
-  optional int32 maxLife = 2;
-  optional int32 curPower = 3;
-  optional int32 maxPower = 4;
-  optional int32 curInnerPower = 5;
-  optional int32 maxInnerPower = 6;
-  optional int32 curOuterPower = 7;
-  optional int32 maxOuterPower = 8;
-  optional int32 curEnergy = 9;
-  optional int32 maxEnergy = 10;
-  optional int32 headPercent = 11;
-  optional int32 armPercent = 12;
-  optional int32 legPercent = 13;
+  int32 curLife = 1;
+  int32 maxLife = 2;
+  int32 curPower = 3;
+  int32 maxPower = 4;
+  int32 curInnerPower = 5;
+  int32 maxInnerPower = 6;
+  int32 curOuterPower = 7;
+  int32 maxOuterPower = 8;
+  int32 curEnergy = 9;
+  int32 maxEnergy = 10;
+  int32 headPercent = 11;
+  int32 armPercent = 12;
+  int32 legPercent = 13;
 }
 
 message PlayerUnequipPacket {
@@ -257,6 +265,15 @@ message PlayerStandUpPacket {
 
 message PlayerCooldownPacket {
   int64 id = 1;
+}
+
+message PlayerRevivePacket {
+  int64 id = 1;
+}
+
+message PlayerGainExpPacket {
+  string name = 1;
+  int32 level = 2;
 }
 
 message Packet {
@@ -285,6 +302,10 @@ message Packet {
     PlayerStandUpPacket standUp = 25;
     PlayerCooldownPacket cooldown = 26;
     AttributePacket attribute = 27;
+    CreatureSoundEventPacket sound = 28;
+    CreatureDieEventPacket die = 29;
+    PlayerRevivePacket playerRevive = 30;
+    PlayerGainExpPacket gainExp = 31;
   }
 }
 

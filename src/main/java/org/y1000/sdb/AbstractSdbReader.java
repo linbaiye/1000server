@@ -11,10 +11,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.function.Function;
 
 public abstract class AbstractSdbReader {
@@ -72,6 +69,10 @@ public abstract class AbstractSdbReader {
         }
         Integer index = headerIndex.get(key);
         return index != null ? strings[index] : null;
+    }
+
+    public Set<String> monsterNames() {
+        return values.keySet();
     }
 
 

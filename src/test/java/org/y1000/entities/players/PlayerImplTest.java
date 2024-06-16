@@ -4,10 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.TestingAttackKungFuParameters;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.CreatureSoundEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.event.PlayerCooldownEvent;
@@ -149,7 +151,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
         int slot2 = inventory.add(axe);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot2));
 
-        assertEquals(player.cooldown(), (PlayerImpl.INNATE_ATTACKSPEED + player.kungFuBook().findUnnamedAttack(AttackKungFuType.AXE).getAttackSpeed()) * Realm.STEP_MILLIS);
+        assertEquals(player.cooldown(), (PlayerImpl.INNATE_ATTACKSPEED + player.kungFuBook().findUnnamedAttack(AttackKungFuType.AXE).attackSpeed()) * Realm.STEP_MILLIS);
         assertTrue(player.state() instanceof PlayerCooldownState);
     }
 
@@ -170,7 +172,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void changeAttackKungFu_differentTypeWhileAttacking() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(QuanfaKungFu.builder().name("test").level(100).build())
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(QuanfaKungFu.builder().name("test").parameters(new TestingAttackKungFuParameters()).level(100).build())
                 .weapon(new Weapon("fist", AttackKungFuType.QUANFA)).inventory(inventory);
         attachListener(builder);
         player.setFightingEntity(createMonster(new Coordinate(1, 2)));
@@ -205,7 +207,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void unequipWeaponWhileAttacking() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(SwordKungFu.builder().name("test").level(100).build())
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(SwordKungFu.builder().name("test").level(100).parameters(new TestingAttackKungFuParameters()).build())
                 .weapon(new Weapon("sword", AttackKungFuType.SWORD)).inventory(inventory);
         attachListener(builder);
         player.setFightingEntity(createMonster(new Coordinate(2, 2)));
@@ -216,7 +218,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
         var cooldownEvent = eventListener.removeFirst(PlayerCooldownEvent.class);
         assertNotNull(cooldownEvent);
         assertSame(player.stateEnum(), State.COOLDOWN);
-        assertEquals((PlayerImpl.INNATE_ATTACKSPEED + player.kungFuBook().findUnnamedAttack(AttackKungFuType.QUANFA).getAttackSpeed()) *  Realm.STEP_MILLIS, player.cooldown());
+        assertEquals((PlayerImpl.INNATE_ATTACKSPEED + player.kungFuBook().findUnnamedAttack(AttackKungFuType.QUANFA).attackSpeed()) *  Realm.STEP_MILLIS, player.cooldown());
     }
 
     @Test
@@ -228,11 +230,14 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
         assertFalse(event.toPacket().getToggleKungFu().getQuietly());
         assertEquals(event.toPacket().getToggleKungFu().getName(), player.kungFuBook().getUnnamedProtection().name());
         assertTrue(event.toPacket().getToggleKungFu().hasLevel());
+        assertNotNull(eventListener.removeFirst(CreatureSoundEvent.class));
 
+        eventListener.clearEvents();
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 10));
-        event = eventListener.dequeue(PlayerToggleKungFuEvent.class);
+        event = eventListener.removeFirst(PlayerToggleKungFuEvent.class);
         assertFalse(event.toPacket().getToggleKungFu().getQuietly());
         assertFalse(event.toPacket().getToggleKungFu().hasLevel());
+        assertNotNull(eventListener.removeFirst(CreatureSoundEvent.class));
     }
 
     @Test
@@ -368,5 +373,14 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
         assertEquals(19, player.power());
         assertEquals(49, player.outerPower());
         assertEquals(99, player.innerPower());
+        player.consumePower(100);
+        player.consumeLife(100);
+        player.consumeInnerPower(100);
+        player.consumeOuterPower(100);
+        assertEquals(0, player.outerPower());
+        assertEquals(0, player.currentLife());
+        assertEquals(0, player.innerPower());
+        assertEquals(0, player.outerPower());
     }
+
 }

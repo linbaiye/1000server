@@ -4,6 +4,8 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.util.Coordinate;
 
+import java.util.Optional;
+
 public interface Creature extends PhysicalEntity {
 
     Direction direction();
@@ -22,5 +24,11 @@ public interface Creature extends PhysicalEntity {
 
     int currentLife();
 
-    int armor();
+    int bodyArmor();
+
+    Optional<String> hurtSound();
+
+
+    Optional<String> dieSound();
+
 }

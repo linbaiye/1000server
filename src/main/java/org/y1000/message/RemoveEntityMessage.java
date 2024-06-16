@@ -4,7 +4,7 @@ import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.RemoveEntityPacket;
 
 
-public final class RemoveEntityMessage extends AbstractServerMessage{
+public final class RemoveEntityMessage extends AbstractServerMessage {
 
     private final long id;
 

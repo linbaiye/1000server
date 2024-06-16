@@ -1,6 +1,5 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.entities.players.PlayerStandUpState;
 import org.y1000.entities.players.event.*;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.InputResponseMessage;
@@ -85,6 +84,18 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     }
 
     default void visit(PlayerAttackAoeEvent event) {
+
+    }
+
+    default void visit(PlayerAttributeEvent event) {
+
+    }
+
+    default void visit(PlayerReviveEvent event) {
+
+    }
+
+    default void visit(PlayerGainExpEvent event) {
 
     }
 }

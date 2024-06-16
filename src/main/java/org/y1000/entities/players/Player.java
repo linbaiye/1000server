@@ -88,6 +88,8 @@ public interface Player extends ViolentCreature {
 
     int energy();
 
+    int armLife();
+
     void consumePower(int amount);
 
     void consumeInnerPower(int amount);
@@ -95,4 +97,6 @@ public interface Player extends ViolentCreature {
     void consumeOuterPower(int amount);
 
     void consumeLife(int amount);
+
+    void gainAttackExp(int amount);
 }

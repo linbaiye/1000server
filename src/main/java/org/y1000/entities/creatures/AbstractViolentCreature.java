@@ -38,7 +38,8 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
 
     protected boolean handleAttacked(ViolentCreature attacker,
                                      Function<State, S> hurtStateSupplier,
-                                     UnaryAction<Damage> damageUnaryAction) {
+                                     UnaryAction<Damage> damageUnaryAction,
+                                     Action killedAction) {
         if (!state().attackable() || randomAvoidance(attacker.hit())) {
             return false;
         }
@@ -50,7 +51,7 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
             changeState(hurtStateSupplier.apply(afterHurtState));
             emitEvent(new CreatureHurtEvent(this, afterHurtState));
         } else {
-            //changeState();
+            killedAction.invoke();
         }
         return true;
     }

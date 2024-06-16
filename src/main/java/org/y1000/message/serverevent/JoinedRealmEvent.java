@@ -43,6 +43,7 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
         return KungFuPacket.newBuilder()
                 .setName(kungFu.name())
                 .setLevel(kungFu.level())
+                .setType(kungFu.kungFuType().value())
                 .setSlot(index)
                 .build();
     }
@@ -53,12 +54,10 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
                 .setX(coordinate.x())
                 .setY(coordinate.y())
                 .setAttackKungFuName(player.attackKungFu().name())
-                .setAttackKungFuType(player.attackKungFu().getType().value())
-                .setAttackKungFuLevel(player.attackKungFu().level())
                 .setInfo(PlayerInfo.toPacket(player))
                 .setAttribute(PlayerAttributeEvent.makeAttributePacket(player))
                 ;
-        player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuLevel(footKungFu.level()).setFootKungFuName(footKungFu.name()));
+        player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuName(footKungFu.name()));
         player.protectKungFu().ifPresent(protectKungFu -> builder.setProtectionKungFu(protectKungFu.name()));
         player.assistantKungFu().ifPresent(assistantKungFu -> builder.setAssistantKungFu(assistantKungFu.name()));
         playerInventory.foreach((index, item) -> builder.addInventoryItems(toPacket(index, item)));

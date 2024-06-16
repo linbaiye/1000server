@@ -15,7 +15,7 @@ import org.y1000.repository.*;
 import org.y1000.network.*;
 import org.y1000.realm.RealmManager;
 import org.y1000.sdb.ActionSdb;
-import org.y1000.sdb.MonsterSdb;
+import org.y1000.sdb.*;
 
 public final class Server {
 

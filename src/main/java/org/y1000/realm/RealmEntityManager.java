@@ -1,15 +1,8 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.Entity;
-import org.y1000.entities.PhysicalEntity;
-import org.y1000.entities.Projectile;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
-import org.y1000.entities.creatures.event.CreatureAttackEvent;
-import org.y1000.entities.creatures.event.CreatureHurtEvent;
-import org.y1000.entities.creatures.event.CreatureShootEvent;
-import org.y1000.entities.GroundedItem;
-import org.y1000.entities.creatures.monster.MonsterFactory;
+import org.y1000.entities.*;
+import org.y1000.entities.creatures.event.*;
 import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
@@ -39,11 +32,14 @@ final class RealmEntityManager implements EntityEventListener,
 
     private final TradeManager tradeManager;
 
+    private final Set<PhysicalEntity> deletingEntities;
+
     RealmEntityManager(ItemRepository itemRepository,
                        ItemFactory itemFactory) {
         this.itemRepository = itemRepository;
         this.itemFactory = itemFactory;
         tradeManager = new TradeManager();
+        deletingEntities = new HashSet<>();
     }
 
     public int generateEntityId() {
@@ -110,13 +106,16 @@ final class RealmEntityManager implements EntityEventListener,
         visibleEntities.forEach(entity -> notifyInterpolation(joinedRealmEvent.player(), entity));
     }
 
+    private void cleanEntity(PhysicalEntity physicalEntity,
+                             ServerMessage message) {
+        Set<Player> affected = scopeManager.filterVisibleEntities(physicalEntity, Player.class);
+        affected.forEach(player -> sendMessage(player, message));
+        deletingEntities.add(physicalEntity);
+    }
+
     @Override
     public void visit(PlayerLeftEvent event) {
-        Set<PhysicalEntity> affected = scopeManager.remove(event.player());
-        affected.stream()
-                .filter(entity -> entity instanceof Player)
-                .map(Player.class::cast)
-                .forEach(player -> sendMessage(player, event));
+        cleanEntity(event.source(), event);
     }
 
     @Override
@@ -261,10 +260,41 @@ final class RealmEntityManager implements EntityEventListener,
         notifyVisiblePlayersAndSelf(event.player(), event);
     }
 
+
     @Override
     public void visit(PlayerAttackAoeEvent event) {
         Set<PhysicalEntity> entities = scopeManager.filterVisibleEntities(event.source(), PhysicalEntity.class);
         event.affect(entities);
+    }
+
+    @Override
+    public void visit(CreatureDieEvent event) {
+        notifyVisiblePlayersAndSelf(event.source(), event);
+    }
+
+    @Override
+    public void visit(PlayerAttributeEvent event) {
+        sendMessage(event.player(), event);
+    }
+
+    @Override
+    public void visit(PlayerReviveEvent event) {
+        notifyVisiblePlayersAndSelf(event.source(), event);
+    }
+
+    @Override
+    public void visit(CreatureSoundEvent event) {
+        notifyVisiblePlayersAndSelf(event.source(), event);
+    }
+
+    @Override
+    public void visit(EntityLeftRealmEvent event) {
+        cleanEntity(event.source(), event);
+    }
+
+    @Override
+    public void visit(PlayerGainExpEvent event) {
+        sendMessage(event.player(), event);
     }
 
     private void update(PhysicalEntity entity, int delta) {
@@ -292,6 +322,9 @@ final class RealmEntityManager implements EntityEventListener,
     public void updateEntities(int delta) {
         scopeManager.getAllEntities().forEach(e -> update(e, delta));
         updateProjectiles(delta);
+        deletingEntities.forEach(scopeManager::remove);
+        deletingEntities.forEach(entity -> entity.deregisterEventListener(this));
+        deletingEntities.clear();
     }
 
     public Optional<PhysicalEntity> findInsight(PhysicalEntity source, long id) {

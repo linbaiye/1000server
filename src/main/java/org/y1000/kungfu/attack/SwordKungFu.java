@@ -13,8 +13,8 @@ public final class SwordKungFu extends AbstractMeleeKungFu {
 
     @Override
     public State randomAttackState() {
-        return level() < 50 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.SWORD : State.SWORD2H;
-        //return level() < 5000 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.SWORD : State.SWORD2H;
+        //return level() < 50 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.SWORD : State.SWORD2H;
+        return level() < 5000 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.SWORD : State.SWORD2H;
     }
 
 
@@ -23,15 +23,6 @@ public final class SwordKungFu extends AbstractMeleeKungFu {
         return AttackKungFuType.SWORD;
     }
 
-    public static SwordKungFu unnamed() {
-        return SwordKungFu.builder()
-                .name("无名剑法")
-                .bodyArmor(1)
-                .bodyDamage(1)
-                .level(100)
-                .attackSpeed(50)
-                .build();
-    }
 
     @Override
     protected Logger logger() {

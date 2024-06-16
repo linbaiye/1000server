@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
+import org.y1000.entities.attribute.AttributeProvider;
 import org.y1000.entities.creatures.State;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -20,8 +21,8 @@ public final class PassiveMonster extends AbstractMonster {
     @Builder
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap, int avoidance, int recovery, int attackSpeed,
-                          int life, int wanderingRange, int armor, Map<State, Integer> stateMillis, String attackSound) {
-        super(id, coordinate, direction, name, realmMap, avoidance, recovery, attackSpeed, life, wanderingRange, armor, stateMillis, attackSound);
+                          int life, int wanderingRange, int armor, Map<State, Integer> stateMillis) {
+        super(id, coordinate, direction, name, realmMap, avoidance, recovery, attackSpeed, life, wanderingRange, armor, stateMillis);
     }
 
 

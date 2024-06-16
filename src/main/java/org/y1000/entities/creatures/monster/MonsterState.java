@@ -8,5 +8,7 @@ public interface MonsterState<C extends AbstractMonster> extends CreatureState<C
      * What to do after hurt.
      * @param creature
      */
-    void afterHurt(C creature);
+    default void afterHurt(C creature) {
+
+    }
 }

@@ -1,12 +1,16 @@
 package org.y1000.sdb;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Set;
+
 public final class MonsterSdb extends AbstractSdbReader {
 
-    public static final MonsterSdb INSTANCE = Load();
+    public static final MonsterSdb INSTANCE = new MonsterSdb();
 
     private MonsterSdb() {
+        read("Monster.sdb");
     }
-
 
     public int getRecovery(String name) {
         return getInt(name, "Recovery");
@@ -28,6 +32,23 @@ public final class MonsterSdb extends AbstractSdbReader {
     public String getSoundAttack(String name) {
         return get(name, "SoundAttack");
     }
+
+    public String getSoundStructed(String name) {
+        return get(name, "SoundStructed");
+    }
+
+    public String getSoundStart(String name) {
+        return get(name, "SoundStart");
+    }
+
+    public String getSoundNormal(String name) {
+        return get(name, "SoundNormal");
+    }
+
+    public String getSoundDie(String name) {
+        return get(name, "SoundDie");
+    }
+
 
     public int getLife(String name) {
         return getInt(name, "Life");
@@ -54,16 +75,16 @@ public final class MonsterSdb extends AbstractSdbReader {
         return "TRUE".equals(s);
     }
 
-    private static MonsterSdb Load() {
-        MonsterSdb monsterSdb = new MonsterSdb();
-        monsterSdb.read("Monster.sdb");
-        return monsterSdb;
-    }
-
     public static void main(String[] args) {
         MonsterSdb monsterSdb = INSTANCE;
         //System.out.println(monsterSdb.get("熊", "boGoodHeart"));
-        System.out.println(monsterSdb.get("牛", "Life"));
+        Set<String> strings = monsterSdb.monsterNames();
+        for (String string : strings) {
+            String s = monsterSdb.get(string, "AttackMagic");
+            if (!StringUtils.isEmpty(s)) {
+                System.out.println(string + ": " + s);
+            }
+        }
     }
 }
 

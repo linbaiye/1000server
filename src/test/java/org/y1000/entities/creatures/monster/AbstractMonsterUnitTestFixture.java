@@ -9,7 +9,7 @@ public abstract class AbstractMonsterUnitTestFixture extends AbstractUnitTestFix
     protected TestingEventListener eventListener;
 
     protected void setup() {
-        monster = monsterBuilder().build();
+        monster = monsterBuilder().life(4000).build();
         eventListener = new TestingEventListener();
         monster.registerEventListener(eventListener);
     }

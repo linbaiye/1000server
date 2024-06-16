@@ -12,7 +12,7 @@ public final class PlayerAttributeEvent extends AbstractPlayerEvent{
 
     @Override
     public void accept(PlayerEventVisitor playerEventHandler) {
-
+        playerEventHandler.visit(this);
     }
 
     @Override

@@ -1,6 +1,10 @@
 package org.y1000.entities.creatures.monster;
 
-import org.y1000.sdb.MonsterSdb;
+import org.apache.commons.lang3.StringUtils;
+import org.y1000.entities.attribute.AttributeProvider;
+import org.y1000.sdb.*;
+
+import java.util.Optional;
 
 public final class MonsterAttributeProvider implements AttributeProvider {
 
@@ -48,12 +52,34 @@ public final class MonsterAttributeProvider implements AttributeProvider {
     }
 
     @Override
-    public String attackSound() {
-        return monsterSdb.getSoundAttack(name);
+    public Optional<String> attackSound() {
+        return getSound(monsterSdb.getSoundAttack(name));
     }
 
     @Override
     public int damage() {
         return monsterSdb.getDamage(name) ;
+    }
+
+    @Override
+    public String hurtSound() {
+        return monsterSdb.getSoundStructed(name);
+    }
+
+    private Optional<String> getSound(String s) {
+        return StringUtils.isEmpty(s) ? Optional.empty() : Optional.of(s);
+    }
+
+    @Override
+    public Optional<String> normalSound() {
+        var s = monsterSdb.getSoundNormal(name);
+        return getSound(s);
+    }
+
+
+
+    @Override
+    public Optional<String> dieSound() {
+        return getSound(monsterSdb.getSoundDie(name));
     }
 }

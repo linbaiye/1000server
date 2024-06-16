@@ -107,4 +107,9 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
     public boolean attackable() {
         return state().attackable();
     }
+    private static final int DEFAULT_EXP = 10000;
+    protected int damagedLifeToExp(int damagedLife) {
+        var n = maxLife() / damagedLife;
+        return n > 15 ? DEFAULT_EXP : DEFAULT_EXP * n * n / (15 * 15);
+    }
 }

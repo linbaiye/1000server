@@ -4,12 +4,13 @@ import org.y1000.kungfu.*;
 import org.y1000.kungfu.attack.*;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
+import org.y1000.kungfu.protect.ProtectionFixedParametersImpl;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class KungFuBookRepositoryImpl implements KungFuBookRepository, KungFuBookFactory  {
+public final class KungFuBookRepositoryImpl implements KungFuBookRepository, KungFuBookFactory, KungFuFactory {
     private final KungFuSdb kungFuSdb = KungFuSdb.INSTANCE;
 
     private final static List<String> UNNAMED_NAMES = List.of(
@@ -30,16 +31,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
          */
         builder.name(name);
         builder.level(100);
-        builder.attackSpeed(kungFuSdb.getAttackSpeed(name));
-        builder.bodyDamage(kungFuSdb.getDamageBody(name));
-        builder.headDamage(kungFuSdb.getDamageHead(name));
-        builder.armDamage(kungFuSdb.getDamageArm(name));
-        builder.legDamage(kungFuSdb.getDamageLeg(name));
-        builder.bodyArmor(kungFuSdb.getArmorBody(name));
-        builder.headArmor(kungFuSdb.getArmorHead(name));
-        builder.armArmor(kungFuSdb.getArmorArm(name));
-        builder.legArmor(kungFuSdb.getArmorLeg(name));
-        builder.parameters(new AttackKungFuParametersImpl(name, kungFuSdb));
+        builder.parameters(new AttackKungFuFixedParametersImpl(name, kungFuSdb));
     }
 
 
@@ -93,11 +85,9 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
 
     private ProtectKungFu protectKungFu(String name) {
         return ProtectKungFu.builder()
-                .bodyArmor(kungFuSdb.getArmorBody(name))
-                .headArmor(kungFuSdb.getArmorHead(name))
-                .armArmor(kungFuSdb.getArmorArm(name))
-                .legArmor(kungFuSdb.getArmorLeg(name))
-                .name(name).level(100).build();
+                .name(name)
+                .parameters(new ProtectionFixedParametersImpl(name, kungFuSdb))
+                .build();
     }
 
 
@@ -125,5 +115,10 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             unnamed.put(i, create(UNNAMED_NAMES.get(i - 1)));
         }
         return new KungFuBook(unnamed);
+    }
+
+    @Override
+    public AttackKungFu createAttackKungFu(String name) {
+        return (AttackKungFu) create(name);
     }
 }

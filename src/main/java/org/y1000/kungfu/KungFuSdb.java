@@ -4,15 +4,12 @@ import org.y1000.sdb.AbstractSdbReader;
 
 public final class KungFuSdb extends AbstractSdbReader {
 
-    private KungFuSdb() {}
-
-    public static final KungFuSdb INSTANCE = Load();
-
-    private static KungFuSdb Load() {
-        KungFuSdb sdb = new KungFuSdb();
-        sdb.read("Magic.sdb");
-        return sdb;
+    private KungFuSdb() {
+        read("Magic.sdb");
     }
+
+    public static final KungFuSdb INSTANCE = new KungFuSdb();
+
 
     // 5Energy,5InPower,5OutPower,5Magic,5Life
 
@@ -122,6 +119,23 @@ public final class KungFuSdb extends AbstractSdbReader {
         return getInt(name, "ArmorLeg");
     }
 
+    public String getSoundSwing(String name) {
+        return get(name, "SoundSwing");
+    }
+
+    public String getSoundStrike(String name) {
+        return get(name, "SoundStrike");
+    }
+
+    public String getSoundStart(String name) {
+        return get(name, "SoundStart");
+    }
+
+    public String getSoundEnd(String name) {
+        return get(name, "SoundEnd");
+    }
+
+
     public KungFuType getMagicType(String name) {
         return getEnum(name, "MagicType", KungFuType::fromValue);
     }
@@ -130,6 +144,9 @@ public final class KungFuSdb extends AbstractSdbReader {
 //        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
 //        System.out.println(INSTANCE.get("无名剑法", "SoundStrike"));
 
-        System.out.println(INSTANCE.get("无名步法", "5InPower"));
+        /*System.out.println(INSTANCE.get("无名剑法", "eInPower"));
+        System.out.println(INSTANCE.get("无名剑法", "eOutPower"));
+        System.out.println(INSTANCE.get("无名剑法", "eMagic"));*/
+        System.out.println(INSTANCE.get("无名刀法", "Recovery"));
     }
 }

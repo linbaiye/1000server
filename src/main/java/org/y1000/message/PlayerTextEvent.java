@@ -30,7 +30,9 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
         NO_INNER_POWER(8),
 
-        NO_OUTER_POWER(8),
+        NO_OUTER_POWER(9),
+
+        NOT_ENOUGH_ARM_LIFE(10),
 
         CUSTOM(1000000);
         ;
@@ -107,7 +109,11 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         return new PlayerTextEvent(player, null, TextType.NO_OUTER_POWER);
     }
 
-    public static PlayerTextEvent noLife(Player player) {
+    public static PlayerTextEvent insufficientLife(Player player) {
         return new PlayerTextEvent(player, null, TextType.NO_LIFE);
+    }
+
+    public static PlayerTextEvent armLifeTooLowToExp(Player player) {
+        return new PlayerTextEvent(player, null, TextType.NOT_ENOUGH_ARM_LIFE);
     }
 }

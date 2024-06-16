@@ -40,4 +40,9 @@ public abstract class AbstractFightingState extends AbstractCreateState<PlayerIm
     public boolean canSitDown() {
         return true;
     }
+
+    @Override
+    public int regenerate() {
+        return 10;
+    }
 }
