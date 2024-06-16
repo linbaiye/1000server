@@ -98,7 +98,12 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private final Damage innateDamage;
 
-    private int timeToRegenerate;
+    private int regenerateTimer;
+
+    private static class PlayerTimer {
+        private int seconds;
+    }
+
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
@@ -202,8 +207,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
     }
 
-    private void setRegenerateTimer() {
-        timeToRegenerate = 9 * 1000;
+    private void resetTimer() {
+        regenerateTimer = 9 * 1000;
     }
 
     private void initProtectKungFu(ProtectKungFu protectKungFu) {
@@ -548,10 +553,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         emitEvent(new JoinedRealmEvent(this, coordinate(), inventory));
     }
 
-    private void takeDamage(int damage) {
-
-    }
-
 
     private void onKilled() {
         disableFootKungFuQuietly();
@@ -560,6 +561,15 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         log().debug("Player dead.");
     }
 
+    private void gainProtectionExp(int bodyDamage) {
+        if (protectKungFu == null) {
+            return;
+        }
+        var exp = DEFAULT_EXP - damagedLifeToExp(bodyDamage);
+        if (protectKungFu.gainExp(exp)) {
+            emitEvent(new PlayerGainExpEvent(this, protectKungFu.name(), protectKungFu.level()));
+        }
+    }
 
     @Override
     public boolean attackedBy(ViolentCreature attacker) {
@@ -569,10 +579,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         cooldownRecovery();
         int bodyDamage = attacker.damage().bodyDamage() - bodyArmor();
         bodyDamage = bodyDamage > 0 ? bodyDamage : 1;
-        consumeLife(bodyDamage);
+        currentLife = Math.max(currentLife - bodyDamage, 0);
         if (currentLife() > 0) {
             state().moveToHurtCoordinate(this);
             State afterHurtState = state().decideAfterHurtState();
+            gainProtectionExp(bodyDamage);
             changeState(PlayerHurtState.hurt(this, afterHurtState));
             emitEvent(new CreatureHurtEvent(this, afterHurtState));
         } else {
@@ -658,14 +669,12 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
 
-
-
     private void regenerate(int delta) {
-        timeToRegenerate -= delta;
-        if (timeToRegenerate > 0) {
+        regenerateTimer -= delta;
+        if (regenerateTimer > 0) {
             return;
         }
-        setRegenerateTimer();
+        resetTimer();
         /*if (stateEnum() == State.DIE) {
             regenRate = 300;
         } else if (stateEnum() == State.SIT) {
@@ -914,7 +923,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public int bodyArmor() {
-        return 0;
+        var am = attackKungFu.bodyArmor();
+        return protectKungFu().map(k -> k.bodyArmor() + am)
+                .orElse(am);
     }
 
 

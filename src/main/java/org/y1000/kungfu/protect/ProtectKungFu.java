@@ -5,10 +5,11 @@ import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.KungFuType;
 
 @SuperBuilder
-public class ProtectKungFu extends AbstractKungFu {
+public final class ProtectKungFu extends AbstractKungFu {
 
     private final ProtectionFixedParameters parameters;
     private static final int INIT_SKILL_DIV_ARMOR = 5000;
+
 
     public int bodyArmor() {
         return applyLevelToArmor(parameters.bodyArmor());
@@ -33,6 +34,7 @@ public class ProtectKungFu extends AbstractKungFu {
     public int legArmor() {
         return applyLevelToArmor(parameters.legArmor());
     }
+
 
     private int applyLevelToArmor(int armor) {
         return armor + armor * level() / INIT_SKILL_DIV_ARMOR;

@@ -16,6 +16,10 @@ public final class ProtectionFixedParametersImpl implements ProtectionFixedParam
     private final String name;
 
     private final KungFuSdb kungFuSdb;
+    private final int keepPower;
+    private final int keepInnerPower;
+    private final int keepOuterPower;
+    private final int keepLife;
 
     public ProtectionFixedParametersImpl(String name,
                                          KungFuSdb kungFuSdb) {
@@ -25,6 +29,10 @@ public final class ProtectionFixedParametersImpl implements ProtectionFixedParam
         headArmor = kungFuSdb.getArmorHead(name) *  INI_MUL_ARMORHEAD / INI_MAGIC_DIV_VALUE;
         armArmor = kungFuSdb.getArmorArm(name) *  INI_MUL_ARMORARM / INI_MAGIC_DIV_VALUE;
         legArmor = kungFuSdb.getArmorLeg(name) *  INI_MUL_ARMORLEG / INI_MAGIC_DIV_VALUE;
+        keepPower = kungFuSdb.getKMagic(name) * 10;
+        keepInnerPower = kungFuSdb.getKInPower(name) * 10;
+        keepOuterPower = kungFuSdb.getKOutPower(name) * 10;
+        keepLife = kungFuSdb.getKLife(name) * 10;
     }
 
     @Override
@@ -35,6 +43,26 @@ public final class ProtectionFixedParametersImpl implements ProtectionFixedParam
     @Override
     public String disableSound() {
         return kungFuSdb.getSoundEnd(name);
+    }
+
+    @Override
+    public int powerToKeep() {
+        return keepPower;
+    }
+
+    @Override
+    public int innerPowerToKeep() {
+        return keepInnerPower;
+    }
+
+    @Override
+    public int outerPowerToKeep() {
+        return keepOuterPower;
+    }
+
+    @Override
+    public int lifeToKeep() {
+        return keepLife;
     }
 
     @Override

@@ -21,5 +21,13 @@ public interface ProtectionFixedParameters {
     String enableSound();
 
     String disableSound();
+
+    int powerToKeep();
+
+    int innerPowerToKeep();
+
+    int outerPowerToKeep();
+
+    int lifeToKeep();
 }
 
