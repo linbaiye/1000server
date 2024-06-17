@@ -1,18 +1,13 @@
 package org.y1000.kungfu.attack;
 
 import org.y1000.kungfu.ArmorParameters;
+import org.y1000.kungfu.EventResourceParameters;
 import org.y1000.kungfu.KungFuSdb;
 
 import static org.y1000.kungfu.ParameterConstants.*;
 
 
 public final class AttackKungFuParametersImpl implements AttackKungFuParameters {
-
-    private static final int INI_MUL_EVENTINPOWER  = 22;
-    private static final int INI_MUL_EVENTOUTPOWER  = 22;
-
-    private static final int INI_MUL_EVENTPOWER  = 10;
-    private static final int INI_MUL_EVENTLIFE = 8;
 
     private static final int INI_ADD_DAMAGE       = 40;
     private static final int INI_MUL_ATTACKSPEED  = 10;
@@ -22,11 +17,6 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
     private static final int INI_MUL_DAMAGEHEAD      = 17;
     private static final int INI_MUL_DAMAGEARM       = 17;
     private static final int INI_MUL_DAMAGELEG       = 17;
-
-    private final int swingPower;
-    private final int swingInnerPower;
-    private final int swingOuterPower;
-    private final int swingLife;
 
     private final int recovery;
 
@@ -51,14 +41,13 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
 
     private final ArmorParameters armorParameters;
 
-    public AttackKungFuParametersImpl(String name, KungFuSdb kungFuSdb, ArmorParameters armorParameters) {
+    private final EventResourceParameters eventResourceParameters;
+
+    public AttackKungFuParametersImpl(String name, KungFuSdb kungFuSdb, ArmorParameters armorParameters,
+                                      EventResourceParameters eventResourceParameters) {
         this.name = name;
         this.kungFuSdb = kungFuSdb;
         this.armorParameters = armorParameters;
-        swingLife = kungFuSdb.getELife(name) * INI_MUL_EVENTLIFE / INI_MAGIC_DIV_VALUE;
-        swingPower = kungFuSdb.getEMagic(name) * INI_MUL_EVENTPOWER / INI_MAGIC_DIV_VALUE;
-        swingOuterPower = kungFuSdb.getEOutPower(name) * INI_MUL_EVENTOUTPOWER / INI_MAGIC_DIV_VALUE;
-        swingInnerPower = kungFuSdb.getEInPower(name) * INI_MUL_EVENTINPOWER / INI_MAGIC_DIV_VALUE;
         recovery = (120 - kungFuSdb.getRecovery(name)) * INI_MUL_RECOVERY / INI_MAGIC_DIV_VALUE;
         attackSpeed = (120 - kungFuSdb.getAttackSpeed(name)) * INI_MUL_ATTACKSPEED / INI_MAGIC_DIV_VALUE;
         avoidance = kungFuSdb.getAvoidance(name) * INI_MUL_AVOID / INI_MAGIC_DIV_VALUE;
@@ -68,6 +57,7 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
         legDamage = valueOrZero(kungFuSdb.getDamageLeg(name), INI_MUL_DAMAGELEG);
         strikeSound = Integer.parseInt(kungFuSdb.getSoundStrike(name));
         swingSound = Integer.parseInt(kungFuSdb.getSoundSwing(name));
+        this.eventResourceParameters = eventResourceParameters;
     }
 
 
@@ -78,11 +68,11 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
 
 
     public int powerToSwing() {
-        return swingPower;
+        return eventResourceParameters.power();
     }
 
     public int innerPowerToSwing() {
-        return swingInnerPower;
+        return eventResourceParameters.innerPower();
     }
 
     public int recovery() {
@@ -90,11 +80,11 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
     }
 
     public int outerPowerToSwing() {
-        return swingOuterPower;
+        return eventResourceParameters.outerPower();
     }
 
     public int lifeToSwing() {
-        return swingLife;
+        return eventResourceParameters.life();
     }
 
 

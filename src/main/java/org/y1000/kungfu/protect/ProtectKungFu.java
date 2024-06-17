@@ -1,15 +1,12 @@
 package org.y1000.kungfu.protect;
 
 import lombok.Builder;
-import org.y1000.entities.players.Player;
-import org.y1000.kungfu.AbstractConsumingResourcesKungFu;
-import org.y1000.kungfu.AbstractKungFu;
+import org.y1000.kungfu.AbstractPeriodicalConsumingKungFu;
 import org.y1000.kungfu.KungFuType;
-import org.y1000.repository.KungFuBookRepositoryImpl;
 
 import java.util.List;
 
-public final class ProtectKungFu extends AbstractConsumingResourcesKungFu  {
+public final class ProtectKungFu extends AbstractPeriodicalConsumingKungFu {
 
     private final ProtectionParameters parameters;
 

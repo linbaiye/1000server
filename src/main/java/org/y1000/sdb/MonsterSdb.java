@@ -78,7 +78,7 @@ public final class MonsterSdb extends AbstractSdbReader {
     public static void main(String[] args) {
         MonsterSdb monsterSdb = INSTANCE;
         //System.out.println(monsterSdb.get("熊", "boGoodHeart"));
-        Set<String> strings = monsterSdb.monsterNames();
+        Set<String> strings = monsterSdb.names();
         for (String string : strings) {
             String s = monsterSdb.get(string, "AttackMagic");
             if (!StringUtils.isEmpty(s)) {

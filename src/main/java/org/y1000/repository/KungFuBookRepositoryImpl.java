@@ -26,7 +26,13 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
                 .sound(kungFuSdb.getSoundEvent(name))
                 .keepParameters(new DefaultKeepParameters(name, kungFuSdb))
                 .fiveSecondsParameters(new DefaultFiveSecondParameters(name, kungFuSdb))
+                .eventResourceParameters(new DefaultEventResourceParameters(name, kungFuSdb))
                 .build();
+    }
+
+    private AttackKungFuParameters createAttackKungFuParameter(String name) {
+        return new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb),
+                new DefaultEventResourceParameters(name, kungFuSdb));
     }
 
 
@@ -34,7 +40,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return SwordKungFu.builder()
                 .name(name)
                 .exp(0)
-                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .parameters(createAttackKungFuParameter(name))
                 .build();
     }
 
@@ -42,7 +48,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return QuanfaKungFu.builder()
                 .name(name)
                 .exp(0)
-                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .parameters(createAttackKungFuParameter(name))
                 .build();
     }
 
@@ -50,7 +56,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return BladeKungFu.builder()
                 .name(name)
                 .exp(0)
-                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .parameters(createAttackKungFuParameter(name))
                 .build();
     }
 
@@ -58,7 +64,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return SpearKungFu.builder()
                 .name(name)
                 .exp(0)
-                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .parameters(createAttackKungFuParameter(name))
                 .build();
     }
 
@@ -66,7 +72,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return AxeKungFu.builder()
                 .name(name)
                 .exp(0)
-                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .parameters(createAttackKungFuParameter(name))
                 .build();
     }
 
@@ -74,7 +80,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return BowKungFu.builder()
                 .name(name)
                 .exp(0)
-                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .parameters(createAttackKungFuParameter(name))
                 .build();
     }
 
@@ -83,13 +89,16 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return ThrowKungFu.builder()
                 .name(name)
                 .exp(0)
-                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .parameters(createAttackKungFuParameter(name))
                 .build();
     }
 
 
     private BreathKungFu breathKungFu(String name) {
-        return BreathKungFu.builder().name(name).exp(100).build();
+        return BreathKungFu.builder().name(name).exp(0)
+                .parameters(new RevertedEventResourceParameters(name, kungFuSdb))
+                .sound(kungFuSdb.getSoundEvent(name))
+                .build();
     }
 
     private ProtectKungFu protectKungFu(String name) {

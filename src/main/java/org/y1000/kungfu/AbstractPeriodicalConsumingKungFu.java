@@ -2,16 +2,16 @@ package org.y1000.kungfu;
 
 import org.y1000.entities.players.Player;
 
-public abstract class AbstractConsumingResourcesKungFu extends AbstractKungFu {
+public abstract class AbstractPeriodicalConsumingKungFu extends AbstractKungFu implements PeriodicalKungFu {
     private final KeepParameters keepParameters;
 
     private final FiveSecondsParameters consumingParameters;
 
     private int consumingTimer;
 
-    protected AbstractConsumingResourcesKungFu(String name, int exp,
-                                               KeepParameters keepParameters,
-                                               FiveSecondsParameters consumingParameters) {
+    protected AbstractPeriodicalConsumingKungFu(String name, int exp,
+                                                KeepParameters keepParameters,
+                                                FiveSecondsParameters consumingParameters) {
         super(name, exp);
         this.keepParameters = keepParameters;
         this.consumingParameters = consumingParameters;
@@ -22,7 +22,7 @@ public abstract class AbstractConsumingResourcesKungFu extends AbstractKungFu {
         consumingTimer = 5000;
     }
 
-    public boolean useResources(Player player, int delta) {
+    public boolean updateResources(Player player, int delta) {
         consumingTimer -= delta;
         if (consumingTimer > 0) {
             return false;

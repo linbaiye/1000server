@@ -5,12 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 
@@ -71,7 +66,7 @@ public abstract class AbstractSdbReader {
         return index != null ? strings[index] : null;
     }
 
-    public Set<String> monsterNames() {
+    public Set<String> names() {
         return values.keySet();
     }
 

@@ -38,6 +38,7 @@ public enum KungFuType implements ValueEnum {
         return v;
     }
 
+
     public static KungFuType fromValue(int v) {
         return ValueEnum.fromValueOrThrow(values(), v);
     }

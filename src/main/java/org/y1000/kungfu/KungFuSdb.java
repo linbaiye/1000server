@@ -1,6 +1,9 @@
 package org.y1000.kungfu;
 
+import org.apache.commons.lang3.StringUtils;
 import org.y1000.sdb.AbstractSdbReader;
+
+import java.util.Set;
 
 public final class KungFuSdb extends AbstractSdbReader {
 
@@ -34,23 +37,23 @@ public final class KungFuSdb extends AbstractSdbReader {
     }
 
     public int getEEnergy(String name) {
-        return getInt(name, "eEnergy");
+        return getIntOrZero(name, "eEnergy");
     }
 
     public int getEInPower(String name) {
-        return getInt(name, "eInPower");
+        return getIntOrZero(name, "eInPower");
     }
 
     public int getEOutPower(String name) {
-        return getInt(name, "eOutPower");
+        return getIntOrZero(name, "eOutPower");
     }
 
     public int getEMagic(String name) {
-        return getInt(name, "eMagic");
+        return getIntOrZero(name, "eMagic");
     }
 
     public int getELife(String name) {
-        return getInt(name, "eLife");
+        return getIntOrZero(name, "eLife");
     }
 
     //kEnergy,kInPower,kOutPower,kMagic
@@ -152,9 +155,26 @@ public final class KungFuSdb extends AbstractSdbReader {
 //        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
 //        System.out.println(INSTANCE.get("无名剑法", "SoundStrike"));
 
-        /*System.out.println(INSTANCE.get("无名剑法", "eInPower"));
-        System.out.println(INSTANCE.get("无名剑法", "eOutPower"));
-        System.out.println(INSTANCE.get("无名剑法", "eMagic"));*/
-        System.out.println(INSTANCE.get("无名刀法", "Recovery"));
+        Set<String> names = INSTANCE.names();
+        for (String name : names) {
+            try {
+                String magicType2 = INSTANCE.get(name, "MagicType");
+                if (StringUtils.isEmpty(magicType2)) {
+                    continue;
+                }
+                int magicType1 = Integer.parseInt(magicType2);
+                if (magicType1 > 10) {
+                    continue;
+                }
+                KungFuType magicType = INSTANCE.getMagicType(name);
+                if (magicType == KungFuType.BREATHING) {
+                    System.out.println("Name:" + name + ", magic:" + INSTANCE.getEMagic(name) + ", life: " + INSTANCE.getELife(name) + ", inner:" + INSTANCE.getEInPower(name) + ", outer:" + INSTANCE.getEOutPower(name));
+                }
+            } catch (Exception e) {
+                System.out.println(name);
+                e.printStackTrace();
+            }
+        }
+        //System.out.println(INSTANCE.get("无名刀法", "Recovery"));
     }
 }

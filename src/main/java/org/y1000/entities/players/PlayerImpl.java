@@ -450,11 +450,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         emitEvent(new PlayerSitDownEvent(this, includeSelf));
     }
 
-    private void standUp() {
+    private void standUp(boolean includeSelf) {
         if (state().canStandUp()) {
-            breathKungFu = null;
+            disableBreathKungNoTip();
             changeState(new PlayerStandUpState(this));
-            emitEvent(new PlayerStandUpEvent(this));
+            emitEvent(new PlayerStandUpEvent(this, includeSelf));
         }
     }
 
@@ -489,7 +489,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         } else if (clientEvent instanceof ClientSitDownEvent) {
             sitDown(false);
         } else if (clientEvent instanceof ClientStandUpEvent) {
-            standUp();
+            standUp(false);
         } else if (clientEvent instanceof ClientAttackEvent attackEvent) {
             startAttack(attackEvent);
         } else if (clientEvent instanceof ClientMovementEvent movementEvent) {
@@ -699,44 +699,58 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         emitEvent(new PlayerAttributeEvent(this));
     }
 
-    private void gainPower(int v) {
+    public void gainPower(int v) {
         if (v > 0) {
             power = Math.min(maxPower, power + v);
         }
     }
 
-    private void gainInnerPower(int v) {
+    public void gainInnerPower(int v) {
         if (v > 0) {
             innerPower = Math.min(maxInnerPower, innerPower + v);
         }
     }
 
-    private void gainOuterPower(int v) {
+    public void gainOuterPower(int v) {
         if (v > 0) {
             outerPower = Math.min(maxOuterPower, outerPower + v);
         }
     }
 
-    private void gainLife(int v) {
+    public void gainLife(int v) {
         if (v > 0) {
             currentLife = Math.min(maxLife(), currentLife + v);
         }
     }
 
 
-    private void updateKungFuAndCheck(AbstractConsumingResourcesKungFu kungFu,
-                                      int delta,
-                                      Action action) {
-        if (kungFu != null && kungFu.useResources(this, delta)) {
-            if (!kungFu.canKeep(this)) {
-                action.invoke();
-            }
+    private boolean updateKungFuAndCheck(PeriodicalKungFu kungFu,
+                                         int delta,
+                                         Action disableAction) {
+        if (kungFu == null) {
+            return false;
         }
+        var ret = kungFu.updateResources(this, delta);
+        if (ret && !kungFu.canKeep(this)) {
+            disableAction.invoke();
+        }
+        return ret;
     }
 
     private void updateKungFu(int delta) {
-        updateKungFuAndCheck(protectKungFu, delta, this::disableProtectionNoTip);
-        updateKungFuAndCheck(footKungfu, delta, this::disableFootKungFuNoTip);
+        var resourceUpdated = updateKungFuAndCheck(protectKungFu, delta, this::disableProtectionNoTip);
+        resourceUpdated = resourceUpdated || updateKungFuAndCheck(footKungfu, delta, this::disableFootKungFuNoTip);
+        if (resourceUpdated) {
+            emitEvent(new PlayerAttributeEvent(this));
+            return;
+        }
+        if (breathKungFu == null) {
+            return;
+        }
+        breathKungFu.update(this, delta, this::emitEvent);
+        if (!breathKungFu.canRegenerateResources(this)) {
+            standUp(true);
+        }
     }
 
     @Override
@@ -963,9 +977,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public Optional<String> dieSound() {
-        if (ThreadLocalRandom.current().nextInt(100) < 40) {
-            return Optional.empty();
-        }
         return Optional.of(age() < 6000 ?
                 (isMale() ? "2003" : "2203") :
                 (isMale() ? "2005" : "2205") );

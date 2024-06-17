@@ -25,7 +25,7 @@ public final class PlayerMoveState extends AbstractPlayerMoveState {
     @Override
     protected void onMoved(PlayerImpl player) {
         player.changeState(idle(player));
-        player.footKungFu().ifPresent(footKungFu -> footKungFu.tryGainExp(player, player::emitEvent));
+        player.footKungFu().ifPresent(footKungFu -> footKungFu.tryGainExpAndUseResources(player, player::emitEvent));
     }
 
     private PlayerState idle(PlayerImpl player) {

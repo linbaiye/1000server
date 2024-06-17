@@ -243,7 +243,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void useProtectionWhenBreathingEnabled() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().breathKungFu(BreathKungFu.builder().name("breath").exp(0).build());
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().breathKungFu(BreathKungFu.builder().name("breath").exp(0).sound("1").build());
         attachListener(builder);
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 10));
         assertTrue(player.breathKungFu().isEmpty());
@@ -277,7 +277,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void useBreathKungFu_useDifferentOne() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().breathKungFu(BreathKungFu.builder().name("breath").exp(0).build());
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().breathKungFu(BreathKungFu.builder().name("breath").exp(0).sound("1").build());
         attachListener(builder);
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 9));
         assertTrue(player.breathKungFu().isPresent());

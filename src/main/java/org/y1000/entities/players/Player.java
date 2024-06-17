@@ -98,5 +98,13 @@ public interface Player extends ViolentCreature {
 
     void consumeLife(int amount);
 
+    void gainPower(int v);
+
+    void gainInnerPower(int v);
+
+    void gainOuterPower(int v);
+
+    void gainLife(int v);
+
     void gainAttackExp(int amount);
 }

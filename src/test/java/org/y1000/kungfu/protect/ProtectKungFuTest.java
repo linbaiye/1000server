@@ -101,14 +101,14 @@ class ProtectKungFuTest {
     void useResources() {
         Player player = Mockito.mock(Player.class);
         when(player.currentLife()).thenReturn(100);
-        protectKungFu.useResources(player, 5000);
+        protectKungFu.updateResources(player, 5000);
         Mockito.verify(player).consumeLife(parameters.lifePer5Seconds());
         Mockito.verify(player).consumeInnerPower(parameters.innerPowerPer5Seconds());
         Mockito.verify(player).consumeOuterPower(parameters.outerPowerPer5Seconds());
         Mockito.verify(player).consumePower(parameters.powerPer5Seconds());
         player = Mockito.mock(Player.class);
         when(player.currentLife()).thenReturn(2);
-        protectKungFu.useResources(player, 5000);
+        protectKungFu.updateResources(player, 5000);
         Mockito.verify(player).consumeLife(1);
     }
 
