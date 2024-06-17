@@ -24,7 +24,7 @@ class KungFuBookTest {
         assertEquals(book.findUnnamedAttack(AttackKungFuType.SWORD).name(), "无名剑法");
         assertEquals(book.getUnnamedFoot().name(), "无名步法");
         assertEquals(book.getUnnamedProtection().name(), "无名强身");
-        book.addToBasic(SwordKungFu.builder().name("test").level(100).build());
+        book.addToBasic(SwordKungFu.builder().name("test").exp(0).build());
         assertNotNull(book.findKungFu(2, 1));
     }
 

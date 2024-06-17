@@ -23,11 +23,6 @@ public final class PlayerToggleKungFuEvent extends AbstractPlayerEvent {
     }
 
 
-    public PlayerToggleKungFuEvent(Player source, String name) {
-        this(source, name, null, false);
-    }
-
-
     public static PlayerToggleKungFuEvent enable(Player player, KungFu kungFu) {
         return new PlayerToggleKungFuEvent(player, kungFu.name(), kungFu.level(), false);
     }
@@ -36,7 +31,7 @@ public final class PlayerToggleKungFuEvent extends AbstractPlayerEvent {
         return new PlayerToggleKungFuEvent(player, kungFu.name(), null, false);
     }
 
-    public static PlayerToggleKungFuEvent disableQuietly(Player player, KungFu kungFu) {
+    public static PlayerToggleKungFuEvent disableNoTip(Player player, KungFu kungFu) {
         return new PlayerToggleKungFuEvent(player, kungFu.name(), null, true);
     }
 

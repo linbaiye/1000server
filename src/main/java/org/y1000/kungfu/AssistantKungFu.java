@@ -1,6 +1,6 @@
 package org.y1000.kungfu;
 
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@SuperBuilder
 public final class AssistantKungFu extends AbstractKungFu {
 
     private final boolean eightDirection;
@@ -23,6 +22,12 @@ public final class AssistantKungFu extends AbstractKungFu {
             );
 
     private static final Set<Direction> STRAIGHT = Set.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
+
+    @Builder
+    public AssistantKungFu(String name, int exp, boolean eightDirection) {
+        super(name, exp);
+        this.eightDirection = eightDirection;
+    }
 
     public Set<Coordinate> affectedCoordinates(Player player) {
         var direction = player.direction();

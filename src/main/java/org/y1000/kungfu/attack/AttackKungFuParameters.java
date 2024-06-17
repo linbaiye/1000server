@@ -3,7 +3,23 @@ package org.y1000.kungfu.attack;
 /**
  * Parameters that will never change and can be shared by all attack KungFu instances.
  */
-public interface AttackKungFuFixedParameters {
+public interface AttackKungFuParameters {
+
+    default int headDamage() {
+        return 1;
+    }
+
+    default int bodyDamage() {
+        return 1;
+    }
+
+    default int armDamage() {
+        return 1;
+    }
+
+    default int legDamage() {
+        return 1;
+    }
     int powerToSwing();
 
     int innerPowerToSwing();
@@ -14,9 +30,6 @@ public interface AttackKungFuFixedParameters {
 
     int lifeToSwing();
 
-    default int bodyDamage() {
-        return 1;
-    }
 
     default int attackSpeed() {
         return 100;
@@ -24,18 +37,6 @@ public interface AttackKungFuFixedParameters {
 
     default int avoidance() {
         return 0;
-    }
-
-    default int headDamage() {
-        return 1;
-    }
-
-    default int armDamage() {
-        return 1;
-    }
-
-    default int legDamage() {
-        return 1;
     }
 
     default int strikeSound() {

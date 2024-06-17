@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.TestingAttackKungFuParameters;
+import org.y1000.kungfu.TestingAttackKungFuParameters;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
@@ -29,6 +29,7 @@ import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.kungfu.attack.SwordKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
+import org.y1000.kungfu.protect.ProtectionParameters;
 import org.y1000.message.InputResponseMessage;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.PositionType;
@@ -157,7 +158,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void changeAttackKungFu_sameType() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(QuanfaKungFu.builder().name("test").level(100).build());
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(QuanfaKungFu.builder().name("test").exp(0).build());
         attachListener(builder);
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 1));
         var kungFuEvent = eventListener.dequeue(PlayerToggleKungFuEvent.class);
@@ -172,7 +173,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void changeAttackKungFu_differentTypeWhileAttacking() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(QuanfaKungFu.builder().name("test").parameters(new TestingAttackKungFuParameters()).level(100).build())
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(QuanfaKungFu.builder().name("test").parameters(new TestingAttackKungFuParameters()).exp(0).build())
                 .weapon(new Weapon("fist", AttackKungFuType.QUANFA)).inventory(inventory);
         attachListener(builder);
         player.setFightingEntity(createMonster(new Coordinate(1, 2)));
@@ -193,7 +194,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void unequipWeapon() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(QuanfaKungFu.builder().name("test").level(100).build())
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(QuanfaKungFu.builder().name("test").exp(0).build())
                 .weapon(new Weapon("fist", AttackKungFuType.QUANFA)).inventory(inventory);
         attachListener(builder);
         player.handleClientEvent(new ClientUnequipEvent(EquipmentType.WEAPON));
@@ -207,7 +208,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void unequipWeaponWhileAttacking() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(SwordKungFu.builder().name("test").level(100).parameters(new TestingAttackKungFuParameters()).build())
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(SwordKungFu.builder().name("test").exp(0).parameters(new TestingAttackKungFuParameters()).build())
                 .weapon(new Weapon("sword", AttackKungFuType.SWORD)).inventory(inventory);
         attachListener(builder);
         player.setFightingEntity(createMonster(new Coordinate(2, 2)));
@@ -242,7 +243,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void useProtectionWhenBreathingEnabled() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().breathKungFu(BreathKungFu.builder().name("breath").level(100).build());
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().breathKungFu(BreathKungFu.builder().name("breath").exp(0).build());
         attachListener(builder);
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 10));
         assertTrue(player.breathKungFu().isEmpty());
@@ -276,7 +277,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void useBreathKungFu_useDifferentOne() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().breathKungFu(BreathKungFu.builder().name("breath").level(100).build());
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().breathKungFu(BreathKungFu.builder().name("breath").exp(0).build());
         attachListener(builder);
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 9));
         assertTrue(player.breathKungFu().isPresent());
@@ -289,7 +290,7 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void useBreath_shouldDisableProtection() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().protectKungFu(ProtectKungFu.builder().name("prot").level(100).build());
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().protectKungFu(ProtectKungFu.builder().name("prot").exp(0).build());
         attachListener(builder);
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 9));
         assertTrue(player.protectKungFu().isEmpty());
@@ -307,8 +308,8 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void useAssistantKungFu() {
-        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("feng").level(100).build());
-        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("feng1").level(100).build());
+        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("feng").exp(0).build());
+        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("feng1").exp(0).build());
         player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
         var kungFuEvent = eventListener.removeFirst(PlayerToggleKungFuEvent.class);
         assertEquals(kungFuEvent.toPacket().getToggleKungFu().getName(), "feng");
@@ -383,4 +384,24 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
         assertEquals(0, player.outerPower());
     }
 
+    @Test
+    void updateProtectKungFu() {
+        ProtectionParameters parameters = Mockito.mock(ProtectionParameters.class);
+        player = playerBuilder().power(1).innateLife(2).innerPower(1).outerPower(1)
+                .protectKungFu(ProtectKungFu.builder().exp(0).parameters(parameters).name("test").build())
+                .build();
+        player.registerEventListener(eventListener);
+        when(parameters.innerPowerPer5Seconds()).thenReturn(2);
+        when(parameters.innerPowerToKeep()).thenReturn(1);
+        when(parameters.lifePer5Seconds()).thenReturn(3);
+        when(parameters.lifeToKeep()).thenReturn(2);
+        when(parameters.powerPer5Seconds()).thenReturn(1);
+        when(parameters.powerToKeep()).thenReturn(1);
+        player.update(5000);
+        assertEquals(1, player.currentLife());
+        assertEquals(0, player.innerPower());
+        assertTrue(player.protectKungFu().isEmpty());
+        assertNotNull(eventListener.removeFirst(PlayerToggleKungFuEvent.class));
+        assertNotNull(eventListener.removeFirst(CreatureSoundEvent.class));
+    }
 }

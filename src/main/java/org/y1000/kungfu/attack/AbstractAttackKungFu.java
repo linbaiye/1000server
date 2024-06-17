@@ -1,7 +1,6 @@
 package org.y1000.kungfu.attack;
 
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
@@ -20,9 +19,13 @@ import org.y1000.message.clientevent.ClientAttackEvent;
 import java.util.List;
 
 @Getter
-@SuperBuilder
 public abstract class AbstractAttackKungFu extends AbstractKungFu implements AttackKungFu {
 
+
+    protected AbstractAttackKungFu(String name, int exp, AttackKungFuParameters parameters) {
+        super(name, exp);
+        this.parameters = parameters;
+    }
 
     private record DamageMultiplier(int levelStart, int levelEnd, int multiplier) {
         public boolean contains(int skillLevel) {
@@ -54,13 +57,13 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     p^.rLifeData.damageBody + p^.rLifeData.damageBody * p^.rcSkillLevel div INI_SKILL_DIV_DAMAGE;
      */
 
-    private final AttackKungFuFixedParameters parameters;
+    private final AttackKungFuParameters parameters;
 
     protected abstract Logger logger();
 
 
 
-    private boolean usePower(PlayerImpl player) {
+    private boolean useResources(PlayerImpl player) {
         if (player.power() < parameters.powerToSwing()) {
             player.emitEvent(PlayerTextEvent.noPower(player));
             return false;
@@ -74,12 +77,9 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             return false;
         }
         int lifeToSwing = parameters.lifeToSwing();
-        if (player.currentLife() < lifeToSwing) {
+        if (player.currentLife() <= lifeToSwing) {
             player.emitEvent(PlayerTextEvent.insufficientLife(player));
             return false;
-        }
-        if (player.currentLife() == lifeToSwing) {
-            lifeToSwing -= 1;
         }
         player.consumeLife(lifeToSwing);
         player.consumeOuterPower(parameters.outerPowerToSwing());
@@ -117,7 +117,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             player.changeState(new PlayerWaitDistanceState(player.getStateMillis(State.COOLDOWN)));
             return;
         }
-        if (!usePower(player)) {
+        if (!useResources(player)) {
             player.changeState(new PlayerCooldownState(player.getStateMillis(State.COOLDOWN)));
             player.emitEvent(PlayerCooldownEvent.of(player));
             return;
@@ -154,8 +154,8 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         }
         Direction direction = event.direction();
         player.setFightingEntity(target);
-        player.disableFootKungFuQuietly();
-        player.disableBreathKungFuQuietly();
+        player.disableFootKungFuNoTip();
+        player.disableBreathKungNoTip();
         doAttack(player, direction, false);
         player.changeDirection(direction);
         player.emitEvent(new PlayerAttackEventResponse(player, event, true));

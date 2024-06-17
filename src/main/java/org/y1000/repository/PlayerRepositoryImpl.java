@@ -61,8 +61,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private KungFuBook loadKungFuBook() {
         KungFuBook kungFuBook = kungFuBookFactory.create();
-        kungFuBook.addToBasic(AssistantKungFu.builder().name("风灵旋").level(100).eightDirection(false).build());
-        kungFuBook.addToBasic(AssistantKungFu.builder().name("灵动八方").level(100).eightDirection(true).build());
+        kungFuBook.addToBasic(AssistantKungFu.builder().name("风灵旋").exp(0).eightDirection(false).build());
+        kungFuBook.addToBasic(AssistantKungFu.builder().name("灵动八方").exp(0).eightDirection(true).build());
         return kungFuBook;
     }
 

@@ -29,6 +29,10 @@ public final class KungFuSdb extends AbstractSdbReader {
         return getInt(name, "5Magic");
     }
 
+    public int get5Life(String name) {
+        return getInt(name, "5Life");
+    }
+
     public int getEEnergy(String name) {
         return getInt(name, "eEnergy");
     }
@@ -133,6 +137,10 @@ public final class KungFuSdb extends AbstractSdbReader {
 
     public String getSoundEnd(String name) {
         return get(name, "SoundEnd");
+    }
+
+    public String getSoundEvent(String name) {
+        return get(name, "SoundEvent");
     }
 
 

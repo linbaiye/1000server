@@ -3,6 +3,7 @@ package org.y1000.exp;
 
 public final class Experience {
 
+    public static final int DEFAULT_EXP = 10000;
     private final int level;
     private final int exp;
     private final int gap;

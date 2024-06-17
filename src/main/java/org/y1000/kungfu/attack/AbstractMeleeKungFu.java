@@ -1,10 +1,12 @@
 package org.y1000.kungfu.attack;
 
-import lombok.experimental.SuperBuilder;
 import org.slf4j.Logger;
 
-@SuperBuilder
 public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {
+
+    public AbstractMeleeKungFu(String name, int exp, AttackKungFuParameters parameters) {
+        super(name, exp, parameters);
+    }
 
     protected abstract Logger logger();
 

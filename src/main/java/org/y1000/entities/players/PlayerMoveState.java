@@ -19,12 +19,17 @@ public final class PlayerMoveState extends AbstractPlayerMoveState {
 
     @Override
     protected PlayerState rewindState(PlayerImpl player) {
-        return stateEnum() == State.ENFIGHT_WALK ? PlayerStillState.chillOut(player) : PlayerStillState.idle(player);
+        return idle(player);
     }
 
     @Override
     protected void onMoved(PlayerImpl player) {
-        player.changeState(rewindState(player));
+        player.changeState(idle(player));
+        player.footKungFu().ifPresent(footKungFu -> footKungFu.tryGainExp(player, player::emitEvent));
+    }
+
+    private PlayerState idle(PlayerImpl player) {
+        return stateEnum() == State.ENFIGHT_WALK ? PlayerStillState.chillOut(player) : PlayerStillState.idle(player);
     }
 
     public static PlayerMoveState moveBy(PlayerImpl player, State state, Direction direction) {

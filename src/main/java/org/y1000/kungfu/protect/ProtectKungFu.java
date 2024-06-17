@@ -1,26 +1,57 @@
 package org.y1000.kungfu.protect;
 
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import org.y1000.entities.players.Player;
+import org.y1000.kungfu.AbstractConsumingResourcesKungFu;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.KungFuType;
+import org.y1000.repository.KungFuBookRepositoryImpl;
 
-@SuperBuilder
-public final class ProtectKungFu extends AbstractKungFu {
+import java.util.List;
 
-    private final ProtectionFixedParameters parameters;
+public final class ProtectKungFu extends AbstractConsumingResourcesKungFu  {
+
+    private final ProtectionParameters parameters;
+
     private static final int INIT_SKILL_DIV_ARMOR = 5000;
 
+    private record ArmorMultiplier(int levelStart, int levelEnd, int multiplier) {
+        public boolean contains(int skillLevel) {
+            return levelEnd >= skillLevel && levelStart <= skillLevel;
+        }
+
+        public int multiply(int armor) {
+            return armor + multiplier * armor / 100;
+        }
+    }
+
+    private static final List<ArmorMultiplier> ARMOR_MULTIPLIERS = List.of(
+            new ArmorMultiplier(0,4999,0),
+            new ArmorMultiplier(5000,6999,5),
+            new ArmorMultiplier(7000,7999,6),
+            new ArmorMultiplier(8000,8999,8),
+            new ArmorMultiplier(9000,9998,10),
+            new ArmorMultiplier(9999,9999,12)
+    );
+
+
+    @Builder
+    public ProtectKungFu(String name, int exp, ProtectionParameters parameters) {
+        super(name, exp, parameters, parameters);
+        this.parameters = parameters;
+        resetTimer();
+    }
 
     public int bodyArmor() {
-        return applyLevelToArmor(parameters.bodyArmor());
+        return computeLevelToArmor(parameters.bodyArmor());
     }
 
     public int headArmor() {
-        return applyLevelToArmor(parameters.headArmor());
+        return computeLevelToArmor(parameters.headArmor());
     }
 
     public int armArmor() {
-        return applyLevelToArmor(parameters.armArmor());
+        return computeLevelToArmor(parameters.armArmor());
     }
 
     public String disableSound() {
@@ -32,13 +63,19 @@ public final class ProtectKungFu extends AbstractKungFu {
     }
 
     public int legArmor() {
-        return applyLevelToArmor(parameters.legArmor());
+        return computeLevelToArmor(parameters.legArmor());
     }
 
 
-    private int applyLevelToArmor(int armor) {
-        return armor + armor * level() / INIT_SKILL_DIV_ARMOR;
+    private int computeLevelToArmor(int armor) {
+        var val = armor + armor * level() / INIT_SKILL_DIV_ARMOR;
+        return ARMOR_MULTIPLIERS.stream()
+                .filter(m -> m.contains(level()))
+                .findAny()
+                .map(m -> m.multiply(val))
+                .orElse(val);
     }
+
 
     @Override
     public KungFuType kungFuType() {
@@ -52,6 +89,7 @@ public final class ProtectKungFu extends AbstractKungFu {
                 + "bodyArmor:" + bodyArmor()  + ","
                 + "headArmor:" + headArmor()   + ","
                 + "armArmor:" + armArmor()   + ","
-                + "legArmor:" + legArmor()   + "}";
+                + "legArmor:" + legArmor()   + "}"
+                + "5SecLife:" +   parameters.lifePer5Seconds() + "}";
     }
 }

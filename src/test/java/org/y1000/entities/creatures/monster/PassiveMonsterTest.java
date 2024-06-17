@@ -106,25 +106,25 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture{
         verify(attacker).gainAttackExp(44);
     }
 
-    @Test
-    void name() {
-        MonsterFactoryImpl monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonsterSdb.INSTANCE);
-        RealmMap mock = Mockito.mock(RealmMap.class);
-        AbstractMonster monster = monsterFactory.createMonster("狗", 1L, mock, Coordinate.xy(1, 1));
-        KungFuFactory kungFuFactory = new KungFuBookRepositoryImpl();
-        AttackKungFu kungFu = kungFuFactory.createAttackKungFu("无名刀法");
-        //159, 213, 262, 309.
-        int time = 1;
-        for (int i = 0; i < time; i++) {
-            var damagedLife = Math.max(kungFu.bodyDamage() - monster.bodyArmor(), 1);
-            var n = monster.maxLife() / damagedLife;
-            var DEFAULT_EXP = 10000;
-            var exp = n > 15 ? DEFAULT_EXP : DEFAULT_EXP * n * n / 15 * 15;
-            kungFu.gainExp(exp);
-            if (i == time - 1) {
-                System.out.println(kungFu.level());
-                System.out.println(kungFu.bodyDamage());
-            }
-        }
-    }
+//    @Test
+//    void name() {
+//        MonsterFactoryImpl monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonsterSdb.INSTANCE);
+//        RealmMap mock = Mockito.mock(RealmMap.class);
+//        AbstractMonster monster = monsterFactory.createMonster("狗", 1L, mock, Coordinate.xy(1, 1));
+//        KungFuFactory kungFuFactory = new KungFuBookRepositoryImpl();
+//        AttackKungFu kungFu = kungFuFactory.createAttackKungFu("无名刀法");
+//        //159, 213, 262, 309.
+//        int time = 1;
+//        for (int i = 0; i < time; i++) {
+//            var damagedLife = Math.max(kungFu.bodyDamage() - monster.bodyArmor(), 1);
+//            var n = monster.maxLife() / damagedLife;
+//            var DEFAULT_EXP = 10000;
+//            var exp = n > 15 ? DEFAULT_EXP : DEFAULT_EXP * n * n / 15 * 15;
+//            kungFu.gainExp(exp);
+//            if (i == time - 1) {
+//                System.out.println(kungFu.level());
+//                System.out.println(kungFu.bodyDamage());
+//            }
+//        }
+//    }
 }

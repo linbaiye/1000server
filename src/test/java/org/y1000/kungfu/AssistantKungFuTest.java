@@ -21,7 +21,7 @@ class AssistantKungFuTest extends AbstractUnitTestFixture  {
     }
 
     private void create(boolean eight) {
-        assistantKungFu = AssistantKungFu.builder().name("5").level(100).eightDirection(eight).build();
+        assistantKungFu = AssistantKungFu.builder().name("5").exp(0).eightDirection(eight).build();
     }
 
     @Test

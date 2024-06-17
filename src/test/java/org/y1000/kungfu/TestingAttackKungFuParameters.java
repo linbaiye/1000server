@@ -1,8 +1,8 @@
-package org.y1000;
+package org.y1000.kungfu;
 
-import org.y1000.kungfu.attack.AttackKungFuFixedParameters;
+import org.y1000.kungfu.attack.AttackKungFuParameters;
 
-public class TestingAttackKungFuParameters implements AttackKungFuFixedParameters {
+public class TestingAttackKungFuParameters implements AttackKungFuParameters {
 
     public TestingAttackKungFuParameters(int bodyDamage) {
         this.bodyDamage = bodyDamage;

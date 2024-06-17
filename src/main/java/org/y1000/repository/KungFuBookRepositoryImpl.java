@@ -4,7 +4,7 @@ import org.y1000.kungfu.*;
 import org.y1000.kungfu.attack.*;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
-import org.y1000.kungfu.protect.ProtectionFixedParametersImpl;
+import org.y1000.kungfu.protect.ProtectionParametersImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,73 +20,85 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
 
 
     private FootKungFu createFootKungFu(String name) {
-        return FootKungFu.builder().name(name).level(100).build();
-    }
-
-
-    private <C extends AbstractAttackKungFu, B extends AbstractAttackKungFu.AbstractAttackKungFuBuilder<C, B>>
-        void setAttackKungFuProperties(String name, AbstractAttackKungFu.AbstractAttackKungFuBuilder<C, B> builder) {
-        /*
-        Recovery,KeepRecovery,Avoid,accuracy,DamageBody,DamageHead,DamageArm,DamageLeg,DamageEnergy,ArmorBody,ArmorHead,ArmorArm,ArmorLeg,
-         */
-        builder.name(name);
-        builder.level(100);
-        builder.parameters(new AttackKungFuFixedParametersImpl(name, kungFuSdb));
+        return FootKungFu.builder()
+                .name(name)
+                .exp(0)
+                .sound(kungFuSdb.getSoundEvent(name))
+                .keepParameters(new DefaultKeepParameters(name, kungFuSdb))
+                .fiveSecondsParameters(new DefaultFiveSecondParameters(name, kungFuSdb))
+                .build();
     }
 
 
     private SwordKungFu createSword(String name) {
-        SwordKungFu.SwordKungFuBuilder<?, ?> builder = SwordKungFu.builder();
-        setAttackKungFuProperties(name, builder);
-        return builder.build();
+        return SwordKungFu.builder()
+                .name(name)
+                .exp(0)
+                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .build();
     }
 
     private QuanfaKungFu quanfaKungFu(String name) {
-        var builder =  QuanfaKungFu.builder();
-        setAttackKungFuProperties(name, builder);
-        return builder.build();
+        return QuanfaKungFu.builder()
+                .name(name)
+                .exp(0)
+                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .build();
     }
 
     private BladeKungFu bladeKungFu(String name) {
-        var builder = BladeKungFu.builder();
-        setAttackKungFuProperties(name, builder);
-        return builder.build();
+        return BladeKungFu.builder()
+                .name(name)
+                .exp(0)
+                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .build();
     }
 
     private SpearKungFu spearKungFu(String name) {
-        var builder = SpearKungFu.builder();
-        setAttackKungFuProperties(name, builder);
-        return builder.build();
+        return SpearKungFu.builder()
+                .name(name)
+                .exp(0)
+                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .build();
     }
 
     private AxeKungFu axeKungFu(String name) {
-        var builder = AxeKungFu.builder();
-        setAttackKungFuProperties(name, builder);
-        return builder.build();
+        return AxeKungFu.builder()
+                .name(name)
+                .exp(0)
+                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .build();
     }
 
     private BowKungFu bowKungFu(String name) {
-        var builder = BowKungFu.builder();
-        setAttackKungFuProperties(name, builder);
-        return builder.build();
+        return BowKungFu.builder()
+                .name(name)
+                .exp(0)
+                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .build();
     }
 
 
     private ThrowKungFu throwKungFu(String name) {
-        var builder = ThrowKungFu.builder();
-        setAttackKungFuProperties(name, builder);
-        return builder.build();
+        return ThrowKungFu.builder()
+                .name(name)
+                .exp(0)
+                .parameters(new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb)))
+                .build();
     }
 
 
     private BreathKungFu breathKungFu(String name) {
-        return BreathKungFu.builder().name(name).level(100).build();
+        return BreathKungFu.builder().name(name).exp(100).build();
     }
 
     private ProtectKungFu protectKungFu(String name) {
         return ProtectKungFu.builder()
                 .name(name)
-                .parameters(new ProtectionFixedParametersImpl(name, kungFuSdb))
+                .parameters(new ProtectionParametersImpl(name, kungFuSdb,
+                        new DefaultKeepParameters(name, kungFuSdb),
+                        new DefaultArmorParameters(name, kungFuSdb),
+                        new DefaultFiveSecondParameters(name, kungFuSdb)))
                 .build();
     }
 
@@ -104,7 +116,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             case FOOT -> createFootKungFu(name);
             case BREATHING -> breathKungFu(name);
             case PROTECTION -> protectKungFu(name);
-            case ASSISTANT ->  AssistantKungFu.builder().name(name).level(100).build();
+            case ASSISTANT ->  AssistantKungFu.builder().name(name).exp(0).build();
         };
     }
 
@@ -120,5 +132,10 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     @Override
     public AttackKungFu createAttackKungFu(String name) {
         return (AttackKungFu) create(name);
+    }
+
+    @Override
+    public ProtectKungFu createProtection(String name) {
+        return protectKungFu(name);
     }
 }

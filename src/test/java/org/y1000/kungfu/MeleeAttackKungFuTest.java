@@ -2,7 +2,6 @@ package org.y1000.kungfu;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.y1000.TestingAttackKungFuParameters;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
@@ -38,7 +37,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
 
     private TestingEventListener playerEventListener;
 
-    private static class NoCostParameters implements AttackKungFuFixedParameters {
+    private static class NoCostParameters implements AttackKungFuParameters {
 
         @Override
         public int powerToSwing() {
@@ -66,7 +65,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         }
     }
 
-    private static class TwoCostParameters implements AttackKungFuFixedParameters {
+    private static class TwoCostParameters implements AttackKungFuParameters {
 
         @Override
         public int powerToSwing() {
@@ -95,11 +94,11 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     }
 
 
-    private QuanfaKungFu createKungFu(AttackKungFuFixedParameters parameters) {
+    private QuanfaKungFu createKungFu(AttackKungFuParameters parameters) {
         return QuanfaKungFu.builder()
                 .parameters(parameters)
                 .name("test")
-                .level(100)
+                .exp(0)
                 .build();
     }
 
@@ -138,7 +137,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     @Test
     void startAttackAssistantEnabled() {
         PassiveMonster monster =  createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
-        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("test").level(100).eightDirection(true).build());
+        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("test").exp(0).eightDirection(true).build());
         player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
         kungFu.startAttack(player, clientAttackEvent, monster);
         assertEquals(player.getFightingEntity(), monster);
@@ -243,9 +242,11 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     void bodyDamage() {
         kungFu = createKungFu(new TestingAttackKungFuParameters(207));
         assertEquals(211, kungFu.bodyDamage());
-        kungFu = QuanfaKungFu.builder().name("无名刀法").parameters(new TestingAttackKungFuParameters(207)).level(9999).build();
+        //99.98
+        kungFu = QuanfaKungFu.builder().name("无名刀法").parameters(new TestingAttackKungFuParameters(207)).exp(1084540874).build();
         assertEquals(775, kungFu.bodyDamage());
-        var spearKungFu = SpearKungFu.builder().name("无名枪术").parameters(new TestingAttackKungFuParameters(230)).level(9998).build();
+        // 99.99
+        var spearKungFu = SpearKungFu.builder().name("无名枪术").parameters(new TestingAttackKungFuParameters(230)).exp(1083942874).build();
         assertEquals(826, spearKungFu.bodyDamage());
     }
 
@@ -260,15 +261,18 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     void attackSpeed() {
         kungFu = createKungFu(new TestingAttackKungFuParameters(207).setAttackSpeed(80));
         assertEquals(80, kungFu.attackSpeed());
-        var sword = SwordKungFu.builder().parameters(new TestingAttackKungFuParameters().setAttackSpeed(60)).level(3872).build();
+        // 38.74
+        var sword = SwordKungFu.builder().parameters(new TestingAttackKungFuParameters().setAttackSpeed(60)).exp(1365874).build();
         assertEquals(51, sword.attackSpeed());
-        sword = SwordKungFu.builder().parameters(new TestingAttackKungFuParameters().setAttackSpeed(60)).level(9999).build();
+        // 99.99
+        sword = SwordKungFu.builder().parameters(new TestingAttackKungFuParameters().setAttackSpeed(60)).exp(1084540874).build();
         assertEquals(37, sword.attackSpeed());
     }
 
+
     @Test
     void halDamage() {
-        var blade = BladeKungFu.builder().parameters(new TestingAttackKungFuParameters().setHeadDamage(136).setArmDamage(136).setLegDamage(136)).level(100)
+        var blade = BladeKungFu.builder().parameters(new TestingAttackKungFuParameters().setHeadDamage(136).setArmDamage(136).setLegDamage(136)).exp(0)
                 .build();
         assertEquals(138, blade.legDamage());
         assertEquals(138, blade.armDamage());

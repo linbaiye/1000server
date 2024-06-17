@@ -13,24 +13,24 @@ import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.fight.PlayerWaitDistanceState;
+import org.y1000.exp.Experience;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.kungfu.AssistantKungFu;
-import org.y1000.kungfu.KungFu;
-import org.y1000.kungfu.KungFuBook;
+import org.y1000.kungfu.*;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.*;
-import org.y1000.kungfu.FootKungFu;
 import org.y1000.message.*;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player {
@@ -272,18 +272,26 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return getFightingEntity() != null;
     }
 
-    public void disableFootKungFuQuietly() {
+    public void disableFootKungFuNoTip() {
         if (footKungfu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, footKungfu));
+            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, footKungfu));
         }
         footKungfu = null;
     }
 
-    public void disableBreathKungFuQuietly() {
+    public void disableBreathKungNoTip() {
         if (breathKungFu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, breathKungFu));
+            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, breathKungFu));
         }
         breathKungFu = null;
+    }
+
+    private void disableProtectionNoTip() {
+        if (protectKungFu != null) {
+            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
+            emitEvent(new CreatureSoundEvent(this, protectKungFu.disableSound()));
+            this.protectKungFu = null;
+        }
     }
 
 
@@ -335,7 +343,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
 
     private void toggleProtectionKungFu(ProtectKungFu newProtection) {
-        disableBreathKungFuQuietly();
+        disableBreathKungNoTip();
         if (protectKungFu != null && protectKungFu.name().equals(newProtection.name())) {
             emitEvent(PlayerToggleKungFuEvent.disable(this, protectKungFu));
             emitEvent(new CreatureSoundEvent(this, protectKungFu.disableSound()));
@@ -343,6 +351,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             return;
         }
         protectKungFu = newProtection;
+        protectKungFu.resetTimer();
         emitEvent(PlayerToggleKungFuEvent.enable(this, protectKungFu));
         emitEvent(new CreatureSoundEvent(this, protectKungFu.enableSound()));
     }
@@ -363,7 +372,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
         if (stateEnum() == State.SIT) {
             if (this.protectKungFu != null) {
-                emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, protectKungFu));
+                emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
                 this.protectKungFu = null;
             }
             this.breathKungFu = newBreath;
@@ -395,7 +404,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             changeState(PlayerStillState.idle(this));
             emitEvent(new SetPositionEvent(this, direction(), coordinate()));
         }
-        disableBreathKungFuQuietly();
+        disableBreathKungNoTip();
         this.footKungfu = newKungFu;
         emitEvent(new PlayerToggleKungFuEvent(this, this.footKungfu));
     }
@@ -413,9 +422,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
 
     private void useKungFu(KungFu kungFu) {
-        if (stateEnum() == State.DIE) {
-            return;
-        }
         if (kungFu instanceof FootKungFu newKungFu) {
             toggleFootKungFu(newKungFu);
         } else if (kungFu instanceof ProtectKungFu newProtectKungFu) {
@@ -436,7 +442,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             return;
         }
         if (footKungfu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableQuietly(this, footKungfu));
+            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, footKungfu));
             footKungfu = null;
         }
         clearFightingEntity();
@@ -453,9 +459,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     private void startAttack(ClientAttackEvent event) {
-        if (stateEnum() == State.DIE) {
-            return;
-        }
         realm.findInsight(this, event.entityId())
                 .ifPresent(target -> attackKungFu.startAttack(this,event, target));
     }
@@ -555,17 +558,16 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
 
     private void onKilled() {
-        disableFootKungFuQuietly();
+        disableFootKungFuNoTip();
         changeState(PlayerDeadState.die(this));
         emitEvent(new CreatureDieEvent(this));
-        log().debug("Player dead.");
     }
 
     private void gainProtectionExp(int bodyDamage) {
         if (protectKungFu == null) {
             return;
         }
-        var exp = DEFAULT_EXP - damagedLifeToExp(bodyDamage);
+        var exp = Experience.DEFAULT_EXP - damagedLifeToExp(bodyDamage);
         if (protectKungFu.gainExp(exp)) {
             emitEvent(new PlayerGainExpEvent(this, protectKungFu.name(), protectKungFu.level()));
         }
@@ -583,9 +585,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (currentLife() > 0) {
             state().moveToHurtCoordinate(this);
             State afterHurtState = state().decideAfterHurtState();
-            gainProtectionExp(bodyDamage);
             changeState(PlayerHurtState.hurt(this, afterHurtState));
             emitEvent(new CreatureHurtEvent(this, afterHurtState));
+            gainProtectionExp(bodyDamage);
         } else {
             onKilled();
         }
@@ -721,10 +723,27 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
     }
 
+
+    private void updateKungFuAndCheck(AbstractConsumingResourcesKungFu kungFu,
+                                      int delta,
+                                      Action action) {
+        if (kungFu != null && kungFu.useResources(this, delta)) {
+            if (!kungFu.canKeep(this)) {
+                action.invoke();
+            }
+        }
+    }
+
+    private void updateKungFu(int delta) {
+        updateKungFuAndCheck(protectKungFu, delta, this::disableProtectionNoTip);
+        updateKungFuAndCheck(footKungfu, delta, this::disableFootKungFuNoTip);
+    }
+
     @Override
     public void update(int delta) {
         cooldown(delta);
         regenerate(delta);
+        updateKungFu(delta);
         state().update(this, delta);
     }
 
@@ -828,7 +847,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
         currentLife = Math.max(currentLife - amount, 0);
         if (currentLife == 0) {
-            // die fool.
+            onKilled();
         }
     }
 
@@ -933,6 +952,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public Optional<String> hurtSound() {
+        if (ThreadLocalRandom.current().nextInt(100) < 40) {
+            return Optional.empty();
+        }
         return Optional.of(age() < 6000 ?
                 (isMale() ? "2002" : "2202") :
                 (isMale() ? "2004" : "2204") );
@@ -941,6 +963,9 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public Optional<String> dieSound() {
+        if (ThreadLocalRandom.current().nextInt(100) < 40) {
+            return Optional.empty();
+        }
         return Optional.of(age() < 6000 ?
                 (isMale() ? "2003" : "2203") :
                 (isMale() ? "2005" : "2205") );
