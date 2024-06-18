@@ -2,9 +2,11 @@ package org.y1000.entities.players.fight;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.Projectile;
+import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.PlayerProjectile;
+import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureShootEvent;
+import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.realm.Realm;
 
@@ -12,10 +14,20 @@ import org.y1000.realm.Realm;
 public final class PlayerAttackState extends AbstractFightingState {
 
     private final State attackingState;
+    private final PhysicalEntity rangedTarget;
+    private final Damage damage;
+    private final int rangedHit;
 
-    public PlayerAttackState(int totalMillis, State attackingState) {
+
+    private PlayerAttackState(int totalMillis, State attackingState,
+                              PhysicalEntity target,
+                              Damage damage,
+                              int rangedHit) {
         super(totalMillis);
         this.attackingState = attackingState;
+        this.rangedTarget = target;
+        this.damage = damage;
+        this.rangedHit = rangedHit;
     }
 
     @Override
@@ -29,9 +41,9 @@ public final class PlayerAttackState extends AbstractFightingState {
         if (!elapse(delta)) {
             return;
         }
-        if (player.hasFightingEntity() && player.attackKungFu().isRanged()) {
-            int dist = player.coordinate().directDistance(player.getFightingEntity().coordinate());
-            player.emitEvent(new CreatureShootEvent(new Projectile(player, player.getFightingEntity(), dist * 30)));
+        if (rangedTarget != null) {
+            int dist = player.coordinate().directDistance(rangedTarget.coordinate());
+            player.emitEvent(new PlayerShootEvent(new PlayerProjectile(player, rangedTarget, dist * 30, damage, rangedHit)));
         }
         player.attackKungFu().attackAgain(player);
     }
@@ -44,6 +56,7 @@ public final class PlayerAttackState extends AbstractFightingState {
     public static PlayerAttackState of(PlayerImpl player) {
         State state = player.attackKungFu().randomAttackState();
         int stateMillis = Math.min(player.getStateMillis(state), player.attackSpeed() * Realm.STEP_MILLIS);
-        return new PlayerAttackState(stateMillis, state);
+        var rangedTarget = player.attackKungFu().isRanged() ? player.getFightingEntity() : null;
+        return new PlayerAttackState(stateMillis, state, rangedTarget, player.damage(), player.hit());
     }
 }

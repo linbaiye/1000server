@@ -4,18 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.entities.players.event.*;
+import org.y1000.item.StackItem;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureSoundEvent;
-import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
-import org.y1000.entities.players.event.PlayerCooldownEvent;
-import org.y1000.entities.players.event.PlayerSitDownEvent;
-import org.y1000.entities.players.event.PlayerToggleKungFuEvent;
-import org.y1000.entities.players.event.PlayerUnequipEvent;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.inventory.Inventory;
@@ -33,10 +30,7 @@ import org.y1000.kungfu.protect.ProtectionParameters;
 import org.y1000.message.InputResponseMessage;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.PositionType;
-import org.y1000.message.clientevent.ClientDoubleClickSlotEvent;
-import org.y1000.message.clientevent.ClientMovementEvent;
-import org.y1000.message.clientevent.ClientToggleKungFuEvent;
-import org.y1000.message.clientevent.ClientUnequipEvent;
+import org.y1000.message.clientevent.*;
 import org.y1000.message.clientevent.input.RightMouseClick;
 import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
@@ -45,22 +39,21 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @Slf4j
-class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
-
-    private PlayerImpl player;
-
-    private TestingEventListener eventListener;
+class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     private Inventory inventory;
 
     @BeforeEach
-    public void setup() {
-        inventory = new Inventory();
-        attachListener(playerBuilder().inventory(inventory));
+    public void setUp() {
+        setup();
+        inventory = player.inventory();
     }
 
 
@@ -403,5 +396,29 @@ class PlayerImplTest extends AbstractMonsterUnitTestFixture  {
         assertTrue(player.protectKungFu().isEmpty());
         assertNotNull(eventListener.removeFirst(PlayerToggleKungFuEvent.class));
         assertNotNull(eventListener.removeFirst(CreatureSoundEvent.class));
+    }
+
+    @Test
+    void bowAttack() {
+        PassiveMonster monster = createMonster(player.coordinate().move(2, 0));
+        when(mockedRealm.findInsight(any(PhysicalEntity.class), any(Long.class))).thenReturn(Optional.of(monster));
+
+        player.inventory().add(new Weapon("bow", AttackKungFuType.BOW));
+        enableBowKungFu();
+        // long enough to clean cooldown frozen because of equipping bow.
+        player.update(100000);
+
+        player.handleClientEvent(new ClientAttackEvent(1, monster.id(), State.BOW, Direction.RIGHT));
+        // no ammo.
+        assertTrue(player.state() instanceof PlayerCooldownState);
+        PlayerTextEvent event = eventListener.removeFirst(PlayerTextEvent.class);
+        assertEquals(PlayerTextEvent.TextType.OUT_OF_AMMO.value(), event.toPacket().getText().getType());
+
+        player.inventory().add(new StackItem("箭", 1));
+        eventListener.clearEvents();
+        player.update(player.getStateMillis(State.COOLDOWN));
+        assertTrue(player.state() instanceof PlayerAttackState);
+        assertNotNull(eventListener.removeFirst(PlayerAttackEvent.class));
+        assertNotNull(eventListener.removeFirst(UpdateInventorySlotEvent.class));
     }
 }

@@ -7,6 +7,7 @@ import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureSoundEvent;
+import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerStillState;
 import org.y1000.entities.players.event.*;
@@ -62,8 +63,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     protected abstract Logger logger();
 
 
-
-    private boolean useResources(PlayerImpl player) {
+    protected boolean useAttributeResources(PlayerImpl player) {
         if (player.power() < parameters.powerToSwing()) {
             player.emitEvent(PlayerTextEvent.noPower(player));
             return false;
@@ -88,6 +88,8 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         player.emitEvent(new PlayerAttributeEvent(player));
         return true;
     }
+
+    protected abstract boolean useResources(PlayerImpl player);
 
 
     private String computeSound(int nr) {

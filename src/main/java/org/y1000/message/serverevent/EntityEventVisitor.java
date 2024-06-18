@@ -38,7 +38,7 @@ public interface EntityEventVisitor {
         visit((EntityEvent) event);
     }
 
-    default void visit(CreatureShootEvent event) {
+    default void visit(PlayerShootEvent event) {
         visit((EntityEvent) event);
     }
 

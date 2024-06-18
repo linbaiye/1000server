@@ -18,16 +18,16 @@ class StackItemTest {
 
     @Test
     void drop() {
-        stackItem.drop(1);
+        stackItem.decrease(1);
         assertEquals(14, stackItem.number());
-        stackItem.drop(-10);
+        stackItem.decrease(-10);
         assertEquals(14, stackItem.number());
-        stackItem.drop(0);
+        stackItem.decrease(0);
         assertEquals(14, stackItem.number());
-        stackItem.drop(15);
+        stackItem.decrease(15);
         assertEquals(0, stackItem.number());
         setUp();
-        stackItem.drop(15);
+        stackItem.decrease(15);
         assertEquals(0, stackItem.number());
     }
 

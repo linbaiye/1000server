@@ -34,6 +34,8 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
         NOT_ENOUGH_ARM_LIFE(10),
 
+        OUT_OF_AMMO(11),
+
         CUSTOM(1000000);
         ;
 
@@ -115,5 +117,9 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
     public static PlayerTextEvent armLifeTooLowToExp(Player player) {
         return new PlayerTextEvent(player, null, TextType.NOT_ENOUGH_ARM_LIFE);
+    }
+
+    public static PlayerTextEvent outOfAmmo(Player player) {
+        return new PlayerTextEvent(player, null, TextType.OUT_OF_AMMO);
     }
 }

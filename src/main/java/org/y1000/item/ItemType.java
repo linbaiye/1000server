@@ -6,6 +6,7 @@ public enum ItemType implements ValueEnum  {
     EQUIPMENT(6),
 
     ARROW(7),
+    STACK(8),
 
             ;
 

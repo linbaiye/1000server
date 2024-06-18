@@ -14,6 +14,7 @@ import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.clientevent.ClientDropItemEvent;
 import org.y1000.message.clientevent.ClientInventoryEvent;
 import org.y1000.message.clientevent.ClientSwapInventoryEvent;
+import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.util.UnaryAction;
 
 import java.util.*;
@@ -75,6 +76,7 @@ public final class Inventory {
                 .findFirst()
                 .map(StackItem.class::cast);
     }
+
 
 
     public int add(Item item) {
@@ -143,6 +145,7 @@ public final class Inventory {
                 .findFirst();
     }
 
+
     public Optional<Weapon> findWeapon(AttackKungFuType type) {
         Objects.requireNonNull(type, "type can't be null.");
         return findFirst(weapon -> weapon.kungFuType() == type, Weapon.class);
@@ -158,6 +161,9 @@ public final class Inventory {
         return 0;
     }
 
+    public boolean contains(String name) {
+        return items.values().stream().anyMatch(item -> item.name().equals(name));
+    }
 
     private void assertRange(int slot){
         Validate.isTrue(slot >= 1 && slot <= maxCapacity(), "Slot out of range.");
@@ -173,7 +179,7 @@ public final class Inventory {
         if (stackItem.number() < number) {
             return false;
         }
-        stackItem.drop(number);
+        stackItem.decrease(number);
         if (stackItem.number() == 0) {
             items.remove(slot);
         }
@@ -215,6 +221,28 @@ public final class Inventory {
                     item instanceof StackItem ? dropItemEvent.number() : null, numberLeft);
             eventSender.invoke(event);
         }
+    }
+
+    public boolean consumeStackItem(Player player,
+                                    String name,
+                                    UnaryAction<? super PlayerEvent> eventSender) {
+        Integer consumedSlot = null;
+        boolean delete = false;
+        for (Integer slot : items.keySet()) {
+            if (items.get(slot).name().equals(name) &&
+                    items.get(slot) instanceof StackItem stackItem) {
+                delete = stackItem.decrease(1) == 0;
+                consumedSlot = slot;
+                break;
+            }
+        }
+        if (delete) {
+            items.remove(consumedSlot);
+            eventSender.invoke(UpdateInventorySlotEvent.remove(player, consumedSlot));
+        } else if (consumedSlot != null) {
+            eventSender.invoke(UpdateInventorySlotEvent.update(player, consumedSlot, getItem(consumedSlot)));
+        }
+        return consumedSlot != null;
     }
 
 

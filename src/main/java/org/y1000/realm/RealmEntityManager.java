@@ -20,7 +20,7 @@ final class RealmEntityManager implements EntityEventListener,
 
     private final RelevantScopeManager scopeManager = new RelevantScopeManager();
 
-    private final Set<Projectile> projectiles = new HashSet<>();
+    private final Set<PlayerProjectile> projectiles = new HashSet<>();
 
     private final Map<Player, Connection> playerConnectionMap = new HashMap<>(100);
 
@@ -170,8 +170,9 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
-    public void visit(CreatureShootEvent event) {
+    public void visit(PlayerShootEvent event) {
         projectiles.add(event.projectile());
+        notifyVisiblePlayersAndSelf(event.source(), event);
     }
 
     @Override
@@ -306,8 +307,8 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     private void updateProjectiles(int delta) {
-        for (Iterator<Projectile> iterator = projectiles.iterator(); iterator.hasNext();) {
-            Projectile projectile = iterator.next();
+        for (Iterator<PlayerProjectile> iterator = projectiles.iterator(); iterator.hasNext();) {
+            PlayerProjectile projectile = iterator.next();
             try {
                 if (projectile.update(delta)) {
                     iterator.remove();

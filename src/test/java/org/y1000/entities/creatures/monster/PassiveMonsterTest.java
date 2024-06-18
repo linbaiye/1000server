@@ -6,26 +6,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Projectile;
+import org.y1000.entities.PlayerProjectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.monster.fight.MonsterFightCooldownState;
 import org.y1000.entities.creatures.monster.fight.MonsterFightIdleState;
 import org.y1000.entities.players.Player;
-import org.y1000.kungfu.KungFuFactory;
-import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.realm.Realm;
-import org.y1000.realm.RealmMap;
-import org.y1000.repository.KungFuBookRepositoryImpl;
-import org.y1000.sdb.ActionSdb;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import org.y1000.sdb.*;
 
 class PassiveMonsterTest extends AbstractMonsterUnitTestFixture{
 
@@ -56,7 +50,7 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture{
     @Test
     void getHurtChangeTarget() {
         player = playerBuilder().coordinate(monster.coordinate().move(2, 2)).build();
-        Projectile projectile = Projectile.builder().target(monster).shooter(player).flyingMillis(10).build();
+        PlayerProjectile projectile = PlayerProjectile.builder().target(monster).shooter(player).damage(new Damage(1, 1,1,1)).flyingMillis(10).build();
         monster.attackedBy(projectile);
         assertEquals(player, monster.getFightingEntity());
         var player1 = playerBuilder().coordinate(monster.coordinate().moveBy(Direction.LEFT)).build();
@@ -106,7 +100,16 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture{
         verify(attacker).gainAttackExp(44);
     }
 
-//    @Test
+    @Test
+    void givePlayerRangedExp() {
+        Player attacker = Mockito.mock(Player.class);
+        monster = monsterBuilder().life(10000).avoidance(0).armor(1).build();
+        PlayerProjectile projectile = new PlayerProjectile(attacker, monster, 100, new Damage(1000, 1,1,1), 100);
+        monster.attackedBy(projectile);
+        verify(attacker).gainRangedAttackExp(any(Integer.class));
+    }
+
+    //    @Test
 //    void name() {
 //        MonsterFactoryImpl monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonsterSdb.INSTANCE);
 //        RealmMap mock = Mockito.mock(RealmMap.class);

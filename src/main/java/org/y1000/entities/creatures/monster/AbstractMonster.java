@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.monster;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Projectile;
+import org.y1000.entities.PlayerProjectile;
 import org.y1000.entities.attribute.AttributeProvider;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.attribute.EmptyAttributeProvider;
@@ -24,6 +24,7 @@ import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
+import org.y1000.util.UnaryAction;
 
 import java.util.Map;
 import java.util.Optional;
@@ -174,16 +175,15 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         return true;
     }
 
-    @Override
-    public boolean attackedBy(Player attacker) {
-        if (!state().attackable() || randomAvoidance(attacker.hit())) {
+    private boolean attackedByPlayer(Player attacker, int bodyDamage, int hit, UnaryAction<Integer> gainExpAction) {
+        if (!state().attackable() || randomAvoidance(hit)) {
             return false;
         }
         cooldownRecovery();
-        var damagedLife = Math.max(attacker.damage().bodyDamage() - bodyArmor(), 1);
+        var damagedLife = Math.max(bodyDamage - bodyArmor(), 1);
         currentLife = Math.max(currentLife - damagedLife, 0);
         var exp = damagedLifeToExp(damagedLife);
-        attacker.gainAttackExp(exp);
+        gainExpAction.invoke(exp);
         if (currentLife() > 0) {
             state().moveToHurtCoordinate(this);
             State afterHurtState = state().decideAfterHurtState();
@@ -199,6 +199,12 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
             clearFightingEntity();
         }
         return true;
+    }
+
+
+    @Override
+    public boolean attackedBy(Player attacker) {
+        return attackedByPlayer(attacker, attacker.damage().bodyDamage(), attacker.hit(), attacker::gainAttackExp);
         /*
            if n < LifeData.avoid then exit;    // 피했음.
 
@@ -243,8 +249,8 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     }
 
     @Override
-    public void attackedBy(Projectile projectile) {
-        attackedBy(projectile.getShooter());
+    public void attackedBy(PlayerProjectile projectile) {
+        attackedByPlayer(projectile.getShooter(), projectile.damage().bodyDamage(), projectile.getHit(), projectile.getShooter()::gainRangedAttackExp);
     }
 
     public void fight() {

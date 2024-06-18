@@ -276,6 +276,12 @@ message PlayerGainExpPacket {
   int32 level = 2;
 }
 
+message PlayerProjectilePacket {
+  int64 id = 1;
+  int64 targetId = 2;
+  int32 flyingTimeMillis = 3;
+}
+
 message Packet {
   oneof TypedPacket {
     PositionPacket positionPacket = 1;
@@ -306,6 +312,7 @@ message Packet {
     CreatureDieEventPacket die = 29;
     PlayerRevivePacket playerRevive = 30;
     PlayerGainExpPacket gainExp = 31;
+    PlayerProjectilePacket playerProjectile = 32;
   }
 }
 

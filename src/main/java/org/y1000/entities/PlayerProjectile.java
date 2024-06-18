@@ -4,10 +4,11 @@ package org.y1000.entities;
 import lombok.Builder;
 import lombok.Getter;
 import org.y1000.entities.attribute.Damage;
-import org.y1000.entities.creatures.ViolentCreature;
-public final class Projectile {
+import org.y1000.entities.players.Player;
+
+public final class PlayerProjectile {
     @Getter
-    private final ViolentCreature shooter;
+    private final Player shooter;
 
     private final PhysicalEntity target;
 
@@ -21,13 +22,16 @@ public final class Projectile {
     private int elapsed;
 
     @Builder
-    public Projectile(ViolentCreature shooter,
-                      PhysicalEntity target, int flyingMillis) {
-        this.damage = shooter.damage();
+    public PlayerProjectile(Player shooter,
+                            PhysicalEntity target,
+                            int flyingMillis,
+                            Damage damage,
+                            int hit) {
         this.target = target;
         this.flyingMillis = flyingMillis;
         this.shooter = shooter;
-        this.hit = shooter.hit();
+        this.hit = hit;
+        this.damage = damage;
     }
 
     public boolean update(int delta) {
@@ -37,5 +41,17 @@ public final class Projectile {
         }
         target.attackedBy(this);
         return true;
+    }
+
+    public PhysicalEntity target() {
+        return target;
+    }
+
+    public Damage damage() {
+        return damage;
+    }
+
+    public int flyingMillis() {
+        return flyingMillis;
     }
 }

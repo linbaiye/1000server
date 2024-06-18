@@ -3,18 +3,20 @@ package org.y1000.entities.players.inventory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.TestingEventListener;
 import org.y1000.entities.players.Player;
+import org.y1000.item.StackItem;
 import org.y1000.item.Weapon;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.clientevent.ClientDropItemEvent;
 import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class InventoryTest {
 
@@ -56,22 +58,21 @@ class InventoryTest {
         assertEquals(0, inventory.findWeaponSlot(AttackKungFuType.AXE));
     }
 
-    private ClientDropItemEvent createDropEvent(int slot, int number) {
-        return new ClientDropItemEvent(number, slot, 1, 1, new Coordinate(2, 2));
-    }
-
     @Test
-    void handleDropWeaponEvent() {
+    void consumeStackItem() {
+        TestingEventListener eventListener = new TestingEventListener();
+        assertFalse(inventory.consumeStackItem(player, "箭", eventListener::onEvent));
+        inventory.add(new StackItem("箭", 2));
+        assertTrue(inventory.consumeStackItem(player, "箭", eventListener::onEvent));
+        UpdateInventorySlotEvent event = eventListener.dequeue(UpdateInventorySlotEvent.class);
+        assertEquals("箭", event.toPacket().getUpdateSlot().getName());
+        assertEquals(1, event.toPacket().getUpdateSlot().getNumber());
+        assertTrue(inventory.contains("箭"));
 
-    }
-
-    @Test
-    void canPickNonStack() {
-
-    }
-
-    @Test
-    void canPickStack() {
-
+        assertTrue(inventory.consumeStackItem(player, "箭", eventListener::onEvent));
+        event = eventListener.dequeue(UpdateInventorySlotEvent.class);
+        assertEquals("", event.toPacket().getUpdateSlot().getName());
+        assertFalse(event.toPacket().getUpdateSlot().hasNumber());
+        assertFalse(inventory.contains("箭"));
     }
 }

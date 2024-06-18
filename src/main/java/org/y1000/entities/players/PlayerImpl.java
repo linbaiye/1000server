@@ -595,7 +595,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     @Override
-    public void attackedBy(Projectile projectile) {
+    public void attackedBy(PlayerProjectile projectile) {
         attackedBy(projectile.getShooter());
     }
 
@@ -878,6 +878,14 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (attackKungFu.gainExp(amount)) {
             emitEvent(new PlayerGainExpEvent(this, attackKungFu.name(), attackKungFu.level()));
         }
+    }
+
+    @Override
+    public void gainRangedAttackExp(int amount) {
+        if (!attackKungFu.isRanged()) {
+            return;
+        }
+        gainAttackExp(amount);
     }
 
     @Override

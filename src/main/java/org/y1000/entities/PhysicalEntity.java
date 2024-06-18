@@ -21,7 +21,7 @@ public interface PhysicalEntity extends Entity {
         return false;
     }
 
-    default void attackedBy(Projectile projectile) {
+    default void attackedBy(PlayerProjectile projectile) {
 
     }
 

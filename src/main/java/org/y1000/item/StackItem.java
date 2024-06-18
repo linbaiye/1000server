@@ -16,14 +16,22 @@ public final class StackItem extends AbstractItem {
         this.number = number;
     }
 
+    @Builder
+    public StackItem(String name, int number) {
+        super(name, ItemType.STACK);
+        Validate.isTrue(number > 0, "number must > 0");
+        this.number = number;
+    }
+
     public boolean canSplit(int number) {
         return this.number >= number && number > 0;
     }
 
     public StackItem split(int number) {
         if (number > this.number) {
+
         }
-        drop(number);
+        decrease(number);
         return new StackItem(name(), number, itemType());
     }
 
@@ -46,10 +54,10 @@ public final class StackItem extends AbstractItem {
         return number;
     }
 
-    public void drop(int n) {
-        if (n <= 0) {
-            return;
+    public int decrease(int n) {
+        if (n > 0) {
+            number = number > n ? number - n : 0;
         }
-        number = number > n ? number - n : 0;
+        return number;
     }
 }

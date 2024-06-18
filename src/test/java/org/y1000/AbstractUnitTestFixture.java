@@ -73,6 +73,9 @@ public abstract class AbstractUnitTestFixture {
                 .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA))
                 .innateAttackSpeed(PlayerImpl.INNATE_ATTACKSPEED)
                 .innateLife(2000)
+                .innerPower(2000)
+                .outerPower(2000)
+                .power(500)
                 .innateDamage(new Damage(41, 41, 41,41))
                 .inventory(new Inventory());
     }
