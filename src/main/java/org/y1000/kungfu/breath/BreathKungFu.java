@@ -5,7 +5,7 @@ import org.y1000.entities.creatures.event.CreatureSoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
-import org.y1000.exp.Experience;
+import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;
 import org.y1000.kungfu.KungFuType;
@@ -73,7 +73,7 @@ public final class BreathKungFu extends AbstractKungFu {
         player.gainInnerPower(computeResource(player.innerPower(), parameters.innerPower()));
         player.gainOuterPower(computeResource(player.outerPower(), parameters.outerPower()));
         eventSender.invoke(new PlayerAttributeEvent(player));
-        if (gainExp(Experience.DEFAULT_EXP)) {
+        if (gainExp(ExperienceUtil.DEFAULT_EXP)) {
             eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
         }
     }

@@ -2,7 +2,7 @@ package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.EventListeners;
-import org.y1000.exp.Experience;
+import org.y1000.exp.ExperienceUtil;
 import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.message.serverevent.EntityEventListener;
 import org.y1000.util.Coordinate;
@@ -109,6 +109,6 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
 
     protected int damagedLifeToExp(int damagedLife) {
         var n = maxLife() / damagedLife;
-        return n > 15 ? Experience.DEFAULT_EXP : Experience.DEFAULT_EXP * n * n / (15 * 15);
+        return n > 15 ? ExperienceUtil.DEFAULT_EXP : ExperienceUtil.DEFAULT_EXP * n * n / (15 * 15);
     }
 }

@@ -6,6 +6,6 @@ public class Age {
 
 
     public int level() {
-
+        return 0;
     }
 }
