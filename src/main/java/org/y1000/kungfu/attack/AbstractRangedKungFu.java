@@ -3,6 +3,7 @@ package org.y1000.kungfu.attack;
 
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
 
@@ -16,6 +17,17 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
     @Override
     public boolean isRanged() {
         return true;
+    }
+
+    protected PlayerTextEvent checkResources(PlayerImpl player) {
+        var ret = checkAttributeResources(player);
+        if (ret != null) {
+            return ret;
+        }
+        if (!player.inventory().contains("箭")) {
+            return PlayerTextEvent.outOfAmmo(player);
+        }
+        return null;
     }
 
     @Override
@@ -38,6 +50,6 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
     @Override
     public void startAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target) {
         count = 2;
-        super.startAttack(player, event, target);
+        doStartAttack(player, event, target);
     }
 }

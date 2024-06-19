@@ -1,10 +1,9 @@
 package org.y1000.entities.creatures.monster.fight;
 
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
+import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.monster.AbstractMonster;
 import org.y1000.entities.creatures.monster.AbstractMonsterIdleState;
-import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.util.Coordinate;
 
 public final class MonsterFightIdleState extends AbstractMonsterIdleState implements MonsterFightState {
@@ -17,7 +16,7 @@ public final class MonsterFightIdleState extends AbstractMonsterIdleState implem
     protected void nextMove(AbstractMonster monster) {
         attackIfAdjacentOrNextMove(monster, () -> {
             monster.changeState(MonsterFightFrozenState.next(monster, getFrom()));
-            monster.emitEvent(CreatureChangeStateEvent.of(monster));
+            monster.emitEvent(MonsterChangeStateEvent.of(monster));
         });
     }
 

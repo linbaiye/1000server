@@ -1,7 +1,10 @@
 package org.y1000.kungfu.attack;
 
 import org.slf4j.Logger;
+import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.players.PlayerImpl;
+import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.clientevent.ClientAttackEvent;
 
 public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {
 
@@ -14,6 +17,15 @@ public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {
     @Override
     protected boolean useResources(PlayerImpl player) {
         return useAttributeResources(player);
+    }
+
+    protected PlayerTextEvent checkResources(PlayerImpl player) {
+        return checkAttributeResources(player);
+    }
+
+    @Override
+    public void startAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target) {
+        doStartAttack(player, event, target);
     }
 
     @Override

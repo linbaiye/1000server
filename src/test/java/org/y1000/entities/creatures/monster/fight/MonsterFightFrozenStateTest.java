@@ -6,7 +6,7 @@ import org.mockito.stubbing.Answer;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
+import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.wander.MonsterWanderingIdleState;
@@ -81,7 +81,7 @@ class MonsterFightFrozenStateTest extends AbstractMonsterUnitTestFixture {
         player.leaveRealm();
         monster.update(2);
         assertTrue(monster.state() instanceof MonsterWanderingIdleState);
-        assertNotNull(eventListener.dequeue(CreatureChangeStateEvent.class));
+        assertNotNull(eventListener.dequeue(MonsterChangeStateEvent.class));
     }
 
     @Test

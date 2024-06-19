@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
+import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.wander.MonsterWanderingIdleState;
@@ -40,7 +40,7 @@ class MonsterFightIdleStateTest extends AbstractMonsterUnitTestFixture {
         monster.setFightingEntity(player);
         monster.update(monster.getStateMillis(State.IDLE));
         assertTrue(monster.state() instanceof MonsterFightFrozenState);
-        var event = eventListener.dequeue(CreatureChangeStateEvent.class);
+        var event = eventListener.dequeue(MonsterChangeStateEvent.class);
         assertNotNull(event);
     }
 
@@ -53,7 +53,7 @@ class MonsterFightIdleStateTest extends AbstractMonsterUnitTestFixture {
         player.leaveRealm();
         monster.update(monster.getStateMillis(State.IDLE));
         assertTrue(monster.state() instanceof MonsterWanderingIdleState);
-        var event = eventListener.dequeue(CreatureChangeStateEvent.class);
+        var event = eventListener.dequeue(MonsterChangeStateEvent.class);
         assertNotNull(event);
     }
 

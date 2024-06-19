@@ -9,6 +9,8 @@ import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.CreatureSoundEvent;
+import org.y1000.entities.creatures.monster.MonsterDieState;
+import org.y1000.entities.creatures.monster.fight.MonsterHurtState;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
@@ -32,6 +34,85 @@ import org.y1000.util.Coordinate;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+/*
+
+procedure TAttribClass.Calculate;
+begin
+   AttribData.cEnergy   := GetLevel (AttribData.Energy) + 500;     // 기본원기 = 5.00
+   AttribData.cInPower  := GetLevel (AttribData.InPower) + 1000;   // 기본내공 = 10.00
+   AttribData.cOutPower := GetLevel (AttribData.OutPower) + 1000;  // 기본외공 = 10.00
+   AttribData.cMagic    := GetLevel (AttribData.Magic) + 500;      // 기본무공 = 5.00
+   AttribData.cLife     := GetLevel (AttribData.Life) + 2000;      // 기본활력 = 20.00
+
+   AttribData.cAge   := GetLevel (AttribData.Age);
+   AttribData.cLight := GetLevel (AttribData.Light + 664);    // 양정기
+   AttribData.cDark  := GetLevel (AttribData.Dark + 664);     // 음정기
+
+   // 원기 = 기본원기(5) + 나이(50) + 약(20) + 노력(25);
+   AttribData.cEnergy := AttribData.cEnergy + (AttribData.cAge div 2);
+   // 내공 = 기본내공 (10) + 나이(50) + ...
+   AttribData.cInPower := AttribData.cInPower + (AttribData.cAge div 2);
+   // 외공 = 기본외공 (10) + 나이(50) + ...
+   AttribData.cOutPower := AttribData.cOutPower + (AttribData.cAge div 2);
+   // 무공 = 기본무공 (10) + 나이(50) + ...
+   AttribData.cMagic := AttribData.cMagic + (AttribData.cAge div 2);
+   // 활력 = 기본활력(20) + 나이(100) + 직업활력 + ...
+   AttribData.cLife := AttribData.cLife + AttribData.cAge;
+
+   with AttribData do begin
+      cTalent := GetLevel (Talent) + (AttribData.cAge div 2);
+      cGoodChar := GetLevel (GoodChar);
+      cBadChar := GetLevel (BadChar);
+//      clucky := GetLevel (lucky);
+      clucky := lucky;
+      cadaptive := GetLevel (adaptive);
+      crevival := GetLevel (revival);
+      cimmunity := GetLevel (immunity);
+      cvirtue := GetLevel (virtue);
+
+      cHeadSeak := cLife;
+      cArmSeak := cLife;
+      cLegSeak := cLife;
+
+      cHealth := cLife;
+      cSatiety := cLife;
+      cPoisoning := cLife;
+   end;
+   SetLifeData;
+end;
+ */
+
+/*
+   StartTick := mmAnsTick;
+   FFeatureState := wfs_normal;
+
+   boRevivalFlag := FALSE;
+   boEnergyFlag := FALSE;
+   boInPowerFlag := FALSE;
+   boOutPowerFlag := FALSE;
+   boMagicFlag := FALSE;
+
+   FillChar (AttribData, sizeof(AttribData), 0);
+   FillChar (CurAttribData, sizeof(CurAttribData), 0);
+   FillChar (ItemDrugArr, sizeof(ItemDrugArr), 0);
+
+   CheckIncreaseTick := StartTick;
+   CheckDrugTick := StartTick;
+
+   boMan := FALSE;
+
+   boMan := false;
+   if StrPas (@aCharData^.Sex) = '남' then boMan := true;
+   //
+   AttribData.Light    := aCharData^.Light;
+   AttribData.Dark     := aCharData^.Dark;
+   AttribData.Age      := AttribData.Light + AttribData.Dark;
+   AttribData.Energy   := aCharData^.Energy;
+   AttribData.InPower  := aCharData^.InPower;
+   AttribData.OutPower := aCharData^.OutPower;
+   AttribData.Magic    := aCharData^.Magic;
+   AttribData.Life     := aCharData^.Life;
+ */
 @Slf4j
 public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player {
 
@@ -100,10 +181,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private int regenerateTimer;
 
-    private static class PlayerTimer {
-        private int seconds;
-    }
-
+    private long tick;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
@@ -205,6 +283,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         currentLeg = currentLife();
         currentHead = currentLife();
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
+        tick = 0;
     }
 
     private void resetTimer() {
@@ -594,6 +673,34 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return true;
     }
 
+
+    private int takeDamage(Damage damage) {
+        var damagedLife = Math.max(damage.bodyDamage() - bodyArmor(), 1);
+        currentLife = Math.max(currentLife - damagedLife, 0);
+        return damagedLife;
+    }
+
+
+    @Override
+    public boolean attackedBy(Player attacker) {
+        if (!state().attackable() || randomAvoidance(attacker.hit())) {
+            return false;
+        }
+        cooldownRecovery();
+        var damagedLife = takeDamage(attacker.damage());
+        var exp = damagedLifeToExp(damagedLife);
+        attacker.gainAttackExp(exp);
+        if (currentLife() > 0) {
+            state().moveToHurtCoordinate(this);
+            State afterHurtState = state().decideAfterHurtState();
+            changeState(PlayerHurtState.hurt(this, afterHurtState));
+            emitEvent(new CreatureHurtEvent(this, afterHurtState));
+        } else {
+            onKilled();
+        }
+        return true;
+    }
+
     @Override
     public void attackedBy(PlayerProjectile projectile) {
         attackedBy(projectile.getShooter());
@@ -759,6 +866,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         regenerate(delta);
         updateKungFu(delta);
         state().update(this, delta);
+        tick++;
     }
 
     public int recovery() {

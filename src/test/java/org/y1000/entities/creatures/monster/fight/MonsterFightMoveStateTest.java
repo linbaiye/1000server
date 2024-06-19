@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
+import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.util.Coordinate;
@@ -51,7 +51,7 @@ class MonsterFightMoveStateTest extends AbstractMonsterUnitTestFixture {
         monster.setFightingEntity(playerBuilder().coordinate(monster.coordinate().move(3, 0)).build());
         monster.update(monster.getStateMillis(State.WALK));
         assertTrue(monster.state() instanceof MonsterFightIdleState);
-        assertNotNull(eventListener.dequeue(CreatureChangeStateEvent.class));
+        assertNotNull(eventListener.dequeue(MonsterChangeStateEvent.class));
     }
 
     @Test

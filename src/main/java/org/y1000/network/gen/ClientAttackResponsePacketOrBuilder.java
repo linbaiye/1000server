@@ -19,4 +19,15 @@ public interface ClientAttackResponsePacketOrBuilder extends
    * @return The accepted.
    */
   boolean getAccepted();
+
+  /**
+   * <code>optional int32 backToState = 3;</code>
+   * @return Whether the backToState field is set.
+   */
+  boolean hasBackToState();
+  /**
+   * <code>optional int32 backToState = 3;</code>
+   * @return The backToState.
+   */
+  int getBackToState();
 }

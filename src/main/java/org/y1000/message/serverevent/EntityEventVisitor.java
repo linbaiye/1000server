@@ -30,7 +30,7 @@ public interface EntityEventVisitor {
         visit((AbstractPositionEvent)setPositionEvent);
     }
 
-    default void visit(CreatureChangeStateEvent event) {
+    default void visit(MonsterChangeStateEvent event) {
         visit((EntityEvent) event);
     }
 

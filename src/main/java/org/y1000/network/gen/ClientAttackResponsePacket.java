@@ -39,6 +39,7 @@ private static final long serialVersionUID = 0L;
             org.y1000.network.gen.ClientAttackResponsePacket.class, org.y1000.network.gen.ClientAttackResponsePacket.Builder.class);
   }
 
+  private int bitField0_;
   public static final int SEQUENCE_FIELD_NUMBER = 1;
   private long sequence_ = 0L;
   /**
@@ -61,6 +62,25 @@ private static final long serialVersionUID = 0L;
     return accepted_;
   }
 
+  public static final int BACKTOSTATE_FIELD_NUMBER = 3;
+  private int backToState_ = 0;
+  /**
+   * <code>optional int32 backToState = 3;</code>
+   * @return Whether the backToState field is set.
+   */
+  @java.lang.Override
+  public boolean hasBackToState() {
+    return ((bitField0_ & 0x00000001) != 0);
+  }
+  /**
+   * <code>optional int32 backToState = 3;</code>
+   * @return The backToState.
+   */
+  @java.lang.Override
+  public int getBackToState() {
+    return backToState_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -81,6 +101,9 @@ private static final long serialVersionUID = 0L;
     if (accepted_ != false) {
       output.writeBool(2, accepted_);
     }
+    if (((bitField0_ & 0x00000001) != 0)) {
+      output.writeInt32(3, backToState_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -97,6 +120,10 @@ private static final long serialVersionUID = 0L;
     if (accepted_ != false) {
       size += com.google.protobuf.CodedOutputStream
         .computeBoolSize(2, accepted_);
+    }
+    if (((bitField0_ & 0x00000001) != 0)) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(3, backToState_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -117,6 +144,11 @@ private static final long serialVersionUID = 0L;
         != other.getSequence()) return false;
     if (getAccepted()
         != other.getAccepted()) return false;
+    if (hasBackToState() != other.hasBackToState()) return false;
+    if (hasBackToState()) {
+      if (getBackToState()
+          != other.getBackToState()) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -134,6 +166,10 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ACCEPTED_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
         getAccepted());
+    if (hasBackToState()) {
+      hash = (37 * hash) + BACKTOSTATE_FIELD_NUMBER;
+      hash = (53 * hash) + getBackToState();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -267,6 +303,7 @@ private static final long serialVersionUID = 0L;
       bitField0_ = 0;
       sequence_ = 0L;
       accepted_ = false;
+      backToState_ = 0;
       return this;
     }
 
@@ -306,6 +343,12 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.accepted_ = accepted_;
       }
+      int to_bitField0_ = 0;
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.backToState_ = backToState_;
+        to_bitField0_ |= 0x00000001;
+      }
+      result.bitField0_ |= to_bitField0_;
     }
 
     @java.lang.Override
@@ -358,6 +401,9 @@ private static final long serialVersionUID = 0L;
       if (other.getAccepted() != false) {
         setAccepted(other.getAccepted());
       }
+      if (other.hasBackToState()) {
+        setBackToState(other.getBackToState());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -394,6 +440,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000002;
               break;
             } // case 16
+            case 24: {
+              backToState_ = input.readInt32();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 24
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -471,6 +522,46 @@ private static final long serialVersionUID = 0L;
     public Builder clearAccepted() {
       bitField0_ = (bitField0_ & ~0x00000002);
       accepted_ = false;
+      onChanged();
+      return this;
+    }
+
+    private int backToState_ ;
+    /**
+     * <code>optional int32 backToState = 3;</code>
+     * @return Whether the backToState field is set.
+     */
+    @java.lang.Override
+    public boolean hasBackToState() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     * <code>optional int32 backToState = 3;</code>
+     * @return The backToState.
+     */
+    @java.lang.Override
+    public int getBackToState() {
+      return backToState_;
+    }
+    /**
+     * <code>optional int32 backToState = 3;</code>
+     * @param value The backToState to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBackToState(int value) {
+
+      backToState_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional int32 backToState = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearBackToState() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      backToState_ = 0;
       onChanged();
       return this;
     }

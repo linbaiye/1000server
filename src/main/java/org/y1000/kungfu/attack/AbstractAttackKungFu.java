@@ -62,26 +62,32 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     protected abstract Logger logger();
 
-
-    protected boolean useAttributeResources(PlayerImpl player) {
+    protected PlayerTextEvent checkAttributeResources(PlayerImpl player) {
         if (player.power() < parameters.powerToSwing()) {
-            player.emitEvent(PlayerTextEvent.noPower(player));
-            return false;
+            return PlayerTextEvent.noPower(player);
         }
         if (player.innerPower() < parameters.innerPowerToSwing()) {
-            player.emitEvent(PlayerTextEvent.noInnerPower(player));
-            return false;
+            return PlayerTextEvent.noInnerPower(player);
         }
         if (player.outerPower() < parameters.outerPowerToSwing()) {
-            player.emitEvent(PlayerTextEvent.noOuterPower(player));
-            return false;
+            return PlayerTextEvent.noOuterPower(player);
         }
         int lifeToSwing = parameters.lifeToSwing();
         if (player.currentLife() <= lifeToSwing) {
-            player.emitEvent(PlayerTextEvent.insufficientLife(player));
+            return PlayerTextEvent.insufficientLife(player);
+        }
+        return null;
+    }
+
+    protected abstract PlayerTextEvent checkResources(PlayerImpl player);
+
+    protected boolean useAttributeResources(PlayerImpl player) {
+        var ret = checkAttributeResources(player);
+        if (ret != null) {
+            player.emitEvent(ret);
             return false;
         }
-        player.consumeLife(lifeToSwing);
+        player.consumeLife(parameters.lifeToSwing());
         player.consumeOuterPower(parameters.outerPowerToSwing());
         player.consumeInnerPower(parameters.innerPowerToSwing());
         player.consumePower(parameters.powerToSwing());
@@ -120,8 +126,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             return;
         }
         if (!useResources(player)) {
-            player.changeState(new PlayerCooldownState(player.getStateMillis(State.COOLDOWN)));
-            player.emitEvent(PlayerCooldownEvent.of(player));
+            player.changeState(new PlayerCooldownState(cooldown));
             return;
         }
         player.changeDirection(direction);
@@ -148,9 +153,14 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         doAttack(player, direction, true);
     }
 
-    @Override
-    public void startAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target) {
+    protected void doStartAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target) {
         if (!player.canAttack(target)) {
+            player.emitEvent(new PlayerAttackEventResponse(player, event, false));
+            return;
+        }
+        var text = checkResources(player);
+        if (text != null) {
+            player.emitEvent(text);
             player.emitEvent(new PlayerAttackEventResponse(player, event, false));
             return;
         }
@@ -162,6 +172,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         player.changeDirection(direction);
         player.emitEvent(new PlayerAttackEventResponse(player, event, true));
     }
+
 
     @Override
     public KungFuType kungFuType() {
@@ -193,7 +204,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     @Override
     public int bodyDamage() {
         /*
-              rcLifeData.DamageBody   := rLifeData.damageBody  + rLifeData.damageBody * rcSkillLevel div INI_SKILL_DIV_DAMAGE;
+      rcLifeData.DamageBody   := rLifeData.damageBody  + rLifeData.damageBody * rcSkillLevel div INI_SKILL_DIV_DAMAGE;
       rcLifeData.DamageHead   := rLifeData.DamageHead  + rLifeData.damageHead * rcSkillLevel div INI_SKILL_DIV_DAMAGE;
       rcLifeData.DamageArm    := rLifeData.DamageArm   + rLifeData.damageArm  * rcSkillLevel div INI_SKILL_DIV_DAMAGE;
       rcLifeData.DamageLeg    := rLifeData.DamageLeg   + rLifeData.damageLeg  * rcSkillLevel div INI_SKILL_DIV_DAMAGE;

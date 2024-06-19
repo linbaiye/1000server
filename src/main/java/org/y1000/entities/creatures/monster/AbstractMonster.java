@@ -256,13 +256,13 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     public void fight() {
         if (getFightingEntity() == null || !canAttack(getFightingEntity())) {
             changeState(MonsterWanderingIdleState.reroll(this));
-            emitEvent(CreatureChangeStateEvent.of(this));
+            emitEvent(MonsterChangeStateEvent.of(this));
             return;
         }
         var entity = getFightingEntity();
         if (entity.coordinate().directDistance(coordinate()) > 1) {
             changeState(MonsterFightIdleState.start(this));
-            emitEvent(CreatureChangeStateEvent.of(this));
+            emitEvent(MonsterChangeStateEvent.of(this));
             return;
         }
         Direction towards = coordinate().computeDirection(entity.coordinate());
@@ -272,7 +272,7 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         int cooldown = cooldown();
         if (cooldown > 0) {
             changeState(MonsterFightCooldownState.cooldown(cooldown));
-            emitEvent(CreatureChangeStateEvent.of(this));
+            emitEvent(MonsterChangeStateEvent.of(this));
             return;
         }
         attributeProvider.attackSound().ifPresent(s -> emitEvent(new CreatureSoundEvent(this, s)));

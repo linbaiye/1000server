@@ -160,7 +160,7 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
-    public void visit(CreatureChangeStateEvent event) {
+    public void visit(MonsterChangeStateEvent event) {
         notifyVisiblePlayers(event.source(), event);
     }
 

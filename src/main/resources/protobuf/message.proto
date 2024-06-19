@@ -91,6 +91,7 @@ message ClientAttackEventPacket {
 message ClientAttackResponsePacket {
   int64 sequence = 1;
   bool accepted = 2;
+  optional int32 backToState = 3;
 }
 
 message ClientUnequipPacket {

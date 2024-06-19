@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.monster.fight;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
+import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,6 +25,6 @@ class MonsterFightAttackStateTest extends AbstractMonsterUnitTestFixture {
         monster.cooldownAttack();
         monster.update(monster.getStateMillis(State.ATTACK));
         assertTrue(monster.state() instanceof MonsterFightCooldownState);
-        assertNotNull(eventListener.dequeue(CreatureChangeStateEvent.class));
+        assertNotNull(eventListener.dequeue(MonsterChangeStateEvent.class));
     }
 }

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
+import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.fight.MonsterFightIdleState;
 import org.y1000.entities.players.Player;
@@ -60,7 +60,7 @@ class MonsterWanderingFrozenStateTest extends AbstractMonsterUnitTestFixture {
         monster.changeState(state);
         monster.update(monster.getStateMillis(State.FROZEN));
         assertTrue(monster.state() instanceof MonsterWanderingIdleState);
-        CreatureChangeStateEvent event = eventListener.dequeue(CreatureChangeStateEvent.class);
+        MonsterChangeStateEvent event = eventListener.dequeue(MonsterChangeStateEvent.class);
         assertNotNull(event);
     }
 

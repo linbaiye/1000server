@@ -2,11 +2,10 @@ package org.y1000.entities.creatures.monster.fight;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
+import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.monster.AbstractMonster;
 import org.y1000.entities.creatures.monster.AbstractMonsterIdleState;
 import org.y1000.entities.creatures.monster.AbstractMonsterMoveState;
-import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.util.Coordinate;
 
 public final class MonsterFightMoveState extends AbstractMonsterMoveState implements MonsterFightState {
@@ -30,7 +29,7 @@ public final class MonsterFightMoveState extends AbstractMonsterMoveState implem
 
     private void continueMove(AbstractMonster creature) {
         creature.changeState(MonsterFightIdleState.nextStep(creature, getStart()));
-        creature.emitEvent(CreatureChangeStateEvent.of(creature));
+        creature.emitEvent(MonsterChangeStateEvent.of(creature));
     }
 
     @Override

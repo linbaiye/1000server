@@ -1,6 +1,7 @@
 package org.y1000.entities.players.event;
 
 import lombok.Getter;
+import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
@@ -16,19 +17,25 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
     @Getter
     private final boolean accepted;
 
+    private final State backToState;
+
     public PlayerAttackEventResponse(Player source, ClientAttackEvent clientEvent, boolean ok) {
         super(source);
         clientAttackEvent = clientEvent;
         this.accepted = ok;
+        backToState = source.stateEnum();
     }
 
     @Override
     protected Packet buildPacket() {
+        ClientAttackResponsePacket.Builder builder = ClientAttackResponsePacket.newBuilder()
+                .setAccepted(accepted)
+                .setSequence(clientAttackEvent.sequence());
+        if (!accepted) {
+            builder.setBackToState(backToState.value());
+        }
         return Packet.newBuilder()
-                .setAttackEventResponsePacket(ClientAttackResponsePacket.newBuilder()
-                        .setAccepted(accepted)
-                        .setSequence(clientAttackEvent.sequence())
-                        .build())
+                .setAttackEventResponsePacket(builder)
                 .build();
     }
 

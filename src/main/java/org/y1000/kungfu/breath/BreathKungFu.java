@@ -19,6 +19,8 @@ public final class BreathKungFu extends AbstractKungFu {
 
     private final int sound;
 
+    public static final int DEFAULT_TIMER_MILLIS = 5000;
+
     @Builder
     public BreathKungFu(String name, int exp,
                         EventResourceParameters parameters,
@@ -30,27 +32,13 @@ public final class BreathKungFu extends AbstractKungFu {
     }
 
     private void setTimer() {
-        timer = 5000;
+        timer = DEFAULT_TIMER_MILLIS;
     }
 
     @Override
     public KungFuType kungFuType() {
         return KungFuType.BREATHING;
     }
-
-    private boolean canGainExp(Player player) {
-        if (parameters.power() > 0 && player.power() >= player.maxPower()) {
-            return false;
-        }
-        if (parameters.innerPower() > 0 && player.innerPower() >= player.maxInnerPower()) {
-            return false;
-        }
-        if (parameters.outerPower() > 0 && player.outerPower() >= player.maxOuterPower()) {
-            return false;
-        }
-        return parameters.life() <= 0 || player.currentLife() < player.maxLife();
-    }
-
 
     private String computeSound(boolean male) {
         var snd = sound;

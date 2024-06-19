@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.monster.wander;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.monster.AbstractMonster;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
+import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterFrozenState;
 import org.y1000.entities.creatures.monster.MonsterState;
 import org.y1000.util.Coordinate;
@@ -22,7 +22,7 @@ public final class MonsterWanderingFrozenState extends AbstractMonsterFrozenStat
     protected void nextMove(AbstractMonster monster) {
         if (!monster.realmMap().movable(destination) || destination.equals(monster.coordinate())) {
             monster.changeState(MonsterWanderingIdleState.reroll(monster));
-            monster.emitEvent(CreatureChangeStateEvent.of(monster));
+            monster.emitEvent(MonsterChangeStateEvent.of(monster));
         } else {
             tryMoveCloser(monster, destination);
         }

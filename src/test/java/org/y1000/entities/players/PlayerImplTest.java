@@ -399,7 +399,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     }
 
     @Test
-    void bowAttack() {
+    void startBowAttack() {
         PassiveMonster monster = createMonster(player.coordinate().move(2, 0));
         when(mockedRealm.findInsight(any(PhysicalEntity.class), any(Long.class))).thenReturn(Optional.of(monster));
 
@@ -407,18 +407,18 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         enableBowKungFu();
         // long enough to clean cooldown frozen because of equipping bow.
         player.update(100000);
-
         player.handleClientEvent(new ClientAttackEvent(1, monster.id(), State.BOW, Direction.RIGHT));
         // no ammo.
-        assertTrue(player.state() instanceof PlayerCooldownState);
+        assertEquals(State.IDLE, player.stateEnum());
         PlayerTextEvent event = eventListener.removeFirst(PlayerTextEvent.class);
         assertEquals(PlayerTextEvent.TextType.OUT_OF_AMMO.value(), event.toPacket().getText().getType());
 
         player.inventory().add(new StackItem("箭", 1));
         eventListener.clearEvents();
-        player.update(player.getStateMillis(State.COOLDOWN));
+        player.handleClientEvent(new ClientAttackEvent(1, monster.id(), State.BOW, Direction.RIGHT));
         assertTrue(player.state() instanceof PlayerAttackState);
-        assertNotNull(eventListener.removeFirst(PlayerAttackEvent.class));
+        PlayerAttackEventResponse response = eventListener.removeFirst(PlayerAttackEventResponse.class);
+        assertTrue(response.isAccepted());
         assertNotNull(eventListener.removeFirst(UpdateInventorySlotEvent.class));
     }
 }

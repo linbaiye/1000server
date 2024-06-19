@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
+import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
@@ -32,7 +32,7 @@ class MonsterWanderingMoveStateTest extends AbstractMonsterUnitTestFixture {
         monster.update(monster.getStateMillis(State.WALK));
         assertEquals(monster.coordinate(), coordinate.moveBy(monster.direction()));
         assertTrue(monster.state() instanceof MonsterWanderingIdleState);
-        CreatureChangeStateEvent dequeue = eventListener.dequeue(CreatureChangeStateEvent.class);
+        MonsterChangeStateEvent dequeue = eventListener.dequeue(MonsterChangeStateEvent.class);
         assertEquals(dequeue.toPacket().getChangeStatePacket().getState(), State.IDLE.value());
         verify(monster.realmMap()).free(monster);
         verify(monster.realmMap()).occupy(monster);

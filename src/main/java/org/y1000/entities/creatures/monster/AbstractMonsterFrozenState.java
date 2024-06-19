@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.monster;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureChangeStateEvent;
+import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.message.MoveEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
@@ -46,7 +46,7 @@ public abstract class AbstractMonsterFrozenState extends AbstractMonsterState {
         }
         if (towards == null) {
             monster.changeState(frontNotMovable(monster));
-            monster.emitEvent(CreatureChangeStateEvent.of(monster));
+            monster.emitEvent(MonsterChangeStateEvent.of(monster));
             return;
         }
         if (towards != monster.direction()) {
@@ -60,7 +60,7 @@ public abstract class AbstractMonsterFrozenState extends AbstractMonsterState {
             monster.emitEvent(MoveEvent.movingTo(monster, towards));
         } else {
             monster.changeState(frontNotMovable(monster));
-            monster.emitEvent(CreatureChangeStateEvent.of(monster));
+            monster.emitEvent(MonsterChangeStateEvent.of(monster));
         }
     }
 }

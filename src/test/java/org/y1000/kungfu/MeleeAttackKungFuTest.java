@@ -211,7 +211,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         kungFu.startAttack(player, clientAttackEvent, monster);
         PlayerTextEvent event = playerEventListener.dequeue(PlayerTextEvent.class);
         assertEquals(PlayerTextEvent.TextType.NO_POWER.value(), event.toPacket().getText().getType());
-        assertInstanceOf(PlayerCooldownState.class, player.state());
+        assertEquals(State.IDLE, player.stateEnum());
     }
 
     @Test
