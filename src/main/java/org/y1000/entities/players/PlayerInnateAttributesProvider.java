@@ -36,7 +36,7 @@ public interface PlayerInnateAttributesProvider {
     }
 
     default int hit() {
-        return 100;
+        return 75;
     }
 
 }

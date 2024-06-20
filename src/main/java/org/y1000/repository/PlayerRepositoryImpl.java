@@ -1,11 +1,11 @@
 package org.y1000.repository;
 
 import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.players.*;
 import org.y1000.kungfu.AssistantKungFu;
+import org.y1000.kungfu.DefaultArmorParameters;
 import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.item.*;
-import org.y1000.entities.players.Player;
-import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.util.Coordinate;
@@ -79,6 +79,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         int slot = findSlot();
         Weapon weapon = weapon();
         KungFuBook kungFuBook = loadKungFuBook();
+        var yinyang = new YinYang();
         return PlayerImpl.builder()
                 .id(slot + playerIdStart)
                 .name("雨诗妾")
@@ -97,15 +98,15 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .chest(new Chest("女子雨中客道袍"))
                 .hair(new Hair("女子麻花辫"))
                 .wrist(new Wrist("女子太极护腕"))
-                .innateAttackSpeed(PlayerImpl.INNATE_ATTACKSPEED)
-                .innateRecovery(PlayerImpl.INNATE_RECOVERY)
-                .innateAvoidance(PlayerImpl.INNATE_AVOIDANCE)
-                .innateLife(2000)
-                .innerPower(1000)
-                .outerPower(1000)
-                .power(500)
-                .energy(500)
-                .innateDamage(new Damage(41, 41, 41, 41))
+                .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
+                .yinYang(yinyang)
+                .life(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .head(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .arm(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .leg(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .power(new PlayerExperiencedAgedAttribute("武功", PlayerDefaultAttributes.INSTANCE.power(), yinyang.age()))
+                .innerPower(new PlayerExperiencedAgedAttribute("内功", PlayerDefaultAttributes.INSTANCE.innerPower(), yinyang.age()))
+                .outerPower(new PlayerExperiencedAgedAttribute("外功", PlayerDefaultAttributes.INSTANCE.outerPower(), yinyang.age()))
                 .build();
     }
 

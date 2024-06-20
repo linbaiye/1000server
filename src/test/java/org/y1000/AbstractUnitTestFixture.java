@@ -5,7 +5,10 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
+import org.y1000.entities.players.PlayerDefaultAttributes;
+import org.y1000.entities.players.PlayerExperiencedAgedAttribute;
 import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.players.PlayerLife;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.KungFuBookFactory;
@@ -71,12 +74,14 @@ public abstract class AbstractUnitTestFixture {
                 .name("test")
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA))
-                .innateAttackSpeed(PlayerImpl.INNATE_ATTACKSPEED)
-                .innateLife(2000)
-                .innerPower(2000)
-                .outerPower(2000)
-                .power(500)
-                .innateDamage(new Damage(41, 41, 41,41))
+                .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
+                .life(PlayerLife.create())
+                .arm(PlayerLife.create())
+                .leg(PlayerLife.create())
+                .head(PlayerLife.create())
+                .innerPower(PlayerExperiencedAgedAttribute.createInnerPower())
+                .outerPower(PlayerExperiencedAgedAttribute.createOuterPower())
+                .power(PlayerExperiencedAgedAttribute.createPower())
                 .inventory(new Inventory());
     }
 

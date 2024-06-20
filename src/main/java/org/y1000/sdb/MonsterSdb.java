@@ -1,6 +1,7 @@
 package org.y1000.sdb;
 
 import org.apache.commons.lang3.StringUtils;
+import org.y1000.kungfu.KungFuSdb;
 
 import java.util.Set;
 
@@ -82,7 +83,8 @@ public final class MonsterSdb extends AbstractSdbReader {
         for (String string : strings) {
             String s = monsterSdb.get(string, "AttackMagic");
             if (!StringUtils.isEmpty(s)) {
-                System.out.println(string + ": " + s);
+                System.out.println(KungFuSdb.INSTANCE.get(s.split(":")[0], "BowImage"));
+                //System.out.println(string + ": " + s);
             }
         }
     }

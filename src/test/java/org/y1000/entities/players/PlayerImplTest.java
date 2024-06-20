@@ -358,9 +358,9 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void consumeAttributes() {
-        player = playerBuilder().innerPower(100)
-                .outerPower(50).power(20)
-                .innateLife(10).build();
+        player = playerBuilder().innerPower(PlayerTestingAttribute.of(100))
+                .outerPower(PlayerTestingAttribute.of(50)).power(PlayerTestingAttribute.of(20))
+                .life(new PlayerLife(10, 0)).build();
         player.consumePower(1);
         player.consumeInnerPower(1);
         player.consumeOuterPower(1);
@@ -368,7 +368,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(49, player.outerPower());
         assertEquals(99, player.innerPower());
         player.consumePower(100);
-        player.consumeLife(100);
+        player.consumeLife(120);
         player.consumeInnerPower(100);
         player.consumeOuterPower(100);
         assertEquals(0, player.outerPower());
@@ -380,14 +380,14 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void updateProtectKungFu() {
         ProtectionParameters parameters = Mockito.mock(ProtectionParameters.class);
-        player = playerBuilder().power(1).innateLife(2).innerPower(1).outerPower(1)
+        player = playerBuilder().power(PlayerTestingAttribute.of(1)).life(new PlayerLife(1, 0)).innerPower(PlayerTestingAttribute.of(1)).outerPower(PlayerTestingAttribute.of(1))
                 .protectKungFu(ProtectKungFu.builder().exp(0).parameters(parameters).name("test").build())
                 .build();
         player.registerEventListener(eventListener);
         when(parameters.innerPowerPer5Seconds()).thenReturn(2);
         when(parameters.innerPowerToKeep()).thenReturn(1);
-        when(parameters.lifePer5Seconds()).thenReturn(3);
-        when(parameters.lifeToKeep()).thenReturn(2);
+        when(parameters.lifePer5Seconds()).thenReturn(103);
+        when(parameters.lifeToKeep()).thenReturn(3);
         when(parameters.powerPer5Seconds()).thenReturn(1);
         when(parameters.powerToKeep()).thenReturn(1);
         player.update(5000);

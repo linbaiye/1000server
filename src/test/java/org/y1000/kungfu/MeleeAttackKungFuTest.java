@@ -9,7 +9,9 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.players.PlayerLife;
 import org.y1000.entities.players.PlayerStillState;
+import org.y1000.entities.players.PlayerTestingAttribute;
 import org.y1000.entities.players.event.PlayerAttackAoeEvent;
 import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
@@ -204,7 +206,9 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
 
     @Test
     void attackWhenNoPower() {
-        player = playerBuilder().power(1).innateLife(3).innerPower(3).outerPower(3).build();
+        player = playerBuilder().power(PlayerTestingAttribute.of(1))
+                .life(new PlayerLife(10, 0)).innerPower(PlayerTestingAttribute.of(5))
+                .outerPower(PlayerTestingAttribute.of(3)).build();
         player.registerEventListener(playerEventListener);
         kungFu = createKungFu(new TwoCostParameters());
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
@@ -216,24 +220,28 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
 
     @Test
     void attackWhenNoLife() {
-        player = playerBuilder().power(3).innateLife(1).innerPower(3).outerPower(3).build();
+        player = playerBuilder().power(PlayerTestingAttribute.of(3)).life(new PlayerLife(1, 0))
+                .innerPower(PlayerTestingAttribute.of(3)).outerPower(PlayerTestingAttribute.of(3)).build();
         player.registerEventListener(playerEventListener);
-        kungFu = createKungFu(new TwoCostParameters());
+        var param = new TestingAttackKungFuParameters();
+        kungFu = createKungFu(param.setLifeToString(103));
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, monster);
-        PlayerTextEvent event = playerEventListener.dequeue(PlayerTextEvent.class);
+        PlayerTextEvent event = playerEventListener.removeFirst(PlayerTextEvent.class);
         assertEquals(PlayerTextEvent.TextType.NO_LIFE.value(), event.toPacket().getText().getType());
     }
 
     @Test
     void usePower() {
-        player = playerBuilder().power(3).innateLife(3).innerPower(3).outerPower(3).build();
+        player = playerBuilder().power(PlayerTestingAttribute.of(3)).life(new PlayerLife(3, 0))
+                .innerPower(PlayerTestingAttribute.of(3)).outerPower(PlayerTestingAttribute.of(3)).build();
         player.registerEventListener(playerEventListener);
+        var param = new TestingAttackKungFuParameters();
         kungFu = createKungFu(new TwoCostParameters());
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, monster);
         assertEquals(1, player.power());
-        assertEquals(1, player.currentLife());
+        assertEquals(101, player.currentLife());
         assertEquals(1, player.innerPower());
         assertEquals(1, player.outerPower());
     }

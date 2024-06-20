@@ -1,11 +1,14 @@
 package org.y1000.exp;
 
+import org.apache.commons.lang3.Validate;
+
 public final class Experience {
     private final int level;
 
     private final int exp;
 
     public Experience(int exp) {
+        Validate.isTrue(exp >= 0);
         this.exp = exp;
         level = ExperienceUtil.computeLevel(exp);
     }

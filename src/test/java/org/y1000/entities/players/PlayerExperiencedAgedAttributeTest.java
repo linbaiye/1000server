@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlayerExperiencedAttributeTest {
+class PlayerExperiencedAgedAttributeTest {
 
-    private PlayerExperiencedAttribute attribute;
+    private PlayerExperiencedAgedAttribute attribute;
 
     @BeforeEach
     void setUp() {
-        attribute = new PlayerExperiencedAttribute(0, 100);
+        attribute = new PlayerExperiencedAgedAttribute("test", 0, 100);
     }
 
     @Test
@@ -48,7 +48,7 @@ class PlayerExperiencedAttributeTest {
     }
 
     @Test
-    void gainExp() {
+    void gainExpIfLowEnough() {
         int oldMax = attribute.maxValue();
         attribute.consume((int)(oldMax * 0.89));
         attribute.gain((int)(oldMax * 0.99));
@@ -56,6 +56,15 @@ class PlayerExperiencedAttributeTest {
 
         attribute.consume((int)(oldMax * 0.95));
         attribute.gain((int)(oldMax * 0.99));
+        assertNotEquals(oldMax, attribute.maxValue());
+    }
+
+    @Test
+    void onAgeIncreased() {
+        var oldMax = attribute.maxValue();
+        assertFalse(attribute.onAgeIncreased(101));
+        assertEquals(oldMax, attribute.maxValue());
+        assertTrue(attribute.onAgeIncreased(200));
         assertNotEquals(oldMax, attribute.maxValue());
     }
 }

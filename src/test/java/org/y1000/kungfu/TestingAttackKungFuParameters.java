@@ -23,10 +23,16 @@ public class TestingAttackKungFuParameters implements AttackKungFuParameters {
     private int headDamage;
     private int legDamage;
     private int power;
+    private int life;
 
 
     public TestingAttackKungFuParameters setBodyDamage(int bodyDamage) {
         this.bodyDamage = bodyDamage;
+        return this;
+    }
+
+    public TestingAttackKungFuParameters setLifeToString(int l) {
+        this.life = l;
         return this;
     }
 
@@ -97,7 +103,7 @@ public class TestingAttackKungFuParameters implements AttackKungFuParameters {
 
     @Override
     public int lifeToSwing() {
-        return 0;
+        return life;
     }
 
     @Override
