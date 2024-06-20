@@ -1,44 +1,43 @@
 package org.y1000.entities.players;
 
+import org.apache.commons.lang3.Validate;
 import org.y1000.exp.Experience;
+import org.y1000.exp.ExperienceUtil;
 
 import java.time.LocalDateTime;
 
 public final class YinYang {
-    private static class SecondsLevel {
-        private int seconds;
-        private int level;
-
-        public SecondsLevel(int seconds) {
-            this.seconds = seconds;
-            this.level = Experience.computeLevel(seconds + 644);
-        }
-
-        public boolean accumulate(int seconds) {
-            this.seconds += seconds;
-            int n = Experience.computeLevel(this.seconds + 664);
-            if (n != level) {
-                level = n;
-                return true;
-            }
-            return false;
-        }
-    }
-
-    private final SecondsLevel yin;
-    private final SecondsLevel yang;
+    private Experience yin;
+    private Experience yang;
 
     public YinYang(int yin, int yang) {
-        this.yin = new SecondsLevel(yin);
-        this.yang = new SecondsLevel(yang);
+        Validate.isTrue(yin >= 0);
+        Validate.isTrue(yang >= 0);
+        this.yin = new Experience(yin + 644);
+        this.yang = new Experience(yang + 644);
+    }
+
+    public YinYang() {
+        this(0, 0);
     }
 
     public int age() {
-        return Experience.computeLevel(yin.seconds + yang.seconds);
+        return ExperienceUtil.computeLevel(yin.value() + yang.value());
+    }
+
+    public boolean isYin() {
+        return LocalDateTime.now().getHour() < 12;
     }
 
     public boolean accumulate(int seconds) {
-        int hour = LocalDateTime.now().getHour();
-        return hour < 12 ? yin.accumulate(seconds) : yang.accumulate(seconds);
+        if (isYin()) {
+            var old = yin.level();
+            yin = yin.gainExp(seconds);
+            return old != yin.level();
+        } else {
+            var old = yang.level();
+            yang = yang.gainExp(seconds);
+            return old != yang.level();
+        }
     }
 }

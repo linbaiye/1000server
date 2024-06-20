@@ -41,7 +41,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     private Inventory loadInventory() {
         Inventory inventory = new Inventory();
         inventory.add(itemFactory.createItem("长剑"));
-        //inventory.add(itemFactory.createItem("箭", 10000));
+        inventory.add(itemFactory.createItem("箭", 10000));
         inventory.add(itemFactory.createItem("太极斧"));
         inventory.add(itemFactory.createItem("太极神枪"));
         inventory.add(itemFactory.createItem("三叉戟"));

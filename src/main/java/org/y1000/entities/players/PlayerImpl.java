@@ -9,13 +9,11 @@ import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.CreatureSoundEvent;
-import org.y1000.entities.creatures.monster.MonsterDieState;
-import org.y1000.entities.creatures.monster.fight.MonsterHurtState;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.fight.PlayerWaitDistanceState;
-import org.y1000.exp.Experience;
+import org.y1000.exp.ExperienceUtil;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.*;
@@ -183,6 +181,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private long tick;
 
+    private final YinYang yinYang;
+
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
         put(State.WALK, 840);
@@ -237,11 +237,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
                       int outerPower,
                       int maxInnerPower,
                       int maxOuterPower,
-                      int age,
                       int innateHit,
                       int energy,
                       int maxEnergy,
-                      int revival) {
+                      int revival,
+                      YinYang yinYang) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
         Objects.requireNonNull(kungFuBook, "kungFuBook can't be null.");
         Objects.requireNonNull(attackKungFu, "attackKungFu can't be null.");
@@ -261,7 +261,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         this.outerPower = outerPower;
         this.maxOuterPower = maxOuterPower == 0 ? outerPower : maxOuterPower;
         this.innateLife = innateLife;
-        this.age = age;
+        this.yinYang = yinYang != null ? yinYang : new YinYang();
+        this.age = this.yinYang.age();
         initProtectKungFu(protectKungFu);
         initBreathKungFu(breathKungFu);
         this.equippedEquipments = new HashMap<>();
@@ -278,7 +279,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         this.innateHit = innateHit == 0 ? 75 : innateHit;
         this.energy = energy;
         this.maxEnergy = maxEnergy != 0 ? maxEnergy : energy;
-        this.revival = revival != 0 ? revival : 100;
+        this.revival = revival;
         currentArm = currentLife();
         currentLeg = currentLife();
         currentHead = currentLife();
@@ -646,7 +647,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (protectKungFu == null) {
             return;
         }
-        var exp = Experience.DEFAULT_EXP - damagedLifeToExp(bodyDamage);
+        var exp = ExperienceUtil.DEFAULT_EXP - damagedLifeToExp(bodyDamage);
         if (protectKungFu.gainExp(exp)) {
             emitEvent(new PlayerGainExpEvent(this, protectKungFu.name(), protectKungFu.level()));
         }

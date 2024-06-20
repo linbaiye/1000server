@@ -15,5 +15,4 @@ public interface KungFu {
 
     KungFuType kungFuType();
 
-    int exp();
 }

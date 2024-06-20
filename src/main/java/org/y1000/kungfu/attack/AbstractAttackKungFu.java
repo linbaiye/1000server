@@ -7,7 +7,6 @@ import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureSoundEvent;
-import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerStillState;
 import org.y1000.entities.players.event.*;

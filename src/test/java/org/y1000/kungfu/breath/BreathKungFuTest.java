@@ -9,6 +9,7 @@ import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.kungfu.EventResourceParameters;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 class BreathKungFuTest extends AbstractPlayerUnitTestFixture {
@@ -40,7 +41,7 @@ class BreathKungFuTest extends AbstractPlayerUnitTestFixture {
         player.consumeLife(1);
         assertTrue(breathKungFu.canRegenerateResources(player));
 
-        resourceParameters = Mockito.mock(EventResourceParameters.class);
+        reset(resourceParameters);
         when(resourceParameters.power()).thenReturn(0);
         player.consumePower(1);
         assertFalse(breathKungFu.canRegenerateResources(player));
