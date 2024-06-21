@@ -5,6 +5,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
+import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.players.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.KungFuBook;
@@ -49,16 +50,13 @@ public abstract class AbstractUnitTestFixture {
 
 
     protected PassiveMonster.PassiveMonsterBuilder monsterBuilder() {
-        return PassiveMonster.builder().id(nextId())
+        return PassiveMonster.builder()
+                .id(nextId())
                 .coordinate(Coordinate.xy(1, 1))
                 .direction(Direction.UP)
                 .name("test")
                 .realmMap(Mockito.mock(RealmMap.class))
-                .attackSpeed(200)
-                .recovery(100)
-                .avoidance(0)
-                .life(1000)
-                .wanderingRange(10)
+                .attributeProvider(new TestingMonsterAttributeProvider())
                 .stateMillis(BAFFULO_STATE_MILLIS)
                 ;
     }

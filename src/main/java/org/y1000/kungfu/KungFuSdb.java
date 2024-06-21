@@ -146,6 +146,10 @@ public final class KungFuSdb extends AbstractSdbReader {
         return get(name, "SoundEvent");
     }
 
+    public String getBowImage(String name) {
+        return get(name, "BowImage");
+    }
+
 
     public KungFuType getMagicType(String name) {
         return getEnum(name, "MagicType", KungFuType::fromValue);

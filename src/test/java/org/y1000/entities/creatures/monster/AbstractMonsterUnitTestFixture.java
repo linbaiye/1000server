@@ -6,10 +6,15 @@ import org.y1000.TestingEventListener;
 public abstract class AbstractMonsterUnitTestFixture extends AbstractUnitTestFixture  {
     protected PassiveMonster monster;
 
+    protected TestingMonsterAttributeProvider attributeProvider;
+
     protected TestingEventListener eventListener;
 
     protected void setup() {
-        monster = monsterBuilder().life(4000).build();
+        attributeProvider = new TestingMonsterAttributeProvider();
+        attributeProvider.life = 4000;
+        attributeProvider.recovery = 100;
+        monster = monsterBuilder().attributeProvider(attributeProvider).build();
         eventListener = new TestingEventListener();
         monster.registerEventListener(eventListener);
     }

@@ -2,6 +2,7 @@ package org.y1000.entities;
 
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.message.serverevent.EntityEventListener;
 
 public interface PhysicalEntity extends Entity {
@@ -25,7 +26,7 @@ public interface PhysicalEntity extends Entity {
 
     }
 
-    default boolean canAttack(PhysicalEntity target) {
+    default boolean isInRangeAndAttackable(PhysicalEntity target) {
         return target != null &&
                 target.canBeSeenAt(coordinate()) &&
                 target.attackable();

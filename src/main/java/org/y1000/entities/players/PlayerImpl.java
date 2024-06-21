@@ -13,6 +13,7 @@ import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.fight.PlayerWaitDistanceState;
+import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
@@ -1007,7 +1008,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (!entityEvent.source().equals(getFightingEntity())) {
             return;
         }
-        if (!canAttack(entityEvent.source())) {
+        if (!isInRangeAndAttackable(entityEvent.source())) {
             clearFightingEntity();
         }
         if (state() instanceof PlayerWaitDistanceState waitDistanceState) {

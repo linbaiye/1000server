@@ -3,10 +3,10 @@ package org.y1000.entities.creatures.monster;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.Direction;
-import org.y1000.entities.PlayerProjectile;
+import org.y1000.entities.projectile.MonsterProjectile;
+import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.entities.attribute.AttributeProvider;
 import org.y1000.entities.attribute.Damage;
-import org.y1000.entities.attribute.EmptyAttributeProvider;
 import org.y1000.entities.creatures.AbstractViolentCreature;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.ViolentCreature;
@@ -59,31 +59,12 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
 
     private int timeLeftToSound;
 
+    private final MonsterRangedSpell rangedSpell;
 
-
-    protected AbstractMonster(long id, Coordinate coordinate, Direction direction, String name,
-                              RealmMap realmMap, int avoidance, int recovery, int attackSpeed, int life,
-                              int wanderingRange, int armor, Map<State, Integer> stateMillis) {
-        super(id, coordinate, direction, name, stateMillis);
-        this.realmMap = realmMap;
-        this.recovery = recovery;
-        this.attackSpeed = attackSpeed;
-        this.avoidance = avoidance;
-        damage = Damage.DEFAULT;
-        spwanCoordinate = coordinate;
-        wanderingArea = new Rectangle(coordinate.move(-wanderingRange, -wanderingRange), coordinate.move(wanderingRange, wanderingRange));
-        maxLife = life;
-        currentLife = life;
-        this.armor = armor;
-        changeState(MonsterWanderingIdleState.start(getStateMillis(State.IDLE), wanderingArea.random(coordinate)));
-        this.realmMap.occupy(this);
-        this.hit = 0;
-        attributeProvider = EmptyAttributeProvider.INSTANCE;
-    }
 
     protected AbstractMonster(long id, Coordinate coordinate, Direction direction, String name,
                               RealmMap realmMap, Map<State, Integer> stateMillis,
-                              AttributeProvider attributeProvider) {
+                              AttributeProvider attributeProvider, MonsterRangedSpell spell) {
         super(id, coordinate, direction, name, stateMillis);
         this.realmMap = realmMap;
         this.recovery = attributeProvider.recovery();
@@ -100,6 +81,7 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
         this.realmMap.occupy(this);
         this.attributeProvider = attributeProvider;
+        this.rangedSpell = spell;
         setSoundTimer();
     }
 
@@ -118,6 +100,10 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         return wanderingArea;
     }
 
+
+    public Optional<MonsterRangedSpell> rangedSpell() {
+        return Optional.ofNullable(rangedSpell);
+    }
 
     private void setSoundTimer() {
         timeLeftToSound = ThreadLocalRandom.current().nextInt(15, 25) * 1000;
@@ -205,47 +191,6 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     @Override
     public boolean attackedBy(Player attacker) {
         return attackedByPlayer(attacker, attacker.damage().bodyDamage(), attacker.hit(), attacker::gainAttackExp);
-        /*
-           if n < LifeData.avoid then exit;    // 피했음.
-
-   if apercent = 100 then begin
-      declife := aHitData.damageBody - LifeData.armorBody;
-   end else begin
-      declife := (aHitData.damageBody * apercent div 100) * aHitData.HitFunctionSkill div 10000 -LifeData.armorBody;
-   end;
-
-   // Monster 나 NPC 의 자체 방어력에 의한 비율적 체력감소
-   if LifeData.HitArmor > 0 then begin
-      declife := declife - ((declife * LifeData.HitArmor) div 100);
-   end;
-
-   if declife <= 0 then declife := 1;
-
-   CurLife := CurLife - declife;
-   if CurLife <= 0 then CurLife := 0;
-
-   FreezeTick := mmAnsTick + LifeData.recovery;
-
-   if MaxLife <= 0 then begin
-      FboAllowDelete := true;
-      exit;
-   end;
-
-   if MaxLife <= 0 then BasicData.LifePercent := 0
-   else BasicData.LifePercent := CurLife * 100 div MaxLife;
-
-   SubData.Percent := BasicData.LifePercent;
-   SubData.attacker := aAttacker;
-   SubData.HitData.HitType := aHitData.HitType;
-
-   SendLocalMessage (NOTARGETPHONE, FM_STRUCTED, BasicData, SubData);
-
-   //  경치 더하기  //
-   n := MaxLife div declife;
-   if n > 15 then exp := DEFAULTEXP         // 10대이상 맞을만 하다면 1000
-   else  exp := DEFAULTEXP * n * n div (15*15);      // 20대 맞으면 죽구도 남으면 10 => 500   n 15 => 750   5=>250
-         */
-
     }
 
     @Override
@@ -253,8 +198,39 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         attackedByPlayer(projectile.getShooter(), projectile.damage().bodyDamage(), projectile.getHit(), projectile.getShooter()::gainRangedAttackExp);
     }
 
+
+    private void doAttack() {
+        if (getFightingEntity() == null || !isInRangeAndAttackable(getFightingEntity())) {
+            changeState(MonsterWanderingIdleState.reroll(this));
+            emitEvent(MonsterChangeStateEvent.of(this));
+            return;
+        }
+
+    }
+
+
+    private void rangedFight() {
+        var entity = getFightingEntity();
+        Direction towards = coordinate().computeDirection(entity.coordinate());
+        if (towards != direction()) {
+            changeDirection(towards);
+        }
+        int cooldown = cooldown();
+        if (cooldown > 0) {
+            changeState(MonsterFightCooldownState.cooldown(cooldown));
+            emitEvent(MonsterChangeStateEvent.of(this));
+            return;
+        }
+        cooldownAttack();
+        changeState(MonsterFightAttackState.of(this));
+        emitEvent(CreatureAttackEvent.ofMonster(this));
+        emitEvent(new MonsterShootEvent(new MonsterProjectile(this, entity, rangedSpell.spriteId())));
+    }
+
+
+
     public void fight() {
-        if (getFightingEntity() == null || !canAttack(getFightingEntity())) {
+        if (getFightingEntity() == null || !isInRangeAndAttackable(getFightingEntity())) {
             changeState(MonsterWanderingIdleState.reroll(this));
             emitEvent(MonsterChangeStateEvent.of(this));
             return;
@@ -350,7 +326,7 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
             log().error("Invalid event received.");
             return;
         }
-        if (!canAttack(getFightingEntity())) {
+        if (!isInRangeAndAttackable(getFightingEntity())) {
             clearFightingEntity();
         }
     }

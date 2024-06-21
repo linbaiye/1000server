@@ -144,7 +144,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     @Override
     public void attackAgain(PlayerImpl player) {
-        if (player.getFightingEntity() == null || !player.canAttack(player.getFightingEntity())) {
+        if (player.getFightingEntity() == null || !player.isInRangeAndAttackable(player.getFightingEntity())) {
             player.changeState(PlayerStillState.chillOut(player));
             return;
         }
@@ -153,7 +153,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
     protected void doStartAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target) {
-        if (!player.canAttack(target)) {
+        if (!player.isInRangeAndAttackable(target)) {
             player.emitEvent(new PlayerAttackEventResponse(player, event, false));
             return;
         }

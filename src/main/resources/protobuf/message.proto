@@ -278,10 +278,11 @@ message PlayerGainExpPacket {
   bool kungFu = 3;
 }
 
-message PlayerProjectilePacket {
+message ProjectilePacket {
   int64 id = 1;
   int64 targetId = 2;
   int32 flyingTimeMillis = 3;
+  int32 sprite = 4;
 }
 
 message Packet {
@@ -314,7 +315,7 @@ message Packet {
     CreatureDieEventPacket die = 29;
     PlayerRevivePacket playerRevive = 30;
     PlayerGainExpPacket gainExp = 31;
-    PlayerProjectilePacket playerProjectile = 32;
+    ProjectilePacket projectile = 32;
   }
 }
 

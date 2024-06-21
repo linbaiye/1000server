@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
-import org.y1000.entities.PlayerProjectile;
+import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
@@ -21,19 +21,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class PassiveMonsterTest extends AbstractMonsterUnitTestFixture{
-
-    private TestingEventListener listener;
-
-    private PassiveMonster monster;
+class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
 
     private Player player;
 
     @BeforeEach
     void setUp() {
-        listener = new TestingEventListener();
-        monster = monsterBuilder().coordinate(Coordinate.xy(1, 1)).build();
-        monster.registerEventListener(listener);
+        setup();
         player = playerBuilder().build();
     }
 
@@ -42,7 +36,7 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture{
         monster.attackedBy(player);
         assertEquals(player, monster.getFightingEntity());
         assertSame(monster.stateEnum(), State.HURT);
-        assertNotNull(listener.dequeue(CreatureHurtEvent.class));
+        assertNotNull(eventListener.dequeue(CreatureHurtEvent.class));
         monster.update(monster.getStateMillis(State.HURT));
         assertTrue(monster.state() instanceof MonsterFightIdleState);
     }
@@ -50,7 +44,7 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture{
     @Test
     void getHurtChangeTarget() {
         player = playerBuilder().coordinate(monster.coordinate().move(2, 2)).build();
-        PlayerProjectile projectile = PlayerProjectile.builder().target(monster).shooter(player).damage(new Damage(1, 1,1,1)).flyingMillis(10).build();
+        PlayerProjectile projectile = PlayerProjectile.builder().target(monster).shooter(player).damage(new Damage(1, 1,1,1)).build();
         monster.attackedBy(projectile);
         assertEquals(player, monster.getFightingEntity());
         var player1 = playerBuilder().coordinate(monster.coordinate().moveBy(Direction.LEFT)).build();
@@ -88,13 +82,17 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture{
     @Test
     void givePlayerExp() {
         Player attacker = Mockito.mock(Player.class);
-        monster = monsterBuilder().life(10000).avoidance(0).armor(1).build();
+        attributeProvider.life = 10000;
+        attributeProvider.armor = 1;
+        monster = monsterBuilder().attributeProvider(attributeProvider).build();
         when(attacker.damage()).thenReturn(new Damage(100, 100, 100, 100));
         monster.attackedBy(attacker);
         verify(attacker).gainAttackExp(10000);
 
         attacker = Mockito.mock(Player.class);
-        monster = monsterBuilder().life(100).avoidance(0).armor(0).build();
+        attributeProvider.life = 100;
+        attributeProvider.armor = 0;
+        monster = monsterBuilder().attributeProvider(attributeProvider).build();
         when(attacker.damage()).thenReturn(new Damage(100, 100, 100, 100));
         monster.attackedBy(attacker);
         verify(attacker).gainAttackExp(44);
@@ -103,8 +101,11 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture{
     @Test
     void givePlayerRangedExp() {
         Player attacker = Mockito.mock(Player.class);
-        monster = monsterBuilder().life(10000).avoidance(0).armor(1).build();
-        PlayerProjectile projectile = new PlayerProjectile(attacker, monster, 100, new Damage(1000, 1,1,1), 100);
+        when(attacker.coordinate()).thenReturn(Coordinate.xy(5, 5));
+        attributeProvider.life = 10000;
+        attributeProvider.armor = 1;
+        monster = monsterBuilder().attributeProvider(attributeProvider).build();
+        PlayerProjectile projectile = new PlayerProjectile(attacker, monster,  new Damage(1000, 1,1,1), 100);
         monster.attackedBy(projectile);
         verify(attacker).gainRangedAttackExp(any(Integer.class));
     }

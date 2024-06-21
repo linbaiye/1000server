@@ -5,7 +5,7 @@ import org.y1000.message.serverevent.EntityEventVisitor;
 import org.y1000.network.gen.CreatureSoundEventPacket;
 import org.y1000.network.gen.Packet;
 
-public class CreatureSoundEvent extends AbstractCreatureEvent {
+public final class CreatureSoundEvent extends AbstractCreatureEvent {
 
     private final String sound;
     public CreatureSoundEvent(Creature source, String sound) {

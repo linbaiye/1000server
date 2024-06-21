@@ -21,18 +21,16 @@ class MonsterFightCooldownStateTest extends AbstractMonsterUnitTestFixture {
 
     @Test
     void getHurt() {
-        monster = monsterBuilder().recovery(99).avoidance(0).build();
-        monster.registerEventListener(eventListener);
         MonsterFightCooldownState cooldownState = MonsterFightCooldownState.cooldown(10 * Realm.STEP_MILLIS);
         Player player = playerBuilder().coordinate(monster.coordinate().moveBy(Direction.RIGHT)).build();
         monster.setFightingEntity(player);
         monster.changeState(cooldownState);
         monster.attackedBy(player);
-        assertEquals(99 * Realm.STEP_MILLIS, monster.cooldown());
+        assertEquals(attributeProvider.recovery() * Realm.STEP_MILLIS, monster.cooldown());
         assertTrue(monster.state() instanceof MonsterHurtState);
         monster.update(monster.getStateMillis(State.HURT));
         assertTrue(monster.state() instanceof MonsterFightCooldownState);
-        assertEquals(99 * Realm.STEP_MILLIS - monster.getStateMillis(State.HURT), monster.cooldown());
+        assertEquals(attributeProvider.recovery() * Realm.STEP_MILLIS - monster.getStateMillis(State.HURT), monster.cooldown());
     }
 
     @Test

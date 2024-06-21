@@ -40,15 +40,7 @@ public abstract class AbstractSdbReader {
     }
 
     protected Integer getInt(String name, String key) {
-        String[] strings = values.get(name);
-        if (strings == null) {
-            return null;
-        }
-        Integer index = headerIndex.get(key);
-        if (index == null) {
-            return null;
-        }
-        String u = strings[index];
+        String u = get(name, key);
         return StringUtils.isEmpty(u) ? null : Integer.parseInt(u);
     }
 
@@ -63,11 +55,18 @@ public abstract class AbstractSdbReader {
             return null;
         }
         Integer index = headerIndex.get(key);
-        return index != null ? strings[index] : null;
+        if (index == null || index >= strings.length) {
+            return null;
+        }
+        return strings[index];
     }
 
     public Set<String> names() {
         return values.keySet();
+    }
+
+    public Set<String> columnNames() {
+        return headerIndex.keySet();
     }
 
 

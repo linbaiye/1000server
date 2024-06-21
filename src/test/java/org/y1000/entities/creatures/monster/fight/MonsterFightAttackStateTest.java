@@ -17,7 +17,8 @@ class MonsterFightAttackStateTest extends AbstractMonsterUnitTestFixture {
 
     @Test
     void nextMove() {
-        monster = monsterBuilder().attackSpeed(99).build();
+        attributeProvider.attackSpeed = 99;
+        monster = monsterBuilder().attributeProvider(attributeProvider).build();
         monster.registerEventListener(eventListener);
         MonsterFightAttackState attackState = MonsterFightAttackState.of(monster);
         monster.setFightingEntity(playerBuilder().coordinate(monster.coordinate().move(1, 0)).build());

@@ -11,6 +11,7 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import org.y1000.entities.creatures.monster.MonsterFactory;
 import org.y1000.entities.creatures.monster.MonsterFactoryImpl;
 import org.y1000.item.ItemSdb;
+import org.y1000.kungfu.KungFuSdb;
 import org.y1000.repository.*;
 import org.y1000.network.*;
 import org.y1000.realm.RealmManager;
@@ -44,7 +45,7 @@ public final class Server {
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdb.INSTANCE);
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl);
         itemRepository = repository;
-        monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonsterSdb.INSTANCE);
+        monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonsterSdb.INSTANCE, KungFuSdb.INSTANCE);
         realmManager = RealmManager.create(repository, itemRepository, monsterFactory);
     }
 

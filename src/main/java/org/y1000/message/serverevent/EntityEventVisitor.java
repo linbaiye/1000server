@@ -3,6 +3,7 @@ package org.y1000.message.serverevent;
 import org.y1000.entities.EntityLeftRealmEvent;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.players.event.RewindEvent;
+import org.y1000.entities.projectile.MonsterProjectile;
 import org.y1000.message.*;
 
 public interface EntityEventVisitor {
@@ -50,6 +51,9 @@ public interface EntityEventVisitor {
     }
 
     default void visit(EntityLeftRealmEvent event) {
+        visit((EntityEvent) event);
+    }
+    default void visit(MonsterShootEvent event) {
         visit((EntityEvent) event);
     }
 }

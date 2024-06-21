@@ -79,7 +79,7 @@ class MonsterFightIdleStateTest extends AbstractMonsterUnitTestFixture {
         // one more millisecond to finish this state.
         monster.update(monster.getStateMillis(State.IDLE) - 1);
 
-        PlayerImpl player = playerBuilder().build();
+        PlayerImpl player = playerBuilder().coordinate(monster.coordinate().move(1,0)).build();
         monster.attackedBy(player);
         assertTrue(monster.state() instanceof MonsterHurtState);
         monster.update(monster.getStateMillis(State.HURT));

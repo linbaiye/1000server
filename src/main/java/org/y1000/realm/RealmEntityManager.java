@@ -3,6 +3,9 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.event.*;
+import org.y1000.entities.projectile.AbstractProjectile;
+import org.y1000.entities.projectile.MonsterProjectile;
+import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
@@ -20,7 +23,7 @@ final class RealmEntityManager implements EntityEventListener,
 
     private final RelevantScopeManager scopeManager = new RelevantScopeManager();
 
-    private final Set<PlayerProjectile> projectiles = new HashSet<>();
+    private final Set<AbstractProjectile<?>> projectiles = new HashSet<>();
 
     private final Map<Player, Connection> playerConnectionMap = new HashMap<>(100);
 
@@ -298,6 +301,12 @@ final class RealmEntityManager implements EntityEventListener,
         sendMessage(event.player(), event);
     }
 
+    @Override
+    public void visit(MonsterShootEvent event) {
+        log.debug("Monster shot.");
+        notifyVisiblePlayers(event.source(), event);
+    }
+
     private void update(PhysicalEntity entity, int delta) {
         try {
             entity.update(delta);
@@ -307,8 +316,8 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     private void updateProjectiles(int delta) {
-        for (Iterator<PlayerProjectile> iterator = projectiles.iterator(); iterator.hasNext();) {
-            PlayerProjectile projectile = iterator.next();
+        for (Iterator<AbstractProjectile<?>> iterator = projectiles.iterator(); iterator.hasNext();) {
+            AbstractProjectile<?> projectile = iterator.next();
             try {
                 if (projectile.update(delta)) {
                     iterator.remove();

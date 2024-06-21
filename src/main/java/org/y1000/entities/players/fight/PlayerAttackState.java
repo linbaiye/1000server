@@ -3,7 +3,7 @@ package org.y1000.entities.players.fight;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.PhysicalEntity;
-import org.y1000.entities.PlayerProjectile;
+import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
@@ -42,8 +42,7 @@ public final class PlayerAttackState extends AbstractFightingState {
             return;
         }
         if (rangedTarget != null) {
-            int dist = player.coordinate().directDistance(rangedTarget.coordinate());
-            player.emitEvent(new PlayerShootEvent(new PlayerProjectile(player, rangedTarget, dist * 30, damage, rangedHit)));
+            player.emitEvent(new PlayerShootEvent(new PlayerProjectile(player, rangedTarget, damage, rangedHit)));
         }
         player.attackKungFu().attackAgain(player);
     }

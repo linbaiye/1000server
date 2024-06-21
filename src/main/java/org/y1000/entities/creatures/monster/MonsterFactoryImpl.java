@@ -1,8 +1,11 @@
 package org.y1000.entities.creatures.monster;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
+import org.y1000.kungfu.KungFuSdb;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.MonsterSdb;
@@ -12,15 +15,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 public final class MonsterFactoryImpl implements MonsterFactory {
 
     private final ActionSdb actionSdb;
 
     private final MonsterSdb monsterSdb;
+    private final KungFuSdb kungFuSdb;
 
-    public MonsterFactoryImpl(ActionSdb actionSdb, MonsterSdb monsterSdb) {
+    public MonsterFactoryImpl(ActionSdb actionSdb, MonsterSdb monsterSdb, KungFuSdb kungFuSdb) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
+        this.kungFuSdb = kungFuSdb;
     }
 
     private Map<State, Integer> createActionLengthMap(String animate) {
@@ -40,16 +46,38 @@ public final class MonsterFactoryImpl implements MonsterFactory {
         return result;
     }
 
+    private MonsterRangedSpell loadRangedSpell(String name) {
+        var magciName = monsterSdb.getAttackMagic(name);
+        if (StringUtils.isEmpty(magciName)) {
+            log.debug("No magic for {}.", name);
+            return null;
+        }
+        String bowImage = kungFuSdb.getBowImage(magciName.split(":")[0]);
+        if (StringUtils.isEmpty(bowImage)) {
+            log.debug("No bow image for {}.", magciName);
+            return null;
+        }
+        log.debug("Loaded bow image {} for {}.", bowImage, name);
+        return new MonsterRangedSpell(Integer.parseInt(bowImage));
+    }
+
     private AggressiveMonster createAggressiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
         return new AggressiveMonster(id, coordinate, Direction.DOWN, name, map,
-                createActionLengthMap(monsterSdb.getAnimate(name)),
-                new MonsterAttributeProvider(name, monsterSdb));
+                createActionLengthMap(monsterSdb.getAnimate(name)), new MonsterAttributeProvider(name, monsterSdb),
+                loadRangedSpell(name));
     }
 
     private PassiveMonster createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
-        return new PassiveMonster(id, coordinate, Direction.DOWN, name, map,
-                createActionLengthMap(monsterSdb.getAnimate(name)),
-                new MonsterAttributeProvider(name, monsterSdb));
+        return PassiveMonster.builder()
+                .id(id)
+                .coordinate(coordinate)
+                .direction(Direction.DOWN)
+                .name(name)
+                .realmMap(map)
+                .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
+                .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
+                .rangedSpell(loadRangedSpell(name))
+                .build();
     }
 
 
