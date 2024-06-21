@@ -41,8 +41,4 @@ public abstract class AbstractFightingState extends AbstractCreateState<PlayerIm
         return true;
     }
 
-    @Override
-    public int regenerate() {
-        return 10;
-    }
 }

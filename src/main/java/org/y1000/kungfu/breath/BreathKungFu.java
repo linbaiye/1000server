@@ -50,11 +50,11 @@ public final class BreathKungFu extends AbstractKungFu {
         return String.valueOf(!male ? snd + 1: snd);
     }
 
-    private int computeResource(int playerCurrentResource, int inParameter) {
+    private int computeResource(int playerMaxResource, int inParameter) {
         if (inParameter == 0) {
             return 0;
         }
-        int max = playerCurrentResource / (6 + (12000 - level()) * 14 / 12000);
+        int max = playerMaxResource / (6 + (12000 - level()) * 14 / 12000);
         return max * inParameter / 100;
     }
 
@@ -68,10 +68,10 @@ public final class BreathKungFu extends AbstractKungFu {
             return;
         }
         eventSender.invoke(new CreatureSoundEvent(player, computeSound(player.isMale())));
-        player.gainLife(computeResource(player.currentLife(), parameters.life()));
-        player.gainPower(computeResource(player.power(), parameters.power()));
-        player.gainInnerPower(computeResource(player.innerPower(), parameters.innerPower()));
-        player.gainOuterPower(computeResource(player.outerPower(), parameters.outerPower()));
+        player.gainLife(computeResource(player.maxLife(), parameters.life()));
+        player.gainPower(computeResource(player.maxPower(), parameters.power()));
+        player.gainInnerPower(computeResource(player.maxInnerPower(), parameters.innerPower()));
+        player.gainOuterPower(computeResource(player.maxOuterPower(), parameters.outerPower()));
         eventSender.invoke(new PlayerAttributeEvent(player));
         if (gainExp(ExperienceUtil.DEFAULT_EXP)) {
             eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));

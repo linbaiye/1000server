@@ -100,6 +100,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .wrist(new Wrist("女子太极护腕"))
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
                 .yinYang(yinyang)
+                .revival(0)
                 .life(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
                 .head(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
                 .arm(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))

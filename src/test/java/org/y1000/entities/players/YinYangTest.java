@@ -42,4 +42,11 @@ class YinYangTest {
         assertNotEquals(accumulated.yangLevel(), yinYang.yangLevel());
         assertNotEquals(accumulated.age(), yinYang.age());
     }
+
+    @Test
+    void hasHigherLevel() {
+        when(mockedDecider.isYin()).thenReturn(true);
+        var newYiyang = yinYang.accumulate(9);
+        assertTrue(newYiyang.hasHigherLevel(yinYang));
+    }
 }

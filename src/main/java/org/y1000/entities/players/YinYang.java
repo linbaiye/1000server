@@ -35,12 +35,21 @@ public final class YinYang {
         return ExperienceUtil.computeLevel(yang.value() + 664);
     }
 
+    public boolean isYin() {
+        return decider.isYin();
+    }
+
     public YinYang() {
         this(0, 0);
     }
 
     public int age() {
         return ExperienceUtil.computeLevel(yin.value() + yang.value());
+    }
+
+    public boolean hasHigherLevel(YinYang another) {
+        return decider.isYin() ? yinLevel() > another.yinLevel() :
+                yangLevel() > another.yangLevel();
     }
 
     public YinYang accumulate(int seconds) {

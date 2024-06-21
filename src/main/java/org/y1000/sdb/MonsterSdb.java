@@ -83,8 +83,8 @@ public final class MonsterSdb extends AbstractSdbReader {
         for (String string : strings) {
             String s = monsterSdb.get(string, "AttackMagic");
             if (!StringUtils.isEmpty(s)) {
+                System.out.print(string + ": " + s + "  ");
                 System.out.println(KungFuSdb.INSTANCE.get(s.split(":")[0], "BowImage"));
-                //System.out.println(string + ": " + s);
             }
         }
     }

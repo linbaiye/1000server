@@ -32,8 +32,4 @@ public final class PlayerFightWalkState extends AbstractPlayerMoveState {
         return State.COOLDOWN;
     }
 
-    @Override
-    public int regenerate() {
-        return 10;
-    }
 }

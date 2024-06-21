@@ -20,7 +20,4 @@ public interface PlayerState extends CreatureState<PlayerImpl> {
         return false;
     }
 
-    default int regenerate() {
-        return 100;
-    }
 }

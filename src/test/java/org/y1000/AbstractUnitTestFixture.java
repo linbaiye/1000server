@@ -5,10 +5,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
-import org.y1000.entities.players.PlayerDefaultAttributes;
-import org.y1000.entities.players.PlayerExperiencedAgedAttribute;
-import org.y1000.entities.players.PlayerImpl;
-import org.y1000.entities.players.PlayerLife;
+import org.y1000.entities.players.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.KungFuBookFactory;
@@ -75,6 +72,7 @@ public abstract class AbstractUnitTestFixture {
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA))
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
+                .yinYang(new YinYang())
                 .life(PlayerLife.create())
                 .arm(PlayerLife.create())
                 .leg(PlayerLife.create())

@@ -11,10 +11,17 @@ public final class PlayerGainExpEvent extends AbstractPlayerEvent {
 
     private final int newLevel;
 
+    private final boolean kungFu;
+
     public PlayerGainExpEvent(Player source, String name, int newLevel) {
+        this(source, name, newLevel, true);
+    }
+
+    public PlayerGainExpEvent(Player source, String name, int newLevel, boolean kungFu) {
         super(source);
         this.name = name;
         this.newLevel = newLevel;
+        this.kungFu = kungFu;
     }
 
     @Override
@@ -25,7 +32,15 @@ public final class PlayerGainExpEvent extends AbstractPlayerEvent {
     @Override
     protected Packet buildPacket() {
         return Packet.newBuilder()
-                .setGainExp(PlayerGainExpPacket.newBuilder().setName(name).setLevel(newLevel).build())
+                .setGainExp(PlayerGainExpPacket.newBuilder()
+                        .setKungFu(kungFu)
+                        .setName(name)
+                        .setLevel(newLevel)
+                        .build())
                 .build();
+    }
+
+    public static PlayerGainExpEvent nonKungFu(Player player, String name) {
+        return new PlayerGainExpEvent(player, name, 0, false);
     }
 }

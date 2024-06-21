@@ -275,6 +275,7 @@ message PlayerRevivePacket {
 message PlayerGainExpPacket {
   string name = 1;
   int32 level = 2;
+  bool kungFu = 3;
 }
 
 message PlayerProjectilePacket {

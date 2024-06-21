@@ -421,4 +421,24 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertTrue(response.isAccepted());
         assertNotNull(eventListener.removeFirst(UpdateInventorySlotEvent.class));
     }
+
+    @Test
+    void accumulateYinYang() {
+        YinYang.YinYangDecider decider = Mockito.mock(YinYang.YinYangDecider.class);
+        when(decider.isYin()).thenReturn(true);
+        attachListener(playerBuilder().yinYang(new YinYang(0, 0, decider)));
+        player.update(PlayerImpl.DEFAULT_REGENERATE_SECONDS * 1000);
+        PlayerGainExpEvent event = eventListener.removeFirst(PlayerGainExpEvent.class);
+        assertEquals("阴气", event.toPacket().getGainExp().getName());
+    }
+
+    @Test
+    void gainPowerExp() {
+        int current = player.power();
+        player.consumePower(player.power());
+        for (int i = 0; i < current; i++)
+            player.gainPower(1);
+        var event = eventListener.removeFirst(PlayerGainExpEvent.class);
+        assertEquals("武功", event.toPacket().getGainExp().getName());
+    }
 }

@@ -114,6 +114,7 @@ end;
 @Slf4j
 public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player {
 
+    public static final int DEFAULT_REGENERATE_SECONDS = 9;
     private Realm realm;
 
     private AttackKungFu attackKungFu;
@@ -136,13 +137,13 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     public static final int INNATE_ATTACKSPEED = 70;
 
-    private int revival;
+    private PlayerRevival revival;
 
     private int regenerateTimer;
 
     private long tick;
 
-    private final YinYang yinYang;
+    private YinYang yinYang;
 
     private final PlayerAgedAttribute innerPower;
 
@@ -236,17 +237,17 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         equippedEquipments.put(EquipmentType.TROUSER, trouser);
         equippedEquipments.put(EquipmentType.HAIR, hair);
         this.innateAttributesProvider = innateAttributesProvider;
-        this.revival = revival;
+        this.revival = new PlayerRevival(revival);
         this.life = life;
         this.armLife = arm;
         this.legLife = leg;
         this.headLife = head;
         changeState(new PlayerStillState(getStateMillis(State.IDLE)));
-        tick = 0;
+        setRegenerateTimer();
     }
 
-    private void resetTimer() {
-        regenerateTimer = 9 * 1000;
+    private void setRegenerateTimer() {
+        regenerateTimer = DEFAULT_REGENERATE_SECONDS * 1000;
     }
 
     private void initProtectKungFu(ProtectKungFu protectKungFu) {
@@ -593,6 +594,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private void onKilled() {
         disableFootKungFuNoTip();
+        var oldLevel = revival.level();
+        revival = revival.gainExp();
+        if (oldLevel != revival.level()) {
+            emitEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
+        }
         changeState(PlayerDeadState.die(this));
         emitEvent(new CreatureDieEvent(this));
     }
@@ -738,45 +744,58 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (regenerateTimer > 0) {
             return;
         }
-        resetTimer();
-        /*if (stateEnum() == State.DIE) {
-            regenRate = 300;
-        } else if (stateEnum() == State.SIT) {
-            regenRate = 150;
+        setRegenerateTimer();
+        var newYY = yinYang.accumulate(DEFAULT_REGENERATE_SECONDS);
+        if (newYY.hasHigherLevel(yinYang)) {
+            emitEvent(PlayerGainExpEvent.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
         }
-        case FFeatureState of
-        wfs_normal   : n := 80;
-        wfs_care     : n := 10;
-        wfs_sitdown  : n := 150;
-        wfs_die      : n := 300;
-         else n :=50;
-        end;
-        n := n + n * AttribData.crevival div 10000;*/
-        var regen = state().regenerate();
-        int regenValue = regen + (regen * revival) / 10000;
-        gainLife(regenValue);
-        gainPower(regenValue);
-        gainOuterPower(regenValue);
-        gainInnerPower(regenValue);
+        int newAge = newYY.age();
+        if (newAge != yinYang.age()) {
+            life.onAgeIncreased(newAge);
+            power.onAgeIncreased(newAge);
+            innerPower.onAgeIncreased(newAge);
+            outerPower.onAgeIncreased(newAge);
+            armLife.onAgeIncreased(newAge);
+            headLife.onAgeIncreased(newAge);
+            legLife.onAgeIncreased(newAge);
+        }
+        yinYang = newYY;
+
+        int halLife =revival.regenerateHalLife(stateEnum());
+        armLife.gain(halLife);
+        headLife.gain(halLife);
+        legLife.gain(halLife);
+        var resource = revival.regenerateResources(stateEnum());
+        life.gain(resource);
+        gainOuterPower(resource);
+        gainInnerPower(resource);
+        gainPower(resource / 2);
         emitEvent(new PlayerAttributeEvent(this));
     }
 
+    private void doGainExperiencedResource(PlayerAgedAttribute attribute, String name, int v) {
+        int old = attribute.maxValue();
+        attribute.gain(v);
+        if (attribute.maxValue() != old) {
+            emitEvent(PlayerGainExpEvent.nonKungFu(this, name));
+        }
+    }
+
     public void gainPower(int v) {
-        power.gain(v);
+        doGainExperiencedResource(power, "武功", v);
     }
 
     public void gainInnerPower(int v) {
-        innerPower.gain(v);
+        doGainExperiencedResource(innerPower, "内功", v);
     }
 
     public void gainOuterPower(int v) {
-        outerPower.gain(v);
+        doGainExperiencedResource(outerPower, "外功", v);
     }
 
     public void gainLife(int v) {
         life.gain(v);
     }
-
 
     private boolean updateKungFuAndCheck(PeriodicalKungFu kungFu,
                                          int delta,
@@ -813,7 +832,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         regenerate(delta);
         updateKungFu(delta);
         state().update(this, delta);
-        tick++;
     }
 
     public int recovery() {
@@ -990,7 +1008,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             return;
         }
         if (!canAttack(entityEvent.source())) {
-            log.debug("Target not attackable.");
             clearFightingEntity();
         }
         if (state() instanceof PlayerWaitDistanceState waitDistanceState) {
