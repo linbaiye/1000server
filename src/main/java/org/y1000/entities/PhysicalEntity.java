@@ -2,7 +2,7 @@ package org.y1000.entities;
 
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.projectile.PlayerProjectile;
+import org.y1000.entities.projectile.Projectile;
 import org.y1000.message.serverevent.EntityEventListener;
 
 public interface PhysicalEntity extends Entity {
@@ -10,9 +10,7 @@ public interface PhysicalEntity extends Entity {
      * Return true if we can be hit.
      * @return true/false.
      */
-    default boolean attackable() {
-        return true;
-    }
+    boolean attackable();
 
     default boolean attackedBy(ViolentCreature attacker) {
         return false;
@@ -22,11 +20,11 @@ public interface PhysicalEntity extends Entity {
         return false;
     }
 
-    default void attackedBy(PlayerProjectile projectile) {
+    default void attackedBy(Projectile projectile) {
 
     }
 
-    default boolean isInRangeAndAttackable(PhysicalEntity target) {
+    default boolean canPurchaseOrAttack(PhysicalEntity target) {
         return target != null &&
                 target.canBeSeenAt(coordinate()) &&
                 target.attackable();

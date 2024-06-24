@@ -9,6 +9,13 @@ message PositionPacket {
   int32 state = 6;
 }
 
+message MonsterMoveEventPacket {
+  int64 id = 1;
+  int32 direction = 2;
+  int32 speed = 3;
+}
+
+
 message InputResponsePacket {
   int64 sequence = 1;
   PositionPacket positionPacket = 2;
@@ -316,6 +323,7 @@ message Packet {
     PlayerRevivePacket playerRevive = 30;
     PlayerGainExpPacket gainExp = 31;
     ProjectilePacket projectile = 32;
+    MonsterMoveEventPacket monsterMove = 33;
   }
 }
 

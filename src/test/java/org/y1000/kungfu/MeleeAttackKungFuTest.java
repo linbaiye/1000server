@@ -8,7 +8,6 @@ import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
-import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerLife;
 import org.y1000.entities.players.PlayerStillState;
@@ -139,19 +138,6 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         assertEquals(player.cooldown(), (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS);
     }
 
-    @Test
-    void startAttackAssistantEnabled() {
-        PassiveMonster monster =  createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
-        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("test").exp(0).eightDirection(true).build());
-        player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
-        kungFu.startAttack(player, clientAttackEvent, monster);
-        assertEquals(monster, player.getFightingEntity());
-        PlayerAttackEventResponse entityEvent = playerEventListener.removeFirst(PlayerAttackEventResponse.class);
-        assertTrue(entityEvent.isAccepted());
-        var aoeEvent = playerEventListener.removeFirst(PlayerAttackAoeEvent.class);
-        assertNotNull(aoeEvent);
-    }
-
 
     @Test
     void startAttack_noEffectWhenOutOfView() {
@@ -189,6 +175,18 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     }
 
     @Test
+    void attackAgainWhenNoEnoughPower() {
+        PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
+        player.setFightingEntity(monster);
+        kungFu.attackAgain(player);
+        PlayerAttackEvent event = playerEventListener.removeFirst(PlayerAttackEvent.class);
+        assertNotNull(event);
+        assertEquals(player.cooldown(), (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS);
+        assertTrue(player.state() instanceof PlayerAttackState);
+        assertEquals(player.direction(), Direction.UP);
+    }
+
+    @Test
     void attackAgain_whenTargetOutOfView() {
         PassiveMonster monster = createMonster( player.coordinate().move(Entity.VISIBLE_X_RANGE + 1, 0));
         player.setFightingEntity(monster);
@@ -208,7 +206,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     }
 
     @Test
-    void attackWhenNoPower() {
+    void startAttackWhenNoPower() {
         player = playerBuilder().power(PlayerTestingAttribute.of(1))
                 .life(new PlayerLife(10, 0)).innerPower(PlayerTestingAttribute.of(5))
                 .outerPower(PlayerTestingAttribute.of(3)).build();

@@ -45,8 +45,8 @@ public final class Server {
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdb.INSTANCE);
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl);
         itemRepository = repository;
-        monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonsterSdb.INSTANCE, KungFuSdb.INSTANCE);
-        realmManager = RealmManager.create(repository, itemRepository, monsterFactory);
+        monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonstersSdb.INSTANCE, KungFuSdb.INSTANCE);
+        realmManager = RealmManager.create(repository, itemRepository, monsterFactory, ItemSdb.INSTANCE);
     }
 
 

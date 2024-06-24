@@ -4,6 +4,7 @@ import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.monster.MonsterMeleeAttackSkill;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.players.*;
@@ -56,6 +57,7 @@ public abstract class AbstractUnitTestFixture {
                 .direction(Direction.UP)
                 .name("test")
                 .realmMap(Mockito.mock(RealmMap.class))
+                .attackSkill(new MonsterMeleeAttackSkill())
                 .attributeProvider(new TestingMonsterAttributeProvider())
                 .stateMillis(BAFFULO_STATE_MILLIS)
                 ;

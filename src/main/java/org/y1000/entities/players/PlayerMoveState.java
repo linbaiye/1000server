@@ -3,6 +3,7 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
+import org.y1000.kungfu.FootKungFu;
 import org.y1000.util.Coordinate;
 import java.util.Set;
 
@@ -22,10 +23,18 @@ public final class PlayerMoveState extends AbstractPlayerMoveState {
         return idle(player);
     }
 
+
+    private void useResource(PlayerImpl player, FootKungFu footKungFu) {
+        footKungFu.tryGainExpAndUseResources(player, player::emitEvent);
+        if (!footKungFu.canKeep(player)) {
+            player.disableFootKungFuNoTip();
+        }
+    }
+
     @Override
     protected void onMoved(PlayerImpl player) {
         player.changeState(idle(player));
-        player.footKungFu().ifPresent(footKungFu -> footKungFu.tryGainExpAndUseResources(player, player::emitEvent));
+        player.footKungFu().ifPresent(kf -> useResource(player, kf));
     }
 
     private PlayerState idle(PlayerImpl player) {

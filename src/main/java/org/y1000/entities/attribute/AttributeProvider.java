@@ -11,6 +11,10 @@ public interface AttributeProvider {
     int armor();
     int hit();
 
+    default int walkSpeed() {
+        return 0;
+    }
+
     default Optional<String> attackSound() {
         return Optional.empty();
     }

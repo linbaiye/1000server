@@ -125,7 +125,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             return;
         }
         if (!useResources(player)) {
-            player.changeState(new PlayerCooldownState(cooldown));
+            player.changeState(new PlayerCooldownState(player.getStateMillis(State.COOLDOWN)));
             return;
         }
         player.changeDirection(direction);
@@ -136,7 +136,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         if (!isRanged()) {
             var hit = player.getFightingEntity().attackedBy(player);
             player.emitEvent(new CreatureSoundEvent(player, hit ? strikeSound() : swingSound()));
-            player.assistantKungFu().ifPresent(assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, assistantKungFu)));
+            //player.assistantKungFu().ifPresent(assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, assistantKungFu)));
         } else {
             player.emitEvent(new CreatureSoundEvent(player, swingSound()));
         }
@@ -144,7 +144,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     @Override
     public void attackAgain(PlayerImpl player) {
-        if (player.getFightingEntity() == null || !player.isInRangeAndAttackable(player.getFightingEntity())) {
+        if (player.getFightingEntity() == null || !player.canPurchaseOrAttack(player.getFightingEntity())) {
             player.changeState(PlayerStillState.chillOut(player));
             return;
         }
@@ -153,7 +153,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
     protected void doStartAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target) {
-        if (!player.isInRangeAndAttackable(target)) {
+        if (!player.canPurchaseOrAttack(target)) {
             player.emitEvent(new PlayerAttackEventResponse(player, event, false));
             return;
         }

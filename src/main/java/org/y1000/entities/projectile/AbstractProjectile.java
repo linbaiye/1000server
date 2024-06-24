@@ -4,10 +4,10 @@ import lombok.Getter;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.ViolentCreature;
 
-public abstract class AbstractProjectile<C extends ViolentCreature> {
+public abstract class AbstractProjectile implements Projectile {
 
     @Getter
-    private final C shooter;
+    private final ViolentCreature shooter;
 
     private final PhysicalEntity target;
 
@@ -17,7 +17,8 @@ public abstract class AbstractProjectile<C extends ViolentCreature> {
 
     private final int spriteId;
 
-    public AbstractProjectile(C shooter,
+
+    public AbstractProjectile(ViolentCreature shooter,
                               PhysicalEntity target,
                               int spriteId) {
         this.spriteId = spriteId;
@@ -32,7 +33,7 @@ public abstract class AbstractProjectile<C extends ViolentCreature> {
         if (elapsed < flyingMillis) {
             return false;
         }
-        target.attackedBy(shooter);
+        target.attackedBy(this);
         return true;
     }
 
@@ -44,8 +45,13 @@ public abstract class AbstractProjectile<C extends ViolentCreature> {
         return flyingMillis;
     }
 
-    public int spriteId() {
+    @Override
+    public int projectileSpriteId() {
         return spriteId;
     }
 
+    @Override
+    public ViolentCreature shooter() {
+        return shooter;
+    }
 }

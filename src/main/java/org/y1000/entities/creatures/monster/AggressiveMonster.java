@@ -17,7 +17,7 @@ public final class AggressiveMonster extends AbstractMonster {
     @Builder
     public AggressiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap, Map<State, Integer> stateMillis,
-                          AttributeProvider attributeProvider, MonsterRangedSpell spell) {
+                          AttributeProvider attributeProvider, MonsterAttackSkill spell) {
         super(id, coordinate, direction, name, realmMap, stateMillis, attributeProvider, spell);
     }
 

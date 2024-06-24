@@ -3,21 +3,14 @@ package org.y1000.entities.creatures.monster;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.Direction;
-import org.y1000.entities.projectile.MonsterProjectile;
-import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.entities.attribute.AttributeProvider;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.AbstractViolentCreature;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.event.*;
-import org.y1000.entities.creatures.monster.fight.MonsterFightAttackState;
-import org.y1000.entities.creatures.monster.fight.MonsterFightCooldownState;
-import org.y1000.entities.creatures.monster.fight.MonsterFightIdleState;
-import org.y1000.entities.creatures.monster.fight.MonsterHurtState;
-import org.y1000.entities.creatures.monster.wander.MonsterWanderingIdleState;
-import org.y1000.entities.creatures.monster.wander.WanderingState;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.projectile.Projectile;
 import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.message.CreatureInterpolation;
 import org.y1000.message.serverevent.EntityEvent;
@@ -28,7 +21,6 @@ import org.y1000.util.UnaryAction;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMonster, MonsterState<AbstractMonster>> {
     private final RealmMap realmMap;
@@ -57,14 +49,14 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
 
     private final AttributeProvider attributeProvider;
 
-    private int timeLeftToSound;
+    private final MonsterAttackSkill attackSkill;
 
-    private final MonsterRangedSpell rangedSpell;
+    private MonsterAI ai;
 
 
     protected AbstractMonster(long id, Coordinate coordinate, Direction direction, String name,
                               RealmMap realmMap, Map<State, Integer> stateMillis,
-                              AttributeProvider attributeProvider, MonsterRangedSpell spell) {
+                              AttributeProvider attributeProvider, MonsterAttackSkill spell) {
         super(id, coordinate, direction, name, stateMillis);
         this.realmMap = realmMap;
         this.recovery = attributeProvider.recovery();
@@ -76,13 +68,18 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         maxLife = attributeProvider.life();
         currentLife = attributeProvider.life();
         this.armor = attributeProvider.armor();
-        changeState(MonsterWanderingIdleState.start(getStateMillis(State.IDLE), wanderingArea.random(coordinate)));
         this.hit = attributeProvider.hit();
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
         this.realmMap.occupy(this);
         this.attributeProvider = attributeProvider;
-        this.rangedSpell = spell;
-        setSoundTimer();
+        this.attackSkill = spell;
+        ai = new MonsterWanderingAI(wanderingArea().random(spwanCoordinate), coordinate);
+        ai.start(this);
+    }
+
+
+    public Optional<String> attackSound() {
+        return attributeProvider.attackSound();
     }
 
 
@@ -91,6 +88,22 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         currentLife = maxLife;
     }
 
+    public MonsterAI AI() {
+        return ai;
+    }
+
+    public void changeAI(MonsterAI ai) {
+        this.ai = ai;
+        this.ai.start(this);
+    }
+
+    public MonsterAttackSkill attackSkill() {
+        return attackSkill;
+    }
+
+    public int walkSpeed() {
+        return attributeProvider.walkSpeed();
+    }
 
     public RealmMap realmMap() {
         return realmMap;
@@ -101,32 +114,10 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     }
 
 
-    public Optional<MonsterRangedSpell> rangedSpell() {
-        return Optional.ofNullable(rangedSpell);
-    }
-
-    private void setSoundTimer() {
-        timeLeftToSound = ThreadLocalRandom.current().nextInt(15, 25) * 1000;
-    }
-
-    private void countDownSoundTimer(int delta) {
-        if (normalSound().isEmpty()) {
-            return;
-        }
-        if (state() instanceof WanderingState)
-            timeLeftToSound = Math.max(0, timeLeftToSound - delta);
-        else
-            setSoundTimer();
-        if (timeLeftToSound == 0) {
-            setSoundTimer();
-            emitEvent(new CreatureSoundEvent(this, normalSound().orElse("")));
-        }
-    }
-
     @Override
     public void update(int delta) {
         cooldown(delta);
-        countDownSoundTimer(delta);
+        ai.update(this, delta);
         state().update(this, delta);
     }
 
@@ -194,68 +185,10 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     }
 
     @Override
-    public void attackedBy(PlayerProjectile projectile) {
-        attackedByPlayer(projectile.getShooter(), projectile.damage().bodyDamage(), projectile.getHit(), projectile.getShooter()::gainRangedAttackExp);
-    }
-
-
-    private void doAttack() {
-        if (getFightingEntity() == null || !isInRangeAndAttackable(getFightingEntity())) {
-            changeState(MonsterWanderingIdleState.reroll(this));
-            emitEvent(MonsterChangeStateEvent.of(this));
-            return;
+    public void attackedBy(Projectile projectile) {
+        if (projectile.shooter() instanceof Player player) {
+            attackedByPlayer(player, projectile.damage().bodyDamage(), projectile.hit(), player::gainRangedAttackExp);
         }
-
-    }
-
-
-    private void rangedFight() {
-        var entity = getFightingEntity();
-        Direction towards = coordinate().computeDirection(entity.coordinate());
-        if (towards != direction()) {
-            changeDirection(towards);
-        }
-        int cooldown = cooldown();
-        if (cooldown > 0) {
-            changeState(MonsterFightCooldownState.cooldown(cooldown));
-            emitEvent(MonsterChangeStateEvent.of(this));
-            return;
-        }
-        cooldownAttack();
-        changeState(MonsterFightAttackState.of(this));
-        emitEvent(CreatureAttackEvent.ofMonster(this));
-        emitEvent(new MonsterShootEvent(new MonsterProjectile(this, entity, rangedSpell.spriteId())));
-    }
-
-
-
-    public void fight() {
-        if (getFightingEntity() == null || !isInRangeAndAttackable(getFightingEntity())) {
-            changeState(MonsterWanderingIdleState.reroll(this));
-            emitEvent(MonsterChangeStateEvent.of(this));
-            return;
-        }
-        var entity = getFightingEntity();
-        if (entity.coordinate().directDistance(coordinate()) > 1) {
-            changeState(MonsterFightIdleState.start(this));
-            emitEvent(MonsterChangeStateEvent.of(this));
-            return;
-        }
-        Direction towards = coordinate().computeDirection(entity.coordinate());
-        if (towards != direction()) {
-            changeDirection(towards);
-        }
-        int cooldown = cooldown();
-        if (cooldown > 0) {
-            changeState(MonsterFightCooldownState.cooldown(cooldown));
-            emitEvent(MonsterChangeStateEvent.of(this));
-            return;
-        }
-        attributeProvider.attackSound().ifPresent(s -> emitEvent(new CreatureSoundEvent(this, s)));
-        cooldownAttack();
-        entity.attackedBy(this);
-        changeState(MonsterFightAttackState.of(this));
-        emitEvent(CreatureAttackEvent.ofMonster(this));
     }
 
 
@@ -326,7 +259,7 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
             log().error("Invalid event received.");
             return;
         }
-        if (!isInRangeAndAttackable(getFightingEntity())) {
+        if (!canPurchaseOrAttack(getFightingEntity())) {
             clearFightingEntity();
         }
     }

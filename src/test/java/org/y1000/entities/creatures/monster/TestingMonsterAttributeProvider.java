@@ -10,8 +10,8 @@ public class TestingMonsterAttributeProvider implements AttributeProvider {
                 .life(1000)
                 .wanderingRange(10)*/
 
-    public int attackSpeed;
-    public int recovery;
+    public int attackSpeed = 100;
+    public int recovery = 200;
     public int life;
     public int avoidance;
     public int armor;

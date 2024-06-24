@@ -3,21 +3,21 @@ package org.y1000.message;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.monster.AbstractMonster;
-import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.EntityEventVisitor;
 import org.y1000.util.Coordinate;
 
 
-public final class MoveEvent extends AbstractPositionEvent {
+public final class PlayerMoveEvent extends AbstractPositionEvent {
 
-    public MoveEvent(Creature entity, Direction direction, Coordinate coordinate) {
+
+    public PlayerMoveEvent(Creature entity, Direction direction, Coordinate coordinate) {
         super(entity, direction, coordinate, entity.stateEnum());
     }
 
-    public static MoveEvent movingTo(Player player,
-                                     Direction direction) {
-        return new MoveEvent(player, direction, player.coordinate());
+    public static PlayerMoveEvent movingTo(Player player,
+                                           Direction direction) {
+        return new PlayerMoveEvent(player, direction, player.coordinate());
     }
 
     @Override
@@ -30,7 +30,7 @@ public final class MoveEvent extends AbstractPositionEvent {
         visitor.visit(this);
     }
 
-    public static MoveEvent movingTo(AbstractMonster monster, Direction direction) {
-        return new MoveEvent(monster, direction, monster.coordinate());
+    public static PlayerMoveEvent movingTo(AbstractMonster monster, Direction direction) {
+        return new PlayerMoveEvent(monster, direction, monster.coordinate());
     }
 }

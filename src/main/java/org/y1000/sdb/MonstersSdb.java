@@ -1,15 +1,11 @@
 package org.y1000.sdb;
 
-import org.apache.commons.lang3.StringUtils;
-import org.y1000.kungfu.KungFuSdb;
 
-import java.util.Set;
+public final class MonstersSdb extends AbstractSdbReader {
 
-public final class MonsterSdb extends AbstractSdbReader {
+    public static final MonstersSdb INSTANCE = new MonstersSdb();
 
-    public static final MonsterSdb INSTANCE = new MonsterSdb();
-
-    private MonsterSdb() {
+    private MonstersSdb() {
         read("Monster.sdb");
     }
 
@@ -75,27 +71,18 @@ public final class MonsterSdb extends AbstractSdbReader {
         return get(name, "AttackMagic");
     }
 
+
+    public int getWalkSpeed(String name) {
+        return getInt(name, "WalkSpeed");
+    }
+
     public boolean isPassive(String name) {
         String s = get(name, "boGoodHeart");
         return "TRUE".equals(s);
     }
 
     public static void main(String[] args) {
-        MonsterSdb monsterSdb = INSTANCE;
-        Set<String> strings = monsterSdb.names();
-        for (String string : strings) {
-            String s = monsterSdb.get(string, "AttackMagic");
-            if (!StringUtils.isEmpty(s)) {
-                System.out.print(string + ": " + s + "  ");
-                System.out.println(KungFuSdb.INSTANCE.get(s.split(":")[0], "BowImage"));
-            }
-        }
-        for(String header: KungFuSdb.INSTANCE.columnNames()) {
-            String name = KungFuSdb.INSTANCE.get("标枪法", header);
-            if (StringUtils.isNotEmpty(name)) {
-                System.out.println(header + ": " + name);
-            }
-        }
+        System.out.println(MonstersSdb.INSTANCE.get("投石女", "WalkSpeed"));
     }
 }
 

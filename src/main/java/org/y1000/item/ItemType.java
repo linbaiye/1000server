@@ -6,6 +6,9 @@ public enum ItemType implements ValueEnum  {
     EQUIPMENT(6),
 
     ARROW(7),
+
+    SELLING_GOODS(5),
+
     STACK(8),
 
             ;
@@ -22,6 +25,9 @@ public enum ItemType implements ValueEnum  {
     }
 
     public static ItemType fromValue(int v) {
+        if (v == 4) {
+            v = 5;
+        }
         return ValueEnum.fromValueOrThrow(values(), v);
     }
 }

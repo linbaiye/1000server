@@ -3,9 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.event.*;
-import org.y1000.entities.projectile.AbstractProjectile;
-import org.y1000.entities.projectile.MonsterProjectile;
-import org.y1000.entities.projectile.PlayerProjectile;
+import org.y1000.entities.projectile.Projectile;
 import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
@@ -23,7 +21,7 @@ final class RealmEntityManager implements EntityEventListener,
 
     private final RelevantScopeManager scopeManager = new RelevantScopeManager();
 
-    private final Set<AbstractProjectile<?>> projectiles = new HashSet<>();
+    private final Set<Projectile> projectiles = new HashSet<>();
 
     private final Map<Player, Connection> playerConnectionMap = new HashMap<>(100);
 
@@ -36,6 +34,7 @@ final class RealmEntityManager implements EntityEventListener,
     private final TradeManager tradeManager;
 
     private final Set<PhysicalEntity> deletingEntities;
+    private final Set<PhysicalEntity> addingEntities;
 
     RealmEntityManager(ItemRepository itemRepository,
                        ItemFactory itemFactory) {
@@ -43,6 +42,7 @@ final class RealmEntityManager implements EntityEventListener,
         this.itemFactory = itemFactory;
         tradeManager = new TradeManager();
         deletingEntities = new HashSet<>();
+        addingEntities = new HashSet<>();
     }
 
     public int generateEntityId() {
@@ -187,8 +187,12 @@ final class RealmEntityManager implements EntityEventListener,
     public void visit(PlayerDropItemEvent event) {
         sendMessage(event.player(), event);
         GroundedItem groundedItem = event.createGroundedItem(temporaryEntityId++);
-        add(groundedItem);
-        notifyVisiblePlayers(groundedItem, groundedItem.captureInterpolation());
+        showItem(groundedItem);
+    }
+
+
+    public void showItem(GroundedItem item) {
+        addingEntities.add(item);
     }
 
 
@@ -303,7 +307,11 @@ final class RealmEntityManager implements EntityEventListener,
 
     @Override
     public void visit(MonsterShootEvent event) {
-        log.debug("Monster shot.");
+        notifyVisiblePlayers(event.source(), event);
+    }
+
+    @Override
+    public void visit(MonsterMoveEvent event) {
         notifyVisiblePlayers(event.source(), event);
     }
 
@@ -316,8 +324,8 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     private void updateProjectiles(int delta) {
-        for (Iterator<AbstractProjectile<?>> iterator = projectiles.iterator(); iterator.hasNext();) {
-            AbstractProjectile<?> projectile = iterator.next();
+        for (Iterator<Projectile> iterator = projectiles.iterator(); iterator.hasNext();) {
+            Projectile projectile = iterator.next();
             try {
                 if (projectile.update(delta)) {
                     iterator.remove();
@@ -335,6 +343,11 @@ final class RealmEntityManager implements EntityEventListener,
         deletingEntities.forEach(scopeManager::remove);
         deletingEntities.forEach(entity -> entity.deregisterEventListener(this));
         deletingEntities.clear();
+        addingEntities.forEach(e -> {
+            scopeManager.add(e);
+            notifyVisiblePlayers(e, e.captureInterpolation());
+        });
+        addingEntities.clear();
     }
 
     public Optional<PhysicalEntity> findInsight(PhysicalEntity source, long id) {

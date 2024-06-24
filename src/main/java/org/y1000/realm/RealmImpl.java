@@ -1,12 +1,11 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.monster.AbstractMonster;
 import org.y1000.entities.creatures.monster.MonsterFactory;
-import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.item.ItemFactory;
+import org.y1000.item.ItemSdb;
 import org.y1000.repository.ItemRepository;
 import org.y1000.realm.event.PlayerConnectedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
@@ -31,12 +30,16 @@ final class RealmImpl implements Runnable, Realm {
 
     private final MonsterFactory monsterFactory;
 
+    private final ItemManager itemManager;
+
     public RealmImpl(RealmMap map,
                      ItemRepository itemRepository,
                      ItemFactory itemFactory,
-                     MonsterFactory monsterFactory) {
+                     MonsterFactory monsterFactory,
+                     ItemSdb itemSdb) {
         realmMap = map;
         entityManager = new RealmEntityManager(itemRepository, itemFactory);
+        itemManager = new ItemManager(entityManager, itemSdb);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
         this.monsterFactory = monsterFactory;
@@ -55,9 +58,11 @@ final class RealmImpl implements Runnable, Realm {
                     monsterFactory.createMonster("老虎", entityManager.generateEntityId(), map(), new Coordinate(39, 32)),
                     monsterFactory.createMonster("忍者", entityManager.generateEntityId(), map(), new Coordinate(39, 33)),
                     monsterFactory.createMonster("赤风", entityManager.generateEntityId(), map(), new Coordinate(39, 35)),
-                    monsterFactory.createMonster("太极公子", entityManager.generateEntityId(), map(), new Coordinate(39, 36))
+                    monsterFactory.createMonster("太极公子", entityManager.generateEntityId(), map(), new Coordinate(39, 36)),
+                    monsterFactory.createMonster("投石女", entityManager.generateEntityId(), map(), new Coordinate(39, 37))
                     //monsterFactory.createMonster("鹿", entityManager.generateEntityId(), map(), new Coordinate(39, 32))
             );
+            monsters.forEach(m -> m.registerEventListener(itemManager));
             monsters.forEach(entityManager::add);
         } catch (Exception e) {
             log.error("Exception ", e);

@@ -3,29 +3,28 @@ package org.y1000.entities.creatures.event;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.projectile.AbstractProjectile;
+import org.y1000.entities.projectile.Projectile;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ProjectilePacket;
 
 public abstract class AbstractShootEvent extends AbstractCreatureEvent {
 
-    private final AbstractProjectile<?> projectile;
+    private final Projectile projectile;
 
     protected AbstractShootEvent(Creature source,
-                                 AbstractProjectile<?> projectile) {
+                                 AbstractProjectile projectile) {
         super(source);
         this.projectile = projectile;
     }
 
-    public AbstractProjectile<?> projectile() {
+    public Projectile projectile() {
         return projectile;
     }
 
-
     @Override
     public PhysicalEntity source() {
-        return projectile.getShooter();
+        return projectile.shooter();
     }
-
 
     @Override
     protected Packet buildPacket() {
@@ -33,7 +32,7 @@ public abstract class AbstractShootEvent extends AbstractCreatureEvent {
                 ProjectilePacket.newBuilder()
                         .setId(source().id())
                         .setTargetId(projectile.target().id())
-                        .setSprite(projectile.spriteId())
+                        .setSprite(projectile.projectileSpriteId())
                         .setFlyingTimeMillis(projectile.flyingMillis())
                         .build()
         ).build();

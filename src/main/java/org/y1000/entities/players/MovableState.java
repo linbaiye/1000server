@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.event.RewindEvent;
 import org.y1000.message.InputResponseMessage;
-import org.y1000.message.MoveEvent;
+import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.message.clientevent.ClientMovementEvent;
 import org.y1000.message.clientevent.input.AbstractRightClick;
@@ -31,7 +31,7 @@ public interface MovableState {
                     (PlayerState)PlayerMoveState.moveBy(player, rightClick.direction()))
                     .orElse(moveState(player, rightClick.direction()));
             player.changeState(playerState);
-            player.emitEvent(new InputResponseMessage(rightClick.sequence(), MoveEvent.movingTo(player, rightClick.direction())));
+            player.emitEvent(new InputResponseMessage(rightClick.sequence(), PlayerMoveEvent.movingTo(player, rightClick.direction())));
         }
     }
 

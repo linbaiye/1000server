@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.EventListeners;
 import org.y1000.exp.ExperienceUtil;
@@ -10,6 +11,7 @@ import org.y1000.util.Coordinate;
 import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S extends CreatureState<C>> implements Creature {
 
     private final long id;
@@ -35,6 +37,7 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
         Objects.requireNonNull(coordinate, "coordinate can't be null.");
         Objects.requireNonNull(direction, "direction can't be null.");
         Objects.requireNonNull(name, "name can't be null.");
+        Objects.requireNonNull(stateMillis, "stateMillis can't be null.");
         this.id = id;
         this.coordinate = coordinate;
         this.direction = direction;

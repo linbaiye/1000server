@@ -13,7 +13,7 @@ import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.fight.PlayerWaitDistanceState;
-import org.y1000.entities.projectile.PlayerProjectile;
+import org.y1000.entities.projectile.Projectile;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
@@ -664,8 +664,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     @Override
-    public void attackedBy(PlayerProjectile projectile) {
-        attackedBy(projectile.getShooter());
+    public void attackedBy(Projectile projectile) {
+        attackedBy(projectile.shooter());
     }
 
     @Override
@@ -1008,7 +1008,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (!entityEvent.source().equals(getFightingEntity())) {
             return;
         }
-        if (!isInRangeAndAttackable(entityEvent.source())) {
+        if (!canPurchaseOrAttack(entityEvent.source())) {
             clearFightingEntity();
         }
         if (state() instanceof PlayerWaitDistanceState waitDistanceState) {

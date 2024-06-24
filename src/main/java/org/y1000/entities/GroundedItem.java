@@ -2,21 +2,20 @@ package org.y1000.entities;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.y1000.message.AbstractEntityInterpolation;
 import org.y1000.message.GroundedItemInterpolation;
 import org.y1000.message.serverevent.EntityEventListener;
 import org.y1000.util.Coordinate;
 
 import java.util.Objects;
+import java.util.Optional;
 
 
 public final class GroundedItem implements PhysicalEntity {
 
     private final Coordinate coordinate;
 
-    private final int x;
-
-    private final int y;
 
     @Getter
     private final Integer number;
@@ -30,16 +29,27 @@ public final class GroundedItem implements PhysicalEntity {
     @Getter
     private final String name;
 
+    private final String dropSound;
+
+    private final String pickSound;
+
     @Builder
-    public GroundedItem(long id, String name, Coordinate coordinate, int x, int y, Integer number) {
+    public GroundedItem(long id, String name, Coordinate coordinate, Integer number, String dropSound, String pickSound) {
         this.id = id;
         this.name = name;
         this.coordinate = coordinate;
-        this.x = x;
-        this.y = y;
         this.number = number;
+        this.dropSound = StringUtils.isEmpty(dropSound) ? null : dropSound;
+        this.pickSound = StringUtils.isAllBlank(pickSound) ? null : pickSound;
     }
 
+    public Optional<String> dropSound() {
+        return Optional.ofNullable(dropSound);
+    }
+
+    public Optional<String> pickSound() {
+        return Optional.ofNullable(pickSound);
+    }
 
     @Override
     public long id() {
@@ -58,7 +68,6 @@ public final class GroundedItem implements PhysicalEntity {
             // listener.OnEvent();
         }
     }
-
 
     public boolean canPickAt(Coordinate from) {
         return coordinate().xDistance(from.x()) <= 2 && coordinate().yDistance(from.y()) <= 3;
@@ -89,8 +98,6 @@ public final class GroundedItem implements PhysicalEntity {
                 .number(number)
                 .id(id())
                 .coordinate(coordinate)
-                .x(x)
-                .y(y)
                 .build();
     }
 

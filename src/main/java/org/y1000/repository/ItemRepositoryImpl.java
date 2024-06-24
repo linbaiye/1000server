@@ -60,6 +60,7 @@ public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
         }
         return switch (itemSdb.getType(name)) {
             case ARROW -> new StackItem(name, number, ItemType.ARROW);
+            case SELLING_GOODS -> new StackItem(name, number, ItemType.SELLING_GOODS);
             default -> throw new NoSuchElementException();
         };
     }

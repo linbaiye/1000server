@@ -9,9 +9,9 @@ import java.util.Optional;
 public final class MonsterAttributeProvider implements AttributeProvider {
 
     private final String name;
-    private final MonsterSdb monsterSdb;
+    private final MonstersSdb monsterSdb;
 
-    public MonsterAttributeProvider(String name, MonsterSdb monsterSdb) {
+    public MonsterAttributeProvider(String name, MonstersSdb monsterSdb) {
         this.name = name;
         this.monsterSdb = monsterSdb;
     }
@@ -64,6 +64,11 @@ public final class MonsterAttributeProvider implements AttributeProvider {
     @Override
     public String hurtSound() {
         return monsterSdb.getSoundStructed(name);
+    }
+
+    @Override
+    public int walkSpeed() {
+        return monsterSdb.getWalkSpeed(name) * 10;
     }
 
     private Optional<String> getSound(String s) {

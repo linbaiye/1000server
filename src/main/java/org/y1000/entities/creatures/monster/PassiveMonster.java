@@ -21,8 +21,8 @@ public final class PassiveMonster extends AbstractMonster {
     @Builder
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap, Map<State, Integer> stateMillis,
-                          AttributeProvider attributeProvider, MonsterRangedSpell rangedSpell) {
-        super(id, coordinate, direction, name, realmMap, stateMillis, attributeProvider, rangedSpell);
+                          AttributeProvider attributeProvider, MonsterAttackSkill attackSkill) {
+        super(id, coordinate, direction, name, realmMap, stateMillis, attributeProvider, attackSkill);
     }
 
 

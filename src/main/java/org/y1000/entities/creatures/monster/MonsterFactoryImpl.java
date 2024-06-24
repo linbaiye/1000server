@@ -8,7 +8,7 @@ import org.y1000.entities.creatures.State;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.ActionSdb;
-import org.y1000.sdb.MonsterSdb;
+import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
 import java.util.HashMap;
@@ -20,10 +20,10 @@ public final class MonsterFactoryImpl implements MonsterFactory {
 
     private final ActionSdb actionSdb;
 
-    private final MonsterSdb monsterSdb;
+    private final MonstersSdb monsterSdb;
     private final KungFuSdb kungFuSdb;
 
-    public MonsterFactoryImpl(ActionSdb actionSdb, MonsterSdb monsterSdb, KungFuSdb kungFuSdb) {
+    public MonsterFactoryImpl(ActionSdb actionSdb, MonstersSdb monsterSdb, KungFuSdb kungFuSdb) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
         this.kungFuSdb = kungFuSdb;
@@ -46,25 +46,24 @@ public final class MonsterFactoryImpl implements MonsterFactory {
         return result;
     }
 
-    private MonsterRangedSpell loadRangedSpell(String name) {
-        var magciName = monsterSdb.getAttackMagic(name);
-        if (StringUtils.isEmpty(magciName)) {
-            log.debug("No magic for {}.", name);
-            return null;
+    private MonsterAttackSkill createAttackSkill(String name) {
+        var magicNameAndLevel = monsterSdb.getAttackMagic(name);
+        if (StringUtils.isEmpty(magicNameAndLevel)) {
+            return new MonsterMeleeAttackSkill();
         }
-        String bowImage = kungFuSdb.getBowImage(magciName.split(":")[0]);
+        String magicName = magicNameAndLevel.split(":")[0];
+        String bowImage = kungFuSdb.getBowImage(magicName);
         if (StringUtils.isEmpty(bowImage)) {
-            log.debug("No bow image for {}.", magciName);
-            return null;
+            return new MonsterMeleeAttackSkill();
         }
-        log.debug("Loaded bow image {} for {}.", bowImage, name);
-        return new MonsterRangedSpell(Integer.parseInt(bowImage));
+        return new MonsterRangedAttackSkill(Integer.parseInt(bowImage), kungFuSdb.getSoundSwing(magicName));
     }
 
     private AggressiveMonster createAggressiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
         return new AggressiveMonster(id, coordinate, Direction.DOWN, name, map,
-                createActionLengthMap(monsterSdb.getAnimate(name)), new MonsterAttributeProvider(name, monsterSdb),
-                loadRangedSpell(name));
+                createActionLengthMap(monsterSdb.getAnimate(name)),
+                new MonsterAttributeProvider(name, monsterSdb),
+                createAttackSkill(name));
     }
 
     private PassiveMonster createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
@@ -76,7 +75,7 @@ public final class MonsterFactoryImpl implements MonsterFactory {
                 .realmMap(map)
                 .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                 .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
-                .rangedSpell(loadRangedSpell(name))
+                .attackSkill(createAttackSkill(name))
                 .build();
     }
 
