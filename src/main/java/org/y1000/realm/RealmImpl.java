@@ -67,8 +67,8 @@ final class RealmImpl implements Runnable, Realm {
                     monsterFactory.createMonster("投石女", entityManager.generateEntityId(), map(), new Coordinate(39, 37))
                     //monsterFactory.createMonster("鹿", entityManager.generateEntityId(), map(), new Coordinate(39, 32))
             );
-            monsters.forEach(m -> m.registerEventListener(itemManager));
             monsters.forEach(entityManager::add);
+            monsters.forEach(m -> m.registerEventListener(itemManager));
         } catch (Exception e) {
             log.error("Exception ", e);
         }
@@ -122,6 +122,8 @@ final class RealmImpl implements Runnable, Realm {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        } catch (Exception e) {
+            log.error("Exception ", e);
         }
     }
 

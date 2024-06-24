@@ -106,6 +106,7 @@ final class ItemManager extends AbstractEntityManager<GroundedItem> implements E
 
     @Override
     public void visit(CreatureDieEvent event) {
+        log.debug("Handling die event.");
         if (event.source() instanceof AbstractMonster monster) {
             List<DropItem> dropItems = getFor(monster.name());
             for (DropItem dropItem : dropItems) {
@@ -115,10 +116,15 @@ final class ItemManager extends AbstractEntityManager<GroundedItem> implements E
                 add(createGroundItem(dropItem.name(), monster.coordinate(), dropItem.count()));
             }
         }
+        log.debug("Handled die event.");
     }
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
-        entityEvent.accept(this);
+        try {
+            entityEvent.accept(this);
+        } catch (Exception e) {
+            log.error("Failed to handle event, ", e);
+        }
     }
 }

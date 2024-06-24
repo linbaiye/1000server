@@ -136,6 +136,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         if (!isRanged()) {
             var hit = player.getFightingEntity().attackedBy(player);
             player.emitEvent(new EntitySoundEvent(player, hit ? strikeSound() : swingSound()));
+            logger().debug("Done attack event.");
             //player.assistantKungFu().ifPresent(assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, assistantKungFu)));
         } else {
             player.emitEvent(new EntitySoundEvent(player, swingSound()));
