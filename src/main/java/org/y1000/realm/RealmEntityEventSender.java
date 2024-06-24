@@ -15,9 +15,12 @@ import org.y1000.network.Connection;
 
 import java.util.*;
 
+/**
+ * Responsible for sending events to visible clients.
+ */
 @Slf4j
-final class RealmEntityManager implements EntityEventListener,
-        PlayerEventVisitor {
+final class RealmEntityEventSender implements EntityEventListener,
+        PlayerEventVisitor, EntityEventSender {
 
     private final RelevantScopeManager scopeManager = new RelevantScopeManager();
 
@@ -27,18 +30,16 @@ final class RealmEntityManager implements EntityEventListener,
 
     private int temporaryEntityId = 1;
 
-    private final ItemRepository itemRepository;
-
     private final ItemFactory itemFactory;
 
     private final TradeManager tradeManager;
 
     private final Set<PhysicalEntity> deletingEntities;
+
     private final Set<PhysicalEntity> addingEntities;
 
-    RealmEntityManager(ItemRepository itemRepository,
-                       ItemFactory itemFactory) {
-        this.itemRepository = itemRepository;
+    RealmEntityEventSender(ItemRepository itemRepository,
+                           ItemFactory itemFactory) {
         this.itemFactory = itemFactory;
         tradeManager = new TradeManager();
         deletingEntities = new HashSet<>();
@@ -183,23 +184,11 @@ final class RealmEntityManager implements EntityEventListener,
         sendMessage(event.player(), event);
     }
 
-    @Override
-    public void visit(PlayerDropItemEvent event) {
-        sendMessage(event.player(), event);
-        GroundedItem groundedItem = event.createGroundedItem(temporaryEntityId++);
-        showItem(groundedItem);
-    }
-
-
-    public void showItem(GroundedItem item) {
-        addingEntities.add(item);
-    }
-
 
     @Override
     public void visit(PlayerPickedItemEvent event) {
         sendMessage(event.player(), event);
-        notifyVisiblePlayers(event.groundedItem(), new RemoveEntityMessage(event.groundedItem().getId()));
+        notifyVisiblePlayers(event.groundedItem(), new RemoveEntityMessage(event.groundedItem().id()));
         scopeManager.remove(event.groundedItem());
         //itemRepository.save(event.player().id(), event, currentItemInSlot);
     }
@@ -291,12 +280,12 @@ final class RealmEntityManager implements EntityEventListener,
     }
 
     @Override
-    public void visit(CreatureSoundEvent event) {
+    public void visit(EntitySoundEvent event) {
         notifyVisiblePlayersAndSelf(event.source(), event);
     }
 
     @Override
-    public void visit(EntityLeftRealmEvent event) {
+    public void visit(RemoveEntityEvent event) {
         cleanEntity(event.source(), event);
     }
 
@@ -312,6 +301,11 @@ final class RealmEntityManager implements EntityEventListener,
 
     @Override
     public void visit(MonsterMoveEvent event) {
+        notifyVisiblePlayers(event.source(), event);
+    }
+
+    @Override
+    public void visit(ShowItemEvent event) {
         notifyVisiblePlayers(event.source(), event);
     }
 
@@ -370,6 +364,15 @@ final class RealmEntityManager implements EntityEventListener,
         }
         scopeManager.add(entity);
         entity.registerEventListener(this);
+    }
+
+    public void remove(PhysicalEntity entity) {
+        scopeManager.remove(entity);
+    }
+
+    @Override
+    public void sendEvent(EntityEvent entityEvent) {
+        entityEvent.accept(this);
     }
 
     public void remove(Player player) {

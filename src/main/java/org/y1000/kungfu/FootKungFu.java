@@ -3,7 +3,7 @@ package org.y1000.kungfu;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.y1000.entities.creatures.event.CreatureSoundEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
@@ -55,7 +55,7 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
         } else if (level() >= 5000) {
             snd = sound + 1;
         }
-        eventSender.invoke(new CreatureSoundEvent(player, String.valueOf(snd)));
+        eventSender.invoke(new EntitySoundEvent(player, String.valueOf(snd)));
         if (gainExp(ExperienceUtil.DEFAULT_EXP)) {
             eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
         }

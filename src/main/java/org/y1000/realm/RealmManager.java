@@ -13,6 +13,7 @@ import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.event.ConnectionEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
+import org.y1000.sdb.MonstersSdb;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -111,10 +112,11 @@ public final class RealmManager implements Runnable {
     public static RealmManager create(ItemFactory itemFactory,
                                       ItemRepository itemRepository,
                                       MonsterFactory monsterFactory,
-                                      ItemSdb itemSdb) {
+                                      ItemSdb itemSdb,
+                                      MonstersSdb monstersSdb) {
         Map<String, RealmImpl> realmMap = new HashMap<>();
         RealmImpl realm = RealmMap.Load("start")
-                .map(m -> new RealmImpl(m, itemRepository, itemFactory, monsterFactory, itemSdb))
+                .map(m -> new RealmImpl(m, itemRepository, itemFactory, monsterFactory, itemSdb, monstersSdb))
                 .orElseThrow(() -> new IllegalArgumentException("Map not found."));
         realmMap.put(realm.map().name(), realm);
         return new RealmManager(realmMap);

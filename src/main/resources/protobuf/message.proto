@@ -147,8 +147,6 @@ message DropItemConfirmPacket {
 
 message ShowItemPacket {
   int32 id = 1;
-  int32 x = 2;
-  int32 y = 3;
   optional int32 number = 4;
   int32 coordinateX = 5;
   int32 coordinateY = 6;

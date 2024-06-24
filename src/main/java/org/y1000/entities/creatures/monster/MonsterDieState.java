@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.monster;
 
-import org.y1000.entities.EntityLeftRealmEvent;
+import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.State;
 
 public final class MonsterDieState extends AbstractMonsterState {
@@ -11,7 +11,7 @@ public final class MonsterDieState extends AbstractMonsterState {
 
     @Override
     protected void nextMove(AbstractMonster monster) {
-        monster.emitEvent(new EntityLeftRealmEvent(monster));
+        monster.emitEvent(new RemoveEntityEvent(monster));
         monster.realmMap().free(monster);
     }
 

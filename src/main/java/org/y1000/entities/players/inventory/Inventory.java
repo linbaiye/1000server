@@ -14,6 +14,7 @@ import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.clientevent.ClientDropItemEvent;
 import org.y1000.message.clientevent.ClientInventoryEvent;
 import org.y1000.message.clientevent.ClientSwapInventoryEvent;
+import org.y1000.message.serverevent.EntityEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.util.UnaryAction;
 
@@ -207,7 +208,7 @@ public final class Inventory {
     }
 
 
-    private void handleDropEvent(Player player, ClientDropItemEvent dropItemEvent, UnaryAction<? super PlayerEvent> eventSender) {
+    private void handleDropEvent(Player player, ClientDropItemEvent dropItemEvent, UnaryAction<EntityEvent> eventSender) {
         assertRange(dropItemEvent.sourceSlot());
         Item item = getItem(dropItemEvent.sourceSlot());
         if (item == null) {
@@ -216,10 +217,9 @@ public final class Inventory {
         }
         if (dropItem(dropItemEvent.sourceSlot(), dropItemEvent.number())) {
             log.debug("Dropped item {}", item);
-            var numberLeft = item instanceof StackItem stackItem ? stackItem.number() : 0;
-            PlayerDropItemEvent event = new PlayerDropItemEvent(player, dropItemEvent, item.name(),
-                    item instanceof StackItem ? dropItemEvent.number() : null, numberLeft);
+            UpdateInventorySlotEvent event = new UpdateInventorySlotEvent(player, dropItemEvent.sourceSlot(), getItem(dropItemEvent.sourceSlot()));
             eventSender.invoke(event);
+            eventSender.invoke(new PlayerDropItemEvent(player, item.name(), dropItemEvent.number(), dropItemEvent.coordinate()));
         }
     }
 
@@ -246,7 +246,7 @@ public final class Inventory {
     }
 
 
-    public void handleClientEvent(Player player, ClientInventoryEvent inventoryEvent, UnaryAction<? super PlayerEvent> eventSender) {
+    public void handleClientEvent(Player player, ClientInventoryEvent inventoryEvent, UnaryAction<EntityEvent> eventSender) {
         if (inventoryEvent instanceof ClientSwapInventoryEvent swapInventoryEvent &&
                 swap(swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot())) {
             eventSender.invoke(new InventorySlotSwappedEvent(player, swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot()));

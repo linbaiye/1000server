@@ -5,9 +5,9 @@ import org.y1000.message.serverevent.EntityEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.RemoveEntityPacket;
 
-public class EntityLeftRealmEvent extends Abstract2ClientEntityEvent {
+public class RemoveEntityEvent extends Abstract2ClientEntityEvent {
 
-    public EntityLeftRealmEvent(PhysicalEntity source) {
+    public RemoveEntityEvent(PhysicalEntity source) {
         super(source);
     }
 

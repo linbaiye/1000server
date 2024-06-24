@@ -9,9 +9,9 @@ import java.util.NoSuchElementException;
 
 public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
 
-    private final ItemSdb itemSdb;
+    private final ItemSdbImpl itemSdb;
 
-    public ItemRepositoryImpl(ItemSdb itemSdb) {
+    public ItemRepositoryImpl(ItemSdbImpl itemSdb) {
         this.itemSdb = itemSdb;
     }
 

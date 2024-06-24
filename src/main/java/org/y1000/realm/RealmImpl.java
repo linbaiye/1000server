@@ -11,6 +11,7 @@ import org.y1000.realm.event.PlayerConnectedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
 import org.y1000.realm.event.RealmEvent;
+import org.y1000.sdb.MonstersSdb;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
@@ -25,21 +26,25 @@ final class RealmImpl implements Runnable, Realm {
 
     private final List<RealmEvent> pendingEvents;
 
-    private final RealmEntityManager entityManager;
+    private final RealmEntityEventSender entityManager;
     private volatile boolean shutdown;
 
     private final MonsterFactory monsterFactory;
 
     private final ItemManager itemManager;
 
+    private final EntityIdGenerator entityIdGenerator;
+
     public RealmImpl(RealmMap map,
                      ItemRepository itemRepository,
                      ItemFactory itemFactory,
                      MonsterFactory monsterFactory,
-                     ItemSdb itemSdb) {
+                     ItemSdb itemSdb,
+                     MonstersSdb monstersSdb) {
         realmMap = map;
-        entityManager = new RealmEntityManager(itemRepository, itemFactory);
-        itemManager = new ItemManager(entityManager, itemSdb);
+        entityIdGenerator = new EntityIdGenerator();
+        entityManager = new RealmEntityEventSender(itemRepository, itemFactory);
+        itemManager = new ItemManager(entityManager, itemSdb, monstersSdb, entityIdGenerator);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
         this.monsterFactory = monsterFactory;

@@ -6,7 +6,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureSoundEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerStillState;
 import org.y1000.entities.players.event.*;
@@ -135,10 +135,10 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             player.emitEvent(PlayerAttackEvent.of(player, player.getFightingEntity().id()));
         if (!isRanged()) {
             var hit = player.getFightingEntity().attackedBy(player);
-            player.emitEvent(new CreatureSoundEvent(player, hit ? strikeSound() : swingSound()));
+            player.emitEvent(new EntitySoundEvent(player, hit ? strikeSound() : swingSound()));
             //player.assistantKungFu().ifPresent(assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, assistantKungFu)));
         } else {
-            player.emitEvent(new CreatureSoundEvent(player, swingSound()));
+            player.emitEvent(new EntitySoundEvent(player, swingSound()));
         }
     }
 

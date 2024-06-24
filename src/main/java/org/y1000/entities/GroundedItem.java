@@ -5,26 +5,20 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.message.AbstractEntityInterpolation;
 import org.y1000.message.GroundedItemInterpolation;
-import org.y1000.message.serverevent.EntityEventListener;
 import org.y1000.util.Coordinate;
 
 import java.util.Objects;
 import java.util.Optional;
 
 
-public final class GroundedItem implements PhysicalEntity {
+public final class GroundedItem extends AbstractPhysicalEntity {
 
     private final Coordinate coordinate;
-
 
     @Getter
     private final Integer number;
 
-    private int ttl = 3 * 60 * 1000;
-
-    private EntityEventListener listener;
-    @Getter
-    private final long id;
+    private long ttl = 3 * 60 * 1000;
 
     @Getter
     private final String name;
@@ -35,7 +29,7 @@ public final class GroundedItem implements PhysicalEntity {
 
     @Builder
     public GroundedItem(long id, String name, Coordinate coordinate, Integer number, String dropSound, String pickSound) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.coordinate = coordinate;
         this.number = number;
@@ -51,10 +45,6 @@ public final class GroundedItem implements PhysicalEntity {
         return Optional.ofNullable(pickSound);
     }
 
-    @Override
-    public long id() {
-        return id;
-    }
 
     @Override
     public Coordinate coordinate() {
@@ -63,11 +53,15 @@ public final class GroundedItem implements PhysicalEntity {
 
     @Override
     public void update(int delta) {
+        if (ttl <= 0) {
+            return;
+        }
         ttl -= delta;
         if (ttl <= 0) {
-            // listener.OnEvent();
+            emitEvent(new RemoveEntityEvent(this));
         }
     }
+
 
     public boolean canPickAt(Coordinate from) {
         return coordinate().xDistance(from.x()) <= 2 && coordinate().yDistance(from.y()) <= 3;
@@ -104,16 +98,5 @@ public final class GroundedItem implements PhysicalEntity {
     @Override
     public String toString() {
         return "[" + id() + ", " + coordinate + ", " + name + "]";
-    }
-
-    @Override
-    public void registerEventListener(EntityEventListener listener) {
-        this.listener = listener;
-    }
-
-    @Override
-    public void deregisterEventListener(EntityEventListener listener) {
-        if (this.listener == listener)
-            this.listener = null;
     }
 }

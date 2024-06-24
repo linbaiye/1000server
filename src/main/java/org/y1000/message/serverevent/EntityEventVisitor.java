@@ -1,6 +1,6 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.entities.EntityLeftRealmEvent;
+import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.players.event.RewindEvent;
 import org.y1000.message.*;
@@ -22,10 +22,6 @@ public interface EntityEventVisitor {
         visit((EntityEvent)hurtEvent);
     }
 
-    default void visit(PlayerMoveEvent moveEvent) {
-        visit((AbstractPositionEvent)moveEvent);
-    }
-
     default void visit(SetPositionEvent setPositionEvent) {
         visit((AbstractPositionEvent)setPositionEvent);
     }
@@ -34,22 +30,14 @@ public interface EntityEventVisitor {
         visit((EntityEvent) event);
     }
 
-    default void visit(RewindEvent event) {
-        visit((EntityEvent) event);
-    }
-
-    default void visit(PlayerShootEvent event) {
-        visit((EntityEvent) event);
-    }
-
     default void visit(CreatureDieEvent event) {
         visit((EntityEvent) event);
     }
-    default void visit(CreatureSoundEvent event) {
+    default void visit(EntitySoundEvent event) {
         visit((EntityEvent) event);
     }
 
-    default void visit(EntityLeftRealmEvent event) {
+    default void visit(RemoveEntityEvent event) {
         visit((EntityEvent) event);
     }
     default void visit(MonsterShootEvent event) {
@@ -57,6 +45,9 @@ public interface EntityEventVisitor {
     }
 
     default void visit(MonsterMoveEvent event) {
+        visit((EntityEvent) event);
+    }
+    default void visit(ShowItemEvent event) {
         visit((EntityEvent) event);
     }
 }

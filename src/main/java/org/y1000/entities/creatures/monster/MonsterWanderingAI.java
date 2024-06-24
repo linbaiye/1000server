@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.monster;
 
-import org.y1000.entities.creatures.event.CreatureSoundEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
 
@@ -80,7 +80,7 @@ public final class MonsterWanderingAI extends AbstractMonsterAI {
         timeLeftToSound = Math.max(0, timeLeftToSound - delta);
         if (timeLeftToSound == 0) {
             setSoundTimer();
-            monster.emitEvent(new CreatureSoundEvent(monster, monster.normalSound().orElse("")));
+            monster.emitEvent(new EntitySoundEvent(monster, monster.normalSound().orElse("")));
         }
     }
 

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.item.StackItem;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
@@ -11,7 +12,6 @@ import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureSoundEvent;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
@@ -224,14 +224,14 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertFalse(event.toPacket().getToggleKungFu().getQuietly());
         assertEquals(event.toPacket().getToggleKungFu().getName(), player.kungFuBook().getUnnamedProtection().name());
         assertTrue(event.toPacket().getToggleKungFu().hasLevel());
-        assertNotNull(eventListener.removeFirst(CreatureSoundEvent.class));
+        assertNotNull(eventListener.removeFirst(EntitySoundEvent.class));
 
         eventListener.clearEvents();
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 10));
         event = eventListener.removeFirst(PlayerToggleKungFuEvent.class);
         assertFalse(event.toPacket().getToggleKungFu().getQuietly());
         assertFalse(event.toPacket().getToggleKungFu().hasLevel());
-        assertNotNull(eventListener.removeFirst(CreatureSoundEvent.class));
+        assertNotNull(eventListener.removeFirst(EntitySoundEvent.class));
     }
 
     @Test
@@ -395,7 +395,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(0, player.innerPower());
         assertTrue(player.protectKungFu().isEmpty());
         assertNotNull(eventListener.removeFirst(PlayerToggleKungFuEvent.class));
-        assertNotNull(eventListener.removeFirst(CreatureSoundEvent.class));
+        assertNotNull(eventListener.removeFirst(EntitySoundEvent.class));
     }
 
     @Test
