@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.creatures.event.CreatureSoundEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
 
@@ -66,7 +66,7 @@ class FootKungFuTest {
         verify(player).consumeOuterPower(any(Integer.class));
         verify(player).consumePower(any(Integer.class));
         assertNotNull(testingEventListener.removeFirst(PlayerGainExpEvent.class));
-        CreatureSoundEvent sound = testingEventListener.removeFirst(CreatureSoundEvent.class);
+        EntitySoundEvent sound = testingEventListener.removeFirst(EntitySoundEvent.class);
         assertEquals("1", sound.toPacket().getSound().getSound());
         assertEquals(159, footKungFu.level());
         testingEventListener.clearEvents();

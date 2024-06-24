@@ -8,7 +8,7 @@ import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
-import org.y1000.entities.creatures.event.CreatureSoundEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
@@ -326,7 +326,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     private void disableProtectionNoTip() {
         if (protectKungFu != null) {
             emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
-            emitEvent(new CreatureSoundEvent(this, protectKungFu.disableSound()));
+            emitEvent(new EntitySoundEvent(this, protectKungFu.disableSound()));
             this.protectKungFu = null;
         }
     }
@@ -383,14 +383,14 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         disableBreathKungNoTip();
         if (protectKungFu != null && protectKungFu.name().equals(newProtection.name())) {
             emitEvent(PlayerToggleKungFuEvent.disable(this, protectKungFu));
-            emitEvent(new CreatureSoundEvent(this, protectKungFu.disableSound()));
+            emitEvent(new EntitySoundEvent(this, protectKungFu.disableSound()));
             protectKungFu = null;
             return;
         }
         protectKungFu = newProtection;
         protectKungFu.resetTimer();
         emitEvent(PlayerToggleKungFuEvent.enable(this, protectKungFu));
-        emitEvent(new CreatureSoundEvent(this, protectKungFu.enableSound()));
+        emitEvent(new EntitySoundEvent(this, protectKungFu.enableSound()));
     }
 
     private void toggleBreathingKungFu(BreathKungFu newBreath) {

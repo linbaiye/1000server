@@ -1,7 +1,7 @@
 package org.y1000.kungfu.breath;
 
 import lombok.Builder;
-import org.y1000.entities.creatures.event.CreatureSoundEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
@@ -67,7 +67,7 @@ public final class BreathKungFu extends AbstractKungFu {
         if (!canRegenerateResources(player)) {
             return;
         }
-        eventSender.invoke(new CreatureSoundEvent(player, computeSound(player.isMale())));
+        eventSender.invoke(new EntitySoundEvent(player, computeSound(player.isMale())));
         player.gainLife(computeResource(player.maxLife(), parameters.life()));
         player.gainPower(computeResource(player.maxPower(), parameters.power()));
         player.gainInnerPower(computeResource(player.maxInnerPower(), parameters.innerPower()));

@@ -61,6 +61,11 @@ public abstract class AbstractSdbReader {
         return strings[index];
     }
 
+    protected String getOrNull(String itemName, String key) {
+        var str = get(itemName, key);
+        return StringUtils.isEmpty(str) ? null : str;
+    }
+
     public Set<String> names() {
         return values.keySet();
     }

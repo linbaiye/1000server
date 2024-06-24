@@ -8,12 +8,12 @@ import org.y1000.repository.ItemRepository;
 
 class EntityVisibilityManagerTest {
 
-    private RealmEntityManager manager;
+    private RealmEntityEventSender manager;
 
 
     @BeforeEach
     void setUp() {
-        manager = new RealmEntityManager(Mockito.mock(ItemRepository.class), Mockito.mock(ItemFactory.class));
+        manager = new RealmEntityEventSender(Mockito.mock(ItemRepository.class), Mockito.mock(ItemFactory.class));
     }
 
 }

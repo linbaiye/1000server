@@ -1,10 +1,8 @@
 package org.y1000.message.serverevent;
 
+import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.players.event.*;
-import org.y1000.message.PlayerDropItemEvent;
-import org.y1000.message.InputResponseMessage;
-import org.y1000.message.GetGroundItemEvent;
-import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.*;
 
 public interface PlayerEventVisitor extends EntityEventVisitor {
 
@@ -97,5 +95,17 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
 
     default void visit(PlayerGainExpEvent event) {
 
+    }
+
+    default void visit(PlayerMoveEvent moveEvent) {
+        visit((AbstractPositionEvent)moveEvent);
+    }
+
+    default void visit(RewindEvent event) {
+        visit((EntityEvent) event);
+    }
+
+    default void visit(PlayerShootEvent event) {
+        visit((EntityEvent) event);
     }
 }

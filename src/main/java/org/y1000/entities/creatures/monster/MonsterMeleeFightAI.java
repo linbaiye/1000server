@@ -1,8 +1,6 @@
 package org.y1000.entities.creatures.monster;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.event.CreatureAttackEvent;
-import org.y1000.entities.creatures.event.CreatureSoundEvent;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 

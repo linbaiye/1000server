@@ -10,7 +10,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
 import org.y1000.entities.creatures.monster.MonsterFactory;
 import org.y1000.entities.creatures.monster.MonsterFactoryImpl;
-import org.y1000.item.ItemSdb;
+import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.repository.*;
 import org.y1000.network.*;
@@ -42,11 +42,11 @@ public final class Server {
         serverGroup = new NioEventLoopGroup();
         bootstrap = new ServerBootstrap();
         KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl();
-        ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdb.INSTANCE);
+        ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE);
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl);
         itemRepository = repository;
-        monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonstersSdb.INSTANCE, KungFuSdb.INSTANCE);
-        realmManager = RealmManager.create(repository, itemRepository, monsterFactory, ItemSdb.INSTANCE);
+        monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE);
+        realmManager = RealmManager.create(repository, itemRepository, monsterFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE);
     }
 
 
@@ -55,7 +55,7 @@ public final class Server {
     }
 
     private void create() {
-        ItemRepository itemRepository = new ItemRepositoryImpl(ItemSdb.INSTANCE);
+        ItemRepository itemRepository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE);
     }
 
 //    private void startRealms() {

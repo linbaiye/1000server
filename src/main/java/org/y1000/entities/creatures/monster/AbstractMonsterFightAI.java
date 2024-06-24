@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.monster;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
-import org.y1000.entities.creatures.event.CreatureSoundEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Action;
 
@@ -27,7 +27,7 @@ public abstract class AbstractMonsterFightAI extends AbstractMonsterAI {
         monster.getFightingEntity().attackedBy(monster);
         monster.changeState(MonsterCommonState.attack(monster));
         monster.emitEvent(CreatureAttackEvent.ofMonster(monster));
-        monster.attackSound().ifPresent(s -> monster.emitEvent(new CreatureSoundEvent(monster, s)));
+        monster.attackSound().ifPresent(s -> monster.emitEvent(new EntitySoundEvent(monster, s)));
     }
 
     @Override

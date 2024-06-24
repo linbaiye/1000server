@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.monster;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.AbstractCreateState;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureSoundEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.event.MonsterShootEvent;
 import org.y1000.entities.projectile.MonsterProjectile;
 
@@ -39,7 +39,7 @@ public final class MonsterRangedAttackState extends AbstractCreateState<Abstract
         if (elapsedMillis() >= (totalMillis() / 2) && monster.getFightingEntity() != null && !shot) {
             monster.emitEvent(new MonsterShootEvent(new MonsterProjectile(monster, monster.getFightingEntity(), spriteId)));
             if (sound != null) {
-                monster.emitEvent(new CreatureSoundEvent(monster, sound));
+                monster.emitEvent(new EntitySoundEvent(monster, sound));
             }
             shot = true;
         }

@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.AbstractPhysicalEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.EventListeners;
 import org.y1000.exp.ExperienceUtil;
@@ -12,9 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S extends CreatureState<C>> implements Creature {
-
-    private final long id;
+public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S extends CreatureState<C>> extends AbstractPhysicalEntity implements Creature {
 
     private Coordinate coordinate;
 
@@ -22,27 +21,23 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
 
     private final String name;
 
-    private final EventListeners eventListeners;
-
     private S state;
 
     private final Map<State, Integer> stateMillis;
-
 
     public AbstractCreature(long id,
                             Coordinate coordinate,
                             Direction direction,
                             String name,
                             Map<State, Integer> stateMillis) {
+        super(id);
         Objects.requireNonNull(coordinate, "coordinate can't be null.");
         Objects.requireNonNull(direction, "direction can't be null.");
         Objects.requireNonNull(name, "name can't be null.");
         Objects.requireNonNull(stateMillis, "stateMillis can't be null.");
-        this.id = id;
         this.coordinate = coordinate;
         this.direction = direction;
         this.name = name;
-        this.eventListeners = new EventListeners();
         this.stateMillis = stateMillis;
     }
 
@@ -62,25 +57,6 @@ public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S exten
         return state;
     }
 
-
-    public void emitEvent(EntityEvent event) {
-        eventListeners.notifyListeners(event);
-    }
-
-    @Override
-    public void registerEventListener(EntityEventListener listener) {
-        eventListeners.register(listener);
-    }
-
-    @Override
-    public void deregisterEventListener(EntityEventListener listener) {
-        eventListeners.deregister(listener);
-    }
-
-    @Override
-    public long id() {
-        return id;
-    }
 
     @Override
     public Coordinate coordinate() {
