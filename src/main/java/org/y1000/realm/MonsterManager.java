@@ -26,18 +26,21 @@ final class MonsterManager extends AbstractEntityManager<AbstractMonster> implem
 
     private final Map<String, List<MonsterSpawnSetting>> monsterSpawnSettings;
 
-
     private final List<RespawningMonster> respawningMonsters;
 
     private final ProjectileManager projectileManager;
 
+    private final ItemManager itemManager;
+
 
     public MonsterManager(EntityEventSender sender,
                           EntityIdGenerator idGenerator,
-                          MonsterFactory monsterFactory) {
+                          MonsterFactory monsterFactory,
+                          ItemManager itemManager) {
         this.sender = sender;
         this.idGenerator = idGenerator;
         this.monsterFactory = monsterFactory;
+        this.itemManager = itemManager;
         this.monsterSpawnSettings = new HashMap<>();
         respawningMonsters = new ArrayList<>();
         projectileManager = new ProjectileManager();
@@ -146,18 +149,20 @@ final class MonsterManager extends AbstractEntityManager<AbstractMonster> implem
         sender.add(entity);
         entity.registerEventListener(this);
         sender.sendEvent(new MonsterJoinedEvent(entity));
+        entity.registerEventListener(itemManager);
     }
 
     @Override
     protected void onDeleted(AbstractMonster entity) {
         sender.remove(entity);
+        respawningMonsters.add(new RespawningMonster(entity, 8000));
     }
 
     private void onRemoveEntity(RemoveEntityEvent removeEntityEvent) {
         if (!(removeEntityEvent.source() instanceof AbstractMonster monster)) {
             return;
         }
-        respawningMonsters.add(new RespawningMonster(monster, 800));
+        delete(monster);
     }
 
     @Override

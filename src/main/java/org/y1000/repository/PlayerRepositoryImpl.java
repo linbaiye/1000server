@@ -83,7 +83,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         return PlayerImpl.builder()
                 .id(slot + playerIdStart)
                 .name("雨诗妾")
-                .coordinate(new Coordinate(39 + slot, 27))
+                .coordinate(new Coordinate(175+ slot, 40))
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(weapon.kungFuType()))

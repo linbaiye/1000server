@@ -51,7 +51,7 @@ final class RealmImpl extends AbstractEntityManager<Player> implements Runnable,
         entityIdGenerator = new EntityIdGenerator();
         eventSender = new RealmEntityEventSender(itemRepository, itemFactory);
         itemManager = new ItemManager(eventSender, itemSdb, monstersSdb, entityIdGenerator);
-        monsterManager = new MonsterManager(eventSender, entityIdGenerator, monsterFactory);
+        monsterManager = new MonsterManager(eventSender, entityIdGenerator, monsterFactory, itemManager);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
         projectileManager = new ProjectileManager();

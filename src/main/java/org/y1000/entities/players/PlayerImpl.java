@@ -598,6 +598,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private void onKilled() {
         disableFootKungFuNoTip();
+        disableBreathKungNoTip();
         var oldLevel = revival.level();
         revival = revival.gainExp();
         if (oldLevel != revival.level()) {
