@@ -1,7 +1,7 @@
 package org.y1000.realm;
 
 import org.junit.jupiter.api.Test;
-import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.util.Coordinate;
@@ -24,9 +24,9 @@ class RelevantScopeTest extends AbstractMonsterUnitTestFixture {
 
     @Test
     void outOfScope() {
-        PhysicalEntity entity = createMonster(0, 0);
+        Entity entity = createMonster(0, 0);
         RelevantScope relevantScope = new RelevantScope(entity);
-        PhysicalEntity another = createMonster(16, 16);
+        Entity another = createMonster(16, 16);
         assertTrue(relevantScope.outOfScope(another));
         another = createMonster(15, 15);
         assertFalse(relevantScope.outOfScope(another));
@@ -34,17 +34,17 @@ class RelevantScopeTest extends AbstractMonsterUnitTestFixture {
 
     @Test
     void addIfVisible() {
-        PhysicalEntity entity = createMonster(0, 0);
+        Entity entity = createMonster(0, 0);
         RelevantScope relevantScope = new RelevantScope(entity);
         assertFalse(relevantScope.addIfVisible(createMonster(new Coordinate(16, 16))));
-        PhysicalEntity another = createMonster(new Coordinate(15, 15));
+        Entity another = createMonster(new Coordinate(15, 15));
         assertTrue(relevantScope.addIfVisible(another));
         assertFalse(relevantScope.addIfVisible(another));
     }
 
     @Test
     void removeIfNotVisible() {
-        PhysicalEntity entity = createMonster(new Coordinate(0, 0));
+        Entity entity = createMonster(new Coordinate(0, 0));
         RelevantScope relevantScope = new RelevantScope(entity);
         PassiveMonster entity1 = createMonster(new Coordinate(1, 2));
         relevantScope.addIfVisible(entity1);
@@ -54,16 +54,16 @@ class RelevantScopeTest extends AbstractMonsterUnitTestFixture {
 
     @Test
     void update() {
-        PhysicalEntity entity = createMonster(new Coordinate(0, 0));
+        Entity entity = createMonster(new Coordinate(0, 0));
         RelevantScope relevantScope = new RelevantScope(entity);
-        PhysicalEntity entity1 = createMonster(new Coordinate(1, 2));
+        Entity entity1 = createMonster(new Coordinate(1, 2));
         relevantScope.addIfVisible(entity1);
         PassiveMonster entity2 = createMonster(new Coordinate(2, 2));
         relevantScope.addIfVisible(entity2);
-        assertEquals(2, relevantScope.filter(PhysicalEntity.class).size());
+        assertEquals(2, relevantScope.filter(Entity.class).size());
         entity2.changeCoordinate(new Coordinate(16, 16));
-        Set<PhysicalEntity> removed = relevantScope.update();
+        Set<Entity> removed = relevantScope.update();
         assertTrue(removed.contains(entity2));
-        assertEquals(1, relevantScope.filter(PhysicalEntity.class).size());
+        assertEquals(1, relevantScope.filter(Entity.class).size());
     }
 }

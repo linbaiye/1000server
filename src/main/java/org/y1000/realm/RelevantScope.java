@@ -1,7 +1,7 @@
 package org.y1000.realm;
 
-import org.y1000.entities.PhysicalEntity;
-import org.y1000.util.Coordinate;
+import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.Entity;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -9,27 +9,27 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 final class RelevantScope {
-    private final PhysicalEntity source;
+    private final Entity source;
 
-    private final Set<PhysicalEntity> entities;
+    private final Set<Entity> entities;
 
 
-    public RelevantScope(PhysicalEntity source) {
+    public RelevantScope(Entity source) {
         this.source = source;
         entities = new HashSet<>();
     }
 
 
-    public PhysicalEntity source() {
+    public Entity source() {
         return source;
     }
 
 
-    public boolean outOfScope(PhysicalEntity entity) {
+    public boolean outOfScope(Entity entity) {
         return !entity.canBeSeenAt(source.coordinate());
     }
 
-    public boolean addIfVisible(PhysicalEntity another) {
+    public boolean addIfVisible(Entity another) {
         if (another == null ||
                 source.equals(another) || entities.contains(another)) {
             return false;
@@ -41,7 +41,7 @@ final class RelevantScope {
         return false;
     }
 
-    public <E extends PhysicalEntity> Set<E> filter(Class<E> type) {
+    public <E extends Entity> Set<E> filter(Class<E> type) {
         Objects.requireNonNull(type);
         return entities.stream()
                 .filter(entity -> type.isAssignableFrom(entity.getClass()))
@@ -49,19 +49,19 @@ final class RelevantScope {
                 .collect(Collectors.toSet());
     }
 
-    public Set<PhysicalEntity> update() {
-        Set<PhysicalEntity> result = entities.stream().filter(this::outOfScope)
+    public Set<Entity> update() {
+        Set<Entity> result = entities.stream().filter(this::outOfScope)
                 .collect(Collectors.toSet());
         entities.removeAll(result);
         return result;
     }
 
-    public void remove(PhysicalEntity another) {
+    public void remove(Entity another) {
         Objects.requireNonNull(another);
         entities.remove(another);
     }
 
-    public boolean removeIfNotVisible(PhysicalEntity another) {
+    public boolean removeIfNotVisible(Entity another) {
         Objects.requireNonNull(another);
         return outOfScope(another) && entities.remove(another);
     }

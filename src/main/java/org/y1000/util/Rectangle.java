@@ -2,6 +2,7 @@ package org.y1000.util;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
@@ -22,6 +23,12 @@ public record Rectangle(Coordinate start, Coordinate end) {
         int minY = Math.max(origin.y() - 3, start.y());
         int maxY = Math.min(origin.y() + 3, end.y());
         var y = ThreadLocalRandom.current().nextInt(minY, maxY);
+        return new Coordinate(x, y);
+    }
+
+    public Coordinate random() {
+        var x = ThreadLocalRandom.current().nextInt(start().x(), end.x());
+        var y = ThreadLocalRandom.current().nextInt(start().y(), end.y());
         return new Coordinate(x, y);
     }
 }

@@ -1,13 +1,13 @@
 package org.y1000.entities;
 
 import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
-import org.y1000.message.serverevent.EntityEventVisitor;
+import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.RemoveEntityPacket;
 
 public class RemoveEntityEvent extends Abstract2ClientEntityEvent {
 
-    public RemoveEntityEvent(PhysicalEntity source) {
+    public RemoveEntityEvent(Entity source) {
         super(source);
     }
 

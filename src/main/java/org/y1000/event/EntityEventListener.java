@@ -1,4 +1,5 @@
-package org.y1000.message.serverevent;
+package org.y1000.event;
+
 
 public interface EntityEventListener  {
 

@@ -1,24 +1,28 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.PhysicalEntity;
-import org.y1000.entities.creatures.monster.AbstractMonster;
+import org.slf4j.Logger;
+import org.y1000.entities.Entity;
+import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.monster.MonsterFactory;
+import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
+import org.y1000.event.EntityEvent;
+import org.y1000.event.EntityEventListener;
+import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.repository.ItemRepository;
 import org.y1000.realm.event.PlayerConnectedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
 import org.y1000.realm.event.RealmEvent;
 import org.y1000.sdb.MonstersSdb;
-import org.y1000.util.Coordinate;
 
 import java.util.*;
 
 
 @Slf4j
-final class RealmImpl implements Runnable, Realm {
+final class RealmImpl extends AbstractEntityManager<Player> implements Runnable, Realm, EntityEventListener {
 
     public static final int STEP_MILLIS = 10;
 
@@ -26,14 +30,16 @@ final class RealmImpl implements Runnable, Realm {
 
     private final List<RealmEvent> pendingEvents;
 
-    private final RealmEntityEventSender entityManager;
+    private final RealmEntityEventSender eventSender;
     private volatile boolean shutdown;
-
-    private final MonsterFactory monsterFactory;
 
     private final ItemManager itemManager;
 
+    private final MonsterManager monsterManager;
+
     private final EntityIdGenerator entityIdGenerator;
+
+    private final ProjectileManager projectileManager;
 
     public RealmImpl(RealmMap map,
                      ItemRepository itemRepository,
@@ -43,50 +49,38 @@ final class RealmImpl implements Runnable, Realm {
                      MonstersSdb monstersSdb) {
         realmMap = map;
         entityIdGenerator = new EntityIdGenerator();
-        entityManager = new RealmEntityEventSender(itemRepository, itemFactory);
-        itemManager = new ItemManager(entityManager, itemSdb, monstersSdb, entityIdGenerator);
+        eventSender = new RealmEntityEventSender(itemRepository, itemFactory);
+        itemManager = new ItemManager(eventSender, itemSdb, monstersSdb, entityIdGenerator);
+        monsterManager = new MonsterManager(eventSender, entityIdGenerator, monsterFactory);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
-        this.monsterFactory = monsterFactory;
+        projectileManager = new ProjectileManager();
     }
 
     public RealmMap map() {
         return realmMap;
     }
 
-    private void initEntities() {
-        try {
 
-            List<AbstractMonster> monsters = List.of(
-                    //monsterFactory.createMonster("犀牛", entityManager.generateEntityId(), map(), new Coordinate(39, 30)),
-                    monsterFactory.createMonster("牛", entityManager.generateEntityId(), map(), new Coordinate(39, 31)),
-                    monsterFactory.createMonster("老虎", entityManager.generateEntityId(), map(), new Coordinate(39, 32)),
-                    monsterFactory.createMonster("忍者", entityManager.generateEntityId(), map(), new Coordinate(39, 33)),
-                    monsterFactory.createMonster("赤风", entityManager.generateEntityId(), map(), new Coordinate(39, 35)),
-                    monsterFactory.createMonster("太极公子", entityManager.generateEntityId(), map(), new Coordinate(39, 36)),
-                    monsterFactory.createMonster("投石女", entityManager.generateEntityId(), map(), new Coordinate(39, 37))
-                    //monsterFactory.createMonster("鹿", entityManager.generateEntityId(), map(), new Coordinate(39, 32))
-            );
-            monsters.forEach(entityManager::add);
-            monsters.forEach(m -> m.registerEventListener(itemManager));
-        } catch (Exception e) {
-            log.error("Exception ", e);
+    private void onPlayerConnected(PlayerConnectedEvent connectedEvent) {
+        if (eventSender.contains(connectedEvent.player())) {
+            log.warn("Player {} already existed.", connectedEvent.player());
+            connectedEvent.player().leaveRealm();
         }
+        eventSender.add(connectedEvent.player(), connectedEvent.connection());
+        add(connectedEvent.player());
     }
 
+    private void onPlayerDisconnected(PlayerDisconnectedEvent disconnectedEvent) {
+        disconnectedEvent.player().leaveRealm();
+    }
 
-    private void dispatchEvent(RealmEvent event) {
+    private void onRealmEvent(RealmEvent event) {
         try {
             if (event instanceof PlayerConnectedEvent connectedEvent) {
-                if (entityManager.contains(connectedEvent.player())) {
-                    log.warn("Player {} already existed.", connectedEvent.player());
-                    connectedEvent.player().leaveRealm();
-                    entityManager.remove(event.player());
-                }
-                entityManager.add(connectedEvent.player(), connectedEvent.connection());
-                connectedEvent.player().joinReam(this);
+                onPlayerConnected(connectedEvent);
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
-                disconnectedEvent.player().leaveRealm();
+                onPlayerDisconnected(disconnectedEvent);
             } else if (event instanceof PlayerDataEvent dataEvent) {
                 dataEvent.player().handleClientEvent(dataEvent.data());
             }
@@ -96,13 +90,16 @@ final class RealmImpl implements Runnable, Realm {
     }
 
 
+
     private void startRealm() {
         long accumulatedMillis = System.currentTimeMillis();
         try {
             while (!shutdown) {
                 long current = System.currentTimeMillis();
                 if (accumulatedMillis <= current) {
-                    entityManager.updateEntities(STEP_MILLIS);
+                    update(STEP_MILLIS);
+                    monsterManager.update(STEP_MILLIS);
+                    itemManager.update(STEP_MILLIS);
                     accumulatedMillis += STEP_MILLIS;
                     continue;
                 }
@@ -118,7 +115,7 @@ final class RealmImpl implements Runnable, Realm {
                     }
                     pendingEvents.notify();
                 }
-                events.forEach(this::dispatchEvent);
+                events.forEach(this::onRealmEvent);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -129,13 +126,13 @@ final class RealmImpl implements Runnable, Realm {
 
     @Override
     public void run() {
-        initEntities();
+        monsterManager.init(this.map());
         startRealm();
     }
 
     @Override
-    public Optional<PhysicalEntity> findInsight(PhysicalEntity source, long id) {
-        return entityManager.findInsight(source, id);
+    public Optional<Entity> findInsight(Entity source, long id) {
+        return eventSender.findInsight(source, id);
     }
 
     @Override
@@ -143,6 +140,38 @@ final class RealmImpl implements Runnable, Realm {
         synchronized (pendingEvents) {
             pendingEvents.add(event);
             pendingEvents.notify();
+        }
+    }
+
+    @Override
+    protected Logger log() {
+        return log;
+    }
+
+    @Override
+    public void update(long delta) {
+        updateManagedEntities(delta);
+        projectileManager.update(delta);
+    }
+
+    @Override
+    protected void onAdded(Player entity) {
+        entity.joinReam(this);
+        entity.registerEventListener(this);
+    }
+
+    @Override
+    protected void onDeleted(Player entity) {
+        entity.deregisterEventListener(this);
+        eventSender.remove(entity);
+    }
+
+    @Override
+    public void onEvent(EntityEvent entityEvent) {
+        if (entityEvent instanceof PlayerLeftEvent playerLeftEvent) {
+            delete(playerLeftEvent.player());
+        } else if (entityEvent instanceof PlayerShootEvent shootEvent) {
+            projectileManager.add(shootEvent.projectile());
         }
     }
 }

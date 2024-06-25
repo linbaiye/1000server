@@ -1,9 +1,10 @@
-package org.y1000.message.serverevent;
+package org.y1000.event;
 
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.*;
-import org.y1000.entities.players.event.RewindEvent;
+import org.y1000.event.EntityEvent;
 import org.y1000.message.*;
+import org.y1000.message.serverevent.ShowItemEvent;
 
 public interface EntityEventVisitor {
     default void visit(EntityEvent event) {
@@ -47,7 +48,12 @@ public interface EntityEventVisitor {
     default void visit(MonsterMoveEvent event) {
         visit((EntityEvent) event);
     }
+
     default void visit(ShowItemEvent event) {
+        visit((EntityEvent) event);
+    }
+
+    default void visit(MonsterJoinedEvent event) {
         visit((EntityEvent) event);
     }
 }

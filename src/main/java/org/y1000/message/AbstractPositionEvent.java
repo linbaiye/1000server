@@ -1,12 +1,12 @@
 package org.y1000.message;
 
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PositionPacket;
 import org.y1000.entities.Direction;
-import org.y1000.entities.PhysicalEntity;
-import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.event.EntityEvent;
 import org.y1000.util.Coordinate;
 
 public abstract class AbstractPositionEvent implements EntityEvent, ServerMessage {
@@ -34,7 +34,7 @@ public abstract class AbstractPositionEvent implements EntityEvent, ServerMessag
 
 
     @Override
-    public PhysicalEntity source() {
+    public AttackableEntity source() {
         return this.source;
     }
 

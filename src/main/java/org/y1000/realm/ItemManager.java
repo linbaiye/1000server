@@ -7,6 +7,8 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.monster.AbstractMonster;
+import org.y1000.event.EntityEvent;
+import org.y1000.event.EntityEventListener;
 import org.y1000.item.ItemSdb;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.serverevent.*;
@@ -79,6 +81,11 @@ final class ItemManager extends AbstractEntityManager<GroundedItem> implements E
     }
 
     @Override
+    public void update(long delta) {
+        updateManagedEntities(delta);
+    }
+
+    @Override
     protected void onAdded(GroundedItem entity) {
         entity.registerEventListener(this);
         eventSender.add(entity);
@@ -106,7 +113,6 @@ final class ItemManager extends AbstractEntityManager<GroundedItem> implements E
 
     @Override
     public void visit(CreatureDieEvent event) {
-        log.debug("Handling die event.");
         if (event.source() instanceof AbstractMonster monster) {
             List<DropItem> dropItems = getFor(monster.name());
             for (DropItem dropItem : dropItems) {
@@ -116,7 +122,6 @@ final class ItemManager extends AbstractEntityManager<GroundedItem> implements E
                 add(createGroundItem(dropItem.name(), monster.coordinate(), dropItem.count()));
             }
         }
-        log.debug("Handled die event.");
     }
 
     @Override

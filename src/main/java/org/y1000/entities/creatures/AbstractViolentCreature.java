@@ -2,11 +2,11 @@ package org.y1000.entities.creatures;
 
 import lombok.Getter;
 import org.slf4j.Logger;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
-import org.y1000.message.serverevent.EntityEventListener;
+import org.y1000.event.EntityEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
@@ -25,7 +25,7 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
     private int attackCooldown;
 
     @Getter
-    private PhysicalEntity fightingEntity;
+    private AttackableEntity fightingEntity;
 
     protected AbstractViolentCreature(long id, Coordinate coordinate, Direction direction, String name, Map<State, Integer> stateMillis) {
         super(id, coordinate, direction, name, stateMillis);
@@ -83,7 +83,7 @@ public abstract class AbstractViolentCreature<C extends AbstractViolentCreature<
         attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
 
-    public void setFightingEntity(PhysicalEntity entity){
+    public void setFightingEntity(AttackableEntity entity){
         Objects.requireNonNull(entity, "entity can't be null");
         if (this.fightingEntity != null) {
             this.fightingEntity.deregisterEventListener(this);

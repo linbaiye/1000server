@@ -2,6 +2,8 @@ package org.y1000.message.serverevent;
 
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.players.event.*;
+import org.y1000.event.EntityEvent;
+import org.y1000.event.EntityEventVisitor;
 import org.y1000.message.*;
 
 public interface PlayerEventVisitor extends EntityEventVisitor {

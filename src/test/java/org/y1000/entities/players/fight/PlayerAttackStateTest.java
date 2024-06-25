@@ -2,32 +2,25 @@ package org.y1000.entities.players.fight;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
-import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.monster.MonsterDieState;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
-import org.y1000.entities.players.PlayerImpl;
 import org.y1000.item.Weapon;
 import org.y1000.kungfu.attack.AttackKungFuParameters;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.message.InputResponseMessage;
-import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.ClientMovementEvent;
 import org.y1000.message.clientevent.input.RightMouseClick;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
 

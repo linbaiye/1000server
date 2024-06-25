@@ -6,7 +6,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.message.AbstractPositionEvent;
 import org.y1000.message.PositionType;
 import org.y1000.message.SetPositionEvent;
-import org.y1000.message.serverevent.EntityEventVisitor;
+import org.y1000.event.EntityEventVisitor;
 import org.y1000.util.Coordinate;
 
 

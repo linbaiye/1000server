@@ -13,7 +13,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.message.CreatureInterpolation;
-import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.event.EntityEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
@@ -28,10 +28,10 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     private final Damage damage;
 
     @Getter
-    private final Rectangle wanderingArea;
+    private Rectangle wanderingArea;
 
     @Getter
-    private final Coordinate spwanCoordinate;
+    private Coordinate spwanCoordinate;
 
     private final int recovery;
 
@@ -46,6 +46,7 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     private final int armor;
 
     private final int hit;
+
 
     private final AttributeProvider attributeProvider;
 
@@ -62,19 +63,14 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         this.recovery = attributeProvider.recovery();
         this.attackSpeed = attributeProvider.attackSpeed();
         this.avoidance = attributeProvider.avoidance();
-        spwanCoordinate = coordinate;
-        int range = attributeProvider.wanderingRange();
-        wanderingArea = new Rectangle(coordinate.move(-range, -range), coordinate.move(range, range));
-        maxLife = attributeProvider.life();
-        currentLife = attributeProvider.life();
         this.armor = attributeProvider.armor();
         this.hit = attributeProvider.hit();
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
         this.realmMap.occupy(this);
         this.attributeProvider = attributeProvider;
         this.attackSkill = spell;
-        ai = new MonsterWanderingAI(wanderingArea().random(spwanCoordinate), coordinate);
-        ai.start(this);
+        this.maxLife = attributeProvider.life();
+        revive(coordinate);
     }
 
 
@@ -83,9 +79,13 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     }
 
 
-    public void revive() {
-        changeCoordinate(wanderingArea.random(spwanCoordinate));
-        currentLife = maxLife;
+    public void revive(Coordinate coordinate) {
+        int range = attributeProvider.wanderingRange();
+        spwanCoordinate = coordinate;
+        changeCoordinate(spwanCoordinate);
+        wanderingArea = new Rectangle(coordinate.move(-range, -range), coordinate.move(range, range));
+        currentLife = attributeProvider.life();
+        changeAI(new MonsterWanderingAI(wanderingArea().random(spwanCoordinate), coordinate));
     }
 
     public MonsterAI AI() {

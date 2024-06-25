@@ -1,6 +1,7 @@
 package org.y1000.message.serverevent;
 
 import org.y1000.entities.GroundedItem;
+import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ShowItemPacket;
 

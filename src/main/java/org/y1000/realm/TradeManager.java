@@ -6,8 +6,8 @@ import org.y1000.entities.players.event.OpenTradeWindowEvent;
 import org.y1000.entities.players.event.PlayerStartTradeEvent;
 import org.y1000.entities.trade.Trade;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.serverevent.EntityEvent;
-import org.y1000.message.serverevent.EntityEventListener;
+import org.y1000.event.EntityEvent;
+import org.y1000.event.EntityEventListener;
 import org.y1000.util.UnaryAction;
 
 import java.util.HashMap;

@@ -1,10 +1,10 @@
 package org.y1000.message;
 
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.GroundedItem;
-import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.players.Player;
-import org.y1000.message.serverevent.EntityEvent;
-import org.y1000.message.serverevent.EntityEventVisitor;
+import org.y1000.event.EntityEvent;
+import org.y1000.event.EntityEventVisitor;
 import org.y1000.util.Coordinate;
 
 public final class PlayerDropItemEvent implements EntityEvent {
@@ -38,7 +38,7 @@ public final class PlayerDropItemEvent implements EntityEvent {
     }
 
     @Override
-    public PhysicalEntity source() {
+    public AttackableEntity source() {
         return source;
     }
 

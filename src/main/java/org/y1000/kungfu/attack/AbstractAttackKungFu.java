@@ -2,8 +2,8 @@ package org.y1000.kungfu.attack;
 
 import lombok.Getter;
 import org.slf4j.Logger;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
@@ -153,7 +153,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         doAttack(player, direction, true);
     }
 
-    protected void doStartAttack(PlayerImpl player, ClientAttackEvent event, PhysicalEntity target) {
+    protected void doStartAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target) {
         if (!player.canPurchaseOrAttack(target)) {
             player.emitEvent(new PlayerAttackEventResponse(player, event, false));
             return;

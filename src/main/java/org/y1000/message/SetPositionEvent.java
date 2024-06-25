@@ -2,7 +2,7 @@ package org.y1000.message;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.message.serverevent.EntityEventVisitor;
+import org.y1000.event.EntityEventVisitor;
 import org.y1000.util.Coordinate;
 
 public final class SetPositionEvent extends AbstractPositionEvent {

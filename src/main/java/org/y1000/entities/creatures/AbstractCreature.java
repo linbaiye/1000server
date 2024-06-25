@@ -1,19 +1,16 @@
 package org.y1000.entities.creatures;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.AbstractPhysicalEntity;
+import org.y1000.entities.AbstractEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.EventListeners;
 import org.y1000.exp.ExperienceUtil;
-import org.y1000.message.serverevent.EntityEvent;
-import org.y1000.message.serverevent.EntityEventListener;
 import org.y1000.util.Coordinate;
 
 import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S extends CreatureState<C>> extends AbstractPhysicalEntity implements Creature {
+public abstract class AbstractCreature<C extends AbstractCreature<C, S>, S extends CreatureState<C>> extends AbstractEntity implements Creature {
 
     private Coordinate coordinate;
 

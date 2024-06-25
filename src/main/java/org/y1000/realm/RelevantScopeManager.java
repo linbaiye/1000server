@@ -1,19 +1,20 @@
 package org.y1000.realm;
 
-import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.Entity;
+import org.y1000.entities.Entity;
 
 import java.util.*;
 
 final class RelevantScopeManager {
-    private final Map<PhysicalEntity, RelevantScope> relevantScopeMap;
+    private final Map<Entity, RelevantScope> relevantScopeMap;
 
     public RelevantScopeManager() {
         relevantScopeMap = new HashMap<>(120);
     }
 
-    private Set<PhysicalEntity> mutualAdd(RelevantScope sourceScope) {
-        Set<PhysicalEntity> entities = new HashSet<>();
-        for (PhysicalEntity entity : relevantScopeMap.keySet()) {
+    private Set<Entity> mutualAdd(RelevantScope sourceScope) {
+        Set<Entity> entities = new HashSet<>();
+        for (Entity entity : relevantScopeMap.keySet()) {
             if (sourceScope.addIfVisible(entity)) {
                 relevantScopeMap.get(entity).addIfVisible(sourceScope.source());
                 entities.add(entity);
@@ -22,7 +23,7 @@ final class RelevantScopeManager {
         return entities;
     }
 
-    public Set<PhysicalEntity> add(PhysicalEntity entity) {
+    public Set<Entity> add(Entity entity) {
         Objects.requireNonNull(entity);
         if (relevantScopeMap.containsKey(entity)) {
             return Collections.emptySet();
@@ -32,12 +33,12 @@ final class RelevantScopeManager {
         return mutualAdd(scope);
     }
 
-    public Set<PhysicalEntity> getAllEntities() {
+    public Set<Entity> getAllEntities() {
         return relevantScopeMap.keySet();
     }
 
 
-    public <E extends PhysicalEntity> Set<E> filterVisibleEntities(PhysicalEntity entity, Class<E> type) {
+    public <E extends Entity> Set<E> filterVisibleEntities(Entity entity, Class<E> type) {
         RelevantScope relevantScope = relevantScopeMap.get(entity);
         if (relevantScope == null) {
             return Collections.emptySet();
@@ -46,36 +47,36 @@ final class RelevantScopeManager {
     }
 
 
-    public boolean outOfScope(PhysicalEntity source, PhysicalEntity target) {
+    public boolean outOfScope(Entity source, Entity target) {
         Objects.requireNonNull(source);
         Objects.requireNonNull(target);
         return relevantScopeMap.containsKey(source) &&
                 relevantScopeMap.get(source).outOfScope(target);
     }
 
-    public Set<PhysicalEntity> update(PhysicalEntity entity) {
+    public Set<Entity> update(Entity entity) {
         Objects.requireNonNull(entity);
         RelevantScope relevantScope = relevantScopeMap.get(entity);
         if (relevantScope == null) {
             return Collections.emptySet();
         }
-        Set<PhysicalEntity> affectedEntities = new HashSet<>(relevantScope.update());
+        Set<Entity> affectedEntities = new HashSet<>(relevantScope.update());
         affectedEntities.stream().map(relevantScopeMap::get)
                 .filter(Objects::nonNull)
                 .forEach(scp -> scp.removeIfNotVisible(entity));
-        Set<PhysicalEntity> added = new HashSet<>(mutualAdd(relevantScope));
+        Set<Entity> added = new HashSet<>(mutualAdd(relevantScope));
         affectedEntities.addAll(added);
         return affectedEntities;
     }
 
 
-    public Set<PhysicalEntity> remove(PhysicalEntity entity) {
+    public Set<Entity> remove(Entity entity) {
         Objects.requireNonNull(entity);
         RelevantScope removed = relevantScopeMap.remove(entity);
         if (removed == null)  {
             return Collections.emptySet();
         }
-        Set<PhysicalEntity> entities = removed.filter(PhysicalEntity.class);
+        Set<Entity> entities = removed.filter(Entity.class);
         entities.stream().map(relevantScopeMap::get)
                 .filter(Objects::nonNull)
                 .forEach(scp -> scp.remove(entity));

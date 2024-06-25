@@ -1,6 +1,9 @@
 package org.y1000.message.serverevent;
 
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.event.EntityEvent;
+import org.y1000.event.EntityEventVisitor;
 import org.y1000.kungfu.KungFu;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
@@ -11,7 +14,6 @@ import org.y1000.network.gen.InventoryItemPacket;
 import org.y1000.network.gen.KungFuPacket;
 import org.y1000.network.gen.LoginPacket;
 import org.y1000.network.gen.Packet;
-import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 
@@ -79,7 +81,7 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
     }
 
     @Override
-    public PhysicalEntity source() {
+    public AttackableEntity source() {
         return player;
     }
 }

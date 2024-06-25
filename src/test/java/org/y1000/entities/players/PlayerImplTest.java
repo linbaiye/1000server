@@ -4,13 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.item.StackItem;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
-import org.y1000.entities.PhysicalEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.fight.PlayerAttackState;
@@ -325,7 +325,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void monitorFightingTarget() {
-        PhysicalEntity mock = Mockito.mock(PhysicalEntity.class);
+        AttackableEntity mock = Mockito.mock(AttackableEntity.class);
         player.setFightingEntity(mock);
         Mockito.verify(mock, Mockito.times(1)).registerEventListener(player);
         player.leaveRealm();
@@ -401,7 +401,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void startBowAttack() {
         PassiveMonster monster = createMonster(player.coordinate().move(2, 0));
-        when(mockedRealm.findInsight(any(PhysicalEntity.class), any(Long.class))).thenReturn(Optional.of(monster));
+        when(mockedRealm.findInsight(any(AttackableEntity.class), any(Long.class))).thenReturn(Optional.of(monster));
 
         player.inventory().add(new Weapon("bow", AttackKungFuType.BOW));
         enableBowKungFu();

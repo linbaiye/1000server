@@ -2,7 +2,7 @@ package org.y1000.entities.players.fight;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
@@ -14,13 +14,13 @@ import org.y1000.realm.Realm;
 public final class PlayerAttackState extends AbstractFightingState {
 
     private final State attackingState;
-    private final PhysicalEntity rangedTarget;
+    private final AttackableEntity rangedTarget;
     private final Damage damage;
     private final int rangedHit;
 
 
     private PlayerAttackState(int totalMillis, State attackingState,
-                              PhysicalEntity target,
+                              AttackableEntity target,
                               Damage damage,
                               int rangedHit) {
         super(totalMillis);

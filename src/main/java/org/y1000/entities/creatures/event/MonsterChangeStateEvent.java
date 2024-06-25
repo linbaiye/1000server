@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.event;
 
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.AbstractMonster;
-import org.y1000.message.serverevent.EntityEventVisitor;
+import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.ChangeStatePacket;
 import org.y1000.network.gen.Packet;
 

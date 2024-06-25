@@ -1,19 +1,20 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.Entity;
+import org.y1000.event.EntityEvent;
 import org.y1000.message.AbstractServerMessage;
 
 public abstract class Abstract2ClientEntityEvent extends AbstractServerMessage
         implements EntityEvent {
 
-    private final PhysicalEntity source;
+    private final Entity source;
 
-    public Abstract2ClientEntityEvent(PhysicalEntity source) {
+    public Abstract2ClientEntityEvent(Entity source) {
         this.source = source;
     }
 
     @Override
-    public PhysicalEntity source() {
+    public Entity source() {
         return source;
     }
 }

@@ -1,6 +1,7 @@
 package org.y1000.entities.players.event;
 
-import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.message.serverevent.PlayerEventVisitor;
@@ -26,14 +27,14 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
     }
 
 
-    public void affect(Set<PhysicalEntity> visibleCreatures)  {
+    public void affect(Set<AttackableEntity> visibleCreatures)  {
         visibleCreatures.stream()
                 .filter(e -> effectedCoordinates.contains(e.coordinate()))
                 .forEach(entity -> entity.attackedBy(player));
     }
 
     @Override
-    public PhysicalEntity source() {
+    public Entity source() {
         return player;
     }
 

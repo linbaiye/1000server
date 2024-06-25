@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 
-public final class GroundedItem extends AbstractPhysicalEntity {
+public final class GroundedItem extends AbstractEntity {
 
     private final Coordinate coordinate;
 
@@ -67,10 +67,6 @@ public final class GroundedItem extends AbstractPhysicalEntity {
         return coordinate().xDistance(from.x()) <= 2 && coordinate().yDistance(from.y()) <= 3;
     }
 
-    @Override
-    public boolean attackable() {
-        return false;
-    }
 
     @Override
     public boolean equals(Object o) {

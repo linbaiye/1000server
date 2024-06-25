@@ -1,8 +1,8 @@
 package org.y1000;
 
-import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.event.EntityEvent;
 import org.y1000.network.Connection;
 import org.y1000.realm.EntityEventSender;
 
@@ -12,7 +12,7 @@ import java.util.Set;
 public final class TestingEntityEventSender implements EntityEventSender {
     private final TestingEventListener eventListener;
 
-    private final Set<PhysicalEntity> entities;
+    private final Set<Entity> entities;
 
     public TestingEntityEventSender() {
         this.eventListener = new TestingEventListener();
@@ -35,16 +35,16 @@ public final class TestingEntityEventSender implements EntityEventSender {
     }
 
     @Override
-    public void add(PhysicalEntity entity) {
+    public void add(Entity entity) {
         entities.add(entity);
     }
 
     @Override
-    public void remove(PhysicalEntity entity) {
+    public void remove(Entity entity) {
         entities.remove(entity);
     }
 
-    public Set<PhysicalEntity> entities() {
+    public Set<Entity> entities() {
         return entities;
     }
 

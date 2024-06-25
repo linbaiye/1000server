@@ -8,10 +8,8 @@ import org.y1000.entities.players.Player;
 import org.y1000.item.StackItem;
 import org.y1000.item.Weapon;
 import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.message.clientevent.ClientDropItemEvent;
-import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.event.EntityEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
-import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
 
 import java.util.Optional;

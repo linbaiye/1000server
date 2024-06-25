@@ -8,7 +8,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
 import org.y1000.exp.ExperienceUtil;
-import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.event.EntityEvent;
 import org.y1000.util.UnaryAction;
 
 @Getter

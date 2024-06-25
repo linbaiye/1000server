@@ -1,6 +1,7 @@
 package org.y1000.entities;
 
 import org.y1000.message.AbstractEntityInterpolation;
+import org.y1000.event.EntityEventListener;
 import org.y1000.util.Coordinate;
 
 /**
@@ -26,4 +27,8 @@ public interface Entity {
     void update(int delta);
 
     AbstractEntityInterpolation captureInterpolation();
+
+    void registerEventListener(EntityEventListener listener);
+
+    void deregisterEventListener(EntityEventListener listener);
 }

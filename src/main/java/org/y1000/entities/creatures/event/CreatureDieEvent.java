@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.event;
 
 import org.y1000.entities.creatures.Creature;
-import org.y1000.message.serverevent.EntityEventVisitor;
+import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.CreatureDieEventPacket;
 import org.y1000.network.gen.Packet;
 

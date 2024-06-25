@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.event;
 
-import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.projectile.AbstractProjectile;
 import org.y1000.entities.projectile.Projectile;
@@ -22,7 +22,7 @@ public abstract class AbstractShootEvent extends AbstractCreatureEvent {
     }
 
     @Override
-    public PhysicalEntity source() {
+    public AttackableEntity source() {
         return projectile.shooter();
     }
 

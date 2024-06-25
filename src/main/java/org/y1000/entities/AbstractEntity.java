@@ -1,13 +1,13 @@
 package org.y1000.entities;
 
-import org.y1000.message.serverevent.EntityEvent;
-import org.y1000.message.serverevent.EntityEventListener;
+import org.y1000.event.EntityEvent;
+import org.y1000.event.EntityEventListener;
 
-public abstract class AbstractPhysicalEntity implements PhysicalEntity {
+public abstract class AbstractEntity implements Entity {
     private final long id;
     private final EventListeners eventListeners;
 
-    protected AbstractPhysicalEntity(long id) {
+    protected AbstractEntity(long id) {
         this.id = id;
         this.eventListeners = new EventListeners();
     }

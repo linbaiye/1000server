@@ -32,13 +32,16 @@ public abstract class AbstractEntityManager<T extends Entity> {
     }
 
 
-    public void update(long delta) {
+    protected void updateManagedEntities(long delta) {
         iterating = true;
         entities.forEach(e -> doUpdate(e, delta));
         iterating = false;
-        handleAdding();
         handleDeleting();
+        handleAdding();
     }
+
+    public abstract void update(long delta);
+
 
     private void handleAdding() {
         adding.forEach(this::doAdd);
@@ -72,7 +75,7 @@ public abstract class AbstractEntityManager<T extends Entity> {
         }
     }
 
-    public void add(T entity) {
+    protected void add(T entity) {
         if (iterating) {
             adding.add(entity);
         } else {
@@ -80,7 +83,7 @@ public abstract class AbstractEntityManager<T extends Entity> {
         }
     }
 
-    public void delete(T entity) {
+    protected void delete(T entity) {
         if (iterating) {
             deleting.add(entity);
         } else {

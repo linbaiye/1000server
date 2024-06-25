@@ -9,7 +9,7 @@ import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;
 import org.y1000.kungfu.KungFuType;
-import org.y1000.message.serverevent.EntityEvent;
+import org.y1000.event.EntityEvent;
 import org.y1000.util.UnaryAction;
 
 public final class BreathKungFu extends AbstractKungFu {

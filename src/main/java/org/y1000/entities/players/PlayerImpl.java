@@ -14,6 +14,7 @@ import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.fight.PlayerWaitDistanceState;
 import org.y1000.entities.projectile.Projectile;
+import org.y1000.event.EntityEvent;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
@@ -294,7 +295,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return attackKungFu;
     }
 
-    private void handlePickItem(PhysicalEntity entity) {
+    private void handlePickItem(Entity entity) {
         if (!(entity instanceof GroundedItem groundedItem)) {
             return;
         }
@@ -496,6 +497,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     private void startAttack(ClientAttackEvent event) {
         realm.findInsight(this, event.entityId())
+                .filter(e -> e instanceof AttackableEntity)
+                .map(AttackableEntity.class::cast)
                 .ifPresent(target -> attackKungFu.startAttack(this,event, target));
     }
 

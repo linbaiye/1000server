@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.Entity;
-import org.y1000.entities.PhysicalEntity;
+import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.util.Coordinate;
 
@@ -26,17 +26,17 @@ class RelevantScopeManagerTest extends AbstractUnitTestFixture  {
 
     @Test
     void add() {
-        PhysicalEntity entity = createMonster(new Coordinate(10, 10));
+        Entity entity = createMonster(new Coordinate(10, 10));
         relevantScopeManager.add(entity);
-        PhysicalEntity entity1 = createMonster(new Coordinate(10, 11));
-        Set<PhysicalEntity> affected = relevantScopeManager.add(entity1);
+        Entity entity1 = createMonster(new Coordinate(10, 11));
+        Set<Entity> affected = relevantScopeManager.add(entity1);
         assertTrue(affected.contains(entity));
-        PhysicalEntity entity2 = createMonster(new Coordinate(10, 12));
-        Set<PhysicalEntity> affected2 = relevantScopeManager.add(entity2);
+        Entity entity2 = createMonster(new Coordinate(10, 12));
+        Set<Entity> affected2 = relevantScopeManager.add(entity2);
         assertTrue(affected2.contains(entity1));
         assertTrue(affected2.contains(entity));
-        PhysicalEntity entity3 = createMonster(new Coordinate(entity.coordinate().x(), entity.coordinate().y() + Entity.VISIBLE_Y_RANGE + 1));
-        Set<PhysicalEntity> affected3 = relevantScopeManager.add(entity3);
+        Entity entity3 = createMonster(new Coordinate(entity.coordinate().x(), entity.coordinate().y() + Entity.VISIBLE_Y_RANGE + 1));
+        Set<Entity> affected3 = relevantScopeManager.add(entity3);
         assertFalse(affected3.contains(entity));
         assertTrue(affected3.contains(entity1));
     }
@@ -45,11 +45,11 @@ class RelevantScopeManagerTest extends AbstractUnitTestFixture  {
     void update() {
         PassiveMonster entity1 = createMonster(new Coordinate(10, 10));
         relevantScopeManager.add(entity1);
-        PhysicalEntity entity2 = createMonster(new Coordinate(10, 11));
+        Entity entity2 = createMonster(new Coordinate(10, 11));
         relevantScopeManager.add(entity2);
-        PhysicalEntity entity3 = createMonster(new Coordinate(10, 11 + Entity.VISIBLE_Y_RANGE + 2));
+        Entity entity3 = createMonster(new Coordinate(10, 11 + Entity.VISIBLE_Y_RANGE + 2));
         relevantScopeManager.add(entity3);
-        Set<PhysicalEntity> affected = relevantScopeManager.update(entity1);
+        Set<Entity> affected = relevantScopeManager.update(entity1);
         assertTrue(affected.isEmpty());
         entity1.changeCoordinate(Coordinate.xy(10, 11 + Entity.VISIBLE_Y_RANGE + 1));
         affected = relevantScopeManager.update(entity1);
