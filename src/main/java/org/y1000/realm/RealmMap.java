@@ -1,7 +1,7 @@
 package org.y1000.realm;
 
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.Entity;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
@@ -10,9 +10,9 @@ public interface RealmMap {
 
     boolean movable(Coordinate coordinate);
 
-    void occupy(AttackableEntity creature);
+    void occupy(Entity entity);
 
-    void free(AttackableEntity creature);
+    void free(Entity creature);
 
     String name();
 

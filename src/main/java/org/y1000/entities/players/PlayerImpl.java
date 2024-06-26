@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.*;
 import org.y1000.entities.attribute.Damage;
@@ -31,8 +32,10 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 
+import java.nio.channels.Pipe;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 
 /*
 
@@ -282,11 +285,20 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
     @Override
-    public void pickItem(Item item, GroundedItem groundedItem){
-        int slot = inventory.add(item);
+    public void pickItem(GroundedItem groundedItem, Function<GroundedItem, Item> creator) {
+        if (!groundedItem.canPickAt(coordinate())) {
+            emitEvent(PlayerTextEvent.tooFarAway(this));
+            return;
+        }
+        if (!inventory.canPick(groundedItem)) {
+            emitEvent(PlayerTextEvent.inventoryFull(this));
+            return;
+        }
+        int slot = inventory.add(creator.apply(groundedItem));
         if (slot > 0) {
-            log.info("Picked grounded item {}.", groundedItem);
-            emitEvent(new PlayerPickedItemEvent(this, slot, inventory.getItem(slot), groundedItem));
+            emitEvent(new UpdateInventorySlotEvent(this, slot, inventory.getItem(slot)));
+            emitEvent(new RemoveEntityEvent(groundedItem));
+            groundedItem.pickSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         }
     }
 
@@ -294,21 +306,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     public AttackKungFu attackKungFu() {
         return attackKungFu;
     }
-
-    private void handlePickItem(Entity entity) {
-        if (!(entity instanceof GroundedItem groundedItem)) {
-            return;
-        }
-        if (!groundedItem.canPickAt(coordinate())) {
-            log.warn("Tried pick item {} from {}.", groundedItem, coordinate());
-            emitEvent(PlayerTextEvent.tooFarAway(this));
-            return;
-        }
-        if (inventory.canPick(groundedItem)) {
-            emitEvent(new GetGroundItemEvent(this, groundedItem));
-        }
-    }
-
 
     public void disableFootKungFuNoTip() {
         if (footKungfu != null) {
@@ -495,6 +492,12 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
     }
 
+    public void attack(ClientAttackEvent event, AttackableEntity target) {
+        Validate.notNull(event, "event can't be null.");
+        Validate.notNull(target, "target can't be null.");
+        attackKungFu.startAttack(this, event, target);
+    }
+
     private void startAttack(ClientAttackEvent event) {
         realm.findInsight(this, event.entityId())
                 .filter(e -> e instanceof AttackableEntity)
@@ -519,8 +522,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             handleInventorySlotDoubleClick(doubleClickSlotEvent.sourceSlot());
         } else if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
             inventory.handleClientEvent(this, inventoryEvent, this::emitEvent);
-        } else if (clientEvent instanceof ClientPickItemEvent pickItemEvent) {
-            realm.findInsight(this, pickItemEvent.id()).ifPresent(this::handlePickItem);
         } else if (clientEvent instanceof ClientUnequipEvent unequipEvent) {
             unequip(unequipEvent.type());
         } else if (clientEvent instanceof ClientToggleKungFuEvent useKungFuEvent) {

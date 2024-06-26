@@ -2,13 +2,16 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
+import org.y1000.entities.Entity;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.monster.AbstractMonster;
+import org.y1000.entities.players.event.PlayerSitDownEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
+import org.y1000.event.item.ItemEventVisitor;
 import org.y1000.item.ItemSdb;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.serverevent.*;
@@ -20,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 final class ItemManager extends AbstractEntityManager<GroundedItem> implements EntityEventListener,
-        PlayerEventVisitor {
+        ItemEventVisitor {
     private final EntityEventSender eventSender;
     private final ItemSdb itemSdb;
     private final MonstersSdb monstersSdb;
@@ -31,6 +34,7 @@ final class ItemManager extends AbstractEntityManager<GroundedItem> implements E
         }
     }
     private final Map<String, List<DropItem>> dropItems;
+
 
     public ItemManager(EntityEventSender eventSender,
                        ItemSdb itemSdb,
@@ -87,15 +91,16 @@ final class ItemManager extends AbstractEntityManager<GroundedItem> implements E
 
     @Override
     protected void onAdded(GroundedItem entity) {
-        entity.registerEventListener(this);
         eventSender.add(entity);
-        eventSender.sendEvent(new ShowItemEvent(entity));
+        eventSender.notifyVisiblePlayers(entity, entity.captureInterpolation());
+        entity.registerEventListener(this);
         entity.dropSound().ifPresent(s -> eventSender.sendEvent(new EntitySoundEvent(entity, s)));
     }
 
     @Override
     protected void onDeleted(GroundedItem entity) {
         eventSender.remove(entity);
+        entity.deregisterEventListener(this);
     }
 
     @Override
@@ -108,6 +113,7 @@ final class ItemManager extends AbstractEntityManager<GroundedItem> implements E
     @Override
     public void visit(PlayerDropItemEvent event) {
         GroundedItem groundedItem = event.createGroundedItem(idGenerator.next());
+        log.debug("Dropped item at {}", groundedItem.coordinate());
         add(groundedItem);
     }
 

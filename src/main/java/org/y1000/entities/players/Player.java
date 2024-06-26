@@ -1,5 +1,6 @@
 package org.y1000.entities.players;
 
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.inventory.Inventory;
@@ -10,10 +11,12 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
+import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.realm.Realm;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public interface Player extends ViolentCreature {
 
@@ -32,7 +35,7 @@ public interface Player extends ViolentCreature {
     }
 
 
-    void pickItem(Item item, GroundedItem groundedItem);
+    void pickItem(GroundedItem groundedItem, Function<GroundedItem, Item> creator);
 
     default Optional<Weapon> weapon() {
         return Optional.empty();
@@ -47,6 +50,8 @@ public interface Player extends ViolentCreature {
     Inventory inventory();
 
     void handleClientEvent(ClientEvent clientEvent);
+
+    void attack(ClientAttackEvent event, AttackableEntity target);
 
     Optional<Hat> hat();
 

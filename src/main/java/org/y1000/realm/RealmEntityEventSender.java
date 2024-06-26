@@ -1,15 +1,13 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.event.*;
-import org.y1000.entities.projectile.Projectile;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
-import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
-import org.y1000.repository.ItemRepository;
 import org.y1000.message.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.*;
@@ -28,13 +26,10 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     private final Map<Player, Connection> playerConnectionMap = new HashMap<>(100);
 
-    private final ItemFactory itemFactory;
 
     private final TradeManager tradeManager;
 
-    RealmEntityEventSender(ItemRepository itemRepository,
-                           ItemFactory itemFactory) {
-        this.itemFactory = itemFactory;
+    RealmEntityEventSender() {
         tradeManager = new TradeManager();
     }
 
@@ -84,7 +79,7 @@ final class RealmEntityEventSender implements EntityEventListener,
         Entity source = positionEvent.source();
         Set<Entity> affectedEntities = scopeManager.update(source);
         affectedEntities.forEach(entity -> notifyOutsightOrInsight(source, entity));
-        notifyVisiblePlayers(source, positionEvent);
+        doNotifyVisiblePlayers(source, positionEvent);
         if (positionEvent.source() instanceof Player player) {
             sendMessage(player, positionEvent);
         }
@@ -111,26 +106,33 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void visit(CreatureAttackEvent event) {
-        notifyVisiblePlayers(event.source(), event);
+        doNotifyVisiblePlayers(event.source(), event);
     }
 
     @Override
     public void visit(RewindEvent event) {
         sendMessage(event.player(), event);
-        notifyVisiblePlayers(event.source(), event.toSetPosition());
+        doNotifyVisiblePlayers(event.source(), event.toSetPosition());
     }
 
     @Override
     public void visit(PlayerAttackEventResponse event) {
         sendMessage(event.player(), event);
         event.toPlayerAttackEvent()
-                .ifPresent(e -> notifyVisiblePlayers(event.source(), e));
+                .ifPresent(e -> doNotifyVisiblePlayers(event.source(), e));
     }
 
-    private void notifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
+    private void doNotifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
         scopeManager.filterVisibleEntities(source, Player.class)
                 .forEach(player -> sendMessage(player, serverMessage));
     }
+
+    public void notifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
+        Validate.notNull(source, "source can't be null.");
+        Validate.notNull(serverMessage, "serverMessage can't be null.");
+        doNotifyVisiblePlayers(source, serverMessage);
+    }
+
 
     @Override
     public void visit(PlayerAttackEvent event) {
@@ -144,7 +146,7 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     private void notifyVisiblePlayersAndSelf(Entity source,
                                              ServerMessage message) {
-        notifyVisiblePlayers(source, message);
+        doNotifyVisiblePlayers(source, message);
         if (source instanceof Player player) {
             sendMessage(player, message);
         }
@@ -152,7 +154,7 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void visit(MonsterChangeStateEvent event) {
-        notifyVisiblePlayers(event.source(), event);
+        doNotifyVisiblePlayers(event.source(), event);
     }
 
     @Override
@@ -170,14 +172,6 @@ final class RealmEntityEventSender implements EntityEventListener,
         sendMessage(event.player(), event);
     }
 
-
-    @Override
-    public void visit(PlayerPickedItemEvent event) {
-        sendMessage(event.player(), event);
-        notifyVisiblePlayers(event.groundedItem(), new RemoveEntityMessage(event.groundedItem().id()));
-        scopeManager.remove(event.groundedItem());
-        //itemRepository.save(event.player().id(), event, currentItemInSlot);
-    }
 
     @Override
     public void visit(UpdateInventorySlotEvent event) {
@@ -211,11 +205,6 @@ final class RealmEntityEventSender implements EntityEventListener,
         insight.ifPresent(another -> tradeManager.handle(event, another, this::onEvent));
     }
 
-    @Override
-    public void visit(GetGroundItemEvent event) {
-        GroundedItem pickingItem = event.getPickingItem();
-        event.player().pickItem(itemFactory.createItem(pickingItem), pickingItem);
-    }
 
     @Override
     public void visit(PlayerToggleKungFuEvent event) {
@@ -224,7 +213,7 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void visit(PlayerSitDownEvent event) {
-        notifyVisiblePlayers(event.source(), event);
+        doNotifyVisiblePlayers(event.source(), event);
         if (event.isIncludeSelf()) {
             sendMessage(event.player(), event);
         }
@@ -232,7 +221,7 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void visit(PlayerStandUpEvent event) {
-        notifyVisiblePlayers(event.source(), event);
+        doNotifyVisiblePlayers(event.source(), event);
         if (event.isIncludeSelf()) {
             sendMessage(event.player(), event);
         }
@@ -282,22 +271,22 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void visit(MonsterShootEvent event) {
-        notifyVisiblePlayers(event.source(), event);
+        doNotifyVisiblePlayers(event.source(), event);
     }
 
     @Override
     public void visit(MonsterMoveEvent event) {
-        notifyVisiblePlayers(event.source(), event);
+        doNotifyVisiblePlayers(event.source(), event);
     }
 
     @Override
     public void visit(ShowItemEvent event) {
-        notifyVisiblePlayers(event.source(), event);
+        doNotifyVisiblePlayers(event.source(), event);
     }
 
     @Override
     public void visit(MonsterJoinedEvent event) {
-        notifyVisiblePlayers(event.source(), event);
+        doNotifyVisiblePlayers(event.source(), event);
     }
 
     public Optional<Entity> findInsight(Entity source, long id) {

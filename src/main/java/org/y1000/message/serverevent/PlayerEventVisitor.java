@@ -32,18 +32,6 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
 
     }
 
-    default void visit(PlayerDropItemEvent event) {
-
-    }
-
-    default void visit(GetGroundItemEvent event) {
-
-    }
-
-    default void visit(PlayerPickedItemEvent event) {
-
-    }
-
     default void visit(PlayerTextEvent event) {
 
     }

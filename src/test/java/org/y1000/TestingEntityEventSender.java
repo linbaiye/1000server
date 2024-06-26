@@ -3,25 +3,33 @@ package org.y1000;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
+import org.y1000.message.ServerMessage;
 import org.y1000.network.Connection;
 import org.y1000.realm.EntityEventSender;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class TestingEntityEventSender implements EntityEventSender {
     private final TestingEventListener eventListener;
 
     private final Set<Entity> entities;
 
+    private final Map<Entity, List<ServerMessage>> entityMessages;
+
+    private final Map<Player, Connection> connectionMap;
+
     public TestingEntityEventSender() {
         this.eventListener = new TestingEventListener();
         this.entities = new HashSet<>();
+        entityMessages = new HashMap<>();
+        connectionMap = new HashMap<>();
     }
 
     @Override
     public void add(Player player, Connection connection) {
-
+        connectionMap.put(player, connection);
+        entities.add(player);
     }
 
     @Override
@@ -31,7 +39,7 @@ public final class TestingEntityEventSender implements EntityEventSender {
 
     @Override
     public void remove(Player player) {
-
+        connectionMap.remove(player);
     }
 
     @Override
@@ -65,8 +73,37 @@ public final class TestingEntityEventSender implements EntityEventSender {
         eventListener.clearEvents();
     }
 
+    public <T extends Entity> T getEntity(Class<T> clazz) {
+        return entities.stream()
+                .filter(entity -> entity.getClass().isAssignableFrom(clazz))
+                .map(clazz::cast)
+                .findFirst()
+                .orElse(null);
+    }
+
+
     @Override
     public void sendEvent(EntityEvent entityEvent) {
         eventListener.onEvent(entityEvent);
+    }
+
+    public <T extends ServerMessage> T removeFirst(Entity source, Class<T> clazz) {
+        List<ServerMessage> messages = entityMessages.get(source);
+        Iterator<ServerMessage> iterator = messages.iterator();
+        while (iterator.hasNext()) {
+            ServerMessage next = iterator.next();
+            if (clazz.isAssignableFrom(next.getClass())) {
+                iterator.remove();
+                return clazz.cast(next);
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public void notifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
+        entityMessages.putIfAbsent(source, new ArrayList<>());
+        entityMessages.get(source).add(serverMessage);
     }
 }

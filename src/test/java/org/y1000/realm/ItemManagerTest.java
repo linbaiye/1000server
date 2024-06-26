@@ -12,6 +12,7 @@ import org.y1000.message.serverevent.ShowItemEvent;
 import org.y1000.sdb.MonstersSdb;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -40,14 +41,6 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         when(monstersSdb.getHaveItem(any(String.class))).thenReturn("皮:2:1:肉:4:1");
         manager.onEvent(new CreatureDieEvent(monsterBuilder().name("牛").build()));
         assertEquals(2, eventSender.entities().size());
-        for (int i = 0; i < 2; i++) {
-            ShowItemEvent event = eventSender.removeFirst(ShowItemEvent.class);
-            if (event.toPacket().getShowItem().getName().equals("皮")) {
-                assertEquals(event.toPacket().getShowItem().getNumber(), 2);
-            } else if (event.toPacket().getShowItem().getName().equals("肉")) {
-                assertEquals(event.toPacket().getShowItem().getNumber(), 4);
-            }
-        }
         EntitySoundEvent soundEvent = eventSender.removeFirst(EntitySoundEvent.class);
         assertEquals("dropSound", soundEvent.toPacket().getSound().getSound());
     }

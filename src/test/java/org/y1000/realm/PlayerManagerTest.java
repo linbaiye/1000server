@@ -1,0 +1,64 @@
+package org.y1000.realm;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.y1000.TestingEntityEventSender;
+import org.y1000.entities.GroundedItem;
+import org.y1000.entities.creatures.monster.Monster;
+import org.y1000.entities.players.Player;
+import org.y1000.item.ItemFactory;
+import org.y1000.item.StackItem;
+import org.y1000.message.clientevent.ClientPickItemEvent;
+import org.y1000.network.Connection;
+import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.util.Coordinate;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+class PlayerManagerTest {
+    private PlayerManager playerManager;
+
+    private EntityEventSender eventSender;
+
+    private EntityManager<GroundedItem> itemManager;
+
+    private ItemFactory itemFactory;
+
+    @SuppressWarnings("unchecked")
+    @BeforeEach
+    void setUp() {
+        eventSender = new TestingEntityEventSender();
+        itemManager = (EntityManager<GroundedItem>)Mockito.mock(EntityManager.class);
+        itemFactory = Mockito.mock(ItemFactory.class);
+        playerManager = new PlayerManager(eventSender, itemManager, itemFactory);
+    }
+
+
+    @Test
+    void addNewPlayer() {
+        var player = Mockito.mock(Player.class);
+        when(player.id()).thenReturn(1L);
+        var connection = Mockito.mock(Connection.class);
+        var realm = Mockito.mock(Realm.class);
+        playerManager.onPlayerConnected(player, connection, realm);
+        verify(player).joinReam(realm);
+        assertTrue(playerManager.find(1L).isPresent());
+    }
+
+    @Test
+    void pickItem() {
+        var player = Mockito.mock(Player.class);
+        GroundedItem groundItem = new GroundedItem(2L, "test", Coordinate.xy(2, 2), 1, "", "");
+        when(itemManager.find(any(Long.class))).thenReturn(Optional.of(groundItem));
+        when(itemFactory.createItem(groundItem)).thenReturn(new StackItem("test", 1));
+        playerManager.onPlayerEvent(new PlayerDataEvent(player, new ClientPickItemEvent(2L)), null);
+        verify(player).pickItem(groundItem, itemFactory::createItem);
+    }
+}

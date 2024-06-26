@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.Server;
 import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.Entity;
 import org.y1000.util.Coordinate;
 
 import java.io.*;
@@ -33,8 +34,8 @@ final class RealmMapV2Impl implements RealmMap {
 
     private final String name;
 
-    private final Map<Coordinate, AttackableEntity> occupyingCreatures;
-    private final Map<AttackableEntity, Coordinate> creatureCoordinateMap;
+    private final Map<Coordinate, Entity> occupyingCreatures;
+    private final Map<Entity, Coordinate> creatureCoordinateMap;
 
     public RealmMapV2Impl(byte[][] movableMask, String name) {
         Objects.requireNonNull(name);
@@ -69,17 +70,17 @@ final class RealmMapV2Impl implements RealmMap {
         return ((cell & 0x1) == 0) && ((cell & 0x2) == 0);
     }
 
-    public void occupy(AttackableEntity creature) {
-        if (!isInRange(creature.coordinate())) {
-            throw new IllegalArgumentException("Invalid coordinate " + creature.coordinate());
+    public void occupy(Entity entity) {
+        if (!isInRange(entity.coordinate())) {
+            throw new IllegalArgumentException("Invalid coordinate " + entity.coordinate());
         }
-        free(creature);
-        occupyingCreatures.put(creature.coordinate(), creature);
-        creatureCoordinateMap.put(creature, creature.coordinate());
+        free(entity);
+        occupyingCreatures.put(entity.coordinate(), entity);
+        creatureCoordinateMap.put(entity, entity.coordinate());
         //log.debug("{} occupied {}.", creature.id(), creature.coordinate());
     }
 
-    public void free(AttackableEntity creature) {
+    public void free(Entity creature) {
         var c = creatureCoordinateMap.remove(creature);
         if (c != null) {
             occupyingCreatures.remove(c);

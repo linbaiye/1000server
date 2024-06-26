@@ -3,6 +3,8 @@ package org.y1000.realm;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
+import org.y1000.message.ServerMessage;
+import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
 import org.y1000.network.Connection;
 
 public interface EntityEventSender {
@@ -21,4 +23,7 @@ public interface EntityEventSender {
     void remove(Entity entity);
 
     void sendEvent(EntityEvent entityEvent);
+
+    void notifyVisiblePlayers(Entity source, ServerMessage serverMessage);
+
 }

@@ -1,13 +1,13 @@
 package org.y1000.message;
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.Entity;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.Player;
-import org.y1000.event.EntityEvent;
-import org.y1000.event.EntityEventVisitor;
+import org.y1000.event.item.ItemEvent;
+import org.y1000.event.item.ItemEventVisitor;
 import org.y1000.util.Coordinate;
 
-public final class PlayerDropItemEvent implements EntityEvent {
+public final class PlayerDropItemEvent implements ItemEvent {
 
     private final String droppedItemName;
 
@@ -38,12 +38,12 @@ public final class PlayerDropItemEvent implements EntityEvent {
     }
 
     @Override
-    public AttackableEntity source() {
+    public Entity source() {
         return source;
     }
 
     @Override
-    public void accept(EntityEventVisitor visitor) {
-        visitor.visit(this);
+    public void accept(ItemEventVisitor itemEventVisitor) {
+        itemEventVisitor.visit(this);
     }
 }

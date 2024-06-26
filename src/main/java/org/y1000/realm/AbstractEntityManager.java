@@ -4,9 +4,10 @@ import org.slf4j.Logger;
 import org.y1000.entities.Entity;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
-public abstract class AbstractEntityManager<T extends Entity> {
+public abstract class AbstractEntityManager<T extends Entity> implements EntityManager<T> {
     private boolean iterating;
     private final Set<T> entities;
 
@@ -39,8 +40,6 @@ public abstract class AbstractEntityManager<T extends Entity> {
         handleDeleting();
         handleAdding();
     }
-
-    public abstract void update(long delta);
 
 
     private void handleAdding() {
@@ -82,6 +81,15 @@ public abstract class AbstractEntityManager<T extends Entity> {
             doAdd(entity);
         }
     }
+
+
+    @Override
+    public Optional<T> find(long id) {
+        return entities.stream()
+                .filter(e -> e.id() == id)
+                .findFirst();
+    }
+
 
     protected void delete(T entity) {
         if (iterating) {

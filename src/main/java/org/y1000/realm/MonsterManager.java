@@ -6,6 +6,7 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.MonsterJoinedEvent;
 import org.y1000.entities.creatures.event.MonsterShootEvent;
 import org.y1000.entities.creatures.monster.AbstractMonster;
+import org.y1000.entities.creatures.monster.Monster;
 import org.y1000.entities.creatures.monster.MonsterFactory;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
@@ -16,7 +17,7 @@ import org.y1000.util.Rectangle;
 import java.util.*;
 
 @Slf4j
-final class MonsterManager extends AbstractEntityManager<AbstractMonster> implements EntityEventListener {
+final class MonsterManager extends AbstractEntityManager<Monster> implements EntityEventListener {
 
     private final EntityEventSender sender;
 
@@ -48,10 +49,10 @@ final class MonsterManager extends AbstractEntityManager<AbstractMonster> implem
 
 
     private static class RespawningMonster {
-        private final AbstractMonster monster;
+        private final Monster monster;
         private int time;
 
-        private RespawningMonster(AbstractMonster monster, int time) {
+        private RespawningMonster(Monster monster, int time) {
             this.monster = monster;
             this.time = time;
         }
@@ -84,7 +85,7 @@ final class MonsterManager extends AbstractEntityManager<AbstractMonster> implem
     }
 
 
-    private void respawn(AbstractMonster monster) {
+    private void respawn(Monster monster) {
         List<MonsterSpawnSetting> settings = getSettings(monster.name());
         for (MonsterSpawnSetting setting : settings) {
             if (setting.range().contains(monster.coordinate())) {
@@ -145,17 +146,19 @@ final class MonsterManager extends AbstractEntityManager<AbstractMonster> implem
     }
 
     @Override
-    protected void onAdded(AbstractMonster entity) {
+    protected void onAdded(Monster entity) {
         sender.add(entity);
-        entity.registerEventListener(this);
         sender.sendEvent(new MonsterJoinedEvent(entity));
+        entity.registerEventListener(this);
         entity.registerEventListener(itemManager);
     }
 
     @Override
-    protected void onDeleted(AbstractMonster entity) {
+    protected void onDeleted(Monster entity) {
         sender.remove(entity);
         respawningMonsters.add(new RespawningMonster(entity, 8000));
+        entity.deregisterEventListener(this);
+        entity.deregisterEventListener(itemManager);
     }
 
     private void onRemoveEntity(RemoveEntityEvent removeEntityEvent) {
@@ -171,6 +174,7 @@ final class MonsterManager extends AbstractEntityManager<AbstractMonster> implem
             onRemoveEntity(removeEntityEvent);
         } else if (entityEvent instanceof MonsterShootEvent shootEvent) {
             projectileManager.add(shootEvent.projectile());
+            sender.notifyVisiblePlayers(shootEvent.source(), shootEvent);
         }
     }
 }

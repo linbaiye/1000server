@@ -22,7 +22,7 @@ import org.y1000.util.UnaryAction;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMonster, MonsterState<AbstractMonster>> {
+public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMonster, MonsterState<AbstractMonster>> implements Monster {
     private final RealmMap realmMap;
 
     private final Damage damage;
@@ -79,6 +79,7 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
     }
 
 
+    @Override
     public void revive(Coordinate coordinate) {
         int range = attributeProvider.wanderingRange();
         spwanCoordinate = coordinate;
@@ -101,14 +102,17 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
         return attackSkill;
     }
 
+    @Override
     public int walkSpeed() {
         return attributeProvider.walkSpeed();
     }
 
+    @Override
     public RealmMap realmMap() {
         return realmMap;
     }
 
+    @Override
     public Rectangle wanderingArea() {
         return wanderingArea;
     }
@@ -244,6 +248,7 @@ public abstract class AbstractMonster extends AbstractViolentCreature<AbstractMo
                 Optional.of(attributeProvider.hurtSound());
     }
 
+    @Override
     public Optional<String> normalSound() {
         return attributeProvider.normalSound();
     }
