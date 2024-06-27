@@ -28,7 +28,8 @@ public interface Creature extends AttackableEntity {
 
     Optional<String> hurtSound();
 
-
     Optional<String> dieSound();
+
+    int getStateMillis(State state);
 
 }

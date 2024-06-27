@@ -11,7 +11,7 @@ public final class MonsterMeleeFightAI extends AbstractMonsterFightAI {
 
 
     private boolean targetCloseEnough(AbstractMonster monster) {
-        return monster.getFightingEntity().attackable() &&
+        return monster.getFightingEntity().canBeAttackedNow() &&
                 monster.getFightingEntity().coordinate().directDistance(monster.coordinate()) <= 1;
     }
 

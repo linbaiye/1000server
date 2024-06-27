@@ -58,7 +58,7 @@ public final class MonsterWanderingAI extends AbstractMonsterAI {
 
 
     private void nextRound(AbstractMonster monster) {
-        destination = monster.wanderingArea().random(monster.getSpwanCoordinate());
+        destination = monster.wanderingArea().random(monster.spawnCoordinate());
         previousCoordinate = monster.coordinate();
         changeToNewState(monster, MonsterCommonState.idle(monster));
     }
@@ -85,6 +85,6 @@ public final class MonsterWanderingAI extends AbstractMonsterAI {
     }
 
     public static MonsterWanderingAI create(AbstractMonster monster) {
-        return new MonsterWanderingAI(monster.wanderingArea().random(monster.getSpwanCoordinate()), monster.coordinate());
+        return new MonsterWanderingAI(monster.wanderingArea().random(monster.spawnCoordinate()), monster.coordinate());
     }
 }

@@ -1,6 +1,8 @@
 package org.y1000.entities.creatures.monster;
 
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.AiPathUtil;
+import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.event.MonsterMoveEvent;
@@ -15,25 +17,10 @@ public abstract class AbstractMonsterAI implements MonsterAI {
         monster.emitEvent(MonsterChangeStateEvent.of(monster));
     }
 
-    protected Direction computeNextMoveDirection(AbstractMonster monster,
-                                                 Coordinate dest, Coordinate previous) {
-        int minDist = Integer.MAX_VALUE;
-        Direction towards = null;
-        for (Direction direction : Direction.values()) {
-            Coordinate coordinate = monster.coordinate().moveBy(direction);
-            int distance = coordinate.distance(dest);
-            if (monster.realmMap().movable(coordinate) && !previous.equals(coordinate) && minDist > distance) {
-                minDist = distance;
-                towards = direction;
-            }
-        }
-        return towards;
-    }
-
     protected void moveProcess(AbstractMonster monster, Coordinate dest,
                                Coordinate previous,
                                Action noPathAction, int speed) {
-        Direction direction = computeNextMoveDirection(monster, dest, previous);
+        Direction direction = AiPathUtil.computeNextMoveDirection(monster, dest, previous);
         if (direction == null) {
             noPathAction.invoke();
             return;

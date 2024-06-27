@@ -9,7 +9,6 @@ import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 import org.y1000.entities.creatures.event.MonsterMoveEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.message.PlayerMoveEvent;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,7 +70,7 @@ class MonsterMeleeFightAITest extends AbstractMonsterUnitTestFixture {
     void onFrozenDoneWhenTargetCloseEnough() {
         var player = Mockito.mock(Player.class);
         when(player.coordinate()).thenReturn(monster.coordinate().moveBy(monster.direction()));
-        when(player.attackable()).thenReturn(true);
+        when(player.canBeAttackedNow()).thenReturn(true);
         monster.setFightingEntity(player);
         ai.onFrozenDone(monster);
         assertEquals(State.ATTACK, monster.stateEnum());

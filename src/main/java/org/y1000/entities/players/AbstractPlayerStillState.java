@@ -1,13 +1,13 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.AbstractCreateState;
+import org.y1000.entities.creatures.AbstractCreatureState;
 import org.y1000.entities.creatures.State;
 ;
 
 /**
  * State that does not move.
  */
-public abstract class AbstractPlayerStillState extends AbstractCreateState<PlayerImpl> implements
+public abstract class AbstractPlayerStillState extends AbstractCreatureState<PlayerImpl> implements
         MovableState, PlayerState {
     private final State state;
 

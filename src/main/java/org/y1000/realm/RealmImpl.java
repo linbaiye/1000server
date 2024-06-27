@@ -1,7 +1,6 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.monster.MonsterFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
@@ -107,11 +106,6 @@ final class RealmImpl implements Runnable, Realm {
     public void run() {
         monsterManager.init(this.map());
         startRealm();
-    }
-
-    @Override
-    public Optional<Entity> findInsight(Entity source, long id) {
-        return eventSender.findInsight(source, id);
     }
 
     @Override

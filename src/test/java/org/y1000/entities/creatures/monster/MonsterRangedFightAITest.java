@@ -20,12 +20,4 @@ class MonsterRangedFightAITest extends AbstractMonsterUnitTestFixture {
         monster.changeAI(ai);
     }
 
-    @Test
-    void onAttackDone() {
-        when(realmMap.movable(any(Coordinate.class))).thenReturn(true);
-        var player = playerBuilder().coordinate(monster.coordinate().moveBy(monster.direction())).build();
-        monster.setFightingEntity(player);
-        ai.onAttackDone(monster);
-        assertInstanceOf(MonsterEscapeAI.class, monster.AI());
-    }
 }

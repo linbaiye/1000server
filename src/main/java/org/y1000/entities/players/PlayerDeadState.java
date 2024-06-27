@@ -1,10 +1,10 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.AbstractCreateState;
+import org.y1000.entities.creatures.AbstractCreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.event.PlayerReviveEvent;
 
-public final class PlayerDeadState extends AbstractCreateState<PlayerImpl> implements PlayerState {
+public final class PlayerDeadState extends AbstractCreatureState<PlayerImpl> implements PlayerState {
 
     public PlayerDeadState(int totalMillis) {
         super(totalMillis);

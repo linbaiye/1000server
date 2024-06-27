@@ -1,14 +1,14 @@
 package org.y1000.entities.creatures.monster;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.AbstractCreateState;
+import org.y1000.entities.creatures.AbstractCreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.event.MonsterShootEvent;
 import org.y1000.entities.projectile.MonsterProjectile;
 
 @Slf4j
-public final class MonsterRangedAttackState extends AbstractCreateState<AbstractMonster> implements MonsterState<AbstractMonster> {
+public final class MonsterRangedAttackState extends AbstractCreatureState<AbstractMonster> implements MonsterState<AbstractMonster> {
 
     private final String sound;
 

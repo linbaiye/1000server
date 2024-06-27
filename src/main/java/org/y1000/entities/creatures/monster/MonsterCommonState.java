@@ -2,13 +2,15 @@ package org.y1000.entities.creatures.monster;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.creatures.AbstractNpcState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
 
 import java.util.Set;
 
 @Slf4j
-public final class MonsterCommonState extends AbstractMonsterState {
+public final class MonsterCommonState extends AbstractNpcState<AbstractMonster>
+        implements MonsterState<AbstractMonster> {
     private static final Set<State> ACCEPTABLE_STATES = Set.of(State.IDLE, State.FROZEN, State.ATTACK);
 
     private MonsterCommonState(int totalMillis, State stat) {

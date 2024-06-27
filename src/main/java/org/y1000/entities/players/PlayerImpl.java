@@ -275,10 +275,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
 
-    RealmMap realmMap() {
-        return realm.map();
-    }
-
     @Override
     public Optional<FootKungFu> footKungFu() {
         return Optional.ofNullable(footKungfu);
@@ -498,13 +494,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         attackKungFu.startAttack(this, event, target);
     }
 
-    private void startAttack(ClientAttackEvent event) {
-        realm.findInsight(this, event.entityId())
-                .filter(e -> e instanceof AttackableEntity)
-                .map(AttackableEntity.class::cast)
-                .ifPresent(target -> attackKungFu.startAttack(this,event, target));
-    }
-
     private void move(ClientMovementEvent event) {
         if (state() instanceof MovableState movableState) {
             movableState.move(this, event);
@@ -530,8 +519,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             sitDown(false);
         } else if (clientEvent instanceof ClientStandUpEvent) {
             standUp(false);
-        } else if (clientEvent instanceof ClientAttackEvent attackEvent) {
-            startAttack(attackEvent);
         } else if (clientEvent instanceof ClientMovementEvent movementEvent) {
             move(movementEvent);
         }
@@ -619,58 +606,75 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
     }
 
+
+    private void afterDamaged(int damagedLife) {
+        if (currentLife() > 0) {
+            cooldownRecovery();
+            state().moveToHurtCoordinate(this);
+            State afterHurtState = state().decideAfterHurtState();
+            changeState(PlayerHurtState.hurt(this, afterHurtState));
+            emitEvent(new CreatureHurtEvent(this, afterHurtState));
+            gainProtectionExp(damagedLife);
+        } else {
+            onKilled();
+        }
+    }
+
+
     @Override
     public boolean attackedBy(ViolentCreature attacker) {
         if (!state().attackable() || randomAvoidance(attacker.hit())) {
             return false;
         }
-        cooldownRecovery();
         int bodyDamage = attacker.damage().bodyDamage() - bodyArmor();
         bodyDamage = bodyDamage > 0 ? bodyDamage : 1;
         life.consume(bodyDamage);
-        if (currentLife() > 0) {
-            state().moveToHurtCoordinate(this);
-            State afterHurtState = state().decideAfterHurtState();
-            changeState(PlayerHurtState.hurt(this, afterHurtState));
-            emitEvent(new CreatureHurtEvent(this, afterHurtState));
-            gainProtectionExp(bodyDamage);
-        } else {
-            onKilled();
-        }
+        afterDamaged(bodyDamage);
         return true;
     }
 
 
-    private int takeDamage(Damage damage) {
+    private int headArmor() {
+        return 0;
+    }
+    private int armArmor() {
+        return 0;
+    }
+    private int legArmor() {
+        return 0;
+    }
+
+    private void takeDamage(Damage damage) {
         var damagedLife = Math.max(damage.bodyDamage() - bodyArmor(), 1);
-        life.consume(damage.bodyDamage());
-        return damagedLife;
+        life.consume(damagedLife);
+        var damagedHead = Math.max(damage.headDamage() - headArmor(), 1);
+        headLife.consume(damagedHead);
+        var damagedArm = Math.max(damage.armDamage() - armArmor(), 1);
+        armLife.consume(damagedArm);
+        var damagedLeg = Math.max(damage.legDamage() - legArmor(), 1);
+        legLife.consume(damagedLeg);
     }
 
 
     @Override
     public boolean attackedBy(Player attacker) {
-        if (!state().attackable() || randomAvoidance(attacker.hit())) {
+        var before = currentLife();
+        var hit = doAttackedAndGiveExp(attacker.damage(), attacker.hit(), this::takeDamage, attacker::gainAttackExp);
+        if (!hit) {
             return false;
         }
-        cooldownRecovery();
-        var damagedLife = takeDamage(attacker.damage());
-        var exp = damagedLifeToExp(damagedLife);
-        attacker.gainAttackExp(exp);
-        if (currentLife() > 0) {
-            state().moveToHurtCoordinate(this);
-            State afterHurtState = state().decideAfterHurtState();
-            changeState(PlayerHurtState.hurt(this, afterHurtState));
-            emitEvent(new CreatureHurtEvent(this, afterHurtState));
-        } else {
-            onKilled();
-        }
+        afterDamaged(currentLife() - before);
         return true;
     }
 
     @Override
     public void attackedBy(Projectile projectile) {
         attackedBy(projectile.shooter());
+    }
+
+    @Override
+    public RealmMap realmMap() {
+        return realm.map();
     }
 
     @Override
@@ -681,7 +685,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     @Override
     public void leaveRealm() {
         if (realm != null) {
-            realmMap().free(this);
+            realm.map().free(this);
         }
         changeState(PlayerFrozenState.Instance);
         emitEvent(new PlayerLeftEvent(this));

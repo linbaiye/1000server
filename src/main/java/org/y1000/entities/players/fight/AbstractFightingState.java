@@ -1,13 +1,13 @@
 package org.y1000.entities.players.fight;
 
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.AbstractCreateState;
+import org.y1000.entities.creatures.AbstractCreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.MovableState;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerState;
 
-public abstract class AbstractFightingState extends AbstractCreateState<PlayerImpl> implements PlayerState, MovableState {
+public abstract class AbstractFightingState extends AbstractCreatureState<PlayerImpl> implements PlayerState, MovableState {
 
 
     public AbstractFightingState(int totalMillis) {

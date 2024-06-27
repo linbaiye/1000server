@@ -3,22 +3,13 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
 import org.y1000.TestingEntityEventSender;
 import org.y1000.entities.GroundedItem;
-import org.y1000.entities.creatures.monster.Monster;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
-import org.y1000.item.StackItem;
-import org.y1000.message.clientevent.ClientPickItemEvent;
 import org.y1000.network.Connection;
-import org.y1000.realm.event.PlayerDataEvent;
-import org.y1000.util.Coordinate;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -52,13 +43,4 @@ class PlayerManagerTest {
         assertTrue(playerManager.find(1L).isPresent());
     }
 
-    @Test
-    void pickItem() {
-        var player = Mockito.mock(Player.class);
-        GroundedItem groundItem = new GroundedItem(2L, "test", Coordinate.xy(2, 2), 1, "", "");
-        when(itemManager.find(any(Long.class))).thenReturn(Optional.of(groundItem));
-        when(itemFactory.createItem(groundItem)).thenReturn(new StackItem("test", 1));
-        playerManager.onPlayerEvent(new PlayerDataEvent(player, new ClientPickItemEvent(2L)), null);
-        verify(player).pickItem(groundItem, itemFactory::createItem);
-    }
 }

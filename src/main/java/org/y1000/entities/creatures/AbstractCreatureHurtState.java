@@ -3,7 +3,7 @@ package org.y1000.entities.creatures;
 import lombok.Getter;
 
 @Getter
-public abstract class AbstractCreatureHurtState<C extends Creature> extends AbstractCreateState<C>{
+public abstract class AbstractCreatureHurtState<C extends Creature> extends AbstractCreatureState<C> {
 
 
     protected AbstractCreatureHurtState(int totalMillis) {

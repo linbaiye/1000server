@@ -103,7 +103,6 @@ final class MonsterManager extends AbstractEntityManager<Monster> implements Ent
             List<MonsterSpawnSetting> settings = getSettings("牛");
             settings.forEach(setting -> spawnMonsters(name, realmMap, setting));
 //            var monsters = create(name, realmMap, setting.get(0));
-
 //            List<AbstractMonster> monsters = List.of(
 //                    monsterFactory.createMonster("犀牛", idGenerator.next(), re)),
 //                    monsterFactory.createMonster("牛", idGenerator.next(), realmMap, new Coordinate(39, 31)),

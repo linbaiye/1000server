@@ -1,23 +1,13 @@
 package org.y1000.entities.creatures.monster;
 
-import org.y1000.entities.RemoveEntityEvent;
+import org.y1000.entities.creatures.AbstractCreatureDieState;
 import org.y1000.entities.creatures.State;
 
-public final class MonsterDieState extends AbstractMonsterState {
+public final class MonsterDieState extends AbstractCreatureDieState<AbstractMonster> implements
+        MonsterState<AbstractMonster> {
 
     public MonsterDieState(int totalMillis) {
-        super(totalMillis, State.DIE);
-    }
-
-    @Override
-    protected void nextMove(AbstractMonster monster) {
-        monster.emitEvent(new RemoveEntityEvent(monster));
-        monster.realmMap().free(monster);
-    }
-
-    @Override
-    public boolean attackable() {
-        return false;
+        super(totalMillis);
     }
 
     public static MonsterDieState die(AbstractMonster monster) {

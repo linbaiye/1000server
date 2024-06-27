@@ -1,11 +1,11 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.AbstractCreateState;
+import org.y1000.entities.creatures.AbstractCreatureState;
 import org.y1000.entities.creatures.State;
 
 @Slf4j
-public final class PlayerSitDownState extends AbstractCreateState<PlayerImpl> implements PlayerState {
+public final class PlayerSitDownState extends AbstractCreatureState<PlayerImpl> implements PlayerState {
 
     public PlayerSitDownState(int totalMillis) {
         super(totalMillis);

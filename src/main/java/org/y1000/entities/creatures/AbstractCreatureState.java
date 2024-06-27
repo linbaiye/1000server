@@ -1,11 +1,11 @@
 package org.y1000.entities.creatures;
 
 
-public abstract class AbstractCreateState<C extends Creature> implements CreatureState<C> {
+public abstract class AbstractCreatureState<C extends Creature> implements CreatureState<C> {
     private int elapsedMillis;
     private final int totalMillis;
 
-    public AbstractCreateState(int totalMillis) {
+    public AbstractCreatureState(int totalMillis) {
         this.totalMillis = totalMillis;
         elapsedMillis = 0;
     }

@@ -1,9 +1,9 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.AbstractCreateState;
+import org.y1000.entities.creatures.AbstractCreatureState;
 import org.y1000.entities.creatures.State;
 
-public final class PlayerStandUpState extends AbstractCreateState<PlayerImpl> implements PlayerState {
+public final class PlayerStandUpState extends AbstractCreatureState<PlayerImpl> implements PlayerState {
 
     public PlayerStandUpState(int totalMillis) {
         super(totalMillis);
