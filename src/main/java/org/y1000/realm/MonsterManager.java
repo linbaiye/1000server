@@ -148,7 +148,7 @@ final class MonsterManager extends AbstractEntityManager<Monster> implements Ent
     @Override
     protected void onAdded(Monster entity) {
         sender.add(entity);
-        sender.sendEvent(new MonsterJoinedEvent(entity));
+        sender.notifyVisiblePlayers(entity, new MonsterJoinedEvent(entity));
         entity.registerEventListener(this);
         entity.registerEventListener(itemManager);
     }
