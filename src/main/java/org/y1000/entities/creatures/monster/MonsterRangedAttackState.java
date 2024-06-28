@@ -32,22 +32,22 @@ public final class MonsterRangedAttackState extends AbstractCreatureState<Abstra
 
     @Override
     public void update(AbstractMonster monster, int delta) {
-        if (elapse(delta)) {
-            monster.AI().onAttackDone(monster);
-            return;
-        }
-        if (elapsedMillis() >= (totalMillis() / 2) && monster.getFightingEntity() != null && !shot) {
-            monster.emitEvent(new MonsterShootEvent(new MonsterProjectile(monster, monster.getFightingEntity(), spriteId)));
-            if (sound != null) {
-                monster.emitEvent(new EntitySoundEvent(monster, sound));
-            }
-            shot = true;
-        }
+//        if (elapse(delta)) {
+//            monster.AI().onAttackDone(monster);
+//            return;
+//        }
+//        if (elapsedMillis() >= (totalMillis() / 2) && monster.getFightingEntity() != null && !shot) {
+//            monster.emitEvent(new MonsterShootEvent(new MonsterProjectile(monster, monster.getFightingEntity(), spriteId)));
+//            if (sound != null) {
+//                monster.emitEvent(new EntitySoundEvent(monster, sound));
+//            }
+//            shot = true;
+//        }
     }
 
     @Override
     public void afterHurt(AbstractMonster creature) {
-        creature.AI().onAttackDone(creature);
+//        creature.AI().onAttackDone(creature);
     }
 
     public static MonsterRangedAttackState attack(AbstractMonster monster, String sound, int projectId) {

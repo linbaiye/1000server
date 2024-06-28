@@ -39,8 +39,6 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;

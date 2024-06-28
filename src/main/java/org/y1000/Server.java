@@ -8,8 +8,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
-import org.y1000.entities.creatures.monster.MonsterFactory;
-import org.y1000.entities.creatures.monster.MonsterFactoryImpl;
+import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.creatures.monster.NpcFactoryImpl;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.repository.*;
@@ -34,7 +34,7 @@ public final class Server {
 
     private ItemRepository itemRepository;
 
-    private MonsterFactory monsterFactory;
+    private NpcFactory npcFactory;
 
     public Server(int port) {
         this.port = port;
@@ -45,8 +45,8 @@ public final class Server {
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE);
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl);
         itemRepository = repository;
-        monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE);
-        realmManager = RealmManager.create(repository, itemRepository, monsterFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE);
+        npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance);
+        realmManager = RealmManager.create(repository, itemRepository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE);
     }
 
 

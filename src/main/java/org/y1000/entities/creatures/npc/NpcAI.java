@@ -1,15 +1,12 @@
 package org.y1000.entities.creatures.npc;
 
 
-public interface NpcAI {
-    void onHurtDone(Npc npc);
+public interface NpcAI<N extends Npc> {
 
-    void onIdleDone(Npc npc);
+    void onActionDone(N npc);
 
-    void onMoveDone(Npc npc);
+    void onMoveFailed(N npc);
 
-    void onFrozenDone(Npc npc);
-
-    void start(Npc npc);
+    void start(N npc);
 
 }

@@ -3,7 +3,7 @@ package org.y1000.sdb;
 public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
     public static final NpcSdbImpl Instance = new NpcSdbImpl();
     private NpcSdbImpl() {
-
+        read("Npc.sdb");
     }
 
     @Override

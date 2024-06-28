@@ -1,7 +1,7 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.monster.MonsterFactory;
+import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
 import org.y1000.repository.ItemRepository;
@@ -29,21 +29,21 @@ final class RealmImpl implements Runnable, Realm {
 
     private final ItemManager itemManager;
 
-    private final MonsterManager monsterManager;
+    private final NpcManager npcManager;
 
     private final PlayerManager playerManager;
 
     public RealmImpl(RealmMap map,
                      ItemRepository itemRepository,
                      ItemFactory itemFactory,
-                     MonsterFactory monsterFactory,
+                     NpcFactory npcFactory,
                      ItemSdb itemSdb,
                      MonstersSdb monstersSdb) {
         realmMap = map;
         var entityIdGenerator = new EntityIdGenerator();
         eventSender = new RealmEntityEventSender();
         itemManager = new ItemManager(eventSender, itemSdb, monstersSdb, entityIdGenerator);
-        monsterManager = new MonsterManager(eventSender, entityIdGenerator, monsterFactory, itemManager);
+        npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
         this.playerManager = new PlayerManager(eventSender, itemManager, itemFactory);
@@ -62,7 +62,7 @@ final class RealmImpl implements Runnable, Realm {
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
                 playerManager.onPlayerDisconnected(disconnectedEvent.player());
             } else if (event instanceof PlayerDataEvent dataEvent) {
-                playerManager.onPlayerEvent(dataEvent, monsterManager);
+                playerManager.onPlayerEvent(dataEvent, npcManager);
             }
         } catch (Exception e) {
             log.error("Exception when handling event .", e);
@@ -76,7 +76,7 @@ final class RealmImpl implements Runnable, Realm {
                 long current = System.currentTimeMillis();
                 if (accumulatedMillis <= current) {
                     playerManager.update(STEP_MILLIS);
-                    monsterManager.update(STEP_MILLIS);
+                    npcManager.update(STEP_MILLIS);
                     itemManager.update(STEP_MILLIS);
                     accumulatedMillis += STEP_MILLIS;
                     continue;
@@ -104,7 +104,7 @@ final class RealmImpl implements Runnable, Realm {
 
     @Override
     public void run() {
-        monsterManager.init(this.map());
+        npcManager.init(this.map());
         startRealm();
     }
 

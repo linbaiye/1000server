@@ -32,7 +32,6 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 
-import java.nio.channels.Pipe;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
@@ -247,7 +246,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         this.armLife = arm;
         this.legLife = leg;
         this.headLife = head;
-        changeState(new PlayerStillState(getStateMillis(State.IDLE)));
+        this.changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         setRegenerateTimer();
     }
 
@@ -428,11 +427,11 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             return;
         }
         if (stateEnum() == State.SIT) {
-            changeState(new PlayerStandUpState(this));
+            this.changeState(new PlayerStandUpState(this));
             emitEvent(new PlayerStandUpEvent(this, true));
         } else if (stateEnum() != State.WALK && stateEnum() != State.ENFIGHT_WALK) {
             log.debug("Enable bufa.");
-            changeState(PlayerStillState.idle(this));
+            this.changeState(PlayerStillState.idle(this));
             emitEvent(new SetPositionEvent(this, direction(), coordinate()));
         }
         disableBreathKungNoTip();
@@ -476,14 +475,14 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             footKungfu = null;
         }
         clearFightingEntity();
-        changeState(PlayerSitDownState.sit(this));
+        this.changeState(PlayerSitDownState.sit(this));
         emitEvent(new PlayerSitDownEvent(this, includeSelf));
     }
 
     private void standUp(boolean includeSelf) {
         if (state().canStandUp()) {
             disableBreathKungNoTip();
-            changeState(new PlayerStandUpState(this));
+            this.changeState(new PlayerStandUpState(this));
             emitEvent(new PlayerStandUpEvent(this, includeSelf));
         }
     }
@@ -578,7 +577,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         }
         this.realm = realm;
         realmMap().occupy(this);
-        changeState(PlayerStillState.idle(this));
+        this.changeState(PlayerStillState.idle(this));
         changeDirection(Direction.DOWN);
         emitEvent(new JoinedRealmEvent(this, coordinate(), inventory));
     }
@@ -592,7 +591,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (oldLevel != revival.level()) {
             emitEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
         }
-        changeState(PlayerDeadState.die(this));
+        this.changeState(PlayerDeadState.die(this));
         emitEvent(new CreatureDieEvent(this));
     }
 
@@ -612,7 +611,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
             cooldownRecovery();
             state().moveToHurtCoordinate(this);
             State afterHurtState = state().decideAfterHurtState();
-            changeState(PlayerHurtState.hurt(this, afterHurtState));
+            this.changeState(PlayerHurtState.hurt(this, afterHurtState));
             emitEvent(new CreatureHurtEvent(this, afterHurtState));
             gainProtectionExp(damagedLife);
         } else {
@@ -669,7 +668,8 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
     @Override
     public void attackedBy(Projectile projectile) {
-        attackedBy(projectile.shooter());
+        if (projectile.shooter() instanceof Player player) {
+        }
     }
 
     @Override
@@ -687,7 +687,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         if (realm != null) {
             realm.map().free(this);
         }
-        changeState(PlayerFrozenState.Instance);
+        this.changeState(PlayerFrozenState.Instance);
         emitEvent(new PlayerLeftEvent(this));
         clearFightingEntity();
     }
@@ -697,7 +697,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         this.attackKungFu = newKungFu;
         cooldownAttack();
         if (needCooldownState && state() instanceof PlayerAttackState) {
-            changeState(new PlayerCooldownState(cooldown()));
+            this.changeState(new PlayerCooldownState(cooldown()));
             emitEvent(new PlayerCooldownEvent(this));
         }
         emitEvent(PlayerToggleKungFuEvent.enable(this, attackKungFu));

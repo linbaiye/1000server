@@ -5,7 +5,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
-import org.y1000.entities.creatures.monster.Monster;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
@@ -75,13 +75,13 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
     }
 
     public void onPlayerEvent(PlayerDataEvent dataEvent,
-                              EntityManager<Monster> monsterManager) {
+                              EntityManager<Npc> npcManager) {
         if (dataEvent.data() instanceof ClientPickItemEvent event) {
             itemManager.find(event.id())
                     .ifPresent(groundItem -> dataEvent.player().pickItem(groundItem, itemFactory::createItem));
         } else if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
-            Validate.notNull(monsterManager);
-            monsterManager.find(attackEvent.entityId()).ifPresent(m -> dataEvent.player().attack(attackEvent, m));
+            Validate.notNull(npcManager);
+            npcManager.find(attackEvent.entityId()).ifPresent(m -> dataEvent.player().attack(attackEvent, m));
             this.find(attackEvent.entityId()).ifPresent(p -> dataEvent.player().attack(attackEvent, p));
         } else {
             dataEvent.player().handleClientEvent(dataEvent.data());

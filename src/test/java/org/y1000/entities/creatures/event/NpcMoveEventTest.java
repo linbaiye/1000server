@@ -7,7 +7,7 @@ import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MonsterMoveEventTest extends AbstractMonsterUnitTestFixture  {
+class NpcMoveEventTest extends AbstractMonsterUnitTestFixture  {
 
     @BeforeEach
     void setUp() {
@@ -16,7 +16,7 @@ class MonsterMoveEventTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void toPacket() {
-        var event = MonsterMoveEvent.move(monster, Direction.RIGHT, 2);
+        var event = NpcMoveEvent.move(monster, Direction.RIGHT, 2);
         assertEquals(2, event.toPacket().getMonsterMove().getSpeed());
         assertEquals(Direction.RIGHT.value(), event.toPacket().getMonsterMove().getDirection());
         assertEquals(monster.id(), event.toPacket().getMonsterMove().getId());

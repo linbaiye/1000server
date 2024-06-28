@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.AbstractNpcState;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.MonsterChangeStateEvent;
+import org.y1000.entities.creatures.event.NpcChangeStateEvent;
 
 import java.util.Set;
 
@@ -20,9 +20,9 @@ public final class MonsterCommonState extends AbstractNpcState<AbstractMonster>
     @Override
     protected void nextMove(AbstractMonster monster) {
         switch (stateEnum()) {
-            case IDLE -> monster.AI().onIdleDone(monster);
-            case FROZEN -> monster.AI().onFrozenDone(monster);
-            case ATTACK -> monster.AI().onAttackDone(monster);
+//            case IDLE -> monster.AI().onIdleDone(monster);
+//            case FROZEN -> monster.AI().onFrozenDone(monster);
+//            case ATTACK -> monster.AI().onAttackDone(monster);
         }
     }
 
@@ -31,8 +31,8 @@ public final class MonsterCommonState extends AbstractNpcState<AbstractMonster>
         if (stateEnum() == State.ATTACK || elapse(creature.getStateMillis(State.HURT))) {
             nextMove(creature);
         } else {
-            creature.changeState(this);
-            creature.emitEvent(MonsterChangeStateEvent.of(creature));
+//            creature.changeState(this);
+            creature.emitEvent(NpcChangeStateEvent.of(creature));
         }
     }
     public static MonsterCommonState idle(AbstractMonster monster) {

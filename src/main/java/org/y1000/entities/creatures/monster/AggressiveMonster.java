@@ -7,28 +7,47 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.AttributeProvider;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.npc.AbstractViolentNpc;
+import org.y1000.entities.creatures.npc.NpcAI;
+import org.y1000.entities.creatures.npc.ViolentNpc;
+import org.y1000.entities.creatures.npc.ViolentNpcWanderingAI;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.Map;
 
 @Slf4j
-public final class AggressiveMonster extends AbstractMonster {
+public final class AggressiveMonster extends AbstractViolentNpc implements Monster {
     @Builder
-    public AggressiveMonster(long id, Coordinate coordinate, Direction direction, String name,
-                          RealmMap realmMap, Map<State, Integer> stateMillis,
-                          AttributeProvider attributeProvider, MonsterAttackSkill spell) {
-        super(id, coordinate, direction, name, realmMap, stateMillis, attributeProvider, spell);
+    public AggressiveMonster(long id, Coordinate coordinate, Direction direction, String name, Map<State, Integer> stateMillis,
+                             AttributeProvider attributeProvider, RealmMap realmMap) {
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, new ViolentNpcWanderingAI());
     }
-
-    public void onCreatureAppear(Creature creature) {
-        if (getFightingEntity() == null) {
-            setFightingEntity(creature);
-        }
-    }
+//    @Builder
+//    public AggressiveMonster(long id, Coordinate coordinate, Direction direction, String name,
+//                          RealmMap realmMap, Map<State, Integer> stateMillis,
+//                          AttributeProvider attributeProvider, MonsterAttackSkill spell) {
+//        super(id, coordinate, direction, name, realmMap, stateMillis, attributeProvider, spell);
+//    }
+//
+//    public void onCreatureAppear(Creature creature) {
+//        if (getFightingEntity() == null) {
+//            setFightingEntity(creature);
+//        }
+//    }
 
     @Override
     protected Logger log() {
         return log;
+    }
+
+    @Override
+    public void update(int delta) {
+
+    }
+
+    @Override
+    public void revive(Coordinate coordinate) {
+
     }
 }

@@ -1,40 +1,38 @@
 package org.y1000.entities.creatures.npc;
 
-import lombok.Getter;
 import org.slf4j.Logger;
-import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
+import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.attribute.AttributeProvider;
 import org.y1000.entities.attribute.Damage;
-import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.event.EntityEventListener;
+import org.y1000.entities.creatures.event.CreatureAttackEvent;
+import org.y1000.entities.creatures.event.NpcChangeStateEvent;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
-public abstract class AbstractViolentNpc<C extends Creature, S extends CreatureState<C>>
-        extends AbstractNpc<C, S> implements ViolentCreature, EntityEventListener {
+public abstract class AbstractViolentNpc
+        extends AbstractNpc implements ViolentNpc {
     private int recoveryCooldown;
 
     private int attackCooldown;
 
     private final Damage damage;
 
-    @Getter
-    private AttackableEntity fightingEntity;
+    private NpcAI<ViolentNpc> ai;
+
+    private NpcRangedSkill rangedSkill;
 
     public AbstractViolentNpc(long id, Coordinate coordinate, Direction direction, String name,
                               Map<State, Integer> stateMillis, AttributeProvider attributeProvider,
-                              RealmMap realmMap) {
+                              RealmMap realmMap, NpcAI<ViolentNpc> ai) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap);
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
+        this.ai = ai;
     }
 
     public Optional<String> attackSound() {
@@ -51,6 +49,36 @@ public abstract class AbstractViolentNpc<C extends Creature, S extends CreatureS
         return damage;
     }
 
+    @Override
+    public Optional<NpcRangedSkill> rangedSkill() {
+        return Optional.ofNullable(rangedSkill);
+    }
+
+    @Override
+    public void changeAI(NpcAI<ViolentNpc> newAI) {
+        this.ai = newAI;
+        this.ai.start(this);
+    }
+
+    @Override
+    public void start() {
+        this.ai.start(this);
+    }
+
+    @Override
+    public void onActionDone() {
+        handleActionDone(() -> ai.onActionDone(this));
+    }
+
+    @Override
+    public int runSpeed() {
+        return attributeProvider().walkSpeed() / 2;
+    }
+
+    @Override
+    public void onMoveFailed() {
+        this.ai.onMoveFailed(this);
+    }
 
     @Override
     public int attackCooldown() {
@@ -72,15 +100,24 @@ public abstract class AbstractViolentNpc<C extends Creature, S extends CreatureS
         attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
 
-    public void setFightingEntity(AttackableEntity entity){
-        Objects.requireNonNull(entity, "entity can't be null");
-        if (this.fightingEntity != null) {
-            this.fightingEntity.deregisterEventListener(this);
-        }
-        this.fightingEntity = entity;
-        this.fightingEntity.registerEventListener(this);
+    private void attackAction() {
+        cooldownAttack();
+        changeState(NpcCommonState.attack(getStateMillis(State.ATTACK)));
+        emitEvent(new CreatureAttackEvent(this));
     }
 
+
+    @Override
+    public void startAction(State state) {
+        if (state == State.ATTACK) {
+            attackAction();
+        } else if (state == State.COOLDOWN) {
+            changeState(NpcCommonState.idle(cooldown()));
+            emitEvent(NpcChangeStateEvent.of(this));
+        } else {
+            super.startAction(state);
+        }
+    }
 
     @Override
     public int attackSpeed() {
@@ -95,12 +132,5 @@ public abstract class AbstractViolentNpc<C extends Creature, S extends CreatureS
     @Override
     public int hit() {
         return attributeProvider().hit();
-    }
-
-    protected void clearFightingEntity() {
-        if (this.fightingEntity != null) {
-            this.fightingEntity.deregisterEventListener(this);
-            this.fightingEntity = null;
-        }
     }
 }

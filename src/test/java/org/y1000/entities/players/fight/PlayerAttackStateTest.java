@@ -132,7 +132,7 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
         var monster = monsterBuilder().coordinate(player.coordinate().move(3, 0)).build();
         player.setFightingEntity(monster);
         player.changeState(PlayerAttackState.of(player));
-        monster.changeState(new MonsterDieState(10000));
+//        monster.changeState(new MonsterDieState(10000));
         player.onEvent(new CreatureDieEvent(monster));
         assertNull(player.getFightingEntity());
         player.update(player.getStateMillis(State.BOW));

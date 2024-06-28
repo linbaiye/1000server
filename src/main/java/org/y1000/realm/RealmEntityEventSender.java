@@ -153,7 +153,7 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
     @Override
-    public void visit(MonsterChangeStateEvent event) {
+    public void visit(NpcChangeStateEvent event) {
         doNotifyVisiblePlayers(event.source(), event);
     }
 
@@ -275,7 +275,7 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
     @Override
-    public void visit(MonsterMoveEvent event) {
+    public void visit(NpcMoveEvent event) {
         doNotifyVisiblePlayers(event.source(), event);
     }
 
@@ -285,7 +285,7 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
     @Override
-    public void visit(MonsterJoinedEvent event) {
+    public void visit(NpcJoinedEvent event) {
         doNotifyVisiblePlayers(event.source(), event);
     }
 

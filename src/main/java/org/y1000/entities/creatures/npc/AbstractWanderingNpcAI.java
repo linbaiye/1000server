@@ -1,0 +1,62 @@
+package org.y1000.entities.creatures.npc;
+
+import org.y1000.entities.creatures.AiPathUtil;
+import org.y1000.entities.creatures.State;
+import org.y1000.util.Coordinate;
+
+public abstract class AbstractWanderingNpcAI<N extends Npc> implements NpcAI<N> {
+
+    private Coordinate destination;
+
+    private Coordinate previousCoordinate;
+
+    protected abstract void onHurtDone(N npc);
+
+    public AbstractWanderingNpcAI(Coordinate destination, Coordinate previousCoordinate) {
+        this.destination = destination;
+        this.previousCoordinate = previousCoordinate;
+    }
+
+    public AbstractWanderingNpcAI() {
+
+    }
+
+    @Override
+    public void onActionDone(N npc) {
+        switch (npc.stateEnum()) {
+            case WALK -> onMoveDone(npc);
+            case FROZEN -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc), npc.getStateMillis(State.WALK));
+            case IDLE -> npc.startAction(State.FROZEN);
+            case HURT -> onHurtDone(npc);
+        }
+    }
+
+    @Override
+    public void onMoveFailed(Npc npc) {
+        nextRound(npc);
+    }
+
+    private void nextRound(Npc npc) {
+        previousCoordinate = null;
+        destination = null;
+        start(npc);
+    }
+
+    @Override
+    public void start(Npc npc) {
+        if (destination == null) {
+            previousCoordinate = npc.coordinate();
+            destination = npc.wanderingArea().random(npc.spawnCoordinate());
+        }
+        npc.startAction(State.IDLE);
+    }
+
+    private void onMoveDone(Npc npc) {
+        previousCoordinate = npc.coordinate();
+        if (npc.coordinate().equals(destination)) {
+            nextRound(npc);
+        } else {
+            npc.startAction(State.IDLE);
+        }
+    }
+}

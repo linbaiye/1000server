@@ -3,11 +3,10 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.RemoveEntityEvent;
-import org.y1000.entities.creatures.event.MonsterJoinedEvent;
+import org.y1000.entities.creatures.event.NpcJoinedEvent;
 import org.y1000.entities.creatures.event.MonsterShootEvent;
-import org.y1000.entities.creatures.monster.AbstractMonster;
-import org.y1000.entities.creatures.monster.Monster;
-import org.y1000.entities.creatures.monster.MonsterFactory;
+import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.sdb.MonsterSpawnSetting;
@@ -17,15 +16,15 @@ import org.y1000.util.Rectangle;
 import java.util.*;
 
 @Slf4j
-final class MonsterManager extends AbstractEntityManager<Monster> implements EntityEventListener {
+final class NpcManager extends AbstractEntityManager<Npc> implements EntityEventListener {
 
     private final EntityEventSender sender;
 
     private final EntityIdGenerator idGenerator;
 
-    private final MonsterFactory monsterFactory;
+    private final NpcFactory npcFactory;
 
-    private final Map<String, List<MonsterSpawnSetting>> monsterSpawnSettings;
+    private final Map<String, List<MonsterSpawnSetting>> npcSpawnSettings;
 
     private final List<RespawningMonster> respawningMonsters;
 
@@ -34,26 +33,26 @@ final class MonsterManager extends AbstractEntityManager<Monster> implements Ent
     private final ItemManager itemManager;
 
 
-    public MonsterManager(EntityEventSender sender,
-                          EntityIdGenerator idGenerator,
-                          MonsterFactory monsterFactory,
-                          ItemManager itemManager) {
+    public NpcManager(EntityEventSender sender,
+                      EntityIdGenerator idGenerator,
+                      NpcFactory npcFactory,
+                      ItemManager itemManager) {
         this.sender = sender;
         this.idGenerator = idGenerator;
-        this.monsterFactory = monsterFactory;
+        this.npcFactory = npcFactory;
         this.itemManager = itemManager;
-        this.monsterSpawnSettings = new HashMap<>();
+        this.npcSpawnSettings = new HashMap<>();
         respawningMonsters = new ArrayList<>();
         projectileManager = new ProjectileManager();
     }
 
 
     private static class RespawningMonster {
-        private final Monster monster;
+        private final Npc npc;
         private int time;
 
-        private RespawningMonster(Monster monster, int time) {
-            this.monster = monster;
+        private RespawningMonster(Npc npc, int time) {
+            this.npc = npc;
             this.time = time;
         }
 
@@ -68,30 +67,36 @@ final class MonsterManager extends AbstractEntityManager<Monster> implements Ent
     }
 
     private List<MonsterSpawnSetting> getSettings(String name) {
-        if (!monsterSpawnSettings.containsKey(name)) {
+        if (!npcSpawnSettings.containsKey(name)) {
             Coordinate coordinate = Coordinate.xy(178, 45);
             var list = Collections.singletonList(new MonsterSpawnSetting(new Rectangle(coordinate.move(-4, -4), coordinate.move(4, 4)), 4));
-            monsterSpawnSettings.put(name, list);
+            npcSpawnSettings.put(name, list);
         }
-        return monsterSpawnSettings.get(name);
+        return npcSpawnSettings.get(name);
     }
 
 
     private void spawnMonsters(String name, RealmMap map, MonsterSpawnSetting setting) {
         for (int i = 0; i < setting.number(); i++) {
-            var monster = monsterFactory.createMonster(name, idGenerator.next(), map, setting.range().random());
-            add(monster);
+            var npc = npcFactory.createMonster(name, idGenerator.next(), map, setting.range().random());
+            add(npc);
         }
     }
 
 
-    private void respawn(Monster monster) {
-        List<MonsterSpawnSetting> settings = getSettings(monster.name());
+    private void spawnMerchant(String name, RealmMap map) {
+        var merchant = npcFactory.createMerchant(name, idGenerator.next(), map, Coordinate.xy(178, 45));
+        add(merchant);
+    }
+
+
+    private void respawn(Npc npc) {
+        List<MonsterSpawnSetting> settings = getSettings(npc.name());
         for (MonsterSpawnSetting setting : settings) {
-            if (setting.range().contains(monster.coordinate())) {
+            if (setting.range().contains(npc.coordinate())) {
                 Coordinate random = setting.range().random();
-                monster.revive(random);
-                add(monster);
+                npc.revive(random);
+                add(npc);
             }
         }
     }
@@ -102,19 +107,20 @@ final class MonsterManager extends AbstractEntityManager<Monster> implements Ent
             var name = "牛";
             List<MonsterSpawnSetting> settings = getSettings("牛");
             settings.forEach(setting -> spawnMonsters(name, realmMap, setting));
-//            var monsters = create(name, realmMap, setting.get(0));
-//            List<AbstractMonster> monsters = List.of(
-//                    monsterFactory.createMonster("犀牛", idGenerator.next(), re)),
-//                    monsterFactory.createMonster("牛", idGenerator.next(), realmMap, new Coordinate(39, 31)),
-//                    monsterFactory.createMonster("老虎", idGenerator.next(), realmMap, new Coordinate(39, 32)),
-//                    monsterFactory.createMonster("忍者", idGenerator.next(), realmMap, new Coordinate(39, 33)),
-//                    monsterFactory.createMonster("赤风", idGenerator.next(), realmMap, new Coordinate(39, 35)),
-//                    monsterFactory.createMonster("太极公子", idGenerator.next(), realmMap, new Coordinate(39, 36)),
-//                    monsterFactory.createMonster("投石女", idGenerator.next(), realmMap, new Coordinate(39, 37))
-//                    monsterFactory.createMonster("牛", idGenerator.next(), realmMap, new Coordinate(39, 31))
-//                    monsterFactory.createMonster("鹿", entityManager.generateEntityId(), map(), new Coordinate(39, 32))
+            spawnMerchant("老板娘", realmMap);
+//            var npcs = create(name, realmMap, setting.get(0));
+//            List<AbstractMonster> npcs = List.of(
+//                    npcFactory.createMonster("犀牛", idGenerator.next(), re)),
+//                    npcFactory.createMonster("牛", idGenerator.next(), realmMap, new Coordinate(39, 31)),
+//                    npcFactory.createMonster("老虎", idGenerator.next(), realmMap, new Coordinate(39, 32)),
+//                    npcFactory.createMonster("忍者", idGenerator.next(), realmMap, new Coordinate(39, 33)),
+//                    npcFactory.createMonster("赤风", idGenerator.next(), realmMap, new Coordinate(39, 35)),
+//                    npcFactory.createMonster("太极公子", idGenerator.next(), realmMap, new Coordinate(39, 36)),
+//                    npcFactory.createMonster("投石女", idGenerator.next(), realmMap, new Coordinate(39, 37))
+//                    npcFactory.createMonster("牛", idGenerator.next(), realmMap, new Coordinate(39, 31))
+//                    npcFactory.createMonster("鹿", entityManager.generateEntityId(), map(), new Coordinate(39, 32))
 //            );
-//            monsters.forEach(this::add);
+//            npcs.forEach(this::add);
         } catch (Exception e) {
             log.error("Exception ", e);
         }
@@ -132,7 +138,7 @@ final class MonsterManager extends AbstractEntityManager<Monster> implements Ent
             RespawningMonster respawningMonster = iterator.next();
             if (respawningMonster.update(delta).canRespawn()) {
                 iterator.remove();
-                respawn(respawningMonster.monster);
+                respawn(respawningMonster.npc);
             }
         }
     }
@@ -145,15 +151,16 @@ final class MonsterManager extends AbstractEntityManager<Monster> implements Ent
     }
 
     @Override
-    protected void onAdded(Monster entity) {
+    protected void onAdded(Npc entity) {
         sender.add(entity);
-        sender.notifyVisiblePlayers(entity, new MonsterJoinedEvent(entity));
+        sender.notifyVisiblePlayers(entity, new NpcJoinedEvent(entity));
         entity.registerEventListener(this);
         entity.registerEventListener(itemManager);
+        entity.start();
     }
 
     @Override
-    protected void onDeleted(Monster entity) {
+    protected void onDeleted(Npc entity) {
         sender.remove(entity);
         respawningMonsters.add(new RespawningMonster(entity, 8000));
         entity.deregisterEventListener(this);
@@ -161,10 +168,10 @@ final class MonsterManager extends AbstractEntityManager<Monster> implements Ent
     }
 
     private void onRemoveEntity(RemoveEntityEvent removeEntityEvent) {
-        if (!(removeEntityEvent.source() instanceof AbstractMonster monster)) {
+        if (!(removeEntityEvent.source() instanceof Npc npc)) {
             return;
         }
-        delete(monster);
+        delete(npc);
     }
 
     @Override

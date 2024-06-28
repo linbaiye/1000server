@@ -1,6 +1,9 @@
 package org.y1000.entities.creatures;
 
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.message.SetPositionEvent;
+import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 
 public final class AiPathUtil {
@@ -17,5 +20,26 @@ public final class AiPathUtil {
             }
         }
         return towards;
+    }
+
+
+    public static void moveProcess(Npc npc, Coordinate dest,
+                                                      Coordinate previous,
+                                                      Action noPathAction, int speed) {
+        Direction direction = AiPathUtil.computeNextMoveDirection(npc, dest, previous);
+        if (direction == null) {
+            noPathAction.invoke();
+            return;
+        } else if (direction != npc.direction()) {
+            npc.changeDirection(direction);
+            npc.emitEvent(SetPositionEvent.of(npc));
+            npc.startAction(State.IDLE);
+            return;
+        }
+        if (npc.realmMap().movable(npc.coordinate().moveBy(direction))) {
+            npc.move(speed);
+        } else {
+            noPathAction.invoke();
+        }
     }
 }

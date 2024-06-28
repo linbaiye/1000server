@@ -2,7 +2,6 @@ package org.y1000;
 
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
-import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.MonsterMeleeAttackSkill;
 import org.y1000.entities.creatures.monster.PassiveMonster;
@@ -37,7 +36,7 @@ public abstract class AbstractUnitTestFixture {
         return mock;
     }
 
-    private static final Map<State, Integer> BAFFULO_STATE_MILLIS = new HashMap<>() {
+    protected static final Map<State, Integer> MONSTER_STATE_MILLIS = new HashMap<>() {
         {
             put(State.IDLE, 1000);
             put(State.WALK, 770);
@@ -49,7 +48,6 @@ public abstract class AbstractUnitTestFixture {
     };
 
 
-
     protected PassiveMonster.PassiveMonsterBuilder monsterBuilder() {
         return PassiveMonster.builder()
                 .id(nextId())
@@ -59,7 +57,7 @@ public abstract class AbstractUnitTestFixture {
                 .realmMap(Mockito.mock(RealmMap.class))
                 .attackSkill(new MonsterMeleeAttackSkill())
                 .attributeProvider(new TestingMonsterAttributeProvider())
-                .stateMillis(BAFFULO_STATE_MILLIS)
+                .stateMillis(MONSTER_STATE_MILLIS)
                 ;
     }
 

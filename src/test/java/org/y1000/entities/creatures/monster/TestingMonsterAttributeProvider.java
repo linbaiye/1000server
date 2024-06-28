@@ -15,6 +15,7 @@ public class TestingMonsterAttributeProvider implements AttributeProvider {
     public int life;
     public int avoidance;
     public int armor;
+
     @Override
     public int life() {
         return life;
@@ -57,6 +58,6 @@ public class TestingMonsterAttributeProvider implements AttributeProvider {
 
     @Override
     public String hurtSound() {
-        return null;
+        return "hurtSound";
     }
 }

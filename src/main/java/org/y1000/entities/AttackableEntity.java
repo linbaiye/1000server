@@ -16,13 +16,10 @@ public interface AttackableEntity extends Entity {
         return false;
     }
 
-    default boolean attackedBy(Player attacker) {
-        return false;
-    }
+    boolean attackedBy(Player attacker);
 
-    default void attackedBy(Projectile projectile) {
+    void attackedBy(Projectile projectile);
 
-    }
 
     RealmMap realmMap();
 

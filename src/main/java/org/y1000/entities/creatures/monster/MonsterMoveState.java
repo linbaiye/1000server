@@ -25,15 +25,15 @@ public final class MonsterMoveState extends AbstractCreatureMoveState<AbstractMo
             return;
         }
         if (tryChangeCoordinate(monster, monster.realmMap())) {
-            monster.AI().onMoveDone(monster);
+//            monster.AI().onMoveDone(monster);
         } else {
-            monster.AI().onMoveFailed(monster);
+//            monster.AI().onMoveFailed(monster);
         }
     }
 
     @Override
     public void afterHurt(AbstractMonster creature) {
-        creature.AI().onMoveDone(creature);
+//        creature.AI().onMoveDone(creature);
     }
 
     @Override

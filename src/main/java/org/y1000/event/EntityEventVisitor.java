@@ -2,7 +2,6 @@ package org.y1000.event;
 
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.*;
-import org.y1000.event.EntityEvent;
 import org.y1000.message.*;
 import org.y1000.message.serverevent.ShowItemEvent;
 
@@ -27,7 +26,7 @@ public interface EntityEventVisitor {
         visit((AbstractPositionEvent)setPositionEvent);
     }
 
-    default void visit(MonsterChangeStateEvent event) {
+    default void visit(NpcChangeStateEvent event) {
         visit((EntityEvent) event);
     }
 
@@ -45,7 +44,7 @@ public interface EntityEventVisitor {
         visit((EntityEvent) event);
     }
 
-    default void visit(MonsterMoveEvent event) {
+    default void visit(NpcMoveEvent event) {
         visit((EntityEvent) event);
     }
 
@@ -53,7 +52,7 @@ public interface EntityEventVisitor {
         visit((EntityEvent) event);
     }
 
-    default void visit(MonsterJoinedEvent event) {
+    default void visit(NpcJoinedEvent event) {
         visit((EntityEvent) event);
     }
 }
