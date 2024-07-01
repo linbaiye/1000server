@@ -1,6 +1,7 @@
 package org.y1000.entities.players;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.fight.PlayerWaitDistanceState;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.event.EntityEvent;
+import org.y1000.event.EntityEventListener;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
@@ -31,6 +33,7 @@ import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
+import org.y1000.util.UnaryAction;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -116,7 +119,8 @@ end;
    AttribData.Life     := aCharData^.Life;
  */
 @Slf4j
-public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, PlayerState> implements Player {
+public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> implements Player,
+        EntityEventListener {
 
     public static final int DEFAULT_REGENERATE_SECONDS = 9;
     private Realm realm;
@@ -160,6 +164,13 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     private final PlayerLife legLife;
 
     private final PlayerInnateAttributesProvider innateAttributesProvider;
+
+    private int recoveryCooldown;
+
+    private int attackCooldown;
+
+    @Getter
+    private AttackableEntity fightingEntity;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
@@ -606,7 +617,7 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     }
 
 
-    private void afterDamaged(int damagedLife) {
+    private void toHurtOrDead(int damagedLife) {
         if (currentLife() > 0) {
             cooldownRecovery();
             state().moveToHurtCoordinate(this);
@@ -621,15 +632,14 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
 
 
     @Override
-    public boolean attackedBy(ViolentCreature attacker) {
+    public void attackedBy(ViolentCreature attacker) {
         if (!state().attackable() || randomAvoidance(attacker.hit())) {
-            return false;
+            return;
         }
         int bodyDamage = attacker.damage().bodyDamage() - bodyArmor();
         bodyDamage = bodyDamage > 0 ? bodyDamage : 1;
         life.consume(bodyDamage);
-        afterDamaged(bodyDamage);
-        return true;
+        toHurtOrDead(bodyDamage);
     }
 
 
@@ -654,21 +664,27 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         legLife.consume(damagedLeg);
     }
 
+    private boolean doAttackedByPlayer(Damage damage, int hit, UnaryAction<Integer> gainExp) {
+        var before = currentLife();
+        if (!doAttackedAndGiveExp(damage, hit, this::takeDamage, gainExp)) {
+            return false;
+        }
+        toHurtOrDead(currentLife() - before);
+        return true;
+    }
+
 
     @Override
     public boolean attackedBy(Player attacker) {
-        var before = currentLife();
-        var hit = doAttackedAndGiveExp(attacker.damage(), attacker.hit(), this::takeDamage, attacker::gainAttackExp);
-        if (!hit) {
-            return false;
-        }
-        afterDamaged(currentLife() - before);
-        return true;
+        return doAttackedByPlayer(attacker.damage(), attacker.hit(), attacker::gainAttackExp);
     }
 
     @Override
     public void attackedBy(Projectile projectile) {
         if (projectile.shooter() instanceof Player player) {
+            doAttackedByPlayer(projectile.damage(), projectile.hit(), player::gainRangedAttackExp);
+        } else {
+            attackedBy(projectile.shooter());
         }
     }
 
@@ -1007,10 +1023,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return Objects.hash(id());
     }
 
-    @Override
-    protected Logger log() {
-        return log;
-    }
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
@@ -1029,7 +1041,6 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
     public int avoidance() {
         return innateAttributesProvider.avoidance();
     }
-
 
     @Override
     public int maxLife() {
@@ -1067,5 +1078,46 @@ public final class PlayerImpl extends AbstractViolentCreature<PlayerImpl, Player
         return Optional.of(age() < 6000 ?
                 (isMale() ? "2003" : "2203") :
                 (isMale() ? "2005" : "2205") );
+    }
+
+
+    @Override
+    public int recoveryCooldown() {
+        return recoveryCooldown;
+    }
+
+    @Override
+    public int attackCooldown() {
+        return attackCooldown;
+    }
+
+    private void cooldown(int delta) {
+        recoveryCooldown = recoveryCooldown > delta ? recoveryCooldown - delta : 0;
+        attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
+    }
+
+    public void cooldownRecovery() {
+        recoveryCooldown = recovery() * Realm.STEP_MILLIS;
+    }
+
+    public void cooldownAttack() {
+        attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
+    }
+
+    public void setFightingEntity(AttackableEntity entity){
+        Objects.requireNonNull(entity, "entity can't be null");
+        if (this.fightingEntity != null) {
+            this.fightingEntity.deregisterEventListener(this);
+        }
+        this.fightingEntity = entity;
+        this.fightingEntity.registerEventListener(this);
+    }
+
+
+    private void clearFightingEntity() {
+        if (this.fightingEntity != null) {
+            this.fightingEntity.deregisterEventListener(this);
+            this.fightingEntity = null;
+        }
     }
 }

@@ -7,6 +7,7 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.monster.AbstractMonster;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.event.item.ItemEventVisitor;
@@ -116,13 +117,13 @@ final class ItemManager extends AbstractEntityManager<GroundedItem> implements E
 
     @Override
     public void visit(CreatureDieEvent event) {
-        if (event.source() instanceof AbstractMonster monster) {
-            List<DropItem> dropItems = getFor(monster.name());
+        if (event.source() instanceof Npc npc) {
+            List<DropItem> dropItems = getFor(npc.name());
             for (DropItem dropItem : dropItems) {
                 if (!dropItem.canDrop()) {
                     continue;
                 }
-                add(createGroundItem(dropItem.name(), monster.coordinate(), dropItem.count()));
+                add(createGroundItem(dropItem.name(), npc.coordinate(), dropItem.count()));
             }
         }
     }

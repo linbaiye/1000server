@@ -1,18 +1,28 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.creatures.AbstractNpcState;
+import org.y1000.entities.creatures.AbstractCreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.NpcChangeStateEvent;
 
-public final class NpcCommonState extends AbstractNpcState<Npc> implements NpcState {
+public final class NpcCommonState extends AbstractCreatureState<Npc> implements NpcState {
 
-    public NpcCommonState(int totalMillis, State stat) {
-        super(totalMillis, stat);
+    private final State stat;
+
+    @Override
+    public State stateEnum() {
+        return stat;
     }
 
     @Override
-    protected void nextMove(Npc npc) {
-        npc.onActionDone();
+    public void update(Npc npc, int delta) {
+        if (elapse(delta)) {
+            npc.onActionDone();
+        }
+    }
+
+    public NpcCommonState(int totalMillis, State stat) {
+        super(totalMillis);
+        this.stat = stat;
     }
 
     @Override
@@ -39,9 +49,9 @@ public final class NpcCommonState extends AbstractNpcState<Npc> implements NpcSt
     @Override
     public void afterHurt(Npc npc) {
         if (stateEnum() == State.ATTACK || elapse(npc.getStateMillis(State.HURT))) {
-            nextMove(npc);
+            npc.onActionDone();
         } else {
-            npc.changeAction(this);
+            npc.changeState(this);
             npc.emitEvent(NpcChangeStateEvent.of(npc));
         }
     }

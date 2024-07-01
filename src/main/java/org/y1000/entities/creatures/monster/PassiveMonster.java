@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.AttributeProvider;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.npc.AbstractViolentNpc;
-import org.y1000.entities.creatures.npc.ViolentNpcMeleeFightAI;
 import org.y1000.entities.creatures.npc.ViolentNpcWanderingAI;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -18,14 +16,14 @@ import java.util.Objects;
 
 
 @Slf4j
-public final class PassiveMonster extends AbstractViolentNpc implements Monster {
-
+public final class PassiveMonster extends AbstractMonster {
 
     @Builder
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap, Map<State, Integer> stateMillis,
-                          AttributeProvider attributeProvider, MonsterAttackSkill attackSkill) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, new ViolentNpcWanderingAI());
+                          AttributeProvider attributeProvider,
+                          MonsterAttackSkill attackSkill) {
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, new MonsterWanderingAI(new ViolentNpcWanderingAI()));
     }
 
 
@@ -51,11 +49,5 @@ public final class PassiveMonster extends AbstractViolentNpc implements Monster 
     public void update(int delta) {
         cooldown(delta);
         state().update(this, delta);
-    }
-
-    @Override
-    public void revive(Coordinate coordinate) {
-        doRevive(coordinate);
-        changeAI(new ViolentNpcWanderingAI());
     }
 }

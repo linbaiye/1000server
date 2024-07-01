@@ -5,12 +5,13 @@ import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AiPathUtil;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
 
-public final class ViolentNpcMeleeFightAI implements NpcAI<ViolentNpc>, EntityEventListener {
+public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener {
     private final AttackableEntity enemy;
 
     private final ViolentNpc npc;
@@ -43,16 +44,16 @@ public final class ViolentNpcMeleeFightAI implements NpcAI<ViolentNpc>, EntityEv
         }
         if (npc.cooldown() > 0) {
             npc.startAction(State.COOLDOWN);
-            return;
+        } else {
+            npc.startAction(State.ATTACK);
+            enemy.attackedBy(npc);
         }
-        npc.startAction(State.ATTACK);
-        enemy.attackedBy(npc);
     }
 
 
 
     @Override
-    public void onActionDone(ViolentNpc npc) {
+    public void onActionDone(Npc npc) {
         if (npc.stateEnum() == State.WALK) {
             previous = npc.coordinate();
         }
@@ -60,12 +61,12 @@ public final class ViolentNpcMeleeFightAI implements NpcAI<ViolentNpc>, EntityEv
     }
 
     @Override
-    public void onMoveFailed(ViolentNpc npc) {
+    public void onMoveFailed(Npc npc) {
         meleeAttackProcess();
     }
 
     @Override
-    public void start(ViolentNpc npc) {
+    public void start(Npc npc) {
         meleeAttackProcess();
     }
 

@@ -1,11 +1,12 @@
 package org.y1000.entities.creatures.npc;
 
-public final class ViolentNpcWanderingAI extends AbstractWanderingNpcAI<ViolentNpc> {
+public final class ViolentNpcWanderingAI extends AbstractWanderingNpcAI {
 
     @Override
-    protected void onHurtDone(ViolentNpc npc) {
+    protected void onHurtDone(Npc npc) {
+        ViolentNpc violentNpc = (ViolentNpc) npc;
         if (npc.state() instanceof NpcHurtState hurtState) {
-            npc.changeAI(new ViolentNpcMeleeFightAI(hurtState.attacker(), npc));
+            violentNpc.changeAI(new ViolentNpcMeleeFightAI(hurtState.attacker(), violentNpc));
         } else {
             throw new IllegalStateException();
         }

@@ -329,6 +329,7 @@ message CreatureInterpolationPacket {
   InterpolationPacket interpolation = 1;
   int64 id = 2;
   string name = 3;
+  int32 type = 4;
 }
 
 

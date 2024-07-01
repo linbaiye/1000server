@@ -3,7 +3,10 @@ package org.y1000.entities.creatures.npc;
 import lombok.Builder;
 import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.AttributeProvider;
+import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
+import org.y1000.message.AbstractCreatureInterpolation;
+import org.y1000.message.NpcInterpolation;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -31,6 +34,11 @@ public final class DevirtueMerchant extends AbstractNpc {
         state().update(this, delta);
     }
 
+
+    @Override
+    public AbstractCreatureInterpolation captureInterpolation() {
+        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name(), NpcType.MERCHANT);
+    }
 
     @Override
     public void onActionDone() {

@@ -4,13 +4,16 @@ import org.y1000.entities.creatures.AiPathUtil;
 import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
-public abstract class AbstractWanderingNpcAI<N extends Npc> implements NpcAI<N> {
+import java.util.concurrent.ThreadLocalRandom;
+
+public abstract class AbstractWanderingNpcAI implements NpcAI {
 
     private Coordinate destination;
 
     private Coordinate previousCoordinate;
 
-    protected abstract void onHurtDone(N npc);
+
+    protected abstract void onHurtDone(Npc npc);
 
     public AbstractWanderingNpcAI(Coordinate destination, Coordinate previousCoordinate) {
         this.destination = destination;
@@ -18,11 +21,9 @@ public abstract class AbstractWanderingNpcAI<N extends Npc> implements NpcAI<N> 
     }
 
     public AbstractWanderingNpcAI() {
-
     }
-
     @Override
-    public void onActionDone(N npc) {
+    public void onActionDone(Npc npc) {
         switch (npc.stateEnum()) {
             case WALK -> onMoveDone(npc);
             case FROZEN -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc), npc.getStateMillis(State.WALK));

@@ -10,8 +10,6 @@ import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
-import org.y1000.message.AbstractCreatureInterpolation;
-import org.y1000.message.CreatureInterpolation;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
@@ -21,7 +19,6 @@ import org.y1000.util.UnaryAction;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
 
 public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implements Npc {
 
@@ -50,10 +47,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         doRevive(coordinate);
     }
 
-    @Override
-    public AbstractCreatureInterpolation captureInterpolation() {
-        return new CreatureInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name());
-    }
+
 
 
     protected void doRevive(Coordinate coordinate) {
@@ -63,7 +57,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         currentLife = attributeProvider.life();
         realmMap.occupy(this);
         changeCoordinate(spwanCoordinate);
-        changeAction(NpcCommonState.idle(getStateMillis(State.IDLE)));
+        this.changeState(NpcCommonState.idle(getStateMillis(State.IDLE)));
     }
 
     protected AttributeProvider attributeProvider() {
@@ -100,10 +94,6 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         return attributeProvider.armor();
     }
 
-    @Override
-    public void changeAction(NpcState state) {
-        changeState(state);
-    }
 
     @Override
     public void startAction(State state) {
@@ -161,8 +151,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     protected boolean doAttackedByPlayer(Damage damage, int attackerHit,
                                          UnaryAction<Integer> gainAttackExp,
                                          Player attacker) {
-        var hit = doAttackedAndGiveExp(damage, attackerHit, this::takeDamage, gainAttackExp);
-        if (!hit) {
+        if (!doAttackedAndGiveExp(damage, attackerHit, this::takeDamage, gainAttackExp)) {
             return false;
         }
         if (currentLife() > 0) {
@@ -184,6 +173,22 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         Validate.notNull(projectile);
         if (projectile.shooter() instanceof Player player) {
             doAttackedByPlayer(projectile.damage(), projectile.hit(), player::gainRangedAttackExp, player);
+        } else {
+            attackedBy(projectile.shooter());
+        }
+    }
+
+    @Override
+    public void attackedBy(ViolentCreature attacker) {
+        Validate.notNull(attacker);
+        if (!state().attackable() || randomAvoidance(attacker.hit())) {
+            return;
+        }
+        takeDamage(attacker.damage());
+        if (currentLife() > 0) {
+            hurtAction(attacker);
+        } else {
+            startAction(State.DIE);
         }
     }
 

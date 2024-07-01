@@ -40,4 +40,10 @@ public interface CreatureInterpolationPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getNameBytes();
+
+  /**
+   * <code>int32 type = 4;</code>
+   * @return The type.
+   */
+  int getType();
 }

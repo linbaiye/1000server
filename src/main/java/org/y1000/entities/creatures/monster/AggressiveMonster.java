@@ -17,11 +17,11 @@ import org.y1000.util.Coordinate;
 import java.util.Map;
 
 @Slf4j
-public final class AggressiveMonster extends AbstractViolentNpc implements Monster {
+public final class AggressiveMonster extends AbstractMonster {
     @Builder
     public AggressiveMonster(long id, Coordinate coordinate, Direction direction, String name, Map<State, Integer> stateMillis,
                              AttributeProvider attributeProvider, RealmMap realmMap) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, new ViolentNpcWanderingAI());
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, new MonsterWanderingAI(new ViolentNpcWanderingAI()));
     }
 //    @Builder
 //    public AggressiveMonster(long id, Coordinate coordinate, Direction direction, String name,
@@ -43,11 +43,6 @@ public final class AggressiveMonster extends AbstractViolentNpc implements Monst
 
     @Override
     public void update(int delta) {
-
-    }
-
-    @Override
-    public void revive(Coordinate coordinate) {
 
     }
 }

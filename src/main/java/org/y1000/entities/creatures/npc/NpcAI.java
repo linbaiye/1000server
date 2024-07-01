@@ -1,12 +1,12 @@
 package org.y1000.entities.creatures.npc;
 
 
-public interface NpcAI<N extends Npc> {
+public interface NpcAI {
 
-    void onActionDone(N npc);
+    void onActionDone(Npc npc);
 
-    void onMoveFailed(N npc);
+    void onMoveFailed(Npc npc);
 
-    void start(N npc);
+    void start(Npc npc);
 
 }

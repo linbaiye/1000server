@@ -1,18 +1,47 @@
 package org.y1000.entities.creatures.monster;
 
 import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.message.SetPositionEvent;
-import org.y1000.util.Coordinate;
+import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.NpcAI;
+import org.y1000.entities.creatures.npc.ViolentNpcWanderingAI;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class MonsterWanderingAI extends AbstractMonsterAI {
 
-    private Coordinate destination;
+public final class MonsterWanderingAI implements NpcAI {
 
-    private Coordinate previousCoordinate;
+    private final ViolentNpcWanderingAI wrappedAi;
 
-    private long timeLeftToSound;
+    private int counter;
+
+    private void resetCounter() {
+        counter = ThreadLocalRandom.current().nextInt(20, 30);
+    }
+
+    public MonsterWanderingAI(ViolentNpcWanderingAI wrappedAi) {
+        this.wrappedAi = wrappedAi;
+        resetCounter();
+    }
+
+
+    @Override
+    public void onActionDone(Npc npc) {
+        wrappedAi.onActionDone(npc);
+        if (--counter <= 0 && npc instanceof Monster monster) {
+            resetCounter();
+            monster.normalSound().ifPresent(s -> npc.emitEvent(new EntitySoundEvent(npc, s)));
+        }
+    }
+
+    @Override
+    public void onMoveFailed(Npc npc) {
+        wrappedAi.onMoveFailed(npc);
+    }
+
+    @Override
+    public void start(Npc npc) {
+        wrappedAi.start(npc);
+    }
 
 
 //    public MonsterWanderingAI(Coordinate destination,
@@ -84,38 +113,5 @@ public final class MonsterWanderingAI extends AbstractMonsterAI {
 //        }
 //    }
 
-    public static MonsterWanderingAI create(AbstractMonster monster) {
-        return null;
-//        return new MonsterWanderingAI(monster.wanderingArea().random(monster.spawnCoordinate()), monster.coordinate());
-    }
 
-    @Override
-    public void onMoveDone(AbstractMonster monster) {
-
-    }
-
-    @Override
-    public void onMoveFailed(AbstractMonster monster) {
-
-    }
-
-    @Override
-    public void onIdleDone(AbstractMonster monster) {
-
-    }
-
-    @Override
-    public void onFrozenDone(AbstractMonster monster) {
-
-    }
-
-    @Override
-    public void onHurtDone(AbstractMonster monster) {
-
-    }
-
-    @Override
-    public void start(AbstractMonster monster) {
-
-    }
 }

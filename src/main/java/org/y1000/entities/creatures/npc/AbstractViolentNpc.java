@@ -7,6 +7,7 @@ import org.y1000.entities.attribute.AttributeProvider;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.event.NpcChangeStateEvent;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
@@ -23,13 +24,13 @@ public abstract class AbstractViolentNpc
 
     private final Damage damage;
 
-    private NpcAI<ViolentNpc> ai;
+    private NpcAI ai;
 
     private NpcRangedSkill rangedSkill;
 
     public AbstractViolentNpc(long id, Coordinate coordinate, Direction direction, String name,
                               Map<State, Integer> stateMillis, AttributeProvider attributeProvider,
-                              RealmMap realmMap, NpcAI<ViolentNpc> ai) {
+                              RealmMap realmMap, NpcAI ai) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap);
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
         this.ai = ai;
@@ -55,7 +56,7 @@ public abstract class AbstractViolentNpc
     }
 
     @Override
-    public void changeAI(NpcAI<ViolentNpc> newAI) {
+    public void changeAI(NpcAI newAI) {
         this.ai = newAI;
         this.ai.start(this);
     }
@@ -100,17 +101,20 @@ public abstract class AbstractViolentNpc
         attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
 
-    private void attackAction() {
+    @Override
+    public void startAttackAction(boolean withSound) {
         cooldownAttack();
         changeState(NpcCommonState.attack(getStateMillis(State.ATTACK)));
         emitEvent(new CreatureAttackEvent(this));
+        if (withSound) {
+            attackSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+        }
     }
-
 
     @Override
     public void startAction(State state) {
         if (state == State.ATTACK) {
-            attackAction();
+            startAttackAction(true);
         } else if (state == State.COOLDOWN) {
             changeState(NpcCommonState.idle(cooldown()));
             emitEvent(NpcChangeStateEvent.of(this));

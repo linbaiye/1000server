@@ -1,16 +1,21 @@
 package org.y1000.message;
 
+import lombok.Builder;
+import org.y1000.entities.creatures.NpcType;
 import org.y1000.network.gen.CreatureInterpolationPacket;
 import org.y1000.network.gen.Packet;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
-public final class CreatureInterpolation extends AbstractNamedCreatureInterpolation {
+public final class NpcInterpolation extends AbstractNamedCreatureInterpolation {
+    private final NpcType type;
 
-    public CreatureInterpolation(long id, Coordinate coordinate, State state,
-                                 Direction direction, int elapsedMillis, String name) {
+    @Builder
+    public NpcInterpolation(long id, Coordinate coordinate, State state,
+                            Direction direction, int elapsedMillis, String name, NpcType type) {
         super(id, coordinate, state, direction, elapsedMillis, name);
+        this.type = type;
     }
 
     @Override
@@ -20,6 +25,7 @@ public final class CreatureInterpolation extends AbstractNamedCreatureInterpolat
                         .setInterpolation(interpolationPacket())
                         .setId(getId())
                         .setName(getName())
+                        .setType(type.value())
                         .build()
         ).build();
     }

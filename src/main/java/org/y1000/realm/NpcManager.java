@@ -26,7 +26,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
 
     private final Map<String, List<MonsterSpawnSetting>> npcSpawnSettings;
 
-    private final List<RespawningMonster> respawningMonsters;
+    private final List<RespawningNpc> respawningNpcs;
 
     private final ProjectileManager projectileManager;
 
@@ -42,21 +42,21 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
         this.npcFactory = npcFactory;
         this.itemManager = itemManager;
         this.npcSpawnSettings = new HashMap<>();
-        respawningMonsters = new ArrayList<>();
+        respawningNpcs = new ArrayList<>();
         projectileManager = new ProjectileManager();
     }
 
 
-    private static class RespawningMonster {
+    private static class RespawningNpc {
         private final Npc npc;
         private int time;
 
-        private RespawningMonster(Npc npc, int time) {
+        private RespawningNpc(Npc npc, int time) {
             this.npc = npc;
             this.time = time;
         }
 
-        public RespawningMonster update(long delta) {
+        public RespawningNpc update(long delta) {
             this.time -= (int)delta;
             return this;
         }
@@ -133,12 +133,12 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     }
 
     private void updateRespawning(long delta) {
-        Iterator<RespawningMonster> iterator = respawningMonsters.iterator();
+        Iterator<RespawningNpc> iterator = respawningNpcs.iterator();
         while (iterator.hasNext()) {
-            RespawningMonster respawningMonster = iterator.next();
-            if (respawningMonster.update(delta).canRespawn()) {
+            RespawningNpc respawningNpc = iterator.next();
+            if (respawningNpc.update(delta).canRespawn()) {
                 iterator.remove();
-                respawn(respawningMonster.npc);
+                respawn(respawningNpc.npc);
             }
         }
     }
@@ -162,7 +162,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     @Override
     protected void onDeleted(Npc entity) {
         sender.remove(entity);
-        respawningMonsters.add(new RespawningMonster(entity, 8000));
+        respawningNpcs.add(new RespawningNpc(entity, 8000));
         entity.deregisterEventListener(this);
         entity.deregisterEventListener(itemManager);
     }

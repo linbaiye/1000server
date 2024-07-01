@@ -31,4 +31,9 @@ public final class NpcHurtState extends AbstractCreatureHurtState<Npc> implement
     public NpcState previousState() {
         return previousState;
     }
+
+    @Override
+    public void afterHurt(Npc npc) {
+        recovery(npc);
+    }
 }

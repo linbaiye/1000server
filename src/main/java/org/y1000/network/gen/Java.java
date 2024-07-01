@@ -438,24 +438,25 @@ public final class Java {
       "000.network.gen.ProjectilePacketH\000\022D\n\013mo" +
       "nsterMove\030! \001(\0132-.org.y1000.network.gen." +
       "MonsterMoveEventPacketH\000B\r\n\013TypedPacket\"" +
-      "z\n\033CreatureInterpolationPacket\022A\n\rinterp" +
-      "olation\030\001 \001(\0132*.org.y1000.network.gen.In" +
-      "terpolationPacket\022\n\n\002id\030\002 \001(\003\022\014\n\004name\030\003 " +
-      "\001(\t\"\356\002\n\020PlayerInfoPacket\022\n\n\002id\030\002 \001(\003\022\014\n\004" +
-      "male\030\003 \001(\010\022\014\n\004name\030\004 \001(\t\022\027\n\nweaponName\030\005" +
-      " \001(\tH\000\210\001\001\022\026\n\tchestName\030\006 \001(\tH\001\210\001\001\022\025\n\010hai" +
-      "rName\030\007 \001(\tH\002\210\001\001\022\024\n\007hatName\030\010 \001(\tH\003\210\001\001\022\026" +
-      "\n\twristName\030\t \001(\tH\004\210\001\001\022\025\n\010bootName\030\n \001(\t" +
-      "H\005\210\001\001\022\031\n\014clothingName\030\013 \001(\tH\006\210\001\001\022\030\n\013trou" +
-      "serName\030\014 \001(\tH\007\210\001\001B\r\n\013_weaponNameB\014\n\n_ch" +
-      "estNameB\013\n\t_hairNameB\n\n\010_hatNameB\014\n\n_wri" +
-      "stNameB\013\n\t_bootNameB\017\n\r_clothingNameB\016\n\014" +
-      "_trouserName\"\225\001\n\031PlayerInterpolationPack" +
-      "et\022A\n\rinterpolation\030\001 \001(\0132*.org.y1000.ne" +
-      "twork.gen.InterpolationPacket\0225\n\004info\030\002 " +
-      "\001(\0132\'.org.y1000.network.gen.PlayerInfoPa" +
-      "cket\" \n\022RemoveEntityPacket\022\n\n\002id\030\001 \001(\003B\031" +
-      "\n\025org.y1000.network.genP\001b\006proto3"
+      "\210\001\n\033CreatureInterpolationPacket\022A\n\rinter" +
+      "polation\030\001 \001(\0132*.org.y1000.network.gen.I" +
+      "nterpolationPacket\022\n\n\002id\030\002 \001(\003\022\014\n\004name\030\003" +
+      " \001(\t\022\014\n\004type\030\004 \001(\005\"\356\002\n\020PlayerInfoPacket\022" +
+      "\n\n\002id\030\002 \001(\003\022\014\n\004male\030\003 \001(\010\022\014\n\004name\030\004 \001(\t\022" +
+      "\027\n\nweaponName\030\005 \001(\tH\000\210\001\001\022\026\n\tchestName\030\006 " +
+      "\001(\tH\001\210\001\001\022\025\n\010hairName\030\007 \001(\tH\002\210\001\001\022\024\n\007hatNa" +
+      "me\030\010 \001(\tH\003\210\001\001\022\026\n\twristName\030\t \001(\tH\004\210\001\001\022\025\n" +
+      "\010bootName\030\n \001(\tH\005\210\001\001\022\031\n\014clothingName\030\013 \001" +
+      "(\tH\006\210\001\001\022\030\n\013trouserName\030\014 \001(\tH\007\210\001\001B\r\n\013_we" +
+      "aponNameB\014\n\n_chestNameB\013\n\t_hairNameB\n\n\010_" +
+      "hatNameB\014\n\n_wristNameB\013\n\t_bootNameB\017\n\r_c" +
+      "lothingNameB\016\n\014_trouserName\"\225\001\n\031PlayerIn" +
+      "terpolationPacket\022A\n\rinterpolation\030\001 \001(\013" +
+      "2*.org.y1000.network.gen.InterpolationPa" +
+      "cket\0225\n\004info\030\002 \001(\0132\'.org.y1000.network.g" +
+      "en.PlayerInfoPacket\" \n\022RemoveEntityPacke" +
+      "t\022\n\n\002id\030\001 \001(\003B\031\n\025org.y1000.network.genP\001" +
+      "b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -736,7 +737,7 @@ public final class Java {
     internal_static_org_y1000_network_gen_CreatureInterpolationPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_CreatureInterpolationPacket_descriptor,
-        new java.lang.String[] { "Interpolation", "Id", "Name", });
+        new java.lang.String[] { "Interpolation", "Id", "Name", "Type", });
     internal_static_org_y1000_network_gen_PlayerInfoPacket_descriptor =
       getDescriptor().getMessageTypes().get(46);
     internal_static_org_y1000_network_gen_PlayerInfoPacket_fieldAccessorTable = new
