@@ -179,6 +179,16 @@ MaxCount,        最多持有数量；
         return getOrNull(itemName, "SoundDrop");
     }
 
+    @Override
+    public int getPrice(String itemName) {
+        return getInt(itemName, "Price");
+    }
+
+    @Override
+    public int getBuyPrice(String itemName) {
+        return getInt(itemName, "Price");
+    }
+
     public static final ItemSdbImpl INSTANCE = read();
 
     private static ItemSdbImpl read() {

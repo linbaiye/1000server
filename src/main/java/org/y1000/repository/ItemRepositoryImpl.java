@@ -54,7 +54,7 @@ public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
     }
 
     @Override
-    public Item createItem(String name, int number) {
+    public Item createItem(String name, long number) {
         if (!itemSdb.contains(name)) {
             throw new NoSuchElementException(name + " is not a valid item.");
         }
@@ -62,6 +62,7 @@ public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
             case ARROW -> new StackItem(name, number, ItemType.ARROW);
             case SELLING_GOODS -> new StackItem(name, number, ItemType.SELLING_GOODS);
             case EQUIPMENT -> createItem(name);
+            case MONEY -> StackItem.money(number);
             default -> throw new NoSuchElementException();
         };
     }

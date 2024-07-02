@@ -77,6 +77,7 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
     }
 
 
+
     public void onPlayerEvent(PlayerDataEvent dataEvent,
                               EntityManager<Npc> npcManager) {
         if (dataEvent.data() instanceof ClientPickItemEvent event) {
@@ -88,8 +89,8 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
             this.find(attackEvent.entityId()).ifPresent(p -> dataEvent.player().attack(attackEvent, p));
         } else if (dataEvent.data() instanceof ClientSellEvent sellEvent) {
             Validate.notNull(npcManager);
-            npcManager.find(sellEvent.merchantId(), Merchant.class).ifPresent(merchant -> dataEvent.player().inventory());
-            log.debug("Sell event {}.", sellEvent);
+            npcManager.find(sellEvent.merchantId(), Merchant.class)
+                    .ifPresent(merchant -> merchant.buy(dataEvent.player(), sellEvent.items()));
         } else {
             dataEvent.player().handleClientEvent(dataEvent.data());
         }

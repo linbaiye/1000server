@@ -9,6 +9,8 @@ public enum ItemType implements ValueEnum  {
 
     SELLING_GOODS(5),
 
+    MONEY(3),
+
     STACK(8),
 
             ;

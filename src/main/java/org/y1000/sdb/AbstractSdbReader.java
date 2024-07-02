@@ -76,32 +76,30 @@ public abstract class AbstractSdbReader {
 
 
     protected void read(String name) {
-        try {
-            try (var inputstream = getClass().getResourceAsStream("/sdb/" + name)) {
-                if (inputstream == null) {
-                    throw new NoSuchElementException("Sdb does not exist, " + name);
+        try (var inputstream = getClass().getResourceAsStream("/sdb/" + name)) {
+            if (inputstream == null) {
+                throw new NoSuchElementException("Sdb does not exist, " + name);
+            }
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream, Charset.forName("GBK")));
+            List<String> lines = bufferedReader.lines().toList();
+            if (lines.isEmpty()) {
+                throw new NoSuchElementException("Empty sdb: " + name);
+            }
+            String headerLine = lines.get(0).trim();
+            String[] header = headerLine.split(",");
+            if (header.length == 0) {
+                throw new NoSuchElementException("Empty sdb: " + name);
+            }
+            for (int i = 0; i < header.length; i++) {
+                headerIndex.put(header[i], i);
+            }
+            for (int i = 1; i < lines.size(); i++) {
+                String item = lines.get(i).trim();
+                String[] values = item.split(",");
+                if (values.length == 0 || StringUtils.isBlank(values[0])) {
+                    continue;
                 }
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream, Charset.forName("GBK")));
-                List<String> lines = bufferedReader.lines().toList();
-                if (lines.isEmpty()) {
-                    throw new NoSuchElementException("Empty sdb: " + name);
-                }
-                String headerLine = lines.get(0).trim();
-                String[] header = headerLine.split(",");
-                if (header.length == 0) {
-                    throw new NoSuchElementException("Empty sdb: " + name);
-                }
-                for (int i = 0; i < header.length; i++) {
-                    headerIndex.put(header[i], i);
-                }
-                for (int i = 1; i < lines.size(); i++) {
-                    String item = lines.get(i).trim();
-                    String[] values = item.split(",");
-                    if (values.length == 0 || StringUtils.isBlank(values[0])) {
-                        continue;
-                    }
-                    this.values.put(values[0], values);
-                }
+                this.values.put(values[0], values);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -163,8 +163,7 @@ message CharacterKungFuPacket {
 
 message ClientSellItemsPacket {
   int64 merchantId = 1;
-  repeated string itemNames = 2;
-  repeated int32 itemNumbers = 3;
+  repeated InventoryItemPacket items = 2;
 }
 
 message ClientPacket {
@@ -200,7 +199,7 @@ message InterpolationsPacket {
 message InventoryItemPacket {
   string name = 1;
   int32 slotId = 2;
-  optional int32 number = 3;
+  optional int64 number = 3;
 }
 
 message TradeWindowPacket {

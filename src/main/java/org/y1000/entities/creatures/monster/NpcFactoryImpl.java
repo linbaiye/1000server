@@ -12,9 +12,7 @@ import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 public final class NpcFactoryImpl implements NpcFactory {
@@ -22,15 +20,18 @@ public final class NpcFactoryImpl implements NpcFactory {
     private final ActionSdb actionSdb;
     private final MonstersSdb monsterSdb;
     private final KungFuSdb kungFuSdb;
-
     private final NpcSdb npcSdb;
+    private final MerchantItemSdbRepository merchantItemSdbRepository;
 
-    public NpcFactoryImpl(ActionSdb actionSdb, MonstersSdb monsterSdb, KungFuSdb kungFuSdb,
-                          NpcSdb npcSdb) {
+    public NpcFactoryImpl(ActionSdb actionSdb,
+                          MonstersSdb monsterSdb,
+                          KungFuSdb kungFuSdb, NpcSdb npcSdb,
+                          MerchantItemSdbRepository merchantItemSdbRepository) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
         this.kungFuSdb = kungFuSdb;
         this.npcSdb = npcSdb;
+        this.merchantItemSdbRepository = merchantItemSdbRepository;
     }
 
 
@@ -109,6 +110,11 @@ public final class NpcFactoryImpl implements NpcFactory {
         return passive ? createPassiveCreature(name, id, realmMap, coordinate) : createAggressiveCreature(name, id, realmMap, coordinate);
     }
 
+    private static final Map<String, String> NPC_NAME_TO_ITME_FILE = Map.of(
+            "老板娘", "lbn.txt"
+    );
+
+
     @Override
     public Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate) {
         Objects.requireNonNull(name);
@@ -118,6 +124,8 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (animate == null) {
             throw new NotImplementedException(name + " has no action sdb.");
         }
+        var fileName = NPC_NAME_TO_ITME_FILE.get(name);
+        MerchantItemSdb merchantItemSdb = merchantItemSdbRepository.load(fileName);
         return DevirtueMerchant.builder()
                 .id(id)
                 .coordinate(coordinate)
@@ -127,6 +135,8 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .stateMillis(createDevirtueActionLengthMap(animate))
                 .attributeProvider(new MerchantAttributeProvider(name, npcSdb))
                 .ai(new DevirtueMerchantAI())
+                .sell(merchantItemSdb.sell())
+                .buy(merchantItemSdb.buy())
                 .build();
     }
 }

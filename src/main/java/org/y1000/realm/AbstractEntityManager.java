@@ -93,7 +93,7 @@ public abstract class AbstractEntityManager<T extends Entity> implements EntityM
     @Override
     public <N extends Entity> Optional<N> find(long id, Class<N> type) {
         return entities.stream()
-                .filter(e -> e.id() == id && e.getClass().isAssignableFrom(type))
+                .filter(e -> e.id() == id && type.isAssignableFrom(e.getClass()))
                 .map(type::cast)
                 .findFirst();
     }

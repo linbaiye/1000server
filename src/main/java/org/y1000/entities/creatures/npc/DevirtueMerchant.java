@@ -5,19 +5,22 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.attribute.AttributeProvider;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.players.Player;
 import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.message.NpcInterpolation;
 import org.y1000.realm.RealmMap;
+import org.y1000.trade.TradeItem;
 import org.y1000.util.Coordinate;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public final class DevirtueMerchant extends AbstractNpc implements Merchant {
 
     private final DevirtueMerchantAI ai;
+
+    private final List<MerchantItem> buyItems;
+    private final List<MerchantItem> sellItems;
+
 
     @Builder
     public DevirtueMerchant(long id, Coordinate coordinate, Direction direction,
@@ -25,11 +28,16 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
                             Map<State, Integer> stateMillis,
                             DevirtueMerchantAI ai,
                             AttributeProvider attributeProvider,
-                            RealmMap realmMap) {
+                            RealmMap realmMap,
+                            List<MerchantItem> buy,
+                            List<MerchantItem> sell) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap);
         Objects.requireNonNull(ai);
         this.ai = ai;
+        this.buyItems = buy;
+        this.sellItems = sell;
     }
+
 
     @Override
     public void update(int delta) {
@@ -78,11 +86,52 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
 
     @Override
     public List<MerchantItem> buyItems() {
-        return Collections.emptyList();
+        return buyItems;
     }
 
     @Override
     public List<MerchantItem> sellItems() {
-        return Collections.emptyList();
+        return sellItems;
+    }
+
+    private Optional<MerchantItem> find(String name) {
+        return buyItems().stream().filter(i -> i.name().equals(name)).findFirst();
+    }
+
+    private boolean buy(String name) {
+        return buyItems().stream().anyMatch(i -> i.name().equals(name));
+    }
+
+    public boolean canBuy(Collection<TradeItem> items) {
+        if (items == null) {
+            return false;
+        }
+        for (TradeItem buyingItems: items) {
+            if (!buy(buyingItems.name())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private long computeProfit(Collection<TradeItem> items) {
+        long total = 0;
+        for (TradeItem item: items) {
+            total += find(item.name())
+                    .map(mi -> mi.price() * item.number())
+                    .orElse(0);
+        }
+        return total;
+    }
+
+
+    @Override
+    public void buy(Player player, Collection<TradeItem> items) {
+        if (!player.canBeSeenAt(coordinate())) {
+            return;
+        }
+        if (player.inventory().canSell(items) && canBuy(items)) {
+            player.inventory().sell(items, computeProfit(items), player);
+        }
     }
 }

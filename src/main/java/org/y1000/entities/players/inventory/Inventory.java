@@ -16,6 +16,7 @@ import org.y1000.message.clientevent.ClientInventoryEvent;
 import org.y1000.message.clientevent.ClientSwapInventoryEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
+import org.y1000.trade.TradeItem;
 import org.y1000.util.UnaryAction;
 
 import java.util.*;
@@ -35,7 +36,7 @@ public final class Inventory {
         return items.size() >= MAX_CAP;
     }
 
-    public void foreach(BiConsumer<Integer, Item> consumer)  {
+    public void foreach(BiConsumer<Integer, Item> consumer) {
         items.forEach(consumer);
     }
 
@@ -47,8 +48,8 @@ public final class Inventory {
         return items.size();
     }
 
-    public void foreachTrading(BiConsumer<Integer, Item> consumer) {
-        tradingItems.forEach(consumer);
+    public int emptySlotSize() {
+        return MAX_CAP - count();
     }
 
     public boolean tradeItem(int slot, int number) {
@@ -79,8 +80,10 @@ public final class Inventory {
     }
 
 
-
     public int add(Item item) {
+        if (item == null) {
+            return 0;
+        }
         if (item instanceof StackItem stackItem) {
             for (int slot : items.keySet()) {
                 Item slotItem = items.get(slot);
@@ -111,6 +114,27 @@ public final class Inventory {
         return items.remove(slot);
     }
 
+    public boolean remove(String name, int number, int slot, Player player) {
+        Validate.notNull(name);
+        Validate.isTrue(number > 0);
+        Validate.notNull(player);
+        Item item = getItem(slot);
+        if (item == null) {
+            return false;
+        }
+        if (item instanceof StackItem stackItem) {
+            if (stackItem.number() >= number) {
+                stackItem.decrease(number);
+            } else {
+                return false;
+            }
+        } else {
+            remove(slot);
+        }
+        player.emitEvent(new UpdateInventorySlotEvent(player, slot, getItem(slot)));
+        return true;
+    }
+
     public boolean swap(int from, int to) {
         if (!items.containsKey(from) && !items.containsKey(to)) {
             return false;
@@ -135,15 +159,19 @@ public final class Inventory {
             items.put(slot, item);
             return;
         }
-        throw new UnsupportedOperationException("Slot " + slot  + " has item already.");
+        throw new UnsupportedOperationException("Slot " + slot + " has item already.");
     }
 
-    private <T extends Item> Optional<T> findFirst(Predicate<T> predicate, Class<T> type)  {
+    private <T extends Item> Optional<T> findFirst(Predicate<T> predicate, Class<T> type) {
         return items.values().stream()
                 .filter(i -> type.isAssignableFrom(i.getClass()))
                 .map(type::cast)
                 .filter(predicate)
                 .findFirst();
+    }
+
+    public Optional<StackItem> findFirstStackItem(String name) {
+        return findFirst(i -> i.name().equals(name), StackItem.class);
     }
 
 
@@ -166,7 +194,7 @@ public final class Inventory {
         return items.values().stream().anyMatch(item -> item.name().equals(name));
     }
 
-    private void assertRange(int slot){
+    private void assertRange(int slot) {
         Validate.isTrue(slot >= 1 && slot <= maxCapacity(), "Slot out of range.");
     }
 
@@ -205,6 +233,53 @@ public final class Inventory {
             }
         }
         return !isFull();
+    }
+
+    public boolean canSell(Collection<TradeItem> items) {
+        Validate.notNull(items);
+        for (TradeItem sellingItem : items) {
+            assertRange(sellingItem.slotId());
+            Item item = getItem(sellingItem.slotId());
+            if (item == null || !item.name().equals(sellingItem.name())) {
+                return false;
+            }
+            if (item instanceof StackItem stackItem && stackItem.number() < sellingItem.number()) {
+                return false;
+            }
+        }
+        return contains(StackItem.MONEY) || emptySlotSize() > 0;
+    }
+
+    public int findFirstSlot(String name) {
+        for (Integer i : items.keySet()) {
+            if (items.get(i).name().equals(name)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public void sell(Collection<TradeItem> items, long profit, Player player) {
+        Validate.notNull(player);
+        Validate.isTrue(profit > 0);
+        if (!canSell(items)) {
+            throw new IllegalArgumentException();
+        }
+        for (TradeItem sellingItem : items) {
+            Item item = getItem(sellingItem.slotId());
+            if (item instanceof StackItem stackItem) {
+                if (stackItem.decrease(sellingItem.number()) == 0) {
+                    remove(sellingItem.slotId());
+                }
+            } else {
+                remove(sellingItem.slotId());
+            }
+            player.emitEvent(new UpdateInventorySlotEvent(player, sellingItem.slotId(), getItem(sellingItem.slotId())));
+        }
+        findStackItem(StackItem.MONEY)
+                .ifPresentOrElse(stackItem -> stackItem.increase(profit), () -> add(new StackItem(StackItem.MONEY, profit)));
+        int n = findFirstSlot(StackItem.MONEY);
+        player.emitEvent(new UpdateInventorySlotEvent(player, n, getItem(n)));
     }
 
 

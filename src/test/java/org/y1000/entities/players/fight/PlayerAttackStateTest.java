@@ -7,7 +7,6 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
-import org.y1000.entities.creatures.monster.MonsterDieState;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
 import org.y1000.item.Weapon;
 import org.y1000.kungfu.attack.AttackKungFuParameters;
@@ -20,7 +19,6 @@ import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 
 class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
 

@@ -9,6 +9,6 @@ public interface ItemFactory {
 
     Item createItem(String name);
 
-    Item createItem(String name, int number);
+    Item createItem(String name, long number);
 
 }

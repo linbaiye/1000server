@@ -12,4 +12,8 @@ public interface ItemSdb {
     String getSoundEvent(String itemName);
 
     String getSoundDrop(String itemName);
+
+    int getPrice(String itemName);
+
+    int getBuyPrice(String itemName);
 }
