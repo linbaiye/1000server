@@ -29,7 +29,7 @@ public final class MonsterWanderingAI implements NpcAI {
         wrappedAi.onActionDone(npc);
         if (--counter <= 0 && npc instanceof Monster monster) {
             resetCounter();
-            monster.normalSound().ifPresent(s -> npc.emitEvent(new EntitySoundEvent(npc, s)));
+            //monster.normalSound().ifPresent(s -> npc.emitEvent(new EntitySoundEvent(npc, s)));
         }
     }
 

@@ -5,12 +5,14 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
+import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.ClientPickItemEvent;
+import org.y1000.message.clientevent.ClientSellEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.network.Connection;
@@ -74,6 +76,7 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
         eventSender.remove(entity);
     }
 
+
     public void onPlayerEvent(PlayerDataEvent dataEvent,
                               EntityManager<Npc> npcManager) {
         if (dataEvent.data() instanceof ClientPickItemEvent event) {
@@ -83,6 +86,10 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
             Validate.notNull(npcManager);
             npcManager.find(attackEvent.entityId()).ifPresent(m -> dataEvent.player().attack(attackEvent, m));
             this.find(attackEvent.entityId()).ifPresent(p -> dataEvent.player().attack(attackEvent, p));
+        } else if (dataEvent.data() instanceof ClientSellEvent sellEvent) {
+            Validate.notNull(npcManager);
+            npcManager.find(sellEvent.merchantId(), Merchant.class).ifPresent(merchant -> dataEvent.player().inventory());
+            log.debug("Sell event {}.", sellEvent);
         } else {
             dataEvent.player().handleClientEvent(dataEvent.data());
         }

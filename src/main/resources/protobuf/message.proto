@@ -160,6 +160,13 @@ message CharacterKungFuPacket {
   int32 attackKungFuType = 3;
 }
 
+
+message ClientSellItemsPacket {
+  int64 merchantId = 1;
+  repeated string itemNames = 2;
+  repeated int32 itemNumbers = 3;
+}
+
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
@@ -174,6 +181,7 @@ message ClientPacket {
     ClientToggleKungFuPacket toggleKungFu = 10;
     ClientSitDownPacket sitDown = 11;
     ClientStandUpPacket standUp = 12;
+    ClientSellItemsPacket sellItems = 13;
   }
 }
 

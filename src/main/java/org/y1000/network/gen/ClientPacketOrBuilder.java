@@ -188,5 +188,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientStandUpPacketOrBuilder getStandUpOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+   * @return Whether the sellItems field is set.
+   */
+  boolean hasSellItems();
+  /**
+   * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+   * @return The sellItems.
+   */
+  org.y1000.network.gen.ClientSellItemsPacket getSellItems();
+  /**
+   * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+   */
+  org.y1000.network.gen.ClientSellItemsPacketOrBuilder getSellItemsOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

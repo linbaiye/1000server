@@ -10,10 +10,12 @@ import org.y1000.message.NpcInterpolation;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public final class DevirtueMerchant extends AbstractNpc {
+public final class DevirtueMerchant extends AbstractNpc implements Merchant {
 
     private final DevirtueMerchantAI ai;
 
@@ -72,5 +74,15 @@ public final class DevirtueMerchant extends AbstractNpc {
             return false;
         }
         return obj == this || ((DevirtueMerchant) obj).id() == id();
+    }
+
+    @Override
+    public List<MerchantItem> buyItems() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<MerchantItem> sellItems() {
+        return Collections.emptyList();
     }
 }

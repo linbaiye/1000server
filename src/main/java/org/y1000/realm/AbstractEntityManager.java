@@ -90,6 +90,13 @@ public abstract class AbstractEntityManager<T extends Entity> implements EntityM
                 .findFirst();
     }
 
+    @Override
+    public <N extends Entity> Optional<N> find(long id, Class<N> type) {
+        return entities.stream()
+                .filter(e -> e.id() == id && e.getClass().isAssignableFrom(type))
+                .map(type::cast)
+                .findFirst();
+    }
 
     protected void delete(T entity) {
         if (iterating) {
