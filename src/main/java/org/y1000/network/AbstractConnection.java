@@ -46,7 +46,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case SITDOWN -> new ClientSitDownEvent(new Coordinate(clientPacket.getSitDown().getX(), clientPacket.getSitDown().getY()));
             case STANDUP -> ClientStandUpEvent.INSTANCE;
             case SELLITEMS -> ClientSellEvent.fromPacket(clientPacket.getSellItems());
-            case BUYITEMS -> ClientBuyItemsEvent.fromPacket(clientPacket.getSellItems());
+            case BUYITEMS -> ClientBuyItemsEvent.fromPacket(clientPacket.getBuyItems());
             default -> throw new IllegalArgumentException();
         };
     }

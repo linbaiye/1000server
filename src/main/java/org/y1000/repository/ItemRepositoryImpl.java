@@ -63,6 +63,7 @@ public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
             case SELLING_GOODS -> new StackItem(name, number, ItemType.SELLING_GOODS);
             case EQUIPMENT -> createItem(name);
             case MONEY -> StackItem.money(number);
+            case PILL -> new StackItem(name, number, ItemType.PILL);
             default -> throw new NoSuchElementException();
         };
     }

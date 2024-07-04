@@ -305,7 +305,6 @@ public final class Inventory {
             }
             player.emitEvent(new UpdateInventorySlotEvent(player, moneySlot, getItem(moneySlot)));
         }
-        findStackItem(StackItem.MONEY).ifPresent(m -> log.debug("Current money {}.", m.number()));
     }
 
     public void sell(Collection<TradeItem> items, long profit, Player player) {
@@ -329,7 +328,6 @@ public final class Inventory {
                 .ifPresentOrElse(stackItem -> stackItem.increase(profit), () -> add(new StackItem(StackItem.MONEY, profit)));
         int n = findFirstSlot(StackItem.MONEY);
         player.emitEvent(new UpdateInventorySlotEvent(player, n, getItem(n)));
-        findStackItem(StackItem.MONEY).ifPresent(m -> log.debug("Current money {}.", m.number()));
     }
 
 
