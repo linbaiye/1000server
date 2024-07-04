@@ -3,6 +3,10 @@ package org.y1000.item;
 import org.y1000.message.ValueEnum;
 
 public enum ItemType implements ValueEnum  {
+    DYE(1),
+
+    KUNGFU_PAGE(2),
+
     MONEY(3),
 
     SELLING_GOODS(5),
