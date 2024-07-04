@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.0-rc2
 package org.y1000.network.gen;
 
-public interface ClientSellItemsPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ClientSellItemsPacket)
+public interface ClientMerchantTradeItemsPacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ClientMerchantTradeItemsPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**

@@ -1,6 +1,6 @@
 package org.y1000.message.clientevent;
 
-import org.y1000.network.gen.ClientSellItemsPacket;
+import org.y1000.network.gen.ClientMerchantTradeItemsPacket;
 import org.y1000.trade.TradeItem;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public record ClientSellEvent(long merchantId, List<TradeItem> items) implements
                 '}';
     }
 
-    public static ClientSellEvent fromPacket(ClientSellItemsPacket packet) {
+    public static ClientSellEvent fromPacket(ClientMerchantTradeItemsPacket packet) {
         List<TradeItem> items = packet.getItemsList().stream()
                 .map(i -> new TradeItem(i.getName(), (int)i.getNumber(), i.getSlotId()))
                 .toList();

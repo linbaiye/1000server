@@ -5,18 +5,18 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.ClientSellItemsPacket}
+ * Protobuf type {@code org.y1000.network.gen.ClientMerchantTradeItemsPacket}
  */
-public final class ClientSellItemsPacket extends
+public final class ClientMerchantTradeItemsPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ClientSellItemsPacket)
-    ClientSellItemsPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ClientMerchantTradeItemsPacket)
+    ClientMerchantTradeItemsPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ClientSellItemsPacket.newBuilder() to construct.
-  private ClientSellItemsPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use ClientMerchantTradeItemsPacket.newBuilder() to construct.
+  private ClientMerchantTradeItemsPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ClientSellItemsPacket() {
+  private ClientMerchantTradeItemsPacket() {
     items_ = java.util.Collections.emptyList();
   }
 
@@ -24,20 +24,20 @@ private static final long serialVersionUID = 0L;
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new ClientSellItemsPacket();
+    return new ClientMerchantTradeItemsPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientSellItemsPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientMerchantTradeItemsPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientSellItemsPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientMerchantTradeItemsPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.ClientSellItemsPacket.class, org.y1000.network.gen.ClientSellItemsPacket.Builder.class);
+            org.y1000.network.gen.ClientMerchantTradeItemsPacket.class, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder.class);
   }
 
   public static final int MERCHANTID_FIELD_NUMBER = 1;
@@ -139,10 +139,10 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.ClientSellItemsPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.ClientMerchantTradeItemsPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.ClientSellItemsPacket other = (org.y1000.network.gen.ClientSellItemsPacket) obj;
+    org.y1000.network.gen.ClientMerchantTradeItemsPacket other = (org.y1000.network.gen.ClientMerchantTradeItemsPacket) obj;
 
     if (getMerchantId()
         != other.getMerchantId()) return false;
@@ -171,44 +171,44 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static org.y1000.network.gen.ClientSellItemsPacket parseFrom(
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClientSellItemsPacket parseFrom(
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientSellItemsPacket parseFrom(
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClientSellItemsPacket parseFrom(
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientSellItemsPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClientSellItemsPacket parseFrom(
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientSellItemsPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.ClientSellItemsPacket parseFrom(
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -216,26 +216,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.ClientSellItemsPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.ClientSellItemsPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientSellItemsPacket parseFrom(
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.ClientSellItemsPacket parseFrom(
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -248,7 +248,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.ClientSellItemsPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.ClientMerchantTradeItemsPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -264,26 +264,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.ClientSellItemsPacket}
+   * Protobuf type {@code org.y1000.network.gen.ClientMerchantTradeItemsPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ClientSellItemsPacket)
-      org.y1000.network.gen.ClientSellItemsPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ClientMerchantTradeItemsPacket)
+      org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientSellItemsPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientMerchantTradeItemsPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientSellItemsPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientMerchantTradeItemsPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.ClientSellItemsPacket.class, org.y1000.network.gen.ClientSellItemsPacket.Builder.class);
+              org.y1000.network.gen.ClientMerchantTradeItemsPacket.class, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.ClientSellItemsPacket.newBuilder()
+    // Construct using org.y1000.network.gen.ClientMerchantTradeItemsPacket.newBuilder()
     private Builder() {
 
     }
@@ -311,17 +311,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientSellItemsPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientMerchantTradeItemsPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClientSellItemsPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.ClientSellItemsPacket.getDefaultInstance();
+    public org.y1000.network.gen.ClientMerchantTradeItemsPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClientSellItemsPacket build() {
-      org.y1000.network.gen.ClientSellItemsPacket result = buildPartial();
+    public org.y1000.network.gen.ClientMerchantTradeItemsPacket build() {
+      org.y1000.network.gen.ClientMerchantTradeItemsPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -329,15 +329,15 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClientSellItemsPacket buildPartial() {
-      org.y1000.network.gen.ClientSellItemsPacket result = new org.y1000.network.gen.ClientSellItemsPacket(this);
+    public org.y1000.network.gen.ClientMerchantTradeItemsPacket buildPartial() {
+      org.y1000.network.gen.ClientMerchantTradeItemsPacket result = new org.y1000.network.gen.ClientMerchantTradeItemsPacket(this);
       buildPartialRepeatedFields(result);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartialRepeatedFields(org.y1000.network.gen.ClientSellItemsPacket result) {
+    private void buildPartialRepeatedFields(org.y1000.network.gen.ClientMerchantTradeItemsPacket result) {
       if (itemsBuilder_ == null) {
         if (((bitField0_ & 0x00000002) != 0)) {
           items_ = java.util.Collections.unmodifiableList(items_);
@@ -349,7 +349,7 @@ private static final long serialVersionUID = 0L;
       }
     }
 
-    private void buildPartial0(org.y1000.network.gen.ClientSellItemsPacket result) {
+    private void buildPartial0(org.y1000.network.gen.ClientMerchantTradeItemsPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.merchantId_ = merchantId_;
@@ -390,16 +390,16 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.ClientSellItemsPacket) {
-        return mergeFrom((org.y1000.network.gen.ClientSellItemsPacket)other);
+      if (other instanceof org.y1000.network.gen.ClientMerchantTradeItemsPacket) {
+        return mergeFrom((org.y1000.network.gen.ClientMerchantTradeItemsPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.ClientSellItemsPacket other) {
-      if (other == org.y1000.network.gen.ClientSellItemsPacket.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.y1000.network.gen.ClientMerchantTradeItemsPacket other) {
+      if (other == org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance()) return this;
       if (other.getMerchantId() != 0L) {
         setMerchantId(other.getMerchantId());
       }
@@ -774,23 +774,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClientSellItemsPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClientMerchantTradeItemsPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ClientSellItemsPacket)
-  private static final org.y1000.network.gen.ClientSellItemsPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ClientMerchantTradeItemsPacket)
+  private static final org.y1000.network.gen.ClientMerchantTradeItemsPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.ClientSellItemsPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.ClientMerchantTradeItemsPacket();
   }
 
-  public static org.y1000.network.gen.ClientSellItemsPacket getDefaultInstance() {
+  public static org.y1000.network.gen.ClientMerchantTradeItemsPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ClientSellItemsPacket>
-      PARSER = new com.google.protobuf.AbstractParser<ClientSellItemsPacket>() {
+  private static final com.google.protobuf.Parser<ClientMerchantTradeItemsPacket>
+      PARSER = new com.google.protobuf.AbstractParser<ClientMerchantTradeItemsPacket>() {
     @java.lang.Override
-    public ClientSellItemsPacket parsePartialFrom(
+    public ClientMerchantTradeItemsPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -809,17 +809,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<ClientSellItemsPacket> parser() {
+  public static com.google.protobuf.Parser<ClientMerchantTradeItemsPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ClientSellItemsPacket> getParserForType() {
+  public com.google.protobuf.Parser<ClientMerchantTradeItemsPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.ClientSellItemsPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.ClientMerchantTradeItemsPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

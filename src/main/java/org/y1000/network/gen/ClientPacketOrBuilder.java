@@ -189,19 +189,34 @@ public interface ClientPacketOrBuilder extends
   org.y1000.network.gen.ClientStandUpPacketOrBuilder getStandUpOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
    * @return Whether the sellItems field is set.
    */
   boolean hasSellItems();
   /**
-   * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
    * @return The sellItems.
    */
-  org.y1000.network.gen.ClientSellItemsPacket getSellItems();
+  org.y1000.network.gen.ClientMerchantTradeItemsPacket getSellItems();
   /**
-   * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
    */
-  org.y1000.network.gen.ClientSellItemsPacketOrBuilder getSellItemsOrBuilder();
+  org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getSellItemsOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+   * @return Whether the buyItems field is set.
+   */
+  boolean hasBuyItems();
+  /**
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+   * @return The buyItems.
+   */
+  org.y1000.network.gen.ClientMerchantTradeItemsPacket getBuyItems();
+  /**
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+   */
+  org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getBuyItemsOrBuilder();
 
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

@@ -11,6 +11,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.clientevent.ClientBuyItemsEvent;
 import org.y1000.message.clientevent.ClientPickItemEvent;
 import org.y1000.message.clientevent.ClientSellEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
@@ -80,17 +81,20 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
 
     public void onPlayerEvent(PlayerDataEvent dataEvent,
                               EntityManager<Npc> npcManager) {
+        Validate.notNull(npcManager);
         if (dataEvent.data() instanceof ClientPickItemEvent event) {
             itemManager.find(event.id())
                     .ifPresent(groundItem -> dataEvent.player().pickItem(groundItem, itemFactory::createItem));
         } else if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
-            Validate.notNull(npcManager);
-            npcManager.find(attackEvent.entityId()).ifPresent(m -> dataEvent.player().attack(attackEvent, m));
-            this.find(attackEvent.entityId()).ifPresent(p -> dataEvent.player().attack(attackEvent, p));
+            npcManager.find(attackEvent.entityId())
+                    .ifPresentOrElse(m -> dataEvent.player().attack(attackEvent, m),
+                    () -> find(attackEvent.entityId()).ifPresent(p -> dataEvent.player().attack(attackEvent, p)));
         } else if (dataEvent.data() instanceof ClientSellEvent sellEvent) {
-            Validate.notNull(npcManager);
             npcManager.find(sellEvent.merchantId(), Merchant.class)
                     .ifPresent(merchant -> merchant.buy(dataEvent.player(), sellEvent.items()));
+        } else if (dataEvent.data() instanceof ClientBuyItemsEvent buyItemsEvent) {
+            npcManager.find(buyItemsEvent.merchantId(), Merchant.class)
+                    .ifPresent(merchant -> merchant.sell(dataEvent.player(), buyItemsEvent.items(), itemFactory::createItem));
         } else {
             dataEvent.player().handleClientEvent(dataEvent.data());
         }

@@ -161,7 +161,7 @@ message CharacterKungFuPacket {
 }
 
 
-message ClientSellItemsPacket {
+message ClientMerchantTradeItemsPacket {
   int64 merchantId = 1;
   repeated InventoryItemPacket items = 2;
 }
@@ -180,7 +180,8 @@ message ClientPacket {
     ClientToggleKungFuPacket toggleKungFu = 10;
     ClientSitDownPacket sitDown = 11;
     ClientStandUpPacket standUp = 12;
-    ClientSellItemsPacket sellItems = 13;
+    ClientMerchantTradeItemsPacket sellItems = 13;
+    ClientMerchantTradeItemsPacket buyItems = 14;
   }
 }
 

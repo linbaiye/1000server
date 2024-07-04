@@ -55,7 +55,7 @@ public final class StackItem extends AbstractItem {
         return number;
     }
 
-    public long decrease(int n) {
+    public long decrease(long n) {
         if (n > 0) {
             number = number > n ? number - n : 0;
         }

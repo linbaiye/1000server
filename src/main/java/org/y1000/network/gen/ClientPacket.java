@@ -58,6 +58,7 @@ private static final long serialVersionUID = 0L;
     SITDOWN(11),
     STANDUP(12),
     SELLITEMS(13),
+    BUYITEMS(14),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -88,6 +89,7 @@ private static final long serialVersionUID = 0L;
         case 11: return SITDOWN;
         case 12: return STANDUP;
         case 13: return SELLITEMS;
+        case 14: return BUYITEMS;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -477,7 +479,7 @@ private static final long serialVersionUID = 0L;
 
   public static final int SELLITEMS_FIELD_NUMBER = 13;
   /**
-   * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
    * @return Whether the sellItems field is set.
    */
   @java.lang.Override
@@ -485,25 +487,56 @@ private static final long serialVersionUID = 0L;
     return typeCase_ == 13;
   }
   /**
-   * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
    * @return The sellItems.
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientSellItemsPacket getSellItems() {
+  public org.y1000.network.gen.ClientMerchantTradeItemsPacket getSellItems() {
     if (typeCase_ == 13) {
-       return (org.y1000.network.gen.ClientSellItemsPacket) type_;
+       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
     }
-    return org.y1000.network.gen.ClientSellItemsPacket.getDefaultInstance();
+    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientSellItemsPacketOrBuilder getSellItemsOrBuilder() {
+  public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getSellItemsOrBuilder() {
     if (typeCase_ == 13) {
-       return (org.y1000.network.gen.ClientSellItemsPacket) type_;
+       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
     }
-    return org.y1000.network.gen.ClientSellItemsPacket.getDefaultInstance();
+    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+  }
+
+  public static final int BUYITEMS_FIELD_NUMBER = 14;
+  /**
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+   * @return Whether the buyItems field is set.
+   */
+  @java.lang.Override
+  public boolean hasBuyItems() {
+    return typeCase_ == 14;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+   * @return The buyItems.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientMerchantTradeItemsPacket getBuyItems() {
+    if (typeCase_ == 14) {
+       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
+    }
+    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getBuyItemsOrBuilder() {
+    if (typeCase_ == 14) {
+       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
+    }
+    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -557,7 +590,10 @@ private static final long serialVersionUID = 0L;
       output.writeMessage(12, (org.y1000.network.gen.ClientStandUpPacket) type_);
     }
     if (typeCase_ == 13) {
-      output.writeMessage(13, (org.y1000.network.gen.ClientSellItemsPacket) type_);
+      output.writeMessage(13, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
+    }
+    if (typeCase_ == 14) {
+      output.writeMessage(14, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -618,7 +654,11 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 13) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(13, (org.y1000.network.gen.ClientSellItemsPacket) type_);
+        .computeMessageSize(13, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
+    }
+    if (typeCase_ == 14) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(14, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -689,6 +729,10 @@ private static final long serialVersionUID = 0L;
         if (!getSellItems()
             .equals(other.getSellItems())) return false;
         break;
+      case 14:
+        if (!getBuyItems()
+            .equals(other.getBuyItems())) return false;
+        break;
       case 0:
       default:
     }
@@ -755,6 +799,10 @@ private static final long serialVersionUID = 0L;
       case 13:
         hash = (37 * hash) + SELLITEMS_FIELD_NUMBER;
         hash = (53 * hash) + getSellItems().hashCode();
+        break;
+      case 14:
+        hash = (37 * hash) + BUYITEMS_FIELD_NUMBER;
+        hash = (53 * hash) + getBuyItems().hashCode();
         break;
       case 0:
       default:
@@ -929,6 +977,9 @@ private static final long serialVersionUID = 0L;
       if (sellItemsBuilder_ != null) {
         sellItemsBuilder_.clear();
       }
+      if (buyItemsBuilder_ != null) {
+        buyItemsBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1021,6 +1072,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 13 &&
           sellItemsBuilder_ != null) {
         result.type_ = sellItemsBuilder_.build();
+      }
+      if (typeCase_ == 14 &&
+          buyItemsBuilder_ != null) {
+        result.type_ = buyItemsBuilder_.build();
       }
     }
 
@@ -1119,6 +1174,10 @@ private static final long serialVersionUID = 0L;
         }
         case SELLITEMS: {
           mergeSellItems(other.getSellItems());
+          break;
+        }
+        case BUYITEMS: {
+          mergeBuyItems(other.getBuyItems());
           break;
         }
         case TYPE_NOT_SET: {
@@ -1242,6 +1301,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 13;
               break;
             } // case 106
+            case 114: {
+              input.readMessage(
+                  getBuyItemsFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 14;
+              break;
+            } // case 114
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -2979,9 +3045,9 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSellItemsPacket, org.y1000.network.gen.ClientSellItemsPacket.Builder, org.y1000.network.gen.ClientSellItemsPacketOrBuilder> sellItemsBuilder_;
+        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> sellItemsBuilder_;
     /**
-     * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
      * @return Whether the sellItems field is set.
      */
     @java.lang.Override
@@ -2989,27 +3055,27 @@ private static final long serialVersionUID = 0L;
       return typeCase_ == 13;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
      * @return The sellItems.
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientSellItemsPacket getSellItems() {
+    public org.y1000.network.gen.ClientMerchantTradeItemsPacket getSellItems() {
       if (sellItemsBuilder_ == null) {
         if (typeCase_ == 13) {
-          return (org.y1000.network.gen.ClientSellItemsPacket) type_;
+          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
         }
-        return org.y1000.network.gen.ClientSellItemsPacket.getDefaultInstance();
+        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
       } else {
         if (typeCase_ == 13) {
           return sellItemsBuilder_.getMessage();
         }
-        return org.y1000.network.gen.ClientSellItemsPacket.getDefaultInstance();
+        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
      */
-    public Builder setSellItems(org.y1000.network.gen.ClientSellItemsPacket value) {
+    public Builder setSellItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
       if (sellItemsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -3023,10 +3089,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
      */
     public Builder setSellItems(
-        org.y1000.network.gen.ClientSellItemsPacket.Builder builderForValue) {
+        org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder builderForValue) {
       if (sellItemsBuilder_ == null) {
         type_ = builderForValue.build();
         onChanged();
@@ -3037,13 +3103,13 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
      */
-    public Builder mergeSellItems(org.y1000.network.gen.ClientSellItemsPacket value) {
+    public Builder mergeSellItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
       if (sellItemsBuilder_ == null) {
         if (typeCase_ == 13 &&
-            type_ != org.y1000.network.gen.ClientSellItemsPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientSellItemsPacket.newBuilder((org.y1000.network.gen.ClientSellItemsPacket) type_)
+            type_ != org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.newBuilder((org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_)
               .mergeFrom(value).buildPartial();
         } else {
           type_ = value;
@@ -3060,7 +3126,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
      */
     public Builder clearSellItems() {
       if (sellItemsBuilder_ == null) {
@@ -3079,38 +3145,38 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
      */
-    public org.y1000.network.gen.ClientSellItemsPacket.Builder getSellItemsBuilder() {
+    public org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder getSellItemsBuilder() {
       return getSellItemsFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientSellItemsPacketOrBuilder getSellItemsOrBuilder() {
+    public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getSellItemsOrBuilder() {
       if ((typeCase_ == 13) && (sellItemsBuilder_ != null)) {
         return sellItemsBuilder_.getMessageOrBuilder();
       } else {
         if (typeCase_ == 13) {
-          return (org.y1000.network.gen.ClientSellItemsPacket) type_;
+          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
         }
-        return org.y1000.network.gen.ClientSellItemsPacket.getDefaultInstance();
+        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSellItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSellItemsPacket, org.y1000.network.gen.ClientSellItemsPacket.Builder, org.y1000.network.gen.ClientSellItemsPacketOrBuilder> 
+        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> 
         getSellItemsFieldBuilder() {
       if (sellItemsBuilder_ == null) {
         if (!(typeCase_ == 13)) {
-          type_ = org.y1000.network.gen.ClientSellItemsPacket.getDefaultInstance();
+          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
         }
         sellItemsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientSellItemsPacket, org.y1000.network.gen.ClientSellItemsPacket.Builder, org.y1000.network.gen.ClientSellItemsPacketOrBuilder>(
-                (org.y1000.network.gen.ClientSellItemsPacket) type_,
+            org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder>(
+                (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_,
                 getParentForChildren(),
                 isClean());
         type_ = null;
@@ -3118,6 +3184,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 13;
       onChanged();
       return sellItemsBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> buyItemsBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+     * @return Whether the buyItems field is set.
+     */
+    @java.lang.Override
+    public boolean hasBuyItems() {
+      return typeCase_ == 14;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+     * @return The buyItems.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientMerchantTradeItemsPacket getBuyItems() {
+      if (buyItemsBuilder_ == null) {
+        if (typeCase_ == 14) {
+          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
+        }
+        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 14) {
+          return buyItemsBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+     */
+    public Builder setBuyItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
+      if (buyItemsBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        buyItemsBuilder_.setMessage(value);
+      }
+      typeCase_ = 14;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+     */
+    public Builder setBuyItems(
+        org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder builderForValue) {
+      if (buyItemsBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        buyItemsBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 14;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+     */
+    public Builder mergeBuyItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
+      if (buyItemsBuilder_ == null) {
+        if (typeCase_ == 14 &&
+            type_ != org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.newBuilder((org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 14) {
+          buyItemsBuilder_.mergeFrom(value);
+        } else {
+          buyItemsBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 14;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+     */
+    public Builder clearBuyItems() {
+      if (buyItemsBuilder_ == null) {
+        if (typeCase_ == 14) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 14) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        buyItemsBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+     */
+    public org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder getBuyItemsBuilder() {
+      return getBuyItemsFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getBuyItemsOrBuilder() {
+      if ((typeCase_ == 14) && (buyItemsBuilder_ != null)) {
+        return buyItemsBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 14) {
+          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
+        }
+        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> 
+        getBuyItemsFieldBuilder() {
+      if (buyItemsBuilder_ == null) {
+        if (!(typeCase_ == 14)) {
+          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+        }
+        buyItemsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder>(
+                (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 14;
+      onChanged();
+      return buyItemsBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

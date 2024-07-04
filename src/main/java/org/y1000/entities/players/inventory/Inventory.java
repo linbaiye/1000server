@@ -21,6 +21,7 @@ import org.y1000.util.UnaryAction;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 @Slf4j
@@ -44,12 +45,12 @@ public final class Inventory {
         return MAX_CAP;
     }
 
-    public int count() {
+    public int itemCount() {
         return items.size();
     }
 
     public int emptySlotSize() {
-        return MAX_CAP - count();
+        return MAX_CAP - itemCount();
     }
 
     public boolean tradeItem(int slot, int number) {
@@ -235,6 +236,26 @@ public final class Inventory {
         return !isFull();
     }
 
+    public boolean canBuy(Collection<TradeItem> buyingItems, long cost) {
+        Validate.notNull(buyingItems);
+        for (TradeItem buyingItem : buyingItems) {
+            assertRange(buyingItem.slotId());
+            Item item = getItem(buyingItem.slotId());
+            if (item == null) {
+                continue;
+            }
+            if (item instanceof StackItem stackItem &&
+                    stackItem.name().equals(buyingItem.name()) &&
+                    stackItem.hasMoreCapacity(buyingItem.number())) {
+                continue;
+            }
+            return false;
+        }
+        return findStackItem(StackItem.MONEY)
+                .map(money -> money.number() >= cost)
+                .orElse(false);
+    }
+
     public boolean canSell(Collection<TradeItem> items) {
         Validate.notNull(items);
         for (TradeItem sellingItem : items) {
@@ -259,6 +280,34 @@ public final class Inventory {
         return 0;
     }
 
+    public void buy(Collection<TradeItem> buyingItems, long cost, Player player, BiFunction<String, Long, Item> itemCreator) {
+        Validate.notNull(player);
+        Validate.notNull(itemCreator);
+        Validate.isTrue(cost > 0);
+        if (!canBuy(buyingItems, cost)) {
+            throw new IllegalArgumentException();
+        }
+        for (TradeItem buyingItem : buyingItems) {
+            Item item = getItem(buyingItem.slotId());
+            if (item == null) {
+                items.put(buyingItem.slotId(), itemCreator.apply(buyingItem.name(), (long)buyingItem.number()));
+            } else if (item instanceof StackItem stackItem) {
+                stackItem.increase(buyingItem.number());
+            }
+            player.emitEvent(new UpdateInventorySlotEvent(player, buyingItem.slotId(), getItem(buyingItem.slotId())));
+        }
+        int moneySlot = findFirstSlot(StackItem.MONEY);
+        if (moneySlot != 0) {
+            Item item = getItem(moneySlot);
+            var current = ((StackItem)item).decrease(cost);
+            if (current <= 0) {
+                remove(moneySlot);
+            }
+            player.emitEvent(new UpdateInventorySlotEvent(player, moneySlot, getItem(moneySlot)));
+        }
+        findStackItem(StackItem.MONEY).ifPresent(m -> log.debug("Current money {}.", m.number()));
+    }
+
     public void sell(Collection<TradeItem> items, long profit, Player player) {
         Validate.notNull(player);
         Validate.isTrue(profit > 0);
@@ -280,6 +329,7 @@ public final class Inventory {
                 .ifPresentOrElse(stackItem -> stackItem.increase(profit), () -> add(new StackItem(StackItem.MONEY, profit)));
         int n = findFirstSlot(StackItem.MONEY);
         player.emitEvent(new UpdateInventorySlotEvent(player, n, getItem(n)));
+        findStackItem(StackItem.MONEY).ifPresent(m -> log.debug("Current money {}.", m.number()));
     }
 
 
