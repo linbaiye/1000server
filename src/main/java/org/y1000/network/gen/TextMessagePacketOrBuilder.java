@@ -30,4 +30,10 @@ public interface TextMessagePacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getTextBytes();
+
+  /**
+   * <code>int32 location = 3;</code>
+   * @return The location.
+   */
+  int getLocation();
 }

@@ -3,17 +3,17 @@ package org.y1000.entities.item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.item.ItemType;
-import org.y1000.item.StackItem;
+import org.y1000.item.DefaultStackItem;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class StackItemTest {
 
-    private StackItem stackItem;
+    private DefaultStackItem stackItem;
 
     @BeforeEach
     void setUp() {
-        stackItem = new StackItem( "test", 15, ItemType.ARROW);
+        stackItem = new DefaultStackItem( "test", 15, ItemType.ARROW);
     }
 
     @Test

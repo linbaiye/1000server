@@ -1,6 +1,6 @@
 package org.y1000.kungfu;
 
-public class RevertedEventResourceParameters implements EventResourceParameters {
+public final class RevertedEventResourceParameters implements EventResourceParameters {
 
     private final int power;
 

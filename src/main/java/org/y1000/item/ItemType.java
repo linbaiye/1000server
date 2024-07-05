@@ -5,7 +5,7 @@ import org.y1000.message.ValueEnum;
 public enum ItemType implements ValueEnum  {
     DYE(1),
 
-    KUNGFU_PAGE(2),
+    KUNGFU(2),
 
     MONEY(3),
 

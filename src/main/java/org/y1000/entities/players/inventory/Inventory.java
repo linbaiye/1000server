@@ -5,7 +5,7 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.item.Item;
-import org.y1000.item.StackItem;
+import org.y1000.item.DefaultStackItem;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.InventorySlotSwappedEvent;
 import org.y1000.item.Weapon;
@@ -58,12 +58,12 @@ public final class Inventory {
             return false;
         }
         Item item = items.get(slot);
-        if (!(item instanceof StackItem stackItem)) {
+        if (!(item instanceof DefaultStackItem stackItem)) {
             tradingItems.put(slot, item);
             return true;
         }
         if (stackItem.canSplit(number)) {
-            StackItem split = stackItem.split(number);
+            DefaultStackItem split = stackItem.split(number);
             tradingItems.put(slot, split);
         }
         if (stackItem.number() == 0) {
@@ -73,11 +73,11 @@ public final class Inventory {
     }
 
 
-    private Optional<StackItem> findStackItem(String name) {
+    private Optional<DefaultStackItem> findStackItem(String name) {
         return items.values().stream()
-                .filter(item -> item instanceof StackItem stackItem && stackItem.name().equals(name))
+                .filter(item -> item instanceof DefaultStackItem stackItem && stackItem.name().equals(name))
                 .findFirst()
-                .map(StackItem.class::cast);
+                .map(DefaultStackItem.class::cast);
     }
 
 
@@ -85,10 +85,10 @@ public final class Inventory {
         if (item == null) {
             return 0;
         }
-        if (item instanceof StackItem stackItem) {
+        if (item instanceof DefaultStackItem stackItem) {
             for (int slot : items.keySet()) {
                 Item slotItem = items.get(slot);
-                if (slotItem instanceof StackItem currentSlot &&
+                if (slotItem instanceof DefaultStackItem currentSlot &&
                         slotItem.name().equals(item.name())) {
                     if (currentSlot.hasMoreCapacity(stackItem.number())) {
                         currentSlot.increase(stackItem.number());
@@ -123,7 +123,7 @@ public final class Inventory {
         if (item == null) {
             return false;
         }
-        if (item instanceof StackItem stackItem) {
+        if (item instanceof DefaultStackItem stackItem) {
             if (stackItem.number() >= number) {
                 stackItem.decrease(number);
             } else {
@@ -171,8 +171,8 @@ public final class Inventory {
                 .findFirst();
     }
 
-    public Optional<StackItem> findFirstStackItem(String name) {
-        return findFirst(i -> i.name().equals(name), StackItem.class);
+    public Optional<DefaultStackItem> findFirstStackItem(String name) {
+        return findFirst(i -> i.name().equals(name), DefaultStackItem.class);
     }
 
 
@@ -202,7 +202,7 @@ public final class Inventory {
 
     private boolean dropItem(int slot, int number) {
         Item item = items.get(slot);
-        if (!(item instanceof StackItem stackItem)) {
+        if (!(item instanceof DefaultStackItem stackItem)) {
             items.remove(slot);
             return true;
         }
@@ -218,7 +218,7 @@ public final class Inventory {
 
 
     public boolean canPick(Item item) {
-        if (item instanceof StackItem stackItem) {
+        if (item instanceof DefaultStackItem stackItem) {
             return findStackItem(item.name())
                     .map(current -> current.hasMoreCapacity(stackItem.number()))
                     .orElse(!isFull());
@@ -228,7 +228,7 @@ public final class Inventory {
 
     public boolean canPick(GroundedItem item) {
         for (Item value : items.values()) {
-            if (value instanceof StackItem stackItem
+            if (value instanceof DefaultStackItem stackItem
                     && stackItem.name().equals(item.getName())) {
                 return stackItem.hasMoreCapacity(item.getNumber());
             }
@@ -244,14 +244,14 @@ public final class Inventory {
             if (item == null) {
                 continue;
             }
-            if (item instanceof StackItem stackItem &&
+            if (item instanceof DefaultStackItem stackItem &&
                     stackItem.name().equals(buyingItem.name()) &&
                     stackItem.hasMoreCapacity(buyingItem.number())) {
                 continue;
             }
             return false;
         }
-        return findStackItem(StackItem.MONEY)
+        return findStackItem(DefaultStackItem.MONEY)
                 .map(money -> money.number() >= cost)
                 .orElse(false);
     }
@@ -264,11 +264,11 @@ public final class Inventory {
             if (item == null || !item.name().equals(sellingItem.name())) {
                 return false;
             }
-            if (item instanceof StackItem stackItem && stackItem.number() < sellingItem.number()) {
+            if (item instanceof DefaultStackItem stackItem && stackItem.number() < sellingItem.number()) {
                 return false;
             }
         }
-        return contains(StackItem.MONEY) || emptySlotSize() > 0;
+        return contains(DefaultStackItem.MONEY) || emptySlotSize() > 0;
     }
 
     public int findFirstSlot(String name) {
@@ -291,15 +291,15 @@ public final class Inventory {
             Item item = getItem(buyingItem.slotId());
             if (item == null) {
                 items.put(buyingItem.slotId(), itemCreator.apply(buyingItem.name(), (long)buyingItem.number()));
-            } else if (item instanceof StackItem stackItem) {
+            } else if (item instanceof DefaultStackItem stackItem) {
                 stackItem.increase(buyingItem.number());
             }
             player.emitEvent(new UpdateInventorySlotEvent(player, buyingItem.slotId(), getItem(buyingItem.slotId())));
         }
-        int moneySlot = findFirstSlot(StackItem.MONEY);
+        int moneySlot = findFirstSlot(DefaultStackItem.MONEY);
         if (moneySlot != 0) {
             Item item = getItem(moneySlot);
-            var current = ((StackItem)item).decrease(cost);
+            var current = ((DefaultStackItem)item).decrease(cost);
             if (current <= 0) {
                 remove(moneySlot);
             }
@@ -315,7 +315,7 @@ public final class Inventory {
         }
         for (TradeItem sellingItem : items) {
             Item item = getItem(sellingItem.slotId());
-            if (item instanceof StackItem stackItem) {
+            if (item instanceof DefaultStackItem stackItem) {
                 if (stackItem.decrease(sellingItem.number()) == 0) {
                     remove(sellingItem.slotId());
                 }
@@ -324,9 +324,9 @@ public final class Inventory {
             }
             player.emitEvent(new UpdateInventorySlotEvent(player, sellingItem.slotId(), getItem(sellingItem.slotId())));
         }
-        findStackItem(StackItem.MONEY)
-                .ifPresentOrElse(stackItem -> stackItem.increase(profit), () -> add(new StackItem(StackItem.MONEY, profit)));
-        int n = findFirstSlot(StackItem.MONEY);
+        findStackItem(DefaultStackItem.MONEY)
+                .ifPresentOrElse(stackItem -> stackItem.increase(profit), () -> add(new DefaultStackItem(DefaultStackItem.MONEY, profit)));
+        int n = findFirstSlot(DefaultStackItem.MONEY);
         player.emitEvent(new UpdateInventorySlotEvent(player, n, getItem(n)));
     }
 
@@ -353,7 +353,7 @@ public final class Inventory {
         boolean delete = false;
         for (Integer slot : items.keySet()) {
             if (items.get(slot).name().equals(name) &&
-                    items.get(slot) instanceof StackItem stackItem) {
+                    items.get(slot) instanceof DefaultStackItem stackItem) {
                 delete = stackItem.decrease(1) == 0;
                 consumedSlot = slot;
                 break;

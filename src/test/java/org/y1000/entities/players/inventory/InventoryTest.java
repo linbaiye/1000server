@@ -6,8 +6,7 @@ import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Hat;
-import org.y1000.item.Item;
-import org.y1000.item.StackItem;
+import org.y1000.item.DefaultStackItem;
 import org.y1000.item.Weapon;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
@@ -15,7 +14,6 @@ import org.y1000.trade.TradeItem;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -53,8 +51,8 @@ class InventoryTest {
         assertEquals(0, inventory.add(null));
         assertEquals(1, inventory.add(new Hat("hat")));
         assertEquals(2, inventory.add(new Hat("hat2")));
-        assertEquals(3, inventory.add(StackItem.money(100)));
-        assertEquals(3, inventory.add(StackItem.money(100)));
+        assertEquals(3, inventory.add(DefaultStackItem.money(100)));
+        assertEquals(3, inventory.add(DefaultStackItem.money(100)));
         for (int i = 0; i < inventory.maxCapacity() - 3; i++) {
             assertNotEquals(0, inventory.add(new Hat("hat")));
         }
@@ -65,7 +63,7 @@ class InventoryTest {
     void consumeStackItem() {
         TestingEventListener eventListener = new TestingEventListener();
         assertFalse(inventory.consumeStackItem(player, "箭", eventListener::onEvent));
-        inventory.add(new StackItem("箭", 2));
+        inventory.add(new DefaultStackItem("箭", 2));
         assertTrue(inventory.consumeStackItem(player, "箭", eventListener::onEvent));
         UpdateInventorySlotEvent event = eventListener.dequeue(UpdateInventorySlotEvent.class);
         assertEquals("箭", event.toPacket().getUpdateSlot().getName());
@@ -83,7 +81,7 @@ class InventoryTest {
     void canSell() {
         List<TradeItem> items = List.of(new TradeItem("肉", 1, 1));
         assertFalse(inventory.canSell(items));
-        inventory.add(new StackItem("肉", 2));
+        inventory.add(new DefaultStackItem("肉", 2));
         assertTrue(inventory.canSell(items));
         for (int i = 0; i < inventory.maxCapacity() - 1; i++) {
             inventory.add(new Hat("hat"));
@@ -91,7 +89,7 @@ class InventoryTest {
         assertFalse(inventory.canSell(items));
         inventory.remove(inventory.maxCapacity());
         assertTrue(inventory.canSell(items));
-        inventory.add(StackItem.money(1));
+        inventory.add(DefaultStackItem.money(1));
         assertTrue(inventory.isFull());
         assertTrue(inventory.canSell(items));
     }
@@ -99,19 +97,19 @@ class InventoryTest {
     @Test
     void sell() {
         List<TradeItem> items = List.of(new TradeItem("肉", 1, 1));
-        inventory.add(new StackItem("肉", 2));
+        inventory.add(new DefaultStackItem("肉", 2));
         var player = Mockito.mock(Player.class);
         inventory.sell(items, 4, player);
         assertTrue(inventory.findFirstStackItem("肉").isPresent());
         inventory.findFirstStackItem("肉").ifPresent( stackItem -> assertEquals(1, stackItem.number()));
-        inventory.findFirstStackItem(StackItem.MONEY).ifPresent( stackItem -> assertEquals(4, stackItem.number()));
+        inventory.findFirstStackItem(DefaultStackItem.MONEY).ifPresent(stackItem -> assertEquals(4, stackItem.number()));
     }
 
     @Test
     void canBuy() {
         List<TradeItem> items = List.of(new TradeItem("肉", 1, 30));
         assertFalse(inventory.canBuy(items, 10));
-        inventory.add(StackItem.money(100));
+        inventory.add(DefaultStackItem.money(100));
         assertTrue(inventory.canBuy(items, 10));
         assertFalse(inventory.canBuy(items, 1000));
         int slot = inventory.emptySlotSize() - 1;
@@ -128,23 +126,23 @@ class InventoryTest {
     @Test
     void buy() {
         List<TradeItem> items = List.of(new TradeItem("药1", 1, inventory.maxCapacity()));
-        inventory.add(StackItem.money(30));
+        inventory.add(DefaultStackItem.money(30));
         var player = Mockito.mock(Player.class);
-        inventory.buy(items, 30, player, StackItem::new);
-        assertTrue(inventory.findFirstStackItem(StackItem.MONEY).isEmpty());
+        inventory.buy(items, 30, player, DefaultStackItem::new);
+        assertTrue(inventory.findFirstStackItem(DefaultStackItem.MONEY).isEmpty());
         assertEquals(inventory.maxCapacity(), inventory.findFirstSlot("药1"));
 
         inventory = new Inventory();
-        inventory.add(StackItem.money(50));
-        inventory.buy(items, 30, player, StackItem::new);
-        assertTrue(inventory.findFirstStackItem(StackItem.MONEY).isPresent());
-        inventory.findFirstStackItem(StackItem.MONEY).ifPresent(m -> assertEquals(20, m.number()));
+        inventory.add(DefaultStackItem.money(50));
+        inventory.buy(items, 30, player, DefaultStackItem::new);
+        assertTrue(inventory.findFirstStackItem(DefaultStackItem.MONEY).isPresent());
+        inventory.findFirstStackItem(DefaultStackItem.MONEY).ifPresent(m -> assertEquals(20, m.number()));
         assertEquals(inventory.maxCapacity(), inventory.findFirstSlot("药1"));
     }
 
     @Test
     void size() {
-        inventory.add(StackItem.money(1));
+        inventory.add(DefaultStackItem.money(1));
         assertEquals(1, inventory.itemCount());
         assertEquals(inventory.maxCapacity() - 1, inventory.emptySlotSize());
         int emptySlot = inventory.emptySlotSize() - 1;

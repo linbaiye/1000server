@@ -11,7 +11,7 @@ import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
-import org.y1000.item.StackItem;
+import org.y1000.item.DefaultStackItem;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
@@ -46,7 +46,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         assertTrue(player.state() instanceof PlayerStillState);
 
         eventListener.clearEvents();
-        player.inventory().add(new StackItem("箭", 3));
+        player.inventory().add(new DefaultStackItem("箭", 3));
         bowKungFu.startAttack(player, clientAttackEvent, monster);
         response = eventListener.removeFirst(PlayerAttackEventResponse.class);
         assertTrue(player.state() instanceof PlayerAttackState);
@@ -57,7 +57,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
     @Test
     void attackAgainNoPower() {
         PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).build();
-        player.inventory().add(new StackItem("箭", 3));
+        player.inventory().add(new DefaultStackItem("箭", 3));
         ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), State.BOW, Direction.RIGHT);
         // trigger attack counter.
         bowKungFu.startAttack(player, clientAttackEvent, monster);
@@ -78,7 +78,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
     @Test
     void attackAgain() {
         PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).build();
-        player.inventory().add(new StackItem("箭", 3));
+        player.inventory().add(new DefaultStackItem("箭", 3));
         ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), State.BOW, Direction.RIGHT);
         // trigger attack counter.
         bowKungFu.startAttack(player, clientAttackEvent, monster);

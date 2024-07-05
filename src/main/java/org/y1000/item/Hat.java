@@ -1,8 +1,12 @@
 package org.y1000.item;
 
-public final class Hat extends AbstractEquipment {
+public final class Hat extends AbstractArmorEquipment {
+    public Hat(String name, boolean male) {
+        super(name, male);
+    }
+
     public Hat(String name) {
-        super(name);
+        super(name, true);
     }
 
     @Override

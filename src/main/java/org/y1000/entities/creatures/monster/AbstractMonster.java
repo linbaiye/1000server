@@ -41,60 +41,10 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
         }
     }
 
-//
+
     @Override
     public void revive(Coordinate coordinate) {
         doRevive(coordinate);
         super.changeAI(new MonsterWanderingAI(new ViolentNpcWanderingAI()));
     }
-//
-//    public MonsterAI AI() {
-//        return ai;
-//    }
-//
-//    public void changeAI(MonsterAI ai) {
-//        this.ai = ai;
-//        this.ai.start(this);
-//    }
-//
-//    public MonsterAttackSkill attackSkill() {
-//        return attackSkill;
-//    }
-//
-//
-//    @Override
-//    public void update(int delta) {
-//        cooldown(delta);
-//        ai.update(this, delta);
-//        state().update(this, delta);
-//    }
-//
-//
-//
-//
-//    @Override
-//    public boolean attackedBy(Player attacker) {
-//        return attackedByPlayer(attacker, attacker.damage(), attacker.hit(), attacker::gainAttackExp);
-//    }
-//
-//    @Override
-//    public void attackedBy(Projectile projectile) {
-//        if (!(projectile.shooter() instanceof Player player)) {
-//            return;
-//        }
-//        attackedByPlayer(player, projectile.damage(), projectile.hit(), player::gainRangedAttackExp);
-//    }
-
-
-//    @Override
-//    public void onEvent(EntityEvent entityEvent) {
-//        if (getFightingEntity() == null) {
-//            log().error("Invalid event received.");
-//            return;
-//        }
-//        if (!canPurchaseOrAttack(getFightingEntity())) {
-//            clearFightingEntity();
-//        }
-//    }
-
 }

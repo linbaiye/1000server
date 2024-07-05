@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.*;
-import org.y1000.item.StackItem;
+import org.y1000.item.DefaultStackItem;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
@@ -410,7 +410,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         PlayerTextEvent event = eventListener.removeFirst(PlayerTextEvent.class);
         assertEquals(PlayerTextEvent.TextType.OUT_OF_AMMO.value(), event.toPacket().getText().getType());
 
-        player.inventory().add(new StackItem("箭", 1));
+        player.inventory().add(new DefaultStackItem("箭", 1));
         eventListener.clearEvents();
 
         player.attack(clientEvent, monster);

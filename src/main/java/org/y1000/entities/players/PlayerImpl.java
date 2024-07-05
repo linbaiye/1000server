@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
 import org.y1000.entities.*;
 import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
@@ -172,6 +171,22 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     @Getter
     private AttackableEntity fightingEntity;
 
+    private static final int PillSlotSize = 3;
+
+    private static class PillSlot {
+        private int counter;
+        private int timeLeft;
+        private final Pill pill;
+
+        private PillSlot(Pill pill) {
+            this.pill = pill;
+            this.counter = pill.useCount();
+            this.counter = pill.useInterval();
+        }
+    }
+
+    private final PillSlot[] pillSlots;
+
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
         put(State.WALK, 840);
@@ -259,6 +274,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         this.headLife = head;
         this.changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         setRegenerateTimer();
+        pillSlots = new PillSlot[PillSlotSize];
     }
 
     private void setRegenerateTimer() {
@@ -289,6 +305,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     public Optional<FootKungFu> footKungFu() {
         return Optional.ofNullable(footKungfu);
     }
+
 
     @Override
     public void pickItem(GroundedItem groundedItem, Function<GroundedItem, Item> creator) {
@@ -355,6 +372,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         emitEvent(new UpdateInventorySlotEvent(this, slot, equipped));
     }
 
+    private void usePill(Pill pill) {
+        emitEvent(PlayerTextEvent.havePill(this, pill.name()));
+    }
+
     private void handleInventorySlotDoubleClick(int slotId) {
         Item item = inventory.getItem(slotId);
         if (item == null) {
@@ -362,6 +383,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         if (item instanceof AbstractEquipment equipment) {
             equip(slotId, equipment);
+        } else if (item instanceof Pill pill) {
+            usePill(pill);
         }
     }
 

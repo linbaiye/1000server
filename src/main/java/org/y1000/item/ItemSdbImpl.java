@@ -1,8 +1,11 @@
 package org.y1000.item;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.sdb.AbstractSdbReader;
+
+import java.util.Set;
 
 @Slf4j
 public final class ItemSdbImpl extends AbstractSdbReader implements ItemSdb {
@@ -164,6 +167,11 @@ MaxCount,        最多持有数量；
         return getEnum(item, "HitType", AttackKungFuType::fromValue);
     }
 
+    public boolean isMale(String itemName) {
+        String s = get(itemName, "Sex");
+        return "1".equals(s);
+    }
+
     @Override
     public ItemType getType(String itemName) {
         return getEnum(itemName, ITEM_TYPE, ItemType::fromValue);
@@ -195,5 +203,15 @@ MaxCount,        最多持有数量；
         ItemSdbImpl itemSdb = new ItemSdbImpl();
         itemSdb.read("Item.sdb");
         return itemSdb;
+    }
+    public static void main(String[] args) {
+        ItemSdbImpl itemSdb = ItemSdbImpl.INSTANCE;
+//        Set<String> names = itemSdb.names();
+        Set<String> names = itemSdb.columnNames();
+        for (String name : names) {
+            String v = itemSdb.get("女子雨中客斗笠", name);
+            if (!StringUtils.isEmpty(v))
+                System.out.println(name + ":" + v);
+        }
     }
 }

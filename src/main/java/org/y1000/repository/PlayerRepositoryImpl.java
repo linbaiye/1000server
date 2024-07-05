@@ -1,9 +1,7 @@
 package org.y1000.repository;
 
-import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.players.*;
 import org.y1000.kungfu.AssistantKungFu;
-import org.y1000.kungfu.DefaultArmorParameters;
 import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
@@ -47,7 +45,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("三叉戟"));
         inventory.add(itemFactory.createItem("黄金手套"));
         inventory.add(itemFactory.createItem("北海连环弓"));
-        inventory.add(itemFactory.createItem(StackItem.MONEY, 10000));
+        inventory.add(itemFactory.createItem(DefaultStackItem.MONEY, 10000));
+        inventory.add(itemFactory.createItem("生药", 10000));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("血皇斧"));*/
@@ -92,13 +91,13 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .protectKungFu(kungFuBook.getUnnamedProtection())
                 .inventory(loadInventory())
                 .male(false)
-                .trouser(new Trouser("女子短裙"))
-                .clothing(new Clothing("女子上衣"))
-                .boot(new Boot("女子皮鞋"))
-                .hat(new Hat("女子血魔头盔"))
-                .chest(new Chest("女子雨中客道袍"))
-                .hair(new Hair("女子麻花辫"))
-                .wrist(new Wrist("女子太极护腕"))
+                .trouser(itemFactory.createTrouser("女子短裙"))
+                .clothing(itemFactory.createClothing("女子上衣"))
+                .boot(itemFactory.createBoot("女子皮鞋"))
+                .hat(itemFactory.createHat("女子血魔头盔"))
+                .chest(itemFactory.createChest("女子雨中客道袍"))
+                .hair(itemFactory.createHair("女子麻花辫"))
+                .wrist(itemFactory.createWrist("女子太极护腕"))
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
                 .yinYang(yinyang)
                 .revival(0)

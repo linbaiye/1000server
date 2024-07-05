@@ -99,6 +99,17 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int LOCATION_FIELD_NUMBER = 3;
+  private int location_ = 0;
+  /**
+   * <code>int32 location = 3;</code>
+   * @return The location.
+   */
+  @java.lang.Override
+  public int getLocation() {
+    return location_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -119,6 +130,9 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000001) != 0)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, text_);
     }
+    if (location_ != 0) {
+      output.writeInt32(3, location_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -134,6 +148,10 @@ private static final long serialVersionUID = 0L;
     }
     if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, text_);
+    }
+    if (location_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(3, location_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -157,6 +175,8 @@ private static final long serialVersionUID = 0L;
       if (!getText()
           .equals(other.getText())) return false;
     }
+    if (getLocation()
+        != other.getLocation()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -174,6 +194,8 @@ private static final long serialVersionUID = 0L;
       hash = (37 * hash) + TEXT_FIELD_NUMBER;
       hash = (53 * hash) + getText().hashCode();
     }
+    hash = (37 * hash) + LOCATION_FIELD_NUMBER;
+    hash = (53 * hash) + getLocation();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -307,6 +329,7 @@ private static final long serialVersionUID = 0L;
       bitField0_ = 0;
       type_ = 0;
       text_ = "";
+      location_ = 0;
       return this;
     }
 
@@ -347,6 +370,9 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.text_ = text_;
         to_bitField0_ |= 0x00000001;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.location_ = location_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -403,6 +429,9 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000002;
         onChanged();
       }
+      if (other.getLocation() != 0) {
+        setLocation(other.getLocation());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -439,6 +468,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000002;
               break;
             } // case 18
+            case 24: {
+              location_ = input.readInt32();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 24
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -563,6 +597,38 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       text_ = value;
       bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+
+    private int location_ ;
+    /**
+     * <code>int32 location = 3;</code>
+     * @return The location.
+     */
+    @java.lang.Override
+    public int getLocation() {
+      return location_;
+    }
+    /**
+     * <code>int32 location = 3;</code>
+     * @param value The location to set.
+     * @return This builder for chaining.
+     */
+    public Builder setLocation(int value) {
+
+      location_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 location = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearLocation() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      location_ = 0;
       onChanged();
       return this;
     }

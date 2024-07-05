@@ -4,9 +4,10 @@ import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventVisitor;
+import org.y1000.item.AbstractStackItem;
 import org.y1000.kungfu.KungFu;
 import org.y1000.item.Item;
-import org.y1000.item.StackItem;
+import org.y1000.item.DefaultStackItem;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.message.PlayerInfo;
 import org.y1000.message.ServerMessage;
@@ -35,7 +36,7 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
         InventoryItemPacket.Builder builder = InventoryItemPacket.newBuilder()
                 .setName(item.name())
                 .setSlotId(index);
-        if (item instanceof StackItem stackItem) {
+        if (item instanceof AbstractStackItem stackItem) {
             builder.setNumber(stackItem.number());
         }
         return builder.build();

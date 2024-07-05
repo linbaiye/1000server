@@ -1,9 +1,9 @@
 package org.y1000.item;
 
-public final class Trouser extends AbstractEquipment {
+public final class Trouser extends AbstractArmorEquipment {
 
-    public Trouser(String name) {
-        super(name);
+    public Trouser(String name, boolean male) {
+        super(name, male);
     }
 
     @Override

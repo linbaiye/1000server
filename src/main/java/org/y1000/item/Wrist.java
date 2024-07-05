@@ -1,8 +1,8 @@
 package org.y1000.item;
 
-public final class Wrist extends AbstractEquipment{
-    public Wrist(String name) {
-        super(name);
+public final class Wrist extends AbstractArmorEquipment {
+    public Wrist(String name, boolean male) {
+        super(name, male);
     }
 
     @Override

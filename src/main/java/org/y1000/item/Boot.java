@@ -1,8 +1,8 @@
 package org.y1000.item;
 
-public final class Boot extends AbstractEquipment {
-    public Boot(String name) {
-        super(name);
+public final class Boot extends AbstractArmorEquipment {
+    public Boot(String name, boolean male) {
+        super(name, male);
     }
 
     @Override

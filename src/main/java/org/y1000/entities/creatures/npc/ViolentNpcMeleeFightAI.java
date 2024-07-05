@@ -25,6 +25,7 @@ public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener 
         this.enemy = enemy;
         this.npc = npc;
         enemy.registerEventListener(this);
+        this.previous = enemy.coordinate();
     }
 
 

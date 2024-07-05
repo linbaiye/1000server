@@ -16,4 +16,7 @@ public interface ItemSdb {
     int getPrice(String itemName);
 
     int getBuyPrice(String itemName);
+
+    boolean isMale(String itemName);
+
 }

@@ -1,8 +1,8 @@
 package org.y1000.item;
 
-public final class Hair extends AbstractEquipment {
-    public Hair(String name) {
-        super(name);
+public final class Hair extends AbstractArmorEquipment {
+    public Hair(String name, boolean male) {
+        super(name, male);
     }
 
     @Override

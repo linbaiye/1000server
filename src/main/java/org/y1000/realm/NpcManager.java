@@ -138,6 +138,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
             RespawningNpc respawningNpc = iterator.next();
             if (respawningNpc.update(delta).canRespawn()) {
                 iterator.remove();
+                log.debug("Need to respawn.");
                 respawn(respawningNpc.npc);
             }
         }

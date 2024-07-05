@@ -103,6 +103,20 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
         verify(attacker).gainRangedAttackExp(any(Integer.class));
     }
 
+    @Test
+    void revive() {
+        attributeProvider.life = 1000;
+        monster = monsterBuilder().attributeProvider(attributeProvider).build();
+        Player attacker = Mockito.mock(Player.class);
+        when(attacker.damage()).thenReturn(new Damage(10000, 100, 100, 100));
+        monster.attackedBy(attacker);
+        assertEquals(0, monster.currentLife());
+        assertEquals(State.DIE, monster.stateEnum());
+        monster.revive(monster.coordinate());
+        assertEquals(1000, monster.currentLife());
+        assertEquals(State.IDLE, monster.stateEnum());
+    }
+
     //    @Test
 //    void name() {
 //        MonsterFactoryImpl monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonsterSdb.INSTANCE);
