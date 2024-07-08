@@ -53,24 +53,6 @@ public final class Inventory {
         return MAX_CAP - itemCount();
     }
 
-    public boolean tradeItem(int slot, int number) {
-        if (!items.containsKey(slot) || tradingItems.containsKey(slot)) {
-            return false;
-        }
-        Item item = items.get(slot);
-        if (!(item instanceof DefaultStackItem stackItem)) {
-            tradingItems.put(slot, item);
-            return true;
-        }
-        if (stackItem.canSplit(number)) {
-            DefaultStackItem split = stackItem.split(number);
-            tradingItems.put(slot, split);
-        }
-        if (stackItem.number() == 0) {
-            items.remove(slot);
-        }
-        return true;
-    }
 
 
     private Optional<DefaultStackItem> findStackItem(String name) {

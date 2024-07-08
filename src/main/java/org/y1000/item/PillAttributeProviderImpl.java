@@ -1,48 +1,73 @@
 package org.y1000.item;
 
-public class PillAttributeProviderImpl implements PillAttributeProvider {
+import org.y1000.sdb.ItemDrugSdb;
+
+public final class PillAttributeProviderImpl implements PillAttributeProvider {
+    private final String name;
+    private final ItemSdb itemSdb;
+
+    private final ItemDrugSdb itemDrugSdb;
+
+    public PillAttributeProviderImpl(String name,
+                                     ItemSdb itemSdb,
+                                     ItemDrugSdb itemDrugSdb) {
+        this.name = name;
+        this.itemSdb = itemSdb;
+        this.itemDrugSdb = itemDrugSdb;
+    }
+
     @Override
     public int useInterval() {
-        return 0;
+        return itemDrugSdb.getUseInterval(name);
     }
 
     @Override
     public int useCount() {
-        return 0;
+        return itemDrugSdb.getUseCount(name);
     }
 
     @Override
     public int power() {
-        return 0;
+        return itemDrugSdb.getEMagic(name);
     }
 
     @Override
     public int innerPower() {
-        return 0;
+        return itemDrugSdb.getEInPower(name);
     }
 
     @Override
     public int outerPower() {
-        return 0;
+        return itemDrugSdb.getEOutPower(name);
     }
 
     @Override
     public int life() {
-        return 0;
+        return itemDrugSdb.getELife(name);
     }
 
     @Override
     public int headLife() {
-        return 0;
+        return itemDrugSdb.getEHeadLife(name);
     }
 
     @Override
     public int armLife() {
-        return 0;
+        return itemDrugSdb.getEArmLife(name);
     }
 
     @Override
     public int legLife() {
-        return 0;
+        return itemDrugSdb.getELegLife(name);
+    }
+
+    @Override
+    public String dropSound() {
+        return itemSdb.getSoundDrop(name);
+    }
+
+    @Override
+    public String eventSound() {
+        return itemSdb.getSoundEvent(name);
     }
 }

@@ -5,7 +5,6 @@ import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AiPathUtil;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.message.SetPositionEvent;
@@ -53,7 +52,6 @@ public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener 
     }
 
 
-
     @Override
     public void onActionDone(Npc npc) {
         if (npc.stateEnum() == State.WALK) {
@@ -74,6 +72,9 @@ public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener 
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
+        if (npc.stateEnum() == State.DIE) {
+            return;
+        }
         if (!npc.canPurchaseOrAttack(entityEvent.source())) {
             npc.changeAI(new ViolentNpcWanderingAI());
         }

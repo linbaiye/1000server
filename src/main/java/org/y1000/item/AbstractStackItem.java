@@ -6,29 +6,18 @@ public abstract class AbstractStackItem extends AbstractItem {
     private long number;
     private static final long MAX_NUMBER = 100000000000L;
 
-    public AbstractStackItem(String name, long number, ItemType type) {
-        super(name, type);
+    public AbstractStackItem(String name, long number, ItemType type,
+    String dropSound, String eventSound) {
+        super(name, type, dropSound, eventSound);
         Validate.isTrue(number > 0, "number must > 0");
         this.number = number;
     }
 
-    public AbstractStackItem(String name, long number) {
-        super(name, ItemType.STACK);
-        Validate.isTrue(number > 0, "number must > 0");
-        this.number = number;
-    }
 
     public boolean canSplit(int number) {
         return this.number >= number && number > 0;
     }
 
-    public DefaultStackItem split(int number) {
-        if (!canSplit(number)) {
-            throw new IllegalArgumentException();
-        }
-        decrease(number);
-        return new DefaultStackItem(name(), number, itemType());
-    }
 
     public boolean increase(long n) {
         if (n < 0) {
@@ -55,11 +44,5 @@ public abstract class AbstractStackItem extends AbstractItem {
         }
         return number;
     }
-
-    public static DefaultStackItem money(long number) {
-        return new DefaultStackItem(MONEY, number, ItemType.MONEY);
-    }
-
-    public static final String MONEY = "钱币";
 
 }

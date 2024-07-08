@@ -93,7 +93,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     private void respawn(Npc npc) {
         List<MonsterSpawnSetting> settings = getSettings(npc.name());
         for (MonsterSpawnSetting setting : settings) {
-            if (setting.range().contains(npc.coordinate())) {
+            if (setting.range().contains(npc.spawnCoordinate())) {
                 Coordinate random = setting.range().random();
                 npc.revive(random);
                 add(npc);
@@ -155,6 +155,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     protected void onAdded(Npc entity) {
         sender.add(entity);
         sender.notifyVisiblePlayers(entity, new NpcJoinedEvent(entity));
+        log.debug("Added creature {}.", entity.id());
         entity.registerEventListener(this);
         entity.registerEventListener(itemManager);
         entity.start();

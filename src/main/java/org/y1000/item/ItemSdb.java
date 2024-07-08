@@ -19,4 +19,24 @@ public interface ItemSdb {
 
     boolean isMale(String itemName);
 
+    int getAvoid(String itemName);
+
+    int getRecovery(String itemName);
+
+    int getDamageBody(String name);
+
+    int getDamageHead(String name);
+
+    int getDamageArm(String name);
+
+    int getDamageLeg(String name);
+
+    int getArmorBody(String name);
+
+    int getArmorHead(String name);
+
+    int getArmorArm(String name);
+
+    int getArmorLeg(String name);
+
 }

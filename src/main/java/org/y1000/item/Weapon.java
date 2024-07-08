@@ -1,20 +1,18 @@
 package org.y1000.item;
 
-import lombok.Builder;
 import org.y1000.kungfu.attack.AttackKungFuType;
 
 public final class Weapon extends AbstractEquipment {
 
-    private final AttackKungFuType attackKungFuType;
+    private final ItemSdb itemSdb;
 
-    @Builder
-    public Weapon(String name, AttackKungFuType attackKungFuType) {
-        super(name);
-        this.attackKungFuType = attackKungFuType;
+    public Weapon(String name, ItemSdb itemSdb) {
+        super(name, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
+        this.itemSdb = itemSdb;
     }
 
     public AttackKungFuType kungFuType() {
-        return attackKungFuType;
+        return itemSdb.getAttackKungFuType(name());
     }
 
     @Override

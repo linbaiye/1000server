@@ -89,7 +89,7 @@ class DevirtueMerchantTest extends AbstractNpcUnitTestFixture {
         sellItems.add(new MerchantItem("草药", 20));
         sellItems.add(new MerchantItem("丸药", 10));
         List<TradeItem> items = List.of(new TradeItem("草药", 1, 3), new TradeItem("丸药", 2, 4));
-        merchant.sell(player, items, (s, aLong) -> new DefaultStackItem(s, aLong, ItemType.STACK));
+        merchant.sell(player, items, (s, aLong) -> new DefaultStackItem(s, aLong, ItemType.STACK, "", ""));
         assertTrue(inventory.findFirstStackItem(DefaultStackItem.MONEY).isPresent());
         inventory.findFirstStackItem(DefaultStackItem.MONEY).ifPresent(money -> assertEquals(1, money.number()));
     }

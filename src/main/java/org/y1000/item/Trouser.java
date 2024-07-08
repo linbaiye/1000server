@@ -1,10 +1,20 @@
 package org.y1000.item;
 
-public final class Trouser extends AbstractArmorEquipment {
+import lombok.Builder;
+import lombok.Getter;
 
-    public Trouser(String name, boolean male) {
-        super(name, male);
+@Getter
+public final class Trouser extends AbstractEquipment {
+
+    private final boolean male;
+
+    @Builder
+    public Trouser(String name, boolean male, String dropSound, String eventSound) {
+        super(name, dropSound, eventSound);
+        this.male = male;
     }
+
+
 
     @Override
     public EquipmentType equipmentType() {

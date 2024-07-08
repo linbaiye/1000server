@@ -13,7 +13,7 @@ class StackItemTest {
 
     @BeforeEach
     void setUp() {
-        stackItem = new DefaultStackItem( "test", 15, ItemType.ARROW);
+        stackItem = new DefaultStackItem( "test", 15, ItemType.ARROW, "", "");
     }
 
     @Test

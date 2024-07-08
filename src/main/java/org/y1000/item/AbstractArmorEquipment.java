@@ -1,38 +1,43 @@
 package org.y1000.item;
 
-import lombok.Getter;
 
-@Getter
 public abstract class AbstractArmorEquipment extends AbstractEquipment {
 
-    private final boolean male;
+    private final ArmorItemAttributeProvider attributeProvider;
 
-    public AbstractArmorEquipment(String name, boolean male) {
-        super(name);
-        this.male = male;
+    public AbstractArmorEquipment(String name,
+                                  ArmorItemAttributeProvider attributeProvider) {
+        super(name, attributeProvider.dropSound(),
+                attributeProvider.eventSound());
+        this.attributeProvider = attributeProvider;
+    }
+
+    public boolean isMale() {
+        return attributeProvider.isMale();
     }
 
     public int avoidance() {
-        return 0;
+        return attributeProvider.avoidance();
     }
 
     public int headArmor() {
-        return 0;
+        return attributeProvider.headArmor();
     }
 
+
     public int armor() {
-        return 0;
+        return attributeProvider.armor();
     }
 
     public int armArmor() {
-        return 0;
+        return attributeProvider.armArmor();
     }
 
     public int legArmor() {
-        return 0;
+        return attributeProvider.legArmor();
     }
 
     public int recovery() {
-        return 0;
+        return attributeProvider.recovery();
     }
 }

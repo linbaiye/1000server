@@ -42,7 +42,7 @@ public final class Server {
         serverGroup = new NioEventLoopGroup();
         bootstrap = new ServerBootstrap();
         KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl();
-        ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE);
+        ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE);
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl);
         itemRepository = repository;
         npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
@@ -54,9 +54,6 @@ public final class Server {
         return null;
     }
 
-    private void create() {
-        ItemRepository itemRepository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE);
-    }
 
 //    private void startRealms() {
 //        Optional<Realm> realmOptional = Realm.create("start", createPlayerRepository());

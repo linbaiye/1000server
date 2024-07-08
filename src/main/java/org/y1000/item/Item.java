@@ -1,9 +1,18 @@
 package org.y1000.item;
 
 
+import java.util.Optional;
+
 public interface Item {
     String name();
 
     ItemType itemType();
 
+    default Optional<String> dropSound() {
+        return Optional.empty();
+    }
+
+    default Optional<String> eventSound() {
+        return Optional.empty();
+    }
 }

@@ -173,6 +173,11 @@ MaxCount,        最多持有数量；
     }
 
     @Override
+    public int getAvoid(String itemName) {
+        return getIntOrZero(itemName, "Avoid");
+    }
+
+    @Override
     public ItemType getType(String itemName) {
         return getEnum(itemName, ITEM_TYPE, ItemType::fromValue);
     }
@@ -196,6 +201,51 @@ MaxCount,        最多持有数量；
     public int getBuyPrice(String itemName) {
         return getInt(itemName, "Price");
     }
+    public int getRecovery(String name) {
+        return getInt(name, "Recovery");
+    }
+
+    public int getAvoidance(String name) {
+        return getInt(name, "Avoid");
+    }
+
+    public int getAccuracy(String name) {
+        return getInt(name, "accuracy");
+    }
+
+    public int getDamageBody(String name) {
+        return getIntOrZero(name, "DamageBody");
+    }
+
+    public int getDamageHead(String name) {
+        return getIntOrZero(name, "DamageHead");
+    }
+
+    public int getDamageArm(String name) {
+        return getIntOrZero(name, "DamageArm");
+    }
+
+    public int getDamageLeg(String name) {
+        return getIntOrZero(name, "DamageLeg");
+    }
+
+
+    public int getArmorBody(String name) {
+        return getIntOrZero(name, "ArmorBody");
+    }
+
+    public int getArmorHead(String name) {
+        return getIntOrZero(name, "ArmorHead");
+    }
+
+    public int getArmorArm(String name) {
+        return getIntOrZero(name, "ArmorArm");
+    }
+
+    public int getArmorLeg(String name) {
+        return getIntOrZero(name, "ArmorLeg");
+    }
+
 
     public static final ItemSdbImpl INSTANCE = read();
 
@@ -208,10 +258,13 @@ MaxCount,        最多持有数量；
         ItemSdbImpl itemSdb = ItemSdbImpl.INSTANCE;
 //        Set<String> names = itemSdb.names();
         Set<String> names = itemSdb.columnNames();
-        for (String name : names) {
-            String v = itemSdb.get("女子雨中客斗笠", name);
-            if (!StringUtils.isEmpty(v))
-                System.out.println(name + ":" + v);
+        Set<String> items = itemSdb.names();
+        for (String i: items) {
+            for (String name : names) {
+                if (!StringUtils.isEmpty(itemSdb.get(i, name)))
+                    System.out.println(name + ":" + i + ", column:" + name + ", value:" + itemSdb.get(i, name));
+            }
+            //String v = itemSdb.get("生药", name);
         }
     }
 }

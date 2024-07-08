@@ -5,8 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.players.Player;
-import org.y1000.item.Hat;
+import org.y1000.item.Hair;
 import org.y1000.item.DefaultStackItem;
+import org.y1000.item.ItemSdb;
 import org.y1000.item.Weapon;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
@@ -16,7 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 class InventoryTest {
 
@@ -24,15 +26,19 @@ class InventoryTest {
 
     private Player player;
 
+    private ItemSdb itemSdb;
+
     @BeforeEach
     void setUp() {
+        itemSdb = Mockito.mock(ItemSdb.class);
+        when(itemSdb.getAttackKungFuType(anyString())).thenReturn(AttackKungFuType.SWORD);
         inventory = new Inventory();
         player = Mockito.mock(Player.class);
     }
 
     @Test
     void findByType() {
-        inventory.add(new Weapon("test", AttackKungFuType.SWORD));
+        inventory.add(new Weapon("test", itemSdb));
         Optional<Weapon> weapon = inventory.findWeapon(AttackKungFuType.SWORD);
         assertTrue(weapon.isPresent());
         weapon.ifPresent(w -> assertEquals(w.kungFuType(), AttackKungFuType.SWORD));
@@ -40,7 +46,7 @@ class InventoryTest {
 
     @Test
     void findSlot() {
-        inventory.add(new Weapon("test", AttackKungFuType.SWORD));
+        inventory.add(new Weapon("test", itemSdb));
         int weaponSlot = inventory.findWeaponSlot(AttackKungFuType.SWORD);
         assertEquals(1, weaponSlot);
         assertEquals(0, inventory.findWeaponSlot(AttackKungFuType.AXE));
@@ -49,14 +55,14 @@ class InventoryTest {
     @Test
     void add() {
         assertEquals(0, inventory.add(null));
-        assertEquals(1, inventory.add(new Hat("hat")));
-        assertEquals(2, inventory.add(new Hat("hat2")));
+        assertEquals(1, inventory.add(new Hair("hat", true, "","'")));
+        assertEquals(2, inventory.add(new Hair("hat2", true, "", "")));
         assertEquals(3, inventory.add(DefaultStackItem.money(100)));
         assertEquals(3, inventory.add(DefaultStackItem.money(100)));
         for (int i = 0; i < inventory.maxCapacity() - 3; i++) {
-            assertNotEquals(0, inventory.add(new Hat("hat")));
+            assertNotEquals(0, inventory.add(new Hair("hat", true, "", "")));
         }
-        assertEquals(0, inventory.add(new Hat("hat")));
+        assertEquals(0, inventory.add(new Hair("hat", true, "", "")));
     }
 
     @Test
@@ -84,7 +90,7 @@ class InventoryTest {
         inventory.add(new DefaultStackItem("肉", 2));
         assertTrue(inventory.canSell(items));
         for (int i = 0; i < inventory.maxCapacity() - 1; i++) {
-            inventory.add(new Hat("hat"));
+            inventory.add(new Hair("hat", true, "", ""));
         }
         assertFalse(inventory.canSell(items));
         inventory.remove(inventory.maxCapacity());
@@ -114,12 +120,12 @@ class InventoryTest {
         assertFalse(inventory.canBuy(items, 1000));
         int slot = inventory.emptySlotSize() - 1;
         for (int i = 0; i < slot; i++) {
-            inventory.add(new Hat("hat"));
+            inventory.add(new Hair("hat", true, "", ""));
         }
         assertTrue(inventory.canBuy(items, 10));
 
         // make inventory full.
-        inventory.add(new Hat("hat"));
+        inventory.add(new Hair("hat", true, "", ""));
         assertFalse(inventory.canBuy(items, 10));
     }
 
@@ -147,7 +153,7 @@ class InventoryTest {
         assertEquals(inventory.maxCapacity() - 1, inventory.emptySlotSize());
         int emptySlot = inventory.emptySlotSize() - 1;
         for (int i = 0; i < emptySlot; i++) {
-            inventory.add(new Hat("hat"));
+            inventory.add(new Hair("hat", true, "", ""));
         }
         assertEquals(inventory.maxCapacity() - 1, inventory.itemCount());
     }

@@ -4,15 +4,18 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
 import org.y1000.item.*;
+import org.y1000.sdb.ItemDrugSdb;
 
 import java.util.NoSuchElementException;
 
 public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
 
     private final ItemSdbImpl itemSdb;
+    private final ItemDrugSdb itemDrugSdb;
 
-    public ItemRepositoryImpl(ItemSdbImpl itemSdb) {
+    public ItemRepositoryImpl(ItemSdbImpl itemSdb, ItemDrugSdb itemDrugSdb) {
         this.itemSdb = itemSdb;
+        this.itemDrugSdb = itemDrugSdb;
     }
 
 
@@ -34,7 +37,7 @@ public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
 
     public Equipment createEquipment(String name) {
         return switch (itemSdb.getEquipmentType(name)) {
-            case WEAPON -> new Weapon(name, itemSdb.getAttackKungFuType(name));
+            case WEAPON -> new Weapon(name, itemSdb);
             case HAT -> createHat(name);
             case CHEST -> createChest(name);
             case TROUSER -> createTrouser(name);
@@ -73,47 +76,59 @@ public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
             throw new NoSuchElementException(name + " is not a valid item.");
         }
         return switch (itemSdb.getType(name)) {
-            case ARROW -> new DefaultStackItem(name, number, ItemType.ARROW);
-            case SELLING_GOODS -> new DefaultStackItem(name, number, ItemType.SELLING_GOODS);
+            case ARROW -> new DefaultStackItem(name, number, ItemType.ARROW, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
+            case SELLING_GOODS -> new DefaultStackItem(name, number, ItemType.SELLING_GOODS, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
             case EQUIPMENT -> createEquipment(name);
             case MONEY -> DefaultStackItem.money(number);
-            case PILL -> new Pill(name, number, new PillAttributeProviderImpl());
+            case PILL -> new Pill(name, number, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
             default -> throw new NoSuchElementException();
         };
     }
 
     @Override
     public Trouser createTrouser(String name) {
-        return new Trouser(name, itemSdb.isMale(name));
+        return Trouser.builder().name(name).male(itemSdb.isMale(name))
+                .dropSound(itemSdb.getSoundDrop(name))
+                .eventSound(itemSdb.getSoundEvent(name)).build();
     }
 
     @Override
     public Hat createHat(String name) {
-        return new Hat(name, itemSdb.isMale(name));
+        return new Hat(name, new DefaultArmorAttributeProvider(name, itemSdb));
     }
 
     @Override
     public Chest createChest(String name) {
-        return new Chest(name, itemSdb.isMale(name));
+        return new Chest(name, new DefaultArmorAttributeProvider(name, itemSdb));
     }
 
     @Override
     public Hair createHair(String name) {
-        return new Hair(name, itemSdb.isMale(name));
+        return Hair.builder()
+                .name(name)
+                .male(itemSdb.isMale(name))
+                .dropSound(itemSdb.getSoundDrop(name))
+                .eventSound(itemSdb.getSoundEvent(name))
+                .build();
     }
 
     @Override
     public Boot createBoot(String name) {
-        return new Boot(name, itemSdb.isMale(name));
+        return new Boot(name, new DefaultArmorAttributeProvider(name, itemSdb));
     }
 
     @Override
     public Wrist createWrist(String name) {
-        return new Wrist(name, itemSdb.isMale(name));
+        return new Wrist(name, new DefaultArmorAttributeProvider(name, itemSdb));
     }
 
     @Override
     public Clothing createClothing(String name) {
-        return new Clothing(name, itemSdb.isMale(name));
+        return Clothing.builder()
+                .name(name)
+                .male(itemSdb.isMale(name))
+                .dropSound(itemSdb.getSoundDrop(name))
+                .eventSound(itemSdb.getSoundEvent(name))
+                .build();
     }
 }

@@ -370,10 +370,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         emitEvent(new PlayerUnequipEvent(this, equipped.equipmentType()));
         int slot = inventory.add(equipped);
         emitEvent(new UpdateInventorySlotEvent(this, slot, equipped));
+        equipped.eventSound().ifPresent(s -> new EntitySoundEvent(this, s));
     }
 
     private void usePill(Pill pill) {
         emitEvent(PlayerTextEvent.havePill(this, pill.name()));
+        pill.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+        //emitEvent(new EntitySoundEvent(this, ));
     }
 
     private void handleInventorySlotDoubleClick(int slotId) {
@@ -771,6 +774,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             inventory.put(slotId, currentEquipped);
         }
         emitEvent(new UpdateInventorySlotEvent(this, slotId, currentEquipped));
+        equipmentInSlot.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
     @Override
