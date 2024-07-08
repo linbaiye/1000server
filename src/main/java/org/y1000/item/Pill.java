@@ -11,7 +11,7 @@ public final class Pill extends AbstractStackItem {
     }
 
     public int useInterval() {
-        return attributeProvider.useInterval() * 100;
+        return attributeProvider.useInterval() * 10;
     }
 
     public int useCount() {

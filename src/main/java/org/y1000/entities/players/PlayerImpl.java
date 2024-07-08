@@ -181,8 +181,29 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         private PillSlot(Pill pill) {
             this.pill = pill;
             this.counter = pill.useCount();
-            this.counter = pill.useInterval();
+            this.timeLeft = pill.useInterval();
         }
+
+        public void update(long delta) {
+            timeLeft -= delta;
+        }
+
+        public boolean isTimeToRegen() {
+            return timeLeft <= 0;
+        }
+
+        public boolean isEffective() {
+            return counter > 0;
+        }
+
+        public void decEffectiveCounter() {
+            counter--;
+        }
+
+        public Pill pill() {
+            return pill;
+        }
+
     }
 
     private final PillSlot[] pillSlots;
@@ -238,8 +259,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                       PlayerAgedAttribute power,
                       PlayerAgedAttribute innerPower,
                       PlayerAgedAttribute outerPower,
-                      int energy,
-                      int maxEnergy,
                       int revival,
                       YinYang yinYang) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
@@ -374,9 +393,29 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     private void usePill(Pill pill) {
-        emitEvent(PlayerTextEvent.havePill(this, pill.name()));
-        pill.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-        //emitEvent(new EntitySoundEvent(this, ));
+        for (int i = 0; i < pillSlots.length; i++) {
+            if (pillSlots[i] == null) {
+                emitEvent(PlayerTextEvent.havePill(this, pill.name()));
+                pill.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+                pillSlots[i] = new PillSlot(pill);
+                return;
+            }
+        }
+        emitEvent(PlayerTextEvent.noMorePill(this));
+    }
+
+    private void updatePillSlots(long delta) {
+        for (int i = 0; i < pillSlots.length; i++) {
+            if (pillSlots[i] == null) {
+                continue;
+            }
+            PillSlot pillSlot = pillSlots[i];
+            pillSlot.update(delta);
+            if (pillSlot.isTimeToRegen()) {
+                gainLife(pillSlot.pill);
+            }
+        }
+
     }
 
     private void handleInventorySlotDoubleClick(int slotId) {
@@ -454,7 +493,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         clearFightingEntity();
         if (this.footKungfu != null ){
             if (newKungFu.name().equals(this.footKungfu.name())) {
-                log.debug("Disable bufa.");
                 emitEvent(PlayerToggleKungFuEvent.disable(this, this.footKungfu));
                 this.footKungfu = null;
             } else {
@@ -467,7 +505,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             this.changeState(new PlayerStandUpState(this));
             emitEvent(new PlayerStandUpEvent(this, true));
         } else if (stateEnum() != State.WALK && stateEnum() != State.ENFIGHT_WALK) {
-            log.debug("Enable bufa.");
             this.changeState(PlayerStillState.idle(this));
             emitEvent(new SetPositionEvent(this, direction(), coordinate()));
         }
@@ -755,6 +792,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         });
         equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
         emitEvent(new PlayerEquipEvent(this, weaponToEquip.name()));
+        weaponToEquip.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         log.debug("Equipped weapon {}.", weaponToEquip.name());
     }
 
@@ -765,16 +803,16 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             if (attackKungFu.getType() != weaponInSlot.kungFuType()) {
                 changeAttackKungFu(kungFuBook.findUnnamedAttack(weaponInSlot.kungFuType()));
             }
-            return;
+        } else {
+            inventory.remove(slotId);
+            Equipment currentEquipped = equippedEquipments.put(equipmentInSlot.equipmentType(), equipmentInSlot);
+            emitEvent(new PlayerEquipEvent(this, equipmentInSlot.name()));
+            if (currentEquipped != null) {
+                inventory.put(slotId, currentEquipped);
+            }
+            emitEvent(new UpdateInventorySlotEvent(this, slotId, currentEquipped));
+            equipmentInSlot.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         }
-        inventory.remove(slotId);
-        Equipment currentEquipped = equippedEquipments.put(equipmentInSlot.equipmentType(), equipmentInSlot);
-        emitEvent(new PlayerEquipEvent(this, equipmentInSlot.name()));
-        if (currentEquipped != null) {
-            inventory.put(slotId, currentEquipped);
-        }
-        emitEvent(new UpdateInventorySlotEvent(this, slotId, currentEquipped));
-        equipmentInSlot.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
     @Override

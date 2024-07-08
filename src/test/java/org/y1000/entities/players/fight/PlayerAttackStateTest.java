@@ -2,12 +2,15 @@ package org.y1000.entities.players.fight;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
+import org.y1000.entities.creatures.npc.NpcCommonState;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
+import org.y1000.item.ItemSdb;
 import org.y1000.item.Weapon;
 import org.y1000.kungfu.attack.AttackKungFuParameters;
 import org.y1000.kungfu.attack.AttackKungFuType;
@@ -124,17 +127,19 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
 
     @Test
     void rangedAttackWhenTargetDead() {
-        player.inventory().add(new Weapon("bow", AttackKungFuType.BOW));
+        ItemSdb itemSdb = Mockito.mock(ItemSdb.class);
+        player.inventory().add(new Weapon("bow", itemSdb));
         enableBowKungFu();
 
         var monster = monsterBuilder().coordinate(player.coordinate().move(3, 0)).build();
         player.setFightingEntity(monster);
         player.changeState(PlayerAttackState.of(player));
-//        monster.changeState(new MonsterDieState(10000));
+        monster.changeState(NpcCommonState.die(1000));
         player.onEvent(new CreatureDieEvent(monster));
         assertNull(player.getFightingEntity());
         player.update(player.getStateMillis(State.BOW));
 
+        // shoot anyway as state changed before creature died.
         PlayerShootEvent playerShootEvent = eventListener.removeFirst(PlayerShootEvent.class);
         assertEquals(playerShootEvent.projectile().target(), monster);
     }

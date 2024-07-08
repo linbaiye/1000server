@@ -55,6 +55,8 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
         OUT_OF_AMMO(11),
 
+        NO_MORE_PILL(12),
+
 
         CUSTOM(1000000);
         ;
@@ -111,6 +113,10 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
     public static PlayerTextEvent havePill(Player player, String pillName) {
         return new PlayerTextEvent(player, "服用了" + pillName, TextType.CUSTOM, Location.LEFT);
+    }
+
+    public static PlayerTextEvent noMorePill(Player player) {
+        return new PlayerTextEvent(player, null, TextType.NO_MORE_PILL, Location.LEFT);
     }
 
     public static PlayerTextEvent tooFarAway(Player player) {
