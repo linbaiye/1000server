@@ -200,10 +200,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             counter--;
         }
 
+        public void resetTimer() {
+            timeLeft = pill.useInterval();
+        }
+
         public Pill pill() {
             return pill;
         }
-
     }
 
     private final PillSlot[] pillSlots;
@@ -405,6 +408,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     private void updatePillSlots(long delta) {
+        boolean needSync = false;
         for (int i = 0; i < pillSlots.length; i++) {
             if (pillSlots[i] == null) {
                 continue;
@@ -412,10 +416,24 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             PillSlot pillSlot = pillSlots[i];
             pillSlot.update(delta);
             if (pillSlot.isTimeToRegen()) {
-                gainLife(pillSlot.pill);
+                Pill pill = pillSlot.pill();
+                gainLife(pill.life());
+                gainHeadLife(pill.headLife());
+                gainArmLife(pill.armLife());
+                gainLegLife(pill.legLife());
+                gainPower(pill.power());
+                gainInnerPower(pill.innerPower());
+                gainOuterPower(pill.outerPower());
+                pillSlot.decEffectiveCounter();
+                pillSlot.resetTimer();
+                needSync = true;
+            }
+            if (!pillSlot.isEffective()) {
+                pillSlots[i] = null;
             }
         }
-
+        if (needSync)
+            emitEvent(new PlayerAttributeEvent(this));
     }
 
     private void handleInventorySlotDoubleClick(int slotId) {
@@ -851,7 +869,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             legLife.onAgeIncreased(newAge);
         }
         yinYang = newYY;
-
         int halLife =revival.regenerateHalLife(stateEnum());
         armLife.gain(halLife);
         headLife.gain(halLife);
@@ -888,6 +905,21 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         life.gain(v);
     }
 
+    @Override
+    public void gainHeadLife(int v) {
+        headLife.gain(v);
+    }
+
+    @Override
+    public void gainArmLife(int v) {
+        armLife.gain(v);
+    }
+
+    @Override
+    public void gainLegLife(int v) {
+        legLife.gain(v);
+    }
+
     private boolean updateKungFuAndCheck(PeriodicalKungFu kungFu,
                                          int delta,
                                          Action disableAction) {
@@ -922,6 +954,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         cooldown(delta);
         regenerate(delta);
         updateKungFu(delta);
+        updatePillSlots(delta);
         state().update(this, delta);
     }
 

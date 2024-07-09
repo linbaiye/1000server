@@ -8,12 +8,38 @@ public final class PillAttributeProviderImpl implements PillAttributeProvider {
 
     private final ItemDrugSdb itemDrugSdb;
 
+    private static final int ITEMDRUG_DIV_VALUE            = 10;
+
+    private static final int ITEMDRUG_MUL_EVENTENERGY      = 10;
+    private static final int ITEMDRUG_MUL_EVENTINPOWER     = 10;
+    private static final int ITEMDRUG_MUL_EVENTOUTPOWER    = 10;
+    private static final int ITEMDRUG_MUL_EVENTMAGIC       = 10;
+    private static final int ITEMDRUG_MUL_EVENTLIFE        = 15;
+    private static final int ITEMDRUG_MUL_EVENTHEADLIFE    = 15;
+    private static final int ITEMDRUG_MUL_EVENTARMLIFE     = 15;
+    private static final int ITEMDRUG_MUL_EVENTLEGLIFE     = 15;
+
+    private final int life;
+    private final int power;
+    private final int innerPower;
+    private final int outerPower;
+    private final int armLife;
+    private final int headLife;
+    private final int legLife;
+
     public PillAttributeProviderImpl(String name,
                                      ItemSdb itemSdb,
                                      ItemDrugSdb itemDrugSdb) {
         this.name = name;
         this.itemSdb = itemSdb;
         this.itemDrugSdb = itemDrugSdb;
+        this.life = itemDrugSdb.getELife(name) * ITEMDRUG_MUL_EVENTLIFE / ITEMDRUG_DIV_VALUE;
+        this.power = itemDrugSdb.getEMagic(name) * ITEMDRUG_MUL_EVENTMAGIC / ITEMDRUG_DIV_VALUE;
+        this.innerPower = itemDrugSdb.getEInPower(name) * ITEMDRUG_MUL_EVENTINPOWER / ITEMDRUG_DIV_VALUE;
+        this.outerPower = itemDrugSdb.getEOutPower(name) * ITEMDRUG_MUL_EVENTOUTPOWER / ITEMDRUG_DIV_VALUE;
+        this.armLife = itemDrugSdb.getEArmLife(name) * ITEMDRUG_MUL_EVENTARMLIFE / ITEMDRUG_DIV_VALUE;
+        this.headLife = itemDrugSdb.getEHeadLife(name) * ITEMDRUG_MUL_EVENTHEADLIFE / ITEMDRUG_DIV_VALUE;
+        this.legLife = itemDrugSdb.getELegLife(name) * ITEMDRUG_MUL_EVENTLEGLIFE / ITEMDRUG_DIV_VALUE;
     }
 
     @Override
@@ -28,37 +54,37 @@ public final class PillAttributeProviderImpl implements PillAttributeProvider {
 
     @Override
     public int power() {
-        return itemDrugSdb.getEMagic(name);
+        return power;
     }
 
     @Override
     public int innerPower() {
-        return itemDrugSdb.getEInPower(name);
+        return innerPower;
     }
 
     @Override
     public int outerPower() {
-        return itemDrugSdb.getEOutPower(name);
+        return outerPower;
     }
 
     @Override
     public int life() {
-        return itemDrugSdb.getELife(name);
+        return life;
     }
 
     @Override
     public int headLife() {
-        return itemDrugSdb.getEHeadLife(name);
+        return headLife;
     }
 
     @Override
     public int armLife() {
-        return itemDrugSdb.getEArmLife(name);
+        return armLife;
     }
 
     @Override
     public int legLife() {
-        return itemDrugSdb.getELegLife(name);
+        return legLife;
     }
 
     @Override

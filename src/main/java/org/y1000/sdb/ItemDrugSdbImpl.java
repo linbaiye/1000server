@@ -5,7 +5,7 @@ public final class ItemDrugSdbImpl extends AbstractSdbReader implements ItemDrug
     public static final ItemDrugSdb INSTANCE = new ItemDrugSdbImpl();
 
     private ItemDrugSdbImpl() {
-        read("ItemDrug.sdb");
+        read("ItemDrug.sdb", "utf8");
     }
 
     /*

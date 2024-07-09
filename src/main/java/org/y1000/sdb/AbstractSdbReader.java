@@ -74,13 +74,12 @@ public abstract class AbstractSdbReader {
         return headerIndex.keySet();
     }
 
-
-    protected void read(String name) {
+    protected void read(String name, String charset) {
         try (var inputstream = getClass().getResourceAsStream("/sdb/" + name)) {
             if (inputstream == null) {
                 throw new NoSuchElementException("Sdb does not exist, " + name);
             }
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream, Charset.forName("GBK")));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream, Charset.forName(charset)));
             List<String> lines = bufferedReader.lines().toList();
             if (lines.isEmpty()) {
                 throw new NoSuchElementException("Empty sdb: " + name);
@@ -104,5 +103,9 @@ public abstract class AbstractSdbReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected void read(String name) {
+        read(name, "GBK");
     }
 }

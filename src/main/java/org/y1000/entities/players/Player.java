@@ -67,6 +67,12 @@ public interface Player extends ViolentCreature {
 
     Optional<Trouser> trouser();
 
+    void gainHeadLife(int v);
+
+    void gainArmLife(int v);
+
+    void gainLegLife(int v);
+
     KungFuBook kungFuBook();
 
     Optional<ProtectKungFu> protectKungFu();
