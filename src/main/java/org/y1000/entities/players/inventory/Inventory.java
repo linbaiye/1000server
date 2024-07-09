@@ -3,12 +3,11 @@ package org.y1000.entities.players.inventory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.PlayerEvent;
-import org.y1000.item.Item;
-import org.y1000.item.DefaultStackItem;
+import org.y1000.item.*;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.InventorySlotSwappedEvent;
-import org.y1000.item.Weapon;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.clientevent.ClientDropItemEvent;
@@ -95,27 +94,6 @@ public final class Inventory {
 
     public Item remove(int slot) {
         return items.remove(slot);
-    }
-
-    public boolean remove(String name, int number, int slot, Player player) {
-        Validate.notNull(name);
-        Validate.isTrue(number > 0);
-        Validate.notNull(player);
-        Item item = getItem(slot);
-        if (item == null) {
-            return false;
-        }
-        if (item instanceof DefaultStackItem stackItem) {
-            if (stackItem.number() >= number) {
-                stackItem.decrease(number);
-            } else {
-                return false;
-            }
-        } else {
-            remove(slot);
-        }
-        player.emitEvent(new UpdateInventorySlotEvent(player, slot, getItem(slot)));
-        return true;
     }
 
     public boolean swap(int from, int to) {
@@ -289,6 +267,22 @@ public final class Inventory {
         }
     }
 
+    public boolean decrease(int slotId) {
+        assertRange(slotId);
+        Item item = getItem(slotId);
+        if (item == null) {
+            return false;
+        }
+        if (item instanceof AbstractStackItem stackItem) {
+            if (stackItem.decrease(1) <= 0) {
+                remove(slotId);
+            }
+        } else {
+            remove(slotId);
+        }
+        return true;
+    }
+
     public void sell(Collection<TradeItem> items, long profit, Player player) {
         Validate.notNull(player);
         Validate.isTrue(profit > 0);
@@ -325,6 +319,7 @@ public final class Inventory {
             UpdateInventorySlotEvent event = new UpdateInventorySlotEvent(player, dropItemEvent.sourceSlot(), getItem(dropItemEvent.sourceSlot()));
             eventSender.invoke(event);
             eventSender.invoke(new PlayerDropItemEvent(player, item.name(), dropItemEvent.number(), dropItemEvent.coordinate()));
+            item.dropSound().ifPresent(s -> eventSender.invoke(new EntitySoundEvent(player, s)));
         }
     }
 

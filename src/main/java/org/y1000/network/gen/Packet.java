@@ -75,6 +75,7 @@ private static final long serialVersionUID = 0L;
     GAINEXP(31),
     PROJECTILE(32),
     MONSTERMOVE(33),
+    LEARNKUNGFU(34),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -122,6 +123,7 @@ private static final long serialVersionUID = 0L;
         case 31: return GAINEXP;
         case 32: return PROJECTILE;
         case 33: return MONSTERMOVE;
+        case 34: return LEARNKUNGFU;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1067,6 +1069,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.MonsterMoveEventPacket.getDefaultInstance();
   }
 
+  public static final int LEARNKUNGFU_FIELD_NUMBER = 34;
+  /**
+   * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+   * @return Whether the learnKungFu field is set.
+   */
+  @java.lang.Override
+  public boolean hasLearnKungFu() {
+    return typedPacketCase_ == 34;
+  }
+  /**
+   * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+   * @return The learnKungFu.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.KungFuPacket getLearnKungFu() {
+    if (typedPacketCase_ == 34) {
+       return (org.y1000.network.gen.KungFuPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.KungFuPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.KungFuPacketOrBuilder getLearnKungFuOrBuilder() {
+    if (typedPacketCase_ == 34) {
+       return (org.y1000.network.gen.KungFuPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.KungFuPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1170,6 +1203,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 33) {
       output.writeMessage(33, (org.y1000.network.gen.MonsterMoveEventPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 34) {
+      output.writeMessage(34, (org.y1000.network.gen.KungFuPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1299,6 +1335,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 33) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(33, (org.y1000.network.gen.MonsterMoveEventPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 34) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(34, (org.y1000.network.gen.KungFuPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1437,6 +1477,10 @@ private static final long serialVersionUID = 0L;
         if (!getMonsterMove()
             .equals(other.getMonsterMove())) return false;
         break;
+      case 34:
+        if (!getLearnKungFu()
+            .equals(other.getLearnKungFu())) return false;
+        break;
       case 0:
       default:
     }
@@ -1571,6 +1615,10 @@ private static final long serialVersionUID = 0L;
       case 33:
         hash = (37 * hash) + MONSTERMOVE_FIELD_NUMBER;
         hash = (53 * hash) + getMonsterMove().hashCode();
+        break;
+      case 34:
+        hash = (37 * hash) + LEARNKUNGFU_FIELD_NUMBER;
+        hash = (53 * hash) + getLearnKungFu().hashCode();
         break;
       case 0:
       default:
@@ -1796,6 +1844,9 @@ private static final long serialVersionUID = 0L;
       if (monsterMoveBuilder_ != null) {
         monsterMoveBuilder_.clear();
       }
+      if (learnKungFuBuilder_ != null) {
+        learnKungFuBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -1956,6 +2007,10 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 33 &&
           monsterMoveBuilder_ != null) {
         result.typedPacket_ = monsterMoveBuilder_.build();
+      }
+      if (typedPacketCase_ == 34 &&
+          learnKungFuBuilder_ != null) {
+        result.typedPacket_ = learnKungFuBuilder_.build();
       }
     }
 
@@ -2122,6 +2177,10 @@ private static final long serialVersionUID = 0L;
         }
         case MONSTERMOVE: {
           mergeMonsterMove(other.getMonsterMove());
+          break;
+        }
+        case LEARNKUNGFU: {
+          mergeLearnKungFu(other.getLearnKungFu());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -2364,6 +2423,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 33;
               break;
             } // case 266
+            case 274: {
+              input.readMessage(
+                  getLearnKungFuFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 34;
+              break;
+            } // case 274
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -6654,6 +6720,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 33;
       onChanged();
       return monsterMoveBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.KungFuPacket, org.y1000.network.gen.KungFuPacket.Builder, org.y1000.network.gen.KungFuPacketOrBuilder> learnKungFuBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+     * @return Whether the learnKungFu field is set.
+     */
+    @java.lang.Override
+    public boolean hasLearnKungFu() {
+      return typedPacketCase_ == 34;
+    }
+    /**
+     * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+     * @return The learnKungFu.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.KungFuPacket getLearnKungFu() {
+      if (learnKungFuBuilder_ == null) {
+        if (typedPacketCase_ == 34) {
+          return (org.y1000.network.gen.KungFuPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.KungFuPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 34) {
+          return learnKungFuBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.KungFuPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+     */
+    public Builder setLearnKungFu(org.y1000.network.gen.KungFuPacket value) {
+      if (learnKungFuBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        learnKungFuBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 34;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+     */
+    public Builder setLearnKungFu(
+        org.y1000.network.gen.KungFuPacket.Builder builderForValue) {
+      if (learnKungFuBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        learnKungFuBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 34;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+     */
+    public Builder mergeLearnKungFu(org.y1000.network.gen.KungFuPacket value) {
+      if (learnKungFuBuilder_ == null) {
+        if (typedPacketCase_ == 34 &&
+            typedPacket_ != org.y1000.network.gen.KungFuPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.KungFuPacket.newBuilder((org.y1000.network.gen.KungFuPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 34) {
+          learnKungFuBuilder_.mergeFrom(value);
+        } else {
+          learnKungFuBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 34;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+     */
+    public Builder clearLearnKungFu() {
+      if (learnKungFuBuilder_ == null) {
+        if (typedPacketCase_ == 34) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 34) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        learnKungFuBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+     */
+    public org.y1000.network.gen.KungFuPacket.Builder getLearnKungFuBuilder() {
+      return getLearnKungFuFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.KungFuPacketOrBuilder getLearnKungFuOrBuilder() {
+      if ((typedPacketCase_ == 34) && (learnKungFuBuilder_ != null)) {
+        return learnKungFuBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 34) {
+          return (org.y1000.network.gen.KungFuPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.KungFuPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.KungFuPacket, org.y1000.network.gen.KungFuPacket.Builder, org.y1000.network.gen.KungFuPacketOrBuilder> 
+        getLearnKungFuFieldBuilder() {
+      if (learnKungFuBuilder_ == null) {
+        if (!(typedPacketCase_ == 34)) {
+          typedPacket_ = org.y1000.network.gen.KungFuPacket.getDefaultInstance();
+        }
+        learnKungFuBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.KungFuPacket, org.y1000.network.gen.KungFuPacket.Builder, org.y1000.network.gen.KungFuPacketOrBuilder>(
+                (org.y1000.network.gen.KungFuPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 34;
+      onChanged();
+      return learnKungFuBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

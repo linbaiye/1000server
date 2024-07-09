@@ -1,5 +1,7 @@
 package org.y1000.repository;
 
+import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.*;
 import org.y1000.kungfu.attack.*;
 import org.y1000.kungfu.breath.BreathKungFu;
@@ -112,7 +114,9 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
 
-    private KungFu create(String name) {
+    @Override
+    public KungFu create(String name) {
+        Validate.notNull(name);
         KungFuType kungFuType = kungFuSdb.getMagicType(name);
         return switch (kungFuType) {
             case QUANFA -> quanfaKungFu(name);
@@ -147,4 +151,6 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     public ProtectKungFu createProtection(String name) {
         return protectKungFu(name);
     }
+
+
 }

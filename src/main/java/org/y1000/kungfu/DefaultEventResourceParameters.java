@@ -2,7 +2,7 @@ package org.y1000.kungfu;
 
 import static org.y1000.kungfu.ParameterConstants.INI_MAGIC_DIV_VALUE;
 
-public class DefaultEventResourceParameters implements EventResourceParameters {
+public final class DefaultEventResourceParameters implements EventResourceParameters {
 
     private static final int INI_MUL_EVENTINPOWER  = 22;
     private static final int INI_MUL_EVENTOUTPOWER  = 22;

@@ -167,9 +167,19 @@ MaxCount,        最多持有数量；
         return getEnum(item, "HitType", AttackKungFuType::fromValue);
     }
 
+    @Override
+    public boolean canStack(String itemName) {
+        String s = get(itemName, "boDouble");
+        return "TRUE".equals(s);
+    }
+
     public boolean isMale(String itemName) {
         String s = get(itemName, "Sex");
         return "1".equals(s);
+    }
+
+    public String getDesc(String itemName) {
+        return get(itemName, "Desc");
     }
 
     @Override
@@ -260,9 +270,11 @@ MaxCount,        最多持有数量；
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
         for (String i: items) {
+            System.out.println("----------------------------");
+            System.out.println(i);
             for (String name : names) {
                 if (!StringUtils.isEmpty(itemSdb.get(i, name)))
-                    System.out.println(name + ":" + i + ", column:" + name + ", value:" + itemSdb.get(i, name));
+                    System.out.println(name + ": " + itemSdb.get(i, name));
             }
             //String v = itemSdb.get("生药", name);
         }

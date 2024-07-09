@@ -4,18 +4,29 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
 import org.y1000.item.*;
+import org.y1000.kungfu.KungFuFactory;
+import org.y1000.kungfu.KungFuSdb;
+import org.y1000.kungfu.KungFuType;
 import org.y1000.sdb.ItemDrugSdb;
 
 import java.util.NoSuchElementException;
 
-public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
+public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
 
     private final ItemSdbImpl itemSdb;
     private final ItemDrugSdb itemDrugSdb;
+    private final KungFuSdb kungFuSdb;
 
-    public ItemRepositoryImpl(ItemSdbImpl itemSdb, ItemDrugSdb itemDrugSdb) {
+    private final KungFuFactory kungFuFactory;
+
+    public ItemRepositoryImpl(ItemSdbImpl itemSdb,
+                              ItemDrugSdb itemDrugSdb,
+                              KungFuSdb kungFuSdb,
+                              KungFuFactory kungFuFactory) {
         this.itemSdb = itemSdb;
         this.itemDrugSdb = itemDrugSdb;
+        this.kungFuSdb = kungFuSdb;
+        this.kungFuFactory = kungFuFactory;
     }
 
 
@@ -24,16 +35,6 @@ public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
     public void save(long playerId, int slot, Item item) {
 
     }
-
-    /*
-                    .trouser(new Trouser("女子短裙"))
-                .clothing(new Clothing("女子上衣"))
-                .boot(new Boot("女子皮鞋"))
-                .hat(new Hat("女子血魔头盔"))
-                .chest(new Chest("女子雨中客道袍"))
-                .hair(new Hair("女子麻花辫", false))
-                .wrist(new Wrist("女子太极护腕"))
-     */
 
     public Equipment createEquipment(String name) {
         return switch (itemSdb.getEquipmentType(name)) {
@@ -66,8 +67,19 @@ public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
         }
         return switch (itemSdb.getType(name)) {
             case EQUIPMENT -> createEquipment(name);
-            default -> throw new NoSuchElementException();
+            default -> new DefaultItem(name, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
         };
+    }
+
+    private KungFuItem createKungFuItem(String name, long number) {
+        return KungFuItem.builder()
+                .eventSound(itemSdb.getSoundEvent(name))
+                .dropSound(itemSdb.getSoundDrop(name))
+                .name(name)
+                .number(number)
+                .kungFu(kungFuFactory.create(name))
+                .desc(itemSdb.getDesc(name))
+                .build();
     }
 
     @Override
@@ -75,13 +87,16 @@ public class ItemRepositoryImpl implements ItemRepository, ItemFactory {
         if (!itemSdb.contains(name)) {
             throw new NoSuchElementException(name + " is not a valid item.");
         }
+        if (!itemSdb.canStack(name)) {
+            return createItem(name);
+        }
         return switch (itemSdb.getType(name)) {
             case ARROW -> new DefaultStackItem(name, number, ItemType.ARROW, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
             case SELLING_GOODS -> new DefaultStackItem(name, number, ItemType.SELLING_GOODS, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
-            case EQUIPMENT -> createEquipment(name);
-            case MONEY -> DefaultStackItem.money(number);
+            case MONEY -> DefaultStackItem.money(number, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
             case PILL -> new Pill(name, number, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
-            default -> throw new NoSuchElementException();
+            case KUNGFU -> createKungFuItem(name, number);
+            default -> DefaultStackItem.builder().name(name).number(number).dropSound(itemSdb.getSoundDrop(name)).eventSound(itemSdb.getSoundEvent(name)).build();
         };
     }
 

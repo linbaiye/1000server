@@ -26,6 +26,7 @@ public final class PillAttributeProviderImpl implements PillAttributeProvider {
     private final int armLife;
     private final int headLife;
     private final int legLife;
+    private final int interval;
 
     public PillAttributeProviderImpl(String name,
                                      ItemSdb itemSdb,
@@ -40,11 +41,12 @@ public final class PillAttributeProviderImpl implements PillAttributeProvider {
         this.armLife = itemDrugSdb.getEArmLife(name) * ITEMDRUG_MUL_EVENTARMLIFE / ITEMDRUG_DIV_VALUE;
         this.headLife = itemDrugSdb.getEHeadLife(name) * ITEMDRUG_MUL_EVENTHEADLIFE / ITEMDRUG_DIV_VALUE;
         this.legLife = itemDrugSdb.getELegLife(name) * ITEMDRUG_MUL_EVENTLEGLIFE / ITEMDRUG_DIV_VALUE;
+        this.interval = itemDrugSdb.getUseInterval(name) * 10;
     }
 
     @Override
     public int useInterval() {
-        return itemDrugSdb.getUseInterval(name);
+        return interval;
     }
 
     @Override

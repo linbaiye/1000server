@@ -20,6 +20,7 @@ public enum ItemType implements ValueEnum  {
     PILL(13),
 
     STACK(Integer.MAX_VALUE),
+    SINGLE(Integer.MAX_VALUE - 1),
 
             ;
 

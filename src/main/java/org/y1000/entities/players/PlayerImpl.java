@@ -209,7 +209,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
     }
 
-    private final PillSlot[] pillSlots;
+    private final PillSlots pillSlots;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
@@ -263,7 +263,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                       PlayerAgedAttribute innerPower,
                       PlayerAgedAttribute outerPower,
                       int revival,
-                      YinYang yinYang) {
+                      YinYang yinYang,
+                      PillSlots pillSlots) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
         Objects.requireNonNull(kungFuBook, "kungFuBook can't be null.");
         Objects.requireNonNull(attackKungFu, "attackKungFu can't be null.");
@@ -294,9 +295,9 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         this.armLife = arm;
         this.legLife = leg;
         this.headLife = head;
+        this.pillSlots = pillSlots;
         this.changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         setRegenerateTimer();
-        pillSlots = new PillSlot[PillSlotSize];
     }
 
     private void setRegenerateTimer() {
@@ -395,46 +396,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         equipped.eventSound().ifPresent(s -> new EntitySoundEvent(this, s));
     }
 
-    private void usePill(Pill pill) {
-        for (int i = 0; i < pillSlots.length; i++) {
-            if (pillSlots[i] == null) {
-                emitEvent(PlayerTextEvent.havePill(this, pill.name()));
-                pill.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-                pillSlots[i] = new PillSlot(pill);
-                return;
-            }
-        }
-        emitEvent(PlayerTextEvent.noMorePill(this));
-    }
-
-    private void updatePillSlots(long delta) {
-        boolean needSync = false;
-        for (int i = 0; i < pillSlots.length; i++) {
-            if (pillSlots[i] == null) {
-                continue;
-            }
-            PillSlot pillSlot = pillSlots[i];
-            pillSlot.update(delta);
-            if (pillSlot.isTimeToRegen()) {
-                Pill pill = pillSlot.pill();
-                gainLife(pill.life());
-                gainHeadLife(pill.headLife());
-                gainArmLife(pill.armLife());
-                gainLegLife(pill.legLife());
-                gainPower(pill.power());
-                gainInnerPower(pill.innerPower());
-                gainOuterPower(pill.outerPower());
-                pillSlot.decEffectiveCounter();
-                pillSlot.resetTimer();
-                needSync = true;
-            }
-            if (!pillSlot.isEffective()) {
-                pillSlots[i] = null;
-            }
-        }
-        if (needSync)
-            emitEvent(new PlayerAttributeEvent(this));
-    }
 
     private void handleInventorySlotDoubleClick(int slotId) {
         Item item = inventory.getItem(slotId);
@@ -444,7 +405,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         if (item instanceof AbstractEquipment equipment) {
             equip(slotId, equipment);
         } else if (item instanceof Pill pill) {
-            usePill(pill);
+            if (inventory.decrease(slotId)) {
+                emitEvent(new UpdateInventorySlotEvent(this, slotId, item));
+                pillSlots.usePill(this, pill);
+            }
         }
     }
 
@@ -954,7 +918,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         cooldown(delta);
         regenerate(delta);
         updateKungFu(delta);
-        updatePillSlots(delta);
+        pillSlots.update(this, delta);
         state().update(this, delta);
     }
 

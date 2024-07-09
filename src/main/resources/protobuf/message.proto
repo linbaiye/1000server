@@ -299,6 +299,7 @@ message ProjectilePacket {
   int32 sprite = 4;
 }
 
+
 message Packet {
   oneof TypedPacket {
     PositionPacket positionPacket = 1;
@@ -331,6 +332,7 @@ message Packet {
     PlayerGainExpPacket gainExp = 31;
     ProjectilePacket projectile = 32;
     MonsterMoveEventPacket monsterMove = 33;
+    KungFuPacket learnKungFu = 34;
   }
 }
 

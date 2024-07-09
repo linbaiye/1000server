@@ -8,4 +8,6 @@ public interface KungFuFactory {
     AttackKungFu createAttackKungFu(String name);
 
     ProtectKungFu createProtection(String name);
+
+    KungFu create(String name);
 }

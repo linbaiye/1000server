@@ -1,6 +1,7 @@
 package org.y1000.kungfu;
 
 import org.apache.commons.lang3.StringUtils;
+import org.y1000.item.ItemSdbImpl;
 import org.y1000.sdb.AbstractSdbReader;
 
 import java.util.Set;
@@ -150,7 +151,6 @@ public final class KungFuSdb extends AbstractSdbReader {
         return get(name, "BowImage");
     }
 
-
     public KungFuType getMagicType(String name) {
         return getEnum(name, "MagicType", KungFuType::fromValue);
     }
@@ -159,26 +159,19 @@ public final class KungFuSdb extends AbstractSdbReader {
 //        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
 //        System.out.println(INSTANCE.get("无名剑法", "SoundStrike"));
 
-        Set<String> names = INSTANCE.names();
-        for (String name : names) {
-            try {
-                String magicType2 = INSTANCE.get(name, "MagicType");
-                if (StringUtils.isEmpty(magicType2)) {
-                    continue;
-                }
-                int magicType1 = Integer.parseInt(magicType2);
-                if (magicType1 > 10) {
-                    continue;
-                }
-                KungFuType magicType = INSTANCE.getMagicType(name);
-                if (magicType == KungFuType.BREATHING) {
-                    System.out.println("Name:" + name + ", magic:" + INSTANCE.getEMagic(name) + ", life: " + INSTANCE.getELife(name) + ", inner:" + INSTANCE.getEInPower(name) + ", outer:" + INSTANCE.getEOutPower(name));
-                }
-            } catch (Exception e) {
-                System.out.println(name);
-                e.printStackTrace();
+        KungFuSdb itemSdb = KungFuSdb.INSTANCE;
+//        Set<String> names = itemSdb.names();
+        Set<String> names = itemSdb.columnNames();
+        Set<String> items = itemSdb.names();
+        for (String i : items) {
+            System.out.println("----------------------------");
+            System.out.println(i);
+            for (String name : names) {
+                if (!StringUtils.isEmpty(itemSdb.get(i, name)))
+                    System.out.println(name + ": " + itemSdb.get(i, name));
             }
+            //String v = itemSdb.get("生药", name);
         }
-        //System.out.println(INSTANCE.get("无名刀法", "Recovery"));
     }
+
 }

@@ -7,6 +7,8 @@ public interface ItemSdb {
 
     AttackKungFuType getAttackKungFuType(String item);
 
+    boolean canStack(String itemName);
+
     ItemType getType(String itemName);
 
     String getSoundEvent(String itemName);

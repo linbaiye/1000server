@@ -458,5 +458,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.MonsterMoveEventPacketOrBuilder getMonsterMoveOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+   * @return Whether the learnKungFu field is set.
+   */
+  boolean hasLearnKungFu();
+  /**
+   * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+   * @return The learnKungFu.
+   */
+  org.y1000.network.gen.KungFuPacket getLearnKungFu();
+  /**
+   * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
+   */
+  org.y1000.network.gen.KungFuPacketOrBuilder getLearnKungFuOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

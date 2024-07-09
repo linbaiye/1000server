@@ -398,7 +398,7 @@ public final class Java {
       "\n\004name\030\001 \001(\t\022\r\n\005level\030\002 \001(\005\022\016\n\006kungFu\030\003 " +
       "\001(\010\"Z\n\020ProjectilePacket\022\n\n\002id\030\001 \001(\003\022\020\n\010t" +
       "argetId\030\002 \001(\003\022\030\n\020flyingTimeMillis\030\003 \001(\005\022" +
-      "\016\n\006sprite\030\004 \001(\005\"\217\020\n\006Packet\022?\n\016positionPa" +
+      "\016\n\006sprite\030\004 \001(\005\"\313\020\n\006Packet\022?\n\016positionPa" +
       "cket\030\001 \001(\0132%.org.y1000.network.gen.Posit" +
       "ionPacketH\000\022S\n\025creatureInterpolation\030\002 \001" +
       "(\01322.org.y1000.network.gen.CreatureInter" +
@@ -449,26 +449,27 @@ public final class Java {
       "inExpPacketH\000\022=\n\nprojectile\030  \001(\0132\'.org." +
       "y1000.network.gen.ProjectilePacketH\000\022D\n\013" +
       "monsterMove\030! \001(\0132-.org.y1000.network.ge" +
-      "n.MonsterMoveEventPacketH\000B\r\n\013TypedPacke" +
-      "t\"\210\001\n\033CreatureInterpolationPacket\022A\n\rint" +
-      "erpolation\030\001 \001(\0132*.org.y1000.network.gen" +
-      ".InterpolationPacket\022\n\n\002id\030\002 \001(\003\022\014\n\004name" +
-      "\030\003 \001(\t\022\014\n\004type\030\004 \001(\005\"\356\002\n\020PlayerInfoPacke" +
-      "t\022\n\n\002id\030\002 \001(\003\022\014\n\004male\030\003 \001(\010\022\014\n\004name\030\004 \001(" +
-      "\t\022\027\n\nweaponName\030\005 \001(\tH\000\210\001\001\022\026\n\tchestName\030" +
-      "\006 \001(\tH\001\210\001\001\022\025\n\010hairName\030\007 \001(\tH\002\210\001\001\022\024\n\007hat" +
-      "Name\030\010 \001(\tH\003\210\001\001\022\026\n\twristName\030\t \001(\tH\004\210\001\001\022" +
-      "\025\n\010bootName\030\n \001(\tH\005\210\001\001\022\031\n\014clothingName\030\013" +
-      " \001(\tH\006\210\001\001\022\030\n\013trouserName\030\014 \001(\tH\007\210\001\001B\r\n\013_" +
-      "weaponNameB\014\n\n_chestNameB\013\n\t_hairNameB\n\n" +
-      "\010_hatNameB\014\n\n_wristNameB\013\n\t_bootNameB\017\n\r" +
-      "_clothingNameB\016\n\014_trouserName\"\225\001\n\031Player" +
-      "InterpolationPacket\022A\n\rinterpolation\030\001 \001" +
-      "(\0132*.org.y1000.network.gen.Interpolation" +
-      "Packet\0225\n\004info\030\002 \001(\0132\'.org.y1000.network" +
-      ".gen.PlayerInfoPacket\" \n\022RemoveEntityPac" +
-      "ket\022\n\n\002id\030\001 \001(\003B\031\n\025org.y1000.network.gen" +
-      "P\001b\006proto3"
+      "n.MonsterMoveEventPacketH\000\022:\n\013learnKungF" +
+      "u\030\" \001(\0132#.org.y1000.network.gen.KungFuPa" +
+      "cketH\000B\r\n\013TypedPacket\"\210\001\n\033CreatureInterp" +
+      "olationPacket\022A\n\rinterpolation\030\001 \001(\0132*.o" +
+      "rg.y1000.network.gen.InterpolationPacket" +
+      "\022\n\n\002id\030\002 \001(\003\022\014\n\004name\030\003 \001(\t\022\014\n\004type\030\004 \001(\005" +
+      "\"\356\002\n\020PlayerInfoPacket\022\n\n\002id\030\002 \001(\003\022\014\n\004mal" +
+      "e\030\003 \001(\010\022\014\n\004name\030\004 \001(\t\022\027\n\nweaponName\030\005 \001(" +
+      "\tH\000\210\001\001\022\026\n\tchestName\030\006 \001(\tH\001\210\001\001\022\025\n\010hairNa" +
+      "me\030\007 \001(\tH\002\210\001\001\022\024\n\007hatName\030\010 \001(\tH\003\210\001\001\022\026\n\tw" +
+      "ristName\030\t \001(\tH\004\210\001\001\022\025\n\010bootName\030\n \001(\tH\005\210" +
+      "\001\001\022\031\n\014clothingName\030\013 \001(\tH\006\210\001\001\022\030\n\013trouser" +
+      "Name\030\014 \001(\tH\007\210\001\001B\r\n\013_weaponNameB\014\n\n_chest" +
+      "NameB\013\n\t_hairNameB\n\n\010_hatNameB\014\n\n_wristN" +
+      "ameB\013\n\t_bootNameB\017\n\r_clothingNameB\016\n\014_tr" +
+      "ouserName\"\225\001\n\031PlayerInterpolationPacket\022" +
+      "A\n\rinterpolation\030\001 \001(\0132*.org.y1000.netwo" +
+      "rk.gen.InterpolationPacket\0225\n\004info\030\002 \001(\013" +
+      "2\'.org.y1000.network.gen.PlayerInfoPacke" +
+      "t\" \n\022RemoveEntityPacket\022\n\n\002id\030\001 \001(\003B\031\n\025o" +
+      "rg.y1000.network.genP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -749,7 +750,7 @@ public final class Java {
     internal_static_org_y1000_network_gen_Packet_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_Packet_descriptor,
-        new java.lang.String[] { "PositionPacket", "CreatureInterpolation", "LoginPacket", "Interpolations", "ResponsePacket", "PlayerInterpolation", "RemoveEntity", "AttackEventResponsePacket", "AttackEventPacket", "HurtEventPacket", "ChangeStatePacket", "SwapInventorySlotPacket", "DropItem", "ShowItem", "UpdateSlot", "Text", "Unequip", "Equip", "TradeWindow", "ToggleKungFu", "SitDown", "StandUp", "Cooldown", "Attribute", "Sound", "Die", "PlayerRevive", "GainExp", "Projectile", "MonsterMove", "TypedPacket", });
+        new java.lang.String[] { "PositionPacket", "CreatureInterpolation", "LoginPacket", "Interpolations", "ResponsePacket", "PlayerInterpolation", "RemoveEntity", "AttackEventResponsePacket", "AttackEventPacket", "HurtEventPacket", "ChangeStatePacket", "SwapInventorySlotPacket", "DropItem", "ShowItem", "UpdateSlot", "Text", "Unequip", "Equip", "TradeWindow", "ToggleKungFu", "SitDown", "StandUp", "Cooldown", "Attribute", "Sound", "Die", "PlayerRevive", "GainExp", "Projectile", "MonsterMove", "LearnKungFu", "TypedPacket", });
     internal_static_org_y1000_network_gen_CreatureInterpolationPacket_descriptor =
       getDescriptor().getMessageTypes().get(46);
     internal_static_org_y1000_network_gen_CreatureInterpolationPacket_fieldAccessorTable = new

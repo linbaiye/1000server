@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.players.Player;
-import org.y1000.item.Hair;
-import org.y1000.item.DefaultStackItem;
-import org.y1000.item.ItemSdb;
-import org.y1000.item.Weapon;
+import org.y1000.item.*;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.trade.TradeItem;
@@ -156,5 +153,17 @@ class InventoryTest {
             inventory.add(new Hair("hat", true, "", ""));
         }
         assertEquals(inventory.maxCapacity() - 1, inventory.itemCount());
+    }
+
+    @Test
+    void decrease() {
+        int slot = inventory.add(Hair.builder().name("ha").eventSound("").dropSound("").male(false).build());
+        inventory.decrease(slot);
+        assertNull(inventory.getItem(slot));
+        slot = inventory.add(DefaultStackItem.builder().type(ItemType.STACK).name("test").number(2).build());
+        inventory.decrease(slot);
+        assertNotNull(inventory.getItem(slot));
+        inventory.decrease(slot);
+        assertNull(inventory.getItem(slot));
     }
 }

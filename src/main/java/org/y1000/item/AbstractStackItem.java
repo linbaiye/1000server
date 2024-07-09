@@ -14,19 +14,13 @@ public abstract class AbstractStackItem extends AbstractItem {
     }
 
 
-    public boolean canSplit(int number) {
-        return this.number >= number && number > 0;
-    }
-
-
-    public boolean increase(long n) {
+    public void increase(long n) {
         if (n < 0) {
-            return false;
+            return;
         }
         if (hasMoreCapacity(n)) {
             number += n;
         }
-        return true;
     }
 
 

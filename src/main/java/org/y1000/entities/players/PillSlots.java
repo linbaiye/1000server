@@ -6,7 +6,7 @@ import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.item.Pill;
 import org.y1000.message.PlayerTextEvent;
 
-final class PillSlots {
+public final class PillSlots {
 
     private static class PillSlot {
         private int counter;
@@ -48,7 +48,7 @@ final class PillSlots {
 
     private final PillSlot[] pillSlots = new PillSlot[PillSlotSize];
 
-    private void usePill(Player player, Pill pill) {
+    public void usePill(Player player, Pill pill) {
         Validate.notNull(player);
         for (int i = 0; i < pillSlots.length; i++) {
             if (pillSlots[i] == null) {
@@ -61,7 +61,7 @@ final class PillSlots {
         player.emitEvent(PlayerTextEvent.noMorePill(player));
     }
 
-    public void updatePillSlots(Player player, long delta) {
+    public void update(Player player, long delta) {
         Validate.notNull(player);
         boolean needSync = false;
         for (int i = 0; i < pillSlots.length; i++) {

@@ -320,6 +320,13 @@ final class RealmEntityEventSender implements EntityEventListener,
         entityEvent.accept(this);
     }
 
+
+    @Override
+    public void notifySelf(AbstractPlayerEvent playerEvent) {
+        Validate.notNull(playerEvent);
+        sendMessage(playerEvent.player(), playerEvent);
+    }
+
     public void remove(Player player) {
         scopeManager.remove(player);
         playerConnectionMap.remove(player);
