@@ -34,7 +34,6 @@ public interface Player extends ViolentCreature {
         return Optional.empty();
     }
 
-
     void pickItem(GroundedItem groundedItem, Function<GroundedItem, Item> creator);
 
     default Optional<Weapon> weapon() {
@@ -98,8 +97,6 @@ public interface Player extends ViolentCreature {
     int maxEnergy();
 
     int energy();
-
-    int armLife();
 
     void consumePower(int amount);
 

@@ -1,7 +1,5 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.attribute.Damage;
-
 public interface PlayerInnateAttributesProvider {
     default int avoidance() {
         return 25;

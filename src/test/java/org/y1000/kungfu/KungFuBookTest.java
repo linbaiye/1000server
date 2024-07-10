@@ -2,6 +2,7 @@ package org.y1000.kungfu;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.attack.SwordKungFu;
 import org.y1000.repository.KungFuBookRepositoryImpl;
@@ -12,11 +13,13 @@ class KungFuBookTest {
 
     private KungFuBook book;
 
-    private final KungFuBookFactory factory = new KungFuBookRepositoryImpl();
+    private final KungFuBookRepositoryImpl bookFactory = new KungFuBookRepositoryImpl();
+
+    private final KungFuFactory kungFuFactory = bookFactory;
 
     @BeforeEach
     void setUp() {
-        book = factory.create();
+        book = bookFactory.create();
     }
 
     @Test
@@ -28,4 +31,10 @@ class KungFuBookTest {
         assertNotNull(book.findKungFu(2, 1));
     }
 
+    @Test
+    void add() {
+        AttackKungFu kungFu = bookFactory.createAttackKungFu("杨家枪法");
+        assertEquals(1, book.addToBasic(kungFu));
+        assertEquals(0, book.addToBasic(kungFu));
+    }
 }

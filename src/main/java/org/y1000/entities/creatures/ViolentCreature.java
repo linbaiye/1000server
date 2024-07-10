@@ -1,7 +1,6 @@
 package org.y1000.entities.creatures;
 
-import org.y1000.entities.attribute.Damage;
-import org.y1000.realm.Realm;
+import org.y1000.entities.players.Damage;
 
 /**
  * A creature that attacks.

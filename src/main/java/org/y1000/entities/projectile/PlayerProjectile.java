@@ -2,7 +2,7 @@ package org.y1000.entities.projectile;
 
 import lombok.Builder;
 import org.y1000.entities.AttackableEntity;
-import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 
 public final class PlayerProjectile extends AbstractProjectile {

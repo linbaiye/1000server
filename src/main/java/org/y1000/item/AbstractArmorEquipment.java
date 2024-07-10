@@ -1,6 +1,8 @@
 package org.y1000.item;
 
 
+import org.y1000.entities.players.Armor;
+
 public abstract class AbstractArmorEquipment extends AbstractEquipment {
 
     private final ArmorItemAttributeProvider attributeProvider;
@@ -20,21 +22,8 @@ public abstract class AbstractArmorEquipment extends AbstractEquipment {
         return attributeProvider.avoidance();
     }
 
-    public int headArmor() {
-        return attributeProvider.headArmor();
-    }
-
-
-    public int armor() {
-        return attributeProvider.armor();
-    }
-
-    public int armArmor() {
-        return attributeProvider.armArmor();
-    }
-
-    public int legArmor() {
-        return attributeProvider.legArmor();
+    public Armor armor() {
+        return new Armor(attributeProvider.armor(), attributeProvider.headArmor(), attributeProvider.armArmor(), attributeProvider.legArmor());
     }
 
     public int recovery() {

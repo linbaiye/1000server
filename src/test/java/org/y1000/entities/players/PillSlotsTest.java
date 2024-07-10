@@ -21,7 +21,7 @@ class PillSlotsTest {
 
     private Player player;
 
-    private ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, KungFuSdb.INSTANCE, new KungFuBookRepositoryImpl());
+    private ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
 
     @BeforeEach
     void setUp() {

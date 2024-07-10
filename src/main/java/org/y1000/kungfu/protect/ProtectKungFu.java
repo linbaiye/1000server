@@ -1,6 +1,7 @@
 package org.y1000.kungfu.protect;
 
 import lombok.Builder;
+import org.y1000.entities.players.Armor;
 import org.y1000.kungfu.AbstractPeriodicalConsumingKungFu;
 import org.y1000.kungfu.KungFuType;
 
@@ -37,6 +38,11 @@ public final class ProtectKungFu extends AbstractPeriodicalConsumingKungFu {
         super(name, exp, parameters, parameters);
         this.parameters = parameters;
         resetTimer();
+    }
+
+
+    public Armor armor() {
+        return new Armor(bodyArmor(), headArmor(), armArmor(), legArmor());
     }
 
     public int bodyArmor() {

@@ -2,23 +2,16 @@ package org.y1000.entities.creatures.monster;
 
 
 import org.y1000.entities.Direction;
-import org.y1000.entities.attribute.AttributeProvider;
-import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.npc.AbstractViolentNpc;
 import org.y1000.entities.creatures.npc.NpcAI;
-import org.y1000.entities.creatures.npc.ViolentNpc;
 import org.y1000.entities.creatures.npc.ViolentNpcWanderingAI;
-import org.y1000.entities.players.Player;
-import org.y1000.entities.projectile.Projectile;
-import org.y1000.event.EntityEvent;
 import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.message.NpcInterpolation;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
-import org.y1000.util.UnaryAction;
 
 import java.util.Map;
 

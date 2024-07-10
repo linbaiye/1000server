@@ -3,7 +3,7 @@ package org.y1000.entities.creatures;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.AbstractEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.players.Damage;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;

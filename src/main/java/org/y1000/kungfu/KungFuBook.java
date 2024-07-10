@@ -22,17 +22,21 @@ public final class KungFuBook {
         this.basic = new HashMap<>();
     }
 
-    public boolean addToBasic(KungFu kungFu) {
+    public int addToBasic(KungFu kungFu) {
+        Validate.notNull(kungFu);
         if (basic.size() == BASIC_MAX) {
-            return false;
+            return 0;
+        }
+        if (basic.values().stream().anyMatch(k -> k.name().equals(kungFu.name()))) {
+            return 0;
         }
         for (int i = 1; i <= BASIC_MAX; i++) {
             if (!basic.containsKey(i)) {
                 basic.put(i, kungFu);
-                break;
+                return i;
             }
         }
-        return true;
+        return 0;
     }
 
     public void foreachUnnamed(BiConsumer<Integer, KungFu> kungFuBiConsumer) {

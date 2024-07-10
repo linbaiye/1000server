@@ -8,7 +8,7 @@ import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.item.*;
-import org.y1000.kungfu.TestingAttackKungFuParameters;
+import org.y1000.kungfu.*;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
@@ -16,8 +16,6 @@ import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.kungfu.AssistantKungFu;
-import org.y1000.kungfu.KungFuType;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.kungfu.attack.SwordKungFu;
@@ -34,6 +32,7 @@ import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.repository.ItemRepositoryImpl;
+import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.sdb.ItemDrugSdb;
 import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.util.Coordinate;
@@ -49,6 +48,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     private Inventory inventory;
 
+    private ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
 
     @BeforeEach
     public void setUp() {
@@ -449,5 +449,17 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
             player.gainPower(1);
         var event = eventListener.removeFirst(PlayerGainExpEvent.class);
         assertEquals("武功", event.toPacket().getGainExp().getName());
+    }
+
+    @Test
+    void armor() {
+        assertEquals(player.attackKungFu().armor().body(), player.bodyArmor());
+        enableProtectKungFu();
+        assertEquals(player.attackKungFu().armor().add(player.protectKungFu().get().armor()).body(), player.bodyArmor());
+        Chest chest = itemFactory.createChest(player.isMale() ? "男子黄金铠甲" : "女子黄金铠甲");
+        int slot = player.inventory().add(chest);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertEquals(player.attackKungFu().armor().add(player.protectKungFu().get().armor())
+                .add(chest.armor()).body(), player.bodyArmor());
     }
 }

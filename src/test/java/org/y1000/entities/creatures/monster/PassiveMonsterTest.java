@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.projectile.PlayerProjectile;
-import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.Player;

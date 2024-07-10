@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.*;
-import org.y1000.entities.attribute.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
@@ -148,8 +147,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     private int regenerateTimer;
 
-    private long tick;
-
     private YinYang yinYang;
 
     private final PlayerAgedAttribute innerPower;
@@ -170,44 +167,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Getter
     private AttackableEntity fightingEntity;
-
-    private static final int PillSlotSize = 3;
-
-    private static class PillSlot {
-        private int counter;
-        private int timeLeft;
-        private final Pill pill;
-
-        private PillSlot(Pill pill) {
-            this.pill = pill;
-            this.counter = pill.useCount();
-            this.timeLeft = pill.useInterval();
-        }
-
-        public void update(long delta) {
-            timeLeft -= delta;
-        }
-
-        public boolean isTimeToRegen() {
-            return timeLeft <= 0;
-        }
-
-        public boolean isEffective() {
-            return counter > 0;
-        }
-
-        public void decEffectiveCounter() {
-            counter--;
-        }
-
-        public void resetTimer() {
-            timeLeft = pill.useInterval();
-        }
-
-        public Pill pill() {
-            return pill;
-        }
-    }
 
     private final PillSlots pillSlots;
 
@@ -397,6 +356,18 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
 
+    private void learnKungFu(int inventorySlotId, KungFuItem kungFuItem) {
+        KungFu kungFu = kungFuItem.kungFu();
+        var slot = kungFuBook().addToBasic(kungFu);
+        if (slot == 0) {
+            return;
+        }
+        emitEvent(new PlayerLearnKungFuEvent(this, slot, kungFu));
+        inventory().decrease(inventorySlotId);
+        emitEvent(new UpdateInventorySlotEvent(this, inventorySlotId, inventory().getItem(inventorySlotId)));
+    }
+
+
     private void handleInventorySlotDoubleClick(int slotId) {
         Item item = inventory.getItem(slotId);
         if (item == null) {
@@ -409,6 +380,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                 emitEvent(new UpdateInventorySlotEvent(this, slotId, item));
                 pillSlots.usePill(this, pill);
             }
+        } else if (item instanceof KungFuItem kungFuItem) {
+            learnKungFu(slotId, kungFuItem);
         }
     }
 
@@ -786,6 +759,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                 changeAttackKungFu(kungFuBook.findUnnamedAttack(weaponInSlot.kungFuType()));
             }
         } else {
+            if (equipmentInSlot instanceof AbstractArmorEquipment armorEquipment &&
+                    armorEquipment.isMale() != isMale()) {
+                return;
+            }
             inventory.remove(slotId);
             Equipment currentEquipped = equippedEquipments.put(equipmentInSlot.equipmentType(), equipmentInSlot);
             emitEvent(new PlayerEquipEvent(this, equipmentInSlot.name()));
@@ -992,10 +969,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         return 0;
     }
 
-    @Override
-    public int armLife() {
-        return armLife.currentValue();
-    }
 
     @Override
     public void consumePower(int amount) {
@@ -1058,7 +1031,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public Damage damage() {
-        return innateAttributesProvider.damage().add(attackKungFu.damage());
+        var damage = innateAttributesProvider.damage().add(attackKungFu.damage());
+        return weapon().map(weapon -> weapon.damage().add(damage)).orElse(damage);
     }
 
     @Override
@@ -1114,11 +1088,22 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         return life.currentValue();
     }
 
+
+    private Armor aggregateArmor() {
+        var armor = protectKungFu().map(ProtectKungFu::armor)
+                .orElse(Armor.Empty)
+                .add(attackKungFu.armor());
+        for (var e : equippedEquipments.values()) {
+            if (e instanceof AbstractArmorEquipment armorEquipment) {
+                armor = armor.add(armorEquipment.armor());
+            }
+        }
+        return armor;
+    }
+
     @Override
     public int bodyArmor() {
-        var am = attackKungFu.bodyArmor();
-        return protectKungFu().map(k -> k.bodyArmor() + am)
-                .orElse(am);
+        return aggregateArmor().body();
     }
 
 

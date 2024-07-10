@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.monster;
 
-import org.y1000.entities.attribute.AttributeProvider;
+import org.y1000.entities.AttributeProvider;
 
 public class TestingMonsterAttributeProvider implements AttributeProvider {
     /*                .attributeProvider()

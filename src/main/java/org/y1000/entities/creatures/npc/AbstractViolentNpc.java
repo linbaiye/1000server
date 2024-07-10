@@ -2,9 +2,8 @@ package org.y1000.entities.creatures.npc;
 
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
-import org.y1000.entities.RemoveEntityEvent;
-import org.y1000.entities.attribute.AttributeProvider;
-import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.AttributeProvider;
+import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;

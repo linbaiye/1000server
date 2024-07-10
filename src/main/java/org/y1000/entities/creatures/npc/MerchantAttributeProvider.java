@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import org.apache.commons.lang3.StringUtils;
-import org.y1000.entities.attribute.AttributeProvider;
+import org.y1000.entities.AttributeProvider;
 import org.y1000.sdb.NpcSdb;
 
 import java.util.Optional;

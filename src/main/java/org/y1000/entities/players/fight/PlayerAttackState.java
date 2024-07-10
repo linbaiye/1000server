@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.projectile.PlayerProjectile;
-import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.players.PlayerImpl;

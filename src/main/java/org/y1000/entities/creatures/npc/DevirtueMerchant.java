@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.Builder;
 import org.y1000.entities.Direction;
-import org.y1000.entities.attribute.AttributeProvider;
+import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;

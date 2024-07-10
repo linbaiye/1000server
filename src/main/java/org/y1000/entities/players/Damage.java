@@ -1,4 +1,4 @@
-package org.y1000.entities.attribute;
+package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
 

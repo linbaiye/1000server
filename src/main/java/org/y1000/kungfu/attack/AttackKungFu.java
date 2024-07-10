@@ -2,7 +2,8 @@ package org.y1000.kungfu.attack;
 
 
 import org.y1000.entities.AttackableEntity;
-import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.players.Armor;
+import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.kungfu.KungFu;
@@ -19,6 +20,8 @@ public interface AttackKungFu extends KungFu {
     int armArmor();
 
     int legArmor();
+
+    Armor armor();
 
     int attackSpeed();
 

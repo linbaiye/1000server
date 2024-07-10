@@ -26,6 +26,10 @@ public abstract class AbstractPlayerUnitTestFixture extends AbstractUnitTestFixt
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 6));
     }
 
+    protected void enableProtectKungFu() {
+        player.handleClientEvent(new ClientToggleKungFuEvent(1, 10));
+    }
+
     protected void setup() {
         player = playerBuilder().build();
         mockedMap = Mockito.mock(RealmMap.class);

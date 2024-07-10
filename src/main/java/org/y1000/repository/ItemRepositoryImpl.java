@@ -15,17 +15,13 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
 
     private final ItemSdbImpl itemSdb;
     private final ItemDrugSdb itemDrugSdb;
-    private final KungFuSdb kungFuSdb;
-
     private final KungFuFactory kungFuFactory;
 
     public ItemRepositoryImpl(ItemSdbImpl itemSdb,
                               ItemDrugSdb itemDrugSdb,
-                              KungFuSdb kungFuSdb,
                               KungFuFactory kungFuFactory) {
         this.itemSdb = itemSdb;
         this.itemDrugSdb = itemDrugSdb;
-        this.kungFuSdb = kungFuSdb;
         this.kungFuFactory = kungFuFactory;
     }
 

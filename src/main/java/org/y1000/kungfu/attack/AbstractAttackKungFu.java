@@ -4,7 +4,8 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.players.Armor;
+import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.PlayerImpl;
@@ -221,6 +222,11 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
                 .findAny()
                 .map(m -> m.multiply(val))
                 .orElse(val);
+    }
+
+    @Override
+    public Armor armor() {
+        return new Armor(bodyArmor(), headArmor(), armArmor(), legArmor());
     }
 
     private int applyLevelToDamage(int damage) {

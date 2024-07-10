@@ -2,6 +2,7 @@ package org.y1000.message.serverevent;
 
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.item.AbstractStackItem;
 import org.y1000.item.Item;
 import org.y1000.item.DefaultStackItem;
 import org.y1000.network.gen.InventoryItemPacket;
@@ -28,7 +29,7 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
         InventoryItemPacket.Builder builder = InventoryItemPacket.newBuilder()
                 .setSlotId(slot)
                 .setName(item != null ? item.name() : "");
-        var number = item instanceof DefaultStackItem stackItem ? stackItem.number() : null;
+        var number = item instanceof AbstractStackItem stackItem ? stackItem.number() : null;
         if (number != null) {
             builder.setNumber(number);
         }

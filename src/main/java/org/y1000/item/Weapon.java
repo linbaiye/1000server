@@ -1,6 +1,6 @@
 package org.y1000.item;
 
-import org.y1000.entities.attribute.Damage;
+import org.y1000.entities.players.Damage;
 import org.y1000.kungfu.attack.AttackKungFuType;
 
 public final class Weapon extends AbstractEquipment {
