@@ -8,6 +8,8 @@ public interface Item {
 
     ItemType itemType();
 
+    String description();
+
     default Optional<String> dropSound() {
         return Optional.empty();
     }

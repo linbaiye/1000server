@@ -63,7 +63,9 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
         }
         return switch (itemSdb.getType(name)) {
             case EQUIPMENT -> createEquipment(name);
-            default -> new DefaultItem(name, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
+            default -> DefaultItem.builder().name(name).dropSound(itemSdb.getSoundDrop(name)).eventSound(itemSdb.getSoundEvent(name))
+                    .desc(itemSdb.getDesc(name))
+                    .build();
         };
     }
 
@@ -87,20 +89,18 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
             return createItem(name);
         }
         return switch (itemSdb.getType(name)) {
-            case ARROW -> new DefaultStackItem(name, number, ItemType.ARROW, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
-            case SELLING_GOODS -> new DefaultStackItem(name, number, ItemType.SELLING_GOODS, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
-            case MONEY -> DefaultStackItem.money(number, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
+            case ARROW -> new DefaultStackItem(name, number, ItemType.ARROW, itemSdb);
+            case SELLING_GOODS -> new DefaultStackItem(name, number, ItemType.SELLING_GOODS, itemSdb);
+            case MONEY -> new DefaultStackItem(name, number, ItemType.MONEY, itemSdb);
             case PILL -> new Pill(name, number, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
             case KUNGFU -> createKungFuItem(name, number);
-            default -> DefaultStackItem.builder().name(name).number(number).dropSound(itemSdb.getSoundDrop(name)).eventSound(itemSdb.getSoundEvent(name)).build();
+            default-> new DefaultStackItem(name, number, ItemType.STACK, itemSdb);
         };
     }
 
     @Override
     public Trouser createTrouser(String name) {
-        return Trouser.builder().name(name).male(itemSdb.isMale(name))
-                .dropSound(itemSdb.getSoundDrop(name))
-                .eventSound(itemSdb.getSoundEvent(name)).build();
+        return new Trouser(name, itemSdb);
     }
 
     @Override
@@ -115,12 +115,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
 
     @Override
     public Hair createHair(String name) {
-        return Hair.builder()
-                .name(name)
-                .male(itemSdb.isMale(name))
-                .dropSound(itemSdb.getSoundDrop(name))
-                .eventSound(itemSdb.getSoundEvent(name))
-                .build();
+        return new Hair(name, itemSdb);
     }
 
     @Override
@@ -140,6 +135,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
                 .male(itemSdb.isMale(name))
                 .dropSound(itemSdb.getSoundDrop(name))
                 .eventSound(itemSdb.getSoundEvent(name))
+                .desc(itemSdb.getDesc(name))
                 .build();
     }
 }

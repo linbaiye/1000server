@@ -532,6 +532,16 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
     }
 
+    private void handleRightClick(ClientRightClickEvent event) {
+        if (event.type() == RightClickType.INVENTORY) {
+            Item item = inventory.getItem(event.slotId());
+            if (item == null) {
+                return;
+            }
+            emitEvent(new PlayerItemAttributeEvent(this, event.page(), event.slotId(), item.description(), event.type()));
+        }
+    }
+
     @Override
     public void handleClientEvent(ClientEvent clientEvent) {
         if (stateEnum() == State.DIE) {
@@ -551,6 +561,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             standUp(false);
         } else if (clientEvent instanceof ClientMovementEvent movementEvent) {
             move(movementEvent);
+        } else if (clientEvent instanceof ClientRightClickEvent event) {
+            handleRightClick(event);
         }
     }
 
@@ -663,25 +675,15 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         toHurtOrDead(bodyDamage);
     }
 
-
-    private int headArmor() {
-        return 0;
-    }
-    private int armArmor() {
-        return 0;
-    }
-    private int legArmor() {
-        return 0;
-    }
-
     private void takeDamage(Damage damage) {
-        var damagedLife = Math.max(damage.bodyDamage() - bodyArmor(), 1);
+        var armor = aggregateArmor();
+        var damagedLife = Math.max(damage.bodyDamage() - armor.body(), 1);
         life.consume(damagedLife);
-        var damagedHead = Math.max(damage.headDamage() - headArmor(), 1);
+        var damagedHead = Math.max(damage.headDamage() - armor.head(), 1);
         headLife.consume(damagedHead);
-        var damagedArm = Math.max(damage.armDamage() - armArmor(), 1);
+        var damagedArm = Math.max(damage.armDamage() - armor.arm(), 1);
         armLife.consume(damagedArm);
-        var damagedLeg = Math.max(damage.legDamage() - legArmor(), 1);
+        var damagedLeg = Math.max(damage.legDamage() - armor.leg(), 1);
         legLife.consume(damagedLeg);
     }
 

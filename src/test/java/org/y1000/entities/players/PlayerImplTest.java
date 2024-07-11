@@ -292,7 +292,9 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void useBreath_shouldDisableProtection() {
-        PlayerImpl.PlayerImplBuilder builder = playerBuilder().protectKungFu(ProtectKungFu.builder().name("prot").exp(0).build());
+        ProtectionParameters parameters = Mockito.mock(ProtectionParameters.class);
+        when(parameters.disableSound()).thenReturn("");
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().protectKungFu(ProtectKungFu.builder().name("prot").exp(0).parameters(parameters).build());
         attachListener(builder);
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 9));
         assertTrue(player.protectKungFu().isEmpty());

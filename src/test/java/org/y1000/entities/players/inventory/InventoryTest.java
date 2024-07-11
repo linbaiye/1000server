@@ -33,6 +33,10 @@ class InventoryTest {
         player = Mockito.mock(Player.class);
     }
 
+    private Hair createHair() {
+        return new Hair("男子长发", ItemSdbImpl.INSTANCE);
+    }
+
     @Test
     void findByType() {
         inventory.add(new Weapon("test", itemSdb));
@@ -52,14 +56,14 @@ class InventoryTest {
     @Test
     void add() {
         assertEquals(0, inventory.add(null));
-        assertEquals(1, inventory.add(new Hair("hat", true, "","'")));
-        assertEquals(2, inventory.add(new Hair("hat2", true, "", "")));
+        assertEquals(1, inventory.add(createHair()));
+        assertEquals(2, inventory.add(createHair()));
         assertEquals(3, inventory.add(DefaultStackItem.money(100)));
         assertEquals(3, inventory.add(DefaultStackItem.money(100)));
         for (int i = 0; i < inventory.maxCapacity() - 3; i++) {
-            assertNotEquals(0, inventory.add(new Hair("hat", true, "", "")));
+            assertNotEquals(0, inventory.add(createHair()));
         }
-        assertEquals(0, inventory.add(new Hair("hat", true, "", "")));
+        assertEquals(0, inventory.add(createHair()));
     }
 
     @Test
@@ -87,7 +91,7 @@ class InventoryTest {
         inventory.add(new DefaultStackItem("肉", 2));
         assertTrue(inventory.canSell(items));
         for (int i = 0; i < inventory.maxCapacity() - 1; i++) {
-            inventory.add(new Hair("hat", true, "", ""));
+            inventory.add(createHair());
         }
         assertFalse(inventory.canSell(items));
         inventory.remove(inventory.maxCapacity());
@@ -117,12 +121,12 @@ class InventoryTest {
         assertFalse(inventory.canBuy(items, 1000));
         int slot = inventory.emptySlotSize() - 1;
         for (int i = 0; i < slot; i++) {
-            inventory.add(new Hair("hat", true, "", ""));
+            inventory.add(createHair());
         }
         assertTrue(inventory.canBuy(items, 10));
 
         // make inventory full.
-        inventory.add(new Hair("hat", true, "", ""));
+        inventory.add(createHair());
         assertFalse(inventory.canBuy(items, 10));
     }
 
@@ -150,14 +154,14 @@ class InventoryTest {
         assertEquals(inventory.maxCapacity() - 1, inventory.emptySlotSize());
         int emptySlot = inventory.emptySlotSize() - 1;
         for (int i = 0; i < emptySlot; i++) {
-            inventory.add(new Hair("hat", true, "", ""));
+            inventory.add(createHair());
         }
         assertEquals(inventory.maxCapacity() - 1, inventory.itemCount());
     }
 
     @Test
     void decrease() {
-        int slot = inventory.add(Hair.builder().name("ha").eventSound("").dropSound("").male(false).build());
+        int slot = inventory.add(createHair());
         inventory.decrease(slot);
         assertNull(inventory.getItem(slot));
         slot = inventory.add(DefaultStackItem.builder().type(ItemType.STACK).name("test").number(2).build());

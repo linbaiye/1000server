@@ -106,7 +106,7 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
     @Test
     void revive() {
         attributeProvider.life = 1000;
-        monster = monsterBuilder().attributeProvider(attributeProvider).build();
+        monster = monsterBuilder().ai(new MonsterWanderingAI()).attributeProvider(attributeProvider).build();
         Player attacker = Mockito.mock(Player.class);
         when(attacker.damage()).thenReturn(new Damage(10000, 100, 100, 100));
         monster.attackedBy(attacker);

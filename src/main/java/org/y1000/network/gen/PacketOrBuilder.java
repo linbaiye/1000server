@@ -473,5 +473,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.KungFuPacketOrBuilder getLearnKungFuOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+   * @return Whether the itemAttribute field is set.
+   */
+  boolean hasItemAttribute();
+  /**
+   * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+   * @return The itemAttribute.
+   */
+  org.y1000.network.gen.ItemAttributePacket getItemAttribute();
+  /**
+   * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+   */
+  org.y1000.network.gen.ItemAttributePacketOrBuilder getItemAttributeOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

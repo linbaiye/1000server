@@ -106,4 +106,9 @@ public final class TestingEntityEventSender implements EntityEventSender {
         entityMessages.putIfAbsent(source, new ArrayList<>());
         entityMessages.get(source).add(serverMessage);
     }
+
+    @Override
+    public void notifyVisiblePlayersAndSelf(Entity source, ServerMessage serverMessage) {
+
+    }
 }

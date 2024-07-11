@@ -8,6 +8,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.item.ItemSdbImpl;
 import org.y1000.item.ItemType;
 import org.y1000.item.DefaultStackItem;
 import org.y1000.realm.RealmMap;
@@ -89,7 +90,7 @@ class DevirtueMerchantTest extends AbstractNpcUnitTestFixture {
         sellItems.add(new MerchantItem("草药", 20));
         sellItems.add(new MerchantItem("丸药", 10));
         List<TradeItem> items = List.of(new TradeItem("草药", 1, 3), new TradeItem("丸药", 2, 4));
-        merchant.sell(player, items, (s, aLong) -> new DefaultStackItem(s, aLong, ItemType.STACK, "", ""));
+        merchant.sell(player, items, (s, aLong) -> new DefaultStackItem(s, aLong, ItemType.STACK, ItemSdbImpl.INSTANCE));
         assertTrue(inventory.findFirstStackItem(DefaultStackItem.MONEY).isPresent());
         inventory.findFirstStackItem(DefaultStackItem.MONEY).ifPresent(money -> assertEquals(1, money.number()));
     }

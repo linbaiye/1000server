@@ -31,6 +31,12 @@ message ClickPacket {
   int64 id = 1;
 }
 
+message RightClickPacket {
+  int32 type = 1;
+  int32 slotId = 2;
+  optional int32 page = 3;
+}
+
 message ClientKeyPressedPacket {
   int32 key = 1;
   int32 x = 2;
@@ -182,6 +188,7 @@ message ClientPacket {
     ClientStandUpPacket standUp = 12;
     ClientMerchantTradeItemsPacket sellItems = 13;
     ClientMerchantTradeItemsPacket buyItems = 14;
+    Client
   }
 }
 
@@ -299,6 +306,13 @@ message ProjectilePacket {
   int32 sprite = 4;
 }
 
+message ItemAttributePacket {
+  int32 type = 1;
+  int32 slotId = 2;
+  optional int32 page = 3;
+  string text = 4;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -333,6 +347,7 @@ message Packet {
     ProjectilePacket projectile = 32;
     MonsterMoveEventPacket monsterMove = 33;
     KungFuPacket learnKungFu = 34;
+    ItemAttributePacket itemAttribute = 35;
   }
 }
 

@@ -3,6 +3,7 @@ package org.y1000.entities.creatures.monster;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
+import org.y1000.entities.creatures.npc.ViolentNpcWanderingAI;
 import org.y1000.realm.RealmMap;
 
 public abstract class AbstractMonsterUnitTestFixture extends AbstractUnitTestFixture  {
@@ -19,7 +20,7 @@ public abstract class AbstractMonsterUnitTestFixture extends AbstractUnitTestFix
         attributeProvider = new TestingMonsterAttributeProvider();
         attributeProvider.life = 4000;
         attributeProvider.recovery = 100;
-        monster = monsterBuilder().realmMap(realmMap).attributeProvider(attributeProvider).build();
+        monster = monsterBuilder().realmMap(realmMap).ai(new MonsterWanderingAI()).attributeProvider(attributeProvider).build();
         eventListener = new TestingEventListener();
         monster.registerEventListener(eventListener);
     }

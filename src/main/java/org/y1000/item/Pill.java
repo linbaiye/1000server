@@ -6,7 +6,8 @@ public final class Pill extends AbstractStackItem {
 
     public Pill(String name,
                 long number, PillAttributeProvider attributeProvider) {
-        super(name, number, ItemType.PILL, attributeProvider.dropSound(), attributeProvider.eventSound());
+        super(name, number, ItemType.PILL, attributeProvider.dropSound(),
+                attributeProvider.eventSound(), attributeProvider.eventSound());
         this.attributeProvider = attributeProvider;
     }
 

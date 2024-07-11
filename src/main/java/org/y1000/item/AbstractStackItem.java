@@ -7,11 +7,17 @@ public abstract class AbstractStackItem extends AbstractItem {
     private static final long MAX_NUMBER = 100000000000L;
 
     public AbstractStackItem(String name, long number, ItemType type,
-    String dropSound, String eventSound) {
-        super(name, type, dropSound, eventSound);
+                             String dropSound, String eventSound) {
+        this(name, number, type, dropSound, eventSound, null);
+    }
+
+    public AbstractStackItem(String name, long number, ItemType type,
+                             String dropSound, String eventSound, String desc) {
+        super(name, type, dropSound, eventSound, desc);
         Validate.isTrue(number > 0, "number must > 0");
         this.number = number;
     }
+
 
 
     public void increase(long n) {

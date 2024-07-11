@@ -2,6 +2,7 @@ package org.y1000.entities.item;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.y1000.item.ItemSdbImpl;
 import org.y1000.item.ItemType;
 import org.y1000.item.DefaultStackItem;
 
@@ -13,7 +14,7 @@ class StackItemTest {
 
     @BeforeEach
     void setUp() {
-        stackItem = new DefaultStackItem( "test", 15, ItemType.ARROW, "", "");
+        stackItem = new DefaultStackItem( "test", 15, ItemType.ARROW, ItemSdbImpl.INSTANCE);
     }
 
     @Test

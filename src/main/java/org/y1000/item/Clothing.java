@@ -8,8 +8,8 @@ public final class Clothing extends AbstractEquipment {
     private final boolean male;
 
     @Builder
-    public Clothing(String name, boolean male, String dropSound, String eventSound) {
-        super(name, dropSound, eventSound);
+    public Clothing(String name, boolean male, String dropSound, String eventSound, String desc) {
+        super(name, dropSound, eventSound, desc);
         this.male = male;
     }
 

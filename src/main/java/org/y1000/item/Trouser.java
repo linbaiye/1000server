@@ -1,20 +1,13 @@
 package org.y1000.item;
 
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public final class Trouser extends AbstractEquipment {
+public final class Trouser extends AbstractSexualEquipment {
 
-    private final boolean male;
-
-    @Builder
-    public Trouser(String name, boolean male, String dropSound, String eventSound) {
-        super(name, dropSound, eventSound);
-        this.male = male;
+    public Trouser(String name, ItemSdb itemSdb) {
+        super(name, itemSdb);
     }
-
-
 
     @Override
     public EquipmentType equipmentType() {

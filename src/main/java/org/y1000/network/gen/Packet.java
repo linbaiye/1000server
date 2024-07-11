@@ -76,6 +76,7 @@ private static final long serialVersionUID = 0L;
     PROJECTILE(32),
     MONSTERMOVE(33),
     LEARNKUNGFU(34),
+    ITEMATTRIBUTE(35),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -124,6 +125,7 @@ private static final long serialVersionUID = 0L;
         case 32: return PROJECTILE;
         case 33: return MONSTERMOVE;
         case 34: return LEARNKUNGFU;
+        case 35: return ITEMATTRIBUTE;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1100,6 +1102,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.KungFuPacket.getDefaultInstance();
   }
 
+  public static final int ITEMATTRIBUTE_FIELD_NUMBER = 35;
+  /**
+   * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+   * @return Whether the itemAttribute field is set.
+   */
+  @java.lang.Override
+  public boolean hasItemAttribute() {
+    return typedPacketCase_ == 35;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+   * @return The itemAttribute.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ItemAttributePacket getItemAttribute() {
+    if (typedPacketCase_ == 35) {
+       return (org.y1000.network.gen.ItemAttributePacket) typedPacket_;
+    }
+    return org.y1000.network.gen.ItemAttributePacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ItemAttributePacketOrBuilder getItemAttributeOrBuilder() {
+    if (typedPacketCase_ == 35) {
+       return (org.y1000.network.gen.ItemAttributePacket) typedPacket_;
+    }
+    return org.y1000.network.gen.ItemAttributePacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1206,6 +1239,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 34) {
       output.writeMessage(34, (org.y1000.network.gen.KungFuPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 35) {
+      output.writeMessage(35, (org.y1000.network.gen.ItemAttributePacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1339,6 +1375,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 34) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(34, (org.y1000.network.gen.KungFuPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 35) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(35, (org.y1000.network.gen.ItemAttributePacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1481,6 +1521,10 @@ private static final long serialVersionUID = 0L;
         if (!getLearnKungFu()
             .equals(other.getLearnKungFu())) return false;
         break;
+      case 35:
+        if (!getItemAttribute()
+            .equals(other.getItemAttribute())) return false;
+        break;
       case 0:
       default:
     }
@@ -1619,6 +1663,10 @@ private static final long serialVersionUID = 0L;
       case 34:
         hash = (37 * hash) + LEARNKUNGFU_FIELD_NUMBER;
         hash = (53 * hash) + getLearnKungFu().hashCode();
+        break;
+      case 35:
+        hash = (37 * hash) + ITEMATTRIBUTE_FIELD_NUMBER;
+        hash = (53 * hash) + getItemAttribute().hashCode();
         break;
       case 0:
       default:
@@ -1847,6 +1895,9 @@ private static final long serialVersionUID = 0L;
       if (learnKungFuBuilder_ != null) {
         learnKungFuBuilder_.clear();
       }
+      if (itemAttributeBuilder_ != null) {
+        itemAttributeBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -2011,6 +2062,10 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 34 &&
           learnKungFuBuilder_ != null) {
         result.typedPacket_ = learnKungFuBuilder_.build();
+      }
+      if (typedPacketCase_ == 35 &&
+          itemAttributeBuilder_ != null) {
+        result.typedPacket_ = itemAttributeBuilder_.build();
       }
     }
 
@@ -2181,6 +2236,10 @@ private static final long serialVersionUID = 0L;
         }
         case LEARNKUNGFU: {
           mergeLearnKungFu(other.getLearnKungFu());
+          break;
+        }
+        case ITEMATTRIBUTE: {
+          mergeItemAttribute(other.getItemAttribute());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -2430,6 +2489,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 34;
               break;
             } // case 274
+            case 282: {
+              input.readMessage(
+                  getItemAttributeFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 35;
+              break;
+            } // case 282
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -6862,6 +6928,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 34;
       onChanged();
       return learnKungFuBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ItemAttributePacket, org.y1000.network.gen.ItemAttributePacket.Builder, org.y1000.network.gen.ItemAttributePacketOrBuilder> itemAttributeBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+     * @return Whether the itemAttribute field is set.
+     */
+    @java.lang.Override
+    public boolean hasItemAttribute() {
+      return typedPacketCase_ == 35;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+     * @return The itemAttribute.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ItemAttributePacket getItemAttribute() {
+      if (itemAttributeBuilder_ == null) {
+        if (typedPacketCase_ == 35) {
+          return (org.y1000.network.gen.ItemAttributePacket) typedPacket_;
+        }
+        return org.y1000.network.gen.ItemAttributePacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 35) {
+          return itemAttributeBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ItemAttributePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+     */
+    public Builder setItemAttribute(org.y1000.network.gen.ItemAttributePacket value) {
+      if (itemAttributeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        itemAttributeBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 35;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+     */
+    public Builder setItemAttribute(
+        org.y1000.network.gen.ItemAttributePacket.Builder builderForValue) {
+      if (itemAttributeBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        itemAttributeBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 35;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+     */
+    public Builder mergeItemAttribute(org.y1000.network.gen.ItemAttributePacket value) {
+      if (itemAttributeBuilder_ == null) {
+        if (typedPacketCase_ == 35 &&
+            typedPacket_ != org.y1000.network.gen.ItemAttributePacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.ItemAttributePacket.newBuilder((org.y1000.network.gen.ItemAttributePacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 35) {
+          itemAttributeBuilder_.mergeFrom(value);
+        } else {
+          itemAttributeBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 35;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+     */
+    public Builder clearItemAttribute() {
+      if (itemAttributeBuilder_ == null) {
+        if (typedPacketCase_ == 35) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 35) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        itemAttributeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+     */
+    public org.y1000.network.gen.ItemAttributePacket.Builder getItemAttributeBuilder() {
+      return getItemAttributeFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ItemAttributePacketOrBuilder getItemAttributeOrBuilder() {
+      if ((typedPacketCase_ == 35) && (itemAttributeBuilder_ != null)) {
+        return itemAttributeBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 35) {
+          return (org.y1000.network.gen.ItemAttributePacket) typedPacket_;
+        }
+        return org.y1000.network.gen.ItemAttributePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ItemAttributePacket, org.y1000.network.gen.ItemAttributePacket.Builder, org.y1000.network.gen.ItemAttributePacketOrBuilder> 
+        getItemAttributeFieldBuilder() {
+      if (itemAttributeBuilder_ == null) {
+        if (!(typedPacketCase_ == 35)) {
+          typedPacket_ = org.y1000.network.gen.ItemAttributePacket.getDefaultInstance();
+        }
+        itemAttributeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ItemAttributePacket, org.y1000.network.gen.ItemAttributePacket.Builder, org.y1000.network.gen.ItemAttributePacketOrBuilder>(
+                (org.y1000.network.gen.ItemAttributePacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 35;
+      onChanged();
+      return itemAttributeBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

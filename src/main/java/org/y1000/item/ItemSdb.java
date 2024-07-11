@@ -43,4 +43,6 @@ public interface ItemSdb {
 
     int getArmorLeg(String name);
 
+    String getDesc(String name);
+
 }

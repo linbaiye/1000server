@@ -98,4 +98,7 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     default void visit(PlayerShootEvent event) {
         visit((EntityEvent) event);
     }
+    default void visit(PlayerItemAttributeEvent event) {
+
+    }
 }

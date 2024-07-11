@@ -20,4 +20,6 @@ public interface ArmorItemAttributeProvider {
 
     boolean isMale();
 
+    String description();
+
 }

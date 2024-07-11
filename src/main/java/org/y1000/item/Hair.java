@@ -4,15 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public final class Hair extends AbstractEquipment {
-
-    private final boolean male;
+public final class Hair extends AbstractSexualEquipment {
 
     @Builder
-    public Hair(String name, boolean male, String dropSound, String eventSound) {
-        super(name, dropSound, eventSound);
-        this.male = male;
+    public Hair(String name, ItemSdb itemSdb) {
+        super(name, itemSdb);
     }
+
 
     @Override
     public EquipmentType equipmentType() {

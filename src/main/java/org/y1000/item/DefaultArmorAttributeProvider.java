@@ -55,4 +55,9 @@ public final class DefaultArmorAttributeProvider implements ArmorItemAttributePr
     public boolean isMale() {
         return itemSdb.isMale(itemName);
     }
+
+    @Override
+    public String description() {
+        return null;
+    }
 }

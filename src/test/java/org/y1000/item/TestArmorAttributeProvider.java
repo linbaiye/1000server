@@ -45,4 +45,9 @@ public class TestArmorAttributeProvider implements ArmorItemAttributeProvider {
     public boolean isMale() {
         return false;
     }
+
+    @Override
+    public String description() {
+        return null;
+    }
 }

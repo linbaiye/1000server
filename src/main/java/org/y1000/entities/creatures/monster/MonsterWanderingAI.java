@@ -1,6 +1,5 @@
 package org.y1000.entities.creatures.monster;
 
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcAI;
 import org.y1000.entities.creatures.npc.ViolentNpcWanderingAI;
@@ -21,6 +20,10 @@ public final class MonsterWanderingAI implements NpcAI {
     public MonsterWanderingAI(ViolentNpcWanderingAI wrappedAi) {
         this.wrappedAi = wrappedAi;
         resetCounter();
+    }
+
+    public MonsterWanderingAI() {
+        this(new ViolentNpcWanderingAI());
     }
 
 

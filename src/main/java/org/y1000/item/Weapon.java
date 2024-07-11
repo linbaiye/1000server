@@ -10,7 +10,7 @@ public final class Weapon extends AbstractEquipment {
     private final Damage damage;
 
     public Weapon(String name, ItemSdb itemSdb) {
-        super(name, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name));
+        super(name, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name), itemSdb.getDesc(name));
         this.itemSdb = itemSdb;
         this.damage = new Damage(itemSdb.getDamageBody(name()), itemSdb.getDamageHead(name()), itemSdb.getDamageArm(name()), itemSdb.getDamageLeg(name()));
     }
