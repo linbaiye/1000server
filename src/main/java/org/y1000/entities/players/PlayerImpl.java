@@ -352,7 +352,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         emitEvent(new PlayerUnequipEvent(this, equipped.equipmentType()));
         int slot = inventory.add(equipped);
         emitEvent(new UpdateInventorySlotEvent(this, slot, equipped));
-        equipped.eventSound().ifPresent(s -> new EntitySoundEvent(this, s));
+        equipped.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
 
@@ -365,6 +365,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         emitEvent(new PlayerLearnKungFuEvent(this, slot, kungFu));
         inventory().decrease(inventorySlotId);
         emitEvent(new UpdateInventorySlotEvent(this, inventorySlotId, inventory().getItem(inventorySlotId)));
+        kungFuItem.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
 
@@ -434,6 +435,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         if (stateEnum() == State.SIT) {
             if (this.protectKungFu != null) {
                 emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
+                emitEvent(new EntitySoundEvent(this, this.protectKungFu.disableSound()));
                 this.protectKungFu = null;
             }
             this.breathKungFu = newBreath;
@@ -646,6 +648,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         } else {
             onKilled();
         }
+        emitEvent(new PlayerAttributeEvent(this));
     }
 
 
@@ -774,9 +777,14 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
     }
 
+
+
     @Override
     public int attackSpeed() {
-        return innateAttributesProvider.attackSpeed() + attackKungFu.attackSpeed();
+        var speed = innateAttributesProvider.attackSpeed()
+                + attackKungFu.attackSpeed();
+        return weapon().map(w -> speed - w.attackSpeed())
+                .orElse(speed);
     }
 
     public Optional<Weapon> weapon() {
@@ -900,8 +908,14 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     public int recovery() {
-        int kfr = attackKungFu != null ? attackKungFu.recovery() : 0;
-        return innateAttributesProvider.recovery() + kfr;
+        int r = attackKungFu.recovery() + innateAttributesProvider.recovery() -
+                weapon().map(Weapon::recovery).orElse(0);
+        for (Equipment equipment : equippedEquipments.values()) {
+            if (equipment instanceof AbstractArmorEquipment armorEquipment) {
+                r -= armorEquipment.recovery();
+            }
+        }
+        return r;
     }
 
     @Override
@@ -1020,6 +1034,21 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
+    public int headPercent() {
+        return headLife.percent();
+    }
+
+    @Override
+    public int armPercent() {
+        return armLife.percent();
+    }
+
+    @Override
+    public int legPercent() {
+        return legLife.percent();
+    }
+
+    @Override
     public Inventory inventory() {
         return inventory;
     }
@@ -1087,6 +1116,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     public int currentLife() {
         return life.currentValue();
     }
+
 
 
     private Armor aggregateArmor() {

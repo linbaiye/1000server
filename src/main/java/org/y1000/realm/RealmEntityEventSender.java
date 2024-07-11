@@ -144,8 +144,10 @@ final class RealmEntityEventSender implements EntityEventListener,
         notifyVisiblePlayersAndSelf(event.source(), event);
     }
 
-    private void notifyVisiblePlayersAndSelf(Entity source,
+    public void notifyVisiblePlayersAndSelf(Entity source,
                                              ServerMessage message) {
+        Validate.notNull(source);
+        Validate.notNull(message);
         doNotifyVisiblePlayers(source, message);
         if (source instanceof Player player) {
             sendMessage(player, message);

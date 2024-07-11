@@ -16,8 +16,11 @@ import org.y1000.util.Coordinate;
 import java.util.Map;
 
 public abstract class AbstractMonster extends AbstractViolentNpc implements Monster {
+
+    private final NpcAI initAi;
     public AbstractMonster(long id, Coordinate coordinate, Direction direction, String name, Map<State, Integer> stateMillis, AttributeProvider attributeProvider, RealmMap realmMap, NpcAI ai) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai);
+        this.initAi = ai;
     }
 
     @Override
@@ -38,6 +41,6 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
     @Override
     public void revive(Coordinate coordinate) {
         doRevive(coordinate);
-        super.changeAI(new MonsterWanderingAI(new ViolentNpcWanderingAI()));
+        super.changeAI(initAi);
     }
 }

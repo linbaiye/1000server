@@ -12,6 +12,7 @@ import java.util.Set;
 public final class ProjectileManager {
     private final Set<Projectile> projectiles;
 
+
     public ProjectileManager() {
         this.projectiles = new HashSet<>();
     }

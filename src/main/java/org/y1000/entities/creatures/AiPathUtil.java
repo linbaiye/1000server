@@ -24,8 +24,8 @@ public final class AiPathUtil {
 
 
     public static void moveProcess(Npc npc, Coordinate dest,
-                                                      Coordinate previous,
-                                                      Action noPathAction, int speed) {
+                                   Coordinate previous,
+                                   Action noPathAction, int speed) {
         Direction direction = AiPathUtil.computeNextMoveDirection(npc, dest, previous);
         if (direction == null) {
             noPathAction.invoke();

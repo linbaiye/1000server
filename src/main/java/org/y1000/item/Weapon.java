@@ -19,6 +19,19 @@ public final class Weapon extends AbstractEquipment {
         return itemSdb.getAttackKungFuType(name());
     }
 
+    public int attackSpeed() {
+        return itemSdb.getAttackSpeed(name());
+    }
+
+    public int avoidance() {
+        return itemSdb.getAvoid(name());
+    }
+
+    public int recovery() {
+        return itemSdb.getRecovery(name());
+    }
+
+
     @Override
     public EquipmentType equipmentType() {
         return EquipmentType.WEAPON;

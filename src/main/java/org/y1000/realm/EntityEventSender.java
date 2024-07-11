@@ -27,8 +27,9 @@ public interface EntityEventSender {
 
     void notifyVisiblePlayers(Entity source, ServerMessage serverMessage);
 
+    void notifyVisiblePlayersAndSelf(Entity source, ServerMessage serverMessage);
+
     default void notifySelf(AbstractPlayerEvent playerEvent) {
 
     }
-
 }

@@ -34,6 +34,9 @@ public final class PlayerAttributeEvent extends AbstractPlayerEvent{
                 .setMaxOuterPower(player.maxOuterPower())
                 .setCurEnergy(player.energy())
                 .setMaxEnergy(player.maxEnergy())
+                .setArmPercent(player.armPercent())
+                .setHeadPercent(player.headPercent())
+                .setLegPercent(player.legPercent())
                 .build();
     }
 }

@@ -188,6 +188,11 @@ MaxCount,        最多持有数量；
     }
 
     @Override
+    public int getAttackSpeed(String itemName) {
+        return getIntOrZero(itemName, "AttackSpeed");
+    }
+
+    @Override
     public ItemType getType(String itemName) {
         return getEnum(itemName, ITEM_TYPE, ItemType::fromValue);
     }
@@ -212,11 +217,11 @@ MaxCount,        最多持有数量；
         return getInt(itemName, "Price");
     }
     public int getRecovery(String name) {
-        return getInt(name, "Recovery");
+        return getIntOrZero(name, "Recovery");
     }
 
     public int getAvoidance(String name) {
-        return getInt(name, "Avoid");
+        return getIntOrZero(name, "Avoid");
     }
 
     public int getAccuracy(String name) {

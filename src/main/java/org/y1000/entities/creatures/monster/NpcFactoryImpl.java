@@ -92,6 +92,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .realmMap(map)
                 .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                 .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
+                .ai(name.equals("稻草人") ? DoNothingAI.INSTANCE :  new MonsterWanderingAI(new ViolentNpcWanderingAI()))
                 .attackSkill(createAttackSkill(name))
                 .build();
     }

@@ -79,7 +79,6 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
     }
 
 
-
     public void onPlayerEvent(PlayerDataEvent dataEvent,
                               EntityManager<Npc> npcManager) {
         Validate.notNull(npcManager);
@@ -107,6 +106,7 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
             delete(playerLeftEvent.player());
         } else if (entityEvent instanceof PlayerShootEvent shootEvent) {
             projectileManager.add(shootEvent.projectile());
+            eventSender.notifyVisiblePlayersAndSelf(shootEvent.source(), shootEvent);
         } else if (entityEvent instanceof PlayerLearnKungFuEvent learnKungFuEvent) {
             eventSender.notifySelf(learnKungFuEvent);
         }

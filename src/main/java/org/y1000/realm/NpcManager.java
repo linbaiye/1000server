@@ -89,8 +89,17 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
         add(merchant);
     }
 
+    private void spawnDaocaoren(String name, RealmMap map) {
+        add(npcFactory.createMonster("稻草人", idGenerator.next(), map, Coordinate.xy(178, 40)));
+    }
+
 
     private void respawn(Npc npc) {
+        if (npc.name().equals("稻草人")) {
+            npc.revive(npc.spawnCoordinate());
+            add(npc);
+            return;
+        }
         List<MonsterSpawnSetting> settings = getSettings(npc.name());
         for (MonsterSpawnSetting setting : settings) {
             if (setting.range().contains(npc.spawnCoordinate())) {
@@ -108,6 +117,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
             List<MonsterSpawnSetting> settings = getSettings("牛");
             settings.forEach(setting -> spawnMonsters(name, realmMap, setting));
             spawnMerchant("老板娘", realmMap);
+            spawnDaocaoren("", realmMap);
 //            var npcs = create(name, realmMap, setting.get(0));
 //            List<AbstractMonster> npcs = List.of(
 //                    npcFactory.createMonster("犀牛", idGenerator.next(), re)),

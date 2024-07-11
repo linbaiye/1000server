@@ -117,4 +117,8 @@ public interface Player extends ViolentCreature {
     void gainAttackExp(int amount);
 
     void gainRangedAttackExp(int amount);
+
+    int headPercent();
+    int armPercent();
+    int legPercent();
 }
