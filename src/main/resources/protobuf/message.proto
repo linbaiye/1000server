@@ -33,7 +33,7 @@ message ClickPacket {
 
 message RightClickPacket {
   int32 type = 1;
-  int32 slotId = 2;
+  optional int32 slotId = 2;
   optional int32 page = 3;
 }
 
@@ -267,6 +267,25 @@ message AttributePacket {
   int32 legPercent = 13;
 }
 
+message PlayerRightClickAttributePacket {
+  int32 attackSpeed = 1;
+  int32 maxLife = 2;
+  int32 avoidance = 3;
+  int32 maxPower = 4;
+  int32 recovery = 5;
+  int32 maxInnerPower = 6;
+  int32 maxOuterPower = 8;
+  int32 maxEnergy = 10;
+  int32 bodyDamage = 7;
+  int32 headDamage = 9;
+  int32 armDamage = 11;
+  int32 legDamage = 12;
+  int32 bodyArmor = 13;
+  int32 headArmor = 14;
+  int32 armArmor = 15;
+  int32 legArmor = 16;
+}
+
 message PlayerUnequipPacket {
   int64 id = 1;
   int32 equipmentType = 2;
@@ -348,6 +367,7 @@ message Packet {
     MonsterMoveEventPacket monsterMove = 33;
     KungFuPacket learnKungFu = 34;
     ItemAttributePacket itemAttribute = 35;
+    PlayerRightClickAttributePacket rightClickAttribute = 36;
   }
 }
 

@@ -18,6 +18,12 @@ public abstract class AbstractStackItem extends AbstractItem {
         this.number = number;
     }
 
+    public AbstractStackItem(String name, ItemType type, long number, ItemSdb itemSdb) {
+        super(name, type, itemSdb);
+        Validate.isTrue(number > 0, "number must > 0");
+        this.number = number;
+    }
+
 
     public void increase(long n) {
         if (n < 0) {

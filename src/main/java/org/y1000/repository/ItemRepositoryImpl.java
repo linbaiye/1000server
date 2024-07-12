@@ -5,8 +5,6 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
 import org.y1000.item.*;
 import org.y1000.kungfu.KungFuFactory;
-import org.y1000.kungfu.KungFuSdb;
-import org.y1000.kungfu.KungFuType;
 import org.y1000.sdb.ItemDrugSdb;
 
 import java.util.NoSuchElementException;
@@ -85,15 +83,22 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
         if (!itemSdb.contains(name)) {
             throw new NoSuchElementException(name + " is not a valid item.");
         }
+
+        if (!ItemType.contains(itemSdb.getTypeValue(name))) {
+            return itemSdb.canStack(name) ? new DefaultStackItem(name, number, ItemType.STACK, itemSdb) :
+                    new DefaultItem(name, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name), itemSdb.getDesc(name));
+        }
         if (!itemSdb.canStack(name)) {
             return createItem(name);
         }
         return switch (itemSdb.getType(name)) {
+            case DYE -> new Dye(name, number, itemSdb);
             case ARROW -> new DefaultStackItem(name, number, ItemType.ARROW, itemSdb);
             case SELLING_GOODS -> new DefaultStackItem(name, number, ItemType.SELLING_GOODS, itemSdb);
             case MONEY -> new DefaultStackItem(name, number, ItemType.MONEY, itemSdb);
             case PILL -> new Pill(name, number, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
             case KUNGFU -> createKungFuItem(name, number);
+            case BANK_INVENTORY -> new BankInventory(name, number, itemSdb);
             default-> new DefaultStackItem(name, number, ItemType.STACK, itemSdb);
         };
     }

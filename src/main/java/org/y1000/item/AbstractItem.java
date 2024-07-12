@@ -27,6 +27,14 @@ public abstract class AbstractItem implements Item {
         this.description = description != null ? description : "";
     }
 
+    public AbstractItem(String name, ItemType type, ItemSdb itemSdb) {
+        this.name = name;
+        this.type = type;
+        this.dropSound = StringUtils.isEmpty(itemSdb.getSoundDrop(name)) ? null : itemSdb.getSoundDrop(name);
+        this.eventSound = StringUtils.isEmpty(itemSdb.getSoundEvent(name)) ? null : itemSdb.getSoundEvent(name);
+        this.description = itemSdb.getDesc(name) != null ? itemSdb.getDesc(name) : "";
+    }
+
 
     @Override
     public String name() {

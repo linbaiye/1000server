@@ -4,6 +4,7 @@ package org.y1000.message;
 public enum RightClickType implements ValueEnum {
     INVENTORY(1),
     KUNGFU(2),
+    CHARACTER(3),
     ;
     private final int v;
 

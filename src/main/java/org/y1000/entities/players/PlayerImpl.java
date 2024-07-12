@@ -541,6 +541,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         } else if (event.type() == RightClickType.KUNGFU) {
             Optional<KungFu> kungFu = kungFuBook.findKungFu(event.page(), event.slotId());
             kungFu.ifPresent(k -> emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), k.description(), event.type())));
+        } else if (event.type() == RightClickType.CHARACTER) {
+
         }
     }
 

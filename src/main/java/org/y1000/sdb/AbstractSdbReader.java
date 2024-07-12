@@ -108,4 +108,8 @@ public abstract class AbstractSdbReader {
     protected void read(String name) {
         read(name, "GBK");
     }
+
+    public int getTypeValue(String itemName) {
+        return getInt(itemName, "Type");
+    }
 }
