@@ -25,15 +25,16 @@ import org.y1000.kungfu.protect.ProtectionParameters;
 import org.y1000.message.InputResponseMessage;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.PositionType;
+import org.y1000.message.RightClickType;
 import org.y1000.message.clientevent.*;
 import org.y1000.message.clientevent.input.RightMouseClick;
 import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
+import org.y1000.network.gen.ItemAttributePacket;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
-import org.y1000.sdb.ItemDrugSdb;
 import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.util.Coordinate;
 
@@ -48,7 +49,8 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     private Inventory inventory;
 
-    private ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
+    private final ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
+    private final KungFuFactory kungFuFactory = new KungFuBookRepositoryImpl();
 
     @BeforeEach
     public void setUp() {
@@ -463,5 +465,40 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertEquals(player.attackKungFu().armor().add(player.protectKungFu().get().armor())
                 .add(chest.armor()).body(), player.bodyArmor());
+    }
+
+    @Test
+    void rightClickInventorySlot() {
+        var slot = player.inventory().add(itemFactory.createItem("生药", 2));
+        player.handleClientEvent(new ClientRightClickEvent(RightClickType.INVENTORY, slot, 0));
+        ItemOrKungFuAttributeEvent event = eventListener.removeFirst(ItemOrKungFuAttributeEvent.class);
+        assertTrue(event.toPacket().getItemAttribute().getText().contains("身体"));
+    }
+
+    @Test
+    void rightClickUnnamedKungFu() {
+        player.handleClientEvent(new ClientRightClickEvent(RightClickType.KUNGFU, 1, 1));
+        ItemOrKungFuAttributeEvent event = eventListener.removeFirst(ItemOrKungFuAttributeEvent.class);
+        ItemAttributePacket itemAttribute = event.toPacket().getItemAttribute();
+        var text = itemAttribute.getText();
+        assertTrue(text.contains("修炼等级"));
+        assertTrue(text.contains("破坏力"));
+        assertTrue(text.contains("防御力"));
+        assertTrue(text.contains("攻击速度"));
+        assertTrue(text.contains("闪躲"));
+        assertTrue(text.contains("恢复"));
+        assertEquals(RightClickType.KUNGFU.value(), itemAttribute.getType());
+        assertEquals(1, itemAttribute.getPage());
+        assertEquals(1, itemAttribute.getSlotId());
+    }
+
+    @Test
+    void rightClickBasicKungFu() {
+        int slot = player.kungFuBook().addToBasic(kungFuFactory.createProtection("金钟罩"));
+        player.handleClientEvent(new ClientRightClickEvent(RightClickType.KUNGFU, slot, 2));
+        ItemOrKungFuAttributeEvent event = eventListener.removeFirst(ItemOrKungFuAttributeEvent.class);
+        ItemAttributePacket itemAttribute = event.toPacket().getItemAttribute();
+        var text = itemAttribute.getText();
+        assertTrue(text.contains("修炼等级"));
     }
 }

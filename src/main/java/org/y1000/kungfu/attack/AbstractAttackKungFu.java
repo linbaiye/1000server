@@ -271,4 +271,18 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     public Damage damage() {
         return new Damage(bodyDamage(), headDamage(), armDamage(), legDamage());
     }
+
+    @Override
+    public String description() {
+        StringBuilder descriptionBuilder = getDescriptionBuilder();
+        descriptionBuilder.append("攻击速度: ").append(attackSpeed()).append("\n")
+                .append("恢复: ").append(recovery()).append("\n")
+                .append("闪躲: ").append(avoidance()).append("\n");
+        var dmg = damage();
+        var dmgStr = String.format("破坏力 : %d / %d / %d / %d", dmg.bodyDamage(), dmg.headDamage(), dmg.armDamage(), dmg.legDamage());
+        descriptionBuilder.append(dmgStr).append("\n");
+        var am = armor();
+        var str = String.format("防御力: %d / %d / %d / %d", am.body(), am.head(), am.arm(), am.leg());
+        return descriptionBuilder.append(str).append("\n").toString();
+    }
 }

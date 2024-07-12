@@ -146,4 +146,12 @@ class ProtectKungFuTest {
         assertEquals(protectKungFu.bodyArmor(), 2);
         assertEquals(32, protectKungFu.legArmor());
     }
+
+    @Test
+    void description() {
+        String description = protectKungFu.description();
+        System.out.println(description);
+        assertTrue(description.contains("修炼等级: 1.00"));
+        assertTrue(description.contains("防御力: 1 / 2 / 3 / 10"));
+    }
 }

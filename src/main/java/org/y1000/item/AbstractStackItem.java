@@ -19,7 +19,6 @@ public abstract class AbstractStackItem extends AbstractItem {
     }
 
 
-
     public void increase(long n) {
         if (n < 0) {
             return;

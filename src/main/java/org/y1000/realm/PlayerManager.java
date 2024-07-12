@@ -8,6 +8,7 @@ import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.ItemOrKungFuAttributeEvent;
 import org.y1000.entities.players.event.PlayerLearnKungFuEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
@@ -109,6 +110,8 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
             eventSender.notifyVisiblePlayersAndSelf(shootEvent.source(), shootEvent);
         } else if (entityEvent instanceof PlayerLearnKungFuEvent learnKungFuEvent) {
             eventSender.notifySelf(learnKungFuEvent);
+        } else if (entityEvent instanceof ItemOrKungFuAttributeEvent itemAttributeEvent) {
+            eventSender.notifySelf(itemAttributeEvent);
         }
     }
 }

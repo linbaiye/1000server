@@ -188,7 +188,7 @@ message ClientPacket {
     ClientStandUpPacket standUp = 12;
     ClientMerchantTradeItemsPacket sellItems = 13;
     ClientMerchantTradeItemsPacket buyItems = 14;
-    Client
+    RightClickPacket rightClick = 15;
   }
 }
 

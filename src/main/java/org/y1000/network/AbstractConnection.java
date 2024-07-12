@@ -47,6 +47,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case STANDUP -> ClientStandUpEvent.INSTANCE;
             case SELLITEMS -> ClientSellEvent.fromPacket(clientPacket.getSellItems());
             case BUYITEMS -> ClientBuyItemsEvent.fromPacket(clientPacket.getBuyItems());
+            case RIGHTCLICK -> ClientRightClickEvent.fromPacket(clientPacket.getRightClick());
             default -> throw new IllegalArgumentException();
         };
     }

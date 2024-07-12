@@ -72,4 +72,9 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
     public KungFuType kungFuType() {
         return KungFuType.FOOT;
     }
+
+    @Override
+    public String description() {
+        return getDescriptionBuilder().toString();
+    }
 }

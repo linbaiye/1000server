@@ -4,8 +4,6 @@ import lombok.Builder;
 import org.y1000.kungfu.KungFu;
 
 public final class KungFuItem extends AbstractStackItem {
-
-    private final String desc;
     private final KungFu kungFu;
     @Builder
     public KungFuItem(String name,
@@ -14,8 +12,7 @@ public final class KungFuItem extends AbstractStackItem {
                       String eventSound,
                       String desc,
                       KungFu kungFu) {
-        super(name, number, ItemType.KUNGFU, dropSound, eventSound);
-        this.desc = desc;
+        super(name, number, ItemType.KUNGFU, dropSound, eventSound, desc);
         this.kungFu = kungFu;
     }
 

@@ -86,6 +86,15 @@ public final class ProtectKungFu extends AbstractPeriodicalConsumingKungFu {
     }
 
     @Override
+    public String description() {
+        StringBuilder descritionBuilder = getDescriptionBuilder();
+        var am = armor();
+        var str = String.format("防御力: %d / %d / %d / %d", am.body(), am.head(), am.arm(), am.leg());
+        return descritionBuilder.append(str).append("\n").toString();
+    }
+
+
+    @Override
     public String toString() {
         return "Protection {"
                 + "level:" + level()  + ","

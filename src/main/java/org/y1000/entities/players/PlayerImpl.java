@@ -535,10 +535,12 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     private void handleRightClick(ClientRightClickEvent event) {
         if (event.type() == RightClickType.INVENTORY) {
             Item item = inventory.getItem(event.slotId());
-            if (item == null) {
-                return;
+            if (item != null) {
+                emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), item.description(), event.type()));
             }
-            emitEvent(new PlayerItemAttributeEvent(this, event.page(), event.slotId(), item.description(), event.type()));
+        } else if (event.type() == RightClickType.KUNGFU) {
+            Optional<KungFu> kungFu = kungFuBook.findKungFu(event.page(), event.slotId());
+            kungFu.ifPresent(k -> emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), k.description(), event.type())));
         }
     }
 

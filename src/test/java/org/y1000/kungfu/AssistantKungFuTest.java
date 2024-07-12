@@ -58,4 +58,9 @@ class AssistantKungFuTest extends AbstractUnitTestFixture  {
         coordinates = assistantKungFu.affectedCoordinates(player);
         assertTrue(coordinates.containsAll(List.of(Coordinate.xy(1, 3), Coordinate.xy(2, 3), Coordinate.xy(3,1), Coordinate.xy(3, 2))));
     }
+
+    @Test
+    void description() {
+        assertTrue(assistantKungFu.description().contains("修炼等级: 1.00"));
+    }
 }

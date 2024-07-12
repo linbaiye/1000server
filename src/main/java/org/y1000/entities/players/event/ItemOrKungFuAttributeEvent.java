@@ -1,18 +1,17 @@
 package org.y1000.entities.players.event;
 
-import lombok.Builder;
 import org.y1000.entities.players.Player;
 import org.y1000.message.RightClickType;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.ItemAttributePacket;
 import org.y1000.network.gen.Packet;
 
-public class PlayerItemAttributeEvent extends AbstractPlayerEvent {
+public class ItemOrKungFuAttributeEvent extends AbstractPlayerEvent {
     private final int page;
     private final int slotId;
     private final String description;
     private final RightClickType type;
-    public PlayerItemAttributeEvent(Player source, int page, int slotId, String description, RightClickType type) {
+    public ItemOrKungFuAttributeEvent(Player source, int page, int slotId, String description, RightClickType type) {
         super(source);
         this.page = page;
         this.slotId = slotId;

@@ -46,4 +46,9 @@ public final class Pill extends AbstractStackItem {
     public int legLife() {
         return attributeProvider.legLife();
     }
+
+    @Override
+    public String description() {
+        return attributeProvider.description();
+    }
 }

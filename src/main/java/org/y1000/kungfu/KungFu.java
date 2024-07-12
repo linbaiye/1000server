@@ -15,4 +15,8 @@ public interface KungFu {
 
     KungFuType kungFuType();
 
+
+    String description();
+
+
 }

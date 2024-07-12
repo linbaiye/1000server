@@ -50,4 +50,9 @@ public final class AssistantKungFu extends AbstractKungFu {
     public KungFuType kungFuType() {
         return KungFuType.ASSISTANT;
     }
+
+    @Override
+    public String description() {
+        return getDescriptionBuilder().toString();
+    }
 }

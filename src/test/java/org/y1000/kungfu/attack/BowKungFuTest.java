@@ -88,4 +88,16 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         assertTrue(player.state() instanceof PlayerAttackState);
         assertNotNull(eventListener.removeFirst(PlayerAttackEvent.class));
     }
+
+
+    @Test
+    void description() {
+        String description = bowKungFu.description();
+        assertTrue(description.contains("修炼等级"));
+        assertTrue(description.contains("攻击速度"));
+        assertTrue(description.contains("恢复"));
+        assertTrue(description.contains("闪躲"));
+        assertTrue(description.contains("破坏力"));
+        assertTrue(description.contains("防御力"));
+    }
 }

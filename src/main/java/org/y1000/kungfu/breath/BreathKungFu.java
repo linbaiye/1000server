@@ -40,6 +40,11 @@ public final class BreathKungFu extends AbstractKungFu {
         return KungFuType.BREATHING;
     }
 
+    @Override
+    public String description() {
+        return getDescriptionBuilder().toString();
+    }
+
     private String computeSound(boolean male) {
         var snd = sound;
         if (level() >= 9000) {

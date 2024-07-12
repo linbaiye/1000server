@@ -98,4 +98,9 @@ public final class PillAttributeProviderImpl implements PillAttributeProvider {
     public String eventSound() {
         return itemSdb.getSoundEvent(name);
     }
+
+    @Override
+    public String description() {
+        return itemSdb.getDesc(name);
+    }
 }
