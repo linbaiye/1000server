@@ -109,7 +109,5 @@ public abstract class AbstractSdbReader {
         read(name, "GBK");
     }
 
-    public int getTypeValue(String itemName) {
-        return getInt(itemName, "Type");
-    }
+
 }

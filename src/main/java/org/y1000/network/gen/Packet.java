@@ -63,7 +63,7 @@ private static final long serialVersionUID = 0L;
     TEXT(19),
     UNEQUIP(20),
     EQUIP(21),
-    TRADEWINDOW(22),
+    OPENTRADEWINDOW(22),
     TOGGLEKUNGFU(23),
     SITDOWN(24),
     STANDUP(25),
@@ -77,6 +77,8 @@ private static final long serialVersionUID = 0L;
     MONSTERMOVE(33),
     LEARNKUNGFU(34),
     ITEMATTRIBUTE(35),
+    RIGHTCLICKATTRIBUTE(36),
+    UPDATETRADEWINDOW(37),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -112,7 +114,7 @@ private static final long serialVersionUID = 0L;
         case 19: return TEXT;
         case 20: return UNEQUIP;
         case 21: return EQUIP;
-        case 22: return TRADEWINDOW;
+        case 22: return OPENTRADEWINDOW;
         case 23: return TOGGLEKUNGFU;
         case 24: return SITDOWN;
         case 25: return STANDUP;
@@ -126,6 +128,8 @@ private static final long serialVersionUID = 0L;
         case 33: return MONSTERMOVE;
         case 34: return LEARNKUNGFU;
         case 35: return ITEMATTRIBUTE;
+        case 36: return RIGHTCLICKATTRIBUTE;
+        case 37: return UPDATETRADEWINDOW;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -699,35 +703,35 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.PlayerEquipPacket.getDefaultInstance();
   }
 
-  public static final int TRADEWINDOW_FIELD_NUMBER = 22;
+  public static final int OPENTRADEWINDOW_FIELD_NUMBER = 22;
   /**
-   * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
-   * @return Whether the tradeWindow field is set.
+   * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
+   * @return Whether the openTradeWindow field is set.
    */
   @java.lang.Override
-  public boolean hasTradeWindow() {
+  public boolean hasOpenTradeWindow() {
     return typedPacketCase_ == 22;
   }
   /**
-   * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
-   * @return The tradeWindow.
+   * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
+   * @return The openTradeWindow.
    */
   @java.lang.Override
-  public org.y1000.network.gen.TradeWindowPacket getTradeWindow() {
+  public org.y1000.network.gen.OpenTradeWindowPacket getOpenTradeWindow() {
     if (typedPacketCase_ == 22) {
-       return (org.y1000.network.gen.TradeWindowPacket) typedPacket_;
+       return (org.y1000.network.gen.OpenTradeWindowPacket) typedPacket_;
     }
-    return org.y1000.network.gen.TradeWindowPacket.getDefaultInstance();
+    return org.y1000.network.gen.OpenTradeWindowPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
+   * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
    */
   @java.lang.Override
-  public org.y1000.network.gen.TradeWindowPacketOrBuilder getTradeWindowOrBuilder() {
+  public org.y1000.network.gen.OpenTradeWindowPacketOrBuilder getOpenTradeWindowOrBuilder() {
     if (typedPacketCase_ == 22) {
-       return (org.y1000.network.gen.TradeWindowPacket) typedPacket_;
+       return (org.y1000.network.gen.OpenTradeWindowPacket) typedPacket_;
     }
-    return org.y1000.network.gen.TradeWindowPacket.getDefaultInstance();
+    return org.y1000.network.gen.OpenTradeWindowPacket.getDefaultInstance();
   }
 
   public static final int TOGGLEKUNGFU_FIELD_NUMBER = 23;
@@ -1133,6 +1137,68 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ItemAttributePacket.getDefaultInstance();
   }
 
+  public static final int RIGHTCLICKATTRIBUTE_FIELD_NUMBER = 36;
+  /**
+   * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+   * @return Whether the rightClickAttribute field is set.
+   */
+  @java.lang.Override
+  public boolean hasRightClickAttribute() {
+    return typedPacketCase_ == 36;
+  }
+  /**
+   * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+   * @return The rightClickAttribute.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.PlayerRightClickAttributePacket getRightClickAttribute() {
+    if (typedPacketCase_ == 36) {
+       return (org.y1000.network.gen.PlayerRightClickAttributePacket) typedPacket_;
+    }
+    return org.y1000.network.gen.PlayerRightClickAttributePacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.PlayerRightClickAttributePacketOrBuilder getRightClickAttributeOrBuilder() {
+    if (typedPacketCase_ == 36) {
+       return (org.y1000.network.gen.PlayerRightClickAttributePacket) typedPacket_;
+    }
+    return org.y1000.network.gen.PlayerRightClickAttributePacket.getDefaultInstance();
+  }
+
+  public static final int UPDATETRADEWINDOW_FIELD_NUMBER = 37;
+  /**
+   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+   * @return Whether the updateTradeWindow field is set.
+   */
+  @java.lang.Override
+  public boolean hasUpdateTradeWindow() {
+    return typedPacketCase_ == 37;
+  }
+  /**
+   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+   * @return The updateTradeWindow.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UpdateTradeWindowPacket getUpdateTradeWindow() {
+    if (typedPacketCase_ == 37) {
+       return (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder getUpdateTradeWindowOrBuilder() {
+    if (typedPacketCase_ == 37) {
+       return (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1202,7 +1268,7 @@ private static final long serialVersionUID = 0L;
       output.writeMessage(21, (org.y1000.network.gen.PlayerEquipPacket) typedPacket_);
     }
     if (typedPacketCase_ == 22) {
-      output.writeMessage(22, (org.y1000.network.gen.TradeWindowPacket) typedPacket_);
+      output.writeMessage(22, (org.y1000.network.gen.OpenTradeWindowPacket) typedPacket_);
     }
     if (typedPacketCase_ == 23) {
       output.writeMessage(23, (org.y1000.network.gen.ToggleKungFuPacket) typedPacket_);
@@ -1242,6 +1308,12 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 35) {
       output.writeMessage(35, (org.y1000.network.gen.ItemAttributePacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 36) {
+      output.writeMessage(36, (org.y1000.network.gen.PlayerRightClickAttributePacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 37) {
+      output.writeMessage(37, (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1326,7 +1398,7 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 22) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(22, (org.y1000.network.gen.TradeWindowPacket) typedPacket_);
+        .computeMessageSize(22, (org.y1000.network.gen.OpenTradeWindowPacket) typedPacket_);
     }
     if (typedPacketCase_ == 23) {
       size += com.google.protobuf.CodedOutputStream
@@ -1379,6 +1451,14 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 35) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(35, (org.y1000.network.gen.ItemAttributePacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 36) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(36, (org.y1000.network.gen.PlayerRightClickAttributePacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 37) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(37, (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1470,8 +1550,8 @@ private static final long serialVersionUID = 0L;
             .equals(other.getEquip())) return false;
         break;
       case 22:
-        if (!getTradeWindow()
-            .equals(other.getTradeWindow())) return false;
+        if (!getOpenTradeWindow()
+            .equals(other.getOpenTradeWindow())) return false;
         break;
       case 23:
         if (!getToggleKungFu()
@@ -1524,6 +1604,14 @@ private static final long serialVersionUID = 0L;
       case 35:
         if (!getItemAttribute()
             .equals(other.getItemAttribute())) return false;
+        break;
+      case 36:
+        if (!getRightClickAttribute()
+            .equals(other.getRightClickAttribute())) return false;
+        break;
+      case 37:
+        if (!getUpdateTradeWindow()
+            .equals(other.getUpdateTradeWindow())) return false;
         break;
       case 0:
       default:
@@ -1613,8 +1701,8 @@ private static final long serialVersionUID = 0L;
         hash = (53 * hash) + getEquip().hashCode();
         break;
       case 22:
-        hash = (37 * hash) + TRADEWINDOW_FIELD_NUMBER;
-        hash = (53 * hash) + getTradeWindow().hashCode();
+        hash = (37 * hash) + OPENTRADEWINDOW_FIELD_NUMBER;
+        hash = (53 * hash) + getOpenTradeWindow().hashCode();
         break;
       case 23:
         hash = (37 * hash) + TOGGLEKUNGFU_FIELD_NUMBER;
@@ -1667,6 +1755,14 @@ private static final long serialVersionUID = 0L;
       case 35:
         hash = (37 * hash) + ITEMATTRIBUTE_FIELD_NUMBER;
         hash = (53 * hash) + getItemAttribute().hashCode();
+        break;
+      case 36:
+        hash = (37 * hash) + RIGHTCLICKATTRIBUTE_FIELD_NUMBER;
+        hash = (53 * hash) + getRightClickAttribute().hashCode();
+        break;
+      case 37:
+        hash = (37 * hash) + UPDATETRADEWINDOW_FIELD_NUMBER;
+        hash = (53 * hash) + getUpdateTradeWindow().hashCode();
         break;
       case 0:
       default:
@@ -1802,6 +1898,7 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
+      bitField1_ = 0;
       if (positionPacketBuilder_ != null) {
         positionPacketBuilder_.clear();
       }
@@ -1856,8 +1953,8 @@ private static final long serialVersionUID = 0L;
       if (equipBuilder_ != null) {
         equipBuilder_.clear();
       }
-      if (tradeWindowBuilder_ != null) {
-        tradeWindowBuilder_.clear();
+      if (openTradeWindowBuilder_ != null) {
+        openTradeWindowBuilder_.clear();
       }
       if (toggleKungFuBuilder_ != null) {
         toggleKungFuBuilder_.clear();
@@ -1898,6 +1995,12 @@ private static final long serialVersionUID = 0L;
       if (itemAttributeBuilder_ != null) {
         itemAttributeBuilder_.clear();
       }
+      if (rightClickAttributeBuilder_ != null) {
+        rightClickAttributeBuilder_.clear();
+      }
+      if (updateTradeWindowBuilder_ != null) {
+        updateTradeWindowBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -1927,6 +2030,7 @@ private static final long serialVersionUID = 0L;
     public org.y1000.network.gen.Packet buildPartial() {
       org.y1000.network.gen.Packet result = new org.y1000.network.gen.Packet(this);
       if (bitField0_ != 0) { buildPartial0(result); }
+      if (bitField1_ != 0) { buildPartial1(result); }
       buildPartialOneofs(result);
       onBuilt();
       return result;
@@ -1934,6 +2038,10 @@ private static final long serialVersionUID = 0L;
 
     private void buildPartial0(org.y1000.network.gen.Packet result) {
       int from_bitField0_ = bitField0_;
+    }
+
+    private void buildPartial1(org.y1000.network.gen.Packet result) {
+      int from_bitField1_ = bitField1_;
     }
 
     private void buildPartialOneofs(org.y1000.network.gen.Packet result) {
@@ -2012,8 +2120,8 @@ private static final long serialVersionUID = 0L;
         result.typedPacket_ = equipBuilder_.build();
       }
       if (typedPacketCase_ == 22 &&
-          tradeWindowBuilder_ != null) {
-        result.typedPacket_ = tradeWindowBuilder_.build();
+          openTradeWindowBuilder_ != null) {
+        result.typedPacket_ = openTradeWindowBuilder_.build();
       }
       if (typedPacketCase_ == 23 &&
           toggleKungFuBuilder_ != null) {
@@ -2066,6 +2174,14 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 35 &&
           itemAttributeBuilder_ != null) {
         result.typedPacket_ = itemAttributeBuilder_.build();
+      }
+      if (typedPacketCase_ == 36 &&
+          rightClickAttributeBuilder_ != null) {
+        result.typedPacket_ = rightClickAttributeBuilder_.build();
+      }
+      if (typedPacketCase_ == 37 &&
+          updateTradeWindowBuilder_ != null) {
+        result.typedPacket_ = updateTradeWindowBuilder_.build();
       }
     }
 
@@ -2186,8 +2302,8 @@ private static final long serialVersionUID = 0L;
           mergeEquip(other.getEquip());
           break;
         }
-        case TRADEWINDOW: {
-          mergeTradeWindow(other.getTradeWindow());
+        case OPENTRADEWINDOW: {
+          mergeOpenTradeWindow(other.getOpenTradeWindow());
           break;
         }
         case TOGGLEKUNGFU: {
@@ -2240,6 +2356,14 @@ private static final long serialVersionUID = 0L;
         }
         case ITEMATTRIBUTE: {
           mergeItemAttribute(other.getItemAttribute());
+          break;
+        }
+        case RIGHTCLICKATTRIBUTE: {
+          mergeRightClickAttribute(other.getRightClickAttribute());
+          break;
+        }
+        case UPDATETRADEWINDOW: {
+          mergeUpdateTradeWindow(other.getUpdateTradeWindow());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -2400,7 +2524,7 @@ private static final long serialVersionUID = 0L;
             } // case 170
             case 178: {
               input.readMessage(
-                  getTradeWindowFieldBuilder().getBuilder(),
+                  getOpenTradeWindowFieldBuilder().getBuilder(),
                   extensionRegistry);
               typedPacketCase_ = 22;
               break;
@@ -2496,6 +2620,20 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 35;
               break;
             } // case 282
+            case 290: {
+              input.readMessage(
+                  getRightClickAttributeFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 36;
+              break;
+            } // case 290
+            case 298: {
+              input.readMessage(
+                  getUpdateTradeWindowFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 37;
+              break;
+            } // case 298
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -2527,6 +2665,7 @@ private static final long serialVersionUID = 0L;
     }
 
     private int bitField0_;
+    private int bitField1_;
 
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.PositionPacket, org.y1000.network.gen.PositionPacket.Builder, org.y1000.network.gen.PositionPacketOrBuilder> positionPacketBuilder_;
@@ -5085,71 +5224,71 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.TradeWindowPacket, org.y1000.network.gen.TradeWindowPacket.Builder, org.y1000.network.gen.TradeWindowPacketOrBuilder> tradeWindowBuilder_;
+        org.y1000.network.gen.OpenTradeWindowPacket, org.y1000.network.gen.OpenTradeWindowPacket.Builder, org.y1000.network.gen.OpenTradeWindowPacketOrBuilder> openTradeWindowBuilder_;
     /**
-     * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
-     * @return Whether the tradeWindow field is set.
+     * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
+     * @return Whether the openTradeWindow field is set.
      */
     @java.lang.Override
-    public boolean hasTradeWindow() {
+    public boolean hasOpenTradeWindow() {
       return typedPacketCase_ == 22;
     }
     /**
-     * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
-     * @return The tradeWindow.
+     * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
+     * @return The openTradeWindow.
      */
     @java.lang.Override
-    public org.y1000.network.gen.TradeWindowPacket getTradeWindow() {
-      if (tradeWindowBuilder_ == null) {
+    public org.y1000.network.gen.OpenTradeWindowPacket getOpenTradeWindow() {
+      if (openTradeWindowBuilder_ == null) {
         if (typedPacketCase_ == 22) {
-          return (org.y1000.network.gen.TradeWindowPacket) typedPacket_;
+          return (org.y1000.network.gen.OpenTradeWindowPacket) typedPacket_;
         }
-        return org.y1000.network.gen.TradeWindowPacket.getDefaultInstance();
+        return org.y1000.network.gen.OpenTradeWindowPacket.getDefaultInstance();
       } else {
         if (typedPacketCase_ == 22) {
-          return tradeWindowBuilder_.getMessage();
+          return openTradeWindowBuilder_.getMessage();
         }
-        return org.y1000.network.gen.TradeWindowPacket.getDefaultInstance();
+        return org.y1000.network.gen.OpenTradeWindowPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
+     * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
      */
-    public Builder setTradeWindow(org.y1000.network.gen.TradeWindowPacket value) {
-      if (tradeWindowBuilder_ == null) {
+    public Builder setOpenTradeWindow(org.y1000.network.gen.OpenTradeWindowPacket value) {
+      if (openTradeWindowBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
         typedPacket_ = value;
         onChanged();
       } else {
-        tradeWindowBuilder_.setMessage(value);
+        openTradeWindowBuilder_.setMessage(value);
       }
       typedPacketCase_ = 22;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
+     * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
      */
-    public Builder setTradeWindow(
-        org.y1000.network.gen.TradeWindowPacket.Builder builderForValue) {
-      if (tradeWindowBuilder_ == null) {
+    public Builder setOpenTradeWindow(
+        org.y1000.network.gen.OpenTradeWindowPacket.Builder builderForValue) {
+      if (openTradeWindowBuilder_ == null) {
         typedPacket_ = builderForValue.build();
         onChanged();
       } else {
-        tradeWindowBuilder_.setMessage(builderForValue.build());
+        openTradeWindowBuilder_.setMessage(builderForValue.build());
       }
       typedPacketCase_ = 22;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
+     * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
      */
-    public Builder mergeTradeWindow(org.y1000.network.gen.TradeWindowPacket value) {
-      if (tradeWindowBuilder_ == null) {
+    public Builder mergeOpenTradeWindow(org.y1000.network.gen.OpenTradeWindowPacket value) {
+      if (openTradeWindowBuilder_ == null) {
         if (typedPacketCase_ == 22 &&
-            typedPacket_ != org.y1000.network.gen.TradeWindowPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.network.gen.TradeWindowPacket.newBuilder((org.y1000.network.gen.TradeWindowPacket) typedPacket_)
+            typedPacket_ != org.y1000.network.gen.OpenTradeWindowPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.OpenTradeWindowPacket.newBuilder((org.y1000.network.gen.OpenTradeWindowPacket) typedPacket_)
               .mergeFrom(value).buildPartial();
         } else {
           typedPacket_ = value;
@@ -5157,19 +5296,19 @@ private static final long serialVersionUID = 0L;
         onChanged();
       } else {
         if (typedPacketCase_ == 22) {
-          tradeWindowBuilder_.mergeFrom(value);
+          openTradeWindowBuilder_.mergeFrom(value);
         } else {
-          tradeWindowBuilder_.setMessage(value);
+          openTradeWindowBuilder_.setMessage(value);
         }
       }
       typedPacketCase_ = 22;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
+     * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
      */
-    public Builder clearTradeWindow() {
-      if (tradeWindowBuilder_ == null) {
+    public Builder clearOpenTradeWindow() {
+      if (openTradeWindowBuilder_ == null) {
         if (typedPacketCase_ == 22) {
           typedPacketCase_ = 0;
           typedPacket_ = null;
@@ -5180,50 +5319,50 @@ private static final long serialVersionUID = 0L;
           typedPacketCase_ = 0;
           typedPacket_ = null;
         }
-        tradeWindowBuilder_.clear();
+        openTradeWindowBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
+     * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
      */
-    public org.y1000.network.gen.TradeWindowPacket.Builder getTradeWindowBuilder() {
-      return getTradeWindowFieldBuilder().getBuilder();
+    public org.y1000.network.gen.OpenTradeWindowPacket.Builder getOpenTradeWindowBuilder() {
+      return getOpenTradeWindowFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
+     * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
      */
     @java.lang.Override
-    public org.y1000.network.gen.TradeWindowPacketOrBuilder getTradeWindowOrBuilder() {
-      if ((typedPacketCase_ == 22) && (tradeWindowBuilder_ != null)) {
-        return tradeWindowBuilder_.getMessageOrBuilder();
+    public org.y1000.network.gen.OpenTradeWindowPacketOrBuilder getOpenTradeWindowOrBuilder() {
+      if ((typedPacketCase_ == 22) && (openTradeWindowBuilder_ != null)) {
+        return openTradeWindowBuilder_.getMessageOrBuilder();
       } else {
         if (typedPacketCase_ == 22) {
-          return (org.y1000.network.gen.TradeWindowPacket) typedPacket_;
+          return (org.y1000.network.gen.OpenTradeWindowPacket) typedPacket_;
         }
-        return org.y1000.network.gen.TradeWindowPacket.getDefaultInstance();
+        return org.y1000.network.gen.OpenTradeWindowPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
+     * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.TradeWindowPacket, org.y1000.network.gen.TradeWindowPacket.Builder, org.y1000.network.gen.TradeWindowPacketOrBuilder> 
-        getTradeWindowFieldBuilder() {
-      if (tradeWindowBuilder_ == null) {
+        org.y1000.network.gen.OpenTradeWindowPacket, org.y1000.network.gen.OpenTradeWindowPacket.Builder, org.y1000.network.gen.OpenTradeWindowPacketOrBuilder> 
+        getOpenTradeWindowFieldBuilder() {
+      if (openTradeWindowBuilder_ == null) {
         if (!(typedPacketCase_ == 22)) {
-          typedPacket_ = org.y1000.network.gen.TradeWindowPacket.getDefaultInstance();
+          typedPacket_ = org.y1000.network.gen.OpenTradeWindowPacket.getDefaultInstance();
         }
-        tradeWindowBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.TradeWindowPacket, org.y1000.network.gen.TradeWindowPacket.Builder, org.y1000.network.gen.TradeWindowPacketOrBuilder>(
-                (org.y1000.network.gen.TradeWindowPacket) typedPacket_,
+        openTradeWindowBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.OpenTradeWindowPacket, org.y1000.network.gen.OpenTradeWindowPacket.Builder, org.y1000.network.gen.OpenTradeWindowPacketOrBuilder>(
+                (org.y1000.network.gen.OpenTradeWindowPacket) typedPacket_,
                 getParentForChildren(),
                 isClean());
         typedPacket_ = null;
       }
       typedPacketCase_ = 22;
       onChanged();
-      return tradeWindowBuilder_;
+      return openTradeWindowBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -7070,6 +7209,290 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 35;
       onChanged();
       return itemAttributeBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.PlayerRightClickAttributePacket, org.y1000.network.gen.PlayerRightClickAttributePacket.Builder, org.y1000.network.gen.PlayerRightClickAttributePacketOrBuilder> rightClickAttributeBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+     * @return Whether the rightClickAttribute field is set.
+     */
+    @java.lang.Override
+    public boolean hasRightClickAttribute() {
+      return typedPacketCase_ == 36;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+     * @return The rightClickAttribute.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.PlayerRightClickAttributePacket getRightClickAttribute() {
+      if (rightClickAttributeBuilder_ == null) {
+        if (typedPacketCase_ == 36) {
+          return (org.y1000.network.gen.PlayerRightClickAttributePacket) typedPacket_;
+        }
+        return org.y1000.network.gen.PlayerRightClickAttributePacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 36) {
+          return rightClickAttributeBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.PlayerRightClickAttributePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+     */
+    public Builder setRightClickAttribute(org.y1000.network.gen.PlayerRightClickAttributePacket value) {
+      if (rightClickAttributeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        rightClickAttributeBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 36;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+     */
+    public Builder setRightClickAttribute(
+        org.y1000.network.gen.PlayerRightClickAttributePacket.Builder builderForValue) {
+      if (rightClickAttributeBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        rightClickAttributeBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 36;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+     */
+    public Builder mergeRightClickAttribute(org.y1000.network.gen.PlayerRightClickAttributePacket value) {
+      if (rightClickAttributeBuilder_ == null) {
+        if (typedPacketCase_ == 36 &&
+            typedPacket_ != org.y1000.network.gen.PlayerRightClickAttributePacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.PlayerRightClickAttributePacket.newBuilder((org.y1000.network.gen.PlayerRightClickAttributePacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 36) {
+          rightClickAttributeBuilder_.mergeFrom(value);
+        } else {
+          rightClickAttributeBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 36;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+     */
+    public Builder clearRightClickAttribute() {
+      if (rightClickAttributeBuilder_ == null) {
+        if (typedPacketCase_ == 36) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 36) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        rightClickAttributeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+     */
+    public org.y1000.network.gen.PlayerRightClickAttributePacket.Builder getRightClickAttributeBuilder() {
+      return getRightClickAttributeFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.PlayerRightClickAttributePacketOrBuilder getRightClickAttributeOrBuilder() {
+      if ((typedPacketCase_ == 36) && (rightClickAttributeBuilder_ != null)) {
+        return rightClickAttributeBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 36) {
+          return (org.y1000.network.gen.PlayerRightClickAttributePacket) typedPacket_;
+        }
+        return org.y1000.network.gen.PlayerRightClickAttributePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.PlayerRightClickAttributePacket, org.y1000.network.gen.PlayerRightClickAttributePacket.Builder, org.y1000.network.gen.PlayerRightClickAttributePacketOrBuilder> 
+        getRightClickAttributeFieldBuilder() {
+      if (rightClickAttributeBuilder_ == null) {
+        if (!(typedPacketCase_ == 36)) {
+          typedPacket_ = org.y1000.network.gen.PlayerRightClickAttributePacket.getDefaultInstance();
+        }
+        rightClickAttributeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.PlayerRightClickAttributePacket, org.y1000.network.gen.PlayerRightClickAttributePacket.Builder, org.y1000.network.gen.PlayerRightClickAttributePacketOrBuilder>(
+                (org.y1000.network.gen.PlayerRightClickAttributePacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 36;
+      onChanged();
+      return rightClickAttributeBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UpdateTradeWindowPacket, org.y1000.network.gen.UpdateTradeWindowPacket.Builder, org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder> updateTradeWindowBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+     * @return Whether the updateTradeWindow field is set.
+     */
+    @java.lang.Override
+    public boolean hasUpdateTradeWindow() {
+      return typedPacketCase_ == 37;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+     * @return The updateTradeWindow.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UpdateTradeWindowPacket getUpdateTradeWindow() {
+      if (updateTradeWindowBuilder_ == null) {
+        if (typedPacketCase_ == 37) {
+          return (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 37) {
+          return updateTradeWindowBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+     */
+    public Builder setUpdateTradeWindow(org.y1000.network.gen.UpdateTradeWindowPacket value) {
+      if (updateTradeWindowBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        updateTradeWindowBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 37;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+     */
+    public Builder setUpdateTradeWindow(
+        org.y1000.network.gen.UpdateTradeWindowPacket.Builder builderForValue) {
+      if (updateTradeWindowBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        updateTradeWindowBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 37;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+     */
+    public Builder mergeUpdateTradeWindow(org.y1000.network.gen.UpdateTradeWindowPacket value) {
+      if (updateTradeWindowBuilder_ == null) {
+        if (typedPacketCase_ == 37 &&
+            typedPacket_ != org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.UpdateTradeWindowPacket.newBuilder((org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 37) {
+          updateTradeWindowBuilder_.mergeFrom(value);
+        } else {
+          updateTradeWindowBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 37;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+     */
+    public Builder clearUpdateTradeWindow() {
+      if (updateTradeWindowBuilder_ == null) {
+        if (typedPacketCase_ == 37) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 37) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        updateTradeWindowBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+     */
+    public org.y1000.network.gen.UpdateTradeWindowPacket.Builder getUpdateTradeWindowBuilder() {
+      return getUpdateTradeWindowFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder getUpdateTradeWindowOrBuilder() {
+      if ((typedPacketCase_ == 37) && (updateTradeWindowBuilder_ != null)) {
+        return updateTradeWindowBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 37) {
+          return (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UpdateTradeWindowPacket, org.y1000.network.gen.UpdateTradeWindowPacket.Builder, org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder> 
+        getUpdateTradeWindowFieldBuilder() {
+      if (updateTradeWindowBuilder_ == null) {
+        if (!(typedPacketCase_ == 37)) {
+          typedPacket_ = org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
+        }
+        updateTradeWindowBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.UpdateTradeWindowPacket, org.y1000.network.gen.UpdateTradeWindowPacket.Builder, org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder>(
+                (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 37;
+      onChanged();
+      return updateTradeWindowBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

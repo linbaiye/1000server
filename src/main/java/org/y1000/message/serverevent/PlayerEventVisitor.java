@@ -16,10 +16,6 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
 
     }
 
-    default void visit(PlayerLeftEvent event) {
-
-    }
-
     default void visit(PlayerAttackEventResponse event) {
 
     }
@@ -47,13 +43,7 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     default void visit(PlayerEquipEvent event) {
     }
 
-    default void visit(PlayerStartTradeEvent event) {
 
-    }
-
-    default void visit(OpenTradeWindowEvent event) {
-
-    }
 
     default void visit(PlayerToggleKungFuEvent event) {
 

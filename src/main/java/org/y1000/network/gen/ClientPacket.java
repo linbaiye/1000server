@@ -60,6 +60,7 @@ private static final long serialVersionUID = 0L;
     SELLITEMS(13),
     BUYITEMS(14),
     RIGHTCLICK(15),
+    TRADEREQUEST(16),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -92,6 +93,7 @@ private static final long serialVersionUID = 0L;
         case 13: return SELLITEMS;
         case 14: return BUYITEMS;
         case 15: return RIGHTCLICK;
+        case 16: return TRADEREQUEST;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -572,6 +574,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.RightClickPacket.getDefaultInstance();
   }
 
+  public static final int TRADEREQUEST_FIELD_NUMBER = 16;
+  /**
+   * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+   * @return Whether the tradeRequest field is set.
+   */
+  @java.lang.Override
+  public boolean hasTradeRequest() {
+    return typeCase_ == 16;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+   * @return The tradeRequest.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientTradePlayerPacket getTradeRequest() {
+    if (typeCase_ == 16) {
+       return (org.y1000.network.gen.ClientTradePlayerPacket) type_;
+    }
+    return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientTradePlayerPacketOrBuilder getTradeRequestOrBuilder() {
+    if (typeCase_ == 16) {
+       return (org.y1000.network.gen.ClientTradePlayerPacket) type_;
+    }
+    return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -630,6 +663,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 15) {
       output.writeMessage(15, (org.y1000.network.gen.RightClickPacket) type_);
+    }
+    if (typeCase_ == 16) {
+      output.writeMessage(16, (org.y1000.network.gen.ClientTradePlayerPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -699,6 +735,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 15) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(15, (org.y1000.network.gen.RightClickPacket) type_);
+    }
+    if (typeCase_ == 16) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(16, (org.y1000.network.gen.ClientTradePlayerPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -777,6 +817,10 @@ private static final long serialVersionUID = 0L;
         if (!getRightClick()
             .equals(other.getRightClick())) return false;
         break;
+      case 16:
+        if (!getTradeRequest()
+            .equals(other.getTradeRequest())) return false;
+        break;
       case 0:
       default:
     }
@@ -851,6 +895,10 @@ private static final long serialVersionUID = 0L;
       case 15:
         hash = (37 * hash) + RIGHTCLICK_FIELD_NUMBER;
         hash = (53 * hash) + getRightClick().hashCode();
+        break;
+      case 16:
+        hash = (37 * hash) + TRADEREQUEST_FIELD_NUMBER;
+        hash = (53 * hash) + getTradeRequest().hashCode();
         break;
       case 0:
       default:
@@ -1031,6 +1079,9 @@ private static final long serialVersionUID = 0L;
       if (rightClickBuilder_ != null) {
         rightClickBuilder_.clear();
       }
+      if (tradeRequestBuilder_ != null) {
+        tradeRequestBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1131,6 +1182,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 15 &&
           rightClickBuilder_ != null) {
         result.type_ = rightClickBuilder_.build();
+      }
+      if (typeCase_ == 16 &&
+          tradeRequestBuilder_ != null) {
+        result.type_ = tradeRequestBuilder_.build();
       }
     }
 
@@ -1237,6 +1292,10 @@ private static final long serialVersionUID = 0L;
         }
         case RIGHTCLICK: {
           mergeRightClick(other.getRightClick());
+          break;
+        }
+        case TRADEREQUEST: {
+          mergeTradeRequest(other.getTradeRequest());
           break;
         }
         case TYPE_NOT_SET: {
@@ -1374,6 +1433,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 15;
               break;
             } // case 122
+            case 130: {
+              input.readMessage(
+                  getTradeRequestFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 16;
+              break;
+            } // case 130
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -3534,6 +3600,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 15;
       onChanged();
       return rightClickBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientTradePlayerPacket, org.y1000.network.gen.ClientTradePlayerPacket.Builder, org.y1000.network.gen.ClientTradePlayerPacketOrBuilder> tradeRequestBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+     * @return Whether the tradeRequest field is set.
+     */
+    @java.lang.Override
+    public boolean hasTradeRequest() {
+      return typeCase_ == 16;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+     * @return The tradeRequest.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientTradePlayerPacket getTradeRequest() {
+      if (tradeRequestBuilder_ == null) {
+        if (typeCase_ == 16) {
+          return (org.y1000.network.gen.ClientTradePlayerPacket) type_;
+        }
+        return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 16) {
+          return tradeRequestBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+     */
+    public Builder setTradeRequest(org.y1000.network.gen.ClientTradePlayerPacket value) {
+      if (tradeRequestBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        tradeRequestBuilder_.setMessage(value);
+      }
+      typeCase_ = 16;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+     */
+    public Builder setTradeRequest(
+        org.y1000.network.gen.ClientTradePlayerPacket.Builder builderForValue) {
+      if (tradeRequestBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        tradeRequestBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 16;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+     */
+    public Builder mergeTradeRequest(org.y1000.network.gen.ClientTradePlayerPacket value) {
+      if (tradeRequestBuilder_ == null) {
+        if (typeCase_ == 16 &&
+            type_ != org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientTradePlayerPacket.newBuilder((org.y1000.network.gen.ClientTradePlayerPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 16) {
+          tradeRequestBuilder_.mergeFrom(value);
+        } else {
+          tradeRequestBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 16;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+     */
+    public Builder clearTradeRequest() {
+      if (tradeRequestBuilder_ == null) {
+        if (typeCase_ == 16) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 16) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        tradeRequestBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+     */
+    public org.y1000.network.gen.ClientTradePlayerPacket.Builder getTradeRequestBuilder() {
+      return getTradeRequestFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientTradePlayerPacketOrBuilder getTradeRequestOrBuilder() {
+      if ((typeCase_ == 16) && (tradeRequestBuilder_ != null)) {
+        return tradeRequestBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 16) {
+          return (org.y1000.network.gen.ClientTradePlayerPacket) type_;
+        }
+        return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientTradePlayerPacket, org.y1000.network.gen.ClientTradePlayerPacket.Builder, org.y1000.network.gen.ClientTradePlayerPacketOrBuilder> 
+        getTradeRequestFieldBuilder() {
+      if (tradeRequestBuilder_ == null) {
+        if (!(typeCase_ == 16)) {
+          type_ = org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
+        }
+        tradeRequestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientTradePlayerPacket, org.y1000.network.gen.ClientTradePlayerPacket.Builder, org.y1000.network.gen.ClientTradePlayerPacketOrBuilder>(
+                (org.y1000.network.gen.ClientTradePlayerPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 16;
+      onChanged();
+      return tradeRequestBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

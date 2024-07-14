@@ -8,18 +8,20 @@ import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.ItemOrKungFuAttributeEvent;
-import org.y1000.entities.players.event.PlayerLearnKungFuEvent;
+import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
-import org.y1000.message.clientevent.ClientAttackEvent;
-import org.y1000.message.clientevent.ClientBuyItemsEvent;
-import org.y1000.message.clientevent.ClientPickItemEvent;
-import org.y1000.message.clientevent.ClientSellEvent;
+import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.network.Connection;
 import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.util.Action;
+import org.y1000.util.UnaryAction;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public final class PlayerManager extends AbstractEntityManager<Player> implements PlayerEventVisitor {
@@ -32,6 +34,8 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
 
     private final ItemFactory itemFactory;
 
+    private final TradeManager tradeManager;
+
     public PlayerManager(EntityEventSender eventSender,
                          EntityManager<GroundedItem> itemManager,
                          ItemFactory itemFactory) {
@@ -39,7 +43,9 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
         this.itemManager = itemManager;
         this.itemFactory = itemFactory;
         this.projectileManager = new ProjectileManager();
+        tradeManager = new TradeManager();
     }
+
 
     public void onPlayerConnected(Player player, Connection connection, Realm realm) {
         if (eventSender.contains(player)) {
@@ -80,6 +86,14 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
     }
 
 
+    private void handleTradePlayer(Player client, Player target, int slotId) {
+        if (!target.tradeEnabled()) {
+            client.emitEvent(PlayerTextEvent.rejectTrade(client));
+        } else {
+            tradeManager.start(client, target, slotId);
+        }
+    }
+
     public void onPlayerEvent(PlayerDataEvent dataEvent,
                               EntityManager<Npc> npcManager) {
         Validate.notNull(npcManager);
@@ -89,13 +103,15 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
         } else if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
             npcManager.find(attackEvent.entityId())
                     .ifPresentOrElse(m -> dataEvent.player().attack(attackEvent, m),
-                    () -> find(attackEvent.entityId()).ifPresent(p -> dataEvent.player().attack(attackEvent, p)));
+                            () -> find(attackEvent.entityId()).ifPresent(p -> dataEvent.player().attack(attackEvent, p)));
         } else if (dataEvent.data() instanceof ClientSellEvent sellEvent) {
             npcManager.find(sellEvent.merchantId(), Merchant.class)
                     .ifPresent(merchant -> merchant.buy(dataEvent.player(), sellEvent.items()));
         } else if (dataEvent.data() instanceof ClientBuyItemsEvent buyItemsEvent) {
             npcManager.find(buyItemsEvent.merchantId(), Merchant.class)
                     .ifPresent(merchant -> merchant.sell(dataEvent.player(), buyItemsEvent.items(), itemFactory::createItem));
+        } else if (dataEvent.data() instanceof ClientTradePlayerEvent tradePlayerEvent) {
+            find(tradePlayerEvent.targetId(), Player.class).ifPresent(player -> handleTradePlayer(dataEvent.player(), player, tradePlayerEvent.slot()));
         } else {
             dataEvent.player().handleClientEvent(dataEvent.data());
         }
@@ -103,7 +119,11 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
+        if (entityEvent.source() instanceof Player player) {
+            tradeManager.onPlayerEvent(player, entityEvent);
+        }
         if (entityEvent instanceof PlayerLeftEvent playerLeftEvent) {
+            eventSender.notifyVisiblePlayers(playerLeftEvent.player(), playerLeftEvent);
             delete(playerLeftEvent.player());
         } else if (entityEvent instanceof PlayerShootEvent shootEvent) {
             projectileManager.add(shootEvent.projectile());
@@ -112,6 +132,12 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
             eventSender.notifySelf(learnKungFuEvent);
         } else if (entityEvent instanceof ItemOrKungFuAttributeEvent itemAttributeEvent) {
             eventSender.notifySelf(itemAttributeEvent);
+        } else if (entityEvent instanceof PlayerRightClickAttributeEvent rightClickAttributeEvent) {
+            eventSender.notifySelf(rightClickAttributeEvent);
+        } else if (entityEvent instanceof OpenTradeWindowEvent openTradeWindowEvent) {
+            eventSender.notifySelf(openTradeWindowEvent);
+        } else if (entityEvent instanceof UpdateTradeWindowEvent updateTradeWindowEvent) {
+            eventSender.notifySelf(updateTradeWindowEvent);
         }
     }
 }

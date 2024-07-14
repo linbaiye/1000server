@@ -57,6 +57,8 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
         NO_MORE_PILL(12),
 
+        MULTI_TRADE(13),
+
 
         CUSTOM(1000000);
         ;
@@ -163,5 +165,13 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
     public static PlayerTextEvent outOfAmmo(Player player) {
         return new PlayerTextEvent(player, null, TextType.OUT_OF_AMMO);
+    }
+
+    public static PlayerTextEvent rejectTrade(Player player) {
+        return new PlayerTextEvent(player, null, TextType.TRADE_REJECTED);
+    }
+
+    public static PlayerTextEvent multiTrade(Player player) {
+        return new PlayerTextEvent(player, null, TextType.MULTI_TRADE);
     }
 }

@@ -542,7 +542,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             Optional<KungFu> kungFu = kungFuBook.findKungFu(event.page(), event.slotId());
             kungFu.ifPresent(k -> emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), k.description(), event.type())));
         } else if (event.type() == RightClickType.CHARACTER) {
-
+            emitEvent(new PlayerRightClickAttributeEvent(this));
         }
     }
 
@@ -1139,9 +1139,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public int bodyArmor() {
-        return aggregateArmor().body();
+        return armor().body();
     }
 
+    @Override
+    public Armor armor() {
+        return aggregateArmor();
+    }
 
     // mandieNew 2003, ManDieOld 2005, womanDieNew 2203, womanDieOld 2205.
 

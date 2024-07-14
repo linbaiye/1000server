@@ -167,6 +167,11 @@ MaxCount,        最多持有数量；
         return getEnum(item, "HitType", AttackKungFuType::fromValue);
     }
 
+
+    public int getTypeValue(String name) {
+        return getInt(name, ITEM_TYPE);
+    }
+
     @Override
     public boolean canStack(String itemName) {
         String s = get(itemName, "boDouble");

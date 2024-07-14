@@ -279,19 +279,19 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.PlayerEquipPacketOrBuilder getEquipOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
-   * @return Whether the tradeWindow field is set.
+   * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
+   * @return Whether the openTradeWindow field is set.
    */
-  boolean hasTradeWindow();
+  boolean hasOpenTradeWindow();
   /**
-   * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
-   * @return The tradeWindow.
+   * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
+   * @return The openTradeWindow.
    */
-  org.y1000.network.gen.TradeWindowPacket getTradeWindow();
+  org.y1000.network.gen.OpenTradeWindowPacket getOpenTradeWindow();
   /**
-   * <code>.org.y1000.network.gen.TradeWindowPacket tradeWindow = 22;</code>
+   * <code>.org.y1000.network.gen.OpenTradeWindowPacket openTradeWindow = 22;</code>
    */
-  org.y1000.network.gen.TradeWindowPacketOrBuilder getTradeWindowOrBuilder();
+  org.y1000.network.gen.OpenTradeWindowPacketOrBuilder getOpenTradeWindowOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.ToggleKungFuPacket toggleKungFu = 23;</code>
@@ -487,6 +487,36 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
    */
   org.y1000.network.gen.ItemAttributePacketOrBuilder getItemAttributeOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+   * @return Whether the rightClickAttribute field is set.
+   */
+  boolean hasRightClickAttribute();
+  /**
+   * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+   * @return The rightClickAttribute.
+   */
+  org.y1000.network.gen.PlayerRightClickAttributePacket getRightClickAttribute();
+  /**
+   * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
+   */
+  org.y1000.network.gen.PlayerRightClickAttributePacketOrBuilder getRightClickAttributeOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+   * @return Whether the updateTradeWindow field is set.
+   */
+  boolean hasUpdateTradeWindow();
+  /**
+   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+   * @return The updateTradeWindow.
+   */
+  org.y1000.network.gen.UpdateTradeWindowPacket getUpdateTradeWindow();
+  /**
+   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
+   */
+  org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder getUpdateTradeWindowOrBuilder();
 
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

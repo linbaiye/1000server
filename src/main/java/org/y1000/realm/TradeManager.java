@@ -1,56 +1,63 @@
 package org.y1000.realm;
 
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.OpenTradeWindowEvent;
-import org.y1000.entities.players.event.PlayerStartTradeEvent;
-import org.y1000.entities.trade.Trade;
-import org.y1000.message.PlayerTextEvent;
+import org.y1000.entities.players.event.UpdateTradeWindowEvent;
+import org.y1000.entities.trade.PlayerTrade;
 import org.y1000.event.EntityEvent;
-import org.y1000.event.EntityEventListener;
-import org.y1000.util.UnaryAction;
+import org.y1000.message.PlayerMoveEvent;
+import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.serverevent.PlayerLeftEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public final class TradeManager implements EntityEventListener {
-
-    private final Map<Player, Trade> ongoingTrades;
-
+public final class TradeManager {
+    private final Map<Player, PlayerTrade> ongoingTrades;
 
     public TradeManager() {
         ongoingTrades = new HashMap<>();
     }
 
-    public boolean hasOngoingTrade(Player player) {
-        return ongoingTrades.containsKey(player);
+    public void start(Player trader, Player tradee, int slotId) {
+        if (!tradee.tradeEnabled()) {
+            trader.emitEvent(PlayerTextEvent.rejectTrade(trader));
+            return;
+        }
+        if (ongoingTrades.containsKey(trader) || ongoingTrades.containsKey(tradee)) {
+            trader.emitEvent(PlayerTextEvent.multiTrade(trader));
+            return;
+        }
+        PlayerTrade trade = new PlayerTrade(trader, tradee);
+        ongoingTrades.put(trader, trade);
+        ongoingTrades.put(tradee, trade);
+        trader.emitEvent(new OpenTradeWindowEvent(trader, tradee.id(), slotId));
+        trader.emitEvent(new OpenTradeWindowEvent(tradee, trader.id(), null));
     }
 
-    public void handle(PlayerStartTradeEvent event, Player target,
-                       UnaryAction<EntityEvent> eventSender) {
-        if (event.player().stateEnum() == State.DIE ||
-                target.stateEnum() == State.DIE ||
-                hasOngoingTrade(event.player()) ||
-                hasOngoingTrade(target)) {
-            return;
+    private boolean needClose(EntityEvent event, Player trader, Player tradee) {
+        if (event instanceof PlayerLeftEvent) {
+            return true;
+        } else if (event instanceof CreatureDieEvent) {
+            return true;
+        } else if (event instanceof PlayerMoveEvent) {
+            return trader.coordinate().directDistance(tradee.coordinate()) > 2;
         }
-        if (!target.tradeEnabled()) {
-            eventSender.invoke(PlayerTextEvent.tradeDisabled(event.player()));
-            return;
-        }
-        if (target.coordinate().directDistance(event.source().coordinate()) > 2) {
-            eventSender.invoke(PlayerTextEvent.tooFarAway(event.player()));
-            return;
-        }
-        Trade trade = new Trade(event.player(), target);
-        ongoingTrades.put(event.player(), trade);
-        ongoingTrades.put(target, trade);
-        eventSender.invoke(event);
-        eventSender.invoke(new OpenTradeWindowEvent(target, event.slot()));
+        return false;
     }
 
-    @Override
-    public void onEvent(EntityEvent entityEvent) {
-
+    public void onPlayerEvent(Player player, EntityEvent event) {
+        if (!ongoingTrades.containsKey(player)) {
+            return;
+        }
+        PlayerTrade trade = ongoingTrades.get(player);
+        if (!needClose(event, trade.getTrader(), trade.getTradee())) {
+            return;
+        }
+        trade.getTrader().emitEvent(UpdateTradeWindowEvent.close(trade.getTrader()));
+        trade.getTradee().emitEvent(UpdateTradeWindowEvent.close(trade.getTradee()));
+        ongoingTrades.remove(trade.getTradee());
+        ongoingTrades.remove(trade.getTrader());
     }
 }

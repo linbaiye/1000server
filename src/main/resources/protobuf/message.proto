@@ -166,6 +166,10 @@ message CharacterKungFuPacket {
   int32 attackKungFuType = 3;
 }
 
+message ClientTradePlayerPacket {
+  int64 targetId = 1;
+  int32 slot = 2;
+}
 
 message ClientMerchantTradeItemsPacket {
   int64 merchantId = 1;
@@ -189,6 +193,7 @@ message ClientPacket {
     ClientMerchantTradeItemsPacket sellItems = 13;
     ClientMerchantTradeItemsPacket buyItems = 14;
     RightClickPacket rightClick = 15;
+    ClientTradePlayerPacket tradeRequest = 16;
   }
 }
 
@@ -210,9 +215,16 @@ message InventoryItemPacket {
   optional int64 number = 3;
 }
 
-message TradeWindowPacket {
-  bool open = 1;
-  optional int32 intputSlot = 2;
+message OpenTradeWindowPacket {
+  int64 anotherPlayerId = 1;
+  optional int32 slot = 2;
+}
+
+message UpdateTradeWindowPacket {
+  int32 type = 1;
+  optional string name = 2;
+  optional int64 number = 3;
+  optional int32 slot = 4;
 }
 
 
@@ -284,6 +296,7 @@ message PlayerRightClickAttributePacket {
   int32 headArmor = 14;
   int32 armArmor = 15;
   int32 legArmor = 16;
+  int32 age = 17;
 }
 
 message PlayerUnequipPacket {
@@ -333,6 +346,7 @@ message ItemAttributePacket {
 }
 
 
+
 message Packet {
   oneof TypedPacket {
     PositionPacket positionPacket = 1;
@@ -353,7 +367,7 @@ message Packet {
     TextMessagePacket text = 19;
     PlayerUnequipPacket unequip = 20;
     PlayerEquipPacket equip = 21;
-    TradeWindowPacket tradeWindow = 22;
+    OpenTradeWindowPacket openTradeWindow = 22;
     ToggleKungFuPacket toggleKungFu = 23;
     PlayerSitDownPacket sitDown = 24;
     PlayerStandUpPacket standUp = 25;
@@ -368,6 +382,7 @@ message Packet {
     KungFuPacket learnKungFu = 34;
     ItemAttributePacket itemAttribute = 35;
     PlayerRightClickAttributePacket rightClickAttribute = 36;
+    UpdateTradeWindowPacket updateTradeWindow = 37;
   }
 }
 

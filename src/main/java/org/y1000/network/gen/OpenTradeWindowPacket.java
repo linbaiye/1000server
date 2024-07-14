@@ -5,69 +5,69 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.TradeWindowPacket}
+ * Protobuf type {@code org.y1000.network.gen.OpenTradeWindowPacket}
  */
-public final class TradeWindowPacket extends
+public final class OpenTradeWindowPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.TradeWindowPacket)
-    TradeWindowPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.OpenTradeWindowPacket)
+    OpenTradeWindowPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use TradeWindowPacket.newBuilder() to construct.
-  private TradeWindowPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use OpenTradeWindowPacket.newBuilder() to construct.
+  private OpenTradeWindowPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private TradeWindowPacket() {
+  private OpenTradeWindowPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new TradeWindowPacket();
+    return new OpenTradeWindowPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_TradeWindowPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_OpenTradeWindowPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_TradeWindowPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_OpenTradeWindowPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.TradeWindowPacket.class, org.y1000.network.gen.TradeWindowPacket.Builder.class);
+            org.y1000.network.gen.OpenTradeWindowPacket.class, org.y1000.network.gen.OpenTradeWindowPacket.Builder.class);
   }
 
   private int bitField0_;
-  public static final int OPEN_FIELD_NUMBER = 1;
-  private boolean open_ = false;
+  public static final int ANOTHERPLAYERID_FIELD_NUMBER = 1;
+  private long anotherPlayerId_ = 0L;
   /**
-   * <code>bool open = 1;</code>
-   * @return The open.
+   * <code>int64 anotherPlayerId = 1;</code>
+   * @return The anotherPlayerId.
    */
   @java.lang.Override
-  public boolean getOpen() {
-    return open_;
+  public long getAnotherPlayerId() {
+    return anotherPlayerId_;
   }
 
-  public static final int INTPUTSLOT_FIELD_NUMBER = 2;
-  private int intputSlot_ = 0;
+  public static final int SLOT_FIELD_NUMBER = 2;
+  private int slot_ = 0;
   /**
-   * <code>optional int32 intputSlot = 2;</code>
-   * @return Whether the intputSlot field is set.
+   * <code>optional int32 slot = 2;</code>
+   * @return Whether the slot field is set.
    */
   @java.lang.Override
-  public boolean hasIntputSlot() {
+  public boolean hasSlot() {
     return ((bitField0_ & 0x00000001) != 0);
   }
   /**
-   * <code>optional int32 intputSlot = 2;</code>
-   * @return The intputSlot.
+   * <code>optional int32 slot = 2;</code>
+   * @return The slot.
    */
   @java.lang.Override
-  public int getIntputSlot() {
-    return intputSlot_;
+  public int getSlot() {
+    return slot_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -84,11 +84,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (open_ != false) {
-      output.writeBool(1, open_);
+    if (anotherPlayerId_ != 0L) {
+      output.writeInt64(1, anotherPlayerId_);
     }
     if (((bitField0_ & 0x00000001) != 0)) {
-      output.writeInt32(2, intputSlot_);
+      output.writeInt32(2, slot_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -99,13 +99,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (open_ != false) {
+    if (anotherPlayerId_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeBoolSize(1, open_);
+        .computeInt64Size(1, anotherPlayerId_);
     }
     if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, intputSlot_);
+        .computeInt32Size(2, slot_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -117,17 +117,17 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.TradeWindowPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.OpenTradeWindowPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.TradeWindowPacket other = (org.y1000.network.gen.TradeWindowPacket) obj;
+    org.y1000.network.gen.OpenTradeWindowPacket other = (org.y1000.network.gen.OpenTradeWindowPacket) obj;
 
-    if (getOpen()
-        != other.getOpen()) return false;
-    if (hasIntputSlot() != other.hasIntputSlot()) return false;
-    if (hasIntputSlot()) {
-      if (getIntputSlot()
-          != other.getIntputSlot()) return false;
+    if (getAnotherPlayerId()
+        != other.getAnotherPlayerId()) return false;
+    if (hasSlot() != other.hasSlot()) return false;
+    if (hasSlot()) {
+      if (getSlot()
+          != other.getSlot()) return false;
     }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
@@ -140,56 +140,56 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + OPEN_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-        getOpen());
-    if (hasIntputSlot()) {
-      hash = (37 * hash) + INTPUTSLOT_FIELD_NUMBER;
-      hash = (53 * hash) + getIntputSlot();
+    hash = (37 * hash) + ANOTHERPLAYERID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getAnotherPlayerId());
+    if (hasSlot()) {
+      hash = (37 * hash) + SLOT_FIELD_NUMBER;
+      hash = (53 * hash) + getSlot();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.TradeWindowPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.TradeWindowPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -197,26 +197,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.TradeWindowPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.TradeWindowPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.TradeWindowPacket parseFrom(
+  public static org.y1000.network.gen.OpenTradeWindowPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -229,7 +229,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.TradeWindowPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.OpenTradeWindowPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -245,26 +245,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.TradeWindowPacket}
+   * Protobuf type {@code org.y1000.network.gen.OpenTradeWindowPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.TradeWindowPacket)
-      org.y1000.network.gen.TradeWindowPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.OpenTradeWindowPacket)
+      org.y1000.network.gen.OpenTradeWindowPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_TradeWindowPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_OpenTradeWindowPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_TradeWindowPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_OpenTradeWindowPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.TradeWindowPacket.class, org.y1000.network.gen.TradeWindowPacket.Builder.class);
+              org.y1000.network.gen.OpenTradeWindowPacket.class, org.y1000.network.gen.OpenTradeWindowPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.TradeWindowPacket.newBuilder()
+    // Construct using org.y1000.network.gen.OpenTradeWindowPacket.newBuilder()
     private Builder() {
 
     }
@@ -278,25 +278,25 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      open_ = false;
-      intputSlot_ = 0;
+      anotherPlayerId_ = 0L;
+      slot_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_TradeWindowPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_OpenTradeWindowPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.TradeWindowPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.TradeWindowPacket.getDefaultInstance();
+    public org.y1000.network.gen.OpenTradeWindowPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.OpenTradeWindowPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.TradeWindowPacket build() {
-      org.y1000.network.gen.TradeWindowPacket result = buildPartial();
+    public org.y1000.network.gen.OpenTradeWindowPacket build() {
+      org.y1000.network.gen.OpenTradeWindowPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -304,21 +304,21 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.TradeWindowPacket buildPartial() {
-      org.y1000.network.gen.TradeWindowPacket result = new org.y1000.network.gen.TradeWindowPacket(this);
+    public org.y1000.network.gen.OpenTradeWindowPacket buildPartial() {
+      org.y1000.network.gen.OpenTradeWindowPacket result = new org.y1000.network.gen.OpenTradeWindowPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.TradeWindowPacket result) {
+    private void buildPartial0(org.y1000.network.gen.OpenTradeWindowPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.open_ = open_;
+        result.anotherPlayerId_ = anotherPlayerId_;
       }
       int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.intputSlot_ = intputSlot_;
+        result.slot_ = slot_;
         to_bitField0_ |= 0x00000001;
       }
       result.bitField0_ |= to_bitField0_;
@@ -358,21 +358,21 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.TradeWindowPacket) {
-        return mergeFrom((org.y1000.network.gen.TradeWindowPacket)other);
+      if (other instanceof org.y1000.network.gen.OpenTradeWindowPacket) {
+        return mergeFrom((org.y1000.network.gen.OpenTradeWindowPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.TradeWindowPacket other) {
-      if (other == org.y1000.network.gen.TradeWindowPacket.getDefaultInstance()) return this;
-      if (other.getOpen() != false) {
-        setOpen(other.getOpen());
+    public Builder mergeFrom(org.y1000.network.gen.OpenTradeWindowPacket other) {
+      if (other == org.y1000.network.gen.OpenTradeWindowPacket.getDefaultInstance()) return this;
+      if (other.getAnotherPlayerId() != 0L) {
+        setAnotherPlayerId(other.getAnotherPlayerId());
       }
-      if (other.hasIntputSlot()) {
-        setIntputSlot(other.getIntputSlot());
+      if (other.hasSlot()) {
+        setSlot(other.getSlot());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -401,12 +401,12 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              open_ = input.readBool();
+              anotherPlayerId_ = input.readInt64();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
             case 16: {
-              intputSlot_ = input.readInt32();
+              slot_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
@@ -427,74 +427,74 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private boolean open_ ;
+    private long anotherPlayerId_ ;
     /**
-     * <code>bool open = 1;</code>
-     * @return The open.
+     * <code>int64 anotherPlayerId = 1;</code>
+     * @return The anotherPlayerId.
      */
     @java.lang.Override
-    public boolean getOpen() {
-      return open_;
+    public long getAnotherPlayerId() {
+      return anotherPlayerId_;
     }
     /**
-     * <code>bool open = 1;</code>
-     * @param value The open to set.
+     * <code>int64 anotherPlayerId = 1;</code>
+     * @param value The anotherPlayerId to set.
      * @return This builder for chaining.
      */
-    public Builder setOpen(boolean value) {
+    public Builder setAnotherPlayerId(long value) {
 
-      open_ = value;
+      anotherPlayerId_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>bool open = 1;</code>
+     * <code>int64 anotherPlayerId = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder clearOpen() {
+    public Builder clearAnotherPlayerId() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      open_ = false;
+      anotherPlayerId_ = 0L;
       onChanged();
       return this;
     }
 
-    private int intputSlot_ ;
+    private int slot_ ;
     /**
-     * <code>optional int32 intputSlot = 2;</code>
-     * @return Whether the intputSlot field is set.
+     * <code>optional int32 slot = 2;</code>
+     * @return Whether the slot field is set.
      */
     @java.lang.Override
-    public boolean hasIntputSlot() {
+    public boolean hasSlot() {
       return ((bitField0_ & 0x00000002) != 0);
     }
     /**
-     * <code>optional int32 intputSlot = 2;</code>
-     * @return The intputSlot.
+     * <code>optional int32 slot = 2;</code>
+     * @return The slot.
      */
     @java.lang.Override
-    public int getIntputSlot() {
-      return intputSlot_;
+    public int getSlot() {
+      return slot_;
     }
     /**
-     * <code>optional int32 intputSlot = 2;</code>
-     * @param value The intputSlot to set.
+     * <code>optional int32 slot = 2;</code>
+     * @param value The slot to set.
      * @return This builder for chaining.
      */
-    public Builder setIntputSlot(int value) {
+    public Builder setSlot(int value) {
 
-      intputSlot_ = value;
+      slot_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>optional int32 intputSlot = 2;</code>
+     * <code>optional int32 slot = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearIntputSlot() {
+    public Builder clearSlot() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      intputSlot_ = 0;
+      slot_ = 0;
       onChanged();
       return this;
     }
@@ -511,23 +511,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.TradeWindowPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.OpenTradeWindowPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.TradeWindowPacket)
-  private static final org.y1000.network.gen.TradeWindowPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.OpenTradeWindowPacket)
+  private static final org.y1000.network.gen.OpenTradeWindowPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.TradeWindowPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.OpenTradeWindowPacket();
   }
 
-  public static org.y1000.network.gen.TradeWindowPacket getDefaultInstance() {
+  public static org.y1000.network.gen.OpenTradeWindowPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<TradeWindowPacket>
-      PARSER = new com.google.protobuf.AbstractParser<TradeWindowPacket>() {
+  private static final com.google.protobuf.Parser<OpenTradeWindowPacket>
+      PARSER = new com.google.protobuf.AbstractParser<OpenTradeWindowPacket>() {
     @java.lang.Override
-    public TradeWindowPacket parsePartialFrom(
+    public OpenTradeWindowPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -546,17 +546,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<TradeWindowPacket> parser() {
+  public static com.google.protobuf.Parser<OpenTradeWindowPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<TradeWindowPacket> getParserForType() {
+  public com.google.protobuf.Parser<OpenTradeWindowPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.TradeWindowPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.OpenTradeWindowPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

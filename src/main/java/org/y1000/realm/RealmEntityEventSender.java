@@ -26,14 +26,6 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     private final Map<Player, Connection> playerConnectionMap = new HashMap<>(100);
 
-
-    private final TradeManager tradeManager;
-
-    RealmEntityEventSender() {
-        tradeManager = new TradeManager();
-    }
-
-
     @Override
     public void visit(InputResponseMessage inputResponseMessage) {
         sendMessage(inputResponseMessage.player(), inputResponseMessage);
@@ -99,10 +91,7 @@ final class RealmEntityEventSender implements EntityEventListener,
         affected.forEach(player -> sendMessage(player, message));
     }
 
-    @Override
-    public void visit(PlayerLeftEvent event) {
-        cleanEntity(event.source(), event);
-    }
+
 
     @Override
     public void visit(CreatureAttackEvent event) {
@@ -193,18 +182,6 @@ final class RealmEntityEventSender implements EntityEventListener,
     @Override
     public void visit(PlayerTextEvent event) {
         sendMessage(event.player(), event);
-    }
-
-    @Override
-    public void visit(OpenTradeWindowEvent event) {
-        sendMessage(event.player(), event);
-    }
-
-    @Override
-    public void visit(PlayerStartTradeEvent event) {
-        Optional<Player> insight = findInsight(event.source(), event.targetPlayerId())
-                .filter(entity -> entity instanceof Player).map(Player.class::cast);
-        insight.ifPresent(another -> tradeManager.handle(event, another, this::onEvent));
     }
 
 

@@ -233,5 +233,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.RightClickPacketOrBuilder getRightClickOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+   * @return Whether the tradeRequest field is set.
+   */
+  boolean hasTradeRequest();
+  /**
+   * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+   * @return The tradeRequest.
+   */
+  org.y1000.network.gen.ClientTradePlayerPacket getTradeRequest();
+  /**
+   * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
+   */
+  org.y1000.network.gen.ClientTradePlayerPacketOrBuilder getTradeRequestOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

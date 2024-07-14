@@ -15,7 +15,12 @@ public interface RightClickPacketOrBuilder extends
   int getType();
 
   /**
-   * <code>int32 slotId = 2;</code>
+   * <code>optional int32 slotId = 2;</code>
+   * @return Whether the slotId field is set.
+   */
+  boolean hasSlotId();
+  /**
+   * <code>optional int32 slotId = 2;</code>
    * @return The slotId.
    */
   int getSlotId();
