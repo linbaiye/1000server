@@ -171,6 +171,19 @@ message ClientTradePlayerPacket {
   int32 slot = 2;
 }
 
+message ClientAddTradeItemPacket {
+  int32 inventorySlot = 1;
+  int64 itemNumber = 2;
+}
+
+message ClientConfirmTradePacket {
+
+}
+
+message ClientCancelTradePacket {
+
+}
+
 message ClientMerchantTradeItemsPacket {
   int64 merchantId = 1;
   repeated InventoryItemPacket items = 2;
@@ -194,6 +207,7 @@ message ClientPacket {
     ClientMerchantTradeItemsPacket buyItems = 14;
     RightClickPacket rightClick = 15;
     ClientTradePlayerPacket tradeRequest = 16;
+    ClientAddTradeItemPacket addTradeItem = 17;
   }
 }
 

@@ -80,19 +80,9 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
 
     @Override
     protected void onDeleted(Player entity) {
-        entity.deregisterEventListener(this);
-        entity.deregisterEventListener(itemManager);
         eventSender.remove(entity);
     }
 
-
-    private void handleTradePlayer(Player client, Player target, int slotId) {
-        if (!target.tradeEnabled()) {
-            client.emitEvent(PlayerTextEvent.rejectTrade(client));
-        } else {
-            tradeManager.start(client, target, slotId);
-        }
-    }
 
     public void onPlayerEvent(PlayerDataEvent dataEvent,
                               EntityManager<Npc> npcManager) {
@@ -111,7 +101,9 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
             npcManager.find(buyItemsEvent.merchantId(), Merchant.class)
                     .ifPresent(merchant -> merchant.sell(dataEvent.player(), buyItemsEvent.items(), itemFactory::createItem));
         } else if (dataEvent.data() instanceof ClientTradePlayerEvent tradePlayerEvent) {
-            find(tradePlayerEvent.targetId(), Player.class).ifPresent(player -> handleTradePlayer(dataEvent.player(), player, tradePlayerEvent.slot()));
+            find(tradePlayerEvent.targetId(), Player.class).ifPresent(tradee -> tradeManager.start(dataEvent.player(), tradee, tradePlayerEvent.slot()));
+        } else if (dataEvent.data() instanceof ClientAddTradeItemEvent addTradeItemEvent) {
+            tradeManager.addTradeItem(dataEvent.player(), addTradeItemEvent.slot(), addTradeItemEvent.number());
         } else {
             dataEvent.player().handleClientEvent(dataEvent.data());
         }

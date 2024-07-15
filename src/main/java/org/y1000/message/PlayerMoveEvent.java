@@ -29,8 +29,4 @@ public final class PlayerMoveEvent extends AbstractPositionEvent {
     public void accept(EntityEventVisitor visitor) {
         visitor.visit(this);
     }
-
-    public static PlayerMoveEvent movingTo(AbstractMonster monster, Direction direction) {
-        return new PlayerMoveEvent(monster, direction, monster.coordinate());
-    }
 }

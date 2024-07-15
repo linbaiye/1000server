@@ -1,12 +1,13 @@
 package org.y1000.realm;
 
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.OpenTradeWindowEvent;
 import org.y1000.entities.players.event.UpdateTradeWindowEvent;
 import org.y1000.entities.trade.PlayerTrade;
 import org.y1000.event.EntityEvent;
-import org.y1000.message.PlayerMoveEvent;
+import org.y1000.item.Item;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 
@@ -21,6 +22,9 @@ public final class TradeManager {
     }
 
     public void start(Player trader, Player tradee, int slotId) {
+        Validate.notNull(trader);
+        Validate.notNull(tradee);
+        Validate.notNull(trader.inventory().getItem(slotId));
         if (!tradee.tradeEnabled()) {
             trader.emitEvent(PlayerTextEvent.rejectTrade(trader));
             return;
@@ -33,7 +37,7 @@ public final class TradeManager {
         ongoingTrades.put(trader, trade);
         ongoingTrades.put(tradee, trade);
         trader.emitEvent(new OpenTradeWindowEvent(trader, tradee.id(), slotId));
-        trader.emitEvent(new OpenTradeWindowEvent(tradee, trader.id(), null));
+        tradee.emitEvent(new OpenTradeWindowEvent(tradee, trader.id(), null));
     }
 
     private boolean needClose(EntityEvent event, Player trader, Player tradee) {
@@ -41,14 +45,12 @@ public final class TradeManager {
             return true;
         } else if (event instanceof CreatureDieEvent) {
             return true;
-        } else if (event instanceof PlayerMoveEvent) {
-            return trader.coordinate().directDistance(tradee.coordinate()) > 2;
         }
-        return false;
+        return trader.coordinate().directDistance(tradee.coordinate()) > 2;
     }
 
     public void onPlayerEvent(Player player, EntityEvent event) {
-        if (!ongoingTrades.containsKey(player)) {
+        if (player == null || event == null || !ongoingTrades.containsKey(player)) {
             return;
         }
         PlayerTrade trade = ongoingTrades.get(player);
@@ -59,5 +61,21 @@ public final class TradeManager {
         trade.getTradee().emitEvent(UpdateTradeWindowEvent.close(trade.getTradee()));
         ongoingTrades.remove(trade.getTradee());
         ongoingTrades.remove(trade.getTrader());
+    }
+
+    public void addTradeItem(Player player, int inventorySlot, long number) {
+        if (player == null || !ongoingTrades.containsKey(player) ||
+                player.inventory().getItem(inventorySlot) == null) {
+            return;
+        }
+        Item item = player.inventory().getItem(inventorySlot);
+        if (player.inventory().hasEnough(inventorySlot, number)) {
+            player.inventory().decrease(inventorySlot, number);
+        }
+        PlayerTrade playerTrade = ongoingTrades.get(player);
+        if (!ongoingTrades.containsKey(player)) {
+            return;
+        }
+//        ongoingTrades.get()
     }
 }

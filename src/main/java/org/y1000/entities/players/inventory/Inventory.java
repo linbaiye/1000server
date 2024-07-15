@@ -30,8 +30,6 @@ public final class Inventory {
 
     private final Map<Integer, Item> items = new HashMap<>(30);
 
-    private final Map<Integer, Item> tradingItems = new HashMap<>(30);
-
     public boolean isFull() {
         return items.size() >= MAX_CAP;
     }
@@ -159,9 +157,23 @@ public final class Inventory {
         Validate.isTrue(slot >= 1 && slot <= maxCapacity(), "Slot out of range.");
     }
 
+    public boolean hasEnough(int slot, long number) {
+        var item = getItem(slot);
+        if (item == null) {
+            return false;
+        }
+        if (item instanceof AbstractStackItem stackItem) {
+            return stackItem.number() >= number;
+        }
+        return number == 1;
+    }
 
-    private boolean dropItem(int slot, int number) {
+
+    public boolean decrease(int slot, long number) {
         Item item = items.get(slot);
+        if (item == null) {
+            return false;
+        }
         if (!(item instanceof DefaultStackItem stackItem)) {
             items.remove(slot);
             return true;
@@ -170,21 +182,12 @@ public final class Inventory {
             return false;
         }
         stackItem.decrease(number);
-        if (stackItem.number() == 0) {
+        if (stackItem.number() <= 0) {
             items.remove(slot);
         }
         return true;
     }
 
-
-    public boolean canPick(Item item) {
-        if (item instanceof DefaultStackItem stackItem) {
-            return findStackItem(item.name())
-                    .map(current -> current.hasMoreCapacity(stackItem.number()))
-                    .orElse(!isFull());
-        }
-        return !isFull();
-    }
 
     public boolean canPick(GroundedItem item) {
         for (Item value : items.values()) {
@@ -314,7 +317,7 @@ public final class Inventory {
             log.warn("Nothing to drop.");
             return;
         }
-        if (dropItem(dropItemEvent.sourceSlot(), dropItemEvent.number())) {
+        if (decrease(dropItemEvent.sourceSlot(), dropItemEvent.number())) {
             log.debug("Dropped item {}", item);
             UpdateInventorySlotEvent event = new UpdateInventorySlotEvent(player, dropItemEvent.sourceSlot(), getItem(dropItemEvent.sourceSlot()));
             eventSender.invoke(event);

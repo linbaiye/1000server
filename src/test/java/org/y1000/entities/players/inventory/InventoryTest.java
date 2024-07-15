@@ -170,4 +170,14 @@ class InventoryTest {
         inventory.decrease(slot);
         assertNull(inventory.getItem(slot));
     }
+
+    @Test
+    void hasEnough() {
+        int slot = inventory.add(createHair());
+        assertTrue(inventory.hasEnough(slot, 1));
+        assertFalse(inventory.hasEnough(slot, 2));
+        slot = inventory.add(new DefaultStackItem(DefaultStackItem.MONEY, 1000, ItemType.MONEY, itemSdb));
+        assertTrue(inventory.hasEnough(slot, 1000));
+        assertFalse(inventory.hasEnough(slot, 1001));
+    }
 }
