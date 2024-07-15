@@ -17,6 +17,6 @@ public final class KungFuItem extends AbstractStackItem {
     }
 
     public KungFu kungFu() {
-        return kungFu;
+        return kungFu.duplicate();
     }
 }

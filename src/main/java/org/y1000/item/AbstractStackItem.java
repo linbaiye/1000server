@@ -34,6 +34,10 @@ public abstract class AbstractStackItem extends AbstractItem {
         }
     }
 
+    public boolean canSplit(int n) {
+        return number() > n && n > 0;
+    }
+
 
     public boolean hasMoreCapacity(long more) {
         return number + more <= MAX_NUMBER;

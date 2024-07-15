@@ -5,9 +5,10 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.State;
+import org.y1000.kungfu.KungFu;
 
 @Slf4j
-public class ThrowKungFu extends AbstractRangedKungFu {
+public final class ThrowKungFu extends AbstractRangedKungFu {
 
     @Builder
     public ThrowKungFu(String name, int exp, AttackKungFuParameters parameters) {
@@ -29,5 +30,10 @@ public class ThrowKungFu extends AbstractRangedKungFu {
     @Override
     protected Logger logger() {
         return log;
+    }
+
+    @Override
+    public KungFu duplicate() {
+        return new ThrowKungFu(name(), 0, getParameters());
     }
 }

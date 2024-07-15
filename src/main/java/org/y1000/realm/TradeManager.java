@@ -7,7 +7,9 @@ import org.y1000.entities.players.event.OpenTradeWindowEvent;
 import org.y1000.entities.players.event.UpdateTradeWindowEvent;
 import org.y1000.entities.trade.PlayerTrade;
 import org.y1000.event.EntityEvent;
+import org.y1000.item.AbstractStackItem;
 import org.y1000.item.Item;
+import org.y1000.item.ItemFactory;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 
@@ -17,8 +19,11 @@ import java.util.Map;
 public final class TradeManager {
     private final Map<Player, PlayerTrade> ongoingTrades;
 
-    public TradeManager() {
+    private final ItemFactory itemFactory;
+
+    public TradeManager(ItemFactory itemFactory) {
         ongoingTrades = new HashMap<>();
+        this.itemFactory = itemFactory;
     }
 
     public void start(Player trader, Player tradee, int slotId) {
@@ -27,6 +32,10 @@ public final class TradeManager {
         Validate.notNull(trader.inventory().getItem(slotId));
         if (!tradee.tradeEnabled()) {
             trader.emitEvent(PlayerTextEvent.rejectTrade(trader));
+            return;
+        }
+        if (trader.coordinate().directDistance(tradee.coordinate()) > 2) {
+            trader.emitEvent(PlayerTextEvent.tooFarAway(trader));
             return;
         }
         if (ongoingTrades.containsKey(trader) || ongoingTrades.containsKey(tradee)) {
@@ -64,18 +73,23 @@ public final class TradeManager {
     }
 
     public void addTradeItem(Player player, int inventorySlot, long number) {
-        if (player == null || !ongoingTrades.containsKey(player) ||
-                player.inventory().getItem(inventorySlot) == null) {
+        if (player == null || !ongoingTrades.containsKey(player)) {
             return;
         }
         Item item = player.inventory().getItem(inventorySlot);
+        if (item == null) {
+            return;
+        }
         if (player.inventory().hasEnough(inventorySlot, number)) {
             player.inventory().decrease(inventorySlot, number);
         }
-        PlayerTrade playerTrade = ongoingTrades.get(player);
-        if (!ongoingTrades.containsKey(player)) {
+        if (item instanceof AbstractStackItem) {
+            item = itemFactory.createItem(item.name(), number);
+        }
+        PlayerTrade trade = ongoingTrades.get(player);
+        if (trade.hasSpace(player)) {
             return;
         }
-//        ongoingTrades.get()
+        trade.addItem(player, inventorySlot, item);
     }
 }

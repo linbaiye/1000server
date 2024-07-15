@@ -3,6 +3,7 @@ package org.y1000.kungfu.protect;
 import lombok.Builder;
 import org.y1000.entities.players.Armor;
 import org.y1000.kungfu.AbstractPeriodicalConsumingKungFu;
+import org.y1000.kungfu.KungFu;
 import org.y1000.kungfu.KungFuType;
 
 import java.util.List;
@@ -91,6 +92,11 @@ public final class ProtectKungFu extends AbstractPeriodicalConsumingKungFu {
         var am = armor();
         var str = String.format("防御力: %d / %d / %d / %d", am.body(), am.head(), am.arm(), am.leg());
         return descritionBuilder.append(str).append("\n").toString();
+    }
+
+    @Override
+    public KungFu duplicate() {
+        return new ProtectKungFu(name(), 0, parameters);
     }
 
 

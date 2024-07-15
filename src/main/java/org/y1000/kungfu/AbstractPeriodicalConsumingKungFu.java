@@ -1,10 +1,13 @@
 package org.y1000.kungfu;
 
+import lombok.Getter;
 import org.y1000.entities.players.Player;
 
 public abstract class AbstractPeriodicalConsumingKungFu extends AbstractKungFu implements PeriodicalKungFu {
+    @Getter
     private final KeepParameters keepParameters;
 
+    @Getter
     private final FiveSecondsParameters consumingParameters;
 
     private int consumingTimer;
@@ -17,6 +20,7 @@ public abstract class AbstractPeriodicalConsumingKungFu extends AbstractKungFu i
         this.consumingParameters = consumingParameters;
         resetTimer();
     }
+
 
     public void resetTimer() {
         consumingTimer = 5000;

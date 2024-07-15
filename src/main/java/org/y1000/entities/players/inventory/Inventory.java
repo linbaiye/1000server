@@ -271,19 +271,7 @@ public final class Inventory {
     }
 
     public boolean decrease(int slotId) {
-        assertRange(slotId);
-        Item item = getItem(slotId);
-        if (item == null) {
-            return false;
-        }
-        if (item instanceof AbstractStackItem stackItem) {
-            if (stackItem.decrease(1) <= 0) {
-                remove(slotId);
-            }
-        } else {
-            remove(slotId);
-        }
-        return true;
+        return decrease(slotId, 1);
     }
 
     public void sell(Collection<TradeItem> items, long profit, Player player) {

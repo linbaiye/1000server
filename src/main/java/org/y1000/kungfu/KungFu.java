@@ -19,4 +19,6 @@ public interface KungFu {
     String description();
 
 
+    KungFu duplicate();
+
 }

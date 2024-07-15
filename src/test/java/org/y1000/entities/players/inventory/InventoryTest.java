@@ -169,6 +169,11 @@ class InventoryTest {
         assertNotNull(inventory.getItem(slot));
         inventory.decrease(slot);
         assertNull(inventory.getItem(slot));
+        slot = inventory.add(DefaultStackItem.builder().type(ItemType.STACK).name("test").number(10).build());
+        assertTrue(inventory.decrease(slot, 5));
+        assertEquals(5, ((AbstractStackItem)inventory.getItem(slot)).number());
+        assertTrue(inventory.decrease(slot, 5));
+        assertNull(inventory.getItem(slot));
     }
 
     @Test

@@ -77,4 +77,9 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
     public String description() {
         return getDescriptionBuilder().toString();
     }
+
+    @Override
+    public KungFu duplicate() {
+        return new FootKungFu(name(), 0, getConsumingParameters(), getKeepParameters(), String.valueOf(sound), getEventResourceParameters());
+    }
 }

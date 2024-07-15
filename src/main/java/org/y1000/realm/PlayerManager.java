@@ -43,7 +43,7 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
         this.itemManager = itemManager;
         this.itemFactory = itemFactory;
         this.projectileManager = new ProjectileManager();
-        tradeManager = new TradeManager();
+        tradeManager = new TradeManager(itemFactory);
     }
 
 

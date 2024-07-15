@@ -8,6 +8,7 @@ import org.y1000.entities.players.event.PlayerGainExpEvent;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;
+import org.y1000.kungfu.KungFu;
 import org.y1000.kungfu.KungFuType;
 import org.y1000.event.EntityEvent;
 import org.y1000.util.UnaryAction;
@@ -45,6 +46,10 @@ public final class BreathKungFu extends AbstractKungFu {
         return getDescriptionBuilder().toString();
     }
 
+    @Override
+    public KungFu duplicate() {
+        return new BreathKungFu(name(), 0, parameters, String.valueOf(sound));
+    }
     private String computeSound(boolean male) {
         var snd = sound;
         if (level() >= 9000) {

@@ -12,7 +12,6 @@ import org.y1000.util.Coordinate;
 
 public final class PlayerInterpolation extends AbstractCreatureInterpolation {
 
-
     @Setter(AccessLevel.PRIVATE)
     private PlayerInfoPacket infoPacket;
 

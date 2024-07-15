@@ -9,6 +9,7 @@ import org.y1000.item.Item;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Getter
 public final class PlayerTrade {
@@ -33,14 +34,35 @@ public final class PlayerTrade {
         traderConfirmed = false;
     }
 
-    public void addItem(Player player, int inventorySlot, int tradeWindowSlot, Item item) {
+
+    private int findSpace(TradingItem[] slots)  {
+        for (int i = 0; i < slots.length; i++) {
+            if (slots[i] == null) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean hasSpace(Player player) {
+        if (trader.equals(player)) {
+            return findSpace(traderItems) != -1;
+        } else if (tradee.equals(player)) {
+            return findSpace(tradeeItems) != -1;
+        }
+        return false;
+    }
+
+    public void addItem(Player player, int inventorySlot, Item item) {
         Validate.notNull(player);
         Validate.notNull(item);
-        Validate.isTrue(tradeWindowSlot >= 1 && tradeWindowSlot <= 4);
+        if (!hasSpace(player)) {
+            return;
+        }
         if (player.equals(trader)) {
-            traderItems[tradeWindowSlot - 1] = new TradingItem(inventorySlot, item);
+            traderItems[findSpace(traderItems)] = new TradingItem(inventorySlot, item);
         } else if (player.equals(tradee)) {
-            tradeeItems[tradeWindowSlot - 1] = new TradingItem(inventorySlot, item);
+            tradeeItems[findSpace(tradeeItems)] = new TradingItem(inventorySlot, item);
         }
     }
 

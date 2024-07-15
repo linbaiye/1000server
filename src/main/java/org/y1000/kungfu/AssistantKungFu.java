@@ -55,4 +55,9 @@ public final class AssistantKungFu extends AbstractKungFu {
     public String description() {
         return getDescriptionBuilder().toString();
     }
+
+    @Override
+    public KungFu duplicate() {
+        return new AssistantKungFu(name(), 0, eightDirection);
+    }
 }
