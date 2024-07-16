@@ -9,6 +9,10 @@ public interface ItemFactory {
 
     Item createItem(String name);
 
+    default StackItem createMoney(long number) {
+        return (StackItem) createItem(ItemType.MONEY_NAME, number);
+    }
+
     Item createItem(String name, long number);
 
     Trouser createTrouser(String name);

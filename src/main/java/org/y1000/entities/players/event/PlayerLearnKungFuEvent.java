@@ -16,7 +16,7 @@ public final class PlayerLearnKungFuEvent extends AbstractPlayerEvent {
     private final int kungFuType;
 
     public PlayerLearnKungFuEvent(Player source, int slot, KungFu kungFu) {
-        super(source);
+        super(source, true);
         this.slot = slot;
         this.kungFuName = kungFu.name();
         this.level = kungFu.level();

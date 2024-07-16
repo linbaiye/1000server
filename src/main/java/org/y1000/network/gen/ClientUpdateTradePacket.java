@@ -5,38 +5,38 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.ClientAddTradeItemPacket}
+ * Protobuf type {@code org.y1000.network.gen.ClientUpdateTradePacket}
  */
-public final class ClientAddTradeItemPacket extends
+public final class ClientUpdateTradePacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ClientAddTradeItemPacket)
-    ClientAddTradeItemPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ClientUpdateTradePacket)
+    ClientUpdateTradePacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ClientAddTradeItemPacket.newBuilder() to construct.
-  private ClientAddTradeItemPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use ClientUpdateTradePacket.newBuilder() to construct.
+  private ClientUpdateTradePacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ClientAddTradeItemPacket() {
+  private ClientUpdateTradePacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new ClientAddTradeItemPacket();
+    return new ClientUpdateTradePacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientAddTradeItemPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientUpdateTradePacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientAddTradeItemPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientUpdateTradePacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.ClientAddTradeItemPacket.class, org.y1000.network.gen.ClientAddTradeItemPacket.Builder.class);
+            org.y1000.network.gen.ClientUpdateTradePacket.class, org.y1000.network.gen.ClientUpdateTradePacket.Builder.class);
   }
 
   public static final int INVENTORYSLOT_FIELD_NUMBER = 1;
@@ -61,6 +61,28 @@ private static final long serialVersionUID = 0L;
     return itemNumber_;
   }
 
+  public static final int TYPE_FIELD_NUMBER = 3;
+  private int type_ = 0;
+  /**
+   * <code>int32 type = 3;</code>
+   * @return The type.
+   */
+  @java.lang.Override
+  public int getType() {
+    return type_;
+  }
+
+  public static final int TRADEWINDOWSLOT_FIELD_NUMBER = 4;
+  private int tradeWindowSlot_ = 0;
+  /**
+   * <code>int32 tradeWindowSlot = 4;</code>
+   * @return The tradeWindowSlot.
+   */
+  @java.lang.Override
+  public int getTradeWindowSlot() {
+    return tradeWindowSlot_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -81,6 +103,12 @@ private static final long serialVersionUID = 0L;
     if (itemNumber_ != 0L) {
       output.writeInt64(2, itemNumber_);
     }
+    if (type_ != 0) {
+      output.writeInt32(3, type_);
+    }
+    if (tradeWindowSlot_ != 0) {
+      output.writeInt32(4, tradeWindowSlot_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -98,6 +126,14 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(2, itemNumber_);
     }
+    if (type_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(3, type_);
+    }
+    if (tradeWindowSlot_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(4, tradeWindowSlot_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -108,15 +144,19 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.ClientAddTradeItemPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.ClientUpdateTradePacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.ClientAddTradeItemPacket other = (org.y1000.network.gen.ClientAddTradeItemPacket) obj;
+    org.y1000.network.gen.ClientUpdateTradePacket other = (org.y1000.network.gen.ClientUpdateTradePacket) obj;
 
     if (getInventorySlot()
         != other.getInventorySlot()) return false;
     if (getItemNumber()
         != other.getItemNumber()) return false;
+    if (getType()
+        != other.getType()) return false;
+    if (getTradeWindowSlot()
+        != other.getTradeWindowSlot()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -133,49 +173,53 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ITEMNUMBER_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getItemNumber());
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType();
+    hash = (37 * hash) + TRADEWINDOWSLOT_FIELD_NUMBER;
+    hash = (53 * hash) + getTradeWindowSlot();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseFrom(
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseFrom(
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseFrom(
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseFrom(
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseFrom(
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseFrom(
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -183,26 +227,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseFrom(
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.ClientAddTradeItemPacket parseFrom(
+  public static org.y1000.network.gen.ClientUpdateTradePacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -215,7 +259,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.ClientAddTradeItemPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.ClientUpdateTradePacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -231,26 +275,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.ClientAddTradeItemPacket}
+   * Protobuf type {@code org.y1000.network.gen.ClientUpdateTradePacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ClientAddTradeItemPacket)
-      org.y1000.network.gen.ClientAddTradeItemPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ClientUpdateTradePacket)
+      org.y1000.network.gen.ClientUpdateTradePacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientAddTradeItemPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientUpdateTradePacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientAddTradeItemPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientUpdateTradePacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.ClientAddTradeItemPacket.class, org.y1000.network.gen.ClientAddTradeItemPacket.Builder.class);
+              org.y1000.network.gen.ClientUpdateTradePacket.class, org.y1000.network.gen.ClientUpdateTradePacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.ClientAddTradeItemPacket.newBuilder()
+    // Construct using org.y1000.network.gen.ClientUpdateTradePacket.newBuilder()
     private Builder() {
 
     }
@@ -266,23 +310,25 @@ private static final long serialVersionUID = 0L;
       bitField0_ = 0;
       inventorySlot_ = 0;
       itemNumber_ = 0L;
+      type_ = 0;
+      tradeWindowSlot_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientAddTradeItemPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientUpdateTradePacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClientAddTradeItemPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.ClientAddTradeItemPacket.getDefaultInstance();
+    public org.y1000.network.gen.ClientUpdateTradePacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClientAddTradeItemPacket build() {
-      org.y1000.network.gen.ClientAddTradeItemPacket result = buildPartial();
+    public org.y1000.network.gen.ClientUpdateTradePacket build() {
+      org.y1000.network.gen.ClientUpdateTradePacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -290,20 +336,26 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClientAddTradeItemPacket buildPartial() {
-      org.y1000.network.gen.ClientAddTradeItemPacket result = new org.y1000.network.gen.ClientAddTradeItemPacket(this);
+    public org.y1000.network.gen.ClientUpdateTradePacket buildPartial() {
+      org.y1000.network.gen.ClientUpdateTradePacket result = new org.y1000.network.gen.ClientUpdateTradePacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.ClientAddTradeItemPacket result) {
+    private void buildPartial0(org.y1000.network.gen.ClientUpdateTradePacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.inventorySlot_ = inventorySlot_;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.itemNumber_ = itemNumber_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.type_ = type_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.tradeWindowSlot_ = tradeWindowSlot_;
       }
     }
 
@@ -341,21 +393,27 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.ClientAddTradeItemPacket) {
-        return mergeFrom((org.y1000.network.gen.ClientAddTradeItemPacket)other);
+      if (other instanceof org.y1000.network.gen.ClientUpdateTradePacket) {
+        return mergeFrom((org.y1000.network.gen.ClientUpdateTradePacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.ClientAddTradeItemPacket other) {
-      if (other == org.y1000.network.gen.ClientAddTradeItemPacket.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.y1000.network.gen.ClientUpdateTradePacket other) {
+      if (other == org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance()) return this;
       if (other.getInventorySlot() != 0) {
         setInventorySlot(other.getInventorySlot());
       }
       if (other.getItemNumber() != 0L) {
         setItemNumber(other.getItemNumber());
+      }
+      if (other.getType() != 0) {
+        setType(other.getType());
+      }
+      if (other.getTradeWindowSlot() != 0) {
+        setTradeWindowSlot(other.getTradeWindowSlot());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -393,6 +451,16 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000002;
               break;
             } // case 16
+            case 24: {
+              type_ = input.readInt32();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 24
+            case 32: {
+              tradeWindowSlot_ = input.readInt32();
+              bitField0_ |= 0x00000008;
+              break;
+            } // case 32
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -473,6 +541,70 @@ private static final long serialVersionUID = 0L;
       onChanged();
       return this;
     }
+
+    private int type_ ;
+    /**
+     * <code>int32 type = 3;</code>
+     * @return The type.
+     */
+    @java.lang.Override
+    public int getType() {
+      return type_;
+    }
+    /**
+     * <code>int32 type = 3;</code>
+     * @param value The type to set.
+     * @return This builder for chaining.
+     */
+    public Builder setType(int value) {
+
+      type_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 type = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearType() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      type_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int tradeWindowSlot_ ;
+    /**
+     * <code>int32 tradeWindowSlot = 4;</code>
+     * @return The tradeWindowSlot.
+     */
+    @java.lang.Override
+    public int getTradeWindowSlot() {
+      return tradeWindowSlot_;
+    }
+    /**
+     * <code>int32 tradeWindowSlot = 4;</code>
+     * @param value The tradeWindowSlot to set.
+     * @return This builder for chaining.
+     */
+    public Builder setTradeWindowSlot(int value) {
+
+      tradeWindowSlot_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 tradeWindowSlot = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearTradeWindowSlot() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      tradeWindowSlot_ = 0;
+      onChanged();
+      return this;
+    }
     @java.lang.Override
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -486,23 +618,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClientAddTradeItemPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClientUpdateTradePacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ClientAddTradeItemPacket)
-  private static final org.y1000.network.gen.ClientAddTradeItemPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ClientUpdateTradePacket)
+  private static final org.y1000.network.gen.ClientUpdateTradePacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.ClientAddTradeItemPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.ClientUpdateTradePacket();
   }
 
-  public static org.y1000.network.gen.ClientAddTradeItemPacket getDefaultInstance() {
+  public static org.y1000.network.gen.ClientUpdateTradePacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ClientAddTradeItemPacket>
-      PARSER = new com.google.protobuf.AbstractParser<ClientAddTradeItemPacket>() {
+  private static final com.google.protobuf.Parser<ClientUpdateTradePacket>
+      PARSER = new com.google.protobuf.AbstractParser<ClientUpdateTradePacket>() {
     @java.lang.Override
-    public ClientAddTradeItemPacket parsePartialFrom(
+    public ClientUpdateTradePacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -521,17 +653,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<ClientAddTradeItemPacket> parser() {
+  public static com.google.protobuf.Parser<ClientUpdateTradePacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ClientAddTradeItemPacket> getParserForType() {
+  public com.google.protobuf.Parser<ClientUpdateTradePacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.ClientAddTradeItemPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.ClientUpdateTradePacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

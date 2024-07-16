@@ -39,9 +39,12 @@ public enum ItemType implements ValueEnum  {
 
 
     STACK(Integer.MAX_VALUE),
-    SINGLE(Integer.MAX_VALUE - 1),
+    UNCATEGORIED(Integer.MAX_VALUE - 1),
 
             ;
+
+
+    public static final String MONEY_NAME = "钱币";
 
 
     private static final Map<Integer, Integer> ITEM_TYPE_MAPPING = Map.of(4, 5,

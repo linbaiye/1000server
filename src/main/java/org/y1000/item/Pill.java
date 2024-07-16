@@ -1,13 +1,12 @@
 package org.y1000.item;
 
 
-public final class Pill extends AbstractStackItem {
+public final class Pill extends AbstractItem {
     private final PillAttributeProvider attributeProvider;
 
-    public Pill(String name,
-                long number, PillAttributeProvider attributeProvider) {
-        super(name, number, ItemType.PILL, attributeProvider.dropSound(),
-                attributeProvider.eventSound(), attributeProvider.eventSound());
+    public Pill(String name, PillAttributeProvider attributeProvider) {
+        super(name, ItemType.PILL, attributeProvider.dropSound(),
+                attributeProvider.eventSound(), attributeProvider.description());
         this.attributeProvider = attributeProvider;
     }
 
@@ -47,8 +46,4 @@ public final class Pill extends AbstractStackItem {
         return attributeProvider.legLife();
     }
 
-    @Override
-    public String description() {
-        return attributeProvider.description();
-    }
 }

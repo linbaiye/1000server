@@ -137,6 +137,25 @@ private static final long serialVersionUID = 0L;
     return slot_;
   }
 
+  public static final int SELF_FIELD_NUMBER = 5;
+  private boolean self_ = false;
+  /**
+   * <code>optional bool self = 5;</code>
+   * @return Whether the self field is set.
+   */
+  @java.lang.Override
+  public boolean hasSelf() {
+    return ((bitField0_ & 0x00000008) != 0);
+  }
+  /**
+   * <code>optional bool self = 5;</code>
+   * @return The self.
+   */
+  @java.lang.Override
+  public boolean getSelf() {
+    return self_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -163,6 +182,9 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000004) != 0)) {
       output.writeInt32(4, slot_);
     }
+    if (((bitField0_ & 0x00000008) != 0)) {
+      output.writeBool(5, self_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -186,6 +208,10 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000004) != 0)) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(4, slot_);
+    }
+    if (((bitField0_ & 0x00000008) != 0)) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(5, self_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -219,6 +245,11 @@ private static final long serialVersionUID = 0L;
       if (getSlot()
           != other.getSlot()) return false;
     }
+    if (hasSelf() != other.hasSelf()) return false;
+    if (hasSelf()) {
+      if (getSelf()
+          != other.getSelf()) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -244,6 +275,11 @@ private static final long serialVersionUID = 0L;
     if (hasSlot()) {
       hash = (37 * hash) + SLOT_FIELD_NUMBER;
       hash = (53 * hash) + getSlot();
+    }
+    if (hasSelf()) {
+      hash = (37 * hash) + SELF_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getSelf());
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -380,6 +416,7 @@ private static final long serialVersionUID = 0L;
       name_ = "";
       number_ = 0L;
       slot_ = 0;
+      self_ = false;
       return this;
     }
 
@@ -428,6 +465,10 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000008) != 0)) {
         result.slot_ = slot_;
         to_bitField0_ |= 0x00000004;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.self_ = self_;
+        to_bitField0_ |= 0x00000008;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -490,6 +531,9 @@ private static final long serialVersionUID = 0L;
       if (other.hasSlot()) {
         setSlot(other.getSlot());
       }
+      if (other.hasSelf()) {
+        setSelf(other.getSelf());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -536,6 +580,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000008;
               break;
             } // case 32
+            case 40: {
+              self_ = input.readBool();
+              bitField0_ |= 0x00000010;
+              break;
+            } // case 40
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -740,6 +789,46 @@ private static final long serialVersionUID = 0L;
     public Builder clearSlot() {
       bitField0_ = (bitField0_ & ~0x00000008);
       slot_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private boolean self_ ;
+    /**
+     * <code>optional bool self = 5;</code>
+     * @return Whether the self field is set.
+     */
+    @java.lang.Override
+    public boolean hasSelf() {
+      return ((bitField0_ & 0x00000010) != 0);
+    }
+    /**
+     * <code>optional bool self = 5;</code>
+     * @return The self.
+     */
+    @java.lang.Override
+    public boolean getSelf() {
+      return self_;
+    }
+    /**
+     * <code>optional bool self = 5;</code>
+     * @param value The self to set.
+     * @return This builder for chaining.
+     */
+    public Builder setSelf(boolean value) {
+
+      self_ = value;
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional bool self = 5;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearSelf() {
+      bitField0_ = (bitField0_ & ~0x00000010);
+      self_ = false;
       onChanged();
       return this;
     }

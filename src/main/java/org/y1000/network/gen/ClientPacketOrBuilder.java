@@ -249,19 +249,19 @@ public interface ClientPacketOrBuilder extends
   org.y1000.network.gen.ClientTradePlayerPacketOrBuilder getTradeRequestOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
-   * @return Whether the addTradeItem field is set.
+   * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
+   * @return Whether the updateTrade field is set.
    */
-  boolean hasAddTradeItem();
+  boolean hasUpdateTrade();
   /**
-   * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
-   * @return The addTradeItem.
+   * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
+   * @return The updateTrade.
    */
-  org.y1000.network.gen.ClientAddTradeItemPacket getAddTradeItem();
+  org.y1000.network.gen.ClientUpdateTradePacket getUpdateTrade();
   /**
-   * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
+   * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
    */
-  org.y1000.network.gen.ClientAddTradeItemPacketOrBuilder getAddTradeItemOrBuilder();
+  org.y1000.network.gen.ClientUpdateTradePacketOrBuilder getUpdateTradeOrBuilder();
 
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

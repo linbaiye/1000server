@@ -8,6 +8,9 @@ import org.y1000.entities.players.Player;
 import org.y1000.item.*;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
+import org.y1000.repository.ItemRepositoryImpl;
+import org.y1000.repository.KungFuBookRepositoryImpl;
+import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.trade.TradeItem;
 
 import java.util.List;
@@ -24,6 +27,8 @@ class InventoryTest {
     private Player player;
 
     private ItemSdb itemSdb;
+
+    private final ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
 
     @BeforeEach
     void setUp() {
@@ -58,19 +63,20 @@ class InventoryTest {
         assertEquals(0, inventory.add(null));
         assertEquals(1, inventory.add(createHair()));
         assertEquals(2, inventory.add(createHair()));
-        assertEquals(3, inventory.add(DefaultStackItem.money(100)));
-        assertEquals(3, inventory.add(DefaultStackItem.money(100)));
-        for (int i = 0; i < inventory.maxCapacity() - 3; i++) {
+        assertEquals(3, inventory.add(itemFactory.createMoney(100)));
+        assertEquals(3, inventory.add(itemFactory.createMoney(100)));
+        for (int i = 0; i < inventory.capacity() - 3; i++) {
             assertNotEquals(0, inventory.add(createHair()));
         }
         assertEquals(0, inventory.add(createHair()));
+        assertEquals(0, inventory.add(null));
     }
 
     @Test
     void consumeStackItem() {
         TestingEventListener eventListener = new TestingEventListener();
         assertFalse(inventory.consumeStackItem(player, "箭", eventListener::onEvent));
-        inventory.add(new DefaultStackItem("箭", 2));
+        inventory.add(itemFactory.createItem("箭", 2));
         assertTrue(inventory.consumeStackItem(player, "箭", eventListener::onEvent));
         UpdateInventorySlotEvent event = eventListener.dequeue(UpdateInventorySlotEvent.class);
         assertEquals("箭", event.toPacket().getUpdateSlot().getName());
@@ -88,15 +94,15 @@ class InventoryTest {
     void canSell() {
         List<TradeItem> items = List.of(new TradeItem("肉", 1, 1));
         assertFalse(inventory.canSell(items));
-        inventory.add(new DefaultStackItem("肉", 2));
+        inventory.add(itemFactory.createItem("肉", 2));
         assertTrue(inventory.canSell(items));
-        for (int i = 0; i < inventory.maxCapacity() - 1; i++) {
+        for (int i = 0; i < inventory.capacity() - 1; i++) {
             inventory.add(createHair());
         }
         assertFalse(inventory.canSell(items));
-        inventory.remove(inventory.maxCapacity());
+        inventory.remove(inventory.capacity());
         assertTrue(inventory.canSell(items));
-        inventory.add(DefaultStackItem.money(1));
+        inventory.add(itemFactory.createMoney(1));
         assertTrue(inventory.isFull());
         assertTrue(inventory.canSell(items));
     }
@@ -104,19 +110,19 @@ class InventoryTest {
     @Test
     void sell() {
         List<TradeItem> items = List.of(new TradeItem("肉", 1, 1));
-        inventory.add(new DefaultStackItem("肉", 2));
+        inventory.add(itemFactory.createItem("肉", 2));
         var player = Mockito.mock(Player.class);
-        inventory.sell(items, 4, player);
+        inventory.sell(items, itemFactory.createMoney(4), player);
         assertTrue(inventory.findFirstStackItem("肉").isPresent());
         inventory.findFirstStackItem("肉").ifPresent( stackItem -> assertEquals(1, stackItem.number()));
-        inventory.findFirstStackItem(DefaultStackItem.MONEY).ifPresent(stackItem -> assertEquals(4, stackItem.number()));
+        inventory.findFirstStackItem("钱币").ifPresent(stackItem -> assertEquals(4, stackItem.number()));
     }
 
     @Test
     void canBuy() {
         List<TradeItem> items = List.of(new TradeItem("肉", 1, 30));
         assertFalse(inventory.canBuy(items, 10));
-        inventory.add(DefaultStackItem.money(100));
+        inventory.add(itemFactory.createMoney(100));
         assertTrue(inventory.canBuy(items, 10));
         assertFalse(inventory.canBuy(items, 1000));
         int slot = inventory.emptySlotSize() - 1;
@@ -132,31 +138,31 @@ class InventoryTest {
 
     @Test
     void buy() {
-        List<TradeItem> items = List.of(new TradeItem("药1", 1, inventory.maxCapacity()));
-        inventory.add(DefaultStackItem.money(30));
+        List<TradeItem> items = List.of(new TradeItem("生药", 1, inventory.capacity()));
+        inventory.add(itemFactory.createMoney(30));
         var player = Mockito.mock(Player.class);
-        inventory.buy(items, 30, player, DefaultStackItem::new);
-        assertTrue(inventory.findFirstStackItem(DefaultStackItem.MONEY).isEmpty());
-        assertEquals(inventory.maxCapacity(), inventory.findFirstSlot("药1"));
+        inventory.buy(items, 30, player, itemFactory::createItem);
+        assertTrue(inventory.findFirstStackItem(ItemType.MONEY_NAME).isEmpty());
+        assertEquals(inventory.capacity(), inventory.findFirstSlot("生药"));
 
         inventory = new Inventory();
-        inventory.add(DefaultStackItem.money(50));
-        inventory.buy(items, 30, player, DefaultStackItem::new);
-        assertTrue(inventory.findFirstStackItem(DefaultStackItem.MONEY).isPresent());
-        inventory.findFirstStackItem(DefaultStackItem.MONEY).ifPresent(m -> assertEquals(20, m.number()));
-        assertEquals(inventory.maxCapacity(), inventory.findFirstSlot("药1"));
+        inventory.add(itemFactory.createMoney(50));
+        inventory.buy(items, 30, player, itemFactory::createItem);
+        assertTrue(inventory.findFirstStackItem(ItemType.MONEY_NAME).isPresent());
+        inventory.findFirstStackItem(ItemType.MONEY_NAME).ifPresent(m -> assertEquals(20, m.number()));
+        assertEquals(inventory.capacity(), inventory.findFirstSlot("生药"));
     }
 
     @Test
     void size() {
-        inventory.add(DefaultStackItem.money(1));
+        inventory.add(itemFactory.createMoney(1));
         assertEquals(1, inventory.itemCount());
-        assertEquals(inventory.maxCapacity() - 1, inventory.emptySlotSize());
+        assertEquals(inventory.capacity() - 1, inventory.emptySlotSize());
         int emptySlot = inventory.emptySlotSize() - 1;
         for (int i = 0; i < emptySlot; i++) {
             inventory.add(createHair());
         }
-        assertEquals(inventory.maxCapacity() - 1, inventory.itemCount());
+        assertEquals(inventory.capacity() - 1, inventory.itemCount());
     }
 
     @Test
@@ -164,14 +170,14 @@ class InventoryTest {
         int slot = inventory.add(createHair());
         inventory.decrease(slot);
         assertNull(inventory.getItem(slot));
-        slot = inventory.add(DefaultStackItem.builder().type(ItemType.STACK).name("test").number(2).build());
+        slot = inventory.add(itemFactory.createItem("肉", 2));
         inventory.decrease(slot);
         assertNotNull(inventory.getItem(slot));
         inventory.decrease(slot);
         assertNull(inventory.getItem(slot));
-        slot = inventory.add(DefaultStackItem.builder().type(ItemType.STACK).name("test").number(10).build());
+        slot = inventory.add(itemFactory.createItem("肉", 10));
         assertTrue(inventory.decrease(slot, 5));
-        assertEquals(5, ((AbstractStackItem)inventory.getItem(slot)).number());
+        assertEquals(5, ((StackItem)inventory.getItem(slot)).number());
         assertTrue(inventory.decrease(slot, 5));
         assertNull(inventory.getItem(slot));
     }
@@ -181,7 +187,7 @@ class InventoryTest {
         int slot = inventory.add(createHair());
         assertTrue(inventory.hasEnough(slot, 1));
         assertFalse(inventory.hasEnough(slot, 2));
-        slot = inventory.add(new DefaultStackItem(DefaultStackItem.MONEY, 1000, ItemType.MONEY, itemSdb));
+        slot = inventory.add(itemFactory.createMoney(1000));
         assertTrue(inventory.hasEnough(slot, 1000));
         assertFalse(inventory.hasEnough(slot, 1001));
     }

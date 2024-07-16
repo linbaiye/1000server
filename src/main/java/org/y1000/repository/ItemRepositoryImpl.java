@@ -54,25 +54,36 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
         }
     }
 
-    @Override
-    public Item createItem(String name) {
+
+    private Item create(String name) {
         if (!itemSdb.contains(name)) {
             throw new NoSuchElementException(name + " is not a valid item.");
         }
-        return switch (itemSdb.getType(name)) {
+        if (!ItemType.contains(itemSdb.getTypeValue(name))) {
+            return SimpleItem.uncategoried(name, itemSdb);
+        }
+        ItemType type = itemSdb.getType(name);
+        return switch (type) {
             case EQUIPMENT -> createEquipment(name);
-            default -> DefaultItem.builder().name(name).dropSound(itemSdb.getSoundDrop(name)).eventSound(itemSdb.getSoundEvent(name))
-                    .desc(itemSdb.getDesc(name))
-                    .build();
+            case ARROW, MONEY, SELLING_GOODS, KNIFE -> new SimpleItem(name, type, itemSdb);
+            case DYE -> new Dye(name, itemSdb);
+            case PILL -> new Pill(name, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
+            case KUNGFU -> createKungFuItem(name);
+            case BANK_INVENTORY -> new BankInventory(name, itemSdb);
+            default -> SimpleItem.uncategoried(name, itemSdb);
         };
     }
 
-    private KungFuItem createKungFuItem(String name, long number) {
+    @Override
+    public Item createItem(String name) {
+        return createItem(name, 1);
+    }
+
+    private KungFuItem createKungFuItem(String name) {
         return KungFuItem.builder()
                 .eventSound(itemSdb.getSoundEvent(name))
                 .dropSound(itemSdb.getSoundDrop(name))
                 .name(name)
-                .number(number)
                 .kungFu(kungFuFactory.create(name))
                 .desc(itemSdb.getDesc(name))
                 .build();
@@ -80,27 +91,10 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
 
     @Override
     public Item createItem(String name, long number) {
-        if (!itemSdb.contains(name)) {
-            throw new NoSuchElementException(name + " is not a valid item.");
-        }
-
-        if (!ItemType.contains(itemSdb.getTypeValue(name))) {
-            return itemSdb.canStack(name) ? new DefaultStackItem(name, number, ItemType.STACK, itemSdb) :
-                    new DefaultItem(name, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name), itemSdb.getDesc(name));
-        }
-        if (!itemSdb.canStack(name)) {
-            return createItem(name);
-        }
-        return switch (itemSdb.getType(name)) {
-            case DYE -> new Dye(name, number, itemSdb);
-            case ARROW -> new DefaultStackItem(name, number, ItemType.ARROW, itemSdb);
-            case SELLING_GOODS -> new DefaultStackItem(name, number, ItemType.SELLING_GOODS, itemSdb);
-            case MONEY -> new DefaultStackItem(name, number, ItemType.MONEY, itemSdb);
-            case PILL -> new Pill(name, number, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
-            case KUNGFU -> createKungFuItem(name, number);
-            case BANK_INVENTORY -> new BankInventory(name, number, itemSdb);
-            default-> new DefaultStackItem(name, number, ItemType.STACK, itemSdb);
-        };
+        Validate.notNull(name);
+        Validate.isTrue(number > 0);
+        var item = create(name);
+        return itemSdb.canStack(name) ? new StackItem(item, number) : item;
     }
 
     @Override

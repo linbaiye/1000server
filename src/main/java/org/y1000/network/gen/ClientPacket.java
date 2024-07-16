@@ -61,7 +61,7 @@ private static final long serialVersionUID = 0L;
     BUYITEMS(14),
     RIGHTCLICK(15),
     TRADEREQUEST(16),
-    ADDTRADEITEM(17),
+    UPDATETRADE(17),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -95,7 +95,7 @@ private static final long serialVersionUID = 0L;
         case 14: return BUYITEMS;
         case 15: return RIGHTCLICK;
         case 16: return TRADEREQUEST;
-        case 17: return ADDTRADEITEM;
+        case 17: return UPDATETRADE;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -607,35 +607,35 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
   }
 
-  public static final int ADDTRADEITEM_FIELD_NUMBER = 17;
+  public static final int UPDATETRADE_FIELD_NUMBER = 17;
   /**
-   * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
-   * @return Whether the addTradeItem field is set.
+   * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
+   * @return Whether the updateTrade field is set.
    */
   @java.lang.Override
-  public boolean hasAddTradeItem() {
+  public boolean hasUpdateTrade() {
     return typeCase_ == 17;
   }
   /**
-   * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
-   * @return The addTradeItem.
+   * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
+   * @return The updateTrade.
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientAddTradeItemPacket getAddTradeItem() {
+  public org.y1000.network.gen.ClientUpdateTradePacket getUpdateTrade() {
     if (typeCase_ == 17) {
-       return (org.y1000.network.gen.ClientAddTradeItemPacket) type_;
+       return (org.y1000.network.gen.ClientUpdateTradePacket) type_;
     }
-    return org.y1000.network.gen.ClientAddTradeItemPacket.getDefaultInstance();
+    return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
+   * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientAddTradeItemPacketOrBuilder getAddTradeItemOrBuilder() {
+  public org.y1000.network.gen.ClientUpdateTradePacketOrBuilder getUpdateTradeOrBuilder() {
     if (typeCase_ == 17) {
-       return (org.y1000.network.gen.ClientAddTradeItemPacket) type_;
+       return (org.y1000.network.gen.ClientUpdateTradePacket) type_;
     }
-    return org.y1000.network.gen.ClientAddTradeItemPacket.getDefaultInstance();
+    return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -701,7 +701,7 @@ private static final long serialVersionUID = 0L;
       output.writeMessage(16, (org.y1000.network.gen.ClientTradePlayerPacket) type_);
     }
     if (typeCase_ == 17) {
-      output.writeMessage(17, (org.y1000.network.gen.ClientAddTradeItemPacket) type_);
+      output.writeMessage(17, (org.y1000.network.gen.ClientUpdateTradePacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -778,7 +778,7 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 17) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(17, (org.y1000.network.gen.ClientAddTradeItemPacket) type_);
+        .computeMessageSize(17, (org.y1000.network.gen.ClientUpdateTradePacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -862,8 +862,8 @@ private static final long serialVersionUID = 0L;
             .equals(other.getTradeRequest())) return false;
         break;
       case 17:
-        if (!getAddTradeItem()
-            .equals(other.getAddTradeItem())) return false;
+        if (!getUpdateTrade()
+            .equals(other.getUpdateTrade())) return false;
         break;
       case 0:
       default:
@@ -945,8 +945,8 @@ private static final long serialVersionUID = 0L;
         hash = (53 * hash) + getTradeRequest().hashCode();
         break;
       case 17:
-        hash = (37 * hash) + ADDTRADEITEM_FIELD_NUMBER;
-        hash = (53 * hash) + getAddTradeItem().hashCode();
+        hash = (37 * hash) + UPDATETRADE_FIELD_NUMBER;
+        hash = (53 * hash) + getUpdateTrade().hashCode();
         break;
       case 0:
       default:
@@ -1130,8 +1130,8 @@ private static final long serialVersionUID = 0L;
       if (tradeRequestBuilder_ != null) {
         tradeRequestBuilder_.clear();
       }
-      if (addTradeItemBuilder_ != null) {
-        addTradeItemBuilder_.clear();
+      if (updateTradeBuilder_ != null) {
+        updateTradeBuilder_.clear();
       }
       typeCase_ = 0;
       type_ = null;
@@ -1239,8 +1239,8 @@ private static final long serialVersionUID = 0L;
         result.type_ = tradeRequestBuilder_.build();
       }
       if (typeCase_ == 17 &&
-          addTradeItemBuilder_ != null) {
-        result.type_ = addTradeItemBuilder_.build();
+          updateTradeBuilder_ != null) {
+        result.type_ = updateTradeBuilder_.build();
       }
     }
 
@@ -1353,8 +1353,8 @@ private static final long serialVersionUID = 0L;
           mergeTradeRequest(other.getTradeRequest());
           break;
         }
-        case ADDTRADEITEM: {
-          mergeAddTradeItem(other.getAddTradeItem());
+        case UPDATETRADE: {
+          mergeUpdateTrade(other.getUpdateTrade());
           break;
         }
         case TYPE_NOT_SET: {
@@ -1501,7 +1501,7 @@ private static final long serialVersionUID = 0L;
             } // case 130
             case 138: {
               input.readMessage(
-                  getAddTradeItemFieldBuilder().getBuilder(),
+                  getUpdateTradeFieldBuilder().getBuilder(),
                   extensionRegistry);
               typeCase_ = 17;
               break;
@@ -3811,71 +3811,71 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientAddTradeItemPacket, org.y1000.network.gen.ClientAddTradeItemPacket.Builder, org.y1000.network.gen.ClientAddTradeItemPacketOrBuilder> addTradeItemBuilder_;
+        org.y1000.network.gen.ClientUpdateTradePacket, org.y1000.network.gen.ClientUpdateTradePacket.Builder, org.y1000.network.gen.ClientUpdateTradePacketOrBuilder> updateTradeBuilder_;
     /**
-     * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
-     * @return Whether the addTradeItem field is set.
+     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
+     * @return Whether the updateTrade field is set.
      */
     @java.lang.Override
-    public boolean hasAddTradeItem() {
+    public boolean hasUpdateTrade() {
       return typeCase_ == 17;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
-     * @return The addTradeItem.
+     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
+     * @return The updateTrade.
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientAddTradeItemPacket getAddTradeItem() {
-      if (addTradeItemBuilder_ == null) {
+    public org.y1000.network.gen.ClientUpdateTradePacket getUpdateTrade() {
+      if (updateTradeBuilder_ == null) {
         if (typeCase_ == 17) {
-          return (org.y1000.network.gen.ClientAddTradeItemPacket) type_;
+          return (org.y1000.network.gen.ClientUpdateTradePacket) type_;
         }
-        return org.y1000.network.gen.ClientAddTradeItemPacket.getDefaultInstance();
+        return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
       } else {
         if (typeCase_ == 17) {
-          return addTradeItemBuilder_.getMessage();
+          return updateTradeBuilder_.getMessage();
         }
-        return org.y1000.network.gen.ClientAddTradeItemPacket.getDefaultInstance();
+        return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
+     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
      */
-    public Builder setAddTradeItem(org.y1000.network.gen.ClientAddTradeItemPacket value) {
-      if (addTradeItemBuilder_ == null) {
+    public Builder setUpdateTrade(org.y1000.network.gen.ClientUpdateTradePacket value) {
+      if (updateTradeBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
         type_ = value;
         onChanged();
       } else {
-        addTradeItemBuilder_.setMessage(value);
+        updateTradeBuilder_.setMessage(value);
       }
       typeCase_ = 17;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
+     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
      */
-    public Builder setAddTradeItem(
-        org.y1000.network.gen.ClientAddTradeItemPacket.Builder builderForValue) {
-      if (addTradeItemBuilder_ == null) {
+    public Builder setUpdateTrade(
+        org.y1000.network.gen.ClientUpdateTradePacket.Builder builderForValue) {
+      if (updateTradeBuilder_ == null) {
         type_ = builderForValue.build();
         onChanged();
       } else {
-        addTradeItemBuilder_.setMessage(builderForValue.build());
+        updateTradeBuilder_.setMessage(builderForValue.build());
       }
       typeCase_ = 17;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
+     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
      */
-    public Builder mergeAddTradeItem(org.y1000.network.gen.ClientAddTradeItemPacket value) {
-      if (addTradeItemBuilder_ == null) {
+    public Builder mergeUpdateTrade(org.y1000.network.gen.ClientUpdateTradePacket value) {
+      if (updateTradeBuilder_ == null) {
         if (typeCase_ == 17 &&
-            type_ != org.y1000.network.gen.ClientAddTradeItemPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientAddTradeItemPacket.newBuilder((org.y1000.network.gen.ClientAddTradeItemPacket) type_)
+            type_ != org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientUpdateTradePacket.newBuilder((org.y1000.network.gen.ClientUpdateTradePacket) type_)
               .mergeFrom(value).buildPartial();
         } else {
           type_ = value;
@@ -3883,19 +3883,19 @@ private static final long serialVersionUID = 0L;
         onChanged();
       } else {
         if (typeCase_ == 17) {
-          addTradeItemBuilder_.mergeFrom(value);
+          updateTradeBuilder_.mergeFrom(value);
         } else {
-          addTradeItemBuilder_.setMessage(value);
+          updateTradeBuilder_.setMessage(value);
         }
       }
       typeCase_ = 17;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
+     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
      */
-    public Builder clearAddTradeItem() {
-      if (addTradeItemBuilder_ == null) {
+    public Builder clearUpdateTrade() {
+      if (updateTradeBuilder_ == null) {
         if (typeCase_ == 17) {
           typeCase_ = 0;
           type_ = null;
@@ -3906,50 +3906,50 @@ private static final long serialVersionUID = 0L;
           typeCase_ = 0;
           type_ = null;
         }
-        addTradeItemBuilder_.clear();
+        updateTradeBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
+     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
      */
-    public org.y1000.network.gen.ClientAddTradeItemPacket.Builder getAddTradeItemBuilder() {
-      return getAddTradeItemFieldBuilder().getBuilder();
+    public org.y1000.network.gen.ClientUpdateTradePacket.Builder getUpdateTradeBuilder() {
+      return getUpdateTradeFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
+     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientAddTradeItemPacketOrBuilder getAddTradeItemOrBuilder() {
-      if ((typeCase_ == 17) && (addTradeItemBuilder_ != null)) {
-        return addTradeItemBuilder_.getMessageOrBuilder();
+    public org.y1000.network.gen.ClientUpdateTradePacketOrBuilder getUpdateTradeOrBuilder() {
+      if ((typeCase_ == 17) && (updateTradeBuilder_ != null)) {
+        return updateTradeBuilder_.getMessageOrBuilder();
       } else {
         if (typeCase_ == 17) {
-          return (org.y1000.network.gen.ClientAddTradeItemPacket) type_;
+          return (org.y1000.network.gen.ClientUpdateTradePacket) type_;
         }
-        return org.y1000.network.gen.ClientAddTradeItemPacket.getDefaultInstance();
+        return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientAddTradeItemPacket addTradeItem = 17;</code>
+     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientAddTradeItemPacket, org.y1000.network.gen.ClientAddTradeItemPacket.Builder, org.y1000.network.gen.ClientAddTradeItemPacketOrBuilder> 
-        getAddTradeItemFieldBuilder() {
-      if (addTradeItemBuilder_ == null) {
+        org.y1000.network.gen.ClientUpdateTradePacket, org.y1000.network.gen.ClientUpdateTradePacket.Builder, org.y1000.network.gen.ClientUpdateTradePacketOrBuilder> 
+        getUpdateTradeFieldBuilder() {
+      if (updateTradeBuilder_ == null) {
         if (!(typeCase_ == 17)) {
-          type_ = org.y1000.network.gen.ClientAddTradeItemPacket.getDefaultInstance();
+          type_ = org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
         }
-        addTradeItemBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientAddTradeItemPacket, org.y1000.network.gen.ClientAddTradeItemPacket.Builder, org.y1000.network.gen.ClientAddTradeItemPacketOrBuilder>(
-                (org.y1000.network.gen.ClientAddTradeItemPacket) type_,
+        updateTradeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientUpdateTradePacket, org.y1000.network.gen.ClientUpdateTradePacket.Builder, org.y1000.network.gen.ClientUpdateTradePacketOrBuilder>(
+                (org.y1000.network.gen.ClientUpdateTradePacket) type_,
                 getParentForChildren(),
                 isClean());
         type_ = null;
       }
       typeCase_ = 17;
       onChanged();
-      return addTradeItemBuilder_;
+      return updateTradeBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

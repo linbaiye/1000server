@@ -12,7 +12,7 @@ public final class OpenTradeWindowEvent extends AbstractPlayerEvent {
     private final long anotherPlayerId;
 
     public OpenTradeWindowEvent(Player source, long anotherPlayerId, Integer slot) {
-        super(source);
+        super(source, true);
         this.slot = slot;
         this.anotherPlayerId = anotherPlayerId;
     }

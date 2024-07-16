@@ -171,18 +171,13 @@ message ClientTradePlayerPacket {
   int32 slot = 2;
 }
 
-message ClientAddTradeItemPacket {
+message ClientUpdateTradePacket {
   int32 inventorySlot = 1;
   int64 itemNumber = 2;
+  int32 type = 3;
+  int32 tradeWindowSlot = 4;
 }
 
-message ClientConfirmTradePacket {
-
-}
-
-message ClientCancelTradePacket {
-
-}
 
 message ClientMerchantTradeItemsPacket {
   int64 merchantId = 1;
@@ -207,7 +202,7 @@ message ClientPacket {
     ClientMerchantTradeItemsPacket buyItems = 14;
     RightClickPacket rightClick = 15;
     ClientTradePlayerPacket tradeRequest = 16;
-    ClientAddTradeItemPacket addTradeItem = 17;
+    ClientUpdateTradePacket updateTrade = 17;
   }
 }
 
@@ -239,6 +234,7 @@ message UpdateTradeWindowPacket {
   optional string name = 2;
   optional int64 number = 3;
   optional int32 slot = 4;
+  optional bool self = 5;
 }
 
 
@@ -358,8 +354,6 @@ message ItemAttributePacket {
   optional int32 page = 3;
   string text = 4;
 }
-
-
 
 message Packet {
   oneof TypedPacket {

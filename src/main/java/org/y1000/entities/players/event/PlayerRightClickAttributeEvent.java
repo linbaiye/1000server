@@ -8,7 +8,7 @@ import org.y1000.network.gen.PlayerRightClickAttributePacket;
 public class PlayerRightClickAttributeEvent extends AbstractPlayerEvent {
     private final PlayerRightClickAttributePacket pkt;
     public PlayerRightClickAttributeEvent(Player source) {
-        super(source);
+        super(source, true);
         this.pkt = rightClickAttributePacket(source);
     }
 

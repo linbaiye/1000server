@@ -6,36 +6,32 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 @Getter
 public final class PlayerTrade {
-    private record TradingItem(int inventorySlot, Item item) {
-    }
 
     private final Player trader;
     private final Player tradee;
     private boolean traderConfirmed;
     private boolean tradeeConfrimed;
 
-    private final TradingItem[] traderItems;
-    private final TradingItem[] tradeeItems;
+    private final Item[] traderItems;
+    private final Item[] tradeeItems;
 
+    private static final int MAX_SIZE = 4;
 
     public PlayerTrade(Player trader, Player tradee) {
         this.trader = trader;
         this.tradee = tradee;
-        traderItems = new TradingItem[4];
-        tradeeItems = new TradingItem[4];
+        traderItems = new Item[MAX_SIZE];
+        tradeeItems = new Item[MAX_SIZE];
         tradeeConfrimed = false;
         traderConfirmed = false;
     }
 
 
-    private int findSpace(TradingItem[] slots)  {
+    private int findEmptySlot(Item[] slots)  {
         for (int i = 0; i < slots.length; i++) {
             if (slots[i] == null) {
                 return i;
@@ -46,24 +42,57 @@ public final class PlayerTrade {
 
     public boolean hasSpace(Player player) {
         if (trader.equals(player)) {
-            return findSpace(traderItems) != -1;
+            return findEmptySlot(traderItems) != -1;
         } else if (tradee.equals(player)) {
-            return findSpace(tradeeItems) != -1;
+            return findEmptySlot(tradeeItems) != -1;
         }
         return false;
     }
 
-    public void addItem(Player player, int inventorySlot, Item item) {
+    public int addItem(Player player, Item item) {
         Validate.notNull(player);
         Validate.notNull(item);
         if (!hasSpace(player)) {
-            return;
+            return 0;
         }
         if (player.equals(trader)) {
-            traderItems[findSpace(traderItems)] = new TradingItem(inventorySlot, item);
+            int slot = findEmptySlot(traderItems);
+            traderItems[slot] = item;
+            return slot + 1;
         } else if (player.equals(tradee)) {
-            tradeeItems[findSpace(tradeeItems)] = new TradingItem(inventorySlot, item);
+            int slot = findEmptySlot(tradeeItems);
+            tradeeItems[slot] = item;
+            return slot + 1;
         }
+        return 0;
+    }
+
+    public boolean hasItem(Player player, int tradeWindowSlot) {
+        if (player == null || tradeWindowSlot < 1 || tradeWindowSlot > MAX_SIZE) {
+            return false;
+        }
+        if (trader.equals(player)) {
+            return traderItems[tradeWindowSlot - 1] != null;
+        } else if (tradee.equals(player)) {
+            return tradeeItems[tradeWindowSlot - 1] != null;
+        }
+        return false;
+    }
+
+    public Optional<Item> removeItem(Player player, int tradeWindowSlot) {
+        if (!hasItem(player, tradeWindowSlot)) {
+            return Optional.empty();
+        }
+        Item item;
+        var index = tradeWindowSlot - 1;
+        if (trader.equals(player)) {
+            item = traderItems[index];
+            traderItems[index] = null;
+        } else {
+            item = tradeeItems[index];
+            tradeeItems[index] = null;
+        }
+        return Optional.ofNullable(item);
     }
 
     public void onConfirmed(Player player) {

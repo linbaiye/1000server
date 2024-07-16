@@ -425,7 +425,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         PlayerTextEvent event = eventListener.removeFirst(PlayerTextEvent.class);
         assertEquals(PlayerTextEvent.TextType.OUT_OF_AMMO.value(), event.toPacket().getText().getType());
 
-        player.inventory().add(new DefaultStackItem("箭", 1));
+        player.inventory().add(itemFactory.createItem("箭", 1));
         eventListener.clearEvents();
 
         player.attack(clientEvent, monster);

@@ -1,6 +1,8 @@
 package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
+import org.y1000.item.Item;
+import org.y1000.item.StackItem;
 import org.y1000.message.ValueEnum;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
@@ -8,8 +10,9 @@ import org.y1000.network.gen.UpdateTradeWindowPacket;
 
 public final class UpdateTradeWindowEvent extends AbstractPlayerEvent {
     public enum Type implements ValueEnum  {
-        CLOSE(1),
-        UPDATE(2),
+        CLOSE_WINDOW(1),
+        ADD_ITEM(2),
+        REMOVE_ITEM(3),
         ;
 
         private final int v;
@@ -36,12 +39,15 @@ public final class UpdateTradeWindowEvent extends AbstractPlayerEvent {
 
     private final int slot;
 
-    public UpdateTradeWindowEvent(Player player, Type type, String name, long number, int slot) {
-        super(player);
+    private final boolean self;
+
+    private UpdateTradeWindowEvent(Player player, Type type, String name, long number, int slot, boolean self) {
+        super(player, true);
         this.type = type;
         this.name = name;
         this.number = number;
         this.slot = slot;
+        this.self = self;
     }
 
 
@@ -52,9 +58,15 @@ public final class UpdateTradeWindowEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
-        UpdateTradeWindowPacket.Builder builder = UpdateTradeWindowPacket.newBuilder().setType(type.value());
-        if (name != null) {
-            builder.setName(name).setNumber(number);
+        UpdateTradeWindowPacket.Builder builder = UpdateTradeWindowPacket.newBuilder()
+                .setType(type.value());
+        if (type == Type.ADD_ITEM) {
+            builder.setName(name)
+                    .setNumber(number)
+                    .setSelf(self)
+                    .setSlot(slot);
+        } else if (type == Type.REMOVE_ITEM) {
+            builder.setSlot(slot).setSelf(self);
         }
         return Packet.newBuilder()
                 .setUpdateTradeWindow(builder)
@@ -62,6 +74,15 @@ public final class UpdateTradeWindowEvent extends AbstractPlayerEvent {
     }
 
     public static UpdateTradeWindowEvent close(Player player) {
-        return new UpdateTradeWindowEvent(player, Type.CLOSE, null, 0, 0);
+        return new UpdateTradeWindowEvent(player, Type.CLOSE_WINDOW, null, 0, 0, true);
+    }
+
+    public static UpdateTradeWindowEvent add(Player player, int slot, Item item, boolean self) {
+        return new UpdateTradeWindowEvent(player, Type.ADD_ITEM, item.name(),
+                (item instanceof StackItem stackItem) ? stackItem.number() : 1, slot, self);
+    }
+
+    public static UpdateTradeWindowEvent remove(Player player, int slot, boolean self) {
+        return new UpdateTradeWindowEvent(player, Type.REMOVE_ITEM, null, 0, slot, self);
     }
 }

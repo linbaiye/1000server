@@ -7,6 +7,7 @@ import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
+import org.y1000.item.StackItem;
 import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.message.NpcInterpolation;
 import org.y1000.realm.RealmMap;
@@ -15,6 +16,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public final class DevirtueMerchant extends AbstractNpc implements Merchant {
 
@@ -137,12 +139,12 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
     }
 
     @Override
-    public void buy(Player player, Collection<TradeItem> items) {
+    public void buy(Player player, Collection<TradeItem> items, Function<Long, StackItem> moneyCreator) {
         if (player == null || items == null || !player.canBeSeenAt(coordinate())) {
             return;
         }
         if (player.inventory().canSell(items) && canBuy(items)) {
-            player.inventory().sell(items, computePlayerProfit(items), player);
+            player.inventory().sell(items, moneyCreator.apply(computePlayerProfit(items)), player);
         }
     }
 

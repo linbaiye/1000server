@@ -1,7 +1,7 @@
 package org.y1000.item;
 
-public final class BankInventory extends AbstractStackItem {
-    public BankInventory(String name, long number, ItemSdb itemSdb) {
-        super(name, ItemType.BANK_INVENTORY, number, itemSdb);
+public final class BankInventory extends AbstractItem {
+    public BankInventory(String name, ItemSdb itemSdb) {
+        super(name, ItemType.BANK_INVENTORY, itemSdb);
     }
 }

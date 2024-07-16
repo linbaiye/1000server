@@ -45,7 +45,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("三叉戟"));
         inventory.add(itemFactory.createItem("黄金手套"));
         inventory.add(itemFactory.createItem("北海连环弓"));
-        inventory.add(itemFactory.createItem(DefaultStackItem.MONEY, 10000));
+        inventory.add(itemFactory.createMoney( 10000));
         inventory.add(itemFactory.createItem("生药", 10000));
         inventory.add(itemFactory.createItem("杨家枪法", 1));
         inventory.add(itemFactory.createItem("无击阵", 1));

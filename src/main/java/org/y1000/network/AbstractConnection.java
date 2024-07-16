@@ -49,7 +49,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case BUYITEMS -> ClientBuyItemsEvent.fromPacket(clientPacket.getBuyItems());
             case RIGHTCLICK -> ClientRightClickEvent.fromPacket(clientPacket.getRightClick());
             case TRADEREQUEST -> new ClientTradePlayerEvent(clientPacket.getTradeRequest().getTargetId(), clientPacket.getTradeRequest().getSlot());
-            case ADDTRADEITEM -> new ClientAddTradeItemEvent(clientPacket.getAddTradeItem().getInventorySlot(), clientPacket.getAddTradeItem().getItemNumber());
+            case UPDATETRADE -> ClientUpdateTradeEvent.fromPacket(clientPacket.getUpdateTrade());
             default -> throw new IllegalArgumentException();
         };
     }

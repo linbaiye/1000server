@@ -8,10 +8,13 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.item.ItemType;
-import org.y1000.item.DefaultStackItem;
 import org.y1000.realm.RealmMap;
+import org.y1000.repository.ItemRepositoryImpl;
+import org.y1000.repository.KungFuBookRepositoryImpl;
+import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.trade.TradeItem;
 import org.y1000.util.Coordinate;
 
@@ -35,6 +38,8 @@ class DevirtueMerchantTest extends AbstractNpcUnitTestFixture {
 
     private List<MerchantItem> buyItems;
     private List<MerchantItem> sellItems;
+
+    private final ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
 
     @BeforeEach
     void setUp() {
@@ -68,13 +73,13 @@ class DevirtueMerchantTest extends AbstractNpcUnitTestFixture {
         Inventory inventory = new Inventory();
         buyItems.add(new MerchantItem("皮", 7));
         buyItems.add(new MerchantItem("肉", 5));
-        inventory.add(new DefaultStackItem("肉", 2));
-        inventory.add(new DefaultStackItem("皮", 1));
+        inventory.add(itemFactory.createItem("肉", 2));
+        inventory.add(itemFactory.createItem("皮", 1));
         when(player.inventory()).thenReturn(inventory);
         List<TradeItem> items = List.of(new TradeItem("肉", 1, 1), new TradeItem("皮", 1, 2));
-        merchant.buy(player, items);
-        assertTrue(inventory.findFirstStackItem(DefaultStackItem.MONEY).isPresent());
-        inventory.findFirstStackItem(DefaultStackItem.MONEY).ifPresent(money -> assertEquals(12, money.number()));
+        merchant.buy(player, items, itemFactory::createMoney);
+        assertTrue(inventory.findFirstStackItem(ItemType.MONEY_NAME).isPresent());
+        inventory.findFirstStackItem(ItemType.MONEY_NAME).ifPresent(money -> assertEquals(12, money.number()));
         assertTrue(inventory.findFirstStackItem("皮").isEmpty());
         assertTrue(inventory.findFirstStackItem("肉").isPresent());
         inventory.findFirstStackItem("肉").ifPresent( meat -> assertEquals(1, meat.number()));
@@ -86,12 +91,12 @@ class DevirtueMerchantTest extends AbstractNpcUnitTestFixture {
         when(player.canBeSeenAt(any(Coordinate.class))).thenReturn(true);
         Inventory inventory = new Inventory();
         when(player.inventory()).thenReturn(inventory);
-        inventory.add(DefaultStackItem.money(41));
-        sellItems.add(new MerchantItem("草药", 20));
+        inventory.add(itemFactory.createMoney(41));
+        sellItems.add(new MerchantItem("生药", 20));
         sellItems.add(new MerchantItem("丸药", 10));
-        List<TradeItem> items = List.of(new TradeItem("草药", 1, 3), new TradeItem("丸药", 2, 4));
-        merchant.sell(player, items, (s, aLong) -> new DefaultStackItem(s, aLong, ItemType.STACK, ItemSdbImpl.INSTANCE));
-        assertTrue(inventory.findFirstStackItem(DefaultStackItem.MONEY).isPresent());
-        inventory.findFirstStackItem(DefaultStackItem.MONEY).ifPresent(money -> assertEquals(1, money.number()));
+        List<TradeItem> items = List.of(new TradeItem("生药", 1, 3), new TradeItem("丸药", 2, 4));
+        merchant.sell(player, items, itemFactory::createItem);
+        assertTrue(inventory.findFirstStackItem(ItemType.MONEY_NAME).isPresent());
+        inventory.findFirstStackItem(ItemType.MONEY_NAME).ifPresent(money -> assertEquals(1, money.number()));
     }
 }

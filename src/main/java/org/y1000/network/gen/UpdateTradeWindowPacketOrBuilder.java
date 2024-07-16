@@ -52,4 +52,15 @@ public interface UpdateTradeWindowPacketOrBuilder extends
    * @return The slot.
    */
   int getSlot();
+
+  /**
+   * <code>optional bool self = 5;</code>
+   * @return Whether the self field is set.
+   */
+  boolean hasSelf();
+  /**
+   * <code>optional bool self = 5;</code>
+   * @return The self.
+   */
+  boolean getSelf();
 }

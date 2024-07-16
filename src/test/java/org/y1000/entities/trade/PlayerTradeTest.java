@@ -2,9 +2,10 @@ package org.y1000.entities.trade;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.y1000.entities.players.Player;
-import org.y1000.item.DefaultItem;
+import org.y1000.item.Item;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,14 +28,33 @@ class PlayerTradeTest {
         assertTrue(trade.hasSpace(trader));
         assertTrue(trade.hasSpace(tradee));
         for (int i = 1; i <= 3; i++ ) {
-            trade.addItem(trader, i, DefaultItem.builder().name("test").desc("").dropSound("").eventSound("").build());
-            trade.addItem(tradee, i, DefaultItem.builder().name("test").desc("").dropSound("").eventSound("").build());
+            assertNotEquals(0, trade.addItem(trader,  Mockito.mock(Item.class)));
+            assertNotEquals(0, trade.addItem(tradee,  Mockito.mock(Item.class)));
         }
         assertTrue(trade.hasSpace(trader));
         assertTrue(trade.hasSpace(tradee));
-        trade.addItem(trader, 4, DefaultItem.builder().name("test").desc("").dropSound("").eventSound("").build());
-        trade.addItem(tradee, 4, DefaultItem.builder().name("test").desc("").dropSound("").eventSound("").build());
+        assertNotEquals(0, trade.addItem(trader,  Mockito.mock(Item.class)));
+        assertNotEquals(0, trade.addItem(tradee,  Mockito.mock(Item.class)));
         assertFalse(trade.hasSpace(trader));
         assertFalse(trade.hasSpace(tradee));
+    }
+
+    @Test
+    void hasItem() {
+        assertFalse(trade.hasItem(trader, 1));
+        assertFalse(trade.hasItem(tradee, 1));
+        assertFalse(trade.hasItem(tradee, 0));
+        assertFalse(trade.hasItem(tradee, 5));
+        trade.addItem(trader, Mockito.mock(Item.class));
+        assertTrue(trade.hasItem(trader, 1));
+        assertFalse(trade.hasItem(Mockito.mock(Player.class), 1));
+    }
+
+    @Test
+    void removeItem() {
+        trade.addItem(trader, Mockito.mock(Item.class));
+        assertTrue(trade.removeItem(trader, 1).isPresent());
+        assertFalse(trade.hasItem(trader, 1));
+        assertTrue(trade.removeItem(trader, 1).isEmpty());
     }
 }

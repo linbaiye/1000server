@@ -12,7 +12,7 @@ public class ItemOrKungFuAttributeEvent extends AbstractPlayerEvent {
     private final String description;
     private final RightClickType type;
     public ItemOrKungFuAttributeEvent(Player source, int page, int slotId, String description, RightClickType type) {
-        super(source);
+        super(source, true);
         this.page = page;
         this.slotId = slotId;
         this.description = description;

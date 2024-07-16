@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.0-rc2
 package org.y1000.network.gen;
 
-public interface ClientAddTradeItemPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ClientAddTradeItemPacket)
+public interface ClientUpdateTradePacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ClientUpdateTradePacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -19,4 +19,16 @@ public interface ClientAddTradeItemPacketOrBuilder extends
    * @return The itemNumber.
    */
   long getItemNumber();
+
+  /**
+   * <code>int32 type = 3;</code>
+   * @return The type.
+   */
+  int getType();
+
+  /**
+   * <code>int32 tradeWindowSlot = 4;</code>
+   * @return The tradeWindowSlot.
+   */
+  int getTradeWindowSlot();
 }

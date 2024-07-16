@@ -357,7 +357,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
 
     private void learnKungFu(int inventorySlotId, KungFuItem kungFuItem) {
-        KungFu kungFu = kungFuItem.kungFu();
+        KungFu kungFu = kungFuItem.kungFu().duplicate();
         var slot = kungFuBook().addToBasic(kungFu);
         if (slot == 0) {
             return;
