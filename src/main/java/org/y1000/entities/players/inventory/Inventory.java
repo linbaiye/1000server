@@ -46,7 +46,7 @@ public final class Inventory {
         return items.size();
     }
 
-    public int emptySlotSize() {
+    public int availableSlots() {
         return MAX_CAP - itemCount();
     }
 
@@ -227,7 +227,35 @@ public final class Inventory {
                 return false;
             }
         }
-        return contains(ItemType.MONEY_NAME) || emptySlotSize() > 0;
+        return contains(ItemType.MONEY_NAME) || availableSlots() > 0;
+    }
+
+    private int requiredSpace(List<StackItem> items) {
+        int count = items.size();
+        for (StackItem item : items) {
+            int firstSlot = findFirstSlot(item.name());
+            if (firstSlot == 0) {
+                continue;
+            }
+            if (getItem(firstSlot) instanceof StackItem stackItem &&
+                    stackItem.hasMoreSpace(item.number())) {
+                count--;
+            }
+        }
+        return count;
+    }
+
+    public boolean canTakeAll(List<Item> items) {
+        if (items == null || items.isEmpty()) {
+            return true;
+        }
+        List<StackItem> stackItems = items.stream()
+                .filter(i -> i instanceof StackItem)
+                .map(StackItem.class::cast)
+                .toList();
+        int space = requiredSpace(stackItems);
+        var nonStackSize = items.size() - stackItems.size();
+        return nonStackSize + space <= availableSlots();
     }
 
     public int findFirstSlot(String name) {

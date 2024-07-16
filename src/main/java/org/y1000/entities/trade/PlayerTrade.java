@@ -6,12 +6,16 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-@Getter
 public final class PlayerTrade {
 
+    @Getter
     private final Player trader;
+    @Getter
     private final Player tradee;
     private boolean traderConfirmed;
     private boolean tradeeConfrimed;
@@ -47,6 +51,18 @@ public final class PlayerTrade {
             return findEmptySlot(tradeeItems) != -1;
         }
         return false;
+    }
+
+    private List<Item> getNotNull(Item[] items) {
+        return Arrays.stream(items).filter(Objects::nonNull).toList();
+    }
+
+    public List<Item> traderItems() {
+        return getNotNull(traderItems);
+    }
+
+    public List<Item> tradeeItems() {
+        return getNotNull(tradeeItems);
     }
 
     public int addItem(Player player, Item item) {

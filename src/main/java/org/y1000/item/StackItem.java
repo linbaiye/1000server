@@ -2,6 +2,8 @@ package org.y1000.item;
 
 import org.apache.commons.lang3.Validate;
 
+import java.util.Optional;
+
 public record StackItem(Item item, long number) implements Item {
 
     public StackItem {
@@ -45,6 +47,16 @@ public record StackItem(Item item, long number) implements Item {
 
     public long number() {
         return number;
+    }
+
+    @Override
+    public Optional<String> dropSound() {
+        return item.dropSound();
+    }
+
+    @Override
+    public Optional<String> eventSound() {
+        return item.eventSound();
     }
 
     public boolean containsSameItem(Item item) {

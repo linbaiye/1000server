@@ -70,5 +70,12 @@ class PlayerManagerTest {
         dataEvent = new PlayerDataEvent(player, new ClientUpdateTradeEvent(1, 2, ClientUpdateTradeEvent.ClientUpdateType.REMOVE_ITEM, 3));
         playerManager.onPlayerEvent(dataEvent, Mockito.mock(EntityManager.class));
         verify(tradeManager, times(1)).removeTradeItem(any(Player.class), anyInt());
+        dataEvent = new PlayerDataEvent(player, new ClientUpdateTradeEvent(1, 2, ClientUpdateTradeEvent.ClientUpdateType.CANCEL, 3));
+        playerManager.onPlayerEvent(dataEvent, Mockito.mock(EntityManager.class));
+        verify(tradeManager, times(1)).cancelTrade(any(Player.class));
+        dataEvent = new PlayerDataEvent(player, new ClientUpdateTradeEvent(1, 2, ClientUpdateTradeEvent.ClientUpdateType.CONFIRM, 3));
+        playerManager.onPlayerEvent(dataEvent, Mockito.mock(EntityManager.class));
+        verify(tradeManager, times(1)).confirmTrade(any(Player.class));
     }
+
 }

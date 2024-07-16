@@ -13,6 +13,8 @@ import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.trade.TradeItem;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,7 +127,7 @@ class InventoryTest {
         inventory.add(itemFactory.createMoney(100));
         assertTrue(inventory.canBuy(items, 10));
         assertFalse(inventory.canBuy(items, 1000));
-        int slot = inventory.emptySlotSize() - 1;
+        int slot = inventory.availableSlots() - 1;
         for (int i = 0; i < slot; i++) {
             inventory.add(createHair());
         }
@@ -157,8 +159,8 @@ class InventoryTest {
     void size() {
         inventory.add(itemFactory.createMoney(1));
         assertEquals(1, inventory.itemCount());
-        assertEquals(inventory.capacity() - 1, inventory.emptySlotSize());
-        int emptySlot = inventory.emptySlotSize() - 1;
+        assertEquals(inventory.capacity() - 1, inventory.availableSlots());
+        int emptySlot = inventory.availableSlots() - 1;
         for (int i = 0; i < emptySlot; i++) {
             inventory.add(createHair());
         }
@@ -190,5 +192,24 @@ class InventoryTest {
         slot = inventory.add(itemFactory.createMoney(1000));
         assertTrue(inventory.hasEnough(slot, 1000));
         assertFalse(inventory.hasEnough(slot, 1001));
+    }
+
+    @Test
+    void canTakeAll() {
+        for (int i = 0; i < inventory.capacity() - 2; i++) {
+            inventory.add(itemFactory.createItem("长剑"));
+        }
+        var items = List.of(itemFactory.createItem("生药", 12), itemFactory.createItem("长剑"));
+        assertTrue(inventory.canTakeAll(items));
+        inventory.add(itemFactory.createItem("生药", 1));
+        assertTrue(inventory.canTakeAll(items));
+        items = List.of(itemFactory.createItem("长剑"), itemFactory.createItem("长剑"));
+        assertFalse(inventory.canTakeAll(items));
+        inventory.add(itemFactory.createItem("丸药", 1));
+        assertFalse(inventory.canTakeAll(Collections.singletonList(itemFactory.createItem("长刀"))));
+        items = List.of(itemFactory.createItem("生药", 12), itemFactory.createItem("丸药", 3));
+        assertTrue(inventory.canTakeAll(items));
+        assertTrue(inventory.canTakeAll(null));
+        assertTrue(inventory.canTakeAll(Collections.emptyList()));
     }
 }

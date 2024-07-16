@@ -299,11 +299,12 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             emitEvent(PlayerTextEvent.inventoryFull(this));
             return;
         }
-        int slot = inventory.add(creator.apply(groundedItem));
+        Item slotItem = creator.apply(groundedItem);
+        int slot = inventory.add(slotItem);
         if (slot > 0) {
             emitEvent(new UpdateInventorySlotEvent(this, slot, inventory.getItem(slot)));
             emitEvent(new RemoveEntityEvent(groundedItem));
-            groundedItem.pickSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+            slotItem.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         }
     }
 
@@ -376,13 +377,15 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         if (item instanceof AbstractEquipment equipment) {
             equip(slotId, equipment);
-        } else if (item instanceof Pill pill) {
-            if (inventory.decrease(slotId)) {
-                emitEvent(new UpdateInventorySlotEvent(this, slotId, item));
-                pillSlots.usePill(this, pill);
+        } else if (item instanceof StackItem stackItem) {
+            if (stackItem.item() instanceof Pill pill) {
+                if (inventory.decrease(slotId)) {
+                    emitEvent(new UpdateInventorySlotEvent(this, slotId, item));
+                    pillSlots.usePill(this, pill);
+                }
+            } else if (stackItem.item() instanceof KungFuItem kungFuItem) {
+                learnKungFu(slotId, kungFuItem);
             }
-        } else if (item instanceof KungFuItem kungFuItem) {
-            learnKungFu(slotId, kungFuItem);
         }
     }
 

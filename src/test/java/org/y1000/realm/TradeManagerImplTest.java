@@ -13,6 +13,7 @@ import org.y1000.event.EntityEvent;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdbImpl;
+import org.y1000.item.StackItem;
 import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.*;
 class TradeManagerImplTest {
     private TradeManager tradeManager;
     private Inventory traderInventory;
+    private Inventory tradeeInventory;
     private Player trader;
     private Player tradee;
     private ItemFactory itemFactory;
@@ -38,14 +40,18 @@ class TradeManagerImplTest {
     @BeforeEach
     void setUp() {
         itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
+        trader = Mockito.mock(Player.class);
         tradeManager = new TradeManagerImpl();
         traderInventory = new Inventory();
         traderInventory.add(itemFactory.createItem("长剑"));
-        trader = Mockito.mock(Player.class);
-        when(trader.coordinate()).thenReturn(Coordinate.xy(1, 1));
-        tradee = Mockito.mock(Player.class);
-        when(tradee.coordinate()).thenReturn(Coordinate.xy(2, 2));
         when(trader.inventory()).thenReturn(traderInventory);
+        when(trader.coordinate()).thenReturn(Coordinate.xy(1, 1));
+
+        tradee = Mockito.mock(Player.class);
+        tradeeInventory = new Inventory();
+        when(tradee.inventory()).thenReturn(tradeeInventory);
+        when(tradee.coordinate()).thenReturn(Coordinate.xy(2, 2));
+
         tradeeEventListener = new TestingEventListener();
         traderEventListener = new TestingEventListener();
         doAnswer(invocationOnMock -> {
@@ -67,6 +73,17 @@ class TradeManagerImplTest {
         tradeManager.start(trader, tradee, slot);
         verify(trader, times(1)).emitEvent(any(OpenTradeWindowEvent.class));
         verify(tradee, times(1)).emitEvent(any(OpenTradeWindowEvent.class));
+    }
+
+    @Test
+    void startDoesNothingWhenSamePlayer() {
+        Inventory inventory = new Inventory();
+        var slot = inventory.add(Mockito.mock(Item.class));
+        when(tradee.tradeEnabled()).thenReturn(true);
+        when(trader.inventory()).thenReturn(inventory);
+        tradeManager.start(trader, trader, slot);
+        verify(trader, times(0)).emitEvent(any(OpenTradeWindowEvent.class));
+        verify(tradee, times(0)).emitEvent(any(OpenTradeWindowEvent.class));
     }
 
     @Test
@@ -139,5 +156,67 @@ class TradeManagerImplTest {
         assertNotNull(traderEventListener.removeFirst(UpdateInventorySlotEvent.class));
         removeEvent = traderEventListener.removeFirst(UpdateTradeWindowEvent.class);
         assertTrue(removeEvent.toPacket().getUpdateTradeWindow().getSelf());
+    }
+
+    @Test
+    void cancel() {
+        when(tradee.tradeEnabled()).thenReturn(true);
+        when(trader.tradeEnabled()).thenReturn(true);
+        tradeManager.start(trader, tradee, 1);
+        tradeManager.addTradeItem(trader, 1, 1);
+        var tradeeSlot = tradeeInventory.add(itemFactory.createItem("生药", 3));
+        tradeManager.addTradeItem(tradee, tradeeSlot, 1);
+        assertEquals(2, ((StackItem)tradeeInventory.getItem(tradeeSlot)).number());
+        assertNull(traderInventory.getItem(1));
+        tradeManager.cancelTrade(trader);
+        assertNotNull(traderInventory.getItem(1));
+        assertEquals(3, ((StackItem)tradeeInventory.getItem(tradeeSlot)).number());
+    }
+
+    @Test
+    void confirmWhenFull() {
+        when(tradee.tradeEnabled()).thenReturn(true);
+        when(trader.tradeEnabled()).thenReturn(true);
+        int slots = traderInventory.availableSlots();
+        for (int i = 0; i < slots; i++) {
+            traderInventory.add(itemFactory.createItem("长刀"));
+        }
+        tradeManager.start(trader, tradee, 1);
+        tradeManager.addTradeItem(trader, 1, 1);
+        var tradeeSlot = tradeeInventory.add(itemFactory.createItem("生药", 3));
+        tradeManager.addTradeItem(tradee, tradeeSlot, 1);
+        tradeeSlot = tradeeInventory.add(itemFactory.createItem("丸药", 2));
+        tradeManager.addTradeItem(tradee, tradeeSlot, 1);
+        traderEventListener.clearEvents();
+        tradeeEventListener.clearEvents();
+        // end setup.
+
+        tradeManager.confirmTrade(trader);
+        tradeManager.confirmTrade(tradee);
+        var update = traderEventListener.removeFirst(UpdateTradeWindowEvent.class);
+        assertEquals(UpdateTradeWindowEvent.Type.CLOSE_WINDOW.value(), update.toPacket().getUpdateTradeWindow().getType());
+        update = tradeeEventListener.removeFirst(UpdateTradeWindowEvent.class);
+        assertEquals(UpdateTradeWindowEvent.Type.CLOSE_WINDOW.value(), update.toPacket().getUpdateTradeWindow().getType());
+        assertEquals("长剑", trader.inventory().getItem(1).name());
+        assertEquals(3, ((StackItem)tradee.inventory().getItem(1)).number());
+        assertEquals(2, ((StackItem)tradee.inventory().getItem(2)).number());
+    }
+
+    @Test
+    void confirmWhenEmpty() {
+        when(tradee.tradeEnabled()).thenReturn(true);
+        when(trader.tradeEnabled()).thenReturn(true);
+        tradeManager.start(trader, tradee, 1);
+        tradeManager.removeTradeItem(trader,  1);
+        traderEventListener.clearEvents();
+        tradeeEventListener.clearEvents();
+        tradeManager.confirmTrade(trader);
+        tradeManager.confirmTrade(tradee);
+        assertNull(traderEventListener.removeFirst(UpdateInventorySlotEvent.class));
+        assertNull(tradeeEventListener.removeFirst(UpdateInventorySlotEvent.class));
+        UpdateTradeWindowEvent update = traderEventListener.removeFirst(UpdateTradeWindowEvent.class);
+        assertEquals(UpdateTradeWindowEvent.Type.CLOSE_WINDOW.value(), update.toPacket().getUpdateTradeWindow().getType());
+        update = tradeeEventListener.removeFirst(UpdateTradeWindowEvent.class);
+        assertEquals(UpdateTradeWindowEvent.Type.CLOSE_WINDOW.value(), update.toPacket().getUpdateTradeWindow().getType());
     }
 }

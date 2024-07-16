@@ -501,4 +501,11 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         var text = itemAttribute.getText();
         assertTrue(text.contains("修炼等级"));
     }
+
+    @Test
+    void doubleClickPill() {
+        int slot = player.inventory().add(itemFactory.createItem("生药", 2));
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertEquals(1, ((StackItem)player.inventory().getItem(slot)).number());
+    }
 }

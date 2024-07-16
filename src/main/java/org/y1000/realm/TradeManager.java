@@ -13,4 +13,6 @@ public interface TradeManager {
     void removeTradeItem(Player player, int tradeWindowSlot);
 
     void cancelTrade(Player player);
+
+    void confirmTrade(Player player);
 }

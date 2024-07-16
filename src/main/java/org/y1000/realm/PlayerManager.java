@@ -88,6 +88,10 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
             tradeManager.addTradeItem(player, updateTradeEvent.slot(), updateTradeEvent.number());
         } else if (updateTradeEvent.type() == ClientUpdateTradeEvent.ClientUpdateType.REMOVE_ITEM) {
             tradeManager.removeTradeItem(player, updateTradeEvent.tradeWindowSlot());
+        } else if (updateTradeEvent.type() == ClientUpdateTradeEvent.ClientUpdateType.CANCEL) {
+            tradeManager.cancelTrade(player);
+        } else if (updateTradeEvent.type() == ClientUpdateTradeEvent.ClientUpdateType.CONFIRM) {
+            tradeManager.confirmTrade(player);
         }
     }
 

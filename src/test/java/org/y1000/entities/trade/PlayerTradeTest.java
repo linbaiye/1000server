@@ -2,7 +2,6 @@ package org.y1000.entities.trade;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
@@ -56,5 +55,16 @@ class PlayerTradeTest {
         assertTrue(trade.removeItem(trader, 1).isPresent());
         assertFalse(trade.hasItem(trader, 1));
         assertTrue(trade.removeItem(trader, 1).isEmpty());
+    }
+
+    @Test
+    void getItems() {
+        assertTrue(trade.traderItems().isEmpty());
+        assertTrue(trade.tradeeItems().isEmpty());
+        trade.addItem(trader, Mockito.mock(Item.class));
+        trade.addItem(trader, Mockito.mock(Item.class));
+        trade.addItem(trader, Mockito.mock(Item.class));
+        trade.removeItem(trader, 2);
+        assertEquals(2, trade.traderItems().size());
     }
 }
