@@ -37,7 +37,6 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
     private final int swingSound;
 
     private final String name;
-    private final KungFuSdb kungFuSdb;
 
     private final ArmorParameters armorParameters;
 
@@ -46,7 +45,6 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
     public AttackKungFuParametersImpl(String name, KungFuSdb kungFuSdb, ArmorParameters armorParameters,
                                       EventResourceParameters eventResourceParameters) {
         this.name = name;
-        this.kungFuSdb = kungFuSdb;
         this.armorParameters = armorParameters;
         recovery = (120 - kungFuSdb.getRecovery(name)) * INI_MUL_RECOVERY / INI_MAGIC_DIV_VALUE;
         attackSpeed = (120 - kungFuSdb.getAttackSpeed(name)) * INI_MUL_ATTACKSPEED / INI_MAGIC_DIV_VALUE;
@@ -76,7 +74,7 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
     }
 
     public int recovery() {
-        return kungFuSdb.getRecovery(name);
+        return recovery;
     }
 
     public int outerPowerToSwing() {

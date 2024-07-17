@@ -159,18 +159,21 @@ public final class KungFuSdb extends AbstractSdbReader {
 //        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
 //        System.out.println(INSTANCE.get("无名剑法", "SoundStrike"));
 
-        KungFuSdb itemSdb = KungFuSdb.INSTANCE;
-//        Set<String> names = itemSdb.names();
-        Set<String> names = itemSdb.columnNames();
-        Set<String> items = itemSdb.names();
+        KungFuSdb kungFuSdb = KungFuSdb.INSTANCE;
+//        Set<String> names = kungFuSdb.names();
+        Set<String> names = kungFuSdb.columnNames();
+        Set<String> items = kungFuSdb.names();
         for (String i : items) {
+            if (!i.contains("壁射剑法"))
+                continue;
+
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {
-                if (!StringUtils.isEmpty(itemSdb.get(i, name)))
-                    System.out.println(name + ": " + itemSdb.get(i, name));
+                if (!StringUtils.isEmpty(kungFuSdb.get(i, name)))
+                    System.out.println(name + ": " + kungFuSdb.get(i, name));
             }
-            //String v = itemSdb.get("生药", name);
+            //String v = kungFuSdb.get("生药", name);
         }
     }
 

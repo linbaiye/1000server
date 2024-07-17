@@ -151,7 +151,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     protected boolean doAttacked(Damage damage, int attackerHit,
                                  UnaryAction<Integer> gainAttackExp,
                                  ViolentCreature attacker) {
-        if (!doAttackedAndGiveExp(damage, attackerHit, this::takeDamage, gainAttackExp)) {
+        if (doAttackedAndGiveExp(damage, attackerHit, this::takeDamage, gainAttackExp) == 0) {
             return false;
         }
         if (currentLife() > 0) {

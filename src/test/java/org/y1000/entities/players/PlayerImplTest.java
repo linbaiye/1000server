@@ -521,4 +521,9 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         player.gainAssistantExp(100);
         assertTrue( player.assistantKungFu().get().level() > 100);
     }
+
+    @Test
+    void attackedByMonster() {
+
+    }
 }

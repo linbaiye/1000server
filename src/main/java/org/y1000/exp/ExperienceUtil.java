@@ -9,6 +9,8 @@ public final class ExperienceUtil {
     private final int gap;
     private final int maxExp;
 
+    public static final int MAX_EXP = 1085138172;
+
     public ExperienceUtil(int level, int exp, int gap, int maxExp) {
         this.level = level;
         this.exp = exp;
@@ -85,7 +87,7 @@ type
             96, 856736129, 54318261, 93170, 97, 911054390, 56216393, 95606,
             98, 967270783, 58052549, 97731,
             99, 1025323333, 59814839, 99691,
-            100, 1085138172, 60000000, 0
+            100, MAX_EXP, 60000000, 0
     };
 
     private static final ExperienceUtil[] EXPERIENCES = buildArray();

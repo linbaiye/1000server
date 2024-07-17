@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.Direction;
+import org.y1000.entities.players.Damage;
 import org.y1000.util.Coordinate;
 
 import java.util.List;
@@ -62,5 +63,14 @@ class AssistantKungFuTest extends AbstractUnitTestFixture  {
     @Test
     void description() {
         assertTrue(assistantKungFu.description().contains("修炼等级: 1.00"));
+    }
+
+    @Test
+    void damage() {
+        Damage damage = assistantKungFu.apply(new Damage(10000, 1000, 200, 10));
+        assertEquals(99, damage.bodyDamage());
+        assertEquals(9, damage.headDamage());
+        assertEquals(1, damage.armDamage());
+        assertEquals(0, damage.legDamage());
     }
 }

@@ -50,6 +50,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("杨家枪法", 1));
         inventory.add(itemFactory.createItem("无击阵", 1));
         inventory.add(itemFactory.createItem("雷剑式", 2));
+        inventory.add(itemFactory.createItem("北马剑法", 1));
+        inventory.add(itemFactory.createItem("壁射剑法", 1));
         inventory.add(itemFactory.createItem("金钟罩", 2));
         inventory.add(itemFactory.createItem("易筋经", 2));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));

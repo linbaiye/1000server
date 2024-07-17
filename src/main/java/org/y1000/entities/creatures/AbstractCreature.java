@@ -86,9 +86,9 @@ public abstract class AbstractCreature<C extends Creature, S extends CreatureSta
         state = newState;
     }
 
-    protected boolean doAttackedAndGiveExp(Damage damage, int hit, UnaryAction<Damage> damageAction, UnaryAction<Integer> gainExp) {
+    protected int doAttackedAndGiveExp(Damage damage, int hit, UnaryAction<Damage> damageAction, UnaryAction<Integer> gainExp) {
         if (!state().attackable() || randomAvoidance(hit)) {
-            return false;
+            return 0;
         }
         var before = currentLife();
         damageAction.invoke(damage);
@@ -97,7 +97,7 @@ public abstract class AbstractCreature<C extends Creature, S extends CreatureSta
             var exp = damagedLifeToExp(damagedLife);
             gainExp.invoke(exp);
         }
-        return true;
+        return damagedLife;
     }
 
 

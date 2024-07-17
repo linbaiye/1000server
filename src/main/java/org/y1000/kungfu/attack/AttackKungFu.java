@@ -47,4 +47,8 @@ public interface AttackKungFu extends KungFu {
 
     Damage damage();
 
+    String strikeSound();
+
+    String swingSound();
+
 }

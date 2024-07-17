@@ -594,13 +594,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public void attackedBy(ViolentCreature attacker) {
-        if (!state().attackable() || randomAvoidance(attacker.hit())) {
-            return;
-        }
-        int bodyDamage = attacker.damage().bodyDamage() - bodyArmor();
-        bodyDamage = bodyDamage > 0 ? bodyDamage : 1;
-        life.consume(bodyDamage);
-        afterTakingDamage(bodyDamage);
+        Validate.notNull(attacker);
+        doAttacked(attacker.damage(), attacker.hit(), e -> {});
     }
 
     private void takeDamage(Damage damage) {
@@ -616,13 +611,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     private boolean doAttacked(Damage damage, int hit, UnaryAction<Integer> gainExp) {
-        var before = currentLife();
-        boolean b = doAttackedAndGiveExp(damage, hit, this::takeDamage, gainExp);
-        if (b) {
-            afterTakingDamage(currentLife() - before);
-            return true;
+        int damagedLife = doAttackedAndGiveExp(damage, hit, this::takeDamage, gainExp);
+        if (damagedLife > 0) {
+            afterTakingDamage(damagedLife);
         }
-        return true;
+        return damagedLife > 0;
     }
 
 
@@ -1051,7 +1044,14 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public int avoidance() {
-        return innateAttributesProvider.avoidance();
+        int av = attackKungFu.avoidance() + innateAttributesProvider.avoidance() +
+                weapon().map(Weapon::avoidance).orElse(0);
+        for (Equipment equipment : equippedEquipments.values()) {
+            if (equipment instanceof AbstractArmorEquipment armorEquipment) {
+                av += armorEquipment.recovery();
+            }
+        }
+        return av;
     }
 
     @Override

@@ -21,4 +21,8 @@ public record Damage(int bodyDamage, int headDamage, int armDamage, int legDamag
                 legDamage + another.legDamage);
     }
 
+    public Damage multiply(float m) {
+        return new Damage((int)(bodyDamage * m), (int)(headDamage * m), (int)(armDamage * m), (int)(legDamage * m));
+    }
+
 }

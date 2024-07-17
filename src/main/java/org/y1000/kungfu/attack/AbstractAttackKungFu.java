@@ -103,11 +103,11 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
                 String.valueOf(level() > 8999 ? nr + 4 : nr + 2);
     }
 
-    private String strikeSound() {
+    public String strikeSound() {
         return computeSound(parameters.strikeSound());
     }
 
-    private String swingSound() {
+    public String swingSound() {
         return computeSound(parameters.swingSound());
     }
 

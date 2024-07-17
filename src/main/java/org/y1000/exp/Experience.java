@@ -9,7 +9,7 @@ public final class Experience {
 
     public Experience(int exp) {
         Validate.isTrue(exp >= 0);
-        this.exp = exp;
+        this.exp = Math.min(exp, ExperienceUtil.MAX_EXP);
         level = ExperienceUtil.computeLevel(exp);
     }
 

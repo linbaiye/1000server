@@ -2,6 +2,7 @@ package org.y1000.kungfu;
 
 import lombok.Builder;
 import org.y1000.entities.Direction;
+import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 
@@ -44,6 +45,10 @@ public final class AssistantKungFu extends AbstractKungFu {
         return FIVE_EFFECTED_DIRECTIONS.get(direction).stream()
                 .map(player.coordinate()::moveBy)
                 .collect(Collectors.toSet());
+    }
+
+    public Damage apply(Damage damage) {
+        return damage.multiply(0.99f * ((float) level() / 10000));
     }
 
     @Override
