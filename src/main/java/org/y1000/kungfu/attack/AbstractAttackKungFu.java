@@ -4,12 +4,9 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.players.Armor;
-import org.y1000.entities.players.Damage;
+import org.y1000.entities.players.*;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.players.PlayerImpl;
-import org.y1000.entities.players.PlayerStillState;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.*;
 import org.y1000.kungfu.AbstractKungFu;
@@ -115,6 +112,11 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
 
+    private void doSingleAttack(PlayerImpl player) {
+        var hit = player.getFightingEntity().attackedBy(player);
+        player.emitEvent(new EntitySoundEvent(player, hit ? strikeSound() : swingSound()));
+    }
+
     private void doAttack(PlayerImpl player, Direction direction, boolean sendAttackEvent) {
         int cooldown = player.cooldown();
         if (cooldown > 0) {
@@ -135,9 +137,9 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         if (sendAttackEvent)
             player.emitEvent(PlayerAttackEvent.of(player, player.getFightingEntity().id()));
         if (!isRanged()) {
-            var hit = player.getFightingEntity().attackedBy(player);
-            player.emitEvent(new EntitySoundEvent(player, hit ? strikeSound() : swingSound()));
-            //player.assistantKungFu().ifPresent(assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, assistantKungFu)));
+            player.assistantKungFu().ifPresentOrElse(
+                    assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, player.getFightingEntity(), assistantKungFu)),
+                    () -> doSingleAttack(player));
         } else {
             player.emitEvent(new EntitySoundEvent(player, swingSound()));
         }

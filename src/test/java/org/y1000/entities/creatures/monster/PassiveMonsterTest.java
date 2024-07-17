@@ -34,43 +34,6 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
         assertNotNull(eventListener.dequeue(CreatureHurtEvent.class));
         assertNotNull(eventListener.dequeue(EntitySoundEvent.class));
     }
-//
-//    @Test
-//    void getHurtChangeTarget() {
-//        player = playerBuilder().coordinate(monster.coordinate().move(2, 2)).build();
-//        PlayerProjectile projectile = PlayerProjectile.builder().target(monster).shooter(player).damage(new Damage(1, 1,1,1)).build();
-//        monster.attackedBy(projectile);
-//        assertEquals(player, monster.getFightingEntity());
-//        var player1 = playerBuilder().coordinate(monster.coordinate().moveBy(Direction.LEFT)).build();
-//        monster.attackedBy(player1);
-//        assertEquals(player1, monster.getFightingEntity());
-//    }
-//
-//    @Test
-//    void getHurtShouldNotChangeTargetIfAdjacent() {
-//        player = playerBuilder().coordinate(monster.coordinate().moveBy(Direction.UP)).build();
-//        monster.attackedBy(player);
-//        assertEquals(player, monster.getFightingEntity());
-//        var player1 = playerBuilder().coordinate(monster.coordinate().moveBy(Direction.LEFT)).build();
-//        monster.attackedBy(player1);
-//        assertEquals(player, monster.getFightingEntity());
-//    }
-//
-//    @Test
-//    void fightingTargetLeft() {
-//        monster.attackedBy(player);
-//        player.leaveRealm();
-//        assertNull(monster.getFightingEntity());
-//        monster.update(monster.getStateMillis(State.HURT));
-//        assertEquals(monster.stateEnum(), State.IDLE);
-//    }
-//
-//    @Test
-//    void attackCooldown() {
-//        monster.setFightingEntity(playerBuilder().coordinate(monster.coordinate().move(1, 0)).build());
-//        monster.cooldownAttack();
-//        assertEquals(Realm.STEP_MILLIS * monster.attackSpeed(), monster.cooldown());
-//    }
 
     @Test
     void givePlayerExp() {
@@ -115,6 +78,13 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
         monster.revive(monster.coordinate());
         assertEquals(1000, monster.currentLife());
         assertEquals(State.IDLE, monster.stateEnum());
+    }
+
+    @Test
+    void attackedByAoe() {
+        Player attacker = Mockito.mock(Player.class);
+        int exp = monster.attackedByAoe(attacker, 100, new Damage(10000, 100, 100, 100));
+        assertTrue(exp > 0);
     }
 
     //    @Test

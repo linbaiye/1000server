@@ -219,4 +219,26 @@ class TradeManagerImplTest {
         update = tradeeEventListener.removeFirst(UpdateTradeWindowEvent.class);
         assertEquals(UpdateTradeWindowEvent.Type.CLOSE_WINDOW.value(), update.toPacket().getUpdateTradeWindow().getType());
     }
+
+    @Test
+    void confirmToSwap() {
+        when(tradee.tradeEnabled()).thenReturn(true);
+        when(trader.tradeEnabled()).thenReturn(true);
+        tradeManager.start(trader, tradee, 1);
+        tradeManager.addTradeItem(trader, 1, 1);
+        tradeeInventory.add(itemFactory.createItem("生药", 3));
+        tradeManager.addTradeItem(tradee, 1, 1);
+        traderEventListener.clearEvents();
+        tradeeEventListener.clearEvents();
+        tradeManager.confirmTrade(trader);
+        tradeManager.confirmTrade(tradee);
+        UpdateTradeWindowEvent update = traderEventListener.removeFirst(UpdateTradeWindowEvent.class);
+        assertEquals(UpdateTradeWindowEvent.Type.CLOSE_WINDOW.value(), update.toPacket().getUpdateTradeWindow().getType());
+        update = tradeeEventListener.removeFirst(UpdateTradeWindowEvent.class);
+        assertEquals(UpdateTradeWindowEvent.Type.CLOSE_WINDOW.value(), update.toPacket().getUpdateTradeWindow().getType());
+        assertNotNull(traderEventListener.removeFirst(UpdateInventorySlotEvent.class));
+        assertNotNull(tradeeEventListener.removeFirst(UpdateInventorySlotEvent.class));
+        assertNotEquals(0, tradee.inventory().findFirstSlot("长剑"));
+        assertNotEquals(0, trader.inventory().findFirstSlot("生药"));
+    }
 }

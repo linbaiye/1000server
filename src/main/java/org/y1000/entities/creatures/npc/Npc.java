@@ -2,6 +2,9 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.players.Damage;
+import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
 
@@ -26,4 +29,13 @@ public interface Npc extends Creature {
     NpcState state();
 
     void start();
+
+    /**
+     * Gets attacked by aoe skills.
+     * @param caster the attacker.
+     * @param hit attacker's hit.
+     * @param damage attacker's damage.
+     * @return exp the attacker can get.
+     */
+    int attackedByAoe(ViolentCreature caster, int hit, Damage damage);
 }

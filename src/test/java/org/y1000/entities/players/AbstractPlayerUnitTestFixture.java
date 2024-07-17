@@ -30,6 +30,14 @@ public abstract class AbstractPlayerUnitTestFixture extends AbstractUnitTestFixt
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 10));
     }
 
+    protected void enableAssistant8KungFu() {
+        int slot = player.kungFuBook().findBasicSlot("灵动八方");
+        if (slot == 0) {
+            slot = player.kungFuBook().addToBasic(kungFuFactory.create("灵动八方"));
+        }
+        player.handleClientEvent(new ClientToggleKungFuEvent(2, slot));
+    }
+
     protected void setup() {
         player = playerBuilder().build();
         mockedMap = Mockito.mock(RealmMap.class);

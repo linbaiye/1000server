@@ -37,85 +37,6 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 
-/*
-
-procedure TAttribClass.Calculate;
-begin
-   AttribData.cEnergy   := GetLevel (AttribData.Energy) + 500;     // 기본원기 = 5.00
-   AttribData.cInPower  := GetLevel (AttribData.InPower) + 1000;   // 기본내공 = 10.00
-   AttribData.cOutPower := GetLevel (AttribData.OutPower) + 1000;  // 기본외공 = 10.00
-   AttribData.cMagic    := GetLevel (AttribData.Magic) + 500;      // 기본무공 = 5.00
-   AttribData.cLife     := GetLevel (AttribData.Life) + 2000;      // 기본활력 = 20.00
-
-   AttribData.cAge   := GetLevel (AttribData.Age);
-   AttribData.cLight := GetLevel (AttribData.Light + 664);    // 양정기
-   AttribData.cDark  := GetLevel (AttribData.Dark + 664);     // 음정기
-
-   // 원기 = 기본원기(5) + 나이(50) + 약(20) + 노력(25);
-   AttribData.cEnergy := AttribData.cEnergy + (AttribData.cAge div 2);
-   // 내공 = 기본내공 (10) + 나이(50) + ...
-   AttribData.cInPower := AttribData.cInPower + (AttribData.cAge div 2);
-   // 외공 = 기본외공 (10) + 나이(50) + ...
-   AttribData.cOutPower := AttribData.cOutPower + (AttribData.cAge div 2);
-   // 무공 = 기본무공 (10) + 나이(50) + ...
-   AttribData.cMagic := AttribData.cMagic + (AttribData.cAge div 2);
-   // 활력 = 기본활력(20) + 나이(100) + 직업활력 + ...
-   AttribData.cLife := AttribData.cLife + AttribData.cAge;
-
-   with AttribData do begin
-      cTalent := GetLevel (Talent) + (AttribData.cAge div 2);
-      cGoodChar := GetLevel (GoodChar);
-      cBadChar := GetLevel (BadChar);
-//      clucky := GetLevel (lucky);
-      clucky := lucky;
-      cadaptive := GetLevel (adaptive);
-      crevival := GetLevel (revival);
-      cimmunity := GetLevel (immunity);
-      cvirtue := GetLevel (virtue);
-
-      cHeadSeak := cLife;
-      cArmSeak := cLife;
-      cLegSeak := cLife;
-
-      cHealth := cLife;
-      cSatiety := cLife;
-      cPoisoning := cLife;
-   end;
-   SetLifeData;
-end;
- */
-
-/*
-   StartTick := mmAnsTick;
-   FFeatureState := wfs_normal;
-
-   boRevivalFlag := FALSE;
-   boEnergyFlag := FALSE;
-   boInPowerFlag := FALSE;
-   boOutPowerFlag := FALSE;
-   boMagicFlag := FALSE;
-
-   FillChar (AttribData, sizeof(AttribData), 0);
-   FillChar (CurAttribData, sizeof(CurAttribData), 0);
-   FillChar (ItemDrugArr, sizeof(ItemDrugArr), 0);
-
-   CheckIncreaseTick := StartTick;
-   CheckDrugTick := StartTick;
-
-   boMan := FALSE;
-
-   boMan := false;
-   if StrPas (@aCharData^.Sex) = '남' then boMan := true;
-   //
-   AttribData.Light    := aCharData^.Light;
-   AttribData.Dark     := aCharData^.Dark;
-   AttribData.Age      := AttribData.Light + AttribData.Dark;
-   AttribData.Energy   := aCharData^.Energy;
-   AttribData.InPower  := aCharData^.InPower;
-   AttribData.OutPower := aCharData^.OutPower;
-   AttribData.Magic    := aCharData^.Magic;
-   AttribData.Life     := aCharData^.Life;
- */
 @Slf4j
 public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> implements Player,
         EntityEventListener {
@@ -542,7 +463,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                 emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), item.description(), event.type()));
             }
         } else if (event.type() == RightClickType.KUNGFU) {
-            Optional<KungFu> kungFu = kungFuBook.findKungFu(event.page(), event.slotId());
+            Optional<KungFu> kungFu = kungFuBook.getKungFu(event.page(), event.slotId());
             kungFu.ifPresent(k -> emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), k.description(), event.type())));
         } else if (event.type() == RightClickType.CHARACTER) {
             emitEvent(new PlayerRightClickAttributeEvent(this));
@@ -561,7 +482,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         } else if (clientEvent instanceof ClientUnequipEvent unequipEvent) {
             unequip(unequipEvent.type());
         } else if (clientEvent instanceof ClientToggleKungFuEvent useKungFuEvent) {
-            kungFuBook().findKungFu(useKungFuEvent.tab(), useKungFuEvent.slot()).ifPresent(this::useKungFu);
+            kungFuBook().getKungFu(useKungFuEvent.tab(), useKungFuEvent.slot()).ifPresent(this::useKungFu);
         } else if (clientEvent instanceof ClientSitDownEvent) {
             sitDown(false);
         } else if (clientEvent instanceof ClientStandUpEvent) {
@@ -656,7 +577,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
 
-    private void toHurtOrDead(int damagedLife) {
+    private void afterTakingDamage(int damagedLife) {
         if (currentLife() > 0) {
             cooldownRecovery();
             state().moveToHurtCoordinate(this);
@@ -679,7 +600,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         int bodyDamage = attacker.damage().bodyDamage() - bodyArmor();
         bodyDamage = bodyDamage > 0 ? bodyDamage : 1;
         life.consume(bodyDamage);
-        toHurtOrDead(bodyDamage);
+        afterTakingDamage(bodyDamage);
     }
 
     private void takeDamage(Damage damage) {
@@ -694,25 +615,25 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         legLife.consume(damagedLeg);
     }
 
-    private boolean doAttackedByPlayer(Damage damage, int hit, UnaryAction<Integer> gainExp) {
+    private boolean doAttacked(Damage damage, int hit, UnaryAction<Integer> gainExp) {
         var before = currentLife();
         if (!doAttackedAndGiveExp(damage, hit, this::takeDamage, gainExp)) {
             return false;
         }
-        toHurtOrDead(currentLife() - before);
+        afterTakingDamage(currentLife() - before);
         return true;
     }
 
 
     @Override
     public boolean attackedBy(Player attacker) {
-        return doAttackedByPlayer(attacker.damage(), attacker.hit(), attacker::gainAttackExp);
+        return doAttacked(attacker.damage(), attacker.hit(), attacker::gainAttackExp);
     }
 
     @Override
     public void attackedBy(Projectile projectile) {
         if (projectile.shooter() instanceof Player player) {
-            doAttackedByPlayer(projectile.damage(), projectile.hit(), player::gainRangedAttackExp);
+            doAttacked(projectile.damage(), projectile.hit(), player::gainRangedAttackExp);
         } else {
             attackedBy(projectile.shooter());
         }
@@ -1020,8 +941,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
 
-    @Override
-    public void gainAttackExp(int amount) {
+    private void doGainExp(int amount, KungFu kungFu) {
         if (amount <= 0) {
             return;
         }
@@ -1029,17 +949,27 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             emitEvent(PlayerTextEvent.armLifeTooLowToExp(this));
             return;
         }
-        if (attackKungFu.gainExp(amount)) {
-            emitEvent(new PlayerGainExpEvent(this, attackKungFu.name(), attackKungFu.level()));
+        if (kungFu.gainExp(amount)) {
+            emitEvent(new PlayerGainExpEvent(this, kungFu.name(), kungFu.level()));
         }
+    }
+
+
+    @Override
+    public void gainAttackExp(int amount) {
+        doGainExp(amount, attackKungFu);
     }
 
     @Override
     public void gainRangedAttackExp(int amount) {
-        if (!attackKungFu.isRanged()) {
-            return;
+        if (attackKungFu.isRanged()) {
+            gainAttackExp(amount);
         }
-        gainAttackExp(amount);
+    }
+
+    @Override
+    public void gainAssistantExp(int amount) {
+        assistantKungFu().ifPresent(kf -> doGainExp(amount, kf));
     }
 
     @Override
@@ -1055,6 +985,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     @Override
     public int legPercent() {
         return legLife.percent();
+    }
+
+    @Override
+    public int attackedByAoe(Damage damage, int hit) {
+        int[] exp = new int[1];
+        doAttacked(damage, hit, e -> exp[0] = e);
+        return exp[0];
     }
 
     @Override

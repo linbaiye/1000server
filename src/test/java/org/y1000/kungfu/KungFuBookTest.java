@@ -28,7 +28,7 @@ class KungFuBookTest {
         assertEquals(book.getUnnamedFoot().name(), "无名步法");
         assertEquals(book.getUnnamedProtection().name(), "无名强身");
         book.addToBasic(SwordKungFu.builder().name("test").exp(0).build());
-        assertNotNull(book.findKungFu(2, 1));
+        assertNotNull(book.getKungFu(2, 1));
     }
 
     @Test
@@ -36,5 +36,12 @@ class KungFuBookTest {
         AttackKungFu kungFu = bookFactory.createAttackKungFu("杨家枪法");
         assertEquals(1, book.addToBasic(kungFu));
         assertEquals(0, book.addToBasic(kungFu));
+    }
+
+    @Test
+    void findBasicSlot() {
+        assertEquals(0, book.findBasicSlot("风灵旋"));
+        assertNotEquals(0, book.addToBasic(kungFuFactory.create("风灵旋")));
+        assertNotEquals(0, book.findBasicSlot("风灵旋"));
     }
 }

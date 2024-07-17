@@ -107,7 +107,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     }
 
 
-    private void hurtAction(Creature attacker) {
+    private void hurtAction(ViolentCreature attacker) {
         state().moveToHurtCoordinate(this);
         State afterHurt = state().decideAfterHurtState();
         changeState(new NpcHurtState(getStateMillis(State.HURT), state(), attacker));
@@ -148,9 +148,9 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     }
 
 
-    protected boolean doAttackedByPlayer(Damage damage, int attackerHit,
-                                         UnaryAction<Integer> gainAttackExp,
-                                         Player attacker) {
+    protected boolean doAttacked(Damage damage, int attackerHit,
+                                 UnaryAction<Integer> gainAttackExp,
+                                 ViolentCreature attacker) {
         if (!doAttackedAndGiveExp(damage, attackerHit, this::takeDamage, gainAttackExp)) {
             return false;
         }
@@ -165,14 +165,14 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     @Override
     public boolean attackedBy(Player attacker) {
         Validate.notNull(attacker);
-        return doAttackedByPlayer(attacker.damage(), attacker.hit(), attacker::gainAttackExp, attacker);
+        return doAttacked(attacker.damage(), attacker.hit(), attacker::gainAttackExp, attacker);
     }
 
     @Override
     public void attackedBy(Projectile projectile) {
         Validate.notNull(projectile);
         if (projectile.shooter() instanceof Player player) {
-            doAttackedByPlayer(projectile.damage(), projectile.hit(), player::gainRangedAttackExp, player);
+            doAttacked(projectile.damage(), projectile.hit(), player::gainRangedAttackExp, player);
         } else {
             attackedBy(projectile.shooter());
         }
@@ -181,15 +181,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     @Override
     public void attackedBy(ViolentCreature attacker) {
         Validate.notNull(attacker);
-        if (!state().attackable() || randomAvoidance(attacker.hit())) {
-            return;
-        }
-        takeDamage(attacker.damage());
-        if (currentLife() > 0) {
-            hurtAction(attacker);
-        } else {
-            startAction(State.DIE);
-        }
+        doAttacked(attacker.damage(), attacker.hit(), e -> {}, attacker);
     }
 
     protected void takeDamage(Damage damage) {
@@ -216,5 +208,14 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     @Override
     public Optional<String> dieSound() {
         return attributeProvider.dieSound();
+    }
+
+    @Override
+    public int attackedByAoe(ViolentCreature caster, int hit, Damage damage) {
+        Validate.notNull(caster);
+        Validate.notNull(damage);
+        int[] exp = new int[1];
+        doAttacked(damage, hit, e -> exp[0] = e, caster);
+        return exp[0];
     }
 }

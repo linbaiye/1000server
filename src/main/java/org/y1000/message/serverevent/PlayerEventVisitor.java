@@ -85,9 +85,6 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
         visit((EntityEvent) event);
     }
 
-    default void visit(PlayerShootEvent event) {
-        visit((EntityEvent) event);
-    }
     default void visit(ItemOrKungFuAttributeEvent event) {
 
     }

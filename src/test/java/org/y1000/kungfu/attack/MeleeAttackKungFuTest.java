@@ -1,4 +1,4 @@
-package org.y1000.kungfu;
+package org.y1000.kungfu.attack;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,15 +12,14 @@ import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerLife;
 import org.y1000.entities.players.PlayerStillState;
 import org.y1000.entities.players.PlayerTestingAttribute;
-import org.y1000.entities.players.event.PlayerAttackAoeEvent;
 import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
-import org.y1000.kungfu.attack.*;
+import org.y1000.kungfu.KungFuBookFactory;
+import org.y1000.kungfu.TestingAttackKungFuParameters;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
-import org.y1000.message.clientevent.ClientToggleKungFuEvent;
 import org.y1000.realm.Realm;
 import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.util.Coordinate;

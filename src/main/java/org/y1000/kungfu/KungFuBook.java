@@ -39,6 +39,15 @@ public final class KungFuBook {
         return 0;
     }
 
+    public int findBasicSlot(String name) {
+        for (int i = 1; i <= BASIC_MAX; i++) {
+            if (basic.containsKey(i) && basic.get(i).name().equals(name)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     public void foreachUnnamed(BiConsumer<Integer, KungFu> kungFuBiConsumer) {
         unnamed.forEach(kungFuBiConsumer);
     }
@@ -73,7 +82,7 @@ public final class KungFuBook {
         return findUnnamed(kungFu -> true, FootKungFu.class);
     }
 
-    public Optional<KungFu> findKungFu(int page, int slot) {
+    public Optional<KungFu> getKungFu(int page, int slot) {
         Validate.isTrue(page > 0, "Page must be greater than 0");
         Validate.isTrue(slot > 0, "Slot must be greater than 0");
         if (page == 1) {

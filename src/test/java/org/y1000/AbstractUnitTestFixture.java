@@ -10,6 +10,7 @@ import org.y1000.entities.players.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.KungFuBookFactory;
+import org.y1000.kungfu.KungFuFactory;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.when;
 public abstract class AbstractUnitTestFixture {
 
     protected final KungFuBookFactory kungFuBookFactory = new KungFuBookRepositoryImpl();
+    protected final KungFuFactory kungFuFactory = new KungFuBookRepositoryImpl();
 
     private int id;
 

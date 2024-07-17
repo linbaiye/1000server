@@ -153,10 +153,6 @@ final class RealmEntityEventSender implements EntityEventListener,
         entityEvent.accept(this);
     }
 
-    @Override
-    public void visit(PlayerShootEvent event) {
-        notifyVisiblePlayersAndSelf(event.source(), event);
-    }
 
     @Override
     public void visit(InventorySlotSwappedEvent event) {
@@ -268,10 +264,6 @@ final class RealmEntityEventSender implements EntityEventListener,
         doNotifyVisiblePlayers(event.source(), event);
     }
 
-    public Optional<Entity> findInsight(Entity source, long id) {
-        Set<Entity> entities = scopeManager.filterVisibleEntities(source, Entity.class);
-        return entities.stream().filter(e -> e.id() == id).findFirst();
-    }
 
     public void add(Player player, Connection connection) {
         playerConnectionMap.put(player, connection);

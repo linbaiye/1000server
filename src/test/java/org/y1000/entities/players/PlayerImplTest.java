@@ -508,4 +508,17 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertEquals(1, ((StackItem)player.inventory().getItem(slot)).number());
     }
+
+    @Test
+    void attackedByAoe() {
+        assertTrue(player.attackedByAoe(Damage.DEFAULT, 100) > 0);
+    }
+
+    @Test
+    void gainAssistantExp() {
+        enableAssistant8KungFu();
+        assertTrue(player.assistantKungFu().isPresent());
+        player.gainAssistantExp(100);
+        assertTrue( player.assistantKungFu().get().level() > 100);
+    }
 }
