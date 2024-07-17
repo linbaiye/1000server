@@ -617,10 +617,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     private boolean doAttacked(Damage damage, int hit, UnaryAction<Integer> gainExp) {
         var before = currentLife();
-        if (!doAttackedAndGiveExp(damage, hit, this::takeDamage, gainExp)) {
-            return false;
+        boolean b = doAttackedAndGiveExp(damage, hit, this::takeDamage, gainExp);
+        if (b) {
+            afterTakingDamage(currentLife() - before);
+            return true;
         }
-        afterTakingDamage(currentLife() - before);
         return true;
     }
 

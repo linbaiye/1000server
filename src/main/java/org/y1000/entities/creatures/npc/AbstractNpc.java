@@ -214,6 +214,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     public int attackedByAoe(ViolentCreature caster, int hit, Damage damage) {
         Validate.notNull(caster);
         Validate.notNull(damage);
+        Validate.isTrue(hit >= 0);
         int[] exp = new int[1];
         doAttacked(damage, hit, e -> exp[0] = e, caster);
         return exp[0];
