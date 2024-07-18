@@ -1,0 +1,153 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Pill</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.item</a>
+</div>
+
+<h1>Coverage Summary for Class: Pill (org.y1000.item)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Pill</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.item;
+&nbsp;
+&nbsp;
+&nbsp;public final class Pill extends AbstractItem {
+&nbsp;    private final PillAttributeProvider attributeProvider;
+&nbsp;
+&nbsp;    public Pill(String name, PillAttributeProvider attributeProvider) {
+<b class="fc">&nbsp;        super(name, ItemType.PILL, attributeProvider.dropSound(),</b>
+<b class="fc">&nbsp;                attributeProvider.eventSound(), attributeProvider.description());</b>
+<b class="fc">&nbsp;        this.attributeProvider = attributeProvider;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int useInterval() {
+<b class="fc">&nbsp;        return attributeProvider.useInterval();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int useCount() {
+<b class="fc">&nbsp;        return attributeProvider.useCount();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int power() {
+<b class="fc">&nbsp;        return attributeProvider.power();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int innerPower() {
+<b class="fc">&nbsp;        return attributeProvider.innerPower();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int outerPower() {
+<b class="fc">&nbsp;        return attributeProvider.outerPower();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int life() {
+<b class="fc">&nbsp;        return attributeProvider.life();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int headLife() {
+<b class="fc">&nbsp;        return attributeProvider.headLife();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int armLife() {
+<b class="fc">&nbsp;        return attributeProvider.armLife();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int legLife() {
+<b class="fc">&nbsp;        return attributeProvider.legLife();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

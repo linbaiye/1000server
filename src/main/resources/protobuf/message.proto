@@ -63,7 +63,7 @@ message CreatureAttackEventPacket {
   bool player = 4;
   int32 x = 5;
   int32 y = 6;
-  optional int64 targetId = 7;
+  optional int32 effectId = 7;
 }
 
 message CreatureSoundEventPacket {

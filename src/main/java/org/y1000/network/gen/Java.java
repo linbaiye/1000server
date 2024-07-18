@@ -324,7 +324,7 @@ public final class Java {
       "\002 \001(\t\"\223\001\n\031CreatureAttackEventPacket\022\n\n\002i" +
       "d\030\001 \001(\003\022\021\n\tdirection\030\002 \001(\005\022\r\n\005state\030\003 \001(" +
       "\005\022\016\n\006player\030\004 \001(\010\022\t\n\001x\030\005 \001(\005\022\t\n\001y\030\006 \001(\005\022" +
-      "\025\n\010targetId\030\007 \001(\003H\000\210\001\001B\013\n\t_targetId\"5\n\030C" +
+      "\025\n\010effectId\030\007 \001(\005H\000\210\001\001B\013\n\t_effectId\"5\n\030C" +
       "reatureSoundEventPacket\022\n\n\002id\030\001 \001(\003\022\r\n\005s" +
       "ound\030\002 \001(\t\"\233\001\n\027CreatureHurtEventPacket\022\n" +
       "\n\002id\030\001 \001(\003\022\021\n\tdirection\030\002 \001(\005\022\t\n\001x\030\003 \001(\005" +
@@ -603,7 +603,7 @@ public final class Java {
     internal_static_org_y1000_network_gen_CreatureAttackEventPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_CreatureAttackEventPacket_descriptor,
-        new java.lang.String[] { "Id", "Direction", "State", "Player", "X", "Y", "TargetId", });
+        new java.lang.String[] { "Id", "Direction", "State", "Player", "X", "Y", "EffectId", });
     internal_static_org_y1000_network_gen_CreatureSoundEventPacket_descriptor =
       getDescriptor().getMessageTypes().get(11);
     internal_static_org_y1000_network_gen_CreatureSoundEventPacket_fieldAccessorTable = new

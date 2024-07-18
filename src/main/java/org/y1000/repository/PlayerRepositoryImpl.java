@@ -60,8 +60,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         return inventory;
     }
 
-    private Weapon weapon() {
-        return (Weapon) itemFactory.createItem("护国神剑");
+    private WeaponImpl weapon() {
+        return (WeaponImpl) itemFactory.createItem("护国神剑");
         //return (Weapon) itemFactory.createItem("太极斧");
     }
 
@@ -84,7 +84,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     @Override
     public Player load(String token) {
         int slot = findSlot();
-        Weapon weapon = weapon();
+        WeaponImpl weapon = weapon();
         KungFuBook kungFuBook = loadKungFuBook();
         var yinyang = new YinYang();
         return PlayerImpl.builder()

@@ -1,0 +1,233 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > BreathKungFu</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.kungfu.breath</a>
+</div>
+
+<h1>Coverage Summary for Class: BreathKungFu (org.y1000.kungfu.breath)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BreathKungFu</td>
+<td class="coverageStat">
+  <span class="percent">
+    70%
+  </span>
+  <span class="absValue">
+    (7/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.6%
+  </span>
+  <span class="absValue">
+    (31/38)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BreathKungFu$BreathKungFuBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    72.7%
+  </span>
+  <span class="absValue">
+    (8/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.1%
+  </span>
+  <span class="absValue">
+    (32/39)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.kungfu.breath;
+&nbsp;
+&nbsp;import lombok.Builder;
+&nbsp;import org.y1000.entities.creatures.event.EntitySoundEvent;
+&nbsp;import org.y1000.entities.players.Player;
+&nbsp;import org.y1000.entities.players.event.PlayerAttributeEvent;
+&nbsp;import org.y1000.entities.players.event.PlayerGainExpEvent;
+&nbsp;import org.y1000.exp.ExperienceUtil;
+&nbsp;import org.y1000.kungfu.AbstractKungFu;
+&nbsp;import org.y1000.kungfu.EventResourceParameters;
+&nbsp;import org.y1000.kungfu.KungFu;
+&nbsp;import org.y1000.kungfu.KungFuType;
+&nbsp;import org.y1000.event.EntityEvent;
+&nbsp;import org.y1000.util.UnaryAction;
+&nbsp;
+&nbsp;public final class BreathKungFu extends AbstractKungFu {
+&nbsp;    private final EventResourceParameters parameters;
+&nbsp;
+&nbsp;    private int timer;
+&nbsp;
+&nbsp;    private final int sound;
+&nbsp;
+&nbsp;    public static final int DEFAULT_TIMER_MILLIS = 5000;
+&nbsp;
+<b class="fc">&nbsp;    @Builder</b>
+&nbsp;    public BreathKungFu(String name, int exp,
+&nbsp;                        EventResourceParameters parameters,
+&nbsp;                        String sound) {
+<b class="fc">&nbsp;        super(name, exp);</b>
+<b class="fc">&nbsp;        this.parameters = parameters;</b>
+<b class="fc">&nbsp;        this.sound = Integer.parseInt(sound);</b>
+<b class="fc">&nbsp;        setTimer();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void setTimer() {
+<b class="fc">&nbsp;        timer = DEFAULT_TIMER_MILLIS;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public KungFuType kungFuType() {
+<b class="nc">&nbsp;        return KungFuType.BREATHING;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String description() {
+<b class="nc">&nbsp;        return getDescriptionBuilder().toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public KungFu duplicate() {
+<b class="nc">&nbsp;        return new BreathKungFu(name(), 0, parameters, String.valueOf(sound));</b>
+&nbsp;    }
+&nbsp;    private String computeSound(boolean male) {
+<b class="fc">&nbsp;        var snd = sound;</b>
+<b class="fc">&nbsp;        if (level() &gt;= 9000) {</b>
+<b class="nc">&nbsp;            snd = sound + 4;</b>
+<b class="fc">&nbsp;        } else if (level() &gt;= 5000) {</b>
+<b class="nc">&nbsp;            snd = sound + 2;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return String.valueOf(!male ? snd + 1: snd);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private int computeResource(int playerMaxResource, int inParameter) {
+<b class="fc">&nbsp;        if (inParameter == 0) {</b>
+<b class="fc">&nbsp;            return 0;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        int max = playerMaxResource / (6 + (12000 - level()) * 14 / 12000);</b>
+<b class="fc">&nbsp;        return max * inParameter / 100;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void update(Player player, int delta, UnaryAction&lt;? super EntityEvent&gt; eventSender) {
+<b class="fc">&nbsp;        timer -= delta;</b>
+<b class="fc">&nbsp;        if (timer &gt; 0) {</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="fc">&nbsp;        setTimer();</b>
+<b class="fc">&nbsp;        if (!canRegenerateResources(player)) {</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="fc">&nbsp;        eventSender.invoke(new EntitySoundEvent(player, computeSound(player.isMale())));</b>
+<b class="fc">&nbsp;        player.gainLife(computeResource(player.maxLife(), parameters.life()));</b>
+<b class="fc">&nbsp;        player.gainPower(computeResource(player.maxPower(), parameters.power()));</b>
+<b class="fc">&nbsp;        player.gainInnerPower(computeResource(player.maxInnerPower(), parameters.innerPower()));</b>
+<b class="fc">&nbsp;        player.gainOuterPower(computeResource(player.maxOuterPower(), parameters.outerPower()));</b>
+<b class="fc">&nbsp;        eventSender.invoke(new PlayerAttributeEvent(player));</b>
+<b class="fc">&nbsp;        if (gainExp(ExperienceUtil.DEFAULT_EXP)) {</b>
+<b class="fc">&nbsp;            eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean canRegenerateResources(Player player) {
+<b class="fc">&nbsp;        if (parameters.power() &gt; 0 &amp;&amp; player.power() &lt; player.maxPower()) {</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (parameters.innerPower() &gt; 0 &amp;&amp; player.innerPower() &lt; player.maxInnerPower()) {</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (parameters.outerPower() &gt; 0 &amp;&amp; player.outerPower() &lt; player.maxOuterPower()) {</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return parameters.life() &gt; 0 &amp;&amp; player.currentLife() &lt; player.maxLife();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

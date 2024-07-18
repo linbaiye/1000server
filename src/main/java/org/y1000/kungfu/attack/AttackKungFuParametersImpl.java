@@ -42,6 +42,8 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
 
     private final EventResourceParameters eventResourceParameters;
 
+    private final KungFuSdb kungFuSdb;
+
     public AttackKungFuParametersImpl(String name, KungFuSdb kungFuSdb, ArmorParameters armorParameters,
                                       EventResourceParameters eventResourceParameters) {
         this.name = name;
@@ -56,6 +58,7 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
         strikeSound = Integer.parseInt(kungFuSdb.getSoundStrike(name));
         swingSound = Integer.parseInt(kungFuSdb.getSoundSwing(name));
         this.eventResourceParameters = eventResourceParameters;
+        this.kungFuSdb = kungFuSdb;
     }
 
 
@@ -144,6 +147,11 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
     @Override
     public int swingSound() {
         return swingSound;
+    }
+
+    @Override
+    public int effectId() {
+        return kungFuSdb.effectColor(name);
     }
 
     @Override

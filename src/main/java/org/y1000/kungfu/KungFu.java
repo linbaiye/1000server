@@ -13,6 +13,7 @@ public interface KungFu {
      */
     boolean gainExp(int value);
 
+
     KungFuType kungFuType();
 
 

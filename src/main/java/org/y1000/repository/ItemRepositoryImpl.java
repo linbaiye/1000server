@@ -32,7 +32,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
 
     public Equipment createEquipment(String name) {
         return switch (itemSdb.getEquipmentType(name)) {
-            case WEAPON -> new Weapon(name, itemSdb);
+            case WEAPON -> new WeaponImpl(name, itemSdb);
             case HAT -> createHat(name);
             case CHEST -> createChest(name);
             case TROUSER -> createTrouser(name);

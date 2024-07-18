@@ -155,6 +155,10 @@ public final class KungFuSdb extends AbstractSdbReader {
         return getEnum(name, "MagicType", KungFuType::fromValue);
     }
 
+    public int effectColor(String name) {
+        return getInt(name, "EffectColor");
+    }
+
     public static void main(String[] args) {
 //        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
 //        System.out.println(INSTANCE.get("无名剑法", "SoundStrike"));

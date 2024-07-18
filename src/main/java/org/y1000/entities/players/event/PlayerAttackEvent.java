@@ -11,33 +11,30 @@ public final class PlayerAttackEvent extends AbstractCreatureAttackEvent
         implements PlayerEvent {
 
     private final State attackState;
-    private final long targetId;
 
-    public PlayerAttackEvent(Player source, State attackState) {
-        this(source, attackState, 0);
-    }
+    private final Integer effectId;
 
-    private PlayerAttackEvent(Player source, State attackState, long targetId) {
+    public PlayerAttackEvent(Player source, State attackState, Integer effectId) {
         super(source, source.coordinate(), source.direction());
         this.attackState = attackState;
-        this.targetId = targetId;
+        this.effectId = effectId;
+    }
+    public PlayerAttackEvent(Player source, State attackState) {
+        this(source, attackState, null);
     }
 
-    public static PlayerAttackEvent of(Player player) {
-        return new PlayerAttackEvent(player, player.stateEnum());
+    public static PlayerAttackEvent of(Player player, Integer effectId) {
+        return new PlayerAttackEvent(player, player.stateEnum(), effectId);
     }
 
-    public static PlayerAttackEvent of(Player player, long id) {
-        return new PlayerAttackEvent(player, player.stateEnum(), id);
-    }
-
-    @Override
+     @Override
     protected CreatureAttackEventPacket.Builder setCreatureSpecificFields(CreatureAttackEventPacket.Builder builder) {
-        if (targetId != 0) {
-            builder.setTargetId(targetId);
-        }
-        return builder.setPlayer(true)
+        builder.setPlayer(true)
                 .setState(attackState.value());
+        if (effectId != null) {
+            builder.setEffectId(effectId);
+        }
+        return builder;
     }
 
     @Override

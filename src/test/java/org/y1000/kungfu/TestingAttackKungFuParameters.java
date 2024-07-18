@@ -1,7 +1,11 @@
 package org.y1000.kungfu;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.y1000.kungfu.attack.AttackKungFuParameters;
 
+@Builder
+@AllArgsConstructor
 public class TestingAttackKungFuParameters implements AttackKungFuParameters {
 
     public TestingAttackKungFuParameters(int bodyDamage) {
@@ -24,6 +28,10 @@ public class TestingAttackKungFuParameters implements AttackKungFuParameters {
     private int legDamage;
     private int power;
     private int life;
+    private int bodyArmor;
+    private int headArmor;
+    private int armArmor;
+    private int legArmor;
 
 
     public TestingAttackKungFuParameters setBodyDamage(int bodyDamage) {

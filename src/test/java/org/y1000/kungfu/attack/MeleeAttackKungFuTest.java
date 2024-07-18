@@ -128,13 +128,14 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     @Test
     void startAttack() {
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
+        int actual = (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS;
         kungFu.startAttack(player, clientAttackEvent, monster);
         assertEquals(player.getFightingEntity(), monster);
         PlayerAttackEventResponse entityEvent = playerEventListener.removeFirst(PlayerAttackEventResponse.class);
         assertEquals(player.direction(), clientAttackEvent.direction());
         assertTrue(entityEvent.isAccepted());
         assertInstanceOf(PlayerAttackState.class, player.state());
-        assertEquals(player.cooldown(), (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS);
+        assertEquals(actual, player.cooldown());
     }
 
 
@@ -163,12 +164,14 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
 
     @Test
     void attackAgain() {
+        System.out.println(kungFu.attackSpeed());
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         player.setFightingEntity(monster);
+        var expectedCooldown = (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS;
         kungFu.attackAgain(player);
         PlayerAttackEvent event = playerEventListener.removeFirst(PlayerAttackEvent.class);
         assertNotNull(event);
-        assertEquals(player.cooldown(), (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS);
+        assertEquals(expectedCooldown, player.cooldown());
         assertTrue(player.state() instanceof PlayerAttackState);
         assertEquals(player.direction(), Direction.UP);
     }
@@ -177,10 +180,11 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     void attackAgainWhenNoEnoughPower() {
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         player.setFightingEntity(monster);
+        int actual = (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS;
         kungFu.attackAgain(player);
         PlayerAttackEvent event = playerEventListener.removeFirst(PlayerAttackEvent.class);
         assertNotNull(event);
-        assertEquals(player.cooldown(), (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS);
+        assertEquals(actual, player.cooldown());
         assertTrue(player.state() instanceof PlayerAttackState);
         assertEquals(player.direction(), Direction.UP);
     }
@@ -236,7 +240,6 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         player = playerBuilder().power(PlayerTestingAttribute.of(3)).life(new PlayerLife(3, 0))
                 .innerPower(PlayerTestingAttribute.of(3)).outerPower(PlayerTestingAttribute.of(3)).build();
         player.registerEventListener(playerEventListener);
-        var param = new TestingAttackKungFuParameters();
         kungFu = createKungFu(new TwoCostParameters());
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, monster);

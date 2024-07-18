@@ -23,9 +23,8 @@ public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener 
         Validate.notNull(npc);
         this.enemy = enemy;
         this.npc = npc;
-        this.previous = npc.coordinate();
         enemy.registerEventListener(this);
-        this.previous = enemy.coordinate();
+        this.previous = Coordinate.Empty;
     }
 
 
@@ -55,7 +54,7 @@ public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener 
     @Override
     public void onActionDone(Npc npc) {
         if (npc.stateEnum() == State.WALK) {
-            previous = npc.coordinate();
+            previous = npc.coordinate().moveBy(npc.direction().opposite());
         }
         meleeAttackProcess();
     }

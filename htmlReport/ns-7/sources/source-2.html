@@ -1,0 +1,165 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AbstractPlayerMoveState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.entities.players</a>
+</div>
+
+<h1>Coverage Summary for Class: AbstractPlayerMoveState (org.y1000.entities.players)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractPlayerMoveState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (2/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    46.7%
+  </span>
+  <span class="absValue">
+    (7/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.entities.players;
+&nbsp;
+&nbsp;import org.y1000.entities.Direction;
+&nbsp;import org.y1000.entities.creatures.AbstractCreatureMoveState;
+&nbsp;import org.y1000.entities.creatures.State;
+&nbsp;import org.y1000.entities.players.event.RewindEvent;
+&nbsp;import org.y1000.message.clientevent.ClientMovementEvent;
+&nbsp;import org.y1000.util.Coordinate;
+&nbsp;
+&nbsp;public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState&lt;PlayerImpl&gt; implements PlayerState {
+&nbsp;
+&nbsp;    private ClientMovementEvent event;
+&nbsp;
+&nbsp;    protected AbstractPlayerMoveState(State state, Coordinate start,
+&nbsp;                                   Direction towards, int millisPerUnit) {
+<b class="fc">&nbsp;        super(state, start, towards, millisPerUnit);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected abstract PlayerState rewindState(PlayerImpl player);
+&nbsp;
+&nbsp;    protected abstract void onMoved(PlayerImpl player);
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void update(PlayerImpl player, int delta) {
+<b class="fc">&nbsp;        if (elapsedMillis() == 0) {</b>
+<b class="fc">&nbsp;            player.realmMap().free(player);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (!walkMillis(player, delta)) {</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="fc">&nbsp;        if (tryChangeCoordinate(player, player.realmMap())) {</b>
+<b class="fc">&nbsp;            onMoved(player);</b>
+<b class="fc">&nbsp;            if (event != null &amp;&amp; player.state() instanceof MovableState movableState) {</b>
+<b class="nc">&nbsp;                movableState.move(player, event);</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="nc">&nbsp;            player.changeCoordinate(getStart());</b>
+<b class="nc">&nbsp;            player.changeState(rewindState(player));</b>
+<b class="nc">&nbsp;            player.emitEvent(RewindEvent.of(player));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void moveToHurtCoordinate(PlayerImpl creature) {
+<b class="nc">&nbsp;        tryChangeCoordinate(creature, creature.realmMap());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void onMoveEvent(ClientMovementEvent event) {
+<b class="nc">&nbsp;        this.event = event;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void afterHurt(PlayerImpl player) {
+<b class="nc">&nbsp;        player.changeState(rewindState(player));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return &quot;Move[&quot; + stateEnum() + &quot;]&quot;;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

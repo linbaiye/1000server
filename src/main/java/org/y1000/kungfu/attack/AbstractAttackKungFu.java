@@ -135,7 +135,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         player.cooldownAttack();
         player.changeState(PlayerAttackState.of(player));
         if (sendAttackEvent)
-            player.emitEvent(PlayerAttackEvent.of(player, player.getFightingEntity().id()));
+            player.emitEvent(PlayerAttackEvent.of(player, computeEffectId()));
         if (!isRanged()) {
             player.assistantKungFu().ifPresentOrElse(
                     assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, player.getFightingEntity(), assistantKungFu)),
@@ -157,13 +157,13 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     protected void doStartAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target) {
         if (!player.canPurchaseOrAttack(target)) {
-            player.emitEvent(new PlayerAttackEventResponse(player, event, false));
+            player.emitEvent(new PlayerAttackEventResponse(player, event, false, computeEffectId()));
             return;
         }
         var text = checkResources(player);
         if (text != null) {
             player.emitEvent(text);
-            player.emitEvent(new PlayerAttackEventResponse(player, event, false));
+            player.emitEvent(new PlayerAttackEventResponse(player, event, false, computeEffectId()));
             return;
         }
         Direction direction = event.direction();
@@ -172,7 +172,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         player.disableBreathKungNoTip();
         doAttack(player, direction, false);
         player.changeDirection(direction);
-        player.emitEvent(new PlayerAttackEventResponse(player, event, true));
+        player.emitEvent(new PlayerAttackEventResponse(player, event, true, computeEffectId()));
     }
 
 
@@ -272,6 +272,11 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     @Override
     public Damage damage() {
         return new Damage(bodyDamage(), headDamage(), armDamage(), legDamage());
+    }
+
+    @Override
+    public Integer computeEffectId() {
+        return level() == 9999 ? parameters.effectId() : null;
     }
 
     @Override

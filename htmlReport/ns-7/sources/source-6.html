@@ -1,0 +1,162 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MovableState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.entities.players</a>
+</div>
+
+<h1>Coverage Summary for Class: MovableState (org.y1000.entities.players)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MovableState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81%
+  </span>
+  <span class="absValue">
+    (17/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.entities.players;
+&nbsp;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.y1000.entities.Direction;
+&nbsp;import org.y1000.entities.players.event.RewindEvent;
+&nbsp;import org.y1000.message.InputResponseMessage;
+&nbsp;import org.y1000.message.PlayerMoveEvent;
+&nbsp;import org.y1000.message.SetPositionEvent;
+&nbsp;import org.y1000.message.clientevent.ClientMovementEvent;
+&nbsp;import org.y1000.message.clientevent.input.AbstractRightClick;
+&nbsp;import org.y1000.message.clientevent.input.RightMouseRelease;
+&nbsp;import org.y1000.util.Coordinate;
+&nbsp;
+&nbsp;public interface MovableState {
+&nbsp;
+&nbsp;    Logger logger();
+&nbsp;
+&nbsp;    PlayerState rewindState(PlayerImpl player);
+&nbsp;
+&nbsp;    PlayerState moveState(PlayerImpl player, Direction direction);
+&nbsp;
+&nbsp;
+&nbsp;    private void handleRightClick(PlayerImpl player, AbstractRightClick rightClick) {
+<b class="fc">&nbsp;        Coordinate targetCoordinate = player.coordinate().moveBy(rightClick.direction());</b>
+<b class="fc">&nbsp;        if (!player.realmMap().movable(targetCoordinate)) {</b>
+<b class="fc">&nbsp;            logger().debug(&quot;Destination conflicted, rewind player {} back to {}&quot;, player.id(), player.coordinate());</b>
+<b class="fc">&nbsp;            player.changeDirection(rightClick.direction());</b>
+<b class="fc">&nbsp;            rewind(player, rightClick.sequence());</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            PlayerState playerState = player.footKungFu().map(footKungFu -&gt;</b>
+<b class="fc">&nbsp;                    (PlayerState)PlayerMoveState.moveBy(player, rightClick.direction()))</b>
+<b class="fc">&nbsp;                    .orElse(moveState(player, rightClick.direction()));</b>
+<b class="fc">&nbsp;            player.changeState(playerState);</b>
+<b class="fc">&nbsp;            player.emitEvent(new InputResponseMessage(rightClick.sequence(), PlayerMoveEvent.movingTo(player, rightClick.direction())));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void rewind(PlayerImpl player, long seq) {
+<b class="fc">&nbsp;        PlayerState newState = player.footKungFu().map(footKungFu -&gt;</b>
+<b class="fc">&nbsp;                (PlayerState)PlayerStillState.idle(player)).orElse(rewindState(player));</b>
+<b class="fc">&nbsp;        player.changeState(newState);</b>
+<b class="fc">&nbsp;        player.emitEvent(new InputResponseMessage(seq, RewindEvent.of(player)));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    default void move(PlayerImpl player, ClientMovementEvent event) {
+<b class="fc">&nbsp;        if (!event.happenedAt().equals(player.coordinate())) {</b>
+<b class="nc">&nbsp;            logger().debug(&quot;Rewind because of coordinate mismatch, client: {}, server: {}.&quot;, event.happenedAt(), player.coordinate());</b>
+<b class="nc">&nbsp;            rewind(player, event.moveInput().sequence());</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="fc">&nbsp;        if (event.moveInput() instanceof AbstractRightClick rightClick) {</b>
+<b class="fc">&nbsp;            handleRightClick(player, rightClick);</b>
+<b class="nc">&nbsp;        } else if (event.moveInput() instanceof RightMouseRelease release) {</b>
+<b class="nc">&nbsp;            player.emitEvent(new InputResponseMessage(release.sequence(), SetPositionEvent.of(player)));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

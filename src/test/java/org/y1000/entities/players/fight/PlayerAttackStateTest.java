@@ -11,7 +11,7 @@ import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.npc.NpcCommonState;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
 import org.y1000.item.ItemSdb;
-import org.y1000.item.Weapon;
+import org.y1000.item.WeaponImpl;
 import org.y1000.kungfu.attack.AttackKungFuParameters;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.attack.QuanfaKungFu;
@@ -128,7 +128,7 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
     @Test
     void rangedAttackWhenTargetDead() {
         ItemSdb itemSdb = Mockito.mock(ItemSdb.class);
-        player.inventory().add(new Weapon("bow", itemSdb));
+        player.inventory().add(new WeaponImpl("bow", itemSdb));
         enableBowKungFu();
 
         var monster = monsterBuilder().coordinate(player.coordinate().move(3, 0)).build();

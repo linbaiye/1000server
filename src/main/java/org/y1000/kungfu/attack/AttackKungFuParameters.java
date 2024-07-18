@@ -63,4 +63,8 @@ public interface AttackKungFuParameters {
         return 0;
     }
 
+    default int effectId() {
+        return 0;
+    }
+
 }

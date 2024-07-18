@@ -1,0 +1,31 @@
+package org.y1000.entities.players;
+
+import lombok.Builder;
+
+public class TestingPlayerInnateAttributesProvider implements PlayerInnateAttributesProvider {
+    private final int avoid;
+    private final Damage damage;
+    private final int speed;
+    @Builder
+    public TestingPlayerInnateAttributesProvider(int avoid,
+                                                 Damage damage, int speed) {
+        this.avoid = avoid;
+        this.damage = damage == null ? Damage.DEFAULT : damage;
+        this.speed = speed;
+    }
+
+    @Override
+    public int avoidance() {
+        return avoid;
+    }
+
+    @Override
+    public int attackSpeed() {
+        return speed;
+    }
+
+    @Override
+    public Damage damage() {
+        return damage;
+    }
+}

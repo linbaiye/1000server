@@ -45,13 +45,13 @@ public interface CreatureAttackEventPacketOrBuilder extends
   int getY();
 
   /**
-   * <code>optional int64 targetId = 7;</code>
-   * @return Whether the targetId field is set.
+   * <code>optional int32 effectId = 7;</code>
+   * @return Whether the effectId field is set.
    */
-  boolean hasTargetId();
+  boolean hasEffectId();
   /**
-   * <code>optional int64 targetId = 7;</code>
-   * @return The targetId.
+   * <code>optional int32 effectId = 7;</code>
+   * @return The effectId.
    */
-  long getTargetId();
+  int getEffectId();
 }

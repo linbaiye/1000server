@@ -1,0 +1,210 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PillAttributeProviderImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.item</a>
+</div>
+
+<h1>Coverage Summary for Class: PillAttributeProviderImpl (org.y1000.item)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PillAttributeProviderImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    30.8%
+  </span>
+  <span class="absValue">
+    (4/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    62.5%
+  </span>
+  <span class="absValue">
+    (15/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.item;
+&nbsp;
+&nbsp;import org.y1000.sdb.ItemDrugSdb;
+&nbsp;
+&nbsp;public final class PillAttributeProviderImpl implements PillAttributeProvider {
+&nbsp;    private final String name;
+&nbsp;    private final ItemSdb itemSdb;
+&nbsp;
+&nbsp;    private final ItemDrugSdb itemDrugSdb;
+&nbsp;
+&nbsp;    private static final int ITEMDRUG_DIV_VALUE            = 10;
+&nbsp;
+&nbsp;    private static final int ITEMDRUG_MUL_EVENTENERGY      = 10;
+&nbsp;    private static final int ITEMDRUG_MUL_EVENTINPOWER     = 10;
+&nbsp;    private static final int ITEMDRUG_MUL_EVENTOUTPOWER    = 10;
+&nbsp;    private static final int ITEMDRUG_MUL_EVENTMAGIC       = 10;
+&nbsp;    private static final int ITEMDRUG_MUL_EVENTLIFE        = 15;
+&nbsp;    private static final int ITEMDRUG_MUL_EVENTHEADLIFE    = 15;
+&nbsp;    private static final int ITEMDRUG_MUL_EVENTARMLIFE     = 15;
+&nbsp;    private static final int ITEMDRUG_MUL_EVENTLEGLIFE     = 15;
+&nbsp;
+&nbsp;    private final int life;
+&nbsp;    private final int power;
+&nbsp;    private final int innerPower;
+&nbsp;    private final int outerPower;
+&nbsp;    private final int armLife;
+&nbsp;    private final int headLife;
+&nbsp;    private final int legLife;
+&nbsp;    private final int interval;
+&nbsp;
+&nbsp;    public PillAttributeProviderImpl(String name,
+&nbsp;                                     ItemSdb itemSdb,
+<b class="fc">&nbsp;                                     ItemDrugSdb itemDrugSdb) {</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.itemSdb = itemSdb;</b>
+<b class="fc">&nbsp;        this.itemDrugSdb = itemDrugSdb;</b>
+<b class="fc">&nbsp;        this.life = itemDrugSdb.getELife(name) * ITEMDRUG_MUL_EVENTLIFE / ITEMDRUG_DIV_VALUE;</b>
+<b class="fc">&nbsp;        this.power = itemDrugSdb.getEMagic(name) * ITEMDRUG_MUL_EVENTMAGIC / ITEMDRUG_DIV_VALUE;</b>
+<b class="fc">&nbsp;        this.innerPower = itemDrugSdb.getEInPower(name) * ITEMDRUG_MUL_EVENTINPOWER / ITEMDRUG_DIV_VALUE;</b>
+<b class="fc">&nbsp;        this.outerPower = itemDrugSdb.getEOutPower(name) * ITEMDRUG_MUL_EVENTOUTPOWER / ITEMDRUG_DIV_VALUE;</b>
+<b class="fc">&nbsp;        this.armLife = itemDrugSdb.getEArmLife(name) * ITEMDRUG_MUL_EVENTARMLIFE / ITEMDRUG_DIV_VALUE;</b>
+<b class="fc">&nbsp;        this.headLife = itemDrugSdb.getEHeadLife(name) * ITEMDRUG_MUL_EVENTHEADLIFE / ITEMDRUG_DIV_VALUE;</b>
+<b class="fc">&nbsp;        this.legLife = itemDrugSdb.getELegLife(name) * ITEMDRUG_MUL_EVENTLEGLIFE / ITEMDRUG_DIV_VALUE;</b>
+<b class="fc">&nbsp;        this.interval = itemDrugSdb.getUseInterval(name) * 10;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int useInterval() {
+<b class="nc">&nbsp;        return interval;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int useCount() {
+<b class="nc">&nbsp;        return itemDrugSdb.getUseCount(name);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int power() {
+<b class="nc">&nbsp;        return power;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int innerPower() {
+<b class="nc">&nbsp;        return innerPower;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int outerPower() {
+<b class="nc">&nbsp;        return outerPower;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int life() {
+<b class="nc">&nbsp;        return life;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int headLife() {
+<b class="nc">&nbsp;        return headLife;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int armLife() {
+<b class="nc">&nbsp;        return armLife;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int legLife() {
+<b class="nc">&nbsp;        return legLife;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String dropSound() {
+<b class="fc">&nbsp;        return itemSdb.getSoundDrop(name);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String eventSound() {
+<b class="fc">&nbsp;        return itemSdb.getSoundEvent(name);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String description() {
+<b class="fc">&nbsp;        return itemSdb.getDesc(name);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 17:32</div>
+</div>
+</body>
+</html>

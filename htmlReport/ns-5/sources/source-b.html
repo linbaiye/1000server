@@ -1,0 +1,205 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MonsterMeleeFightAI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.entities.creatures.monster</a>
+</div>
+
+<h1>Coverage Summary for Class: MonsterMeleeFightAI (org.y1000.entities.creatures.monster)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MonsterMeleeFightAI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.entities.creatures.monster;
+&nbsp;
+&nbsp;import lombok.extern.slf4j.Slf4j;
+&nbsp;import org.y1000.util.Action;
+&nbsp;import org.y1000.util.Coordinate;
+&nbsp;
+<b class="nc">&nbsp;@Slf4j</b>
+<b class="nc">&nbsp;public final class MonsterMeleeFightAI extends AbstractMonsterFightAI {</b>
+&nbsp;    @Override
+&nbsp;    public void onMoveDone(AbstractMonster monster) {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void onMoveFailed(AbstractMonster monster) {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void onIdleDone(AbstractMonster monster) {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void onFrozenDone(AbstractMonster monster) {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void onHurtDone(AbstractMonster monster) {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void start(AbstractMonster monster) {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;//
+&nbsp;//    private Coordinate previousCoordinate;
+&nbsp;//
+&nbsp;//
+&nbsp;//    private boolean targetCloseEnough(AbstractMonster monster) {
+&nbsp;//        return monster.getFightingEntity().canBeAttackedNow() &amp;&amp;
+&nbsp;//                monster.getFightingEntity().coordinate().directDistance(monster.coordinate()) &lt;= 1;
+&nbsp;//    }
+&nbsp;//
+&nbsp;//    @Override
+&nbsp;//    public void onMoveDone(AbstractMonster monster) {
+&nbsp;//        previousCoordinate = monster.coordinate();
+&nbsp;//        process(monster, () -&gt; toIdle(monster));
+&nbsp;//    }
+&nbsp;//
+&nbsp;//    @Override
+&nbsp;//    public void onMoveFailed(AbstractMonster monster) {
+&nbsp;//        process(monster, () -&gt; toIdle(monster));
+&nbsp;//    }
+&nbsp;//
+&nbsp;//    @Override
+&nbsp;//    public void onIdleDone(AbstractMonster monster) {
+&nbsp;//        process(monster, () -&gt; changeToNewState(monster, MonsterCommonState.freeze(monster)));
+&nbsp;//    }
+&nbsp;//
+&nbsp;//    @Override
+&nbsp;//    public void onFrozenDone(AbstractMonster monster) {
+&nbsp;//        process(monster, () -&gt; moveCloser(monster));
+&nbsp;//    }
+&nbsp;//
+&nbsp;//    @Override
+&nbsp;//    public void onAttackDone(AbstractMonster monster) {
+&nbsp;//        process(monster, () -&gt; moveCloser(monster));
+&nbsp;//    }
+&nbsp;//
+&nbsp;//    private void moveCloser(AbstractMonster monster) {
+&nbsp;//        moveProcess(monster, monster.getFightingEntity().coordinate(), previousCoordinate, () -&gt; toIdle(monster));
+&nbsp;//    }
+&nbsp;//
+&nbsp;//
+&nbsp;//    private void process(AbstractMonster monster, Action monsterFarAction) {
+&nbsp;//        if (monster.getFightingEntity() == null) {
+&nbsp;//            monster.changeAI(MonsterWanderingAI.create(monster));
+&nbsp;//            return;
+&nbsp;//        }
+&nbsp;//        if (!targetCloseEnough(monster)) {
+&nbsp;//            monsterFarAction.invoke();
+&nbsp;//            return;
+&nbsp;//        }
+&nbsp;//        attackProcess(monster, () -&gt; doMeleeAttack(monster));
+&nbsp;//    }
+&nbsp;//
+&nbsp;//
+&nbsp;//
+&nbsp;//    private void toIdle(AbstractMonster monster) {
+&nbsp;//        changeToNewState(monster, MonsterCommonState.idle(monster));
+&nbsp;//    }
+&nbsp;//
+&nbsp;//    @Override
+&nbsp;//    public void start(AbstractMonster monster) {
+&nbsp;//        previousCoordinate = monster.coordinate();
+&nbsp;//        process(monster, () -&gt; toIdle(monster));
+&nbsp;//    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

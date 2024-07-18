@@ -13,7 +13,6 @@ import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.trade.TradeItem;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,7 @@ class InventoryTest {
 
     @Test
     void findByType() {
-        inventory.add(new Weapon("test", itemSdb));
+        inventory.add(new WeaponImpl("test", itemSdb));
         Optional<Weapon> weapon = inventory.findWeapon(AttackKungFuType.SWORD);
         assertTrue(weapon.isPresent());
         weapon.ifPresent(w -> assertEquals(w.kungFuType(), AttackKungFuType.SWORD));
@@ -54,7 +53,7 @@ class InventoryTest {
 
     @Test
     void findSlot() {
-        inventory.add(new Weapon("test", itemSdb));
+        inventory.add(new WeaponImpl("test", itemSdb));
         int weaponSlot = inventory.findWeaponSlot(AttackKungFuType.SWORD);
         assertEquals(1, weaponSlot);
         assertEquals(0, inventory.findWeaponSlot(AttackKungFuType.AXE));

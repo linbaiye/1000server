@@ -1,0 +1,145 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PlayerLearnKungFuEvent</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.entities.players.event</a>
+</div>
+
+<h1>Coverage Summary for Class: PlayerLearnKungFuEvent (org.y1000.entities.players.event)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerLearnKungFuEvent</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.entities.players.event;
+&nbsp;
+&nbsp;import org.y1000.entities.players.Player;
+&nbsp;import org.y1000.kungfu.KungFu;
+&nbsp;import org.y1000.message.serverevent.PlayerEventVisitor;
+&nbsp;import org.y1000.network.gen.KungFuPacket;
+&nbsp;import org.y1000.network.gen.Packet;
+&nbsp;
+&nbsp;public final class PlayerLearnKungFuEvent extends AbstractPlayerEvent {
+&nbsp;    private final int slot;
+&nbsp;
+&nbsp;    private final String kungFuName;
+&nbsp;
+&nbsp;    private final int level;
+&nbsp;
+&nbsp;    private final int kungFuType;
+&nbsp;
+&nbsp;    public PlayerLearnKungFuEvent(Player source, int slot, KungFu kungFu) {
+<b class="nc">&nbsp;        super(source, true);</b>
+<b class="nc">&nbsp;        this.slot = slot;</b>
+<b class="nc">&nbsp;        this.kungFuName = kungFu.name();</b>
+<b class="nc">&nbsp;        this.level = kungFu.level();</b>
+<b class="nc">&nbsp;        this.kungFuType = kungFu.kungFuType().value();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void accept(PlayerEventVisitor playerEventHandler) {
+<b class="nc">&nbsp;        playerEventHandler.visit(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected Packet buildPacket() {
+<b class="nc">&nbsp;        return Packet.newBuilder()</b>
+<b class="nc">&nbsp;                .setLearnKungFu(KungFuPacket.newBuilder()</b>
+<b class="nc">&nbsp;                        .setLevel(level)</b>
+<b class="nc">&nbsp;                        .setSlot(slot)</b>
+<b class="nc">&nbsp;                        .setName(kungFuName)</b>
+<b class="nc">&nbsp;                        .setType(kungFuType)</b>
+<b class="nc">&nbsp;                ).build();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 15:34</div>
+</div>
+</body>
+</html>

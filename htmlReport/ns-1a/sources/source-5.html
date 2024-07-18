@@ -1,0 +1,220 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DevelopingConnection</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.network</a>
+</div>
+
+<h1>Coverage Summary for Class: DevelopingConnection (org.y1000.network)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DevelopingConnection</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/44)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.network;
+&nbsp;
+&nbsp;import io.netty.channel.ChannelHandlerContext;
+&nbsp;import lombok.extern.slf4j.Slf4j;
+&nbsp;import org.y1000.repository.PlayerRepository;
+&nbsp;import org.y1000.message.ServerMessage;
+&nbsp;import org.y1000.realm.RealmManager;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * An implementation that introduces 200ms latency, for development only.
+&nbsp; */
+<b class="nc">&nbsp;@Slf4j</b>
+&nbsp;public final class DevelopingConnection extends AbstractConnection implements Runnable {
+&nbsp;
+&nbsp;    private final List&lt;ServerMessage&gt; messages;
+&nbsp;
+&nbsp;    public final Thread sender;
+&nbsp;
+&nbsp;    private long id;
+&nbsp;
+<b class="nc">&nbsp;    private static final Set&lt;Long&gt; IDs = new HashSet&lt;&gt;();</b>
+&nbsp;
+&nbsp;    public DevelopingConnection(PlayerRepository playerRepository, RealmManager realmManager) {
+<b class="nc">&nbsp;        super(realmManager, playerRepository);</b>
+<b class="nc">&nbsp;        messages = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        sender = new Thread(this);</b>
+<b class="nc">&nbsp;        sender.start();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static synchronized long allocateId() {
+<b class="nc">&nbsp;        if (!IDs.contains(0L)) {</b>
+<b class="nc">&nbsp;            IDs.add(0L);</b>
+<b class="nc">&nbsp;            return 0L;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (!IDs.contains(1L)) {</b>
+<b class="nc">&nbsp;            IDs.add(1L);</b>
+<b class="nc">&nbsp;            return 1L;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        throw new IllegalArgumentException(&quot;No Id free.&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static synchronized void freeId(long id) {
+<b class="nc">&nbsp;        IDs.remove(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void write(ServerMessage message) {
+<b class="nc">&nbsp;        synchronized (messages) {</b>
+<b class="nc">&nbsp;            messages.add(message);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void writeAndFlush(ServerMessage message) {
+<b class="nc">&nbsp;        write(message);</b>
+<b class="nc">&nbsp;        flush();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void write(List&lt;ServerMessage&gt; messages) {
+<b class="nc">&nbsp;        synchronized (this.messages) {</b>
+<b class="nc">&nbsp;            this.messages.addAll(messages);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public long id() {
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+<b class="nc">&nbsp;        id = allocateId();</b>
+<b class="nc">&nbsp;        super.channelActive(ctx);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+<b class="nc">&nbsp;        freeId(id);</b>
+<b class="nc">&nbsp;        super.channelInactive(ctx);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void handleMessages() {
+<b class="nc">&nbsp;        ChannelHandlerContext context = getContext();</b>
+<b class="nc">&nbsp;        if (context == null) {</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        synchronized (messages) {</b>
+<b class="nc">&nbsp;            if (messages.isEmpty()) {</b>
+<b class="nc">&nbsp;                return;</b>
+&nbsp;            }
+&nbsp;            try {
+<b class="nc">&nbsp;                messages.forEach(context.channel()::write);</b>
+&nbsp;                // messages.forEach(m -&gt; log.debug(&quot;Sent message {}.&quot;, m));
+<b class="nc">&nbsp;                context.channel().flush();</b>
+<b class="nc">&nbsp;                messages.clear();</b>
+<b class="nc">&nbsp;            } catch (Exception e) {</b>
+<b class="nc">&nbsp;                log.error(&quot;Failed to write message.&quot;, e);;</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void run() {
+&nbsp;        while (true) {
+&nbsp;            try {
+<b class="nc">&nbsp;                handleMessages();</b>
+<b class="nc">&nbsp;                Thread.sleep(120);</b>
+<b class="nc">&nbsp;            } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;                break;</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,148 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DefaultArmorParameters</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.kungfu</a>
+</div>
+
+<h1>Coverage Summary for Class: DefaultArmorParameters (org.y1000.kungfu)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DefaultArmorParameters</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (1/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.6%
+  </span>
+  <span class="absValue">
+    (5/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.kungfu;
+&nbsp;
+&nbsp;import static org.y1000.kungfu.ParameterConstants.*;
+&nbsp;
+&nbsp;public final class DefaultArmorParameters implements ArmorParameters {
+&nbsp;
+&nbsp;    private static final int INI_MUL_ARMORBODY      = 7;
+&nbsp;    private static final int INI_MUL_ARMORHEAD       = 8;
+&nbsp;    private static final int INI_MUL_ARMORARM        = 8;
+&nbsp;    private static final int INI_MUL_ARMORLEG        = 8;
+&nbsp;
+&nbsp;
+&nbsp;    private final int bodyArmor;
+&nbsp;    private final int headArmor;
+&nbsp;    private final int armArmor;
+&nbsp;    private final int legArmor;
+&nbsp;
+<b class="fc">&nbsp;    public DefaultArmorParameters(String name, KungFuSdb kungFuSdb) {</b>
+<b class="fc">&nbsp;        bodyArmor = kungFuSdb.getArmorBody(name) *  INI_MUL_ARMORBODY / INI_MAGIC_DIV_VALUE;</b>
+<b class="fc">&nbsp;        headArmor = kungFuSdb.getArmorHead(name) *  INI_MUL_ARMORHEAD / INI_MAGIC_DIV_VALUE;</b>
+<b class="fc">&nbsp;        armArmor = kungFuSdb.getArmorArm(name) *  INI_MUL_ARMORARM / INI_MAGIC_DIV_VALUE;</b>
+<b class="fc">&nbsp;        legArmor = kungFuSdb.getArmorLeg(name) *  INI_MUL_ARMORLEG / INI_MAGIC_DIV_VALUE;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int bodyArmor() {
+<b class="nc">&nbsp;        return bodyArmor;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int headArmor() {
+<b class="nc">&nbsp;        return headArmor;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int armArmor() {
+<b class="nc">&nbsp;        return armArmor;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int legArmor() {
+<b class="nc">&nbsp;        return legArmor;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 17:32</div>
+</div>
+</body>
+</html>

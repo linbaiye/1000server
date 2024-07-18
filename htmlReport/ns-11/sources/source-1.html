@@ -1,0 +1,141 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AbstractArmorEquipment</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.item</a>
+</div>
+
+<h1>Coverage Summary for Class: AbstractArmorEquipment (org.y1000.item)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractArmorEquipment</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    40%
+  </span>
+  <span class="absValue">
+    (2/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (4/12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.item;
+&nbsp;
+&nbsp;
+&nbsp;import org.y1000.entities.players.Armor;
+&nbsp;
+&nbsp;public abstract class AbstractArmorEquipment extends AbstractSexualEquipment {
+&nbsp;    private final ArmorItemAttributeProvider attributeProvider;
+&nbsp;
+&nbsp;    public AbstractArmorEquipment(String name,
+&nbsp;                                  ArmorItemAttributeProvider attributeProvider) {
+<b class="fc">&nbsp;        super(name, attributeProvider.dropSound(),</b>
+<b class="fc">&nbsp;                attributeProvider.eventSound(), attributeProvider.description(), attributeProvider.isMale());</b>
+<b class="fc">&nbsp;        this.attributeProvider = attributeProvider;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int avoidance() {
+<b class="nc">&nbsp;        return attributeProvider.avoidance();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Armor armor() {
+<b class="fc">&nbsp;        return new Armor(attributeProvider.armor(), attributeProvider.headArmor(), attributeProvider.armArmor(), attributeProvider.legArmor());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int recovery() {
+<b class="nc">&nbsp;        return attributeProvider.recovery();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String description() {
+<b class="nc">&nbsp;        StringBuilder descriptionBuilder = getDescriptionBuilder();</b>
+<b class="nc">&nbsp;        descriptionBuilder.append(&quot;恢复: &quot;).append(recovery()).append(&quot;\t&quot;)</b>
+<b class="nc">&nbsp;                .append(&quot;闪躲: &quot;).append(avoidance()).append(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;        Armor armor = armor();</b>
+<b class="nc">&nbsp;        descriptionBuilder.append(String.format(&quot;防御力: %d / %d / %d / %d&quot;, armor.body(), armor.head(), armor.arm(), armor.leg()));</b>
+<b class="nc">&nbsp;        return descriptionBuilder.toString();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

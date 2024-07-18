@@ -702,13 +702,12 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
 
-
     @Override
     public int attackSpeed() {
-        var speed = innateAttributesProvider.attackSpeed()
-                + attackKungFu.attackSpeed();
-        return weapon().map(w -> speed - w.attackSpeed())
-                .orElse(speed);
+        var spd = weapon().map(Weapon::attackSpeed).orElse(0) +
+                innateAttributesProvider.attackSpeed() + attackKungFu.attackSpeed();
+        var p = legPercent();
+        return p >= 50 ? spd : spd + spd * (50 - p )/ 50;
     }
 
     public Optional<Weapon> weapon() {
@@ -1000,8 +999,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public Damage damage() {
-        var damage = innateAttributesProvider.damage().add(attackKungFu.damage());
-        return weapon().map(weapon -> weapon.damage().add(damage)).orElse(damage);
+        var dmg = weapon().map(Weapon::damage).orElse(Damage.ZERO)
+                .add(innateAttributesProvider.damage())
+                .add(attackKungFu().damage());
+        int percent = armLife.percent();
+        if (percent >= 50)
+            return dmg;
+        return dmg.multiply((float) percent / 50);
     }
 
     @Override
@@ -1063,7 +1067,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     public int currentLife() {
         return life.currentValue();
     }
-
 
 
     private Armor aggregateArmor() {

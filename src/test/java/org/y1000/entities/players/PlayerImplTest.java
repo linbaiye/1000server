@@ -5,7 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
+import org.y1000.entities.creatures.monster.Monster;
 import org.y1000.entities.players.event.*;
 import org.y1000.item.*;
 import org.y1000.kungfu.*;
@@ -42,7 +44,7 @@ import org.y1000.util.Coordinate;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Slf4j
 class PlayerImplTest extends AbstractPlayerUnitTestFixture {
@@ -59,10 +61,10 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     }
 
 
-    private Weapon createWeapon(String name, AttackKungFuType type) {
+    private WeaponImpl createWeapon(String name, AttackKungFuType type) {
         ItemSdb mock = Mockito.mock(ItemSdb.class);
         when(mock.getAttackKungFuType(anyString())).thenReturn(type);
-        return new Weapon(name, mock);
+        return new WeaponImpl(name, mock);
     }
 
 
@@ -511,6 +513,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void attackedByAoe() {
+        enableTestingKungFu();
         assertTrue(player.attackedByAoe(Damage.DEFAULT, 100) > 0);
     }
 
@@ -524,6 +527,92 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void attackedByMonster() {
+        PlayerLife arm = PlayerLife.create();
+        PlayerLife leg = PlayerLife.create();
+        PlayerLife head = PlayerLife.create();
+        player = playerBuilder().arm(arm).leg(leg).head(head).innateAttributesProvider(TestingPlayerInnateAttributesProvider.builder().avoid(0).build()).build();
+        player.registerEventListener(eventListener);
+        var monster = Mockito.mock(Monster.class);
+        Damage dmg = new Damage(300, 100, 99, 98);
+        when(monster.damage()).thenReturn(dmg);
+        enableTestingKungFu();
+        assertEquals(0, player.avoidance());
+        player.attackedBy(monster);
+        var am = player.attackKungFu().armor();
+        assertEquals(player.maxLife() - (dmg.bodyDamage()  - am.body()), player.currentLife());
+        assertEquals(leg.maxValue() - (dmg.legDamage()  - am.leg()), leg.currentValue());
+        assertEquals(head.maxValue() - (dmg.headDamage()  - am.head()), head.currentValue());
+        assertEquals(arm.maxValue() - (dmg.armDamage()  - am.arm()), arm.currentValue());
+        assertNotNull(eventListener.removeFirst(CreatureHurtEvent.class));
+    }
 
+    @Test
+    void attackedByPlayer() {
+        PlayerLife arm = PlayerLife.create();
+        PlayerLife leg = PlayerLife.create();
+        PlayerLife head = PlayerLife.create();
+        player = playerBuilder().arm(arm).leg(leg).head(head).innateAttributesProvider(TestingPlayerInnateAttributesProvider.builder().avoid(0).build()).build();
+        enableTestingKungFu();
+        player.registerEventListener(eventListener);
+        var attacker = Mockito.mock(Player.class);
+        Damage dmg = new Damage(300, 100, 99, 98);
+        when(attacker.damage()).thenReturn(dmg);
+        var am = player.attackKungFu().armor();
+        player.attackedBy(attacker);
+        assertEquals(player.maxLife() - (dmg.bodyDamage()  - am.body()), player.currentLife());
+        verify(attacker, times(1)).gainAttackExp(anyInt());
+    }
+
+
+
+    @Test
+    void damageAffectedByArm() {
+        // make it 1000
+        PlayerLife arm = new PlayerLife(900, 0);
+        player = playerBuilder().arm(arm).innateAttributesProvider(TestingPlayerInnateAttributesProvider.builder().avoid(0).damage(Damage.ZERO).build()).build();
+        enableTestingKungFu();
+        assertTrue(player.damage().equalTo(player.attackKungFu().damage()));
+        arm.consume(499);
+        assertTrue(player.damage().equalTo(player.attackKungFu().damage()));
+        arm.consume(1);
+        assertTrue(player.damage().equalTo(player.attackKungFu().damage()));
+
+        //98 % damage.
+        arm.consume(10);
+        assertEquals(player.attackKungFu().damage().multiply(0.98f).bodyDamage(), player.damage().bodyDamage());
+        arm.consume(480);
+        assertEquals(player.attackKungFu().damage().multiply(0.02f).bodyDamage(), player.damage().bodyDamage());
+    }
+
+    @Test
+    void attackSpeedAffectedByLeg() {
+        PlayerLife leg = new PlayerLife(900, 0);
+        player = playerBuilder().leg(leg).innateAttributesProvider(TestingPlayerInnateAttributesProvider.builder().speed(0).build()).build();
+        enableTestingKungFu();
+        var speed = player.attackKungFu().attackSpeed();
+        assertEquals(speed, player.attackSpeed());
+        leg.consume(500);
+        assertEquals(speed, player.attackSpeed());
+
+        leg.consume(10);
+        assertEquals(speed + speed * 0.02, player.attackSpeed());
+        leg.consume(480);
+        assertEquals(speed + speed * 0.98, player.attackSpeed());
+    }
+
+    @Test
+    void learnKungFu() {
+        var slot = player.inventory().add(itemFactory.createItem("闪光剑破解"));
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertNull(player.inventory().getItem(slot));
+        assertNotNull(player.kungFuBook().getKungFu(2, 1));
+    }
+
+    @Test
+    void avoidance() {
+        TestingPlayerInnateAttributesProvider attr = TestingPlayerInnateAttributesProvider.builder().speed(0).avoid(1).build();
+        player = playerBuilder().innateAttributesProvider(attr).build();
+        enableTestingKungFu();
+        assertEquals(1, player.avoidance());
     }
 }

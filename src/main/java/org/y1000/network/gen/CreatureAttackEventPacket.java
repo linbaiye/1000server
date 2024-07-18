@@ -106,23 +106,23 @@ private static final long serialVersionUID = 0L;
     return y_;
   }
 
-  public static final int TARGETID_FIELD_NUMBER = 7;
-  private long targetId_ = 0L;
+  public static final int EFFECTID_FIELD_NUMBER = 7;
+  private int effectId_ = 0;
   /**
-   * <code>optional int64 targetId = 7;</code>
-   * @return Whether the targetId field is set.
+   * <code>optional int32 effectId = 7;</code>
+   * @return Whether the effectId field is set.
    */
   @java.lang.Override
-  public boolean hasTargetId() {
+  public boolean hasEffectId() {
     return ((bitField0_ & 0x00000001) != 0);
   }
   /**
-   * <code>optional int64 targetId = 7;</code>
-   * @return The targetId.
+   * <code>optional int32 effectId = 7;</code>
+   * @return The effectId.
    */
   @java.lang.Override
-  public long getTargetId() {
-    return targetId_;
+  public int getEffectId() {
+    return effectId_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -158,7 +158,7 @@ private static final long serialVersionUID = 0L;
       output.writeInt32(6, y_);
     }
     if (((bitField0_ & 0x00000001) != 0)) {
-      output.writeInt64(7, targetId_);
+      output.writeInt32(7, effectId_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -195,7 +195,7 @@ private static final long serialVersionUID = 0L;
     }
     if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(7, targetId_);
+        .computeInt32Size(7, effectId_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -224,10 +224,10 @@ private static final long serialVersionUID = 0L;
         != other.getX()) return false;
     if (getY()
         != other.getY()) return false;
-    if (hasTargetId() != other.hasTargetId()) return false;
-    if (hasTargetId()) {
-      if (getTargetId()
-          != other.getTargetId()) return false;
+    if (hasEffectId() != other.hasEffectId()) return false;
+    if (hasEffectId()) {
+      if (getEffectId()
+          != other.getEffectId()) return false;
     }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
@@ -254,10 +254,9 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getX();
     hash = (37 * hash) + Y_FIELD_NUMBER;
     hash = (53 * hash) + getY();
-    if (hasTargetId()) {
-      hash = (37 * hash) + TARGETID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getTargetId());
+    if (hasEffectId()) {
+      hash = (37 * hash) + EFFECTID_FIELD_NUMBER;
+      hash = (53 * hash) + getEffectId();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -396,7 +395,7 @@ private static final long serialVersionUID = 0L;
       player_ = false;
       x_ = 0;
       y_ = 0;
-      targetId_ = 0L;
+      effectId_ = 0;
       return this;
     }
 
@@ -450,7 +449,7 @@ private static final long serialVersionUID = 0L;
       }
       int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000040) != 0)) {
-        result.targetId_ = targetId_;
+        result.effectId_ = effectId_;
         to_bitField0_ |= 0x00000001;
       }
       result.bitField0_ |= to_bitField0_;
@@ -518,8 +517,8 @@ private static final long serialVersionUID = 0L;
       if (other.getY() != 0) {
         setY(other.getY());
       }
-      if (other.hasTargetId()) {
-        setTargetId(other.getTargetId());
+      if (other.hasEffectId()) {
+        setEffectId(other.getEffectId());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -578,7 +577,7 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 48
             case 56: {
-              targetId_ = input.readInt64();
+              effectId_ = input.readInt32();
               bitField0_ |= 0x00000040;
               break;
             } // case 56
@@ -791,42 +790,42 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long targetId_ ;
+    private int effectId_ ;
     /**
-     * <code>optional int64 targetId = 7;</code>
-     * @return Whether the targetId field is set.
+     * <code>optional int32 effectId = 7;</code>
+     * @return Whether the effectId field is set.
      */
     @java.lang.Override
-    public boolean hasTargetId() {
+    public boolean hasEffectId() {
       return ((bitField0_ & 0x00000040) != 0);
     }
     /**
-     * <code>optional int64 targetId = 7;</code>
-     * @return The targetId.
+     * <code>optional int32 effectId = 7;</code>
+     * @return The effectId.
      */
     @java.lang.Override
-    public long getTargetId() {
-      return targetId_;
+    public int getEffectId() {
+      return effectId_;
     }
     /**
-     * <code>optional int64 targetId = 7;</code>
-     * @param value The targetId to set.
+     * <code>optional int32 effectId = 7;</code>
+     * @param value The effectId to set.
      * @return This builder for chaining.
      */
-    public Builder setTargetId(long value) {
+    public Builder setEffectId(int value) {
 
-      targetId_ = value;
+      effectId_ = value;
       bitField0_ |= 0x00000040;
       onChanged();
       return this;
     }
     /**
-     * <code>optional int64 targetId = 7;</code>
+     * <code>optional int32 effectId = 7;</code>
      * @return This builder for chaining.
      */
-    public Builder clearTargetId() {
+    public Builder clearEffectId() {
       bitField0_ = (bitField0_ & ~0x00000040);
-      targetId_ = 0L;
+      effectId_ = 0;
       onChanged();
       return this;
     }

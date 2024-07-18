@@ -19,11 +19,18 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
 
     private final State backToState;
 
-    public PlayerAttackEventResponse(Player source, ClientAttackEvent clientEvent, boolean ok) {
+    private final Integer effectId;
+
+    public PlayerAttackEventResponse(Player source, ClientAttackEvent clientEvent, boolean ok, Integer effectId) {
         super(source);
         clientAttackEvent = clientEvent;
         this.accepted = ok;
         backToState = source.stateEnum();
+        this.effectId = effectId;
+    }
+
+    public PlayerAttackEventResponse(Player source, ClientAttackEvent clientEvent, boolean ok) {
+        this(source, clientEvent, ok, null);
     }
 
     @Override
@@ -41,7 +48,7 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
 
 
     public Optional<PlayerAttackEvent> toPlayerAttackEvent() {
-        return accepted ? Optional.of(new PlayerAttackEvent(player(), clientAttackEvent.attackState())) : Optional.empty();
+        return accepted ? Optional.of(new PlayerAttackEvent(player(), clientAttackEvent.attackState(), effectId)) : Optional.empty();
     }
 
 

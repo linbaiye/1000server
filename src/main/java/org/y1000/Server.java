@@ -9,7 +9,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
 import org.y1000.entities.creatures.npc.NpcFactory;
-import org.y1000.entities.creatures.monster.NpcFactoryImpl;
+import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.repository.*;

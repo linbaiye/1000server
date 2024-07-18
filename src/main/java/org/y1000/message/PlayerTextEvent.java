@@ -144,19 +144,19 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
     }
 
     public static PlayerTextEvent noPower(Player player) {
-        return new PlayerTextEvent(player, null, TextType.NO_POWER);
+        return new PlayerTextEvent(player, null, TextType.NO_POWER, Location.LEFT);
     }
 
     public static PlayerTextEvent noInnerPower(Player player) {
-        return new PlayerTextEvent(player, null, TextType.NO_INNER_POWER);
+        return new PlayerTextEvent(player, null, TextType.NO_INNER_POWER, Location.LEFT);
     }
 
     public static PlayerTextEvent noOuterPower(Player player) {
-        return new PlayerTextEvent(player, null, TextType.NO_OUTER_POWER);
+        return new PlayerTextEvent(player, null, TextType.NO_OUTER_POWER, Location.LEFT);
     }
 
     public static PlayerTextEvent insufficientLife(Player player) {
-        return new PlayerTextEvent(player, null, TextType.NO_LIFE);
+        return new PlayerTextEvent(player, null, TextType.NO_LIFE, Location.LEFT);
     }
 
     public static PlayerTextEvent armLifeTooLowToExp(Player player) {

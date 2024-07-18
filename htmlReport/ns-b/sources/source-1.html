@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AbstractProjectile</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.entities.projectile</a>
+</div>
+
+<h1>Coverage Summary for Class: AbstractProjectile (org.y1000.entities.projectile)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractProjectile</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    42.9%
+  </span>
+  <span class="absValue">
+    (3/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (8/16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.entities.projectile;
+&nbsp;
+&nbsp;import lombok.Getter;
+&nbsp;import org.y1000.entities.AttackableEntity;
+&nbsp;import org.y1000.entities.creatures.ViolentCreature;
+&nbsp;
+&nbsp;public abstract class AbstractProjectile implements Projectile {
+&nbsp;
+<b class="fc">&nbsp;    @Getter</b>
+&nbsp;    private final ViolentCreature shooter;
+&nbsp;
+&nbsp;    private final AttackableEntity target;
+&nbsp;
+&nbsp;    private final int flyingMillis;
+&nbsp;
+&nbsp;    private int elapsed;
+&nbsp;
+&nbsp;    private final int spriteId;
+&nbsp;
+&nbsp;
+&nbsp;    public AbstractProjectile(ViolentCreature shooter,
+&nbsp;                              AttackableEntity target,
+<b class="fc">&nbsp;                              int spriteId) {</b>
+<b class="fc">&nbsp;        this.spriteId = spriteId;</b>
+<b class="fc">&nbsp;        int dist = shooter.coordinate().directDistance(target.coordinate());</b>
+<b class="fc">&nbsp;        this.shooter = shooter;</b>
+<b class="fc">&nbsp;        this.target = target;</b>
+<b class="fc">&nbsp;        this.flyingMillis = dist * 30;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean update(int delta) {
+<b class="nc">&nbsp;        elapsed += delta;</b>
+<b class="nc">&nbsp;        if (elapsed &lt; flyingMillis) {</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        target.attackedBy(this);</b>
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public AttackableEntity target() {
+<b class="nc">&nbsp;        return target;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int flyingMillis() {
+<b class="nc">&nbsp;        return flyingMillis;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int projectileSpriteId() {
+<b class="nc">&nbsp;        return spriteId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ViolentCreature shooter() {
+<b class="fc">&nbsp;        return shooter;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

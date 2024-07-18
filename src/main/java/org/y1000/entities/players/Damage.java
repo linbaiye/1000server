@@ -25,4 +25,14 @@ public record Damage(int bodyDamage, int headDamage, int armDamage, int legDamag
         return new Damage((int)(bodyDamage * m), (int)(headDamage * m), (int)(armDamage * m), (int)(legDamage * m));
     }
 
+    public static final Damage ZERO = new Damage(0, 0, 0, 0);
+
+    public boolean equalTo(Damage damage) {
+        return damage != null &&
+                damage.legDamage == legDamage &&
+                damage.bodyDamage == bodyDamage &&
+                damage.headDamage == headDamage &&
+                damage.armDamage == armDamage;
+    }
+
 }

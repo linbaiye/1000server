@@ -1,0 +1,247 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > NpcFactoryImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.entities.creatures.monster</a>
+</div>
+
+<h1>Coverage Summary for Class: NpcFactoryImpl (org.y1000.entities.creatures.monster)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NpcFactoryImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/80)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.entities.creatures.monster;
+&nbsp;
+&nbsp;import lombok.extern.slf4j.Slf4j;
+&nbsp;import org.apache.commons.lang3.NotImplementedException;
+&nbsp;import org.apache.commons.lang3.StringUtils;
+&nbsp;import org.y1000.entities.Direction;
+&nbsp;import org.y1000.entities.creatures.State;
+&nbsp;import org.y1000.entities.creatures.npc.*;
+&nbsp;import org.y1000.kungfu.KungFuSdb;
+&nbsp;import org.y1000.realm.RealmMap;
+&nbsp;import org.y1000.sdb.ActionSdb;
+&nbsp;import org.y1000.sdb.*;
+&nbsp;import org.y1000.util.Coordinate;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+<b class="nc">&nbsp;@Slf4j</b>
+&nbsp;public final class NpcFactoryImpl implements NpcFactory {
+&nbsp;
+&nbsp;    private final ActionSdb actionSdb;
+&nbsp;    private final MonstersSdb monsterSdb;
+&nbsp;    private final KungFuSdb kungFuSdb;
+&nbsp;    private final NpcSdb npcSdb;
+&nbsp;    private final MerchantItemSdbRepository merchantItemSdbRepository;
+&nbsp;
+&nbsp;    public NpcFactoryImpl(ActionSdb actionSdb,
+&nbsp;                          MonstersSdb monsterSdb,
+&nbsp;                          KungFuSdb kungFuSdb, NpcSdb npcSdb,
+<b class="nc">&nbsp;                          MerchantItemSdbRepository merchantItemSdbRepository) {</b>
+<b class="nc">&nbsp;        this.actionSdb = actionSdb;</b>
+<b class="nc">&nbsp;        this.monsterSdb = monsterSdb;</b>
+<b class="nc">&nbsp;        this.kungFuSdb = kungFuSdb;</b>
+<b class="nc">&nbsp;        this.npcSdb = npcSdb;</b>
+<b class="nc">&nbsp;        this.merchantItemSdbRepository = merchantItemSdbRepository;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private Map&lt;State, Integer&gt; createDevirtueActionLengthMap(String animate) {
+<b class="nc">&nbsp;        Map&lt;State, Integer&gt; result = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        int idle = actionSdb.getActionLength(animate, State.IDLE);</b>
+<b class="nc">&nbsp;        int move = actionSdb.getActionLength(animate, State.WALK);</b>
+<b class="nc">&nbsp;        int hurt = actionSdb.getActionLength(animate, State.HURT);</b>
+<b class="nc">&nbsp;        int die = actionSdb.getActionLength(animate, State.DIE);</b>
+<b class="nc">&nbsp;        int frozen = actionSdb.getActionLength(animate, State.FROZEN);</b>
+<b class="nc">&nbsp;        result.put(State.IDLE, idle);</b>
+<b class="nc">&nbsp;        result.put(State.WALK, move);</b>
+<b class="nc">&nbsp;        result.put(State.HURT, hurt);</b>
+<b class="nc">&nbsp;        result.put(State.DIE, die);</b>
+<b class="nc">&nbsp;        result.put(State.FROZEN, frozen &lt; 100 ? frozen * 10 : frozen);</b>
+<b class="nc">&nbsp;        return result;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Map&lt;State, Integer&gt; createActionLengthMap(String animate) {
+<b class="nc">&nbsp;        Map&lt;State, Integer&gt; result = createDevirtueActionLengthMap(animate);</b>
+<b class="nc">&nbsp;        int attack = actionSdb.getActionLength(animate, State.ATTACK);</b>
+<b class="nc">&nbsp;        result.put(State.ATTACK, attack);</b>
+<b class="nc">&nbsp;        return result;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private MonsterAttackSkill createAttackSkill(String name) {
+<b class="nc">&nbsp;        var magicNameAndLevel = monsterSdb.getAttackMagic(name);</b>
+<b class="nc">&nbsp;        if (StringUtils.isEmpty(magicNameAndLevel)) {</b>
+<b class="nc">&nbsp;            return new MonsterMeleeAttackSkill();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        String magicName = magicNameAndLevel.split(&quot;:&quot;)[0];</b>
+<b class="nc">&nbsp;        String bowImage = kungFuSdb.getBowImage(magicName);</b>
+<b class="nc">&nbsp;        if (StringUtils.isEmpty(bowImage)) {</b>
+<b class="nc">&nbsp;            return new MonsterMeleeAttackSkill();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return new MonsterRangedAttackSkill(Integer.parseInt(bowImage), kungFuSdb.getSoundSwing(magicName));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private AggressiveMonster createAggressiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
+<b class="nc">&nbsp;        return AggressiveMonster.builder()</b>
+<b class="nc">&nbsp;                .id(id)</b>
+<b class="nc">&nbsp;                .coordinate(coordinate)</b>
+<b class="nc">&nbsp;                .direction(Direction.DOWN)</b>
+<b class="nc">&nbsp;                .name(name)</b>
+<b class="nc">&nbsp;                .realmMap(map)</b>
+<b class="nc">&nbsp;                .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))</b>
+<b class="nc">&nbsp;                .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))</b>
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;//                createAttackSkill(name));
+&nbsp;    }
+&nbsp;
+&nbsp;    private PassiveMonster createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
+<b class="nc">&nbsp;        return PassiveMonster.builder()</b>
+<b class="nc">&nbsp;                .id(id)</b>
+<b class="nc">&nbsp;                .coordinate(coordinate)</b>
+<b class="nc">&nbsp;                .direction(Direction.DOWN)</b>
+<b class="nc">&nbsp;                .name(name)</b>
+<b class="nc">&nbsp;                .realmMap(map)</b>
+<b class="nc">&nbsp;                .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))</b>
+<b class="nc">&nbsp;                .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))</b>
+<b class="nc">&nbsp;                .ai(name.equals(&quot;稻草人&quot;) ? DoNothingAI.INSTANCE :  new MonsterWanderingAI(new ViolentNpcWanderingAI()))</b>
+<b class="nc">&nbsp;                .attackSkill(createAttackSkill(name))</b>
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Monster createMonster(String name, long id, RealmMap realmMap, Coordinate coordinate) {
+<b class="nc">&nbsp;        Objects.requireNonNull(name);</b>
+<b class="nc">&nbsp;        Objects.requireNonNull(realmMap);</b>
+<b class="nc">&nbsp;        Objects.requireNonNull(coordinate);</b>
+<b class="nc">&nbsp;        String animate = monsterSdb.getAnimate(name);</b>
+<b class="nc">&nbsp;        if (animate == null) {</b>
+<b class="nc">&nbsp;            throw new NotImplementedException(name + &quot; has no action sdb.&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        boolean passive = monsterSdb.isPassive(name);</b>
+<b class="nc">&nbsp;        return passive ? createPassiveCreature(name, id, realmMap, coordinate) : createAggressiveCreature(name, id, realmMap, coordinate);</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    private static final Map&lt;String, String&gt; NPC_NAME_TO_ITME_FILE = Map.of(</b>
+&nbsp;            &quot;老板娘&quot;, &quot;lbn.txt&quot;
+&nbsp;    );
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate) {
+<b class="nc">&nbsp;        Objects.requireNonNull(name);</b>
+<b class="nc">&nbsp;        Objects.requireNonNull(realmMap);</b>
+<b class="nc">&nbsp;        Objects.requireNonNull(coordinate);</b>
+<b class="nc">&nbsp;        String animate = npcSdb.getAnimate(name);</b>
+<b class="nc">&nbsp;        if (animate == null) {</b>
+<b class="nc">&nbsp;            throw new NotImplementedException(name + &quot; has no action sdb.&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        var fileName = NPC_NAME_TO_ITME_FILE.get(name);</b>
+<b class="nc">&nbsp;        MerchantItemSdb merchantItemSdb = merchantItemSdbRepository.load(fileName);</b>
+<b class="nc">&nbsp;        return DevirtueMerchant.builder()</b>
+<b class="nc">&nbsp;                .id(id)</b>
+<b class="nc">&nbsp;                .coordinate(coordinate)</b>
+<b class="nc">&nbsp;                .direction(Direction.DOWN)</b>
+<b class="nc">&nbsp;                .name(name)</b>
+<b class="nc">&nbsp;                .realmMap(realmMap)</b>
+<b class="nc">&nbsp;                .stateMillis(createDevirtueActionLengthMap(animate))</b>
+<b class="nc">&nbsp;                .attributeProvider(new MerchantAttributeProvider(name, npcSdb))</b>
+<b class="nc">&nbsp;                .ai(new DevirtueMerchantAI())</b>
+<b class="nc">&nbsp;                .sell(merchantItemSdb.sell())</b>
+<b class="nc">&nbsp;                .buy(merchantItemSdb.buy())</b>
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

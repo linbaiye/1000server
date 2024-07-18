@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MonsterRangedAttackState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.entities.creatures.monster</a>
+</div>
+
+<h1>Coverage Summary for Class: MonsterRangedAttackState (org.y1000.entities.creatures.monster)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MonsterRangedAttackState</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.entities.creatures.monster;
+&nbsp;
+&nbsp;import lombok.extern.slf4j.Slf4j;
+&nbsp;import org.y1000.entities.creatures.AbstractCreatureState;
+&nbsp;import org.y1000.entities.creatures.State;
+&nbsp;import org.y1000.entities.creatures.event.EntitySoundEvent;
+&nbsp;import org.y1000.entities.creatures.event.MonsterShootEvent;
+&nbsp;import org.y1000.entities.projectile.MonsterProjectile;
+&nbsp;
+<b class="nc">&nbsp;@Slf4j</b>
+&nbsp;public final class MonsterRangedAttackState extends AbstractCreatureState&lt;AbstractMonster&gt; implements MonsterState&lt;AbstractMonster&gt; {
+&nbsp;
+&nbsp;    private final String sound;
+&nbsp;
+&nbsp;    private final int spriteId;
+&nbsp;
+&nbsp;    private boolean shot;
+&nbsp;
+&nbsp;    public MonsterRangedAttackState(int totalMillis,
+&nbsp;                                    String sound,
+&nbsp;                                    int spriteId) {
+<b class="nc">&nbsp;        super(totalMillis);</b>
+<b class="nc">&nbsp;        this.sound = sound;</b>
+<b class="nc">&nbsp;        this.spriteId = spriteId;</b>
+<b class="nc">&nbsp;        shot = false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public State stateEnum() {
+<b class="nc">&nbsp;        return State.ATTACK;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void update(AbstractMonster monster, int delta) {
+&nbsp;//        if (elapse(delta)) {
+&nbsp;//            monster.AI().onAttackDone(monster);
+&nbsp;//            return;
+&nbsp;//        }
+&nbsp;//        if (elapsedMillis() &gt;= (totalMillis() / 2) &amp;&amp; monster.getFightingEntity() != null &amp;&amp; !shot) {
+&nbsp;//            monster.emitEvent(new MonsterShootEvent(new MonsterProjectile(monster, monster.getFightingEntity(), spriteId)));
+&nbsp;//            if (sound != null) {
+&nbsp;//                monster.emitEvent(new EntitySoundEvent(monster, sound));
+&nbsp;//            }
+&nbsp;//            shot = true;
+&nbsp;//        }
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void afterHurt(AbstractMonster creature) {
+&nbsp;//        creature.AI().onAttackDone(creature);
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public static MonsterRangedAttackState attack(AbstractMonster monster, String sound, int projectId) {
+<b class="nc">&nbsp;        return new MonsterRangedAttackState(monster.getStateMillis(State.ATTACK), sound, projectId);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

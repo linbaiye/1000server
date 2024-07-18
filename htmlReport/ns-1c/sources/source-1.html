@@ -1,0 +1,212 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AbstractEntityManager</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.realm</a>
+</div>
+
+<h1>Coverage Summary for Class: AbstractEntityManager (org.y1000.realm)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractEntityManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    45.5%
+  </span>
+  <span class="absValue">
+    (5/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    41.5%
+  </span>
+  <span class="absValue">
+    (17/41)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.realm;
+&nbsp;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.y1000.entities.Entity;
+&nbsp;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;public abstract class AbstractEntityManager&lt;T extends Entity&gt; implements EntityManager&lt;T&gt; {
+&nbsp;    private boolean iterating;
+&nbsp;    private final Set&lt;T&gt; entities;
+&nbsp;
+&nbsp;    private final Set&lt;T&gt; adding;
+&nbsp;
+&nbsp;    private final Set&lt;T&gt; deleting;
+&nbsp;
+<b class="fc">&nbsp;    protected AbstractEntityManager() {</b>
+<b class="fc">&nbsp;        this.iterating = false;</b>
+<b class="fc">&nbsp;        this.entities = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.adding = new HashSet&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.deleting = new HashSet&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected abstract Logger log();
+&nbsp;
+&nbsp;    private void doUpdate(T t, long delta) {
+&nbsp;        try {
+<b class="nc">&nbsp;            t.update((int)delta);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            log().error(&quot;Failed to update {}.&quot;, t, e);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    protected void updateManagedEntities(long delta) {
+<b class="nc">&nbsp;        iterating = true;</b>
+<b class="nc">&nbsp;        entities.forEach(e -&gt; doUpdate(e, delta));</b>
+<b class="nc">&nbsp;        iterating = false;</b>
+<b class="nc">&nbsp;        handleDeleting();</b>
+<b class="nc">&nbsp;        handleAdding();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private void handleAdding() {
+<b class="nc">&nbsp;        adding.forEach(this::doAdd);</b>
+<b class="nc">&nbsp;        adding.clear();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void handleDeleting() {
+<b class="nc">&nbsp;        deleting.forEach(this::doDelete);</b>
+<b class="nc">&nbsp;        deleting.clear();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected abstract void onAdded(T entity);
+&nbsp;
+&nbsp;    protected abstract void onDeleted(T entity);
+&nbsp;
+&nbsp;    private void doAdd(T entity) {
+&nbsp;        try {
+<b class="fc">&nbsp;            if (entities.add(entity))</b>
+<b class="fc">&nbsp;                onAdded(entity);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            log().error(&quot;Exception after adding {}.&quot;, entity, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void doDelete(T entity) {
+&nbsp;        try {
+<b class="nc">&nbsp;            if (entities.remove(entity))</b>
+<b class="nc">&nbsp;                onDeleted(entity);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            log().error(&quot;Exception after deleting {}.&quot;, entity, e);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void add(T entity) {
+<b class="fc">&nbsp;        if (iterating) {</b>
+<b class="nc">&nbsp;            adding.add(entity);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            doAdd(entity);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Optional&lt;T&gt; find(long id) {
+<b class="fc">&nbsp;        return entities.stream()</b>
+<b class="fc">&nbsp;                .filter(e -&gt; e.id() == id)</b>
+<b class="fc">&nbsp;                .findFirst();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public &lt;N extends Entity&gt; Optional&lt;N&gt; find(long id, Class&lt;N&gt; type) {
+<b class="fc">&nbsp;        return entities.stream()</b>
+<b class="fc">&nbsp;                .filter(e -&gt; e.id() == id &amp;&amp; type.isAssignableFrom(e.getClass()))</b>
+<b class="fc">&nbsp;                .map(type::cast)</b>
+<b class="fc">&nbsp;                .findFirst();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void delete(T entity) {
+<b class="nc">&nbsp;        if (iterating) {</b>
+<b class="nc">&nbsp;            deleting.add(entity);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            doDelete(entity);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,286 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > KungFuBookRepositoryImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: KungFuBookRepositoryImpl (org.y1000.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">KungFuBookRepositoryImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (75/75)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">KungFuBookRepositoryImpl$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (76/76)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.repository;
+&nbsp;
+&nbsp;import org.apache.commons.lang3.NotImplementedException;
+&nbsp;import org.apache.commons.lang3.Validate;
+&nbsp;import org.y1000.kungfu.*;
+&nbsp;import org.y1000.kungfu.attack.*;
+&nbsp;import org.y1000.kungfu.breath.BreathKungFu;
+&nbsp;import org.y1000.kungfu.protect.ProtectKungFu;
+&nbsp;import org.y1000.kungfu.protect.ProtectionParametersImpl;
+&nbsp;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+<b class="fc">&nbsp;public final class KungFuBookRepositoryImpl implements KungFuBookRepository, KungFuBookFactory, KungFuFactory {</b>
+<b class="fc">&nbsp;    private final KungFuSdb kungFuSdb = KungFuSdb.INSTANCE;</b>
+&nbsp;
+<b class="fc">&nbsp;    private final static List&lt;String&gt; UNNAMED_NAMES = List.of(</b>
+&nbsp;            &quot;无名拳法&quot;, &quot;无名剑法&quot;, &quot;无名刀法&quot;, &quot;无名槌法&quot;, &quot;无名枪术&quot;, &quot;无名弓术&quot;
+&nbsp;            , &quot;无名投法&quot;, &quot;无名步法&quot;, &quot;无名心法&quot;, &quot;无名强身&quot;
+&nbsp;    );
+&nbsp;
+&nbsp;
+&nbsp;    private FootKungFu createFootKungFu(String name) {
+<b class="fc">&nbsp;        return FootKungFu.builder()</b>
+<b class="fc">&nbsp;                .name(name)</b>
+<b class="fc">&nbsp;                .exp(0)</b>
+<b class="fc">&nbsp;                .sound(kungFuSdb.getSoundEvent(name))</b>
+<b class="fc">&nbsp;                .keepParameters(new DefaultKeepParameters(name, kungFuSdb))</b>
+<b class="fc">&nbsp;                .fiveSecondsParameters(new DefaultFiveSecondParameters(name, kungFuSdb))</b>
+<b class="fc">&nbsp;                .eventResourceParameters(new DefaultEventResourceParameters(name, kungFuSdb))</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private AttackKungFuParameters createAttackKungFuParameter(String name) {
+<b class="fc">&nbsp;        return new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb),</b>
+&nbsp;                new DefaultEventResourceParameters(name, kungFuSdb));
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private SwordKungFu createSword(String name) {
+<b class="fc">&nbsp;        return SwordKungFu.builder()</b>
+<b class="fc">&nbsp;                .name(name)</b>
+<b class="fc">&nbsp;                .exp(0)</b>
+<b class="fc">&nbsp;                .parameters(createAttackKungFuParameter(name))</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private QuanfaKungFu quanfaKungFu(String name) {
+<b class="fc">&nbsp;        return QuanfaKungFu.builder()</b>
+<b class="fc">&nbsp;                .name(name)</b>
+<b class="fc">&nbsp;                .exp(0)</b>
+<b class="fc">&nbsp;                .parameters(createAttackKungFuParameter(name))</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private BladeKungFu bladeKungFu(String name) {
+<b class="fc">&nbsp;        return BladeKungFu.builder()</b>
+<b class="fc">&nbsp;                .name(name)</b>
+<b class="fc">&nbsp;                .exp(0)</b>
+<b class="fc">&nbsp;                .parameters(createAttackKungFuParameter(name))</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private SpearKungFu spearKungFu(String name) {
+<b class="fc">&nbsp;        return SpearKungFu.builder()</b>
+<b class="fc">&nbsp;                .name(name)</b>
+<b class="fc">&nbsp;                .exp(0)</b>
+<b class="fc">&nbsp;                .parameters(createAttackKungFuParameter(name))</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private AxeKungFu axeKungFu(String name) {
+<b class="fc">&nbsp;        return AxeKungFu.builder()</b>
+<b class="fc">&nbsp;                .name(name)</b>
+<b class="fc">&nbsp;                .exp(0)</b>
+<b class="fc">&nbsp;                .parameters(createAttackKungFuParameter(name))</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private BowKungFu bowKungFu(String name) {
+<b class="fc">&nbsp;        return BowKungFu.builder()</b>
+<b class="fc">&nbsp;                .name(name)</b>
+<b class="fc">&nbsp;                .exp(0)</b>
+<b class="fc">&nbsp;                .parameters(createAttackKungFuParameter(name))</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private ThrowKungFu throwKungFu(String name) {
+<b class="fc">&nbsp;        return ThrowKungFu.builder()</b>
+<b class="fc">&nbsp;                .name(name)</b>
+<b class="fc">&nbsp;                .exp(0)</b>
+<b class="fc">&nbsp;                .parameters(createAttackKungFuParameter(name))</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private BreathKungFu breathKungFu(String name) {
+<b class="fc">&nbsp;        return BreathKungFu.builder().name(name).exp(0)</b>
+<b class="fc">&nbsp;                .parameters(new RevertedEventResourceParameters(name, kungFuSdb))</b>
+<b class="fc">&nbsp;                .sound(kungFuSdb.getSoundEvent(name))</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private ProtectKungFu protectKungFu(String name) {
+<b class="fc">&nbsp;        return ProtectKungFu.builder()</b>
+<b class="fc">&nbsp;                .name(name)</b>
+<b class="fc">&nbsp;                .parameters(new ProtectionParametersImpl(name, kungFuSdb,</b>
+&nbsp;                        new DefaultKeepParameters(name, kungFuSdb),
+&nbsp;                        new DefaultArmorParameters(name, kungFuSdb),
+&nbsp;                        new DefaultFiveSecondParameters(name, kungFuSdb)))
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public KungFu create(String name) {
+<b class="fc">&nbsp;        Validate.notNull(name);</b>
+<b class="fc">&nbsp;        KungFuType kungFuType = kungFuSdb.getMagicType(name);</b>
+<b class="fc">&nbsp;        return switch (kungFuType) {</b>
+<b class="fc">&nbsp;            case QUANFA -&gt; quanfaKungFu(name);</b>
+<b class="fc">&nbsp;            case SWORD -&gt; createSword(name);</b>
+<b class="fc">&nbsp;            case BLADE -&gt; bladeKungFu(name);</b>
+<b class="fc">&nbsp;            case SPEAR -&gt; spearKungFu(name);</b>
+<b class="fc">&nbsp;            case AXE -&gt; axeKungFu(name);</b>
+<b class="fc">&nbsp;            case BOW -&gt; bowKungFu(name);</b>
+<b class="fc">&nbsp;            case THROW -&gt; throwKungFu(name);</b>
+<b class="fc">&nbsp;            case FOOT -&gt; createFootKungFu(name);</b>
+<b class="fc">&nbsp;            case BREATHING -&gt; breathKungFu(name);</b>
+<b class="fc">&nbsp;            case PROTECTION -&gt; protectKungFu(name);</b>
+<b class="fc">&nbsp;            case ASSISTANT -&gt;  AssistantKungFu.builder().name(name).exp(0).build();</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public KungFuBook create() {
+<b class="fc">&nbsp;        Map&lt;Integer, KungFu&gt; unnamed = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (int i = 1; i &lt;= UNNAMED_NAMES.size(); i++ ){</b>
+<b class="fc">&nbsp;            unnamed.put(i, create(UNNAMED_NAMES.get(i - 1)));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return new KungFuBook(unnamed);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public AttackKungFu createAttackKungFu(String name) {
+<b class="fc">&nbsp;        return (AttackKungFu) create(name);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ProtectKungFu createProtection(String name) {
+<b class="fc">&nbsp;        return protectKungFu(name);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

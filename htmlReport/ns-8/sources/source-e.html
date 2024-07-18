@@ -1,0 +1,152 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PlayerRightClickAttributeEvent</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.entities.players.event</a>
+</div>
+
+<h1>Coverage Summary for Class: PlayerRightClickAttributeEvent (org.y1000.entities.players.event)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerRightClickAttributeEvent</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/25)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.entities.players.event;
+&nbsp;
+&nbsp;import org.y1000.entities.players.Player;
+&nbsp;import org.y1000.message.serverevent.PlayerEventVisitor;
+&nbsp;import org.y1000.network.gen.Packet;
+&nbsp;import org.y1000.network.gen.PlayerRightClickAttributePacket;
+&nbsp;
+&nbsp;public class PlayerRightClickAttributeEvent extends AbstractPlayerEvent {
+&nbsp;    private final PlayerRightClickAttributePacket pkt;
+&nbsp;    public PlayerRightClickAttributeEvent(Player source) {
+<b class="nc">&nbsp;        super(source, true);</b>
+<b class="nc">&nbsp;        this.pkt = rightClickAttributePacket(source);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void accept(PlayerEventVisitor playerEventHandler) {
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;
+&nbsp;    private PlayerRightClickAttributePacket rightClickAttributePacket(Player player) {
+<b class="nc">&nbsp;        var am = player.armor();</b>
+<b class="nc">&nbsp;        var dmg = player.damage();</b>
+<b class="nc">&nbsp;        return PlayerRightClickAttributePacket.newBuilder()</b>
+<b class="nc">&nbsp;                .setArmArmor(am.arm())</b>
+<b class="nc">&nbsp;                .setLegArmor(am.leg())</b>
+<b class="nc">&nbsp;                .setHeadArmor(am.head())</b>
+<b class="nc">&nbsp;                .setBodyArmor(am.body())</b>
+<b class="nc">&nbsp;                .setBodyDamage(dmg.bodyDamage())</b>
+<b class="nc">&nbsp;                .setHeadDamage(dmg.headDamage())</b>
+<b class="nc">&nbsp;                .setArmDamage(dmg.armDamage())</b>
+<b class="nc">&nbsp;                .setLegDamage(dmg.legDamage())</b>
+<b class="nc">&nbsp;                .setMaxEnergy(player.maxEnergy())</b>
+<b class="nc">&nbsp;                .setMaxLife(player.maxLife())</b>
+<b class="nc">&nbsp;                .setMaxPower(player.maxPower())</b>
+<b class="nc">&nbsp;                .setMaxInnerPower(player.innerPower())</b>
+<b class="nc">&nbsp;                .setMaxOuterPower(player.outerPower())</b>
+<b class="nc">&nbsp;                .setAttackSpeed(player.attackSpeed())</b>
+<b class="nc">&nbsp;                .setRecovery(player.recovery())</b>
+<b class="nc">&nbsp;                .setAvoidance(player.avoidance())</b>
+<b class="nc">&nbsp;                .setAge(player.age())</b>
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected Packet buildPacket() {
+<b class="nc">&nbsp;        return Packet.newBuilder().setRightClickAttribute(pkt).build();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

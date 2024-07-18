@@ -1,0 +1,157 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AbstractCreatureMoveState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.entities.creatures</a>
+</div>
+
+<h1>Coverage Summary for Class: AbstractCreatureMoveState (org.y1000.entities.creatures)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractCreatureMoveState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.4%
+  </span>
+  <span class="absValue">
+    (17/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.entities.creatures;
+&nbsp;
+&nbsp;import org.y1000.entities.Direction;
+&nbsp;import org.y1000.realm.RealmMap;
+&nbsp;import org.y1000.util.Coordinate;
+&nbsp;
+&nbsp;public abstract class AbstractCreatureMoveState&lt;C extends Creature&gt; extends AbstractCreatureState&lt;C&gt; {
+&nbsp;
+&nbsp;    private final State state;
+&nbsp;
+&nbsp;    private final Direction towards;
+&nbsp;
+&nbsp;    private final Coordinate start;
+&nbsp;
+&nbsp;    public AbstractCreatureMoveState(State state,
+&nbsp;                                     Coordinate start,
+&nbsp;                                     Direction towards, int millisPerUnit) {
+<b class="fc">&nbsp;        super(millisPerUnit);</b>
+<b class="fc">&nbsp;        this.state = state;</b>
+<b class="fc">&nbsp;        this.towards = towards;</b>
+<b class="fc">&nbsp;        this.start = start;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public State stateEnum() {
+<b class="fc">&nbsp;        return state;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected Coordinate getStart() {
+<b class="nc">&nbsp;        return start;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected boolean tryChangeCoordinate(C c, RealmMap realmMap) {
+<b class="fc">&nbsp;        Coordinate next = c.coordinate().moveBy(towards);</b>
+<b class="fc">&nbsp;        boolean changed =false;</b>
+<b class="fc">&nbsp;        if (realmMap.movable(next)) {</b>
+<b class="fc">&nbsp;            c.changeCoordinate(next);</b>
+<b class="fc">&nbsp;            changed = true;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        realmMap.occupy(c);</b>
+<b class="fc">&nbsp;        return changed;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    protected boolean walkMillis(C c, int delta) {
+<b class="fc">&nbsp;        if (elapsedMillis() == 0) {</b>
+<b class="fc">&nbsp;            c.changeDirection(towards);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (elapsedMillis() &lt; totalMillis())</b>
+<b class="fc">&nbsp;            elapse(delta);</b>
+<b class="fc">&nbsp;        return elapsedMillis() &gt;= totalMillis();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

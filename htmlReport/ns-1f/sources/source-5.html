@@ -1,0 +1,148 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MerchantItemSdbRepositoryImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.y1000.sdb</a>
+</div>
+
+<h1>Coverage Summary for Class: MerchantItemSdbRepositoryImpl (org.y1000.sdb)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MerchantItemSdbRepositoryImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (18/20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.y1000.sdb;
+&nbsp;
+&nbsp;import org.apache.commons.lang3.Validate;
+&nbsp;import org.y1000.entities.creatures.npc.MerchantItem;
+&nbsp;import org.y1000.item.ItemSdb;
+&nbsp;
+&nbsp;import java.io.BufferedReader;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStreamReader;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;public final class MerchantItemSdbRepositoryImpl implements MerchantItemSdbRepository {
+&nbsp;
+&nbsp;    private final ItemSdb itemSdb;
+&nbsp;
+<b class="fc">&nbsp;    public MerchantItemSdbRepositoryImpl(ItemSdb itemSdb) {</b>
+<b class="fc">&nbsp;        this.itemSdb = itemSdb;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public MerchantItemSdb load(String name) {
+<b class="fc">&nbsp;        Validate.notNull(name, &quot;file name can&#39;t be null.&quot;);</b>
+<b class="fc">&nbsp;        try (var inputstream = getClass().getResourceAsStream(&quot;/sdb/npc/&quot; + name)) {</b>
+<b class="fc">&nbsp;            if (inputstream == null) {</b>
+<b class="nc">&nbsp;                throw new NoSuchElementException(&quot;Sdb does not exist, &quot; + name);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            List&lt;MerchantItem&gt; buy = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            List&lt;MerchantItem&gt; sell = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream));</b>
+<b class="fc">&nbsp;            List&lt;String&gt; lines = bufferedReader.lines().toList();</b>
+<b class="fc">&nbsp;            for (String line : lines) {</b>
+<b class="fc">&nbsp;                String[] split = line.split(&quot;:&quot;);</b>
+<b class="fc">&nbsp;                if (split[0].equals(&quot;SELLITEM&quot;)) {</b>
+<b class="fc">&nbsp;                    sell.add(new MerchantItem(split[1], itemSdb.getPrice(split[1])));</b>
+<b class="fc">&nbsp;                } else if (split[0].equals(&quot;BUYITEM&quot;)) {</b>
+<b class="fc">&nbsp;                    buy.add(new MerchantItem(split[1], itemSdb.getBuyPrice(split[1])));</b>
+&nbsp;                }
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;            return new MerchantItemSdb(buy, sell);</b>
+<b class="fc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-18 11:06</div>
+</div>
+</body>
+</html>

@@ -21,8 +21,8 @@ public abstract class AbstractKungFu implements KungFu {
     @Override
     public boolean gainExp(int expValue) {
         var old = experience.level();
-        experience = experience.gainExp(100000000);
-        //experience = experience.gainPermitExp(expValue);
+//        experience = experience.gainExp(30000000);
+        experience = experience.gainPermitExp(expValue);
        return old != experience.level();
     }
 
