@@ -496,7 +496,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     private <T extends Equipment> Optional<T> getEquipment(EquipmentType type, Class<T> clazz) {
         Equipment equipment = equippedEquipments.get(type);
-        return equipment != null && equipment.getClass().isAssignableFrom(clazz) ?
+        return equipment != null && clazz.isAssignableFrom(equipment.getClass()) ?
                 Optional.of(clazz.cast(equipment)) : Optional.empty();
     }
 
@@ -1038,7 +1038,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         if (!entityEvent.source().equals(getFightingEntity())) {
             return;
         }
-        if (!canPurchaseOrAttack(entityEvent.source())) {
+        if (!canChaseOrAttack(entityEvent.source())) {
             clearFightingEntity();
         }
         if (state() instanceof PlayerWaitDistanceState waitDistanceState) {

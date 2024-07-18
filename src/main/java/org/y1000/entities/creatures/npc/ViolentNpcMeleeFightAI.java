@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
@@ -10,6 +11,7 @@ import org.y1000.event.EntityEventListener;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
 
+@Slf4j
 public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener {
     private final AttackableEntity enemy;
 
@@ -25,11 +27,12 @@ public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener 
         this.npc = npc;
         enemy.registerEventListener(this);
         this.previous = Coordinate.Empty;
+        log.debug("{} now fighting entity {}.", npc.id(), enemy.id());
     }
 
 
     private void meleeAttackProcess() {
-        if (!npc.canPurchaseOrAttack(enemy)) {
+        if (!npc.canChaseOrAttack(enemy)) {
             npc.changeAI(new ViolentNpcWanderingAI());
             return;
         }
@@ -71,10 +74,11 @@ public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener 
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
-        if (npc.stateEnum() == State.DIE) {
+        if (npc.stateEnum() == State.DIE || !entityEvent.source().equals(enemy)) {
             return;
         }
-        if (!npc.canPurchaseOrAttack(entityEvent.source())) {
+        if (!npc.canChaseOrAttack(entityEvent.source())) {
+            log.debug("Entity {} not attackable.", entityEvent.source().id());
             npc.changeAI(new ViolentNpcWanderingAI());
         }
     }

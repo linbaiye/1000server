@@ -52,6 +52,9 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("雷剑式", 2));
         inventory.add(itemFactory.createItem("北马剑法", 1));
         inventory.add(itemFactory.createItem("壁射剑法", 1));
+        inventory.add(itemFactory.createItem("圣灵21剑", 1));
+        inventory.add(itemFactory.createItem("闪光剑破解", 1));
+        inventory.add(itemFactory.createItem("太极剑结", 1));
         inventory.add(itemFactory.createItem("金钟罩", 2));
         inventory.add(itemFactory.createItem("易筋经", 2));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));
@@ -60,8 +63,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         return inventory;
     }
 
-    private WeaponImpl weapon() {
-        return (WeaponImpl) itemFactory.createItem("护国神剑");
+    private Weapon weapon() {
+        return (Weapon) itemFactory.createItem("护国神剑");
         //return (Weapon) itemFactory.createItem("太极斧");
     }
 
@@ -84,7 +87,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     @Override
     public Player load(String token) {
         int slot = findSlot();
-        WeaponImpl weapon = weapon();
+        Weapon weapon = weapon();
         KungFuBook kungFuBook = loadKungFuBook();
         var yinyang = new YinYang();
         return PlayerImpl.builder()

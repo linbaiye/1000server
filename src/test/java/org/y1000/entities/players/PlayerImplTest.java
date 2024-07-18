@@ -61,7 +61,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     }
 
 
-    private WeaponImpl createWeapon(String name, AttackKungFuType type) {
+    private Weapon createWeapon(String name, AttackKungFuType type) {
         ItemSdb mock = Mockito.mock(ItemSdb.class);
         when(mock.getAttackKungFuType(anyString())).thenReturn(type);
         return new WeaponImpl(name, mock);

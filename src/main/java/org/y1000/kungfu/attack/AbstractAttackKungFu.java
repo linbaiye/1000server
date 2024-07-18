@@ -147,7 +147,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     @Override
     public void attackAgain(PlayerImpl player) {
-        if (player.getFightingEntity() == null || !player.canPurchaseOrAttack(player.getFightingEntity())) {
+        if (player.getFightingEntity() == null || !player.canChaseOrAttack(player.getFightingEntity())) {
             player.changeState(PlayerStillState.chillOut(player));
             return;
         }
@@ -156,7 +156,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
     protected void doStartAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target) {
-        if (!player.canPurchaseOrAttack(target)) {
+        if (!player.canChaseOrAttack(target)) {
             player.emitEvent(new PlayerAttackEventResponse(player, event, false, computeEffectId()));
             return;
         }
@@ -274,9 +274,21 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         return new Damage(bodyDamage(), headDamage(), armDamage(), legDamage());
     }
 
+    private int effectIdPrefix() {
+        return switch (getType()) {
+            case QUANFA -> 110;
+            case SWORD -> 120;
+            case BLADE -> 130;
+            case AXE -> 140;
+            case SPEAR -> 150;
+            case BOW -> 160;
+            case THROW -> 170;
+        };
+    }
+
     @Override
     public Integer computeEffectId() {
-        return level() == 9999 ? parameters.effectId() : null;
+        return level() == 9999 ? effectIdPrefix() +  parameters.effectId() : null;
     }
 
     @Override
