@@ -6,17 +6,26 @@ public class TestingPlayerInnateAttributesProvider implements PlayerInnateAttrib
     private final int avoid;
     private final Damage damage;
     private final int speed;
+
+    private final int recovery;
     @Builder
     public TestingPlayerInnateAttributesProvider(int avoid,
-                                                 Damage damage, int speed) {
+                                                 Damage damage, int speed,
+                                                 int recovery) {
         this.avoid = avoid;
         this.damage = damage == null ? Damage.DEFAULT : damage;
         this.speed = speed;
+        this.recovery = recovery;
     }
 
     @Override
     public int avoidance() {
         return avoid;
+    }
+
+    @Override
+    public int recovery() {
+        return recovery;
     }
 
     @Override

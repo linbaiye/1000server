@@ -1,11 +1,11 @@
 package org.y1000.entities.creatures.event;
 
-import org.y1000.entities.projectile.MonsterProjectile;
+import org.y1000.entities.projectile.NpcProjectile;
 import org.y1000.event.EntityEventVisitor;
 
 
 public class MonsterShootEvent extends AbstractShootEvent {
-    public MonsterShootEvent(MonsterProjectile projectile) {
+    public MonsterShootEvent(NpcProjectile projectile) {
         super(projectile.getShooter(), projectile);
     }
 

@@ -34,8 +34,6 @@ public interface Player extends ViolentCreature {
         return Optional.empty();
     }
 
-    void pickItem(GroundedItem groundedItem, Function<GroundedItem, Item> creator);
-
     default Optional<Weapon> weapon() {
         return Optional.empty();
     }
@@ -52,15 +50,15 @@ public interface Player extends ViolentCreature {
 
     void attack(ClientAttackEvent event, AttackableEntity target);
 
-    Optional<Hat> hat();
+    Optional<ArmorEquipment> hat();
 
-    Optional<Chest> chest();
+    Optional<ArmorEquipment> chest();
 
     Optional<Hair> hair();
 
-    Optional<Wrist> wrist();
+    Optional<ArmorEquipment> wrist();
 
-    Optional<Boot> boot();
+    Optional<ArmorEquipment> boot();
 
     Optional<Clothing> clothing();
 

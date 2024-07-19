@@ -5,8 +5,6 @@ import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.kungfu.KungFu;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
-import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.kungfu.attack.AxeKungFu;
 import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.message.clientevent.ClientToggleKungFuEvent;
 import org.y1000.realm.Realm;
@@ -23,7 +21,7 @@ public abstract class AbstractPlayerUnitTestFixture extends AbstractUnitTestFixt
     protected Realm mockedRealm;
 
 
-    protected void enableFootKungFu() {
+    protected void clickBasicFootKungFu() {
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 8));
     }
 

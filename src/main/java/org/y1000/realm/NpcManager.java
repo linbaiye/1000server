@@ -30,13 +30,13 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
 
     private final ProjectileManager projectileManager;
 
-    private final ItemManager itemManager;
+    private final ItemManagerImpl itemManager;
 
 
     public NpcManager(EntityEventSender sender,
                       EntityIdGenerator idGenerator,
                       NpcFactory npcFactory,
-                      ItemManager itemManager) {
+                      ItemManagerImpl itemManager) {
         this.sender = sender;
         this.idGenerator = idGenerator;
         this.npcFactory = npcFactory;

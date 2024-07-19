@@ -29,7 +29,7 @@ class PlayerMoveStateTest extends AbstractPlayerUnitTestFixture {
         when(realm.map()).thenReturn(map);
         when(map.movable(any(Coordinate.class))).thenReturn(true);
         player.joinReam(realm);
-        enableFootKungFu();
+        clickBasicFootKungFu();
         for (int i = 0; i < 10; i++) {
             player.handleClientEvent(new ClientMovementEvent(new RightMouseClick(1, Direction.RIGHT), player.coordinate()));
             player.update(player.getStateMillis(player.stateEnum()));

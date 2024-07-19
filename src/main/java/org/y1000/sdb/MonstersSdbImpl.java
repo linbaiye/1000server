@@ -1,9 +1,13 @@
 package org.y1000.sdb;
 
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Set;
+
 public final class MonstersSdbImpl extends AbstractSdbReader implements MonstersSdb {
 
-    public static final MonstersSdb INSTANCE = new MonstersSdbImpl();
+    public static final MonstersSdbImpl INSTANCE = new MonstersSdbImpl();
 
     private MonstersSdbImpl() {
         read("Monster.sdb");
@@ -101,6 +105,21 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
     @Override
     public String getHaveItem(String name) {
         return getOrNull(name, "HaveItem");
+    }
+
+    public static void main(String[] args) {
+        MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;
+//        Set<String> names = itemSdb.names();
+        Set<String> names = monstersSdb.columnNames();
+        Set<String> items = monstersSdb.names();
+        for (String i: items) {
+            System.out.println("----------------------------");
+            System.out.println(i);
+            for (String name : names) {
+                if (!StringUtils.isEmpty(monstersSdb.get(i, name)))
+                    System.out.println(name + ": " + monstersSdb.get(i, name));
+            }
+        }
     }
 }
 

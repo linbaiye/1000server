@@ -21,7 +21,7 @@ class PlayerManagerTest {
 
     private EntityEventSender eventSender;
 
-    private EntityManager<GroundedItem> itemManager;
+    private GroundItemManager itemManager;
 
     private ItemFactory itemFactory;
 
@@ -32,7 +32,7 @@ class PlayerManagerTest {
     void setUp() {
         tradeManager = Mockito.mock(TradeManager.class);
         eventSender = new TestingEntityEventSender();
-        itemManager = (EntityManager<GroundedItem>)Mockito.mock(EntityManager.class);
+        itemManager = Mockito.mock(GroundItemManager.class);
         itemFactory = Mockito.mock(ItemFactory.class);
         playerManager = new PlayerManager(eventSender, itemManager, itemFactory, tradeManager);
     }

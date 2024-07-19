@@ -103,13 +103,13 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
     }
 
     @Override
-    public Hat createHat(String name) {
-        return new Hat(name, new DefaultArmorAttributeProvider(name, itemSdb));
+    public ArmorEquipment createHat(String name) {
+        return new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.HAT);
     }
 
     @Override
-    public Chest createChest(String name) {
-        return new Chest(name, new DefaultArmorAttributeProvider(name, itemSdb));
+    public ArmorEquipment createChest(String name) {
+        return new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.CHEST);
     }
 
     @Override
@@ -118,13 +118,13 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
     }
 
     @Override
-    public Boot createBoot(String name) {
-        return new Boot(name, new DefaultArmorAttributeProvider(name, itemSdb));
+    public ArmorEquipment createBoot(String name) {
+        return new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.BOOT);
     }
 
     @Override
-    public Wrist createWrist(String name) {
-        return new Wrist(name, new DefaultArmorAttributeProvider(name, itemSdb));
+    public ArmorEquipment createWrist(String name) {
+        return new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.WRIST);
     }
 
     @Override

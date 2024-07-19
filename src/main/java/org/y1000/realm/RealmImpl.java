@@ -27,7 +27,7 @@ final class RealmImpl implements Runnable, Realm {
 
     private volatile boolean shutdown;
 
-    private final ItemManager itemManager;
+    private final ItemManagerImpl itemManager;
 
     private final NpcManager npcManager;
 
@@ -42,7 +42,7 @@ final class RealmImpl implements Runnable, Realm {
         realmMap = map;
         var entityIdGenerator = new EntityIdGenerator();
         eventSender = new RealmEntityEventSender();
-        itemManager = new ItemManager(eventSender, itemSdb, monstersSdb, entityIdGenerator);
+        itemManager = new ItemManagerImpl(eventSender, itemSdb, monstersSdb, entityIdGenerator, itemFactory);
         npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);

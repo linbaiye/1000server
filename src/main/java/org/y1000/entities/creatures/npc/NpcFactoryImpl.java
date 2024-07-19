@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.*;
-import org.y1000.entities.creatures.npc.*;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.ActionSdb;
@@ -58,17 +57,17 @@ public final class NpcFactoryImpl implements NpcFactory {
         return result;
     }
 
-    private MonsterAttackSkill createAttackSkill(String name) {
+    private NpcRangedSkill createSkill(String name) {
         var magicNameAndLevel = monsterSdb.getAttackMagic(name);
         if (StringUtils.isEmpty(magicNameAndLevel)) {
-            return new MonsterMeleeAttackSkill();
+            return null;
         }
         String magicName = magicNameAndLevel.split(":")[0];
         String bowImage = kungFuSdb.getBowImage(magicName);
         if (StringUtils.isEmpty(bowImage)) {
-            return new MonsterMeleeAttackSkill();
+            return null;
         }
-        return new MonsterRangedAttackSkill(Integer.parseInt(bowImage), kungFuSdb.getSoundSwing(magicName));
+        return new NpcRangedSkill(Integer.parseInt(bowImage), kungFuSdb.getSoundSwing(magicName));
     }
 
     private AggressiveMonster createAggressiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
@@ -80,8 +79,8 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .realmMap(map)
                 .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                 .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
+                .skill(createSkill(name))
                 .build();
-//                createAttackSkill(name));
     }
 
     private PassiveMonster createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
@@ -94,7 +93,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                 .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
                 .ai(name.equals("稻草人") ? DoNothingAI.INSTANCE :  new MonsterWanderingAI(new ViolentNpcWanderingAI()))
-                .attackSkill(createAttackSkill(name))
+                .skill(createSkill(name))
                 .build();
     }
 

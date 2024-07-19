@@ -7,6 +7,7 @@ import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.npc.AbstractViolentNpc;
 import org.y1000.entities.creatures.npc.NpcAI;
+import org.y1000.entities.creatures.npc.NpcRangedSkill;
 import org.y1000.entities.creatures.npc.ViolentNpcWanderingAI;
 import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.message.NpcInterpolation;
@@ -18,8 +19,11 @@ import java.util.Map;
 public abstract class AbstractMonster extends AbstractViolentNpc implements Monster {
 
     private final NpcAI initAi;
-    public AbstractMonster(long id, Coordinate coordinate, Direction direction, String name, Map<State, Integer> stateMillis, AttributeProvider attributeProvider, RealmMap realmMap, NpcAI ai) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai);
+    public AbstractMonster(long id, Coordinate coordinate, Direction direction, String name, Map<State, Integer> stateMillis,
+                           AttributeProvider attributeProvider,
+                           RealmMap realmMap,
+                           NpcAI ai, NpcRangedSkill sk) {
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai, sk);
         this.initAi = ai;
     }
 

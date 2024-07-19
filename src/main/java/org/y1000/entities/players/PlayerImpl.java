@@ -124,11 +124,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                       AttackKungFu attackKungFu,
                       KungFuBook kungFuBook,
                       boolean male,
-                      Hat hat,
-                      Chest chest,
+                      ArmorEquipment hat,
+                      ArmorEquipment chest,
                       Hair hair,
-                      Wrist wrist,
-                      Boot boot,
+                      ArmorEquipment wrist,
+                      ArmorEquipment boot,
                       Trouser trouser,
                       Clothing clothing,
                       FootKungFu footKungfu,
@@ -211,25 +211,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
 
     @Override
-    public void pickItem(GroundedItem groundedItem, Function<GroundedItem, Item> creator) {
-        if (!groundedItem.canPickAt(coordinate())) {
-            emitEvent(PlayerTextEvent.tooFarAway(this));
-            return;
-        }
-        if (!inventory.canPick(groundedItem)) {
-            emitEvent(PlayerTextEvent.inventoryFull(this));
-            return;
-        }
-        Item slotItem = creator.apply(groundedItem);
-        int slot = inventory.add(slotItem);
-        if (slot > 0) {
-            emitEvent(new UpdateInventorySlotEvent(this, slot, inventory.getItem(slot)));
-            emitEvent(new RemoveEntityEvent(groundedItem));
-            slotItem.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-        }
-    }
-
-    @Override
     public AttackKungFu attackKungFu() {
         return attackKungFu;
     }
@@ -296,7 +277,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         if (item == null) {
             return;
         }
-        if (item instanceof AbstractEquipment equipment) {
+        if (item instanceof Equipment equipment) {
             equip(slotId, equipment);
         } else if (item instanceof StackItem stackItem) {
             if (stackItem.item() instanceof Pill pill) {
@@ -501,13 +482,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public Optional<Hat> hat() {
-        return getEquipment(EquipmentType.HAT, Hat.class);
+    public Optional<ArmorEquipment> hat() {
+        return getEquipment(EquipmentType.HAT, ArmorEquipment.class);
     }
 
     @Override
-    public Optional<Chest> chest() {
-        return getEquipment(EquipmentType.CHEST, Chest.class);
+    public Optional<ArmorEquipment> chest() {
+        return getEquipment(EquipmentType.CHEST, ArmorEquipment.class);
     }
 
     @Override
@@ -516,13 +497,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public Optional<Wrist> wrist() {
-        return getEquipment(EquipmentType.WRIST, Wrist.class);
+    public Optional<ArmorEquipment> wrist() {
+        return getEquipment(EquipmentType.WRIST, ArmorEquipment.class);
     }
 
     @Override
-    public Optional<Boot> boot() {
-        return getEquipment(EquipmentType.BOOT, Boot.class);
+    public Optional<ArmorEquipment> boot() {
+        return getEquipment(EquipmentType.BOOT, ArmorEquipment.class);
     }
 
     @Override
@@ -678,7 +659,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         log.debug("Equipped weapon {}.", weaponToEquip.name());
     }
 
-    private void equip(int slotId, AbstractEquipment equipmentInSlot) {
+    private void equip(int slotId, Equipment equipmentInSlot) {
         if (equipmentInSlot.equipmentType() == EquipmentType.WEAPON) {
             Weapon weaponInSlot = (Weapon) equipmentInSlot;
             equipWeaponFromSlot(slotId, weaponInSlot);
@@ -686,8 +667,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                 changeAttackKungFu(kungFuBook.findUnnamedAttack(weaponInSlot.kungFuType()));
             }
         } else {
-            if (equipmentInSlot instanceof AbstractArmorEquipment armorEquipment &&
-                    armorEquipment.isMale() != isMale()) {
+            if (equipmentInSlot instanceof SexualEquipment sexualEquipment &&
+                    sexualEquipment.isMale() != isMale()) {
                 return;
             }
             inventory.remove(slotId);
@@ -834,7 +815,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         int r = attackKungFu.recovery() + innateAttributesProvider.recovery() -
                 weapon().map(Weapon::recovery).orElse(0);
         for (Equipment equipment : equippedEquipments.values()) {
-            if (equipment instanceof AbstractArmorEquipment armorEquipment) {
+            if (equipment instanceof ArmorEquipment armorEquipment) {
                 r -= armorEquipment.recovery();
             }
         }
@@ -938,7 +919,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         if (amount <= 0) {
             return;
         }
-        if (armLife.percent() <= 50) {
+        if (armLife.percent() < 50) {
             emitEvent(PlayerTextEvent.armLifeTooLowToExp(this));
             return;
         }
@@ -1051,8 +1032,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         int av = attackKungFu.avoidance() + innateAttributesProvider.avoidance() +
                 weapon().map(Weapon::avoidance).orElse(0);
         for (Equipment equipment : equippedEquipments.values()) {
-            if (equipment instanceof AbstractArmorEquipment armorEquipment) {
-                av += armorEquipment.recovery();
+            if (equipment instanceof ArmorEquipment armorEquipment) {
+                av += armorEquipment.avoidance();
             }
         }
         return av;
@@ -1074,7 +1055,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                 .orElse(Armor.Empty)
                 .add(attackKungFu.armor());
         for (var e : equippedEquipments.values()) {
-            if (e instanceof AbstractArmorEquipment armorEquipment) {
+            if (e instanceof ArmorEquipment armorEquipment) {
                 armor = armor.add(armorEquipment.armor());
             }
         }

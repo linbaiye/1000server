@@ -6,7 +6,7 @@ import org.y1000.sdb.NpcSdb;
 
 import java.util.Optional;
 
-public class MerchantAttributeProvider implements AttributeProvider {
+public final class MerchantAttributeProvider implements AttributeProvider {
 
     private final String name;
     private final NpcSdb npcSdb;

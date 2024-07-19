@@ -22,7 +22,7 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
 
     private final EntityEventSender eventSender;
 
-    private final EntityManager<GroundedItem> itemManager;
+    private final GroundItemManager itemManager;
 
     private final ProjectileManager projectileManager;
 
@@ -31,13 +31,13 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
     private final TradeManager tradeManager;
 
     public PlayerManager(EntityEventSender eventSender,
-                         EntityManager<GroundedItem> itemManager,
+                         GroundItemManager itemManager,
                          ItemFactory itemFactory) {
         this(eventSender, itemManager, itemFactory, new TradeManagerImpl());
     }
 
     public PlayerManager(EntityEventSender eventSender,
-                         EntityManager<GroundedItem> itemManager,
+                         GroundItemManager itemManager,
                          ItemFactory itemFactory, TradeManager tradeManager) {
         this.eventSender = eventSender;
         this.itemManager = itemManager;
@@ -100,8 +100,7 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
                               EntityManager<Npc> npcManager) {
         Validate.notNull(npcManager);
         if (dataEvent.data() instanceof ClientPickItemEvent event) {
-            itemManager.find(event.id())
-                    .ifPresent(groundItem -> dataEvent.player().pickItem(groundItem, itemFactory::createItem));
+            itemManager.pickItem(dataEvent.player(), event.id());
         } else if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
             npcManager.find(attackEvent.entityId())
                     .ifPresentOrElse(m -> dataEvent.player().attack(attackEvent, m),

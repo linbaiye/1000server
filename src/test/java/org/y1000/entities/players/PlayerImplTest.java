@@ -81,15 +81,33 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void hat() {
-        player = playerBuilder().hat(new Hat("test", new TestArmorAttributeProvider())).build();
+        player = playerBuilder().hat(new ArmorEquipmentImpl("test", new TestArmorAttributeProvider(), EquipmentType.HAT)).build();
         assertEquals("test", player.hat().get().name());
+        player.handleClientEvent(new ClientUnequipEvent(EquipmentType.HAT));
+        assertTrue(player.hat().isEmpty());
+    }
+
+    @Test
+    void chest() {
+        player = playerBuilder().chest(new ArmorEquipmentImpl("chest", new TestArmorAttributeProvider(), EquipmentType.CHEST)).build();
+        assertEquals("chest", player.chest().get().name());
+        player.handleClientEvent(new ClientUnequipEvent(EquipmentType.CHEST));
+        assertTrue(player.chest().isEmpty());
+    }
+
+    @Test
+    void boot() {
+        player = playerBuilder().boot(new ArmorEquipmentImpl("boot", new TestArmorAttributeProvider(), EquipmentType.BOOT)).build();
+        assertEquals("boot", player.boot().get().name());
+        player.handleClientEvent(new ClientUnequipEvent(EquipmentType.BOOT));
+        assertTrue(player.boot().isEmpty());
     }
 
 
     @Test
     void equipHatEvent() {
         Inventory inventory = new Inventory();
-        int slot = inventory.add(new Hat("test", new TestArmorAttributeProvider()));
+        int slot = inventory.add(new ArmorEquipmentImpl("test", new TestArmorAttributeProvider(), EquipmentType.HAT));
         player = playerBuilder().inventory(inventory).build();
         player.registerEventListener(eventListener);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
@@ -462,7 +480,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(player.attackKungFu().armor().body(), player.bodyArmor());
         enableProtectKungFu();
         assertEquals(player.attackKungFu().armor().add(player.protectKungFu().get().armor()).body(), player.bodyArmor());
-        Chest chest = itemFactory.createChest(player.isMale() ? "男子黄金铠甲" : "女子黄金铠甲");
+        ArmorEquipment chest = itemFactory.createChest(player.isMale() ? "男子黄金铠甲" : "女子黄金铠甲");
         int slot = player.inventory().add(chest);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertEquals(player.attackKungFu().armor().add(player.protectKungFu().get().armor())
@@ -513,6 +531,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void attackedByAoe() {
+        player = playerBuilder().innateAttributesProvider(TestingPlayerInnateAttributesProvider.builder().avoid(0).build()).build();
         enableTestingKungFu();
         assertTrue(player.attackedByAoe(Damage.DEFAULT, 100) > 0);
     }
@@ -564,7 +583,6 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     }
 
 
-
     @Test
     void damageAffectedByArm() {
         // make it 1000
@@ -614,5 +632,90 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         player = playerBuilder().innateAttributesProvider(attr).build();
         enableTestingKungFu();
         assertEquals(1, player.avoidance());
+        Weapon weapon = Mockito.mock(Weapon.class);
+        when(weapon.avoidance()).thenReturn(1);
+        when(weapon.equipmentType()).thenReturn(EquipmentType.WEAPON);
+        when(weapon.kungFuType()).thenReturn(AttackKungFuType.QUANFA);
+        int slot = player.inventory().add(weapon);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertEquals(2, player.avoidance());
+
+        var hat = Mockito.mock(ArmorEquipment.class);
+        when(hat.equipmentType()).thenReturn(EquipmentType.HAT);
+        when(hat.avoidance()).thenReturn(5);
+        slot = player.inventory().add(hat);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertEquals(7, player.avoidance());
+    }
+
+    @Test
+    void recovery() {
+        TestingPlayerInnateAttributesProvider attr = TestingPlayerInnateAttributesProvider.builder().speed(0).recovery(3).build();
+        player = playerBuilder().innateAttributesProvider(attr).build();
+        enableTestingKungFu();
+        assertEquals(3, player.recovery());
+        Weapon weapon = Mockito.mock(Weapon.class);
+        when(weapon.recovery()).thenReturn(1);
+        when(weapon.equipmentType()).thenReturn(EquipmentType.WEAPON);
+        when(weapon.kungFuType()).thenReturn(AttackKungFuType.QUANFA);
+        int slot = player.inventory().add(weapon);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertEquals(2, player.recovery());
+        var chest = Mockito.mock(ArmorEquipment.class);
+        when(chest.equipmentType()).thenReturn(EquipmentType.CHEST);
+        when(chest.recovery()).thenReturn(1);
+
+        slot = player.inventory().add(chest);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertEquals(1, player.recovery());
+    }
+
+    @Test
+    void damage() {
+        TestingPlayerInnateAttributesProvider attr = TestingPlayerInnateAttributesProvider.builder().speed(0).damage(Damage.DEFAULT).build();
+        player = playerBuilder().innateAttributesProvider(attr).build();
+        enableTestingKungFu();
+        var expected = player.attackKungFu().damage().add(Damage.DEFAULT);
+        assertTrue(expected.equalTo(player.damage()));
+        Weapon weapon = Mockito.mock(Weapon.class);
+        when(weapon.damage()).thenReturn(new Damage(1, 1,1,1));
+        when(weapon.equipmentType()).thenReturn(EquipmentType.WEAPON);
+        when(weapon.kungFuType()).thenReturn(AttackKungFuType.QUANFA);
+        int slot = player.inventory().add(weapon);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertTrue(expected.add(new Damage(1,1,1,1)).equalTo(player.damage()));
+    }
+
+    @Test
+    void gainExp() {
+        PlayerLife arm = new PlayerLife(900, 0);
+        player = playerBuilder().arm(arm).build();
+        enableTestingKungFu();
+        player.gainAttackExp(0);
+        assertEquals(100, player.attackKungFu().level());
+        arm.consume(510);
+        eventListener.clearEvents();
+        player.registerEventListener(eventListener);
+        player.gainAttackExp(1000);
+        var event = eventListener.removeFirst(PlayerTextEvent.class);
+        assertEquals(PlayerTextEvent.TextType.NOT_ENOUGH_ARM_LIFE.value(), event.toPacket().getText().getType());
+        assertEquals(100, player.attackKungFu().level());
+        arm.gain(10);
+        player.gainAttackExp(1000);
+        assertNotNull(eventListener.removeFirst(PlayerGainExpEvent.class));
+        assertNotEquals(100, player.attackKungFu().level());
+    }
+
+    @Test
+    void toggleBufa() {
+        clickBasicFootKungFu();
+        assertTrue(player.footKungFu().isPresent());
+        clickBasicFootKungFu();
+        assertTrue(player.footKungFu().isEmpty());
+        addBasicKungFu(kungFuFactory.create("草上飞"));
+        player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
+        assertTrue(player.footKungFu().isPresent());
+        clickBasicFootKungFu();
+        assertTrue(player.footKungFu().isPresent());
     }
 }

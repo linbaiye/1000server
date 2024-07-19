@@ -17,15 +17,15 @@ public interface ItemFactory {
 
     Trouser createTrouser(String name);
 
-    Hat createHat(String name);
+    ArmorEquipment createHat(String name);
 
-    Chest createChest(String name);
+    ArmorEquipment createChest(String name);
 
     Hair createHair(String name);
 
-    Boot createBoot(String name);
+    ArmorEquipment createBoot(String name);
 
-    Wrist createWrist(String name);
+    ArmorEquipment createWrist(String name);
 
     Clothing createClothing(String name);
 

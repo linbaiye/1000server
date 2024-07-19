@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import org.slf4j.Logger;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.players.Damage;
@@ -25,14 +26,15 @@ public abstract class AbstractViolentNpc
 
     private NpcAI ai;
 
-    private NpcRangedSkill rangedSkill;
+    private final NpcRangedSkill skill;
 
     public AbstractViolentNpc(long id, Coordinate coordinate, Direction direction, String name,
                               Map<State, Integer> stateMillis, AttributeProvider attributeProvider,
-                              RealmMap realmMap, NpcAI ai) {
+                              RealmMap realmMap, NpcAI ai, NpcRangedSkill skill) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap);
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
         this.ai = ai;
+        this.skill = skill;
     }
 
     public Optional<String> attackSound() {
@@ -50,8 +52,8 @@ public abstract class AbstractViolentNpc
     }
 
     @Override
-    public Optional<NpcRangedSkill> rangedSkill() {
-        return Optional.ofNullable(rangedSkill);
+    public Optional<NpcRangedSkill> skill() {
+        return Optional.ofNullable(skill);
     }
 
     @Override
@@ -102,12 +104,26 @@ public abstract class AbstractViolentNpc
 
     @Override
     public void startAttackAction(boolean withSound) {
-        cooldownAttack();
-        changeState(NpcCommonState.attack(getStateMillis(State.ATTACK)));
-        emitEvent(new CreatureAttackEvent(this));
+        doAttackAction(NpcCommonState.attack(getStateMillis(State.ATTACK)));
         if (withSound) {
             attackSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         }
+    }
+
+    private void doAttackAction(NpcState attackState) {
+        cooldownAttack();
+        changeState(attackState);
+        emitEvent(new CreatureAttackEvent(this));
+    }
+
+    public void startRangedAttack(AttackableEntity target) {
+        if (skill == null) {
+            throw new IllegalStateException("ranged attack is not supported.");
+        }
+        if (target == null || !skill.isAvailable()) {
+            return;
+        }
+        doAttackAction(new NpcRangedAttackState(getStateMillis(State.ATTACK), skill.getSwingSound(), skill.getProjectileSpriteId(), target, this));
     }
 
     @Override

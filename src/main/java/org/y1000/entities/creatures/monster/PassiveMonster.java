@@ -8,6 +8,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.npc.NpcAI;
+import org.y1000.entities.creatures.npc.NpcRangedSkill;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -18,13 +19,12 @@ import java.util.Objects;
 @Slf4j
 public final class PassiveMonster extends AbstractMonster {
 
-
     @Builder
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
                           RealmMap realmMap, Map<State, Integer> stateMillis,
                           AttributeProvider attributeProvider,
-                          MonsterAttackSkill attackSkill, NpcAI ai) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai);
+                          NpcRangedSkill skill, NpcAI ai) {
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai, skill);
     }
 
 
@@ -50,5 +50,6 @@ public final class PassiveMonster extends AbstractMonster {
     public void update(int delta) {
         cooldown(delta);
         state().update(this, delta);
+        skill().ifPresent(s -> s.cooldown(delta));
     }
 }
