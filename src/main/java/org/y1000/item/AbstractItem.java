@@ -18,7 +18,7 @@ public abstract class AbstractItem implements Item {
                         String dropSound,
                         String eventSound,
                         String description) {
-        Validate.notNull(name, "name must not be null.");
+        Validate.notNull(name, "idName must not be null.");
         Validate.notNull(type, "type must not be null.");
         this.name = name;
         this.type = type;

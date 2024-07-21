@@ -1,6 +1,6 @@
 package org.y1000.entities;
 
-public final class EmptyAttributeProvider implements AttributeProvider{
+public final class EmptyAttributeProvider implements AttributeProvider {
 
     public static final EmptyAttributeProvider INSTANCE = new EmptyAttributeProvider();
 

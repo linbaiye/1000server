@@ -25,10 +25,13 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
 
     private final Inventory playerInventory;
 
-    public JoinedRealmEvent(Player player, Coordinate coordinate, Inventory playerInventory) {
+    private final String mapName;
+
+    public JoinedRealmEvent(Player player, Coordinate coordinate, Inventory playerInventory, String mapName) {
         this.player = player;
         this.coordinate = coordinate;
         this.playerInventory = playerInventory;
+        this.mapName = mapName;
     }
 
     private InventoryItemPacket toPacket(int index, Item item) {
@@ -58,6 +61,7 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
                 .setAttackKungFuName(player.attackKungFu().name())
                 .setInfo(PlayerInfo.toPacket(player))
                 .setAttribute(PlayerAttributeEvent.makeAttributePacket(player))
+                .setMapName(mapName)
                 ;
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuName(footKungFu.name()));
         player.protectKungFu().ifPresent(protectKungFu -> builder.setProtectionKungFu(protectKungFu.name()));

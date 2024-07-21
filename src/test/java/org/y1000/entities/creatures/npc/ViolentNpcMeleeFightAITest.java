@@ -8,15 +8,16 @@ import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
+import org.y1000.entities.creatures.monster.MonsterWanderingAI;
+import org.y1000.entities.players.PlayerImpl;
+import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
@@ -85,11 +86,11 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         assertEquals(Direction.RIGHT, monster.direction());
         assertEquals(State.WALK, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.WALK));
+        monster.update(monster.walkSpeedInFight());
         assertEquals(Direction.RIGHT, monster.direction());
         assertEquals(State.WALK, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.WALK));
+        monster.update(monster.walkSpeedInFight());
         assertEquals(Direction.UP_LEFT, monster.direction());
         assertEquals(State.IDLE, monster.stateEnum());
 
@@ -97,7 +98,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         assertEquals(Direction.UP_LEFT, monster.direction());
         assertEquals(State.WALK, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.WALK));
+        monster.update(monster.walkSpeedInFight());
         assertEquals(Direction.DOWN_LEFT, monster.direction());
         assertEquals(State.IDLE, monster.stateEnum());
     }
@@ -112,7 +113,6 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         monster.update(monster.getStateMillis(State.ATTACK) - 10);
         reset(enemy);
         when(enemy.canBeAttackedNow()).thenReturn(false);
-        ai.onEvent(new CreatureDieEvent(enemy));
         monster.update( 10);
         assertNotEquals(State.ATTACK, monster.stateEnum());
     }
@@ -128,5 +128,23 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         monster.changeState(NpcCommonState.die(10000));
         monster.update( 20);
         assertNotEquals(State.ATTACK, monster.stateEnum());
+    }
+
+    @Test
+    void changeEnemyIfCurrentEnemyFar() {
+        Realm realm = Mockito.mock(Realm.class);
+        when(realm.map()).thenReturn(monster.realmMap());
+        PlayerImpl player = playerBuilder().coordinate(monster.coordinate().move(1, 0)).build();
+        monster.changeAI(new MonsterWanderingAI());
+        monster.attackedBy(player);
+        monster.update(monster.getStateMillis(State.HURT));
+        assertEquals(State.ATTACK, monster.stateEnum());
+        player.joinReam(mockAllFlatRealm());
+        player.changeCoordinate(player.coordinate().move(2, 2));
+        var another = playerBuilder().coordinate(monster.coordinate().move(0, 1)).build();
+        monster.attackedBy(another);
+        assertEquals(State.HURT, monster.stateEnum());
+        monster.update(monster.getStateMillis(State.HURT));
+        assertEquals(Direction.DOWN, monster.direction());
     }
 }

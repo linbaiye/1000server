@@ -19,9 +19,12 @@ import org.y1000.message.InputResponseMessage;
 import org.y1000.message.clientevent.ClientMovementEvent;
 import org.y1000.message.clientevent.input.RightMouseClick;
 import org.y1000.realm.Realm;
+import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
 
@@ -64,6 +67,8 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
         }
     }
 
+
+
     @BeforeEach
     public void setUp() {
         setup();
@@ -101,6 +106,7 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
         PlayerShootEvent dequeue = eventListener.dequeue(PlayerShootEvent.class);
         assertNotNull(dequeue);
     }
+
 
     @Test
     void move() {

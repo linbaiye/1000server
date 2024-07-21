@@ -24,6 +24,7 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
         return get(name, "Animate");
     }
 
+
     @Override
     public int getAvoid(String name) {
         return getIntOrZero(name, "Avoid");
@@ -42,6 +43,16 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
     @Override
     public String getSoundStructed(String name) {
         return get(name, "SoundStructed");
+    }
+
+    @Override
+    public String getViewName(String name) {
+        return get(name, "ViewName");
+    }
+
+    @Override
+    public String getShape(String name) {
+        return get(name, "Shape");
     }
 
     @Override
@@ -107,12 +118,21 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
         return getOrNull(name, "HaveItem");
     }
 
+    @Override
+    public boolean attack(String name) {
+        return "TRUE".equals(get(name, "boAttack"));
+    }
+
     public static void main(String[] args) {
         MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;
 //        Set<String> names = itemSdb.names();
         Set<String> names = monstersSdb.columnNames();
         Set<String> items = monstersSdb.names();
         for (String i: items) {
+            if (!i.equals("稻草人")) {
+                continue;
+            }
+
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {

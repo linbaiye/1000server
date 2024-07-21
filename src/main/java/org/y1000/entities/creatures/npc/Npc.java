@@ -31,6 +31,12 @@ public interface Npc extends Creature {
     void start();
 
     /**
+     * An idName is used identify a npc uniquely as different NPCs can have the same idName.
+     * @return the unique idName.
+     */
+    String idName();
+
+    /**
      * Gets attacked by aoe skills.
      * @param caster the attacker.
      * @param hit attacker's hit.

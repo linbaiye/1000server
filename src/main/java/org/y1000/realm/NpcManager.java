@@ -1,6 +1,7 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.NpcJoinedEvent;
@@ -9,9 +10,10 @@ import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
-import org.y1000.sdb.MonsterSpawnSetting;
+import org.y1000.sdb.CreateNpcSdb;
+import org.y1000.sdb.CreateNpcSdbRepository;
+import org.y1000.sdb.NpcSpawnSetting;
 import org.y1000.util.Coordinate;
-import org.y1000.util.Rectangle;
 
 import java.util.*;
 
@@ -24,19 +26,26 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
 
     private final NpcFactory npcFactory;
 
-    private final Map<String, List<MonsterSpawnSetting>> npcSpawnSettings;
+    private final Map<String, List<NpcSpawnSetting>> npcSpawnSettings;
 
     private final List<RespawningNpc> respawningNpcs;
 
     private final ProjectileManager projectileManager;
 
-    private final ItemManagerImpl itemManager;
+    private final GroundItemManager itemManager;
+
+    private final CreateNpcSdbRepository createNpcSdbRepository;
 
 
     public NpcManager(EntityEventSender sender,
                       EntityIdGenerator idGenerator,
                       NpcFactory npcFactory,
-                      ItemManagerImpl itemManager) {
+                      GroundItemManager itemManager,
+                      CreateNpcSdbRepository createNpcSdbRepository) {
+        Validate.notNull(sender);
+        Validate.notNull(idGenerator);
+        Validate.notNull(itemManager);
+        Validate.notNull(createNpcSdbRepository);
         this.sender = sender;
         this.idGenerator = idGenerator;
         this.npcFactory = npcFactory;
@@ -44,8 +53,8 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
         this.npcSpawnSettings = new HashMap<>();
         respawningNpcs = new ArrayList<>();
         projectileManager = new ProjectileManager();
+        this.createNpcSdbRepository = createNpcSdbRepository;
     }
-
 
     private static class RespawningNpc {
         private final Npc npc;
@@ -66,76 +75,50 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
         }
     }
 
-    private List<MonsterSpawnSetting> getSettings(String name) {
-        if (!npcSpawnSettings.containsKey(name)) {
-            Coordinate coordinate = Coordinate.xy(178, 45);
-            var list = Collections.singletonList(new MonsterSpawnSetting(new Rectangle(coordinate.move(-4, -4), coordinate.move(4, 4)), 4));
-            npcSpawnSettings.put(name, list);
-        }
-        return npcSpawnSettings.get(name);
-    }
-
-
-    private void spawnMonsters(String name, RealmMap map, MonsterSpawnSetting setting) {
+    private void spawnMonsters(String name, RealmMap map, NpcSpawnSetting setting) {
         for (int i = 0; i < setting.number(); i++) {
-            var npc = npcFactory.createMonster(name, idGenerator.next(), map, setting.range().random());
-            add(npc);
-        }
-    }
-
-
-    private void spawnMerchant(String name, RealmMap map) {
-        var merchant = npcFactory.createMerchant(name, idGenerator.next(), map, Coordinate.xy(178, 45));
-        add(merchant);
-    }
-
-    private void spawnDaocaoren(String name, RealmMap map) {
-        add(npcFactory.createMonster("稻草人", idGenerator.next(), map, Coordinate.xy(178, 40)));
-    }
-
-
-    private void respawn(Npc npc) {
-        if (npc.name().equals("稻草人")) {
-            npc.revive(npc.spawnCoordinate());
-            add(npc);
-            return;
-        }
-        List<MonsterSpawnSetting> settings = getSettings(npc.name());
-        for (MonsterSpawnSetting setting : settings) {
-            if (setting.range().contains(npc.spawnCoordinate())) {
-                Coordinate random = setting.range().random();
-                npc.revive(random);
-                add(npc);
+            try {
+                Optional<Coordinate> random = setting.range().random(map);
+                random.ifPresentOrElse(p -> add(npcFactory.createNpc(name, idGenerator.next(), map, p)),
+                        () -> log.error("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), map.name()));
+            } catch (Exception e) {
+                log.error("Failed to create npc {}.", name, e);
             }
         }
     }
 
+    private void respawn(Npc npc) {
+        List<NpcSpawnSetting> settings = npcSpawnSettings.getOrDefault(npc.idName(), Collections.emptyList());
+        for (NpcSpawnSetting setting : settings) {
+            if (!setting.range().contains(npc.spawnCoordinate())) {
+                continue;
+            }
+            Coordinate coordinate = setting.range()
+                    .random(npc.realmMap())
+                    .orElse(npc.spawnCoordinate());
+            npc.revive(coordinate);
+            add(npc);
+            return;
+        }
+        log.error("Failed to respawn {}.", npc.id());
+    }
 
-    public void init(RealmMap realmMap) {
-        try {
-            var name = "牛";
-            List<MonsterSpawnSetting> settings = getSettings("牛");
-            settings.forEach(setting -> spawnMonsters(name, realmMap, setting));
-            spawnMerchant("老板娘", realmMap);
-            spawnDaocaoren("", realmMap);
-//            var npcs = create(name, realmMap, setting.get(0));
-//            List<AbstractMonster> npcs = List.of(
-//                    npcFactory.createMonster("犀牛", idGenerator.next(), re)),
-//                    npcFactory.createMonster("牛", idGenerator.next(), realmMap, new Coordinate(39, 31)),
-//                    npcFactory.createMonster("老虎", idGenerator.next(), realmMap, new Coordinate(39, 32)),
-//                    npcFactory.createMonster("忍者", idGenerator.next(), realmMap, new Coordinate(39, 33)),
-//                    npcFactory.createMonster("赤风", idGenerator.next(), realmMap, new Coordinate(39, 35)),
-//                    npcFactory.createMonster("太极公子", idGenerator.next(), realmMap, new Coordinate(39, 36)),
-//                    npcFactory.createMonster("投石女", idGenerator.next(), realmMap, new Coordinate(39, 37))
-//                    npcFactory.createMonster("牛", idGenerator.next(), realmMap, new Coordinate(39, 31))
-//                    npcFactory.createMonster("鹿", entityManager.generateEntityId(), map(), new Coordinate(39, 32))
-//            );
-//            npcs.forEach(this::add);
-        } catch (Exception e) {
-            log.error("Exception ", e);
+    private void spawn(CreateNpcSdb createNpcSdb, RealmMap realmMap) {
+        List<NpcSpawnSetting> allSettings = createNpcSdb.getAllSettings();
+        for (NpcSpawnSetting setting : allSettings) {
+            npcSpawnSettings.put(setting.idName(), createNpcSdb.getSettings(setting.idName()));
+            spawnMonsters(setting.idName(), realmMap, setting);
         }
     }
 
+    public void init(RealmMap realmMap, int realmId) {
+        if (createNpcSdbRepository.monsterSdbExists(realmId)) {
+            spawn(createNpcSdbRepository.loadMonster(realmId), realmMap);
+        }
+        if (createNpcSdbRepository.npcSdbExists(realmId)) {
+            spawn(createNpcSdbRepository.loadNpc(realmId), realmMap);
+        }
+    }
 
     @Override
     protected Logger log() {
@@ -148,7 +131,6 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
             RespawningNpc respawningNpc = iterator.next();
             if (respawningNpc.update(delta).canRespawn()) {
                 iterator.remove();
-                log.debug("Need to respawn.");
                 respawn(respawningNpc.npc);
             }
         }
@@ -165,7 +147,6 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     protected void onAdded(Npc entity) {
         sender.add(entity);
         sender.notifyVisiblePlayers(entity, new NpcJoinedEvent(entity));
-        log.debug("Added creature {}.", entity.id());
         entity.registerEventListener(this);
         entity.registerEventListener(itemManager);
         entity.start();

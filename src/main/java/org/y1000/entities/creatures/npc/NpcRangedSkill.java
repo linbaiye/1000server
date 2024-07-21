@@ -2,18 +2,18 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.Getter;
 
-public class NpcRangedSkill {
+public final class NpcRangedSkill {
     @Getter
     private final int projectileSpriteId;
 
     @Getter
     private final String swingSound;
 
-    private static final int COOLDOWN = 3000;
+    public static final int COOLDOWN = 3000;
 
     private int cooldown;
 
-    private int counter;
+    private int projectile;
 
     public NpcRangedSkill(int projectileSpriteId,
                           String swingSound) {
@@ -24,15 +24,15 @@ public class NpcRangedSkill {
     }
 
     private void resetCounter() {
-        counter = 5;
+        projectile = 5;
     }
 
     public boolean isAvailable() {
-        return counter > 0;
+        return projectile > 0;
     }
 
     public void cooldown(int delta) {
-        if (counter > 0) {
+        if (projectile > 0) {
             return;
         }
         cooldown -= delta;
@@ -40,9 +40,17 @@ public class NpcRangedSkill {
             resetCounter();
         }
     }
+    
+    public boolean isInRange(int dist) {
+        return dist >= 3 && dist <= 5;
+    }
+    
+    public boolean isLtLower(int dis) {
+        return dis < 3;
+    }
 
-    public void consumeCounter() {
-        if (--counter <= 0) {
+    public void consumeProjectile() {
+        if (--projectile <= 0) {
             cooldown = COOLDOWN;
         }
     }

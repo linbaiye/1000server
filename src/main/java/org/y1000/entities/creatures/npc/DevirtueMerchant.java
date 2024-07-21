@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.Builder;
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.NpcType;
@@ -20,23 +21,28 @@ import java.util.function.Function;
 
 public final class DevirtueMerchant extends AbstractNpc implements Merchant {
 
-    private final DevirtueMerchantAI ai;
+    private final SubmissiveWanderingAI ai;
 
     private final List<MerchantItem> buyItems;
     private final List<MerchantItem> sellItems;
-
+    private final String textFileName;
 
     @Builder
     public DevirtueMerchant(long id, Coordinate coordinate, Direction direction,
                             String name,
                             Map<State, Integer> stateMillis,
-                            DevirtueMerchantAI ai,
+                            SubmissiveWanderingAI ai,
                             AttributeProvider attributeProvider,
                             RealmMap realmMap,
                             List<MerchantItem> buy,
-                            List<MerchantItem> sell) {
+                            List<MerchantItem> sell,
+                            String textFileName) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap);
-        Objects.requireNonNull(ai);
+        Validate.notNull(sell);
+        Validate.notNull(buy);
+        Validate.notNull(textFileName);
+        Validate.notNull(ai);
+        this.textFileName = textFileName;
         this.ai = ai;
         this.buyItems = buy;
         this.sellItems = sell;
@@ -51,7 +57,8 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
 
     @Override
     public AbstractCreatureInterpolation captureInterpolation() {
-        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name(), NpcType.MERCHANT);
+        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name(),
+                NpcType.MERCHANT, attributeProvider().animate(), attributeProvider().shape(), textFileName);
     }
 
     @Override
@@ -86,14 +93,6 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
             return false;
         }
         return obj == this || ((DevirtueMerchant) obj).id() == id();
-    }
-
-    private List<MerchantItem> buyItems() {
-        return buyItems;
-    }
-
-    private List<MerchantItem> sellItems() {
-        return sellItems;
     }
 
     private boolean containsAll(Collection<TradeItem> items, List<MerchantItem> merchantItems) {

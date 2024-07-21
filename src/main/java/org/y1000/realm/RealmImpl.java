@@ -9,6 +9,7 @@ import org.y1000.realm.event.PlayerConnectedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
 import org.y1000.realm.event.RealmEvent;
+import org.y1000.sdb.CreateNpcSdbRepository;
 import org.y1000.sdb.MonstersSdb;
 
 import java.util.*;
@@ -33,17 +34,21 @@ final class RealmImpl implements Runnable, Realm {
 
     private final PlayerManager playerManager;
 
+    private final int id;
+
     public RealmImpl(RealmMap map,
                      ItemRepository itemRepository,
                      ItemFactory itemFactory,
                      NpcFactory npcFactory,
                      ItemSdb itemSdb,
-                     MonstersSdb monstersSdb) {
+                     MonstersSdb monstersSdb, int id,
+                     CreateNpcSdbRepository createNpcSdbRepository) {
         realmMap = map;
+        this.id = id;
         var entityIdGenerator = new EntityIdGenerator();
         eventSender = new RealmEntityEventSender();
         itemManager = new ItemManagerImpl(eventSender, itemSdb, monstersSdb, entityIdGenerator, itemFactory);
-        npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager);
+        npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager, createNpcSdbRepository);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
         this.playerManager = new PlayerManager(eventSender, itemManager, itemFactory);
@@ -53,6 +58,10 @@ final class RealmImpl implements Runnable, Realm {
         return realmMap;
     }
 
+    @Override
+    public int id() {
+        return 0;
+    }
 
 
     private void onRealmEvent(RealmEvent event) {
@@ -104,8 +113,12 @@ final class RealmImpl implements Runnable, Realm {
 
     @Override
     public void run() {
-        npcManager.init(this.map());
-        startRealm();
+        try {
+            npcManager.init(this.map(), id);
+            startRealm();
+        } catch (Exception e) {
+            log.error("Failed to start realm {}.", id, e);
+        }
     }
 
     @Override

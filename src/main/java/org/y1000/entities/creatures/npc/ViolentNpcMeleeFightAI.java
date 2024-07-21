@@ -1,50 +1,29 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.Validate;
 import org.y1000.entities.AttackableEntity;
-import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AiPathUtil;
 import org.y1000.entities.creatures.State;
-import org.y1000.event.EntityEvent;
-import org.y1000.event.EntityEventListener;
-import org.y1000.message.SetPositionEvent;
-import org.y1000.util.Coordinate;
 
 @Slf4j
-public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener {
-    private final AttackableEntity enemy;
-
-    private final ViolentNpc npc;
-
-    private Coordinate previous;
+public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
 
     public ViolentNpcMeleeFightAI(AttackableEntity enemy,
                                   ViolentNpc npc) {
-        Validate.notNull(enemy);
-        Validate.notNull(npc);
-        this.enemy = enemy;
-        this.npc = npc;
-        enemy.registerEventListener(this);
-        this.previous = Coordinate.Empty;
-        log.debug("{} now fighting entity {}.", npc.id(), enemy.id());
+        super(enemy, npc);
     }
 
-
-    private void meleeAttackProcess() {
-        if (!npc.canChaseOrAttack(enemy)) {
-            npc.changeAI(new ViolentNpcWanderingAI());
+    protected void fightProcess() {
+        var enemy = getEnemy();
+        if (npc.skill().isPresent() && npc.skill().get().isAvailable()) {
+            npc.changeAI(new ViolentNpcRangedFightAI(enemy, npc));
             return;
         }
         if (npc.coordinate().directDistance(enemy.coordinate()) > 1) {
-            AiPathUtil.moveProcess(npc, enemy.coordinate(), previous, () -> npc.startAction(State.IDLE), npc.getStateMillis(State.WALK));
+            AiPathUtil.moveProcess(npc, enemy.coordinate(), getPrevious(), () -> npc.startAction(State.IDLE), npc.walkSpeedInFight());
             return;
         }
-        Direction towards = npc.coordinate().computeDirection(enemy.coordinate());
-        if (towards != npc.direction()) {
-            npc.changeDirection(towards);
-            npc.emitEvent(SetPositionEvent.of(npc));
-        }
+        turnIfNotFaced();
         if (npc.cooldown() > 0) {
             npc.startAction(State.COOLDOWN);
         } else {
@@ -53,33 +32,9 @@ public final class ViolentNpcMeleeFightAI implements NpcAI, EntityEventListener 
         }
     }
 
-
     @Override
-    public void onActionDone(Npc npc) {
-        if (npc.stateEnum() == State.WALK) {
-            previous = npc.coordinate().moveBy(npc.direction().opposite());
-        }
-        meleeAttackProcess();
+    protected boolean shouldChangeEnemy(AttackableEntity newEnemy) {
+        return getEnemy().coordinate().directDistance(npc.coordinate()) > 1;
     }
 
-    @Override
-    public void onMoveFailed(Npc npc) {
-        meleeAttackProcess();
-    }
-
-    @Override
-    public void start(Npc npc) {
-        meleeAttackProcess();
-    }
-
-    @Override
-    public void onEvent(EntityEvent entityEvent) {
-        if (npc.stateEnum() == State.DIE || !entityEvent.source().equals(enemy)) {
-            return;
-        }
-        if (!npc.canChaseOrAttack(entityEvent.source())) {
-            log.debug("Entity {} not attackable.", entityEvent.source().id());
-            npc.changeAI(new ViolentNpcWanderingAI());
-        }
-    }
 }

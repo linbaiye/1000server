@@ -12,4 +12,5 @@ public interface Realm {
     default String name() {
         return map().name();
     }
+    int id();
 }

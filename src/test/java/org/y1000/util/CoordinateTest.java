@@ -34,11 +34,6 @@ class CoordinateTest {
         assertEquals(new Coordinate(-1, -1), origin.moveBy(Direction.UP_LEFT));
     }
 
-    @org.junit.jupiter.api.Test
-    void add() {
-        assertEquals(new Coordinate(2, 2), new Coordinate(1, 1).add(new Coordinate(1, 1)));
-    }
-
     @Test
     void name() {
         System.out.println(50%900);

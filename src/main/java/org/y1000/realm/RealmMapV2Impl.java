@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.Server;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Entity;
+import org.y1000.entities.creatures.Creature;
 import org.y1000.util.Coordinate;
 
 import java.io.*;
@@ -77,11 +78,10 @@ final class RealmMapV2Impl implements RealmMap {
         free(entity);
         occupyingCreatures.put(entity.coordinate(), entity);
         creatureCoordinateMap.put(entity, entity.coordinate());
-        //log.debug("{} occupied {}.", creature.id(), creature.coordinate());
     }
 
-    public void free(Entity creature) {
-        var c = creatureCoordinateMap.remove(creature);
+    public void free(Entity entity) {
+        var c = creatureCoordinateMap.remove(entity);
         if (c != null) {
             occupyingCreatures.remove(c);
         }

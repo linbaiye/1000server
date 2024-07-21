@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class DevirtueMerchantTest extends AbstractNpcUnitTestFixture {
-    private DevirtueMerchantAI ai;
+    private SubmissiveWanderingAI ai;
 
     private DevirtueMerchant merchant;
 
@@ -45,7 +45,7 @@ class DevirtueMerchantTest extends AbstractNpcUnitTestFixture {
     void setUp() {
         testingMonsterAttributeProvider = new TestingMonsterAttributeProvider();
         testingMonsterAttributeProvider.life = 10000;
-        ai = new DevirtueMerchantAI(Coordinate.xy(1, 1), Coordinate.Empty);
+        ai = new SubmissiveWanderingAI(Coordinate.xy(1, 1), Coordinate.Empty);
         map = Mockito.mock(RealmMap.class);
         eventListener = new TestingEventListener();
         buyItems = new ArrayList<>();
@@ -60,6 +60,7 @@ class DevirtueMerchantTest extends AbstractNpcUnitTestFixture {
                 .direction(Direction.DOWN)
                 .stateMillis(MONSTER_STATE_MILLIS)
                 .coordinate(Coordinate.xy(3, 3))
+                .textFileName("items.txt")
                 .buy(buyItems)
                 .sell(sellItems)
                 .build();

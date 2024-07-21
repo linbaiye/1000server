@@ -55,8 +55,12 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("圣灵21剑", 1));
         inventory.add(itemFactory.createItem("闪光剑破解", 1));
         inventory.add(itemFactory.createItem("太极剑结", 1));
-        inventory.add(itemFactory.createItem("金钟罩", 2));
-        inventory.add(itemFactory.createItem("易筋经", 2));
+        inventory.add(itemFactory.createItem("黑沙刚体", 1));
+        inventory.add(itemFactory.createItem("银狼破皇剑"));
+        inventory.add(itemFactory.createItem("女子黄龙弓服"));
+        inventory.add(itemFactory.createItem("女子黄龙鞋"));
+        inventory.add(itemFactory.createItem("女子黄龙手套"));
+        inventory.add(itemFactory.createItem("女子斗笠"));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("血皇斧"));*/
@@ -93,7 +97,9 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         return PlayerImpl.builder()
                 .id(slot + playerIdStart)
                 .name("雨诗妾")
-                .coordinate(new Coordinate(175+ slot, 40))
+                //.coordinate(new Coordinate(175+ slot, 40))
+                .coordinate(new Coordinate(63, 117))
+                //.coordinate(new Coordinate(104, 60))
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(weapon.kungFuType()))

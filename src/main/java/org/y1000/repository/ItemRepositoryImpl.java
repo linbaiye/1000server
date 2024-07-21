@@ -39,8 +39,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
             case CLOTHING -> createClothing(name);
             case BOOT -> createBoot(name);
             case HAIR -> createHair(name);
-            case WRIST -> createWrist(name);
-            default -> throw new NotImplementedException();
+            case WRIST, WRIST_CHESTED -> createWrist(name);
         };
     }
 

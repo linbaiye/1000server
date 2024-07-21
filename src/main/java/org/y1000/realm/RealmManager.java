@@ -13,6 +13,9 @@ import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.event.ConnectionEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
+import org.y1000.sdb.CreateNpcSdbRepository;
+import org.y1000.sdb.MapSdb;
+import org.y1000.sdb.MapSdbImpl;
 import org.y1000.sdb.MonstersSdb;
 
 import java.util.*;
@@ -21,7 +24,7 @@ import java.util.concurrent.*;
 
 @Slf4j
 public final class RealmManager implements Runnable {
-    private final Map<String, RealmImpl> realms;
+    private final Map<Integer, RealmImpl> realms;
 
     private final Map<Player, RealmImpl> playerRealmMap;
 
@@ -31,9 +34,10 @@ public final class RealmManager implements Runnable {
 
     private final Queue<ConnectionEvent> eventQueue;
 
+
     private volatile boolean shutdown;
 
-    private RealmManager(Map<String, RealmImpl> realms) {
+    private RealmManager(Map<Integer, RealmImpl> realms) {
         this.realms = realms;
         executorService = Executors.newFixedThreadPool(realms.size());
         playerRealmMap = new HashMap<>();
@@ -46,8 +50,9 @@ public final class RealmManager implements Runnable {
         realms.values().forEach(executorService::submit);
     }
 
-    private String getPlayerLastRealm(Player player) {
-        return "start";
+    private int getPlayerLastRealm(Player player) {
+        return 19;
+        //return 49;
     }
 
     private void handleNewConnection(ConnectionEstablishedEvent event) {
@@ -55,7 +60,7 @@ public final class RealmManager implements Runnable {
             // need to close current connection.
             return;
         }
-        String playerLastRealm = getPlayerLastRealm(event.player());
+        var playerLastRealm = getPlayerLastRealm(event.player());
         RealmImpl realm = realms.get(playerLastRealm);
         if (realm == null) {
             log.error("Realm {} does not exist.", playerLastRealm);
@@ -109,16 +114,29 @@ public final class RealmManager implements Runnable {
         }
     }
 
+
+    private static List<Integer> getRealmIds() {
+        return List.of(19);
+        //return List.of(19, 49);
+    }
+
+
     public static RealmManager create(ItemFactory itemFactory,
                                       ItemRepository itemRepository,
                                       NpcFactory npcFactory,
                                       ItemSdb itemSdb,
-                                      MonstersSdb monstersSdb) {
-        Map<String, RealmImpl> realmMap = new HashMap<>();
-        RealmImpl realm = RealmMap.Load("start")
-                .map(m -> new RealmImpl(m, itemRepository, itemFactory, npcFactory, itemSdb, monstersSdb))
-                .orElseThrow(() -> new IllegalArgumentException("Map not found."));
-        realmMap.put(realm.map().name(), realm);
+                                      MonstersSdb monstersSdb,
+                                      MapSdb mapSdb,
+                                      CreateNpcSdbRepository createNpcSdbRepository) {
+        Map<Integer, RealmImpl> realmMap = new HashMap<>();
+        List<Integer> realmIds = getRealmIds();
+        for (Integer id : realmIds) {
+            String mapName = mapSdb.getMapName(id);
+            RealmImpl realm = RealmMap.Load(mapName)
+                    .map(m -> new RealmImpl(m, itemRepository, itemFactory, npcFactory, itemSdb, monstersSdb, id, createNpcSdbRepository))
+                    .orElseThrow(() -> new IllegalArgumentException("Map not found."));
+            realmMap.put(id, realm);
+        }
         return new RealmManager(realmMap);
     }
 

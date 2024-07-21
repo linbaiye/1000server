@@ -33,7 +33,7 @@ public abstract class AbstractCreature<C extends Creature, S extends CreatureSta
         super(id);
         Objects.requireNonNull(coordinate, "coordinate can't be null.");
         Objects.requireNonNull(direction, "direction can't be null.");
-        Objects.requireNonNull(name, "name can't be null.");
+        Objects.requireNonNull(name, "idName can't be null.");
         Objects.requireNonNull(stateMillis, "stateMillis can't be null.");
         this.coordinate = coordinate;
         this.direction = direction;
@@ -47,6 +47,7 @@ public abstract class AbstractCreature<C extends Creature, S extends CreatureSta
 
     public void changeCoordinate(Coordinate newCoor) {
         coordinate = newCoor;
+        realmMap().occupy(this);
     }
 
     public int getStateMillis(State state) {

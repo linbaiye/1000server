@@ -15,6 +15,7 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.Map;
+import java.util.Optional;
 
 public abstract class AbstractMonster extends AbstractViolentNpc implements Monster {
 
@@ -29,7 +30,8 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
 
     @Override
     public AbstractCreatureInterpolation captureInterpolation() {
-        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name(), NpcType.MONSTER);
+        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name(), NpcType.MONSTER,
+                attributeProvider().animate(), attributeProvider().shape());
     }
 
     @Override
@@ -41,6 +43,15 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
         }
     }
 
+    @Override
+    public Optional<String> normalSound() {
+        return attributeProvider().normalSound();
+    }
+
+    @Override
+    public void update(int delta) {
+        doUpdate(delta);
+    }
 
     @Override
     public void revive(Coordinate coordinate) {

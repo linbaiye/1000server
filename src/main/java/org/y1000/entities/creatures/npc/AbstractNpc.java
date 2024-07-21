@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
@@ -48,15 +49,12 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     }
 
 
-
-
     protected void doRevive(Coordinate coordinate) {
         int range = attributeProvider.wanderingRange();
         spwanCoordinate = coordinate;
         wanderingArea = new Rectangle(coordinate.move(-range, -range), coordinate.move(range, range));
         currentLife = attributeProvider.life();
-        realmMap.occupy(this);
-        changeCoordinate(spwanCoordinate);
+        changeCoordinate(coordinate);
         this.changeState(NpcCommonState.idle(getStateMillis(State.IDLE)));
     }
 
@@ -147,6 +145,10 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         }
     }
 
+    @Override
+    public String idName() {
+        return attributeProvider().idName();
+    }
 
     protected boolean doAttacked(Damage damage, int attackerHit,
                                  UnaryAction<Integer> gainAttackExp,
@@ -201,9 +203,6 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
                 Optional.of(attributeProvider.hurtSound());
     }
 
-    public Optional<String> normalSound() {
-        return attributeProvider.normalSound();
-    }
 
     @Override
     public Optional<String> dieSound() {

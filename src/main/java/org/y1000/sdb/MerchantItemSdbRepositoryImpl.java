@@ -7,7 +7,11 @@ import org.y1000.item.ItemSdb;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Stream;
 
 public final class MerchantItemSdbRepositoryImpl implements MerchantItemSdbRepository {
 
@@ -19,8 +23,8 @@ public final class MerchantItemSdbRepositoryImpl implements MerchantItemSdbRepos
 
     @Override
     public MerchantItemSdb load(String name) {
-        Validate.notNull(name, "file name can't be null.");
-        try (var inputstream = getClass().getResourceAsStream("/sdb/npc/" + name)) {
+        Validate.notNull(name, "file idName can't be null.");
+        try (var inputstream = getClass().getResourceAsStream("/sdb/NpcSetting/" + name)) {
             if (inputstream == null) {
                 throw new NoSuchElementException("Sdb does not exist, " + name);
             }
@@ -41,4 +45,6 @@ public final class MerchantItemSdbRepositoryImpl implements MerchantItemSdbRepos
             throw new RuntimeException(e);
         }
     }
+
+
 }

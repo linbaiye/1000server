@@ -27,7 +27,17 @@ public interface AttributeProvider {
         return Optional.empty();
     }
 
+    default String animate() {
+        return null;
+    }
 
+    default String shape() {
+        return null;
+    }
+
+    default String idName() {
+        return null;
+    }
 
     default Optional<String> dieSound() {
         return Optional.empty();

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.npc.NpcAI;
 import org.y1000.entities.creatures.npc.NpcRangedSkill;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -18,30 +19,14 @@ public final class AggressiveMonster extends AbstractMonster {
     public AggressiveMonster(long id, Coordinate coordinate, Direction direction,
                              String name, Map<State, Integer> stateMillis,
                              AttributeProvider attributeProvider,
-                             RealmMap realmMap, NpcRangedSkill skill) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap,
-                new MonsterWanderingAI(), skill);
+                             RealmMap realmMap, NpcRangedSkill skill, NpcAI ai) {
+        super(id, coordinate, direction, name, stateMillis, attributeProvider,
+                realmMap, ai, skill);
     }
-//    @Builder
-//    public AggressiveMonster(long id, Coordinate coordinate, Direction direction, String name,
-//                          RealmMap realmMap, Map<State, Integer> stateMillis,
-//                          AttributeProvider attributeProvider, MonsterAttackSkill spell) {
-//        super(id, coordinate, direction, name, realmMap, stateMillis, attributeProvider, spell);
-//    }
-//
-//    public void onCreatureAppear(Creature creature) {
-//        if (getFightingEntity() == null) {
-//            setFightingEntity(creature);
-//        }
-//    }
-
     @Override
     protected Logger log() {
         return log;
     }
 
-    @Override
-    public void update(int delta) {
 
-    }
 }

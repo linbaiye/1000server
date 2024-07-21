@@ -34,4 +34,17 @@ public interface NpcSdb {
     int getWalkSpeed(String name);
 
     String getHaveItem(String name);
+
+    boolean contains(String name);
+
+    boolean isProtector(String name);
+
+    String getNpcText(String name);
+
+    boolean isSeller(String name);
+
+    String getViewName(String name);
+
+    String getShape(String name);
 }
+

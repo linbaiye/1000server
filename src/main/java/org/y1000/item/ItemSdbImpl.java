@@ -280,13 +280,15 @@ MaxCount,        最多持有数量；
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
         for (String i: items) {
+            if (!i.contains("弓"))
+                continue;
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {
                 if (!StringUtils.isEmpty(itemSdb.get(i, name)))
                     System.out.println(name + ": " + itemSdb.get(i, name));
             }
-            //String v = itemSdb.get("生药", name);
+            //String v = itemSdb.get("生药", idName);
         }
     }
 }

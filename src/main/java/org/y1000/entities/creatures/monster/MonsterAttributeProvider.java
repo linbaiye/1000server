@@ -67,6 +67,13 @@ public final class MonsterAttributeProvider implements AttributeProvider {
     }
 
     @Override
+    public String idName() {
+        return name;
+    }
+
+
+
+    @Override
     public int walkSpeed() {
         return monsterSdb.getWalkSpeed(name) * 10;
     }
@@ -81,6 +88,15 @@ public final class MonsterAttributeProvider implements AttributeProvider {
         return getSound(s);
     }
 
+    @Override
+    public String animate() {
+        return monsterSdb.getAnimate(name);
+    }
+
+    @Override
+    public String shape() {
+        return monsterSdb.getShape(name);
+    }
 
 
     @Override

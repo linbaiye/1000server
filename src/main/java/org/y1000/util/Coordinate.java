@@ -3,6 +3,7 @@ package org.y1000.util;
 import org.y1000.entities.Direction;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public record Coordinate(int x, int y) {
@@ -13,7 +14,7 @@ public record Coordinate(int x, int y) {
         return add(direction.offset());
     }
 
-    public Coordinate add(Coordinate coordinate) {
+    private Coordinate add(Coordinate coordinate) {
         return new Coordinate(x + coordinate.x, y + coordinate.y);
     }
 
@@ -57,6 +58,18 @@ public record Coordinate(int x, int y) {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coordinate that = (Coordinate) o;
+        return x == that.x && y == that.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
 
     public Coordinate move(int x, int y) {
         return new Coordinate(x() + x, y() + y);

@@ -12,9 +12,9 @@ public interface AttackableEntity extends Entity {
      */
     boolean canBeAttackedNow();
 
-    void attackedBy(ViolentCreature attacker);
-
     boolean attackedBy(Player attacker);
+
+    void attackedBy(ViolentCreature attacker);
 
     void attackedBy(Projectile projectile);
 

@@ -531,7 +531,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         realmMap().occupy(this);
         this.changeState(PlayerStillState.idle(this));
         changeDirection(Direction.DOWN);
-        emitEvent(new JoinedRealmEvent(this, coordinate(), inventory));
+        emitEvent(new JoinedRealmEvent(this, coordinate(), inventory, realm.map().name()));
     }
 
 

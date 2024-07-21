@@ -69,12 +69,10 @@ public abstract class AbstractViolentNpc
 
     @Override
     public void onActionDone() {
+        if (stateEnum() == State.DIE) {
+            changeAI(NpcFrozenAI.INSTANCE);
+        }
         handleActionDone(() -> ai.onActionDone(this));
-    }
-
-    @Override
-    public int runSpeed() {
-        return attributeProvider().walkSpeed() / 2;
     }
 
     @Override
@@ -136,6 +134,12 @@ public abstract class AbstractViolentNpc
         } else {
             super.startAction(state);
         }
+    }
+
+    protected void doUpdate(int delta) {
+        cooldown(delta);
+        state().update(this, delta);
+        skill().ifPresent(s -> s.cooldown(delta));
     }
 
     @Override

@@ -32,7 +32,10 @@ import org.y1000.message.clientevent.*;
 import org.y1000.message.clientevent.input.RightMouseClick;
 import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
+import org.y1000.network.gen.AttributePacket;
 import org.y1000.network.gen.ItemAttributePacket;
+import org.y1000.network.gen.Packet;
+import org.y1000.network.gen.PlayerRightClickAttributePacket;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.repository.ItemRepositoryImpl;
@@ -574,12 +577,20 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         enableTestingKungFu();
         player.registerEventListener(eventListener);
         var attacker = Mockito.mock(Player.class);
-        Damage dmg = new Damage(300, 100, 99, 98);
+        Damage dmg = new Damage(300, 300, 300, 300);
         when(attacker.damage()).thenReturn(dmg);
         var am = player.attackKungFu().armor();
+        eventListener.clearEvents();
         player.attackedBy(attacker);
         assertEquals(player.maxLife() - (dmg.bodyDamage()  - am.body()), player.currentLife());
+        assertNotEquals(100, player.legPercent());
+        assertNotEquals(100, player.headPercent());
+        assertNotEquals(100, player.armPercent());
         verify(attacker, times(1)).gainAttackExp(anyInt());
+        AttributePacket attribute = eventListener.removeFirst(PlayerAttributeEvent.class).toPacket().getAttribute();
+        assertEquals(player.armPercent(), attribute.getArmPercent());
+        assertEquals(player.legPercent(), attribute.getLegPercent());
+        assertEquals(player.headPercent(), attribute.getHeadPercent());
     }
 
 
@@ -717,5 +728,31 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertTrue(player.footKungFu().isPresent());
         clickBasicFootKungFu();
         assertTrue(player.footKungFu().isPresent());
+    }
+
+    @Test
+    void rightClickAttribute() {
+        player.handleClientEvent(new ClientRightClickEvent(RightClickType.CHARACTER, 0, 0));
+        player.consumePower(20);
+        player.consumeOuterPower(20);
+        player.consumeInnerPower(20);
+        player.consumeLife(20);
+        PlayerRightClickAttributeEvent event = eventListener.removeFirst(PlayerRightClickAttributeEvent.class);
+        PlayerRightClickAttributePacket attr = event.toPacket().getRightClickAttribute();
+        assertEquals(player.maxInnerPower(), attr.getMaxInnerPower());
+        assertEquals(player.maxOuterPower(), attr.getMaxOuterPower());
+        assertEquals(player.maxPower(), attr.getMaxPower());
+        assertEquals(player.maxLife(), attr.getMaxLife());
+        assertEquals(player.attackSpeed(), attr.getAttackSpeed());
+        assertEquals(player.recovery(), attr.getRecovery());
+        assertEquals(player.avoidance(), attr.getAvoidance());
+        assertEquals(player.damage().bodyDamage(), attr.getBodyDamage());
+        assertEquals(player.damage().headDamage(), attr.getHeadDamage());
+        assertEquals(player.damage().legDamage(), attr.getLegDamage());
+        assertEquals(player.damage().armDamage(), attr.getArmDamage());
+        assertEquals(player.armor().body(), attr.getBodyArmor());
+        assertEquals(player.armor().head(), attr.getHeadArmor());
+        assertEquals(player.armor().arm(), attr.getArmArmor());
+        assertEquals(player.armor().leg(), attr.getLegArmor());
     }
 }

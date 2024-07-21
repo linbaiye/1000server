@@ -177,7 +177,7 @@ public final class KungFuSdb extends AbstractSdbReader {
                 if (!StringUtils.isEmpty(kungFuSdb.get(i, name)))
                     System.out.println(name + ": " + kungFuSdb.get(i, name));
             }
-            //String v = kungFuSdb.get("生药", name);
+            //String v = kungFuSdb.get("生药", idName);
         }
     }
 

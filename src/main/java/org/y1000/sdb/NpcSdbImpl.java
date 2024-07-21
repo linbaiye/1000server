@@ -1,5 +1,9 @@
 package org.y1000.sdb;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Set;
+
 public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
     public static final NpcSdbImpl Instance = new NpcSdbImpl();
     private NpcSdbImpl() {
@@ -10,7 +14,6 @@ public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
     public int getRecovery(String name) {
         return getInt(name, "Recovery");
     }
-
 
     @Override
     public String getAnimate(String name) {
@@ -93,6 +96,50 @@ public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
     @Override
     public String getHaveItem(String name) {
         return getOrNull(name, "HaveItem");
+    }
 
+    @Override
+    public boolean isProtector(String name) {
+        var str = get(name, "boProtecter");
+        return "TRUE".equals(str);
+    }
+
+    @Override
+    public String getNpcText(String name) {
+        return get(name, "NpcText");
+    }
+
+    @Override
+    public boolean isSeller(String name) {
+        return "TRUE".equals(get(name, "boSeller"));
+    }
+
+    @Override
+    public String getViewName(String name) {
+        return get(name, "ViewName");
+    }
+
+    @Override
+    public String getShape(String name) {
+        return get(name, "shape");
+    }
+
+    public static void main(String[] args) {
+        NpcSdbImpl monstersSdb= NpcSdbImpl.Instance;
+//        Set<String> names = itemSdb.names();
+        Set<String> names = monstersSdb.columnNames();
+        Set<String> items = monstersSdb.names();
+        for (String i: items) {
+            if (!i.equals("一级稻草人")) {
+                continue;
+            }
+
+            System.out.println("----------------------------");
+            System.out.println(i);
+            for (String name : names) {
+                if (!StringUtils.isEmpty(monstersSdb.get(i, name)))
+                    System.out.println(name + ": " + monstersSdb.get(i, name));
+            }
+        }
     }
 }

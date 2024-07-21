@@ -37,6 +37,7 @@ public abstract class AbstractUnitTestFixture {
         return mock;
     }
 
+
     protected static final Map<State, Integer> MONSTER_STATE_MILLIS = new HashMap<>() {
         {
             put(State.IDLE, 1000);
@@ -65,7 +66,7 @@ public abstract class AbstractUnitTestFixture {
     protected PlayerImpl.PlayerImplBuilder playerBuilder() {
         KungFuBook kungFuBook = kungFuBookFactory.create();
         return PlayerImpl.builder()
-                .id(1L)
+                .id(nextId())
                 .coordinate(new Coordinate(1, 1))
                 .name("test")
                 .kungFuBook(kungFuBook)

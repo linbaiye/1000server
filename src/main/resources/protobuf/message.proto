@@ -271,6 +271,7 @@ message LoginPacket {
   optional string assistantKungFu = 14;
   optional string breathKungFu = 15;
   AttributePacket attribute = 17;
+  string mapName = 18;
 }
 
 message AttributePacket {
@@ -399,6 +400,9 @@ message CreatureInterpolationPacket {
   int64 id = 2;
   string name = 3;
   int32 type = 4;
+  optional string merchantFile = 5;
+  string shape = 6;
+  string animate = 7;
 }
 
 

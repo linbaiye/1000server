@@ -13,6 +13,10 @@ public interface MonstersSdb {
 
     String getSoundStructed(String name);
 
+    String getViewName(String name);
+
+    String getShape(String name);
+
     String getSoundStart(String name);
 
     String getSoundNormal(String name);
@@ -36,4 +40,8 @@ public interface MonstersSdb {
     boolean isPassive(String name);
 
     String getHaveItem(String name);
+
+    boolean contains(String name);
+
+    boolean attack(String name);
 }

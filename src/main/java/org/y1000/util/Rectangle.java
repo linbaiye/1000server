@@ -1,8 +1,9 @@
 package org.y1000.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.realm.RealmMap;
 
-import java.util.Collections;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
@@ -26,7 +27,18 @@ public record Rectangle(Coordinate start, Coordinate end) {
         return new Coordinate(x, y);
     }
 
-    public Coordinate random() {
+
+    public Optional<Coordinate> random(RealmMap map) {
+        for (int i = 0; i < 5; i++) {
+            Coordinate random = random();
+            if (map.movable(random)) {
+                return Optional.of(random);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Coordinate random() {
         var x = ThreadLocalRandom.current().nextInt(start().x(), end.x());
         var y = ThreadLocalRandom.current().nextInt(start().y(), end.y());
         return new Coordinate(x, y);

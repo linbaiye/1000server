@@ -1,5 +1,6 @@
 package org.y1000.sdb;
 
+import org.apache.commons.lang3.ClassPathUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
@@ -14,6 +15,8 @@ public abstract class AbstractSdbReader {
     private final Map<String, String[]> values;
 
     private final Map<String, Integer> headerIndex;
+
+    public static final String SDB_PATH = "/sdb";
 
     protected AbstractSdbReader() {
         values = new HashMap<>();
@@ -73,6 +76,8 @@ public abstract class AbstractSdbReader {
     public Set<String> columnNames() {
         return headerIndex.keySet();
     }
+
+
 
     protected void read(String name, String charset) {
         try (var inputstream = getClass().getResourceAsStream("/sdb/" + name)) {

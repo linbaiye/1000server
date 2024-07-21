@@ -57,6 +57,16 @@ public class TestingMonsterAttributeProvider implements AttributeProvider {
     }
 
     @Override
+    public String shape() {
+        return "shape";
+    }
+
+    @Override
+    public String animate() {
+        return "animate";
+    }
+
+    @Override
     public String hurtSound() {
         return "hurtSound";
     }

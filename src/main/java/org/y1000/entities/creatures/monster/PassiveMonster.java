@@ -27,7 +27,6 @@ public final class PassiveMonster extends AbstractMonster {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai, skill);
     }
 
-
     @Override
     public int hashCode() {
         return Objects.hashCode(id());
@@ -46,10 +45,4 @@ public final class PassiveMonster extends AbstractMonster {
         return log;
     }
 
-    @Override
-    public void update(int delta) {
-        cooldown(delta);
-        state().update(this, delta);
-        skill().ifPresent(s -> s.cooldown(delta));
-    }
 }
