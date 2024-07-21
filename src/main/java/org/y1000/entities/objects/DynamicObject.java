@@ -46,6 +46,15 @@ public final class DynamicObject extends AbstractEntity implements AttackableEnt
         return false;
     }
 
+    @Override
+    public void attackedBy(ViolentCreature attacker) {
+        
+    }
+
+    @Override
+    public void attackedBy(Projectile projectile) {
+
+    }
 
 
     @Override
