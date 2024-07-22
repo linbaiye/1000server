@@ -6,13 +6,13 @@ import org.y1000.util.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractCreateNpcSdb extends AbstractSdbReader implements CreateNpcSdb {
+public abstract class AbstractCreateEntitySdb extends AbstractSdbReader implements CreateNpcSdb {
 
     private final List<NpcSpawnSetting> settings;
 
     public static final String SETTING_PATH = "Setting";
 
-    public AbstractCreateNpcSdb(String name) {
+    public AbstractCreateEntitySdb(String name) {
         read(SETTING_PATH + "/" + name , "utf8");
         settings = parse();
     }

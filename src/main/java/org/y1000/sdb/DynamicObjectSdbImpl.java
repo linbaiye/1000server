@@ -2,10 +2,12 @@ package org.y1000.sdb;
 
 
 import org.apache.commons.lang3.StringUtils;
+import org.y1000.entities.objects.DynamicObjectType;
 
+import java.util.Optional;
 import java.util.Set;
 
-public final class DynamicObjectSdbImpl extends AbstractSdbReader {
+public final class DynamicObjectSdbImpl extends AbstractSdbReader implements DynamicObjectSdb {
 
     public static final DynamicObjectSdbImpl INSTANCE = new DynamicObjectSdbImpl();
     private DynamicObjectSdbImpl() {
@@ -18,7 +20,8 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader {
         Set<String> names = sdb.columnNames();
         Set<String> items = sdb.names();
         for (String i: items) {
-            if (!i.startsWith("狐狸"))
+//            if (!i.startsWith("狐狸") || !"2".equals(sdb.get(i, "Kind")))
+            if (!"2".equals(sdb.get(i, "Kind")))
                 continue;
             System.out.println("----------------------------");
             System.out.println(i);
@@ -28,4 +31,71 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader {
             }
         }
     }
+
+    @Override
+    public String getShape(String name) {
+        return get(name, "Shape");
+    }
+
+    @Override
+    public boolean isRemove(String name) {
+        return "TRUE".equals(get(name, "boRemove"));
+    }
+
+    @Override
+    public Optional<String> getViewName(String name) {
+        String s = get(name, "ViewName");
+        return StringUtils.isEmpty(s) ? Optional.empty() : Optional.of(s);
+    }
+
+    @Override
+    public int getRegenInterval(String name) {
+        return getInt(name, "");
+    }
+
+    @Override
+    public int getOpenedInterval(String name) {
+        return getInt(name, "OpennedInterval");
+    }
+
+    @Override
+    public DynamicObjectType getKind(String name) {
+        return getEnum(name, "Kind", DynamicObjectType::fromValue);
+    }
+
+    @Override
+    public String getSStep0(String name) {
+        return get(name, "SStep0");
+    }
+
+    @Override
+    public String getEStep0(String name) {
+        return get(name, "EStep0");
+    }
+
+    @Override
+    public String getSStep1(String name) {
+        return get(name, "SStep1");
+    }
+
+    @Override
+    public String getEStep1(String name) {
+        return get(name, "EStep1");
+    }
+
+    @Override
+    public String getSStep2(String name) {
+        return get(name, "SStep2");
+    }
+
+    @Override
+    public String getEStep2(String name) {
+        return get(name, "EStep2");
+    }
+
+    @Override
+    public String getEventItem(String name) {
+        return get(name, "EventItem");
+    }
+
 }

@@ -356,6 +356,24 @@ message ItemAttributePacket {
   string text = 4;
 }
 
+message ShowDynamicObjectPacket {
+  int64 id = 1;
+  int32 x = 2;
+  int32 y = 3;
+  int32 type = 4;
+  int32 start = 5;
+  int32 end = 6;
+  string shape = 7;
+  int32 elapsed = 8;
+  optional string name = 9;
+}
+
+message UpdateDynamicObjectPacket {
+  int64 id = 1;
+  int32 start = 2;
+  int32 end = 3;
+}
+
 message Packet {
   oneof TypedPacket {
     PositionPacket positionPacket = 1;
@@ -392,6 +410,8 @@ message Packet {
     ItemAttributePacket itemAttribute = 35;
     PlayerRightClickAttributePacket rightClickAttribute = 36;
     UpdateTradeWindowPacket updateTradeWindow = 37;
+    ShowDynamicObjectPacket showDynamicObject = 38;
+    UpdateDynamicObjectPacket updateDynamicObject = 39;
   }
 }
 

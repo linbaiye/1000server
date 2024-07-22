@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.TestingEventListener;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
@@ -39,7 +38,7 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
 
     private GroundItemManager itemManager;
 
-    private CreateNpcSdbRepository npcSdbRepository;
+    private CreateEntitySdbRepository npcSdbRepository;
 
     private List<NpcSpawnSetting> monsterSettings;
 
@@ -55,7 +54,7 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
         eventSender = Mockito.mock(EntityEventSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
-        npcSdbRepository = Mockito.mock(CreateNpcSdbRepository.class);
+        npcSdbRepository = Mockito.mock(CreateEntitySdbRepository.class);
         monsterSettings = new ArrayList<>();
         CreateNpcSdb monsterSdb = Mockito.mock(CreateNpcSdb.class);
         when(monsterSdb.getAllSettings()).thenReturn(monsterSettings);

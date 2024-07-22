@@ -969,6 +969,14 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
+    public boolean consumeItem(int slotId) {
+        var ret = inventory.decrease(slotId);
+        if (ret)
+            emitEvent(new UpdateInventorySlotEvent(this, slotId, inventory.getItem(slotId)));
+        return ret;
+    }
+
+    @Override
     public Inventory inventory() {
         return inventory;
     }

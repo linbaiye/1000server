@@ -3,9 +3,9 @@ package org.y1000.sdb;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public final class CreateNpcSdbRepositoryImpl implements CreateNpcSdbRepository {
-    public static final CreateNpcSdbRepositoryImpl INSTANCE = new CreateNpcSdbRepositoryImpl();
-    private CreateNpcSdbRepositoryImpl() {}
+public final class CreateEntitySdbRepositoryImpl implements CreateEntitySdbRepository {
+    public static final CreateEntitySdbRepositoryImpl INSTANCE = new CreateEntitySdbRepositoryImpl();
+    private CreateEntitySdbRepositoryImpl() {}
 
     @Override
     public CreateNpcSdb loadMonster(int realmId) {
@@ -18,7 +18,7 @@ public final class CreateNpcSdbRepositoryImpl implements CreateNpcSdbRepository 
     }
 
     private boolean exists(String fileName) {
-        var path = CreateNpcSdbImpl.SDB_PATH + "/" + CreateNpcSdbImpl.SETTING_PATH + "/" + fileName;
+        var path = AbstractSdbReader.SDB_PATH + "/" + AbstractCreateEntitySdb.SETTING_PATH + "/" + fileName;
         return getClass().getResource(path) != null;
     }
 
@@ -31,5 +31,15 @@ public final class CreateNpcSdbRepositoryImpl implements CreateNpcSdbRepository 
     public boolean npcSdbExists(int realmId) {
         String fileName = CreateNpcSdbImpl.makeFileName(realmId);
         return exists(fileName);
+    }
+
+    @Override
+    public CreateNpcSdb loadObject(int realmId) {
+        return null;
+    }
+
+    @Override
+    public boolean objectSdbExists(int realmId) {
+        return false;
     }
 }

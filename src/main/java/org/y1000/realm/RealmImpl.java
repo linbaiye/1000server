@@ -9,7 +9,7 @@ import org.y1000.realm.event.PlayerConnectedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
 import org.y1000.realm.event.RealmEvent;
-import org.y1000.sdb.CreateNpcSdbRepository;
+import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.sdb.MonstersSdb;
 
 import java.util.*;
@@ -42,13 +42,13 @@ final class RealmImpl implements Runnable, Realm {
                      NpcFactory npcFactory,
                      ItemSdb itemSdb,
                      MonstersSdb monstersSdb, int id,
-                     CreateNpcSdbRepository createNpcSdbRepository) {
+                     CreateEntitySdbRepository createEntitySdbRepository) {
         realmMap = map;
         this.id = id;
         var entityIdGenerator = new EntityIdGenerator();
         eventSender = new RealmEntityEventSender();
         itemManager = new ItemManagerImpl(eventSender, itemSdb, monstersSdb, entityIdGenerator, itemFactory);
-        npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager, createNpcSdbRepository);
+        npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager, createEntitySdbRepository);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
         this.playerManager = new PlayerManager(eventSender, itemManager, itemFactory);

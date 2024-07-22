@@ -1,6 +1,6 @@
 package org.y1000.sdb;
 
-public final class CreateNpcSdbImpl extends AbstractCreateNpcSdb {
+public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb {
 
     public CreateNpcSdbImpl(int realmId) {
         super(makeFileName(realmId));

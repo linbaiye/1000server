@@ -52,7 +52,7 @@ public final class Server {
                 ItemSdbImpl.INSTANCE,
                 MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE,
-                CreateNpcSdbRepositoryImpl.INSTANCE);
+                CreateEntitySdbRepositoryImpl.INSTANCE);
     }
 
 

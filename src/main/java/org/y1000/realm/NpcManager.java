@@ -11,7 +11,7 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.sdb.CreateNpcSdb;
-import org.y1000.sdb.CreateNpcSdbRepository;
+import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.sdb.NpcSpawnSetting;
 import org.y1000.util.Coordinate;
 
@@ -34,18 +34,18 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
 
     private final GroundItemManager itemManager;
 
-    private final CreateNpcSdbRepository createNpcSdbRepository;
+    private final CreateEntitySdbRepository createEntitySdbRepository;
 
 
     public NpcManager(EntityEventSender sender,
                       EntityIdGenerator idGenerator,
                       NpcFactory npcFactory,
                       GroundItemManager itemManager,
-                      CreateNpcSdbRepository createNpcSdbRepository) {
+                      CreateEntitySdbRepository createEntitySdbRepository) {
         Validate.notNull(sender);
         Validate.notNull(idGenerator);
         Validate.notNull(itemManager);
-        Validate.notNull(createNpcSdbRepository);
+        Validate.notNull(createEntitySdbRepository);
         this.sender = sender;
         this.idGenerator = idGenerator;
         this.npcFactory = npcFactory;
@@ -53,7 +53,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
         this.npcSpawnSettings = new HashMap<>();
         respawningNpcs = new ArrayList<>();
         projectileManager = new ProjectileManager();
-        this.createNpcSdbRepository = createNpcSdbRepository;
+        this.createEntitySdbRepository = createEntitySdbRepository;
     }
 
     private static class RespawningNpc {
@@ -112,11 +112,11 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     }
 
     public void init(RealmMap realmMap, int realmId) {
-        if (createNpcSdbRepository.monsterSdbExists(realmId)) {
-            spawn(createNpcSdbRepository.loadMonster(realmId), realmMap);
+        if (createEntitySdbRepository.monsterSdbExists(realmId)) {
+            spawn(createEntitySdbRepository.loadMonster(realmId), realmMap);
         }
-        if (createNpcSdbRepository.npcSdbExists(realmId)) {
-            spawn(createNpcSdbRepository.loadNpc(realmId), realmMap);
+        if (createEntitySdbRepository.npcSdbExists(realmId)) {
+            spawn(createEntitySdbRepository.loadNpc(realmId), realmMap);
         }
     }
 

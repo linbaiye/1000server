@@ -125,4 +125,6 @@ public interface Player extends ViolentCreature {
     int legPercent();
 
     int attackedByAoe(Damage damage, int hit);
+
+    boolean consumeItem(int slotId);
 }

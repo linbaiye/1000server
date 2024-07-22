@@ -13,9 +13,8 @@ import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.event.ConnectionEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
-import org.y1000.sdb.CreateNpcSdbRepository;
+import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.sdb.MapSdb;
-import org.y1000.sdb.MapSdbImpl;
 import org.y1000.sdb.MonstersSdb;
 
 import java.util.*;
@@ -127,13 +126,13 @@ public final class RealmManager implements Runnable {
                                       ItemSdb itemSdb,
                                       MonstersSdb monstersSdb,
                                       MapSdb mapSdb,
-                                      CreateNpcSdbRepository createNpcSdbRepository) {
+                                      CreateEntitySdbRepository createEntitySdbRepository) {
         Map<Integer, RealmImpl> realmMap = new HashMap<>();
         List<Integer> realmIds = getRealmIds();
         for (Integer id : realmIds) {
             String mapName = mapSdb.getMapName(id);
             RealmImpl realm = RealmMap.Load(mapName)
-                    .map(m -> new RealmImpl(m, itemRepository, itemFactory, npcFactory, itemSdb, monstersSdb, id, createNpcSdbRepository))
+                    .map(m -> new RealmImpl(m, itemRepository, itemFactory, npcFactory, itemSdb, monstersSdb, id, createEntitySdbRepository))
                     .orElseThrow(() -> new IllegalArgumentException("Map not found."));
             realmMap.put(id, realm);
         }

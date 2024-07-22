@@ -1,10 +1,12 @@
 package org.y1000.sdb;
 
+import org.y1000.entities.objects.DynamicObjectType;
+
 import java.util.Optional;
 
 public interface DynamicObjectSdb {
 
-    int getShape(String name);
+    String getShape(String name);
 
     boolean isRemove(String name);
 
@@ -12,8 +14,20 @@ public interface DynamicObjectSdb {
 
     int getRegenInterval(String name);
 
-    int getOpennedInterval(String name);
+    int getOpenedInterval(String name);
 
-    int getKind(String name);
+    DynamicObjectType getKind(String name);
+
+    String getSStep0(String name);
+    String getEStep0(String name);
+
+    String getSStep1(String name);
+    String getEStep1(String name);
+
+    String getSStep2(String name);
+
+    String getEStep2(String name);
+
+    String getEventItem(String name);
 
 }
