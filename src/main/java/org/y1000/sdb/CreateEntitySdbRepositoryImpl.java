@@ -22,6 +22,7 @@ public final class CreateEntitySdbRepositoryImpl implements CreateEntitySdbRepos
         return getClass().getResource(path) != null;
     }
 
+
     @Override
     public CreateNpcSdb loadNpc(int realmId) {
         return new CreateNpcSdbImpl(realmId);
@@ -34,12 +35,13 @@ public final class CreateEntitySdbRepositoryImpl implements CreateEntitySdbRepos
     }
 
     @Override
-    public CreateNpcSdb loadObject(int realmId) {
-        return null;
+    public CreateDynamicObjectSdb loadObject(int realmId) {
+        return new CreateDynamicObjectSdbImpl(realmId);
     }
 
     @Override
     public boolean objectSdbExists(int realmId) {
-        return false;
+        String fileName = CreateDynamicObjectSdbImpl.makeFileName(realmId);
+        return getClass().getResource(AbstractSdbReader.SDB_PATH + "/" + fileName) != null;
     }
 }

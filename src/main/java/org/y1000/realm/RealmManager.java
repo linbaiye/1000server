@@ -2,6 +2,7 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemSdb;
@@ -126,13 +127,14 @@ public final class RealmManager implements Runnable {
                                       ItemSdb itemSdb,
                                       MonstersSdb monstersSdb,
                                       MapSdb mapSdb,
-                                      CreateEntitySdbRepository createEntitySdbRepository) {
+                                      CreateEntitySdbRepository createEntitySdbRepository,
+                                      DynamicObjectFactory dynamicObjectFactory) {
         Map<Integer, RealmImpl> realmMap = new HashMap<>();
         List<Integer> realmIds = getRealmIds();
         for (Integer id : realmIds) {
             String mapName = mapSdb.getMapName(id);
             RealmImpl realm = RealmMap.Load(mapName)
-                    .map(m -> new RealmImpl(m, itemRepository, itemFactory, npcFactory, itemSdb, monstersSdb, id, createEntitySdbRepository))
+                    .map(m -> new RealmImpl(m, itemRepository, itemFactory, npcFactory, itemSdb, monstersSdb, id, createEntitySdbRepository, dynamicObjectFactory))
                     .orElseThrow(() -> new IllegalArgumentException("Map not found."));
             realmMap.put(id, realm);
         }

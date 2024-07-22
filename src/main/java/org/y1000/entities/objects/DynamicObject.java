@@ -10,4 +10,5 @@ public interface DynamicObject extends AttackableEntity {
     String shape();
 
     Optional<String> name();
+
 }

@@ -55,7 +55,6 @@ final class ItemManagerImpl extends AbstractEntityManager<GroundedItem> implemen
     }
 
 
-
     @Override
     public void pickItem(Player picker, long id) {
         Validate.notNull(picker);
@@ -153,7 +152,7 @@ final class ItemManagerImpl extends AbstractEntityManager<GroundedItem> implemen
     @Override
     public void visit(CreatureDieEvent event) {
         if (event.source() instanceof Npc npc) {
-            List<DropItem> dropItems = getFor(npc.name());
+            List<DropItem> dropItems = getFor(npc.idName());
             for (DropItem dropItem : dropItems) {
                 if (!dropItem.canDrop()) {
                     continue;

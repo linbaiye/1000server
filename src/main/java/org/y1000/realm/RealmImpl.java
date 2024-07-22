@@ -2,6 +2,7 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
 import org.y1000.repository.ItemRepository;
@@ -33,6 +34,7 @@ final class RealmImpl implements Runnable, Realm {
     private final NpcManager npcManager;
 
     private final PlayerManager playerManager;
+    private final DynamicObjectManager dynamicObjectManager;
 
     private final int id;
 
@@ -42,13 +44,15 @@ final class RealmImpl implements Runnable, Realm {
                      NpcFactory npcFactory,
                      ItemSdb itemSdb,
                      MonstersSdb monstersSdb, int id,
-                     CreateEntitySdbRepository createEntitySdbRepository) {
+                     CreateEntitySdbRepository createEntitySdbRepository,
+                     DynamicObjectFactory dynamicObjectFactory) {
         realmMap = map;
         this.id = id;
         var entityIdGenerator = new EntityIdGenerator();
         eventSender = new RealmEntityEventSender();
         itemManager = new ItemManagerImpl(eventSender, itemSdb, monstersSdb, entityIdGenerator, itemFactory);
         npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager, createEntitySdbRepository);
+        dynamicObjectManager = new DynamicObjectManager(dynamicObjectFactory, createEntitySdbRepository, itemManager, entityIdGenerator, eventSender);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
         this.playerManager = new PlayerManager(eventSender, itemManager, itemFactory);
@@ -87,6 +91,7 @@ final class RealmImpl implements Runnable, Realm {
                     playerManager.update(STEP_MILLIS);
                     npcManager.update(STEP_MILLIS);
                     itemManager.update(STEP_MILLIS);
+                    dynamicObjectManager.update(STEP_MILLIS);
                     accumulatedMillis += STEP_MILLIS;
                     continue;
                 }
@@ -115,6 +120,7 @@ final class RealmImpl implements Runnable, Realm {
     public void run() {
         try {
             npcManager.init(this.map(), id);
+            dynamicObjectManager.init(this.map(), id);
             startRealm();
         } catch (Exception e) {
             log.error("Failed to start realm {}.", id, e);

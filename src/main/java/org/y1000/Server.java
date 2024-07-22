@@ -10,8 +10,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
+import org.y1000.entities.objects.DynamicObjectFactory;
+import org.y1000.entities.objects.DynamicObjectFactoryImpl;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
+import org.y1000.realm.DynamicObjectManager;
 import org.y1000.repository.*;
 import org.y1000.network.*;
 import org.y1000.realm.RealmManager;
@@ -34,6 +37,9 @@ public final class Server {
 
     private ItemRepository itemRepository;
 
+
+    private DynamicObjectFactory dynamicObjectFactory;
+
     private NpcFactory npcFactory;
 
     public Server(int port) {
@@ -46,13 +52,15 @@ public final class Server {
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl);
         itemRepository = repository;
         npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
+        dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         realmManager = RealmManager.create(repository,
                 itemRepository,
                 npcFactory,
                 ItemSdbImpl.INSTANCE,
                 MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE,
-                CreateEntitySdbRepositoryImpl.INSTANCE);
+                CreateEntitySdbRepositoryImpl.INSTANCE,
+                dynamicObjectFactory);
     }
 
 

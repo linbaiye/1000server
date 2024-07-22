@@ -10,8 +10,7 @@ public interface CreateEntitySdbRepository {
 
     boolean npcSdbExists(int realmId);
 
-
-    CreateNpcSdb loadObject(int realmId);
+    CreateDynamicObjectSdb loadObject(int realmId);
 
     boolean objectSdbExists(int realmId);
 
