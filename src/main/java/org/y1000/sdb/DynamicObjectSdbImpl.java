@@ -21,8 +21,8 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
         Set<String> items = sdb.names();
         for (String i: items) {
 //            if (!i.startsWith("狐狸") || !"2".equals(sdb.get(i, "Kind")))
-            if (!"2".equals(sdb.get(i, "Kind")))
-                continue;
+//            if (!"2".equals(sdb.get(i, "Kind")))
+//                continue;
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {
@@ -50,7 +50,7 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
 
     @Override
     public int getRegenInterval(String name) {
-        return getInt(name, "");
+        return getIntOrZero(name, "RegenInterval");
     }
 
     @Override
@@ -96,6 +96,11 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
     @Override
     public String getEventItem(String name) {
         return get(name, "EventItem");
+    }
+
+    @Override
+    public String getGuardPos(String name) {
+        return get(name, "GuardPos");
     }
 
 }

@@ -30,4 +30,6 @@ public interface DynamicObjectSdb {
 
     String getEventItem(String name);
 
+    String getGuardPos(String name);
+
 }

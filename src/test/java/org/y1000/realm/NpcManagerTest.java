@@ -75,20 +75,22 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
     void init() {
         Rectangle range = new Rectangle(Coordinate.xy(1, 1), Coordinate.xy(4, 4));
         monsterSettings.add(new NpcSpawnSetting(range, 2, "牛"));
+        when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
         npcManager.init(map, 49);
         Npc npc = npcManager.find(1).get();
-        assertEquals("牛", npc.name());
+        assertEquals("牛", npc.viewName());
         assertTrue(range.contains(npc.spawnCoordinate()));
         npc = npcManager.find(2).get();
-        assertEquals("牛", npc.name());
+        assertEquals("牛", npc.viewName());
         assertTrue(range.contains(npc.spawnCoordinate()));
         verify(eventSender, times(2)).notifyVisiblePlayers(any(Entity.class), any(NpcJoinedEvent.class));
     }
 
     @Test
-    void respwan() {
+    void respawnNpc() {
         Rectangle range = new Rectangle(Coordinate.xy(1, 1), Coordinate.xy(4, 4));
         monsterSettings.add(new NpcSpawnSetting(range, 1, "一级牛"));
+        when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
         npcManager.init(map, 49);
         verify(eventSender, times(1)).notifyVisiblePlayers(any(Entity.class), any(NpcJoinedEvent.class));
         Npc monster = npcManager.find(1L).get();

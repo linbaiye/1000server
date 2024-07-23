@@ -30,7 +30,7 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
 
     @Override
     public AbstractCreatureInterpolation captureInterpolation() {
-        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name(), NpcType.MONSTER,
+        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), viewName(), NpcType.MONSTER,
                 attributeProvider().animate(), attributeProvider().shape());
     }
 

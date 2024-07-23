@@ -34,7 +34,6 @@ import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.network.gen.AttributePacket;
 import org.y1000.network.gen.ItemAttributePacket;
-import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerRightClickAttributePacket;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;

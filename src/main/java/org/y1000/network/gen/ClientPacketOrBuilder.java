@@ -263,5 +263,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientUpdateTradePacketOrBuilder getUpdateTradeOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+   * @return Whether the triggerDynamicObject field is set.
+   */
+  boolean hasTriggerDynamicObject();
+  /**
+   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+   * @return The triggerDynamicObject.
+   */
+  org.y1000.network.gen.ClientTriggerDynamicObjectPacket getTriggerDynamicObject();
+  /**
+   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+   */
+  org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder getTriggerDynamicObjectOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

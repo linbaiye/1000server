@@ -3,10 +3,10 @@ package org.y1000.realm;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Validate;
 import org.y1000.Server;
-import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.objects.DynamicObject;
 import org.y1000.util.Coordinate;
 
 import java.io.*;
@@ -35,8 +35,8 @@ final class RealmMapV2Impl implements RealmMap {
 
     private final String name;
 
-    private final Map<Coordinate, Entity> occupyingCreatures;
-    private final Map<Entity, Coordinate> creatureCoordinateMap;
+    private final Map<Coordinate, Set<Entity>> coordinateEntityMap;
+    private final Map<Entity, Coordinate> entityCoordinateMap;
 
     public RealmMapV2Impl(byte[][] movableMask, String name) {
         Objects.requireNonNull(name);
@@ -50,8 +50,8 @@ final class RealmMapV2Impl implements RealmMap {
         this.movableMask = movableMask;
         this.height = movableMask.length;
         this.width = movableMask[0].length;
-        occupyingCreatures = new HashMap<>();
-        creatureCoordinateMap = new HashMap<>();
+        coordinateEntityMap = new HashMap<>();
+        entityCoordinateMap = new HashMap<>();
     }
 
     private boolean isInRange(Coordinate coordinate) {
@@ -64,7 +64,7 @@ final class RealmMapV2Impl implements RealmMap {
         if (!isInRange(coordinate)) {
             return false;
         }
-        if (occupyingCreatures.containsKey(coordinate)) {
+        if (!coordinateEntityMap.getOrDefault(coordinate, Collections.emptySet()).isEmpty()) {
             return false;
         }
         var cell = movableMask[coordinate.y()][coordinate.x()];
@@ -76,14 +76,44 @@ final class RealmMapV2Impl implements RealmMap {
             throw new IllegalArgumentException("Invalid coordinate " + entity.coordinate());
         }
         free(entity);
-        occupyingCreatures.put(entity.coordinate(), entity);
-        creatureCoordinateMap.put(entity, entity.coordinate());
+        coordinateEntityMap.computeIfAbsent(entity.coordinate(), c -> new HashSet<>()).add(entity);
+        entityCoordinateMap.put(entity, entity.coordinate());
+    }
+
+
+    private void doRemoveCoordinate(Entity entity, Coordinate coordinate) {
+        Set<Entity> entities = coordinateEntityMap.getOrDefault(coordinate, Collections.emptySet());
+        entities.remove(entity);
+        if (entities.isEmpty()) {
+            coordinateEntityMap.remove(coordinate);
+        }
     }
 
     public void free(Entity entity) {
-        var c = creatureCoordinateMap.remove(entity);
+        var c = entityCoordinateMap.remove(entity);
         if (c != null) {
-            occupyingCreatures.remove(c);
+            doRemoveCoordinate(entity, c);
+        }
+    }
+
+    @Override
+    public void occupy(DynamicObject dynamicObject) {
+        Validate.notNull(dynamicObject);
+        if (dynamicObject.occupyingCoordinates().stream().anyMatch(c -> !isInRange(c)))  {
+            throw new IllegalArgumentException("Coordinate out of range.");
+        }
+        entityCoordinateMap.put(dynamicObject, dynamicObject.coordinate());
+        for (Coordinate coordinate : dynamicObject.occupyingCoordinates()) {
+            coordinateEntityMap.computeIfAbsent(coordinate, c -> new HashSet<>()).add(dynamicObject);
+        }
+    }
+
+    @Override
+    public void free(DynamicObject dynamicObject) {
+        Validate.notNull(dynamicObject);
+        entityCoordinateMap.remove(dynamicObject);
+        for (Coordinate coordinate : dynamicObject.occupyingCoordinates()) {
+            doRemoveCoordinate(dynamicObject, coordinate);
         }
     }
 

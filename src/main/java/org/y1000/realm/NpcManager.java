@@ -28,7 +28,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
 
     private final Map<String, List<NpcSpawnSetting>> npcSpawnSettings;
 
-    private final List<RespawningNpc> respawningNpcs;
+    private final List<RespawningEntity<Npc>> respawningNpcs;
 
     private final ProjectileManager projectileManager;
 
@@ -54,25 +54,6 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
         respawningNpcs = new ArrayList<>();
         projectileManager = new ProjectileManager();
         this.createEntitySdbRepository = createEntitySdbRepository;
-    }
-
-    private static class RespawningNpc {
-        private final Npc npc;
-        private int time;
-
-        private RespawningNpc(Npc npc, int time) {
-            this.npc = npc;
-            this.time = time;
-        }
-
-        public RespawningNpc update(long delta) {
-            this.time -= (int)delta;
-            return this;
-        }
-
-        public boolean canRespawn() {
-            return this.time <= 0;
-        }
     }
 
     private void spawnMonsters(String name, RealmMap map, NpcSpawnSetting setting) {
@@ -126,12 +107,12 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     }
 
     private void updateRespawning(long delta) {
-        Iterator<RespawningNpc> iterator = respawningNpcs.iterator();
+        Iterator<RespawningEntity<Npc>> iterator = respawningNpcs.iterator();
         while (iterator.hasNext()) {
-            RespawningNpc respawningNpc = iterator.next();
+            RespawningEntity<Npc> respawningNpc = iterator.next();
             if (respawningNpc.update(delta).canRespawn()) {
                 iterator.remove();
-                respawn(respawningNpc.npc);
+                respawn(respawningNpc.getEntity());
             }
         }
     }
@@ -155,7 +136,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     @Override
     protected void onDeleted(Npc entity) {
         sender.remove(entity);
-        respawningNpcs.add(new RespawningNpc(entity, 8000));
+        respawningNpcs.add(new RespawningEntity<>(entity, 8000));
         entity.deregisterEventListener(this);
         entity.deregisterEventListener(itemManager);
     }

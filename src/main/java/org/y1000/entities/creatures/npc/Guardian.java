@@ -30,7 +30,7 @@ public final class Guardian extends AbstractViolentNpc {
 
     @Override
     public AbstractEntityInterpolation captureInterpolation() {
-        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name(),
+        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), viewName(),
                 NpcType.GUARDIAN, attributeProvider().animate(), attributeProvider().shape());
     }
 

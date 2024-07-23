@@ -78,4 +78,55 @@ public interface ShowDynamicObjectPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getNameBytes();
+
+  /**
+   * <code>repeated int32 guardX = 10;</code>
+   * @return A list containing the guardX.
+   */
+  java.util.List<java.lang.Integer> getGuardXList();
+  /**
+   * <code>repeated int32 guardX = 10;</code>
+   * @return The count of guardX.
+   */
+  int getGuardXCount();
+  /**
+   * <code>repeated int32 guardX = 10;</code>
+   * @param index The index of the element to return.
+   * @return The guardX at the given index.
+   */
+  int getGuardX(int index);
+
+  /**
+   * <code>repeated int32 guardY = 11;</code>
+   * @return A list containing the guardY.
+   */
+  java.util.List<java.lang.Integer> getGuardYList();
+  /**
+   * <code>repeated int32 guardY = 11;</code>
+   * @return The count of guardY.
+   */
+  int getGuardYCount();
+  /**
+   * <code>repeated int32 guardY = 11;</code>
+   * @param index The index of the element to return.
+   * @return The guardY at the given index.
+   */
+  int getGuardY(int index);
+
+  /**
+   * <code>optional string requiredItem = 12;</code>
+   * @return Whether the requiredItem field is set.
+   */
+  boolean hasRequiredItem();
+  /**
+   * <code>optional string requiredItem = 12;</code>
+   * @return The requiredItem.
+   */
+  java.lang.String getRequiredItem();
+  /**
+   * <code>optional string requiredItem = 12;</code>
+   * @return The bytes for requiredItem.
+   */
+  com.google.protobuf.ByteString
+      getRequiredItemBytes();
 }

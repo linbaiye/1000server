@@ -3,6 +3,7 @@ package org.y1000.network;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.objects.TriggerDynamicObject;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.item.EquipmentType;
 import org.y1000.message.clientevent.*;
@@ -50,6 +51,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case RIGHTCLICK -> ClientRightClickEvent.fromPacket(clientPacket.getRightClick());
             case TRADEREQUEST -> new ClientTradePlayerEvent(clientPacket.getTradeRequest().getTargetId(), clientPacket.getTradeRequest().getSlot());
             case UPDATETRADE -> ClientUpdateTradeEvent.fromPacket(clientPacket.getUpdateTrade());
+            case TRIGGERDYNAMICOBJECT -> new ClientTriggerDynamicObjectEvent(clientPacket.getTriggerDynamicObject().getId(), clientPacket.getTriggerDynamicObject().getUseSlot());
             default -> throw new IllegalArgumentException();
         };
     }

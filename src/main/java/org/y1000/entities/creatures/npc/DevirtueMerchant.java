@@ -57,7 +57,7 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
 
     @Override
     public AbstractCreatureInterpolation captureInterpolation() {
-        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name(),
+        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), viewName(),
                 NpcType.MERCHANT, attributeProvider().animate(), attributeProvider().shape(), textFileName);
     }
 

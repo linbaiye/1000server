@@ -5,6 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.sdb.AbstractSdbReader;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
@@ -274,14 +277,32 @@ MaxCount,        最多持有数量；
         itemSdb.read("Item.sdb");
         return itemSdb;
     }
-    public static void main(String[] args) {
+
+    private static void checkDuplicateNames() {
         ItemSdbImpl itemSdb = ItemSdbImpl.INSTANCE;
+        Map<String, Set<String>> duplicateNames = new HashMap<>();
 //        Set<String> names = itemSdb.names();
+        Set<String> items = itemSdb.names();
+        for (String i: items) {
+            String viewName = itemSdb.get(i, "ViewName");
+            if (!duplicateNames.containsKey(viewName)) {
+                duplicateNames.put(viewName, new HashSet<>());
+            }
+            duplicateNames.get(viewName).add(i);
+            //String v = itemSdb.get("生药", idName);
+        }
+        for (String s : duplicateNames.keySet()) {
+            if (duplicateNames.get(s).size() > 1) {
+                System.out.println(s + ": " + duplicateNames.get(s));
+            }
+        }
+    }
+
+    private static void dump() {
+        ItemSdbImpl itemSdb = ItemSdbImpl.INSTANCE;
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
         for (String i: items) {
-            if (!i.contains("弓"))
-                continue;
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {
@@ -290,5 +311,8 @@ MaxCount,        最多持有数量；
             }
             //String v = itemSdb.get("生药", idName);
         }
+    }
+    public static void main(String[] args) {
+        checkDuplicateNames();
     }
 }

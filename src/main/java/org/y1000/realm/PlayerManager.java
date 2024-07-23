@@ -30,20 +30,26 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
 
     private final TradeManager tradeManager;
 
+    private final DynamicObjectManager dynamicObjectManager;
+
     public PlayerManager(EntityEventSender eventSender,
                          GroundItemManager itemManager,
-                         ItemFactory itemFactory) {
-        this(eventSender, itemManager, itemFactory, new TradeManagerImpl());
+                         ItemFactory itemFactory,
+                         DynamicObjectManager dynamicObjectManager) {
+        this(eventSender, itemManager, itemFactory, new TradeManagerImpl(), dynamicObjectManager);
     }
 
     public PlayerManager(EntityEventSender eventSender,
                          GroundItemManager itemManager,
-                         ItemFactory itemFactory, TradeManager tradeManager) {
+                         ItemFactory itemFactory,
+                         TradeManager tradeManager,
+                         DynamicObjectManager dynamicObjectManager) {
         this.eventSender = eventSender;
         this.itemManager = itemManager;
         this.itemFactory = itemFactory;
         this.projectileManager = new ProjectileManager();
         this.tradeManager = tradeManager;
+        this.dynamicObjectManager = dynamicObjectManager;
     }
 
 
@@ -115,6 +121,8 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
             find(tradePlayerEvent.targetId(), Player.class).ifPresent(tradee -> tradeManager.start(dataEvent.player(), tradee, tradePlayerEvent.slot()));
         } else if (dataEvent.data() instanceof ClientUpdateTradeEvent updateTradeEvent) {
             handleUpdateTradeEvent(dataEvent.player(), updateTradeEvent);
+        } else if (dataEvent.data() instanceof ClientTriggerDynamicObjectEvent triggerDynamicObjectEvent) {
+            dynamicObjectManager.triggerDynamicObject(triggerDynamicObjectEvent.id(), dataEvent.player(), triggerDynamicObjectEvent.useSlot());
         } else {
             dataEvent.player().handleClientEvent(dataEvent.data());
         }

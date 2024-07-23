@@ -14,7 +14,6 @@ import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
-import org.y1000.realm.DynamicObjectManager;
 import org.y1000.repository.*;
 import org.y1000.network.*;
 import org.y1000.realm.RealmManager;

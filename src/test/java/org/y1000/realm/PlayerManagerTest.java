@@ -9,6 +9,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.message.clientevent.ClientTradePlayerEvent;
+import org.y1000.message.clientevent.ClientTriggerDynamicObjectEvent;
 import org.y1000.message.clientevent.ClientUpdateTradeEvent;
 import org.y1000.network.Connection;
 import org.y1000.realm.event.PlayerDataEvent;
@@ -27,6 +28,8 @@ class PlayerManagerTest {
 
     private TradeManager tradeManager;
 
+    private DynamicObjectManager dynamicObjectManager;
+
     @SuppressWarnings("unchecked")
     @BeforeEach
     void setUp() {
@@ -34,7 +37,8 @@ class PlayerManagerTest {
         eventSender = new TestingEntityEventSender();
         itemManager = Mockito.mock(GroundItemManager.class);
         itemFactory = Mockito.mock(ItemFactory.class);
-        playerManager = new PlayerManager(eventSender, itemManager, itemFactory, tradeManager);
+        dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);
+        playerManager = new PlayerManager(eventSender, itemManager, itemFactory, tradeManager, dynamicObjectManager);
     }
 
 
@@ -78,4 +82,11 @@ class PlayerManagerTest {
         verify(tradeManager, times(1)).confirmTrade(any(Player.class));
     }
 
+    @Test
+    void onClientTriggerDynamicObject() {
+        var player = Mockito.mock(Player.class);
+        PlayerDataEvent dataEvent = new PlayerDataEvent(player, new ClientTriggerDynamicObjectEvent(1L, 2));
+        playerManager.onPlayerEvent(dataEvent, Mockito.mock(EntityManager.class));
+        verify(dynamicObjectManager, times(1)).triggerDynamicObject(1L, player, 2);
+    }
 }

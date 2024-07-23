@@ -17,7 +17,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TriggerDynamicObjectTest {
@@ -106,6 +106,8 @@ class TriggerDynamicObjectTest {
         assertEquals(0, showDynamicObject.getEnd());
         assertEquals("testView", showDynamicObject.getName());
         assertEquals("shape", showDynamicObject.getShape());
+        assertEquals(object.coordinate().x(), showDynamicObject.getGuardX(0));
+        assertEquals(object.coordinate().y(), showDynamicObject.getGuardY(0));
         object.trigger(player, 1);
         showDynamicObject = object.captureInterpolation().toPacket().getShowDynamicObject();
         assertEquals(1, showDynamicObject.getStart());
@@ -113,5 +115,58 @@ class TriggerDynamicObjectTest {
         object.update(120);
         showDynamicObject = object.captureInterpolation().toPacket().getShowDynamicObject();
         assertEquals(120, showDynamicObject.getElapsed());
+    }
+
+    @Test
+    void parseGuardPos() {
+        when(dynamicObjectSdb.getGuardPos(idName)).thenReturn(null);
+        object = TriggerDynamicObject.builder()
+                .id(1)
+                .idName(idName)
+                .dynamicObjectSdb(dynamicObjectSdb)
+                .realmMap(realmMap)
+                .coordinate(Coordinate.xy(1, 2))
+                .build();
+        assertEquals(1, object.occupyingCoordinates().size());
+        assertTrue(object.occupyingCoordinates().contains(Coordinate.xy(1, 2)));
+
+        when(dynamicObjectSdb.getGuardPos(idName)).thenReturn("1:1:1:0");
+        object = TriggerDynamicObject.builder()
+                .id(1)
+                .idName(idName)
+                .dynamicObjectSdb(dynamicObjectSdb)
+                .realmMap(realmMap)
+                .coordinate(Coordinate.xy(1, 2))
+                .build();
+        assertEquals(3, object.occupyingCoordinates().size());
+        assertTrue(object.occupyingCoordinates().contains(Coordinate.xy(1, 2)));
+        assertTrue(object.occupyingCoordinates().contains(Coordinate.xy(1, 2).move(1, 1)));
+        assertTrue(object.occupyingCoordinates().contains(Coordinate.xy(1, 2).move(1, 0)));
+        ShowDynamicObjectPacket showDynamicObject = object.captureInterpolation().toPacket().getShowDynamicObject();
+        for (int i = 0; i< 3; i++) {
+            int x = showDynamicObject.getGuardX(i);
+            int y = showDynamicObject.getGuardY(i);
+            assertTrue(object.occupyingCoordinates().contains(Coordinate.xy(x, y)));
+        }
+
+        when(dynamicObjectSdb.getGuardPos(idName)).thenReturn("2:2");
+        object = TriggerDynamicObject.builder()
+                .id(1)
+                .idName(idName)
+                .dynamicObjectSdb(dynamicObjectSdb)
+                .realmMap(realmMap)
+                .coordinate(Coordinate.xy(1, 2))
+                .build();
+        assertEquals(2, object.occupyingCoordinates().size());
+        assertTrue(object.occupyingCoordinates().contains(Coordinate.xy(1, 2)));
+        assertTrue(object.occupyingCoordinates().contains(Coordinate.xy(3, 4)));
+        when(dynamicObjectSdb.getGuardPos(idName)).thenReturn("2:");
+        assertThrows(IllegalArgumentException.class, () -> TriggerDynamicObject.builder()
+                .id(1)
+                .idName(idName)
+                .dynamicObjectSdb(dynamicObjectSdb)
+                .realmMap(realmMap)
+                .coordinate(Coordinate.xy(1, 2))
+                .build());
     }
 }

@@ -8,7 +8,7 @@ public final class PlayerInfo {
     public static PlayerInfoPacket toPacket(Player player) {
         PlayerInfoPacket.Builder builder = PlayerInfoPacket.newBuilder()
                 .setId(player.id())
-                .setName(player.name())
+                .setName(player.viewName())
                 .setMale(player.isMale());
         player.weapon().ifPresent(weapon -> builder.setWeaponName(weapon.name()));
         player.hat().ifPresent(hat -> builder.setHatName(hat.name()));

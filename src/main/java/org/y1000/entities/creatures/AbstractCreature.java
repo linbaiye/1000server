@@ -74,7 +74,7 @@ public abstract class AbstractCreature<C extends Creature, S extends CreatureSta
     }
 
     @Override
-    public String name() {
+    public String viewName() {
         return name;
     }
 

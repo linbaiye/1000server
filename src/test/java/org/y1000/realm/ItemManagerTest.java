@@ -10,8 +10,7 @@ import org.y1000.entities.GroundedItem;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.players.Player;
-import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
@@ -53,7 +52,9 @@ class ItemManagerTest extends AbstractUnitTestFixture {
     void whenAMonsterDead() {
         when(itemSdb.getSoundDrop("肉")).thenReturn("dropSound");
         when(monstersSdb.getHaveItem(any(String.class))).thenReturn("皮:2:1:肉:4:1");
-        manager.onEvent(new CreatureDieEvent(monsterBuilder().name("牛").build()));
+        TestingMonsterAttributeProvider attributeProvider = new TestingMonsterAttributeProvider();
+        attributeProvider.idName = "牛";
+        manager.onEvent(new CreatureDieEvent(monsterBuilder().attributeProvider(attributeProvider).name("牛").build()));
         assertEquals(2, eventSender.entities().size());
         EntitySoundEvent soundEvent = eventSender.removeFirst(EntitySoundEvent.class);
         assertEquals("dropSound", soundEvent.toPacket().getSound().getSound());

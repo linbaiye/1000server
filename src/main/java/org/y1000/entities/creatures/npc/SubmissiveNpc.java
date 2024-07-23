@@ -34,7 +34,7 @@ public final class SubmissiveNpc extends AbstractNpc {
 
     @Override
     public AbstractEntityInterpolation captureInterpolation() {
-        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), name(), NpcType.MONSTER,
+        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), viewName(), NpcType.MONSTER,
                 attributeProvider().animate(), attributeProvider().shape());
     }
 

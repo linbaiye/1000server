@@ -8,6 +8,10 @@ public final class DynamicObjectInterpolation extends AbstractEntityInterpolatio
     private final Packet packet;
 
     public DynamicObjectInterpolation(TriggerDynamicObject dynamicObject, int elapsed) {
+        this(dynamicObject, elapsed, null);
+    }
+
+    public DynamicObjectInterpolation(TriggerDynamicObject dynamicObject, int elapsed, String requiredItem) {
         super(dynamicObject.id(), dynamicObject.coordinate());
         var builder = ShowDynamicObjectPacket.newBuilder()
                 .setId(dynamicObject.id())
@@ -18,9 +22,17 @@ public final class DynamicObjectInterpolation extends AbstractEntityInterpolatio
                 .setShape(dynamicObject.shape())
                 .setElapsed(elapsed)
                 .setEnd(dynamicObject.currentAnimation().frameEnd());
-        dynamicObject.name().ifPresent(builder::setName);
+        dynamicObject.occupyingCoordinates().forEach(coordinate -> {
+            builder.addGuardX(coordinate.x());
+            builder.addGuardY(coordinate.y());
+        });
+        if (dynamicObject.type() == DynamicObjectType.TRIGGER) {
+            builder.setRequiredItem(requiredItem);
+        }
+        dynamicObject.viewName().ifPresent(builder::setName);
         packet = Packet.newBuilder().setShowDynamicObject(builder).build();
     }
+
 
     @Override
     public Packet toPacket() {

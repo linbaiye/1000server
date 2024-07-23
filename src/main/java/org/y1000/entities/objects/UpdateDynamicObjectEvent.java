@@ -5,18 +5,17 @@ import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateDynamicObjectPacket;
 
-public class UpdateDynamicObjectEvent extends Abstract2ClientEntityEvent  {
+public final class UpdateDynamicObjectEvent extends Abstract2ClientEntityEvent  {
 
     private final Packet packet;
 
-    public UpdateDynamicObjectEvent(TriggerDynamicObject object) {
+    public UpdateDynamicObjectEvent(DynamicObject object) {
         super(object);
         packet = Packet.newBuilder()
                 .setUpdateDynamicObject(UpdateDynamicObjectPacket.newBuilder()
                         .setId(object.id())
                         .setStart(object.currentAnimation().frameStart())
-                        .setEnd(object.currentAnimation().frameEnd())
-                ).build();
+                        .setEnd(object.currentAnimation().frameEnd())).build();
     }
 
     @Override

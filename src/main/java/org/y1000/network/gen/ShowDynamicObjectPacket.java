@@ -19,6 +19,9 @@ private static final long serialVersionUID = 0L;
   private ShowDynamicObjectPacket() {
     shape_ = "";
     name_ = "";
+    guardX_ = emptyIntList();
+    guardY_ = emptyIntList();
+    requiredItem_ = "";
   }
 
   @java.lang.Override
@@ -205,6 +208,113 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int GUARDX_FIELD_NUMBER = 10;
+  @SuppressWarnings("serial")
+  private com.google.protobuf.Internal.IntList guardX_ =
+      emptyIntList();
+  /**
+   * <code>repeated int32 guardX = 10;</code>
+   * @return A list containing the guardX.
+   */
+  @java.lang.Override
+  public java.util.List<java.lang.Integer>
+      getGuardXList() {
+    return guardX_;
+  }
+  /**
+   * <code>repeated int32 guardX = 10;</code>
+   * @return The count of guardX.
+   */
+  public int getGuardXCount() {
+    return guardX_.size();
+  }
+  /**
+   * <code>repeated int32 guardX = 10;</code>
+   * @param index The index of the element to return.
+   * @return The guardX at the given index.
+   */
+  public int getGuardX(int index) {
+    return guardX_.getInt(index);
+  }
+  private int guardXMemoizedSerializedSize = -1;
+
+  public static final int GUARDY_FIELD_NUMBER = 11;
+  @SuppressWarnings("serial")
+  private com.google.protobuf.Internal.IntList guardY_ =
+      emptyIntList();
+  /**
+   * <code>repeated int32 guardY = 11;</code>
+   * @return A list containing the guardY.
+   */
+  @java.lang.Override
+  public java.util.List<java.lang.Integer>
+      getGuardYList() {
+    return guardY_;
+  }
+  /**
+   * <code>repeated int32 guardY = 11;</code>
+   * @return The count of guardY.
+   */
+  public int getGuardYCount() {
+    return guardY_.size();
+  }
+  /**
+   * <code>repeated int32 guardY = 11;</code>
+   * @param index The index of the element to return.
+   * @return The guardY at the given index.
+   */
+  public int getGuardY(int index) {
+    return guardY_.getInt(index);
+  }
+  private int guardYMemoizedSerializedSize = -1;
+
+  public static final int REQUIREDITEM_FIELD_NUMBER = 12;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object requiredItem_ = "";
+  /**
+   * <code>optional string requiredItem = 12;</code>
+   * @return Whether the requiredItem field is set.
+   */
+  @java.lang.Override
+  public boolean hasRequiredItem() {
+    return ((bitField0_ & 0x00000002) != 0);
+  }
+  /**
+   * <code>optional string requiredItem = 12;</code>
+   * @return The requiredItem.
+   */
+  @java.lang.Override
+  public java.lang.String getRequiredItem() {
+    java.lang.Object ref = requiredItem_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      requiredItem_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string requiredItem = 12;</code>
+   * @return The bytes for requiredItem.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getRequiredItemBytes() {
+    java.lang.Object ref = requiredItem_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      requiredItem_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -219,6 +329,7 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    getSerializedSize();
     if (id_ != 0L) {
       output.writeInt64(1, id_);
     }
@@ -245,6 +356,23 @@ private static final long serialVersionUID = 0L;
     }
     if (((bitField0_ & 0x00000001) != 0)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 9, name_);
+    }
+    if (getGuardXList().size() > 0) {
+      output.writeUInt32NoTag(82);
+      output.writeUInt32NoTag(guardXMemoizedSerializedSize);
+    }
+    for (int i = 0; i < guardX_.size(); i++) {
+      output.writeInt32NoTag(guardX_.getInt(i));
+    }
+    if (getGuardYList().size() > 0) {
+      output.writeUInt32NoTag(90);
+      output.writeUInt32NoTag(guardYMemoizedSerializedSize);
+    }
+    for (int i = 0; i < guardY_.size(); i++) {
+      output.writeInt32NoTag(guardY_.getInt(i));
+    }
+    if (((bitField0_ & 0x00000002) != 0)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 12, requiredItem_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -289,6 +417,37 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, name_);
     }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < guardX_.size(); i++) {
+        dataSize += com.google.protobuf.CodedOutputStream
+          .computeInt32SizeNoTag(guardX_.getInt(i));
+      }
+      size += dataSize;
+      if (!getGuardXList().isEmpty()) {
+        size += 1;
+        size += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(dataSize);
+      }
+      guardXMemoizedSerializedSize = dataSize;
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < guardY_.size(); i++) {
+        dataSize += com.google.protobuf.CodedOutputStream
+          .computeInt32SizeNoTag(guardY_.getInt(i));
+      }
+      size += dataSize;
+      if (!getGuardYList().isEmpty()) {
+        size += 1;
+        size += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(dataSize);
+      }
+      guardYMemoizedSerializedSize = dataSize;
+    }
+    if (((bitField0_ & 0x00000002) != 0)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, requiredItem_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -325,6 +484,15 @@ private static final long serialVersionUID = 0L;
       if (!getName()
           .equals(other.getName())) return false;
     }
+    if (!getGuardXList()
+        .equals(other.getGuardXList())) return false;
+    if (!getGuardYList()
+        .equals(other.getGuardYList())) return false;
+    if (hasRequiredItem() != other.hasRequiredItem()) return false;
+    if (hasRequiredItem()) {
+      if (!getRequiredItem()
+          .equals(other.getRequiredItem())) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -356,6 +524,18 @@ private static final long serialVersionUID = 0L;
     if (hasName()) {
       hash = (37 * hash) + NAME_FIELD_NUMBER;
       hash = (53 * hash) + getName().hashCode();
+    }
+    if (getGuardXCount() > 0) {
+      hash = (37 * hash) + GUARDX_FIELD_NUMBER;
+      hash = (53 * hash) + getGuardXList().hashCode();
+    }
+    if (getGuardYCount() > 0) {
+      hash = (37 * hash) + GUARDY_FIELD_NUMBER;
+      hash = (53 * hash) + getGuardYList().hashCode();
+    }
+    if (hasRequiredItem()) {
+      hash = (37 * hash) + REQUIREDITEM_FIELD_NUMBER;
+      hash = (53 * hash) + getRequiredItem().hashCode();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -497,6 +677,9 @@ private static final long serialVersionUID = 0L;
       shape_ = "";
       elapsed_ = 0;
       name_ = "";
+      guardX_ = emptyIntList();
+      guardY_ = emptyIntList();
+      requiredItem_ = "";
       return this;
     }
 
@@ -558,6 +741,18 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000100) != 0)) {
         result.name_ = name_;
         to_bitField0_ |= 0x00000001;
+      }
+      if (((from_bitField0_ & 0x00000200) != 0)) {
+        guardX_.makeImmutable();
+        result.guardX_ = guardX_;
+      }
+      if (((from_bitField0_ & 0x00000400) != 0)) {
+        guardY_.makeImmutable();
+        result.guardY_ = guardY_;
+      }
+      if (((from_bitField0_ & 0x00000800) != 0)) {
+        result.requiredItem_ = requiredItem_;
+        to_bitField0_ |= 0x00000002;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -637,6 +832,33 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000100;
         onChanged();
       }
+      if (!other.guardX_.isEmpty()) {
+        if (guardX_.isEmpty()) {
+          guardX_ = other.guardX_;
+          guardX_.makeImmutable();
+          bitField0_ |= 0x00000200;
+        } else {
+          ensureGuardXIsMutable();
+          guardX_.addAll(other.guardX_);
+        }
+        onChanged();
+      }
+      if (!other.guardY_.isEmpty()) {
+        if (guardY_.isEmpty()) {
+          guardY_ = other.guardY_;
+          guardY_.makeImmutable();
+          bitField0_ |= 0x00000400;
+        } else {
+          ensureGuardYIsMutable();
+          guardY_.addAll(other.guardY_);
+        }
+        onChanged();
+      }
+      if (other.hasRequiredItem()) {
+        requiredItem_ = other.requiredItem_;
+        bitField0_ |= 0x00000800;
+        onChanged();
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -708,6 +930,43 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000100;
               break;
             } // case 74
+            case 80: {
+              int v = input.readInt32();
+              ensureGuardXIsMutable();
+              guardX_.addInt(v);
+              break;
+            } // case 80
+            case 82: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              ensureGuardXIsMutable();
+              while (input.getBytesUntilLimit() > 0) {
+                guardX_.addInt(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            } // case 82
+            case 88: {
+              int v = input.readInt32();
+              ensureGuardYIsMutable();
+              guardY_.addInt(v);
+              break;
+            } // case 88
+            case 90: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              ensureGuardYIsMutable();
+              while (input.getBytesUntilLimit() > 0) {
+                guardY_.addInt(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            } // case 90
+            case 98: {
+              requiredItem_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00000800;
+              break;
+            } // case 98
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1096,6 +1355,253 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       name_ = value;
       bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.Internal.IntList guardX_ = emptyIntList();
+    private void ensureGuardXIsMutable() {
+      if (!guardX_.isModifiable()) {
+        guardX_ = makeMutableCopy(guardX_);
+      }
+      bitField0_ |= 0x00000200;
+    }
+    /**
+     * <code>repeated int32 guardX = 10;</code>
+     * @return A list containing the guardX.
+     */
+    public java.util.List<java.lang.Integer>
+        getGuardXList() {
+      guardX_.makeImmutable();
+      return guardX_;
+    }
+    /**
+     * <code>repeated int32 guardX = 10;</code>
+     * @return The count of guardX.
+     */
+    public int getGuardXCount() {
+      return guardX_.size();
+    }
+    /**
+     * <code>repeated int32 guardX = 10;</code>
+     * @param index The index of the element to return.
+     * @return The guardX at the given index.
+     */
+    public int getGuardX(int index) {
+      return guardX_.getInt(index);
+    }
+    /**
+     * <code>repeated int32 guardX = 10;</code>
+     * @param index The index to set the value at.
+     * @param value The guardX to set.
+     * @return This builder for chaining.
+     */
+    public Builder setGuardX(
+        int index, int value) {
+
+      ensureGuardXIsMutable();
+      guardX_.setInt(index, value);
+      bitField0_ |= 0x00000200;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated int32 guardX = 10;</code>
+     * @param value The guardX to add.
+     * @return This builder for chaining.
+     */
+    public Builder addGuardX(int value) {
+
+      ensureGuardXIsMutable();
+      guardX_.addInt(value);
+      bitField0_ |= 0x00000200;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated int32 guardX = 10;</code>
+     * @param values The guardX to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllGuardX(
+        java.lang.Iterable<? extends java.lang.Integer> values) {
+      ensureGuardXIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, guardX_);
+      bitField0_ |= 0x00000200;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated int32 guardX = 10;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearGuardX() {
+      guardX_ = emptyIntList();
+      bitField0_ = (bitField0_ & ~0x00000200);
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.Internal.IntList guardY_ = emptyIntList();
+    private void ensureGuardYIsMutable() {
+      if (!guardY_.isModifiable()) {
+        guardY_ = makeMutableCopy(guardY_);
+      }
+      bitField0_ |= 0x00000400;
+    }
+    /**
+     * <code>repeated int32 guardY = 11;</code>
+     * @return A list containing the guardY.
+     */
+    public java.util.List<java.lang.Integer>
+        getGuardYList() {
+      guardY_.makeImmutable();
+      return guardY_;
+    }
+    /**
+     * <code>repeated int32 guardY = 11;</code>
+     * @return The count of guardY.
+     */
+    public int getGuardYCount() {
+      return guardY_.size();
+    }
+    /**
+     * <code>repeated int32 guardY = 11;</code>
+     * @param index The index of the element to return.
+     * @return The guardY at the given index.
+     */
+    public int getGuardY(int index) {
+      return guardY_.getInt(index);
+    }
+    /**
+     * <code>repeated int32 guardY = 11;</code>
+     * @param index The index to set the value at.
+     * @param value The guardY to set.
+     * @return This builder for chaining.
+     */
+    public Builder setGuardY(
+        int index, int value) {
+
+      ensureGuardYIsMutable();
+      guardY_.setInt(index, value);
+      bitField0_ |= 0x00000400;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated int32 guardY = 11;</code>
+     * @param value The guardY to add.
+     * @return This builder for chaining.
+     */
+    public Builder addGuardY(int value) {
+
+      ensureGuardYIsMutable();
+      guardY_.addInt(value);
+      bitField0_ |= 0x00000400;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated int32 guardY = 11;</code>
+     * @param values The guardY to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllGuardY(
+        java.lang.Iterable<? extends java.lang.Integer> values) {
+      ensureGuardYIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, guardY_);
+      bitField0_ |= 0x00000400;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated int32 guardY = 11;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearGuardY() {
+      guardY_ = emptyIntList();
+      bitField0_ = (bitField0_ & ~0x00000400);
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object requiredItem_ = "";
+    /**
+     * <code>optional string requiredItem = 12;</code>
+     * @return Whether the requiredItem field is set.
+     */
+    public boolean hasRequiredItem() {
+      return ((bitField0_ & 0x00000800) != 0);
+    }
+    /**
+     * <code>optional string requiredItem = 12;</code>
+     * @return The requiredItem.
+     */
+    public java.lang.String getRequiredItem() {
+      java.lang.Object ref = requiredItem_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        requiredItem_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string requiredItem = 12;</code>
+     * @return The bytes for requiredItem.
+     */
+    public com.google.protobuf.ByteString
+        getRequiredItemBytes() {
+      java.lang.Object ref = requiredItem_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        requiredItem_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string requiredItem = 12;</code>
+     * @param value The requiredItem to set.
+     * @return This builder for chaining.
+     */
+    public Builder setRequiredItem(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      requiredItem_ = value;
+      bitField0_ |= 0x00000800;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string requiredItem = 12;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearRequiredItem() {
+      requiredItem_ = getDefaultInstance().getRequiredItem();
+      bitField0_ = (bitField0_ & ~0x00000800);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string requiredItem = 12;</code>
+     * @param value The bytes for requiredItem to set.
+     * @return This builder for chaining.
+     */
+    public Builder setRequiredItemBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      requiredItem_ = value;
+      bitField0_ |= 0x00000800;
       onChanged();
       return this;
     }

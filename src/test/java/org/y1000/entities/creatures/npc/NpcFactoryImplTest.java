@@ -31,18 +31,18 @@ class NpcFactoryImplTest {
     @Test
     void createNpc() {
         var npc = npcFactory.createNpc("一级牛", 1L, map, Coordinate.xy(2, 2));
-        assertEquals("牛", npc.name());
+        assertEquals("牛", npc.viewName());
         assertInstanceOf(PassiveMonster.class, npc);
         var lbn = npcFactory.createMerchant("一级老板娘", 1L, map, Coordinate.xy(2, 2));
-        assertEquals("老板娘", lbn.name());
+        assertEquals("老板娘", lbn.viewName());
         var merchant = (DevirtueMerchant)npcFactory.createNpc("一级老板娘", 1L, map, Coordinate.xy(2, 2));
-        assertEquals("老板娘", merchant.name());
+        assertEquals("老板娘", merchant.viewName());
     }
 
     @Test
     void createMonster() {
         var npc = npcFactory.createNpc("一级牛", 1L, map, Coordinate.xy(2, 2));
-        assertEquals("牛", npc.name());
+        assertEquals("牛", npc.viewName());
         assertEquals(Coordinate.xy(2, 2), npc.coordinate());
         assertEquals(Coordinate.xy(2, 2), npc.spawnCoordinate());
     }

@@ -62,6 +62,7 @@ private static final long serialVersionUID = 0L;
     RIGHTCLICK(15),
     TRADEREQUEST(16),
     UPDATETRADE(17),
+    TRIGGERDYNAMICOBJECT(18),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -96,6 +97,7 @@ private static final long serialVersionUID = 0L;
         case 15: return RIGHTCLICK;
         case 16: return TRADEREQUEST;
         case 17: return UPDATETRADE;
+        case 18: return TRIGGERDYNAMICOBJECT;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -638,6 +640,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
   }
 
+  public static final int TRIGGERDYNAMICOBJECT_FIELD_NUMBER = 18;
+  /**
+   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+   * @return Whether the triggerDynamicObject field is set.
+   */
+  @java.lang.Override
+  public boolean hasTriggerDynamicObject() {
+    return typeCase_ == 18;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+   * @return The triggerDynamicObject.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientTriggerDynamicObjectPacket getTriggerDynamicObject() {
+    if (typeCase_ == 18) {
+       return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
+    }
+    return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder getTriggerDynamicObjectOrBuilder() {
+    if (typeCase_ == 18) {
+       return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
+    }
+    return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -702,6 +735,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 17) {
       output.writeMessage(17, (org.y1000.network.gen.ClientUpdateTradePacket) type_);
+    }
+    if (typeCase_ == 18) {
+      output.writeMessage(18, (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -779,6 +815,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 17) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(17, (org.y1000.network.gen.ClientUpdateTradePacket) type_);
+    }
+    if (typeCase_ == 18) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(18, (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -865,6 +905,10 @@ private static final long serialVersionUID = 0L;
         if (!getUpdateTrade()
             .equals(other.getUpdateTrade())) return false;
         break;
+      case 18:
+        if (!getTriggerDynamicObject()
+            .equals(other.getTriggerDynamicObject())) return false;
+        break;
       case 0:
       default:
     }
@@ -947,6 +991,10 @@ private static final long serialVersionUID = 0L;
       case 17:
         hash = (37 * hash) + UPDATETRADE_FIELD_NUMBER;
         hash = (53 * hash) + getUpdateTrade().hashCode();
+        break;
+      case 18:
+        hash = (37 * hash) + TRIGGERDYNAMICOBJECT_FIELD_NUMBER;
+        hash = (53 * hash) + getTriggerDynamicObject().hashCode();
         break;
       case 0:
       default:
@@ -1133,6 +1181,9 @@ private static final long serialVersionUID = 0L;
       if (updateTradeBuilder_ != null) {
         updateTradeBuilder_.clear();
       }
+      if (triggerDynamicObjectBuilder_ != null) {
+        triggerDynamicObjectBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1241,6 +1292,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 17 &&
           updateTradeBuilder_ != null) {
         result.type_ = updateTradeBuilder_.build();
+      }
+      if (typeCase_ == 18 &&
+          triggerDynamicObjectBuilder_ != null) {
+        result.type_ = triggerDynamicObjectBuilder_.build();
       }
     }
 
@@ -1355,6 +1410,10 @@ private static final long serialVersionUID = 0L;
         }
         case UPDATETRADE: {
           mergeUpdateTrade(other.getUpdateTrade());
+          break;
+        }
+        case TRIGGERDYNAMICOBJECT: {
+          mergeTriggerDynamicObject(other.getTriggerDynamicObject());
           break;
         }
         case TYPE_NOT_SET: {
@@ -1506,6 +1565,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 17;
               break;
             } // case 138
+            case 146: {
+              input.readMessage(
+                  getTriggerDynamicObjectFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 18;
+              break;
+            } // case 146
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -3950,6 +4016,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 17;
       onChanged();
       return updateTradeBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientTriggerDynamicObjectPacket, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder, org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder> triggerDynamicObjectBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+     * @return Whether the triggerDynamicObject field is set.
+     */
+    @java.lang.Override
+    public boolean hasTriggerDynamicObject() {
+      return typeCase_ == 18;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+     * @return The triggerDynamicObject.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientTriggerDynamicObjectPacket getTriggerDynamicObject() {
+      if (triggerDynamicObjectBuilder_ == null) {
+        if (typeCase_ == 18) {
+          return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
+        }
+        return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 18) {
+          return triggerDynamicObjectBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+     */
+    public Builder setTriggerDynamicObject(org.y1000.network.gen.ClientTriggerDynamicObjectPacket value) {
+      if (triggerDynamicObjectBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        triggerDynamicObjectBuilder_.setMessage(value);
+      }
+      typeCase_ = 18;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+     */
+    public Builder setTriggerDynamicObject(
+        org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder builderForValue) {
+      if (triggerDynamicObjectBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        triggerDynamicObjectBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 18;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+     */
+    public Builder mergeTriggerDynamicObject(org.y1000.network.gen.ClientTriggerDynamicObjectPacket value) {
+      if (triggerDynamicObjectBuilder_ == null) {
+        if (typeCase_ == 18 &&
+            type_ != org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientTriggerDynamicObjectPacket.newBuilder((org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 18) {
+          triggerDynamicObjectBuilder_.mergeFrom(value);
+        } else {
+          triggerDynamicObjectBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 18;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+     */
+    public Builder clearTriggerDynamicObject() {
+      if (triggerDynamicObjectBuilder_ == null) {
+        if (typeCase_ == 18) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 18) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        triggerDynamicObjectBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+     */
+    public org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder getTriggerDynamicObjectBuilder() {
+      return getTriggerDynamicObjectFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder getTriggerDynamicObjectOrBuilder() {
+      if ((typeCase_ == 18) && (triggerDynamicObjectBuilder_ != null)) {
+        return triggerDynamicObjectBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 18) {
+          return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
+        }
+        return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientTriggerDynamicObjectPacket, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder, org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder> 
+        getTriggerDynamicObjectFieldBuilder() {
+      if (triggerDynamicObjectBuilder_ == null) {
+        if (!(typeCase_ == 18)) {
+          type_ = org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
+        }
+        triggerDynamicObjectBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientTriggerDynamicObjectPacket, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder, org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder>(
+                (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 18;
+      onChanged();
+      return triggerDynamicObjectBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

@@ -2,14 +2,18 @@ package org.y1000.realm;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
+import org.y1000.entities.objects.DynamicObject;
 import org.y1000.util.Coordinate;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 class RealmMapV2ImplTest extends AbstractUnitTestFixture {
     private final transient String name = "test";
@@ -65,5 +69,44 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
         assertTrue(start.movable(Coordinate.xy(47, 38)));
         assertTrue(start.movable(Coordinate.xy(44, 31)));
         assertFalse(start.movable(Coordinate.xy(45, 31)));
+    }
+
+    @Test
+    void dynamicObjectOccupy() {
+        DynamicObject dynamicObject = Mockito.mock(DynamicObject.class);
+        when(dynamicObject.occupyingCoordinates()).thenReturn(Set.of(Coordinate.xy(1, 1), Coordinate.xy(1, 2)));
+        assertTrue(realmMap.movable(Coordinate.xy(1, 1)));
+        assertTrue(realmMap.movable(Coordinate.xy(1, 2)));
+        realmMap.occupy(dynamicObject);
+        assertFalse(realmMap.movable(Coordinate.xy(1, 1)));
+        assertFalse(realmMap.movable(Coordinate.xy(1, 2)));
+    }
+
+    @Test
+    void dynamicObjectFree() {
+        DynamicObject dynamicObject = Mockito.mock(DynamicObject.class);
+        when(dynamicObject.occupyingCoordinates()).thenReturn(Set.of(Coordinate.xy(3, 1), Coordinate.xy(3, 2)));
+        realmMap.occupy(dynamicObject);
+        assertFalse(realmMap.movable(Coordinate.xy(3, 1)));
+        assertFalse(realmMap.movable(Coordinate.xy(3, 2)));
+        realmMap.free(dynamicObject);
+        assertTrue(realmMap.movable(Coordinate.xy(3, 1)));
+        assertTrue(realmMap.movable(Coordinate.xy(3, 2)));
+    }
+
+    @Test
+    void intersectedOccupy() {
+        DynamicObject dynamicObject = Mockito.mock(DynamicObject.class);
+        when(dynamicObject.occupyingCoordinates()).thenReturn(Set.of(Coordinate.xy(1, 1), Coordinate.xy(1, 2)));
+        realmMap.occupy(dynamicObject);
+        PassiveMonster monster = monsterBuilder().coordinate(Coordinate.xy(1, 1)).build();
+        realmMap.occupy(monster);
+        assertFalse(realmMap.movable(Coordinate.xy(1, 1)));
+        realmMap.free(monster);
+        assertFalse(realmMap.movable(Coordinate.xy(1, 1)));
+        assertFalse(realmMap.movable(Coordinate.xy(1, 2)));
+        realmMap.free(dynamicObject);
+        assertTrue(realmMap.movable(Coordinate.xy(1, 1)));
+        assertTrue(realmMap.movable(Coordinate.xy(1, 2)));
     }
 }

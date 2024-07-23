@@ -34,7 +34,8 @@ final class RealmImpl implements Runnable, Realm {
     private final NpcManager npcManager;
 
     private final PlayerManager playerManager;
-    private final DynamicObjectManager dynamicObjectManager;
+
+    private final DynamicObjectManagerImpl dynamicObjectManager;
 
     private final int id;
 
@@ -52,10 +53,10 @@ final class RealmImpl implements Runnable, Realm {
         eventSender = new RealmEntityEventSender();
         itemManager = new ItemManagerImpl(eventSender, itemSdb, monstersSdb, entityIdGenerator, itemFactory);
         npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager, createEntitySdbRepository);
-        dynamicObjectManager = new DynamicObjectManager(dynamicObjectFactory, createEntitySdbRepository, itemManager, entityIdGenerator, eventSender);
+        dynamicObjectManager = new DynamicObjectManagerImpl(dynamicObjectFactory, createEntitySdbRepository, entityIdGenerator, eventSender);
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
-        this.playerManager = new PlayerManager(eventSender, itemManager, itemFactory);
+        this.playerManager = new PlayerManager(eventSender, itemManager, itemFactory, dynamicObjectManager);
     }
 
     public RealmMap map() {

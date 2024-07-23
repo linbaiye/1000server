@@ -18,7 +18,7 @@ public interface Creature extends AttackableEntity {
 
     int avoidance();
 
-    String name();
+    String viewName();
 
     int maxLife();
 

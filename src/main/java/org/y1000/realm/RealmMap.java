@@ -2,9 +2,11 @@ package org.y1000.realm;
 
 
 import org.y1000.entities.Entity;
+import org.y1000.entities.objects.DynamicObject;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface RealmMap {
 
@@ -13,6 +15,10 @@ public interface RealmMap {
     void occupy(Entity entity);
 
     void free(Entity creature);
+
+    void occupy(DynamicObject dynamicObject);
+
+    void free(DynamicObject dynamicObject);
 
     String name();
 

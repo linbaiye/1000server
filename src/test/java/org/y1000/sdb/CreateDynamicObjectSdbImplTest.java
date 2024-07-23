@@ -15,7 +15,7 @@ class CreateDynamicObjectSdbImplTest {
         CreateDynamicObjectSdb sdb = new CreateDynamicObjectSdbImpl(19);
         Set<String> numbers = sdb.getNumbers();
         assertEquals(9, numbers.size());
-        assertEquals(Coordinate.xy(135, 87), Coordinate.xy(sdb.getX("9"), sdb.getY("9")));
+        assertEquals(Coordinate.xy(135, 87), Coordinate.xy(sdb.getX("8"), sdb.getY("8")));
         for (String number : numbers) {
             assertNotNull(sdb.getName(number));
             assertNotEquals(0, sdb.getX(number));

@@ -1,6 +1,5 @@
 package org.y1000.entities.creatures.npc;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;

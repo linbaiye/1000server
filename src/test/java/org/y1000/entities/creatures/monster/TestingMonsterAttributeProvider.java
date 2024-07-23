@@ -15,6 +15,12 @@ public class TestingMonsterAttributeProvider implements AttributeProvider {
     public int life;
     public int avoidance;
     public int armor;
+    public String idName;
+
+    @Override
+    public String idName() {
+        return idName;
+    }
 
     @Override
     public int life() {

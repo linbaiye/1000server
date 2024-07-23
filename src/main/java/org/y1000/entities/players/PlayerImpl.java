@@ -35,7 +35,6 @@ import org.y1000.util.UnaryAction;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Function;
 
 @Slf4j
 public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> implements Player,
