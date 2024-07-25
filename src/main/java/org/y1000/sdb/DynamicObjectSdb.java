@@ -15,6 +15,7 @@ public interface DynamicObjectSdb {
     int getRegenInterval(String name);
 
     int getOpenedInterval(String name);
+    int getArmor(String name);
 
     DynamicObjectType getKind(String name);
 

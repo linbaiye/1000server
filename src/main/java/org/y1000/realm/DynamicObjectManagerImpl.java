@@ -7,14 +7,13 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.objects.DynamicObject;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.TriggerDynamicObject;
+import org.y1000.entities.objects.UpdateDynamicObjectEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.sdb.CreateDynamicObjectSdb;
 import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.util.Coordinate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -28,8 +27,6 @@ public final class DynamicObjectManagerImpl extends AbstractEntityManager<Dynami
 
     private final EntityEventSender eventSender;
 
-    private final List<RespawningEntity<DynamicObject>> respawningEntities;
-
     public DynamicObjectManagerImpl(DynamicObjectFactory factory,
                                     CreateEntitySdbRepository createEntitySdbRepository,
                                     EntityIdGenerator entityIdGenerator,
@@ -38,7 +35,6 @@ public final class DynamicObjectManagerImpl extends AbstractEntityManager<Dynami
         this.createEntitySdbRepository = createEntitySdbRepository;
         this.entityIdGenerator = entityIdGenerator;
         this.eventSender = eventSender;
-        this.respawningEntities = new ArrayList<>();
     }
 
     @Override
@@ -48,6 +44,8 @@ public final class DynamicObjectManagerImpl extends AbstractEntityManager<Dynami
         }
         if (entityEvent instanceof RemoveEntityEvent) {
             delete(object);
+        } else if (entityEvent instanceof UpdateDynamicObjectEvent updateDynamicObjectEvent) {
+            eventSender.notifyVisiblePlayers(entityEvent.source(), updateDynamicObjectEvent);
         }
     }
 

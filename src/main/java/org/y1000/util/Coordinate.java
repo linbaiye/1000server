@@ -2,6 +2,7 @@ package org.y1000.util;
 
 import org.y1000.entities.Direction;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -78,5 +79,7 @@ public record Coordinate(int x, int y) {
     public static Coordinate xy(int x, int y) {
         return new Coordinate(x, y);
     }
+
+    public static Comparator<Coordinate> byDistance = Coordinate::directDistance;
 
 }

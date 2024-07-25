@@ -68,6 +68,12 @@ class TriggerDynamicObjectTest {
 
     @Test
     void trigger() {
+        when(player.coordinate()).thenReturn(Coordinate.xy(4, 5));
+        object.trigger(player, 1);
+        assertNull(eventListener.removeFirst(UpdateDynamicObjectEvent.class));
+
+
+        when(player.coordinate()).thenReturn(Coordinate.xy(2, 3));
         object.trigger(player, 1);
         UpdateDynamicObjectPacket packet = eventListener.removeFirst(UpdateDynamicObjectEvent.class).toPacket().getUpdateDynamicObject();
         assertEquals(object.id(), packet.getId());
@@ -79,9 +85,11 @@ class TriggerDynamicObjectTest {
 
     @Test
     void update() {
+        when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
         object.trigger(player, 1);
         eventListener.clearEvents();
-        when(dynamicObjectSdb.getOpenedInterval(idName)).thenReturn(6000);
+        int interval = 6000;
+        when(dynamicObjectSdb.getOpenedInterval(idName)).thenReturn(interval);
         when(dynamicObjectSdb.isRemove(idName)).thenReturn(true);
         object.update(object.currentAnimation().total() * 500);
         UpdateDynamicObjectPacket packet = eventListener.removeFirst(UpdateDynamicObjectEvent.class).toPacket().getUpdateDynamicObject();
@@ -90,7 +98,7 @@ class TriggerDynamicObjectTest {
         assertEquals(5, packet.getEnd());
         assertEquals(5, object.currentAnimation().frameStart());
         assertEquals(5, object.currentAnimation().frameEnd());
-        object.update(6000);
+        object.update(interval * 10);
         assertEquals(object.id(), eventListener.removeFirst(RemoveEntityEvent.class).toPacket().getRemoveEntity().getId());
         verify(realmMap, times(1)).free(object);
     }
@@ -108,6 +116,7 @@ class TriggerDynamicObjectTest {
         assertEquals("shape", showDynamicObject.getShape());
         assertEquals(object.coordinate().x(), showDynamicObject.getGuardX(0));
         assertEquals(object.coordinate().y(), showDynamicObject.getGuardY(0));
+        when(player.coordinate()).thenReturn(object.coordinate().move(1, 1));
         object.trigger(player, 1);
         showDynamicObject = object.captureInterpolation().toPacket().getShowDynamicObject();
         assertEquals(1, showDynamicObject.getStart());

@@ -11,7 +11,10 @@ import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
+import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 
 public final class TriggerDynamicObject extends AbstractMutableDynamicObject {
@@ -58,7 +61,7 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject {
     private void changeState(DynamicObjectState state) {
         this.state = state;
         if (state == DynamicObjectState.CHANGED) {
-            changeAnimation(getIndex(), dynamicObjectSdb().getOpenedInterval(idName()));
+            changeAnimation(getIndex(), dynamicObjectSdb().getOpenedInterval(idName()) * 10);
         } else {
             changeAnimation(getIndex());
         }
@@ -66,6 +69,9 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject {
 
     public void trigger(Player player, int slot) {
         if (state != DynamicObjectState.INITIAL) {
+            return;
+        }
+        if (occupyingCoordinates().stream().noneMatch(coordinate -> coordinate.directDistance(player.coordinate()) <= 1)) {
             return;
         }
         Item item = player.inventory().getItem(slot);

@@ -5,6 +5,8 @@ import org.y1000.realm.RealmMap;
 
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 @Slf4j
 public record Rectangle(Coordinate start, Coordinate end) {
@@ -28,10 +30,10 @@ public record Rectangle(Coordinate start, Coordinate end) {
     }
 
 
-    public Optional<Coordinate> random(RealmMap map) {
+    public Optional<Coordinate> random(Predicate<Coordinate> checker) {
         for (int i = 0; i < 5; i++) {
             Coordinate random = random();
-            if (map.movable(random)) {
+            if (checker.test(random)) {
                 return Optional.of(random);
             }
         }

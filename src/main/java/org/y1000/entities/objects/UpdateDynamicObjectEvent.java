@@ -5,7 +5,7 @@ import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateDynamicObjectPacket;
 
-public final class UpdateDynamicObjectEvent extends Abstract2ClientEntityEvent  {
+public final class UpdateDynamicObjectEvent extends Abstract2ClientEntityEvent {
 
     private final Packet packet;
 

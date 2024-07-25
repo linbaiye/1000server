@@ -28,7 +28,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
 
     private final Map<String, List<NpcSpawnSetting>> npcSpawnSettings;
 
-    private final List<RespawningEntity<Npc>> respawningNpcs;
+    private final RespawningEntityManager<Npc> respawningEntityManager;
 
     private final ProjectileManager projectileManager;
 
@@ -51,7 +51,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
         this.npcFactory = npcFactory;
         this.itemManager = itemManager;
         this.npcSpawnSettings = new HashMap<>();
-        respawningNpcs = new ArrayList<>();
+        respawningEntityManager = new RespawningEntityManager<>();
         projectileManager = new ProjectileManager();
         this.createEntitySdbRepository = createEntitySdbRepository;
     }
@@ -59,9 +59,9 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     private void spawnMonsters(String name, RealmMap map, NpcSpawnSetting setting) {
         for (int i = 0; i < setting.number(); i++) {
             try {
-                Optional<Coordinate> random = setting.range().random(map);
+                Optional<Coordinate> random = setting.range().random(map::movable);
                 random.ifPresentOrElse(p -> add(npcFactory.createNpc(name, idGenerator.next(), map, p)),
-                        () -> log.error("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), map.name()));
+                        () -> log.warn("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), map.name()));
             } catch (Exception e) {
                 log.error("Failed to create npc {}.", name, e);
             }
@@ -75,7 +75,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
                 continue;
             }
             Coordinate coordinate = setting.range()
-                    .random(npc.realmMap())
+                    .random(npc.realmMap()::movable)
                     .orElse(npc.spawnCoordinate());
             npc.revive(coordinate);
             add(npc);
@@ -107,14 +107,8 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     }
 
     private void updateRespawning(long delta) {
-        Iterator<RespawningEntity<Npc>> iterator = respawningNpcs.iterator();
-        while (iterator.hasNext()) {
-            RespawningEntity<Npc> respawningNpc = iterator.next();
-            if (respawningNpc.update(delta).canRespawn()) {
-                iterator.remove();
-                respawn(respawningNpc.getEntity());
-            }
-        }
+        Set<Npc> respawningNpcs = respawningEntityManager.update(delta);
+        respawningNpcs.forEach(this::respawn);
     }
 
     @Override
@@ -136,7 +130,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
     @Override
     protected void onDeleted(Npc entity) {
         sender.remove(entity);
-        respawningNpcs.add(new RespawningEntity<>(entity, 8000));
+        respawningEntityManager.add(entity, 8000);
         entity.deregisterEventListener(this);
         entity.deregisterEventListener(itemManager);
     }

@@ -65,7 +65,7 @@ final class RealmImpl implements Runnable, Realm {
 
     @Override
     public int id() {
-        return 0;
+        return id;
     }
 
 

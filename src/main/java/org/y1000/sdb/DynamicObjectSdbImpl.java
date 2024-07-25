@@ -59,6 +59,11 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
     }
 
     @Override
+    public int getArmor(String name) {
+        return getIntOrZero(name, "Armor");
+    }
+
+    @Override
     public DynamicObjectType getKind(String name) {
         return getEnum(name, "Kind", DynamicObjectType::fromValue);
     }
