@@ -15,7 +15,7 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
     }
 
     @Override
-    public TriggerDynamicObject createDynamicObject(String name,
+    public DynamicObject createDynamicObject(String name,
                                                     long id,
                                                     RealmMap realmMap,
                                                     Coordinate coordinate) {
@@ -23,16 +23,23 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
         DynamicObjectType kind = dynamicObjectSdb.getKind(name);
-        if (kind != DynamicObjectType.TRIGGER) {
-            log.error("{} is not a trigger object.", name);
-            throw new IllegalArgumentException("Invalid type.");
+        if (kind == DynamicObjectType.TRIGGER) {
+            return TriggerDynamicObject.builder()
+                    .id(id)
+                    .idName(name)
+                    .realmMap(realmMap)
+                    .coordinate(coordinate)
+                    .dynamicObjectSdb(dynamicObjectSdb)
+                    .build();
+        } else if (kind == DynamicObjectType.KILLABLE) {
+            return KillableDynamicObject.builder()
+                    .id(id)
+                    .coordinate(coordinate)
+                    .idName(name)
+                    .realmMap(realmMap)
+                    .dynamicObjectSdb(dynamicObjectSdb)
+                    .build();
         }
-        return TriggerDynamicObject.builder()
-                .id(id)
-                .idName(name)
-                .realmMap(realmMap)
-                .coordinate(coordinate)
-                .dynamicObjectSdb(dynamicObjectSdb)
-                .build();
+        throw new IllegalArgumentException();
     }
 }

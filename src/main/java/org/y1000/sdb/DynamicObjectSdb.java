@@ -33,4 +33,12 @@ public interface DynamicObjectSdb {
 
     String getGuardPos(String name);
 
+    Optional<String> getSoundEvent(String name);
+
+    int getLife(String name);
+
+    default int getOpenedMillis(String name) {
+        return 10 * getOpenedInterval(name);
+    }
+
 }

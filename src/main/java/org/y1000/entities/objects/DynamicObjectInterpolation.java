@@ -7,11 +7,11 @@ import org.y1000.network.gen.ShowDynamicObjectPacket;
 public final class DynamicObjectInterpolation extends AbstractEntityInterpolation  {
     private final Packet packet;
 
-    public DynamicObjectInterpolation(TriggerDynamicObject dynamicObject, int elapsed) {
+    public DynamicObjectInterpolation(DynamicObject dynamicObject, int elapsed) {
         this(dynamicObject, elapsed, null);
     }
 
-    public DynamicObjectInterpolation(TriggerDynamicObject dynamicObject, int elapsed, String requiredItem) {
+    public DynamicObjectInterpolation(DynamicObject dynamicObject, int elapsed, String requiredItem) {
         super(dynamicObject.id(), dynamicObject.coordinate());
         var builder = ShowDynamicObjectPacket.newBuilder()
                 .setId(dynamicObject.id())

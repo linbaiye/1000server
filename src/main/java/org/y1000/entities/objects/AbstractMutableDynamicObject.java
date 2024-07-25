@@ -91,13 +91,12 @@ public abstract class AbstractMutableDynamicObject extends AbstractEntity implem
         emitEvent(new UpdateDynamicObjectEvent(this));
     }
 
-    protected void changeAnimation(int index) {
-        changeAnimation(index, animations[index].total() * FRAME_DURATION);
+    protected int getAnimationIndex() {
+        return animationIndex;
     }
 
-    public Optional<Integer> regenTime() {
-        int reg = dynamicObjectSdb.getRegenInterval(idName);
-        return reg > 0 ? Optional.of(reg * 10) : Optional.empty();
+    protected void changeAnimation(int index) {
+        changeAnimation(index, animations[index].total() * FRAME_DURATION);
     }
 
     public Animation currentAnimation() {

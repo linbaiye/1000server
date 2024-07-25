@@ -54,7 +54,7 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
     }
 
     @Override
-    public void revive(Coordinate coordinate) {
+    public void respawn(Coordinate coordinate) {
         doRevive(coordinate);
         super.changeAI(initAi);
     }

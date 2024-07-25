@@ -5,6 +5,6 @@ import org.y1000.util.Coordinate;
 
 public interface DynamicObjectFactory {
 
-    TriggerDynamicObject createDynamicObject(String name, long id, RealmMap realmMap, Coordinate coordinate);
+    DynamicObject createDynamicObject(String name, long id, RealmMap realmMap, Coordinate coordinate);
 
 }

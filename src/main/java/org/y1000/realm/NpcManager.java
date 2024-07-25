@@ -77,7 +77,7 @@ final class NpcManager extends AbstractEntityManager<Npc> implements EntityEvent
             Coordinate coordinate = setting.range()
                     .random(npc.realmMap()::movable)
                     .orElse(npc.spawnCoordinate());
-            npc.revive(coordinate);
+            npc.respawn(coordinate);
             add(npc);
             return;
         }

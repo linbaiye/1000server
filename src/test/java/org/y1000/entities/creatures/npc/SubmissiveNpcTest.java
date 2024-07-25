@@ -61,7 +61,7 @@ class SubmissiveNpcTest extends AbstractUnitTestFixture  {
         npc.attackedBy(player);
         assertEquals(State.DIE, npc.stateEnum());
         Mockito.reset(mockedMap);
-        npc.revive(npc.coordinate().move(0, 1));
+        npc.respawn(npc.coordinate().move(0, 1));
         assertEquals(State.IDLE, npc.stateEnum());
         assertEquals(npc.coordinate(), Coordinate.xy(2, 4));
         assertEquals(npc.spawnCoordinate(), Coordinate.xy(2, 4));

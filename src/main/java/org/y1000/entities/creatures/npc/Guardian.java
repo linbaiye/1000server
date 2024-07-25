@@ -40,7 +40,7 @@ public final class Guardian extends AbstractViolentNpc {
     }
 
     @Override
-    public void revive(Coordinate coordinate) {
+    public void respawn(Coordinate coordinate) {
         doRevive(coordinate);
     }
 

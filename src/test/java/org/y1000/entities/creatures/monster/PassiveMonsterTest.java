@@ -75,7 +75,7 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
         monster.attackedBy(attacker);
         assertEquals(0, monster.currentLife());
         assertEquals(State.DIE, monster.stateEnum());
-        monster.revive(monster.coordinate());
+        monster.respawn(monster.coordinate());
         assertEquals(1000, monster.currentLife());
         assertEquals(State.IDLE, monster.stateEnum());
     }

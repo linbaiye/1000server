@@ -72,7 +72,7 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
     }
 
     @Override
-    public void revive(Coordinate coordinate) {
+    public void respawn(Coordinate coordinate) {
         doRevive(coordinate);
         ai.start(this);
     }

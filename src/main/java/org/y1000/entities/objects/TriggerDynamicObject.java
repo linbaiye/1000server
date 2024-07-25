@@ -1,8 +1,10 @@
 package org.y1000.entities.objects;
 
 import lombok.Builder;
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.item.Item;
@@ -11,13 +13,10 @@ import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
-import java.util.Comparator;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 
-public final class TriggerDynamicObject extends AbstractMutableDynamicObject {
+public final class TriggerDynamicObject extends AbstractMutableDynamicObject implements RespawnDynamicObject {
 
     private final String requiredItem;
 
@@ -30,15 +29,12 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject {
                                 DynamicObjectSdb dynamicObjectSdb,
                                 String idName) {
         super(id, coordinate, realmMap, dynamicObjectSdb, idName);
+        Validate.isTrue(dynamicObjectSdb.getRegenInterval(idName) > 0);
         this.requiredItem = dynamicObjectSdb.getEventItem(idName).split(":")[0].trim();
         this.state = DynamicObjectState.INITIAL;
         changeAnimation(0);
     }
 
-    public void rebuild()  {
-        changeState(DynamicObjectState.INITIAL);
-        realmMap().occupy(this);
-    }
 
     @Override
     public void update(int delta) {
@@ -61,7 +57,7 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject {
     private void changeState(DynamicObjectState state) {
         this.state = state;
         if (state == DynamicObjectState.CHANGED) {
-            changeAnimation(getIndex(), dynamicObjectSdb().getOpenedInterval(idName()) * 10);
+            changeAnimation(getIndex(), dynamicObjectSdb().getOpenedMillis(idName()));
         } else {
             changeAnimation(getIndex());
         }
@@ -76,6 +72,7 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject {
         }
         Item item = player.inventory().getItem(slot);
         if (item != null && requiredItem.equals(item.name()) && player.consumeItem(slot)) {
+            dynamicObjectSdb().getSoundEvent(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
             changeState(DynamicObjectState.CHANGING);
         }
     }
@@ -129,5 +126,16 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject {
         } else {
             changeState(DynamicObjectState.INITIAL);
         }
+    }
+
+    @Override
+    public void respawn() {
+        realmMap().occupy(this);
+        changeState(DynamicObjectState.INITIAL);
+    }
+
+    @Override
+    public int respawnTime() {
+        return dynamicObjectSdb().getRegenInterval(idName()) * 10;
     }
 }

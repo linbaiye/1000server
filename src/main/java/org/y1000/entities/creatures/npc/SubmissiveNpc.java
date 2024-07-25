@@ -49,7 +49,7 @@ public final class SubmissiveNpc extends AbstractNpc {
     }
 
     @Override
-    public void revive(Coordinate coordinate) {
+    public void respawn(Coordinate coordinate) {
         doRevive(coordinate);
     }
 

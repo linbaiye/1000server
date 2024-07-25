@@ -15,7 +15,8 @@ public final class UpdateDynamicObjectEvent extends Abstract2ClientEntityEvent {
                 .setUpdateDynamicObject(UpdateDynamicObjectPacket.newBuilder()
                         .setId(object.id())
                         .setStart(object.currentAnimation().frameStart())
-                        .setEnd(object.currentAnimation().frameEnd())).build();
+                        .setEnd(object.currentAnimation().frameEnd()))
+                .build();
     }
 
     @Override

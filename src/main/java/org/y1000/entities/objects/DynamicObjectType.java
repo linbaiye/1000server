@@ -6,6 +6,9 @@ public enum DynamicObjectType implements ValueEnum  {
     TRIGGER(2),
     // Does nothing but occupies the ground.
     IMMUNE(0),
+
+    //
+    KILLABLE(1);
     ;
 
     private final int v;

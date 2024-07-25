@@ -61,7 +61,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("女子黄龙鞋"));
         inventory.add(itemFactory.createItem("女子黄龙手套"));
         inventory.add(itemFactory.createItem("女子斗笠"));
-        inventory.add(itemFactory.createItem("骨钥匙", 1));
+        inventory.add(itemFactory.createItem("骨钥匙", 1000));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("血皇斧"));*/
@@ -99,7 +99,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .id(slot + playerIdStart)
                 .name("雨诗妾")
                 //.coordinate(new Coordinate(175+ slot, 40))
-                .coordinate(new Coordinate(129, 99))
+                .coordinate(new Coordinate(92, 50))
+                //.coordinate(new Coordinate(129, 99))
                 //.coordinate(new Coordinate(63, 117))
                 //.coordinate(new Coordinate(104, 60))
                 .weapon(weapon)

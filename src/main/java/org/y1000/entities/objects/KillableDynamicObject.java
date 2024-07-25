@@ -1,6 +1,10 @@
 package org.y1000.entities.objects;
 
+import lombok.Builder;
+import org.apache.commons.lang3.Validate;
+import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
@@ -9,28 +13,47 @@ import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
-public class KillableDynamicObject extends AbstractMutableDynamicObject {
+public class KillableDynamicObject extends AbstractMutableDynamicObject implements RespawnDynamicObject {
 
     private final int armor;
 
     private int life;
 
-    public KillableDynamicObject(long id, Coordinate coordinate,
+    private final int maxLife;
+
+    @Builder
+    public KillableDynamicObject(long id,
+                                 Coordinate coordinate,
                                  RealmMap realmMap,
                                  DynamicObjectSdb dynamicObjectSdb, String idName) {
         super(id, coordinate, realmMap, dynamicObjectSdb, idName);
         this.armor = dynamicObjectSdb.getArmor(idName);
+        this.maxLife = dynamicObjectSdb.getLife(idName);
+        Validate.isTrue(maxLife > 0);
+        this.life = maxLife;
     }
 
     @Override
     protected void onAnimationDone() {
-
+        realmMap().free(this);
+        emitEvent(new RemoveEntityEvent(this));
     }
 
+    private boolean handleDamaged(Damage damage) {
+        if (!canBeAttackedNow()) {
+            return false;
+        }
+        life -= Math.min(damage.bodyDamage() - armor, life);
+        dynamicObjectSdb().getSoundEvent(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+        if (life == 0) {
+            changeAnimation(1, dynamicObjectSdb().getOpenedMillis(idName()));
+        }
+        return true;
+    }
 
     @Override
     public boolean attackedBy(Player attacker) {
-        return false;
+        return handleDamaged(attacker.damage());
     }
 
     @Override
@@ -44,28 +67,39 @@ public class KillableDynamicObject extends AbstractMutableDynamicObject {
     }
 
     public void attackedByAoe(Damage damage) {
-        if (life <= 0) {
-            return;
-        }
-        life -= Math.min(damage.bodyDamage() - armor, life);
-        if (life == 0) {
-
-        }
+        handleDamaged(damage);
     }
-
 
     @Override
     public void update(int delta) {
-
+        if (getAnimationIndex() != 0)
+            updateAnimation(delta);
     }
 
     @Override
     public AbstractEntityInterpolation captureInterpolation() {
-        return null;
+        return new DynamicObjectInterpolation(this, animationElapsedDuration());
     }
 
     @Override
     public DynamicObjectType type() {
-        return null;
+        return DynamicObjectType.KILLABLE;
+    }
+
+    @Override
+    public boolean canBeAttackedNow() {
+        return getAnimationIndex() == 0 && life > 0;
+    }
+
+    @Override
+    public void respawn() {
+        life = maxLife;
+        realmMap().occupy(this);
+        changeAnimation(0);
+    }
+
+    @Override
+    public int respawnTime() {
+        return dynamicObjectSdb().getRegenInterval(idName()) * 10;
     }
 }
