@@ -1,7 +1,7 @@
 package org.y1000.kungfu.attack;
 
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.players.Armor;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
@@ -35,7 +35,7 @@ public interface AttackKungFu extends KungFu {
 
     void attackAgain(PlayerImpl player);
 
-    void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target);
+    void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableActiveEntity target);
 
     boolean isRanged();
 

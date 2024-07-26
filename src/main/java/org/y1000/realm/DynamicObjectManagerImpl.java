@@ -14,7 +14,7 @@ import org.y1000.util.Coordinate;
 import java.util.Set;
 
 @Slf4j
-public final class DynamicObjectManagerImpl extends AbstractEntityManager<DynamicObject> implements DynamicObjectManager {
+public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<DynamicObject> implements DynamicObjectManager {
 
     private final DynamicObjectFactory factory;
 
@@ -90,9 +90,6 @@ public final class DynamicObjectManagerImpl extends AbstractEntityManager<Dynami
         Set<String> numbers = createDynamicObjectSdb.getNumbers();
         for (String number : numbers) {
             String name = createDynamicObjectSdb.getName(number);
-            /*if (!name.contains("狐狸")) {
-                continue;
-            }*/
             var obj = factory.createDynamicObject(name, entityIdGenerator.next(), map, Coordinate.xy(createDynamicObjectSdb.getX(number), createDynamicObjectSdb.getY(number)));
             add(obj);
         }

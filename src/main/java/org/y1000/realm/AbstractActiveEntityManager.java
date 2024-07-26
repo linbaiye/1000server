@@ -1,13 +1,13 @@
 package org.y1000.realm;
 
 import org.slf4j.Logger;
-import org.y1000.entities.Entity;
+import org.y1000.entities.ActiveEntity;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class AbstractEntityManager<T extends Entity> implements EntityManager<T> {
+public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implements EntityManager<T> {
     private boolean iterating;
     private final Set<T> entities;
 
@@ -15,7 +15,7 @@ public abstract class AbstractEntityManager<T extends Entity> implements EntityM
 
     private final Set<T> deleting;
 
-    protected AbstractEntityManager() {
+    protected AbstractActiveEntityManager() {
         this.iterating = false;
         this.entities = new HashSet<>();
         this.adding = new HashSet<>();
@@ -91,7 +91,7 @@ public abstract class AbstractEntityManager<T extends Entity> implements EntityM
     }
 
     @Override
-    public <N extends Entity> Optional<N> find(long id, Class<N> type) {
+    public <N extends ActiveEntity> Optional<N> find(long id, Class<N> type) {
         return entities.stream()
                 .filter(e -> e.id() == id && type.isAssignableFrom(e.getClass()))
                 .map(type::cast)

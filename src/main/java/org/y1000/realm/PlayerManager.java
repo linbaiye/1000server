@@ -3,7 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.creatures.npc.Npc;
@@ -17,14 +17,8 @@ import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.network.Connection;
 import org.y1000.realm.event.PlayerDataEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 @Slf4j
-public final class PlayerManager extends AbstractEntityManager<Player> implements PlayerEventVisitor {
+public final class PlayerManager extends AbstractActiveEntityManager<Player> implements PlayerEventVisitor {
 
     private final EntityEventSender eventSender;
 
@@ -115,9 +109,9 @@ public final class PlayerManager extends AbstractEntityManager<Player> implement
         if (dataEvent.data() instanceof ClientPickItemEvent event) {
             itemManager.pickItem(dataEvent.player(), event.id());
         } else if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
-            npcManager.find(attackEvent.entityId(), AttackableEntity.class)
-                    .or(() -> find(attackEvent.entityId(), AttackableEntity.class))
-                    .or(() -> dynamicObjectManager.find(attackEvent.entityId(), AttackableEntity.class))
+            npcManager.find(attackEvent.entityId(), AttackableActiveEntity.class)
+                    .or(() -> find(attackEvent.entityId(), AttackableActiveEntity.class))
+                    .or(() -> dynamicObjectManager.find(attackEvent.entityId(), AttackableActiveEntity.class))
                     .ifPresent(attackableEntity -> dataEvent.player().attack(attackEvent, attackableEntity));
         } else if (dataEvent.data() instanceof ClientSellEvent sellEvent) {
             npcManager.find(sellEvent.merchantId(), Merchant.class)

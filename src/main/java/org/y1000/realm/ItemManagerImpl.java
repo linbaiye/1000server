@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
-final class ItemManagerImpl extends AbstractEntityManager<GroundedItem> implements ItemEventVisitor, GroundItemManager {
+final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> implements ItemEventVisitor, GroundItemManager {
     private final EntityEventSender eventSender;
     private final ItemSdb itemSdb;
     private final MonstersSdb monstersSdb;

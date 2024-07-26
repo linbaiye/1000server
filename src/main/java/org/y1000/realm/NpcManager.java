@@ -18,7 +18,7 @@ import org.y1000.util.Coordinate;
 import java.util.*;
 
 @Slf4j
-final class NpcManager extends AbstractEntityManager<Npc> implements EntityEventListener {
+final class NpcManager extends AbstractActiveEntityManager<Npc> implements EntityEventListener {
 
     private final EntityEventSender sender;
 

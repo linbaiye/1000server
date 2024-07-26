@@ -8,7 +8,9 @@ public enum DynamicObjectType implements ValueEnum  {
     IMMUNE(0),
 
     //
-    KILLABLE(1);
+    KILLABLE(1),
+
+    YAOHUA(7),
     ;
 
     private final int v;

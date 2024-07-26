@@ -1,6 +1,6 @@
 package org.y1000.realm;
 
-import org.y1000.entities.Entity;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 
 import java.util.*;
@@ -38,7 +38,7 @@ final class RelevantScopeManager {
     }
 
 
-    public <E extends Entity> Set<E> filterVisibleEntities(Entity entity, Class<E> type) {
+    public <E extends ActiveEntity> Set<E> filterVisibleEntities(Entity entity, Class<E> type) {
         RelevantScope relevantScope = relevantScopeMap.get(entity);
         if (relevantScope == null) {
             return Collections.emptySet();

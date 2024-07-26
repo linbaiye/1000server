@@ -1,6 +1,5 @@
 package org.y1000.realm;
 
-import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Entity;
 
 import java.util.HashSet;

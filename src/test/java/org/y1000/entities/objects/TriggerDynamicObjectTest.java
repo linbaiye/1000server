@@ -47,6 +47,7 @@ class TriggerDynamicObjectTest {
         when(dynamicObjectSdb.getSStep2(idName)).thenReturn("5");
         when(dynamicObjectSdb.getEStep2(idName)).thenReturn("5");
         when(dynamicObjectSdb.getViewName(idName)).thenReturn(Optional.of("testView"));
+        when(dynamicObjectSdb.getRegenInterval(idName)).thenReturn(1000);
         object = TriggerDynamicObject.builder()
                 .id(1)
                 .idName(idName)

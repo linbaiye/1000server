@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.AbstractCreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
@@ -15,14 +15,14 @@ public final class NpcRangedAttackState extends AbstractCreatureState<Npc> imple
 
     private boolean shot;
 
-    private final AttackableEntity target;
+    private final AttackableActiveEntity target;
 
     private final ViolentNpc shooter;
 
     public NpcRangedAttackState(int totalMillis,
                                 String sound,
                                 int spriteId,
-                                AttackableEntity target, ViolentNpc shooter) {
+                                AttackableActiveEntity target, ViolentNpc shooter) {
         super(totalMillis);
         this.sound = sound;
         this.spriteId = spriteId;

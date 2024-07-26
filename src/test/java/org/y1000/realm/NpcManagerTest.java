@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.entities.Entity;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.NpcJoinedEvent;
@@ -83,7 +83,7 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         npc = npcManager.find(2).get();
         assertEquals("牛", npc.viewName());
         assertTrue(range.contains(npc.spawnCoordinate()));
-        verify(eventSender, times(2)).notifyVisiblePlayers(any(Entity.class), any(NpcJoinedEvent.class));
+        verify(eventSender, times(2)).notifyVisiblePlayers(any(ActiveEntity.class), any(NpcJoinedEvent.class));
     }
 
     @Test
@@ -92,7 +92,7 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         monsterSettings.add(new NpcSpawnSetting(range, 1, "一级牛"));
         when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
         npcManager.init(map, 49);
-        verify(eventSender, times(1)).notifyVisiblePlayers(any(Entity.class), any(NpcJoinedEvent.class));
+        verify(eventSender, times(1)).notifyVisiblePlayers(any(ActiveEntity.class), any(NpcJoinedEvent.class));
         Npc monster = npcManager.find(1L).get();
         Weapon weapon = Mockito.mock(Weapon.class);
         when(weapon.damage()).thenReturn(new Damage(10000000, 1, 1,1));
@@ -108,7 +108,7 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         assertEquals(State.IDLE, monster.stateEnum());
         assertTrue(range.contains(monster.spawnCoordinate()));
         assertTrue(range.contains(monster.coordinate()));
-        verify(eventSender, times(2)).notifyVisiblePlayers(any(Entity.class), any(NpcJoinedEvent.class));
+        verify(eventSender, times(2)).notifyVisiblePlayers(any(ActiveEntity.class), any(NpcJoinedEvent.class));
     }
 
 }

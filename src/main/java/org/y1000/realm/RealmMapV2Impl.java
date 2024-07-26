@@ -7,6 +7,8 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.Server;
 import org.y1000.entities.Entity;
 import org.y1000.entities.objects.DynamicObject;
+import org.y1000.entities.players.Player;
+import org.y1000.entities.teleport.Teleport;
 import org.y1000.util.Coordinate;
 
 import java.io.*;
@@ -38,6 +40,8 @@ final class RealmMapV2Impl implements RealmMap {
     private final Map<Coordinate, Set<Entity>> coordinateEntityMap;
     private final Map<Entity, Coordinate> entityCoordinateMap;
 
+    private final Map<Coordinate, Teleport> teleportMap;
+
     public RealmMapV2Impl(byte[][] movableMask, String name) {
         Objects.requireNonNull(name);
         if (movableMask.length == 0) {
@@ -52,6 +56,7 @@ final class RealmMapV2Impl implements RealmMap {
         this.width = movableMask[0].length;
         coordinateEntityMap = new HashMap<>();
         entityCoordinateMap = new HashMap<>();
+        teleportMap = new HashMap<>();
     }
 
     private boolean isInRange(Coordinate coordinate) {
@@ -74,6 +79,10 @@ final class RealmMapV2Impl implements RealmMap {
     public void occupy(Entity entity) {
         if (!isInRange(entity.coordinate())) {
             throw new IllegalArgumentException("Invalid coordinate " + entity.coordinate());
+        }
+        if (teleportMap.containsKey(entity.coordinate()) && entity instanceof Player player) {
+            teleportMap.get(entity.coordinate()).teleport(player);
+            return;
         }
         free(entity);
         coordinateEntityMap.computeIfAbsent(entity.coordinate(), c -> new HashSet<>()).add(entity);
@@ -120,6 +129,18 @@ final class RealmMapV2Impl implements RealmMap {
     @Override
     public String name() {
         return name;
+    }
+
+    @Override
+    public void addTeleport(Teleport teleport) {
+        if (teleport == null) {
+            return;
+        }
+        Set<Coordinate> coordinates = teleportMap.keySet();
+        if (teleport.teleportCoordinates().stream().anyMatch(coordinates::contains)) {
+            throw new IllegalStateException("Conflict coordinate for teleport " + teleport);
+        }
+        teleport.teleportCoordinates().forEach(p -> teleportMap.put(p, teleport));
     }
 
 

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.monster.Monster;
@@ -360,7 +360,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void monitorFightingTarget() {
-        AttackableEntity mock = Mockito.mock(AttackableEntity.class);
+        AttackableActiveEntity mock = Mockito.mock(AttackableActiveEntity.class);
         player.setFightingEntity(mock);
         Mockito.verify(mock, Mockito.times(1)).registerEventListener(player);
         player.leaveRealm();

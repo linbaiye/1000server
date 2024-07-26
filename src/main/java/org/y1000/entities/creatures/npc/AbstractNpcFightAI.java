@@ -1,20 +1,20 @@
 package org.y1000.entities.creatures.npc;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
 
 public abstract class AbstractNpcFightAI implements NpcAI{
-    private AttackableEntity enemy;
+    private AttackableActiveEntity enemy;
 
     protected final ViolentNpc npc;
 
     private Coordinate previous;
 
-    public AbstractNpcFightAI(AttackableEntity enemy,
+    public AbstractNpcFightAI(AttackableActiveEntity enemy,
                               ViolentNpc npc) {
         Validate.notNull(enemy);
         Validate.notNull(npc);
@@ -37,11 +37,11 @@ public abstract class AbstractNpcFightAI implements NpcAI{
         return previous;
     }
 
-    protected AttackableEntity getEnemy() {
+    protected AttackableActiveEntity getEnemy() {
         return enemy;
     }
 
-    protected abstract boolean shouldChangeEnemy(AttackableEntity newEnemy);
+    protected abstract boolean shouldChangeEnemy(AttackableActiveEntity newEnemy);
 
 
     private void tryChangeEnemy() {

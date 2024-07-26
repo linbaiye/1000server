@@ -1,5 +1,6 @@
 package org.y1000;
 
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
@@ -8,7 +9,6 @@ import org.y1000.network.Connection;
 import org.y1000.realm.EntityEventSender;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public final class TestingEntityEventSender implements EntityEventSender {
     private final TestingEventListener eventListener;
@@ -43,7 +43,7 @@ public final class TestingEntityEventSender implements EntityEventSender {
     }
 
     @Override
-    public void add(Entity entity) {
+    public void add(ActiveEntity entity) {
         entities.add(entity);
     }
 
@@ -73,7 +73,7 @@ public final class TestingEntityEventSender implements EntityEventSender {
         eventListener.clearEvents();
     }
 
-    public <T extends Entity> T getEntity(Class<T> clazz) {
+    public <T extends ActiveEntity> T getEntity(Class<T> clazz) {
         return entities.stream()
                 .filter(entity -> entity.getClass().isAssignableFrom(clazz))
                 .map(clazz::cast)

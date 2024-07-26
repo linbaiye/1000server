@@ -1,8 +1,7 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.KungFuBook;
@@ -16,7 +15,6 @@ import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.realm.Realm;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 public interface Player extends ViolentCreature {
 
@@ -48,7 +46,7 @@ public interface Player extends ViolentCreature {
 
     void handleClientEvent(ClientEvent clientEvent);
 
-    void attack(ClientAttackEvent event, AttackableEntity target);
+    void attack(ClientAttackEvent event, AttackableActiveEntity target);
 
     Optional<ArmorEquipment> hat();
 

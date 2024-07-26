@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.ViolentCreature;
 
@@ -21,6 +21,6 @@ public interface ViolentNpc extends ViolentCreature, Npc {
 
     void startAttackAction(boolean withSound);
 
-    void startRangedAttack(AttackableEntity target);
+    void startRangedAttack(AttackableActiveEntity target);
 
 }

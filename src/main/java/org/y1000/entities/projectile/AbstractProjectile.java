@@ -1,7 +1,7 @@
 package org.y1000.entities.projectile;
 
 import lombok.Getter;
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.ViolentCreature;
 
 public abstract class AbstractProjectile implements Projectile {
@@ -9,7 +9,7 @@ public abstract class AbstractProjectile implements Projectile {
     @Getter
     private final ViolentCreature shooter;
 
-    private final AttackableEntity target;
+    private final AttackableActiveEntity target;
 
     private final int flyingMillis;
 
@@ -19,7 +19,7 @@ public abstract class AbstractProjectile implements Projectile {
 
 
     public AbstractProjectile(ViolentCreature shooter,
-                              AttackableEntity target,
+                              AttackableActiveEntity target,
                               int spriteId) {
         this.spriteId = spriteId;
         int dist = shooter.coordinate().directDistance(target.coordinate());
@@ -37,7 +37,7 @@ public abstract class AbstractProjectile implements Projectile {
         return true;
     }
 
-    public AttackableEntity target() {
+    public AttackableActiveEntity target() {
         return target;
     }
 

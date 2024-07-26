@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AiPathUtil;
 import org.y1000.entities.creatures.State;
@@ -8,7 +8,7 @@ import org.y1000.util.Coordinate;
 
 public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
 
-    public ViolentNpcRangedFightAI(AttackableEntity enemy, ViolentNpc npc) {
+    public ViolentNpcRangedFightAI(AttackableActiveEntity enemy, ViolentNpc npc) {
         super(enemy, npc);
     }
 
@@ -60,7 +60,7 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
     }
 
     @Override
-    protected boolean shouldChangeEnemy(AttackableEntity newEnemy) {
+    protected boolean shouldChangeEnemy(AttackableActiveEntity newEnemy) {
         return true;
     }
 }

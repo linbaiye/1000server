@@ -3,11 +3,11 @@ package org.y1000.entities;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 
-public abstract class AbstractEntity implements Entity {
+public abstract class AbstractActiveEntity implements ActiveEntity {
     private final long id;
     private final EventListeners eventListeners;
 
-    protected AbstractEntity(long id) {
+    protected AbstractActiveEntity(long id) {
         this.id = id;
         this.eventListeners = new EventListeners();
     }

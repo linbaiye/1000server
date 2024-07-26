@@ -86,7 +86,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     private int attackCooldown;
 
     @Getter
-    private AttackableEntity fightingEntity;
+    private AttackableActiveEntity fightingEntity;
 
     private final PillSlots pillSlots;
 
@@ -422,7 +422,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
     }
 
-    public void attack(ClientAttackEvent event, AttackableEntity target) {
+    public void attack(ClientAttackEvent event, AttackableActiveEntity target) {
         Validate.notNull(event, "event can't be null.");
         Validate.notNull(target, "target can't be null.");
         attackKungFu.startAttack(this, event, target);
@@ -1123,7 +1123,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
 
-    public void setFightingEntity(AttackableEntity entity){
+    public void setFightingEntity(AttackableActiveEntity entity){
         Objects.requireNonNull(entity, "entity can't be null");
         if (this.fightingEntity != null) {
             this.fightingEntity.deregisterEventListener(this);

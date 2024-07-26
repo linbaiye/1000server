@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 
-public final class GroundedItem extends AbstractEntity {
+public final class GroundedItem extends AbstractActiveEntity {
 
     private final Coordinate coordinate;
 

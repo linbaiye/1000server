@@ -2,7 +2,7 @@ package org.y1000.entities.objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.AbstractEntity;
+import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
@@ -10,7 +10,7 @@ import org.y1000.util.Coordinate;
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class AbstractMutableDynamicObject extends AbstractEntity implements DynamicObject {
+public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity implements DynamicObject {
 
     private final Coordinate coordinate;
 

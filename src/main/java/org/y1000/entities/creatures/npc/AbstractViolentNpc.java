@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import org.slf4j.Logger;
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.players.Damage;
@@ -114,7 +114,7 @@ public abstract class AbstractViolentNpc
         emitEvent(new CreatureAttackEvent(this));
     }
 
-    public void startRangedAttack(AttackableEntity target) {
+    public void startRangedAttack(AttackableActiveEntity target) {
         if (skill == null) {
             throw new IllegalStateException("ranged attack is not supported.");
         }

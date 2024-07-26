@@ -20,8 +20,10 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
         Set<String> names = sdb.columnNames();
         Set<String> items = sdb.names();
         for (String i: items) {
-//            if (!i.startsWith("狐狸"))
-                //continue;
+            if (!"1".equals(sdb.get(i, "Kind")) &&
+            !"2".equals(sdb.get(i, "Kind"))
+            )
+                continue;
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {

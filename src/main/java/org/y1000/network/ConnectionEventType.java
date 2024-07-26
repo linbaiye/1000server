@@ -4,5 +4,7 @@ public enum ConnectionEventType {
     CLOSED,
     ESTABLISHED,
 
+    TELEPORTED,
+
     DATA,
 }

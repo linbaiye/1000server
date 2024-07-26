@@ -5,7 +5,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.realm.RealmMap;
 
-public interface AttackableEntity extends Entity {
+public interface AttackableActiveEntity extends ActiveEntity {
     /**
      * Return true if we can be hit.
      * @return true/false.
@@ -21,7 +21,7 @@ public interface AttackableEntity extends Entity {
     RealmMap realmMap();
 
     default boolean canChaseOrAttack(Entity target) {
-        return target instanceof AttackableEntity attackableEntity &&
+        return target instanceof AttackableActiveEntity attackableEntity &&
                 target.canBeSeenAt(coordinate()) &&
                 attackableEntity.canBeAttackedNow();
     }

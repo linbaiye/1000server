@@ -1,6 +1,7 @@
 package org.y1000.realm;
 
 import org.junit.jupiter.api.Test;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
@@ -60,10 +61,10 @@ class RelevantScopeTest extends AbstractMonsterUnitTestFixture {
         relevantScope.addIfVisible(entity1);
         PassiveMonster entity2 = createMonster(new Coordinate(2, 2));
         relevantScope.addIfVisible(entity2);
-        assertEquals(2, relevantScope.filter(Entity.class).size());
+        assertEquals(2, relevantScope.filter(ActiveEntity.class).size());
         entity2.changeCoordinate(new Coordinate(16, 16));
         Set<Entity> removed = relevantScope.update();
         assertTrue(removed.contains(entity2));
-        assertEquals(1, relevantScope.filter(Entity.class).size());
+        assertEquals(1, relevantScope.filter(ActiveEntity.class).size());
     }
 }

@@ -1,12 +1,12 @@
 package org.y1000.entities.creatures;
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
-public interface Creature extends AttackableEntity {
+public interface Creature extends AttackableActiveEntity {
 
     Direction direction();
 

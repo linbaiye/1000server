@@ -32,7 +32,7 @@ final class RealmEntityEventSender implements EntityEventListener,
         visit(inputResponseMessage.positionMessage());
     }
 
-    private void notifyInterpolation(Player joined, Entity entity) {
+    private void notifyInterpolation(Player joined, ActiveEntity entity) {
         sendMessage(joined, entity.captureInterpolation());
         log.debug("Notified player {} of player {}", joined.id(), entity.id());
         if (entity instanceof Player another) {
@@ -81,7 +81,7 @@ final class RealmEntityEventSender implements EntityEventListener,
     @Override
     public void visit(JoinedRealmEvent joinedRealmEvent) {
         sendMessage(joinedRealmEvent.player(), joinedRealmEvent);
-        var visibleEntities = scopeManager.filterVisibleEntities(joinedRealmEvent.source(), Entity.class);
+        var visibleEntities = scopeManager.filterVisibleEntities(joinedRealmEvent.source(), ActiveEntity.class);
         visibleEntities.forEach(entity -> notifyInterpolation(joinedRealmEvent.player(), entity));
     }
 
@@ -134,7 +134,7 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
     public void notifyVisiblePlayersAndSelf(Entity source,
-                                             ServerMessage message) {
+                                            ServerMessage message) {
         Validate.notNull(source);
         Validate.notNull(message);
         doNotifyVisiblePlayers(source, message);
@@ -210,7 +210,7 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void visit(PlayerAttackAoeEvent event) {
-        Set<AttackableEntity> entities = scopeManager.filterVisibleEntities(event.source(), AttackableEntity.class);
+        Set<AttackableActiveEntity> entities = scopeManager.filterVisibleEntities(event.source(), AttackableActiveEntity.class);
         event.affect(entities);
     }
 
@@ -274,7 +274,7 @@ final class RealmEntityEventSender implements EntityEventListener,
         return playerConnectionMap.containsKey(player);
     }
 
-    public void add(Entity entity) {
+    public void add(ActiveEntity entity) {
         if (scopeManager.getAllEntities().contains(entity)) {
             return;
         }

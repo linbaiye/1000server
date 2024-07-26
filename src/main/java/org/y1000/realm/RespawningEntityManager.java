@@ -1,10 +1,10 @@
 package org.y1000.realm;
 
-import org.y1000.entities.Entity;
+import org.y1000.entities.ActiveEntity;
 
 import java.util.*;
 
-final class RespawningEntityManager<E extends Entity>  {
+final class RespawningEntityManager<E extends ActiveEntity>  {
     private final List<RespawningEntity<E>> respawningEntities;
 
     public RespawningEntityManager() {
@@ -37,7 +37,7 @@ final class RespawningEntityManager<E extends Entity>  {
         return entities == null ? Collections.emptySet() : entities;
     }
 
-    private static class RespawningEntity<E extends Entity> {
+    private static class RespawningEntity<E extends ActiveEntity> {
         private final E e;
         private int time;
 

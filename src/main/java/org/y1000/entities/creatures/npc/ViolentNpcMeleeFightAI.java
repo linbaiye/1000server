@@ -1,14 +1,14 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.AiPathUtil;
 import org.y1000.entities.creatures.State;
 
 @Slf4j
 public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
 
-    public ViolentNpcMeleeFightAI(AttackableEntity enemy,
+    public ViolentNpcMeleeFightAI(AttackableActiveEntity enemy,
                                   ViolentNpc npc) {
         super(enemy, npc);
     }
@@ -33,7 +33,7 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
     }
 
     @Override
-    protected boolean shouldChangeEnemy(AttackableEntity newEnemy) {
+    protected boolean shouldChangeEnemy(AttackableActiveEntity newEnemy) {
         return getEnemy().coordinate().directDistance(npc.coordinate()) > 1;
     }
 

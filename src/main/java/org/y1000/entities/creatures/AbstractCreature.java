@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.AbstractEntity;
+import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Damage;
 import org.y1000.exp.ExperienceUtil;
@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
-public abstract class AbstractCreature<C extends Creature, S extends CreatureState<C>> extends AbstractEntity implements Creature {
+public abstract class AbstractCreature<C extends Creature, S extends CreatureState<C>> extends AbstractActiveEntity implements Creature {
 
     private Coordinate coordinate;
 

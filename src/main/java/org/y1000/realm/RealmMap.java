@@ -3,10 +3,10 @@ package org.y1000.realm;
 
 import org.y1000.entities.Entity;
 import org.y1000.entities.objects.DynamicObject;
+import org.y1000.entities.teleport.Teleport;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
-import java.util.Set;
 
 public interface RealmMap {
 
@@ -25,4 +25,6 @@ public interface RealmMap {
     static Optional<RealmMap> Load(String name) {
         return RealmMapV2Impl.read(name);
     }
+
+    void addTeleport(Teleport teleport);
 }

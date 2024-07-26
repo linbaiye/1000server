@@ -1,7 +1,7 @@
 package org.y1000.kungfu.attack;
 
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
@@ -47,7 +47,7 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
     }
 
     @Override
-    public void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target) {
+    public void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableActiveEntity target) {
         count = 2;
         doStartAttack(player, event, target);
     }

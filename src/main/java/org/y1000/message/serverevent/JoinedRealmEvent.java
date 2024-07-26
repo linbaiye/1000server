@@ -1,6 +1,6 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventVisitor;
@@ -85,7 +85,7 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
     }
 
     @Override
-    public AttackableEntity source() {
+    public AttackableActiveEntity source() {
         return player;
     }
 }

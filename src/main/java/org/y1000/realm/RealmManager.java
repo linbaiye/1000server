@@ -51,7 +51,7 @@ public final class RealmManager implements Runnable {
     }
 
     private int getPlayerLastRealm(Player player) {
-        return 19;
+        return 1;
         //return 49;
     }
 
@@ -116,7 +116,8 @@ public final class RealmManager implements Runnable {
 
 
     private static List<Integer> getRealmIds() {
-        return List.of(19);
+        return List.of(1);
+        //return List.of(19);
         //return List.of(19, 49);
     }
 

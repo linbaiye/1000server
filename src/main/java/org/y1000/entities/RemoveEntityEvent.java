@@ -7,7 +7,7 @@ import org.y1000.network.gen.RemoveEntityPacket;
 
 public class RemoveEntityEvent extends Abstract2ClientEntityEvent {
 
-    public RemoveEntityEvent(Entity source) {
+    public RemoveEntityEvent(ActiveEntity source) {
         super(source);
     }
 

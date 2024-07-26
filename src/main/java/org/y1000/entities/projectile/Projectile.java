@@ -1,6 +1,6 @@
 package org.y1000.entities.projectile;
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.ViolentCreature;
 
@@ -8,7 +8,7 @@ public interface Projectile {
 
     ViolentCreature shooter();
 
-    AttackableEntity target();
+    AttackableActiveEntity target();
 
     int flyingMillis();
 

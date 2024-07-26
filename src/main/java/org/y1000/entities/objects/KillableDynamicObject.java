@@ -13,7 +13,9 @@ import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
-public class KillableDynamicObject extends AbstractMutableDynamicObject implements RespawnDynamicObject {
+import java.util.Objects;
+
+public final class KillableDynamicObject extends AbstractMutableDynamicObject implements RespawnDynamicObject {
 
     private final int armor;
 
@@ -53,6 +55,10 @@ public class KillableDynamicObject extends AbstractMutableDynamicObject implemen
 
     @Override
     public boolean attackedBy(Player attacker) {
+        Validate.notNull(attacker);
+        if (occupyingCoordinates().stream().noneMatch(coordinate -> coordinate.directDistance(attacker.coordinate()) <= 1)) {
+            return false;
+        }
         return handleDamaged(attacker.damage());
     }
 
@@ -101,5 +107,17 @@ public class KillableDynamicObject extends AbstractMutableDynamicObject implemen
     @Override
     public int respawnTime() {
         return dynamicObjectSdb().getRegenInterval(idName()) * 10;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TriggerDynamicObject object)) return false;
+        return Objects.equals(id(), object.id());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id());
     }
 }

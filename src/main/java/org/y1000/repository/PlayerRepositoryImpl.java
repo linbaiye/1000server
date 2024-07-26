@@ -99,7 +99,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .id(slot + playerIdStart)
                 .name("雨诗妾")
                 //.coordinate(new Coordinate(175+ slot, 40))
-                .coordinate(new Coordinate(92, 50))
+                .coordinate(new Coordinate(309, 148))
                 //.coordinate(new Coordinate(129, 99))
                 //.coordinate(new Coordinate(63, 117))
                 //.coordinate(new Coordinate(104, 60))

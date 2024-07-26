@@ -1,6 +1,6 @@
 package org.y1000.message;
 
-import org.y1000.entities.Entity;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.Player;
 import org.y1000.event.item.ItemEvent;
@@ -38,7 +38,7 @@ public final class PlayerDropItemEvent implements ItemEvent {
     }
 
     @Override
-    public Entity source() {
+    public ActiveEntity source() {
         return source;
     }
 

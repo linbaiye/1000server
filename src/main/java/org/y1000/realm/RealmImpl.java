@@ -5,8 +5,8 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
+import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.repository.ItemRepository;
-import org.y1000.realm.event.PlayerConnectedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
 import org.y1000.realm.event.RealmEvent;
@@ -71,7 +71,7 @@ final class RealmImpl implements Runnable, Realm {
 
     private void onRealmEvent(RealmEvent event) {
         try {
-            if (event instanceof PlayerConnectedEvent connectedEvent) {
+            if (event instanceof ConnectionEstablishedEvent connectedEvent) {
                 playerManager.onPlayerConnected(connectedEvent.player(), connectedEvent.connection(), this);
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
                 playerManager.onPlayerDisconnected(disconnectedEvent.player());

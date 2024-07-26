@@ -39,6 +39,14 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
                     .realmMap(realmMap)
                     .dynamicObjectSdb(dynamicObjectSdb)
                     .build();
+        } else if (kind == DynamicObjectType.YAOHUA) {
+            return Yaohua.builder()
+                    .id(id)
+                    .coordinate(coordinate)
+                    .idName(name)
+                    .realmMap(realmMap)
+                    .dynamicObjectSdb(dynamicObjectSdb)
+                    .build();
         }
         throw new IllegalArgumentException();
     }

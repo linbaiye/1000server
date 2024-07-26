@@ -168,7 +168,7 @@ public final class KungFuSdb extends AbstractSdbReader {
         Set<String> names = kungFuSdb.columnNames();
         Set<String> items = kungFuSdb.names();
         for (String i : items) {
-            if (!i.contains("壁射剑法"))
+            if (!i.contains("百鬼夜行术"))
                 continue;
 
             System.out.println("----------------------------");
