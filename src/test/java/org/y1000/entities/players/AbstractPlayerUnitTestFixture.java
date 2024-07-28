@@ -64,10 +64,8 @@ public abstract class AbstractPlayerUnitTestFixture extends AbstractUnitTestFixt
 
     protected void setup() {
         player = playerBuilder().build();
-        mockedMap = Mockito.mock(RealmMap.class);
-        mockedRealm = Mockito.mock(Realm.class);
-        when(mockedRealm.map()).thenReturn(mockedMap);
         eventListener = new TestingEventListener();
+        mockedRealm = mockAllFlatRealm();
         player.joinReam(mockedRealm);
         player.registerEventListener(eventListener);
     }

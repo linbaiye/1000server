@@ -1,7 +1,6 @@
 package org.y1000.entities.objects;
 
 import lombok.Builder;
-import org.apache.commons.lang3.Validate;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
@@ -29,7 +28,6 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
                                 DynamicObjectSdb dynamicObjectSdb,
                                 String idName) {
         super(id, coordinate, realmMap, dynamicObjectSdb, idName);
-        Validate.isTrue(dynamicObjectSdb.getRegenInterval(idName) > 0);
         this.requiredItem = dynamicObjectSdb.getEventItem(idName).split(":")[0].trim();
         this.state = DynamicObjectState.INITIAL;
         changeAnimation(0);
@@ -67,7 +65,7 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
         if (state != DynamicObjectState.INITIAL) {
             return;
         }
-        if (occupyingCoordinates().stream().noneMatch(coordinate -> coordinate.directDistance(player.coordinate()) <= 1)) {
+        if (occupyingCoordinates().stream().noneMatch(coordinate -> coordinate.directDistance(player.coordinate()) <= 2)) {
             return;
         }
         Item item = player.inventory().getItem(slot);

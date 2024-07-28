@@ -48,6 +48,7 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
                     .dynamicObjectSdb(dynamicObjectSdb)
                     .build();
         }
-        throw new IllegalArgumentException();
+        log.error("Unable to create dynamic object : " + name);
+        return null;
     }
 }

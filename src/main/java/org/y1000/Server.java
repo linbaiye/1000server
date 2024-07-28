@@ -59,7 +59,8 @@ public final class Server {
                 MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE,
                 CreateEntitySdbRepositoryImpl.INSTANCE,
-                dynamicObjectFactory);
+                dynamicObjectFactory,
+                CreateGateSdbImpl.INSTANCE);
     }
 
 

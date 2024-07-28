@@ -1,11 +1,9 @@
 package org.y1000.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.realm.RealmMap;
 
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 @Slf4j
@@ -17,16 +15,20 @@ public record Rectangle(Coordinate start, Coordinate end) {
     }
 
     public Coordinate random(Coordinate origin) {
-        if (!contains(origin)) {
-            return origin;
+        try {
+            if (!contains(origin)) {
+                return origin;
+            }
+            int minX = Math.max(origin.x() - 3, start.x());
+            int maxX = Math.min(origin.x() + 3, end.x());
+            var x = ThreadLocalRandom.current().nextInt(minX, maxX + 1);
+            int minY = Math.max(origin.y() - 3, start.y());
+            int maxY = Math.min(origin.y() + 3, end.y());
+            var y = ThreadLocalRandom.current().nextInt(minY, maxY + 1);
+            return new Coordinate(x, y);
+        } catch (RuntimeException e) {
+            throw e;
         }
-        int minX = Math.max(origin.x() - 3, start.x());
-        int maxX = Math.min(origin.x() + 3, end.x());
-        var x = ThreadLocalRandom.current().nextInt(minX, maxX);
-        int minY = Math.max(origin.y() - 3, start.y());
-        int maxY = Math.min(origin.y() + 3, end.y());
-        var y = ThreadLocalRandom.current().nextInt(minY, maxY);
-        return new Coordinate(x, y);
     }
 
 

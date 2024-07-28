@@ -64,7 +64,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
                 var message = createMessage(packet);
                 if (message instanceof LoginEvent loginEvent) {
                     var player = playerRepository.load(loginEvent.getToken());
-                    realmManager.queueEvent(new ConnectionEstablishedEvent(player, this));
+                    realmManager.queueEvent(new ConnectionEstablishedEvent(0, player, this));
                 } else {
                     realmManager.queueEvent(new ConnectionDataEvent(this, message));
                 }

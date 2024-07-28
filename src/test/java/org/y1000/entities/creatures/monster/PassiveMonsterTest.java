@@ -54,6 +54,7 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
         verify(attacker).gainAttackExp(44);
     }
 
+
     @Test
     void givePlayerRangedExp() {
         Player attacker = Mockito.mock(Player.class);

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implements EntityManager<T> {
+public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implements ActiveEntityManager<T> {
     private boolean iterating;
     private final Set<T> entities;
 
@@ -74,12 +74,17 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
         }
     }
 
-    protected void add(T entity) {
+    void add(T entity) {
         if (iterating) {
+            deleting.remove(entity);
             adding.add(entity);
         } else {
             doAdd(entity);
         }
+    }
+
+    boolean contains(T entity) {
+        return entities.contains(entity);
     }
 
 
@@ -90,16 +95,10 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
                 .findFirst();
     }
 
-    @Override
-    public <N extends ActiveEntity> Optional<N> find(long id, Class<N> type) {
-        return entities.stream()
-                .filter(e -> e.id() == id && type.isAssignableFrom(e.getClass()))
-                .map(type::cast)
-                .findFirst();
-    }
 
-    protected void delete(T entity) {
+    void remove(T entity) {
         if (iterating) {
+            adding.remove(entity);
             deleting.add(entity);
         } else {
             doDelete(entity);

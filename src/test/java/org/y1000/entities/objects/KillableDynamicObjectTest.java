@@ -4,9 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
+import org.y1000.entities.EntityLifebarEvent;
 import org.y1000.entities.RemoveEntityEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
+import org.y1000.network.gen.CreatureSoundEventPacket;
+import org.y1000.network.gen.LifeBarPacket;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
@@ -45,6 +49,8 @@ class KillableDynamicObjectTest {
         when(dynamicObjectSdb.getArmor(idName)).thenReturn(0);
         when(dynamicObjectSdb.getLife(idName)).thenReturn(1);
         when(dynamicObjectSdb.getOpenedMillis(idName)).thenReturn(400);
+        when(dynamicObjectSdb.getSoundEvent(idName)).thenReturn(Optional.of("eventSound"));
+        when(dynamicObjectSdb.getSoundSpecial(idName)).thenReturn(Optional.of("specialSound"));
         object = KillableDynamicObject.builder()
                 .id(1)
                 .idName(idName)
@@ -54,7 +60,6 @@ class KillableDynamicObjectTest {
                 .build();
         eventListener = new TestingEventListener();
         object.registerEventListener(eventListener);
-
         player = Mockito.mock(Player.class);
         when(player.coordinate()).thenReturn(object.coordinate().move(1, 1));
         when(player.damage()).thenReturn(new Damage(100, 100, 100, 100));
@@ -75,6 +80,31 @@ class KillableDynamicObjectTest {
         assertEquals(1, event.toPacket().getUpdateDynamicObject().getId());
         object.attackedBy(player);
         assertNull(eventListener.removeFirst(UpdateDynamicObjectEvent.class));
+
+        when(dynamicObjectSdb.getArmor(idName)).thenReturn(100);
+        when(dynamicObjectSdb.getLife(idName)).thenReturn(100);
+
+        object = KillableDynamicObject.builder()
+                .id(1)
+                .idName(idName)
+                .dynamicObjectSdb(dynamicObjectSdb)
+                .realmMap(realmMap)
+                .coordinate(Coordinate.xy(1, 2))
+                .build();
+        eventListener = new TestingEventListener();
+        object.registerEventListener(eventListener);
+        object.attackedBy(player);
+        LifeBarPacket lifebar = eventListener.removeFirst(EntityLifebarEvent.class).toPacket().getLifebar();
+        assertEquals(99, lifebar.getPercent());
+        CreatureSoundEventPacket sound = eventListener.removeFirst(EntitySoundEvent.class).toPacket().getSound();
+        assertEquals("specialSound", sound.getSound());
+
+        when(player.damage()).thenReturn(new Damage(200, 0,0,0));
+        object.attackedBy(player);
+        lifebar = eventListener.removeFirst(EntityLifebarEvent.class).toPacket().getLifebar();
+        assertEquals(0, lifebar.getPercent());
+        sound = eventListener.removeFirst(EntitySoundEvent.class).toPacket().getSound();
+        assertEquals("eventSound", sound.getSound());
     }
 
     @Test

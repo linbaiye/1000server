@@ -9,8 +9,14 @@ public interface Realm {
     void handle(RealmEvent event);
 
     RealmMap map();
-    default String name() {
-        return map().name();
-    }
+
+    String name();
+
+    String bgm();
+
+    void update();
+
+    void init();
+
     int id();
 }

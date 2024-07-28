@@ -3,6 +3,7 @@ package org.y1000.realm;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.Server;
 import org.y1000.entities.Entity;
@@ -37,13 +38,26 @@ final class RealmMapV2Impl implements RealmMap {
 
     private final String name;
 
+    private final String tile;
+
+    private final String object;
+
+    private final String roof;
+
     private final Map<Coordinate, Set<Entity>> coordinateEntityMap;
     private final Map<Entity, Coordinate> entityCoordinateMap;
 
     private final Map<Coordinate, Teleport> teleportMap;
 
+
     public RealmMapV2Impl(byte[][] movableMask, String name) {
+        this(movableMask, name, "", "", "");
+    }
+
+    public RealmMapV2Impl(byte[][] movableMask, String name, String tile, String obj, String rof) {
         Objects.requireNonNull(name);
+        Validate.notNull(tile);
+        Validate.notNull(obj);
         if (movableMask.length == 0) {
             throw new IllegalArgumentException();
         }
@@ -57,6 +71,9 @@ final class RealmMapV2Impl implements RealmMap {
         coordinateEntityMap = new HashMap<>();
         entityCoordinateMap = new HashMap<>();
         teleportMap = new HashMap<>();
+        this.tile = tile;
+        this.object = obj;
+        this.roof = StringUtils.isEmpty(rof) ? null : rof;
     }
 
     private boolean isInRange(Coordinate coordinate) {
@@ -77,6 +94,7 @@ final class RealmMapV2Impl implements RealmMap {
     }
 
     public void occupy(Entity entity) {
+        Validate.notNull(entity);
         if (!isInRange(entity.coordinate())) {
             throw new IllegalArgumentException("Invalid coordinate " + entity.coordinate());
         }
@@ -85,7 +103,7 @@ final class RealmMapV2Impl implements RealmMap {
             return;
         }
         free(entity);
-        coordinateEntityMap.computeIfAbsent(entity.coordinate(), c -> new HashSet<>()).add(entity);
+        addToCoordinateEntityMap(entity.coordinate(), entity);
         entityCoordinateMap.put(entity, entity.coordinate());
     }
 
@@ -99,10 +117,19 @@ final class RealmMapV2Impl implements RealmMap {
     }
 
     public void free(Entity entity) {
+        Validate.notNull(entity);
         var c = entityCoordinateMap.remove(entity);
         if (c != null) {
             doRemoveCoordinate(entity, c);
         }
+    }
+
+    private void addToCoordinateEntityMap(Coordinate coordinate, Entity entity) {
+        if (!coordinateEntityMap.containsKey(coordinate)) {
+            coordinateEntityMap.put(coordinate, new HashSet<>());
+        }
+        Validate.notNull(entity);
+        coordinateEntityMap.get(coordinate).add(entity);
     }
 
     @Override
@@ -113,7 +140,8 @@ final class RealmMapV2Impl implements RealmMap {
         }
         entityCoordinateMap.put(dynamicObject, dynamicObject.coordinate());
         for (Coordinate coordinate : dynamicObject.occupyingCoordinates()) {
-            coordinateEntityMap.computeIfAbsent(coordinate, c -> new HashSet<>()).add(dynamicObject);
+            //coordinateEntityMap.computeIfAbsent(coordinate, c -> new HashSet<>()).add(dynamicObject);
+            addToCoordinateEntityMap(coordinate, dynamicObject);
         }
     }
 
@@ -127,8 +155,23 @@ final class RealmMapV2Impl implements RealmMap {
     }
 
     @Override
-    public String name() {
+    public String mapFile() {
         return name;
+    }
+
+    @Override
+    public String roofFile() {
+        return roof;
+    }
+
+    @Override
+    public String objectFile() {
+        return object;
+    }
+
+    @Override
+    public String tileFile() {
+        return tile;
     }
 
     @Override
@@ -168,7 +211,7 @@ final class RealmMapV2Impl implements RealmMap {
     }
 
 
-    public static Optional<RealmMap> read(String name) {
+    public static Optional<RealmMap> read(String name, String tile, String obj, String rof) {
         String mapName = name.endsWith(".map") ? name : name + ".map";
         if (!mapName.startsWith("/maps/")) {
             mapName = "/maps/" + mapName;
@@ -203,7 +246,7 @@ final class RealmMapV2Impl implements RealmMap {
                     }
                 }
             }
-            return Optional.of(new RealmMapV2Impl(cellMasks, name));
+            return Optional.of(new RealmMapV2Impl(cellMasks, name, tile, obj, rof));
         } catch (Exception e) {
             log.error("Failed to read map {}.", mapName, e);
         }

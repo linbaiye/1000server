@@ -3,10 +3,13 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+import org.y1000.entities.EntityLifebarEvent;
 import org.y1000.entities.RemoveEntityEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.objects.*;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
+import org.y1000.network.gen.LifeBarPacket;
 import org.y1000.sdb.CreateDynamicObjectSdb;
 import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.util.Coordinate;
@@ -43,9 +46,17 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
             return;
         }
         if (entityEvent instanceof RemoveEntityEvent) {
-            delete(object);
+            var entity = entityEvent.source();
+            eventSender.remove(entity);
+            if (entity instanceof RespawnDynamicObject respawnDynamicObject) {
+                respawningEntityManager.add(respawnDynamicObject, respawnDynamicObject.respawnTime());
+            }
+            remove(object);
         } else if (entityEvent instanceof UpdateDynamicObjectEvent updateDynamicObjectEvent) {
+            log.debug("Notify update");
             eventSender.notifyVisiblePlayers(entityEvent.source(), updateDynamicObjectEvent);
+        } else if (entityEvent instanceof EntityLifebarEvent entityLifebarEvent) {
+            eventSender.notifyVisiblePlayers(entityEvent.source(), entityLifebarEvent);
         }
     }
 
@@ -56,24 +67,25 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
     @Override
     protected void onAdded(DynamicObject entity) {
-        eventSender.add(entity);
-        eventSender.notifyVisiblePlayers(entity, entity.captureInterpolation());
-        entity.registerEventListener(this);
-        log.debug("Added object {}.", entity.id());
+
     }
 
     @Override
     protected void onDeleted(DynamicObject entity) {
-        eventSender.remove(entity);
-        entity.deregisterEventListener(this);
-        if (entity instanceof RespawnDynamicObject respawnDynamicObject) {
-            respawningEntityManager.add(respawnDynamicObject, respawnDynamicObject.respawnTime());
-        }
+
+    }
+
+    private void addObject(DynamicObject entity) {
+        eventSender.add(entity);
+        entity.registerEventListener(this);
+        eventSender.notifyVisiblePlayers(entity, entity.captureInterpolation());
+        add(entity);
+        log.debug("Added object {}.", entity.id());
     }
 
     private void tryRespawn(RespawnDynamicObject respawnDynamicObject) {
         respawnDynamicObject.respawn();
-        add(respawnDynamicObject);
+        addObject(respawnDynamicObject);
     }
 
     @Override
@@ -91,7 +103,8 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         for (String number : numbers) {
             String name = createDynamicObjectSdb.getName(number);
             var obj = factory.createDynamicObject(name, entityIdGenerator.next(), map, Coordinate.xy(createDynamicObjectSdb.getX(number), createDynamicObjectSdb.getY(number)));
-            add(obj);
+            if (obj != null)
+                addObject(obj);
         }
     }
 

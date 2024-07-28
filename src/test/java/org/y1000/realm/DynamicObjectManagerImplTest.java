@@ -102,4 +102,9 @@ class DynamicObjectManagerImplTest {
         manager.update(interval);
         assertTrue(manager.find(2L, KillableDynamicObject.class).isPresent());
     }
+
+    @Test
+    void regenImmediately() {
+
+    }
 }

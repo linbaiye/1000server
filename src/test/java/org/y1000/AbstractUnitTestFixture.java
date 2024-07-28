@@ -29,12 +29,27 @@ public abstract class AbstractUnitTestFixture {
 
     private int id;
 
+    protected RealmMap mockRealmMap() {
+        RealmMap mockedMap= Mockito.mock(RealmMap.class);
+        when(mockedMap.mapFile()).thenReturn("map");
+        when(mockedMap.tileFile()).thenReturn("til");
+        when(mockedMap.objectFile()).thenReturn("obj");
+        when(mockedMap.roofFile()).thenReturn("rof");
+        return mockedMap;
+    }
+
+    protected Realm mockRealm(RealmMap map) {
+        Realm mockedRealm = Mockito.mock(Realm.class);
+        when(mockedRealm.name()).thenReturn("realm");
+        when(mockedRealm.bgm()).thenReturn("bgm");
+        when(mockedRealm.map()).thenReturn(map);
+        return mockedRealm;
+    }
+
     protected Realm mockAllFlatRealm() {
-        Realm mock = Mockito.mock(Realm.class);
-        RealmMap map = Mockito.mock(RealmMap.class);
-        when (map.movable(any(Coordinate.class))).thenReturn(true);
-        when(mock.map()).thenReturn(map);
-        return mock;
+        RealmMap mockedMap = mockRealmMap();
+        when (mockedMap.movable(any(Coordinate.class))).thenReturn(true);
+        return mockRealm(mockedMap);
     }
 
 

@@ -523,16 +523,34 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public void joinReam(Realm realm) {
+        if (realm == null) {
+            return;
+        }
+        changeDirection(Direction.DOWN);
+        changeState(PlayerStillState.idle(this));
+        doJoinRealm(realm, null);
+        emitEvent(new JoinedRealmEvent(this, coordinate(), inventory, realm));
+    }
+
+    private void doJoinRealm(Realm realm, Coordinate coordinate) {
         if (this.realm != null) {
             leaveRealm();
         }
         this.realm = realm;
-        realmMap().occupy(this);
-        this.changeState(PlayerStillState.idle(this));
-        changeDirection(Direction.DOWN);
-        emitEvent(new JoinedRealmEvent(this, coordinate(), inventory, realm.map().name()));
+        if (coordinate != null) {
+            changeCoordinate(coordinate);
+        } else {
+            realm.map().occupy(this);
+        }
     }
 
+    @Override
+    public void teleport(Realm realm, Coordinate coordinate) {
+        if (realm != null && coordinate != null) {
+            doJoinRealm(realm, coordinate);
+            emitEvent(new PlayerTeleportEvent(this, realm, coordinate));
+        }
+    }
 
     private void onKilled() {
         disableFootKungFuNoTip();
@@ -628,7 +646,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         if (realm != null) {
             realm.map().free(this);
         }
-        this.changeState(PlayerFrozenState.Instance);
+        realm = null;
         emitEvent(new PlayerLeftEvent(this));
         clearFightingEntity();
     }
@@ -656,6 +674,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         emitEvent(new PlayerEquipEvent(this, weaponToEquip.name()));
         weaponToEquip.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         log.debug("Equipped weapon {}.", weaponToEquip.name());
+    }
+
+    @Override
+    public boolean canBeAttackedNow() {
+        return realm != null && super.canBeAttackedNow();
     }
 
     private void equip(int slotId, Equipment equipmentInSlot) {

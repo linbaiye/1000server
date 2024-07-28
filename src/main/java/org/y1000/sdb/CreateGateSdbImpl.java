@@ -59,4 +59,24 @@ public final class CreateGateSdbImpl extends AbstractSdbReader implements Create
     public int getWidth(String name) {
         return getInt(name, "Width");
     }
+
+    @Override
+    public int getX(String name) {
+        return getInt(name, "X");
+    }
+
+    @Override
+    public int getY(String name) {
+        return getInt(name, "Y");
+    }
+
+    @Override
+    public boolean isVisible(String name) {
+        return "TRUE".equals(get(name, "boShow"));
+    }
+
+    @Override
+    public String getRandomPos(String name) {
+        return get(name, "RandomPos");
+    }
 }

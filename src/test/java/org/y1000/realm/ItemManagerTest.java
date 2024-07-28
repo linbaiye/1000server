@@ -80,6 +80,6 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         Item item = picker.inventory().getItem(1);
         assertEquals("肉", item.name());
         assertTrue(manager.find(3).isEmpty());
-        assertNotNull(itemEvenListener.removeFirst(RemoveEntityEvent.class));
+        assertNotNull(eventSender.removeFirst(groundItem, RemoveEntityEvent.class));
     }
 }

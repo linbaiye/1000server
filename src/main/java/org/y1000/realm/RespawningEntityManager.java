@@ -12,7 +12,7 @@ final class RespawningEntityManager<E extends ActiveEntity>  {
     }
 
     public void add(E entity, int millis) {
-        if (entity != null && millis > 0)
+        if (entity != null && millis >= 0)
             respawningEntities.add(new RespawningEntity<>(entity, millis));
     }
 

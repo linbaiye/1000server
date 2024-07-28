@@ -74,7 +74,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         int slot = picker.inventory().add(slotItem);
         if (slot > 0) {
             picker.emitEvent(new UpdateInventorySlotEvent(picker, slot, picker.inventory().getItem(slot)));
-            groundedItem.emitEvent(new RemoveEntityEvent(groundedItem));
+            visit(new RemoveEntityEvent(groundedItem));
             slotItem.eventSound().ifPresent(s -> picker.emitEvent(new EntitySoundEvent(picker, s)));
         }
     }
@@ -117,36 +117,42 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
     }
 
     @Override
+    protected void onAdded(GroundedItem entity) {
+
+    }
+
+    @Override
     public void update(long delta) {
         updateManagedEntities(delta);
     }
 
-    @Override
-    protected void onAdded(GroundedItem entity) {
-        eventSender.add(entity);
-        eventSender.notifyVisiblePlayers(entity, entity.captureInterpolation());
-        entity.registerEventListener(this);
-        entity.dropSound().ifPresent(s -> eventSender.sendEvent(new EntitySoundEvent(entity, s)));
-    }
 
     @Override
     protected void onDeleted(GroundedItem entity) {
-        eventSender.remove(entity);
-        entity.deregisterEventListener(this);
     }
 
     @Override
     public void visit(RemoveEntityEvent event) {
         if (event.source() instanceof GroundedItem item) {
-            delete(item);
+            eventSender.notifyVisiblePlayers(event.source(), event);
+            eventSender.remove(event.source());
+            remove(item);
         }
+    }
+
+    private void insertNewItem(GroundedItem item) {
+        eventSender.add(item);
+        eventSender.notifyVisiblePlayers(item, item.captureInterpolation());
+        item.registerEventListener(this);
+        add(item);
+        item.dropSound().ifPresent(s -> eventSender.sendEvent(new EntitySoundEvent(item, s)));
     }
 
     @Override
     public void visit(PlayerDropItemEvent event) {
         GroundedItem groundedItem = event.createGroundedItem(idGenerator.next());
+        insertNewItem(groundedItem);
         log.debug("Dropped item at {}", groundedItem.coordinate());
-        add(groundedItem);
     }
 
     @Override
@@ -157,7 +163,8 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
                 if (!dropItem.canDrop()) {
                     continue;
                 }
-                add(createGroundItem(dropItem.name(), npc.coordinate(), dropItem.count()));
+                GroundedItem groundItem = createGroundItem(dropItem.name(), npc.coordinate(), dropItem.count());
+                insertNewItem(groundItem);
             }
         }
     }

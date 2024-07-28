@@ -116,6 +116,12 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
     }
 
     @Override
+    public Optional<String> getSoundSpecial(String name) {
+        var str = get(name, "SoundSpecial");
+        return !StringUtils.isEmpty(str) ? Optional.of(str) : Optional.empty();
+    }
+
+    @Override
     public int getLife(String name) {
         return getIntOrZero(name, "Life");
     }

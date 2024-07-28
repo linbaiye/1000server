@@ -21,6 +21,31 @@ public final class MapSdbImpl extends AbstractSdbReader implements MapSdb {
         return getMapName(String.valueOf(id));
     }
 
+    @Override
+    public String getMapTitle(int id) {
+        return get(String.valueOf(id), "MapTitle");
+    }
+
+    @Override
+    public String getSoundBase(int id) {
+        return get(String.valueOf(id), "SoundBase");
+    }
+
+    @Override
+    public String getTilName(int id) {
+        return get(String.valueOf(id), "TilName");
+    }
+
+    @Override
+    public String getObjName(int id) {
+        return get(String.valueOf(id), "ObjName");
+    }
+
+    @Override
+    public String getRofName(int id) {
+        return get(String.valueOf(id), "RofName");
+    }
+
 
     public static void main(String[] args) {
         MapSdbImpl sdb = MapSdbImpl .INSTANCE;

@@ -10,7 +10,7 @@ public final class InventorySlotSwappedEvent extends AbstractPlayerEvent {
     private final int slot2;
 
     public InventorySlotSwappedEvent(Player source, int slot1, int slot2) {
-        super(source);
+        super(source, true);
         this.slot1 = slot1;
         this.slot2 = slot2;
     }

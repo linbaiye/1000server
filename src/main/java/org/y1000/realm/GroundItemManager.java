@@ -4,7 +4,7 @@ import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEventListener;
 
-public interface GroundItemManager extends EntityManager<GroundedItem>,
+public interface GroundItemManager extends ActiveEntityManager<GroundedItem>,
         EntityEventListener {
 
     void pickItem(Player picker, long id);

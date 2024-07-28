@@ -264,11 +264,27 @@ message ToggleKungFuPacket {
   bool quietly = 4;
 }
 
-message LoginPacket {
+message LifeBarPacket {
+  int64 id = 1;
+  int32 percent = 2;
+}
+
+
+message TeleportPacket {
   int32 x = 1;
   int32 y = 2;
-  PlayerInfoPacket info = 3;
-  string attackKungFuName = 6;
+  string map = 3;
+  string tile = 4;
+  string obj = 5;
+  string rof = 6;
+  string bgm = 7;
+  string realm = 8;
+}
+
+message LoginPacket {
+  TeleportPacket teleport = 1;
+  PlayerInfoPacket info = 2;
+  string attackKungFuName = 3;
   optional string footKungFuName = 8;
   repeated InventoryItemPacket inventoryItems = 9;
   repeated KungFuPacket unnamedKungFuList = 11;
@@ -277,7 +293,6 @@ message LoginPacket {
   optional string assistantKungFu = 14;
   optional string breathKungFu = 15;
   AttributePacket attribute = 17;
-  string mapName = 18;
 }
 
 message AttributePacket {
@@ -383,6 +398,8 @@ message UpdateDynamicObjectPacket {
   int32 end = 3;
 }
 
+
+
 message Packet {
   oneof TypedPacket {
     PositionPacket positionPacket = 1;
@@ -421,6 +438,8 @@ message Packet {
     UpdateTradeWindowPacket updateTradeWindow = 37;
     ShowDynamicObjectPacket showDynamicObject = 38;
     UpdateDynamicObjectPacket updateDynamicObject = 39;
+    TeleportPacket teleport = 40;
+    LifeBarPacket lifebar = 41;
   }
 }
 

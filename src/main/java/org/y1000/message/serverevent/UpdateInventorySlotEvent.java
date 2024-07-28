@@ -13,7 +13,7 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
     private final Item item;
 
     public UpdateInventorySlotEvent(Player source, int slot, Item item) {
-        super(source);
+        super(source, true);
         this.slot = slot;
         this.item = item;
     }

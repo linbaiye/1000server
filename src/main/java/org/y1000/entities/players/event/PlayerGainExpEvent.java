@@ -18,7 +18,7 @@ public final class PlayerGainExpEvent extends AbstractPlayerEvent {
     }
 
     public PlayerGainExpEvent(Player source, String name, int newLevel, boolean kungFu) {
-        super(source);
+        super(source, true);
         this.name = name;
         this.newLevel = newLevel;
         this.kungFu = kungFu;

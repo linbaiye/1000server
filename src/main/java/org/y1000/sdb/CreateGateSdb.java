@@ -20,4 +20,8 @@ public interface CreateGateSdb {
     int getX(String name);
 
     int getY(String name);
+
+    boolean isVisible(String name);
+
+    String getRandomPos(String name);
 }

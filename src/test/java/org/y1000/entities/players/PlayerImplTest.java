@@ -369,9 +369,8 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void handleMoveEventWhenIdle() {
-        RealmMap map = Mockito.mock(RealmMap.class);
-        Realm realm = Mockito.mock(Realm.class);
-        when(realm.map()).thenReturn(map);
+        RealmMap map = mockRealmMap();
+        Realm realm = mockRealm(map);
         player.joinReam(realm);
         eventListener.clearEvents();
         when(map.movable(player.coordinate().moveBy(Direction.DOWN))).thenReturn(true);

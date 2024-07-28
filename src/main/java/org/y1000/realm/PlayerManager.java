@@ -12,10 +12,12 @@ import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.clientevent.*;
+import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.message.serverevent.PlayerLeftEvent;
-import org.y1000.network.Connection;
 import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.util.Coordinate;
+
 
 @Slf4j
 public final class PlayerManager extends AbstractActiveEntityManager<Player> implements PlayerEventVisitor {
@@ -31,7 +33,6 @@ public final class PlayerManager extends AbstractActiveEntityManager<Player> imp
     private final TradeManager tradeManager;
 
     private final DynamicObjectManager dynamicObjectManager;
-
 
     public PlayerManager(EntityEventSender eventSender,
                          GroundItemManager itemManager,
@@ -53,24 +54,38 @@ public final class PlayerManager extends AbstractActiveEntityManager<Player> imp
         this.dynamicObjectManager = dynamicObjectManager;
     }
 
-
-    public void onPlayerConnected(Player player, Connection connection, Realm realm) {
-        if (eventSender.contains(player)) {
-            log.warn("Player {} already existed.", player);
-            player.leaveRealm();
-        }
-        eventSender.add(player, connection);
+    public void onPlayerConnected(Player player, Realm realm) {
+        doAdd(player);
         player.joinReam(realm);
+    }
+
+    private void doAdd(Player player) {
+        player.registerEventListener(this);
+        player.registerEventListener(itemManager);
         add(player);
+    }
+
+    public void teleportIn(Player player,
+                           Realm realm, Coordinate coordinate) {
+        if (player == null || realm == null) {
+            return;
+        }
+        doAdd(player);
+        player.teleport(realm, coordinate);
+    }
+
+    public void teleportOut(Player player) {
+        if (player == null) {
+            return;
+        }
+        player.leaveRealm();
+        player.clearListeners();
+        remove(player);
     }
 
     public void onPlayerDisconnected(Player player) {
         player.leaveRealm();
-    }
-
-    @Override
-    protected Logger log() {
-        return log;
+        remove(player);
     }
 
     @Override
@@ -80,15 +95,20 @@ public final class PlayerManager extends AbstractActiveEntityManager<Player> imp
     }
 
     @Override
+    protected Logger log() {
+        return log;
+    }
+
+    @Override
     protected void onAdded(Player entity) {
-        entity.registerEventListener(this);
-        entity.registerEventListener(itemManager);
+
     }
 
     @Override
     protected void onDeleted(Player entity) {
-        eventSender.remove(entity);
+
     }
+
 
     private void handleUpdateTradeEvent(Player player, ClientUpdateTradeEvent updateTradeEvent) {
         if (updateTradeEvent.type() == ClientUpdateTradeEvent.ClientUpdateType.ADD_ITEM) {
@@ -102,10 +122,12 @@ public final class PlayerManager extends AbstractActiveEntityManager<Player> imp
         }
     }
 
-
-    public void onPlayerEvent(PlayerDataEvent dataEvent,
-                              EntityManager<Npc> npcManager) {
+    public void onClientEvent(PlayerDataEvent dataEvent,
+                              ActiveEntityManager<Npc> npcManager) {
         Validate.notNull(npcManager);
+        if (!contains(dataEvent.player())){
+            return;
+        }
         if (dataEvent.data() instanceof ClientPickItemEvent event) {
             itemManager.pickItem(dataEvent.player(), event.id());
         } else if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
@@ -137,10 +159,18 @@ public final class PlayerManager extends AbstractActiveEntityManager<Player> imp
         }
         if (entityEvent instanceof PlayerLeftEvent playerLeftEvent) {
             eventSender.notifyVisiblePlayers(playerLeftEvent.player(), playerLeftEvent);
-            delete(playerLeftEvent.player());
+        } else if (entityEvent instanceof JoinedRealmEvent joinedRealmEvent) {
+            eventSender.notifySelf(joinedRealmEvent);
+            eventSender.notifyPlayerOfEntities(joinedRealmEvent.player());
         } else if (entityEvent instanceof PlayerShootEvent shootEvent) {
             projectileManager.add(shootEvent.projectile());
             eventSender.notifyVisiblePlayersAndSelf(shootEvent.source(), shootEvent);
+        } else if (entityEvent instanceof PlayerTeleportEvent teleportEvent) {
+            eventSender.updateScope(teleportEvent.player());
+            eventSender.notifySelf(teleportEvent);
+            eventSender.notifyPlayerOfEntities(teleportEvent.player());
+        } else if (entityEvent instanceof PlayerAttackEvent attackEvent) {
+            eventSender.notifyVisiblePlayersAndSelf(attackEvent.source(), attackEvent);
         } else if (entityEvent instanceof AbstractPlayerEvent playerEvent && playerEvent.isSelfEvent()) {
             eventSender.notifySelf(playerEvent);
         }

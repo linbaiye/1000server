@@ -35,6 +35,21 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
     }
 
     @Test
+    void stopFightingWhenPlayerLeft() {
+        monster.changeCoordinate(Coordinate.xy(3, 3));
+        monster.changeDirection(Direction.UP);
+        var player = playerBuilder().coordinate(Coordinate.xy(3, 4)).build();
+        player.joinReam(mockAllFlatRealm());
+        ai = new ViolentNpcMeleeFightAI(player, monster);
+        monster.changeAI(ai);
+        assertEquals(State.ATTACK, monster.stateEnum());
+        monster.update(monster.getStateMillis(State.ATTACK) - 10);
+        player.leaveRealm();
+        monster.update( 10 + monster.cooldown());
+        assertNotEquals(State.ATTACK, monster.stateEnum());
+    }
+
+    @Test
     void chase() {
         monster.changeCoordinate(Coordinate.xy(3, 3));
         monster.changeDirection(Direction.UP);
@@ -113,7 +128,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         monster.update(monster.getStateMillis(State.ATTACK) - 10);
         reset(enemy);
         when(enemy.canBeAttackedNow()).thenReturn(false);
-        monster.update( 10);
+        monster.update( 10 + monster.cooldown());
         assertNotEquals(State.ATTACK, monster.stateEnum());
     }
 
@@ -132,9 +147,9 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
 
     @Test
     void changeEnemyIfCurrentEnemyFar() {
-        Realm realm = Mockito.mock(Realm.class);
-        when(realm.map()).thenReturn(monster.realmMap());
+        Realm realm = mockAllFlatRealm();
         PlayerImpl player = playerBuilder().coordinate(monster.coordinate().move(1, 0)).build();
+        player.joinReam(realm);
         monster.changeAI(new MonsterWanderingAI());
         monster.attackedBy(player);
         monster.update(monster.getStateMillis(State.HURT));
@@ -142,6 +157,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         player.joinReam(mockAllFlatRealm());
         player.changeCoordinate(player.coordinate().move(2, 2));
         var another = playerBuilder().coordinate(monster.coordinate().move(0, 1)).build();
+        another.joinReam(realm);
         monster.attackedBy(another);
         assertEquals(State.HURT, monster.stateEnum());
         monster.update(monster.getStateMillis(State.HURT));

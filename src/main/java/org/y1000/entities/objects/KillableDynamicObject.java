@@ -2,8 +2,10 @@ package org.y1000.entities.objects;
 
 import lombok.Builder;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.EntityLifebarEvent;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
@@ -45,11 +47,15 @@ public final class KillableDynamicObject extends AbstractMutableDynamicObject im
         if (!canBeAttackedNow()) {
             return false;
         }
-        life -= Math.min(damage.bodyDamage() - armor, life);
-        dynamicObjectSdb().getSoundEvent(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+        var dmg = Math.max(damage.bodyDamage() - armor, 1);
+        life -= Math.min(dmg, life);
         if (life == 0) {
+            dynamicObjectSdb().getSoundEvent(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
             changeAnimation(1, dynamicObjectSdb().getOpenedMillis(idName()));
+        } else {
+            dynamicObjectSdb().getSoundSpecial(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         }
+        emitEvent(new EntityLifebarEvent(this, life, maxLife));
         return true;
     }
 

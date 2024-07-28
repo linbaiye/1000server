@@ -26,6 +26,7 @@ htmlReport/
 /nbdist/
 /.nb-gradle/
 build/
+src/main/resources/maps/
 !**/src/main/**/build/
 !**/src/test/**/build/
 

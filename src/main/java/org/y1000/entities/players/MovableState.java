@@ -23,7 +23,7 @@ public interface MovableState {
     private void handleRightClick(PlayerImpl player, AbstractRightClick rightClick) {
         Coordinate targetCoordinate = player.coordinate().moveBy(rightClick.direction());
         if (!player.realmMap().movable(targetCoordinate)) {
-            logger().debug("Destination conflicted, rewind player {} back to {}", player.id(), player.coordinate());
+            logger().debug("Destination {} conflicted, rewind player {} back to {}", targetCoordinate, player.id(), player.coordinate());
             player.changeDirection(rightClick.direction());
             rewind(player, rightClick.sequence());
         } else {

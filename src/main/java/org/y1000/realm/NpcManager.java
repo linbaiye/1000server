@@ -61,7 +61,7 @@ final class NpcManager extends AbstractActiveEntityManager<Npc> implements Entit
             try {
                 Optional<Coordinate> random = setting.range().random(map::movable);
                 random.ifPresentOrElse(p -> add(npcFactory.createNpc(name, idGenerator.next(), map, p)),
-                        () -> log.warn("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), map.name()));
+                        () -> log.warn("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), map.mapFile()));
             } catch (Exception e) {
                 log.error("Failed to create npc {}.", name, e);
             }
@@ -139,7 +139,7 @@ final class NpcManager extends AbstractActiveEntityManager<Npc> implements Entit
         if (!(removeEntityEvent.source() instanceof Npc npc)) {
             return;
         }
-        delete(npc);
+        remove(npc);
     }
 
     @Override

@@ -9,7 +9,6 @@ import org.y1000.event.EntityEventListener;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
 import org.y1000.message.*;
-import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.*;
 import org.y1000.network.Connection;
 
@@ -32,18 +31,18 @@ final class RealmEntityEventSender implements EntityEventListener,
         visit(inputResponseMessage.positionMessage());
     }
 
-    private void notifyInterpolation(Player joined, ActiveEntity entity) {
+    private void notifyInterpolation(Player joined, Entity entity) {
         sendMessage(joined, entity.captureInterpolation());
-        log.debug("Notified player {} of player {}", joined.id(), entity.id());
         if (entity instanceof Player another) {
-            log.debug("Notified player {} of player {}", another.id(), joined.id());
             sendMessage(another, joined.captureInterpolation());
         }
     }
 
     private void sendMessage(Player player, ServerMessage serverMessage) {
-        playerConnectionMap.get(player).write(serverMessage);
+        if (playerConnectionMap.containsKey(player))
+            playerConnectionMap.get(player).write(serverMessage);
     }
+
 
     private void notifyOutsightOrInsight(Entity moved,
                                          Entity affected) {
@@ -78,20 +77,20 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
 
-    @Override
-    public void visit(JoinedRealmEvent joinedRealmEvent) {
-        sendMessage(joinedRealmEvent.player(), joinedRealmEvent);
-        var visibleEntities = scopeManager.filterVisibleEntities(joinedRealmEvent.source(), ActiveEntity.class);
-        visibleEntities.forEach(entity -> notifyInterpolation(joinedRealmEvent.player(), entity));
-    }
-
     private void cleanEntity(Entity entity,
                              ServerMessage message) {
         Set<Player> affected = scopeManager.filterVisibleEntities(entity, Player.class);
         affected.forEach(player -> sendMessage(player, message));
     }
 
-
+    @Override
+    public void notifyPlayerOfEntities(Player player) {
+        if (player == null) {
+            return;
+        }
+        var visibleEntities = scopeManager.filterVisibleEntities(player, Entity.class);
+        visibleEntities.forEach(entity -> notifyInterpolation(player, entity));
+    }
 
     @Override
     public void visit(CreatureAttackEvent event) {
@@ -122,12 +121,6 @@ final class RealmEntityEventSender implements EntityEventListener,
         doNotifyVisiblePlayers(source, serverMessage);
     }
 
-
-    @Override
-    public void visit(PlayerAttackEvent event) {
-        notifyVisiblePlayersAndSelf(event.source(), event);
-    }
-
     @Override
     public void visit(CreatureHurtEvent event) {
         notifyVisiblePlayersAndSelf(event.source(), event);
@@ -153,18 +146,6 @@ final class RealmEntityEventSender implements EntityEventListener,
         entityEvent.accept(this);
     }
 
-
-    @Override
-    public void visit(InventorySlotSwappedEvent event) {
-        sendMessage(event.player(), event);
-    }
-
-
-    @Override
-    public void visit(UpdateInventorySlotEvent event) {
-        sendMessage(event.player(), event);
-    }
-
     @Override
     public void visit(PlayerUnequipEvent event) {
         notifyVisiblePlayersAndSelf(event.player(), event);
@@ -173,11 +154,6 @@ final class RealmEntityEventSender implements EntityEventListener,
     @Override
     public void visit(PlayerEquipEvent event) {
         notifyVisiblePlayersAndSelf(event.player(), event);
-    }
-
-    @Override
-    public void visit(PlayerTextEvent event) {
-        sendMessage(event.player(), event);
     }
 
 
@@ -220,11 +196,6 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
     @Override
-    public void visit(PlayerAttributeEvent event) {
-        sendMessage(event.player(), event);
-    }
-
-    @Override
     public void visit(PlayerReviveEvent event) {
         notifyVisiblePlayersAndSelf(event.source(), event);
     }
@@ -239,10 +210,6 @@ final class RealmEntityEventSender implements EntityEventListener,
         cleanEntity(event.source(), event);
     }
 
-    @Override
-    public void visit(PlayerGainExpEvent event) {
-        sendMessage(event.player(), event);
-    }
 
     @Override
     public void visit(MonsterShootEvent event) {
@@ -259,27 +226,20 @@ final class RealmEntityEventSender implements EntityEventListener,
         doNotifyVisiblePlayers(event.source(), event);
     }
 
-    @Override
-    public void visit(NpcJoinedEvent event) {
-        doNotifyVisiblePlayers(event.source(), event);
-    }
-
 
     public void add(Player player, Connection connection) {
         playerConnectionMap.put(player, connection);
         add(player);
     }
 
-    public boolean contains(Player player) {
-        return playerConnectionMap.containsKey(player);
-    }
 
-    public void add(ActiveEntity entity) {
+    public void add(Entity entity) {
         if (scopeManager.getAllEntities().contains(entity)) {
             return;
         }
         scopeManager.add(entity);
-        entity.registerEventListener(this);
+        if (entity instanceof ActiveEntity activeEntity)
+            activeEntity.registerEventListener(this);
     }
 
     public void remove(Entity entity) {
@@ -298,8 +258,13 @@ final class RealmEntityEventSender implements EntityEventListener,
         sendMessage(playerEvent.player(), playerEvent);
     }
 
-    public void remove(Player player) {
+    public Connection remove(Player player) {
         scopeManager.remove(player);
-        playerConnectionMap.remove(player);
+        return playerConnectionMap.remove(player);
+    }
+
+    @Override
+    public void updateScope(Player player) {
+        scopeManager.update(player);
     }
 }

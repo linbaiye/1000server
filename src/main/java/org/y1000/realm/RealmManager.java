@@ -6,6 +6,8 @@ import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemSdb;
+import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.repository.ItemRepository;
 import org.y1000.network.Connection;
 import org.y1000.network.ConnectionEventType;
@@ -15,6 +17,7 @@ import org.y1000.network.event.ConnectionEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
 import org.y1000.sdb.CreateEntitySdbRepository;
+import org.y1000.sdb.CreateGateSdb;
 import org.y1000.sdb.MapSdb;
 import org.y1000.sdb.MonstersSdb;
 
@@ -23,36 +26,35 @@ import java.util.concurrent.*;
 
 
 @Slf4j
-public final class RealmManager implements Runnable {
-    private final Map<Integer, RealmImpl> realms;
+public final class RealmManager implements Runnable , CrossRealmEventHandler{
 
-    private final Map<Player, RealmImpl> playerRealmMap;
+    private final Map<Player, Integer> playerRealmMap;
 
     private final Map<Connection, Player> connectionPlayerMap;
 
-    private final ExecutorService executorService;
+    private ExecutorService executorService;
 
     private final Queue<ConnectionEvent> eventQueue;
 
+    private Map<Integer, RealmGroup> realmGroups;
 
     private volatile boolean shutdown;
 
-    private RealmManager(Map<Integer, RealmImpl> realms) {
-        this.realms = realms;
-        executorService = Executors.newFixedThreadPool(realms.size());
-        playerRealmMap = new HashMap<>();
+    private RealmManager() {
+        playerRealmMap = new ConcurrentHashMap<>();
         eventQueue = new ArrayDeque<>(100);
         connectionPlayerMap = new HashMap<>(500);
         shutdown = false;
     }
 
+
     public void startRealms() {
-        realms.values().forEach(executorService::submit);
+        realmGroups.values().forEach(executorService::submit);
     }
 
     private int getPlayerLastRealm(Player player) {
-        return 1;
-        //return 49;
+       // return 1;
+        return 49;
     }
 
     private void handleNewConnection(ConnectionEstablishedEvent event) {
@@ -61,15 +63,15 @@ public final class RealmManager implements Runnable {
             return;
         }
         var playerLastRealm = getPlayerLastRealm(event.player());
-        RealmImpl realm = realms.get(playerLastRealm);
-        if (realm == null) {
+        RealmGroup group = realmGroups.get(playerLastRealm);
+        if (group == null) {
             log.error("Realm {} does not exist.", playerLastRealm);
             event.connection().close();
             return;
         }
         connectionPlayerMap.put(event.connection(), event.player());
-        playerRealmMap.put(event.player(), realm);
-        realm.handle(event);
+        playerRealmMap.put(event.player(), playerLastRealm);
+        group.handle(new ConnectionEstablishedEvent(playerLastRealm, event.player(), event.connection()));
     }
 
     private void sendDataToRealm(ConnectionDataEvent dataEvent) {
@@ -79,14 +81,17 @@ public final class RealmManager implements Runnable {
             dataEvent.connection().close();
             return;
         }
-        playerRealmMap.get(player).handle(new PlayerDataEvent(player, dataEvent.data()));
+        int realmId = playerRealmMap.get(player);
+        realmGroups.get(realmId).handle(new PlayerDataEvent(realmId, player, dataEvent.data()));
     }
+
+
 
     private void handleDisconnection(Connection connection) {
         Player removed = connectionPlayerMap.remove(connection);
         if (removed != null) {
-            RealmImpl realm = playerRealmMap.remove(removed);
-            realm.handle(new PlayerDisconnectedEvent(removed));
+            Integer realmId = playerRealmMap.remove(removed);
+            realmGroups.get(realmId).handle(new PlayerDisconnectedEvent(realmId, removed));
         }
     }
 
@@ -115,10 +120,31 @@ public final class RealmManager implements Runnable {
     }
 
 
+    private void handleTeleport(RealmTeleportEvent teleportEvent) {
+        int realmId = teleportEvent.realmId();
+        playerRealmMap.remove(teleportEvent.player());
+        playerRealmMap.put(teleportEvent.player(), realmId);
+        RealmGroup group = realmGroups.get(realmId);
+        group.handle(teleportEvent);
+    }
+
+    @Override
+    public void handle(RealmEvent realmEvent) {
+        if (realmEvent instanceof RealmTeleportEvent teleportEvent) {
+            handleTeleport(teleportEvent);
+        }
+    }
+
+    private void setRealmGroups(Map<Integer, RealmGroup> realmGroups) {
+        this.realmGroups = realmGroups;
+        this.executorService = Executors.newFixedThreadPool(this.realmGroups.size());
+    }
+
+
     private static List<Integer> getRealmIds() {
-        return List.of(1);
+        return List.of(1, 19, 20, 49);
         //return List.of(19);
-        //return List.of(19, 49);
+        //return List.of(49);
     }
 
 
@@ -129,17 +155,35 @@ public final class RealmManager implements Runnable {
                                       MonstersSdb monstersSdb,
                                       MapSdb mapSdb,
                                       CreateEntitySdbRepository createEntitySdbRepository,
-                                      DynamicObjectFactory dynamicObjectFactory) {
-        Map<Integer, RealmImpl> realmMap = new HashMap<>();
+                                      DynamicObjectFactory dynamicObjectFactory,
+                                      CreateGateSdb createGateSdb) {
         List<Integer> realmIds = getRealmIds();
+        List<Realm> realmList = new ArrayList<>();
+        var manager = new RealmManager();
         for (Integer id : realmIds) {
             String mapName = mapSdb.getMapName(id);
-            RealmImpl realm = RealmMap.Load(mapName)
-                    .map(m -> new RealmImpl(m, itemRepository, itemFactory, npcFactory, itemSdb, monstersSdb, id, createEntitySdbRepository, dynamicObjectFactory))
+            RealmImpl realm = RealmMap.Load(mapName, mapSdb.getTilName(id), mapSdb.getObjName(id), mapSdb.getRofName(id))
+                    .map(m -> new RealmImpl(m, itemRepository, itemFactory, npcFactory, itemSdb, monstersSdb, id, createEntitySdbRepository, dynamicObjectFactory, createGateSdb, manager, mapSdb))
                     .orElseThrow(() -> new IllegalArgumentException("Map not found."));
-            realmMap.put(id, realm);
+            realmList.add(realm);
         }
-        return new RealmManager(realmMap);
+        var groupSize = (realmList.size() / 4 ) > 0 ? (realmList.size() / 4) : 1;
+        var left = realmList.size() % groupSize;
+        List<RealmGroup> groups = new ArrayList<>();
+        for (int i = 0, start = 0; i < realmList.size() / groupSize; i++, start += groupSize) {
+            int end = start + groupSize;
+            if (i == groupSize - 1) {
+                end += left;
+            }
+            RealmGroup group = new RealmGroup(realmList.subList(start, end));
+            groups.add(group);
+        }
+        Map<Integer, RealmGroup> realmGroupMap = new HashMap<>();
+        for (RealmGroup group : groups) {
+            group.realmIds().forEach(id -> realmGroupMap.put(id,group));
+        }
+        manager.setRealmGroups(realmGroupMap);
+        return manager;
     }
 
     @Override

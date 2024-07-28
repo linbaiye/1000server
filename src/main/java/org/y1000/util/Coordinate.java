@@ -1,5 +1,6 @@
 package org.y1000.util;
 
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
 
 import java.util.Comparator;
@@ -10,6 +11,11 @@ import java.util.Set;
 public record Coordinate(int x, int y) {
 
     public static final Coordinate Empty = new Coordinate(0, 0);
+
+    /*public Coordinate {
+        Validate.isTrue(x >= 0);
+        Validate.isTrue(y >= 0);
+    }*/
 
     public Coordinate moveBy(Direction direction) {
         return add(direction.offset());

@@ -11,6 +11,8 @@ public enum DynamicObjectType implements ValueEnum  {
     KILLABLE(1),
 
     YAOHUA(7),
+
+    ENTRANCE(8),
     ;
 
     private final int v;

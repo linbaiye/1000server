@@ -26,24 +26,18 @@ public final class TestingEntityEventSender implements EntityEventSender {
         connectionMap = new HashMap<>();
     }
 
-    @Override
     public void add(Player player, Connection connection) {
         connectionMap.put(player, connection);
         entities.add(player);
     }
 
-    @Override
     public boolean contains(Player player) {
         return false;
     }
 
-    @Override
-    public void remove(Player player) {
-        connectionMap.remove(player);
-    }
 
     @Override
-    public void add(ActiveEntity entity) {
+    public void add(Entity entity) {
         entities.add(entity);
     }
 

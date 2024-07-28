@@ -81,7 +81,7 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
     }
 
     public PlayerTextEvent(Player source, String text, TextType type, Location location) {
-        super(source);
+        super(source, true);
         if (type == TextType.CUSTOM) {
             Validate.isTrue(text != null && text.length() <= 30);
         }

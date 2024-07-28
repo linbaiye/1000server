@@ -26,6 +26,10 @@ public final class EventListeners {
         listeners.add(listener);
     }
 
+    public void clear() {
+        listeners.clear();
+    }
+
     public void deregister(EntityEventListener listener) {
         Objects.requireNonNull(listener);
         listeners.remove(listener);

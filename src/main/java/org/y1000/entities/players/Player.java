@@ -13,6 +13,7 @@ import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.realm.Realm;
+import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
@@ -23,6 +24,8 @@ public interface Player extends ViolentCreature {
     }
 
     void joinReam(Realm realm);
+
+    void teleport(Realm realm, Coordinate coordinate);
 
     Realm getRealm();
 

@@ -6,18 +6,21 @@ import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
 import org.y1000.network.event.ConnectionEstablishedEvent;
+import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.repository.ItemRepository;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
 import org.y1000.realm.event.RealmEvent;
 import org.y1000.sdb.CreateEntitySdbRepository;
+import org.y1000.sdb.CreateGateSdb;
+import org.y1000.sdb.MapSdb;
 import org.y1000.sdb.MonstersSdb;
 
 import java.util.*;
 
 
 @Slf4j
-final class RealmImpl implements Runnable, Realm {
+final class RealmImpl implements Realm {
 
     public static final int STEP_MILLIS = 10;
 
@@ -37,7 +40,15 @@ final class RealmImpl implements Runnable, Realm {
 
     private final DynamicObjectManagerImpl dynamicObjectManager;
 
+    private final TeleportManager teleportManager;
+
+    private long accumulatedMillis;
+
     private final int id;
+
+    private final CrossRealmEventHandler crossRealmEventHandler;
+
+    private final MapSdb mapSdb;
 
     public RealmImpl(RealmMap map,
                      ItemRepository itemRepository,
@@ -46,9 +57,13 @@ final class RealmImpl implements Runnable, Realm {
                      ItemSdb itemSdb,
                      MonstersSdb monstersSdb, int id,
                      CreateEntitySdbRepository createEntitySdbRepository,
-                     DynamicObjectFactory dynamicObjectFactory) {
+                     DynamicObjectFactory dynamicObjectFactory,
+                     CreateGateSdb createGateSdb,
+                     CrossRealmEventHandler crossRealmEventHandler,
+                     MapSdb mapSdb) {
         realmMap = map;
         this.id = id;
+        this.mapSdb = mapSdb;
         var entityIdGenerator = new EntityIdGenerator();
         eventSender = new RealmEntityEventSender();
         itemManager = new ItemManagerImpl(eventSender, itemSdb, monstersSdb, entityIdGenerator, itemFactory);
@@ -57,6 +72,8 @@ final class RealmImpl implements Runnable, Realm {
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
         this.playerManager = new PlayerManager(eventSender, itemManager, itemFactory, dynamicObjectManager);
+        this.teleportManager = new TeleportManager(createGateSdb, entityIdGenerator);
+        this.crossRealmEventHandler = crossRealmEventHandler;
     }
 
     public RealmMap map() {
@@ -64,75 +81,76 @@ final class RealmImpl implements Runnable, Realm {
     }
 
     @Override
+    public String name() {
+        return mapSdb.getMapTitle(id);
+    }
+
+    @Override
+    public String bgm() {
+        return mapSdb.getSoundBase(id);
+    }
+
+    @Override
+    public void update() {
+        long current = System.currentTimeMillis();
+        while (accumulatedMillis <= current) {
+            playerManager.update(STEP_MILLIS);
+            npcManager.update(STEP_MILLIS);
+            itemManager.update(STEP_MILLIS);
+            dynamicObjectManager.update(STEP_MILLIS);
+            accumulatedMillis += STEP_MILLIS;
+        }
+    }
+
+    @Override
+    public void init() {
+        accumulatedMillis = System.currentTimeMillis();
+        log.info("Initializing realm {}.", this.map().mapFile());
+        npcManager.init(this.map(), id);
+        dynamicObjectManager.init(this.map(), id);
+        teleportManager.init(this.map(), id, this::onPlayerTeleport);
+    }
+
+    @Override
     public int id() {
         return id;
+    }
+
+    private void onPlayerTeleport(RealmEvent event) {
+        if (!(event instanceof RealmTeleportEvent realmTeleportEvent)) {
+            return;
+        }
+        playerManager.teleportOut(event.player());
+        log.debug("Player {} left {}.", event.player(), id());
+        var connection = eventSender.remove(event.player());
+        realmTeleportEvent.setConnection(connection);
+        crossRealmEventHandler.handle(event);
     }
 
 
     private void onRealmEvent(RealmEvent event) {
         try {
             if (event instanceof ConnectionEstablishedEvent connectedEvent) {
-                playerManager.onPlayerConnected(connectedEvent.player(), connectedEvent.connection(), this);
+                eventSender.add(connectedEvent.player(), connectedEvent.connection());
+                playerManager.onPlayerConnected(connectedEvent.player(), this);
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
                 playerManager.onPlayerDisconnected(disconnectedEvent.player());
+                eventSender.remove(event.player());
             } else if (event instanceof PlayerDataEvent dataEvent) {
-                playerManager.onPlayerEvent(dataEvent, npcManager);
+                playerManager.onClientEvent(dataEvent, npcManager);
+            } else if (event instanceof RealmTeleportEvent teleportEvent) {
+                log.debug("Teleport player {} to {} at {}.", teleportEvent.player(), id, teleportEvent.toCoordinate());
+                eventSender.add(teleportEvent.player(), teleportEvent.getConnection());
+                playerManager.teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate());
             }
         } catch (Exception e) {
             log.error("Exception when handling event .", e);
         }
     }
 
-    private void startRealm() {
-        long accumulatedMillis = System.currentTimeMillis();
-        try {
-            while (!shutdown) {
-                long current = System.currentTimeMillis();
-                if (accumulatedMillis <= current) {
-                    playerManager.update(STEP_MILLIS);
-                    npcManager.update(STEP_MILLIS);
-                    itemManager.update(STEP_MILLIS);
-                    dynamicObjectManager.update(STEP_MILLIS);
-                    accumulatedMillis += STEP_MILLIS;
-                    continue;
-                }
-                List<RealmEvent> events = Collections.emptyList();
-                synchronized (pendingEvents) {
-                    while (pendingEvents.isEmpty() && current < accumulatedMillis) {
-                        pendingEvents.wait(accumulatedMillis - current);
-                        current = System.currentTimeMillis();
-                    }
-                    if (!pendingEvents.isEmpty()) {
-                        events = new ArrayList<>(pendingEvents);
-                        pendingEvents.clear();
-                    }
-                    pendingEvents.notify();
-                }
-                events.forEach(this::onRealmEvent);
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (Exception e) {
-            log.error("Exception ", e);
-        }
-    }
-
-    @Override
-    public void run() {
-        try {
-            npcManager.init(this.map(), id);
-            dynamicObjectManager.init(this.map(), id);
-            startRealm();
-        } catch (Exception e) {
-            log.error("Failed to start realm {}.", id, e);
-        }
-    }
 
     @Override
     public void handle(RealmEvent event) {
-        synchronized (pendingEvents) {
-            pendingEvents.add(event);
-            pendingEvents.notify();
-        }
+        onRealmEvent(event);
     }
 }

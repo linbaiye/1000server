@@ -15,4 +15,6 @@ public interface ActiveEntity extends Entity {
     void registerEventListener(EntityEventListener listener);
 
     void deregisterEventListener(EntityEventListener listener);
+
+    void clearListeners();
 }

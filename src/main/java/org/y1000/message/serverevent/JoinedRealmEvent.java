@@ -1,37 +1,28 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
-import org.y1000.event.EntityEvent;
-import org.y1000.event.EntityEventVisitor;
+import org.y1000.entities.players.event.PlayerTeleportEvent;
 import org.y1000.item.StackItem;
 import org.y1000.kungfu.KungFu;
 import org.y1000.item.Item;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.message.PlayerInfo;
-import org.y1000.message.ServerMessage;
-import org.y1000.network.gen.InventoryItemPacket;
-import org.y1000.network.gen.KungFuPacket;
-import org.y1000.network.gen.LoginPacket;
-import org.y1000.network.gen.Packet;
+import org.y1000.network.gen.*;
 import org.y1000.entities.players.Player;
+import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
-public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
-
-    private final Player player;
-
-    private final Coordinate coordinate;
+public final class JoinedRealmEvent extends AbstractPlayerEvent{
 
     private final Inventory playerInventory;
 
-    private final String mapName;
+    private final TeleportPacket teleportPacket;
 
-    public JoinedRealmEvent(Player player, Coordinate coordinate, Inventory playerInventory, String mapName) {
-        this.player = player;
-        this.coordinate = coordinate;
+    public JoinedRealmEvent(Player player, Coordinate coordinate, Inventory playerInventory, Realm realm) {
+        super(player);
         this.playerInventory = playerInventory;
-        this.mapName = mapName;
+        this.teleportPacket = PlayerTeleportEvent.teleportPacket(realm, coordinate);
     }
 
     private InventoryItemPacket toPacket(int index, Item item) {
@@ -54,14 +45,13 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
     }
 
     @Override
-    public Packet toPacket() {
+    protected Packet buildPacket() {
+        var player = player();
         LoginPacket.Builder builder = LoginPacket.newBuilder()
-                .setX(coordinate.x())
-                .setY(coordinate.y())
                 .setAttackKungFuName(player.attackKungFu().name())
                 .setInfo(PlayerInfo.toPacket(player))
                 .setAttribute(PlayerAttributeEvent.makeAttributePacket(player))
-                .setMapName(mapName)
+                .setTeleport(teleportPacket)
                 ;
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuName(footKungFu.name()));
         player.protectKungFu().ifPresent(protectKungFu -> builder.setProtectionKungFu(protectKungFu.name()));
@@ -72,20 +62,8 @@ public final class JoinedRealmEvent implements EntityEvent, ServerMessage {
         return Packet.newBuilder().setLoginPacket(builder.build()).build();
     }
 
-
     @Override
-    public void accept(EntityEventVisitor visitor) {
-        if (visitor instanceof PlayerEventVisitor playerEventHandler) {
-            playerEventHandler.visit(this);
-        }
-    }
-
-    public Player player() {
-        return (Player)source();
-    }
-
-    @Override
-    public AttackableActiveEntity source() {
-        return player;
+    public void accept(PlayerEventVisitor playerEventHandler) {
+        playerEventHandler.visit(this);
     }
 }

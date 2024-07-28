@@ -6,4 +6,6 @@ public interface RealmEvent {
 
     Player player();
 
+    int realmId();
+
 }

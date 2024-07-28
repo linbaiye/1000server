@@ -7,7 +7,7 @@ import org.y1000.network.gen.Packet;
 
 public final class PlayerAttributeEvent extends AbstractPlayerEvent{
     public PlayerAttributeEvent(Player source) {
-        super(source);
+        super(source, true);
     }
 
     @Override

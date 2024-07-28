@@ -27,6 +27,11 @@ public abstract class AbstractActiveEntity implements ActiveEntity {
     }
 
     @Override
+    public void clearListeners() {
+        eventListeners.clear();
+    }
+
+    @Override
     public long id() {
         return id;
     }
