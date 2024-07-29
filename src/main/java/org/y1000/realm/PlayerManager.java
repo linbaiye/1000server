@@ -11,6 +11,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
+import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
@@ -61,7 +62,6 @@ public final class PlayerManager extends AbstractActiveEntityManager<Player> imp
 
     private void doAdd(Player player) {
         player.registerEventListener(this);
-        player.registerEventListener(itemManager);
         add(player);
     }
 
@@ -171,6 +171,8 @@ public final class PlayerManager extends AbstractActiveEntityManager<Player> imp
             eventSender.notifyPlayerOfEntities(teleportEvent.player());
         } else if (entityEvent instanceof PlayerAttackEvent attackEvent) {
             eventSender.notifyVisiblePlayersAndSelf(attackEvent.source(), attackEvent);
+        } else if (entityEvent instanceof PlayerDropItemEvent dropItemEvent) {
+            itemManager.dropItem(dropItemEvent.getDroppedItemName(), dropItemEvent.getNumberOnGround(), dropItemEvent.getCoordinate());
         } else if (entityEvent instanceof AbstractPlayerEvent playerEvent && playerEvent.isSelfEvent()) {
             eventSender.notifySelf(playerEvent);
         }

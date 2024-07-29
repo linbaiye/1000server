@@ -89,6 +89,12 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         }
     }
 
+    @Override
+    public void dropItem(String name, int number, Coordinate at) {
+        Validate.notNull(name);
+        Validate.notNull(at);
+        dropNewItem(createGroundItem(name, at, number));
+    }
 
 
     private GroundedItem createGroundItem(String name,

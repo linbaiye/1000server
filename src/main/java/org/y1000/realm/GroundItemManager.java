@@ -11,4 +11,7 @@ public interface GroundItemManager extends ActiveEntityManager<GroundedItem>,
     void pickItem(Player picker, long id);
 
     void dropItem(String itemNumberRateArray, Coordinate at);
+
+    void dropItem(String name, int number, Coordinate at);
+
 }

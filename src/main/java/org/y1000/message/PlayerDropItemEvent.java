@@ -1,5 +1,6 @@
 package org.y1000.message;
 
+import lombok.Getter;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.Player;
@@ -9,10 +10,13 @@ import org.y1000.util.Coordinate;
 
 public final class PlayerDropItemEvent implements ItemEvent {
 
+    @Getter
     private final String droppedItemName;
 
+    @Getter
     private final Integer numberOnGround;
 
+    @Getter
     private final Coordinate coordinate;
 
     private final Player source;
@@ -25,7 +29,6 @@ public final class PlayerDropItemEvent implements ItemEvent {
         this.coordinate = coordinate;
         this.source = source;
     }
-
 
     public GroundedItem createGroundedItem(long id) {
         GroundedItem.GroundedItemBuilder builder = GroundedItem.builder()

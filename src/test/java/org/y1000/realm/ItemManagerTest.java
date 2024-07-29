@@ -71,10 +71,20 @@ class ItemManagerTest extends AbstractUnitTestFixture {
 
     @Test
     void dropItem() {
-        manager.dropItem("皮:2:1", Coordinate.xy(1, 1));
+        manager.dropItem("皮:2:1:肉:5:1", Coordinate.xy(1, 1));
         Optional<GroundedItem> groundedItem = manager.find(1L);
         assertEquals("皮", groundedItem.get().getName());
         assertEquals(2, groundedItem.get().getNumber());
         assertEquals(Coordinate.xy(1, 1), groundedItem.get().coordinate());
+        groundedItem = manager.find(2L);
+        assertEquals("肉", groundedItem.get().getName());
+        assertEquals(5, groundedItem.get().getNumber());
+
+        manager.dropItem("钱币",  100, Coordinate.xy(2, 2));
+        groundedItem = manager.find(3L);
+        assertEquals("钱币", groundedItem.get().getName());
+        assertEquals(100, groundedItem.get().getNumber());
+        assertEquals(Coordinate.xy(2, 2), groundedItem.get().coordinate());
     }
+
 }
