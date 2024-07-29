@@ -66,9 +66,9 @@ final class RealmImpl implements Realm {
         this.mapSdb = mapSdb;
         var entityIdGenerator = new EntityIdGenerator();
         eventSender = new RealmEntityEventSender();
-        itemManager = new ItemManagerImpl(eventSender, itemSdb, monstersSdb, entityIdGenerator, itemFactory);
-        npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager, createEntitySdbRepository);
-        dynamicObjectManager = new DynamicObjectManagerImpl(dynamicObjectFactory, createEntitySdbRepository, entityIdGenerator, eventSender);
+        itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
+        npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager, createEntitySdbRepository, monstersSdb);
+        dynamicObjectManager = new DynamicObjectManagerImpl(dynamicObjectFactory, createEntitySdbRepository, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id));
         shutdown = false;
         pendingEvents = new ArrayList<>(100);
         this.playerManager = new PlayerManager(eventSender, itemManager, itemFactory, dynamicObjectManager);

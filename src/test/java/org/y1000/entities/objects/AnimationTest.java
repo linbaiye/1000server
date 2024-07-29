@@ -8,7 +8,7 @@ class AnimationTest {
 
     @Test
     void total() {
-        assertEquals(1, new Animation(0, 0).total());
-        assertEquals(2, new Animation(1, 2).total());
+        assertEquals(1, new Animation(0, 0, false).total());
+        assertEquals(2, new Animation(1, 2, false).total());
     }
 }

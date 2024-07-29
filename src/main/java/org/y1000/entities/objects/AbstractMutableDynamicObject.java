@@ -73,7 +73,7 @@ public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity 
             int s2 = StringUtils.isNotEmpty(sStep2) ? Integer.parseInt(sStep2) : e1;
             String eStep2 = sdb.getEStep2(idName);
             int e2 = StringUtils.isNotEmpty(eStep2) ? Integer.parseInt(eStep2) : s2;
-            return new Animation[]{new Animation(s0, e0), new Animation(s1, e1), new Animation(s2, e2)};
+            return new Animation[]{new Animation(s0, e0, false), new Animation(s1, e1, false), new Animation(s2, e2, true)};
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid animation for " + idName, e);
         }

@@ -315,6 +315,17 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int LOOP_FIELD_NUMBER = 13;
+  private boolean loop_ = false;
+  /**
+   * <code>bool loop = 13;</code>
+   * @return The loop.
+   */
+  @java.lang.Override
+  public boolean getLoop() {
+    return loop_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -373,6 +384,9 @@ private static final long serialVersionUID = 0L;
     }
     if (((bitField0_ & 0x00000002) != 0)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 12, requiredItem_);
+    }
+    if (loop_ != false) {
+      output.writeBool(13, loop_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -448,6 +462,10 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000002) != 0)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, requiredItem_);
     }
+    if (loop_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(13, loop_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -493,6 +511,8 @@ private static final long serialVersionUID = 0L;
       if (!getRequiredItem()
           .equals(other.getRequiredItem())) return false;
     }
+    if (getLoop()
+        != other.getLoop()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -537,6 +557,9 @@ private static final long serialVersionUID = 0L;
       hash = (37 * hash) + REQUIREDITEM_FIELD_NUMBER;
       hash = (53 * hash) + getRequiredItem().hashCode();
     }
+    hash = (37 * hash) + LOOP_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getLoop());
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -680,6 +703,7 @@ private static final long serialVersionUID = 0L;
       guardX_ = emptyIntList();
       guardY_ = emptyIntList();
       requiredItem_ = "";
+      loop_ = false;
       return this;
     }
 
@@ -753,6 +777,9 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000800) != 0)) {
         result.requiredItem_ = requiredItem_;
         to_bitField0_ |= 0x00000002;
+      }
+      if (((from_bitField0_ & 0x00001000) != 0)) {
+        result.loop_ = loop_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -858,6 +885,9 @@ private static final long serialVersionUID = 0L;
         requiredItem_ = other.requiredItem_;
         bitField0_ |= 0x00000800;
         onChanged();
+      }
+      if (other.getLoop() != false) {
+        setLoop(other.getLoop());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -967,6 +997,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000800;
               break;
             } // case 98
+            case 104: {
+              loop_ = input.readBool();
+              bitField0_ |= 0x00001000;
+              break;
+            } // case 104
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1602,6 +1637,38 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       requiredItem_ = value;
       bitField0_ |= 0x00000800;
+      onChanged();
+      return this;
+    }
+
+    private boolean loop_ ;
+    /**
+     * <code>bool loop = 13;</code>
+     * @return The loop.
+     */
+    @java.lang.Override
+    public boolean getLoop() {
+      return loop_;
+    }
+    /**
+     * <code>bool loop = 13;</code>
+     * @param value The loop to set.
+     * @return This builder for chaining.
+     */
+    public Builder setLoop(boolean value) {
+
+      loop_ = value;
+      bitField0_ |= 0x00001000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>bool loop = 13;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearLoop() {
+      bitField0_ = (bitField0_ & ~0x00001000);
+      loop_ = false;
       onChanged();
       return this;
     }

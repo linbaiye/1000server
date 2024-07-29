@@ -64,6 +64,11 @@ public abstract class AbstractSdbReader {
         return strings[index];
     }
 
+    Optional<String> getOptional(String name, String value) {
+        var str = get(name, value);
+        return !StringUtils.isEmpty(str) ? Optional.of(str) : Optional.empty();
+    }
+
     protected String getOrNull(String itemName, String key) {
         var str = get(itemName, key);
         return StringUtils.isEmpty(str) ? null : str;

@@ -34,8 +34,6 @@ class ItemManagerTest extends AbstractUnitTestFixture {
 
     private TestingEntityEventSender eventSender;
 
-    private MonstersSdb monstersSdb;
-
     private ItemSdb itemSdb;
 
     private ItemFactory itemFactory;
@@ -43,23 +41,9 @@ class ItemManagerTest extends AbstractUnitTestFixture {
     @BeforeEach
     void setUp() {
         eventSender = new TestingEntityEventSender();
-        monstersSdb = Mockito.mock(MonstersSdb.class);
         itemSdb = Mockito.mock(ItemSdb.class);
         itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
-        manager = new ItemManagerImpl(eventSender, itemSdb, monstersSdb, new EntityIdGenerator(), itemFactory);
-    }
-
-
-    @Test
-    void whenAMonsterDead() {
-        when(itemSdb.getSoundDrop("肉")).thenReturn("dropSound");
-        when(monstersSdb.getHaveItem(any(String.class))).thenReturn("皮:2:1:肉:4:1");
-        TestingMonsterAttributeProvider attributeProvider = new TestingMonsterAttributeProvider();
-        attributeProvider.idName = "牛";
-        manager.onEvent(new CreatureDieEvent(monsterBuilder().attributeProvider(attributeProvider).name("牛").build()));
-        assertEquals(2, eventSender.entities().size());
-        EntitySoundEvent soundEvent = eventSender.removeFirst(EntitySoundEvent.class);
-        assertEquals("dropSound", soundEvent.toPacket().getSound().getSound());
+        manager = new ItemManagerImpl(eventSender, itemSdb, new EntityIdGenerator(), itemFactory);
     }
 
     @Test

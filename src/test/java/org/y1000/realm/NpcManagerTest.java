@@ -7,7 +7,11 @@ import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.CreatureDieEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.event.NpcJoinedEvent;
+import org.y1000.entities.creatures.monster.PassiveMonster;
+import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
@@ -46,6 +50,8 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
 
     private EntityIdGenerator idGenerator;
 
+    private MonstersSdb monstersSdb;
+
     private RealmMap map;
 
 
@@ -66,7 +72,8 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         when(npcSdbRepository.loadMonster(anyInt())).thenReturn(monsterSdb);
         when(npcSdbRepository.loadNpc(anyInt())).thenReturn(npcSdb);
         idGenerator = new EntityIdGenerator();
-        npcManager = new NpcManager(eventSender, idGenerator, npcFactory, itemManager, npcSdbRepository);
+        monstersSdb = Mockito.mock(MonstersSdb.class);
+        npcManager = new NpcManager(eventSender, idGenerator, npcFactory, itemManager, npcSdbRepository, monstersSdb);
         map = Mockito.mock(RealmMap.class);
         when(map.movable(any(Coordinate.class))).thenReturn(true);
     }
@@ -111,4 +118,14 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         verify(eventSender, times(2)).notifyVisiblePlayers(any(ActiveEntity.class), any(NpcJoinedEvent.class));
     }
 
+
+    @Test
+    void whenAMonsterDies() {
+        when(monstersSdb.getHaveItem(any(String.class))).thenReturn("皮:2:1:肉:4:1");
+        TestingMonsterAttributeProvider attributeProvider = new TestingMonsterAttributeProvider();
+        attributeProvider.idName = "牛";
+        PassiveMonster monster = monsterBuilder().attributeProvider(attributeProvider).name("牛").build();
+        npcManager.onEvent(new CreatureDieEvent(monster));
+        verify(itemManager, times(1)).dropItem("皮:2:1:肉:4:1", monster.coordinate());
+    }
 }

@@ -125,20 +125,20 @@ public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
     }
 
     public static void main(String[] args) {
-        NpcSdbImpl monstersSdb= NpcSdbImpl.Instance;
+        NpcSdbImpl sdb= NpcSdbImpl.Instance;
 //        Set<String> names = itemSdb.names();
-        Set<String> names = monstersSdb.columnNames();
-        Set<String> items = monstersSdb.names();
+        Set<String> names = sdb.columnNames();
+        Set<String> items = sdb.names();
         for (String i: items) {
-            if (!i.equals("一级稻草人")) {
+            if (StringUtils.isEmpty(sdb.getHaveItem(i))) {
                 continue;
             }
 
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {
-                if (!StringUtils.isEmpty(monstersSdb.get(i, name)))
-                    System.out.println(name + ": " + monstersSdb.get(i, name));
+                if (!StringUtils.isEmpty(sdb.get(i, name)))
+                    System.out.println(name + ": " + sdb.get(i, name));
             }
         }
     }

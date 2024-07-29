@@ -5,11 +5,9 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.EntityLifebarEvent;
 import org.y1000.entities.RemoveEntityEvent;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.objects.*;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
-import org.y1000.network.gen.LifeBarPacket;
 import org.y1000.sdb.CreateDynamicObjectSdb;
 import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.util.Coordinate;
@@ -27,16 +25,22 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
     private final EntityEventSender eventSender;
 
+    private final GroundItemManager itemManager;
+
     private final RespawningEntityManager<RespawnDynamicObject> respawningEntityManager;
+
+    private final CreateDynamicObjectSdb createDynamicObjectSdb;
 
     public DynamicObjectManagerImpl(DynamicObjectFactory factory,
                                     CreateEntitySdbRepository createEntitySdbRepository,
                                     EntityIdGenerator entityIdGenerator,
-                                    EntityEventSender eventSender) {
+                                    EntityEventSender eventSender, GroundItemManager itemManager, CreateDynamicObjectSdb dynamicObjectSdb) {
         this.factory = factory;
         this.createEntitySdbRepository = createEntitySdbRepository;
         this.entityIdGenerator = entityIdGenerator;
         this.eventSender = eventSender;
+        this.itemManager = itemManager;
+        this.createDynamicObjectSdb = dynamicObjectSdb;
         respawningEntityManager = new RespawningEntityManager<>();
     }
 
@@ -57,6 +61,10 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
             eventSender.notifyVisiblePlayers(entityEvent.source(), updateDynamicObjectEvent);
         } else if (entityEvent instanceof EntityLifebarEvent entityLifebarEvent) {
             eventSender.notifyVisiblePlayers(entityEvent.source(), entityLifebarEvent);
+        } else if (entityEvent instanceof DynamicObjectDieEvent dieEvent) {
+            createDynamicObjectSdb.getFirstNo(dieEvent.object().idName())
+                            .flatMap(createDynamicObjectSdb::getDropItem)
+                            .ifPresent(items -> itemManager.dropItem(items, dieEvent.object().coordinate()));
         }
     }
 

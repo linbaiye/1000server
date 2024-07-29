@@ -116,6 +116,7 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
     protected void onAnimationDone() {
         if (state == DynamicObjectState.CHANGING) {
             changeState(DynamicObjectState.CHANGED);
+            emitEvent(new DynamicObjectDieEvent(this));
             return;
         }
         if (dynamicObjectSdb().isRemove(idName())) {

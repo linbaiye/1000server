@@ -50,8 +50,9 @@ public final class KillableDynamicObject extends AbstractMutableDynamicObject im
         var dmg = Math.max(damage.bodyDamage() - armor, 1);
         life -= Math.min(dmg, life);
         if (life == 0) {
-            dynamicObjectSdb().getSoundEvent(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
             changeAnimation(1, dynamicObjectSdb().getOpenedMillis(idName()));
+            emitEvent(new DynamicObjectDieEvent(this));
+            dynamicObjectSdb().getSoundEvent(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         } else {
             dynamicObjectSdb().getSoundSpecial(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         }

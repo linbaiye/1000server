@@ -22,4 +22,16 @@ class CreateDynamicObjectSdbImplTest {
             assertNotEquals(0, sdb.getY(number));
         }
     }
+
+    @Test
+    void getFirstNo() {
+        CreateDynamicObjectSdb sdb = new CreateDynamicObjectSdbImpl(49);
+        assertTrue(sdb.getFirstNo("坛子1").isPresent());
+    }
+
+    @Test
+    void getDropItem() {
+        CreateDynamicObjectSdb sdb = new CreateDynamicObjectSdbImpl(49);
+        assertTrue(sdb.getFirstNo("坛子1").flatMap(sdb::getDropItem).isPresent());
+    }
 }

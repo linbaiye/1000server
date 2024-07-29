@@ -390,12 +390,14 @@ message ShowDynamicObjectPacket {
   repeated int32 guardX = 10;
   repeated int32 guardY = 11;
   optional string requiredItem = 12;
+  bool loop = 13;
 }
 
 message UpdateDynamicObjectPacket {
   int64 id = 1;
   int32 start = 2;
   int32 end = 3;
+  bool loop = 4;
 }
 
 

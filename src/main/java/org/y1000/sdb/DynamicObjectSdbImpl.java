@@ -109,16 +109,17 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
         return get(name, "GuardPos");
     }
 
+
+
+
     @Override
     public Optional<String> getSoundEvent(String name) {
-        var str = get(name, "SoundEvent");
-        return !StringUtils.isEmpty(str) ? Optional.of(str) : Optional.empty();
+        return getOptional(name, "SoundEvent");
     }
 
     @Override
     public Optional<String> getSoundSpecial(String name) {
-        var str = get(name, "SoundSpecial");
-        return !StringUtils.isEmpty(str) ? Optional.of(str) : Optional.empty();
+        return getOptional(name, "SoundSpecial");
     }
 
     @Override

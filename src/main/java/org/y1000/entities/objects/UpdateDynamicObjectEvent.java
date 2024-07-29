@@ -9,12 +9,14 @@ public final class UpdateDynamicObjectEvent extends Abstract2ClientEntityEvent {
 
     private final Packet packet;
 
+
     public UpdateDynamicObjectEvent(DynamicObject object) {
         super(object);
         packet = Packet.newBuilder()
                 .setUpdateDynamicObject(UpdateDynamicObjectPacket.newBuilder()
                         .setId(object.id())
                         .setStart(object.currentAnimation().frameStart())
+                        .setLoop(object.currentAnimation().loop())
                         .setEnd(object.currentAnimation().frameEnd()))
                 .build();
     }

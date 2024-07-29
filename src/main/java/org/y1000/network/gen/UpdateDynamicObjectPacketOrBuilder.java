@@ -25,4 +25,10 @@ public interface UpdateDynamicObjectPacketOrBuilder extends
    * @return The end.
    */
   int getEnd();
+
+  /**
+   * <code>bool loop = 4;</code>
+   * @return The loop.
+   */
+  boolean getLoop();
 }

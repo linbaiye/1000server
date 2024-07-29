@@ -65,6 +65,15 @@ class KillableDynamicObjectTest {
         when(player.damage()).thenReturn(new Damage(100, 100, 100, 100));
     }
 
+    private KillableDynamicObject.KillableDynamicObjectBuilder builder() {
+        return KillableDynamicObject.builder()
+                .id(1)
+                .idName(idName)
+                .dynamicObjectSdb(dynamicObjectSdb)
+                .realmMap(realmMap)
+                .coordinate(Coordinate.xy(1, 2));
+    }
+
 
     @Test
     void occupyCoordinates() {
@@ -103,6 +112,8 @@ class KillableDynamicObjectTest {
         object.attackedBy(player);
         lifebar = eventListener.removeFirst(EntityLifebarEvent.class).toPacket().getLifebar();
         assertEquals(0, lifebar.getPercent());
+        assertNotNull(eventListener.removeFirst(DynamicObjectDieEvent.class));
+
         sound = eventListener.removeFirst(EntitySoundEvent.class).toPacket().getSound();
         assertEquals("eventSound", sound.getSound());
     }
@@ -115,5 +126,13 @@ class KillableDynamicObjectTest {
         object.update(400);
         RemoveEntityEvent event = eventListener.removeFirst(RemoveEntityEvent.class);
         assertEquals(1L, event.toPacket().getRemoveEntity().getId());
+    }
+
+    @Test
+    void respawn() {
+        object.attackedBy(player);
+        object.respawn();
+        assertEquals(0, object.currentAnimation().frameStart());
+        assertEquals(0, object.currentAnimation().frameEnd());
     }
 }

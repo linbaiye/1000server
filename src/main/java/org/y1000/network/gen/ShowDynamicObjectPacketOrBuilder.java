@@ -129,4 +129,10 @@ public interface ShowDynamicObjectPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getRequiredItemBytes();
+
+  /**
+   * <code>bool loop = 13;</code>
+   * @return The loop.
+   */
+  boolean getLoop();
 }

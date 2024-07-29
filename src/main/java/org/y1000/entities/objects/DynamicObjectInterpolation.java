@@ -19,6 +19,7 @@ public final class DynamicObjectInterpolation extends AbstractEntityInterpolatio
                 .setY(coordinate().y())
                 .setType(dynamicObject.type().value())
                 .setStart(dynamicObject.currentAnimation().frameStart())
+                .setLoop(dynamicObject.currentAnimation().loop())
                 .setShape(dynamicObject.shape())
                 .setElapsed(elapsed)
                 .setEnd(dynamicObject.currentAnimation().frameEnd());

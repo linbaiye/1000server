@@ -1,9 +1,12 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+import org.y1000.entities.GroundedItem;
 import org.y1000.entities.RemoveEntityEvent;
+import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.NpcJoinedEvent;
 import org.y1000.entities.creatures.event.MonsterShootEvent;
 import org.y1000.entities.creatures.npc.Npc;
@@ -12,6 +15,7 @@ import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.sdb.CreateNpcSdb;
 import org.y1000.sdb.CreateEntitySdbRepository;
+import org.y1000.sdb.MonstersSdb;
 import org.y1000.sdb.NpcSpawnSetting;
 import org.y1000.util.Coordinate;
 
@@ -36,12 +40,15 @@ final class NpcManager extends AbstractActiveEntityManager<Npc> implements Entit
 
     private final CreateEntitySdbRepository createEntitySdbRepository;
 
+    private final MonstersSdb monstersSdb;
+
 
     public NpcManager(EntityEventSender sender,
                       EntityIdGenerator idGenerator,
                       NpcFactory npcFactory,
                       GroundItemManager itemManager,
-                      CreateEntitySdbRepository createEntitySdbRepository) {
+                      CreateEntitySdbRepository createEntitySdbRepository,
+                      MonstersSdb monstersSdb) {
         Validate.notNull(sender);
         Validate.notNull(idGenerator);
         Validate.notNull(itemManager);
@@ -51,6 +58,7 @@ final class NpcManager extends AbstractActiveEntityManager<Npc> implements Entit
         this.npcFactory = npcFactory;
         this.itemManager = itemManager;
         this.npcSpawnSettings = new HashMap<>();
+        this.monstersSdb = monstersSdb;
         respawningEntityManager = new RespawningEntityManager<>();
         projectileManager = new ProjectileManager();
         this.createEntitySdbRepository = createEntitySdbRepository;
@@ -142,6 +150,16 @@ final class NpcManager extends AbstractActiveEntityManager<Npc> implements Entit
         remove(npc);
     }
 
+    private void handleDieEvent(CreatureDieEvent event) {
+        if (!(event.source() instanceof Npc npc)) {
+            return;
+        }
+        var dropItems = monstersSdb.getHaveItem(npc.idName());
+        if (!StringUtils.isEmpty(dropItems)) {
+            itemManager.dropItem(dropItems, event.source().coordinate());
+        }
+    }
+
     @Override
     public void onEvent(EntityEvent entityEvent) {
         if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
@@ -149,6 +167,8 @@ final class NpcManager extends AbstractActiveEntityManager<Npc> implements Entit
         } else if (entityEvent instanceof MonsterShootEvent shootEvent) {
             projectileManager.add(shootEvent.projectile());
             sender.notifyVisiblePlayers(shootEvent.source(), shootEvent);
+        } else if (entityEvent instanceof CreatureDieEvent dieEvent) {
+            handleDieEvent(dieEvent);
         }
     }
 }
