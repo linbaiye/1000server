@@ -1,6 +1,7 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.GroundedItem;
@@ -33,7 +34,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
     private final ItemFactory itemFactory;
 
 
-    private record DropItem(String name, int count, int rate) {
+    private record DropItem(String name, int number, int rate) {
         public boolean canDrop() {
             return ThreadLocalRandom.current().nextInt(rate) == 0;
         }
@@ -78,6 +79,26 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
             slotItem.eventSound().ifPresent(s -> picker.emitEvent(new EntitySoundEvent(picker, s)));
         }
     }
+
+    @Override
+    public void dropItem(String itemNumberRateArray, Coordinate at) {
+        Validate.notNull(at);
+        if (StringUtils.isEmpty(itemNumberRateArray)) {
+            return;
+        }
+        String[] tokens = itemNumberRateArray.split(":");
+        List<DropItem> dropItems = new ArrayList<>();
+        for (int i = 0; i < tokens.length / 3; i++) {
+            dropItems.add(new DropItem(tokens[i * 3], Integer.parseInt(tokens[i * 3 + 1]), Integer.parseInt(tokens[i * 3 + 2])));
+        }
+        for (DropItem dropItem : dropItems) {
+            if (dropItem.canDrop()) {
+                GroundedItem groundItem = createGroundItem(dropItem.name(), at, dropItem.number());
+                insertNewItem(groundItem);
+            }
+        }
+    }
+
 
     private List<DropItem> getFor(String name) {
         if (dropItems.containsKey(name)) {
@@ -163,7 +184,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
                 if (!dropItem.canDrop()) {
                     continue;
                 }
-                GroundedItem groundItem = createGroundItem(dropItem.name(), npc.coordinate(), dropItem.count());
+                GroundedItem groundItem = createGroundItem(dropItem.name(), npc.coordinate(), dropItem.number());
                 insertNewItem(groundItem);
             }
         }

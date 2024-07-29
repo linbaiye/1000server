@@ -22,6 +22,8 @@ import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.sdb.MonstersSdb;
 import org.y1000.util.Coordinate;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -81,5 +83,14 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         assertEquals("肉", item.name());
         assertTrue(manager.find(3).isEmpty());
         assertNotNull(eventSender.removeFirst(groundItem, RemoveEntityEvent.class));
+    }
+
+    @Test
+    void dropItem() {
+        manager.dropItem("皮:2:1", Coordinate.xy(1, 1));
+        Optional<GroundedItem> groundedItem = manager.find(1L);
+        assertEquals("皮", groundedItem.get().getName());
+        assertEquals(2, groundedItem.get().getNumber());
+        assertEquals(Coordinate.xy(1, 1), groundedItem.get().coordinate());
     }
 }
