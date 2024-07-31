@@ -196,6 +196,11 @@ MaxCount,        最多持有数量；
     }
 
     @Override
+    public int getActionImage(String itemName) {
+        return getInt(itemName, "ActionImage");
+    }
+
+    @Override
     public int getAttackSpeed(String itemName) {
         return getIntOrZero(itemName, "AttackSpeed");
     }
@@ -303,6 +308,9 @@ MaxCount,        最多持有数量；
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
         for (String i: items) {
+            if (!i.equals("箭")) {
+                continue;
+            }
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {
@@ -313,6 +321,6 @@ MaxCount,        最多持有数量；
         }
     }
     public static void main(String[] args) {
-        checkDuplicateNames();
+        dump();
     }
 }

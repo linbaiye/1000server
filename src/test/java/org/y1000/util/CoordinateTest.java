@@ -34,21 +34,9 @@ class CoordinateTest {
         assertEquals(new Coordinate(-1, -1), origin.moveBy(Direction.UP_LEFT));
     }
 
-    @Test
-    void name() {
-        System.out.println(50%900);
-    }
 
     public static boolean isLeft(Point a, Point b, Point c) {
         return (b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x) < 0;
-    }
-
-    public static void main(String[] args) {
-        Testing a = new Testing(Direction.LEFT);
-        Direction v = a.direction;
-        a.change();
-        System.out.println(v);
-        System.out.println(a.getDirection());
     }
 
 }

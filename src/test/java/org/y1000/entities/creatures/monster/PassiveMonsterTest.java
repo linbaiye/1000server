@@ -62,7 +62,7 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
         attributeProvider.life = 10000;
         attributeProvider.armor = 1;
         monster = monsterBuilder().attributeProvider(attributeProvider).build();
-        PlayerProjectile projectile = new PlayerProjectile(attacker, monster,  new Damage(1000, 1,1,1), 100);
+        PlayerProjectile projectile = new PlayerProjectile(attacker, monster,  new Damage(1000, 1,1,1), 100, 0);
         monster.attackedBy(projectile);
         verify(attacker).gainRangedAttackExp(any(Integer.class));
     }

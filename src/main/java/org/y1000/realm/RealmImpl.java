@@ -26,8 +26,6 @@ final class RealmImpl implements Realm {
 
     private final RealmMap realmMap;
 
-    private final List<RealmEvent> pendingEvents;
-
     private final RealmEntityEventSender eventSender;
 
     private volatile boolean shutdown;
@@ -38,7 +36,7 @@ final class RealmImpl implements Realm {
 
     private final PlayerManager playerManager;
 
-    private final DynamicObjectManagerImpl dynamicObjectManager;
+    private final DynamicObjectManager dynamicObjectManager;
 
     private final TeleportManager teleportManager;
 
@@ -68,9 +66,9 @@ final class RealmImpl implements Realm {
         eventSender = new RealmEntityEventSender();
         itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
         npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager, createEntitySdbRepository, monstersSdb);
-        dynamicObjectManager = new DynamicObjectManagerImpl(dynamicObjectFactory, createEntitySdbRepository, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id));
+        dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ?  DynamicObjectManager.EMPTY :
+                new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id));
         shutdown = false;
-        pendingEvents = new ArrayList<>(100);
         this.playerManager = new PlayerManager(eventSender, itemManager, itemFactory, dynamicObjectManager);
         this.teleportManager = new TeleportManager(createGateSdb, entityIdGenerator);
         this.crossRealmEventHandler = crossRealmEventHandler;
@@ -107,7 +105,7 @@ final class RealmImpl implements Realm {
         accumulatedMillis = System.currentTimeMillis();
         log.info("Initializing realm {}.", this.map().mapFile());
         npcManager.init(this.map(), id);
-        dynamicObjectManager.init(this.map(), id);
+        dynamicObjectManager.init(this.map());
         teleportManager.init(this.map(), id, this::onPlayerTeleport);
     }
 

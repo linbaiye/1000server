@@ -30,10 +30,9 @@ public final class AssistantKungFu extends AbstractKungFu {
         this.eightDirection = eightDirection;
     }
 
-    public Set<Coordinate> affectedCoordinates(Player player) {
-        var direction = player.direction();
-        var front = player.coordinate().moveBy(direction);
-        Set<Coordinate> affected = player.coordinate().neighbours();
+    public Set<Coordinate> affectedCoordinates(Coordinate coordinate, Direction direction) {
+        var front = coordinate.moveBy(direction);
+        Set<Coordinate> affected = coordinate.neighbours();
         affected.remove(front);
         if (eightDirection) {
             return affected;
@@ -43,8 +42,12 @@ public final class AssistantKungFu extends AbstractKungFu {
             return affected.stream().filter(neighbours1::contains).collect(Collectors.toSet());
         }
         return FIVE_EFFECTED_DIRECTIONS.get(direction).stream()
-                .map(player.coordinate()::moveBy)
+                .map(coordinate::moveBy)
                 .collect(Collectors.toSet());
+    }
+
+    public Set<Coordinate> affectedCoordinates(Player player) {
+        return affectedCoordinates(player.coordinate(), player.direction());
     }
 
     public Damage apply(Damage damage) {

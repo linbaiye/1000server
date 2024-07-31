@@ -59,6 +59,8 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
         MULTI_TRADE(13),
 
+        KUNGFU_LEVEL_LOW(14),
+
 
         CUSTOM(1000000);
         ;
@@ -174,4 +176,13 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
     public static PlayerTextEvent multiTrade(Player player) {
         return new PlayerTextEvent(player, null, TextType.MULTI_TRADE);
     }
+
+    public static PlayerTextEvent kungFuLevelLow(Player player) {
+        return new PlayerTextEvent(player, null, TextType.KUNGFU_LEVEL_LOW);
+    }
+
+    public static PlayerTextEvent pickedItem(Player player, String name, int number) {
+        return new PlayerTextEvent(player, "获得 " + name + " " + number + "个", TextType.CUSTOM, Location.LEFT);
+    }
+
 }

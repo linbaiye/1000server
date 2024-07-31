@@ -1,6 +1,5 @@
 package org.y1000.repository;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
 import org.y1000.item.*;
@@ -64,7 +63,8 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
         ItemType type = itemSdb.getType(name);
         return switch (type) {
             case EQUIPMENT -> createEquipment(name);
-            case ARROW, MONEY, SELLING_GOODS, KNIFE -> new SimpleItem(name, type, itemSdb);
+            case ARROW, KNIFE -> new Ammo(name, type, itemSdb);
+            case MONEY, SELLING_GOODS -> new SimpleItem(name, type, itemSdb);
             case DYE -> new Dye(name, itemSdb);
             case PILL -> new Pill(name, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
             case KUNGFU -> createKungFuItem(name);

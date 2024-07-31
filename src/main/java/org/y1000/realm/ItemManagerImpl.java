@@ -65,6 +65,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         int slot = picker.inventory().add(slotItem);
         if (slot > 0) {
             picker.emitEvent(new UpdateInventorySlotEvent(picker, slot, picker.inventory().getItem(slot)));
+            picker.emitEvent(PlayerTextEvent.pickedItem(picker, groundedItem.getName(), groundedItem.getNumber()));
             visit(new RemoveEntityEvent(groundedItem));
             slotItem.eventSound().ifPresent(s -> picker.emitEvent(new EntitySoundEvent(picker, s)));
         }

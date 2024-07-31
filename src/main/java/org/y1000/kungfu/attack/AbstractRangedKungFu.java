@@ -2,7 +2,11 @@ package org.y1000.kungfu.attack;
 
 
 import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.players.fight.PlayerAttackState;
+import org.y1000.item.Ammo;
+import org.y1000.item.ItemType;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
 
@@ -18,37 +22,37 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
         return true;
     }
 
-    protected PlayerTextEvent checkResources(PlayerImpl player) {
+    protected abstract ItemType getAmmoType();
+
+    protected boolean checkResourcesAndSendError(Player player) {
         var ret = checkAttributeResources(player);
         if (ret != null) {
-            return ret;
+            player.emitEvent(ret);
+            return false;
         }
-        if (!player.inventory().contains("箭")) {
-            return PlayerTextEvent.outOfAmmo(player);
+        if (!player.inventory().contains(getAmmoType())) {
+            player.emitEvent(PlayerTextEvent.outOfAmmo(player));
+            return false;
         }
-        return null;
+        return count > 0;
+    }
+
+    protected PlayerAttackState useResourcesAndCreateState(PlayerImpl player) {
+        useAttributeResources(player);
+        count --;
+        var ammo = player.inventory()
+                .consumeStackItem(player, getAmmoType(), player::emitEvent);
+        return PlayerAttackState.ranged(player, ((Ammo)ammo).spriteId());
     }
 
     @Override
-    protected boolean useResources(PlayerImpl player) {
-        if (count <= 0) {
-            return false;
-        }
-        count--;
-        if (!useAttributeResources(player)) {
-            return false;
-        }
-        boolean ret = player.inventory()
-                .consumeStackItem(player, "箭", player::emitEvent);
-        if (!ret) {
-            player.emitEvent(PlayerTextEvent.outOfAmmo(player));
-        }
-        return ret;
+    protected int computeAbove5000SoundOffset(int level) {
+        return level > 8999 ? 2 : 1;
     }
 
     @Override
     public void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableActiveEntity target) {
-        count = 2;
+        count = level() / 2000 + 2;
         doStartAttack(player, event, target);
     }
 }

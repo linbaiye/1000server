@@ -9,7 +9,6 @@ import org.y1000.entities.objects.*;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.sdb.CreateDynamicObjectSdb;
-import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.util.Coordinate;
 
 import java.util.Set;
@@ -18,8 +17,6 @@ import java.util.Set;
 public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<DynamicObject> implements DynamicObjectManager {
 
     private final DynamicObjectFactory factory;
-
-    private final CreateEntitySdbRepository createEntitySdbRepository;
 
     private final EntityIdGenerator entityIdGenerator;
 
@@ -32,11 +29,11 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
     private final CreateDynamicObjectSdb createDynamicObjectSdb;
 
     public DynamicObjectManagerImpl(DynamicObjectFactory factory,
-                                    CreateEntitySdbRepository createEntitySdbRepository,
                                     EntityIdGenerator entityIdGenerator,
-                                    EntityEventSender eventSender, GroundItemManager itemManager, CreateDynamicObjectSdb dynamicObjectSdb) {
+                                    EntityEventSender eventSender,
+                                    GroundItemManager itemManager,
+                                    CreateDynamicObjectSdb dynamicObjectSdb) {
         this.factory = factory;
-        this.createEntitySdbRepository = createEntitySdbRepository;
         this.entityIdGenerator = entityIdGenerator;
         this.eventSender = eventSender;
         this.itemManager = itemManager;
@@ -57,7 +54,6 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
             }
             remove(object);
         } else if (entityEvent instanceof UpdateDynamicObjectEvent updateDynamicObjectEvent) {
-            log.debug("Notify update");
             eventSender.notifyVisiblePlayers(entityEvent.source(), updateDynamicObjectEvent);
         } else if (entityEvent instanceof EntityLifebarEvent entityLifebarEvent) {
             eventSender.notifyVisiblePlayers(entityEvent.source(), entityLifebarEvent);
@@ -102,11 +98,8 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         respawningEntityManager.update(delta).forEach(this::tryRespawn);
     }
 
-    public void init(RealmMap map, int id) {
-        if (!createEntitySdbRepository.objectSdbExists(id)) {
-            return;
-        }
-        CreateDynamicObjectSdb createDynamicObjectSdb = createEntitySdbRepository.loadObject(id);
+    @Override
+    public void init(RealmMap map) {
         Set<String> numbers = createDynamicObjectSdb.getNumbers();
         for (String number : numbers) {
             String name = createDynamicObjectSdb.getName(number);

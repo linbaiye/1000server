@@ -28,7 +28,7 @@ public final class Inventory {
 
     private static final int MAX_CAP = 30;
 
-    private final Map<Integer, Item> items = new HashMap<>(30);
+    private final Map<Integer, Item> items = new HashMap<>(MAX_CAP);
 
     public boolean isFull() {
         return items.size() >= MAX_CAP;
@@ -258,13 +258,17 @@ public final class Inventory {
         return nonStackSize + space <= availableSlots();
     }
 
-    public int findFirstSlot(String name) {
-        for (Integer i : items.keySet()) {
-            if (items.get(i).name().equals(name)) {
+    private int findFirstSlot(Predicate<? super Item> predicate) {
+        for (int i = 1; i <= MAX_CAP; i++) {
+            if (items.containsKey(i) && predicate.test(items.get(i))) {
                 return i;
             }
         }
         return 0;
+    }
+
+    public int findFirstSlot(String name) {
+        return name != null ? findFirstSlot(i -> i.name().equals(name)) : 0;
     }
 
     public void buy(Collection<TradeItem> buyingItems, long cost, Player player, BiFunction<String, Long, Item> itemCreator) {
@@ -344,19 +348,14 @@ public final class Inventory {
         }
     }
 
-    public boolean consumeStackItem(Player player,
-                                    String name,
-                                    UnaryAction<? super PlayerEvent> eventSender) {
-        var targetSlot = -1;
-        for (Integer slot : items.keySet()) {
-            if (items.get(slot).name().equals(name) &&
-                    items.get(slot) instanceof StackItem) {
-                targetSlot = slot;
-                break;
-            }
-        }
-        if (targetSlot == -1) {
-            return false;
+    public boolean contains(ItemType type) {
+        return items.values().stream().anyMatch(i -> i.itemType() == type);
+    }
+
+
+    private Item doConsumeStackItem(int targetSlot, Player player, UnaryAction<? super PlayerEvent> eventSender) {
+        if (targetSlot == 0) {
+            return null;
         }
         var stackItem = ((StackItem)items.get(targetSlot));
         var decreased = stackItem.decrease(1);
@@ -367,7 +366,23 @@ public final class Inventory {
             items.put(targetSlot, decreased);
             eventSender.invoke(UpdateInventorySlotEvent.update(player, targetSlot, getItem(targetSlot)));
         }
-        return true;
+        return stackItem.item();
+
+    }
+
+    public Item consumeStackItem(Player player,
+                                    ItemType type,
+                                    UnaryAction<? super PlayerEvent> eventSender) {
+        int slot = findFirstSlot(item -> item.itemType() == type);
+        return doConsumeStackItem(slot, player, eventSender);
+    }
+
+
+    public boolean consumeStackItem(Player player,
+                                    String name,
+                                    UnaryAction<? super PlayerEvent> eventSender) {
+        var targetSlot = findFirstSlot(i -> i.name().equals(name) && i instanceof StackItem);
+        return doConsumeStackItem(targetSlot, player, eventSender) != null;
     }
 
 

@@ -2,6 +2,7 @@ package org.y1000.realm;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
@@ -15,7 +16,10 @@ import org.y1000.item.Item;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +29,6 @@ class DynamicObjectManagerImplTest {
 
     private DynamicObjectFactory factory;
 
-    private CreateEntitySdbRepository repository;
 
     private EntityIdGenerator entityIdGenerator;
 
@@ -40,20 +43,13 @@ class DynamicObjectManagerImplTest {
 
     @BeforeEach
     void setUp() {
-        repository = CreateEntitySdbRepositoryImpl.INSTANCE;
-        factory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
+        factory = Mockito.mock(DynamicObjectFactory.class);
         entityIdGenerator = new EntityIdGenerator();
         entityEventSender = Mockito.mock(EntityEventSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
         createDynamicObjectSdb = Mockito.mock(CreateDynamicObjectSdb.class);
-        manager = new DynamicObjectManagerImpl(factory, repository, entityIdGenerator, entityEventSender, itemManager, createDynamicObjectSdb);
+        manager = new DynamicObjectManagerImpl(factory, entityIdGenerator, entityEventSender, itemManager, createDynamicObjectSdb);
         realmMap = Mockito.mock(RealmMap.class);
-    }
-
-    @Test
-    void init() {
-        manager.init(realmMap, 19);
-        assertNotNull(manager.find(1L, RespawnDynamicObject.class));
     }
 
     @Test
@@ -92,11 +88,14 @@ class DynamicObjectManagerImplTest {
                 .dynamicObjectSdb(dynamicObjectSdb)
                 .build();
         var player = Mockito.mock(Player.class);
-        when(player.coordinate()).thenReturn(Coordinate.xy(2, 3));
-        when(player.damage()).thenReturn(new Damage(100, 100, 100, 100));
-        manager.add(killable);
+        when(factory.createDynamicObject(anyString(), anyLong(), any(RealmMap.class), any(Coordinate.class))).thenReturn(killable);
+        when(createDynamicObjectSdb.getName(anyString())).thenReturn("test");
+        when(createDynamicObjectSdb.getNumbers()).thenReturn(Set.of(killable.idName()));
+        manager.init(realmMap);
         var eventListener = new TestingEventListener();
         killable.registerEventListener(eventListener);
+        when(player.coordinate()).thenReturn(Coordinate.xy(2, 3));
+        when(player.damage()).thenReturn(new Damage(100, 100, 100, 100));
         killable.attackedBy(player);
         assertNotNull(eventListener.removeFirst(UpdateDynamicObjectEvent.class));
         manager.update(dynamicObjectSdb.getOpenedMillis(killable.idName()));
@@ -106,8 +105,4 @@ class DynamicObjectManagerImplTest {
         assertTrue(manager.find(2L, KillableDynamicObject.class).isPresent());
     }
 
-    @Test
-    void regenImmediately() {
-
-    }
 }

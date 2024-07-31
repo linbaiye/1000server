@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
 import org.y1000.entities.players.PlayerStillState;
@@ -36,6 +37,10 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         setup();
         parameters = new TestingAttackKungFuParameters();
         bowKungFu = BowKungFu.builder().name("test").parameters(parameters).exp(0).build();
+        player.kungFuBook().addToBasic(bowKungFu);
+        player.inventory().add(itemFactory.createItem("木弓"));
+        enableBasicKungFu(1);
+        player.update(player.cooldown());
     }
 
     @Test
@@ -68,16 +73,18 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         // trigger attack counter.
         bowKungFu.startAttack(player, clientAttackEvent, monster);
         assertNotNull(player.getFightingEntity());
-        player.update(player.cooldown());
+
         // use all power.
         player.consumePower(player.power());
         parameters.setPowerToSwing(1);
         eventListener.clearEvents();
 
-        bowKungFu.attackAgain(player);
+        // trigger attack again.
+        player.update(player.cooldown());
         assertTrue(player.state() instanceof PlayerCooldownState);
         PlayerTextEvent textEvent = eventListener.removeFirst(PlayerTextEvent.class);
         assertEquals(PlayerTextEvent.TextType.NO_POWER.value(), textEvent.toPacket().getText().getType());
+        assertNotNull(eventListener.removeFirst(PlayerShootEvent.class));
         assertEquals(0, eventListener.eventSize());
     }
 
@@ -89,8 +96,8 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         // trigger attack counter.
         bowKungFu.startAttack(player, clientAttackEvent, monster);
         assertNotNull(player.getFightingEntity());
+        // trigger attack again.
         player.update(player.cooldown());
-        bowKungFu.attackAgain(player);
         assertTrue(player.state() instanceof PlayerAttackState);
         assertNotNull(eventListener.removeFirst(PlayerAttackEvent.class));
     }

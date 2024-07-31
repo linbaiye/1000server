@@ -23,6 +23,8 @@ public interface ItemSdb {
 
     int getAvoid(String itemName);
 
+    int getActionImage(String itemName);
+
     int getAttackSpeed(String itemName);
 
     int getRecovery(String itemName);

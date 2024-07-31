@@ -40,6 +40,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         Inventory inventory = new Inventory();
         inventory.add(itemFactory.createItem("长剑"));
         inventory.add(itemFactory.createItem("箭", 10000));
+        inventory.add(itemFactory.createItem("飞刀", 10000));
+        inventory.add(itemFactory.createItem("斗甲"));
         inventory.add(itemFactory.createItem("太极斧"));
         inventory.add(itemFactory.createItem("太极神枪"));
         inventory.add(itemFactory.createItem("三叉戟"));
@@ -50,11 +52,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("杨家枪法", 1));
         inventory.add(itemFactory.createItem("无击阵", 1));
         inventory.add(itemFactory.createItem("雷剑式", 2));
-        inventory.add(itemFactory.createItem("北马剑法", 1));
-        inventory.add(itemFactory.createItem("壁射剑法", 1));
-        inventory.add(itemFactory.createItem("圣灵21剑", 1));
         inventory.add(itemFactory.createItem("闪光剑破解", 1));
-        inventory.add(itemFactory.createItem("太极剑结", 1));
         inventory.add(itemFactory.createItem("黑沙刚体", 1));
         inventory.add(itemFactory.createItem("银狼破皇剑"));
         inventory.add(itemFactory.createItem("女子黄龙弓服"));

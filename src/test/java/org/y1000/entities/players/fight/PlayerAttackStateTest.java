@@ -19,7 +19,6 @@ import org.y1000.message.InputResponseMessage;
 import org.y1000.message.clientevent.ClientMovementEvent;
 import org.y1000.message.clientevent.input.RightMouseClick;
 import org.y1000.realm.Realm;
-import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,7 +75,7 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
 
     @Test
     void hurtRelated() {
-        var attackState = PlayerAttackState.of(player);
+        var attackState = PlayerAttackState.melee(player);
         assertEquals(State.COOLDOWN, attackState.decideAfterHurtState());
         attackState.afterHurt(player);
         assertTrue(player.state() instanceof PlayerCooldownState);
@@ -88,10 +87,10 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
     @Test
     void considerAttackSpeed() {
         player = playerBuilder().attackKungFu(QuanfaKungFu.builder().parameters(new TestKungFuParameters(-60)).name("test").exp(0).build()).build();
-        var state = PlayerAttackState.of(player);
+        var state = PlayerAttackState.melee(player);
         assertEquals(100, state.totalMillis());
         player = playerBuilder().attackKungFu(QuanfaKungFu.builder().parameters(new TestKungFuParameters(160)).name("test").exp(0).build()).build();
-        state = PlayerAttackState.of(player);
+        state = PlayerAttackState.melee(player);
         assertEquals(player.getStateMillis(state.stateEnum()), state.totalMillis());
     }
 
@@ -101,10 +100,11 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
         player = playerBuilder().attackKungFu(kungFuBookFactory.create().findUnnamedAttack(AttackKungFuType.BOW)).build();
         player.setFightingEntity(monsterBuilder().coordinate(Coordinate.xy(2, 2)).build());
         player.registerEventListener(eventListener);
-        var state = PlayerAttackState.of(player);
+        var state = PlayerAttackState.ranged(player, 2);
         state.update(player, state.totalMillis());
         PlayerShootEvent dequeue = eventListener.dequeue(PlayerShootEvent.class);
         assertNotNull(dequeue);
+        assertEquals(2, dequeue.projectile().projectileSpriteId());
     }
 
 
@@ -112,7 +112,7 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
     void move() {
         Realm realm = mockAllFlatRealm();
         player.joinReam(realm);
-        var state = PlayerAttackState.of(player);
+        var state = PlayerAttackState.melee(player);
         player.changeState(state);
         eventListener.clearEvents();
         state.move(player, new ClientMovementEvent(new RightMouseClick(1, Direction.RIGHT), player.coordinate()));
@@ -124,7 +124,7 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
 
     @Test
     void doables() {
-        var state = PlayerAttackState.of(player);
+        var state = PlayerAttackState.melee(player);
         assertTrue(state.attackable());
         assertTrue(state.canSitDown());
         assertFalse(state.canStandUp());
@@ -134,12 +134,13 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
     @Test
     void rangedAttackWhenTargetDead() {
         ItemSdb itemSdb = Mockito.mock(ItemSdb.class);
+        when(itemSdb.getAttackKungFuType("bow")).thenReturn(AttackKungFuType.BOW);
         player.inventory().add(new WeaponImpl("bow", itemSdb));
         enableBowKungFu();
 
         var monster = monsterBuilder().coordinate(player.coordinate().move(3, 0)).build();
         player.setFightingEntity(monster);
-        player.changeState(PlayerAttackState.of(player));
+        player.changeState(PlayerAttackState.ranged(player, 2));
         monster.changeState(NpcCommonState.die(1000));
         player.onEvent(new CreatureDieEvent(monster));
         assertNull(player.getFightingEntity());

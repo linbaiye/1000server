@@ -1,6 +1,7 @@
 package org.y1000.entities.players.fight;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.projectile.PlayerProjectile;
@@ -17,17 +18,19 @@ public final class PlayerAttackState extends AbstractFightingState {
     private final AttackableActiveEntity rangedTarget;
     private final Damage damage;
     private final int rangedHit;
-
+    private final int spriteId;
 
     private PlayerAttackState(int totalMillis, State attackingState,
                               AttackableActiveEntity target,
                               Damage damage,
-                              int rangedHit) {
+                              int rangedHit,
+                              int spriteId) {
         super(totalMillis);
         this.attackingState = attackingState;
         this.rangedTarget = target;
         this.damage = damage;
         this.rangedHit = rangedHit;
+        this.spriteId = spriteId;
     }
 
     @Override
@@ -42,7 +45,7 @@ public final class PlayerAttackState extends AbstractFightingState {
             return;
         }
         if (rangedTarget != null) {
-            player.emitEvent(new PlayerShootEvent(new PlayerProjectile(player, rangedTarget, damage, rangedHit)));
+            player.emitEvent(new PlayerShootEvent(new PlayerProjectile(player, rangedTarget, damage, rangedHit, spriteId)));
         }
         player.attackKungFu().attackAgain(player);
     }
@@ -52,10 +55,17 @@ public final class PlayerAttackState extends AbstractFightingState {
         return log;
     }
 
-    public static PlayerAttackState of(PlayerImpl player) {
+    public static PlayerAttackState ranged(PlayerImpl player, int spriteId) {
+        Validate.isTrue(player.attackKungFu().isRanged());
+        Validate.notNull(player.getFightingEntity());
         State state = player.attackKungFu().randomAttackState();
         int stateMillis = Math.min(player.getStateMillis(state), player.attackSpeed() * Realm.STEP_MILLIS);
-        var rangedTarget = player.attackKungFu().isRanged() ? player.getFightingEntity() : null;
-        return new PlayerAttackState(stateMillis, state, rangedTarget, player.damage(), player.hit());
+        return new PlayerAttackState(stateMillis, state, player.getFightingEntity(), player.damage(), player.hit(), spriteId);
+    }
+
+    public static PlayerAttackState melee(PlayerImpl player) {
+        State state = player.attackKungFu().randomAttackState();
+        int stateMillis = Math.min(player.getStateMillis(state), player.attackSpeed() * Realm.STEP_MILLIS);
+        return new PlayerAttackState(stateMillis, state, null, null, 0, 0);
     }
 }

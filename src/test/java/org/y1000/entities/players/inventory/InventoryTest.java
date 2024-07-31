@@ -74,7 +74,7 @@ class InventoryTest {
     }
 
     @Test
-    void consumeStackItem() {
+    void consumeStackItemByName() {
         TestingEventListener eventListener = new TestingEventListener();
         assertFalse(inventory.consumeStackItem(player, "箭", eventListener::onEvent));
         inventory.add(itemFactory.createItem("箭", 2));
@@ -89,6 +89,25 @@ class InventoryTest {
         assertEquals("", event.toPacket().getUpdateSlot().getName());
         assertFalse(event.toPacket().getUpdateSlot().hasNumber());
         assertFalse(inventory.contains("箭"));
+    }
+
+    @Test
+    void consumeStackItemByType() {
+        inventory = new Inventory();
+        TestingEventListener eventListener = new TestingEventListener();
+        assertNull( inventory.consumeStackItem(player, ItemType.ARROW, eventListener::onEvent));
+        inventory.add(itemFactory.createItem("箭", 1));
+        inventory.add(itemFactory.createItem("火箭", 1));
+        assertNotNull(inventory.consumeStackItem(player, ItemType.ARROW, eventListener::onEvent));
+        UpdateInventorySlotEvent event = eventListener.dequeue(UpdateInventorySlotEvent.class);
+        assertEquals("", event.toPacket().getUpdateSlot().getName());
+        assertFalse(inventory.contains("箭"));
+        assertTrue(inventory.contains("火箭"));
+        assertNotNull(inventory.consumeStackItem(player, ItemType.ARROW, eventListener::onEvent));
+        event = eventListener.dequeue(UpdateInventorySlotEvent.class);
+        assertEquals("", event.toPacket().getUpdateSlot().getName());
+        assertFalse(event.toPacket().getUpdateSlot().hasNumber());
+        assertFalse(inventory.contains("火箭"));
     }
 
     @Test

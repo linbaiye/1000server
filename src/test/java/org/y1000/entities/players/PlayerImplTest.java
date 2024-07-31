@@ -9,6 +9,7 @@ import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.monster.Monster;
 import org.y1000.entities.players.event.*;
+import org.y1000.exp.ExperienceUtil;
 import org.y1000.item.*;
 import org.y1000.kungfu.*;
 import org.y1000.TestingEventListener;
@@ -172,7 +173,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         int slot1 = inventory.add(sword);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot1));
         player.setFightingEntity(createMonster(new Coordinate(1, 1)));
-        player.changeState(PlayerAttackState.of(player));
+        player.changeState(PlayerAttackState.melee(player));
         eventListener.clearEvents();
         var axe = createWeapon("axe", AttackKungFuType.AXE);
         int slot2 = inventory.add(axe);
@@ -203,7 +204,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
                 .weapon(createWeapon("fist", AttackKungFuType.QUANFA)).inventory(inventory);
         attachListener(builder);
         player.setFightingEntity(createMonster(new Coordinate(1, 2)));
-        player.changeState(PlayerAttackState.of(player));
+        player.changeState(PlayerAttackState.melee(player));
 
         int slot = inventory.add(createWeapon("sword", AttackKungFuType.SWORD));
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 2));
@@ -238,7 +239,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
                 .weapon(createWeapon("sword", AttackKungFuType.SWORD)).inventory(inventory);
         attachListener(builder);
         player.setFightingEntity(createMonster(new Coordinate(2, 2)));
-        player.changeState(PlayerAttackState.of(player));
+        player.changeState(PlayerAttackState.melee(player));
         player.handleClientEvent(new ClientUnequipEvent(EquipmentType.WEAPON));
         var kungFuEvent = eventListener.removeFirst(PlayerToggleKungFuEvent.class);
         assertEquals(kungFuEvent.toPacket().getToggleKungFu().getName(), "无名拳法");
@@ -334,10 +335,43 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertTrue(event.toPacket().getToggleKungFu().getQuietly());
     }
 
+
+    @Test
+    void assistantWhenSwitchingKungFu() {
+        player.kungFuBook().addToBasic(AssistantKungFu.builder().name("feng").exp(0).build());
+        while (player.attackKungFu().level() < 9999) {
+            player.gainAttackExp(ExperienceUtil.DEFAULT_EXP);
+        }
+
+        player.kungFuBook().addToBasic(kungFuFactory.create("太极剑结"));
+        player.handleClientEvent(new ClientToggleKungFuEvent(2, 2));
+        while (player.attackKungFu().level() < 9999) {
+            player.gainAttackExp(ExperienceUtil.DEFAULT_EXP);
+        }
+        player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
+        assertTrue(player.assistantKungFu().isPresent());
+
+        player.handleClientEvent(new ClientToggleKungFuEvent(1, 1));
+        assertTrue(player.assistantKungFu().isPresent());
+        assertEquals(AttackKungFuType.QUANFA, player.attackKungFu().getType());
+
+        player.inventory().add(itemFactory.createItem("长剑"));
+        player.handleClientEvent(new ClientToggleKungFuEvent(1, 2));
+        assertTrue(player.assistantKungFu().isEmpty());
+    }
+
+
     @Test
     void useAssistantKungFu() {
         player.kungFuBook().addToBasic(AssistantKungFu.builder().name("feng").exp(0).build());
         player.kungFuBook().addToBasic(AssistantKungFu.builder().name("feng1").exp(0).build());
+        player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
+        PlayerTextEvent event = eventListener.removeFirst(PlayerTextEvent.class);
+        assertEquals(PlayerTextEvent.TextType.KUNGFU_LEVEL_LOW.value(), event.toPacket().getText().getType());
+
+        while (player.attackKungFu().level() < 9999) {
+            player.gainAttackExp(ExperienceUtil.DEFAULT_EXP);
+        }
         player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
         var kungFuEvent = eventListener.removeFirst(PlayerToggleKungFuEvent.class);
         assertEquals(kungFuEvent.toPacket().getToggleKungFu().getName(), "feng");
@@ -539,6 +573,9 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void gainAssistantExp() {
+        while (player.attackKungFu().level() < 9999) {
+            player.attackKungFu().gainExp(ExperienceUtil.DEFAULT_EXP);
+        }
         enableAssistant8KungFu();
         assertTrue(player.assistantKungFu().isPresent());
         player.gainAssistantExp(100);

@@ -59,7 +59,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     protected abstract Logger logger();
 
-    protected PlayerTextEvent checkAttributeResources(PlayerImpl player) {
+    protected PlayerTextEvent checkAttributeResources(Player player) {
         if (player.power() < parameters.powerToSwing()) {
             return PlayerTextEvent.noPower(player);
         }
@@ -76,9 +76,9 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         return null;
     }
 
-    protected abstract PlayerTextEvent checkResources(PlayerImpl player);
+    protected abstract boolean checkResourcesAndSendError(Player player);
 
-    protected boolean useAttributeResources(PlayerImpl player) {
+    protected boolean useAttributeResources(Player player) {
         var ret = checkAttributeResources(player);
         if (ret != null) {
             player.emitEvent(ret);
@@ -92,25 +92,24 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         return true;
     }
 
-    protected abstract boolean useResources(PlayerImpl player);
+    protected abstract PlayerAttackState useResourcesAndCreateState(PlayerImpl player);
 
+    protected abstract int computeAbove5000SoundOffset(int level);
 
     private String computeSound(int nr) {
         if (level() < 5000) {
             return String.valueOf(nr);
         }
-        return level() < 5000 ? String.valueOf(nr) :
-                String.valueOf(level() > 8999 ? nr + 4 : nr + 2);
+        return String.valueOf(computeAbove5000SoundOffset(level()));
     }
 
     public String strikeSound() {
-        return computeSound(parameters.strikeSound());
+        return computeSound(getParameters().strikeSound());
     }
 
     public String swingSound() {
-        return computeSound(parameters.swingSound());
+        return computeSound(getParameters().swingSound());
     }
-
 
     private void doSingleAttack(PlayerImpl player) {
         var hit = player.getFightingEntity().attackedBy(player);
@@ -127,13 +126,15 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             player.changeState(new PlayerWaitDistanceState(player.getStateMillis(State.COOLDOWN)));
             return;
         }
-        if (!useResources(player)) {
+        var ok = checkResourcesAndSendError(player);
+        if (!ok) {
             player.changeState(new PlayerCooldownState(player.getStateMillis(State.COOLDOWN)));
             return;
         }
         player.changeDirection(direction);
         player.cooldownAttack();
-        player.changeState(PlayerAttackState.of(player));
+        var state = useResourcesAndCreateState(player);
+        player.changeState(state);
         if (sendAttackEvent)
             player.emitEvent(PlayerAttackEvent.of(player, computeEffectId()));
         if (!isRanged()) {
@@ -160,9 +161,8 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             player.emitEvent(new PlayerAttackEventResponse(player, event, false, computeEffectId()));
             return;
         }
-        var text = checkResources(player);
-        if (text != null) {
-            player.emitEvent(text);
+        var ok = checkResourcesAndSendError(player);
+        if (!ok) {
             player.emitEvent(new PlayerAttackEventResponse(player, event, false, computeEffectId()));
             return;
         }

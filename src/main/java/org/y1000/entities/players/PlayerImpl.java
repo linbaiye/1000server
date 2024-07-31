@@ -228,6 +228,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         breathKungFu = null;
     }
 
+    private void disableAssistantKungFuNoTip() {
+        if (assistantKungFu != null) {
+            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, assistantKungFu));
+        }
+        assistantKungFu = null;
+    }
+
     private void disableProtectionNoTip() {
         if (protectKungFu != null) {
             emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
@@ -375,6 +382,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     private void toggleAssistantKungFu(AssistantKungFu newAssistant) {
+        if (attackKungFu.level() < 9999) {
+            emitEvent(PlayerTextEvent.kungFuLevelLow(this));
+            return;
+        }
         if (this.assistantKungFu != null &&
                 this.assistantKungFu.name().equals(newAssistant.name())) {
             emitEvent(PlayerToggleKungFuEvent.disable(this, this.assistantKungFu));
@@ -652,6 +663,9 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     private void changeAttackKungFu(AttackKungFu newKungFu) {
+        if (newKungFu.level() < 9999) {
+            disableAssistantKungFuNoTip();
+        }
         boolean needCooldownState = newKungFu.getType() != this.attackKungFu.getType();
         this.attackKungFu = newKungFu;
         cooldownAttack();

@@ -15,8 +15,8 @@ public final class PlayerProjectile extends AbstractProjectile {
     public PlayerProjectile(Player shooter,
                             AttackableActiveEntity target,
                             Damage damage,
-                            int hit) {
-        super(shooter, target, 2);
+                            int hit, int spriteId) {
+        super(shooter, target, spriteId);
         this.damage = damage;
         this.hit = hit;
     }
