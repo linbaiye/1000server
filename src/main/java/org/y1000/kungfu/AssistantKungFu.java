@@ -50,7 +50,7 @@ public final class AssistantKungFu extends AbstractKungFu {
         return affectedCoordinates(player.coordinate(), player.direction());
     }
 
-    public Damage apply(Damage damage) {
+    public Damage computeDamage(Damage damage) {
         return damage.multiply(0.99f * ((float) level() / 10000));
     }
 

@@ -1013,6 +1013,17 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
+    public void onProjectileReachTarget(Projectile projectile) {
+        Validate.notNull(projectile, "projectile can't nbe null");
+        if (!projectile.target().canBeAttackedNow()) {
+            return;
+        }
+        assistantKungFu().ifPresentOrElse(
+                kf -> emitEvent(PlayerAttackAoeEvent.ranged(this, projectile.target(), projectile.direction(), projectile.damage(), kf)),
+                () -> projectile.target().attackedBy(projectile));
+    }
+
+    @Override
     public Inventory inventory() {
         return inventory;
     }

@@ -6,10 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTextEventTest {
 
-
     @Test
     void pickItem() {
-        PlayerTextEvent.pickedItem()
 
     }
 }

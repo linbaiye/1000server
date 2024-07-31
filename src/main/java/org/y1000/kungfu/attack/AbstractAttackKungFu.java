@@ -100,7 +100,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         if (level() < 5000) {
             return String.valueOf(nr);
         }
-        return String.valueOf(computeAbove5000SoundOffset(level()));
+        return String.valueOf(nr +  computeAbove5000SoundOffset(level()));
     }
 
     public String strikeSound() {

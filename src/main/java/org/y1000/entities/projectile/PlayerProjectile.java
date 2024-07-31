@@ -29,4 +29,9 @@ public final class PlayerProjectile extends AbstractProjectile {
     public Damage damage() {
         return damage;
     }
+
+    @Override
+    protected void onReachTarget() {
+        ((Player)shooter()).onProjectileReachTarget(this);
+    }
 }

@@ -20,4 +20,9 @@ public final class NpcProjectile extends AbstractProjectile {
     public int hit() {
         return shooter().hit();
     }
+
+    @Override
+    protected void onReachTarget() {
+        target().attackedBy(shooter());
+    }
 }

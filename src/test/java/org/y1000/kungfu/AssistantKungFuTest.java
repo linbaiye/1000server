@@ -67,7 +67,7 @@ class AssistantKungFuTest extends AbstractUnitTestFixture  {
 
     @Test
     void damage() {
-        Damage damage = assistantKungFu.apply(new Damage(10000, 1000, 200, 10));
+        Damage damage = assistantKungFu.computeDamage(new Damage(10000, 1000, 200, 10));
         assertEquals(99, damage.bodyDamage());
         assertEquals(9, damage.headDamage());
         assertEquals(1, damage.armDamage());
