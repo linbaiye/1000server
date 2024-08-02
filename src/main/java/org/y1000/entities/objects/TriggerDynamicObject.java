@@ -27,7 +27,7 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
                                 Coordinate coordinate,
                                 DynamicObjectSdb dynamicObjectSdb,
                                 String idName) {
-        super(id, coordinate, realmMap, dynamicObjectSdb, idName);
+        super(id, coordinate, realmMap, dynamicObjectSdb, idName, parseAnimationFrames(idName, dynamicObjectSdb));
         this.requiredItem = dynamicObjectSdb.getEventItem(idName).split(":")[0].trim();
         this.state = DynamicObjectState.INITIAL;
         changeAnimation(0);
@@ -82,6 +82,11 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
 
 
     @Override
+    public boolean canBeAttackedNow() {
+        return true;
+    }
+
+    @Override
     public boolean attackedBy(Player attacker) {
         return true;
     }
@@ -126,6 +131,7 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
             changeState(DynamicObjectState.INITIAL);
         }
     }
+
 
     @Override
     public void respawn() {

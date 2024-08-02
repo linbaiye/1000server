@@ -98,8 +98,8 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         switch (state) {
             case IDLE -> idle();
             case DIE -> die();
-            case FROZEN -> freeze();
-            case WALK -> move(getStateMillis(State.WALK));
+            //case FROZEN -> freeze();
+            case WALK -> move();
         }
     }
 
@@ -114,7 +114,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
 
 
     private void idle() {
-        changeState(NpcCommonState.idle(getStateMillis(State.IDLE)));
+        changeState(NpcCommonState.idle(getStateMillis(State.IDLE) * 2));
         emitEvent(new NpcChangeStateEvent(this, stateEnum()));
     }
 
@@ -123,10 +123,11 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         emitEvent(new NpcChangeStateEvent(this, stateEnum()));
     }
 
-    public void move(int speed) {
-        Validate.isTrue(speed > 0);
-        changeState(NpcMoveState.move(this, speed));
-        emitEvent(NpcMoveEvent.move(this, this.direction(), speed));
+    public void move() {
+//        Validate.isTrue(speed > 0);
+        int stateMillis = getStateMillis(State.WALK);
+        changeState(NpcMoveState.move(this, stateMillis));
+        emitEvent(NpcMoveEvent.move(this, this.direction(), stateMillis));
     }
 
     private void die() {

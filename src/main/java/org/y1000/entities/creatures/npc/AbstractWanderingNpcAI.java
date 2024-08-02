@@ -26,8 +26,9 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
     public void onActionDone(Npc npc) {
         switch (npc.stateEnum()) {
             case WALK -> onMoveDone(npc);
-            case FROZEN -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc), npc.getStateMillis(State.WALK));
-            case IDLE -> npc.startAction(State.FROZEN);
+            case IDLE -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc), npc.getStateMillis(State.WALK));
+//            case FROZEN -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc), npc.getStateMillis(State.WALK));
+//            case IDLE -> npc.startAction(State.FROZEN);
             case HURT -> onHurtDone(npc);
         }
     }

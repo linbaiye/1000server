@@ -20,10 +20,11 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
         Set<String> names = sdb.columnNames();
         Set<String> items = sdb.names();
         for (String i: items) {
-            if (!"1".equals(sdb.get(i, "Kind")) &&
-            !"2".equals(sdb.get(i, "Kind"))
-            )
+            if (!"7".equals(sdb.get(i, "Kind")))
                 continue;
+//            !"2".equals(sdb.get(i, "Kind"))
+//            )
+//                continue;
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {
@@ -108,8 +109,6 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
     public String getGuardPos(String name) {
         return get(name, "GuardPos");
     }
-
-
 
 
     @Override

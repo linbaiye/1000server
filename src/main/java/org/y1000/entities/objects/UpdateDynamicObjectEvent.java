@@ -21,6 +21,14 @@ public final class UpdateDynamicObjectEvent extends Abstract2ClientEntityEvent {
                 .build();
     }
 
+    public int frameStart() {
+        return packet.getUpdateDynamicObject().getStart();
+    }
+
+    public int frameEnd() {
+        return packet.getUpdateDynamicObject().getEnd();
+    }
+
     @Override
     public void accept(EntityEventVisitor visitor) {
 

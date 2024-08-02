@@ -13,7 +13,7 @@ public interface Npc extends Creature {
 
     void onMoveFailed();
 
-    void move(int speed);
+    void move();
 
     Rectangle wanderingArea();
 

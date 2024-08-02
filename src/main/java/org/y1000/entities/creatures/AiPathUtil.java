@@ -37,7 +37,7 @@ public final class AiPathUtil {
             return;
         }
         if (npc.realmMap().movable(npc.coordinate().moveBy(direction))) {
-            npc.move(speed);
+            npc.move();
         } else {
             noPathAction.invoke();
         }
