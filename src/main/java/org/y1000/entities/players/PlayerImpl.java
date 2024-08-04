@@ -461,6 +461,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
     }
 
+    private void handleSwapKungFuSlot(ClientSwapKungFuSlotEvent event) {
+        if (kungFuBook().swapSlot(event.page(), event.slot1(), event.slot2())) {
+            emitEvent(new UpdateKungFuSlotEvent(this, event.slot1(), kungFuBook().getKungFu(event.page(), event.slot1()).orElse(null)));
+            emitEvent(new UpdateKungFuSlotEvent(this, event.slot2(), kungFuBook().getKungFu(event.page(), event.slot2()).orElse(null)));
+        }
+    }
+
     @Override
     public void handleClientEvent(ClientEvent clientEvent) {
         if (stateEnum() == State.DIE) {
@@ -482,6 +489,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             move(movementEvent);
         } else if (clientEvent instanceof ClientRightClickEvent event) {
             handleRightClick(event);
+        } else if (clientEvent instanceof ClientSwapKungFuSlotEvent swapKungfuSlotEvent) {
+            handleSwapKungFuSlot(swapKungfuSlotEvent);
         }
     }
 
@@ -862,6 +871,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     public KungFuBook kungFuBook() {
         return kungFuBook;
     }
+
+
 
     @Override
     public Optional<ProtectKungFu> protectKungFu() {

@@ -13,6 +13,8 @@ message MonsterMoveEventPacket {
   int64 id = 1;
   int32 direction = 2;
   int32 speed = 3;
+  int32 x = 4;
+  int32 y = 5;
 }
 
 
@@ -189,6 +191,12 @@ message ClientTriggerDynamicObjectPacket {
   int32 useSlot = 2;
 }
 
+message ClientSwapKungFuSlotPacket {
+  int32 page = 1;
+  int32 slot1 = 2;
+  int32 slot2 = 3;
+}
+
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
@@ -209,6 +217,7 @@ message ClientPacket {
     ClientTradePlayerPacket tradeRequest = 16;
     ClientUpdateTradePacket updateTrade = 17;
     ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;
+    ClientSwapKungFuSlotPacket swapKungFuSlot = 19;
   }
 }
 
@@ -442,6 +451,7 @@ message Packet {
     UpdateDynamicObjectPacket updateDynamicObject = 39;
     TeleportPacket teleport = 40;
     LifeBarPacket lifebar = 41;
+    KungFuPacket updateKungFuSlot = 42;
   }
 }
 

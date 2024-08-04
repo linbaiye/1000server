@@ -1,15 +1,19 @@
 package org.y1000.entities.creatures.npc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AiPathUtil;
 import org.y1000.entities.creatures.State;
 import org.y1000.util.Coordinate;
 
+@Slf4j
 public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
 
+    private static final int SPEEDRATE = 2;
+
     public ViolentNpcRangedFightAI(AttackableActiveEntity enemy, ViolentNpc npc) {
-        super(enemy, npc);
+        super(enemy, npc, SPEEDRATE);
     }
 
     private Coordinate computeEscapePoint() {
@@ -35,7 +39,7 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
     private void rangedFightProcess(NpcRangedSkill rangedSkill) {
         var enemy = getEnemy();
         if (!rangedSkill.isAvailable()) {
-            npc.changeAI(new ViolentNpcMeleeFightAI(enemy, npc));
+            npc.changeAI(new ViolentNpcMeleeFightAI(enemy, npc, SPEEDRATE));
             return;
         }
         var dis = npc.coordinate().directDistance(enemy.coordinate());
@@ -46,10 +50,12 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
             if (next == Coordinate.Empty) {
                 cooldownOrShoot(rangedSkill);
             } else {
-                AiPathUtil.moveProcess(npc, next, getPrevious(), () -> cooldownOrShoot(rangedSkill), npc.walkSpeedInFight());
+                log.debug("Walk on unit in {} millis, stay millis {}.", computeWalkMillis(), computeStayMillis());
+                AiPathUtil.moveProcess(npc, next, getPrevious(), () -> cooldownOrShoot(rangedSkill), computeWalkMillis(), computeStayMillis());
             }
         } else {
-            AiPathUtil.moveProcess(npc, enemy.coordinate(), getPrevious(), () -> cooldownOrShoot(rangedSkill), npc.walkSpeedInFight());
+            log.debug("Walk on unit in {} millis, stay millis {}.", computeWalkMillis(), computeStayMillis());
+            AiPathUtil.moveProcess(npc, enemy.coordinate(), getPrevious(), () -> cooldownOrShoot(rangedSkill), computeWalkMillis(), computeStayMillis());
         }
     }
 

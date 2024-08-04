@@ -33,7 +33,7 @@ public final class NpcMoveState extends AbstractCreatureMoveState<Npc> implement
         tryChangeCoordinate(creature, creature.realmMap());
     }
 
-    public static NpcMoveState move(Npc npc, int speed) {
-        return new NpcMoveState(npc.coordinate(), npc.direction(), speed);
+    public static NpcMoveState move(Npc npc, int millis) {
+        return new NpcMoveState(npc.coordinate(), npc.direction(), millis);
     }
 }

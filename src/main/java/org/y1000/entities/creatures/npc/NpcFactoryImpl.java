@@ -36,10 +36,10 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private Map<State, Integer> createDevirtueActionLengthMap(String animate, int walkSpeed) {
+    private Map<State, Integer> createDevirtueActionLengthMap(String animate) {
         Map<State, Integer> result = new HashMap<>();
         int move = actionSdb.getActionLength(animate, State.WALK);
-        int idle = walkSpeed * 10 > move ? (walkSpeed * 10) - move : 0;
+        int idle = actionSdb.getActionLength(animate, State.IDLE);
         int hurt = actionSdb.getActionLength(animate, State.HURT);
         int die = actionSdb.getActionLength(animate, State.DIE);
         int frozen = actionSdb.getActionLength(animate, State.FROZEN);
@@ -51,8 +51,8 @@ public final class NpcFactoryImpl implements NpcFactory {
         return result;
     }
 
-    private Map<State, Integer> createActionLengthMap(String animate, int walkSpeed) {
-        Map<State, Integer> result = createDevirtueActionLengthMap(animate, walkSpeed);
+    private Map<State, Integer> createActionLengthMap(String animate) {
+        Map<State, Integer> result = createDevirtueActionLengthMap(animate);
         int attack = actionSdb.getActionLength(animate, State.ATTACK);
         result.put(State.ATTACK, attack);
         return result;
@@ -78,7 +78,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .direction(Direction.DOWN)
                 .name(monsterSdb.getViewName(name))
                 .realmMap(map)
-                .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name), monsterSdb.getWalkSpeed(name)))
+                .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                 .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
                 .skill(createSkill(name))
                 .ai(new MonsterWanderingAI())
@@ -94,7 +94,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .direction(Direction.DOWN)
                     .name(monsterSdb.getViewName(name))
                     .realmMap(map)
-                    .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name), monsterSdb.getWalkSpeed(name)))
+                    .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                     .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
                     .ai(new MonsterWanderingAI(new ViolentNpcWanderingAI()))
                     .skill(createSkill(name))
@@ -108,7 +108,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .direction(Direction.DOWN)
                     .name(monsterSdb.getViewName(name))
                     .realmMap(map)
-                    .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name), monsterSdb.getWalkSpeed(name)))
+                    .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                     .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
                     .ai(ai)
                     .build();
@@ -147,7 +147,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .direction(Direction.DOWN)
                 .name(npcSdb.getViewName(name))
                 .realmMap(realmMap)
-                .stateMillis(createDevirtueActionLengthMap(animate, 200))
+                .stateMillis(createDevirtueActionLengthMap(animate))
                 .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
                 .ai(new SubmissiveWanderingAI())
                 .textFileName(npcText)
@@ -165,7 +165,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .direction(Direction.DOWN)
                 .name(npcSdb.getViewName(name))
                 .realmMap(realmMap)
-                .stateMillis(createActionLengthMap(animate, 200))
+                .stateMillis(createActionLengthMap(animate))
                 .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
                 .ai(new ViolentNpcWanderingAI())
                 .build();

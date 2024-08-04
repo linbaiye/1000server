@@ -278,5 +278,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder getTriggerDynamicObjectOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+   * @return Whether the swapKungFuSlot field is set.
+   */
+  boolean hasSwapKungFuSlot();
+  /**
+   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+   * @return The swapKungFuSlot.
+   */
+  org.y1000.network.gen.ClientSwapKungFuSlotPacket getSwapKungFuSlot();
+  /**
+   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+   */
+  org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder getSwapKungFuSlotOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

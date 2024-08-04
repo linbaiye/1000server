@@ -21,12 +21,23 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
     }
 
     public AbstractWanderingNpcAI() {
+
     }
+
+
+    private void stayIdle(Npc npc) {
+        int stateMillis = npc.getStateMillis(State.IDLE) ;
+        int walkSpeed = npc.walkSpeed();
+        int millis = Math.max(walkSpeed, stateMillis) * 2;
+        npc.stay(millis);
+    }
+
     @Override
     public void onActionDone(Npc npc) {
         switch (npc.stateEnum()) {
             case WALK -> onMoveDone(npc);
-            case IDLE -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc), npc.getStateMillis(State.WALK));
+            case IDLE -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc),
+                    npc.getStateMillis(State.WALK), npc.getStateMillis(State.IDLE));
 //            case FROZEN -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc), npc.getStateMillis(State.WALK));
 //            case IDLE -> npc.startAction(State.FROZEN);
             case HURT -> onHurtDone(npc);
@@ -50,7 +61,7 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
             previousCoordinate = npc.coordinate();
             destination = npc.wanderingArea().random(npc.spawnCoordinate());
         }
-        npc.startAction(State.IDLE);
+        stayIdle(npc);
     }
 
     private void onMoveDone(Npc npc) {
@@ -58,7 +69,7 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
         if (npc.coordinate().equals(destination)) {
             nextRound(npc);
         } else {
-            npc.startAction(State.IDLE);
+            stayIdle(npc);
         }
     }
 }

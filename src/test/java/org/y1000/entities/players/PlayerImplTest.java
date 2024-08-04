@@ -35,6 +35,7 @@ import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.network.gen.AttributePacket;
 import org.y1000.network.gen.ItemAttributePacket;
+import org.y1000.network.gen.KungFuPacket;
 import org.y1000.network.gen.PlayerRightClickAttributePacket;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
@@ -789,5 +790,19 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(player.armor().head(), attr.getHeadArmor());
         assertEquals(player.armor().arm(), attr.getArmArmor());
         assertEquals(player.armor().leg(), attr.getLegArmor());
+    }
+
+    @Test
+    void swapKungFuSlots() {
+        player.kungFuBook().addToBasic(kungFuFactory.create("雷剑式"));
+        player.handleClientEvent(new ClientSwapKungFuSlotEvent(2, 1, 2));
+        KungFuPacket packet = eventListener.removeFirst(UpdateKungFuSlotEvent.class).toPacket().getUpdateKungFuSlot();
+        assertEquals(1, packet.getSlot());
+        assertEquals("", packet.getName());
+        packet = eventListener.removeFirst(UpdateKungFuSlotEvent.class).toPacket().getUpdateKungFuSlot();
+        assertEquals(2, packet.getSlot());
+        assertEquals("雷剑式", packet.getName());
+        assertEquals(100, packet.getLevel());
+        assertEquals(AttackKungFuType.SWORD.value(), packet.getType());
     }
 }

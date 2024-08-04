@@ -578,5 +578,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.LifeBarPacketOrBuilder getLifebarOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.KungFuPacket updateKungFuSlot = 42;</code>
+   * @return Whether the updateKungFuSlot field is set.
+   */
+  boolean hasUpdateKungFuSlot();
+  /**
+   * <code>.org.y1000.network.gen.KungFuPacket updateKungFuSlot = 42;</code>
+   * @return The updateKungFuSlot.
+   */
+  org.y1000.network.gen.KungFuPacket getUpdateKungFuSlot();
+  /**
+   * <code>.org.y1000.network.gen.KungFuPacket updateKungFuSlot = 42;</code>
+   */
+  org.y1000.network.gen.KungFuPacketOrBuilder getUpdateKungFuSlotOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

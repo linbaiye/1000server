@@ -68,7 +68,7 @@ public final class NonMonsterNpcAttributeProvider implements AttributeProvider {
 
     @Override
     public int walkSpeed() {
-        return npcSdb.getWalkSpeed(name) * 10;
+        return 2000;
     }
 
     @Override

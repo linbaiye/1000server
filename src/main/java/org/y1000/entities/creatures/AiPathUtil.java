@@ -1,11 +1,13 @@
 package org.y1000.entities.creatures;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 
+@Slf4j
 public final class AiPathUtil {
     public static Direction computeNextMoveDirection(Creature creature,
                                                  Coordinate dest, Coordinate previous) {
@@ -25,7 +27,7 @@ public final class AiPathUtil {
 
     public static void moveProcess(Npc npc, Coordinate dest,
                                    Coordinate previous,
-                                   Action noPathAction, int speed) {
+                                   Action noPathAction, int walkMillis, int turnMillis) {
         Direction direction = AiPathUtil.computeNextMoveDirection(npc, dest, previous);
         if (direction == null) {
             noPathAction.invoke();
@@ -33,11 +35,11 @@ public final class AiPathUtil {
         } else if (direction != npc.direction()) {
             npc.changeDirection(direction);
             npc.emitEvent(SetPositionEvent.of(npc));
-            npc.startAction(State.IDLE);
+            npc.stay(walkMillis);
             return;
         }
         if (npc.realmMap().movable(npc.coordinate().moveBy(direction))) {
-            npc.move();
+            npc.move(walkMillis);
         } else {
             noPathAction.invoke();
         }

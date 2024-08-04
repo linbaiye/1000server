@@ -101,11 +101,11 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         assertEquals(Direction.RIGHT, monster.direction());
         assertEquals(State.WALK, monster.stateEnum());
 
-        monster.update(monster.walkSpeedInFight());
+        monster.update(monster.walkSpeed());
         assertEquals(Direction.RIGHT, monster.direction());
         assertEquals(State.WALK, monster.stateEnum());
 
-        monster.update(monster.walkSpeedInFight());
+        monster.update(monster.walkSpeed());
         assertEquals(Direction.UP_LEFT, monster.direction());
         assertEquals(State.IDLE, monster.stateEnum());
 
@@ -113,7 +113,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         assertEquals(Direction.UP_LEFT, monster.direction());
         assertEquals(State.WALK, monster.stateEnum());
 
-        monster.update(monster.walkSpeedInFight());
+        monster.update(monster.walkSpeed());
         assertEquals(Direction.DOWN_LEFT, monster.direction());
         assertEquals(State.IDLE, monster.stateEnum());
     }

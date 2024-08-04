@@ -92,4 +92,24 @@ public final class KungFuBook {
         }
         return Optional.empty();
     }
+
+    public boolean swapSlot(int page, int slot1, int slot2) {
+        if (page != 2) {
+            return false;
+        }
+        var kungfu1 = basic.get(slot1);
+        var kungfu2 = basic.get(slot2);
+        if (kungfu1 == null && kungfu2 == null) {
+            return false;
+        }
+        basic.remove(slot1);
+        basic.remove(slot2);
+        if (kungfu1 != null) {
+            basic.put(slot2, kungfu1);
+        }
+        if (kungfu2 != null) {
+            basic.put(slot1, kungfu2);
+        }
+        return true;
+    }
 }

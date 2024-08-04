@@ -14,10 +14,15 @@ public final class NpcMoveEvent extends AbstractCreatureEvent {
 
     private final int speed;
 
+    private final int x;
+    private final int y;
+
     private NpcMoveEvent(Npc source, Direction direction, int speed) {
         super(source);
         this.speed = speed;
         this.direction = direction;
+        this.x = source.coordinate().x();
+        this.y = source.coordinate().y();
     }
 
     @Override
@@ -27,6 +32,8 @@ public final class NpcMoveEvent extends AbstractCreatureEvent {
                         .setId(source().id())
                         .setDirection(direction.value())
                         .setSpeed(speed)
+                        .setX(x)
+                        .setY(y)
                         .build())
                 .build();
     }

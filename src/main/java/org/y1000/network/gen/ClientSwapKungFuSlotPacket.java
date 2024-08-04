@@ -5,93 +5,71 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.MonsterMoveEventPacket}
+ * Protobuf type {@code org.y1000.network.gen.ClientSwapKungFuSlotPacket}
  */
-public final class MonsterMoveEventPacket extends
+public final class ClientSwapKungFuSlotPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.MonsterMoveEventPacket)
-    MonsterMoveEventPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ClientSwapKungFuSlotPacket)
+    ClientSwapKungFuSlotPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use MonsterMoveEventPacket.newBuilder() to construct.
-  private MonsterMoveEventPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use ClientSwapKungFuSlotPacket.newBuilder() to construct.
+  private ClientSwapKungFuSlotPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private MonsterMoveEventPacket() {
+  private ClientSwapKungFuSlotPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new MonsterMoveEventPacket();
+    return new ClientSwapKungFuSlotPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_MonsterMoveEventPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientSwapKungFuSlotPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_MonsterMoveEventPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientSwapKungFuSlotPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.MonsterMoveEventPacket.class, org.y1000.network.gen.MonsterMoveEventPacket.Builder.class);
+            org.y1000.network.gen.ClientSwapKungFuSlotPacket.class, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder.class);
   }
 
-  public static final int ID_FIELD_NUMBER = 1;
-  private long id_ = 0L;
+  public static final int PAGE_FIELD_NUMBER = 1;
+  private int page_ = 0;
   /**
-   * <code>int64 id = 1;</code>
-   * @return The id.
+   * <code>int32 page = 1;</code>
+   * @return The page.
    */
   @java.lang.Override
-  public long getId() {
-    return id_;
+  public int getPage() {
+    return page_;
   }
 
-  public static final int DIRECTION_FIELD_NUMBER = 2;
-  private int direction_ = 0;
+  public static final int SLOT1_FIELD_NUMBER = 2;
+  private int slot1_ = 0;
   /**
-   * <code>int32 direction = 2;</code>
-   * @return The direction.
+   * <code>int32 slot1 = 2;</code>
+   * @return The slot1.
    */
   @java.lang.Override
-  public int getDirection() {
-    return direction_;
+  public int getSlot1() {
+    return slot1_;
   }
 
-  public static final int SPEED_FIELD_NUMBER = 3;
-  private int speed_ = 0;
+  public static final int SLOT2_FIELD_NUMBER = 3;
+  private int slot2_ = 0;
   /**
-   * <code>int32 speed = 3;</code>
-   * @return The speed.
+   * <code>int32 slot2 = 3;</code>
+   * @return The slot2.
    */
   @java.lang.Override
-  public int getSpeed() {
-    return speed_;
-  }
-
-  public static final int X_FIELD_NUMBER = 4;
-  private int x_ = 0;
-  /**
-   * <code>int32 x = 4;</code>
-   * @return The x.
-   */
-  @java.lang.Override
-  public int getX() {
-    return x_;
-  }
-
-  public static final int Y_FIELD_NUMBER = 5;
-  private int y_ = 0;
-  /**
-   * <code>int32 y = 5;</code>
-   * @return The y.
-   */
-  @java.lang.Override
-  public int getY() {
-    return y_;
+  public int getSlot2() {
+    return slot2_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -108,20 +86,14 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (id_ != 0L) {
-      output.writeInt64(1, id_);
+    if (page_ != 0) {
+      output.writeInt32(1, page_);
     }
-    if (direction_ != 0) {
-      output.writeInt32(2, direction_);
+    if (slot1_ != 0) {
+      output.writeInt32(2, slot1_);
     }
-    if (speed_ != 0) {
-      output.writeInt32(3, speed_);
-    }
-    if (x_ != 0) {
-      output.writeInt32(4, x_);
-    }
-    if (y_ != 0) {
-      output.writeInt32(5, y_);
+    if (slot2_ != 0) {
+      output.writeInt32(3, slot2_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -132,25 +104,17 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (id_ != 0L) {
+    if (page_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, id_);
+        .computeInt32Size(1, page_);
     }
-    if (direction_ != 0) {
+    if (slot1_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, direction_);
+        .computeInt32Size(2, slot1_);
     }
-    if (speed_ != 0) {
+    if (slot2_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, speed_);
-    }
-    if (x_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(4, x_);
-    }
-    if (y_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(5, y_);
+        .computeInt32Size(3, slot2_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -162,21 +126,17 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.MonsterMoveEventPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.ClientSwapKungFuSlotPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.MonsterMoveEventPacket other = (org.y1000.network.gen.MonsterMoveEventPacket) obj;
+    org.y1000.network.gen.ClientSwapKungFuSlotPacket other = (org.y1000.network.gen.ClientSwapKungFuSlotPacket) obj;
 
-    if (getId()
-        != other.getId()) return false;
-    if (getDirection()
-        != other.getDirection()) return false;
-    if (getSpeed()
-        != other.getSpeed()) return false;
-    if (getX()
-        != other.getX()) return false;
-    if (getY()
-        != other.getY()) return false;
+    if (getPage()
+        != other.getPage()) return false;
+    if (getSlot1()
+        != other.getSlot1()) return false;
+    if (getSlot2()
+        != other.getSlot2()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -188,60 +148,55 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + ID_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getId());
-    hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
-    hash = (53 * hash) + getDirection();
-    hash = (37 * hash) + SPEED_FIELD_NUMBER;
-    hash = (53 * hash) + getSpeed();
-    hash = (37 * hash) + X_FIELD_NUMBER;
-    hash = (53 * hash) + getX();
-    hash = (37 * hash) + Y_FIELD_NUMBER;
-    hash = (53 * hash) + getY();
+    hash = (37 * hash) + PAGE_FIELD_NUMBER;
+    hash = (53 * hash) + getPage();
+    hash = (37 * hash) + SLOT1_FIELD_NUMBER;
+    hash = (53 * hash) + getSlot1();
+    hash = (37 * hash) + SLOT2_FIELD_NUMBER;
+    hash = (53 * hash) + getSlot2();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseFrom(
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseFrom(
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseFrom(
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseFrom(
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseFrom(
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseFrom(
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -249,26 +204,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseFrom(
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.MonsterMoveEventPacket parseFrom(
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -281,7 +236,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.MonsterMoveEventPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.ClientSwapKungFuSlotPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -297,26 +252,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.MonsterMoveEventPacket}
+   * Protobuf type {@code org.y1000.network.gen.ClientSwapKungFuSlotPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.MonsterMoveEventPacket)
-      org.y1000.network.gen.MonsterMoveEventPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ClientSwapKungFuSlotPacket)
+      org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_MonsterMoveEventPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientSwapKungFuSlotPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_MonsterMoveEventPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientSwapKungFuSlotPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.MonsterMoveEventPacket.class, org.y1000.network.gen.MonsterMoveEventPacket.Builder.class);
+              org.y1000.network.gen.ClientSwapKungFuSlotPacket.class, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.MonsterMoveEventPacket.newBuilder()
+    // Construct using org.y1000.network.gen.ClientSwapKungFuSlotPacket.newBuilder()
     private Builder() {
 
     }
@@ -330,28 +285,26 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      id_ = 0L;
-      direction_ = 0;
-      speed_ = 0;
-      x_ = 0;
-      y_ = 0;
+      page_ = 0;
+      slot1_ = 0;
+      slot2_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_MonsterMoveEventPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientSwapKungFuSlotPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.MonsterMoveEventPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.MonsterMoveEventPacket.getDefaultInstance();
+    public org.y1000.network.gen.ClientSwapKungFuSlotPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.MonsterMoveEventPacket build() {
-      org.y1000.network.gen.MonsterMoveEventPacket result = buildPartial();
+    public org.y1000.network.gen.ClientSwapKungFuSlotPacket build() {
+      org.y1000.network.gen.ClientSwapKungFuSlotPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -359,29 +312,23 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.MonsterMoveEventPacket buildPartial() {
-      org.y1000.network.gen.MonsterMoveEventPacket result = new org.y1000.network.gen.MonsterMoveEventPacket(this);
+    public org.y1000.network.gen.ClientSwapKungFuSlotPacket buildPartial() {
+      org.y1000.network.gen.ClientSwapKungFuSlotPacket result = new org.y1000.network.gen.ClientSwapKungFuSlotPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.MonsterMoveEventPacket result) {
+    private void buildPartial0(org.y1000.network.gen.ClientSwapKungFuSlotPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.id_ = id_;
+        result.page_ = page_;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.direction_ = direction_;
+        result.slot1_ = slot1_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.speed_ = speed_;
-      }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
-        result.x_ = x_;
-      }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
-        result.y_ = y_;
+        result.slot2_ = slot2_;
       }
     }
 
@@ -419,30 +366,24 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.MonsterMoveEventPacket) {
-        return mergeFrom((org.y1000.network.gen.MonsterMoveEventPacket)other);
+      if (other instanceof org.y1000.network.gen.ClientSwapKungFuSlotPacket) {
+        return mergeFrom((org.y1000.network.gen.ClientSwapKungFuSlotPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.MonsterMoveEventPacket other) {
-      if (other == org.y1000.network.gen.MonsterMoveEventPacket.getDefaultInstance()) return this;
-      if (other.getId() != 0L) {
-        setId(other.getId());
+    public Builder mergeFrom(org.y1000.network.gen.ClientSwapKungFuSlotPacket other) {
+      if (other == org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance()) return this;
+      if (other.getPage() != 0) {
+        setPage(other.getPage());
       }
-      if (other.getDirection() != 0) {
-        setDirection(other.getDirection());
+      if (other.getSlot1() != 0) {
+        setSlot1(other.getSlot1());
       }
-      if (other.getSpeed() != 0) {
-        setSpeed(other.getSpeed());
-      }
-      if (other.getX() != 0) {
-        setX(other.getX());
-      }
-      if (other.getY() != 0) {
-        setY(other.getY());
+      if (other.getSlot2() != 0) {
+        setSlot2(other.getSlot2());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -471,30 +412,20 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              id_ = input.readInt64();
+              page_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
             case 16: {
-              direction_ = input.readInt32();
+              slot1_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
             case 24: {
-              speed_ = input.readInt32();
+              slot2_ = input.readInt32();
               bitField0_ |= 0x00000004;
               break;
             } // case 24
-            case 32: {
-              x_ = input.readInt32();
-              bitField0_ |= 0x00000008;
-              break;
-            } // case 32
-            case 40: {
-              y_ = input.readInt32();
-              bitField0_ |= 0x00000010;
-              break;
-            } // case 40
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -512,162 +443,98 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private long id_ ;
+    private int page_ ;
     /**
-     * <code>int64 id = 1;</code>
-     * @return The id.
+     * <code>int32 page = 1;</code>
+     * @return The page.
      */
     @java.lang.Override
-    public long getId() {
-      return id_;
+    public int getPage() {
+      return page_;
     }
     /**
-     * <code>int64 id = 1;</code>
-     * @param value The id to set.
+     * <code>int32 page = 1;</code>
+     * @param value The page to set.
      * @return This builder for chaining.
      */
-    public Builder setId(long value) {
+    public Builder setPage(int value) {
 
-      id_ = value;
+      page_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>int64 id = 1;</code>
+     * <code>int32 page = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder clearId() {
+    public Builder clearPage() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      id_ = 0L;
+      page_ = 0;
       onChanged();
       return this;
     }
 
-    private int direction_ ;
+    private int slot1_ ;
     /**
-     * <code>int32 direction = 2;</code>
-     * @return The direction.
+     * <code>int32 slot1 = 2;</code>
+     * @return The slot1.
      */
     @java.lang.Override
-    public int getDirection() {
-      return direction_;
+    public int getSlot1() {
+      return slot1_;
     }
     /**
-     * <code>int32 direction = 2;</code>
-     * @param value The direction to set.
+     * <code>int32 slot1 = 2;</code>
+     * @param value The slot1 to set.
      * @return This builder for chaining.
      */
-    public Builder setDirection(int value) {
+    public Builder setSlot1(int value) {
 
-      direction_ = value;
+      slot1_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 direction = 2;</code>
+     * <code>int32 slot1 = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearDirection() {
+    public Builder clearSlot1() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      direction_ = 0;
+      slot1_ = 0;
       onChanged();
       return this;
     }
 
-    private int speed_ ;
+    private int slot2_ ;
     /**
-     * <code>int32 speed = 3;</code>
-     * @return The speed.
+     * <code>int32 slot2 = 3;</code>
+     * @return The slot2.
      */
     @java.lang.Override
-    public int getSpeed() {
-      return speed_;
+    public int getSlot2() {
+      return slot2_;
     }
     /**
-     * <code>int32 speed = 3;</code>
-     * @param value The speed to set.
+     * <code>int32 slot2 = 3;</code>
+     * @param value The slot2 to set.
      * @return This builder for chaining.
      */
-    public Builder setSpeed(int value) {
+    public Builder setSlot2(int value) {
 
-      speed_ = value;
+      slot2_ = value;
       bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 speed = 3;</code>
+     * <code>int32 slot2 = 3;</code>
      * @return This builder for chaining.
      */
-    public Builder clearSpeed() {
+    public Builder clearSlot2() {
       bitField0_ = (bitField0_ & ~0x00000004);
-      speed_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int x_ ;
-    /**
-     * <code>int32 x = 4;</code>
-     * @return The x.
-     */
-    @java.lang.Override
-    public int getX() {
-      return x_;
-    }
-    /**
-     * <code>int32 x = 4;</code>
-     * @param value The x to set.
-     * @return This builder for chaining.
-     */
-    public Builder setX(int value) {
-
-      x_ = value;
-      bitField0_ |= 0x00000008;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 x = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearX() {
-      bitField0_ = (bitField0_ & ~0x00000008);
-      x_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private int y_ ;
-    /**
-     * <code>int32 y = 5;</code>
-     * @return The y.
-     */
-    @java.lang.Override
-    public int getY() {
-      return y_;
-    }
-    /**
-     * <code>int32 y = 5;</code>
-     * @param value The y to set.
-     * @return This builder for chaining.
-     */
-    public Builder setY(int value) {
-
-      y_ = value;
-      bitField0_ |= 0x00000010;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 y = 5;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearY() {
-      bitField0_ = (bitField0_ & ~0x00000010);
-      y_ = 0;
+      slot2_ = 0;
       onChanged();
       return this;
     }
@@ -684,23 +551,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.MonsterMoveEventPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClientSwapKungFuSlotPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.MonsterMoveEventPacket)
-  private static final org.y1000.network.gen.MonsterMoveEventPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ClientSwapKungFuSlotPacket)
+  private static final org.y1000.network.gen.ClientSwapKungFuSlotPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.MonsterMoveEventPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.ClientSwapKungFuSlotPacket();
   }
 
-  public static org.y1000.network.gen.MonsterMoveEventPacket getDefaultInstance() {
+  public static org.y1000.network.gen.ClientSwapKungFuSlotPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<MonsterMoveEventPacket>
-      PARSER = new com.google.protobuf.AbstractParser<MonsterMoveEventPacket>() {
+  private static final com.google.protobuf.Parser<ClientSwapKungFuSlotPacket>
+      PARSER = new com.google.protobuf.AbstractParser<ClientSwapKungFuSlotPacket>() {
     @java.lang.Override
-    public MonsterMoveEventPacket parsePartialFrom(
+    public ClientSwapKungFuSlotPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -719,17 +586,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<MonsterMoveEventPacket> parser() {
+  public static com.google.protobuf.Parser<ClientSwapKungFuSlotPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<MonsterMoveEventPacket> getParserForType() {
+  public com.google.protobuf.Parser<ClientSwapKungFuSlotPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.MonsterMoveEventPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.ClientSwapKungFuSlotPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

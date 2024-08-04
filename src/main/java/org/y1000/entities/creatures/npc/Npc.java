@@ -13,7 +13,9 @@ public interface Npc extends Creature {
 
     void onMoveFailed();
 
-    void move();
+    void move(int millis);
+
+    void stay(int millis);
 
     Rectangle wanderingArea();
 
@@ -43,4 +45,6 @@ public interface Npc extends Creature {
      * @return exp the attacker can get.
      */
     int attackedByAoe(ViolentCreature caster, int hit, Damage damage);
+
+    int walkSpeed();
 }

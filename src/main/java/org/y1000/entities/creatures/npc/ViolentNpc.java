@@ -14,10 +14,6 @@ public interface ViolentNpc extends ViolentCreature, Npc {
 
     Optional<String> attackSound();
 
-    default int walkSpeedInFight() {
-        int stateMillis = getStateMillis(State.WALK);
-        return skill().isEmpty() ? stateMillis : (int)(stateMillis / 1.7);
-    }
 
     void startAttackAction(boolean withSound);
 

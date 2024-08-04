@@ -63,6 +63,7 @@ private static final long serialVersionUID = 0L;
     TRADEREQUEST(16),
     UPDATETRADE(17),
     TRIGGERDYNAMICOBJECT(18),
+    SWAPKUNGFUSLOT(19),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -98,6 +99,7 @@ private static final long serialVersionUID = 0L;
         case 16: return TRADEREQUEST;
         case 17: return UPDATETRADE;
         case 18: return TRIGGERDYNAMICOBJECT;
+        case 19: return SWAPKUNGFUSLOT;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -671,6 +673,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
   }
 
+  public static final int SWAPKUNGFUSLOT_FIELD_NUMBER = 19;
+  /**
+   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+   * @return Whether the swapKungFuSlot field is set.
+   */
+  @java.lang.Override
+  public boolean hasSwapKungFuSlot() {
+    return typeCase_ == 19;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+   * @return The swapKungFuSlot.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientSwapKungFuSlotPacket getSwapKungFuSlot() {
+    if (typeCase_ == 19) {
+       return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
+    }
+    return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder getSwapKungFuSlotOrBuilder() {
+    if (typeCase_ == 19) {
+       return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
+    }
+    return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -738,6 +771,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 18) {
       output.writeMessage(18, (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_);
+    }
+    if (typeCase_ == 19) {
+      output.writeMessage(19, (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -819,6 +855,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 18) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(18, (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_);
+    }
+    if (typeCase_ == 19) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(19, (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -909,6 +949,10 @@ private static final long serialVersionUID = 0L;
         if (!getTriggerDynamicObject()
             .equals(other.getTriggerDynamicObject())) return false;
         break;
+      case 19:
+        if (!getSwapKungFuSlot()
+            .equals(other.getSwapKungFuSlot())) return false;
+        break;
       case 0:
       default:
     }
@@ -995,6 +1039,10 @@ private static final long serialVersionUID = 0L;
       case 18:
         hash = (37 * hash) + TRIGGERDYNAMICOBJECT_FIELD_NUMBER;
         hash = (53 * hash) + getTriggerDynamicObject().hashCode();
+        break;
+      case 19:
+        hash = (37 * hash) + SWAPKUNGFUSLOT_FIELD_NUMBER;
+        hash = (53 * hash) + getSwapKungFuSlot().hashCode();
         break;
       case 0:
       default:
@@ -1184,6 +1232,9 @@ private static final long serialVersionUID = 0L;
       if (triggerDynamicObjectBuilder_ != null) {
         triggerDynamicObjectBuilder_.clear();
       }
+      if (swapKungFuSlotBuilder_ != null) {
+        swapKungFuSlotBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1296,6 +1347,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 18 &&
           triggerDynamicObjectBuilder_ != null) {
         result.type_ = triggerDynamicObjectBuilder_.build();
+      }
+      if (typeCase_ == 19 &&
+          swapKungFuSlotBuilder_ != null) {
+        result.type_ = swapKungFuSlotBuilder_.build();
       }
     }
 
@@ -1414,6 +1469,10 @@ private static final long serialVersionUID = 0L;
         }
         case TRIGGERDYNAMICOBJECT: {
           mergeTriggerDynamicObject(other.getTriggerDynamicObject());
+          break;
+        }
+        case SWAPKUNGFUSLOT: {
+          mergeSwapKungFuSlot(other.getSwapKungFuSlot());
           break;
         }
         case TYPE_NOT_SET: {
@@ -1572,6 +1631,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 18;
               break;
             } // case 146
+            case 154: {
+              input.readMessage(
+                  getSwapKungFuSlotFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 19;
+              break;
+            } // case 154
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -4158,6 +4224,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 18;
       onChanged();
       return triggerDynamicObjectBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientSwapKungFuSlotPacket, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder, org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder> swapKungFuSlotBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+     * @return Whether the swapKungFuSlot field is set.
+     */
+    @java.lang.Override
+    public boolean hasSwapKungFuSlot() {
+      return typeCase_ == 19;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+     * @return The swapKungFuSlot.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientSwapKungFuSlotPacket getSwapKungFuSlot() {
+      if (swapKungFuSlotBuilder_ == null) {
+        if (typeCase_ == 19) {
+          return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
+        }
+        return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 19) {
+          return swapKungFuSlotBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+     */
+    public Builder setSwapKungFuSlot(org.y1000.network.gen.ClientSwapKungFuSlotPacket value) {
+      if (swapKungFuSlotBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        swapKungFuSlotBuilder_.setMessage(value);
+      }
+      typeCase_ = 19;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+     */
+    public Builder setSwapKungFuSlot(
+        org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder builderForValue) {
+      if (swapKungFuSlotBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        swapKungFuSlotBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 19;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+     */
+    public Builder mergeSwapKungFuSlot(org.y1000.network.gen.ClientSwapKungFuSlotPacket value) {
+      if (swapKungFuSlotBuilder_ == null) {
+        if (typeCase_ == 19 &&
+            type_ != org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientSwapKungFuSlotPacket.newBuilder((org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 19) {
+          swapKungFuSlotBuilder_.mergeFrom(value);
+        } else {
+          swapKungFuSlotBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 19;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+     */
+    public Builder clearSwapKungFuSlot() {
+      if (swapKungFuSlotBuilder_ == null) {
+        if (typeCase_ == 19) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 19) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        swapKungFuSlotBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+     */
+    public org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder getSwapKungFuSlotBuilder() {
+      return getSwapKungFuSlotFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder getSwapKungFuSlotOrBuilder() {
+      if ((typeCase_ == 19) && (swapKungFuSlotBuilder_ != null)) {
+        return swapKungFuSlotBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 19) {
+          return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
+        }
+        return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientSwapKungFuSlotPacket, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder, org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder> 
+        getSwapKungFuSlotFieldBuilder() {
+      if (swapKungFuSlotBuilder_ == null) {
+        if (!(typeCase_ == 19)) {
+          type_ = org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
+        }
+        swapKungFuSlotBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientSwapKungFuSlotPacket, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder, org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder>(
+                (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 19;
+      onChanged();
+      return swapKungFuSlotBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

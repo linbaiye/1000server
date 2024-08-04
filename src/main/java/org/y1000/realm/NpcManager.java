@@ -9,6 +9,7 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.NpcJoinedEvent;
 import org.y1000.entities.creatures.event.MonsterShootEvent;
+import org.y1000.entities.creatures.event.NpcMoveEvent;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.event.EntityEvent;

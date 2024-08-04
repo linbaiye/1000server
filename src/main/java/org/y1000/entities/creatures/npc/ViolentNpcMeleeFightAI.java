@@ -10,7 +10,12 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
 
     public ViolentNpcMeleeFightAI(AttackableActiveEntity enemy,
                                   ViolentNpc npc) {
-        super(enemy, npc);
+        this(enemy, npc, 1);
+    }
+
+    public ViolentNpcMeleeFightAI(AttackableActiveEntity enemy,
+                                  ViolentNpc npc, int speedRate) {
+        super(enemy, npc, speedRate);
     }
 
     protected void fightProcess() {
@@ -20,7 +25,8 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
             return;
         }
         if (npc.coordinate().directDistance(enemy.coordinate()) > 1) {
-            AiPathUtil.moveProcess(npc, enemy.coordinate(), getPrevious(), () -> npc.startAction(State.IDLE), npc.walkSpeedInFight());
+            log.debug("Walk on unit in {} millis, stay millis {}.", computeWalkMillis(), computeStayMillis());
+            AiPathUtil.moveProcess(npc, enemy.coordinate(), getPrevious(), () -> npc.stay(computeStayMillis()), computeWalkMillis(), computeStayMillis());
             return;
         }
         turnIfNotFaced();

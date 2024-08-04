@@ -25,4 +25,16 @@ public interface MonsterMoveEventPacketOrBuilder extends
    * @return The speed.
    */
   int getSpeed();
+
+  /**
+   * <code>int32 x = 4;</code>
+   * @return The x.
+   */
+  int getX();
+
+  /**
+   * <code>int32 y = 5;</code>
+   * @return The y.
+   */
+  int getY();
 }

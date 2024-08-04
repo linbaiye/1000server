@@ -68,8 +68,8 @@ final class RealmEntityEventSender implements EntityEventListener,
     @Override
     public void visit(AbstractPositionEvent positionEvent) {
         Entity source = positionEvent.source();
-        Set<Entity> affectedEntities = scopeManager.update(source);
-        affectedEntities.forEach(entity -> notifyOutsightOrInsight(source, entity));
+        Set<Entity> outViewEntities = scopeManager.update(source);
+        outViewEntities.forEach(entity -> notifyOutsightOrInsight(source, entity));
         doNotifyVisiblePlayers(source, positionEvent);
         if (positionEvent.source() instanceof Player player) {
             sendMessage(player, positionEvent);
@@ -218,7 +218,10 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void visit(NpcMoveEvent event) {
-        doNotifyVisiblePlayers(event.source(), event);
+        Entity source = event.source();
+        Set<Entity> inOrOutViewEntities = scopeManager.update(source);
+        inOrOutViewEntities.forEach(entity -> notifyOutsightOrInsight(source, entity));
+        doNotifyVisiblePlayers(source, event);
     }
 
     @Override

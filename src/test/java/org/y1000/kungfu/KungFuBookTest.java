@@ -44,4 +44,19 @@ class KungFuBookTest {
         assertNotEquals(0, book.addToBasic(kungFuFactory.create("风灵旋")));
         assertNotEquals(0, book.findBasicSlot("风灵旋"));
     }
+
+    @Test
+    void swap() {
+        assertFalse(book.swapSlot(2, 1, 2));
+        assertFalse(book.swapSlot(1, 1, 2));
+        book.addToBasic(kungFuFactory.create("风灵旋"));
+        assertTrue(book.getKungFu(2, 1).isPresent());
+        assertTrue(book.swapSlot(2, 1, 2));
+        assertTrue(book.getKungFu(2, 1).isEmpty());
+        assertEquals("风灵旋", book.getKungFu(2, 2).map(KungFu::name).orElse(null));
+        book.addToBasic(kungFuFactory.create("雷剑式"));
+        assertTrue(book.swapSlot(2, 1, 2));
+        assertEquals("风灵旋", book.getKungFu(2, 1).map(KungFu::name).orElse(null));
+        assertEquals("雷剑式", book.getKungFu(2, 2).map(KungFu::name).orElse(null));
+    }
 }
