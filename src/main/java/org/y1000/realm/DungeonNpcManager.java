@@ -37,15 +37,15 @@ final class DungeonNpcManager extends AbstractNpcManager {
     private void handleRemoveEvent(RemoveEntityEvent removeEntityEvent) {
         if (removeEntityEvent.source() instanceof Npc npc) {
             removeNpc(npc);
+            removeFromCloned(npc);
         }
     }
 
 
     @Override
     void onUnhandledEvent(EntityEvent entityEvent) {
-        if (entityEvent.source() instanceof Npc npc) {
-            removeNpc(npc);
+        if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
+            handleRemoveEvent(removeEntityEvent);
         }
-
     }
 }

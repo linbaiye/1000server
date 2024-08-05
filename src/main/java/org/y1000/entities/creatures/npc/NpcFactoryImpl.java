@@ -110,7 +110,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         return new NpcRangedSkill(Integer.parseInt(bowImage), kungFuSdb.getSoundSwing(magicName));
     }
 
-    private AggressiveMonster createAggressiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
+    private AggressiveMonster createAggressiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells, NpcAI ai) {
         return AggressiveMonster.builder()
                 .id(id)
                 .coordinate(coordinate)
@@ -120,12 +120,12 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                 .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
                 .skill(createSkill(name))
-                .ai(new MonsterWanderingAI())
-                .spells(loadSpells(name))
+                .ai(ai)
+                .spells(spells)
                 .build();
     }
 
-    private Npc createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
+    private Npc createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells, NpcAI ai) {
         boolean attack = monsterSdb.attack(name);
         if (attack) {
             return PassiveMonster.builder()
@@ -136,13 +136,13 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .realmMap(map)
                     .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                     .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
-                    .ai(new MonsterWanderingAI(new ViolentNpcWanderingAI()))
+                    .ai(ai)
                     .skill(createSkill(name))
                     .spells(spells)
                     .build();
         } else {
             int actionWidth = monsterSdb.getActionWidth(name);
-            var ai = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
+            var npcAI = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
             return SubmissiveNpc.builder()
                     .id(id)
                     .coordinate(coordinate)
@@ -151,14 +151,14 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .realmMap(map)
                     .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                     .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
-                    .ai(ai)
+                    .ai(npcAI)
                     .spells(spells)
                     .build();
         }
     }
 
 
-    private Npc createMonster(String name, long id, RealmMap realmMap, Coordinate coordinate, List<NpcSpell> spells) {
+    private Npc createMonster(String name, long id, RealmMap realmMap, Coordinate coordinate, List<NpcSpell> spells, NpcAI ai) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(realmMap);
         Objects.requireNonNull(coordinate);
@@ -167,7 +167,7 @@ public final class NpcFactoryImpl implements NpcFactory {
             throw new NotImplementedException(name + " has no action sdb.");
         }
         boolean passive = monsterSdb.isPassive(name);
-        return passive ? createPassiveCreature(name, id, realmMap, coordinate, spells) : createAggressiveCreature(name, id, realmMap, coordinate, spells);
+        return passive ? createPassiveCreature(name, id, realmMap, coordinate, spells, ai) : createAggressiveCreature(name, id, realmMap, coordinate, spells, ai);
     }
 
 
@@ -227,7 +227,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
         if (monsterSdb.contains(name)) {
-            return createMonster(name, id, realmMap, coordinate, loadSpells(name));
+            return createMonster(name, id, realmMap, coordinate, loadSpells(name), new MonsterWanderingAI());
         } else if (npcSdb.contains(name)) {
             return createNonMonsterNpc(name, id, realmMap, coordinate);
         }
@@ -236,10 +236,10 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
     @Override
-    public Npc createClonedNpc(Npc npc, long id) {
+    public Npc createClonedNpc(Npc npc, long id, Coordinate coordinate) {
         Validate.notNull(npc);
         if (monsterSdb.contains(npc.idName())) {
-            return createMonster(npc.idName(), id, npc.realmMap(), npc.coordinate(), null);
+            return createMonster(npc.idName(), id, npc.realmMap(), coordinate, null, new MonsterWanderingAI());
         }
         log.error("Name {} does not exist.", npc.idName());
         throw new NoSuchElementException(npc.idName());

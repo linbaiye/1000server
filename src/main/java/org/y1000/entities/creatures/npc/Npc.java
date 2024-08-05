@@ -13,6 +13,8 @@ public interface Npc extends Creature {
 
     void onMoveFailed();
 
+    NpcAI AI();
+
     void move(int millis);
 
     void stay(int millis);

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.AttributeProvider;
+import org.y1000.entities.creatures.npc.spell.CloneSpell;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.creatures.npc.spell.ShiftSpell;
 import org.y1000.entities.players.Damage;
@@ -98,9 +99,13 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     }
 
     private Optional<ShiftSpell> findShiftSpell() {
+        return findSpell(ShiftSpell.class);
+    }
+
+    private <S extends NpcSpell> Optional<S> findSpell(Class<S> type) {
         return spells.stream()
-                .filter(npcSpell -> npcSpell instanceof ShiftSpell)
-                .findFirst().map(ShiftSpell.class::cast);
+                .filter(npcSpell -> type.isAssignableFrom(npcSpell.getClass()))
+                .findFirst().map(type::cast);
     }
 
     @Override
@@ -149,10 +154,14 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     }
 
     public void die() {
+        if (stateEnum() == State.DIE) {
+            return;
+        }
         changeState(NpcCommonState.die(getStateMillis(State.DIE) + (findShiftSpell().isPresent() ? 2000 : 8000)));
         emitEvent(new CreatureDieEvent(this));
         dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
+
 
     protected void handleActionDone(Action action) {
         if (stateEnum() == State.DIE) {
@@ -160,6 +169,12 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
             findShiftSpell().ifPresentOrElse(shiftSpell -> shiftSpell.cast(this),
                     () -> emitEvent(new RemoveEntityEvent(this)));
         } else {
+            if (stateEnum() == State.HURT) {
+                findSpell(CloneSpell.class).ifPresent(s -> {
+                    if (s.canCast(this))
+                        s.cast(this);
+                });
+            }
             action.invoke();
         }
     }

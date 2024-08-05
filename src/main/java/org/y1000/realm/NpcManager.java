@@ -78,7 +78,11 @@ final class NpcManager extends AbstractNpcManager {
     private void handleRemoveEvent(RemoveEntityEvent removeEntityEvent) {
         if (removeEntityEvent.source() instanceof Npc npc) {
             removeNpc(npc);
-            respawningEntityManager.add(npc, 8000);
+            if (!isCloned(npc)) {
+                respawningEntityManager.add(npc, 8000);
+            } else {
+                removeFromCloned(npc);
+            }
         }
     }
 

@@ -36,6 +36,7 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
                 attributeProvider().animate(), attributeProvider().shape());
     }
 
+
     @Override
     public void changeAI(NpcAI newAI) {
         if (newAI instanceof ViolentNpcWanderingAI wanderingAI) {

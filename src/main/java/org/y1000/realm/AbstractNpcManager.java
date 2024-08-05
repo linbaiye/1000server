@@ -14,6 +14,7 @@ import org.y1000.sdb.NpcSpawnSetting;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> implements EntityEventListener {
 
@@ -31,7 +32,9 @@ public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc
 
     private final MonstersSdb monstersSdb;
 
-    private final Map<Npc, Set<Npc>> cloned;
+    private final Map<Npc, Set<Npc>> linked;
+
+    private final Set<Long> cloned;
 
     public AbstractNpcManager(EntityEventSender sender,
                               EntityIdGenerator idGenerator,
@@ -50,12 +53,10 @@ public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc
         this.monstersSdb = monstersSdb;
         projectileManager = new ProjectileManager();
         this.createEntitySdbRepository = createEntitySdbRepository;
-        cloned = new HashMap<>();
+        linked = new HashMap<>();
+        cloned = new HashSet<>();
     }
 
-    NpcFactory npcFactory() {
-        return npcFactory;
-    }
 
     void spawnNPCs(CreateNpcSdb createNpcSdb, RealmMap map) {
         List<NpcSpawnSetting> allSettings = createNpcSdb.getAllSettings();
@@ -114,9 +115,8 @@ public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc
         if (!StringUtils.isEmpty(dropItems)) {
             itemManager.dropItem(dropItems, event.source().coordinate());
         }
-        if (cloned.containsKey(npc)) {
-            cloned.get(npc).forEach(Npc::die);
-            cloned.remove(npc);
+        if (linked.containsKey(npc)) {
+            linked.get(npc).forEach(Npc::die);
         }
     }
 
@@ -130,14 +130,32 @@ public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc
         addNpc(newNpc);
     }
 
+    boolean isCloned(Npc npc) {
+        return cloned.contains(npc.id());
+    }
+
+    void removeFromCloned(Npc npc) {
+        cloned.remove(npc.id());
+    }
+
     private void handleCloneEvent(NpcCastCloneEvent event) {
         var set =  new HashSet<Npc>();
+        var random = ThreadLocalRandom.current();
         for (int i = 0; i < event.number(); i++) {
-            var newNpc = npcFactory.createClonedNpc(event.npc(), idGenerator.next());
-            addNpc(newNpc);
-            set.add(newNpc);
+            Coordinate coordinate = event.npc().coordinate();
+            int x = coordinate.x() - 2;
+            x += random.nextInt(0, 4);
+            int y = coordinate.y() - 2;
+            y += random.nextInt(0, 4);
+            Coordinate coordinate1 = Coordinate.xy(x, y);
+            if (event.npc().realmMap().movable(coordinate1)) {
+                var newNpc = npcFactory.createClonedNpc(event.npc(), idGenerator.next(), coordinate1);
+                addNpc(newNpc);
+                set.add(newNpc);
+                cloned.add(newNpc.id());
+            }
         }
-        cloned.put(event.npc(), set);
+        linked.put(event.npc(), set);
     }
 
     @Override

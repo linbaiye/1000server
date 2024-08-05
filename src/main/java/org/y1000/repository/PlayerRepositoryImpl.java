@@ -88,8 +88,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
    AttribData.cLife     := GetLevel (AttribData.Life) + 2000;      // 기본활력 = 20.00
      */
 
-    @Override
-    public Player load(String token) {
+    private PlayerImpl createFemale() {
         int slot = findSlot();
         Weapon weapon = weapon();
         KungFuBook kungFuBook = loadKungFuBook();
@@ -102,7 +101,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 //.coordinate(new Coordinate(129, 99))
                 //.coordinate(new Coordinate(19, 31)) //修炼洞
                 .coordinate(new Coordinate(98, 46)) //新手村
-               // .coordinate(new Coordinate(104, 60))
+                // .coordinate(new Coordinate(104, 60))
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(weapon.kungFuType()))
@@ -129,6 +128,51 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .outerPower(new PlayerExperiencedAgedAttribute("外功", PlayerDefaultAttributes.INSTANCE.outerPower(), yinyang.age()))
                 .pillSlots(new PillSlots())
                 .build();
+    }
+
+    private PlayerImpl createMale() {
+        int slot = findSlot();
+        Weapon weapon = weapon();
+        KungFuBook kungFuBook = loadKungFuBook();
+        var yinyang = new YinYang();
+        return PlayerImpl.builder()
+                .id(slot + playerIdStart)
+                .name("拓跋")
+                //.coordinate(new Coordinate(175+ slot, 40))
+                .coordinate(new Coordinate(500, 500))
+                //.coordinate(new Coordinate(309, 148))
+                //.coordinate(new Coordinate(129, 99))
+                //.coordinate(new Coordinate(38, 50)) //修炼洞
+                //.coordinate(new Coordinate(98, 46)) //新手村
+                // .coordinate(new Coordinate(104, 60))
+                .weapon(weapon)
+                .kungFuBook(kungFuBook)
+                .attackKungFu(kungFuBook.findUnnamedAttack(weapon.kungFuType()))
+                .footKungfu(kungFuBook.getUnnamedFoot())
+                .protectKungFu(kungFuBook.getUnnamedProtection())
+                .inventory(loadInventory())
+                .male(true)
+                .hat(itemFactory.createHat("男子雨中客斗笠"))
+                .chest(itemFactory.createChest("男子雨中客道袍"))
+                .wrist(itemFactory.createWrist("男子黄龙手套"))
+                .boot(itemFactory.createBoot("男子利齿靴"))
+                .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
+                .yinYang(yinyang)
+                .revival(0)
+                .life(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .head(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .arm(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .leg(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .power(new PlayerExperiencedAgedAttribute("武功", PlayerDefaultAttributes.INSTANCE.power(), yinyang.age()))
+                .innerPower(new PlayerExperiencedAgedAttribute("内功", PlayerDefaultAttributes.INSTANCE.innerPower(), yinyang.age()))
+                .outerPower(new PlayerExperiencedAgedAttribute("外功", PlayerDefaultAttributes.INSTANCE.outerPower(), yinyang.age()))
+                .pillSlots(new PillSlots())
+                .build();
+    }
+
+    @Override
+    public Player load(String token) {
+        return createMale();
     }
 
     @Override

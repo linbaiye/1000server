@@ -39,6 +39,11 @@ public abstract class AbstractViolentNpc
         this.skill = skill;
     }
 
+    @Override
+    public NpcAI AI() {
+        return ai;
+    }
+
     public Optional<String> attackSound() {
         return attributeProvider().attackSound();
     }

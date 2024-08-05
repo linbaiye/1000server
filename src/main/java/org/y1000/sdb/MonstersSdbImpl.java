@@ -170,7 +170,7 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
         Set<String> names = monstersSdb.columnNames();
         Set<String> items = monstersSdb.names();
         for (String i: items) {
-            if (!i.contains("分身忍者")) {
+            if (!i.contains("妖")) {
                 continue;
             }
 

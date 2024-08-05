@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures.npc.spell;
 
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.NpcCastCloneEvent;
 import org.y1000.entities.creatures.npc.Npc;
 
 public final class CloneSpell implements NpcSpell {
@@ -23,6 +24,7 @@ public final class CloneSpell implements NpcSpell {
     @Override
     public void cast(Npc npc) {
         casted = true;
+        npc.emitEvent(new NpcCastCloneEvent(npc, number));
     }
 
     @Override

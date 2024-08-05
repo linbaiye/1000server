@@ -51,6 +51,11 @@ public final class SubmissiveNpc extends AbstractNpc {
     }
 
     @Override
+    public NpcAI AI() {
+        return ai;
+    }
+
+    @Override
     public void respawn(Coordinate coordinate) {
         doRevive(coordinate);
     }
