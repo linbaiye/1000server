@@ -25,7 +25,7 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
             return;
         }
         if (npc.coordinate().directDistance(enemy.coordinate()) > 1) {
-            log.debug("Walk on unit in {} millis, stay millis {}.", computeWalkMillis(), computeStayMillis());
+            //log.debug("Walk on unit in {} millis, stay millis {}.", computeWalkMillis(), computeStayMillis());
             AiPathUtil.moveProcess(npc, enemy.coordinate(), getPrevious(), () -> npc.stay(computeStayMillis()), computeWalkMillis(), computeStayMillis());
             return;
         }

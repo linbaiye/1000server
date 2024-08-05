@@ -5,8 +5,12 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.message.SetPositionEvent;
+import org.y1000.sdb.NpcSpawnSetting;
 import org.y1000.util.Coordinate;
+
+import java.util.List;
 
 @Slf4j
 public abstract class AbstractNpcFightAI implements NpcAI {
@@ -17,11 +21,6 @@ public abstract class AbstractNpcFightAI implements NpcAI {
     private Coordinate previous;
 
     private final int speedRate;
-
-    public AbstractNpcFightAI(AttackableActiveEntity enemy,
-                              ViolentNpc npc) {
-        this(enemy, npc, 1);
-    }
 
     public AbstractNpcFightAI(AttackableActiveEntity enemy,
                               ViolentNpc npc, int speedRate) {

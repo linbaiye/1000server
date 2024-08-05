@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
+import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
@@ -13,6 +14,7 @@ import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,8 +32,8 @@ public abstract class AbstractViolentNpc
 
     public AbstractViolentNpc(long id, Coordinate coordinate, Direction direction, String name,
                               Map<State, Integer> stateMillis, AttributeProvider attributeProvider,
-                              RealmMap realmMap, NpcAI ai, NpcRangedSkill skill) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap);
+                              RealmMap realmMap, NpcAI ai, NpcRangedSkill skill, List<NpcSpell> spellList) {
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, spellList);
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
         this.ai = ai;
         this.skill = skill;

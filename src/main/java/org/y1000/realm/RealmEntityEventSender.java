@@ -77,12 +77,6 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
 
-    private void cleanEntity(Entity entity,
-                             ServerMessage message) {
-        Set<Player> affected = scopeManager.filterVisibleEntities(entity, Player.class);
-        affected.forEach(player -> sendMessage(player, message));
-    }
-
     @Override
     public void notifyPlayerOfEntities(Player player) {
         if (player == null) {
@@ -207,7 +201,7 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void visit(RemoveEntityEvent event) {
-        cleanEntity(event.source(), event);
+        notifyVisiblePlayers(event.source(), event);
     }
 
 

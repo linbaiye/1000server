@@ -8,8 +8,8 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.event.NpcJoinedEvent;
+import org.y1000.entities.creatures.event.NpcShiftEvent;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.creatures.npc.Npc;
@@ -29,6 +29,7 @@ import org.y1000.util.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -57,7 +58,7 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
 
     @BeforeEach
     void setUp() {
-        NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
+        NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
         eventSender = Mockito.mock(EntityEventSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
         npcSdbRepository = Mockito.mock(CreateEntitySdbRepository.class);
@@ -127,5 +128,18 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         PassiveMonster monster = monsterBuilder().attributeProvider(attributeProvider).name("牛").build();
         npcManager.onEvent(new CreatureDieEvent(monster));
         verify(itemManager, times(1)).dropItem("皮:2:1:肉:4:1", monster.coordinate());
+    }
+
+    @Test
+    void handleShiftEvent() {
+        Rectangle range = new Rectangle(Coordinate.xy(1, 1), Coordinate.xy(4, 4));
+        monsterSettings.add(new NpcSpawnSetting(range, 2, "白狐狸"));
+        when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
+        npcManager.init(map, 49);
+        Npc npc = npcManager.find(1L).orElseThrow(IllegalAccessError::new);
+        npcManager.onEvent(new NpcShiftEvent("白狐狸变身", npc));
+        assertTrue(npcManager.find(1L).isEmpty());
+        npc = npcManager.find(3L).orElseThrow(IllegalAccessError::new);
+        assertEquals("白狐狸变身", npc.idName());
     }
 }

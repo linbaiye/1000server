@@ -99,15 +99,6 @@ public final class PlayerManager extends AbstractActiveEntityManager<Player> imp
         return log;
     }
 
-    @Override
-    protected void onAdded(Player entity) {
-
-    }
-
-    @Override
-    protected void onDeleted(Player entity) {
-
-    }
 
 
     private void handleUpdateTradeEvent(Player player, ClientUpdateTradeEvent updateTradeEvent) {

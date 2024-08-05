@@ -52,14 +52,9 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
         deleting.clear();
     }
 
-    protected abstract void onAdded(T entity);
-
-    protected abstract void onDeleted(T entity);
-
     private void doAdd(T entity) {
         try {
-            if (entities.add(entity))
-                onAdded(entity);
+            entities.add(entity);
         } catch (Exception e) {
             log().error("Exception after adding {}.", entity, e);
         }
@@ -67,8 +62,7 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
 
     private void doDelete(T entity) {
         try {
-            if (entities.remove(entity))
-                onDeleted(entity);
+            entities.remove(entity);
         } catch (Exception e) {
             log().error("Exception after deleting {}.", entity, e);
         }

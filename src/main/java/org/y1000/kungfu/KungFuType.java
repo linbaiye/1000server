@@ -26,6 +26,8 @@ public enum KungFuType implements ValueEnum {
 
     ASSISTANT(10),
 
+    NPC_SPELL(12),
+
     ;
     private final int v;
 

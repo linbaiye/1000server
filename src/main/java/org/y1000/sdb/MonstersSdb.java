@@ -44,4 +44,6 @@ public interface MonstersSdb {
     boolean contains(String name);
 
     boolean attack(String name);
+
+    String getHaveMagic(String name);
 }

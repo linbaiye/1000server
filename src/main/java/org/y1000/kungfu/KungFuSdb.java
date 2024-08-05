@@ -3,6 +3,7 @@ package org.y1000.kungfu;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.sdb.AbstractSdbReader;
+import org.y1000.sdb.MagicParamSdb;
 
 import java.util.Set;
 
@@ -155,9 +156,14 @@ public final class KungFuSdb extends AbstractSdbReader {
         return getEnum(name, "MagicType", KungFuType::fromValue);
     }
 
+    public int getFunction(String name) {
+        return getInt(name, "Function");
+    }
+
     public int effectColor(String name) {
         return getInt(name, "EffectColor");
     }
+
 
     public static void main(String[] args) {
 //        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
@@ -168,8 +174,11 @@ public final class KungFuSdb extends AbstractSdbReader {
         Set<String> names = kungFuSdb.columnNames();
         Set<String> items = kungFuSdb.names();
         for (String i : items) {
-            if (!i.contains("百鬼夜行术"))
+            if (!"12".equals(kungFuSdb.get(i, "MagicType"))) {
                 continue;
+            }
+//            if (!i.contains("标枪法"))
+//                continue;
 
             System.out.println("----------------------------");
             System.out.println(i);
@@ -177,7 +186,6 @@ public final class KungFuSdb extends AbstractSdbReader {
                 if (!StringUtils.isEmpty(kungFuSdb.get(i, name)))
                     System.out.println(name + ": " + kungFuSdb.get(i, name));
             }
-            //String v = kungFuSdb.get("生药", idName);
         }
     }
 

@@ -10,4 +10,6 @@ public interface NpcFactory {
 
     Npc createNpc(String name, long id, RealmMap realmMap, Coordinate coordinate);
 
+    Npc createClonedNpc(Npc npc, long id);
+
 }

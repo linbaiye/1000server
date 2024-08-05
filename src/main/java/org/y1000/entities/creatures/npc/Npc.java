@@ -17,6 +17,8 @@ public interface Npc extends Creature {
 
     void stay(int millis);
 
+    void die();
+
     Rectangle wanderingArea();
 
     Coordinate spawnCoordinate();

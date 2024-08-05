@@ -116,20 +116,12 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         return log;
     }
 
-    @Override
-    protected void onAdded(GroundedItem entity) {
-
-    }
 
     @Override
     public void update(long delta) {
         updateManagedEntities(delta);
     }
 
-
-    @Override
-    protected void onDeleted(GroundedItem entity) {
-    }
 
     @Override
     public void visit(RemoveEntityEvent event) {

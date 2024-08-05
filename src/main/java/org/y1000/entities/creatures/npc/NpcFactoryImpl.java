@@ -7,13 +7,19 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.*;
+import org.y1000.entities.creatures.npc.spell.CloneSpell;
+import org.y1000.entities.creatures.npc.spell.NpcSpell;
+import org.y1000.entities.creatures.npc.spell.NpcSpellType;
+import org.y1000.entities.creatures.npc.spell.ShiftSpell;
 import org.y1000.kungfu.KungFuSdb;
+import org.y1000.kungfu.KungFuType;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public final class NpcFactoryImpl implements NpcFactory {
@@ -22,17 +28,50 @@ public final class NpcFactoryImpl implements NpcFactory {
     private final MonstersSdb monsterSdb;
     private final KungFuSdb kungFuSdb;
     private final NpcSdb npcSdb;
+    private final MagicParamSdb magicParamSdb;
     private final MerchantItemSdbRepository merchantItemSdbRepository;
 
     public NpcFactoryImpl(ActionSdb actionSdb,
                           MonstersSdb monsterSdb,
-                          KungFuSdb kungFuSdb, NpcSdb npcSdb,
+                          KungFuSdb kungFuSdb,
+                          NpcSdb npcSdb,
+                          MagicParamSdb magicParamSdb,
                           MerchantItemSdbRepository merchantItemSdbRepository) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
         this.kungFuSdb = kungFuSdb;
         this.npcSdb = npcSdb;
+        this.magicParamSdb = magicParamSdb;
         this.merchantItemSdbRepository = merchantItemSdbRepository;
+    }
+
+
+    private NpcSpell createSpell(String npcName, String magicName) {
+        KungFuType magicType = kungFuSdb.getMagicType(magicName);
+        if (magicType != KungFuType.NPC_SPELL) {
+            log.error("{} is not a npc spell.", magicName);
+            return null;
+        }
+        int function = kungFuSdb.getFunction(magicName);
+        if (!NpcSpellType.contains(function)) {
+            return null;
+        }
+        return switch (NpcSpellType.fromValue(function)) {
+            case HIDE -> null;
+            case CLONE -> new CloneSpell(magicParamSdb.getNumberParam1(npcName, magicName), magicParamSdb.getNumberParam2(npcName, magicName));
+            case HEAL -> null;
+            case SHIFT -> new ShiftSpell(magicParamSdb.getNameParam1(npcName, magicName));
+        };
+    }
+
+    private List<NpcSpell> loadSpells(String name) {
+        String haveMagic = monsterSdb.getHaveMagic(name);
+        if (StringUtils.isEmpty(haveMagic)) {
+            return Collections.emptyList();
+        }
+        String[] magics = haveMagic.split(":");
+        return Arrays.stream(magics).map(m -> createSpell(name, m))
+                .filter(Objects::nonNull).collect(Collectors.toList());
     }
 
 
@@ -71,7 +110,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         return new NpcRangedSkill(Integer.parseInt(bowImage), kungFuSdb.getSoundSwing(magicName));
     }
 
-    private AggressiveMonster createAggressiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
+    private AggressiveMonster createAggressiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
         return AggressiveMonster.builder()
                 .id(id)
                 .coordinate(coordinate)
@@ -82,10 +121,11 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
                 .skill(createSkill(name))
                 .ai(new MonsterWanderingAI())
+                .spells(loadSpells(name))
                 .build();
     }
 
-    private Npc createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate) {
+    private Npc createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
         boolean attack = monsterSdb.attack(name);
         if (attack) {
             return PassiveMonster.builder()
@@ -98,6 +138,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
                     .ai(new MonsterWanderingAI(new ViolentNpcWanderingAI()))
                     .skill(createSkill(name))
+                    .spells(spells)
                     .build();
         } else {
             int actionWidth = monsterSdb.getActionWidth(name);
@@ -111,12 +152,13 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
                     .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
                     .ai(ai)
+                    .spells(spells)
                     .build();
         }
     }
 
 
-    private Npc createMonster(String name, long id, RealmMap realmMap, Coordinate coordinate) {
+    private Npc createMonster(String name, long id, RealmMap realmMap, Coordinate coordinate, List<NpcSpell> spells) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(realmMap);
         Objects.requireNonNull(coordinate);
@@ -125,7 +167,7 @@ public final class NpcFactoryImpl implements NpcFactory {
             throw new NotImplementedException(name + " has no action sdb.");
         }
         boolean passive = monsterSdb.isPassive(name);
-        return passive ? createPassiveCreature(name, id, realmMap, coordinate) : createAggressiveCreature(name, id, realmMap, coordinate);
+        return passive ? createPassiveCreature(name, id, realmMap, coordinate, spells) : createAggressiveCreature(name, id, realmMap, coordinate, spells);
     }
 
 
@@ -185,11 +227,21 @@ public final class NpcFactoryImpl implements NpcFactory {
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
         if (monsterSdb.contains(name)) {
-            return createMonster(name, id, realmMap, coordinate);
+            return createMonster(name, id, realmMap, coordinate, loadSpells(name));
         } else if (npcSdb.contains(name)) {
             return createNonMonsterNpc(name, id, realmMap, coordinate);
         }
         log.error("Name {} does not exist.", name);
         throw new NoSuchElementException(name);
+    }
+
+    @Override
+    public Npc createClonedNpc(Npc npc, long id) {
+        Validate.notNull(npc);
+        if (monsterSdb.contains(npc.idName())) {
+            return createMonster(npc.idName(), id, npc.realmMap(), npc.coordinate(), null);
+        }
+        log.error("Name {} does not exist.", npc.idName());
+        throw new NoSuchElementException(npc.idName());
     }
 }

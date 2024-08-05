@@ -20,7 +20,7 @@ public final class Guardian extends AbstractViolentNpc {
 
     @Builder
     public Guardian(long id, Coordinate coordinate, Direction direction, String name, Map<State, Integer> stateMillis, AttributeProvider attributeProvider, RealmMap realmMap, NpcAI ai) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai, null);
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai, null, null);
     }
 
     @Override

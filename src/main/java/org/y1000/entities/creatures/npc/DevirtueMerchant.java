@@ -37,7 +37,7 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
                             List<MerchantItem> buy,
                             List<MerchantItem> sell,
                             String textFileName) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap);
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, null);
         Validate.notNull(sell);
         Validate.notNull(buy);
         Validate.notNull(textFileName);

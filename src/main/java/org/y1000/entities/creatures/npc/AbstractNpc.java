@@ -5,6 +5,8 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.AttributeProvider;
+import org.y1000.entities.creatures.npc.spell.NpcSpell;
+import org.y1000.entities.creatures.npc.spell.ShiftSpell;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.*;
@@ -16,9 +18,7 @@ import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
 import org.y1000.util.UnaryAction;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implements Npc {
 
@@ -34,16 +34,21 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
 
     private static final Set<State> ACCEPTABLE_STATES = Set.of(State.IDLE, State.WALK, State.FROZEN, State.DIE);
 
+    private final List<NpcSpell> spells;
+
+
     public AbstractNpc(long id,
                        Coordinate coordinate,
                        Direction direction,
                        String name,
                        Map<State, Integer> stateMillis,
                        AttributeProvider attributeProvider,
-                       RealmMap realmMap) {
+                       RealmMap realmMap,
+                       List<NpcSpell> spells) {
         super(id, coordinate, direction, name, stateMillis);
         this.attributeProvider = attributeProvider;
         this.realmMap = realmMap;
+        this.spells = spells == null ? Collections.emptyList() : spells;
         doRevive(coordinate);
     }
 
@@ -55,6 +60,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         currentLife = attributeProvider.life();
         changeCoordinate(coordinate);
         this.changeState(NpcCommonState.idle(getStateMillis(State.IDLE)));
+        spells.forEach(NpcSpell::reset);
     }
 
     protected AttributeProvider attributeProvider() {
@@ -91,6 +97,11 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         return attributeProvider.armor();
     }
 
+    private Optional<ShiftSpell> findShiftSpell() {
+        return spells.stream()
+                .filter(npcSpell -> npcSpell instanceof ShiftSpell)
+                .findFirst().map(ShiftSpell.class::cast);
+    }
 
     @Override
     public void startAction(State state) {
@@ -137,16 +148,17 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         emitEvent(NpcMoveEvent.move(this, this.direction(), millis));
     }
 
-    private void die() {
-        changeState(NpcCommonState.die(getStateMillis(State.DIE) + 8000));
+    public void die() {
+        changeState(NpcCommonState.die(getStateMillis(State.DIE) + (findShiftSpell().isPresent() ? 2000 : 8000)));
         emitEvent(new CreatureDieEvent(this));
         dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
     protected void handleActionDone(Action action) {
         if (stateEnum() == State.DIE) {
-            emitEvent(new RemoveEntityEvent(this));
             realmMap.free(this);
+            findShiftSpell().ifPresentOrElse(shiftSpell -> shiftSpell.cast(this),
+                    () -> emitEvent(new RemoveEntityEvent(this)));
         } else {
             action.invoke();
         }

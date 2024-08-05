@@ -1,6 +1,5 @@
 package org.y1000.repository;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.*;
 import org.y1000.kungfu.attack.*;
@@ -130,6 +129,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             case BREATHING -> breathKungFu(name);
             case PROTECTION -> protectKungFu(name);
             case ASSISTANT ->  AssistantKungFu.builder().name(name).exp(0).build();
+            default -> throw new IllegalStateException("Unexpected value: " + kungFuType);
         };
     }
 

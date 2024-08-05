@@ -50,11 +50,11 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
             if (next == Coordinate.Empty) {
                 cooldownOrShoot(rangedSkill);
             } else {
-                log.debug("Walk on unit in {} millis, stay millis {}.", computeWalkMillis(), computeStayMillis());
+//                log.debug("Walk on unit in {} millis, stay millis {}.", computeWalkMillis(), computeStayMillis());
                 AiPathUtil.moveProcess(npc, next, getPrevious(), () -> cooldownOrShoot(rangedSkill), computeWalkMillis(), computeStayMillis());
             }
         } else {
-            log.debug("Walk on unit in {} millis, stay millis {}.", computeWalkMillis(), computeStayMillis());
+//            log.debug("Walk on unit in {} millis, stay millis {}.", computeWalkMillis(), computeStayMillis());
             AiPathUtil.moveProcess(npc, enemy.coordinate(), getPrevious(), () -> cooldownOrShoot(rangedSkill), computeWalkMillis(), computeStayMillis());
         }
     }

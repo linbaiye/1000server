@@ -69,15 +69,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         return log;
     }
 
-    @Override
-    protected void onAdded(DynamicObject entity) {
 
-    }
-
-    @Override
-    protected void onDeleted(DynamicObject entity) {
-
-    }
 
     private void addObject(DynamicObject entity) {
         eventSender.add(entity);

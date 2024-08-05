@@ -2,6 +2,8 @@ package org.y1000.sdb;
 
 
 import org.apache.commons.lang3.StringUtils;
+import org.y1000.kungfu.KungFuSdb;
+import org.y1000.kungfu.KungFuType;
 
 import java.util.Set;
 
@@ -123,13 +125,52 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
         return "TRUE".equals(get(name, "boAttack"));
     }
 
-    public static void main(String[] args) {
+    @Override
+    public String getHaveMagic(String name) {
+        return get(name, "HaveMagic");
+    }
+
+
+    private static void check() {
+
+        MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;
+//        Set<String> names = itemSdb.names();
+        Set<String> names = monstersSdb.columnNames();
+        Set<String> items = monstersSdb.names();
+        KungFuSdb kungFuSdb = KungFuSdb.INSTANCE;
+        MagicParamSdb magicParamSdb = MagicParamSdb.INSTANCE;
+        for (String i: items) {
+            if (StringUtils.isEmpty(monstersSdb.get(i, "HaveMagic"))) {
+                continue;
+            }
+            String[] magics = monstersSdb.get(i, "HaveMagic").split(":");
+            for (String magic : magics) {
+                System.out.println("----------------------------");
+                if (kungFuSdb.getMagicType(magic) != KungFuType.NPC_SPELL) {
+                    System.out.println("Magic " + magic + " bad.");
+                } else {
+                    System.out.println("Magic " + magic + " ok.");
+                }
+            }
+//
+//            System.out.println("----------------------------");
+//            System.out.println(i);
+//            for (String name : names) {
+//                if (!StringUtils.isEmpty(monstersSdb.get(i, name)))
+//                    System.out.println(name + ": " + monstersSdb.get(i, name));
+//            }
+        }
+
+
+    }
+
+    private static void dump( ) {
         MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;
 //        Set<String> names = itemSdb.names();
         Set<String> names = monstersSdb.columnNames();
         Set<String> items = monstersSdb.names();
         for (String i: items) {
-            if (!i.equals("火狐狸")) {
+            if (!i.contains("分身忍者")) {
                 continue;
             }
 
@@ -140,6 +181,12 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
                     System.out.println(name + ": " + monstersSdb.get(i, name));
             }
         }
+
+    }
+
+
+    public static void main(String[] args) {
+        dump();
     }
 }
 

@@ -2,25 +2,29 @@ package org.y1000.entities.creatures.npc;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.y1000.TestingEventListener;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.event.CreatureDieEvent;
+import org.y1000.entities.creatures.event.NpcShiftEvent;
 import org.y1000.entities.creatures.monster.PassiveMonster;
+import org.y1000.entities.players.Damage;
+import org.y1000.entities.players.Player;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.realm.RealmMap;
-import org.y1000.sdb.ActionSdb;
-import org.y1000.sdb.MerchantItemSdbRepositoryImpl;
-import org.y1000.sdb.MonstersSdbImpl;
-import org.y1000.sdb.NpcSdbImpl;
+import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
 class NpcFactoryImplTest {
 
     private final NpcFactoryImpl npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE,
-            NpcSdbImpl.Instance, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
+            NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
     private RealmMap map;
 
     @BeforeEach
@@ -63,5 +67,23 @@ class NpcFactoryImplTest {
         assertEquals(3, npc.id());
         assertEquals(Coordinate.xy(2, 2), npc.coordinate());
         assertEquals(State.IDLE, npc.stateEnum());
+    }
+
+    @Test
+    void createNpcWithSpells() {
+        var npc = npcFactory.createNpc("白狐狸", 3L, map, Coordinate.xy(2, 2));
+        TestingEventListener eventListener = new TestingEventListener();
+        npc.registerEventListener(eventListener);
+        Player player = Mockito.mock(Player.class);
+        when(player.damage()).thenReturn(new Damage(1000000, 1000, 100, 100));
+        when(player.hit()).thenReturn(1000000);
+        while (npc.stateEnum() != State.DIE) {
+            npc.attackedBy(player);
+        }
+        assertNotNull(eventListener.removeFirst(CreatureDieEvent.class));
+        npc.update(npc.getStateMillis(State.DIE) + 2000);
+        assertNotNull(eventListener.removeFirst(NpcShiftEvent.class));
+
+        assertNotNull(npcFactory.createNpc("分身忍者", 3L, map, Coordinate.xy(2, 3)));
     }
 }
