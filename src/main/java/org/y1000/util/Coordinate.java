@@ -1,5 +1,6 @@
 package org.y1000.util;
 
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
 
 import java.util.HashSet;
@@ -16,6 +17,7 @@ public record Coordinate(int x, int y) {
     }*/
 
     public Coordinate moveBy(Direction direction) {
+        Validate.notNull(direction);
         return add(direction.offset());
     }
 

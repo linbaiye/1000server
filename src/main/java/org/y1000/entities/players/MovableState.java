@@ -25,6 +25,8 @@ public interface MovableState {
         if (!player.realmMap().movable(targetCoordinate)) {
             logger().debug("Destination {} conflicted, rewind player {} back to {}", targetCoordinate, player.id(), player.coordinate());
             player.changeDirection(rightClick.direction());
+            for (var coor : player.coordinate().neighbours())
+                logger().debug("{} Movable {}", coor, player.realmMap().movable(coor));
             rewind(player, rightClick.sequence());
         } else {
             PlayerState playerState = player.footKungFu().map(footKungFu ->

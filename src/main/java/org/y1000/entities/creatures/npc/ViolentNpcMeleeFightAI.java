@@ -33,6 +33,7 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
         if (npc.cooldown() > 0) {
             npc.startAction(State.COOLDOWN);
         } else {
+            //log.debug("Creature attack at {}, direction {}.", npc.coordinate(), npc.direction());
             npc.startAction(State.ATTACK);
             enemy.attackedBy(npc);
         }

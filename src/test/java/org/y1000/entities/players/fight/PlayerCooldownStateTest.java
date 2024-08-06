@@ -7,6 +7,7 @@ import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.players.PlayerStillState;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,6 +41,6 @@ class PlayerCooldownStateTest extends AbstractUnitTestFixture {
         state.moveToHurtCoordinate(player);
         assertEquals(before, player.coordinate());
         state.afterHurt(player);
-        assertTrue(player.state() instanceof PlayerCooldownState);
+        assertEquals(State.COOLDOWN, player.stateEnum());
     }
 }

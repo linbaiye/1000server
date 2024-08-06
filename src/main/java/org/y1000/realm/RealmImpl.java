@@ -63,7 +63,8 @@ final class RealmImpl implements Realm {
         this.id = id;
         this.mapSdb = mapSdb;
         var entityIdGenerator = new EntityIdGenerator();
-        GridAOIManager scopeManager = new GridAOIManager(map.width(), map.height());
+        AOIManager scopeManager = new RelevantScopeManager();
+        //GridAOIManager scopeManager = new GridAOIManager(map.width(), map.height());
         eventSender = new RealmEntityEventSender(scopeManager);
         itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
         npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager, createEntitySdbRepository, monstersSdb, scopeManager);

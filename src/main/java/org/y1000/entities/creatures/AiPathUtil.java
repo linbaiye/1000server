@@ -9,7 +9,7 @@ import org.y1000.util.Coordinate;
 
 @Slf4j
 public final class AiPathUtil {
-    public static Direction computeNextMoveDirection(Creature creature,
+    private static Direction computeNextMoveDirection(Creature creature,
                                                  Coordinate dest, Coordinate previous) {
         int minDist = Integer.MAX_VALUE;
         Direction towards = null;
@@ -35,7 +35,7 @@ public final class AiPathUtil {
         } else if (direction != npc.direction()) {
             npc.changeDirection(direction);
             npc.emitEvent(SetPositionEvent.of(npc));
-            npc.stay(walkMillis);
+            npc.stay(turnMillis);
             return;
         }
         if (npc.realmMap().movable(npc.coordinate().moveBy(direction))) {

@@ -28,7 +28,7 @@ public abstract class AbstractFightingState extends AbstractCreatureState<Player
 
     @Override
     public void afterHurt(PlayerImpl player) {
-        player.changeState(new PlayerCooldownState(player.cooldown()));
+        player.attackKungFu().attackAgain(player);
     }
 
     @Override

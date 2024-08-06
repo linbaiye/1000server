@@ -1,11 +1,11 @@
 package org.y1000.repository;
 
 import org.y1000.entities.players.*;
-import org.y1000.kungfu.AssistantKungFu;
-import org.y1000.kungfu.KungFuBookFactory;
+import org.y1000.exp.ExperienceUtil;
+import org.y1000.kungfu.*;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.kungfu.KungFuBook;
+import org.y1000.kungfu.attack.SwordKungFu;
 import org.y1000.util.Coordinate;
 
 public final class PlayerRepositoryImpl implements PlayerRepository {
@@ -17,6 +17,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     private final ItemFactory itemFactory;
     private final KungFuBookFactory kungFuBookFactory;
     private final KungFuBookRepository kungFuRepository;
+
 
     public PlayerRepositoryImpl(ItemFactory itemFactory,
                                 KungFuBookFactory kungFuBookFactory,
@@ -48,10 +49,11 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("黄金手套"));
         inventory.add(itemFactory.createItem("北海连环弓"));
         inventory.add(itemFactory.createMoney( 10000));
-        inventory.add(itemFactory.createItem("生药", 10000));
+        inventory.add(itemFactory.createItem("金毛草", 10000));
         inventory.add(itemFactory.createItem("杨家枪法", 1));
         inventory.add(itemFactory.createItem("无击阵", 1));
-        inventory.add(itemFactory.createItem("雷剑式", 2));
+        inventory.add(itemFactory.createItem("雷剑式", 1));
+        inventory.add(itemFactory.createItem("壁射剑法", 1));
         inventory.add(itemFactory.createItem("闪光剑破解", 1));
         inventory.add(itemFactory.createItem("黑沙刚体", 1));
         inventory.add(itemFactory.createItem("银狼破皇剑"));
@@ -75,7 +77,16 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     private KungFuBook loadKungFuBook() {
         KungFuBook kungFuBook = kungFuBookFactory.create();
         kungFuBook.addToBasic(AssistantKungFu.builder().name("风灵旋").exp(0).eightDirection(false).build());
-        kungFuBook.addToBasic(AssistantKungFu.builder().name("灵动八方").exp(0).eightDirection(true).build());
+        kungFuBook.addToBasic(AssistantKungFu.builder().name("灵动八方").exp(ExperienceUtil.MAX_EXP).eightDirection(true).build());
+        KungFu sword = ((KungFuFactory) kungFuBookFactory).create("壁射剑法");
+        sword.gainExp(ExperienceUtil.MAX_EXP);
+        kungFuBook.addToBasic(sword);
+        var prot = ((KungFuFactory) kungFuBookFactory).create("金钟罩");
+        prot.gainExp(ExperienceUtil.MAX_EXP);
+        kungFuBook.addToBasic(prot);
+        var bufa = ((KungFuFactory) kungFuBookFactory).create("幻魔身法");
+        bufa.gainExp(ExperienceUtil.MAX_EXP);
+        kungFuBook.addToBasic(bufa);
         return kungFuBook;
     }
 

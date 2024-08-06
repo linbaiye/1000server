@@ -1,7 +1,9 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 public final class SubmissiveNpc extends AbstractNpc {
 
     private final NpcAI ai;
@@ -32,6 +35,11 @@ public final class SubmissiveNpc extends AbstractNpc {
     @Override
     public void update(int delta) {
         state().update(this, delta);
+    }
+
+    @Override
+    protected Logger log() {
+        return log;
     }
 
     @Override

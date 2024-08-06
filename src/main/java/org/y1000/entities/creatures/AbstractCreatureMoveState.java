@@ -35,6 +35,8 @@ public abstract class AbstractCreatureMoveState<C extends Creature> extends Abst
         boolean movable = realmMap.movable(next);
         if (movable)
             c.changeCoordinate(next);
+        else
+            c.changeCoordinate(c.coordinate());
         return movable;
     }
 

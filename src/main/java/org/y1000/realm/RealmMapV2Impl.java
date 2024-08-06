@@ -103,7 +103,7 @@ final class RealmMapV2Impl implements RealmMap {
             return;
         }
         free(entity);
-        addToCoordinateEntityMap(entity.coordinate(), entity);
+        coordinateEntityMap.computeIfAbsent(entity.coordinate(), c -> new HashSet<>()).add(entity);
         entityCoordinateMap.put(entity, entity.coordinate());
     }
 
@@ -134,13 +134,6 @@ final class RealmMapV2Impl implements RealmMap {
         return height;
     }
 
-    private void addToCoordinateEntityMap(Coordinate coordinate, Entity entity) {
-        if (!coordinateEntityMap.containsKey(coordinate)) {
-            coordinateEntityMap.put(coordinate, new HashSet<>());
-        }
-        Validate.notNull(entity);
-        coordinateEntityMap.get(coordinate).add(entity);
-    }
 
     @Override
     public void occupy(DynamicObject dynamicObject) {
@@ -150,8 +143,7 @@ final class RealmMapV2Impl implements RealmMap {
         }
         entityCoordinateMap.put(dynamicObject, dynamicObject.coordinate());
         for (Coordinate coordinate : dynamicObject.occupyingCoordinates()) {
-            //coordinateEntityMap.computeIfAbsent(coordinate, c -> new HashSet<>()).add(dynamicObject);
-            addToCoordinateEntityMap(coordinate, dynamicObject);
+            coordinateEntityMap.computeIfAbsent(coordinate, c -> new HashSet<>()).add(dynamicObject);
         }
     }
 

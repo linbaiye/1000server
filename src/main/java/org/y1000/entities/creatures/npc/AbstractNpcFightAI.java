@@ -85,7 +85,6 @@ public abstract class AbstractNpcFightAI implements NpcAI {
     }
 
 
-
     @Override
     public void onActionDone(Npc npc) {
         if (npc.stateEnum() == State.WALK) {

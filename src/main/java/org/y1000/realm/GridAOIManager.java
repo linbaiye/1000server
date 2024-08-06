@@ -100,7 +100,7 @@ final class GridAOIManager implements AOIManager {
     public boolean outOfScope(Entity source, Entity target) {
         Validate.notNull(source);
         Validate.notNull(target);
-        return source.canBeSeenAt(target.coordinate());
+        return !source.canBeSeenAt(target.coordinate());
     }
 
     @Override

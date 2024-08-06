@@ -2,6 +2,7 @@ package org.y1000.entities.creatures.npc;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.AttributeProvider;
@@ -165,13 +166,19 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     }
 
 
+    protected abstract Logger log();
+
     protected void handleActionDone(Action action) {
         if (stateEnum() == State.DIE) {
             realmMap.free(this);
-            findShiftSpell().ifPresentOrElse(shiftSpell -> shiftSpell.cast(this),
-                    () -> emitEvent(new RemoveEntityEvent(this)));
+            emitEvent(new RemoveEntityEvent(this));
+            log().debug("Free {}.", id());
+            /*findShiftSpell().ifPresentOrElse(shiftSpell -> shiftSpell.cast(this),
+                    () -> {
+                        log().debug("Free {}.", id());
+                        emitEvent(new RemoveEntityEvent(this));
+                    });*/
         } else {
-
             action.invoke();
         }
     }

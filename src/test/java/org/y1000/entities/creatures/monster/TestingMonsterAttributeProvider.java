@@ -58,6 +58,11 @@ public class TestingMonsterAttributeProvider implements AttributeProvider {
     }
 
     @Override
+    public int viewWidth() {
+        return 0;
+    }
+
+    @Override
     public int damage() {
         return 0;
     }

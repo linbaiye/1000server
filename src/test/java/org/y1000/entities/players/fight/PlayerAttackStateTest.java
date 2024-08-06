@@ -78,7 +78,7 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
         var attackState = PlayerAttackState.melee(player);
         assertEquals(State.COOLDOWN, attackState.decideAfterHurtState());
         attackState.afterHurt(player);
-        assertTrue(player.state() instanceof PlayerCooldownState);
+        assertEquals(State.COOLDOWN, player.stateEnum());
         var before = player.coordinate();
         attackState.moveToHurtCoordinate(player);
         assertEquals(before, player.coordinate());

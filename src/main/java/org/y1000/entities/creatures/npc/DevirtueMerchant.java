@@ -1,7 +1,9 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.NpcType;
@@ -19,6 +21,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+@Slf4j
 public final class DevirtueMerchant extends AbstractNpc implements Merchant {
 
     private final SubmissiveWanderingAI ai;
@@ -157,5 +160,10 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
         if (player.inventory().canBuy(items, cost) && canSell(items)) {
             player.inventory().buy(items, cost, player, itemCreator);
         }
+    }
+
+    @Override
+    protected Logger log() {
+        return log;
     }
 }

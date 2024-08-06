@@ -89,8 +89,6 @@ public abstract class AbstractViolentNpc
         return attackCooldown;
     }
 
-    protected abstract Logger log();
-
     protected void cooldown(int delta) {
         recoveryCooldown = recoveryCooldown > delta ? recoveryCooldown - delta : 0;
         attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;

@@ -1,30 +1,34 @@
 package org.y1000.entities.players;
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.*;
 
+@Slf4j
 public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl> implements PlayerState {
 
-    @FunctionalInterface
-    public interface AfterHurtAction {
-        void apply(PlayerImpl player);
-    }
+    private final PlayerState returnState;
 
-    private final AfterHurtAction afterHurtAction;
-
+    /**
+     * For client to interpolate, perhaps no useless.
+     */
     private final State afterHurtState;
 
-    private PlayerHurtState(int totalMillis, AfterHurtAction afterHurt, State returnState) {
+    private PlayerHurtState(int totalMillis, PlayerState afterHurt, State returnState) {
         super(totalMillis);
-        this.afterHurtAction = afterHurt;
+        this.returnState = afterHurt;
         this.afterHurtState = returnState;
     }
 
     @Override
     protected void recovery(PlayerImpl player) {
-        afterHurtAction.apply(player);
+        returnState.afterHurt(player);
     }
 
     public static PlayerHurtState hurt(PlayerImpl player, State afterHurt) {
-        return new PlayerHurtState(player.getStateMillis(State.HURT), player.state()::afterHurt, afterHurt);
+        if (player.state() instanceof PlayerHurtState hurtState) {
+            return new PlayerHurtState(player.getStateMillis(State.HURT), hurtState.returnState, afterHurt);
+        } else {
+            return new PlayerHurtState(player.getStateMillis(State.HURT), player.state(), afterHurt);
+        }
     }
 
     @Override
