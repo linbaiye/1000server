@@ -50,10 +50,6 @@ public final class SubmissiveNpc extends AbstractNpc {
         ai.onMoveFailed(this);
     }
 
-    @Override
-    public NpcAI AI() {
-        return ai;
-    }
 
     @Override
     public void respawn(Coordinate coordinate) {

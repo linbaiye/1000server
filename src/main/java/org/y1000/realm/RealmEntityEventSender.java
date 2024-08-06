@@ -21,9 +21,14 @@ import java.util.*;
 final class RealmEntityEventSender implements EntityEventListener,
         PlayerEventVisitor, EntityEventSender {
 
-    private final RelevantScopeManager scopeManager = new RelevantScopeManager();
+    private final AOIManager scopeManager;
 
     private final Map<Player, Connection> playerConnectionMap = new HashMap<>(100);
+
+    public RealmEntityEventSender(AOIManager scopeManager) {
+        Validate.notNull(scopeManager);
+        this.scopeManager = scopeManager;
+    }
 
     @Override
     public void visit(InputResponseMessage inputResponseMessage) {
@@ -231,7 +236,7 @@ final class RealmEntityEventSender implements EntityEventListener,
 
 
     public void add(Entity entity) {
-        if (scopeManager.getAllEntities().contains(entity)) {
+        if (scopeManager.contains(entity)) {
             return;
         }
         scopeManager.add(entity);

@@ -53,6 +53,8 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
 
     private MonstersSdb monstersSdb;
 
+    private AOIManager aoiManager;
+
     private RealmMap map;
 
 
@@ -74,7 +76,8 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         when(npcSdbRepository.loadNpc(anyInt())).thenReturn(npcSdb);
         idGenerator = new EntityIdGenerator();
         monstersSdb = Mockito.mock(MonstersSdb.class);
-        npcManager = new NpcManager(eventSender, idGenerator, npcFactory, itemManager, npcSdbRepository, monstersSdb);
+        aoiManager = Mockito.mock(AOIManager.class);
+        npcManager = new NpcManager(eventSender, idGenerator, npcFactory, itemManager, npcSdbRepository, monstersSdb, aoiManager);
         map = Mockito.mock(RealmMap.class);
         when(map.movable(any(Coordinate.class))).thenReturn(true);
     }
@@ -141,5 +144,12 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         assertTrue(npcManager.find(1L).isEmpty());
         npc = npcManager.find(3L).orElseThrow(IllegalAccessError::new);
         assertEquals("白狐狸变身", npc.idName());
+    }
+
+    @Test
+    void handleCloneEvent() {
+        Rectangle range = new Rectangle(Coordinate.xy(1, 1), Coordinate.xy(4, 4));
+        monsterSettings.add(new NpcSpawnSetting(range, 2, "白狐狸"));
+        when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
     }
 }

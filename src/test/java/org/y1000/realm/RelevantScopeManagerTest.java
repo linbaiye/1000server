@@ -12,7 +12,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RelevantScopeManagerTest extends AbstractUnitTestFixture  {
-    private RelevantScopeManager relevantScopeManager;
+    private AOIManager relevantScopeManager;
     @BeforeEach
     void setUp() {
         relevantScopeManager = new RelevantScopeManager();

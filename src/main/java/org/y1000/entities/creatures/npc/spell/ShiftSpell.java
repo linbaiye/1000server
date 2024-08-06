@@ -19,9 +19,9 @@ public final class ShiftSpell implements NpcSpell {
         return npc.stateEnum() == State.DIE;
     }
 
-    @Override
     public void cast(Npc npc) {
-        npc.emitEvent(new NpcShiftEvent(newNpcName, npc));
+        if (canCast(npc))
+            npc.emitEvent(new NpcShiftEvent(newNpcName, npc));
     }
 
 }

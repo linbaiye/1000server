@@ -17,6 +17,11 @@ public final class MonsterAttributeProvider implements AttributeProvider {
     }
 
     @Override
+    public int viewWidth() {
+        return monsterSdb.getViewWidth(name);
+    }
+
+    @Override
     public int life() {
         return monsterSdb.getLife(name);
     }

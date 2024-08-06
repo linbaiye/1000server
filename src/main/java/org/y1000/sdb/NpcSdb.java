@@ -46,5 +46,7 @@ public interface NpcSdb {
     String getViewName(String name);
 
     String getShape(String name);
+
+    int getViewWidth(String name);
 }
 

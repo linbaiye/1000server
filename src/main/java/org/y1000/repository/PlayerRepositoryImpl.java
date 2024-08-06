@@ -172,7 +172,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     @Override
     public Player load(String token) {
-        return createMale();
+        return createFemale();
+        //return createMale();
     }
 
     @Override

@@ -111,8 +111,8 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
 
     @Override
     public boolean isPassive(String name) {
-        String s = get(name, "boGoodHeart");
-        return "TRUE".equals(s);
+        String s = get(name, "boAutoAttack");
+        return !"TRUE".equals(s);
     }
 
     @Override
@@ -128,6 +128,11 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
     @Override
     public String getHaveMagic(String name) {
         return get(name, "HaveMagic");
+    }
+
+    @Override
+    public int getViewWidth(String name) {
+        return getInt(name, "ViewWidth");
     }
 
 
@@ -170,10 +175,9 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
         Set<String> names = monstersSdb.columnNames();
         Set<String> items = monstersSdb.names();
         for (String i: items) {
-            if (!i.contains("妖")) {
+            if (!"TRUE".equals(monstersSdb.get(i, "boAutoAttack"))) {
                 continue;
             }
-
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {

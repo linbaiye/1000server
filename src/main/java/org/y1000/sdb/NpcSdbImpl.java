@@ -124,6 +124,11 @@ public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
         return get(name, "shape");
     }
 
+    @Override
+    public int getViewWidth(String name) {
+        return getInt(name, "ViewWidth");
+    }
+
     public static void main(String[] args) {
         NpcSdbImpl sdb= NpcSdbImpl.Instance;
 //        Set<String> names = itemSdb.names();

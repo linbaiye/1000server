@@ -11,6 +11,8 @@ public interface AttributeProvider {
     int armor();
     int hit();
 
+    int viewWidth();
+
     default int walkSpeed() {
         return 0;
     }

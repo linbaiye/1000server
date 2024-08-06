@@ -16,6 +16,10 @@ public interface RealmMap {
 
     void free(Entity creature);
 
+    int width();
+
+    int height();
+
     void occupy(DynamicObject dynamicObject);
 
     void free(DynamicObject dynamicObject);

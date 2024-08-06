@@ -102,7 +102,9 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         return findSpell(ShiftSpell.class);
     }
 
-    private <S extends NpcSpell> Optional<S> findSpell(Class<S> type) {
+    @Override
+    public<S extends NpcSpell> Optional<S> findSpell(Class<S> type) {
+        Validate.notNull(type);
         return spells.stream()
                 .filter(npcSpell -> type.isAssignableFrom(npcSpell.getClass()))
                 .findFirst().map(type::cast);
@@ -169,12 +171,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
             findShiftSpell().ifPresentOrElse(shiftSpell -> shiftSpell.cast(this),
                     () -> emitEvent(new RemoveEntityEvent(this)));
         } else {
-            if (stateEnum() == State.HURT) {
-                findSpell(CloneSpell.class).ifPresent(s -> {
-                    if (s.canCast(this))
-                        s.cast(this);
-                });
-            }
+
             action.invoke();
         }
     }

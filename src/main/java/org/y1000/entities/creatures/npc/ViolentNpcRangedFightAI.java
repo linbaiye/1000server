@@ -69,4 +69,5 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
     protected boolean shouldChangeEnemy(AttackableActiveEntity newEnemy) {
         return true;
     }
+
 }

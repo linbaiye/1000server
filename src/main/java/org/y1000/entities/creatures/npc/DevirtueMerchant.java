@@ -71,10 +71,6 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
         ai.onMoveFailed(this);
     }
 
-    @Override
-    public NpcAI AI() {
-        return ai;
-    }
 
     @Override
     public void respawn(Coordinate coordinate) {

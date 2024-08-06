@@ -1,5 +1,7 @@
 package org.y1000.entities.creatures.npc.spell;
 
+import lombok.Getter;
+import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.NpcCastCloneEvent;
 import org.y1000.entities.creatures.npc.Npc;
@@ -8,6 +10,7 @@ public final class CloneSpell implements NpcSpell {
     private boolean casted = false;
     private final int lifePercent;
 
+    @Getter
     private final int number;
 
     public CloneSpell(int lifePercent, int number) {
@@ -21,10 +24,11 @@ public final class CloneSpell implements NpcSpell {
                 ((float)npc.currentLife() / npc.maxLife()) * 100 <= lifePercent;
     }
 
-    @Override
-    public void cast(Npc npc) {
-        casted = true;
-        npc.emitEvent(new NpcCastCloneEvent(npc, number));
+    public void castIfAvailable(Npc npc, AttackableActiveEntity entity) {
+        if (canCast(npc)) {
+            casted = true;
+            npc.emitEvent(new NpcCastCloneEvent(npc, number, entity));
+        }
     }
 
     @Override

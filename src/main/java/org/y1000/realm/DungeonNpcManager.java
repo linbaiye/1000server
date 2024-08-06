@@ -17,8 +17,9 @@ final class DungeonNpcManager extends AbstractNpcManager {
                              NpcFactory npcFactory,
                              GroundItemManager itemManager,
                              CreateEntitySdbRepository createEntitySdbRepository,
-                             MonstersSdb monstersSdb) {
-        super(sender, idGenerator, npcFactory, itemManager, createEntitySdbRepository, monstersSdb);
+                             MonstersSdb monstersSdb,
+                             AOIManager aoiManager) {
+        super(sender, idGenerator, npcFactory, itemManager, createEntitySdbRepository, monstersSdb, aoiManager);
     }
 
 

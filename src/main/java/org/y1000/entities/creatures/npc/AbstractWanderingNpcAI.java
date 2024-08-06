@@ -55,6 +55,7 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
         start(npc);
     }
 
+
     @Override
     public void start(Npc npc) {
         if (destination == null) {
@@ -65,7 +66,7 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
     }
 
     private void onMoveDone(Npc npc) {
-        previousCoordinate = npc.coordinate();
+        previousCoordinate = npc.coordinate().moveBy(npc.direction().opposite());
         if (npc.coordinate().equals(destination)) {
             nextRound(npc);
         } else {

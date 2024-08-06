@@ -40,6 +40,11 @@ public final class EmptyAttributeProvider implements AttributeProvider {
         return 0;
     }
 
+    @Override
+    public int viewWidth() {
+        return 0;
+    }
+
 
     @Override
     public int damage() {

@@ -3,17 +3,18 @@ package org.y1000.entities.creatures.npc;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.players.Damage;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
+
+import java.util.Optional;
 
 public interface Npc extends Creature {
 
     void onActionDone();
 
     void onMoveFailed();
-
-    NpcAI AI();
 
     void move(int millis);
 
@@ -26,6 +27,8 @@ public interface Npc extends Creature {
     Coordinate spawnCoordinate();
 
     void respawn(Coordinate coordinate);
+
+    <S extends NpcSpell> Optional<S> findSpell(Class<S> type);
 
     void startAction(State state);
 

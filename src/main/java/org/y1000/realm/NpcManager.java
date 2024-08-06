@@ -24,8 +24,8 @@ final class NpcManager extends AbstractNpcManager {
     public NpcManager(EntityEventSender sender, EntityIdGenerator idGenerator,
                       NpcFactory npcFactory, GroundItemManager itemManager,
                       CreateEntitySdbRepository createEntitySdbRepository,
-                      MonstersSdb monstersSdb) {
-        super(sender, idGenerator, npcFactory, itemManager, createEntitySdbRepository, monstersSdb);
+                      MonstersSdb monstersSdb, AOIManager aoiManager) {
+        super(sender, idGenerator, npcFactory, itemManager, createEntitySdbRepository, monstersSdb, aoiManager);
         this.respawningEntityManager = new RespawningEntityManager<>();
         this.npcSpawnSettings = new HashMap<>();
     }

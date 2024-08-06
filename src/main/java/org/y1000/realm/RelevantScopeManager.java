@@ -4,7 +4,7 @@ import org.y1000.entities.Entity;
 
 import java.util.*;
 
-final class RelevantScopeManager {
+final class RelevantScopeManager implements AOIManager {
     private final Map<Entity, RelevantScope> relevantScopeMap;
 
     public RelevantScopeManager() {
@@ -22,6 +22,7 @@ final class RelevantScopeManager {
         return entities;
     }
 
+    @Override
     public Set<Entity> add(Entity entity) {
         Objects.requireNonNull(entity);
         if (relevantScopeMap.containsKey(entity)) {
@@ -32,11 +33,13 @@ final class RelevantScopeManager {
         return mutualAdd(scope);
     }
 
-    public Set<Entity> getAllEntities() {
-        return relevantScopeMap.keySet();
+
+    @Override
+    public boolean contains(Entity entity) {
+        return relevantScopeMap.containsKey(entity);
     }
 
-
+    @Override
     public <E extends Entity> Set<E> filterVisibleEntities(Entity entity, Class<E> type) {
         RelevantScope relevantScope = relevantScopeMap.get(entity);
         if (relevantScope == null) {
@@ -46,6 +49,7 @@ final class RelevantScopeManager {
     }
 
 
+    @Override
     public boolean outOfScope(Entity source, Entity target) {
         Objects.requireNonNull(source);
         Objects.requireNonNull(target);
@@ -53,6 +57,7 @@ final class RelevantScopeManager {
                 relevantScopeMap.get(source).outOfScope(target);
     }
 
+    @Override
     public Set<Entity> update(Entity entity) {
         Objects.requireNonNull(entity);
         RelevantScope relevantScope = relevantScopeMap.get(entity);
@@ -69,16 +74,16 @@ final class RelevantScopeManager {
     }
 
 
-    public Set<Entity> remove(Entity entity) {
+    @Override
+    public void remove(Entity entity) {
         Objects.requireNonNull(entity);
         RelevantScope removed = relevantScopeMap.remove(entity);
         if (removed == null)  {
-            return Collections.emptySet();
+            return;
         }
         Set<Entity> entities = removed.filter(Entity.class);
         entities.stream().map(relevantScopeMap::get)
                 .filter(Objects::nonNull)
                 .forEach(scp -> scp.remove(entity));
-        return entities;
     }
 }

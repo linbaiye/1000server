@@ -52,6 +52,11 @@ public final class NonMonsterNpcAttributeProvider implements AttributeProvider {
     }
 
     @Override
+    public int viewWidth() {
+        return 0;
+    }
+
+    @Override
     public Optional<String> attackSound() {
         return getSound(npcSdb.getSoundAttack(name));
     }

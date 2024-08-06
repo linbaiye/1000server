@@ -3,8 +3,10 @@ package org.y1000.realm;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.event.*;
+import org.y1000.entities.creatures.npc.AggressiveNpc;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.sdb.CreateEntitySdbRepository;
@@ -16,7 +18,7 @@ import org.y1000.util.Coordinate;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> implements EntityEventListener {
+abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> implements EntityEventListener {
 
     private final EntityEventSender sender;
 
@@ -36,16 +38,22 @@ public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc
 
     private final Set<Long> cloned;
 
+    private final AOIManager aoiManager;
+
     public AbstractNpcManager(EntityEventSender sender,
                               EntityIdGenerator idGenerator,
                               NpcFactory npcFactory,
                               GroundItemManager itemManager,
                               CreateEntitySdbRepository createEntitySdbRepository,
-                              MonstersSdb monstersSdb) {
+                              MonstersSdb monstersSdb,
+                              AOIManager aoiManager) {
         Validate.notNull(sender);
         Validate.notNull(idGenerator);
         Validate.notNull(itemManager);
+        Validate.notNull(npcFactory);
         Validate.notNull(createEntitySdbRepository);
+        Validate.notNull(monstersSdb);
+        Validate.notNull(aoiManager);
         this.sender = sender;
         this.idGenerator = idGenerator;
         this.npcFactory = npcFactory;
@@ -55,15 +63,18 @@ public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc
         this.createEntitySdbRepository = createEntitySdbRepository;
         linked = new HashMap<>();
         cloned = new HashSet<>();
+        this.aoiManager = aoiManager;
     }
 
 
     void spawnNPCs(CreateNpcSdb createNpcSdb, RealmMap map) {
         List<NpcSpawnSetting> allSettings = createNpcSdb.getAllSettings();
+        int total = 0;
         for (NpcSpawnSetting setting : allSettings) {
             var name = setting.idName();
             for (int i = 0; i < setting.number(); i++) {
                 try {
+                    total += setting.number();
                     Optional<Coordinate> random = setting.range().random(map::movable);
                     random.ifPresentOrElse(p -> addNpc(npcFactory.createNpc(name, idGenerator.next(), map, p)),
                             () -> log().warn("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), map.mapFile()));
@@ -72,6 +83,7 @@ public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc
                 }
             }
         }
+        log().debug("Created {} npc in total.", total);
     }
 
     Optional<CreateNpcSdb> createMonsterSdb(int realmId) {
@@ -150,12 +162,21 @@ public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc
             Coordinate coordinate1 = Coordinate.xy(x, y);
             if (event.npc().realmMap().movable(coordinate1)) {
                 var newNpc = npcFactory.createClonedNpc(event.npc(), idGenerator.next(), coordinate1);
+                if (newNpc instanceof AggressiveNpc aggressiveNpc) {
+                    aggressiveNpc.actAggressively(event.enemy());
+                }
                 addNpc(newNpc);
                 set.add(newNpc);
                 cloned.add(newNpc.id());
             }
         }
         linked.put(event.npc(), set);
+    }
+
+    private void handleSeekPlayerEvent(SeekPlayerEvent event) {
+        Set<Player> players = aoiManager.filterVisibleEntities(event.source(), Player.class);
+        AggressiveNpc npc = event.aggressiveNpc();
+        players.stream().filter(npc::canActAggressively).findFirst().ifPresent(npc::actAggressively);
     }
 
     @Override
@@ -169,6 +190,8 @@ public abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc
             handleShiftEvent(shiftEvent);
         } else if (entityEvent instanceof NpcCastCloneEvent cloneEvent) {
             handleCloneEvent(cloneEvent);
+        } else if (entityEvent instanceof SeekPlayerEvent seekPlayerEvent) {
+            handleSeekPlayerEvent(seekPlayerEvent);
         } else {
             onUnhandledEvent(entityEvent);
         }

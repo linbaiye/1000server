@@ -54,8 +54,8 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
 
     private int getPlayerLastRealm(Player player) {
         //return 20;
-         return 1;
-       // return 49;
+        // return 1;
+        return 49;
     }
 
     private void handleNewConnection(ConnectionEstablishedEvent event) {

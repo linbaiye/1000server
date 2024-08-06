@@ -46,4 +46,6 @@ public interface MonstersSdb {
     boolean attack(String name);
 
     String getHaveMagic(String name);
+
+    int getViewWidth(String name);
 }

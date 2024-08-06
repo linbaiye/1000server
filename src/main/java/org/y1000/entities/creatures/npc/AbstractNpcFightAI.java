@@ -5,12 +5,9 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.npc.spell.NpcSpell;
+import org.y1000.entities.creatures.npc.spell.CloneSpell;
 import org.y1000.message.SetPositionEvent;
-import org.y1000.sdb.NpcSpawnSetting;
 import org.y1000.util.Coordinate;
-
-import java.util.List;
 
 @Slf4j
 public abstract class AbstractNpcFightAI implements NpcAI {
@@ -87,14 +84,16 @@ public abstract class AbstractNpcFightAI implements NpcAI {
         }
     }
 
+
+
     @Override
     public void onActionDone(Npc npc) {
         if (npc.stateEnum() == State.WALK) {
             previous = npc.coordinate().moveBy(npc.direction().opposite());
-            log.debug("Stay {}.", computeStayMillis());
             npc.stay(computeStayMillis());
             return;
         } else if (npc.stateEnum() == State.HURT) {
+            npc.findSpell(CloneSpell.class).ifPresent(s -> s.castIfAvailable(npc, getEnemy()));
             tryChangeEnemy();
         }
         wanderOrFight();
@@ -107,6 +106,7 @@ public abstract class AbstractNpcFightAI implements NpcAI {
 
     @Override
     public void start(Npc npc) {
+        npc.findSpell(CloneSpell.class).ifPresent(s -> s.castIfAvailable(npc, getEnemy()));
         wanderOrFight();
     }
 }

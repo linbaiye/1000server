@@ -6,8 +6,6 @@ public interface NpcSpell {
 
     boolean canCast(Npc npc);
 
-    void cast(Npc npc);
-
     default void reset() {
 
     }

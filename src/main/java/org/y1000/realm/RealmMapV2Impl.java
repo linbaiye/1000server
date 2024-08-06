@@ -124,6 +124,16 @@ final class RealmMapV2Impl implements RealmMap {
         }
     }
 
+    @Override
+    public int width() {
+        return width;
+    }
+
+    @Override
+    public int height() {
+        return height;
+    }
+
     private void addToCoordinateEntityMap(Coordinate coordinate, Entity entity) {
         if (!coordinateEntityMap.containsKey(coordinate)) {
             coordinateEntityMap.put(coordinate, new HashSet<>());
