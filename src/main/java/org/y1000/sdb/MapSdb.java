@@ -1,5 +1,7 @@
 package org.y1000.sdb;
 
+import java.util.Optional;
+
 public interface MapSdb {
 
     String getMapName(int id);
@@ -13,5 +15,7 @@ public interface MapSdb {
     String getObjName(int id);
 
     String getRofName(int id);
+
+    Optional<Integer> getRegenInterval(int id);
 
 }

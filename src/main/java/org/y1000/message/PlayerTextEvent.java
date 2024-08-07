@@ -116,7 +116,7 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
     }
 
     public static PlayerTextEvent havePill(Player player, String pillName) {
-        return new PlayerTextEvent(player, "服用了" + pillName, TextType.CUSTOM, Location.LEFT);
+        return new PlayerTextEvent(player, "服用了" + pillName + "。", TextType.CUSTOM, Location.LEFT);
     }
 
     public static PlayerTextEvent noMorePill(Player player) {

@@ -1,5 +1,6 @@
 package org.y1000.realm;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.RemoveEntityEvent;
@@ -7,7 +8,6 @@ import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.event.EntityEvent;
 import org.y1000.sdb.CreateNpcSdb;
-import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.sdb.MonstersSdb;
 import org.y1000.sdb.NpcSpawnSetting;
 import org.y1000.util.Coordinate;
@@ -21,11 +21,17 @@ final class NpcManager extends AbstractNpcManager {
 
     private final RespawningEntityManager<Npc> respawningEntityManager;
 
-    public NpcManager(EntityEventSender sender, EntityIdGenerator idGenerator,
-                      NpcFactory npcFactory, GroundItemManager itemManager,
-                      CreateEntitySdbRepository createEntitySdbRepository,
-                      MonstersSdb monstersSdb, AOIManager aoiManager) {
-        super(sender, idGenerator, npcFactory, itemManager, createEntitySdbRepository, monstersSdb, aoiManager);
+    @Builder
+    public NpcManager(EntityEventSender sender,
+                      EntityIdGenerator idGenerator,
+                      NpcFactory npcFactory,
+                      GroundItemManager itemManager,
+                      MonstersSdb monstersSdb,
+                      AOIManager aoiManager,
+                      CreateNpcSdb createMonsterSdb,
+                      CreateNpcSdb createNpcSdb,
+                      RealmMap realmMap) {
+        super(sender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, createMonsterSdb, createNpcSdb, realmMap);
         this.respawningEntityManager = new RespawningEntityManager<>();
         this.npcSpawnSettings = new HashMap<>();
     }

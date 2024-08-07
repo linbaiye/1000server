@@ -54,4 +54,5 @@ public interface Npc extends Creature {
     int attackedByAoe(ViolentCreature caster, int hit, Damage damage);
 
     int walkSpeed();
+
 }

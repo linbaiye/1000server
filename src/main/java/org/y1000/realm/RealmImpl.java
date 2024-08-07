@@ -1,5 +1,6 @@
 package org.y1000.realm;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.objects.DynamicObjectFactory;
@@ -63,17 +64,41 @@ final class RealmImpl implements Realm {
         this.id = id;
         this.mapSdb = mapSdb;
         var entityIdGenerator = new EntityIdGenerator();
-        AOIManager scopeManager = new RelevantScopeManager();
-        //GridAOIManager scopeManager = new GridAOIManager(map.width(), map.height());
-        eventSender = new RealmEntityEventSender(scopeManager);
+        AOIManager aoiManager = new RelevantScopeManager();
+//        AOIManager aoiManager = new GridAOIManager(map.width(), map.height());
+        eventSender = new RealmEntityEventSender(aoiManager);
         itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
-        npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager, createEntitySdbRepository, monstersSdb, scopeManager);
+        npcManager = new NpcManager(eventSender, entityIdGenerator, npcFactory, itemManager,  monstersSdb, aoiManager,
+                createEntitySdbRepository.loadMonster(id),
+                createEntitySdbRepository.loadNpc(id), realmMap);
         dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ?  DynamicObjectManager.EMPTY :
                 new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id));
-        shutdown = false;
         this.playerManager = new PlayerManager(eventSender, itemManager, itemFactory, dynamicObjectManager);
         this.teleportManager = new TeleportManager(createGateSdb, entityIdGenerator);
         this.crossRealmEventHandler = crossRealmEventHandler;
+        shutdown = false;
+    }
+
+    @Builder
+    public RealmImpl(int id, RealmMap realmMap,
+                     RealmEntityEventSender eventSender,
+                     ItemManagerImpl itemManager,
+                     NpcManager npcManager,
+                     PlayerManager playerManager,
+                     DynamicObjectManager dynamicObjectManager,
+                     TeleportManager teleportManager,
+                     CrossRealmEventHandler crossRealmEventHandler,
+                     MapSdb mapSdb) {
+        this.realmMap = realmMap;
+        this.eventSender = eventSender;
+        this.itemManager = itemManager;
+        this.npcManager = npcManager;
+        this.playerManager = playerManager;
+        this.dynamicObjectManager = dynamicObjectManager;
+        this.teleportManager = teleportManager;
+        this.id = id;
+        this.crossRealmEventHandler = crossRealmEventHandler;
+        this.mapSdb = mapSdb;
     }
 
     public RealmMap map() {

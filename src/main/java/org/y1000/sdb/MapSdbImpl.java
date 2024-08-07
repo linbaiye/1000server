@@ -3,6 +3,7 @@ package org.y1000.sdb;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Optional;
 import java.util.Set;
 
 public final class MapSdbImpl extends AbstractSdbReader implements MapSdb {
@@ -44,6 +45,12 @@ public final class MapSdbImpl extends AbstractSdbReader implements MapSdb {
     @Override
     public String getRofName(int id) {
         return get(String.valueOf(id), "RofName");
+    }
+
+    @Override
+    public Optional<Integer> getRegenInterval(int id) {
+        Integer anInt = getInt(String.valueOf(id), "RegenInterval");
+        return anInt != null ? Optional.of(anInt)  : Optional.empty();
     }
 
 

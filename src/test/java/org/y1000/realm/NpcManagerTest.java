@@ -149,7 +149,9 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
     @Test
     void handleCloneEvent() {
         Rectangle range = new Rectangle(Coordinate.xy(1, 1), Coordinate.xy(4, 4));
-        monsterSettings.add(new NpcSpawnSetting(range, 2, "白狐狸"));
+        monsterSettings.add(new NpcSpawnSetting(range, 2, "分身忍者"));
         when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
+        npcManager.init(map, 49);
+        Npc npc = npcManager.find(1L).orElseThrow(IllegalAccessError::new);
     }
 }

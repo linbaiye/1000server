@@ -9,7 +9,6 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
-import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.sdb.CreateNpcSdb;
 import org.y1000.sdb.MonstersSdb;
 import org.y1000.sdb.NpcSpawnSetting;
@@ -30,8 +29,6 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     private final GroundItemManager itemManager;
 
-    private final CreateEntitySdbRepository createEntitySdbRepository;
-
     private final MonstersSdb monstersSdb;
 
     private final Map<Npc, Set<Npc>> linked;
@@ -40,30 +37,41 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     private final AOIManager aoiManager;
 
+    private final CreateNpcSdb createMonsterSdb;
+
+    private final CreateNpcSdb createNpcSdb;
+
+    private final RealmMap realmMap;
+
     public AbstractNpcManager(EntityEventSender sender,
                               EntityIdGenerator idGenerator,
                               NpcFactory npcFactory,
                               GroundItemManager itemManager,
-                              CreateEntitySdbRepository createEntitySdbRepository,
                               MonstersSdb monstersSdb,
-                              AOIManager aoiManager) {
+                              AOIManager aoiManager,
+                              CreateNpcSdb createMonsterSdb,
+                              CreateNpcSdb createNpcSdb,
+                              RealmMap realmMap) {
         Validate.notNull(sender);
         Validate.notNull(idGenerator);
         Validate.notNull(itemManager);
         Validate.notNull(npcFactory);
-        Validate.notNull(createEntitySdbRepository);
         Validate.notNull(monstersSdb);
         Validate.notNull(aoiManager);
+        Validate.isTrue(createMonsterSdb != null || createNpcSdb != null);
+        Validate.notNull(realmMap);
+        this.createMonsterSdb = createMonsterSdb;
+        this.createNpcSdb = createNpcSdb;
         this.sender = sender;
         this.idGenerator = idGenerator;
         this.npcFactory = npcFactory;
         this.itemManager = itemManager;
         this.monstersSdb = monstersSdb;
+        this.aoiManager = aoiManager;
+        this.realmMap = realmMap;
         projectileManager = new ProjectileManager();
-        this.createEntitySdbRepository = createEntitySdbRepository;
         linked = new HashMap<>();
         cloned = new HashSet<>();
-        this.aoiManager = aoiManager;
     }
 
 
@@ -87,13 +95,11 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     }
 
     Optional<CreateNpcSdb> createMonsterSdb(int realmId) {
-        return createEntitySdbRepository.monsterSdbExists(realmId) ?
-            Optional.of(createEntitySdbRepository.loadMonster(realmId)) : Optional.empty();
+        return Optional.ofNullable(createMonsterSdb);
     }
 
     Optional<CreateNpcSdb> createNpcSdb(int realmId) {
-        return createEntitySdbRepository.npcSdbExists(realmId) ?
-            Optional.of(createEntitySdbRepository.loadNpc(realmId)) : Optional.empty();
+        return Optional.ofNullable(createNpcSdb);
     }
 
 

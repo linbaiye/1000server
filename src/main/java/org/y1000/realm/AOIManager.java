@@ -6,9 +6,9 @@ import java.util.Set;
 
 interface AOIManager {
     /**
-     * Add entity and return visible entities.
+     * Add a new entity and return visible entities if successful.
      * @param entity entity to add.
-     * @return visible entities.
+     * @return visible entities or empty if previously added.
      * @throws NullPointerException if entity null.
      */
     Set<Entity> add(Entity entity);

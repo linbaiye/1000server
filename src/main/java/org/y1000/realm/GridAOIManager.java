@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 final class GridAOIManager implements AOIManager {
-    private final List<Entity>[][] grids;
+    private final List<Entity>[][] mapGrids;
     private final Map<Entity, Coordinate> currentCoordinates;
     private final int width;
     private final int height;
@@ -16,7 +16,7 @@ final class GridAOIManager implements AOIManager {
     public GridAOIManager(int mapWidth, int mapHeight) {
         Validate.isTrue(mapWidth > 1);
         Validate.isTrue(mapHeight > 1);
-        grids = new List[mapWidth][mapHeight];
+        mapGrids = new List[mapHeight][mapWidth];
         currentCoordinates = new HashMap<>();
         width = mapWidth;
         height = mapHeight;
@@ -24,14 +24,14 @@ final class GridAOIManager implements AOIManager {
 
 
     private Set<Entity> filterVisible(Entity entity, Coordinate coordinate) {
-        int start = Math.max(0, coordinate.x() - entity.VISIBLE_X_RANGE);
-        int end = Math.min(width - 1, coordinate.x() + entity.VISIBLE_X_RANGE);
+        int yStart = Math.max(0, coordinate.y() - entity.VISIBLE_Y_RANGE);
+        int yEnd = Math.min(height - 1, coordinate.y() + entity.VISIBLE_Y_RANGE);
         Set<Entity> result = new HashSet<>();
-        for (int i = start; i <= end; i++) {
-            int jstart = Math.max(0, coordinate.y() - entity.VISIBLE_Y_RANGE);
-            int jend = Math.min(height - 1, coordinate.y() + entity.VISIBLE_Y_RANGE);
-            for (int j = jstart; j <= jend; j++) {
-                List<Entity> entities = grids[i][j];
+        for (int y = yStart; y <= yEnd; y++) {
+            int start = Math.max(0, coordinate.x() - entity.VISIBLE_X_RANGE);
+            int end = Math.min(width - 1, coordinate.x() + entity.VISIBLE_X_RANGE);
+            for (int x = start; x <= end; x++) {
+                List<Entity> entities = mapGrids[y][x];
                 if (entities != null && !entities.isEmpty()) {
                     result.addAll(entities);
                 }
@@ -41,8 +41,6 @@ final class GridAOIManager implements AOIManager {
         return result;
     }
 
-
-
     private Set<Entity> filterVisible(Entity entity) {
         return filterVisible(entity, entity.coordinate());
     }
@@ -50,14 +48,8 @@ final class GridAOIManager implements AOIManager {
     private void cleanEntity(Entity entity) {
         Coordinate coordinate = currentCoordinates.remove(entity);
         if (coordinate != null) {
-            grids[coordinate.x()][coordinate.y()].remove(entity);
+            mapGrids[coordinate.y()][coordinate.x()].remove(entity);
         }
-    }
-
-
-    private boolean coordinateNotChanged(Entity entity) {
-        return currentCoordinates.containsKey(entity) &&
-                currentCoordinates.get(entity).equals(entity.coordinate());
     }
 
 
@@ -65,15 +57,14 @@ final class GridAOIManager implements AOIManager {
     public Set<Entity> add(Entity entity) {
         Validate.notNull(entity);
         Validate.isTrue(entity.coordinate().x() <= width && entity.coordinate().y() <= height);
-        if (coordinateNotChanged(entity)) {
-            return filterVisible(entity);
+        if (contains(entity)) {
+            return Collections.emptySet();
         }
-        cleanEntity(entity);
         Coordinate coordinate = entity.coordinate();
-        if (grids[coordinate.x()][coordinate.y()] == null) {
-            grids[coordinate.x()][coordinate.y()] = new ArrayList<>();
+        if (mapGrids[coordinate.y()][coordinate.x()] == null) {
+            mapGrids[coordinate.y()][coordinate.x()] = new ArrayList<>();
         }
-        grids[coordinate.x()][coordinate.y()].add(entity);
+        mapGrids[coordinate.y()][coordinate.x()].add(entity);
         currentCoordinates.put(entity, entity.coordinate());
         return filterVisible(entity);
     }
@@ -100,16 +91,17 @@ final class GridAOIManager implements AOIManager {
     public boolean outOfScope(Entity source, Entity target) {
         Validate.notNull(source);
         Validate.notNull(target);
-        return !source.canBeSeenAt(target.coordinate());
+        return contains(source) && !source.canBeSeenAt(target.coordinate());
     }
 
     @Override
     public Set<Entity> update(Entity entity) {
         Validate.notNull(entity);
-        if (!contains(entity) || coordinateNotChanged(entity)) {
+        if (!contains(entity)) {
             return Collections.emptySet();
         }
         Set<Entity> previousVisible = filterVisible(entity, currentCoordinates.get(entity));
+        cleanEntity(entity);
         Set<Entity> currentVisible = add(entity);
         Set<Entity> result = new HashSet<>();
         previousVisible.stream().filter(e -> !currentVisible.contains(e)).forEach(result::add);
