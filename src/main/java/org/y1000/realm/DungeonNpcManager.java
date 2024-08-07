@@ -31,12 +31,6 @@ final class DungeonNpcManager extends AbstractNpcManager {
     }
 
 
-    @Override
-    public void update(long delta) {
-        super.update(delta);
-    }
-
-
     private void handleRemoveEvent(RemoveEntityEvent removeEntityEvent) {
         if (removeEntityEvent.source() instanceof Npc npc) {
             removeNpc(npc);
@@ -50,5 +44,11 @@ final class DungeonNpcManager extends AbstractNpcManager {
         if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
             handleRemoveEvent(removeEntityEvent);
         }
+    }
+
+    @Override
+    void init() {
+        createMonsterSdb().ifPresent(this::spawnNPCs);
+        createNpcSdb().ifPresent(this::spawnNPCs);
     }
 }

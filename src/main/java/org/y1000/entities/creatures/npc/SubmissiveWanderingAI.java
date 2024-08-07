@@ -7,10 +7,9 @@ public final class SubmissiveWanderingAI extends AbstractWanderingNpcAI {
 
     @Override
     protected void onHurtDone(Npc npc) {
-        var merchant = (DevirtueMerchant)npc;
-        if (merchant.state() instanceof NpcHurtState hurtState) {
+        if (npc.state() instanceof NpcHurtState hurtState) {
             npc.changeState(hurtState.previousState());
-            npc.state().afterHurt(merchant);
+            npc.state().afterHurt(npc);
         } else {
             throw new IllegalStateException();
         }

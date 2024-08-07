@@ -75,7 +75,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     }
 
 
-    void spawnNPCs(CreateNpcSdb createNpcSdb, RealmMap map) {
+    void spawnNPCs(CreateNpcSdb createNpcSdb) {
         List<NpcSpawnSetting> allSettings = createNpcSdb.getAllSettings();
         int total = 0;
         for (NpcSpawnSetting setting : allSettings) {
@@ -83,9 +83,9 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
             for (int i = 0; i < setting.number(); i++) {
                 try {
                     total += setting.number();
-                    Optional<Coordinate> random = setting.range().random(map::movable);
-                    random.ifPresentOrElse(p -> addNpc(npcFactory.createNpc(name, idGenerator.next(), map, p)),
-                            () -> log().warn("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), map.mapFile()));
+                    Optional<Coordinate> random = setting.range().random(realmMap::movable);
+                    random.ifPresentOrElse(p -> addNpc(npcFactory.createNpc(name, idGenerator.next(), realmMap, p)),
+                            () -> log().warn("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), realmMap.mapFile()));
                 } catch (Exception e) {
                     log().error("Failed to create npc {}.", name, e);
                 }
@@ -94,11 +94,11 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         log().debug("Created {} npc in total.", total);
     }
 
-    Optional<CreateNpcSdb> createMonsterSdb(int realmId) {
+    Optional<CreateNpcSdb> createMonsterSdb() {
         return Optional.ofNullable(createMonsterSdb);
     }
 
-    Optional<CreateNpcSdb> createNpcSdb(int realmId) {
+    Optional<CreateNpcSdb> createNpcSdb() {
         return Optional.ofNullable(createNpcSdb);
     }
 
@@ -155,6 +155,8 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     void removeFromCloned(Npc npc) {
         cloned.remove(npc.id());
     }
+
+    abstract void init();
 
     private void handleCloneEvent(NpcCastCloneEvent event) {
         var set =  new HashSet<Npc>();

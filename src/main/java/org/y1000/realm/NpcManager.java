@@ -62,16 +62,11 @@ final class NpcManager extends AbstractNpcManager {
         respawningNpcs.forEach(this::respawn);
     }
 
-    private void init(CreateNpcSdb createNpcSdb, RealmMap realmMap) {
-        spawnNPCs(createNpcSdb, realmMap);
+    private void init(CreateNpcSdb createNpcSdb) {
+        spawnNPCs(createNpcSdb);
         for (NpcSpawnSetting setting: createNpcSdb.getAllSettings()) {
             npcSpawnSettings.put(setting.idName(), createNpcSdb.getSettings(setting.idName()));
         }
-    }
-
-    public void init(RealmMap realmMap, int realmId) {
-        createMonsterSdb(realmId).ifPresent(sdb -> init(sdb, realmMap));
-        createNpcSdb(realmId).ifPresent(sdb -> init(sdb, realmMap));
     }
 
 
@@ -97,5 +92,11 @@ final class NpcManager extends AbstractNpcManager {
         if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
             handleRemoveEvent(removeEntityEvent);
         }
+    }
+
+    @Override
+    void init() {
+        createMonsterSdb().ifPresent(this::init);
+        createNpcSdb().ifPresent(this::init);
     }
 }

@@ -11,19 +11,36 @@ import java.util.Set;
 
 public class TestingTeleport implements Teleport {
 
-    private final int toRealm = 19;
+    private final int toRealm;
     //private final int toRealm = 19;
 
     //private final Coordinate toCoordinate = Coordinate.xy(122, 66);
-    private final Coordinate toCoordinate = Coordinate.xy(60, 115);
+    private final Coordinate toCoordinate;
     //private final Coordinate toCoordinate = Coordinate.xy(500, 500);
-    private final Coordinate coordinate = Coordinate.xy(97, 44);
+    private final Coordinate coordinate;
 
     private final UnaryAction<RealmEvent> eventHandler;
 
-    public TestingTeleport(UnaryAction<RealmEvent> eventHandler) {
+
+    public TestingTeleport(Coordinate to,
+            Coordinate pos,
+            int toRealm,
+            UnaryAction<RealmEvent> eventHandler) {
         this.eventHandler = eventHandler;
+        this.toCoordinate = to;
+        this.coordinate = pos;
+        this.toRealm = toRealm;
     }
+
+    public static TestingTeleport fox(UnaryAction<RealmEvent> eventHandler) {
+        return  new TestingTeleport( Coordinate.xy(60, 115), Coordinate.xy(97, 44), 19, eventHandler);
+    }
+
+
+    public static TestingTeleport south(UnaryAction<RealmEvent> eventHandler) {
+        return  new TestingTeleport( Coordinate.xy(500, 500), Coordinate.xy(96, 53), 1, eventHandler);
+    }
+
 
     @Override
     public Coordinate coordinate() {

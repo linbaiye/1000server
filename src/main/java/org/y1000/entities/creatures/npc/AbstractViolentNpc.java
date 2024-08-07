@@ -1,6 +1,5 @@
 package org.y1000.entities.creatures.npc;
 
-import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;

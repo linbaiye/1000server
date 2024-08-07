@@ -54,8 +54,8 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
 
     private int getPlayerLastRealm(Player player) {
         //return 20;
-        // return 1;
-        return 49;
+         return 1;
+        //return 49;
     }
 
     private void handleNewConnection(ConnectionEstablishedEvent event) {
@@ -148,24 +148,13 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
         //return List.of(49);
     }
 
+    public static RealmManager create(RealmFactory realmFactory) {
 
-    public static RealmManager create(ItemFactory itemFactory,
-                                      ItemRepository itemRepository,
-                                      NpcFactory npcFactory,
-                                      ItemSdb itemSdb,
-                                      MonstersSdb monstersSdb,
-                                      MapSdb mapSdb,
-                                      CreateEntitySdbRepository createEntitySdbRepository,
-                                      DynamicObjectFactory dynamicObjectFactory,
-                                      CreateGateSdb createGateSdb) {
         List<Integer> realmIds = getRealmIds();
         List<Realm> realmList = new ArrayList<>();
         var manager = new RealmManager();
         for (Integer id : realmIds) {
-            String mapName = mapSdb.getMapName(id);
-            RealmImpl realm = RealmMap.Load(mapName, mapSdb.getTilName(id), mapSdb.getObjName(id), mapSdb.getRofName(id))
-                    .map(m -> new RealmImpl(m, itemRepository, itemFactory, npcFactory, itemSdb, monstersSdb, id, createEntitySdbRepository, dynamicObjectFactory, createGateSdb, manager, mapSdb))
-                    .orElseThrow(() -> new IllegalArgumentException("Map not found."));
+            Realm realm = realmFactory.createRealm(id, manager);
             realmList.add(realm);
         }
         var groupSize = (realmList.size() / 4 ) > 0 ? (realmList.size() / 4) : 1;
@@ -186,6 +175,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
         manager.setRealmGroups(realmGroupMap);
         return manager;
     }
+
 
     @Override
     public void run() {

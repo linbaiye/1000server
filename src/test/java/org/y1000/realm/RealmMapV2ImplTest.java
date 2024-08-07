@@ -113,6 +113,7 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
     @Test
     void files() {
         realmMap = new RealmMapV2Impl(cells, name, "tile", "obj", "rof");
+        assertEquals(name, realmMap.mapFile());
         assertEquals("tile", realmMap.tileFile());
         assertEquals("obj", realmMap.objectFile());
         assertEquals("rof", realmMap.roofFile());

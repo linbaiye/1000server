@@ -39,7 +39,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private Inventory loadInventory() {
         Inventory inventory = new Inventory();
-        inventory.add(itemFactory.createItem("长剑"));
+        inventory.add(itemFactory.createItem("百炼金鳞神剑"));
         inventory.add(itemFactory.createItem("箭", 10000));
         inventory.add(itemFactory.createItem("飞刀", 10000));
         inventory.add(itemFactory.createItem("斗甲"));
@@ -111,7 +111,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 //.coordinate(new Coordinate(309, 148))
                 //.coordinate(new Coordinate(129, 99))
                 //.coordinate(new Coordinate(19, 31)) //修炼洞
-                .coordinate(new Coordinate(98, 46)) //新手村
+                //.coordinate(new Coordinate(98, 46)) //新手村
+                .coordinate(new Coordinate(172, 438)) //僵尸一
                 // .coordinate(new Coordinate(104, 60))
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)
@@ -123,8 +124,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .trouser(itemFactory.createTrouser("女子短裙"))
                 .clothing(itemFactory.createClothing("女子上衣"))
                 .boot(itemFactory.createBoot("女子皮鞋"))
-                .hat(itemFactory.createHat("女子血魔头盔"))
-                .chest(itemFactory.createChest("女子雨中客道袍"))
+                .hat(itemFactory.createHat("女子百炼雨中客斗笠"))
+                .chest(itemFactory.createChest("女子百炼雨中客道袍"))
                 .hair(itemFactory.createHair("女子麻花辫"))
                 .wrist(itemFactory.createWrist("女子太极护腕"))
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)

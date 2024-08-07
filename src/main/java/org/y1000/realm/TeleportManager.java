@@ -68,7 +68,8 @@ public final class TeleportManager {
                      int realmId,
                      UnaryAction<RealmEvent> teleportEventHandler) {
         if (realmId == 49) {
-            realmMap.addTeleport(new TestingTeleport(teleportEventHandler));
+            realmMap.addTeleport(TestingTeleport.fox(teleportEventHandler));
+            realmMap.addTeleport(TestingTeleport.south(teleportEventHandler));
             return;
         }
         createGateSdb.getNames(realmId).forEach(name -> this.createTeleport(realmMap, name, teleportEventHandler));

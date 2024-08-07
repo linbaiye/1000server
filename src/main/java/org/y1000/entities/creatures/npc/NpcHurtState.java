@@ -1,8 +1,10 @@
 package org.y1000.entities.creatures.npc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.AbstractCreatureHurtState;
 import org.y1000.entities.creatures.Creature;
 
+@Slf4j
 public final class NpcHurtState extends AbstractCreatureHurtState<Npc> implements NpcState {
     /**
      * The state before getting hurt.
@@ -18,6 +20,7 @@ public final class NpcHurtState extends AbstractCreatureHurtState<Npc> implement
             this.previousState = hurtState.previousState;
         else
             this.previousState = previousState;
+        log.debug("Hurt millis {}.", totalMillis);
     }
 
     public Creature attacker() {

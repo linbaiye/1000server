@@ -126,7 +126,11 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     private void hurtAction(ViolentCreature attacker) {
         state().moveToHurtCoordinate(this);
         State afterHurt = state().decideAfterHurtState();
-        changeState(new NpcHurtState(getStateMillis(State.HURT), state(), attacker));
+        if (this instanceof ViolentNpc violentNpc) {
+            violentNpc.cooldownRecovery();
+        }
+        int recovery = attributeProvider.recovery() * 10;
+        changeState(new NpcHurtState(recovery, state(), attacker));
         emitEvent(new CreatureHurtEvent(this, afterHurt));
         hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
@@ -171,13 +175,10 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     protected void handleActionDone(Action action) {
         if (stateEnum() == State.DIE) {
             realmMap.free(this);
-            emitEvent(new RemoveEntityEvent(this));
-            log().debug("Free {}.", id());
-            /*findShiftSpell().ifPresentOrElse(shiftSpell -> shiftSpell.cast(this),
-                    () -> {
-                        log().debug("Free {}.", id());
-                        emitEvent(new RemoveEntityEvent(this));
-                    });*/
+            //emitEvent(new RemoveEntityEvent(this));
+            //log().debug("Free {}.", id());
+            findShiftSpell().ifPresentOrElse(shiftSpell -> shiftSpell.cast(this),
+                    () -> emitEvent(new RemoveEntityEvent(this)));
         } else {
             action.invoke();
         }
@@ -187,6 +188,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     public String idName() {
         return attributeProvider().idName();
     }
+
 
     protected boolean doAttacked(Damage damage, int attackerHit,
                                  UnaryAction<Integer> gainAttackExp,

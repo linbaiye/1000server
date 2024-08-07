@@ -14,6 +14,8 @@ import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
+import org.y1000.realm.RealmFactory;
+import org.y1000.realm.RealmFactoryImpl;
 import org.y1000.repository.*;
 import org.y1000.network.*;
 import org.y1000.realm.RealmManager;
@@ -52,15 +54,9 @@ public final class Server {
         itemRepository = repository;
         npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
-        realmManager = RealmManager.create(repository,
-                itemRepository,
-                npcFactory,
-                ItemSdbImpl.INSTANCE,
-                MonstersSdbImpl.INSTANCE,
-                MapSdbImpl.INSTANCE,
-                CreateEntitySdbRepositoryImpl.INSTANCE,
-                dynamicObjectFactory,
-                CreateGateSdbImpl.INSTANCE);
+        RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
+                MapSdbImpl.INSTANCE, CreateEntitySdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE);
+        realmManager = RealmManager.create(realmFactory);
     }
 
 
