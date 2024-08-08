@@ -60,6 +60,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
     private void handleNewConnection(ConnectionEstablishedEvent event) {
         if (playerRealmMap.containsKey(event.player())) {
             // need to close current connection.
+            log.error("Duplicate connection for {}.", event.player());
             return;
         }
         var playerLastRealm = getPlayerLastRealm(event.player());

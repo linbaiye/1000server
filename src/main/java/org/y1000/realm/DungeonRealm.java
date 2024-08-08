@@ -42,7 +42,8 @@ final class DungeonRealm extends AbstractRealm {
                         DynamicObjectManager dynamicObjectManager,
                         TeleportManager teleportManager,
                         CrossRealmEventHandler crossRealmEventHandler,
-                        MapSdb mapSdb, int interval,
+                        MapSdb mapSdb,
+                        int interval,
                         Supplier<LocalDateTime> timeSupplier) {
         super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb);
         Validate.isTrue(interval == 180000 || interval == 360000);
@@ -63,9 +64,9 @@ final class DungeonRealm extends AbstractRealm {
     private boolean isOpening() {
         var minute = dateTimeSupplier.get().getMinute();
         if (isHalfHourInterval()) {
-            return minute <= 5 || minute >= 30 && minute <= 35;
+            return minute <= 4 || minute >= 30 && minute <= 34;
         } else {
-            return minute <= 5;
+            return minute <= 4;
         }
     }
 
@@ -97,7 +98,6 @@ final class DungeonRealm extends AbstractRealm {
         if (isOpening()) {
             acceptTeleport(teleportEvent);
         } else {
-            log.debug("Open in {} seconds, teleport out.", buildTip());
             teleportEvent.getConnection().write(PlayerTextEvent.bottom(teleportEvent.player(), buildTip()));
             getCrossRealmEventHandler().handle(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection()));
         }

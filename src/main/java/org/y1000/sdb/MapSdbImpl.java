@@ -75,7 +75,7 @@ public final class MapSdbImpl extends AbstractSdbReader implements MapSdb {
         Set<String> names = sdb.columnNames();
         Set<String> items = sdb.names();
         for (String i: items) {
-            if (!i.equals("19") && !i.equals("1") && !i.equals("29"))
+            if (!i.equals("19") && !i.equals("1") && !i.equals("29") && !i.equals("20"))
                 continue;
 
             System.out.println("----------------------------");
