@@ -81,12 +81,10 @@ public final class NpcFactoryImpl implements NpcFactory {
         int idle = actionSdb.getActionLength(animate, State.IDLE);
         int hurt = actionSdb.getActionLength(animate, State.HURT);
         int die = actionSdb.getActionLength(animate, State.DIE);
-        int frozen = actionSdb.getActionLength(animate, State.FROZEN);
         result.put(State.IDLE, idle);
         result.put(State.WALK, move);
         result.put(State.HURT, hurt);
         result.put(State.DIE, die);
-        result.put(State.FROZEN, frozen < 100 ? frozen * 10 : frozen);
         return result;
     }
 
@@ -125,6 +123,39 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .build();
     }
 
+    private Npc createSubmissiveMonster(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
+        int actionWidth = monsterSdb.getActionWidth(name);
+        var npcAI = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
+        return SubmissiveNpc.builder()
+                .id(id)
+                .coordinate(coordinate)
+                .direction(Direction.DOWN)
+                .name(monsterSdb.getViewName(name))
+                .realmMap(map)
+                .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
+                .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
+                .ai(npcAI)
+                .spells(spells)
+                .build();
+    }
+
+    private Npc createSubmissiveNpc(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
+        int actionWidth = npcSdb.getActionWidth(name);
+        var npcAI = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
+        return SubmissiveNpc.builder()
+                .id(id)
+                .coordinate(coordinate)
+                .direction(Direction.DOWN)
+                .name(npcSdb.getViewName(name))
+                .realmMap(map)
+                .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
+                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                .ai(npcAI)
+                .spells(spells)
+                .build();
+    }
+
+
     private Npc createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells, NpcAI ai) {
         boolean attack = monsterSdb.attack(name);
         if (attack) {
@@ -141,21 +172,10 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .spells(spells)
                     .build();
         } else {
-            int actionWidth = monsterSdb.getActionWidth(name);
-            var npcAI = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
-            return SubmissiveNpc.builder()
-                    .id(id)
-                    .coordinate(coordinate)
-                    .direction(Direction.DOWN)
-                    .name(monsterSdb.getViewName(name))
-                    .realmMap(map)
-                    .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
-                    .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
-                    .ai(npcAI)
-                    .spells(spells)
-                    .build();
+            return createSubmissiveMonster(name, id, map, coordinate, spells);
         }
     }
+
 
 
     private Npc createMonster(String name, long id, RealmMap realmMap, Coordinate coordinate, List<NpcSpell> spells, NpcAI ai) {
@@ -214,10 +234,12 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
     private Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate) {
-        if (npcSdb.isSeller(name)) {
+        if (npcSdb.isSeller(name) && !StringUtils.isEmpty(npcSdb.getNpcText(name))) {
             return createMerchant(name, id, realmMap, coordinate);
-        } else {
+        } else if (npcSdb.isProtector(name)){
             return createGuardian(name, id, realmMap, coordinate);
+        } else {
+            return createSubmissiveNpc(name, id, realmMap, coordinate, Collections.emptyList());
         }
     }
 

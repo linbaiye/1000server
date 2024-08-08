@@ -15,4 +15,6 @@ public interface ActiveEntityManager<T extends ActiveEntity> extends EntityEvent
         return find(id).filter(t -> type.isAssignableFrom(t.getClass()))
                 .map(type::cast);
     }
+
+    boolean contains(T entity);
 }

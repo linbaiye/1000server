@@ -78,18 +78,16 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     protected abstract boolean checkResourcesAndSendError(Player player);
 
-    protected boolean useAttributeResources(Player player) {
+    protected void useAttributeResources(Player player) {
         var ret = checkAttributeResources(player);
         if (ret != null) {
-            player.emitEvent(ret);
-            return false;
+            return;
         }
         player.consumeLife(parameters.lifeToSwing());
         player.consumeOuterPower(parameters.outerPowerToSwing());
         player.consumeInnerPower(parameters.innerPowerToSwing());
         player.consumePower(parameters.powerToSwing());
         player.emitEvent(new PlayerAttributeEvent(player));
-        return true;
     }
 
     protected abstract PlayerAttackState useResourcesAndCreateState(PlayerImpl player);

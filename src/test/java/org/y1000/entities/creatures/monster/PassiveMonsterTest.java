@@ -10,6 +10,7 @@ import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.Player;
+import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,14 +26,19 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
     void setUp() {
         setup();
         player = playerBuilder().build();
+        var realm = mockRealm(monster.realmMap());
+        player.joinReam(realm);
     }
 
     @Test
     void getHurt() {
         monster.attackedBy(player);
         assertSame(monster.stateEnum(), State.HURT);
+        assertEquals(attributeProvider.recovery() * Realm.STEP_MILLIS, monster.cooldown());
         assertNotNull(eventListener.dequeue(CreatureHurtEvent.class));
         assertNotNull(eventListener.dequeue(EntitySoundEvent.class));
+        monster.update(attributeProvider.recovery() * Realm.STEP_MILLIS);
+        assertEquals(State.ATTACK, monster.stateEnum());
     }
 
     @Test

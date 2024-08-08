@@ -99,6 +99,9 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
    AttribData.cLife     := GetLevel (AttribData.Life) + 2000;      // 기본활력 = 20.00
      */
 
+    public static int lastRealmId() {
+        return 49;
+    }
     private PlayerImpl createFemale() {
         int slot = findSlot();
         Weapon weapon = weapon();
@@ -111,8 +114,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 //.coordinate(new Coordinate(309, 148))
                 //.coordinate(new Coordinate(129, 99))
                 //.coordinate(new Coordinate(19, 31)) //修炼洞
-                //.coordinate(new Coordinate(98, 46)) //新手村
-                .coordinate(new Coordinate(172, 438)) //僵尸一
+                .coordinate(new Coordinate(98, 46)) //新手村
+               // .coordinate(new Coordinate(172, 438)) //僵尸一
                 // .coordinate(new Coordinate(104, 60))
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)

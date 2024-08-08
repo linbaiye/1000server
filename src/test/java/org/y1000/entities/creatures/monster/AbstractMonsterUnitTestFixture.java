@@ -16,7 +16,7 @@ public abstract class AbstractMonsterUnitTestFixture extends AbstractUnitTestFix
     protected RealmMap realmMap;
 
     protected void setup() {
-        realmMap = Mockito.mock(RealmMap.class);
+        realmMap = mockRealmMap();
         attributeProvider = new TestingMonsterAttributeProvider();
         attributeProvider.life = 4000;
         attributeProvider.recovery = 100;

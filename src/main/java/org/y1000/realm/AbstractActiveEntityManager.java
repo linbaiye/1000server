@@ -77,8 +77,8 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
         }
     }
 
-    boolean contains(T entity) {
-        return entities.contains(entity);
+    public boolean contains(T entity) {
+        return !deleting.contains(entity) && entities.contains(entity);
     }
 
 

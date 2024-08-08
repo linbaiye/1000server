@@ -72,7 +72,7 @@ final class NpcManager extends AbstractNpcManager {
 
     @Override
     public void update(long delta) {
-        super.update(delta);
+        doUpdateEntities(delta);
         updateRespawning(delta);
     }
 

@@ -8,6 +8,7 @@ import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.message.AbstractEntityInterpolation;
 import org.y1000.message.NpcInterpolation;
@@ -35,6 +36,11 @@ public final class SubmissiveNpc extends AbstractNpc {
     @Override
     public void update(int delta) {
         state().update(this, delta);
+    }
+
+    @Override
+    void hurt(ViolentCreature attacker) {
+        doHurtAction(attacker, getStateMillis(State.HURT));
     }
 
     @Override

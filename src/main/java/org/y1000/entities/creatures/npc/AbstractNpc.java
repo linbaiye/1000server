@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.AttributeProvider;
-import org.y1000.entities.creatures.npc.spell.CloneSpell;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.creatures.npc.spell.ShiftSpell;
 import org.y1000.entities.players.Damage;
@@ -117,20 +116,21 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         switch (state) {
             case IDLE -> idle();
             case DIE -> die();
-            //case FROZEN -> freeze();
             case WALK -> move(getStateMillis(State.WALK));
         }
     }
 
+    /**
+     * Invoked when the npc gets hurt.
+     * @param attacker the attacker.
+     */
+    abstract void hurt(ViolentCreature attacker) ;
 
-    private void hurtAction(ViolentCreature attacker) {
+
+    void doHurtAction(ViolentCreature attacker, int millis) {
         state().moveToHurtCoordinate(this);
         State afterHurt = state().decideAfterHurtState();
-        if (this instanceof ViolentNpc violentNpc) {
-            violentNpc.cooldownRecovery();
-        }
-        int recovery = attributeProvider.recovery() * 10;
-        changeState(new NpcHurtState(recovery, state(), attacker));
+        changeState(new NpcHurtState(millis, state(), attacker));
         emitEvent(new CreatureHurtEvent(this, afterHurt));
         hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
@@ -175,8 +175,6 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     protected void handleActionDone(Action action) {
         if (stateEnum() == State.DIE) {
             realmMap.free(this);
-            //emitEvent(new RemoveEntityEvent(this));
-            //log().debug("Free {}.", id());
             findShiftSpell().ifPresentOrElse(shiftSpell -> shiftSpell.cast(this),
                     () -> emitEvent(new RemoveEntityEvent(this)));
         } else {
@@ -197,9 +195,9 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
             return false;
         }
         if (currentLife() > 0) {
-            hurtAction(attacker);
+            hurt(attacker);
         } else {
-            startAction(State.DIE);
+            die();
         }
         return true;
     }

@@ -51,4 +51,9 @@ final class DungeonNpcManager extends AbstractNpcManager {
         createMonsterSdb().ifPresent(this::spawnNPCs);
         createNpcSdb().ifPresent(this::spawnNPCs);
     }
+
+    @Override
+    public void update(long delta) {
+        doUpdateEntities(delta);
+    }
 }

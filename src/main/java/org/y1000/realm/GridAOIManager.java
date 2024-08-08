@@ -7,6 +7,7 @@ import org.y1000.util.Coordinate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// buggy.
 final class GridAOIManager implements AOIManager {
     private final List<Entity>[][] mapGrids;
     private final Map<Entity, Coordinate> currentCoordinates;

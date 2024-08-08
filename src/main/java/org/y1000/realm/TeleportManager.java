@@ -72,6 +72,6 @@ public final class TeleportManager {
             realmMap.addTeleport(TestingTeleport.south(teleportEventHandler));
             return;
         }
-        createGateSdb.getNames(realmId).forEach(name -> this.createTeleport(realmMap, name, teleportEventHandler));
+        createGateSdb.getNames(realmId).forEach(name -> createTeleport(realmMap, name, teleportEventHandler));
     }
 }

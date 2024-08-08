@@ -16,9 +16,14 @@ public class RealmTeleportEvent implements RealmEvent {
     private Connection connection;
 
     public RealmTeleportEvent(Player player, int realmId, Coordinate toCoordinate) {
+        this(player, realmId, toCoordinate, null);
+    }
+
+    public RealmTeleportEvent(Player player, int realmId, Coordinate toCoordinate, Connection connection) {
         this.player = player;
         this.realmId = realmId;
         this.toCoordinate = toCoordinate;
+        this.connection = connection;
     }
 
     @Override

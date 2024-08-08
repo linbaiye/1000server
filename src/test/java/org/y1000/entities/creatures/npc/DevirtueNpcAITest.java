@@ -57,29 +57,13 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
         merchant.registerEventListener(testingEventListener);
     }
 
-    @Test
-    void afterFrozen() {
-        when(map.movable(any(Coordinate.class))).thenReturn(true);
-        merchant.changeState(NpcCommonState.freeze(MONSTER_STATE_MILLIS.get(State.FROZEN)));
-        merchant.update(MONSTER_STATE_MILLIS.get(State.FROZEN));
-        assertEquals(State.IDLE, merchant.stateEnum());
-        assertNotNull(testingEventListener.removeFirst(SetPositionEvent.class));
-
-        merchant.changeCoordinate(Coordinate.xy(2, 1));
-        merchant.changeDirection(Direction.LEFT);
-        testingEventListener.clearEvents();
-        merchant.changeState(NpcCommonState.freeze(MONSTER_STATE_MILLIS.get(State.FROZEN)));
-        merchant.update(MONSTER_STATE_MILLIS.get(State.FROZEN));
-        assertEquals(State.WALK, merchant.stateEnum());
-        assertNotNull(testingEventListener.removeFirst(NpcMoveEvent.class));
-    }
 
     @Test
     void afterIdle() {
+        when(map.movable(any(Coordinate.class))).thenReturn(true);
+        var previousDire = merchant.direction();
         merchant.update(merchant.getStateMillis(State.IDLE));
-        assertEquals(State.FROZEN, merchant.stateEnum());
-        assertInstanceOf(NpcCommonState.class, merchant.state());
-        assertNotNull(testingEventListener.removeFirst(NpcChangeStateEvent.class));
+        assertTrue(previousDire != merchant.direction() || State.WALK == merchant.stateEnum());
     }
 
     @Test
@@ -112,6 +96,7 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
         assertNotNull(testingEventListener.removeFirst(EntitySoundEvent.class));
         testingEventListener.clearEvents();
         merchant.update(merchant.getStateMillis(State.HURT));
+        assertEquals(State.IDLE, merchant.stateEnum());
     }
 
     @Test

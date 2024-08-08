@@ -230,12 +230,15 @@ final class RealmEntityEventSender implements EntityEventListener,
 
 
     public void add(Player player, Connection connection) {
+        Validate.notNull(player);
+        Validate.notNull(connection);
         playerConnectionMap.put(player, connection);
         add(player);
     }
 
 
     public void add(Entity entity) {
+        Validate.notNull(entity);
         if (scopeManager.contains(entity)) {
             return;
         }
@@ -250,6 +253,7 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void sendEvent(EntityEvent entityEvent) {
+        Validate.notNull(entityEvent);
         entityEvent.accept(this);
     }
 

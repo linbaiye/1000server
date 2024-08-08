@@ -103,8 +103,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     }
 
 
-    @Override
-    public void update(long delta) {
+    void doUpdateEntities(long delta) {
         updateManagedEntities(delta);
         projectileManager.update(delta);
     }

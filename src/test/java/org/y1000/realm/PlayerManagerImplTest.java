@@ -9,14 +9,13 @@ import org.y1000.item.ItemFactory;
 import org.y1000.message.clientevent.ClientTradePlayerEvent;
 import org.y1000.message.clientevent.ClientTriggerDynamicObjectEvent;
 import org.y1000.message.clientevent.ClientUpdateTradeEvent;
-import org.y1000.network.Connection;
 import org.y1000.realm.event.PlayerDataEvent;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-class PlayerManagerTest {
-    private PlayerManager playerManager;
+class PlayerManagerImplTest {
+    private PlayerManagerImpl playerManager;
 
     private EntityEventSender eventSender;
 
@@ -37,7 +36,7 @@ class PlayerManagerTest {
         itemManager = Mockito.mock(GroundItemManager.class);
         itemFactory = Mockito.mock(ItemFactory.class);
         dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);
-        playerManager = new PlayerManager(eventSender, itemManager, itemFactory, tradeManager, dynamicObjectManager);
+        playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, tradeManager, dynamicObjectManager);
         realm = Mockito.mock(Realm.class);
     }
 

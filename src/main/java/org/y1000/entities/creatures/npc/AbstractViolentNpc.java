@@ -3,6 +3,7 @@ package org.y1000.entities.creatures.npc;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
+import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
@@ -109,6 +110,12 @@ public abstract class AbstractViolentNpc
         }
     }
 
+    @Override
+    void hurt(ViolentCreature attacker) {
+        cooldownRecovery();
+        doHurtAction(attacker, recoveryCooldown());
+    }
+
     private void doAttackAction(NpcState attackState) {
         cooldownAttack();
         changeState(attackState);
@@ -139,8 +146,8 @@ public abstract class AbstractViolentNpc
 
     protected void doUpdate(int delta) {
         cooldown(delta);
-        state().update(this, delta);
         skill().ifPresent(s -> s.cooldown(delta));
+        state().update(this, delta);
     }
 
     @Override

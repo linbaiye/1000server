@@ -18,4 +18,10 @@ public interface MapSdb {
 
     Optional<Integer> getRegenInterval(int id);
 
+    int getTargetServerID(int id);
+
+    int getTargetX(int id);
+
+    int getTargetY(int id);
+
 }

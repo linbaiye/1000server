@@ -115,6 +115,10 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         return new PlayerTextEvent(player, text, TextType.CUSTOM, Location.LEFT);
     }
 
+    public static PlayerTextEvent bottom(Player player, String text) {
+        return new PlayerTextEvent(player, text, TextType.CUSTOM, Location.DOWN);
+    }
+
     public static PlayerTextEvent havePill(Player player, String pillName) {
         return new PlayerTextEvent(player, "服用了" + pillName + "。", TextType.CUSTOM, Location.LEFT);
     }
@@ -182,7 +186,7 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
     }
 
     public static PlayerTextEvent pickedItem(Player player, String name, int number) {
-        return new PlayerTextEvent(player, "获得 " + name + " " + number + "个", TextType.CUSTOM, Location.LEFT);
+        return new PlayerTextEvent(player, "获得 " + name + " " + number + "个。", TextType.CUSTOM, Location.LEFT);
     }
 
 }

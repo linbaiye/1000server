@@ -8,6 +8,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
@@ -28,7 +29,7 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
 
     private final List<MerchantItem> buyItems;
     private final List<MerchantItem> sellItems;
-    private final String textFileName;
+    private final String itemsFileName;
 
     @Builder
     public DevirtueMerchant(long id, Coordinate coordinate, Direction direction,
@@ -45,7 +46,7 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
         Validate.notNull(buy);
         Validate.notNull(textFileName);
         Validate.notNull(ai);
-        this.textFileName = textFileName;
+        this.itemsFileName = textFileName;
         this.ai = ai;
         this.buyItems = buy;
         this.sellItems = sell;
@@ -61,7 +62,7 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
     @Override
     public AbstractCreatureInterpolation captureInterpolation() {
         return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), viewName(),
-                NpcType.MERCHANT, attributeProvider().animate(), attributeProvider().shape(), textFileName);
+                NpcType.MERCHANT, attributeProvider().animate(), attributeProvider().shape(), itemsFileName);
     }
 
     @Override
@@ -160,6 +161,11 @@ public final class DevirtueMerchant extends AbstractNpc implements Merchant {
         if (player.inventory().canBuy(items, cost) && canSell(items)) {
             player.inventory().buy(items, cost, player, itemCreator);
         }
+    }
+
+    @Override
+    void hurt(ViolentCreature attacker) {
+        doHurtAction(attacker, getStateMillis(State.HURT));
     }
 
     @Override

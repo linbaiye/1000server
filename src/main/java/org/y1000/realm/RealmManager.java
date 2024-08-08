@@ -16,6 +16,7 @@ import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.event.ConnectionEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
+import org.y1000.repository.PlayerRepositoryImpl;
 import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.sdb.CreateGateSdb;
 import org.y1000.sdb.MapSdb;
@@ -53,9 +54,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
     }
 
     private int getPlayerLastRealm(Player player) {
-        //return 20;
-         return 1;
-        //return 49;
+        return PlayerRepositoryImpl.lastRealmId();
     }
 
     private void handleNewConnection(ConnectionEstablishedEvent event) {

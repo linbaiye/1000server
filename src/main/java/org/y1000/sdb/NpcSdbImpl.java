@@ -135,10 +135,9 @@ public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
         Set<String> names = sdb.columnNames();
         Set<String> items = sdb.names();
         for (String i: items) {
-            if (StringUtils.isEmpty(sdb.getHaveItem(i))) {
+            if (!sdb.getViewName(i).contains("九尾狐")) {
                 continue;
             }
-
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {

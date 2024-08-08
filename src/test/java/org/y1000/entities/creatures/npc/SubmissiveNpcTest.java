@@ -2,6 +2,7 @@ package org.y1000.entities.creatures.npc;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
@@ -10,6 +11,7 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
+import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.network.gen.CreatureInterpolationPacket;
 import org.y1000.realm.RealmMap;
@@ -19,20 +21,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-class SubmissiveNpcTest extends AbstractUnitTestFixture  {
+class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
 
     private SubmissiveNpc npc;
 
     private RealmMap mockedMap;
 
+    private TestingMonsterAttributeProvider attributeProvider;
+
     @BeforeEach
     void setUp() {
-        TestingMonsterAttributeProvider attributeProvider = new TestingMonsterAttributeProvider();
+        attributeProvider = new TestingMonsterAttributeProvider();
         attributeProvider.life = 1;
         attributeProvider.avoidance = 0;
         mockedMap = Mockito.mock(RealmMap.class);
-        npc = SubmissiveNpc.builder()
+        npc = createNpc(NpcFrozenAI.INSTANCE);
+    }
+
+    private SubmissiveNpc createNpc(NpcAI ai) {
+        return SubmissiveNpc.builder()
                 .id(1L)
                 .name("test")
                 .realmMap(mockedMap)
@@ -40,10 +49,10 @@ class SubmissiveNpcTest extends AbstractUnitTestFixture  {
                 .direction(Direction.DOWN)
                 .coordinate(Coordinate.xy(2, 3))
                 .attributeProvider(attributeProvider)
-                .ai(NpcFrozenAI.INSTANCE)
+                .ai(ai)
                 .build();
-
     }
+
 
     @Test
     void interpolation() {
@@ -95,5 +104,18 @@ class SubmissiveNpcTest extends AbstractUnitTestFixture  {
         RemoveEntityEvent removeEntityEvent = eventListener.removeFirst(RemoveEntityEvent.class);
         assertEquals(npc.id(), removeEntityEvent.toPacket().getRemoveEntity().getId());
         Mockito.verify(mockedMap, Mockito.times(1)).free(npc);
+    }
+
+    @Test
+    void attackedByPlayer() {
+        TestingEventListener eventListener = new TestingEventListener();
+        attributeProvider.life = 1000;
+        npc = createNpc(new SubmissiveWanderingAI());
+        npc.registerEventListener(eventListener);
+        Player player = mockEnemyPlayer(npc.coordinate());
+        while (!npc.attackedBy(player)) ;
+        assertEquals(State.HURT, npc.stateEnum());
+        npc.update(npc.getStateMillis(State.HURT));
+        assertEquals(State.IDLE, npc.stateEnum());
     }
 }

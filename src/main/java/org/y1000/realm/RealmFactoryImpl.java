@@ -81,7 +81,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
         var dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ? null :
                 new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id));
-        var playerManager = new PlayerManager(eventSender, itemManager, itemFactory, dynamicObjectManager);
+        var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager);
         var teleportManager = new TeleportManager(createGateSdb, entityIdGenerator);
         var builder = RealmBuilder.builder()
                 .id(id)
@@ -105,7 +105,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         private RealmEntityEventSender eventSender;
         private ItemManagerImpl itemManager;
         private AbstractNpcManager npcManager;
-        private PlayerManager playerManager;
+        private PlayerManagerImpl playerManager;
         private DynamicObjectManager dynamicObjectManager;
         private TeleportManager teleportManager;
         private int id;
@@ -139,7 +139,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder playerManager(PlayerManager playerManager) {
+        public RealmBuilder playerManager(PlayerManagerImpl playerManager) {
             this.playerManager = playerManager;
             return this;
         }

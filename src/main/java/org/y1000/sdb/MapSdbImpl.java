@@ -53,6 +53,21 @@ public final class MapSdbImpl extends AbstractSdbReader implements MapSdb {
         return anInt != null ? Optional.of(anInt)  : Optional.empty();
     }
 
+    @Override
+    public int getTargetServerID(int id) {
+        return getInt(String.valueOf(id), "TargetServerID");
+    }
+
+    @Override
+    public int getTargetX(int id) {
+        return getInt(String.valueOf(id), "TargetX");
+    }
+
+    @Override
+    public int getTargetY(int id) {
+        return getInt(String.valueOf(id), "TargetY");
+    }
+
 
     public static void main(String[] args) {
         MapSdbImpl sdb = MapSdbImpl .INSTANCE;
