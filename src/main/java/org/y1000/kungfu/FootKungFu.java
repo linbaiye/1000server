@@ -56,7 +56,7 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
             snd = sound + 1;
         }
         eventSender.invoke(new EntitySoundEvent(player, String.valueOf(snd)));
-        if (gainExp(ExperienceUtil.DEFAULT_EXP)) {
+        if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
             eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
         }
         int life = applyLevelToValue(eventResourceParameters.life());

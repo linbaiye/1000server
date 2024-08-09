@@ -131,7 +131,7 @@ class ProtectKungFuTest {
 
     @Test
     void gainExp() {
-        assertTrue(protectKungFu.gainExp(1000));
+        assertTrue(protectKungFu.gainPermittedExp(1000));
         assertEquals(159, protectKungFu.level());
     }
 
@@ -142,7 +142,7 @@ class ProtectKungFuTest {
         assertEquals(protectKungFu.armArmor(), 3);
         assertEquals(10, protectKungFu.legArmor());
         while (protectKungFu.level() != 9999)
-            protectKungFu.gainExp(10000);
+            protectKungFu.gainPermittedExp(10000);
         assertEquals(protectKungFu.bodyArmor(), 2);
         assertEquals(32, protectKungFu.legArmor());
     }

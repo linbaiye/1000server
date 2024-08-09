@@ -29,6 +29,9 @@ public abstract class AbstractTeleport implements Teleport {
 
     private final Coordinate toCoordinate;
 
+    private final Coordinate rejectCoordinate;
+    private final int realmId;
+
     public AbstractTeleport(long id,
                             String idName,
                             CreateGateSdb createGateSdb,
@@ -45,6 +48,8 @@ public abstract class AbstractTeleport implements Teleport {
         this.teleportEventHandler = teleportEventHandler;
         Validate.notNull(coordinate);
         Validate.notNull(toCoordinate);
+        rejectCoordinate = Coordinate.Empty;
+        realmId = 0;
     }
 
     public long id() {

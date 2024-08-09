@@ -5,6 +5,8 @@ import org.y1000.entities.players.Player;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.util.Coordinate;
 
+import java.util.Set;
+
 interface PlayerManager extends ActiveEntityManager<Player> {
     void onPlayerConnected(Player player, Realm realm);
 
@@ -17,4 +19,6 @@ interface PlayerManager extends ActiveEntityManager<Player> {
 
     void onClientEvent(PlayerDataEvent dataEvent,
                        ActiveEntityManager<Npc> npcManager);
+
+    Set<Player> allPlayers();
 }

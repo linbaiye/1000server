@@ -1,14 +1,9 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.npc.NpcFactory;
-import org.y1000.entities.objects.DynamicObjectFactory;
-import org.y1000.item.ItemFactory;
 import org.y1000.entities.players.Player;
-import org.y1000.item.ItemSdb;
 import org.y1000.realm.event.RealmEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
-import org.y1000.repository.ItemRepository;
 import org.y1000.network.Connection;
 import org.y1000.network.ConnectionEventType;
 import org.y1000.network.event.ConnectionDataEvent;
@@ -17,10 +12,6 @@ import org.y1000.network.event.ConnectionEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.PlayerDisconnectedEvent;
 import org.y1000.repository.PlayerRepositoryImpl;
-import org.y1000.sdb.CreateEntitySdbRepository;
-import org.y1000.sdb.CreateGateSdb;
-import org.y1000.sdb.MapSdb;
-import org.y1000.sdb.MonstersSdb;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -38,6 +29,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
     private final Queue<ConnectionEvent> eventQueue;
 
     private Map<Integer, RealmGroup> realmGroups;
+
 
     private volatile boolean shutdown;
 
@@ -75,6 +67,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
         group.handle(new ConnectionEstablishedEvent(playerLastRealm, event.player(), event.connection()));
     }
 
+
     private void sendDataToRealm(ConnectionDataEvent dataEvent) {
         Player player = connectionPlayerMap.get(dataEvent.connection());
         if (player == null) {
@@ -85,7 +78,6 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
         int realmId = playerRealmMap.get(player);
         realmGroups.get(realmId).handle(new PlayerDataEvent(realmId, player, dataEvent.data()));
     }
-
 
 
     private void handleDisconnection(Connection connection) {
@@ -165,7 +157,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
             if (i == groupSize - 1) {
                 end += left;
             }
-            RealmGroup group = new RealmGroup(realmList.subList(start, end));
+            RealmGroup group = new RealmGroup(realmList.subList(start, end), realmFactory, manager);
             groups.add(group);
         }
         Map<Integer, RealmGroup> realmGroupMap = new HashMap<>();

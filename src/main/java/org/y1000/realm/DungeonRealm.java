@@ -3,6 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.sdb.MapSdb;
@@ -18,6 +19,8 @@ final class DungeonRealm extends AbstractRealm {
     private final int interval;
 
     private final Supplier<LocalDateTime> dateTimeSupplier;
+
+    private boolean closing;
 
     public DungeonRealm(int id,
                         RealmMap realmMap,
@@ -50,6 +53,7 @@ final class DungeonRealm extends AbstractRealm {
         Validate.notNull(timeSupplier);
         this.interval = interval;
         this.dateTimeSupplier = timeSupplier;
+        closing = false;
     }
 
     @Override
@@ -57,7 +61,7 @@ final class DungeonRealm extends AbstractRealm {
         return log;
     }
 
-    private boolean isHalfHourInterval() {
+    public boolean isHalfHourInterval() {
         return interval == 180000;
     }
 
@@ -69,6 +73,7 @@ final class DungeonRealm extends AbstractRealm {
             return minute <= 4;
         }
     }
+
 
     private String buildTip() {
         var now = dateTimeSupplier.get();
@@ -95,6 +100,10 @@ final class DungeonRealm extends AbstractRealm {
 
     @Override
     void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
+        if (closing) {
+            teleportEvent.getConnection().write(PlayerTextEvent.bottom(teleportEvent.player(), "当前无法进入，请稍后重试。"));
+            getCrossRealmEventHandler().handle(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection()));
+        }
         if (isOpening()) {
             acceptTeleport(teleportEvent);
         } else {
@@ -111,8 +120,27 @@ final class DungeonRealm extends AbstractRealm {
         return Coordinate.xy(getMapSdb().getTargetX(id()), getMapSdb().getTargetY(id()));
     }
 
+    private void teleportOut(Player player) {
+        onPlayerTeleport(new RealmTeleportEvent(player, exitRealmIt(), exitCoordinate()));
+    }
+
+    public void close() {
+        if (closing) {
+            return;
+        }
+        closing = true;
+        playerManager().allPlayers().forEach(this::teleportOut);
+    }
+
     @Override
     public void update() {
         doUpdateEntities();
+    }
+
+    @Override
+    public String toString() {
+        return "DungeonRealm{" +
+                "id =" + id() +
+                '}';
     }
 }

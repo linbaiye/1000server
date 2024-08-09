@@ -19,6 +19,8 @@ import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.util.Coordinate;
 
+import java.util.Set;
+
 
 @Slf4j
 final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implements PlayerEventVisitor, PlayerManager {
@@ -146,6 +148,11 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         } else {
             dataEvent.player().handleClientEvent(dataEvent.data());
         }
+    }
+
+    @Override
+    public Set<Player> allPlayers() {
+        return getEntities();
     }
 
     @Override

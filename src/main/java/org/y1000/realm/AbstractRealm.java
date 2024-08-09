@@ -92,6 +92,7 @@ abstract class AbstractRealm implements Realm {
         if (dynamicObjectManager != null)
             dynamicObjectManager.init(this.map());
         teleportManager.init(this.map(), id, this::onPlayerTeleport);
+        log().debug("Initialized {}.", this);
     }
 
     MapSdb getMapSdb() {
@@ -101,7 +102,6 @@ abstract class AbstractRealm implements Realm {
     public int id() {
         return id;
     }
-
 
 
     void onPlayerTeleport(RealmEvent event) {
@@ -126,6 +126,9 @@ abstract class AbstractRealm implements Realm {
 
     abstract void handleTeleportEvent(RealmTeleportEvent teleportEvent);
 
+    PlayerManager playerManager() {
+        return playerManager;
+    }
 
     public void handle(RealmEvent event) {
         try {

@@ -76,7 +76,6 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         entity.registerEventListener(this);
         eventSender.notifyVisiblePlayers(entity, entity.captureInterpolation());
         add(entity);
-        log.debug("Added object {}.", entity.id());
     }
 
     private void tryRespawn(RespawnDynamicObject respawnDynamicObject) {

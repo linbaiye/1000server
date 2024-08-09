@@ -5,7 +5,6 @@ import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.*;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.kungfu.attack.SwordKungFu;
 import org.y1000.util.Coordinate;
 
 public final class PlayerRepositoryImpl implements PlayerRepository {
@@ -74,18 +73,26 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         //return (Weapon) itemFactory.createItem("太极斧");
     }
 
+    private void levelUp(KungFu kungFu) {
+        while (kungFu.level() < 9999) {
+            kungFu.gainPermittedExp(ExperienceUtil.MAX_EXP);
+        }
+    }
+
     private KungFuBook loadKungFuBook() {
         KungFuBook kungFuBook = kungFuBookFactory.create();
         kungFuBook.addToBasic(AssistantKungFu.builder().name("风灵旋").exp(0).eightDirection(false).build());
-        kungFuBook.addToBasic(AssistantKungFu.builder().name("灵动八方").exp(ExperienceUtil.MAX_EXP).eightDirection(true).build());
+        AssistantKungFu ld = AssistantKungFu.builder().name("灵动八方").exp(ExperienceUtil.MAX_EXP).eightDirection(true).build();
+        levelUp(ld);
+        kungFuBook.addToBasic(ld);
         KungFu sword = ((KungFuFactory) kungFuBookFactory).create("壁射剑法");
-        sword.gainExp(ExperienceUtil.MAX_EXP);
+        levelUp(sword);
         kungFuBook.addToBasic(sword);
         var prot = ((KungFuFactory) kungFuBookFactory).create("金钟罩");
-        prot.gainExp(ExperienceUtil.MAX_EXP);
+        levelUp(prot);
         kungFuBook.addToBasic(prot);
         var bufa = ((KungFuFactory) kungFuBookFactory).create("幻魔身法");
-        bufa.gainExp(ExperienceUtil.MAX_EXP);
+        levelUp(bufa);
         kungFuBook.addToBasic(bufa);
         return kungFuBook;
     }

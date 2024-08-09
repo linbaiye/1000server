@@ -575,7 +575,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void gainAssistantExp() {
         while (player.attackKungFu().level() < 9999) {
-            player.attackKungFu().gainExp(ExperienceUtil.DEFAULT_EXP);
+            player.attackKungFu().gainPermittedExp(ExperienceUtil.DEFAULT_EXP);
         }
         enableAssistant8KungFu();
         assertTrue(player.assistantKungFu().isPresent());

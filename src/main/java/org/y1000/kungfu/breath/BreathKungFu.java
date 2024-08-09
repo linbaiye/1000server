@@ -83,7 +83,7 @@ public final class BreathKungFu extends AbstractKungFu {
         player.gainInnerPower(computeResource(player.maxInnerPower(), parameters.innerPower()));
         player.gainOuterPower(computeResource(player.maxOuterPower(), parameters.outerPower()));
         eventSender.invoke(new PlayerAttributeEvent(player));
-        if (gainExp(ExperienceUtil.DEFAULT_EXP)) {
+        if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
             eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
         }
     }

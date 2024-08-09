@@ -41,6 +41,10 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
         handleAdding();
     }
 
+    Set<T> getEntities() {
+        return entities;
+    }
+
 
     private void handleAdding() {
         adding.forEach(this::doAdd);

@@ -34,4 +34,9 @@ final class RealmImpl extends AbstractRealm {
     public void update() {
         doUpdateEntities();
     }
+
+    @Override
+    public String toString() {
+        return "RealmImpl {id = " + id() + "}";
+    }
 }

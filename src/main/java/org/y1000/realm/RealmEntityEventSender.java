@@ -48,7 +48,6 @@ final class RealmEntityEventSender implements EntityEventListener,
             playerConnectionMap.get(player).write(serverMessage);
     }
 
-
     private void notifyOutsightOrInsight(Entity moved,
                                          Entity affected) {
         boolean outOfView = scopeManager.outOfScope(moved, affected);

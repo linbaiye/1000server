@@ -589,7 +589,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             return;
         }
         var exp = ExperienceUtil.DEFAULT_EXP - damagedLifeToExp(bodyDamage);
-        if (protectKungFu.gainExp(exp)) {
+        if (protectKungFu.gainPermittedExp(exp)) {
             emitEvent(new PlayerGainExpEvent(this, protectKungFu.name(), protectKungFu.level()));
         }
     }
@@ -970,7 +970,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             emitEvent(PlayerTextEvent.armLifeTooLowToExp(this));
             return;
         }
-        if (kungFu.gainExp(amount)) {
+        if (kungFu.gainPermittedExp(amount)) {
             emitEvent(new PlayerGainExpEvent(this, kungFu.name(), kungFu.level()));
         }
     }

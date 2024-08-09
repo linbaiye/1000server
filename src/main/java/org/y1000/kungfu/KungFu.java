@@ -11,7 +11,7 @@ public interface KungFu {
      * @param value exp
      * @return true if level up.
      */
-    boolean gainExp(int value);
+    boolean gainPermittedExp(int value);
 
 
     KungFuType kungFuType();

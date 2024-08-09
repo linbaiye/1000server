@@ -170,12 +170,12 @@ public final class RealmFactoryImpl implements RealmFactory {
         }
 
         public Realm buildNormal() {
-            log.debug("Creating normal realm {}, eventsender {}.", id, eventSender);
+            log.debug("Creating normal realm {}.", id);
             return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb);
         }
 
         public Realm buildDungeon(int interval) {
-            log.debug("Creating dungeon realm {}, eventsender {}.", id, eventSender);
+            log.debug("Creating dungeon realm {}.", id);
             return new DungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, interval);
         }
     }
