@@ -288,7 +288,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         } else if (item instanceof StackItem stackItem) {
             if (stackItem.item() instanceof Pill pill) {
                 if (inventory.decrease(slotId)) {
-                    emitEvent(new UpdateInventorySlotEvent(this, slotId, item));
+                    emitEvent(new UpdateInventorySlotEvent(this, slotId, inventory.getItem(slotId)));
                     pillSlots.usePill(this, pill);
                 }
             } else if (stackItem.item() instanceof KungFuItem kungFuItem) {
@@ -547,15 +547,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             return;
         }
         changeDirection(Direction.DOWN);
-        changeState(PlayerStillState.idle(this));
         doJoinRealm(realm, null);
         emitEvent(new JoinedRealmEvent(this, coordinate(), inventory, realm));
     }
 
     private void doJoinRealm(Realm realm, Coordinate coordinate) {
-        if (this.realm != null) {
-            leaveRealm();
-        }
         this.realm = realm;
         if (coordinate != null) {
             changeCoordinate(coordinate);
@@ -567,6 +563,9 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     @Override
     public void teleport(Realm realm, Coordinate coordinate) {
         if (realm != null && coordinate != null) {
+            if (this.realm != null) {
+                leaveRealm();
+            }
             doJoinRealm(realm, coordinate);
             emitEvent(new PlayerTeleportEvent(this, realm, coordinate));
         }
@@ -602,6 +601,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             State afterHurtState = state().decideAfterHurtState();
             this.changeState(PlayerHurtState.hurt(this, afterHurtState));
             emitEvent(new CreatureHurtEvent(this, afterHurtState));
+            hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
             gainProtectionExp(damagedLife);
         } else {
             onKilled();
@@ -653,7 +653,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public RealmMap realmMap() {
-        return realm.map();
+        return realm != null ? realm.map() : null;
     }
 
     @Override

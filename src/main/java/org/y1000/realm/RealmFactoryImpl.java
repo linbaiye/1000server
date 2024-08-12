@@ -69,34 +69,38 @@ public final class RealmFactoryImpl implements RealmFactory {
 
     @Override
     public Realm createRealm(int id,
-                             CrossRealmEventHandler crossRealmEventHandler) {
-        Validate.notNull(crossRealmEventHandler);
-        var realmMap = RealmMap.Load(mapSdb.getMapName(id), mapSdb.getTilName(id), mapSdb.getObjName(id), mapSdb.getRofName(id))
-                .orElseThrow(() -> new IllegalArgumentException("No map for " + id));
-        var entityIdGenerator = new EntityIdGenerator();
-        AOIManager aoiManager = new RelevantScopeManager();
-        //AOIManager aoiManager = new GridAOIManager(realmMap.width(), realmMap.height());
-        var eventSender = new RealmEntityEventSender(aoiManager);
-        var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
-        var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
-        var dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ? null :
-                new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id));
-        var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager);
-        var teleportManager = new TeleportManager(createGateSdb, entityIdGenerator);
-        var builder = RealmBuilder.builder()
-                .id(id)
-                .crossRealmEventHandler(crossRealmEventHandler)
-                .dynamicObjectManager(dynamicObjectManager)
-                .eventSender(eventSender)
-                .itemManager(itemManager)
-                .mapSdb(mapSdb)
-                .npcManager(npcManager)
-                .playerManager(playerManager)
-                .realmMap(realmMap)
-                .teleportManager(teleportManager);
-        return mapSdb.getRegenInterval(id)
-                .map(builder::buildDungeon)
-                .orElseGet(builder::buildNormal);
+                             RealmEventHandler crossRealmEventHandler) {
+        try {
+            Validate.notNull(crossRealmEventHandler);
+            var realmMap = RealmMap.Load(mapSdb.getMapName(id), mapSdb.getTilName(id), mapSdb.getObjName(id), mapSdb.getRofName(id))
+                    .orElseThrow(() -> new IllegalArgumentException("No map for " + id));
+            var entityIdGenerator = new EntityIdGenerator();
+            AOIManager aoiManager = new RelevantScopeManager();
+            var eventSender = new RealmEntityEventSender(aoiManager);
+            var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
+            var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
+            var dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ? null :
+                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id), crossRealmEventHandler);
+            var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager);
+            var teleportManager = new TeleportManager(id, realmMap, createGateSdb, entityIdGenerator, aoiManager);
+            var builder = RealmBuilder.builder()
+                    .id(id)
+                    .crossRealmEventHandler(crossRealmEventHandler)
+                    .dynamicObjectManager(dynamicObjectManager)
+                    .eventSender(eventSender)
+                    .itemManager(itemManager)
+                    .mapSdb(mapSdb)
+                    .npcManager(npcManager)
+                    .playerManager(playerManager)
+                    .realmMap(realmMap)
+                    .teleportManager(teleportManager);
+            return mapSdb.getRegenInterval(id)
+                    .map(builder::buildDungeon)
+                    .orElseGet(builder::buildNormal);
+        } catch (RuntimeException e) {
+            log.error("Failed to init realm {}.", id, e);
+            throw e;
+        }
     }
 
     @Slf4j
@@ -109,7 +113,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         private DynamicObjectManager dynamicObjectManager;
         private TeleportManager teleportManager;
         private int id;
-        private CrossRealmEventHandler crossRealmEventHandler;
+        private RealmEventHandler crossRealmEventHandler;
         private MapSdb mapSdb;
 
         private RealmBuilder() {
@@ -159,7 +163,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder crossRealmEventHandler(CrossRealmEventHandler crossRealmEventHandler) {
+        public RealmBuilder crossRealmEventHandler(RealmEventHandler crossRealmEventHandler) {
             this.crossRealmEventHandler = crossRealmEventHandler;
             return this;
         }

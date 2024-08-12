@@ -279,7 +279,7 @@ MaxCount,        最多持有数量；
 
     private static ItemSdbImpl read() {
         ItemSdbImpl itemSdb = new ItemSdbImpl();
-        itemSdb.read("Item.sdb");
+        itemSdb.read("Init/Item.sdb");
         return itemSdb;
     }
 
@@ -308,7 +308,7 @@ MaxCount,        最多持有数量；
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
         for (String i: items) {
-            if (!i.equals("箭")) {
+            if (!i.contains("女子血魔")) {
                 continue;
             }
             System.out.println("----------------------------");
@@ -317,7 +317,6 @@ MaxCount,        最多持有数量；
                 if (!StringUtils.isEmpty(itemSdb.get(i, name)))
                     System.out.println(name + ": " + itemSdb.get(i, name));
             }
-            //String v = itemSdb.get("生药", idName);
         }
     }
     public static void main(String[] args) {

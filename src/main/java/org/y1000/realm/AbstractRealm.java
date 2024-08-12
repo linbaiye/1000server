@@ -2,11 +2,9 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
-import org.y1000.realm.event.PlayerDataEvent;
-import org.y1000.realm.event.PlayerDisconnectedEvent;
-import org.y1000.realm.event.RealmEvent;
-import org.y1000.realm.event.RealmTeleportEvent;
+import org.y1000.realm.event.*;
 import org.y1000.sdb.MapSdb;
 
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ abstract class AbstractRealm implements Realm {
     private final TeleportManager teleportManager;
 
     private final int id;
-    private final CrossRealmEventHandler crossRealmEventHandler;
+    private final RealmEventHandler crossRealmEventHandler;
     private final MapSdb mapSdb;
     private volatile boolean shutdown;
     private long accumulatedMillis;
@@ -36,7 +34,7 @@ abstract class AbstractRealm implements Realm {
                          PlayerManager playerManager,
                          DynamicObjectManager dynamicObjectManager,
                          TeleportManager teleportManager,
-                         CrossRealmEventHandler crossRealmEventHandler,
+                         RealmEventHandler crossRealmEventHandler,
                          MapSdb mapSdb) {
         Validate.notNull(realmMap);
         Validate.notNull(eventSender);
@@ -91,7 +89,7 @@ abstract class AbstractRealm implements Realm {
             npcManager.init();
         if (dynamicObjectManager != null)
             dynamicObjectManager.init(this.map());
-        teleportManager.init(this.map(), id, this::onPlayerTeleport);
+        teleportManager.init(this::onPlayerTeleport);
         log().debug("Initialized {}.", this);
     }
 
@@ -104,7 +102,7 @@ abstract class AbstractRealm implements Realm {
     }
 
 
-    void onPlayerTeleport(RealmEvent event) {
+    void onPlayerTeleport(PlayerRealmEvent event) {
         if (!(event instanceof RealmTeleportEvent realmTeleportEvent) ||
                 !playerManager.contains(event.player())) {
             return;
@@ -115,7 +113,7 @@ abstract class AbstractRealm implements Realm {
         crossRealmEventHandler.handle(event);
     }
 
-    CrossRealmEventHandler getCrossRealmEventHandler() {
+    RealmEventHandler getCrossRealmEventHandler() {
         return crossRealmEventHandler;
     }
 
@@ -138,11 +136,15 @@ abstract class AbstractRealm implements Realm {
                 log().debug("Added player to realm {}.", id);
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
                 playerManager.onPlayerDisconnected(disconnectedEvent.player());
-                eventSender.remove(event.player());
+                eventSender.remove(disconnectedEvent.player());
             } else if (event instanceof PlayerDataEvent dataEvent) {
                 playerManager.onClientEvent(dataEvent, npcManager);
             } else if (event instanceof RealmTeleportEvent teleportEvent) {
                 handleTeleportEvent(teleportEvent);
+            } else if (event instanceof BroadcastSoundEvent broadcastSoundEvent) {
+                playerManager().allPlayers().forEach(player -> player.emitEvent(new EntitySoundEvent(player, broadcastSoundEvent.sound())));
+            } else if (event instanceof RealmLetterEvent<?> letterEvent) {
+                npcManager.handleCrossRealmEvent(letterEvent);
             }
         } catch (Exception e) {
             log().error("Exception when handling event .", e);

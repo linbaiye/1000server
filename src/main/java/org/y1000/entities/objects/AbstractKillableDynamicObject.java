@@ -2,7 +2,6 @@ package org.y1000.entities.objects;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.EntityLifebarEvent;
-import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Damage;
@@ -27,50 +26,50 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
     }
 
 
-    boolean doHandleDamaged(Damage damage) {
+    void damageLife(Damage damage) {
         if (!canBeAttackedNow()) {
-            return false;
+            return;
         }
         var dmg = Math.max(damage.bodyDamage() - armor, 1);
         life -= Math.min(dmg, life);
         if (life == 0) {
             changeAnimation(1, dynamicObjectSdb().getOpenedMillis(idName()));
+            dynamicObjectSdb().getSoundDie(idName()).or(() -> dynamicObjectSdb().getSoundEvent(idName()))
+                    .ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
             emitEvent(new DynamicObjectDieEvent(this));
-            dynamicObjectSdb().getSoundEvent(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         } else {
             dynamicObjectSdb().getSoundSpecial(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         }
         emitEvent(new EntityLifebarEvent(this, life, maxLife));
-        return true;
     }
 
-    abstract boolean handleDamaged(Damage damage);
+    abstract void handleDamaged(Damage damage);
 
     @Override
     public boolean attackedBy(Player attacker) {
         Validate.notNull(attacker);
-        if (occupyingCoordinates().stream().noneMatch(coordinate -> coordinate.directDistance(attacker.coordinate()) <= 1)) {
+        if (!canBeAttackedNow() || !canBeMeleeAt(attacker.coordinate()))
             return false;
-        }
-        return handleDamaged(attacker.damage());
+        handleDamaged(attacker.damage());
+        return true;
     }
 
     @Override
     public void attackedBy(ViolentCreature attacker) {
         Validate.notNull(attacker);
-        if (occupyingCoordinates().stream()
-                .anyMatch(coordinate -> coordinate.directDistance(attacker.coordinate()) <= 1)) {
+        if (canBeAttackedNow() && canBeMeleeAt(attacker.coordinate()))
             handleDamaged(attacker.damage());
-        }
     }
 
     @Override
     public void attackedBy(Projectile projectile) {
-        handleDamaged(projectile.damage());
+        if (canBeAttackedNow())
+            handleDamaged(projectile.damage());
     }
 
     public void attackedByAoe(Damage damage) {
-        handleDamaged(damage);
+        if (canBeAttackedNow())
+            handleDamaged(damage);
     }
 
     void resetLife() {
@@ -86,6 +85,18 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
         if (getAnimationIndex() != 0)
             updateAnimation(delta);
     }
+
+    @Override
+    public boolean canBeMeleeAt(Coordinate coordinate) {
+        return coordinate != null &&
+                occupyingCoordinates().stream().anyMatch(coor -> coor.directDistance(coordinate) < 2);
+    }
+
+    @Override
+    public boolean canBeAttackedNow() {
+        return getAnimationIndex() == 0 && currentLife() > 0;
+    }
+
 
     @Override
     public AbstractEntityInterpolation captureInterpolation() {

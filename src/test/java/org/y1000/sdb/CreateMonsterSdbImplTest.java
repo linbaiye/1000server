@@ -11,7 +11,7 @@ class CreateMonsterSdbImplTest {
     @Test
     void getSettings() {
         CreateNpcSdb monsterSdb = new CreateMonsterSdbImpl(49);
-        List<NpcSpawnSetting> settingList = monsterSdb.getSettings("一级牛");
+        List<NpcSpawnSetting> settingList = monsterSdb.getSettings("牛");
         assertFalse(settingList.isEmpty());
     }
 }

@@ -61,9 +61,10 @@ public abstract class AbstractNpcFightAI implements NpcAI {
     }
 
     int computeStayMillis() {
+        int speed = npc.walkSpeed() /speedRate;
         int walk = computeWalkMillis();
-        var stateMillis = npc.getStateMillis(State.WALK);
-        return Math.max(walk - stateMillis, 100);
+        //var stateMillis = npc.getStateMillis(State.WALK);
+        return Math.max(speed - walk, 100);
     }
 
 

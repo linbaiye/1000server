@@ -154,11 +154,19 @@ message DropItemConfirmPacket {
 
 
 message ShowItemPacket {
-  int32 id = 1;
+  int64 id = 1;
   optional int32 number = 4;
   int32 coordinateX = 5;
   int32 coordinateY = 6;
   string name = 7;
+}
+
+message ShowTeleportPacket {
+  int64 id = 1;
+  int32 coordinateX = 5;
+  int32 coordinateY = 6;
+  string name = 7;
+  int32 shape = 8;
 }
 
 
@@ -452,6 +460,7 @@ message Packet {
     TeleportPacket teleport = 40;
     LifeBarPacket lifebar = 41;
     KungFuPacket updateKungFuSlot = 42;
+    ShowTeleportPacket showTeleport = 43;
   }
 }
 

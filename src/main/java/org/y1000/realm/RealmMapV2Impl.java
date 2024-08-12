@@ -214,6 +214,10 @@ final class RealmMapV2Impl implements RealmMap {
 
 
     public static Optional<RealmMap> read(String name, String tile, String obj, String rof) {
+        Validate.notNull(name);
+        Validate.notNull(tile);
+        Validate.notNull(obj);
+        Validate.notNull(rof);
         String mapName = name.endsWith(".map") ? name : name + ".map";
         if (!mapName.startsWith("/maps/")) {
             mapName = "/maps/" + mapName;

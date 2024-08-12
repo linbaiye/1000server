@@ -2,16 +2,13 @@ package org.y1000.realm;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
-import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.objects.*;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.event.EntityEventListener;
 import org.y1000.item.Item;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
@@ -48,7 +45,8 @@ class DynamicObjectManagerImplTest {
         entityEventSender = Mockito.mock(EntityEventSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
         createDynamicObjectSdb = Mockito.mock(CreateDynamicObjectSdb.class);
-        manager = new DynamicObjectManagerImpl(factory, entityIdGenerator, entityEventSender, itemManager, createDynamicObjectSdb);
+        var eventHandler = Mockito.mock(RealmEventHandler.class);
+        manager = new DynamicObjectManagerImpl(factory, entityIdGenerator, entityEventSender, itemManager, createDynamicObjectSdb, eventHandler);
         realmMap = Mockito.mock(RealmMap.class);
     }
 
@@ -80,7 +78,7 @@ class DynamicObjectManagerImplTest {
     @Test
     void respawn() {
         DynamicObjectSdb dynamicObjectSdb = DynamicObjectSdbImpl.INSTANCE;
-        KillableDynamicObject killable = KillableDynamicObject.builder()
+        RespawnKillableDynamicObject killable = RespawnKillableDynamicObject.builder()
                 .id(2L)
                 .coordinate(Coordinate.xy(1, 2))
                 .idName("倒塌的壁A")
@@ -99,10 +97,10 @@ class DynamicObjectManagerImplTest {
         killable.attackedBy(player);
         assertNotNull(eventListener.removeFirst(UpdateDynamicObjectEvent.class));
         manager.update(dynamicObjectSdb.getOpenedMillis(killable.idName()));
-        assertTrue(manager.find(2L, KillableDynamicObject.class).isEmpty());
+        assertTrue(manager.find(2L, RespawnKillableDynamicObject.class).isEmpty());
         var interval = dynamicObjectSdb.getRegenInterval(killable.idName()) * 10;
         manager.update(interval);
-        assertTrue(manager.find(2L, KillableDynamicObject.class).isPresent());
+        assertTrue(manager.find(2L, RespawnKillableDynamicObject.class).isPresent());
     }
 
 }

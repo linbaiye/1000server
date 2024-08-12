@@ -6,6 +6,8 @@ import org.y1000.entities.ActiveEntity;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implements ActiveEntityManager<T> {
     private boolean iterating;
@@ -93,6 +95,10 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
                 .findFirst();
     }
 
+    @Override
+    public Set<T> find(Predicate<? super T> predicate) {
+        return entities.stream().filter(predicate).collect(Collectors.toSet());
+    }
 
     void remove(T entity) {
         if (iterating) {

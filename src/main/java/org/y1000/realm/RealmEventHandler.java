@@ -2,6 +2,6 @@ package org.y1000.realm;
 
 import org.y1000.realm.event.RealmEvent;
 
-public interface CrossRealmEventHandler {
+public interface RealmEventHandler {
     void handle(RealmEvent realmEvent);
 }

@@ -5,18 +5,18 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.ShowItemPacket}
+ * Protobuf type {@code org.y1000.network.gen.ShowTeleportPacket}
  */
-public final class ShowItemPacket extends
+public final class ShowTeleportPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ShowItemPacket)
-    ShowItemPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ShowTeleportPacket)
+    ShowTeleportPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ShowItemPacket.newBuilder() to construct.
-  private ShowItemPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use ShowTeleportPacket.newBuilder() to construct.
+  private ShowTeleportPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ShowItemPacket() {
+  private ShowTeleportPacket() {
     name_ = "";
   }
 
@@ -24,23 +24,22 @@ private static final long serialVersionUID = 0L;
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new ShowItemPacket();
+    return new ShowTeleportPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ShowItemPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ShowTeleportPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ShowItemPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ShowTeleportPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.ShowItemPacket.class, org.y1000.network.gen.ShowItemPacket.Builder.class);
+            org.y1000.network.gen.ShowTeleportPacket.class, org.y1000.network.gen.ShowTeleportPacket.Builder.class);
   }
 
-  private int bitField0_;
   public static final int ID_FIELD_NUMBER = 1;
   private long id_ = 0L;
   /**
@@ -50,25 +49,6 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public long getId() {
     return id_;
-  }
-
-  public static final int NUMBER_FIELD_NUMBER = 4;
-  private int number_ = 0;
-  /**
-   * <code>optional int32 number = 4;</code>
-   * @return Whether the number field is set.
-   */
-  @java.lang.Override
-  public boolean hasNumber() {
-    return ((bitField0_ & 0x00000001) != 0);
-  }
-  /**
-   * <code>optional int32 number = 4;</code>
-   * @return The number.
-   */
-  @java.lang.Override
-  public int getNumber() {
-    return number_;
   }
 
   public static final int COORDINATEX_FIELD_NUMBER = 5;
@@ -132,6 +112,17 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int SHAPE_FIELD_NUMBER = 8;
+  private int shape_ = 0;
+  /**
+   * <code>int32 shape = 8;</code>
+   * @return The shape.
+   */
+  @java.lang.Override
+  public int getShape() {
+    return shape_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -149,9 +140,6 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0L) {
       output.writeInt64(1, id_);
     }
-    if (((bitField0_ & 0x00000001) != 0)) {
-      output.writeInt32(4, number_);
-    }
     if (coordinateX_ != 0) {
       output.writeInt32(5, coordinateX_);
     }
@@ -160,6 +148,9 @@ private static final long serialVersionUID = 0L;
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, name_);
+    }
+    if (shape_ != 0) {
+      output.writeInt32(8, shape_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -174,10 +165,6 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(1, id_);
     }
-    if (((bitField0_ & 0x00000001) != 0)) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(4, number_);
-    }
     if (coordinateX_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(5, coordinateX_);
@@ -189,6 +176,10 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, name_);
     }
+    if (shape_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(8, shape_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -199,24 +190,21 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.ShowItemPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.ShowTeleportPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.ShowItemPacket other = (org.y1000.network.gen.ShowItemPacket) obj;
+    org.y1000.network.gen.ShowTeleportPacket other = (org.y1000.network.gen.ShowTeleportPacket) obj;
 
     if (getId()
         != other.getId()) return false;
-    if (hasNumber() != other.hasNumber()) return false;
-    if (hasNumber()) {
-      if (getNumber()
-          != other.getNumber()) return false;
-    }
     if (getCoordinateX()
         != other.getCoordinateX()) return false;
     if (getCoordinateY()
         != other.getCoordinateY()) return false;
     if (!getName()
         .equals(other.getName())) return false;
+    if (getShape()
+        != other.getShape()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -231,59 +219,57 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getId());
-    if (hasNumber()) {
-      hash = (37 * hash) + NUMBER_FIELD_NUMBER;
-      hash = (53 * hash) + getNumber();
-    }
     hash = (37 * hash) + COORDINATEX_FIELD_NUMBER;
     hash = (53 * hash) + getCoordinateX();
     hash = (37 * hash) + COORDINATEY_FIELD_NUMBER;
     hash = (53 * hash) + getCoordinateY();
     hash = (37 * hash) + NAME_FIELD_NUMBER;
     hash = (53 * hash) + getName().hashCode();
+    hash = (37 * hash) + SHAPE_FIELD_NUMBER;
+    hash = (53 * hash) + getShape();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.ShowItemPacket parseFrom(
+  public static org.y1000.network.gen.ShowTeleportPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ShowItemPacket parseFrom(
+  public static org.y1000.network.gen.ShowTeleportPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ShowItemPacket parseFrom(
+  public static org.y1000.network.gen.ShowTeleportPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ShowItemPacket parseFrom(
+  public static org.y1000.network.gen.ShowTeleportPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ShowItemPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.ShowTeleportPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ShowItemPacket parseFrom(
+  public static org.y1000.network.gen.ShowTeleportPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ShowItemPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ShowTeleportPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.ShowItemPacket parseFrom(
+  public static org.y1000.network.gen.ShowTeleportPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -291,26 +277,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.ShowItemPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ShowTeleportPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.ShowItemPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.ShowTeleportPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.ShowItemPacket parseFrom(
+  public static org.y1000.network.gen.ShowTeleportPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.ShowItemPacket parseFrom(
+  public static org.y1000.network.gen.ShowTeleportPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -323,7 +309,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.ShowItemPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.ShowTeleportPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -339,26 +325,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.ShowItemPacket}
+   * Protobuf type {@code org.y1000.network.gen.ShowTeleportPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ShowItemPacket)
-      org.y1000.network.gen.ShowItemPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ShowTeleportPacket)
+      org.y1000.network.gen.ShowTeleportPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ShowItemPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ShowTeleportPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ShowItemPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ShowTeleportPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.ShowItemPacket.class, org.y1000.network.gen.ShowItemPacket.Builder.class);
+              org.y1000.network.gen.ShowTeleportPacket.class, org.y1000.network.gen.ShowTeleportPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.ShowItemPacket.newBuilder()
+    // Construct using org.y1000.network.gen.ShowTeleportPacket.newBuilder()
     private Builder() {
 
     }
@@ -373,27 +359,27 @@ private static final long serialVersionUID = 0L;
       super.clear();
       bitField0_ = 0;
       id_ = 0L;
-      number_ = 0;
       coordinateX_ = 0;
       coordinateY_ = 0;
       name_ = "";
+      shape_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ShowItemPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ShowTeleportPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ShowItemPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.ShowItemPacket.getDefaultInstance();
+    public org.y1000.network.gen.ShowTeleportPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.ShowTeleportPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ShowItemPacket build() {
-      org.y1000.network.gen.ShowItemPacket result = buildPartial();
+    public org.y1000.network.gen.ShowTeleportPacket build() {
+      org.y1000.network.gen.ShowTeleportPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -401,33 +387,30 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ShowItemPacket buildPartial() {
-      org.y1000.network.gen.ShowItemPacket result = new org.y1000.network.gen.ShowItemPacket(this);
+    public org.y1000.network.gen.ShowTeleportPacket buildPartial() {
+      org.y1000.network.gen.ShowTeleportPacket result = new org.y1000.network.gen.ShowTeleportPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.ShowItemPacket result) {
+    private void buildPartial0(org.y1000.network.gen.ShowTeleportPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.id_ = id_;
       }
-      int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.number_ = number_;
-        to_bitField0_ |= 0x00000001;
-      }
-      if (((from_bitField0_ & 0x00000004) != 0)) {
         result.coordinateX_ = coordinateX_;
       }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
+      if (((from_bitField0_ & 0x00000004) != 0)) {
         result.coordinateY_ = coordinateY_;
       }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
+      if (((from_bitField0_ & 0x00000008) != 0)) {
         result.name_ = name_;
       }
-      result.bitField0_ |= to_bitField0_;
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.shape_ = shape_;
+      }
     }
 
     @java.lang.Override
@@ -464,21 +447,18 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.ShowItemPacket) {
-        return mergeFrom((org.y1000.network.gen.ShowItemPacket)other);
+      if (other instanceof org.y1000.network.gen.ShowTeleportPacket) {
+        return mergeFrom((org.y1000.network.gen.ShowTeleportPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.ShowItemPacket other) {
-      if (other == org.y1000.network.gen.ShowItemPacket.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.y1000.network.gen.ShowTeleportPacket other) {
+      if (other == org.y1000.network.gen.ShowTeleportPacket.getDefaultInstance()) return this;
       if (other.getId() != 0L) {
         setId(other.getId());
-      }
-      if (other.hasNumber()) {
-        setNumber(other.getNumber());
       }
       if (other.getCoordinateX() != 0) {
         setCoordinateX(other.getCoordinateX());
@@ -488,8 +468,11 @@ private static final long serialVersionUID = 0L;
       }
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000008;
         onChanged();
+      }
+      if (other.getShape() != 0) {
+        setShape(other.getShape());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -522,26 +505,26 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000001;
               break;
             } // case 8
-            case 32: {
-              number_ = input.readInt32();
-              bitField0_ |= 0x00000002;
-              break;
-            } // case 32
             case 40: {
               coordinateX_ = input.readInt32();
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000002;
               break;
             } // case 40
             case 48: {
               coordinateY_ = input.readInt32();
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000004;
               break;
             } // case 48
             case 58: {
               name_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000008;
               break;
             } // case 58
+            case 64: {
+              shape_ = input.readInt32();
+              bitField0_ |= 0x00000010;
+              break;
+            } // case 64
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -591,46 +574,6 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private int number_ ;
-    /**
-     * <code>optional int32 number = 4;</code>
-     * @return Whether the number field is set.
-     */
-    @java.lang.Override
-    public boolean hasNumber() {
-      return ((bitField0_ & 0x00000002) != 0);
-    }
-    /**
-     * <code>optional int32 number = 4;</code>
-     * @return The number.
-     */
-    @java.lang.Override
-    public int getNumber() {
-      return number_;
-    }
-    /**
-     * <code>optional int32 number = 4;</code>
-     * @param value The number to set.
-     * @return This builder for chaining.
-     */
-    public Builder setNumber(int value) {
-
-      number_ = value;
-      bitField0_ |= 0x00000002;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>optional int32 number = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearNumber() {
-      bitField0_ = (bitField0_ & ~0x00000002);
-      number_ = 0;
-      onChanged();
-      return this;
-    }
-
     private int coordinateX_ ;
     /**
      * <code>int32 coordinateX = 5;</code>
@@ -648,7 +591,7 @@ private static final long serialVersionUID = 0L;
     public Builder setCoordinateX(int value) {
 
       coordinateX_ = value;
-      bitField0_ |= 0x00000004;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -657,7 +600,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearCoordinateX() {
-      bitField0_ = (bitField0_ & ~0x00000004);
+      bitField0_ = (bitField0_ & ~0x00000002);
       coordinateX_ = 0;
       onChanged();
       return this;
@@ -680,7 +623,7 @@ private static final long serialVersionUID = 0L;
     public Builder setCoordinateY(int value) {
 
       coordinateY_ = value;
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -689,7 +632,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearCoordinateY() {
-      bitField0_ = (bitField0_ & ~0x00000008);
+      bitField0_ = (bitField0_ & ~0x00000004);
       coordinateY_ = 0;
       onChanged();
       return this;
@@ -738,7 +681,7 @@ private static final long serialVersionUID = 0L;
         java.lang.String value) {
       if (value == null) { throw new NullPointerException(); }
       name_ = value;
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -748,7 +691,7 @@ private static final long serialVersionUID = 0L;
      */
     public Builder clearName() {
       name_ = getDefaultInstance().getName();
-      bitField0_ = (bitField0_ & ~0x00000010);
+      bitField0_ = (bitField0_ & ~0x00000008);
       onChanged();
       return this;
     }
@@ -762,7 +705,39 @@ private static final long serialVersionUID = 0L;
       if (value == null) { throw new NullPointerException(); }
       checkByteStringIsUtf8(value);
       name_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+
+    private int shape_ ;
+    /**
+     * <code>int32 shape = 8;</code>
+     * @return The shape.
+     */
+    @java.lang.Override
+    public int getShape() {
+      return shape_;
+    }
+    /**
+     * <code>int32 shape = 8;</code>
+     * @param value The shape to set.
+     * @return This builder for chaining.
+     */
+    public Builder setShape(int value) {
+
+      shape_ = value;
       bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 shape = 8;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearShape() {
+      bitField0_ = (bitField0_ & ~0x00000010);
+      shape_ = 0;
       onChanged();
       return this;
     }
@@ -779,23 +754,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ShowItemPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ShowTeleportPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ShowItemPacket)
-  private static final org.y1000.network.gen.ShowItemPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ShowTeleportPacket)
+  private static final org.y1000.network.gen.ShowTeleportPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.ShowItemPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.ShowTeleportPacket();
   }
 
-  public static org.y1000.network.gen.ShowItemPacket getDefaultInstance() {
+  public static org.y1000.network.gen.ShowTeleportPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ShowItemPacket>
-      PARSER = new com.google.protobuf.AbstractParser<ShowItemPacket>() {
+  private static final com.google.protobuf.Parser<ShowTeleportPacket>
+      PARSER = new com.google.protobuf.AbstractParser<ShowTeleportPacket>() {
     @java.lang.Override
-    public ShowItemPacket parsePartialFrom(
+    public ShowTeleportPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -814,17 +789,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<ShowItemPacket> parser() {
+  public static com.google.protobuf.Parser<ShowTeleportPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ShowItemPacket> getParserForType() {
+  public com.google.protobuf.Parser<ShowTeleportPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.ShowItemPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.ShowTeleportPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

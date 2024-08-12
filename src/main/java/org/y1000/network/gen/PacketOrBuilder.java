@@ -593,5 +593,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.KungFuPacketOrBuilder getUpdateKungFuSlotOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+   * @return Whether the showTeleport field is set.
+   */
+  boolean hasShowTeleport();
+  /**
+   * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+   * @return The showTeleport.
+   */
+  org.y1000.network.gen.ShowTeleportPacket getShowTeleport();
+  /**
+   * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+   */
+  org.y1000.network.gen.ShowTeleportPacketOrBuilder getShowTeleportOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

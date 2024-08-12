@@ -4,11 +4,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.npc.AggressiveNpc;
+import org.y1000.entities.creatures.npc.NineTailFoxHuman;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
+import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.RealmLetterEvent;
 import org.y1000.sdb.CreateNpcSdb;
 import org.y1000.sdb.MonstersSdb;
 import org.y1000.sdb.NpcSpawnSetting;
@@ -135,6 +138,18 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         if (linked.containsKey(npc)) {
             linked.get(npc).forEach(Npc::die);
         }
+    }
+
+    public void handleCrossRealmEvent(RealmEvent crossRealmEvent) {
+        if (!(crossRealmEvent instanceof RealmLetterEvent<?> letterEvent)) {
+            return;
+        }
+        log().debug("Handle cross event.");
+        Set<Npc> npcs = find(npc -> npc.idName().equals(letterEvent.toName()));
+        npcs.forEach(npc -> log().debug("Npc name {}", npc.idName()));
+        find(npc -> npc.idName().equals(letterEvent.toName()) && NineTailFoxHuman.class.isAssignableFrom(npc.getClass()))
+                .stream().map(NineTailFoxHuman.class::cast)
+                .forEach(NineTailFoxHuman::shift);
     }
 
     abstract void onUnhandledEvent(EntityEvent entityEvent) ;

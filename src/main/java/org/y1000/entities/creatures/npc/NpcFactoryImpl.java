@@ -186,6 +186,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (animate == null) {
             throw new NotImplementedException(name + " has no action sdb.");
         }
+        //boolean passive = true;
         boolean passive = monsterSdb.isPassive(name);
         return passive ? createPassiveCreature(name, id, realmMap, coordinate, spells, ai) : createAggressiveCreature(name, id, realmMap, coordinate, spells, ai);
     }
@@ -248,6 +249,20 @@ public final class NpcFactoryImpl implements NpcFactory {
         Validate.notNull(name);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
+        if (name.equals("九尾狐酒母")) {
+            NineTailFoxHuman build = NineTailFoxHuman.builder()
+                    .id(id)
+                    .coordinate(coordinate)
+                    .direction(Direction.DOWN)
+                    .name(npcSdb.getViewName(name))
+                    .realmMap(realmMap)
+                    .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
+                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                    .ai(new SubmissiveWanderingAI())
+                    .build();
+            log.debug("Npc id name {}.", build.idName());
+            return build;
+        }
         if (monsterSdb.contains(name)) {
             return createMonster(name, id, realmMap, coordinate, loadSpells(name), new MonsterWanderingAI());
         } else if (npcSdb.contains(name)) {

@@ -2,15 +2,12 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.players.Player;
-import org.y1000.realm.event.RealmEvent;
-import org.y1000.realm.event.RealmTeleportEvent;
+import org.y1000.realm.event.*;
 import org.y1000.network.Connection;
 import org.y1000.network.ConnectionEventType;
 import org.y1000.network.event.ConnectionDataEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.event.ConnectionEvent;
-import org.y1000.realm.event.PlayerDataEvent;
-import org.y1000.realm.event.PlayerDisconnectedEvent;
 import org.y1000.repository.PlayerRepositoryImpl;
 
 import java.util.*;
@@ -18,7 +15,7 @@ import java.util.concurrent.*;
 
 
 @Slf4j
-public final class RealmManager implements Runnable , CrossRealmEventHandler{
+public final class RealmManager implements Runnable , RealmEventHandler {
 
     private final Map<Player, Integer> playerRealmMap;
 
@@ -28,7 +25,9 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
 
     private final Queue<ConnectionEvent> eventQueue;
 
-    private Map<Integer, RealmGroup> realmGroups;
+    private Map<Integer, RealmGroup> realmIdGroupMap;
+
+    private final List<RealmGroup> groups;
 
 
     private volatile boolean shutdown;
@@ -38,11 +37,12 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
         eventQueue = new ArrayDeque<>(100);
         connectionPlayerMap = new HashMap<>(500);
         shutdown = false;
+        groups = new ArrayList<>();
     }
 
 
     public void startRealms() {
-        realmGroups.values().forEach(executorService::submit);
+        groups.forEach(executorService::submit);
     }
 
     private int getPlayerLastRealm(Player player) {
@@ -56,7 +56,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
             return;
         }
         var playerLastRealm = getPlayerLastRealm(event.player());
-        RealmGroup group = realmGroups.get(playerLastRealm);
+        RealmGroup group = realmIdGroupMap.get(playerLastRealm);
         if (group == null) {
             log.error("Realm {} does not exist.", playerLastRealm);
             event.connection().close();
@@ -76,7 +76,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
             return;
         }
         int realmId = playerRealmMap.get(player);
-        realmGroups.get(realmId).handle(new PlayerDataEvent(realmId, player, dataEvent.data()));
+        realmIdGroupMap.get(realmId).handle(new PlayerDataEvent(realmId, player, dataEvent.data()));
     }
 
 
@@ -84,7 +84,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
         Player removed = connectionPlayerMap.remove(connection);
         if (removed != null) {
             Integer realmId = playerRealmMap.remove(removed);
-            realmGroups.get(realmId).handle(new PlayerDisconnectedEvent(realmId, removed));
+            realmIdGroupMap.get(realmId).handle(new PlayerDisconnectedEvent(realmId, removed));
         }
     }
 
@@ -117,7 +117,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
         int realmId = teleportEvent.realmId();
         playerRealmMap.remove(teleportEvent.player());
         playerRealmMap.put(teleportEvent.player(), realmId);
-        RealmGroup group = realmGroups.get(realmId);
+        RealmGroup group = realmIdGroupMap.get(realmId);
         group.handle(teleportEvent);
     }
 
@@ -125,17 +125,38 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
     public void handle(RealmEvent realmEvent) {
         if (realmEvent instanceof RealmTeleportEvent teleportEvent) {
             handleTeleport(teleportEvent);
+        } else if (realmEvent instanceof BroadcastSoundEvent broadcastSoundEvent) {
+            groups.forEach(realmGroup -> realmGroup.handle(broadcastSoundEvent));
+        } else if (realmEvent instanceof RealmLetterEvent<?> realmLetterEvent) {
+            RealmGroup group = realmIdGroupMap.get(realmLetterEvent.realmId());
+            if (group != null) {
+                log.debug("Sent to group with realm {}.",realmLetterEvent.realmId());
+                group.handle(realmLetterEvent);
+            } else {
+                log.debug("No group to handle event.");
+            }
         }
     }
 
-    private void setRealmGroups(Map<Integer, RealmGroup> realmGroups) {
-        this.realmGroups = realmGroups;
-        this.executorService = Executors.newFixedThreadPool(this.realmGroups.size());
+    private void setRealmGroups(List<RealmGroup> groups) {
+        realmIdGroupMap = new HashMap<>();
+        for (RealmGroup group : groups) {
+            group.realmIds().forEach(id -> realmIdGroupMap.put(id,group));
+        }
+        this.executorService = Executors.newFixedThreadPool(groups.size());
+        this.groups.addAll(groups);
     }
 
 
     private static List<Integer> getRealmIds() {
-        return List.of(1, 19, 20, 49);
+        List<Integer> result = new ArrayList<>();
+        for (int i = 1; i <= 30; i++) {
+            result.add(i);
+        }
+        result.add(49);
+        result.add(88);
+        return result;
+        // return List.of(1, 3, 4, 19, 20, 49);
         //return List.of(19);
         //return List.of(49);
     }
@@ -151,20 +172,14 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler{
         }
         var groupSize = (realmList.size() / 4 ) > 0 ? (realmList.size() / 4) : 1;
         var left = realmList.size() % groupSize;
+        int groupNumber = realmList.size() / groupSize + (left > 0 ? 1 : 0);
         List<RealmGroup> groups = new ArrayList<>();
-        for (int i = 0, start = 0; i < realmList.size() / groupSize; i++, start += groupSize) {
-            int end = start + groupSize;
-            if (i == groupSize - 1) {
-                end += left;
-            }
+        for (int i = 0, start = 0; i < groupNumber; i++, start += groupSize) {
+            int end = Math.min(start + groupSize, realmList.size());
             RealmGroup group = new RealmGroup(realmList.subList(start, end), realmFactory, manager);
             groups.add(group);
         }
-        Map<Integer, RealmGroup> realmGroupMap = new HashMap<>();
-        for (RealmGroup group : groups) {
-            group.realmIds().forEach(id -> realmGroupMap.put(id,group));
-        }
-        manager.setRealmGroups(realmGroupMap);
+        manager.setRealmGroups(groups);
         return manager;
     }
 

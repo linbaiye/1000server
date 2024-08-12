@@ -19,6 +19,6 @@ public final class ChangeCharsetUtil {
 
     public static void main(String[] args) throws IOException {
         //Files.list(Path.of("D:\\work\\java\\1000server\\src\\main\\resources\\sdb\\")).forEach(System.out::println);
-        convert(Path.of("D:/work/java/1000server/src/main/resources/sdb/Init/MagicParam.sdb"));
+        convert(Path.of("D:/work/java/1000server/src/main/resources/sdb/Init/PosByDie.sdb"));
     }
 }

@@ -4,6 +4,7 @@ import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.realm.RealmMap;
+import org.y1000.util.Coordinate;
 
 public interface AttackableActiveEntity extends ActiveEntity {
     /**
@@ -22,8 +23,12 @@ public interface AttackableActiveEntity extends ActiveEntity {
 
     default boolean canChaseOrAttack(Entity target) {
         return target instanceof AttackableActiveEntity attackableEntity &&
+                attackableEntity.realmMap() == realmMap() &&
                 target.canBeSeenAt(coordinate()) &&
                 attackableEntity.canBeAttackedNow();
     }
 
+    default boolean canBeMeleeAt(Coordinate coordinate) {
+        return coordinate != null && coordinate().directDistance(coordinate) < 2;
+    }
 }

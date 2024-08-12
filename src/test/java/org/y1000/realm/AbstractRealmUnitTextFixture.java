@@ -20,7 +20,7 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
     PlayerManager playerManager;
     DynamicObjectManager dynamicObjectManager;
     TeleportManager teleportManager;
-    CrossRealmEventHandler crossRealmEventHandler;
+    RealmEventHandler crossRealmEventHandler;
     MapSdb mapSdb;
 
     CreateGateSdb createGateSdb;
@@ -34,8 +34,8 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
         dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);
         createGateSdb = Mockito.mock(CreateGateSdb.class);
         when(createGateSdb.getNames(anyInt())).thenReturn(Collections.emptySet());
-        teleportManager = new TeleportManager(createGateSdb, new EntityIdGenerator());
-        crossRealmEventHandler = Mockito.mock(CrossRealmEventHandler.class);
+        teleportManager = new TeleportManager(1, realmMap, createGateSdb, new EntityIdGenerator(), new RelevantScopeManager());
+        crossRealmEventHandler = Mockito.mock(RealmEventHandler.class);
         mapSdb = Mockito.mock(MapSdb.class);
     }
 

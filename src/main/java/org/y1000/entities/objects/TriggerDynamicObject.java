@@ -83,7 +83,7 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
 
     @Override
     public boolean canBeAttackedNow() {
-        return true;
+        return state == DynamicObjectState.INITIAL;
     }
 
     @Override

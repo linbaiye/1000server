@@ -75,11 +75,25 @@ public final class CreateGateSdbImpl extends AbstractSdbReader implements Create
 
     @Override
     public boolean isVisible(String name) {
-        return "TRUE".equals(get(name, "boShow"));
+        if (!"TRUE".equals(get(name, "boShow"))) {
+            return false;
+        }
+        var shape = getShape(name);
+        return shape == 69 || shape == 70;
     }
 
     @Override
     public String getRandomPos(String name) {
         return get(name, "RandomPos");
+    }
+
+    @Override
+    public int getShape(String name) {
+        return getInt(name, "Shape");
+    }
+
+    @Override
+    public String getViewName(String name) {
+        return get(name, "ViewName");
     }
 }

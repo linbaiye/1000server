@@ -26,7 +26,7 @@ public final class GroundedItemInterpolation extends AbstractEntityInterpolation
                 .setCoordinateX(coordinate().x())
                 .setCoordinateY(coordinate().y())
                 .setName(name)
-                .setId((int) getId());
+                .setId(getId());
         if (number != null) {
             showItemBuidler.setNumber(number);
         }

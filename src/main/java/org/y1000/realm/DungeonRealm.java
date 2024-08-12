@@ -30,7 +30,7 @@ final class DungeonRealm extends AbstractRealm {
                         PlayerManager playerManager,
                         DynamicObjectManager dynamicObjectManager,
                         TeleportManager teleportManager,
-                        CrossRealmEventHandler crossRealmEventHandler,
+                        RealmEventHandler crossRealmEventHandler,
                         MapSdb mapSdb, int interval) {
         this(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb,
                 interval, LocalDateTime::now);
@@ -44,7 +44,7 @@ final class DungeonRealm extends AbstractRealm {
                         PlayerManager playerManager,
                         DynamicObjectManager dynamicObjectManager,
                         TeleportManager teleportManager,
-                        CrossRealmEventHandler crossRealmEventHandler,
+                        RealmEventHandler crossRealmEventHandler,
                         MapSdb mapSdb,
                         int interval,
                         Supplier<LocalDateTime> timeSupplier) {
@@ -104,12 +104,13 @@ final class DungeonRealm extends AbstractRealm {
             teleportEvent.getConnection().write(PlayerTextEvent.bottom(teleportEvent.player(), "当前无法进入，请稍后重试。"));
             getCrossRealmEventHandler().handle(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection()));
         }
-        if (isOpening()) {
+        acceptTeleport(teleportEvent);
+        /*if (isOpening()) {
             acceptTeleport(teleportEvent);
         } else {
             teleportEvent.getConnection().write(PlayerTextEvent.bottom(teleportEvent.player(), buildTip()));
             getCrossRealmEventHandler().handle(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection()));
-        }
+        }*/
     }
 
     private int exitRealmIt() {

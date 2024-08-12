@@ -35,6 +35,8 @@ public interface DynamicObjectSdb {
 
     Optional<String> getSoundEvent(String name);
 
+    Optional<String> getSoundDie(String name);
+
     Optional<String> getSoundSpecial(String name);
 
     int getLife(String name);

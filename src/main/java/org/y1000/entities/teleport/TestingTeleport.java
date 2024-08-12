@@ -1,7 +1,7 @@
 package org.y1000.entities.teleport;
 
 import org.y1000.entities.players.Player;
-import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.PlayerRealmEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
@@ -19,25 +19,25 @@ public class TestingTeleport implements Teleport {
     //private final Coordinate toCoordinate = Coordinate.xy(500, 500);
     private final Coordinate coordinate;
 
-    private final UnaryAction<RealmEvent> eventHandler;
+    private final UnaryAction<PlayerRealmEvent> eventHandler;
 
 
     public TestingTeleport(Coordinate to,
             Coordinate pos,
             int toRealm,
-            UnaryAction<RealmEvent> eventHandler) {
+            UnaryAction<PlayerRealmEvent> eventHandler) {
         this.eventHandler = eventHandler;
         this.toCoordinate = to;
         this.coordinate = pos;
         this.toRealm = toRealm;
     }
 
-    public static TestingTeleport fox(UnaryAction<RealmEvent> eventHandler) {
+    public static TestingTeleport fox(UnaryAction<PlayerRealmEvent> eventHandler) {
         return  new TestingTeleport( Coordinate.xy(60, 115), Coordinate.xy(97, 44), 19, eventHandler);
     }
 
 
-    public static TestingTeleport south(UnaryAction<RealmEvent> eventHandler) {
+    public static TestingTeleport south(UnaryAction<PlayerRealmEvent> eventHandler) {
         return  new TestingTeleport( Coordinate.xy(500, 500), Coordinate.xy(96, 53), 1, eventHandler);
     }
 

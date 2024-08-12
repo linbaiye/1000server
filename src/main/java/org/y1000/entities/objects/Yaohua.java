@@ -2,6 +2,7 @@ package org.y1000.entities.objects;
 
 import lombok.Builder;
 import org.y1000.entities.RemoveEntityEvent;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Damage;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
@@ -31,8 +32,8 @@ public final class Yaohua extends AbstractKillableDynamicObject
 
     @Override
     public boolean canBeAttackedNow() {
-        return currentLife() > 0 && getAnimationIndex() == 0
-                && fireLighted >= 4;
+        return currentLife() > 0 && getAnimationIndex() == 0;
+                //&& fireLighted >= 4;
     }
 
     @Override
@@ -59,8 +60,15 @@ public final class Yaohua extends AbstractKillableDynamicObject
     }
 
     @Override
-    boolean handleDamaged(Damage damage) {
-        return doHandleDamaged(damage);
+    void handleDamaged(Damage damage) {
+        damageLife(damage);
+        if (currentLife() <= 0) {
+            emitEvent(new EntityBroadcastSoundEvent(this, "8950"));
+            emitEvent(new EntityCrossRealmEvent(this, 1));
+            changeAnimation(1);
+        } else {
+            dynamicObjectSdb().getSoundSpecial(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+        }
     }
 
     @Override

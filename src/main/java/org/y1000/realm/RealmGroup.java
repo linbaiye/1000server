@@ -2,7 +2,10 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.y1000.realm.event.BroadcastSoundEvent;
+import org.y1000.realm.event.PlayerRealmEvent;
 import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.RealmLetterEvent;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -21,7 +24,7 @@ public final class RealmGroup implements Runnable {
 
     private final RealmFactory realmFactory;
 
-    private final CrossRealmEventHandler crossRealmEventHandler;
+    private final RealmEventHandler crossRealmEventHandler;
 
     private final Supplier<LocalDateTime> dateTimeSupplier;
 
@@ -29,7 +32,7 @@ public final class RealmGroup implements Runnable {
 
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
-                      CrossRealmEventHandler crossRealmEventHandler,
+                      RealmEventHandler crossRealmEventHandler,
                       Supplier<LocalDateTime> dateTimeSupplier) {
         Validate.isTrue(realms != null && !realms.isEmpty());
         Validate.notNull(realmFactory);
@@ -49,7 +52,7 @@ public final class RealmGroup implements Runnable {
 
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
-                      CrossRealmEventHandler crossRealmEventHandler) {
+                      RealmEventHandler crossRealmEventHandler) {
         this(realms, realmFactory, crossRealmEventHandler, LocalDateTime::now);
     }
 
@@ -73,7 +76,7 @@ public final class RealmGroup implements Runnable {
                     continue;
                 }
                 if (!dungeonRealm.isHalfHourInterval() && now.getMinute() != 59) {
-                    return;
+                    continue;
                 }
                 dungeonRealm.close();
                 realms[i] = realmFactory.createRealm(dungeonRealm.id(), crossRealmEventHandler);
@@ -115,9 +118,21 @@ public final class RealmGroup implements Runnable {
         return events;
     }
 
+
+    private void handleRealmEvent(RealmEvent realmEvent){
+        if (realmEvent instanceof PlayerRealmEvent playerRealmEvent) {
+            find(playerRealmEvent.realmId()).ifPresent(realm -> realm.handle(playerRealmEvent));
+        } else if (realmEvent instanceof BroadcastSoundEvent broadcastSoundEvent) {
+            Arrays.stream(realms).forEach(realm -> realm.handle(broadcastSoundEvent));
+        } else if (realmEvent instanceof RealmLetterEvent<?> letterEvent) {
+            find(letterEvent.realmId()).ifPresent(realm -> realm.handle(letterEvent));
+        }
+    }
+
     @Override
     public void run() {
         try {
+            log.info("Start initializing realms {}.", Arrays.stream(realms).toList());
             Arrays.stream(realms).forEach(Realm::init);
         } catch (Exception e) {
             log.error("Failed to init realms.", e);
@@ -126,8 +141,8 @@ public final class RealmGroup implements Runnable {
         while (!shutdown) {
             Arrays.stream(realms).forEach(this::updateRealm);
             resetDungeonsIfTimeUp();
-            List<RealmEvent> realmEvents = pollPendingEvents();
-            realmEvents.forEach(e -> find(e.realmId()).ifPresent(realm -> realm.handle(e)));
+            List<RealmEvent> newEvents = pollPendingEvents();
+            newEvents.forEach(this::handleRealmEvent);
         }
     }
 

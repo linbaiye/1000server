@@ -36,7 +36,6 @@ public final class CreatureHurtEvent extends AbstractCreatureEvent {
                         .setY(coordinate.y())
                         .setCurrentLife(currentLife)
                         .setMaxLife(maxLife)
-                        .setSound(((Creature)source()).hurtSound().orElse(""))
                         .build())
                 .build();
     }

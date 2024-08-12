@@ -84,6 +84,7 @@ private static final long serialVersionUID = 0L;
     TELEPORT(40),
     LIFEBAR(41),
     UPDATEKUNGFUSLOT(42),
+    SHOWTELEPORT(43),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -140,6 +141,7 @@ private static final long serialVersionUID = 0L;
         case 40: return TELEPORT;
         case 41: return LIFEBAR;
         case 42: return UPDATEKUNGFUSLOT;
+        case 43: return SHOWTELEPORT;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1364,6 +1366,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.KungFuPacket.getDefaultInstance();
   }
 
+  public static final int SHOWTELEPORT_FIELD_NUMBER = 43;
+  /**
+   * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+   * @return Whether the showTeleport field is set.
+   */
+  @java.lang.Override
+  public boolean hasShowTeleport() {
+    return typedPacketCase_ == 43;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+   * @return The showTeleport.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ShowTeleportPacket getShowTeleport() {
+    if (typedPacketCase_ == 43) {
+       return (org.y1000.network.gen.ShowTeleportPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.ShowTeleportPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ShowTeleportPacketOrBuilder getShowTeleportOrBuilder() {
+    if (typedPacketCase_ == 43) {
+       return (org.y1000.network.gen.ShowTeleportPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.ShowTeleportPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1494,6 +1527,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 42) {
       output.writeMessage(42, (org.y1000.network.gen.KungFuPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 43) {
+      output.writeMessage(43, (org.y1000.network.gen.ShowTeleportPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1659,6 +1695,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 42) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(42, (org.y1000.network.gen.KungFuPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 43) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(43, (org.y1000.network.gen.ShowTeleportPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1833,6 +1873,10 @@ private static final long serialVersionUID = 0L;
         if (!getUpdateKungFuSlot()
             .equals(other.getUpdateKungFuSlot())) return false;
         break;
+      case 43:
+        if (!getShowTeleport()
+            .equals(other.getShowTeleport())) return false;
+        break;
       case 0:
       default:
     }
@@ -2003,6 +2047,10 @@ private static final long serialVersionUID = 0L;
       case 42:
         hash = (37 * hash) + UPDATEKUNGFUSLOT_FIELD_NUMBER;
         hash = (53 * hash) + getUpdateKungFuSlot().hashCode();
+        break;
+      case 43:
+        hash = (37 * hash) + SHOWTELEPORT_FIELD_NUMBER;
+        hash = (53 * hash) + getShowTeleport().hashCode();
         break;
       case 0:
       default:
@@ -2256,6 +2304,9 @@ private static final long serialVersionUID = 0L;
       if (updateKungFuSlotBuilder_ != null) {
         updateKungFuSlotBuilder_.clear();
       }
+      if (showTeleportBuilder_ != null) {
+        showTeleportBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -2458,6 +2509,10 @@ private static final long serialVersionUID = 0L;
           updateKungFuSlotBuilder_ != null) {
         result.typedPacket_ = updateKungFuSlotBuilder_.build();
       }
+      if (typedPacketCase_ == 43 &&
+          showTeleportBuilder_ != null) {
+        result.typedPacket_ = showTeleportBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -2659,6 +2714,10 @@ private static final long serialVersionUID = 0L;
         }
         case UPDATEKUNGFUSLOT: {
           mergeUpdateKungFuSlot(other.getUpdateKungFuSlot());
+          break;
+        }
+        case SHOWTELEPORT: {
+          mergeShowTeleport(other.getShowTeleport());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -2964,6 +3023,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 42;
               break;
             } // case 338
+            case 346: {
+              input.readMessage(
+                  getShowTeleportFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 43;
+              break;
+            } // case 346
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -8533,6 +8599,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 42;
       onChanged();
       return updateKungFuSlotBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ShowTeleportPacket, org.y1000.network.gen.ShowTeleportPacket.Builder, org.y1000.network.gen.ShowTeleportPacketOrBuilder> showTeleportBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+     * @return Whether the showTeleport field is set.
+     */
+    @java.lang.Override
+    public boolean hasShowTeleport() {
+      return typedPacketCase_ == 43;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+     * @return The showTeleport.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ShowTeleportPacket getShowTeleport() {
+      if (showTeleportBuilder_ == null) {
+        if (typedPacketCase_ == 43) {
+          return (org.y1000.network.gen.ShowTeleportPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.ShowTeleportPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 43) {
+          return showTeleportBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ShowTeleportPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+     */
+    public Builder setShowTeleport(org.y1000.network.gen.ShowTeleportPacket value) {
+      if (showTeleportBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        showTeleportBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 43;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+     */
+    public Builder setShowTeleport(
+        org.y1000.network.gen.ShowTeleportPacket.Builder builderForValue) {
+      if (showTeleportBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        showTeleportBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 43;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+     */
+    public Builder mergeShowTeleport(org.y1000.network.gen.ShowTeleportPacket value) {
+      if (showTeleportBuilder_ == null) {
+        if (typedPacketCase_ == 43 &&
+            typedPacket_ != org.y1000.network.gen.ShowTeleportPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.ShowTeleportPacket.newBuilder((org.y1000.network.gen.ShowTeleportPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 43) {
+          showTeleportBuilder_.mergeFrom(value);
+        } else {
+          showTeleportBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 43;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+     */
+    public Builder clearShowTeleport() {
+      if (showTeleportBuilder_ == null) {
+        if (typedPacketCase_ == 43) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 43) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        showTeleportBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+     */
+    public org.y1000.network.gen.ShowTeleportPacket.Builder getShowTeleportBuilder() {
+      return getShowTeleportFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ShowTeleportPacketOrBuilder getShowTeleportOrBuilder() {
+      if ((typedPacketCase_ == 43) && (showTeleportBuilder_ != null)) {
+        return showTeleportBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 43) {
+          return (org.y1000.network.gen.ShowTeleportPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.ShowTeleportPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ShowTeleportPacket showTeleport = 43;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ShowTeleportPacket, org.y1000.network.gen.ShowTeleportPacket.Builder, org.y1000.network.gen.ShowTeleportPacketOrBuilder> 
+        getShowTeleportFieldBuilder() {
+      if (showTeleportBuilder_ == null) {
+        if (!(typedPacketCase_ == 43)) {
+          typedPacket_ = org.y1000.network.gen.ShowTeleportPacket.getDefaultInstance();
+        }
+        showTeleportBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ShowTeleportPacket, org.y1000.network.gen.ShowTeleportPacket.Builder, org.y1000.network.gen.ShowTeleportPacketOrBuilder>(
+                (org.y1000.network.gen.ShowTeleportPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 43;
+      onChanged();
+      return showTeleportBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

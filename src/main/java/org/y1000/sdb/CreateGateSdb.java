@@ -24,4 +24,8 @@ public interface CreateGateSdb {
     boolean isVisible(String name);
 
     String getRandomPos(String name);
+
+    int getShape(String name);
+
+    String getViewName(String name);
 }

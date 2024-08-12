@@ -20,7 +20,7 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
         Set<String> names = sdb.columnNames();
         Set<String> items = sdb.names();
         for (String i: items) {
-            if (!"7".equals(sdb.get(i, "Kind")))
+            if (!i.contains("妖"))
                 continue;
 //            !"2".equals(sdb.get(i, "Kind"))
 //            )
@@ -114,6 +114,11 @@ public final class DynamicObjectSdbImpl extends AbstractSdbReader implements Dyn
     @Override
     public Optional<String> getSoundEvent(String name) {
         return getOptional(name, "SoundEvent");
+    }
+
+    @Override
+    public Optional<String> getSoundDie(String name) {
+        return getOptional(name, "SoundDie");
     }
 
     @Override

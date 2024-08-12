@@ -43,8 +43,18 @@ public record Rectangle(Coordinate start, Coordinate end) {
     }
 
     private Coordinate random() {
-        var x = ThreadLocalRandom.current().nextInt(start().x(), end.x());
-        var y = ThreadLocalRandom.current().nextInt(start().y(), end.y());
+        int x;
+        if (start.x() == end.x()) {
+            x = start.x();
+        } else {
+            x = ThreadLocalRandom.current().nextInt(start().x(), end.x());
+        }
+        int y;
+        if (start.y() == end.y()) {
+            y = start.y();
+        } else {
+            y = ThreadLocalRandom.current().nextInt(start().y(), end.y());
+        }
         return new Coordinate(x, y);
     }
 }

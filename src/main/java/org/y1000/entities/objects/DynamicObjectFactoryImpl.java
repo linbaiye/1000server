@@ -32,13 +32,22 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
                     .dynamicObjectSdb(dynamicObjectSdb)
                     .build();
         } else if (kind == DynamicObjectType.KILLABLE) {
-            return KillableDynamicObject.builder()
+            return dynamicObjectSdb.getRegenInterval(name) > 0 ?
+            RespawnKillableDynamicObject.builder()
                     .id(id)
                     .coordinate(coordinate)
                     .idName(name)
                     .realmMap(realmMap)
                     .dynamicObjectSdb(dynamicObjectSdb)
-                    .build();
+                    .build()
+                    :
+                    KillableDynamicObject.builder()
+                            .id(id)
+                            .coordinate(coordinate)
+                            .idName(name)
+                            .realmMap(realmMap)
+                            .dynamicObjectSdb(dynamicObjectSdb)
+                            .build();
         } else if (kind == DynamicObjectType.YAOHUA) {
             return Yaohua.builder()
                     .id(id)

@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.1
 package org.y1000.network.gen;
 
-public interface ShowItemPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ShowItemPacket)
+public interface ShowTeleportPacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ShowTeleportPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -13,17 +13,6 @@ public interface ShowItemPacketOrBuilder extends
    * @return The id.
    */
   long getId();
-
-  /**
-   * <code>optional int32 number = 4;</code>
-   * @return Whether the number field is set.
-   */
-  boolean hasNumber();
-  /**
-   * <code>optional int32 number = 4;</code>
-   * @return The number.
-   */
-  int getNumber();
 
   /**
    * <code>int32 coordinateX = 5;</code>
@@ -48,4 +37,10 @@ public interface ShowItemPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getNameBytes();
+
+  /**
+   * <code>int32 shape = 8;</code>
+   * @return The shape.
+   */
+  int getShape();
 }

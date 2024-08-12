@@ -2,7 +2,7 @@ package org.y1000.entities.teleport;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.PlayerRealmEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.sdb.CreateGateSdb;
 import org.y1000.util.Coordinate;
@@ -23,7 +23,7 @@ public abstract class AbstractTeleport implements Teleport {
 
     private final Coordinate coordinate;
 
-    private final UnaryAction<RealmEvent> teleportEventHandler;
+    private final UnaryAction<PlayerRealmEvent> teleportEventHandler;
 
     private final int toRealm;
 
@@ -35,7 +35,7 @@ public abstract class AbstractTeleport implements Teleport {
     public AbstractTeleport(long id,
                             String idName,
                             CreateGateSdb createGateSdb,
-                            UnaryAction<RealmEvent> teleportEventHandler) {
+                            UnaryAction<PlayerRealmEvent> teleportEventHandler) {
         Validate.notNull(idName);
         Validate.notNull(teleportEventHandler);
         Validate.notNull(createGateSdb);
@@ -51,6 +51,7 @@ public abstract class AbstractTeleport implements Teleport {
         rejectCoordinate = Coordinate.Empty;
         realmId = 0;
     }
+
 
     public long id() {
         return id;

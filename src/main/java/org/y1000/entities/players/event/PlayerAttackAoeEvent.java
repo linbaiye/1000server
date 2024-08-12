@@ -6,8 +6,10 @@ import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.objects.AbstractKillableDynamicObject;
 import org.y1000.entities.objects.DynamicObject;
 import org.y1000.entities.objects.KillableDynamicObject;
+import org.y1000.entities.objects.RespawnKillableDynamicObject;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.kungfu.AssistantKungFu;
@@ -49,7 +51,7 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
             exp = npc.attackedByAoe(player(), player().hit(), damage);
         } else if (entity instanceof Player targetPlayer) {
             exp = targetPlayer.attackedByAoe(damage, player().hit());
-        } else if (entity instanceof KillableDynamicObject dynamicObject) {
+        } else if (entity instanceof AbstractKillableDynamicObject dynamicObject) {
             dynamicObject.attackedByAoe(damage);
         }
         return exp;
@@ -87,7 +89,7 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
     }
 
     public static PlayerAttackAoeEvent melee(Player player, AttackableActiveEntity target, AssistantKungFu assistantKungFu) {
-        Validate.isTrue(player.coordinate().directDistance(target.coordinate()) <= 1);
+        Validate.isTrue(target.canBeMeleeAt(player.coordinate()));
         return new PlayerAttackAoeEvent(player, target, assistantKungFu.computeDamage(player.damage()), assistantKungFu.affectedCoordinates(player), true);
     }
 

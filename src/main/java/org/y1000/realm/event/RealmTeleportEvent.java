@@ -6,7 +6,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.network.Connection;
 import org.y1000.util.Coordinate;
 
-public class RealmTeleportEvent implements RealmEvent {
+public class RealmTeleportEvent implements PlayerRealmEvent {
     private final Player player;
     private final int realmId;
     private final Coordinate toCoordinate;

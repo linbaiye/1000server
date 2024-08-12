@@ -7,6 +7,7 @@ import org.y1000.entities.EntityLifebarEvent;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.objects.*;
 import org.y1000.entities.players.Player;
+import org.y1000.event.CrossRealmEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.sdb.CreateDynamicObjectSdb;
 import org.y1000.util.Coordinate;
@@ -28,16 +29,20 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
     private final CreateDynamicObjectSdb createDynamicObjectSdb;
 
+    private final RealmEventHandler realmEventHandler;
+
     public DynamicObjectManagerImpl(DynamicObjectFactory factory,
                                     EntityIdGenerator entityIdGenerator,
                                     EntityEventSender eventSender,
                                     GroundItemManager itemManager,
-                                    CreateDynamicObjectSdb dynamicObjectSdb) {
+                                    CreateDynamicObjectSdb dynamicObjectSdb,
+                                    RealmEventHandler realmEventHandler) {
         this.factory = factory;
         this.entityIdGenerator = entityIdGenerator;
         this.eventSender = eventSender;
         this.itemManager = itemManager;
         this.createDynamicObjectSdb = dynamicObjectSdb;
+        this.realmEventHandler = realmEventHandler;
         respawningEntityManager = new RespawningEntityManager<>();
     }
 
@@ -57,6 +62,8 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
             eventSender.notifyVisiblePlayers(entityEvent.source(), updateDynamicObjectEvent);
         } else if (entityEvent instanceof EntityLifebarEvent entityLifebarEvent) {
             eventSender.notifyVisiblePlayers(entityEvent.source(), entityLifebarEvent);
+        } else if (entityEvent instanceof CrossRealmEvent crossRealmEvent) {
+            realmEventHandler.handle(crossRealmEvent.toRealmEvent());
         } else if (entityEvent instanceof DynamicObjectDieEvent dieEvent) {
             createDynamicObjectSdb.getFirstNo(dieEvent.object().idName())
                             .flatMap(createDynamicObjectSdb::getDropItem)
@@ -68,7 +75,6 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
     protected Logger log() {
         return log;
     }
-
 
 
     private void addObject(DynamicObject entity) {
@@ -95,8 +101,10 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         for (String number : numbers) {
             String name = createDynamicObjectSdb.getName(number);
             var obj = factory.createDynamicObject(name, entityIdGenerator.next(), map, Coordinate.xy(createDynamicObjectSdb.getX(number), createDynamicObjectSdb.getY(number)));
-            if (obj != null)
+            if (obj != null) {
                 addObject(obj);
+                log.debug("Added dynamic object type {}, name {}.",obj.type(), obj.idName());
+            }
         }
     }
 

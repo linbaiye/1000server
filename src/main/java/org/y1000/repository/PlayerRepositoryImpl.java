@@ -5,6 +5,8 @@ import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.*;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.kungfu.attack.AttackKungFu;
+import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.util.Coordinate;
 
 public final class PlayerRepositoryImpl implements PlayerRepository {
@@ -49,17 +51,12 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("北海连环弓"));
         inventory.add(itemFactory.createMoney( 10000));
         inventory.add(itemFactory.createItem("金毛草", 10000));
-        inventory.add(itemFactory.createItem("杨家枪法", 1));
-        inventory.add(itemFactory.createItem("无击阵", 1));
-        inventory.add(itemFactory.createItem("雷剑式", 1));
-        inventory.add(itemFactory.createItem("壁射剑法", 1));
-        inventory.add(itemFactory.createItem("闪光剑破解", 1));
         inventory.add(itemFactory.createItem("黑沙刚体", 1));
-        inventory.add(itemFactory.createItem("银狼破皇剑"));
+        inventory.add(itemFactory.createItem("大脉神弓"));
+        inventory.add(itemFactory.createItem("梅雨弓"));
         inventory.add(itemFactory.createItem("女子黄龙弓服"));
-        inventory.add(itemFactory.createItem("女子黄龙鞋"));
-        inventory.add(itemFactory.createItem("女子黄龙手套"));
-        inventory.add(itemFactory.createItem("女子斗笠"));
+        inventory.add(itemFactory.createItem("血魔剑"));
+        inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("骨钥匙", 1000));
         inventory.add(itemFactory.createItem("火石", 1000));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));
@@ -81,11 +78,20 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private KungFuBook loadKungFuBook() {
         KungFuBook kungFuBook = kungFuBookFactory.create();
+        AttackKungFu bow = kungFuBook.findUnnamedAttack(AttackKungFuType.BOW);
+        levelUp(bow);
         kungFuBook.addToBasic(AssistantKungFu.builder().name("风灵旋").exp(0).eightDirection(false).build());
         AssistantKungFu ld = AssistantKungFu.builder().name("灵动八方").exp(ExperienceUtil.MAX_EXP).eightDirection(true).build();
-        levelUp(ld);
         kungFuBook.addToBasic(ld);
         KungFu sword = ((KungFuFactory) kungFuBookFactory).create("壁射剑法");
+        levelUp(sword);
+        kungFuBook.addToBasic(sword);
+
+        sword = ((KungFuFactory) kungFuBookFactory).create("点枪术");
+        levelUp(sword);
+        kungFuBook.addToBasic(sword);
+
+        sword = ((KungFuFactory) kungFuBookFactory).create("闪光剑破解");
         levelUp(sword);
         kungFuBook.addToBasic(sword);
         var prot = ((KungFuFactory) kungFuBookFactory).create("金钟罩");
@@ -107,7 +113,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
      */
 
     public static int lastRealmId() {
-        return 49;
+        return 3;
     }
     private PlayerImpl createFemale() {
         int slot = findSlot();
@@ -118,12 +124,15 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .id(slot + playerIdStart)
                 .name("雨诗妾")
                 //.coordinate(new Coordinate(175+ slot, 40))
-                //.coordinate(new Coordinate(309, 148))
+               // .coordinate(new Coordinate(55, 51)) // 王陵2层
+                //.coordinate(new Coordinate(80, 157)) // 王陵2层
+                .coordinate(new Coordinate(32, 165)) // 王陵2层
                 //.coordinate(new Coordinate(129, 99))
-                //.coordinate(new Coordinate(19, 31)) //修炼洞
-                .coordinate(new Coordinate(98, 46)) //新手村
+               // .coordinate(new Coordinate(37, 49)) //修炼洞
+                //.coordinate(new Coordinate(98, 46)) //新手村
              //   .coordinate(new Coordinate(172, 438)) //僵尸一
-                // .coordinate(new Coordinate(104, 60))
+               //  .coordinate(new Coordinate(344, 110))
+                //.coordinate(new Coordinate(344, 110))
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(weapon.kungFuType()))
@@ -132,12 +141,16 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .inventory(loadInventory())
                 .male(false)
                 .trouser(itemFactory.createTrouser("女子短裙"))
-                .clothing(itemFactory.createClothing("女子上衣"))
-                .boot(itemFactory.createBoot("女子皮鞋"))
-                .hat(itemFactory.createHat("女子百炼雨中客斗笠"))
-                .chest(itemFactory.createChest("女子百炼雨中客道袍"))
-                .hair(itemFactory.createHair("女子麻花辫"))
-                .wrist(itemFactory.createWrist("女子太极护腕"))
+                //.clothing(itemFactory.createClothing("女子上衣"))
+                .boot(itemFactory.createBoot("女子血魔战靴"))
+                //.boot(itemFactory.createBoot("女子皮鞋"))
+                .hat(itemFactory.createHat("女子血魔头盔"))
+                //.hat(itemFactory.createHat("女子百炼雨中客斗笠"))
+                .chest(itemFactory.createChest("女子血魔道袍"))
+                //.chest(itemFactory.createChest("女子百炼雨中客道袍"))
+                //.hair(itemFactory.createHair("女子麻花辫"))
+                .wrist(itemFactory.createWrist("女子血魔护腕"))
+                //.wrist(itemFactory.createWrist("女子太极护腕"))
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
                 .yinYang(yinyang)
                 .revival(0)
