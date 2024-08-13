@@ -110,6 +110,17 @@ private static final long serialVersionUID = 0L;
     return location_;
   }
 
+  public static final int COLORTYPE_FIELD_NUMBER = 4;
+  private int colorType_ = 0;
+  /**
+   * <code>int32 colorType = 4;</code>
+   * @return The colorType.
+   */
+  @java.lang.Override
+  public int getColorType() {
+    return colorType_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -133,6 +144,9 @@ private static final long serialVersionUID = 0L;
     if (location_ != 0) {
       output.writeInt32(3, location_);
     }
+    if (colorType_ != 0) {
+      output.writeInt32(4, colorType_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -152,6 +166,10 @@ private static final long serialVersionUID = 0L;
     if (location_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(3, location_);
+    }
+    if (colorType_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(4, colorType_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -177,6 +195,8 @@ private static final long serialVersionUID = 0L;
     }
     if (getLocation()
         != other.getLocation()) return false;
+    if (getColorType()
+        != other.getColorType()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -196,6 +216,8 @@ private static final long serialVersionUID = 0L;
     }
     hash = (37 * hash) + LOCATION_FIELD_NUMBER;
     hash = (53 * hash) + getLocation();
+    hash = (37 * hash) + COLORTYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getColorType();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -330,6 +352,7 @@ private static final long serialVersionUID = 0L;
       type_ = 0;
       text_ = "";
       location_ = 0;
+      colorType_ = 0;
       return this;
     }
 
@@ -373,6 +396,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
         result.location_ = location_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.colorType_ = colorType_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -432,6 +458,9 @@ private static final long serialVersionUID = 0L;
       if (other.getLocation() != 0) {
         setLocation(other.getLocation());
       }
+      if (other.getColorType() != 0) {
+        setColorType(other.getColorType());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -473,6 +502,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000004;
               break;
             } // case 24
+            case 32: {
+              colorType_ = input.readInt32();
+              bitField0_ |= 0x00000008;
+              break;
+            } // case 32
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -629,6 +663,38 @@ private static final long serialVersionUID = 0L;
     public Builder clearLocation() {
       bitField0_ = (bitField0_ & ~0x00000004);
       location_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int colorType_ ;
+    /**
+     * <code>int32 colorType = 4;</code>
+     * @return The colorType.
+     */
+    @java.lang.Override
+    public int getColorType() {
+      return colorType_;
+    }
+    /**
+     * <code>int32 colorType = 4;</code>
+     * @param value The colorType to set.
+     * @return This builder for chaining.
+     */
+    public Builder setColorType(int value) {
+
+      colorType_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 colorType = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearColorType() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      colorType_ = 0;
       onChanged();
       return this;
     }

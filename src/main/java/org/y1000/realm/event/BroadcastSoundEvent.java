@@ -1,17 +1,19 @@
 package org.y1000.realm.event;
 
-
-import lombok.Getter;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.creatures.event.EntitySoundEvent;
+import org.y1000.entities.players.Player;
 
-public record BroadcastSoundEvent(String sound) implements RealmEvent {
+public record BroadcastSoundEvent(String sound) implements BroadcastEvent {
 
     public BroadcastSoundEvent {
         Validate.notNull(sound);
     }
 
     @Override
-    public RealmEventType realmEventType() {
-        return RealmEventType.BROADCAST;
+    public void send(Player player) {
+        if (player != null) {
+            player.emitEvent(EntitySoundEvent.broadcast(player, sound));
+        }
     }
 }

@@ -113,7 +113,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
      */
 
     public static int lastRealmId() {
-        return 3;
+        return 49;
     }
     private PlayerImpl createFemale() {
         int slot = findSlot();
@@ -126,13 +126,13 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 //.coordinate(new Coordinate(175+ slot, 40))
                // .coordinate(new Coordinate(55, 51)) // 王陵2层
                 //.coordinate(new Coordinate(80, 157)) // 王陵2层
-                .coordinate(new Coordinate(32, 165)) // 王陵2层
+               // .coordinate(new Coordinate(32, 165)) // 王陵2层
                 //.coordinate(new Coordinate(129, 99))
-               // .coordinate(new Coordinate(37, 49)) //修炼洞
-                //.coordinate(new Coordinate(98, 46)) //新手村
+                //.coordinate(new Coordinate(37, 49)) //修炼洞
+                .coordinate(new Coordinate(98, 46)) //新手村
              //   .coordinate(new Coordinate(172, 438)) //僵尸一
                //  .coordinate(new Coordinate(344, 110))
-                //.coordinate(new Coordinate(344, 110))
+               // .coordinate(new Coordinate(530, 462))
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(weapon.kungFuType()))

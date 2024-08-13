@@ -4,10 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.Rope;
 import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
@@ -19,6 +21,9 @@ import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.util.Coordinate;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -36,6 +41,8 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     private final TradeManager tradeManager;
 
     private final DynamicObjectManager dynamicObjectManager;
+
+    private final Set<Rope> ropes;
 
     public PlayerManagerImpl(EntityEventSender eventSender,
                              GroundItemManager itemManager,
@@ -55,6 +62,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         this.projectileManager = new ProjectileManager();
         this.tradeManager = tradeManager;
         this.dynamicObjectManager = dynamicObjectManager;
+        ropes = new HashSet<>();
     }
 
     @Override
@@ -98,6 +106,18 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     public void update(long delta) {
         updateManagedEntities(delta);
         projectileManager.update(delta);
+        updateRopes(delta);
+    }
+
+    private void updateRopes(long delta) {
+        Iterator<Rope> iterator = ropes.iterator();
+        while (iterator.hasNext()) {
+            Rope next = iterator.next();
+            next.update(delta);
+            if (next.done()) {
+                iterator.remove();
+            }
+        }
     }
 
     @Override
@@ -117,6 +137,13 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         } else if (updateTradeEvent.type() == ClientUpdateTradeEvent.ClientUpdateType.CONFIRM) {
             tradeManager.confirmTrade(player);
         }
+    }
+
+    private void handleDragPlayerEvent(Player player, Player dragged) {
+        if (dragged.stateEnum() != State.DIE || dragged.coordinate().directDistance(player.coordinate()) > 2) {
+            return;
+        }
+        ropes.add(new Rope(dragged, player));
     }
 
     @Override
@@ -145,6 +172,8 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
             handleUpdateTradeEvent(dataEvent.player(), updateTradeEvent);
         } else if (dataEvent.data() instanceof ClientTriggerDynamicObjectEvent triggerDynamicObjectEvent) {
             dynamicObjectManager.triggerDynamicObject(triggerDynamicObjectEvent.id(), dataEvent.player(), triggerDynamicObjectEvent.useSlot());
+        } else if (dataEvent.data() instanceof ClientDragPlayerEvent dragPlayerEvent) {
+            find(dragPlayerEvent.target()).ifPresent(dragged -> handleDragPlayerEvent(dataEvent.player(), dragged));
         } else {
             dataEvent.player().handleClientEvent(dataEvent.data());
         }

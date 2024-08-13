@@ -9,18 +9,29 @@ import org.y1000.network.gen.Packet;
 public final class EntitySoundEvent extends Abstract2ClientEntityEvent {
 
     private final String sound;
+    private final long id;
     public EntitySoundEvent(ActiveEntity source, String sound) {
+        this(source, sound, source.id());
+    }
+
+    public EntitySoundEvent(ActiveEntity source, String sound, long id) {
         super(source);
         this.sound = sound;
+        this.id = id;
+    }
+
+    public static EntitySoundEvent broadcast(ActiveEntity source, String sound) {
+        return new EntitySoundEvent(source, sound, 0);
     }
 
     @Override
     protected Packet buildPacket() {
         return Packet.newBuilder()
                 .setSound(CreatureSoundEventPacket.newBuilder()
-                        .setId(source().id())
+                        .setId(id)
                         .setSound(sound)
-                        .build()).build();
+                        .build())
+                .build();
     }
 
     @Override

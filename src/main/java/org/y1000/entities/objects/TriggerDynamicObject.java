@@ -133,6 +133,11 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
     }
 
 
+    public boolean isTriggered() {
+        return state == DynamicObjectState.CHANGED ||
+                state == DynamicObjectState.CHANGING;
+    }
+
     @Override
     public void respawn() {
         realmMap().occupy(this);

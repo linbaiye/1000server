@@ -272,6 +272,7 @@ message TextMessagePacket {
   int32 type = 1;
   optional string text = 2;
   int32 location = 3;
+  int32 colorType = 4;
 }
 
 message ToggleKungFuPacket {

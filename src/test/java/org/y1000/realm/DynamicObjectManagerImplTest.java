@@ -37,6 +37,8 @@ class DynamicObjectManagerImplTest {
 
     private CreateDynamicObjectSdb createDynamicObjectSdb;
 
+    private RealmEventHandler eventHandler;
+
 
     @BeforeEach
     void setUp() {
@@ -45,9 +47,9 @@ class DynamicObjectManagerImplTest {
         entityEventSender = Mockito.mock(EntityEventSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
         createDynamicObjectSdb = Mockito.mock(CreateDynamicObjectSdb.class);
-        var eventHandler = Mockito.mock(RealmEventHandler.class);
-        manager = new DynamicObjectManagerImpl(factory, entityIdGenerator, entityEventSender, itemManager, createDynamicObjectSdb, eventHandler);
+        eventHandler = Mockito.mock(RealmEventHandler.class);
         realmMap = Mockito.mock(RealmMap.class);
+        manager = new DynamicObjectManagerImpl(factory, entityIdGenerator, entityEventSender, itemManager, createDynamicObjectSdb, eventHandler, realmMap);
     }
 
     @Test
@@ -89,7 +91,7 @@ class DynamicObjectManagerImplTest {
         when(factory.createDynamicObject(anyString(), anyLong(), any(RealmMap.class), any(Coordinate.class))).thenReturn(killable);
         when(createDynamicObjectSdb.getName(anyString())).thenReturn("test");
         when(createDynamicObjectSdb.getNumbers()).thenReturn(Set.of(killable.idName()));
-        manager.init(realmMap);
+        manager.init();
         var eventListener = new TestingEventListener();
         killable.registerEventListener(eventListener);
         when(player.coordinate()).thenReturn(Coordinate.xy(2, 3));

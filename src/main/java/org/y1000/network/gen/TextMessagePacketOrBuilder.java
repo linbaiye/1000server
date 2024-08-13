@@ -36,4 +36,10 @@ public interface TextMessagePacketOrBuilder extends
    * @return The location.
    */
   int getLocation();
+
+  /**
+   * <code>int32 colorType = 4;</code>
+   * @return The colorType.
+   */
+  int getColorType();
 }

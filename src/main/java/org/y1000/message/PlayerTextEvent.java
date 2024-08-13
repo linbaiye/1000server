@@ -26,11 +26,33 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         }
     }
 
-    private final String text;
 
-    private final TextType type;
-    private final Location location;
 
+    public enum ColorType implements ValueEnum {
+        FIRST_GRADE(1),
+        SECOND_GRADE(2),
+        THIRD_GRADE(3),
+        FOURTH_GRADE(4),
+        FIVE_GRADE(5),
+        SIX_GRADE(6),
+        SEVEN_GRADE(7),
+        EIGHT_GRADE(8),
+        NINE_GRADE(9),
+        TEN_GRADE(10),
+        SAY(11),
+        ;
+
+        private final int val;
+
+        ColorType(int val) {
+            this.val = val;
+        }
+
+        @Override
+        public int value() {
+            return val;
+        }
+    }
 
     public enum TextType implements ValueEnum {
         FARAWAY(1),
@@ -61,6 +83,8 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
         KUNGFU_LEVEL_LOW(14),
 
+        NINE_TAIL_FOX_SHIFT(15),
+
 
         CUSTOM(1000000);
         ;
@@ -77,21 +101,34 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         }
     }
 
+    private final String text;
+    private final TextType type;
+    private final Location location;
 
-    public PlayerTextEvent(Player source, String text, TextType type) {
+    private final ColorType colorType;
+
+
+    private PlayerTextEvent(Player source, String text, TextType type) {
         this(source, text, type, Location.DOWN);
     }
 
-    public PlayerTextEvent(Player source, String text, TextType type, Location location) {
+    private PlayerTextEvent(Player source, String text, TextType type, Location location) {
+        this(source, text, type, location, ColorType.SAY);
+    }
+
+    public PlayerTextEvent(Player source, String text, TextType type, Location location, ColorType colorType) {
         super(source, true);
         if (type == TextType.CUSTOM) {
             Validate.isTrue(text != null && text.length() <= 30);
         }
+        Validate.notNull(type);
+        Validate.notNull(location);
+        Validate.notNull(colorType);
         this.text = text;
         this.type = type;
         this.location = location;
+        this.colorType = colorType;
     }
-
 
 
     @Override
@@ -102,6 +139,7 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
     @Override
     protected Packet buildPacket() {
         TextMessagePacket.Builder buider = TextMessagePacket.newBuilder().setType(type.value())
+                .setColorType(colorType.value())
                 .setLocation(location.value());
         if (text != null) {
             buider.setText(text);
@@ -139,10 +177,6 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
     public static PlayerTextEvent inventoryFull(Player player) {
         return new PlayerTextEvent(player, null, TextType.INVENTORY_FULL);
-    }
-
-    public static PlayerTextEvent tradeDisabled(Player player) {
-        return new PlayerTextEvent(player, null, TextType.TRADE_REJECTED);
     }
 
     public static PlayerTextEvent noWeapon(Player player) {
@@ -186,7 +220,10 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
     }
 
     public static PlayerTextEvent pickedItem(Player player, String name, int number) {
-        return new PlayerTextEvent(player, "获得 " + name + " " + number + "个。", TextType.CUSTOM, Location.LEFT);
+        return new PlayerTextEvent(player, name + " 获得 " + number + "个。", TextType.CUSTOM, Location.LEFT);
     }
 
+    public static PlayerTextEvent nineTailFoxShift(Player player) {
+        return new PlayerTextEvent(player, null, TextType.CUSTOM, Location.DOWN, ColorType.SIX_GRADE);
+    }
 }

@@ -125,8 +125,8 @@ public final class RealmManager implements Runnable , RealmEventHandler {
     public void handle(RealmEvent realmEvent) {
         if (realmEvent instanceof RealmTeleportEvent teleportEvent) {
             handleTeleport(teleportEvent);
-        } else if (realmEvent instanceof BroadcastSoundEvent broadcastSoundEvent) {
-            groups.forEach(realmGroup -> realmGroup.handle(broadcastSoundEvent));
+        } else if (realmEvent.realmEventType() == RealmEventType.BROADCAST) {
+            groups.forEach(realmGroup -> realmGroup.handle(realmEvent));
         } else if (realmEvent instanceof RealmLetterEvent<?> realmLetterEvent) {
             RealmGroup group = realmIdGroupMap.get(realmLetterEvent.realmId());
             if (group != null) {

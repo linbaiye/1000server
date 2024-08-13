@@ -31,18 +31,22 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
     private final RealmEventHandler realmEventHandler;
 
+    private final RealmMap realmMap;
+
     public DynamicObjectManagerImpl(DynamicObjectFactory factory,
                                     EntityIdGenerator entityIdGenerator,
                                     EntityEventSender eventSender,
                                     GroundItemManager itemManager,
                                     CreateDynamicObjectSdb dynamicObjectSdb,
-                                    RealmEventHandler realmEventHandler) {
+                                    RealmEventHandler realmEventHandler,
+                                    RealmMap realmMap) {
         this.factory = factory;
         this.entityIdGenerator = entityIdGenerator;
         this.eventSender = eventSender;
         this.itemManager = itemManager;
         this.createDynamicObjectSdb = dynamicObjectSdb;
         this.realmEventHandler = realmEventHandler;
+        this.realmMap = realmMap;
         respawningEntityManager = new RespawningEntityManager<>();
     }
 
@@ -63,7 +67,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         } else if (entityEvent instanceof EntityLifebarEvent entityLifebarEvent) {
             eventSender.notifyVisiblePlayers(entityEvent.source(), entityLifebarEvent);
         } else if (entityEvent instanceof CrossRealmEvent crossRealmEvent) {
-            realmEventHandler.handle(crossRealmEvent.toRealmEvent());
+            realmEventHandler.handle(crossRealmEvent.realmEvent());
         } else if (entityEvent instanceof DynamicObjectDieEvent dieEvent) {
             createDynamicObjectSdb.getFirstNo(dieEvent.object().idName())
                             .flatMap(createDynamicObjectSdb::getDropItem)
@@ -96,14 +100,21 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
     }
 
     @Override
-    public void init(RealmMap map) {
+    public void init() {
         Set<String> numbers = createDynamicObjectSdb.getNumbers();
         for (String number : numbers) {
             String name = createDynamicObjectSdb.getName(number);
-            var obj = factory.createDynamicObject(name, entityIdGenerator.next(), map, Coordinate.xy(createDynamicObjectSdb.getX(number), createDynamicObjectSdb.getY(number)));
+            var obj = factory.createDynamicObject(name, entityIdGenerator.next(),
+                    realmMap, Coordinate.xy(createDynamicObjectSdb.getX(number), createDynamicObjectSdb.getY(number)));
             if (obj != null) {
                 addObject(obj);
-                log.debug("Added dynamic object type {}, name {}.",obj.type(), obj.idName());
+                //log.debug("Added dynamic object type {}, name {}.",obj.type(), obj.idName());
+            }
+        }
+        Set<DynamicObject> entities = getEntities();
+        for (DynamicObject entity : entities) {
+            if (entity instanceof EventDrivenDynamicObject dynamicObject) {
+                dynamicObject.subscribe(entities);
             }
         }
     }

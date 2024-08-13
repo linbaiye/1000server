@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.message.SetPositionEvent;
@@ -9,8 +10,11 @@ import org.y1000.util.Coordinate;
 
 @Slf4j
 public final class AiPathUtil {
-    private static Direction computeNextMoveDirection(Creature creature,
+    public static Direction computeNextMoveDirection(Creature creature,
                                                  Coordinate dest, Coordinate previous) {
+        Validate.notNull(creature);
+        Validate.notNull(dest);
+        Validate.notNull(previous);
         int minDist = Integer.MAX_VALUE;
         Direction towards = null;
         for (Direction direction : Direction.values()) {

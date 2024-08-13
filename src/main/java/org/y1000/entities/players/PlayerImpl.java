@@ -468,6 +468,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
     }
 
+
     @Override
     public void handleClientEvent(ClientEvent clientEvent) {
         if (stateEnum() == State.DIE) {

@@ -2,10 +2,7 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.realm.event.BroadcastSoundEvent;
-import org.y1000.realm.event.PlayerRealmEvent;
-import org.y1000.realm.event.RealmEvent;
-import org.y1000.realm.event.RealmLetterEvent;
+import org.y1000.realm.event.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -122,8 +119,8 @@ public final class RealmGroup implements Runnable {
     private void handleRealmEvent(RealmEvent realmEvent){
         if (realmEvent instanceof PlayerRealmEvent playerRealmEvent) {
             find(playerRealmEvent.realmId()).ifPresent(realm -> realm.handle(playerRealmEvent));
-        } else if (realmEvent instanceof BroadcastSoundEvent broadcastSoundEvent) {
-            Arrays.stream(realms).forEach(realm -> realm.handle(broadcastSoundEvent));
+        } else if (realmEvent.realmEventType() == RealmEventType.BROADCAST ) {
+            Arrays.stream(realms).forEach(realm -> realm.handle(realmEvent));
         } else if (realmEvent instanceof RealmLetterEvent<?> letterEvent) {
             find(letterEvent.realmId()).ifPresent(realm -> realm.handle(letterEvent));
         }

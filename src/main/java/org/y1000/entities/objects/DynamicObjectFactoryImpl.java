@@ -56,6 +56,8 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
                     .realmMap(realmMap)
                     .dynamicObjectSdb(dynamicObjectSdb)
                     .build();
+        } else if (kind == DynamicObjectType.IMMUNE) {
+
         }
         log.error("Unable to create dynamic object : " + name);
         return null;

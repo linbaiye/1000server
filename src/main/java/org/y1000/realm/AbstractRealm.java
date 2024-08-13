@@ -88,7 +88,7 @@ abstract class AbstractRealm implements Realm {
         if (npcManager != null)
             npcManager.init();
         if (dynamicObjectManager != null)
-            dynamicObjectManager.init(this.map());
+            dynamicObjectManager.init();
         teleportManager.init(this::onPlayerTeleport);
         log().debug("Initialized {}.", this);
     }
@@ -141,8 +141,8 @@ abstract class AbstractRealm implements Realm {
                 playerManager.onClientEvent(dataEvent, npcManager);
             } else if (event instanceof RealmTeleportEvent teleportEvent) {
                 handleTeleportEvent(teleportEvent);
-            } else if (event instanceof BroadcastSoundEvent broadcastSoundEvent) {
-                playerManager().allPlayers().forEach(player -> player.emitEvent(new EntitySoundEvent(player, broadcastSoundEvent.sound())));
+            } else if (event instanceof BroadcastEvent broadcastEvent) {
+                playerManager().allPlayers().forEach(broadcastEvent::send);
             } else if (event instanceof RealmLetterEvent<?> letterEvent) {
                 npcManager.handleCrossRealmEvent(letterEvent);
             }
