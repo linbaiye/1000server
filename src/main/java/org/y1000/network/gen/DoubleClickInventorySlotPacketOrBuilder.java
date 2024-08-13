@@ -9,8 +9,8 @@ public interface DoubleClickInventorySlotPacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int32 slot = 1;</code>
-   * @return The slot.
+   * <code>int32 ropeSlot = 1;</code>
+   * @return The ropeSlot.
    */
   int getSlot();
 }

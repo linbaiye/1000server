@@ -93,8 +93,8 @@ private static final long serialVersionUID = 0L;
   public static final int SLOT_FIELD_NUMBER = 3;
   private int slot_ = 0;
   /**
-   * <code>int32 slot = 3;</code>
-   * @return The slot.
+   * <code>int32 ropeSlot = 3;</code>
+   * @return The ropeSlot.
    */
   @java.lang.Override
   public int getSlot() {
@@ -613,16 +613,16 @@ private static final long serialVersionUID = 0L;
 
     private int slot_ ;
     /**
-     * <code>int32 slot = 3;</code>
-     * @return The slot.
+     * <code>int32 ropeSlot = 3;</code>
+     * @return The ropeSlot.
      */
     @java.lang.Override
     public int getSlot() {
       return slot_;
     }
     /**
-     * <code>int32 slot = 3;</code>
-     * @param value The slot to set.
+     * <code>int32 ropeSlot = 3;</code>
+     * @param value The ropeSlot to set.
      * @return This builder for chaining.
      */
     public Builder setSlot(int value) {
@@ -633,7 +633,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int32 slot = 3;</code>
+     * <code>int32 ropeSlot = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearSlot() {

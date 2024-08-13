@@ -60,7 +60,7 @@ class PillSlotsTest {
         }
         Mockito.verify(player, Mockito.times(pill.useCount())).emitEvent(any(PlayerAttributeEvent.class));
 
-        // make sure slot is emptied.
+        // make sure ropeSlot is emptied.
         Mockito.reset(player);
         slots.usePill(player, pill);
         slots.usePill(player, pill);

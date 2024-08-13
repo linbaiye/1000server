@@ -15,8 +15,8 @@ public interface ClientTradePlayerPacketOrBuilder extends
   long getTargetId();
 
   /**
-   * <code>int32 slot = 2;</code>
-   * @return The slot.
+   * <code>int32 ropeSlot = 2;</code>
+   * @return The ropeSlot.
    */
   int getSlot();
 }

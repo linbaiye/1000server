@@ -15,13 +15,13 @@ public interface OpenTradeWindowPacketOrBuilder extends
   long getAnotherPlayerId();
 
   /**
-   * <code>optional int32 slot = 2;</code>
-   * @return Whether the slot field is set.
+   * <code>optional int32 ropeSlot = 2;</code>
+   * @return Whether the ropeSlot field is set.
    */
   boolean hasSlot();
   /**
-   * <code>optional int32 slot = 2;</code>
-   * @return The slot.
+   * <code>optional int32 ropeSlot = 2;</code>
+   * @return The ropeSlot.
    */
   int getSlot();
 }

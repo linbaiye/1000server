@@ -6,6 +6,7 @@ import org.y1000.entities.creatures.State;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.message.AbstractPositionEvent;
+import org.y1000.message.InputResponseMessage;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.util.Coordinate;
@@ -89,7 +90,7 @@ end;
 
     private void follow() {
         var dist = distance();
-        if (done() || dist < 1) {
+        if (done() || dist < 1 || dragged.stateEnum() != State.DIE) {
             return;
         }
         var dir = dragged.coordinate().computeDirection(moving.coordinate());
@@ -114,12 +115,16 @@ end;
         dragged.emitEvent(SetPositionEvent.of(dragged));
     }
 
+    public void breakIfDraggedAgain(Player dragged) {
+        if (this.dragged.equals(dragged)) {
+            mills = 0;
+        }
+    }
+
     @Override
     public void onEvent(EntityEvent entityEvent) {
-        if (entityEvent != null && moving.equals(entityEvent.source()) &&
-                entityEvent instanceof AbstractPositionEvent) {
-            follow();
-        } else if (entityEvent instanceof PlayerLeftEvent || moving.stateEnum() == State.DIE) {
+        if (entityEvent instanceof PlayerLeftEvent || moving.stateEnum() == State.DIE ||
+                dragged.stateEnum() != State.DIE) {
             mills = 0;
         }
     }

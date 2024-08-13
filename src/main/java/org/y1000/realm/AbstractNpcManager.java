@@ -91,6 +91,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
                             () -> log().warn("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), realmMap.mapFile()));
                 } catch (Exception e) {
                     log().error("Failed to create npc {}.", name, e);
+                    throw new RuntimeException(e);
                 }
             }
         }

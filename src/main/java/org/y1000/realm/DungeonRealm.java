@@ -49,7 +49,10 @@ final class DungeonRealm extends AbstractRealm {
                         int interval,
                         Supplier<LocalDateTime> timeSupplier) {
         super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb);
-        Validate.isTrue(interval == 180000 || interval == 360000);
+        if (interval != 180000 && interval != 360000) {
+            log.warn("Not a neat dungeon realm: {}.", id);
+        }
+
         Validate.notNull(timeSupplier);
         this.interval = interval;
         this.dateTimeSupplier = timeSupplier;

@@ -43,13 +43,13 @@ public interface UpdateTradeWindowPacketOrBuilder extends
   long getNumber();
 
   /**
-   * <code>optional int32 slot = 4;</code>
-   * @return Whether the slot field is set.
+   * <code>optional int32 ropeSlot = 4;</code>
+   * @return Whether the ropeSlot field is set.
    */
   boolean hasSlot();
   /**
-   * <code>optional int32 slot = 4;</code>
-   * @return The slot.
+   * <code>optional int32 ropeSlot = 4;</code>
+   * @return The ropeSlot.
    */
   int getSlot();
 

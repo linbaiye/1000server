@@ -35,13 +35,15 @@ class TradeManagerImplTest {
 
     private TestingEventListener traderEventListener;
     private TestingEventListener tradeeEventListener;
+    private EntityEventSender eventSender;
 
 
     @BeforeEach
     void setUp() {
+        eventSender = Mockito.mock(EntityEventSender.class);
         itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
         trader = Mockito.mock(Player.class);
-        tradeManager = new TradeManagerImpl();
+        tradeManager = new TradeManagerImpl(eventSender);
         traderInventory = new Inventory();
         traderInventory.add(itemFactory.createItem("长剑"));
         when(trader.inventory()).thenReturn(traderInventory);
@@ -120,11 +122,15 @@ class TradeManagerImplTest {
         tradeManager.start(trader, tradee, 1);
         tradeManager.onPlayerEvent(trader, new PlayerMoveEvent(trader, Direction.DOWN, Coordinate.xy(1, 2)));
         verify(trader, times(0)).emitEvent(any(UpdateTradeWindowEvent.class));
-        reset(trader);
-        when(trader.coordinate()).thenReturn(Coordinate.xy(5, 2));
-        tradeManager.onPlayerEvent(trader, new PlayerMoveEvent(trader, Direction.DOWN, Coordinate.xy(5, 3)));
+        tradeManager.addTradeItem(trader, 1, 1);
         verify(trader, times(1)).emitEvent(any(UpdateTradeWindowEvent.class));
         verify(tradee, times(1)).emitEvent(any(UpdateTradeWindowEvent.class));
+        assertNull(trader.inventory().getItem(1));
+        when(trader.coordinate()).thenReturn(Coordinate.xy(5, 2));
+        tradeManager.onPlayerEvent(trader, new PlayerMoveEvent(trader, Direction.DOWN, Coordinate.xy(5, 3)));
+        assertNotNull(trader.inventory().getItem(1));
+        verify(trader, times(2)).emitEvent(any(UpdateTradeWindowEvent.class));
+        verify(tradee, times(2)).emitEvent(any(UpdateTradeWindowEvent.class));
     }
 
     @Test

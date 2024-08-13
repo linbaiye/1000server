@@ -19,9 +19,8 @@ public final class CreateGateSdbImpl extends AbstractSdbReader implements Create
         Set<String> names = monstersSdb.columnNames();
         Set<String> items = monstersSdb.names();
         for (String i: items) {
-            if (!"1".equals(monstersSdb.get(i, "MapId"))) {
+            if (!i.equals("70"))
                 continue;
-            }
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {

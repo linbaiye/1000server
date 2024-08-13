@@ -84,13 +84,18 @@ abstract class AbstractRealm implements Realm {
     abstract Logger log();
 
     public void init() {
-        accumulatedMillis = System.currentTimeMillis();
-        if (npcManager != null)
-            npcManager.init();
-        if (dynamicObjectManager != null)
-            dynamicObjectManager.init();
-        teleportManager.init(this::onPlayerTeleport);
-        log().debug("Initialized {}.", this);
+        try {
+            accumulatedMillis = System.currentTimeMillis();
+            if (npcManager != null)
+                npcManager.init();
+            if (dynamicObjectManager != null)
+                dynamicObjectManager.init();
+            teleportManager.init(this::onPlayerTeleport);
+            log().debug("Initialized {}.", this);
+        } catch (Exception e) {
+            log().error("Failed to init realm {}.", id, e);
+            throw new RuntimeException(e);
+        }
     }
 
     MapSdb getMapSdb() {

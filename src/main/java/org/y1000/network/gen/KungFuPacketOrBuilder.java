@@ -27,8 +27,8 @@ public interface KungFuPacketOrBuilder extends
   int getLevel();
 
   /**
-   * <code>int32 slot = 3;</code>
-   * @return The slot.
+   * <code>int32 ropeSlot = 3;</code>
+   * @return The ropeSlot.
    */
   int getSlot();
 

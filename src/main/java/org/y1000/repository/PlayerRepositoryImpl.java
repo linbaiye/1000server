@@ -123,7 +123,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         return PlayerImpl.builder()
                 .id(slot + playerIdStart)
                 .name("雨诗妾")
-                //.coordinate(new Coordinate(175+ slot, 40))
+                //.coordinate(new Coordinate(175+ ropeSlot, 40))
                // .coordinate(new Coordinate(55, 51)) // 王陵2层
                 //.coordinate(new Coordinate(80, 157)) // 王陵2层
                // .coordinate(new Coordinate(32, 165)) // 王陵2层
@@ -173,7 +173,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         return PlayerImpl.builder()
                 .id(slot + playerIdStart)
                 .name("拓跋")
-                //.coordinate(new Coordinate(175+ slot, 40))
+                //.coordinate(new Coordinate(175+ ropeSlot, 40))
                 .coordinate(new Coordinate(500, 500))
                 //.coordinate(new Coordinate(309, 148))
                 //.coordinate(new Coordinate(129, 99))

@@ -4,19 +4,19 @@
 // Protobuf Java Version: 3.25.1
 package org.y1000.network.gen;
 
-public interface ClientToggleKungFuPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ClientToggleKungFuPacket)
+public interface ClientDragPlayerPacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.ClientDragPlayerPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int32 tab = 1;</code>
-   * @return The tab.
+   * <code>int64 targetId = 1;</code>
+   * @return The targetId.
    */
-  int getTab();
+  long getTargetId();
 
   /**
    * <code>int32 ropeSlot = 2;</code>
    * @return The ropeSlot.
    */
-  int getSlot();
+  int getRopeSlot();
 }

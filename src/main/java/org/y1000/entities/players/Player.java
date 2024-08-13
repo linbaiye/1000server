@@ -1,6 +1,7 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.projectile.Projectile;
@@ -129,6 +130,20 @@ public interface Player extends ViolentCreature {
     int attackedByAoe(Damage damage, int hit);
 
     boolean consumeItem(int slotId);
+
+    default boolean canDrag(Player target, int ropeSlot) {
+        if (stateEnum() == State.DIE || stateEnum() == State.FROZEN) {
+            return false;
+        }
+        if (target == null || target.stateEnum() != State.DIE) {
+            return false;
+        }
+        if (target.coordinate().directDistance(coordinate()) > 2) {
+            return false;
+        }
+        Item item = inventory().getItem(ropeSlot);
+        return item != null && item.name().equals("追魂索");
+    }
 
     void onProjectileReachTarget(Projectile projectile);
 }

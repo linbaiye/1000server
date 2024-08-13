@@ -10,6 +10,8 @@ import org.y1000.entities.trade.PlayerTrade;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
+import org.y1000.message.AbstractPositionEvent;
+import org.y1000.message.InputResponseMessage;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
@@ -22,9 +24,11 @@ import java.util.Map;
 public final class TradeManagerImpl implements TradeManager {
     private final Map<Player, PlayerTrade> ongoingTrades;
 
-
-    public TradeManagerImpl() {
+    private final EntityEventSender eventSender;
+    public TradeManagerImpl(EntityEventSender eventSender) {
+        Validate.notNull(eventSender);
         ongoingTrades = new HashMap<>();
+        this.eventSender = eventSender;
     }
 
     @Override
@@ -36,22 +40,22 @@ public final class TradeManagerImpl implements TradeManager {
         }
         Validate.notNull(trader.inventory().getItem(slotId));
         if (!tradee.tradeEnabled()) {
-            trader.emitEvent(PlayerTextEvent.rejectTrade(trader));
+            eventSender.notifySelf(PlayerTextEvent.rejectTrade(trader));
             return;
         }
         if (trader.coordinate().directDistance(tradee.coordinate()) > 2) {
-            trader.emitEvent(PlayerTextEvent.tooFarAway(trader));
+            eventSender.notifySelf(PlayerTextEvent.tooFarAway(trader));
             return;
         }
         if (ongoingTrades.containsKey(trader) || ongoingTrades.containsKey(tradee)) {
-            trader.emitEvent(PlayerTextEvent.multiTrade(trader));
+            eventSender.notifySelf(PlayerTextEvent.multiTrade(trader));
             return;
         }
         PlayerTrade trade = new PlayerTrade(trader, tradee);
         ongoingTrades.put(trader, trade);
         ongoingTrades.put(tradee, trade);
-        trader.emitEvent(new OpenTradeWindowEvent(trader, tradee.id(), slotId));
-        tradee.emitEvent(new OpenTradeWindowEvent(tradee, trader.id(), null));
+        eventSender.notifySelf(new OpenTradeWindowEvent(trader, tradee.id(), slotId));
+        eventSender.notifySelf(new OpenTradeWindowEvent(tradee, trader.id(), null));
     }
 
     private boolean needClose(EntityEvent event, Player trader, Player tradee) {
@@ -60,25 +64,29 @@ public final class TradeManagerImpl implements TradeManager {
         } else if (event instanceof CreatureDieEvent) {
             return true;
         }
+        log.debug("Checking distance.");
         return trader.coordinate().directDistance(tradee.coordinate()) > 2;
     }
 
 
     private void doClose(PlayerTrade trade) {
-        trade.getTrader().emitEvent(UpdateTradeWindowEvent.close(trade.getTrader()));
-        trade.getTradee().emitEvent(UpdateTradeWindowEvent.close(trade.getTradee()));
         ongoingTrades.remove(trade.getTradee());
         ongoingTrades.remove(trade.getTrader());
+        eventSender.notifySelf(UpdateTradeWindowEvent.close(trade.getTrader()));
+        eventSender.notifySelf(UpdateTradeWindowEvent.close(trade.getTradee()));
     }
 
     @Override
     public void onPlayerEvent(Player player, EntityEvent event) {
-        if (player == null || event == null || !ongoingTrades.containsKey(player)) {
+        if (player == null || !ongoingTrades.containsKey(player)) {
             return;
         }
-        PlayerTrade trade = ongoingTrades.get(player);
-        if (needClose(event, trade.getTrader(), trade.getTradee())) {
-            doClose(trade);
+        if (event instanceof PlayerLeftEvent || event instanceof InputResponseMessage ||
+                event instanceof CreatureDieEvent) {
+            PlayerTrade trade = ongoingTrades.get(player);
+            if (needClose(event, trade.getTrader(), trade.getTradee())) {
+                doCancel(player);
+            }
         }
     }
 
@@ -96,21 +104,21 @@ public final class TradeManagerImpl implements TradeManager {
             return;
         }
         player.inventory().decrease(inventorySlot, number);
-        player.emitEvent(new UpdateInventorySlotEvent(player, inventorySlot, player.inventory().getItem(inventorySlot)));
+        eventSender.notifySelf(new UpdateInventorySlotEvent(player, inventorySlot, player.inventory().getItem(inventorySlot)));
         if (item instanceof StackItem stackItem) {
             item = new StackItem(stackItem.item(), number);
         }
         int tradeWindowSlot = trade.addItem(player, item);
-        player.emitEvent(UpdateTradeWindowEvent.add(player, tradeWindowSlot, item, true));
+        eventSender.notifySelf(UpdateTradeWindowEvent.add(player, tradeWindowSlot, item, true));
         var another = trade.getTrader().equals(player) ? trade.getTradee() : trade.getTrader();
-        another.emitEvent(UpdateTradeWindowEvent.add(another, tradeWindowSlot, item, false));
+        eventSender.notifySelf(UpdateTradeWindowEvent.add(another, tradeWindowSlot, item, false));
     }
 
 
     private void addToInventory(Player player, Item item) {
         int slot = player.inventory().add(item);
         if (slot != 0) {
-            player.emitEvent(new UpdateInventorySlotEvent(player, slot, player.inventory().getItem(slot)));
+            eventSender.notifySelf(new UpdateInventorySlotEvent(player, slot, player.inventory().getItem(slot)));
             return;
         }
         log.warn("Player {} lost item {}.", player.id(), item);
@@ -130,14 +138,15 @@ public final class TradeManagerImpl implements TradeManager {
         Player tradee = playerTrade.getTradee();
         var active = trader.equals(player) ? trader : tradee;
         var passive = trader.equals(player) ? tradee: trader;
-        active.emitEvent(UpdateTradeWindowEvent.remove(active, tradeWindowSlot, true));
-        passive.emitEvent(UpdateTradeWindowEvent.remove(passive, tradeWindowSlot, false));
+        eventSender.notifySelf(UpdateTradeWindowEvent.remove(active, tradeWindowSlot, true));
+        eventSender.notifySelf(UpdateTradeWindowEvent.remove(passive, tradeWindowSlot, false));
     }
 
 
     private void addItemsToInventory(Player player, List<Item> items) {
         items.forEach(i -> addToInventory(player, i));
     }
+
 
     private void doCancel(Player player) {
         var trade = ongoingTrades.get(player);
@@ -167,8 +176,8 @@ public final class TradeManagerImpl implements TradeManager {
         if (!trade.getTrader().inventory().canTakeAll(trade.tradeeItems()) ||
                 !trade.getTradee().inventory().canTakeAll(trade.traderItems())) {
             doCancel(player);
-            trade.getTrader().emitEvent(PlayerTextEvent.inventoryFull(trade.getTrader()));
-            trade.getTradee().emitEvent(PlayerTextEvent.inventoryFull(trade.getTradee()));
+            eventSender.notifySelf(PlayerTextEvent.inventoryFull(trade.getTrader()));
+            eventSender.notifySelf(PlayerTextEvent.inventoryFull(trade.getTradee()));
         } else {
             addItemsToInventory(trade.getTrader(), trade.tradeeItems());
             addItemsToInventory(trade.getTradee(), trade.traderItems());

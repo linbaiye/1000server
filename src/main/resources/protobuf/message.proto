@@ -205,6 +205,11 @@ message ClientSwapKungFuSlotPacket {
   int32 slot2 = 3;
 }
 
+message ClientDragPlayerPacket {
+  int64 targetId = 1;
+  int32 ropeSlot = 2;
+}
+
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
@@ -226,6 +231,7 @@ message ClientPacket {
     ClientUpdateTradePacket updateTrade = 17;
     ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;
     ClientSwapKungFuSlotPacket swapKungFuSlot = 19;
+    ClientDragPlayerPacket dragPlayer = 20;
   }
 }
 

@@ -252,7 +252,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         Equipment equipped = equippedEquipments.remove(type);
         if (equipped == null) {
-            log.error("Trying to unequip from non equipped slot {}", type);
+            log.error("Trying to unequip from non equipped ropeSlot {}", type);
             return;
         }
         if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.QUANFA) {
