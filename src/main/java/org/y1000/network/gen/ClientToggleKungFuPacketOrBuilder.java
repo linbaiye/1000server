@@ -15,8 +15,8 @@ public interface ClientToggleKungFuPacketOrBuilder extends
   int getTab();
 
   /**
-   * <code>int32 ropeSlot = 2;</code>
-   * @return The ropeSlot.
+   * <code>int32 slot = 2;</code>
+   * @return The slot.
    */
   int getSlot();
 }

@@ -29,15 +29,14 @@ import org.y1000.util.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-class NpcManagerTest extends AbstractUnitTestFixture  {
+class NpcManagerImplTest extends AbstractUnitTestFixture  {
 
-    private NpcManager npcManager;
+    private NpcManagerImpl npcManager;
 
     private EntityEventSender eventSender;
 
@@ -79,7 +78,7 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         aoiManager = Mockito.mock(AOIManager.class);
         map = Mockito.mock(RealmMap.class);
         when(map.movable(any(Coordinate.class))).thenReturn(true);
-        npcManager = new NpcManager(eventSender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, monsterSdb, npcSdb, map);
+        npcManager = new NpcManagerImpl(eventSender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, monsterSdb, npcSdb, map);
     }
 
     @Test

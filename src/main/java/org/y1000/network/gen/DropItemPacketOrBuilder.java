@@ -9,8 +9,8 @@ public interface DropItemPacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int32 ropeSlot = 1;</code>
-   * @return The ropeSlot.
+   * <code>int32 slot = 1;</code>
+   * @return The slot.
    */
   int getSlot();
 

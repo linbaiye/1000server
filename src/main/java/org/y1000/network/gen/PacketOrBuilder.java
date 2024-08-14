@@ -608,5 +608,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.ShowTeleportPacketOrBuilder getShowTeleportOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+   * @return Whether the breakRope field is set.
+   */
+  boolean hasBreakRope();
+  /**
+   * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+   * @return The breakRope.
+   */
+  org.y1000.network.gen.BreakRopePacket getBreakRope();
+  /**
+   * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+   */
+  org.y1000.network.gen.BreakRopePacketOrBuilder getBreakRopeOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

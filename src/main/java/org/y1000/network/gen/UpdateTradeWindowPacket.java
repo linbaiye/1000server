@@ -121,16 +121,16 @@ private static final long serialVersionUID = 0L;
   public static final int SLOT_FIELD_NUMBER = 4;
   private int slot_ = 0;
   /**
-   * <code>optional int32 ropeSlot = 4;</code>
-   * @return Whether the ropeSlot field is set.
+   * <code>optional int32 slot = 4;</code>
+   * @return Whether the slot field is set.
    */
   @java.lang.Override
   public boolean hasSlot() {
     return ((bitField0_ & 0x00000004) != 0);
   }
   /**
-   * <code>optional int32 ropeSlot = 4;</code>
-   * @return The ropeSlot.
+   * <code>optional int32 slot = 4;</code>
+   * @return The slot.
    */
   @java.lang.Override
   public int getSlot() {
@@ -755,24 +755,24 @@ private static final long serialVersionUID = 0L;
 
     private int slot_ ;
     /**
-     * <code>optional int32 ropeSlot = 4;</code>
-     * @return Whether the ropeSlot field is set.
+     * <code>optional int32 slot = 4;</code>
+     * @return Whether the slot field is set.
      */
     @java.lang.Override
     public boolean hasSlot() {
       return ((bitField0_ & 0x00000008) != 0);
     }
     /**
-     * <code>optional int32 ropeSlot = 4;</code>
-     * @return The ropeSlot.
+     * <code>optional int32 slot = 4;</code>
+     * @return The slot.
      */
     @java.lang.Override
     public int getSlot() {
       return slot_;
     }
     /**
-     * <code>optional int32 ropeSlot = 4;</code>
-     * @param value The ropeSlot to set.
+     * <code>optional int32 slot = 4;</code>
+     * @param value The slot to set.
      * @return This builder for chaining.
      */
     public Builder setSlot(int value) {
@@ -783,7 +783,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>optional int32 ropeSlot = 4;</code>
+     * <code>optional int32 slot = 4;</code>
      * @return This builder for chaining.
      */
     public Builder clearSlot() {

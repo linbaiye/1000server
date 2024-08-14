@@ -424,6 +424,9 @@ message UpdateDynamicObjectPacket {
   bool loop = 4;
 }
 
+message BreakRopePacket {
+  int64 id = 1;
+}
 
 
 message Packet {
@@ -468,6 +471,7 @@ message Packet {
     LifeBarPacket lifebar = 41;
     KungFuPacket updateKungFuSlot = 42;
     ShowTeleportPacket showTeleport = 43;
+    BreakRopePacket breakRope = 44;
   }
 }
 

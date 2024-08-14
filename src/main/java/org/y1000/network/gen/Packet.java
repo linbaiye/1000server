@@ -85,6 +85,7 @@ private static final long serialVersionUID = 0L;
     LIFEBAR(41),
     UPDATEKUNGFUSLOT(42),
     SHOWTELEPORT(43),
+    BREAKROPE(44),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -142,6 +143,7 @@ private static final long serialVersionUID = 0L;
         case 41: return LIFEBAR;
         case 42: return UPDATEKUNGFUSLOT;
         case 43: return SHOWTELEPORT;
+        case 44: return BREAKROPE;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1397,6 +1399,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ShowTeleportPacket.getDefaultInstance();
   }
 
+  public static final int BREAKROPE_FIELD_NUMBER = 44;
+  /**
+   * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+   * @return Whether the breakRope field is set.
+   */
+  @java.lang.Override
+  public boolean hasBreakRope() {
+    return typedPacketCase_ == 44;
+  }
+  /**
+   * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+   * @return The breakRope.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.BreakRopePacket getBreakRope() {
+    if (typedPacketCase_ == 44) {
+       return (org.y1000.network.gen.BreakRopePacket) typedPacket_;
+    }
+    return org.y1000.network.gen.BreakRopePacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.BreakRopePacketOrBuilder getBreakRopeOrBuilder() {
+    if (typedPacketCase_ == 44) {
+       return (org.y1000.network.gen.BreakRopePacket) typedPacket_;
+    }
+    return org.y1000.network.gen.BreakRopePacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1530,6 +1563,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 43) {
       output.writeMessage(43, (org.y1000.network.gen.ShowTeleportPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 44) {
+      output.writeMessage(44, (org.y1000.network.gen.BreakRopePacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1699,6 +1735,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 43) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(43, (org.y1000.network.gen.ShowTeleportPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 44) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(44, (org.y1000.network.gen.BreakRopePacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1877,6 +1917,10 @@ private static final long serialVersionUID = 0L;
         if (!getShowTeleport()
             .equals(other.getShowTeleport())) return false;
         break;
+      case 44:
+        if (!getBreakRope()
+            .equals(other.getBreakRope())) return false;
+        break;
       case 0:
       default:
     }
@@ -2051,6 +2095,10 @@ private static final long serialVersionUID = 0L;
       case 43:
         hash = (37 * hash) + SHOWTELEPORT_FIELD_NUMBER;
         hash = (53 * hash) + getShowTeleport().hashCode();
+        break;
+      case 44:
+        hash = (37 * hash) + BREAKROPE_FIELD_NUMBER;
+        hash = (53 * hash) + getBreakRope().hashCode();
         break;
       case 0:
       default:
@@ -2307,6 +2355,9 @@ private static final long serialVersionUID = 0L;
       if (showTeleportBuilder_ != null) {
         showTeleportBuilder_.clear();
       }
+      if (breakRopeBuilder_ != null) {
+        breakRopeBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -2513,6 +2564,10 @@ private static final long serialVersionUID = 0L;
           showTeleportBuilder_ != null) {
         result.typedPacket_ = showTeleportBuilder_.build();
       }
+      if (typedPacketCase_ == 44 &&
+          breakRopeBuilder_ != null) {
+        result.typedPacket_ = breakRopeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -2718,6 +2773,10 @@ private static final long serialVersionUID = 0L;
         }
         case SHOWTELEPORT: {
           mergeShowTeleport(other.getShowTeleport());
+          break;
+        }
+        case BREAKROPE: {
+          mergeBreakRope(other.getBreakRope());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -3030,6 +3089,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 43;
               break;
             } // case 346
+            case 354: {
+              input.readMessage(
+                  getBreakRopeFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 44;
+              break;
+            } // case 354
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -8741,6 +8807,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 43;
       onChanged();
       return showTeleportBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.BreakRopePacket, org.y1000.network.gen.BreakRopePacket.Builder, org.y1000.network.gen.BreakRopePacketOrBuilder> breakRopeBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+     * @return Whether the breakRope field is set.
+     */
+    @java.lang.Override
+    public boolean hasBreakRope() {
+      return typedPacketCase_ == 44;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+     * @return The breakRope.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.BreakRopePacket getBreakRope() {
+      if (breakRopeBuilder_ == null) {
+        if (typedPacketCase_ == 44) {
+          return (org.y1000.network.gen.BreakRopePacket) typedPacket_;
+        }
+        return org.y1000.network.gen.BreakRopePacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 44) {
+          return breakRopeBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.BreakRopePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+     */
+    public Builder setBreakRope(org.y1000.network.gen.BreakRopePacket value) {
+      if (breakRopeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        breakRopeBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 44;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+     */
+    public Builder setBreakRope(
+        org.y1000.network.gen.BreakRopePacket.Builder builderForValue) {
+      if (breakRopeBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        breakRopeBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 44;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+     */
+    public Builder mergeBreakRope(org.y1000.network.gen.BreakRopePacket value) {
+      if (breakRopeBuilder_ == null) {
+        if (typedPacketCase_ == 44 &&
+            typedPacket_ != org.y1000.network.gen.BreakRopePacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.BreakRopePacket.newBuilder((org.y1000.network.gen.BreakRopePacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 44) {
+          breakRopeBuilder_.mergeFrom(value);
+        } else {
+          breakRopeBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 44;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+     */
+    public Builder clearBreakRope() {
+      if (breakRopeBuilder_ == null) {
+        if (typedPacketCase_ == 44) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 44) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        breakRopeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+     */
+    public org.y1000.network.gen.BreakRopePacket.Builder getBreakRopeBuilder() {
+      return getBreakRopeFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.BreakRopePacketOrBuilder getBreakRopeOrBuilder() {
+      if ((typedPacketCase_ == 44) && (breakRopeBuilder_ != null)) {
+        return breakRopeBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 44) {
+          return (org.y1000.network.gen.BreakRopePacket) typedPacket_;
+        }
+        return org.y1000.network.gen.BreakRopePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.BreakRopePacket breakRope = 44;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.BreakRopePacket, org.y1000.network.gen.BreakRopePacket.Builder, org.y1000.network.gen.BreakRopePacketOrBuilder> 
+        getBreakRopeFieldBuilder() {
+      if (breakRopeBuilder_ == null) {
+        if (!(typedPacketCase_ == 44)) {
+          typedPacket_ = org.y1000.network.gen.BreakRopePacket.getDefaultInstance();
+        }
+        breakRopeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.BreakRopePacket, org.y1000.network.gen.BreakRopePacket.Builder, org.y1000.network.gen.BreakRopePacketOrBuilder>(
+                (org.y1000.network.gen.BreakRopePacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 44;
+      onChanged();
+      return breakRopeBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

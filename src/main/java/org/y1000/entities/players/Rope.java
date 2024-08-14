@@ -1,13 +1,13 @@
 package org.y1000.entities.players;
 
+import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.AiPathUtil;
 import org.y1000.entities.creatures.State;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
-import org.y1000.message.AbstractPositionEvent;
-import org.y1000.message.InputResponseMessage;
-import org.y1000.message.SetPositionEvent;
+import org.y1000.message.BreakRopeEvent;
+import org.y1000.message.PlayerDraggedEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.util.Coordinate;
 
@@ -69,14 +69,19 @@ end;
     private int mills;
     private Coordinate from;
 
+    @Getter
+    private boolean broken;
+
     public Rope(Player dragged, Player moving) {
         Validate.notNull(dragged);
         Validate.notNull(moving);
-        Validate.isTrue(dragged.coordinate().directDistance(moving.coordinate()) <= 2);
         this.dragged = dragged;
         this.moving = moving;
         this.mills = 5000;
         from = Coordinate.Empty;
+        broken = false;
+        dragged.registerEventListener(this);
+        moving.registerEventListener(this);
     }
 
     private int distance() {
@@ -84,13 +89,25 @@ end;
     }
 
     public void update(long delta) {
+        if (isBroken())
+            return;
         mills -= (int)delta;
         follow();
+        if (mills <= 0) {
+            breakRope();
+        }
+    }
+
+    private void breakRope() {
+        if (!broken) {
+            broken = true;
+            dragged.emitEvent(new BreakRopeEvent(dragged));
+        }
     }
 
     private void follow() {
         var dist = distance();
-        if (done() || dist < 1 || dragged.stateEnum() != State.DIE) {
+        if (isBroken() || dist < 1 || dragged.stateEnum() != State.DIE) {
             return;
         }
         var dir = dragged.coordinate().computeDirection(moving.coordinate());
@@ -98,7 +115,7 @@ end;
         if (nextPos.equals(moving.coordinate())) {
             if (dragged.direction() != dir) {
                 dragged.changeDirection(dir);
-                dragged.emitEvent(SetPositionEvent.of(dragged));
+                dragged.emitEvent(new PlayerDraggedEvent(dragged));
             }
             return;
         }
@@ -112,12 +129,12 @@ end;
             dragged.changeCoordinate(dragged.coordinate().moveBy(direction));
             from = dragged.coordinate();
         }
-        dragged.emitEvent(SetPositionEvent.of(dragged));
+        dragged.emitEvent(new PlayerDraggedEvent(dragged));
     }
 
     public void breakIfDraggedAgain(Player dragged) {
         if (this.dragged.equals(dragged)) {
-            mills = 0;
+            breakRope();
         }
     }
 
@@ -125,11 +142,7 @@ end;
     public void onEvent(EntityEvent entityEvent) {
         if (entityEvent instanceof PlayerLeftEvent || moving.stateEnum() == State.DIE ||
                 dragged.stateEnum() != State.DIE) {
-            mills = 0;
+            breakRope();
         }
-    }
-
-    public boolean done() {
-        return mills <= 0;
     }
 }

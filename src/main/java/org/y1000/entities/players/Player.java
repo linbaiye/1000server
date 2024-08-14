@@ -138,7 +138,7 @@ public interface Player extends ViolentCreature {
         if (target == null || target.stateEnum() != State.DIE) {
             return false;
         }
-        if (target.coordinate().directDistance(coordinate()) > 2) {
+        if (target.coordinate().directDistance(coordinate()) > 4) {
             return false;
         }
         Item item = inventory().getItem(ropeSlot);

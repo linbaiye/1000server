@@ -20,7 +20,7 @@ import org.y1000.util.Coordinate;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> implements EntityEventListener {
+abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> implements EntityEventListener, NpcManager {
 
     private final EntityEventSender sender;
 
@@ -141,6 +141,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         }
     }
 
+    @Override
     public void handleCrossRealmEvent(RealmEvent crossRealmEvent) {
         if (!(crossRealmEvent instanceof RealmLetterEvent<?> letterEvent)) {
             return;
@@ -170,8 +171,6 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     void removeFromCloned(Npc npc) {
         cloned.remove(npc.id());
     }
-
-    abstract void init();
 
     private void handleCloneEvent(NpcCastCloneEvent event) {
         var set =  new HashSet<Npc>();

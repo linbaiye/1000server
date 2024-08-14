@@ -14,7 +14,7 @@ abstract class AbstractRealm implements Realm {
     public static final int STEP_MILLIS = 10;
     private final RealmMap realmMap;
     private final RealmEntityEventSender eventSender;
-    private final AbstractNpcManager npcManager;
+    private final NpcManager npcManager;
     private final PlayerManager playerManager;
     private final DynamicObjectManager dynamicObjectManager;
     private final TeleportManager teleportManager;
@@ -30,7 +30,7 @@ abstract class AbstractRealm implements Realm {
                          RealmMap realmMap,
                          RealmEntityEventSender eventSender,
                          GroundItemManager itemManager,
-                         AbstractNpcManager npcManager,
+                         NpcManager npcManager,
                          PlayerManager playerManager,
                          DynamicObjectManager dynamicObjectManager,
                          TeleportManager teleportManager,

@@ -112,7 +112,6 @@ public final class RealmManager implements Runnable , RealmEventHandler {
         }
     }
 
-
     private void handleTeleport(RealmTeleportEvent teleportEvent) {
         int realmId = teleportEvent.realmId();
         playerRealmMap.remove(teleportEvent.player());

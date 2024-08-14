@@ -53,12 +53,12 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("金毛草", 10000));
         inventory.add(itemFactory.createItem("黑沙刚体", 1));
         inventory.add(itemFactory.createItem("大脉神弓"));
-        inventory.add(itemFactory.createItem("梅雨弓"));
         inventory.add(itemFactory.createItem("女子黄龙弓服"));
         inventory.add(itemFactory.createItem("血魔剑"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("骨钥匙", 1000));
         inventory.add(itemFactory.createItem("火石", 1000));
+        inventory.add(itemFactory.createItem("追魂索", 10000));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("血皇斧"));*/
@@ -113,7 +113,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
      */
 
     public static int lastRealmId() {
-        return 49;
+        return 110;
+        //return 49;
     }
     private PlayerImpl createFemale() {
         int slot = findSlot();
@@ -123,13 +124,14 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         return PlayerImpl.builder()
                 .id(slot + playerIdStart)
                 .name("雨诗妾")
-                //.coordinate(new Coordinate(175+ ropeSlot, 40))
+               .coordinate(new Coordinate(176, 224))
+               //.coordinate(new Coordinate(516, 478))
                // .coordinate(new Coordinate(55, 51)) // 王陵2层
                 //.coordinate(new Coordinate(80, 157)) // 王陵2层
                // .coordinate(new Coordinate(32, 165)) // 王陵2层
                 //.coordinate(new Coordinate(129, 99))
                 //.coordinate(new Coordinate(37, 49)) //修炼洞
-                .coordinate(new Coordinate(98, 46)) //新手村
+              //  .coordinate(new Coordinate(98, 46)) //新手村
              //   .coordinate(new Coordinate(172, 438)) //僵尸一
                //  .coordinate(new Coordinate(344, 110))
                // .coordinate(new Coordinate(530, 462))

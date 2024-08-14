@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.creatures.npc.Npc;
@@ -113,7 +112,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         while (iterator.hasNext()) {
             Rope rope = iterator.next();
             rope.update(delta);
-            if (rope.done()) {
+            if (rope.isBroken()) {
                 iterator.remove();
             }
         }
@@ -150,7 +149,6 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     @Override
     public void onClientEvent(PlayerDataEvent dataEvent,
                               ActiveEntityManager<Npc> npcManager) {
-        Validate.notNull(npcManager);
         if (!contains(dataEvent.player())){
             return;
         }
