@@ -2,7 +2,6 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
 import org.y1000.sdb.MapSdb;
@@ -112,10 +111,11 @@ abstract class AbstractRealm implements Realm {
                 !playerManager.contains(event.player())) {
             return;
         }
-        playerManager.teleportOut(event.player());
+        playerManager.clearPlayer(event.player());
         var connection = eventSender.remove(event.player());
         realmTeleportEvent.setConnection(connection);
         crossRealmEventHandler.handle(event);
+        log().debug("Removed player {}.", event.player().id());
     }
 
     RealmEventHandler getCrossRealmEventHandler() {
@@ -140,7 +140,7 @@ abstract class AbstractRealm implements Realm {
                 playerManager.onPlayerConnected(connectedEvent.player(), this);
                 log().debug("Added player to realm {}.", id);
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
-                playerManager.onPlayerDisconnected(disconnectedEvent.player());
+                playerManager.clearPlayer(disconnectedEvent.player());
                 eventSender.remove(disconnectedEvent.player());
             } else if (event instanceof PlayerDataEvent dataEvent) {
                 playerManager.onClientEvent(dataEvent, npcManager);

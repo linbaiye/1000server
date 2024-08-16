@@ -64,7 +64,6 @@ public final class TradeManagerImpl implements TradeManager {
         } else if (event instanceof CreatureDieEvent) {
             return true;
         }
-        log.debug("Checking distance.");
         return trader.coordinate().directDistance(tradee.coordinate()) > 2;
     }
 

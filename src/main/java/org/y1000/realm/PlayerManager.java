@@ -13,9 +13,7 @@ interface PlayerManager extends ActiveEntityManager<Player> {
     void teleportIn(Player player,
                     Realm realm, Coordinate coordinate);
 
-    void teleportOut(Player player);
-
-    void onPlayerDisconnected(Player player);
+    void clearPlayer(Player player);
 
     void onClientEvent(PlayerDataEvent dataEvent,
                        ActiveEntityManager<Npc> npcManager);

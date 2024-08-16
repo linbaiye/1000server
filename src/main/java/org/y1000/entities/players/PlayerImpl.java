@@ -544,12 +544,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public void joinReam(Realm realm) {
-        if (realm == null) {
-            return;
-        }
-        changeDirection(Direction.DOWN);
-        doJoinRealm(realm, null);
-        emitEvent(new JoinedRealmEvent(this, coordinate(), inventory, realm));
+        joinRealm(realm, coordinate());
     }
 
     private void doJoinRealm(Realm realm, Coordinate coordinate) {
@@ -562,14 +557,12 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public void teleport(Realm realm, Coordinate coordinate) {
-        if (realm != null && coordinate != null) {
-            if (this.realm != null) {
-                leaveRealm();
-            }
-            doJoinRealm(realm, coordinate);
-            emitEvent(new PlayerTeleportEvent(this, realm, coordinate));
-        }
+    public void joinRealm(Realm realm, Coordinate coordinate) {
+        Validate.notNull(realm);
+        Validate.notNull(coordinate);
+        Validate.isTrue(this.realm == null);
+        this.realm = realm;
+        changeCoordinate(coordinate);
     }
 
     private void onKilled() {
@@ -668,8 +661,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             realm.map().free(this);
         }
         realm = null;
-        emitEvent(new PlayerLeftEvent(this));
         clearFightingEntity();
+        emitEvent(new PlayerLeftEvent(this));
     }
 
     private void changeAttackKungFu(AttackKungFu newKungFu) {

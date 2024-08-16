@@ -25,6 +25,11 @@ public final class JoinedRealmEvent extends AbstractPlayerEvent{
         this.teleportPacket = PlayerTeleportEvent.teleportPacket(realm, coordinate);
     }
 
+    public JoinedRealmEvent(Player player) {
+        this(player, player.coordinate(), player.inventory(), player.getRealm());
+    }
+
+
     private InventoryItemPacket toPacket(int index, Item item) {
         InventoryItemPacket.Builder builder = InventoryItemPacket.newBuilder()
                 .setName(item.name())
