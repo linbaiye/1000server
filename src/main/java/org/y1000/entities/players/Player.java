@@ -25,7 +25,7 @@ public interface Player extends ViolentCreature {
         return true;
     }
 
-    void joinReam(Realm realm);
+    void joinRealm(Realm realm);
 
     void joinRealm(Realm realm, Coordinate coordinate);
 

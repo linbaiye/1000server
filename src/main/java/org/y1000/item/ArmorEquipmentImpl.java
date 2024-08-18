@@ -3,6 +3,8 @@ package org.y1000.item;
 
 import org.y1000.entities.players.Armor;
 
+import java.util.Optional;
+
 public final class ArmorEquipmentImpl extends AbstractSexualEquipment implements ArmorEquipment {
     private final ArmorItemAttributeProvider attributeProvider;
     private final EquipmentType type;
@@ -31,6 +33,11 @@ public final class ArmorEquipmentImpl extends AbstractSexualEquipment implements
 
     public int recovery() {
         return attributeProvider.recovery();
+    }
+
+    @Override
+    public int color() {
+        return attributeProvider.color();
     }
 
     @Override

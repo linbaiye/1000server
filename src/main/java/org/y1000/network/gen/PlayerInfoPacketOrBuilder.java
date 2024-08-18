@@ -167,4 +167,46 @@ public interface PlayerInfoPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getTrouserNameBytes();
+
+  /**
+   * <code>int32 chestColor = 13;</code>
+   * @return The chestColor.
+   */
+  int getChestColor();
+
+  /**
+   * <code>int32 hairColor = 14;</code>
+   * @return The hairColor.
+   */
+  int getHairColor();
+
+  /**
+   * <code>int32 hatColor = 15;</code>
+   * @return The hatColor.
+   */
+  int getHatColor();
+
+  /**
+   * <code>int32 wristColor = 16;</code>
+   * @return The wristColor.
+   */
+  int getWristColor();
+
+  /**
+   * <code>int32 bootColor = 17;</code>
+   * @return The bootColor.
+   */
+  int getBootColor();
+
+  /**
+   * <code>int32 clothingColor = 18;</code>
+   * @return The clothingColor.
+   */
+  int getClothingColor();
+
+  /**
+   * <code>int32 trouserColor = 19;</code>
+   * @return The trouserColor.
+   */
+  int getTrouserColor();
 }

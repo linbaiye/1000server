@@ -6,11 +6,15 @@ import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.npc.spell.CloneSpell;
+import org.y1000.entities.players.Player;
+import org.y1000.event.EntityEvent;
+import org.y1000.event.EntityEventListener;
 import org.y1000.message.SetPositionEvent;
+import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.util.Coordinate;
 
 @Slf4j
-public abstract class AbstractNpcFightAI implements NpcAI {
+public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
     private AttackableActiveEntity enemy;
 
     protected final ViolentNpc npc;
@@ -28,6 +32,7 @@ public abstract class AbstractNpcFightAI implements NpcAI {
         this.npc = npc;
         this.previous = Coordinate.Empty;
         this.speedRate = speedRate;
+        enemy.registerEventListener(this);
     }
 
     protected void turnIfNotFaced() {
@@ -108,5 +113,13 @@ public abstract class AbstractNpcFightAI implements NpcAI {
     public void start(Npc npc) {
         npc.findSpell(CloneSpell.class).ifPresent(s -> s.castIfAvailable(npc, getEnemy()));
         wanderOrFight();
+    }
+
+    @Override
+    public void onEvent(EntityEvent entityEvent) {
+        if (entityEvent != null && enemy.equals(entityEvent.source()) && !enemy.canBeAttackedNow()) {
+            enemy.deregisterEventListener(this);
+            npc.changeAI(new ViolentNpcWanderingAI());
+        }
     }
 }

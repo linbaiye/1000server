@@ -169,6 +169,10 @@ message ShowTeleportPacket {
   int32 shape = 8;
 }
 
+message ClientSimpleCommandPacket {
+  int32 command = 1;
+}
+
 
 message CharacterKungFuPacket {
   string attackKungFuName = 1;
@@ -232,6 +236,7 @@ message ClientPacket {
     ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;
     ClientSwapKungFuSlotPacket swapKungFuSlot = 19;
     ClientDragPlayerPacket dragPlayer = 20;
+    ClientSimpleCommandPacket simpleCommand = 21;
   }
 }
 
@@ -251,6 +256,7 @@ message InventoryItemPacket {
   string name = 1;
   int32 slotId = 2;
   optional int64 number = 3;
+  int32 color = 4;
 }
 
 message OpenTradeWindowPacket {
@@ -264,6 +270,7 @@ message UpdateTradeWindowPacket {
   optional int64 number = 3;
   optional int32 slot = 4;
   optional bool self = 5;
+  int32 color = 6;
 }
 
 
@@ -363,6 +370,7 @@ message PlayerUnequipPacket {
 message PlayerEquipPacket {
   int64 id = 1;
   string equipmentName = 2;
+  int32 color = 3;
 }
 
 message PlayerSitDownPacket {
@@ -428,6 +436,12 @@ message BreakRopePacket {
   int64 id = 1;
 }
 
+message NpcPositionPacket {
+  repeated int32 xList = 1;
+  repeated int32 yList = 2;
+  repeated string nameList = 3;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -472,6 +486,7 @@ message Packet {
     KungFuPacket updateKungFuSlot = 42;
     ShowTeleportPacket showTeleport = 43;
     BreakRopePacket breakRope = 44;
+    NpcPositionPacket npcPosition = 45;
   }
 }
 
@@ -498,6 +513,13 @@ message PlayerInfoPacket {
   optional string bootName = 10;
   optional string clothingName = 11;
   optional string trouserName = 12;
+  int32 chestColor = 13;
+  int32 hairColor = 14;
+  int32 hatColor = 15;
+  int32 wristColor = 16;
+  int32 bootColor = 17;
+  int32 clothingColor = 18;
+  int32 trouserColor = 19;
 }
 
 

@@ -11,6 +11,11 @@ public record StackItem(Item item, long number) implements Item {
         Validate.notNull(item);
     }
 
+    @Override
+    public int color() {
+        return item.color();
+    }
+
     private static final long MAX_NUMBER = 100000000000L;
 
     @Override

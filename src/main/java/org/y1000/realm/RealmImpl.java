@@ -10,7 +10,7 @@ final class RealmImpl extends AbstractRealm {
 
     public RealmImpl(int id, RealmMap realmMap,
                      RealmEntityEventSender eventSender,
-                     ItemManagerImpl itemManager,
+                     GroundItemManager itemManager,
                      NpcManager npcManager,
                      PlayerManager playerManager,
                      DynamicObjectManager dynamicObjectManager,

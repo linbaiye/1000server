@@ -486,6 +486,83 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int CHESTCOLOR_FIELD_NUMBER = 13;
+  private int chestColor_ = 0;
+  /**
+   * <code>int32 chestColor = 13;</code>
+   * @return The chestColor.
+   */
+  @java.lang.Override
+  public int getChestColor() {
+    return chestColor_;
+  }
+
+  public static final int HAIRCOLOR_FIELD_NUMBER = 14;
+  private int hairColor_ = 0;
+  /**
+   * <code>int32 hairColor = 14;</code>
+   * @return The hairColor.
+   */
+  @java.lang.Override
+  public int getHairColor() {
+    return hairColor_;
+  }
+
+  public static final int HATCOLOR_FIELD_NUMBER = 15;
+  private int hatColor_ = 0;
+  /**
+   * <code>int32 hatColor = 15;</code>
+   * @return The hatColor.
+   */
+  @java.lang.Override
+  public int getHatColor() {
+    return hatColor_;
+  }
+
+  public static final int WRISTCOLOR_FIELD_NUMBER = 16;
+  private int wristColor_ = 0;
+  /**
+   * <code>int32 wristColor = 16;</code>
+   * @return The wristColor.
+   */
+  @java.lang.Override
+  public int getWristColor() {
+    return wristColor_;
+  }
+
+  public static final int BOOTCOLOR_FIELD_NUMBER = 17;
+  private int bootColor_ = 0;
+  /**
+   * <code>int32 bootColor = 17;</code>
+   * @return The bootColor.
+   */
+  @java.lang.Override
+  public int getBootColor() {
+    return bootColor_;
+  }
+
+  public static final int CLOTHINGCOLOR_FIELD_NUMBER = 18;
+  private int clothingColor_ = 0;
+  /**
+   * <code>int32 clothingColor = 18;</code>
+   * @return The clothingColor.
+   */
+  @java.lang.Override
+  public int getClothingColor() {
+    return clothingColor_;
+  }
+
+  public static final int TROUSERCOLOR_FIELD_NUMBER = 19;
+  private int trouserColor_ = 0;
+  /**
+   * <code>int32 trouserColor = 19;</code>
+   * @return The trouserColor.
+   */
+  @java.lang.Override
+  public int getTrouserColor() {
+    return trouserColor_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -533,6 +610,27 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000080) != 0)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 12, trouserName_);
     }
+    if (chestColor_ != 0) {
+      output.writeInt32(13, chestColor_);
+    }
+    if (hairColor_ != 0) {
+      output.writeInt32(14, hairColor_);
+    }
+    if (hatColor_ != 0) {
+      output.writeInt32(15, hatColor_);
+    }
+    if (wristColor_ != 0) {
+      output.writeInt32(16, wristColor_);
+    }
+    if (bootColor_ != 0) {
+      output.writeInt32(17, bootColor_);
+    }
+    if (clothingColor_ != 0) {
+      output.writeInt32(18, clothingColor_);
+    }
+    if (trouserColor_ != 0) {
+      output.writeInt32(19, trouserColor_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -576,6 +674,34 @@ private static final long serialVersionUID = 0L;
     }
     if (((bitField0_ & 0x00000080) != 0)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, trouserName_);
+    }
+    if (chestColor_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(13, chestColor_);
+    }
+    if (hairColor_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(14, hairColor_);
+    }
+    if (hatColor_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(15, hatColor_);
+    }
+    if (wristColor_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(16, wristColor_);
+    }
+    if (bootColor_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(17, bootColor_);
+    }
+    if (clothingColor_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(18, clothingColor_);
+    }
+    if (trouserColor_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(19, trouserColor_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -638,6 +764,20 @@ private static final long serialVersionUID = 0L;
       if (!getTrouserName()
           .equals(other.getTrouserName())) return false;
     }
+    if (getChestColor()
+        != other.getChestColor()) return false;
+    if (getHairColor()
+        != other.getHairColor()) return false;
+    if (getHatColor()
+        != other.getHatColor()) return false;
+    if (getWristColor()
+        != other.getWristColor()) return false;
+    if (getBootColor()
+        != other.getBootColor()) return false;
+    if (getClothingColor()
+        != other.getClothingColor()) return false;
+    if (getTrouserColor()
+        != other.getTrouserColor()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -689,6 +829,20 @@ private static final long serialVersionUID = 0L;
       hash = (37 * hash) + TROUSERNAME_FIELD_NUMBER;
       hash = (53 * hash) + getTrouserName().hashCode();
     }
+    hash = (37 * hash) + CHESTCOLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getChestColor();
+    hash = (37 * hash) + HAIRCOLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getHairColor();
+    hash = (37 * hash) + HATCOLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getHatColor();
+    hash = (37 * hash) + WRISTCOLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getWristColor();
+    hash = (37 * hash) + BOOTCOLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getBootColor();
+    hash = (37 * hash) + CLOTHINGCOLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getClothingColor();
+    hash = (37 * hash) + TROUSERCOLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getTrouserColor();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -831,6 +985,13 @@ private static final long serialVersionUID = 0L;
       bootName_ = "";
       clothingName_ = "";
       trouserName_ = "";
+      chestColor_ = 0;
+      hairColor_ = 0;
+      hatColor_ = 0;
+      wristColor_ = 0;
+      bootColor_ = 0;
+      clothingColor_ = 0;
+      trouserColor_ = 0;
       return this;
     }
 
@@ -905,6 +1066,27 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000400) != 0)) {
         result.trouserName_ = trouserName_;
         to_bitField0_ |= 0x00000080;
+      }
+      if (((from_bitField0_ & 0x00000800) != 0)) {
+        result.chestColor_ = chestColor_;
+      }
+      if (((from_bitField0_ & 0x00001000) != 0)) {
+        result.hairColor_ = hairColor_;
+      }
+      if (((from_bitField0_ & 0x00002000) != 0)) {
+        result.hatColor_ = hatColor_;
+      }
+      if (((from_bitField0_ & 0x00004000) != 0)) {
+        result.wristColor_ = wristColor_;
+      }
+      if (((from_bitField0_ & 0x00008000) != 0)) {
+        result.bootColor_ = bootColor_;
+      }
+      if (((from_bitField0_ & 0x00010000) != 0)) {
+        result.clothingColor_ = clothingColor_;
+      }
+      if (((from_bitField0_ & 0x00020000) != 0)) {
+        result.trouserColor_ = trouserColor_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -1004,6 +1186,27 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000400;
         onChanged();
       }
+      if (other.getChestColor() != 0) {
+        setChestColor(other.getChestColor());
+      }
+      if (other.getHairColor() != 0) {
+        setHairColor(other.getHairColor());
+      }
+      if (other.getHatColor() != 0) {
+        setHatColor(other.getHatColor());
+      }
+      if (other.getWristColor() != 0) {
+        setWristColor(other.getWristColor());
+      }
+      if (other.getBootColor() != 0) {
+        setBootColor(other.getBootColor());
+      }
+      if (other.getClothingColor() != 0) {
+        setClothingColor(other.getClothingColor());
+      }
+      if (other.getTrouserColor() != 0) {
+        setTrouserColor(other.getTrouserColor());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -1085,6 +1288,41 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000400;
               break;
             } // case 98
+            case 104: {
+              chestColor_ = input.readInt32();
+              bitField0_ |= 0x00000800;
+              break;
+            } // case 104
+            case 112: {
+              hairColor_ = input.readInt32();
+              bitField0_ |= 0x00001000;
+              break;
+            } // case 112
+            case 120: {
+              hatColor_ = input.readInt32();
+              bitField0_ |= 0x00002000;
+              break;
+            } // case 120
+            case 128: {
+              wristColor_ = input.readInt32();
+              bitField0_ |= 0x00004000;
+              break;
+            } // case 128
+            case 136: {
+              bootColor_ = input.readInt32();
+              bitField0_ |= 0x00008000;
+              break;
+            } // case 136
+            case 144: {
+              clothingColor_ = input.readInt32();
+              bitField0_ |= 0x00010000;
+              break;
+            } // case 144
+            case 152: {
+              trouserColor_ = input.readInt32();
+              bitField0_ |= 0x00020000;
+              break;
+            } // case 152
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1866,6 +2104,230 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       trouserName_ = value;
       bitField0_ |= 0x00000400;
+      onChanged();
+      return this;
+    }
+
+    private int chestColor_ ;
+    /**
+     * <code>int32 chestColor = 13;</code>
+     * @return The chestColor.
+     */
+    @java.lang.Override
+    public int getChestColor() {
+      return chestColor_;
+    }
+    /**
+     * <code>int32 chestColor = 13;</code>
+     * @param value The chestColor to set.
+     * @return This builder for chaining.
+     */
+    public Builder setChestColor(int value) {
+
+      chestColor_ = value;
+      bitField0_ |= 0x00000800;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 chestColor = 13;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearChestColor() {
+      bitField0_ = (bitField0_ & ~0x00000800);
+      chestColor_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int hairColor_ ;
+    /**
+     * <code>int32 hairColor = 14;</code>
+     * @return The hairColor.
+     */
+    @java.lang.Override
+    public int getHairColor() {
+      return hairColor_;
+    }
+    /**
+     * <code>int32 hairColor = 14;</code>
+     * @param value The hairColor to set.
+     * @return This builder for chaining.
+     */
+    public Builder setHairColor(int value) {
+
+      hairColor_ = value;
+      bitField0_ |= 0x00001000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 hairColor = 14;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearHairColor() {
+      bitField0_ = (bitField0_ & ~0x00001000);
+      hairColor_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int hatColor_ ;
+    /**
+     * <code>int32 hatColor = 15;</code>
+     * @return The hatColor.
+     */
+    @java.lang.Override
+    public int getHatColor() {
+      return hatColor_;
+    }
+    /**
+     * <code>int32 hatColor = 15;</code>
+     * @param value The hatColor to set.
+     * @return This builder for chaining.
+     */
+    public Builder setHatColor(int value) {
+
+      hatColor_ = value;
+      bitField0_ |= 0x00002000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 hatColor = 15;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearHatColor() {
+      bitField0_ = (bitField0_ & ~0x00002000);
+      hatColor_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int wristColor_ ;
+    /**
+     * <code>int32 wristColor = 16;</code>
+     * @return The wristColor.
+     */
+    @java.lang.Override
+    public int getWristColor() {
+      return wristColor_;
+    }
+    /**
+     * <code>int32 wristColor = 16;</code>
+     * @param value The wristColor to set.
+     * @return This builder for chaining.
+     */
+    public Builder setWristColor(int value) {
+
+      wristColor_ = value;
+      bitField0_ |= 0x00004000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 wristColor = 16;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearWristColor() {
+      bitField0_ = (bitField0_ & ~0x00004000);
+      wristColor_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int bootColor_ ;
+    /**
+     * <code>int32 bootColor = 17;</code>
+     * @return The bootColor.
+     */
+    @java.lang.Override
+    public int getBootColor() {
+      return bootColor_;
+    }
+    /**
+     * <code>int32 bootColor = 17;</code>
+     * @param value The bootColor to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBootColor(int value) {
+
+      bootColor_ = value;
+      bitField0_ |= 0x00008000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 bootColor = 17;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearBootColor() {
+      bitField0_ = (bitField0_ & ~0x00008000);
+      bootColor_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int clothingColor_ ;
+    /**
+     * <code>int32 clothingColor = 18;</code>
+     * @return The clothingColor.
+     */
+    @java.lang.Override
+    public int getClothingColor() {
+      return clothingColor_;
+    }
+    /**
+     * <code>int32 clothingColor = 18;</code>
+     * @param value The clothingColor to set.
+     * @return This builder for chaining.
+     */
+    public Builder setClothingColor(int value) {
+
+      clothingColor_ = value;
+      bitField0_ |= 0x00010000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 clothingColor = 18;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearClothingColor() {
+      bitField0_ = (bitField0_ & ~0x00010000);
+      clothingColor_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int trouserColor_ ;
+    /**
+     * <code>int32 trouserColor = 19;</code>
+     * @return The trouserColor.
+     */
+    @java.lang.Override
+    public int getTrouserColor() {
+      return trouserColor_;
+    }
+    /**
+     * <code>int32 trouserColor = 19;</code>
+     * @param value The trouserColor to set.
+     * @return This builder for chaining.
+     */
+    public Builder setTrouserColor(int value) {
+
+      trouserColor_ = value;
+      bitField0_ |= 0x00020000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 trouserColor = 19;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearTrouserColor() {
+      bitField0_ = (bitField0_ & ~0x00020000);
+      trouserColor_ = 0;
       onChanged();
       return this;
     }

@@ -110,6 +110,17 @@ private static final long serialVersionUID = 0L;
     return number_;
   }
 
+  public static final int COLOR_FIELD_NUMBER = 4;
+  private int color_ = 0;
+  /**
+   * <code>int32 color = 4;</code>
+   * @return The color.
+   */
+  @java.lang.Override
+  public int getColor() {
+    return color_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -133,6 +144,9 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000001) != 0)) {
       output.writeInt64(3, number_);
     }
+    if (color_ != 0) {
+      output.writeInt32(4, color_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -152,6 +166,10 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(3, number_);
+    }
+    if (color_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(4, color_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -177,6 +195,8 @@ private static final long serialVersionUID = 0L;
       if (getNumber()
           != other.getNumber()) return false;
     }
+    if (getColor()
+        != other.getColor()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -197,6 +217,8 @@ private static final long serialVersionUID = 0L;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getNumber());
     }
+    hash = (37 * hash) + COLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getColor();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -331,6 +353,7 @@ private static final long serialVersionUID = 0L;
       name_ = "";
       slotId_ = 0;
       number_ = 0L;
+      color_ = 0;
       return this;
     }
 
@@ -374,6 +397,9 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000004) != 0)) {
         result.number_ = number_;
         to_bitField0_ |= 0x00000001;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.color_ = color_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -433,6 +459,9 @@ private static final long serialVersionUID = 0L;
       if (other.hasNumber()) {
         setNumber(other.getNumber());
       }
+      if (other.getColor() != 0) {
+        setColor(other.getColor());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -474,6 +503,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000004;
               break;
             } // case 24
+            case 32: {
+              color_ = input.readInt32();
+              bitField0_ |= 0x00000008;
+              break;
+            } // case 32
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -631,6 +665,38 @@ private static final long serialVersionUID = 0L;
     public Builder clearNumber() {
       bitField0_ = (bitField0_ & ~0x00000004);
       number_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private int color_ ;
+    /**
+     * <code>int32 color = 4;</code>
+     * @return The color.
+     */
+    @java.lang.Override
+    public int getColor() {
+      return color_;
+    }
+    /**
+     * <code>int32 color = 4;</code>
+     * @param value The color to set.
+     * @return This builder for chaining.
+     */
+    public Builder setColor(int value) {
+
+      color_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 color = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearColor() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      color_ = 0;
       onChanged();
       return this;
     }

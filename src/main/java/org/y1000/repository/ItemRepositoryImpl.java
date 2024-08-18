@@ -128,12 +128,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
 
     @Override
     public Clothing createClothing(String name) {
-        return Clothing.builder()
-                .name(name)
-                .male(itemSdb.isMale(name))
-                .dropSound(itemSdb.getSoundDrop(name))
-                .eventSound(itemSdb.getSoundEvent(name))
-                .desc(itemSdb.getDesc(name))
-                .build();
+        return new Clothing(name, itemSdb);
     }
 }

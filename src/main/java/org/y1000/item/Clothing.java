@@ -1,20 +1,10 @@
 package org.y1000.item;
 
-import lombok.Builder;
-import lombok.Getter;
 
-@Getter
-public final class Clothing extends AbstractEquipment {
-    private final boolean male;
+public final class Clothing extends AbstractSexualEquipment {
 
-    @Builder
-    public Clothing(String name, boolean male, String dropSound, String eventSound, String desc) {
-        super(name, dropSound, eventSound, desc);
-        this.male = male;
-    }
-
-    public boolean isMale() {
-        return male;
+    public Clothing(String name, ItemSdb itemSdb) {
+        super(name, itemSdb);
     }
 
     @Override

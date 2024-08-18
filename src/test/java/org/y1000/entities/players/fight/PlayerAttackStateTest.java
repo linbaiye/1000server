@@ -110,8 +110,6 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
 
     @Test
     void move() {
-        Realm realm = mockAllFlatRealm();
-        player.joinReam(realm);
         var state = PlayerAttackState.melee(player);
         player.changeState(state);
         eventListener.clearEvents();

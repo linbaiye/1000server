@@ -9,7 +9,6 @@ import org.y1000.network.gen.Packet;
 
 public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
     private final int slot;
-
     private final Item item;
 
     public UpdateInventorySlotEvent(Player source, int slot, Item item) {
@@ -27,6 +26,7 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
     protected Packet buildPacket() {
         InventoryItemPacket.Builder builder = InventoryItemPacket.newBuilder()
                 .setSlotId(slot)
+                .setColor(item != null ? item.color() : 0)
                 .setName(item != null ? item.name() : "");
         var number = item instanceof StackItem stackItem ? stackItem.number() : null;
         if (number != null) {

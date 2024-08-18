@@ -31,6 +31,7 @@ class PlayerAttackAoeEventTest extends AbstractUnitTestFixture  {
         when(player.attackKungFu()).thenReturn(kungFuFactory.createAttackKungFu("无名剑法"));
 
         Npc mainTarget = Mockito.mock(Npc.class);
+        when(mainTarget.canBeMeleeAt(any(Coordinate.class))).thenReturn(true);
         when(mainTarget.attackedByAoe(any(ViolentCreature.class), anyInt(), any(Damage.class))).thenReturn(1);
         when(mainTarget.coordinate()).thenReturn(Coordinate.xy(2, 3));
 

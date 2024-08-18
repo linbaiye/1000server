@@ -67,15 +67,11 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         if (player == null || realm == null) {
             return;
         }
-        doAdd(player, realm, player.coordinate());
-        eventSender.notifySelf(new JoinedRealmEvent(player));
-        eventSender.notifyPlayerOfEntities(player);
-    }
-
-    private void doAdd(Player player, Realm realm, Coordinate coordinate) {
         player.registerEventListener(this);
         add(player);
-        player.joinRealm(realm, coordinate);
+        player.joinRealm(realm);
+        eventSender.notifySelf(new JoinedRealmEvent(player));
+        eventSender.notifyPlayerOfEntities(player);
     }
 
     @Override
@@ -84,7 +80,8 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         if (player == null || realm == null || coordinate == null) {
             return;
         }
-        doAdd(player, realm, coordinate);
+        player.registerEventListener(this);
+        add(player);
         eventSender.notifySelf(new PlayerTeleportEvent(player, realm, coordinate));
         eventSender.notifyPlayerOfEntities(player);
     }
@@ -95,8 +92,8 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
             return;
         }
         player.leaveRealm();
-        remove(player);
         eventSender.notifyVisiblePlayersAndSelf(player, new RemoveEntityMessage(player.id()));
+        remove(player);
         player.clearListeners();
     }
 

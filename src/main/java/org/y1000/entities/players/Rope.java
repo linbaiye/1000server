@@ -102,6 +102,8 @@ end;
         if (!broken) {
             broken = true;
             dragged.emitEvent(new BreakRopeEvent(dragged));
+            dragged.deregisterEventListener(this);
+            moving.deregisterEventListener(this);
         }
     }
 

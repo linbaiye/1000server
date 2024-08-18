@@ -78,6 +78,18 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     }
 
 
+    NpcFactory getNpcFactory() {
+        return npcFactory;
+    }
+
+    EntityEventSender getEventSender() {
+        return sender;
+    }
+
+    EntityIdGenerator getIdGenerator() {
+        return idGenerator;
+    }
+
     void spawnNPCs(CreateNpcSdb createNpcSdb) {
         List<NpcSpawnSetting> allSettings = createNpcSdb.getAllSettings();
         int total = 0;
@@ -146,9 +158,6 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         if (!(crossRealmEvent instanceof RealmLetterEvent<?> letterEvent)) {
             return;
         }
-        log().debug("Handle cross event.");
-        Set<Npc> npcs = find(npc -> npc.idName().equals(letterEvent.toName()));
-        npcs.forEach(npc -> log().debug("Npc name {}", npc.idName()));
         find(npc -> npc.idName().equals(letterEvent.toName()) && NineTailFoxHuman.class.isAssignableFrom(npc.getClass()))
                 .stream().map(NineTailFoxHuman.class::cast)
                 .forEach(NineTailFoxHuman::shift);
@@ -156,12 +165,13 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     abstract void onUnhandledEvent(EntityEvent entityEvent) ;
 
-    private void handleShiftEvent(NpcShiftEvent shiftEvent) {
+    Npc replaceNpc(NpcShiftEvent shiftEvent) {
         Npc npc = shiftEvent.npc();
-        sender.notifyVisiblePlayers(npc, shiftEvent.createRemoveEvent());
+        getEventSender().notifyVisiblePlayers(npc, shiftEvent.createRemoveEvent());
         removeNpc(npc);
-        Npc newNpc = npcFactory.createNpc(shiftEvent.shiftToName(), idGenerator.next(), npc.realmMap(), npc.coordinate());
+        Npc newNpc = getNpcFactory().createNpc(shiftEvent.shiftToName(), getIdGenerator().next(), npc.realmMap(), npc.coordinate());
         addNpc(newNpc);
+        return newNpc;
     }
 
     boolean isCloned(Npc npc) {
@@ -208,8 +218,6 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
             sender.notifyVisiblePlayers(shootEvent.source(), shootEvent);
         } else if (entityEvent instanceof CreatureDieEvent dieEvent) {
             handleDieEvent(dieEvent);
-        } else if (entityEvent instanceof NpcShiftEvent shiftEvent) {
-            handleShiftEvent(shiftEvent);
         } else if (entityEvent instanceof NpcCastCloneEvent cloneEvent) {
             handleCloneEvent(cloneEvent);
         } else if (entityEvent instanceof SeekPlayerEvent seekPlayerEvent) {

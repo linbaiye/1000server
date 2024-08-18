@@ -1,5 +1,7 @@
 package org.y1000.item;
 
+import java.util.Optional;
+
 public interface ArmorItemAttributeProvider {
 
     String dropSound();
@@ -21,5 +23,9 @@ public interface ArmorItemAttributeProvider {
     boolean isMale();
 
     String description();
+
+    default int color() {
+        return 0;
+    }
 
 }

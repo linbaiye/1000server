@@ -2,12 +2,17 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+import org.y1000.entities.creatures.npc.Merchant;
+import org.y1000.entities.teleport.StaticTeleport;
+import org.y1000.message.clientevent.ClientSimpleCommandEvent;
+import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
 import org.y1000.sdb.MapSdb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 abstract class AbstractRealm implements Realm {
     public static final int STEP_MILLIS = 10;
@@ -123,6 +128,8 @@ abstract class AbstractRealm implements Realm {
     }
 
     void acceptTeleport(RealmTeleportEvent teleportEvent) {
+        // order matters, so AOI can be computed correctly.
+        teleportEvent.player().joinRealm(this, teleportEvent.toCoordinate());
         eventSender.add(teleportEvent.player(), teleportEvent.getConnection());
         playerManager.teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate());
     }
@@ -131,6 +138,18 @@ abstract class AbstractRealm implements Realm {
 
     PlayerManager playerManager() {
         return playerManager;
+    }
+
+    private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
+        if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent &&
+                commandEvent.isAskingPosition()) {
+            Set<Merchant> merchants = npcManager.findMerchants();
+            Set<StaticTeleport> staticTeleports = teleportManager.findStaticTeleports();
+            if (!merchants.isEmpty() || !staticTeleports.isEmpty())
+                eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
+        } else {
+            playerManager.onClientEvent(dataEvent, npcManager);
+        }
     }
 
     public void handle(RealmEvent event) {
@@ -143,7 +162,7 @@ abstract class AbstractRealm implements Realm {
                 playerManager.clearPlayer(disconnectedEvent.player());
                 eventSender.remove(disconnectedEvent.player());
             } else if (event instanceof PlayerDataEvent dataEvent) {
-                playerManager.onClientEvent(dataEvent, npcManager);
+                handlePlayerDataEvent(dataEvent);
             } else if (event instanceof RealmTeleportEvent teleportEvent) {
                 handleTeleportEvent(teleportEvent);
             } else if (event instanceof BroadcastEvent broadcastEvent) {

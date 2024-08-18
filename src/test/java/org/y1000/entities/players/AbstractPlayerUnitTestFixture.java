@@ -1,6 +1,5 @@
 package org.y1000.entities.players;
 
-import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.kungfu.KungFu;
@@ -9,8 +8,6 @@ import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.message.clientevent.ClientToggleKungFuEvent;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
-
-import static org.mockito.Mockito.when;
 
 public abstract class AbstractPlayerUnitTestFixture extends AbstractUnitTestFixture  {
     protected PlayerImpl player;
@@ -66,7 +63,7 @@ public abstract class AbstractPlayerUnitTestFixture extends AbstractUnitTestFixt
         player = playerBuilder().build();
         eventListener = new TestingEventListener();
         mockedRealm = mockAllFlatRealm();
-        player.joinReam(mockedRealm);
+        player.joinRealm(mockedRealm);
         player.registerEventListener(eventListener);
     }
 }

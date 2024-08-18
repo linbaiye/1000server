@@ -9,7 +9,7 @@ public abstract class AbstractSexualEquipment extends AbstractEquipment {
 
     public AbstractSexualEquipment(String name,
                                    ItemSdb itemSdb) {
-        super(name, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name), itemSdb.getDesc(name));
+        super(name, itemSdb);
         this.male = itemSdb.isMale(name);
     }
 

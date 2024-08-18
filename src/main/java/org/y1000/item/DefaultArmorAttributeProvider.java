@@ -1,5 +1,8 @@
 package org.y1000.item;
 
+import java.util.Objects;
+import java.util.Optional;
+
 public final class DefaultArmorAttributeProvider implements ArmorItemAttributeProvider {
     private final String itemName;
 
@@ -58,6 +61,11 @@ public final class DefaultArmorAttributeProvider implements ArmorItemAttributePr
 
     @Override
     public String description() {
-        return null;
+        return itemSdb.getDesc(itemName);
+    }
+
+    @Override
+    public int color() {
+        return Objects.requireNonNullElse(itemSdb.getColor(itemName), 0);
     }
 }

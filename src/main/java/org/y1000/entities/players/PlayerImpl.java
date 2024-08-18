@@ -543,18 +543,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public void joinReam(Realm realm) {
+    public void joinRealm(Realm realm) {
         joinRealm(realm, coordinate());
     }
 
-    private void doJoinRealm(Realm realm, Coordinate coordinate) {
-        this.realm = realm;
-        if (coordinate != null) {
-            changeCoordinate(coordinate);
-        } else {
-            realm.map().occupy(this);
-        }
-    }
 
     @Override
     public void joinRealm(Realm realm, Coordinate coordinate) {
@@ -647,7 +639,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public RealmMap realmMap() {
-        return realm != null ? realm.map() : null;
+        return getRealm() != null ? getRealm().map() : null;
     }
 
     @Override
@@ -688,7 +680,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             log.debug("Put equipped weapon {} back to inventory.", equippedWeapon.name());
         });
         equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
-        emitEvent(new PlayerEquipEvent(this, weaponToEquip.name()));
+        emitEvent(new PlayerEquipEvent(this, weaponToEquip));
         weaponToEquip.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         log.debug("Equipped weapon {}.", weaponToEquip.name());
     }
@@ -712,7 +704,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             }
             inventory.remove(slotId);
             Equipment currentEquipped = equippedEquipments.put(equipmentInSlot.equipmentType(), equipmentInSlot);
-            emitEvent(new PlayerEquipEvent(this, equipmentInSlot.name()));
+            emitEvent(new PlayerEquipEvent(this, equipmentInSlot));
             if (currentEquipped != null) {
                 inventory.put(slotId, currentEquipped);
             }

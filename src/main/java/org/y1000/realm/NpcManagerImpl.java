@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.RemoveEntityEvent;
+import org.y1000.entities.creatures.event.NpcShiftEvent;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.event.EntityEvent;
@@ -21,6 +22,11 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
 
     private final RespawningEntityManager<Npc> respawningEntityManager;
 
+    private boolean initialized = false;
+
+    private final Map<Npc, Npc> shiftedNpcs;
+    private static final int RESPAWN_MILLIS = 8000;
+
     @Builder
     public NpcManagerImpl(EntityEventSender sender,
                           EntityIdGenerator idGenerator,
@@ -34,6 +40,7 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
         super(sender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, createMonsterSdb, createNpcSdb, realmMap);
         this.respawningEntityManager = new RespawningEntityManager<>();
         this.npcSpawnSettings = new HashMap<>();
+        this.shiftedNpcs = new HashMap<>();
     }
 
     private void respawn(Npc npc) {
@@ -79,24 +86,38 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
     private void handleRemoveEvent(RemoveEntityEvent removeEntityEvent) {
         if (removeEntityEvent.source() instanceof Npc npc) {
             removeNpc(npc);
-            if (!isCloned(npc)) {
-                respawningEntityManager.add(npc, 8000);
-            } else {
+            if (isCloned(npc)) {
                 removeFromCloned(npc);
+                return;
             }
+            Npc shiftFrom = shiftedNpcs.remove(npc);
+            respawningEntityManager.add(Objects.requireNonNullElse(shiftFrom, npc),
+                    RESPAWN_MILLIS);
         }
+    }
+
+    private void handleShiftEvent(NpcShiftEvent shiftEvent) {
+        if (shiftedNpcs.containsKey(shiftEvent.npc()))
+            return;
+        Npc newNpc = replaceNpc(shiftEvent);
+        shiftedNpcs.put(newNpc, shiftEvent.npc());
     }
 
     @Override
     void onUnhandledEvent(EntityEvent entityEvent) {
         if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
             handleRemoveEvent(removeEntityEvent);
+        } else if (entityEvent instanceof NpcShiftEvent shiftEvent) {
+            handleShiftEvent(shiftEvent);
         }
     }
 
     @Override
     public void init() {
+        if (initialized)
+            throw new IllegalStateException();
         createMonsterSdb().ifPresent(this::init);
         createNpcSdb().ifPresent(this::init);
+        initialized = true;
     }
 }

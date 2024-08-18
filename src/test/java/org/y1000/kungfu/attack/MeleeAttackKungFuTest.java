@@ -38,6 +38,8 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
 
     private TestingEventListener playerEventListener;
 
+    private Realm realm;
+
     private static class NoCostParameters implements AttackKungFuParameters {
 
         @Override
@@ -107,6 +109,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     @BeforeEach
     void setUp() {
         setup();
+        realm = mockAllFlatRealm();
         kungFu = createKungFu(new NoCostParameters());
         player = playerBuilder()
                 .attackKungFu(kungFu)
@@ -115,6 +118,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         clientAttackEvent = new ClientAttackEvent(1L, 1L, kungFu.randomAttackState(), Direction.UP);
         playerEventListener = new TestingEventListener();
         player.registerEventListener(playerEventListener);
+        player.joinRealm(realm);
     }
 
 
@@ -122,7 +126,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
 
     private PassiveMonster createMonster(Coordinate coordinate) {
         attributeProvider.life = 10000;
-        return monsterBuilder().attributeProvider(attributeProvider).coordinate(coordinate).build();
+        return monsterBuilder().attributeProvider(attributeProvider).realmMap(realm.map()).coordinate(coordinate).build();
     }
 
     @Test
@@ -214,6 +218,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
                 .life(new PlayerLife(10, 0)).innerPower(PlayerTestingAttribute.of(5))
                 .outerPower(PlayerTestingAttribute.of(3)).build();
         player.registerEventListener(playerEventListener);
+        player.joinRealm(realm);
         kungFu = createKungFu(new TwoCostParameters());
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, monster);
@@ -227,6 +232,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         player = playerBuilder().power(PlayerTestingAttribute.of(3)).life(new PlayerLife(1, 0))
                 .innerPower(PlayerTestingAttribute.of(3)).outerPower(PlayerTestingAttribute.of(3)).build();
         player.registerEventListener(playerEventListener);
+        player.joinRealm(realm);
         var param = new TestingAttackKungFuParameters();
         kungFu = createKungFu(param.setLifeToString(103));
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
@@ -239,6 +245,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     void usePower() {
         player = playerBuilder().power(PlayerTestingAttribute.of(3)).life(new PlayerLife(3, 0))
                 .innerPower(PlayerTestingAttribute.of(3)).outerPower(PlayerTestingAttribute.of(3)).build();
+        player.joinRealm(realm);
         player.registerEventListener(playerEventListener);
         kungFu = createKungFu(new TwoCostParameters());
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));

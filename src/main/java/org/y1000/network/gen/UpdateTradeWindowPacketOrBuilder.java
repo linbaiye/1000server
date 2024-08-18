@@ -63,4 +63,10 @@ public interface UpdateTradeWindowPacketOrBuilder extends
    * @return The self.
    */
   boolean getSelf();
+
+  /**
+   * <code>int32 color = 6;</code>
+   * @return The color.
+   */
+  int getColor();
 }

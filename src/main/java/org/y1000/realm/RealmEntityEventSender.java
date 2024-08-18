@@ -87,7 +87,10 @@ final class RealmEntityEventSender implements EntityEventListener,
             return;
         }
         var visibleEntities = scopeManager.filterVisibleEntities(player, Entity.class);
-        visibleEntities.forEach(entity -> notifyInterpolation(player, entity));
+        visibleEntities.forEach(entity -> {
+            notifyInterpolation(player, entity);
+            log.debug("Notified player of entity {} at {}.", entity.id(), entity.coordinate());
+        });
     }
 
     @Override

@@ -17,4 +17,12 @@ public interface Item {
     default Optional<String> eventSound() {
         return Optional.empty();
     }
+
+    default int color() {
+        return 0;
+    }
+
+    default boolean canDye() {
+        return false;
+    }
 }

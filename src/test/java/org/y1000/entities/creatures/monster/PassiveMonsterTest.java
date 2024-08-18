@@ -27,7 +27,7 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
         setup();
         player = playerBuilder().build();
         var realm = mockRealm(monster.realmMap());
-        player.joinReam(realm);
+        player.joinRealm(realm);
     }
 
     @Test

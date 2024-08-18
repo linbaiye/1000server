@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
@@ -143,6 +144,10 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         assertTrue(npcManager.find(1L).isEmpty());
         npc = npcManager.find(3L).orElseThrow(IllegalAccessError::new);
         assertEquals("白狐狸变身", npc.idName());
+        npcManager.onEvent(new RemoveEntityEvent(npc));
+        npcManager.update(1000000);
+        // original npc should be back.
+        assertTrue(npcManager.find(1L).isPresent());
     }
 
     @Test
@@ -152,5 +157,14 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
         npcManager.init();
         Npc npc = npcManager.find(1L).orElseThrow(IllegalAccessError::new);
+    }
+
+    @Test
+    void findMerchants() {
+        Rectangle range = new Rectangle(Coordinate.xy(1, 1), Coordinate.xy(4, 4));
+        npcSettings.add(new NpcSpawnSetting(range, 1, "老板娘"));
+        when(npcSdbRepository.npcSdbExists(49)).thenReturn(true);
+        npcManager.init();
+        assertFalse(npcManager.findMerchants().isEmpty());
     }
 }

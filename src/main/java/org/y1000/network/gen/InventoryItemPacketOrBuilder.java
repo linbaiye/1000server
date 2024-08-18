@@ -36,4 +36,10 @@ public interface InventoryItemPacketOrBuilder extends
    * @return The number.
    */
   long getNumber();
+
+  /**
+   * <code>int32 color = 4;</code>
+   * @return The color.
+   */
+  int getColor();
 }

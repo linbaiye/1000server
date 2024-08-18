@@ -308,5 +308,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientDragPlayerPacketOrBuilder getDragPlayerOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+   * @return Whether the simpleCommand field is set.
+   */
+  boolean hasSimpleCommand();
+  /**
+   * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+   * @return The simpleCommand.
+   */
+  org.y1000.network.gen.ClientSimpleCommandPacket getSimpleCommand();
+  /**
+   * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+   */
+  org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder getSimpleCommandOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

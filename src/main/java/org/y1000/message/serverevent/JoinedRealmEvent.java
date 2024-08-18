@@ -33,6 +33,7 @@ public final class JoinedRealmEvent extends AbstractPlayerEvent{
     private InventoryItemPacket toPacket(int index, Item item) {
         InventoryItemPacket.Builder builder = InventoryItemPacket.newBuilder()
                 .setName(item.name())
+                .setColor(item.color())
                 .setSlotId(index);
         if (item instanceof StackItem stackItem) {
             builder.setNumber(stackItem.number());

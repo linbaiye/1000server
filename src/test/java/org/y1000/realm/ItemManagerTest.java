@@ -8,9 +8,6 @@ import org.y1000.TestingEntityEventSender;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.RemoveEntityEvent;
-import org.y1000.entities.creatures.event.CreatureDieEvent;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
@@ -19,14 +16,12 @@ import org.y1000.message.PlayerTextEvent;
 import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.sdb.ItemDrugSdbImpl;
-import org.y1000.sdb.MonstersSdb;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class ItemManagerTest extends AbstractUnitTestFixture {
 
@@ -53,7 +48,7 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         groundItem.registerEventListener(itemEvenListener);
         manager.add(groundItem);
         var picker = playerBuilder().coordinate(Coordinate.xy(5, 2)).build();
-        picker.joinReam(mockAllFlatRealm());
+        picker.joinRealm(mockAllFlatRealm());
         TestingEventListener playerEventListener = new TestingEventListener();
         picker.registerEventListener(playerEventListener);
         manager.pickItem(picker, 3);

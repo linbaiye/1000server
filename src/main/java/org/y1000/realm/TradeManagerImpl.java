@@ -12,6 +12,7 @@ import org.y1000.item.Item;
 import org.y1000.item.StackItem;
 import org.y1000.message.AbstractPositionEvent;
 import org.y1000.message.InputResponseMessage;
+import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
@@ -81,7 +82,7 @@ public final class TradeManagerImpl implements TradeManager {
             return;
         }
         if (event instanceof PlayerLeftEvent || event instanceof InputResponseMessage ||
-                event instanceof CreatureDieEvent) {
+                event instanceof CreatureDieEvent || event instanceof PlayerMoveEvent) {
             PlayerTrade trade = ongoingTrades.get(player);
             if (needClose(event, trade.getTrader(), trade.getTradee())) {
                 doCancel(player);

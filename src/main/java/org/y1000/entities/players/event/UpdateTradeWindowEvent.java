@@ -40,14 +40,16 @@ public final class UpdateTradeWindowEvent extends AbstractPlayerEvent {
     private final int slot;
 
     private final boolean self;
+    private final int color;
 
-    private UpdateTradeWindowEvent(Player player, Type type, String name, long number, int slot, boolean self) {
+    private UpdateTradeWindowEvent(Player player, Type type, String name, long number, int slot, boolean self, int color) {
         super(player, true);
         this.type = type;
         this.name = name;
         this.number = number;
         this.slot = slot;
         this.self = self;
+        this.color = color;
     }
 
 
@@ -64,6 +66,7 @@ public final class UpdateTradeWindowEvent extends AbstractPlayerEvent {
             builder.setName(name)
                     .setNumber(number)
                     .setSelf(self)
+                    .setColor(color)
                     .setSlot(slot);
         } else if (type == Type.REMOVE_ITEM) {
             builder.setSlot(slot).setSelf(self);
@@ -74,15 +77,15 @@ public final class UpdateTradeWindowEvent extends AbstractPlayerEvent {
     }
 
     public static UpdateTradeWindowEvent close(Player player) {
-        return new UpdateTradeWindowEvent(player, Type.CLOSE_WINDOW, null, 0, 0, true);
+        return new UpdateTradeWindowEvent(player, Type.CLOSE_WINDOW, null, 0, 0, true, 0);
     }
 
-    public static UpdateTradeWindowEvent add(Player player, int slot, Item item, boolean self) {
+    public static UpdateTradeWindowEvent add(Player player, int slot, Item item, boolean myWindow) {
         return new UpdateTradeWindowEvent(player, Type.ADD_ITEM, item.name(),
-                (item instanceof StackItem stackItem) ? stackItem.number() : 1, slot, self);
+                (item instanceof StackItem stackItem) ? stackItem.number() : 1, slot, myWindow, item.color());
     }
 
-    public static UpdateTradeWindowEvent remove(Player player, int slot, boolean self) {
-        return new UpdateTradeWindowEvent(player, Type.REMOVE_ITEM, null, 0, slot, self);
+    public static UpdateTradeWindowEvent remove(Player player, int slot, boolean myWindow) {
+        return new UpdateTradeWindowEvent(player, Type.REMOVE_ITEM, null, 0, slot, myWindow, 0);
     }
 }

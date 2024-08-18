@@ -41,10 +41,6 @@ public final class GroundedItem extends AbstractActiveEntity {
         return Optional.ofNullable(dropSound);
     }
 
-    public Optional<String> pickSound() {
-        return Optional.ofNullable(pickSound);
-    }
-
     @Override
     public Coordinate coordinate() {
         return coordinate;

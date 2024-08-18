@@ -3,6 +3,7 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEntityEventSender;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
@@ -10,11 +11,12 @@ import org.y1000.message.clientevent.ClientTradePlayerEvent;
 import org.y1000.message.clientevent.ClientTriggerDynamicObjectEvent;
 import org.y1000.message.clientevent.ClientUpdateTradeEvent;
 import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-class PlayerManagerImplTest {
+class PlayerManagerImplTest extends AbstractUnitTestFixture {
     private PlayerManagerImpl playerManager;
 
     private EntityEventSender eventSender;
@@ -27,7 +29,8 @@ class PlayerManagerImplTest {
 
     private DynamicObjectManager dynamicObjectManager;
 
-    private Realm realm = Mockito.mock(Realm.class);
+    private Realm realm;
+    private RealmMap realmMap;
     @SuppressWarnings("unchecked")
     @BeforeEach
     void setUp() {
@@ -37,23 +40,32 @@ class PlayerManagerImplTest {
         itemFactory = Mockito.mock(ItemFactory.class);
         dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);
         playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, tradeManager, dynamicObjectManager);
-        realm = Mockito.mock(Realm.class);
+        realmMap = mockRealmMap();
+        realm = mockRealm(realmMap);
+    }
+
+    private Player mockPlayer() {
+        var player = Mockito.mock(Player.class);
+        when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
+        when(player.getRealm()).thenReturn(realm);
+        when(player.realmMap()).thenReturn(realmMap);
+        return player;
     }
 
 
     @Test
     void addNewPlayer() {
-        var player = Mockito.mock(Player.class);
+        var player = mockPlayer();
         when(player.id()).thenReturn(1L);
         playerManager.onPlayerConnected(player, realm);
-        verify(player).joinReam(realm);
+        verify(player).joinRealm(realm);
         assertTrue(playerManager.find(1L).isPresent());
     }
 
     @Test
     void onStartTradeEvent() {
-        var player = Mockito.mock(Player.class);
-        var tradee = Mockito.mock(Player.class);
+        var player = mockPlayer();
+        var tradee = mockPlayer();
         playerManager.onPlayerConnected(player, realm);
         playerManager.onPlayerConnected(tradee, realm);
         when(tradee.id()).thenReturn(1L);
@@ -65,7 +77,7 @@ class PlayerManagerImplTest {
 
     @Test
     void onUpdateTradeEvent() {
-        var player = Mockito.mock(Player.class);
+        var player = mockPlayer();
         playerManager.onPlayerConnected(player, realm);
         PlayerDataEvent dataEvent = new PlayerDataEvent(0, player, new ClientUpdateTradeEvent(1, 2, ClientUpdateTradeEvent.ClientUpdateType.ADD_ITEM, 3));
         playerManager.onClientEvent(dataEvent, Mockito.mock(ActiveEntityManager.class));
@@ -83,7 +95,7 @@ class PlayerManagerImplTest {
 
     @Test
     void onClientTriggerDynamicObject() {
-        var player = Mockito.mock(Player.class);
+        var player = mockPlayer();
         playerManager.onPlayerConnected(player, realm);
         PlayerDataEvent dataEvent = new PlayerDataEvent(0, player, new ClientTriggerDynamicObjectEvent(1L, 2));
         playerManager.onClientEvent(dataEvent, Mockito.mock(ActiveEntityManager.class));
