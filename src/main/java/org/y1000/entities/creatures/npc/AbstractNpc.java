@@ -62,6 +62,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         changeCoordinate(coordinate);
         this.changeState(NpcCommonState.idle(getStateMillis(State.IDLE)));
         spells.forEach(NpcSpell::reset);
+        clearListeners();
     }
 
     protected AttributeProvider attributeProvider() {

@@ -3,16 +3,14 @@ package org.y1000.entities;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public final class EventListeners {
 
-    private final List<EntityEventListener> listeners;
+    private final Set<EntityEventListener> listeners;
 
     public EventListeners() {
-        listeners = new ArrayList<>();
+        listeners = new HashSet<>();
     }
 
     public void notifyListeners(EntityEvent event) {
