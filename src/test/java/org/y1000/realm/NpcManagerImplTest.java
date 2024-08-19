@@ -30,6 +30,7 @@ import org.y1000.util.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -116,9 +117,8 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         }
         CreatureState<?> state = monster.state();
         npcManager.update(state.totalMillis());
-        assertEquals(State.IDLE, monster.stateEnum());
-        assertTrue(range.contains(monster.spawnCoordinate()));
-        assertTrue(range.contains(monster.coordinate()));
+        Npc recreatedNpc = npcManager.find(2L).get();
+        assertEquals("一级牛", recreatedNpc.idName());
         verify(eventSender, times(2)).notifyVisiblePlayers(any(ActiveEntity.class), any(NpcJoinedEvent.class));
     }
 
@@ -147,7 +147,8 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         npcManager.onEvent(new RemoveEntityEvent(npc));
         npcManager.update(1000000);
         // original npc should be back.
-        assertTrue(npcManager.find(1L).isPresent());
+        Npc npc1 = npcManager.find(4L).get();
+        assertEquals("白狐狸", npc1.idName());
     }
 
     @Test

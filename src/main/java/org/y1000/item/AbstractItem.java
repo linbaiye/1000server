@@ -14,9 +14,6 @@ public abstract class AbstractItem implements Item {
     private final String eventSound;
     private final String description;
 
-    private final boolean dyable;
-    private final int color;
-
     public AbstractItem(String name,
                         ItemType type,
                         String dropSound,
@@ -29,8 +26,6 @@ public abstract class AbstractItem implements Item {
         this.dropSound = StringUtils.isEmpty(dropSound) ? null : dropSound;
         this.eventSound  = StringUtils.isEmpty(eventSound) ? null : eventSound;
         this.description = description != null ? description : "";
-        this.color = 0;
-        this.dyable = false;
     }
 
     public AbstractItem(String name, ItemType type, ItemSdb itemSdb) {
@@ -39,19 +34,8 @@ public abstract class AbstractItem implements Item {
         this.dropSound = StringUtils.isEmpty(itemSdb.getSoundDrop(name)) ? null : itemSdb.getSoundDrop(name);
         this.eventSound = StringUtils.isEmpty(itemSdb.getSoundEvent(name)) ? null : itemSdb.getSoundEvent(name);
         this.description = itemSdb.getDesc(name) != null ? itemSdb.getDesc(name) : "";
-        this.dyable = itemSdb.isColoring(name);
-        this.color = Objects.requireNonNullElse(itemSdb.getColor(name), 0);
     }
 
-    @Override
-    public boolean canDye() {
-        return dyable;
-    }
-
-    @Override
-    public int color() {
-        return color;
-    }
 
     @Override
     public String name() {

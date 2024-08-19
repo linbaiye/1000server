@@ -15,32 +15,37 @@ public record Rectangle(Coordinate start, Coordinate end) {
     }
 
     public Coordinate random(Coordinate origin) {
-        try {
-            if (!contains(origin)) {
-                return origin;
-            }
-            int minX = Math.max(origin.x() - 3, start.x());
-            int maxX = Math.min(origin.x() + 3, end.x());
-            var x = ThreadLocalRandom.current().nextInt(minX, maxX + 1);
-            int minY = Math.max(origin.y() - 3, start.y());
-            int maxY = Math.min(origin.y() + 3, end.y());
-            var y = ThreadLocalRandom.current().nextInt(minY, maxY + 1);
-            return new Coordinate(x, y);
-        } catch (RuntimeException e) {
-            throw e;
+        if (!contains(origin)) {
+            return origin;
         }
+        int minX = Math.max(origin.x() - 3, start.x());
+        int maxX = Math.min(origin.x() + 3, end.x());
+        var x = ThreadLocalRandom.current().nextInt(minX, maxX + 1);
+        int minY = Math.max(origin.y() - 3, start.y());
+        int maxY = Math.min(origin.y() + 3, end.y());
+        var y = ThreadLocalRandom.current().nextInt(minY, maxY + 1);
+        return new Coordinate(x, y);
     }
 
 
     public Optional<Coordinate> random(Predicate<Coordinate> checker) {
-        for (int i = 0; i < 5; i++) {
-            Coordinate random = random();
-            if (checker.test(random)) {
-                return Optional.of(random);
+        Coordinate random = random();
+        return checker.test(random) ? Optional.of(random) : Optional.empty();
+    }
+
+
+    public Optional<Coordinate> findFirst(Predicate<Coordinate> checker) {
+        for (int i = start.x(); i <= end.x(); i++) {
+            for (int j = start.y(); j <= end.y(); j++) {
+                Coordinate coor = Coordinate.xy(i, j);
+                if (checker.test(coor)) {
+                    return Optional.of(coor);
+                }
             }
         }
         return Optional.empty();
     }
+
 
     private Coordinate random() {
         int x;

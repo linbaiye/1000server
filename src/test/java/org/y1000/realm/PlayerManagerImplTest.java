@@ -7,6 +7,8 @@ import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEntityEventSender;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
+import org.y1000.message.BreakRopeEvent;
+import org.y1000.message.clientevent.ClientDragPlayerEvent;
 import org.y1000.message.clientevent.ClientTradePlayerEvent;
 import org.y1000.message.clientevent.ClientTriggerDynamicObjectEvent;
 import org.y1000.message.clientevent.ClientUpdateTradeEvent;
@@ -100,5 +102,28 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
         PlayerDataEvent dataEvent = new PlayerDataEvent(0, player, new ClientTriggerDynamicObjectEvent(1L, 2));
         playerManager.onClientEvent(dataEvent, Mockito.mock(ActiveEntityManager.class));
         verify(dynamicObjectManager, times(1)).triggerDynamicObject(1L, player, 2);
+    }
+
+    @Test
+    void drag() {
+        var player1 = mockPlayer();
+        when(player1.id()).thenReturn(1L);
+        playerManager.onPlayerConnected(player1, realm);
+        var player2 = mockPlayer();
+        when(player2.id()).thenReturn(2L);
+        playerManager.onPlayerConnected(player2, realm);
+        when(player1.canDrag(player2, 1)).thenReturn(true);
+        PlayerDataEvent dataEvent = new PlayerDataEvent(0, player1, new ClientDragPlayerEvent(2L, 1));
+        playerManager.onClientEvent(dataEvent, Mockito.mock(ActiveEntityManager.class));
+        verify(player1, times(1)).consumeItem(1);
+
+        var player3 = mockPlayer();
+        when(player3.id()).thenReturn(3L);
+        playerManager.onPlayerConnected(player3, realm);
+        when(player3.canDrag(player2, 1)).thenReturn(true);
+        dataEvent = new PlayerDataEvent(0, player3, new ClientDragPlayerEvent(2L, 1));
+        playerManager.onClientEvent(dataEvent, Mockito.mock(ActiveEntityManager.class));
+        verify(player3, times(1)).consumeItem(1);
+        verify(player2, times(1)).emitEvent(any(BreakRopeEvent.class));
     }
 }

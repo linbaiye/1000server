@@ -93,9 +93,8 @@ end;
             return;
         mills -= (int)delta;
         follow();
-        if (mills <= 0) {
+        if (mills <= 0)
             breakRope();
-        }
     }
 
     private void breakRope() {

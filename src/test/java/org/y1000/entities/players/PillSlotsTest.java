@@ -15,6 +15,8 @@ import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.sdb.ItemDrugSdbImpl;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 class PillSlotsTest {
@@ -29,6 +31,8 @@ class PillSlotsTest {
         player = Mockito.mock(Player.class);
         slots = new PillSlots();
     }
+
+
 
     @Test
     void usePill() {
@@ -45,7 +49,7 @@ class PillSlotsTest {
         Mockito.verify(player, Mockito.times(3)).emitEvent(any(PlayerTextEvent.class));
         slots.usePill(player, pill);
         Mockito.verify(player, Mockito.times(3)).emitEvent(any(EntitySoundEvent.class));
-        Mockito.verify(player, Mockito.times(4)).emitEvent(any(PlayerTextEvent.class));
+        Mockito.verify(player, Mockito.times(3)).emitEvent(any(PlayerTextEvent.class));
     }
 
     @Test
@@ -67,5 +71,16 @@ class PillSlotsTest {
         slots.usePill(player, pill);
         Mockito.verify(player, Mockito.times(3)).emitEvent(any(EntitySoundEvent.class));
         Mockito.verify(player, Mockito.times(3)).emitEvent(any(PlayerTextEvent.class));
+    }
+
+    @Test
+    void canTake() {
+        StackItem stackItem= (StackItem) itemFactory.createItem("生药", 100);
+        var pill = (Pill) stackItem.item();
+        slots.usePill(player, pill);
+        slots.usePill(player, pill);
+        assertTrue(slots.canTakePill());
+        slots.usePill(player, pill);
+        assertFalse(slots.canTakePill());
     }
 }

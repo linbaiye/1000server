@@ -40,20 +40,19 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private Inventory loadInventory() {
         Inventory inventory = new Inventory();
-        inventory.add(itemFactory.createItem("百炼金鳞神剑"));
         inventory.add(itemFactory.createItem("箭", 10000));
         inventory.add(itemFactory.createItem("飞刀", 10000));
         inventory.add(itemFactory.createItem("斗甲"));
         inventory.add(itemFactory.createItem("太极斧"));
-        inventory.add(itemFactory.createItem("太极神枪"));
         inventory.add(itemFactory.createItem("三叉戟"));
         inventory.add(itemFactory.createItem("黄金手套"));
         inventory.add(itemFactory.createItem("北海连环弓"));
         inventory.add(itemFactory.createMoney( 10000));
         inventory.add(itemFactory.createItem("金毛草", 10000));
-        inventory.add(itemFactory.createItem("黑沙刚体", 1));
         inventory.add(itemFactory.createItem("大脉神弓"));
         inventory.add(itemFactory.createItem("女子黄龙弓服"));
+        inventory.add(itemFactory.createItem("女子黄龙手套"));
+        inventory.add(itemFactory.createItem("女子黄龙鞋"));
         inventory.add(itemFactory.createItem("血魔剑"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("骨钥匙", 1000));

@@ -12,6 +12,7 @@ import org.y1000.sdb.CreateNpcSdb;
 import org.y1000.sdb.MonstersSdb;
 import org.y1000.sdb.NpcSpawnSetting;
 import org.y1000.util.Coordinate;
+import org.y1000.util.Rectangle;
 
 import java.util.*;
 
@@ -46,14 +47,16 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
     private void respawn(Npc npc) {
         List<NpcSpawnSetting> settings = npcSpawnSettings.getOrDefault(npc.idName(), Collections.emptyList());
         for (NpcSpawnSetting setting : settings) {
-            if (!setting.range().contains(npc.spawnCoordinate())) {
+            Rectangle range = setting.range();
+            if (!range.contains(npc.spawnCoordinate())) {
                 continue;
             }
-            Coordinate coordinate = setting.range()
+            Coordinate coordinate = range
                     .random(npc.realmMap()::movable)
+                    .or(() -> range.findFirst(npc.realmMap()::movable))
                     .orElse(npc.spawnCoordinate());
-            npc.respawn(coordinate);
-            addNpc(npc);
+            var newNpc = getNpcFactory().createNpc(npc.idName(), getIdGenerator().next(), npc.realmMap(), coordinate);
+            addNpc(newNpc);
             return;
         }
         log.error("Failed to respawn {}.", npc.id());

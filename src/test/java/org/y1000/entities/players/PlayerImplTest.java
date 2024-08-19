@@ -33,10 +33,7 @@ import org.y1000.message.clientevent.*;
 import org.y1000.message.clientevent.input.RightMouseClick;
 import org.y1000.message.serverevent.PlayerEquipEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
-import org.y1000.network.gen.AttributePacket;
-import org.y1000.network.gen.ItemAttributePacket;
-import org.y1000.network.gen.KungFuPacket;
-import org.y1000.network.gen.PlayerRightClickAttributePacket;
+import org.y1000.network.gen.*;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.repository.ItemRepositoryImpl;
@@ -808,5 +805,19 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals("雷剑式", packet.getName());
         assertEquals(100, packet.getLevel());
         assertEquals(AttackKungFuType.SWORD.value(), packet.getType());
+    }
+
+    @Test
+    void takePill() {
+        int slot = player.inventory().add(itemFactory.createItem("生药", 4));
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertEquals(1L, ((StackItem)player.inventory().getItem(slot)).number());
+        eventListener.clearEvents();
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertEquals(1L, ((StackItem)player.inventory().getItem(slot)).number());
+        TextMessagePacket text = eventListener.removeFirst(PlayerTextEvent.class).toPacket().getText();
+        assertEquals(PlayerTextEvent.TextType.NO_MORE_PILL.value(), text.getType());
     }
 }

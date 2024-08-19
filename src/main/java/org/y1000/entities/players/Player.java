@@ -57,15 +57,15 @@ public interface Player extends ViolentCreature {
 
     Optional<ArmorEquipment> chest();
 
-    Optional<Hair> hair();
+    Optional<SexualEquipment> hair();
 
     Optional<ArmorEquipment> wrist();
 
     Optional<ArmorEquipment> boot();
 
-    Optional<Clothing> clothing();
+    Optional<SexualEquipment> clothing();
 
-    Optional<Trouser> trouser();
+    Optional<SexualEquipment> trouser();
 
     void gainHeadLife(int v);
 
@@ -132,10 +132,11 @@ public interface Player extends ViolentCreature {
     boolean consumeItem(int slotId);
 
     default boolean canDrag(Player target, int ropeSlot) {
-        if (stateEnum() == State.DIE || stateEnum() == State.FROZEN) {
+        if (stateEnum() == State.DIE || stateEnum() == State.FROZEN ||
+                target.equals(this)) {
             return false;
         }
-        if (target == null || target.stateEnum() != State.DIE) {
+        if (target.stateEnum() != State.DIE) {
             return false;
         }
         if (target.coordinate().directDistance(coordinate()) > 4) {

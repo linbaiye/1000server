@@ -125,11 +125,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                       boolean male,
                       ArmorEquipment hat,
                       ArmorEquipment chest,
-                      Hair hair,
+                      SexualEquipment hair,
                       ArmorEquipment wrist,
                       ArmorEquipment boot,
-                      Trouser trouser,
-                      Clothing clothing,
+                      SexualEquipment trouser,
+                      SexualEquipment clothing,
                       FootKungFu footKungfu,
                       ProtectKungFu protectKungFu,
                       BreathKungFu breathKungFu,
@@ -287,9 +287,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             equip(slotId, equipment);
         } else if (item instanceof StackItem stackItem) {
             if (stackItem.item() instanceof Pill pill) {
-                if (inventory.decrease(slotId)) {
+                if (pillSlots.canTakePill() && inventory.decrease(slotId)) {
                     emitEvent(new UpdateInventorySlotEvent(this, slotId, inventory.getItem(slotId)));
                     pillSlots.usePill(this, pill);
+                } else {
+                    emitEvent(PlayerTextEvent.noMorePill(this));
                 }
             } else if (stackItem.item() instanceof KungFuItem kungFuItem) {
                 learnKungFu(slotId, kungFuItem);
@@ -512,8 +514,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public Optional<Hair> hair() {
-        return getEquipment(EquipmentType.HAIR, Hair.class);
+    public Optional<SexualEquipment> hair() {
+        return getEquipment(EquipmentType.HAIR, SexualEquipment.class);
     }
 
     @Override
@@ -527,13 +529,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public Optional<Clothing> clothing() {
-        return getEquipment(EquipmentType.CLOTHING, Clothing.class);
+    public Optional<SexualEquipment> clothing() {
+        return getEquipment(EquipmentType.CLOTHING, SexualEquipment.class);
     }
 
     @Override
-    public Optional<Trouser> trouser() {
-        return getEquipment(EquipmentType.TROUSER, Trouser.class);
+    public Optional<SexualEquipment> trouser() {
+        return getEquipment(EquipmentType.TROUSER, SexualEquipment.class);
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.y1000.sdb.CreateNpcSdb;
 import org.y1000.sdb.MonstersSdb;
 import org.y1000.sdb.NpcSpawnSetting;
 import org.y1000.util.Coordinate;
+import org.y1000.util.Rectangle;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -98,9 +99,11 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
             for (int i = 0; i < setting.number(); i++) {
                 try {
                     total += setting.number();
-                    Optional<Coordinate> random = setting.range().random(realmMap::movable);
-                    random.ifPresentOrElse(p -> addNpc(npcFactory.createNpc(name, idGenerator.next(), realmMap, p)),
-                            () -> log().warn("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), realmMap.mapFile()));
+                    Rectangle range = setting.range();
+                    Coordinate coordinate = range.random(realmMap::movable)
+                            .or(() -> range.findFirst(realmMap::movable))
+                            .orElse(range.start());
+                    addNpc(npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate));
                 } catch (Exception e) {
                     log().error("Failed to create npc {}.", name, e);
                     throw new RuntimeException(e);

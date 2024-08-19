@@ -6,6 +6,8 @@ import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.item.Pill;
 import org.y1000.message.PlayerTextEvent;
 
+import java.util.stream.Stream;
+
 public final class PillSlots {
 
     private static class PillSlot {
@@ -58,7 +60,15 @@ public final class PillSlots {
                 return;
             }
         }
-        player.emitEvent(PlayerTextEvent.noMorePill(player));
+    }
+
+    public boolean canTakePill() {
+        for (PillSlot pillSlot : pillSlots) {
+            if (pillSlot == null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void update(Player player, long delta) {

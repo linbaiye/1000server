@@ -3,7 +3,7 @@ package org.y1000.item;
 import lombok.Getter;
 
 @Getter
-public abstract class AbstractSexualEquipment extends AbstractEquipment {
+public abstract class AbstractSexualEquipment extends AbstractEquipment implements SexualEquipment {
 
     private final boolean male;
 

@@ -21,8 +21,4 @@ public interface Item {
     default int color() {
         return 0;
     }
-
-    default boolean canDye() {
-        return false;
-    }
 }
