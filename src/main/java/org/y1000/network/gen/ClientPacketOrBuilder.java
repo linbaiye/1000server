@@ -323,5 +323,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder getSimpleCommandOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+   * @return Whether the dye field is set.
+   */
+  boolean hasDye();
+  /**
+   * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+   * @return The dye.
+   */
+  org.y1000.network.gen.ClientDyePacket getDye();
+  /**
+   * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+   */
+  org.y1000.network.gen.ClientDyePacketOrBuilder getDyeOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

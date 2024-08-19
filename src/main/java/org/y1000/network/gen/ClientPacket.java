@@ -66,6 +66,7 @@ private static final long serialVersionUID = 0L;
     SWAPKUNGFUSLOT(19),
     DRAGPLAYER(20),
     SIMPLECOMMAND(21),
+    DYE(22),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -104,6 +105,7 @@ private static final long serialVersionUID = 0L;
         case 19: return SWAPKUNGFUSLOT;
         case 20: return DRAGPLAYER;
         case 21: return SIMPLECOMMAND;
+        case 22: return DYE;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -770,6 +772,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
   }
 
+  public static final int DYE_FIELD_NUMBER = 22;
+  /**
+   * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+   * @return Whether the dye field is set.
+   */
+  @java.lang.Override
+  public boolean hasDye() {
+    return typeCase_ == 22;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+   * @return The dye.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientDyePacket getDye() {
+    if (typeCase_ == 22) {
+       return (org.y1000.network.gen.ClientDyePacket) type_;
+    }
+    return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientDyePacketOrBuilder getDyeOrBuilder() {
+    if (typeCase_ == 22) {
+       return (org.y1000.network.gen.ClientDyePacket) type_;
+    }
+    return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -846,6 +879,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 21) {
       output.writeMessage(21, (org.y1000.network.gen.ClientSimpleCommandPacket) type_);
+    }
+    if (typeCase_ == 22) {
+      output.writeMessage(22, (org.y1000.network.gen.ClientDyePacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -939,6 +975,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 21) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(21, (org.y1000.network.gen.ClientSimpleCommandPacket) type_);
+    }
+    if (typeCase_ == 22) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(22, (org.y1000.network.gen.ClientDyePacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1041,6 +1081,10 @@ private static final long serialVersionUID = 0L;
         if (!getSimpleCommand()
             .equals(other.getSimpleCommand())) return false;
         break;
+      case 22:
+        if (!getDye()
+            .equals(other.getDye())) return false;
+        break;
       case 0:
       default:
     }
@@ -1139,6 +1183,10 @@ private static final long serialVersionUID = 0L;
       case 21:
         hash = (37 * hash) + SIMPLECOMMAND_FIELD_NUMBER;
         hash = (53 * hash) + getSimpleCommand().hashCode();
+        break;
+      case 22:
+        hash = (37 * hash) + DYE_FIELD_NUMBER;
+        hash = (53 * hash) + getDye().hashCode();
         break;
       case 0:
       default:
@@ -1337,6 +1385,9 @@ private static final long serialVersionUID = 0L;
       if (simpleCommandBuilder_ != null) {
         simpleCommandBuilder_.clear();
       }
+      if (dyeBuilder_ != null) {
+        dyeBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1461,6 +1512,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 21 &&
           simpleCommandBuilder_ != null) {
         result.type_ = simpleCommandBuilder_.build();
+      }
+      if (typeCase_ == 22 &&
+          dyeBuilder_ != null) {
+        result.type_ = dyeBuilder_.build();
       }
     }
 
@@ -1591,6 +1646,10 @@ private static final long serialVersionUID = 0L;
         }
         case SIMPLECOMMAND: {
           mergeSimpleCommand(other.getSimpleCommand());
+          break;
+        }
+        case DYE: {
+          mergeDye(other.getDye());
           break;
         }
         case TYPE_NOT_SET: {
@@ -1770,6 +1829,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 21;
               break;
             } // case 170
+            case 178: {
+              input.readMessage(
+                  getDyeFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 22;
+              break;
+            } // case 178
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -4782,6 +4848,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 21;
       onChanged();
       return simpleCommandBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientDyePacket, org.y1000.network.gen.ClientDyePacket.Builder, org.y1000.network.gen.ClientDyePacketOrBuilder> dyeBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+     * @return Whether the dye field is set.
+     */
+    @java.lang.Override
+    public boolean hasDye() {
+      return typeCase_ == 22;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+     * @return The dye.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientDyePacket getDye() {
+      if (dyeBuilder_ == null) {
+        if (typeCase_ == 22) {
+          return (org.y1000.network.gen.ClientDyePacket) type_;
+        }
+        return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 22) {
+          return dyeBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+     */
+    public Builder setDye(org.y1000.network.gen.ClientDyePacket value) {
+      if (dyeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        dyeBuilder_.setMessage(value);
+      }
+      typeCase_ = 22;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+     */
+    public Builder setDye(
+        org.y1000.network.gen.ClientDyePacket.Builder builderForValue) {
+      if (dyeBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        dyeBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 22;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+     */
+    public Builder mergeDye(org.y1000.network.gen.ClientDyePacket value) {
+      if (dyeBuilder_ == null) {
+        if (typeCase_ == 22 &&
+            type_ != org.y1000.network.gen.ClientDyePacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientDyePacket.newBuilder((org.y1000.network.gen.ClientDyePacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 22) {
+          dyeBuilder_.mergeFrom(value);
+        } else {
+          dyeBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 22;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+     */
+    public Builder clearDye() {
+      if (dyeBuilder_ == null) {
+        if (typeCase_ == 22) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 22) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        dyeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+     */
+    public org.y1000.network.gen.ClientDyePacket.Builder getDyeBuilder() {
+      return getDyeFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientDyePacketOrBuilder getDyeOrBuilder() {
+      if ((typeCase_ == 22) && (dyeBuilder_ != null)) {
+        return dyeBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 22) {
+          return (org.y1000.network.gen.ClientDyePacket) type_;
+        }
+        return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientDyePacket, org.y1000.network.gen.ClientDyePacket.Builder, org.y1000.network.gen.ClientDyePacketOrBuilder> 
+        getDyeFieldBuilder() {
+      if (dyeBuilder_ == null) {
+        if (!(typeCase_ == 22)) {
+          type_ = org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
+        }
+        dyeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientDyePacket, org.y1000.network.gen.ClientDyePacket.Builder, org.y1000.network.gen.ClientDyePacketOrBuilder>(
+                (org.y1000.network.gen.ClientDyePacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 22;
+      onChanged();
+      return dyeBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

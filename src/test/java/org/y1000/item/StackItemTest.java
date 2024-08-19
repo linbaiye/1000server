@@ -9,7 +9,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-class StackItemTest {
+class StackItemTest extends AbstractItemUnitTestFixture {
 
     @Test
     void hasEnough() {
@@ -58,5 +58,11 @@ class StackItemTest {
         StackItem stackItem = new StackItem(mocked, StackItem.capacity() -1);
         assertEquals("drop", stackItem.dropSound().get());
         assertEquals("event", stackItem.eventSound().get());
+    }
+
+    @Test
+    void origin() {
+        var stackItem = (StackItem)itemFactory.createItem("蓝色染剂", 1);
+        assertTrue(stackItem.origin(Dye.class).isPresent());
     }
 }

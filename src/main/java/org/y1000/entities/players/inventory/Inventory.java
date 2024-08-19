@@ -131,6 +131,20 @@ public final class Inventory {
                 .findFirst();
     }
 
+    public <T extends Item> Optional<StackItem> getStackItem(int slot, Class<T> type) {
+        Validate.notNull(type);
+        Item item = getItem(slot);
+        return item instanceof StackItem stackItem && stackItem.origin(type).isPresent() ?
+                Optional.of(stackItem) : Optional.empty();
+    }
+
+    public <T extends Item> Optional<T> getItem(int slot, Class<T> type) {
+        Validate.notNull(type);
+        Item item = getItem(slot);
+        return item != null && type.isAssignableFrom(item.getClass()) ?
+                Optional.of(type.cast(item)) : Optional.empty();
+    }
+
     public Optional<StackItem> findFirstStackItem(String name) {
         return findFirst(i -> i.name().equals(name), StackItem.class);
     }

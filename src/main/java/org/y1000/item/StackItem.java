@@ -27,6 +27,10 @@ public record StackItem(Item item, long number) implements Item {
         return MAX_NUMBER;
     }
 
+    public <T extends Item> Optional<T> origin(Class<T> type) {
+        return type.isAssignableFrom(item.getClass()) ? Optional.of(type.cast(item)) : Optional.empty();
+    }
+
     @Override
     public ItemType itemType() {
         return item.itemType();
