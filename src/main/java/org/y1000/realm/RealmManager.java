@@ -112,7 +112,6 @@ public final class RealmManager implements Runnable , RealmEventHandler {
         }
     }
 
-
     private void handleTeleport(RealmTeleportEvent teleportEvent) {
         int realmId = teleportEvent.realmId();
         playerRealmMap.remove(teleportEvent.player());
@@ -147,14 +146,15 @@ public final class RealmManager implements Runnable , RealmEventHandler {
         this.groups.addAll(groups);
     }
 
+    private static final Set<Integer> IGNORED_REALMS = Set.of(31, 43, 46, 70, 71, 89);
+
 
     private static List<Integer> getRealmIds() {
         List<Integer> result = new ArrayList<>();
-        for (int i = 1; i <= 30; i++) {
-            result.add(i);
+        for (int i = 1; i <= 110; i++) {
+            if (!IGNORED_REALMS.contains(i))
+                result.add(i);
         }
-        result.add(49);
-        result.add(88);
         return result;
         // return List.of(1, 3, 4, 19, 20, 49);
         //return List.of(19);

@@ -32,14 +32,6 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
         }
         var dmg = Math.max(damage.bodyDamage() - armor, 1);
         life -= Math.min(dmg, life);
-        if (life == 0) {
-            changeAnimation(1, dynamicObjectSdb().getOpenedMillis(idName()));
-            dynamicObjectSdb().getSoundDie(idName()).or(() -> dynamicObjectSdb().getSoundEvent(idName()))
-                    .ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-            emitEvent(new DynamicObjectDieEvent(this));
-        } else {
-            dynamicObjectSdb().getSoundSpecial(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-        }
         emitEvent(new EntityLifebarEvent(this, life, maxLife));
     }
 

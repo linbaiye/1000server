@@ -38,9 +38,11 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
             case WALK -> onMoveDone(npc);
             case IDLE -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc),
                     npc.getStateMillis(State.WALK), npc.getStateMillis(State.IDLE));
-//            case FROZEN -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc), npc.getStateMillis(State.WALK));
-//            case IDLE -> npc.startAction(State.FROZEN);
             case HURT -> onHurtDone(npc);
+            default -> {
+                if (npc.stateEnum() != State.DIE)
+                    nextRound(npc);
+            }
         }
     }
 
@@ -55,9 +57,11 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
         start(npc);
     }
 
-
     @Override
     public void start(Npc npc) {
+        if (npc.stateEnum() == State.DIE) {
+            return;
+        }
         if (destination == null) {
             previousCoordinate = npc.coordinate();
             destination = npc.wanderingArea().random(npc.spawnCoordinate());

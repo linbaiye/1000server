@@ -11,13 +11,34 @@ public final class PlayerInfo {
                 .setName(player.viewName())
                 .setMale(player.isMale());
         player.weapon().ifPresent(weapon -> builder.setWeaponName(weapon.name()));
-        player.hat().ifPresent(hat -> builder.setHatName(hat.name()));
-        player.chest().ifPresent(chest -> builder.setChestName(chest.name()));
-        player.hair().ifPresent(h -> builder.setHairName(h.name()));
-        player.wrist().ifPresent(w -> builder.setWristName(w.name()));
-        player.boot().ifPresent(b -> builder.setBootName(b.name()));
-        player.trouser().ifPresent(t -> builder.setTrouserName(t.name()));
-        player.clothing().ifPresent(c -> builder.setClothingName(c.name()));
+        player.hat().ifPresent(hat -> {
+            builder.setHatName(hat.name());
+            builder.setHatColor(hat.color());
+        });
+        player.chest().ifPresent(chest -> {
+            builder.setChestName(chest.name());
+            builder.setChestColor(chest.color());
+        });
+        player.hair().ifPresent(h -> {
+            builder.setHairName(h.name());
+            builder.setHairColor(h.color());
+        });
+        player.wrist().ifPresent(w -> {
+            builder.setWristName(w.name());
+            builder.setWristColor(w.color());
+        });
+        player.boot().ifPresent(b -> {
+            builder.setBootName(b.name());
+            builder.setBootColor(b.color());
+        });
+        player.trouser().ifPresent(t -> {
+            builder.setTrouserName(t.name());
+            builder.setTrouserColor(t.color());
+        });
+        player.clothing().ifPresent(c -> {
+            builder.setClothingName(c.name());
+            builder.setClothingColor(c.color());
+        });
         return builder.build();
     }
 }

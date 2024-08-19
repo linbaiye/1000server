@@ -25,4 +25,10 @@ public interface PlayerEquipPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getEquipmentNameBytes();
+
+  /**
+   * <code>int32 color = 3;</code>
+   * @return The color.
+   */
+  int getColor();
 }

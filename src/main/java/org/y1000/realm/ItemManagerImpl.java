@@ -106,7 +106,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
                 .name(name)
                 .number(number)
                 .coordinate(coordinate)
-                .pickSound(itemSdb.getSoundEvent(name))
+                .color(itemSdb.getColor(name))
                 .dropSound(itemSdb.getSoundDrop(name))
                 .build();
     }

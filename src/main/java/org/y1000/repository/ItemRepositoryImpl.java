@@ -23,7 +23,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
     }
 
 
-
     @Override
     public void save(long playerId, int slot, Item item) {
 
@@ -97,43 +96,51 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
     }
 
     @Override
-    public Trouser createTrouser(String name) {
-        return new Trouser(name, itemSdb);
+    public SexualEquipment createTrouser(String name) {
+        return itemSdb.isColoring(name) ? new DecorativeEquipment(name, EquipmentType.TROUSER, itemSdb, itemSdb.getColor(name))
+                : new Trouser(name, itemSdb);
     }
 
     @Override
     public ArmorEquipment createHat(String name) {
-        return new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.HAT);
+        return itemSdb.isColoring(name) ?
+                new DyableArmorEquipment(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.HAT, itemSdb.getColor(name)) :
+                new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.HAT);
     }
 
     @Override
     public ArmorEquipment createChest(String name) {
-        return new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.CHEST);
+        return itemSdb.isColoring(name) ?
+                new DyableArmorEquipment(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.CHEST, itemSdb.getColor(name)) :
+                new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.CHEST);
     }
 
     @Override
-    public Hair createHair(String name) {
-        return new Hair(name, itemSdb);
+    public SexualEquipment createHair(String name) {
+        Validate.isTrue(name != null && itemSdb.getType(name) == ItemType.EQUIPMENT);
+        return itemSdb.isColoring(name) ? new DecorativeEquipment(name, EquipmentType.HAIR, itemSdb, itemSdb.getColor(name)) :
+            new Hair(name, itemSdb);
     }
 
     @Override
     public ArmorEquipment createBoot(String name) {
-        return new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.BOOT);
+        Validate.isTrue(name != null && itemSdb.getType(name) == ItemType.EQUIPMENT);
+        return itemSdb.isColoring(name) ?
+                new DyableArmorEquipment(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.BOOT, itemSdb.getColor(name)) :
+                new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.BOOT);
     }
 
     @Override
     public ArmorEquipment createWrist(String name) {
-        return new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.WRIST);
+        return itemSdb.isColoring(name) ?
+                new DyableArmorEquipment(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.WRIST, itemSdb.getColor(name)) :
+                new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.WRIST);
     }
 
     @Override
-    public Clothing createClothing(String name) {
-        return Clothing.builder()
-                .name(name)
-                .male(itemSdb.isMale(name))
-                .dropSound(itemSdb.getSoundDrop(name))
-                .eventSound(itemSdb.getSoundEvent(name))
-                .desc(itemSdb.getDesc(name))
-                .build();
+    public SexualEquipment createClothing(String name) {
+        Validate.isTrue(name != null && itemSdb.getType(name) == ItemType.EQUIPMENT);
+        return itemSdb.isColoring(name) ? new DecorativeEquipment(name, EquipmentType.CLOTHING, itemSdb, itemSdb.getColor(name))
+                : new Clothing(name, itemSdb);
     }
 }

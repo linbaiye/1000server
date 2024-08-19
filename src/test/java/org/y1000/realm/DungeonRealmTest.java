@@ -76,12 +76,14 @@ class DungeonRealmTest extends AbstractRealmUnitTextFixture {
     void enterHalfHourWhenOpen() {
         buildRealm();
         Player player = playerBuilder().build();
+        player.leaveRealm();
         Connection connection = Mockito.mock(Connection.class);
         RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection);
         currentDateTime  = LocalDateTime.now().withMinute(0).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);
         verify(playerManager, times(1)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
         currentDateTime  = LocalDateTime.now().withMinute(4).withSecond(59);
+        player.leaveRealm();
         dungeonRealm.handle(realmTeleportEvent);
         verify(playerManager, times(2)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
     }
@@ -110,12 +112,14 @@ class DungeonRealmTest extends AbstractRealmUnitTextFixture {
         interval = 360000;
         buildRealm();
         Player player = playerBuilder().build();
+        player.leaveRealm();
         Connection connection = Mockito.mock(Connection.class);
         RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection);
         currentDateTime  = LocalDateTime.now().withMinute(0).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);
         verify(playerManager, times(1)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
         currentDateTime  = LocalDateTime.now().withMinute(4).withSecond(59);
+        player.leaveRealm();
         dungeonRealm.handle(realmTeleportEvent);
         verify(playerManager, times(2)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
     }

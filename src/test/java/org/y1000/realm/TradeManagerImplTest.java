@@ -3,9 +3,12 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.entities.players.event.OpenTradeWindowEvent;
 import org.y1000.entities.players.event.UpdateTradeWindowEvent;
 import org.y1000.entities.players.inventory.Inventory;
@@ -16,7 +19,9 @@ import org.y1000.item.ItemSdbImpl;
 import org.y1000.item.StackItem;
 import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.ServerMessage;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
+import org.y1000.network.gen.TextMessagePacket;
 import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.sdb.ItemDrugSdbImpl;
@@ -35,13 +40,15 @@ class TradeManagerImplTest {
 
     private TestingEventListener traderEventListener;
     private TestingEventListener tradeeEventListener;
+    private EntityEventSender eventSender;
 
 
     @BeforeEach
     void setUp() {
+        eventSender = Mockito.mock(EntityEventSender.class);
         itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
         trader = Mockito.mock(Player.class);
-        tradeManager = new TradeManagerImpl();
+        tradeManager = new TradeManagerImpl(eventSender);
         traderInventory = new Inventory();
         traderInventory.add(itemFactory.createItem("长剑"));
         when(trader.inventory()).thenReturn(traderInventory);
@@ -51,17 +58,17 @@ class TradeManagerImplTest {
         tradeeInventory = new Inventory();
         when(tradee.inventory()).thenReturn(tradeeInventory);
         when(tradee.coordinate()).thenReturn(Coordinate.xy(2, 2));
-
         tradeeEventListener = new TestingEventListener();
         traderEventListener = new TestingEventListener();
         doAnswer(invocationOnMock -> {
-            traderEventListener.onEvent(invocationOnMock.getArgument(0));
+            AbstractPlayerEvent event = invocationOnMock.getArgument(0);
+            if (event.source() == trader) {
+                traderEventListener.onEvent(event);
+            } else if (event.source() == tradee) {
+                tradeeEventListener.onEvent(event);
+            }
             return null;
-        }).when(trader).emitEvent(any(EntityEvent.class));
-        doAnswer(invocationOnMock -> {
-            tradeeEventListener.onEvent(invocationOnMock.getArgument(0));
-            return null;
-        }).when(tradee).emitEvent(any(EntityEvent.class));
+        }).when(eventSender).notifySelf(any(AbstractPlayerEvent.class));
     }
 
     @Test
@@ -71,8 +78,11 @@ class TradeManagerImplTest {
         when(tradee.tradeEnabled()).thenReturn(true);
         when(trader.inventory()).thenReturn(inventory);
         tradeManager.start(trader, tradee, slot);
-        verify(trader, times(1)).emitEvent(any(OpenTradeWindowEvent.class));
-        verify(tradee, times(1)).emitEvent(any(OpenTradeWindowEvent.class));
+        verify(eventSender, times(2)).notifySelf(any(OpenTradeWindowEvent.class));
+        assertNotNull(tradeeEventListener.removeFirst(OpenTradeWindowEvent.class));
+        assertNotNull(traderEventListener.removeFirst(OpenTradeWindowEvent.class));
+        assertTrue(tradeeEventListener.isEmpty());
+        assertTrue(traderEventListener.isEmpty());
     }
 
     @Test
@@ -82,8 +92,8 @@ class TradeManagerImplTest {
         when(tradee.tradeEnabled()).thenReturn(true);
         when(trader.inventory()).thenReturn(inventory);
         tradeManager.start(trader, trader, slot);
-        verify(trader, times(0)).emitEvent(any(OpenTradeWindowEvent.class));
-        verify(tradee, times(0)).emitEvent(any(OpenTradeWindowEvent.class));
+        assertTrue(tradeeEventListener.isEmpty());
+        assertTrue(traderEventListener.isEmpty());
     }
 
     @Test
@@ -93,8 +103,10 @@ class TradeManagerImplTest {
         when(tradee.tradeEnabled()).thenReturn(false);
         when(trader.inventory()).thenReturn(inventory);
         tradeManager.start(trader, tradee, slot);
-        verify(trader, times(1)).emitEvent(any(PlayerTextEvent.class));
-        verify(tradee, times(0)).emitEvent(any(EntityEvent.class));
+        TextMessagePacket text = traderEventListener.removeFirst(PlayerTextEvent.class).toPacket().getText();
+        assertEquals(PlayerTextEvent.TextType.TRADE_REJECTED.value(), text.getType());
+        assertTrue(tradeeEventListener.isEmpty());
+        assertTrue(traderEventListener.isEmpty());
     }
 
     @Test
@@ -103,15 +115,17 @@ class TradeManagerImplTest {
         var slot = inventory.add(Mockito.mock(Item.class));
         when(tradee.tradeEnabled()).thenReturn(true);
         when(trader.inventory()).thenReturn(inventory);
-        tradeManager.start(trader, tradee, slot);
-        var trader2 = Mockito.mock(Player.class);
+        var tradingTrader = Mockito.mock(Player.class);
         inventory = new Inventory();
         slot = inventory.add(Mockito.mock(Item.class));
-        when(trader2.inventory()).thenReturn(inventory);
-        when(trader2.coordinate()).thenReturn(Coordinate.xy(2, 3));
-        tradeManager.start(trader2, tradee, slot);
-        verify(trader2, times(1)).emitEvent(any(PlayerTextEvent.class));
-        verify(tradee, times(1)).emitEvent(any(EntityEvent.class));
+        when(tradingTrader.inventory()).thenReturn(inventory);
+        when(tradingTrader.coordinate()).thenReturn(Coordinate.xy(2, 3));
+        tradeManager.start(tradingTrader,tradee, slot);
+        assertNotNull(tradeeEventListener.removeFirst(OpenTradeWindowEvent.class));
+
+        tradeManager.start(trader, tradee, slot);
+        TextMessagePacket text = traderEventListener.removeFirst(PlayerTextEvent.class).toPacket().getText();
+        assertEquals(PlayerTextEvent.TextType.MULTI_TRADE.value(), text.getType());
     }
 
     @Test
@@ -119,12 +133,15 @@ class TradeManagerImplTest {
         when(tradee.tradeEnabled()).thenReturn(true);
         tradeManager.start(trader, tradee, 1);
         tradeManager.onPlayerEvent(trader, new PlayerMoveEvent(trader, Direction.DOWN, Coordinate.xy(1, 2)));
-        verify(trader, times(0)).emitEvent(any(UpdateTradeWindowEvent.class));
-        reset(trader);
+        tradeManager.addTradeItem(trader, 1, 1);
+        assertNotNull(tradeeEventListener.removeFirst(UpdateTradeWindowEvent.class));
+        assertNotNull(traderEventListener.removeFirst(UpdateTradeWindowEvent.class));
+        assertNull(trader.inventory().getItem(1));
         when(trader.coordinate()).thenReturn(Coordinate.xy(5, 2));
         tradeManager.onPlayerEvent(trader, new PlayerMoveEvent(trader, Direction.DOWN, Coordinate.xy(5, 3)));
-        verify(trader, times(1)).emitEvent(any(UpdateTradeWindowEvent.class));
-        verify(tradee, times(1)).emitEvent(any(UpdateTradeWindowEvent.class));
+        assertNotNull(trader.inventory().getItem(1));
+        assertNotNull(tradeeEventListener.removeFirst(UpdateTradeWindowEvent.class));
+        assertNotNull(traderEventListener.removeFirst(UpdateTradeWindowEvent.class));
     }
 
     @Test

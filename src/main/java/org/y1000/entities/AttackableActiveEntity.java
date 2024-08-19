@@ -21,12 +21,7 @@ public interface AttackableActiveEntity extends ActiveEntity {
 
     RealmMap realmMap();
 
-    default boolean canChaseOrAttack(Entity target) {
-        return target instanceof AttackableActiveEntity attackableEntity &&
-                attackableEntity.realmMap() == realmMap() &&
-                target.canBeSeenAt(coordinate()) &&
-                attackableEntity.canBeAttackedNow();
-    }
+
 
     default boolean canBeMeleeAt(Coordinate coordinate) {
         return coordinate != null && coordinate().directDistance(coordinate) < 2;

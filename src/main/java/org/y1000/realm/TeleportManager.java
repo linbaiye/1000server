@@ -11,6 +11,9 @@ import org.y1000.realm.event.PlayerRealmEvent;
 import org.y1000.sdb.CreateGateSdb;
 import org.y1000.util.UnaryAction;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Slf4j
 final class TeleportManager {
 
@@ -24,6 +27,8 @@ final class TeleportManager {
 
     private final AOIManager aoiManager;
 
+    private final Set<StaticTeleport> teleports;
+
 
     public TeleportManager(int realmId,
                            RealmMap realmMap,
@@ -35,6 +40,7 @@ final class TeleportManager {
         this.realmMap = realmMap;
         this.realmId = realmId;
         this.aoiManager = aoiManager;
+        this.teleports = new HashSet<>();
     }
 
     private void addTeleport(String idName, UnaryAction<PlayerRealmEvent> handler) {
@@ -42,6 +48,7 @@ final class TeleportManager {
         if (createGateSdb.isVisible(idName)) {
             var port = new StaticTeleport(entityIdGenerator.next(), idName, createGateSdb, handler);
             aoiManager.add(port);
+            teleports.add(port);
             teleport = port;
         } else {
             teleport = new InvisibleTeleport(entityIdGenerator.next(), idName, createGateSdb, handler);
@@ -56,5 +63,9 @@ final class TeleportManager {
             realmMap.addTeleport(TestingTeleport.south(teleportEventHandler));
         }
         createGateSdb.getNames(realmId).forEach(name -> addTeleport(name, teleportEventHandler));
+    }
+
+    public Set<StaticTeleport> findStaticTeleports() {
+        return teleports;
     }
 }

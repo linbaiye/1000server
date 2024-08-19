@@ -16,11 +16,12 @@ import org.y1000.sdb.CreateNpcSdb;
 import org.y1000.sdb.MonstersSdb;
 import org.y1000.sdb.NpcSpawnSetting;
 import org.y1000.util.Coordinate;
+import org.y1000.util.Rectangle;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> implements EntityEventListener {
+abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> implements EntityEventListener, NpcManager {
 
     private final EntityEventSender sender;
 
@@ -78,6 +79,18 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     }
 
 
+    NpcFactory getNpcFactory() {
+        return npcFactory;
+    }
+
+    EntityEventSender getEventSender() {
+        return sender;
+    }
+
+    EntityIdGenerator getIdGenerator() {
+        return idGenerator;
+    }
+
     void spawnNPCs(CreateNpcSdb createNpcSdb) {
         List<NpcSpawnSetting> allSettings = createNpcSdb.getAllSettings();
         int total = 0;
@@ -86,11 +99,14 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
             for (int i = 0; i < setting.number(); i++) {
                 try {
                     total += setting.number();
-                    Optional<Coordinate> random = setting.range().random(realmMap::movable);
-                    random.ifPresentOrElse(p -> addNpc(npcFactory.createNpc(name, idGenerator.next(), realmMap, p)),
-                            () -> log().warn("Not able to spawn monster {} within range {} on map {}..", name, setting.range(), realmMap.mapFile()));
+                    Rectangle range = setting.range();
+                    Coordinate coordinate = range.random(realmMap::movable)
+                            .or(() -> range.findFirst(realmMap::movable))
+                            .orElse(range.start());
+                    addNpc(npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate));
                 } catch (Exception e) {
                     log().error("Failed to create npc {}.", name, e);
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -140,13 +156,11 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         }
     }
 
+    @Override
     public void handleCrossRealmEvent(RealmEvent crossRealmEvent) {
         if (!(crossRealmEvent instanceof RealmLetterEvent<?> letterEvent)) {
             return;
         }
-        log().debug("Handle cross event.");
-        Set<Npc> npcs = find(npc -> npc.idName().equals(letterEvent.toName()));
-        npcs.forEach(npc -> log().debug("Npc name {}", npc.idName()));
         find(npc -> npc.idName().equals(letterEvent.toName()) && NineTailFoxHuman.class.isAssignableFrom(npc.getClass()))
                 .stream().map(NineTailFoxHuman.class::cast)
                 .forEach(NineTailFoxHuman::shift);
@@ -154,12 +168,13 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     abstract void onUnhandledEvent(EntityEvent entityEvent) ;
 
-    private void handleShiftEvent(NpcShiftEvent shiftEvent) {
+    Npc replaceNpc(NpcShiftEvent shiftEvent) {
         Npc npc = shiftEvent.npc();
-        sender.notifyVisiblePlayers(npc, shiftEvent.createRemoveEvent());
+        getEventSender().notifyVisiblePlayers(npc, shiftEvent.createRemoveEvent());
         removeNpc(npc);
-        Npc newNpc = npcFactory.createNpc(shiftEvent.shiftToName(), idGenerator.next(), npc.realmMap(), npc.coordinate());
+        Npc newNpc = getNpcFactory().createNpc(shiftEvent.shiftToName(), getIdGenerator().next(), npc.realmMap(), npc.coordinate());
         addNpc(newNpc);
+        return newNpc;
     }
 
     boolean isCloned(Npc npc) {
@@ -169,8 +184,6 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     void removeFromCloned(Npc npc) {
         cloned.remove(npc.id());
     }
-
-    abstract void init();
 
     private void handleCloneEvent(NpcCastCloneEvent event) {
         var set =  new HashSet<Npc>();
@@ -208,8 +221,6 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
             sender.notifyVisiblePlayers(shootEvent.source(), shootEvent);
         } else if (entityEvent instanceof CreatureDieEvent dieEvent) {
             handleDieEvent(dieEvent);
-        } else if (entityEvent instanceof NpcShiftEvent shiftEvent) {
-            handleShiftEvent(shiftEvent);
         } else if (entityEvent instanceof NpcCastCloneEvent cloneEvent) {
             handleCloneEvent(cloneEvent);
         } else if (entityEvent instanceof SeekPlayerEvent seekPlayerEvent) {

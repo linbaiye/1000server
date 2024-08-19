@@ -3,6 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.RemoveEntityEvent;
+import org.y1000.entities.creatures.event.NpcShiftEvent;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.event.EntityEvent;
@@ -24,7 +25,6 @@ final class DungeonNpcManager extends AbstractNpcManager {
         super(sender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, createMonsterSdb, createNpcSdb, realmMap);
     }
 
-
     @Override
     protected Logger log() {
         return log;
@@ -43,11 +43,13 @@ final class DungeonNpcManager extends AbstractNpcManager {
     void onUnhandledEvent(EntityEvent entityEvent) {
         if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
             handleRemoveEvent(removeEntityEvent);
+        } else if (entityEvent instanceof NpcShiftEvent shiftEvent) {
+            replaceNpc(shiftEvent);
         }
     }
 
     @Override
-    void init() {
+    public void init() {
         createMonsterSdb().ifPresent(this::spawnNPCs);
         createNpcSdb().ifPresent(this::spawnNPCs);
     }

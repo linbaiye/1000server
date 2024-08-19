@@ -14,7 +14,7 @@ public final class TeleportInterpolation extends AbstractEntityInterpolation {
                         .setShape(teleport.shape())
                         .setCoordinateX(teleport.coordinate().x())
                         .setCoordinateY(teleport.coordinate().y())
-                        .setName(teleport.name())).build();
+                        .setName(teleport.viewName())).build();
     }
 
     @Override

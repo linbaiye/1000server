@@ -6,11 +6,11 @@ import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.MonsterWanderingAI;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.realm.Realm;
+import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.Set;
@@ -25,13 +25,17 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
 
     private Creature enemy;
 
+    private Realm realm;
+
     @BeforeEach
     void setUp() {
         setup();
         enemy = Mockito.mock(Creature.class);
         when(enemy.canBeAttackedNow()).thenReturn(true);
         when(enemy.canBeSeenAt(any(Coordinate.class))).thenReturn(true);
+        when(enemy.realmMap()).thenReturn(realmMap);
         ai = new ViolentNpcMeleeFightAI(enemy, monster);
+        realm = mockRealm(realmMap);
     }
 
     @Test
@@ -39,7 +43,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         monster.changeCoordinate(Coordinate.xy(3, 3));
         monster.changeDirection(Direction.UP);
         var player = playerBuilder().coordinate(Coordinate.xy(3, 4)).build();
-        player.joinReam(mockAllFlatRealm());
+        player.joinRealm(realm);
         ai = new ViolentNpcMeleeFightAI(player, monster);
         monster.changeAI(ai);
         assertEquals(State.ATTACK, monster.stateEnum());
@@ -147,20 +151,19 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
 
     @Test
     void changeEnemyIfCurrentEnemyFar() {
-        Realm realm = mockAllFlatRealm();
         PlayerImpl player = playerBuilder().coordinate(monster.coordinate().move(1, 0)).build();
-        player.joinReam(realm);
+        player.joinRealm(realm);
         monster.changeAI(new MonsterWanderingAI());
         monster.attackedBy(player);
-        monster.update(monster.getStateMillis(State.HURT));
+        monster.update(monster.cooldown());
         assertEquals(State.ATTACK, monster.stateEnum());
-        player.joinReam(mockAllFlatRealm());
         player.changeCoordinate(player.coordinate().move(2, 2));
+
         var another = playerBuilder().coordinate(monster.coordinate().move(0, 1)).build();
-        another.joinReam(realm);
+        another.joinRealm(realm);
         monster.attackedBy(another);
         assertEquals(State.HURT, monster.stateEnum());
-        monster.update(monster.getStateMillis(State.HURT));
+        monster.update(monster.cooldown());
         assertEquals(Direction.DOWN, monster.direction());
     }
 }

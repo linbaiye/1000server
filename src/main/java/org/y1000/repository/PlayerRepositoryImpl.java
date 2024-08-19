@@ -40,25 +40,24 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
 
     private Inventory loadInventory() {
         Inventory inventory = new Inventory();
-        inventory.add(itemFactory.createItem("百炼金鳞神剑"));
         inventory.add(itemFactory.createItem("箭", 10000));
         inventory.add(itemFactory.createItem("飞刀", 10000));
         inventory.add(itemFactory.createItem("斗甲"));
         inventory.add(itemFactory.createItem("太极斧"));
-        inventory.add(itemFactory.createItem("太极神枪"));
         inventory.add(itemFactory.createItem("三叉戟"));
         inventory.add(itemFactory.createItem("黄金手套"));
         inventory.add(itemFactory.createItem("北海连环弓"));
         inventory.add(itemFactory.createMoney( 10000));
         inventory.add(itemFactory.createItem("金毛草", 10000));
-        inventory.add(itemFactory.createItem("黑沙刚体", 1));
         inventory.add(itemFactory.createItem("大脉神弓"));
-        inventory.add(itemFactory.createItem("梅雨弓"));
         inventory.add(itemFactory.createItem("女子黄龙弓服"));
+        inventory.add(itemFactory.createItem("女子黄龙手套"));
+        inventory.add(itemFactory.createItem("女子黄龙鞋"));
         inventory.add(itemFactory.createItem("血魔剑"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("骨钥匙", 1000));
         inventory.add(itemFactory.createItem("火石", 1000));
+        inventory.add(itemFactory.createItem("追魂索", 10000));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("血皇斧"));*/
@@ -115,6 +114,13 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     public static int lastRealmId() {
         return 49;
     }
+
+    private static final PlayerInnateAttributesProvider DEV_PROVIDER = new PlayerInnateAttributesProvider() {
+        @Override
+        public Damage damage() {
+            return new Damage(5000, 0, 0, 0);
+        }
+    };
     private PlayerImpl createFemale() {
         int slot = findSlot();
         Weapon weapon = weapon();
@@ -123,21 +129,17 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         return PlayerImpl.builder()
                 .id(slot + playerIdStart)
                 .name("雨诗妾")
-                //.coordinate(new Coordinate(175+ slot, 40))
+              //   .coordinate(new Coordinate(33, 167)) // 王陵1层 -> 2入口
+               // .coordinate(new Coordinate(500, 500))
+               //.coordinate(new Coordinate(516, 478))
                // .coordinate(new Coordinate(55, 51)) // 王陵2层
                 //.coordinate(new Coordinate(80, 157)) // 王陵2层
                // .coordinate(new Coordinate(32, 165)) // 王陵2层
-                //.coordinate(new Coordinate(129, 99))
                 //.coordinate(new Coordinate(37, 49)) //修炼洞
-                .coordinate(new Coordinate(98, 46)) //新手村
-             //   .coordinate(new Coordinate(172, 438)) //僵尸一
-               //  .coordinate(new Coordinate(344, 110))
-               // .coordinate(new Coordinate(530, 462))
+                .coordinate(new Coordinate(94, 59)) //新手村
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(weapon.kungFuType()))
-                .footKungfu(kungFuBook.getUnnamedFoot())
-                .protectKungFu(kungFuBook.getUnnamedProtection())
                 .inventory(loadInventory())
                 .male(false)
                 .trouser(itemFactory.createTrouser("女子短裙"))
@@ -148,10 +150,12 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 //.hat(itemFactory.createHat("女子百炼雨中客斗笠"))
                 .chest(itemFactory.createChest("女子血魔道袍"))
                 //.chest(itemFactory.createChest("女子百炼雨中客道袍"))
+                .hair(itemFactory.createHair("女子束长发"))
                 //.hair(itemFactory.createHair("女子麻花辫"))
                 .wrist(itemFactory.createWrist("女子血魔护腕"))
                 //.wrist(itemFactory.createWrist("女子太极护腕"))
-                .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
+                .innateAttributesProvider(DEV_PROVIDER)
+                //.innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
                 .yinYang(yinyang)
                 .revival(0)
                 .life(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
@@ -173,7 +177,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         return PlayerImpl.builder()
                 .id(slot + playerIdStart)
                 .name("拓跋")
-                //.coordinate(new Coordinate(175+ slot, 40))
+                //.coordinate(new Coordinate(175+ ropeSlot, 40))
                 .coordinate(new Coordinate(500, 500))
                 //.coordinate(new Coordinate(309, 148))
                 //.coordinate(new Coordinate(129, 99))

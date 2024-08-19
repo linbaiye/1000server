@@ -24,6 +24,10 @@ public class TestingEventListener implements EntityEventListener {
         return entityEvents.size();
     }
 
+    public boolean isEmpty() {
+        return entityEvents.isEmpty();
+    }
+
     public <T extends EntityEvent> T removeFirst(Class<T> clazz) {
         Iterator<EntityEvent> iterator = entityEvents.iterator();
         while (iterator.hasNext()) {

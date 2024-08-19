@@ -5,10 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.sdb.AbstractSdbReader;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 public final class ItemSdbImpl extends AbstractSdbReader implements ItemSdb {
@@ -274,6 +271,15 @@ MaxCount,        最多持有数量；
         return getIntOrZero(name, "ArmorLeg");
     }
 
+    @Override
+    public Integer getColor(String name) {
+        return getInt(name, "Color");
+    }
+
+    @Override
+    public boolean isColoring(String name) {
+        return "TRUE".equals(get(name, "boColoring"));
+    }
 
     public static final ItemSdbImpl INSTANCE = read();
 
@@ -308,7 +314,7 @@ MaxCount,        最多持有数量；
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
         for (String i: items) {
-            if (!i.contains("女子血魔")) {
+            if (!i.contains("女子手套")) {
                 continue;
             }
             System.out.println("----------------------------");

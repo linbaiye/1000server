@@ -125,11 +125,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                       boolean male,
                       ArmorEquipment hat,
                       ArmorEquipment chest,
-                      Hair hair,
+                      SexualEquipment hair,
                       ArmorEquipment wrist,
                       ArmorEquipment boot,
-                      Trouser trouser,
-                      Clothing clothing,
+                      SexualEquipment trouser,
+                      SexualEquipment clothing,
                       FootKungFu footKungfu,
                       ProtectKungFu protectKungFu,
                       BreathKungFu breathKungFu,
@@ -252,7 +252,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         Equipment equipped = equippedEquipments.remove(type);
         if (equipped == null) {
-            log.error("Trying to unequip from non equipped slot {}", type);
+            log.error("Trying to unequip from non equipped ropeSlot {}", type);
             return;
         }
         if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.QUANFA) {
@@ -287,9 +287,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             equip(slotId, equipment);
         } else if (item instanceof StackItem stackItem) {
             if (stackItem.item() instanceof Pill pill) {
-                if (inventory.decrease(slotId)) {
+                if (pillSlots.canTakePill() && inventory.decrease(slotId)) {
                     emitEvent(new UpdateInventorySlotEvent(this, slotId, inventory.getItem(slotId)));
                     pillSlots.usePill(this, pill);
+                } else {
+                    emitEvent(PlayerTextEvent.noMorePill(this));
                 }
             } else if (stackItem.item() instanceof KungFuItem kungFuItem) {
                 learnKungFu(slotId, kungFuItem);
@@ -512,8 +514,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public Optional<Hair> hair() {
-        return getEquipment(EquipmentType.HAIR, Hair.class);
+    public Optional<SexualEquipment> hair() {
+        return getEquipment(EquipmentType.HAIR, SexualEquipment.class);
     }
 
     @Override
@@ -527,13 +529,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public Optional<Clothing> clothing() {
-        return getEquipment(EquipmentType.CLOTHING, Clothing.class);
+    public Optional<SexualEquipment> clothing() {
+        return getEquipment(EquipmentType.CLOTHING, SexualEquipment.class);
     }
 
     @Override
-    public Optional<Trouser> trouser() {
-        return getEquipment(EquipmentType.TROUSER, Trouser.class);
+    public Optional<SexualEquipment> trouser() {
+        return getEquipment(EquipmentType.TROUSER, SexualEquipment.class);
     }
 
     @Override
@@ -543,33 +545,18 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public void joinReam(Realm realm) {
-        if (realm == null) {
-            return;
-        }
-        changeDirection(Direction.DOWN);
-        doJoinRealm(realm, null);
-        emitEvent(new JoinedRealmEvent(this, coordinate(), inventory, realm));
+    public void joinRealm(Realm realm) {
+        joinRealm(realm, coordinate());
     }
 
-    private void doJoinRealm(Realm realm, Coordinate coordinate) {
-        this.realm = realm;
-        if (coordinate != null) {
-            changeCoordinate(coordinate);
-        } else {
-            realm.map().occupy(this);
-        }
-    }
 
     @Override
-    public void teleport(Realm realm, Coordinate coordinate) {
-        if (realm != null && coordinate != null) {
-            if (this.realm != null) {
-                leaveRealm();
-            }
-            doJoinRealm(realm, coordinate);
-            emitEvent(new PlayerTeleportEvent(this, realm, coordinate));
-        }
+    public void joinRealm(Realm realm, Coordinate coordinate) {
+        Validate.notNull(realm);
+        Validate.notNull(coordinate);
+        Validate.isTrue(this.realm == null);
+        this.realm = realm;
+        changeCoordinate(coordinate);
     }
 
     private void onKilled() {
@@ -654,7 +641,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public RealmMap realmMap() {
-        return realm != null ? realm.map() : null;
+        return getRealm() != null ? getRealm().map() : null;
     }
 
     @Override
@@ -668,8 +655,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             realm.map().free(this);
         }
         realm = null;
-        emitEvent(new PlayerLeftEvent(this));
         clearFightingEntity();
+        emitEvent(new PlayerLeftEvent(this));
     }
 
     private void changeAttackKungFu(AttackKungFu newKungFu) {
@@ -695,7 +682,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             log.debug("Put equipped weapon {} back to inventory.", equippedWeapon.name());
         });
         equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
-        emitEvent(new PlayerEquipEvent(this, weaponToEquip.name()));
+        emitEvent(new PlayerEquipEvent(this, weaponToEquip));
         weaponToEquip.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         log.debug("Equipped weapon {}.", weaponToEquip.name());
     }
@@ -719,7 +706,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             }
             inventory.remove(slotId);
             Equipment currentEquipped = equippedEquipments.put(equipmentInSlot.equipmentType(), equipmentInSlot);
-            emitEvent(new PlayerEquipEvent(this, equipmentInSlot.name()));
+            emitEvent(new PlayerEquipEvent(this, equipmentInSlot));
             if (currentEquipped != null) {
                 inventory.put(slotId, currentEquipped);
             }

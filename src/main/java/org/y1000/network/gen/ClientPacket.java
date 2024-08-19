@@ -64,6 +64,8 @@ private static final long serialVersionUID = 0L;
     UPDATETRADE(17),
     TRIGGERDYNAMICOBJECT(18),
     SWAPKUNGFUSLOT(19),
+    DRAGPLAYER(20),
+    SIMPLECOMMAND(21),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -100,6 +102,8 @@ private static final long serialVersionUID = 0L;
         case 17: return UPDATETRADE;
         case 18: return TRIGGERDYNAMICOBJECT;
         case 19: return SWAPKUNGFUSLOT;
+        case 20: return DRAGPLAYER;
+        case 21: return SIMPLECOMMAND;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -704,6 +708,68 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
   }
 
+  public static final int DRAGPLAYER_FIELD_NUMBER = 20;
+  /**
+   * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+   * @return Whether the dragPlayer field is set.
+   */
+  @java.lang.Override
+  public boolean hasDragPlayer() {
+    return typeCase_ == 20;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+   * @return The dragPlayer.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientDragPlayerPacket getDragPlayer() {
+    if (typeCase_ == 20) {
+       return (org.y1000.network.gen.ClientDragPlayerPacket) type_;
+    }
+    return org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientDragPlayerPacketOrBuilder getDragPlayerOrBuilder() {
+    if (typeCase_ == 20) {
+       return (org.y1000.network.gen.ClientDragPlayerPacket) type_;
+    }
+    return org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
+  }
+
+  public static final int SIMPLECOMMAND_FIELD_NUMBER = 21;
+  /**
+   * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+   * @return Whether the simpleCommand field is set.
+   */
+  @java.lang.Override
+  public boolean hasSimpleCommand() {
+    return typeCase_ == 21;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+   * @return The simpleCommand.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientSimpleCommandPacket getSimpleCommand() {
+    if (typeCase_ == 21) {
+       return (org.y1000.network.gen.ClientSimpleCommandPacket) type_;
+    }
+    return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder getSimpleCommandOrBuilder() {
+    if (typeCase_ == 21) {
+       return (org.y1000.network.gen.ClientSimpleCommandPacket) type_;
+    }
+    return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -774,6 +840,12 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 19) {
       output.writeMessage(19, (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_);
+    }
+    if (typeCase_ == 20) {
+      output.writeMessage(20, (org.y1000.network.gen.ClientDragPlayerPacket) type_);
+    }
+    if (typeCase_ == 21) {
+      output.writeMessage(21, (org.y1000.network.gen.ClientSimpleCommandPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -859,6 +931,14 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 19) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(19, (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_);
+    }
+    if (typeCase_ == 20) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(20, (org.y1000.network.gen.ClientDragPlayerPacket) type_);
+    }
+    if (typeCase_ == 21) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(21, (org.y1000.network.gen.ClientSimpleCommandPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -953,6 +1033,14 @@ private static final long serialVersionUID = 0L;
         if (!getSwapKungFuSlot()
             .equals(other.getSwapKungFuSlot())) return false;
         break;
+      case 20:
+        if (!getDragPlayer()
+            .equals(other.getDragPlayer())) return false;
+        break;
+      case 21:
+        if (!getSimpleCommand()
+            .equals(other.getSimpleCommand())) return false;
+        break;
       case 0:
       default:
     }
@@ -1043,6 +1131,14 @@ private static final long serialVersionUID = 0L;
       case 19:
         hash = (37 * hash) + SWAPKUNGFUSLOT_FIELD_NUMBER;
         hash = (53 * hash) + getSwapKungFuSlot().hashCode();
+        break;
+      case 20:
+        hash = (37 * hash) + DRAGPLAYER_FIELD_NUMBER;
+        hash = (53 * hash) + getDragPlayer().hashCode();
+        break;
+      case 21:
+        hash = (37 * hash) + SIMPLECOMMAND_FIELD_NUMBER;
+        hash = (53 * hash) + getSimpleCommand().hashCode();
         break;
       case 0:
       default:
@@ -1235,6 +1331,12 @@ private static final long serialVersionUID = 0L;
       if (swapKungFuSlotBuilder_ != null) {
         swapKungFuSlotBuilder_.clear();
       }
+      if (dragPlayerBuilder_ != null) {
+        dragPlayerBuilder_.clear();
+      }
+      if (simpleCommandBuilder_ != null) {
+        simpleCommandBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1351,6 +1453,14 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 19 &&
           swapKungFuSlotBuilder_ != null) {
         result.type_ = swapKungFuSlotBuilder_.build();
+      }
+      if (typeCase_ == 20 &&
+          dragPlayerBuilder_ != null) {
+        result.type_ = dragPlayerBuilder_.build();
+      }
+      if (typeCase_ == 21 &&
+          simpleCommandBuilder_ != null) {
+        result.type_ = simpleCommandBuilder_.build();
       }
     }
 
@@ -1473,6 +1583,14 @@ private static final long serialVersionUID = 0L;
         }
         case SWAPKUNGFUSLOT: {
           mergeSwapKungFuSlot(other.getSwapKungFuSlot());
+          break;
+        }
+        case DRAGPLAYER: {
+          mergeDragPlayer(other.getDragPlayer());
+          break;
+        }
+        case SIMPLECOMMAND: {
+          mergeSimpleCommand(other.getSimpleCommand());
           break;
         }
         case TYPE_NOT_SET: {
@@ -1638,6 +1756,20 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 19;
               break;
             } // case 154
+            case 162: {
+              input.readMessage(
+                  getDragPlayerFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 20;
+              break;
+            } // case 162
+            case 170: {
+              input.readMessage(
+                  getSimpleCommandFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 21;
+              break;
+            } // case 170
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -4366,6 +4498,290 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 19;
       onChanged();
       return swapKungFuSlotBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientDragPlayerPacket, org.y1000.network.gen.ClientDragPlayerPacket.Builder, org.y1000.network.gen.ClientDragPlayerPacketOrBuilder> dragPlayerBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+     * @return Whether the dragPlayer field is set.
+     */
+    @java.lang.Override
+    public boolean hasDragPlayer() {
+      return typeCase_ == 20;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+     * @return The dragPlayer.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientDragPlayerPacket getDragPlayer() {
+      if (dragPlayerBuilder_ == null) {
+        if (typeCase_ == 20) {
+          return (org.y1000.network.gen.ClientDragPlayerPacket) type_;
+        }
+        return org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 20) {
+          return dragPlayerBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+     */
+    public Builder setDragPlayer(org.y1000.network.gen.ClientDragPlayerPacket value) {
+      if (dragPlayerBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        dragPlayerBuilder_.setMessage(value);
+      }
+      typeCase_ = 20;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+     */
+    public Builder setDragPlayer(
+        org.y1000.network.gen.ClientDragPlayerPacket.Builder builderForValue) {
+      if (dragPlayerBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        dragPlayerBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 20;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+     */
+    public Builder mergeDragPlayer(org.y1000.network.gen.ClientDragPlayerPacket value) {
+      if (dragPlayerBuilder_ == null) {
+        if (typeCase_ == 20 &&
+            type_ != org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientDragPlayerPacket.newBuilder((org.y1000.network.gen.ClientDragPlayerPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 20) {
+          dragPlayerBuilder_.mergeFrom(value);
+        } else {
+          dragPlayerBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 20;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+     */
+    public Builder clearDragPlayer() {
+      if (dragPlayerBuilder_ == null) {
+        if (typeCase_ == 20) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 20) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        dragPlayerBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+     */
+    public org.y1000.network.gen.ClientDragPlayerPacket.Builder getDragPlayerBuilder() {
+      return getDragPlayerFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientDragPlayerPacketOrBuilder getDragPlayerOrBuilder() {
+      if ((typeCase_ == 20) && (dragPlayerBuilder_ != null)) {
+        return dragPlayerBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 20) {
+          return (org.y1000.network.gen.ClientDragPlayerPacket) type_;
+        }
+        return org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientDragPlayerPacket, org.y1000.network.gen.ClientDragPlayerPacket.Builder, org.y1000.network.gen.ClientDragPlayerPacketOrBuilder> 
+        getDragPlayerFieldBuilder() {
+      if (dragPlayerBuilder_ == null) {
+        if (!(typeCase_ == 20)) {
+          type_ = org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
+        }
+        dragPlayerBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientDragPlayerPacket, org.y1000.network.gen.ClientDragPlayerPacket.Builder, org.y1000.network.gen.ClientDragPlayerPacketOrBuilder>(
+                (org.y1000.network.gen.ClientDragPlayerPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 20;
+      onChanged();
+      return dragPlayerBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientSimpleCommandPacket, org.y1000.network.gen.ClientSimpleCommandPacket.Builder, org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder> simpleCommandBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+     * @return Whether the simpleCommand field is set.
+     */
+    @java.lang.Override
+    public boolean hasSimpleCommand() {
+      return typeCase_ == 21;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+     * @return The simpleCommand.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientSimpleCommandPacket getSimpleCommand() {
+      if (simpleCommandBuilder_ == null) {
+        if (typeCase_ == 21) {
+          return (org.y1000.network.gen.ClientSimpleCommandPacket) type_;
+        }
+        return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 21) {
+          return simpleCommandBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+     */
+    public Builder setSimpleCommand(org.y1000.network.gen.ClientSimpleCommandPacket value) {
+      if (simpleCommandBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        simpleCommandBuilder_.setMessage(value);
+      }
+      typeCase_ = 21;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+     */
+    public Builder setSimpleCommand(
+        org.y1000.network.gen.ClientSimpleCommandPacket.Builder builderForValue) {
+      if (simpleCommandBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        simpleCommandBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 21;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+     */
+    public Builder mergeSimpleCommand(org.y1000.network.gen.ClientSimpleCommandPacket value) {
+      if (simpleCommandBuilder_ == null) {
+        if (typeCase_ == 21 &&
+            type_ != org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientSimpleCommandPacket.newBuilder((org.y1000.network.gen.ClientSimpleCommandPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 21) {
+          simpleCommandBuilder_.mergeFrom(value);
+        } else {
+          simpleCommandBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 21;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+     */
+    public Builder clearSimpleCommand() {
+      if (simpleCommandBuilder_ == null) {
+        if (typeCase_ == 21) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 21) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        simpleCommandBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+     */
+    public org.y1000.network.gen.ClientSimpleCommandPacket.Builder getSimpleCommandBuilder() {
+      return getSimpleCommandFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder getSimpleCommandOrBuilder() {
+      if ((typeCase_ == 21) && (simpleCommandBuilder_ != null)) {
+        return simpleCommandBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 21) {
+          return (org.y1000.network.gen.ClientSimpleCommandPacket) type_;
+        }
+        return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientSimpleCommandPacket, org.y1000.network.gen.ClientSimpleCommandPacket.Builder, org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder> 
+        getSimpleCommandFieldBuilder() {
+      if (simpleCommandBuilder_ == null) {
+        if (!(typeCase_ == 21)) {
+          type_ = org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
+        }
+        simpleCommandBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientSimpleCommandPacket, org.y1000.network.gen.ClientSimpleCommandPacket.Builder, org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder>(
+                (org.y1000.network.gen.ClientSimpleCommandPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 21;
+      onChanged();
+      return simpleCommandBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

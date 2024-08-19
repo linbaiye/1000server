@@ -166,8 +166,9 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
 //            }
         }
 
-
     }
+
+    public static Set<Integer> ERROR_ANIMATES = Set.of(1);
 
     private static void dump( ) {
         MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;
@@ -179,7 +180,7 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
                 continue;
             }
              */
-            if (!i.contains("九尾"))
+            if (!ERROR_ANIMATES.contains(Integer.valueOf(monstersSdb.getAnimate(i))))
                 continue;
             System.out.println("----------------------------");
             System.out.println(i);

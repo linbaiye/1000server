@@ -12,7 +12,7 @@ class GroundedItemTest {
 
     @BeforeEach
     void setUp() {
-        item = new GroundedItem(1, "test", new Coordinate(1, 2), 0, null, null);
+        item = new GroundedItem(1, "test", new Coordinate(1, 2), 0, null, 0);
     }
 
     @Test

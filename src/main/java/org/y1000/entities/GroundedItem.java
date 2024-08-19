@@ -24,25 +24,20 @@ public final class GroundedItem extends AbstractActiveEntity {
     private final String name;
 
     private final String dropSound;
-
-    private final String pickSound;
+    private final int color;
 
     @Builder
-    public GroundedItem(long id, String name, Coordinate coordinate, Integer number, String dropSound, String pickSound) {
+    public GroundedItem(long id, String name, Coordinate coordinate, Integer number, String dropSound, Integer color) {
         super(id);
         this.name = name;
         this.coordinate = coordinate;
         this.number = number;
         this.dropSound = StringUtils.isEmpty(dropSound) ? null : dropSound;
-        this.pickSound = StringUtils.isAllBlank(pickSound) ? null : pickSound;
+        this.color = color != null ? color : 0;
     }
 
     public Optional<String> dropSound() {
         return Optional.ofNullable(dropSound);
-    }
-
-    public Optional<String> pickSound() {
-        return Optional.ofNullable(pickSound);
     }
 
     @Override

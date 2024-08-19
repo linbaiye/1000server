@@ -50,20 +50,20 @@ public final class RealmFactoryImpl implements RealmFactory {
         this.createGateSdb = createGateSdb;
     }
 
-    private AbstractNpcManager createNpcManager(int id,
+    private NpcManager createNpcManager(int id,
                                                 AOIManager aoiManager,
                                                 EntityIdGenerator idGenerator,
                                                 GroundItemManager itemManager,
                                                 EntityEventSender entityEventSender,
                                                 RealmMap realmMap) {
         if (!createEntitySdbRepository.monsterSdbExists(id) && !createEntitySdbRepository.npcSdbExists(id)) {
-            return null;
+            return NpcManager.EMPTY;
         }
         var monsterSdb = createEntitySdbRepository.monsterSdbExists(id) ? createEntitySdbRepository.loadMonster(id) : null;
         var npcSdb = createEntitySdbRepository.npcSdbExists(id) ? createEntitySdbRepository.loadNpc(id) : null;
         return mapSdb.getRegenInterval(id).isPresent() ?
                 new DungeonNpcManager(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap) :
-                new NpcManager(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap);
+                new NpcManagerImpl(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap);
     }
 
 
@@ -79,7 +79,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             var eventSender = new RealmEntityEventSender(aoiManager);
             var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
             var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
-            var dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ? null :
+            var dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
                     new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id), crossRealmEventHandler, realmMap);
             var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager);
             var teleportManager = new TeleportManager(id, realmMap, createGateSdb, entityIdGenerator, aoiManager);
@@ -108,7 +108,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         private RealmMap realmMap;
         private RealmEntityEventSender eventSender;
         private ItemManagerImpl itemManager;
-        private AbstractNpcManager npcManager;
+        private NpcManager npcManager;
         private PlayerManagerImpl playerManager;
         private DynamicObjectManager dynamicObjectManager;
         private TeleportManager teleportManager;
@@ -138,7 +138,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder npcManager(AbstractNpcManager npcManager) {
+        public RealmBuilder npcManager(NpcManager npcManager) {
             this.npcManager = npcManager;
             return this;
         }

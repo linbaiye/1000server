@@ -62,6 +62,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         changeCoordinate(coordinate);
         this.changeState(NpcCommonState.idle(getStateMillis(State.IDLE)));
         spells.forEach(NpcSpell::reset);
+        clearListeners();
     }
 
     protected AttributeProvider attributeProvider() {
@@ -155,7 +156,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
 
     @Override
     public void move(int millis) {
-        Validate.isTrue(millis > 0);
+        Validate.isTrue(millis >= 0);
         changeState(NpcMoveState.move(this, millis));
         emitEvent(NpcMoveEvent.move(this, this.direction(), millis));
     }

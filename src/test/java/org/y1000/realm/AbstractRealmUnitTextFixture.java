@@ -16,7 +16,7 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
     RealmMap realmMap;
     RealmEntityEventSender eventSender;
     GroundItemManager itemManager;
-    AbstractNpcManager npcManager;
+    NpcManager npcManager;
     PlayerManager playerManager;
     DynamicObjectManager dynamicObjectManager;
     TeleportManager teleportManager;
@@ -29,7 +29,7 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
         eventSender = new RealmEntityEventSender(Mockito.mock(AOIManager.class));
         realmMap = mockRealmMap();
         itemManager = Mockito.mock(GroundItemManager.class);
-        npcManager = Mockito.mock(AbstractNpcManager.class);
+        npcManager = Mockito.mock(NpcManager.class);
         playerManager = Mockito.mock(PlayerManager.class);
         dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);
         createGateSdb = Mockito.mock(CreateGateSdb.class);

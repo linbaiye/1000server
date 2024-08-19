@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Set;
 
+import static org.y1000.sdb.MonstersSdbImpl.ERROR_ANIMATES;
+
 public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
     public static final NpcSdbImpl Instance = new NpcSdbImpl();
     private NpcSdbImpl() {
@@ -135,9 +137,8 @@ public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
         Set<String> names = sdb.columnNames();
         Set<String> items = sdb.names();
         for (String i: items) {
-            if (!sdb.getViewName(i).contains("九尾狐")) {
+            if (!ERROR_ANIMATES.contains(Integer.valueOf(sdb.getAnimate(i))))
                 continue;
-            }
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {

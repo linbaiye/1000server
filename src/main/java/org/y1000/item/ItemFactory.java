@@ -15,19 +15,19 @@ public interface ItemFactory {
 
     Item createItem(String name, long number);
 
-    Trouser createTrouser(String name);
+    SexualEquipment createTrouser(String name);
 
     ArmorEquipment createHat(String name);
 
     ArmorEquipment createChest(String name);
 
-    Hair createHair(String name);
+    SexualEquipment createHair(String name);
 
     ArmorEquipment createBoot(String name);
 
     ArmorEquipment createWrist(String name);
 
-    Clothing createClothing(String name);
+    SexualEquipment createClothing(String name);
 
     Equipment createEquipment(String name);
 }

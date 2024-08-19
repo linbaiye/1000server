@@ -47,4 +47,7 @@ public interface ItemSdb {
 
     String getDesc(String name);
 
+    Integer getColor(String name);
+
+    boolean isColoring(String name);
 }

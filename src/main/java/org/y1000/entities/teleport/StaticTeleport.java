@@ -21,7 +21,7 @@ public final class StaticTeleport extends AbstractTeleport implements Entity  {
         Validate.notEmpty(name);
     }
 
-    public String name() {
+    public String viewName() {
         return name;
     }
 

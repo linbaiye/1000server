@@ -10,6 +10,11 @@ public abstract class AbstractEquipment extends AbstractItem implements Equipmen
         super(name, ItemType.EQUIPMENT, drop, eventSound, description);
     }
 
+    public AbstractEquipment(String name, ItemSdb itemSdb) {
+        super(name, ItemType.EQUIPMENT, itemSdb);
+    }
+
+
     protected StringBuilder getDescriptionBuilder() {
         return StringUtils.isEmpty(super.description()) ? new StringBuilder()
                 : new StringBuilder(super.description()).append("\n");

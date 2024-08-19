@@ -124,6 +124,7 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
     private Npc createSubmissiveMonster(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
+
         int actionWidth = monsterSdb.getActionWidth(name);
         var npcAI = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
         return SubmissiveNpc.builder()
@@ -141,6 +142,18 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private Npc createSubmissiveNpc(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
         int actionWidth = npcSdb.getActionWidth(name);
+        if (name.equals("九尾狐酒母")) {
+            return NineTailFoxHuman.builder()
+                    .id(id)
+                    .coordinate(coordinate)
+                    .direction(Direction.DOWN)
+                    .name(npcSdb.getViewName(name))
+                    .realmMap(map)
+                    .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
+                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                    .ai(new SubmissiveWanderingAI())
+                    .build();
+        }
         var npcAI = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
         return SubmissiveNpc.builder()
                 .id(id)
@@ -249,20 +262,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         Validate.notNull(name);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
-        if (name.equals("九尾狐酒母")) {
-            NineTailFoxHuman build = NineTailFoxHuman.builder()
-                    .id(id)
-                    .coordinate(coordinate)
-                    .direction(Direction.DOWN)
-                    .name(npcSdb.getViewName(name))
-                    .realmMap(realmMap)
-                    .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
-                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                    .ai(new SubmissiveWanderingAI())
-                    .build();
-            log.debug("Npc id name {}.", build.idName());
-            return build;
-        }
+
         if (monsterSdb.contains(name)) {
             return createMonster(name, id, realmMap, coordinate, loadSpells(name), new MonsterWanderingAI());
         } else if (npcSdb.contains(name)) {

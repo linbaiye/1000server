@@ -45,7 +45,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void startBowAttack() {
-        PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).build();
+        PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).realmMap(mockedRealm.map()).build();
         ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), State.BOW, Direction.RIGHT);
         bowKungFu.startAttack(player, clientAttackEvent, monster);
         // no ammo.
@@ -67,7 +67,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void attackAgainNoPower() {
-        PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).build();
+        PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).realmMap(mockedRealm.map()).build();
         player.inventory().add(itemFactory.createItem("箭", 3));
         ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), State.BOW, Direction.RIGHT);
         // trigger attack counter.
@@ -90,7 +90,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void attackAgain() {
-        PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).build();
+        PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).realmMap(mockedRealm.map()).build();
         player.inventory().add(itemFactory.createItem("箭", 3));
         ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), State.BOW, Direction.RIGHT);
         // trigger attack counter.

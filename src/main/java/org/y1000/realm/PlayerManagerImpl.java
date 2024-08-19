@@ -1,10 +1,8 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.creatures.npc.Npc;
@@ -14,16 +12,15 @@ import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.PlayerDropItemEvent;
+import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
-import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.util.Coordinate;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.Set;
 
 
@@ -48,7 +45,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                              GroundItemManager itemManager,
                              ItemFactory itemFactory,
                              DynamicObjectManager dynamicObjectManager) {
-        this(eventSender, itemManager, itemFactory, new TradeManagerImpl(), dynamicObjectManager);
+        this(eventSender, itemManager, itemFactory, new TradeManagerImpl(eventSender), dynamicObjectManager);
     }
 
     public PlayerManagerImpl(EntityEventSender eventSender,
@@ -67,39 +64,37 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     @Override
     public void onPlayerConnected(Player player, Realm realm) {
-        doAdd(player);
-        player.joinReam(realm);
-    }
-
-    private void doAdd(Player player) {
+        if (player == null || realm == null) {
+            return;
+        }
         player.registerEventListener(this);
         add(player);
+        player.joinRealm(realm);
+        eventSender.notifySelf(new JoinedRealmEvent(player));
+        eventSender.notifyPlayerOfEntities(player);
     }
 
     @Override
     public void teleportIn(Player player,
                            Realm realm, Coordinate coordinate) {
-        if (player == null || realm == null) {
+        if (player == null || realm == null || coordinate == null) {
             return;
         }
-        doAdd(player);
-        player.teleport(realm, coordinate);
+        player.registerEventListener(this);
+        add(player);
+        eventSender.notifySelf(new PlayerTeleportEvent(player, realm, coordinate));
+        eventSender.notifyPlayerOfEntities(player);
     }
 
     @Override
-    public void teleportOut(Player player) {
+    public void clearPlayer(Player player) {
         if (player == null) {
             return;
         }
         player.leaveRealm();
+        eventSender.notifyVisiblePlayersAndSelf(player, new RemoveEntityMessage(player.id()));
+        remove(player);
         player.clearListeners();
-        remove(player);
-    }
-
-    @Override
-    public void onPlayerDisconnected(Player player) {
-        player.leaveRealm();
-        remove(player);
     }
 
     @Override
@@ -112,9 +107,9 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     private void updateRopes(long delta) {
         Iterator<Rope> iterator = ropes.iterator();
         while (iterator.hasNext()) {
-            Rope next = iterator.next();
-            next.update(delta);
-            if (next.done()) {
+            Rope rope = iterator.next();
+            rope.update(delta);
+            if (rope.isBroken()) {
                 iterator.remove();
             }
         }
@@ -139,17 +134,18 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         }
     }
 
-    private void handleDragPlayerEvent(Player player, Player dragged) {
-        if (dragged.stateEnum() != State.DIE || dragged.coordinate().directDistance(player.coordinate()) > 2) {
-            return;
+    private void handleDragPlayerEvent(Player player, Player dragged, int ropeSlot) {
+        if (player.canDrag(dragged, ropeSlot)) {
+            log().debug("Drag player {}.", dragged.id());
+            player.consumeItem(ropeSlot);
+            ropes.forEach(rope -> rope.breakIfDraggedAgain(dragged));
+            ropes.add(new Rope(dragged, player));
         }
-        ropes.add(new Rope(dragged, player));
     }
 
     @Override
     public void onClientEvent(PlayerDataEvent dataEvent,
                               ActiveEntityManager<Npc> npcManager) {
-        Validate.notNull(npcManager);
         if (!contains(dataEvent.player())){
             return;
         }
@@ -173,7 +169,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         } else if (dataEvent.data() instanceof ClientTriggerDynamicObjectEvent triggerDynamicObjectEvent) {
             dynamicObjectManager.triggerDynamicObject(triggerDynamicObjectEvent.id(), dataEvent.player(), triggerDynamicObjectEvent.useSlot());
         } else if (dataEvent.data() instanceof ClientDragPlayerEvent dragPlayerEvent) {
-            find(dragPlayerEvent.target()).ifPresent(dragged -> handleDragPlayerEvent(dataEvent.player(), dragged));
+            find(dragPlayerEvent.target()).ifPresent(dragged -> handleDragPlayerEvent(dataEvent.player(), dragged, dragPlayerEvent.ropeSlot()));
         } else {
             dataEvent.player().handleClientEvent(dataEvent.data());
         }
@@ -186,28 +182,23 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
-        if (entityEvent.source() instanceof Player player) {
-            tradeManager.onPlayerEvent(player, entityEvent);
+        try {
+            if (entityEvent.source() instanceof Player player) {
+                tradeManager.onPlayerEvent(player, entityEvent);
+            }
+            if (entityEvent instanceof PlayerShootEvent shootEvent) {
+                projectileManager.add(shootEvent.projectile());
+                eventSender.notifyVisiblePlayersAndSelf(shootEvent.source(), shootEvent);
+            } else if (entityEvent instanceof PlayerAttackEvent attackEvent) {
+                eventSender.notifyVisiblePlayersAndSelf(attackEvent.source(), attackEvent);
+            } else if (entityEvent instanceof PlayerDropItemEvent dropItemEvent) {
+                itemManager.dropItem(dropItemEvent.getDroppedItemName(), dropItemEvent.getNumberOnGround(), dropItemEvent.getCoordinate());
+            } else if (entityEvent instanceof AbstractPlayerEvent playerEvent && playerEvent.isSelfEvent()) {
+                eventSender.notifySelf(playerEvent);
+            }
+        } catch (Exception e) {
+            log.error("Failed to handle event.", e);
         }
-        if (entityEvent instanceof PlayerLeftEvent playerLeftEvent) {
-            eventSender.notifyVisiblePlayers(playerLeftEvent.player(), playerLeftEvent);
-            log.debug("Sent remove player {} event.", playerLeftEvent.source());
-        } else if (entityEvent instanceof JoinedRealmEvent joinedRealmEvent) {
-            eventSender.notifySelf(joinedRealmEvent);
-            eventSender.notifyPlayerOfEntities(joinedRealmEvent.player());
-        } else if (entityEvent instanceof PlayerShootEvent shootEvent) {
-            projectileManager.add(shootEvent.projectile());
-            eventSender.notifyVisiblePlayersAndSelf(shootEvent.source(), shootEvent);
-        } else if (entityEvent instanceof PlayerTeleportEvent teleportEvent) {
-            eventSender.updateScope(teleportEvent.player());
-            eventSender.notifySelf(teleportEvent);
-            eventSender.notifyPlayerOfEntities(teleportEvent.player());
-        } else if (entityEvent instanceof PlayerAttackEvent attackEvent) {
-            eventSender.notifyVisiblePlayersAndSelf(attackEvent.source(), attackEvent);
-        } else if (entityEvent instanceof PlayerDropItemEvent dropItemEvent) {
-            itemManager.dropItem(dropItemEvent.getDroppedItemName(), dropItemEvent.getNumberOnGround(), dropItemEvent.getCoordinate());
-        } else if (entityEvent instanceof AbstractPlayerEvent playerEvent && playerEvent.isSelfEvent()) {
-            eventSender.notifySelf(playerEvent);
-        }
+
     }
 }

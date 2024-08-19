@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
@@ -35,9 +36,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-class NpcManagerTest extends AbstractUnitTestFixture  {
+class NpcManagerImplTest extends AbstractUnitTestFixture  {
 
-    private NpcManager npcManager;
+    private NpcManagerImpl npcManager;
 
     private EntityEventSender eventSender;
 
@@ -79,7 +80,7 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         aoiManager = Mockito.mock(AOIManager.class);
         map = Mockito.mock(RealmMap.class);
         when(map.movable(any(Coordinate.class))).thenReturn(true);
-        npcManager = new NpcManager(eventSender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, monsterSdb, npcSdb, map);
+        npcManager = new NpcManagerImpl(eventSender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, monsterSdb, npcSdb, map);
     }
 
     @Test
@@ -116,9 +117,8 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         }
         CreatureState<?> state = monster.state();
         npcManager.update(state.totalMillis());
-        assertEquals(State.IDLE, monster.stateEnum());
-        assertTrue(range.contains(monster.spawnCoordinate()));
-        assertTrue(range.contains(monster.coordinate()));
+        Npc recreatedNpc = npcManager.find(2L).get();
+        assertEquals("一级牛", recreatedNpc.idName());
         verify(eventSender, times(2)).notifyVisiblePlayers(any(ActiveEntity.class), any(NpcJoinedEvent.class));
     }
 
@@ -144,6 +144,11 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         assertTrue(npcManager.find(1L).isEmpty());
         npc = npcManager.find(3L).orElseThrow(IllegalAccessError::new);
         assertEquals("白狐狸变身", npc.idName());
+        npcManager.onEvent(new RemoveEntityEvent(npc));
+        npcManager.update(1000000);
+        // original npc should be back.
+        Npc npc1 = npcManager.find(4L).get();
+        assertEquals("白狐狸", npc1.idName());
     }
 
     @Test
@@ -153,5 +158,14 @@ class NpcManagerTest extends AbstractUnitTestFixture  {
         when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
         npcManager.init();
         Npc npc = npcManager.find(1L).orElseThrow(IllegalAccessError::new);
+    }
+
+    @Test
+    void findMerchants() {
+        Rectangle range = new Rectangle(Coordinate.xy(1, 1), Coordinate.xy(4, 4));
+        npcSettings.add(new NpcSpawnSetting(range, 1, "老板娘"));
+        when(npcSdbRepository.npcSdbExists(49)).thenReturn(true);
+        npcManager.init();
+        assertFalse(npcManager.findMerchants().isEmpty());
     }
 }

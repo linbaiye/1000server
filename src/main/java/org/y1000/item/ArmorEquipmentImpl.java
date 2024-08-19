@@ -1,45 +1,18 @@
 package org.y1000.item;
 
 
-import org.y1000.entities.players.Armor;
 
-public final class ArmorEquipmentImpl extends AbstractSexualEquipment implements ArmorEquipment {
-    private final ArmorItemAttributeProvider attributeProvider;
-    private final EquipmentType type;
+public final class ArmorEquipmentImpl extends AbstractArmorEquipment {
 
     public ArmorEquipmentImpl(String name,
                               ArmorItemAttributeProvider attributeProvider,
                               EquipmentType type) {
         super(name, attributeProvider.dropSound(),
-                attributeProvider.eventSound(), attributeProvider.description(), attributeProvider.isMale());
-        this.attributeProvider = attributeProvider;
-        this.type = type;
+                attributeProvider.eventSound(), attributeProvider.description(), attributeProvider.isMale(), attributeProvider, type);
     }
 
     @Override
-    public EquipmentType equipmentType() {
-        return type;
-    }
-
-    public int avoidance() {
-        return attributeProvider.avoidance();
-    }
-
-    public Armor armor() {
-        return new Armor(attributeProvider.armor(), attributeProvider.headArmor(), attributeProvider.armArmor(), attributeProvider.legArmor());
-    }
-
-    public int recovery() {
-        return attributeProvider.recovery();
-    }
-
-    @Override
-    public String description() {
-        StringBuilder descriptionBuilder = getDescriptionBuilder();
-        descriptionBuilder.append("恢复: ").append(recovery()).append("\t")
-                .append("闪躲: ").append(avoidance()).append("\n");
-        Armor armor = armor();
-        descriptionBuilder.append(String.format("防御力: %d / %d / %d / %d", armor.body(), armor.head(), armor.arm(), armor.leg()));
-        return descriptionBuilder.toString();
+    public int color() {
+        return attributeProvider().color();
     }
 }
