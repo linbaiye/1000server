@@ -35,6 +35,7 @@ final class DungeonNpcManager extends AbstractNpcManager {
         if (removeEntityEvent.source() instanceof Npc npc) {
             removeNpc(npc);
             removeFromCloned(npc);
+            log.debug("Removed npc {}.", npc.id());
         }
     }
 

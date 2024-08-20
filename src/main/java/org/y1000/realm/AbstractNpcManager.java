@@ -10,6 +10,7 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
+import org.y1000.message.RemoveEntityMessage;
 import org.y1000.realm.event.RealmEvent;
 import org.y1000.realm.event.RealmLetterEvent;
 import org.y1000.sdb.CreateNpcSdb;
@@ -127,8 +128,8 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         projectileManager.update(delta);
     }
 
-
     protected void removeNpc(Npc npc) {
+        sender.notifyVisiblePlayers(npc, new RemoveEntityMessage(npc.id()));
         sender.remove(npc);
         npc.deregisterEventListener(this);
         remove(npc);
@@ -170,7 +171,6 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     Npc replaceNpc(NpcShiftEvent shiftEvent) {
         Npc npc = shiftEvent.npc();
-        getEventSender().notifyVisiblePlayers(npc, shiftEvent.createRemoveEvent());
         removeNpc(npc);
         Npc newNpc = getNpcFactory().createNpc(shiftEvent.shiftToName(), getIdGenerator().next(), npc.realmMap(), npc.coordinate());
         addNpc(newNpc);

@@ -23,6 +23,7 @@ public final class DyableArmorEquipment extends AbstractArmorEquipment implement
     @Override
     public void bleach(int color) {
         this.color += color;
+        this.color %= 256;
     }
 
     @Override

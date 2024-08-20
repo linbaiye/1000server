@@ -55,10 +55,10 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         if (!(entityEvent.source() instanceof DynamicObject object))  {
             return;
         }
-        if (entityEvent instanceof RemoveEntityEvent) {
-            var entity = entityEvent.source();
-            eventSender.remove(entity);
-            if (entity instanceof RespawnDynamicObject respawnDynamicObject) {
+        if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
+            eventSender.notifyVisiblePlayers(object, removeEntityEvent);
+            eventSender.remove(object);
+            if (object instanceof RespawnDynamicObject respawnDynamicObject) {
                 respawningEntityManager.add(respawnDynamicObject, respawnDynamicObject.respawnTime());
             }
             remove(object);
@@ -89,8 +89,8 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
     }
 
     private void tryRespawn(RespawnDynamicObject respawnDynamicObject) {
-        respawnDynamicObject.respawn();
-        addObject(respawnDynamicObject);
+        var obj = factory.createDynamicObject(respawnDynamicObject.idName(), entityIdGenerator.next(), realmMap, respawnDynamicObject.coordinate());
+        addObject(obj);
     }
 
     @Override

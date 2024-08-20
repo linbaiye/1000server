@@ -171,7 +171,7 @@ abstract class AbstractRealm implements Realm {
             } else if (event instanceof RealmLetterEvent<?> letterEvent) {
                 npcManager.handleCrossRealmEvent(letterEvent);
             } else if (event instanceof ClientDirectMessageEvent messageEvent) {
-                playerManager.
+
             }
         } catch (Exception e) {
             log().error("Exception when handling event .", e);

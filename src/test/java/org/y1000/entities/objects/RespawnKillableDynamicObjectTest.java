@@ -119,11 +119,4 @@ class RespawnKillableDynamicObjectTest {
         assertEquals(1L, event.toPacket().getRemoveEntity().getId());
     }
 
-    @Test
-    void respawn() {
-        object.attackedBy(player);
-        object.respawn();
-        assertEquals(0, object.currentAnimation().frameStart());
-        assertEquals(0, object.currentAnimation().frameEnd());
-    }
 }

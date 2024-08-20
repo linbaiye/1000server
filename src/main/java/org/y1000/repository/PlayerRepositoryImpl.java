@@ -114,7 +114,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
      */
 
     public static int lastRealmId() {
-        return 49;
+        return 20;
     }
 
     private static final PlayerInnateAttributesProvider DEV_PROVIDER = new PlayerInnateAttributesProvider() {
@@ -137,8 +137,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                // .coordinate(new Coordinate(55, 51)) // 王陵2层
                 //.coordinate(new Coordinate(80, 157)) // 王陵2层
                // .coordinate(new Coordinate(32, 165)) // 王陵2层
-                //.coordinate(new Coordinate(37, 49)) //修炼洞
-                .coordinate(new Coordinate(94, 59)) //新手村
+                .coordinate(new Coordinate(37, 49)) //修炼洞
+                //.coordinate(new Coordinate(94, 59)) //新手村
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)
                 .attackKungFu(kungFuBook.findUnnamedAttack(weapon.kungFuType()))
