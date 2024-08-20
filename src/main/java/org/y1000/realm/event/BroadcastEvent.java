@@ -9,5 +9,6 @@ public interface BroadcastEvent extends RealmEvent {
     default RealmEventType realmEventType() {
         return RealmEventType.BROADCAST;
     }
+
     void send(Player player);
 }

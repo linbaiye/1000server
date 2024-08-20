@@ -67,6 +67,7 @@ private static final long serialVersionUID = 0L;
     DRAGPLAYER(20),
     SIMPLECOMMAND(21),
     DYE(22),
+    SAY(23),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -106,6 +107,7 @@ private static final long serialVersionUID = 0L;
         case 20: return DRAGPLAYER;
         case 21: return SIMPLECOMMAND;
         case 22: return DYE;
+        case 23: return SAY;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -803,6 +805,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
   }
 
+  public static final int SAY_FIELD_NUMBER = 23;
+  /**
+   * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+   * @return Whether the say field is set.
+   */
+  @java.lang.Override
+  public boolean hasSay() {
+    return typeCase_ == 23;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+   * @return The say.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientSayPacket getSay() {
+    if (typeCase_ == 23) {
+       return (org.y1000.network.gen.ClientSayPacket) type_;
+    }
+    return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientSayPacketOrBuilder getSayOrBuilder() {
+    if (typeCase_ == 23) {
+       return (org.y1000.network.gen.ClientSayPacket) type_;
+    }
+    return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -882,6 +915,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 22) {
       output.writeMessage(22, (org.y1000.network.gen.ClientDyePacket) type_);
+    }
+    if (typeCase_ == 23) {
+      output.writeMessage(23, (org.y1000.network.gen.ClientSayPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -979,6 +1015,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 22) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(22, (org.y1000.network.gen.ClientDyePacket) type_);
+    }
+    if (typeCase_ == 23) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(23, (org.y1000.network.gen.ClientSayPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1085,6 +1125,10 @@ private static final long serialVersionUID = 0L;
         if (!getDye()
             .equals(other.getDye())) return false;
         break;
+      case 23:
+        if (!getSay()
+            .equals(other.getSay())) return false;
+        break;
       case 0:
       default:
     }
@@ -1187,6 +1231,10 @@ private static final long serialVersionUID = 0L;
       case 22:
         hash = (37 * hash) + DYE_FIELD_NUMBER;
         hash = (53 * hash) + getDye().hashCode();
+        break;
+      case 23:
+        hash = (37 * hash) + SAY_FIELD_NUMBER;
+        hash = (53 * hash) + getSay().hashCode();
         break;
       case 0:
       default:
@@ -1388,6 +1436,9 @@ private static final long serialVersionUID = 0L;
       if (dyeBuilder_ != null) {
         dyeBuilder_.clear();
       }
+      if (sayBuilder_ != null) {
+        sayBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1516,6 +1567,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 22 &&
           dyeBuilder_ != null) {
         result.type_ = dyeBuilder_.build();
+      }
+      if (typeCase_ == 23 &&
+          sayBuilder_ != null) {
+        result.type_ = sayBuilder_.build();
       }
     }
 
@@ -1650,6 +1705,10 @@ private static final long serialVersionUID = 0L;
         }
         case DYE: {
           mergeDye(other.getDye());
+          break;
+        }
+        case SAY: {
+          mergeSay(other.getSay());
           break;
         }
         case TYPE_NOT_SET: {
@@ -1836,6 +1895,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 22;
               break;
             } // case 178
+            case 186: {
+              input.readMessage(
+                  getSayFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 23;
+              break;
+            } // case 186
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -4990,6 +5056,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 22;
       onChanged();
       return dyeBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientSayPacket, org.y1000.network.gen.ClientSayPacket.Builder, org.y1000.network.gen.ClientSayPacketOrBuilder> sayBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+     * @return Whether the say field is set.
+     */
+    @java.lang.Override
+    public boolean hasSay() {
+      return typeCase_ == 23;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+     * @return The say.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientSayPacket getSay() {
+      if (sayBuilder_ == null) {
+        if (typeCase_ == 23) {
+          return (org.y1000.network.gen.ClientSayPacket) type_;
+        }
+        return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 23) {
+          return sayBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+     */
+    public Builder setSay(org.y1000.network.gen.ClientSayPacket value) {
+      if (sayBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        sayBuilder_.setMessage(value);
+      }
+      typeCase_ = 23;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+     */
+    public Builder setSay(
+        org.y1000.network.gen.ClientSayPacket.Builder builderForValue) {
+      if (sayBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        sayBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 23;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+     */
+    public Builder mergeSay(org.y1000.network.gen.ClientSayPacket value) {
+      if (sayBuilder_ == null) {
+        if (typeCase_ == 23 &&
+            type_ != org.y1000.network.gen.ClientSayPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientSayPacket.newBuilder((org.y1000.network.gen.ClientSayPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 23) {
+          sayBuilder_.mergeFrom(value);
+        } else {
+          sayBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 23;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+     */
+    public Builder clearSay() {
+      if (sayBuilder_ == null) {
+        if (typeCase_ == 23) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 23) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        sayBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+     */
+    public org.y1000.network.gen.ClientSayPacket.Builder getSayBuilder() {
+      return getSayFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientSayPacketOrBuilder getSayOrBuilder() {
+      if ((typeCase_ == 23) && (sayBuilder_ != null)) {
+        return sayBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 23) {
+          return (org.y1000.network.gen.ClientSayPacket) type_;
+        }
+        return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientSayPacket, org.y1000.network.gen.ClientSayPacket.Builder, org.y1000.network.gen.ClientSayPacketOrBuilder> 
+        getSayFieldBuilder() {
+      if (sayBuilder_ == null) {
+        if (!(typeCase_ == 23)) {
+          type_ = org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
+        }
+        sayBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientSayPacket, org.y1000.network.gen.ClientSayPacket.Builder, org.y1000.network.gen.ClientSayPacketOrBuilder>(
+                (org.y1000.network.gen.ClientSayPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 23;
+      onChanged();
+      return sayBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

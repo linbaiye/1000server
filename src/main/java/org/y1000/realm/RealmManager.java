@@ -2,6 +2,7 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.players.Player;
+import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.realm.event.*;
 import org.y1000.network.Connection;
 import org.y1000.network.ConnectionEventType;
@@ -76,7 +77,11 @@ public final class RealmManager implements Runnable , RealmEventHandler {
             return;
         }
         int realmId = playerRealmMap.get(player);
-        realmIdGroupMap.get(realmId).handle(new PlayerDataEvent(realmId, player, dataEvent.data()));
+        ClientEvent data = dataEvent.data();
+        if (data.withinRealm())
+            realmIdGroupMap.get(realmId).handle(new PlayerDataEvent(realmId, player, data));
+        else
+            groups.forEach(realmGroup -> realmGroup.handle((BroadcastEvent)data));
     }
 
 

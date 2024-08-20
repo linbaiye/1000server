@@ -114,7 +114,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
      */
 
     public static int lastRealmId() {
-        return 20;
+        return 1;
     }
 
     private static final PlayerInnateAttributesProvider DEV_PROVIDER = new PlayerInnateAttributesProvider() {
@@ -132,12 +132,12 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .id(slot + playerIdStart)
                 .name("雨诗妾")
               //   .coordinate(new Coordinate(33, 167)) // 王陵1层 -> 2入口
-               // .coordinate(new Coordinate(500, 500))
+                .coordinate(new Coordinate(500, 500))
+              //   .coordinate(new Coordinate(20, 10)) // 极乐传送
                //.coordinate(new Coordinate(516, 478))
                // .coordinate(new Coordinate(55, 51)) // 王陵2层
-                //.coordinate(new Coordinate(80, 157)) // 王陵2层
-               // .coordinate(new Coordinate(32, 165)) // 王陵2层
-                .coordinate(new Coordinate(37, 49)) //修炼洞
+                //.coordinate(new Coordinate(37, 49)) //修炼洞
+                //.coordinate(new Coordinate(37, 49)) //修炼洞
                 //.coordinate(new Coordinate(94, 59)) //新手村
                 .weapon(weapon)
                 .kungFuBook(kungFuBook)

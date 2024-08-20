@@ -219,6 +219,10 @@ message ClientDyePacket {
   int32 dyeSlotId = 2;
 }
 
+message ClientSayPacket {
+  string text = 1;
+}
+
 
 message ClientPacket {
   oneof Type {
@@ -244,6 +248,7 @@ message ClientPacket {
     ClientDragPlayerPacket dragPlayer = 20;
     ClientSimpleCommandPacket simpleCommand = 21;
     ClientDyePacket dye = 22;
+    ClientSayPacket say = 23;
   }
 }
 

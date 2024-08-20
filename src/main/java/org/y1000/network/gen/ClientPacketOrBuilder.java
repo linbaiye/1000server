@@ -338,5 +338,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientDyePacketOrBuilder getDyeOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+   * @return Whether the say field is set.
+   */
+  boolean hasSay();
+  /**
+   * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+   * @return The say.
+   */
+  org.y1000.network.gen.ClientSayPacket getSay();
+  /**
+   * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
+   */
+  org.y1000.network.gen.ClientSayPacketOrBuilder getSayOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

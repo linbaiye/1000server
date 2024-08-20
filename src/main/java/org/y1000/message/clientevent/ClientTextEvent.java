@@ -7,10 +7,10 @@ public interface ClientTextEvent extends ClientEvent {
 
     void handle(Player player);
 
-    default ClientTextEvent create(String content) {
+    static ClientEvent create(String content) {
         if (ClientDirectMessageEvent.isFormatCorrect(content)) {
             return ClientDirectMessageEvent.parse(content);
         }
-        return null;
+        return new ClientWorldSayEvent(content);
     }
 }
