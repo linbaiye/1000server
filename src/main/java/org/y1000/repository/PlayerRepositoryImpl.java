@@ -59,6 +59,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("紫色染剂", 10));
         inventory.add(itemFactory.createItem("女子束长发"));
         inventory.add(itemFactory.createItem("红色染剂", 10));
+        inventory.add(itemFactory.createItem("脱色药", 10));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("血皇斧"));*/

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.teleport.StaticTeleport;
+import org.y1000.message.ClientDirectMessageEvent;
 import org.y1000.message.clientevent.ClientSimpleCommandEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
@@ -169,6 +170,8 @@ abstract class AbstractRealm implements Realm {
                 playerManager().allPlayers().forEach(broadcastEvent::send);
             } else if (event instanceof RealmLetterEvent<?> letterEvent) {
                 npcManager.handleCrossRealmEvent(letterEvent);
+            } else if (event instanceof ClientDirectMessageEvent messageEvent) {
+                playerManager.
             }
         } catch (Exception e) {
             log().error("Exception when handling event .", e);

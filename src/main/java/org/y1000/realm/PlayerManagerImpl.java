@@ -12,6 +12,7 @@ import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.PlayerDropItemEvent;
+import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
@@ -178,6 +179,16 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     @Override
     public Set<Player> allPlayers() {
         return getEntities();
+    }
+
+    @Override
+    public void sendDirectMessage(String playerName, String content) {
+        if (playerName == null || content == null) {
+            return;
+        }
+        getEntities().stream().filter(player -> player.viewName().equals(playerName))
+                .findFirst().ifPresent(player -> player.emitEvent(PlayerTextEvent.()));
+
     }
 
     @Override

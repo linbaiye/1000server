@@ -9,6 +9,17 @@ public final class Dye extends AbstractItem {
         color = itemSdb.getColor(name);
     }
 
+    public void dye(DyableEquipment equipment) {
+        if (equipment == null) {
+            return;
+        }
+        if ("脱色药".equals(name())) {
+            equipment.bleach(color);
+        } else {
+            equipment.dye(color);
+        }
+    }
+
     @Override
     public int color() {
         return color;

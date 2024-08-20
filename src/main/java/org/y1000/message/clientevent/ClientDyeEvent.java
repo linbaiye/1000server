@@ -15,7 +15,7 @@ public record ClientDyeEvent(int dyedSlot, int dyeSlot) implements ClientEvent {
     private void dye(Player player, Dye dye) {
         player.inventory().getItem(dyedSlot, DyableEquipment.class)
                 .ifPresent(equipment -> {
-                    equipment.dye(dye.color());
+                    dye.dye(equipment);
                     player.consumeItem(dyeSlot);
                     player.emitEvent(new UpdateInventorySlotEvent(player, dyedSlot, player.inventory().getItem(dyedSlot)));
                 });

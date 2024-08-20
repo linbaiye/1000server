@@ -12,12 +12,12 @@ public final class DecorativeEquipment extends AbstractSexualEquipment implement
 
     @Override
     public void dye(int color) {
-        this.color += color;
+        this.color = color;
     }
 
     @Override
     public void bleach(int color) {
-        this.color = color;
+        this.color += color;
     }
 
     @Override

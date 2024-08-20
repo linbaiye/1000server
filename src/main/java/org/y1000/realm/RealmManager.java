@@ -120,6 +120,7 @@ public final class RealmManager implements Runnable , RealmEventHandler {
         group.handle(teleportEvent);
     }
 
+    // Multi-threads involved, careful.
     @Override
     public void handle(RealmEvent realmEvent) {
         if (realmEvent instanceof RealmTeleportEvent teleportEvent) {
@@ -138,7 +139,7 @@ public final class RealmManager implements Runnable , RealmEventHandler {
     }
 
     private void setRealmGroups(List<RealmGroup> groups) {
-        realmIdGroupMap = new HashMap<>();
+        realmIdGroupMap = new ConcurrentHashMap<>();
         for (RealmGroup group : groups) {
             group.realmIds().forEach(id -> realmIdGroupMap.put(id,group));
         }

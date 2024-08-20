@@ -314,7 +314,7 @@ MaxCount,        最多持有数量；
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
         for (String i: items) {
-            if (!i.contains("女子手套")) {
+            if (!i.contains("脱色")) {
                 continue;
             }
             System.out.println("----------------------------");
