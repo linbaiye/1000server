@@ -97,6 +97,16 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         dropNewItem(createGroundItem(name, at, number));
     }
 
+    @Override
+    public void dropItem(PlayerDropItemEvent dropItemEvent) {
+        if (dropItemEvent == null)
+            return;
+        GroundedItem groundedItem = dropItemEvent.createGroundedItem(idGenerator.next());
+        dropNewItem(groundedItem);
+        log.debug("Dropped item at {}", groundedItem.coordinate());
+
+    }
+
 
     private GroundedItem createGroundItem(String name,
                                           Coordinate coordinate,
@@ -122,7 +132,6 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         updateManagedEntities(delta);
     }
 
-
     @Override
     public void visit(RemoveEntityEvent event) {
         if (event.source() instanceof GroundedItem item) {
@@ -139,14 +148,6 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         add(item);
         item.dropSound().ifPresent(s -> eventSender.sendEvent(new EntitySoundEvent(item, s)));
     }
-
-    @Override
-    public void visit(PlayerDropItemEvent event) {
-        GroundedItem groundedItem = event.createGroundedItem(idGenerator.next());
-        dropNewItem(groundedItem);
-        log.debug("Dropped item at {}", groundedItem.coordinate());
-    }
-
 
     @Override
     public void onEvent(EntityEvent entityEvent) {

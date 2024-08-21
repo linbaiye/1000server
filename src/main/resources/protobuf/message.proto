@@ -159,6 +159,7 @@ message ShowItemPacket {
   int32 coordinateX = 5;
   int32 coordinateY = 6;
   string name = 7;
+  int32 color = 8;
 }
 
 message ShowTeleportPacket {

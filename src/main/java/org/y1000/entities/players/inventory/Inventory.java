@@ -354,10 +354,9 @@ public final class Inventory {
             return;
         }
         if (decrease(dropItemEvent.sourceSlot(), dropItemEvent.number())) {
-            log.debug("Dropped item {}", item);
             UpdateInventorySlotEvent event = new UpdateInventorySlotEvent(player, dropItemEvent.sourceSlot(), getItem(dropItemEvent.sourceSlot()));
             eventSender.invoke(event);
-            eventSender.invoke(new PlayerDropItemEvent(player, item.name(), dropItemEvent.number(), dropItemEvent.coordinate()));
+            eventSender.invoke(new PlayerDropItemEvent(player, item.name(), dropItemEvent.number(), dropItemEvent.coordinate(), item.color()));
             item.dropSound().ifPresent(s -> eventSender.invoke(new EntitySoundEvent(player, s)));
         }
     }

@@ -132,6 +132,17 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int COLOR_FIELD_NUMBER = 8;
+  private int color_ = 0;
+  /**
+   * <code>int32 color = 8;</code>
+   * @return The color.
+   */
+  @java.lang.Override
+  public int getColor() {
+    return color_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -161,6 +172,9 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, name_);
     }
+    if (color_ != 0) {
+      output.writeInt32(8, color_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -188,6 +202,10 @@ private static final long serialVersionUID = 0L;
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, name_);
+    }
+    if (color_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(8, color_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -217,6 +235,8 @@ private static final long serialVersionUID = 0L;
         != other.getCoordinateY()) return false;
     if (!getName()
         .equals(other.getName())) return false;
+    if (getColor()
+        != other.getColor()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -241,6 +261,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getCoordinateY();
     hash = (37 * hash) + NAME_FIELD_NUMBER;
     hash = (53 * hash) + getName().hashCode();
+    hash = (37 * hash) + COLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getColor();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -377,6 +399,7 @@ private static final long serialVersionUID = 0L;
       coordinateX_ = 0;
       coordinateY_ = 0;
       name_ = "";
+      color_ = 0;
       return this;
     }
 
@@ -426,6 +449,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000010) != 0)) {
         result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.color_ = color_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -491,6 +517,9 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000010;
         onChanged();
       }
+      if (other.getColor() != 0) {
+        setColor(other.getColor());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -542,6 +571,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000010;
               break;
             } // case 58
+            case 64: {
+              color_ = input.readInt32();
+              bitField0_ |= 0x00000020;
+              break;
+            } // case 64
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -763,6 +797,38 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       name_ = value;
       bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+
+    private int color_ ;
+    /**
+     * <code>int32 color = 8;</code>
+     * @return The color.
+     */
+    @java.lang.Override
+    public int getColor() {
+      return color_;
+    }
+    /**
+     * <code>int32 color = 8;</code>
+     * @param value The color to set.
+     * @return This builder for chaining.
+     */
+    public Builder setColor(int value) {
+
+      color_ = value;
+      bitField0_ |= 0x00000020;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 color = 8;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearColor() {
+      bitField0_ = (bitField0_ & ~0x00000020);
+      color_ = 0;
       onChanged();
       return this;
     }

@@ -48,4 +48,10 @@ public interface ShowItemPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getNameBytes();
+
+  /**
+   * <code>int32 color = 8;</code>
+   * @return The color.
+   */
+  int getColor();
 }

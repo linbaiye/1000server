@@ -44,11 +44,12 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
     @Override
     public Item createItem(GroundedItem item) {
         Validate.notNull(item, "item must not be null");
-        if (item.getNumber() != null) {
-            return createItem(item.getName(), item.getNumber());
-        } else {
-            return createItem(item.getName());
+        Item restored = item.getNumber() != null ?
+                createItem(item.getName(), item.getNumber()) : createItem(item.getName());
+        if (restored instanceof DyableEquipment dyableEquipment) {
+            dyableEquipment.dye(item.getColor());
         }
+        return restored;
     }
 
 

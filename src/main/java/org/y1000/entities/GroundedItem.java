@@ -24,6 +24,7 @@ public final class GroundedItem extends AbstractActiveEntity {
     private final String name;
 
     private final String dropSound;
+    @Getter
     private final int color;
 
     @Builder
@@ -82,6 +83,7 @@ public final class GroundedItem extends AbstractActiveEntity {
                 .number(number)
                 .id(id())
                 .coordinate(coordinate)
+                .color(color)
                 .build();
     }
 

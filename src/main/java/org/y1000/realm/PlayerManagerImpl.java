@@ -202,7 +202,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
             } else if (entityEvent instanceof PlayerAttackEvent attackEvent) {
                 eventSender.notifyVisiblePlayersAndSelf(attackEvent.source(), attackEvent);
             } else if (entityEvent instanceof PlayerDropItemEvent dropItemEvent) {
-                itemManager.dropItem(dropItemEvent.getDroppedItemName(), dropItemEvent.getNumberOnGround(), dropItemEvent.getCoordinate());
+                itemManager.dropItem(dropItemEvent);
             } else if (entityEvent instanceof AbstractPlayerEvent playerEvent && playerEvent.isSelfEvent()) {
                 eventSender.notifySelf(playerEvent);
             }
