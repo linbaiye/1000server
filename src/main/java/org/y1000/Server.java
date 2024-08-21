@@ -56,7 +56,7 @@ public final class Server {
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, CreateEntitySdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE);
-        realmManager = RealmManager.create(realmFactory);
+        realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory);
     }
 
 

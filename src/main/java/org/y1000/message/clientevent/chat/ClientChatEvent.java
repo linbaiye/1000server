@@ -1,16 +1,16 @@
-package org.y1000.message.clientevent;
+package org.y1000.message.clientevent.chat;
 
 import org.y1000.entities.players.Player;
-import org.y1000.message.ClientDirectMessageEvent;
+import org.y1000.message.clientevent.ClientEvent;
 
-public interface ClientTextEvent extends ClientEvent {
+public interface ClientChatEvent extends ClientEvent {
 
-    void handle(Player player);
+    boolean canSend(Player player);
 
     static ClientEvent create(String content) {
         if (ClientDirectMessageEvent.isFormatCorrect(content)) {
             return ClientDirectMessageEvent.parse(content);
         }
-        return new ClientWorldSayEvent(content);
+        return new ClientWorldShoutEvent(content);
     }
 }

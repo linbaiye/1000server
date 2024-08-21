@@ -3,7 +3,7 @@ package org.y1000.network;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.objects.TriggerDynamicObject;
+import org.y1000.message.clientevent.chat.ClientChatEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.item.EquipmentType;
 import org.y1000.message.clientevent.*;
@@ -56,7 +56,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case DRAGPLAYER -> new ClientDragPlayerEvent(clientPacket.getDragPlayer().getTargetId(), clientPacket.getDragPlayer().getRopeSlot());
             case SIMPLECOMMAND -> ClientSimpleCommandEvent.parse(clientPacket.getSimpleCommand().getCommand());
             case DYE -> new ClientDyeEvent(clientPacket.getDye().getDyedSlotId(), clientPacket.getDye().getDyeSlotId());
-            case SAY -> ClientTextEvent.create(clientPacket.getSay().getText());
+            case SAY -> ClientChatEvent.create(clientPacket.getSay().getText());
             default -> throw new IllegalArgumentException();
         };
     }

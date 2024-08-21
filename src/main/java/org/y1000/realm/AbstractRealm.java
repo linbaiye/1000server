@@ -3,9 +3,11 @@ package org.y1000.realm;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.npc.Merchant;
+import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.StaticTeleport;
-import org.y1000.message.ClientDirectMessageEvent;
 import org.y1000.message.clientevent.ClientSimpleCommandEvent;
+import org.y1000.message.clientevent.chat.ClientChatEvent;
+import org.y1000.message.clientevent.chat.ClientRealmChatEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
@@ -141,6 +143,16 @@ abstract class AbstractRealm implements Realm {
         return playerManager;
     }
 
+
+    private void handleClientChatEvent(Player player, ClientChatEvent event) {
+        if (!event.canSend(player)) {
+            return;
+        }
+        if (event instanceof ClientRealmChatEvent realmChatEvent) {
+            crossRealmEventHandler.handle(realmChatEvent.toRealmEvent(player));
+        }
+    }
+
     private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
         if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent &&
                 commandEvent.isAskingPosition()) {
@@ -148,6 +160,8 @@ abstract class AbstractRealm implements Realm {
             Set<StaticTeleport> staticTeleports = teleportManager.findStaticTeleports();
             if (!merchants.isEmpty() || !staticTeleports.isEmpty())
                 eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
+        } else if (dataEvent.data() instanceof ClientChatEvent clientChatEvent) {
+            playerManager.find(dataEvent.playerId()).ifPresent(player -> handleClientChatEvent(player, clientChatEvent));
         } else {
             playerManager.onClientEvent(dataEvent, npcManager);
         }
@@ -170,8 +184,6 @@ abstract class AbstractRealm implements Realm {
                 playerManager().allPlayers().forEach(broadcastEvent::send);
             } else if (event instanceof RealmLetterEvent<?> letterEvent) {
                 npcManager.handleCrossRealmEvent(letterEvent);
-            } else if (event instanceof ClientDirectMessageEvent messageEvent) {
-
             }
         } catch (Exception e) {
             log().error("Exception when handling event .", e);

@@ -6,10 +6,6 @@ import org.y1000.realm.event.BroadcastEvent;
 
 public record ClientWorldSayEvent(String content) implements ClientEvent, BroadcastEvent {
 
-    @Override
-    public boolean withinRealm() {
-        return false;
-    }
 
     @Override
     public void send(Player player) {

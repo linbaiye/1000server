@@ -188,7 +188,6 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         }
         /*getEntities().stream().filter(player -> player.viewName().equals(playerName))
                 .findFirst().ifPresent(player -> player.emitEvent(PlayerTextEvent.()));*/
-
     }
 
     @Override

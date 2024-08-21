@@ -1,6 +1,7 @@
 package org.y1000.message;
 
 import org.junit.jupiter.api.Test;
+import org.y1000.message.clientevent.chat.ClientDirectMessageEvent;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -10,6 +10,7 @@ import org.y1000.network.event.ConnectionDataEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.event.ConnectionEvent;
 import org.y1000.repository.PlayerRepositoryImpl;
+import org.y1000.sdb.MapSdb;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -78,12 +79,8 @@ public final class RealmManager implements Runnable , RealmEventHandler {
         }
         int realmId = playerRealmMap.get(player);
         ClientEvent data = dataEvent.data();
-        if (data.withinRealm())
-            realmIdGroupMap.get(realmId).handle(new PlayerDataEvent(realmId, player, data));
-        else
-            groups.forEach(realmGroup -> realmGroup.handle((BroadcastEvent)data));
+        realmIdGroupMap.get(realmId).handle(new PlayerDataEvent(realmId, player, data));
     }
-
 
     private void handleDisconnection(Connection connection) {
         Player removed = connectionPlayerMap.remove(connection);
@@ -155,21 +152,18 @@ public final class RealmManager implements Runnable , RealmEventHandler {
     private static final Set<Integer> IGNORED_REALMS = Set.of(31, 43, 46, 70, 71, 89);
 
 
-    private static List<Integer> getRealmIds() {
-        List<Integer> result = new ArrayList<>();
-        for (int i = 1; i <= 110; i++) {
-            if (!IGNORED_REALMS.contains(i))
-                result.add(i);
-        }
-        return result;
+    private static List<Integer> getRealmIds(MapSdb mapSdb) {
+        var allIds = new ArrayList<>(mapSdb.getAllIds());
+        allIds.removeAll(IGNORED_REALMS);
+        return allIds;
         // return List.of(1, 3, 4, 19, 20, 49);
         //return List.of(19);
         //return List.of(49);
     }
 
-    public static RealmManager create(RealmFactory realmFactory) {
+    public static RealmManager create(MapSdb mapSdb, RealmFactory realmFactory) {
 
-        List<Integer> realmIds = getRealmIds();
+        List<Integer> realmIds = getRealmIds(mapSdb);
         List<Realm> realmList = new ArrayList<>();
         var manager = new RealmManager();
         for (Integer id : realmIds) {
