@@ -1,15 +1,19 @@
 package org.y1000.message.clientevent.chat;
 
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.entities.players.event.PlayerSpeakEvent;
 
 public record ClientSpeakEvent(String content) implements ClientChatEvent {
-    public void handle(Player source) {
-        if (source != null)
-            return;
+
+    public AbstractPlayerEvent toPlayerEvent(Player source) {
+        Validate.notNull(source);
+        return new PlayerSpeakEvent(source, source.viewName() + "：" + content);
     }
 
     @Override
     public boolean canSend(Player player) {
-        return false;
+        return player != null;
     }
 }

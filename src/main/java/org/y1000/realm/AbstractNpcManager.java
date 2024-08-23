@@ -12,7 +12,7 @@ import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.realm.event.RealmEvent;
-import org.y1000.realm.event.RealmLetterEvent;
+import org.y1000.realm.event.RealmTriggerEvent;
 import org.y1000.sdb.CreateNpcSdb;
 import org.y1000.sdb.MonstersSdb;
 import org.y1000.sdb.NpcSpawnSetting;
@@ -159,7 +159,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     @Override
     public void handleCrossRealmEvent(RealmEvent crossRealmEvent) {
-        if (!(crossRealmEvent instanceof RealmLetterEvent<?> letterEvent)) {
+        if (!(crossRealmEvent instanceof RealmTriggerEvent letterEvent)) {
             return;
         }
         find(npc -> npc.idName().equals(letterEvent.toName()) && NineTailFoxHuman.class.isAssignableFrom(npc.getClass()))

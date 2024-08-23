@@ -20,5 +20,4 @@ interface PlayerManager extends ActiveEntityManager<Player> {
 
     Set<Player> allPlayers();
 
-    void sendDirectMessage(String playerName, String content);
 }

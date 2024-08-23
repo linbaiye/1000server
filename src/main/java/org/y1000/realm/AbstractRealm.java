@@ -3,11 +3,9 @@ package org.y1000.realm;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.npc.Merchant;
-import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.StaticTeleport;
 import org.y1000.message.clientevent.ClientSimpleCommandEvent;
 import org.y1000.message.clientevent.chat.ClientChatEvent;
-import org.y1000.message.clientevent.chat.ClientRealmChatEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
@@ -27,11 +25,13 @@ abstract class AbstractRealm implements Realm {
     private final TeleportManager teleportManager;
 
     private final int id;
-    private final RealmEventHandler crossRealmEventHandler;
+    private final CrossRealmEventHandler crossRealmEventHandler;
     private final MapSdb mapSdb;
     private volatile boolean shutdown;
     private long accumulatedMillis;
     private final List<ActiveEntityManager<?>> entityManagers;
+
+    private final ChatManager chatManager;
 
     public AbstractRealm(int id,
                          RealmMap realmMap,
@@ -41,8 +41,9 @@ abstract class AbstractRealm implements Realm {
                          PlayerManager playerManager,
                          DynamicObjectManager dynamicObjectManager,
                          TeleportManager teleportManager,
-                         RealmEventHandler crossRealmEventHandler,
-                         MapSdb mapSdb) {
+                         CrossRealmEventHandler crossRealmEventHandler,
+                         MapSdb mapSdb,
+                         ChatManager chatManager) {
         Validate.notNull(realmMap);
         Validate.notNull(eventSender);
         Validate.notNull(itemManager);
@@ -65,6 +66,7 @@ abstract class AbstractRealm implements Realm {
             entityManagers.add(dynamicObjectManager);
         if (npcManager != null)
             entityManagers.add(npcManager);
+        this.chatManager = chatManager;
     }
 
     public RealmMap map() {
@@ -126,7 +128,7 @@ abstract class AbstractRealm implements Realm {
         log().debug("Removed player {}.", event.player().id());
     }
 
-    RealmEventHandler getCrossRealmEventHandler() {
+    CrossRealmEventHandler getCrossRealmEventHandler() {
         return crossRealmEventHandler;
     }
 
@@ -144,14 +146,7 @@ abstract class AbstractRealm implements Realm {
     }
 
 
-    private void handleClientChatEvent(Player player, ClientChatEvent event) {
-        if (!event.canSend(player)) {
-            return;
-        }
-        if (event instanceof ClientRealmChatEvent realmChatEvent) {
-            crossRealmEventHandler.handle(realmChatEvent.toRealmEvent(player));
-        }
-    }
+
 
     private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
         if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent &&
@@ -161,7 +156,7 @@ abstract class AbstractRealm implements Realm {
             if (!merchants.isEmpty() || !staticTeleports.isEmpty())
                 eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
         } else if (dataEvent.data() instanceof ClientChatEvent clientChatEvent) {
-            playerManager.find(dataEvent.playerId()).ifPresent(player -> handleClientChatEvent(player, clientChatEvent));
+            chatManager.handleClientChat(dataEvent.playerId(), clientChatEvent);
         } else {
             playerManager.onClientEvent(dataEvent, npcManager);
         }
@@ -182,8 +177,10 @@ abstract class AbstractRealm implements Realm {
                 handleTeleportEvent(teleportEvent);
             } else if (event instanceof BroadcastEvent broadcastEvent) {
                 playerManager().allPlayers().forEach(broadcastEvent::send);
-            } else if (event instanceof RealmLetterEvent<?> letterEvent) {
+            } else if (event instanceof RealmTriggerEvent letterEvent) {
                 npcManager.handleCrossRealmEvent(letterEvent);
+            } else if (event instanceof PrivateChatEvent privateMessageEvent) {
+                chatManager.handleCrossRealmChat(privateMessageEvent);
             }
         } catch (Exception e) {
             log().error("Exception when handling event .", e);

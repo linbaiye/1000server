@@ -21,7 +21,7 @@ public final class RealmGroup implements Runnable {
 
     private final RealmFactory realmFactory;
 
-    private final RealmEventHandler crossRealmEventHandler;
+    private final CrossRealmEventHandler crossRealmEventHandler;
 
     private final Supplier<LocalDateTime> dateTimeSupplier;
 
@@ -29,7 +29,7 @@ public final class RealmGroup implements Runnable {
 
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
-                      RealmEventHandler crossRealmEventHandler,
+                      CrossRealmEventHandler crossRealmEventHandler,
                       Supplier<LocalDateTime> dateTimeSupplier) {
         Validate.isTrue(realms != null && !realms.isEmpty());
         Validate.notNull(realmFactory);
@@ -49,7 +49,7 @@ public final class RealmGroup implements Runnable {
 
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
-                      RealmEventHandler crossRealmEventHandler) {
+                      CrossRealmEventHandler crossRealmEventHandler) {
         this(realms, realmFactory, crossRealmEventHandler, LocalDateTime::now);
     }
 
@@ -121,7 +121,7 @@ public final class RealmGroup implements Runnable {
             find(playerRealmEvent.realmId()).ifPresent(realm -> realm.handle(playerRealmEvent));
         } else if (realmEvent.realmEventType() == RealmEventType.BROADCAST ) {
             Arrays.stream(realms).forEach(realm -> realm.handle(realmEvent));
-        } else if (realmEvent instanceof RealmLetterEvent<?> letterEvent) {
+        } else if (realmEvent instanceof RealmTriggerEvent letterEvent) {
             find(letterEvent.realmId()).ifPresent(realm -> realm.handle(letterEvent));
         }
     }

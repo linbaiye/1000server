@@ -23,7 +23,7 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
 
     private RealmGroup realmGroup;
     private RealmFactory realmFactory;
-    private RealmEventHandler eventHandler;
+    private CrossRealmEventHandler eventHandler;
     private List<Realm> realms;
     private LocalDateTime dateTime;
 
@@ -35,12 +35,12 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
     void setUp() {
         setup();
         realmFactory = Mockito.mock(RealmFactory.class);
-        when(realmFactory.createRealm(anyInt(), any(RealmEventHandler.class))).thenAnswer(invocationOnMock -> {
+        when(realmFactory.createRealm(anyInt(), any(CrossRealmEventHandler.class))).thenAnswer(invocationOnMock -> {
             Realm realm = Mockito.mock(Realm.class);
             when(realm.id()).thenReturn(invocationOnMock.getArgument(0));
             return realm;
         });
-        eventHandler = Mockito.mock(RealmEventHandler.class);
+        eventHandler = Mockito.mock(CrossRealmEventHandler.class);
         realms = new ArrayList<>();
         latchRealm = Mockito.mock(Realm.class);
         countDownLatch = new CountDownLatch(3);
@@ -88,12 +88,12 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
         realms.add(createHalfHourDungeon(() -> dateTime));
         realms.add(latchRealm);
         realmGroup = new RealmGroup(realms, realmFactory, eventHandler, () -> dateTime);
-        when(realmFactory.createRealm(anyInt(), any(RealmEventHandler.class))).thenReturn(createHalfHourDungeon(() -> dateTime));
+        when(realmFactory.createRealm(anyInt(), any(CrossRealmEventHandler.class))).thenReturn(createHalfHourDungeon(() -> dateTime));
         new Thread(realmGroup).start();
         countDownLatch.await(30, TimeUnit.SECONDS);
         realmGroup.shutdown();
         verify(crossRealmEventHandler, times(1)).handle(any(RealmTeleportEvent.class));
-        verify(realmFactory, times(1)).createRealm(anyInt(), any(RealmEventHandler.class));
+        verify(realmFactory, times(1)).createRealm(anyInt(), any(CrossRealmEventHandler.class));
     }
 
     @Test
@@ -105,11 +105,11 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
         realms.add(createOneHourDungeon(() -> dateTime));
         realms.add(latchRealm);
         realmGroup = new RealmGroup(realms, realmFactory, eventHandler, () -> dateTime);
-        when(realmFactory.createRealm(anyInt(), any(RealmEventHandler.class))).thenReturn(createOneHourDungeon(() -> dateTime));
+        when(realmFactory.createRealm(anyInt(), any(CrossRealmEventHandler.class))).thenReturn(createOneHourDungeon(() -> dateTime));
         new Thread(realmGroup).start();
         countDownLatch.await(30, TimeUnit.SECONDS);
         realmGroup.shutdown();
         verify(crossRealmEventHandler, times(1)).handle(any(RealmTeleportEvent.class));
-        verify(realmFactory, times(1)).createRealm(anyInt(), any(RealmEventHandler.class));
+        verify(realmFactory, times(1)).createRealm(anyInt(), any(CrossRealmEventHandler.class));
     }
 }

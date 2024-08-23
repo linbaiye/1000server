@@ -638,5 +638,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.NpcPositionPacketOrBuilder getNpcPositionOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ChatPacket chat = 46;</code>
+   * @return Whether the chat field is set.
+   */
+  boolean hasChat();
+  /**
+   * <code>.org.y1000.network.gen.ChatPacket chat = 46;</code>
+   * @return The chat.
+   */
+  org.y1000.network.gen.ChatPacket getChat();
+  /**
+   * <code>.org.y1000.network.gen.ChatPacket chat = 46;</code>
+   */
+  org.y1000.network.gen.ChatPacketOrBuilder getChatOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

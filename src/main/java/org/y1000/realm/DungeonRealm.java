@@ -30,10 +30,11 @@ final class DungeonRealm extends AbstractRealm {
                         PlayerManager playerManager,
                         DynamicObjectManager dynamicObjectManager,
                         TeleportManager teleportManager,
-                        RealmEventHandler crossRealmEventHandler,
-                        MapSdb mapSdb, int interval) {
+                        CrossRealmEventHandler crossRealmEventHandler,
+                        MapSdb mapSdb, int interval,
+                        ChatManager chatManager) {
         this(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb,
-                interval, LocalDateTime::now);
+                interval, LocalDateTime::now, chatManager);
     }
 
     public DungeonRealm(int id,
@@ -44,15 +45,14 @@ final class DungeonRealm extends AbstractRealm {
                         PlayerManager playerManager,
                         DynamicObjectManager dynamicObjectManager,
                         TeleportManager teleportManager,
-                        RealmEventHandler crossRealmEventHandler,
+                        CrossRealmEventHandler crossRealmEventHandler,
                         MapSdb mapSdb,
                         int interval,
-                        Supplier<LocalDateTime> timeSupplier) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb);
+                        Supplier<LocalDateTime> timeSupplier, ChatManager chatManager) {
+        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, chatManager);
         if (interval != 180000 && interval != 360000) {
             log.warn("Not a neat dungeon realm: {}.", id);
         }
-
         Validate.notNull(timeSupplier);
         this.interval = interval;
         this.dateTimeSupplier = timeSupplier;

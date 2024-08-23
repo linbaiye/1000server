@@ -9,7 +9,7 @@ import org.y1000.message.PlayerTextEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.realm.event.BroadcastSoundEvent;
 import org.y1000.realm.event.BroadcastChatEvent;
-import org.y1000.realm.event.RealmLetterEvent;
+import org.y1000.realm.event.RealmTriggerEvent;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
@@ -58,7 +58,7 @@ public final class Yaohua extends AbstractKillableDynamicObject
         damageLife(damage);
         if (currentLife() <= 0) {
             emitEvent(new CrossRealmEvent(this, new BroadcastSoundEvent("8950")));
-            emitEvent(new CrossRealmEvent(this, new RealmLetterEvent<>(1, "九尾狐酒母", "shift")));
+            emitEvent(new CrossRealmEvent(this, new RealmTriggerEvent(1, "九尾狐酒母")));
             emitEvent(new CrossRealmEvent(this, new BroadcastChatEvent(null, PlayerTextEvent.TextType.NINE_TAIL_FOX_SHIFT, PlayerTextEvent.ColorType.SIX_GRADE)));
             changeAnimation(1);
         } else {

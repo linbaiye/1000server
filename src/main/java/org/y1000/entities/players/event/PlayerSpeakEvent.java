@@ -1,14 +1,20 @@
 package org.y1000.entities.players.event;
 
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.PlayerEventVisitor;
+import org.y1000.network.gen.ChatPacket;
 import org.y1000.network.gen.Packet;
 
-public class PlayerSpeakEvent extends AbstractPlayerEvent {
+public final class PlayerSpeakEvent extends AbstractPlayerEvent {
+
     private final Packet packet;
     public PlayerSpeakEvent(Player source, String content) {
         super(source);
-        packet = null;
+        Validate.notNull(content);
+        packet = Packet.newBuilder()
+                .setChat(ChatPacket.newBuilder().setId(player().id())
+                        .setContent(content)).build();
     }
 
     @Override
@@ -18,6 +24,6 @@ public class PlayerSpeakEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
-        return null;
+        return packet;
     }
 }

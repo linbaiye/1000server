@@ -455,6 +455,11 @@ message NpcPositionPacket {
   repeated string nameList = 3;
 }
 
+message ChatPacket {
+  int64 id = 1;
+  string content = 2;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -500,6 +505,7 @@ message Packet {
     ShowTeleportPacket showTeleport = 43;
     BreakRopePacket breakRope = 44;
     NpcPositionPacket npcPosition = 45;
+    ChatPacket chat = 46;
   }
 }
 

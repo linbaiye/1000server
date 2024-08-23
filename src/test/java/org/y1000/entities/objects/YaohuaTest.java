@@ -14,7 +14,7 @@ import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuFactory;
 import org.y1000.realm.RealmMap;
 import org.y1000.realm.event.BroadcastSoundEvent;
-import org.y1000.realm.event.RealmLetterEvent;
+import org.y1000.realm.event.RealmTriggerEvent;
 import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.sdb.DynamicObjectSdbImpl;
 import org.y1000.sdb.ItemDrugSdbImpl;
@@ -74,7 +74,7 @@ class YaohuaTest extends AbstractUnitTestFixture {
         while (yaohua.currentLife() > 0)
             yaohua.attackedBy(attacker);
         assertInstanceOf(BroadcastSoundEvent.class, eventListener.removeFirst(CrossRealmEvent.class).realmEvent());
-        var realmEvent = (RealmLetterEvent<?>)eventListener.removeFirst(CrossRealmEvent.class).realmEvent();
+        var realmEvent = (RealmTriggerEvent)eventListener.removeFirst(CrossRealmEvent.class).realmEvent();
         assertEquals(1, realmEvent.realmId());
         assertEquals("九尾狐酒母", realmEvent.toName());
     }

@@ -20,10 +20,12 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
     PlayerManager playerManager;
     DynamicObjectManager dynamicObjectManager;
     TeleportManager teleportManager;
-    RealmEventHandler crossRealmEventHandler;
+    CrossRealmEventHandler crossRealmEventHandler;
     MapSdb mapSdb;
 
     CreateGateSdb createGateSdb;
+
+    ChatManager chatManager;
 
     void setup() {
         eventSender = new RealmEntityEventSender(Mockito.mock(AOIManager.class));
@@ -35,19 +37,20 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
         createGateSdb = Mockito.mock(CreateGateSdb.class);
         when(createGateSdb.getNames(anyInt())).thenReturn(Collections.emptySet());
         teleportManager = new TeleportManager(1, realmMap, createGateSdb, new EntityIdGenerator(), new RelevantScopeManager());
-        crossRealmEventHandler = Mockito.mock(RealmEventHandler.class);
+        crossRealmEventHandler = Mockito.mock(CrossRealmEventHandler.class);
         mapSdb = Mockito.mock(MapSdb.class);
+        chatManager = Mockito.mock(ChatManager.class);
     }
 
     DungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier) {
-        return new DungeonRealm(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, interval, dateTimeSupplier);
+        return new DungeonRealm(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, interval, dateTimeSupplier, chatManager);
     }
 
     DungeonRealm createHalfHourDungeon(Supplier<LocalDateTime> dateTimeSupplier) {
-        return new DungeonRealm(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, 180000, dateTimeSupplier);
+        return new DungeonRealm(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, 180000, dateTimeSupplier, chatManager);
     }
 
     DungeonRealm createOneHourDungeon(Supplier<LocalDateTime> dateTimeSupplier) {
-        return new DungeonRealm(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, 360000, dateTimeSupplier);
+        return new DungeonRealm(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, 360000, dateTimeSupplier, chatManager);
     }
 }

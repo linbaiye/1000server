@@ -17,7 +17,7 @@ import java.util.concurrent.*;
 
 
 @Slf4j
-public final class RealmManager implements Runnable , RealmEventHandler {
+public final class RealmManager implements Runnable , CrossRealmEventHandler {
 
     private final Map<Player, Integer> playerRealmMap;
 
@@ -129,11 +129,10 @@ public final class RealmManager implements Runnable , RealmEventHandler {
             handleTeleport(teleportEvent);
         } else if (realmEvent.realmEventType() == RealmEventType.BROADCAST) {
             groups.forEach(realmGroup -> realmGroup.handle(realmEvent));
-        } else if (realmEvent instanceof RealmLetterEvent<?> realmLetterEvent) {
-            RealmGroup group = realmIdGroupMap.get(realmLetterEvent.realmId());
+        } else if (realmEvent instanceof RealmTriggerEvent realmTriggerEvent) {
+            RealmGroup group = realmIdGroupMap.get(realmTriggerEvent.realmId());
             if (group != null) {
-                log.debug("Sent to group with realm {}.",realmLetterEvent.realmId());
-                group.handle(realmLetterEvent);
+                group.handle(realmTriggerEvent);
             } else {
                 log.debug("No group to handle event.");
             }

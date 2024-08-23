@@ -1,5 +1,6 @@
 package org.y1000.message.clientevent.chat;
 
+import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
@@ -10,12 +11,28 @@ public record ClientWorldShoutEvent(String content) implements ClientRealmChatEv
 
     @Override
     public RealmEvent toRealmEvent(Player player) {
-        return new BroadcastChatEvent(player.viewName() + ":" + content, PlayerTextEvent.TextType.CUSTOM,
+        return new BroadcastChatEvent(player.viewName() + "：" + content, PlayerTextEvent.TextType.CUSTOM,
                 PlayerTextEvent.ColorType.EIGHT_GRADE);
     }
 
     @Override
     public boolean canSend(Player player) {
         return player != null && player.stateEnum() != State.DIE;
+    }
+
+    public static boolean isFormatCorrect(String text) {
+        if (StringUtils.isEmpty(text)) {
+            return false;
+        }
+        if (!text.startsWith("!") && !text.startsWith("！")) {
+            return false;
+        }
+        return !StringUtils.isEmpty(text.substring(1).trim());
+    }
+
+    public static ClientWorldShoutEvent parse(String text) {
+        if (!isFormatCorrect(text))
+            return null;
+        return new ClientWorldShoutEvent(text.substring(1));
     }
 }

@@ -181,14 +181,6 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         return getEntities();
     }
 
-    @Override
-    public void sendDirectMessage(String playerName, String content) {
-        if (playerName == null || content == null) {
-            return;
-        }
-        /*getEntities().stream().filter(player -> player.viewName().equals(playerName))
-                .findFirst().ifPresent(player -> player.emitEvent(PlayerTextEvent.()));*/
-    }
 
     @Override
     public void onEvent(EntityEvent entityEvent) {

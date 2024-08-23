@@ -40,6 +40,7 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         NINE_GRADE(9),
         TEN_GRADE(10),
         SAY(11),
+        PRIVATE_CHAT(12),
         ;
 
         private final int val;
@@ -223,7 +224,8 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         return new PlayerTextEvent(player, name + " 获得 " + number + "个。", TextType.CUSTOM, Location.LEFT);
     }
 
-    public static PlayerTextEvent nineTailFoxShift(Player player) {
-        return new PlayerTextEvent(player, null, TextType.CUSTOM, Location.DOWN, ColorType.SIX_GRADE);
+
+    public static PlayerTextEvent privateChat(Player player, String content) {
+        return new PlayerTextEvent(player, content, TextType.CUSTOM, Location.DOWN, ColorType.PRIVATE_CHAT);
     }
 }

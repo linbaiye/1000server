@@ -4,10 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.PrivateChatEvent;
+public record ClientPrivateChatEvent(String receiver, String content) implements ClientRealmChatEvent {
 
-public record ClientDirectMessageEvent(String receiver, String content) implements ClientRealmChatEvent {
-
-    public ClientDirectMessageEvent {
+    public ClientPrivateChatEvent {
         Validate.isTrue(receiver != null);
         Validate.isTrue(content != null);
     }
@@ -20,21 +20,21 @@ public record ClientDirectMessageEvent(String receiver, String content) implemen
         return split.length >= 2 && StringUtils.isNotEmpty(split[1]);
     }
 
-    public static ClientDirectMessageEvent parse(String text) {
+    public static ClientPrivateChatEvent parse(String text) {
         Validate.isTrue(isFormatCorrect(text));
         String[] split = text.split(" ");
         String replace = text.replace("@纸条 " + split[1], "");
-        return new ClientDirectMessageEvent(split[1], replace.startsWith(" ") ? replace.substring(1) : replace);
+        return new ClientPrivateChatEvent(split[1], replace.startsWith(" ") ? replace.substring(1) : replace);
     }
 
     @Override
     public boolean canSend(Player player) {
-        return true;
+        return player != null;
     }
-
 
     @Override
     public RealmEvent toRealmEvent(Player player) {
-        return null;
+        Validate.notNull(player);
+        return new PrivateChatEvent(receiver, player.viewName(), content);
     }
 }

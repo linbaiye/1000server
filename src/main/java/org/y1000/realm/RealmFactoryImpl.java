@@ -69,7 +69,7 @@ public final class RealmFactoryImpl implements RealmFactory {
 
     @Override
     public Realm createRealm(int id,
-                             RealmEventHandler crossRealmEventHandler) {
+                             CrossRealmEventHandler crossRealmEventHandler) {
         try {
             Validate.notNull(crossRealmEventHandler);
             var realmMap = RealmMap.Load(mapSdb.getMapName(id), mapSdb.getTilName(id), mapSdb.getObjName(id), mapSdb.getRofName(id))
@@ -93,7 +93,9 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .npcManager(npcManager)
                     .playerManager(playerManager)
                     .realmMap(realmMap)
-                    .teleportManager(teleportManager);
+                    .teleportManager(teleportManager)
+                    .chatManager(new ChatManagerImpl(playerManager, eventSender, crossRealmEventHandler))
+                    ;
             return mapSdb.getRegenInterval(id)
                     .map(builder::buildDungeon)
                     .orElseGet(builder::buildNormal);
@@ -113,8 +115,10 @@ public final class RealmFactoryImpl implements RealmFactory {
         private DynamicObjectManager dynamicObjectManager;
         private TeleportManager teleportManager;
         private int id;
-        private RealmEventHandler crossRealmEventHandler;
+        private CrossRealmEventHandler crossRealmEventHandler;
         private MapSdb mapSdb;
+
+        private ChatManager chatManager;
 
         private RealmBuilder() {
         }
@@ -132,6 +136,12 @@ public final class RealmFactoryImpl implements RealmFactory {
             this.eventSender = eventSender;
             return this;
         }
+
+        public RealmBuilder chatManager(ChatManager chatManager) {
+            this.chatManager = chatManager;
+            return this;
+        }
+
 
         public RealmBuilder itemManager(ItemManagerImpl itemManager) {
             this.itemManager = itemManager;
@@ -163,7 +173,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder crossRealmEventHandler(RealmEventHandler crossRealmEventHandler) {
+        public RealmBuilder crossRealmEventHandler(CrossRealmEventHandler crossRealmEventHandler) {
             this.crossRealmEventHandler = crossRealmEventHandler;
             return this;
         }
@@ -175,12 +185,12 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         public Realm buildNormal() {
             log.debug("Creating normal realm {}.", id);
-            return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb);
+            return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, chatManager);
         }
 
         public Realm buildDungeon(int interval) {
             log.debug("Creating dungeon realm {}.", id);
-            return new DungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, interval);
+            return new DungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, interval, chatManager);
         }
     }
 }
