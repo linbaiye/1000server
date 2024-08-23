@@ -3,7 +3,6 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.message.PlayerTextEvent;
@@ -132,8 +131,8 @@ class DungeonRealmTest extends AbstractRealmUnitTextFixture {
         when(playerManager.allPlayers()).thenReturn(Collections.singleton(player));
         when(playerManager.contains(player)).thenReturn(true);
         dungeonRealm.close();
-        verify(crossRealmEventHandler, times(1)).handle(any(RealmTeleportEvent.class));
+        verify(crossRealmEventSender, times(1)).send(any(RealmTeleportEvent.class));
         dungeonRealm.close();
-        verify(crossRealmEventHandler, times(1)).handle(any(RealmTeleportEvent.class));
+        verify(crossRealmEventSender, times(1)).send(any(RealmTeleportEvent.class));
     }
 }

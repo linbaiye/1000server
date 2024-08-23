@@ -69,9 +69,9 @@ public final class RealmFactoryImpl implements RealmFactory {
 
     @Override
     public Realm createRealm(int id,
-                             CrossRealmEventHandler crossRealmEventHandler) {
+                             CrossRealmEventSender crossRealmEventSender) {
         try {
-            Validate.notNull(crossRealmEventHandler);
+            Validate.notNull(crossRealmEventSender);
             var realmMap = RealmMap.Load(mapSdb.getMapName(id), mapSdb.getTilName(id), mapSdb.getObjName(id), mapSdb.getRofName(id))
                     .orElseThrow(() -> new IllegalArgumentException("No map for " + id));
             var entityIdGenerator = new EntityIdGenerator();
@@ -80,12 +80,12 @@ public final class RealmFactoryImpl implements RealmFactory {
             var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
             var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
             var dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
-                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id), crossRealmEventHandler, realmMap);
+                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id), crossRealmEventSender, realmMap);
             var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager);
             var teleportManager = new TeleportManager(id, realmMap, createGateSdb, entityIdGenerator, aoiManager);
             var builder = RealmBuilder.builder()
                     .id(id)
-                    .crossRealmEventHandler(crossRealmEventHandler)
+                    .crossRealmEventHandler(crossRealmEventSender)
                     .dynamicObjectManager(dynamicObjectManager)
                     .eventSender(eventSender)
                     .itemManager(itemManager)
@@ -94,7 +94,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .playerManager(playerManager)
                     .realmMap(realmMap)
                     .teleportManager(teleportManager)
-                    .chatManager(new ChatManagerImpl(playerManager, eventSender, crossRealmEventHandler))
+                    .chatManager(new ChatManagerImpl(playerManager, eventSender, crossRealmEventSender))
                     ;
             return mapSdb.getRegenInterval(id)
                     .map(builder::buildDungeon)
@@ -115,7 +115,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         private DynamicObjectManager dynamicObjectManager;
         private TeleportManager teleportManager;
         private int id;
-        private CrossRealmEventHandler crossRealmEventHandler;
+        private CrossRealmEventSender crossRealmEventSender;
         private MapSdb mapSdb;
 
         private ChatManager chatManager;
@@ -173,8 +173,8 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder crossRealmEventHandler(CrossRealmEventHandler crossRealmEventHandler) {
-            this.crossRealmEventHandler = crossRealmEventHandler;
+        public RealmBuilder crossRealmEventHandler(CrossRealmEventSender crossRealmEventSender) {
+            this.crossRealmEventSender = crossRealmEventSender;
             return this;
         }
 
@@ -185,12 +185,12 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         public Realm buildNormal() {
             log.debug("Creating normal realm {}.", id);
-            return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, chatManager);
+            return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
         }
 
         public Realm buildDungeon(int interval) {
             log.debug("Creating dungeon realm {}.", id);
-            return new DungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, interval, chatManager);
+            return new DungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager);
         }
     }
 }

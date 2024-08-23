@@ -35,6 +35,6 @@ public record ClientPrivateChatEvent(String receiver, String content) implements
     @Override
     public RealmEvent toRealmEvent(Player player) {
         Validate.notNull(player);
-        return new PrivateChatEvent(receiver, player.viewName(), content);
+        return new PrivateChatEvent(receiver, player.viewName(), content, false);
     }
 }

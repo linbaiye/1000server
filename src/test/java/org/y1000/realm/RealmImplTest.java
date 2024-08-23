@@ -28,7 +28,7 @@ class RealmImplTest extends AbstractRealmUnitTextFixture {
     void setUp() {
         setup();
         player = Mockito.mock(Player.class);
-        realm = new RealmImpl(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, chatManager);
+        realm = new RealmImpl(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
         connection = Mockito.mock(Connection.class);
         realm.handle(new ConnectionEstablishedEvent(realm.id(), player, connection));
     }

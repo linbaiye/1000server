@@ -15,10 +15,10 @@ final class RealmImpl extends AbstractRealm {
                      PlayerManager playerManager,
                      DynamicObjectManager dynamicObjectManager,
                      TeleportManager teleportManager,
-                     CrossRealmEventHandler crossRealmEventHandler,
+                     CrossRealmEventSender crossRealmEventSender,
                      MapSdb mapSdb,
                      ChatManager chatManager) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, chatManager);
+        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
     }
 
     @Override

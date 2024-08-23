@@ -30,10 +30,10 @@ final class DungeonRealm extends AbstractRealm {
                         PlayerManager playerManager,
                         DynamicObjectManager dynamicObjectManager,
                         TeleportManager teleportManager,
-                        CrossRealmEventHandler crossRealmEventHandler,
+                        CrossRealmEventSender crossRealmEventSender,
                         MapSdb mapSdb, int interval,
                         ChatManager chatManager) {
-        this(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb,
+        this(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
                 interval, LocalDateTime::now, chatManager);
     }
 
@@ -45,11 +45,11 @@ final class DungeonRealm extends AbstractRealm {
                         PlayerManager playerManager,
                         DynamicObjectManager dynamicObjectManager,
                         TeleportManager teleportManager,
-                        CrossRealmEventHandler crossRealmEventHandler,
+                        CrossRealmEventSender crossRealmEventSender,
                         MapSdb mapSdb,
                         int interval,
                         Supplier<LocalDateTime> timeSupplier, ChatManager chatManager) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventHandler, mapSdb, chatManager);
+        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
         if (interval != 180000 && interval != 360000) {
             log.warn("Not a neat dungeon realm: {}.", id);
         }
@@ -105,7 +105,7 @@ final class DungeonRealm extends AbstractRealm {
     void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
         if (closing) {
             teleportEvent.getConnection().write(PlayerTextEvent.bottom(teleportEvent.player(), "当前无法进入，请稍后重试。"));
-            getCrossRealmEventHandler().handle(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection()));
+            getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection()));
         }
         acceptTeleport(teleportEvent);
         /*if (isOpening()) {

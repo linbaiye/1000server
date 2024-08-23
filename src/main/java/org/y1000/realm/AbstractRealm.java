@@ -25,7 +25,7 @@ abstract class AbstractRealm implements Realm {
     private final TeleportManager teleportManager;
 
     private final int id;
-    private final CrossRealmEventHandler crossRealmEventHandler;
+    private final CrossRealmEventSender crossRealmEventSender;
     private final MapSdb mapSdb;
     private volatile boolean shutdown;
     private long accumulatedMillis;
@@ -41,14 +41,14 @@ abstract class AbstractRealm implements Realm {
                          PlayerManager playerManager,
                          DynamicObjectManager dynamicObjectManager,
                          TeleportManager teleportManager,
-                         CrossRealmEventHandler crossRealmEventHandler,
+                         CrossRealmEventSender crossRealmEventSender,
                          MapSdb mapSdb,
                          ChatManager chatManager) {
         Validate.notNull(realmMap);
         Validate.notNull(eventSender);
         Validate.notNull(itemManager);
         Validate.notNull(playerManager);
-        Validate.notNull(crossRealmEventHandler);
+        Validate.notNull(crossRealmEventSender);
         Validate.notNull(mapSdb);
         this.realmMap = realmMap;
         this.eventSender = eventSender;
@@ -57,7 +57,7 @@ abstract class AbstractRealm implements Realm {
         this.dynamicObjectManager = dynamicObjectManager;
         this.teleportManager = teleportManager;
         this.id = id;
-        this.crossRealmEventHandler = crossRealmEventHandler;
+        this.crossRealmEventSender = crossRealmEventSender;
         this.mapSdb = mapSdb;
         this.entityManagers = new ArrayList<>();
         entityManagers.add(playerManager);
@@ -124,12 +124,12 @@ abstract class AbstractRealm implements Realm {
         playerManager.clearPlayer(event.player());
         var connection = eventSender.remove(event.player());
         realmTeleportEvent.setConnection(connection);
-        crossRealmEventHandler.handle(event);
+        crossRealmEventSender.send(event);
         log().debug("Removed player {}.", event.player().id());
     }
 
-    CrossRealmEventHandler getCrossRealmEventHandler() {
-        return crossRealmEventHandler;
+    CrossRealmEventSender getCrossRealmEventHandler() {
+        return crossRealmEventSender;
     }
 
     void acceptTeleport(RealmTeleportEvent teleportEvent) {

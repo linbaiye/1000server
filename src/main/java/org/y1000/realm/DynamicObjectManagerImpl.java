@@ -29,7 +29,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
     private final CreateDynamicObjectSdb createDynamicObjectSdb;
 
-    private final CrossRealmEventHandler crossRealmEventHandler;
+    private final CrossRealmEventSender crossRealmEventSender;
 
     private final RealmMap realmMap;
 
@@ -38,14 +38,14 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
                                     EntityEventSender eventSender,
                                     GroundItemManager itemManager,
                                     CreateDynamicObjectSdb dynamicObjectSdb,
-                                    CrossRealmEventHandler crossRealmEventHandler,
+                                    CrossRealmEventSender crossRealmEventSender,
                                     RealmMap realmMap) {
         this.factory = factory;
         this.entityIdGenerator = entityIdGenerator;
         this.eventSender = eventSender;
         this.itemManager = itemManager;
         this.createDynamicObjectSdb = dynamicObjectSdb;
-        this.crossRealmEventHandler = crossRealmEventHandler;
+        this.crossRealmEventSender = crossRealmEventSender;
         this.realmMap = realmMap;
         respawningEntityManager = new RespawningEntityManager<>();
     }
@@ -67,7 +67,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         } else if (entityEvent instanceof EntityLifebarEvent entityLifebarEvent) {
             eventSender.notifyVisiblePlayers(entityEvent.source(), entityLifebarEvent);
         } else if (entityEvent instanceof CrossRealmEvent crossRealmEvent) {
-            crossRealmEventHandler.handle(crossRealmEvent.realmEvent());
+            crossRealmEventSender.send(crossRealmEvent.realmEvent());
         } else if (entityEvent instanceof DynamicObjectDieEvent dieEvent) {
             createDynamicObjectSdb.getFirstNo(dieEvent.object().idName())
                             .flatMap(createDynamicObjectSdb::getDropItem)

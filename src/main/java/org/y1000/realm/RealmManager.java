@@ -17,20 +17,21 @@ import java.util.concurrent.*;
 
 
 @Slf4j
-public final class RealmManager implements Runnable , CrossRealmEventHandler {
+public final class RealmManager implements Runnable , CrossRealmEventSender {
 
     private final Map<Player, Integer> playerRealmMap;
 
     private final Map<Connection, Player> connectionPlayerMap;
 
+    private final Map<String, Integer> playerNameRealmIdMap;
+
     private ExecutorService executorService;
 
-    private final Queue<ConnectionEvent> eventQueue;
+    private final Queue<Object> eventQueue;
 
     private Map<Integer, RealmGroup> realmIdGroupMap;
 
     private final List<RealmGroup> groups;
-
 
     private volatile boolean shutdown;
 
@@ -40,6 +41,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler {
         connectionPlayerMap = new HashMap<>(500);
         shutdown = false;
         groups = new ArrayList<>();
+        playerNameRealmIdMap = new HashMap<>();
     }
 
 
@@ -55,6 +57,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler {
         if (playerRealmMap.containsKey(event.player())) {
             // need to close current connection.
             log.error("Duplicate connection for {}.", event.player());
+            event.connection().close();
             return;
         }
         var playerLastRealm = getPlayerLastRealm(event.player());
@@ -66,6 +69,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler {
         }
         connectionPlayerMap.put(event.connection(), event.player());
         playerRealmMap.put(event.player(), playerLastRealm);
+        playerNameRealmIdMap.put(event.player().viewName(), playerLastRealm);
         group.handle(new ConnectionEstablishedEvent(playerLastRealm, event.player(), event.connection()));
     }
 
@@ -87,6 +91,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler {
         if (removed != null) {
             Integer realmId = playerRealmMap.remove(removed);
             realmIdGroupMap.get(realmId).handle(new PlayerDisconnectedEvent(realmId, removed));
+            playerNameRealmIdMap.remove(removed.viewName());
         }
     }
 
@@ -100,6 +105,29 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler {
         }
     }
 
+    private void handle(RealmEvent realmEvent) {
+        if (realmEvent instanceof RealmTeleportEvent teleportEvent) {
+            handleTeleport(teleportEvent);
+        } else if (realmEvent instanceof BroadcastEvent) {
+            groups.forEach(realmGroup -> realmGroup.handle(realmEvent));
+        } else if (realmEvent instanceof RealmTriggerEvent realmTriggerEvent) {
+            RealmGroup group = realmIdGroupMap.get(realmTriggerEvent.realmId());
+            if (group != null) {
+                group.handle(realmTriggerEvent);
+            }
+        } else if (realmEvent instanceof PrivateChatEvent privateChat) {
+            Integer realm = playerNameRealmIdMap.get(privateChat.receiverName());
+            if (realm == null) {
+                if (playerNameRealmIdMap.containsKey(privateChat.senderName()))
+                    handle(privateChat.noRecipient());
+            } else {
+                RealmGroup group = realmIdGroupMap.get(realm);
+                if (group != null) {
+                    group.handle(privateChat);
+                }
+            }
+        }
+    }
 
     public boolean shut() throws InterruptedException {
         executorService.shutdown();
@@ -107,7 +135,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler {
         return executorService.awaitTermination(60, TimeUnit.SECONDS);
     }
 
-    public void queueEvent(ConnectionEvent event) {
+    public void queueEvent(Object event) {
         synchronized (eventQueue) {
             eventQueue.add(event);
             eventQueue.notifyAll();
@@ -118,25 +146,15 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler {
         int realmId = teleportEvent.realmId();
         playerRealmMap.remove(teleportEvent.player());
         playerRealmMap.put(teleportEvent.player(), realmId);
+        playerNameRealmIdMap.put(teleportEvent.player().viewName(), realmId);
         RealmGroup group = realmIdGroupMap.get(realmId);
         group.handle(teleportEvent);
     }
 
     // Multi-threads involved, careful.
     @Override
-    public void handle(RealmEvent realmEvent) {
-        if (realmEvent instanceof RealmTeleportEvent teleportEvent) {
-            handleTeleport(teleportEvent);
-        } else if (realmEvent.realmEventType() == RealmEventType.BROADCAST) {
-            groups.forEach(realmGroup -> realmGroup.handle(realmEvent));
-        } else if (realmEvent instanceof RealmTriggerEvent realmTriggerEvent) {
-            RealmGroup group = realmIdGroupMap.get(realmTriggerEvent.realmId());
-            if (group != null) {
-                group.handle(realmTriggerEvent);
-            } else {
-                log.debug("No group to handle event.");
-            }
-        }
+    public void send(RealmEvent realmEvent) {
+        queueEvent(realmEvent);
     }
 
     private void setRealmGroups(List<RealmGroup> groups) {
@@ -149,7 +167,6 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler {
     }
 
     private static final Set<Integer> IGNORED_REALMS = Set.of(31, 43, 46, 70, 71, 89);
-
 
     private static List<Integer> getRealmIds(MapSdb mapSdb) {
         var allIds = new ArrayList<>(mapSdb.getAllIds());
@@ -187,7 +204,7 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler {
     public void run() {
         while (!shutdown) {
             try {
-                ConnectionEvent event;
+                Object event;
                 synchronized (eventQueue) {
                     while (eventQueue.isEmpty()) {
                         eventQueue.wait();
@@ -195,7 +212,10 @@ public final class RealmManager implements Runnable , CrossRealmEventHandler {
                     event = eventQueue.poll();
                     eventQueue.notifyAll();
                 }
-                handle(event);
+                if (event instanceof ConnectionEvent connectionEvent)
+                    handle(connectionEvent);
+                else if (event instanceof RealmEvent realmEvent)
+                    handle(realmEvent);
             } catch (Exception e) {
                 log.error("Exception ", e);
             }

@@ -1,9 +1,6 @@
 package org.y1000.realm.event;
 
-public record RealmTriggerEvent(int realmId, String toName) implements RealmEvent {
+public record RealmTriggerEvent(int realmId, String toName) implements IdentityRealmEvent {
 
-    @Override
-    public RealmEventType realmEventType() {
-        return RealmEventType.IDENTIFIED;
-    }
+
 }
