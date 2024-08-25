@@ -68,6 +68,7 @@ private static final long serialVersionUID = 0L;
     SIMPLECOMMAND(21),
     DYE(22),
     SAY(23),
+    BANKOPERATION(24),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -108,6 +109,7 @@ private static final long serialVersionUID = 0L;
         case 21: return SIMPLECOMMAND;
         case 22: return DYE;
         case 23: return SAY;
+        case 24: return BANKOPERATION;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -836,6 +838,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
   }
 
+  public static final int BANKOPERATION_FIELD_NUMBER = 24;
+  /**
+   * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+   * @return Whether the bankOperation field is set.
+   */
+  @java.lang.Override
+  public boolean hasBankOperation() {
+    return typeCase_ == 24;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+   * @return The bankOperation.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientBankOperationPacket getBankOperation() {
+    if (typeCase_ == 24) {
+       return (org.y1000.network.gen.ClientBankOperationPacket) type_;
+    }
+    return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientBankOperationPacketOrBuilder getBankOperationOrBuilder() {
+    if (typeCase_ == 24) {
+       return (org.y1000.network.gen.ClientBankOperationPacket) type_;
+    }
+    return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -918,6 +951,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 23) {
       output.writeMessage(23, (org.y1000.network.gen.ClientSayPacket) type_);
+    }
+    if (typeCase_ == 24) {
+      output.writeMessage(24, (org.y1000.network.gen.ClientBankOperationPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1019,6 +1055,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 23) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(23, (org.y1000.network.gen.ClientSayPacket) type_);
+    }
+    if (typeCase_ == 24) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(24, (org.y1000.network.gen.ClientBankOperationPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1129,6 +1169,10 @@ private static final long serialVersionUID = 0L;
         if (!getSay()
             .equals(other.getSay())) return false;
         break;
+      case 24:
+        if (!getBankOperation()
+            .equals(other.getBankOperation())) return false;
+        break;
       case 0:
       default:
     }
@@ -1235,6 +1279,10 @@ private static final long serialVersionUID = 0L;
       case 23:
         hash = (37 * hash) + SAY_FIELD_NUMBER;
         hash = (53 * hash) + getSay().hashCode();
+        break;
+      case 24:
+        hash = (37 * hash) + BANKOPERATION_FIELD_NUMBER;
+        hash = (53 * hash) + getBankOperation().hashCode();
         break;
       case 0:
       default:
@@ -1439,6 +1487,9 @@ private static final long serialVersionUID = 0L;
       if (sayBuilder_ != null) {
         sayBuilder_.clear();
       }
+      if (bankOperationBuilder_ != null) {
+        bankOperationBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1571,6 +1622,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 23 &&
           sayBuilder_ != null) {
         result.type_ = sayBuilder_.build();
+      }
+      if (typeCase_ == 24 &&
+          bankOperationBuilder_ != null) {
+        result.type_ = bankOperationBuilder_.build();
       }
     }
 
@@ -1709,6 +1764,10 @@ private static final long serialVersionUID = 0L;
         }
         case SAY: {
           mergeSay(other.getSay());
+          break;
+        }
+        case BANKOPERATION: {
+          mergeBankOperation(other.getBankOperation());
           break;
         }
         case TYPE_NOT_SET: {
@@ -1902,6 +1961,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 23;
               break;
             } // case 186
+            case 194: {
+              input.readMessage(
+                  getBankOperationFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 24;
+              break;
+            } // case 194
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -5198,6 +5264,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 23;
       onChanged();
       return sayBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientBankOperationPacket, org.y1000.network.gen.ClientBankOperationPacket.Builder, org.y1000.network.gen.ClientBankOperationPacketOrBuilder> bankOperationBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+     * @return Whether the bankOperation field is set.
+     */
+    @java.lang.Override
+    public boolean hasBankOperation() {
+      return typeCase_ == 24;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+     * @return The bankOperation.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientBankOperationPacket getBankOperation() {
+      if (bankOperationBuilder_ == null) {
+        if (typeCase_ == 24) {
+          return (org.y1000.network.gen.ClientBankOperationPacket) type_;
+        }
+        return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 24) {
+          return bankOperationBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+     */
+    public Builder setBankOperation(org.y1000.network.gen.ClientBankOperationPacket value) {
+      if (bankOperationBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        bankOperationBuilder_.setMessage(value);
+      }
+      typeCase_ = 24;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+     */
+    public Builder setBankOperation(
+        org.y1000.network.gen.ClientBankOperationPacket.Builder builderForValue) {
+      if (bankOperationBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        bankOperationBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 24;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+     */
+    public Builder mergeBankOperation(org.y1000.network.gen.ClientBankOperationPacket value) {
+      if (bankOperationBuilder_ == null) {
+        if (typeCase_ == 24 &&
+            type_ != org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientBankOperationPacket.newBuilder((org.y1000.network.gen.ClientBankOperationPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 24) {
+          bankOperationBuilder_.mergeFrom(value);
+        } else {
+          bankOperationBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 24;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+     */
+    public Builder clearBankOperation() {
+      if (bankOperationBuilder_ == null) {
+        if (typeCase_ == 24) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 24) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        bankOperationBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+     */
+    public org.y1000.network.gen.ClientBankOperationPacket.Builder getBankOperationBuilder() {
+      return getBankOperationFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientBankOperationPacketOrBuilder getBankOperationOrBuilder() {
+      if ((typeCase_ == 24) && (bankOperationBuilder_ != null)) {
+        return bankOperationBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 24) {
+          return (org.y1000.network.gen.ClientBankOperationPacket) type_;
+        }
+        return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientBankOperationPacket, org.y1000.network.gen.ClientBankOperationPacket.Builder, org.y1000.network.gen.ClientBankOperationPacketOrBuilder> 
+        getBankOperationFieldBuilder() {
+      if (bankOperationBuilder_ == null) {
+        if (!(typeCase_ == 24)) {
+          type_ = org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
+        }
+        bankOperationBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientBankOperationPacket, org.y1000.network.gen.ClientBankOperationPacket.Builder, org.y1000.network.gen.ClientBankOperationPacketOrBuilder>(
+                (org.y1000.network.gen.ClientBankOperationPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 24;
+      onChanged();
+      return bankOperationBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

@@ -3,7 +3,6 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.chat.ClientChatEvent;
 import org.y1000.message.clientevent.chat.ClientRealmChatEvent;
 import org.y1000.message.clientevent.chat.ClientSpeakEvent;
@@ -49,6 +48,13 @@ class ChatManagerImpl implements ChatManager {
         playerManager.find(from).ifPresent(player -> handleClientChatEvent(player, clientChatEvent));
     }
 
+    private void handlePrivateChat(Player player, PrivateChatEvent chatEvent) {
+        log.debug("Found by name {}.", player.viewName());
+        player.emitEvent(chatEvent.toTextEvent(player));
+        if (chatEvent.needConfirm())
+            handleCrossRealmChat(chatEvent.createConfirmation());
+    }
+
     @Override
     public void handleCrossRealmChat(RealmEvent realmEvent) {
         if (realmEvent == null) {
@@ -56,10 +62,7 @@ class ChatManagerImpl implements ChatManager {
         }
         if (realmEvent instanceof PrivateChatEvent privateMessageEvent) {
             playerManager.allPlayers().stream().filter(p -> privateMessageEvent.receiverName().equals(p.viewName()))
-                    .findFirst().ifPresent(player -> {
-                        log.error("Found by name {}.", player.viewName());
-                        player.emitEvent(PlayerTextEvent.privateChat(player, privateMessageEvent.content()));
-                    });
+                    .findFirst().ifPresent(player -> handlePrivateChat(player, privateMessageEvent));
         }
     }
 }

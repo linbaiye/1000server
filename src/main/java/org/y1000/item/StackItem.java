@@ -72,6 +72,20 @@ public record StackItem(Item item, long number) implements Item {
         return item != null && name().equals(item.name());
     }
 
+    public boolean canMerge(Item item) {
+        return item instanceof StackItem stackItem &&
+                stackItem.name().equals(name())
+                && hasMoreSpace(stackItem.number());
+    }
+
+    public StackItem merge(Item item) {
+        if (!canMerge(item)) {
+            throw new IllegalArgumentException();
+        }
+        return increase(((StackItem)item).number());
+    }
+
+
     public StackItem decrease(long n) {
         Validate.isTrue(n > 0);
         return hasEnough(n) ? new StackItem(item, number() - n) : new StackItem(item, 0);

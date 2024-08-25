@@ -230,4 +230,36 @@ class InventoryTest {
         assertTrue(inventory.canTakeAll(null));
         assertTrue(inventory.canTakeAll(Collections.emptyList()));
     }
+
+    @Test
+    void removeItem() {
+        Item item = itemFactory.createItem("生药", 1000);
+        int slot = inventory.add(item);
+        StackItem removed = (StackItem)inventory.remove(slot, 1);
+        assertEquals( "生药", removed.name());
+        assertEquals(1, removed.number());
+        StackItem item1 = inventory.getItem(slot, StackItem.class).get();
+        assertEquals( "生药", item1.name());
+        assertEquals( 999, item1.number());
+        removed = (StackItem)inventory.remove(slot, 999);
+        assertEquals( "生药", removed.name());
+        assertEquals(999, removed.number());
+        assertNull(inventory.getItem(slot));
+
+        item = itemFactory.createItem("长剑");
+        slot = inventory.add(item);
+        Item remove = inventory.remove(slot, 1);
+        assertEquals("长剑", remove.name());
+        assertNull(inventory.getItem(slot));
+    }
+
+    @Test
+    void put() {
+        Item item = itemFactory.createItem("生药", 1000);
+        int slot = inventory.add(item);
+        inventory.put(slot, itemFactory.createItem("生药", 2));
+        StackItem stackItem = inventory.getItem(slot, StackItem.class).get();
+        assertEquals(1002, stackItem.number());
+        assertEquals("生药", stackItem.name());
+    }
 }

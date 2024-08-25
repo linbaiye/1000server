@@ -30,7 +30,7 @@ public final class JoinedRealmEvent extends AbstractPlayerEvent{
     }
 
 
-    private InventoryItemPacket toPacket(int index, Item item) {
+    public static InventoryItemPacket toPacket(int index, Item item) {
         InventoryItemPacket.Builder builder = InventoryItemPacket.newBuilder()
                 .setName(item.name())
                 .setColor(item.color())

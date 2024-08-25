@@ -117,6 +117,11 @@ public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
     }
 
     @Override
+    public boolean isBanker(String name) {
+        return "TRUE".equals(get(name, "boSeller"));
+    }
+
+    @Override
     public String getViewName(String name) {
         return get(name, "ViewName");
     }
@@ -137,8 +142,7 @@ public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
         Set<String> names = sdb.columnNames();
         Set<String> items = sdb.names();
         for (String i: items) {
-            if (!ERROR_ANIMATES.contains(Integer.valueOf(sdb.getAnimate(i))))
-                continue;
+
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {

@@ -151,7 +151,6 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         group.handle(teleportEvent);
     }
 
-    // Multi-threads involved, careful.
     @Override
     public void send(RealmEvent realmEvent) {
         queueEvent(realmEvent);

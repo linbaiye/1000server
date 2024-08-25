@@ -224,6 +224,13 @@ message ClientSayPacket {
   string text = 1;
 }
 
+message ClientBankOperationPacket {
+  int32 type = 1;
+  int32 fromSlot = 2;
+  int32 toSlot = 3;
+  int64 number = 4;
+  int64 bankerId = 5;
+}
 
 message ClientPacket {
   oneof Type {
@@ -250,6 +257,7 @@ message ClientPacket {
     ClientSimpleCommandPacket simpleCommand = 21;
     ClientDyePacket dye = 22;
     ClientSayPacket say = 23;
+    ClientBankOperationPacket bankOperation = 24;
   }
 }
 
@@ -460,6 +468,17 @@ message ChatPacket {
   string content = 2;
 }
 
+message OpenBankPacket {
+  repeated InventoryItemPacket items = 1;
+  int32 capacity = 2;
+  int32 unlocked = 3;
+}
+
+message UpdateBankPacket {
+  int32 type = 1;
+  InventoryItemPacket updateSlot = 2;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -506,6 +525,8 @@ message Packet {
     BreakRopePacket breakRope = 44;
     NpcPositionPacket npcPosition = 45;
     ChatPacket chat = 46;
+    OpenBankPacket openBank = 47;
+    UpdateBankPacket updateBank = 48;
   }
 }
 

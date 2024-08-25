@@ -1,0 +1,137 @@
+package org.y1000.realm;
+
+import org.y1000.entities.creatures.npc.Banker;
+import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerOpenBankEvent;
+import org.y1000.entities.players.inventory.Bank;
+import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.event.EntityEvent;
+import org.y1000.event.EntityEventListener;
+import org.y1000.item.Item;
+import org.y1000.item.ItemType;
+import org.y1000.item.StackItem;
+import org.y1000.message.clientevent.ClientOperateBankEvent;
+import org.y1000.message.serverevent.UpdateInventorySlotEvent;
+import org.y1000.repository.BankRepository;
+
+import java.util.HashMap;
+import java.util.Map;
+
+final class BankManagerImpl implements EntityEventListener, BankManager {
+
+    private record BankTransaction(Bank bank, Player player, Banker banker) {
+    }
+
+    private final Map<Player, BankTransaction> playerTransactionMap;
+
+    private final EntityEventSender eventSender;
+
+    private final NpcManager npcManager;
+
+    private final BankRepository bankRepository;
+
+    public BankManagerImpl(EntityEventSender eventSender,
+                           NpcManager npcManager, BankRepository bankRepository) {
+        this.bankRepository = bankRepository;
+        this.playerTransactionMap = new HashMap<>();
+        this.eventSender = eventSender;
+        this.npcManager = npcManager;
+    }
+
+    @Override
+    public void onEvent(EntityEvent entityEvent) {
+        if (entityEvent == null || !(entityEvent.source() instanceof Player player)) {
+            return;
+        }
+        BankTransaction transaction = playerTransactionMap.get(player);
+        if (transaction == null) {
+            return;
+        }
+        if (!transaction.banker().allowOperation(transaction.player())) {
+            close(player);
+        }
+    }
+
+    private void close(Player player) {
+        player.deregisterEventListener(this);
+        BankTransaction transaction = playerTransactionMap.get(player);
+        if (transaction != null) {
+            transaction.banker().deregisterEventListener(this);
+            bankRepository.save(player.id(), transaction.bank());
+        }
+    }
+
+    private void startTx(Player player, Banker banker) {
+        Bank bank = bankRepository.find(player.id()).orElse(Bank.open());
+        playerTransactionMap.put(player, new BankTransaction(bank, player, banker));
+        banker.registerEventListener(this);
+        player.registerEventListener(this);
+        eventSender.notifySelf(new PlayerOpenBankEvent(player, bank));
+    }
+
+    private void start(long bankerId, Player player) {
+        if (playerTransactionMap.containsKey(player)) {
+            return;
+        }
+        npcManager.find(bankerId, Banker.class)
+                .filter(banker -> banker.allowOperation(player))
+                .ifPresent(b -> startTx(player, b));
+    }
+
+
+    private void unlock(Player player, int slot) {
+        if (playerTransactionMap.containsKey(player)) {
+            return;
+        }
+        Item item = player.inventory().getItem(slot);
+        if (item == null || item.itemType() != ItemType.BANK_INVENTORY) {
+            return;
+        }
+        Bank bank = bankRepository.find(player.id()).orElse(Bank.open());
+        if (!bank.canUnlock()) {
+            return;
+        }
+        bank.unlock();
+        player.inventory().decrease(slot);
+        eventSender.notifySelf(UpdateInventorySlotEvent.update(player, slot));
+        bankRepository.save(player.id(), bank);
+    }
+
+
+    @Override
+    public void handle(Player player, ClientOperateBankEvent event) {
+        if (event == null) {
+            return;
+        }
+        if (event.isOpen()) {
+            start(event.bankerId(), player);
+        } else if (event.isUnlock()) {
+            unlock(player, event.fromSlot());
+        }
+    }
+
+    public void inventoryToBank(Player player, int inventorySlot, int bankSlot, long number) {
+        BankTransaction transaction = playerTransactionMap.get(player);
+        if (transaction == null) {
+            return;
+        }
+        Inventory inventory = transaction.player().inventory();
+        if (inventory.hasEnough(inventorySlot, number)) {
+            return;
+        }
+        Item item = inventory.getItem(inventorySlot);
+        if (item instanceof StackItem stackItem) {
+            item = new StackItem(stackItem.item(), number);
+        }
+        Bank bank = transaction.bank();
+        if (!bank.canPut(bankSlot, item)) {
+            return;
+        }
+        Item removed = inventory.remove(inventorySlot, number);
+        bank.put(bankSlot, removed);
+    }
+
+    public void bankToInventory(Player player, int inventorySlot, int bankSlot, long number) {
+
+    }
+}

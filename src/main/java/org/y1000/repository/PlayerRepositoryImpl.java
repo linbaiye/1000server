@@ -195,6 +195,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
         inventory.add(itemFactory.createItem("女子束长发"));
         inventory.add(itemFactory.createItem("红色染剂", 10));
         inventory.add(itemFactory.createItem("脱色药", 10));
+        inventory.add(itemFactory.createItem("福袋", 10));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("血皇斧"));*/
@@ -254,7 +255,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
      */
 
     public static int lastRealmId() {
-        return 1;
+        return 88;
     }
 
     private static final PlayerInnateAttributesProvider DEV_PROVIDER = new PlayerInnateAttributesProvider() {
@@ -273,7 +274,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .name(randomName())
                 //.name("雨诗妾")
               //   .coordinate(new Coordinate(33, 167)) // 王陵1层 -> 2入口
-                .coordinate(new Coordinate(500, 500))
+                .coordinate(new Coordinate(58, 74)) // 交易村
+                //.coordinate(new Coordinate(500, 500))
               //   .coordinate(new Coordinate(20, 10)) // 极乐传送
                //.coordinate(new Coordinate(516, 478))
                // .coordinate(new Coordinate(55, 51)) // 王陵2层

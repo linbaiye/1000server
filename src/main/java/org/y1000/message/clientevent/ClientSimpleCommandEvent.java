@@ -5,7 +5,8 @@ import org.y1000.message.ValueEnum;
 public record ClientSimpleCommandEvent(org.y1000.message.clientevent.ClientSimpleCommandEvent.Command command) implements ClientEvent {
 
     public enum Command implements ValueEnum {
-        NPC_POSITION(1);
+        NPC_POSITION(1),
+        ;
         private final int v;
 
         Command(int v) {
@@ -29,4 +30,5 @@ public record ClientSimpleCommandEvent(org.y1000.message.clientevent.ClientSimpl
     public boolean isAskingPosition() {
         return command == Command.NPC_POSITION;
     }
+
 }

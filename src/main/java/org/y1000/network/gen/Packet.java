@@ -88,6 +88,8 @@ private static final long serialVersionUID = 0L;
     BREAKROPE(44),
     NPCPOSITION(45),
     CHAT(46),
+    OPENBANK(47),
+    UPDATEBANK(48),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -148,6 +150,8 @@ private static final long serialVersionUID = 0L;
         case 44: return BREAKROPE;
         case 45: return NPCPOSITION;
         case 46: return CHAT;
+        case 47: return OPENBANK;
+        case 48: return UPDATEBANK;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1496,6 +1500,68 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ChatPacket.getDefaultInstance();
   }
 
+  public static final int OPENBANK_FIELD_NUMBER = 47;
+  /**
+   * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+   * @return Whether the openBank field is set.
+   */
+  @java.lang.Override
+  public boolean hasOpenBank() {
+    return typedPacketCase_ == 47;
+  }
+  /**
+   * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+   * @return The openBank.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.OpenBankPacket getOpenBank() {
+    if (typedPacketCase_ == 47) {
+       return (org.y1000.network.gen.OpenBankPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.OpenBankPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.OpenBankPacketOrBuilder getOpenBankOrBuilder() {
+    if (typedPacketCase_ == 47) {
+       return (org.y1000.network.gen.OpenBankPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.OpenBankPacket.getDefaultInstance();
+  }
+
+  public static final int UPDATEBANK_FIELD_NUMBER = 48;
+  /**
+   * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+   * @return Whether the updateBank field is set.
+   */
+  @java.lang.Override
+  public boolean hasUpdateBank() {
+    return typedPacketCase_ == 48;
+  }
+  /**
+   * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+   * @return The updateBank.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UpdateBankPacket getUpdateBank() {
+    if (typedPacketCase_ == 48) {
+       return (org.y1000.network.gen.UpdateBankPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.UpdateBankPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UpdateBankPacketOrBuilder getUpdateBankOrBuilder() {
+    if (typedPacketCase_ == 48) {
+       return (org.y1000.network.gen.UpdateBankPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.UpdateBankPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1638,6 +1704,12 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 46) {
       output.writeMessage(46, (org.y1000.network.gen.ChatPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 47) {
+      output.writeMessage(47, (org.y1000.network.gen.OpenBankPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 48) {
+      output.writeMessage(48, (org.y1000.network.gen.UpdateBankPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1819,6 +1891,14 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 46) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(46, (org.y1000.network.gen.ChatPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 47) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(47, (org.y1000.network.gen.OpenBankPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 48) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(48, (org.y1000.network.gen.UpdateBankPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2009,6 +2089,14 @@ private static final long serialVersionUID = 0L;
         if (!getChat()
             .equals(other.getChat())) return false;
         break;
+      case 47:
+        if (!getOpenBank()
+            .equals(other.getOpenBank())) return false;
+        break;
+      case 48:
+        if (!getUpdateBank()
+            .equals(other.getUpdateBank())) return false;
+        break;
       case 0:
       default:
     }
@@ -2195,6 +2283,14 @@ private static final long serialVersionUID = 0L;
       case 46:
         hash = (37 * hash) + CHAT_FIELD_NUMBER;
         hash = (53 * hash) + getChat().hashCode();
+        break;
+      case 47:
+        hash = (37 * hash) + OPENBANK_FIELD_NUMBER;
+        hash = (53 * hash) + getOpenBank().hashCode();
+        break;
+      case 48:
+        hash = (37 * hash) + UPDATEBANK_FIELD_NUMBER;
+        hash = (53 * hash) + getUpdateBank().hashCode();
         break;
       case 0:
       default:
@@ -2460,6 +2556,12 @@ private static final long serialVersionUID = 0L;
       if (chatBuilder_ != null) {
         chatBuilder_.clear();
       }
+      if (openBankBuilder_ != null) {
+        openBankBuilder_.clear();
+      }
+      if (updateBankBuilder_ != null) {
+        updateBankBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -2678,6 +2780,14 @@ private static final long serialVersionUID = 0L;
           chatBuilder_ != null) {
         result.typedPacket_ = chatBuilder_.build();
       }
+      if (typedPacketCase_ == 47 &&
+          openBankBuilder_ != null) {
+        result.typedPacket_ = openBankBuilder_.build();
+      }
+      if (typedPacketCase_ == 48 &&
+          updateBankBuilder_ != null) {
+        result.typedPacket_ = updateBankBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -2895,6 +3005,14 @@ private static final long serialVersionUID = 0L;
         }
         case CHAT: {
           mergeChat(other.getChat());
+          break;
+        }
+        case OPENBANK: {
+          mergeOpenBank(other.getOpenBank());
+          break;
+        }
+        case UPDATEBANK: {
+          mergeUpdateBank(other.getUpdateBank());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -3228,6 +3346,20 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 46;
               break;
             } // case 370
+            case 378: {
+              input.readMessage(
+                  getOpenBankFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 47;
+              break;
+            } // case 378
+            case 386: {
+              input.readMessage(
+                  getUpdateBankFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 48;
+              break;
+            } // case 386
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -9365,6 +9497,290 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 46;
       onChanged();
       return chatBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.OpenBankPacket, org.y1000.network.gen.OpenBankPacket.Builder, org.y1000.network.gen.OpenBankPacketOrBuilder> openBankBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+     * @return Whether the openBank field is set.
+     */
+    @java.lang.Override
+    public boolean hasOpenBank() {
+      return typedPacketCase_ == 47;
+    }
+    /**
+     * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+     * @return The openBank.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.OpenBankPacket getOpenBank() {
+      if (openBankBuilder_ == null) {
+        if (typedPacketCase_ == 47) {
+          return (org.y1000.network.gen.OpenBankPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.OpenBankPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 47) {
+          return openBankBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.OpenBankPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+     */
+    public Builder setOpenBank(org.y1000.network.gen.OpenBankPacket value) {
+      if (openBankBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        openBankBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 47;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+     */
+    public Builder setOpenBank(
+        org.y1000.network.gen.OpenBankPacket.Builder builderForValue) {
+      if (openBankBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        openBankBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 47;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+     */
+    public Builder mergeOpenBank(org.y1000.network.gen.OpenBankPacket value) {
+      if (openBankBuilder_ == null) {
+        if (typedPacketCase_ == 47 &&
+            typedPacket_ != org.y1000.network.gen.OpenBankPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.OpenBankPacket.newBuilder((org.y1000.network.gen.OpenBankPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 47) {
+          openBankBuilder_.mergeFrom(value);
+        } else {
+          openBankBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 47;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+     */
+    public Builder clearOpenBank() {
+      if (openBankBuilder_ == null) {
+        if (typedPacketCase_ == 47) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 47) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        openBankBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+     */
+    public org.y1000.network.gen.OpenBankPacket.Builder getOpenBankBuilder() {
+      return getOpenBankFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.OpenBankPacketOrBuilder getOpenBankOrBuilder() {
+      if ((typedPacketCase_ == 47) && (openBankBuilder_ != null)) {
+        return openBankBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 47) {
+          return (org.y1000.network.gen.OpenBankPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.OpenBankPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.OpenBankPacket, org.y1000.network.gen.OpenBankPacket.Builder, org.y1000.network.gen.OpenBankPacketOrBuilder> 
+        getOpenBankFieldBuilder() {
+      if (openBankBuilder_ == null) {
+        if (!(typedPacketCase_ == 47)) {
+          typedPacket_ = org.y1000.network.gen.OpenBankPacket.getDefaultInstance();
+        }
+        openBankBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.OpenBankPacket, org.y1000.network.gen.OpenBankPacket.Builder, org.y1000.network.gen.OpenBankPacketOrBuilder>(
+                (org.y1000.network.gen.OpenBankPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 47;
+      onChanged();
+      return openBankBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UpdateBankPacket, org.y1000.network.gen.UpdateBankPacket.Builder, org.y1000.network.gen.UpdateBankPacketOrBuilder> updateBankBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+     * @return Whether the updateBank field is set.
+     */
+    @java.lang.Override
+    public boolean hasUpdateBank() {
+      return typedPacketCase_ == 48;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+     * @return The updateBank.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UpdateBankPacket getUpdateBank() {
+      if (updateBankBuilder_ == null) {
+        if (typedPacketCase_ == 48) {
+          return (org.y1000.network.gen.UpdateBankPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.UpdateBankPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 48) {
+          return updateBankBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.UpdateBankPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+     */
+    public Builder setUpdateBank(org.y1000.network.gen.UpdateBankPacket value) {
+      if (updateBankBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        updateBankBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 48;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+     */
+    public Builder setUpdateBank(
+        org.y1000.network.gen.UpdateBankPacket.Builder builderForValue) {
+      if (updateBankBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        updateBankBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 48;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+     */
+    public Builder mergeUpdateBank(org.y1000.network.gen.UpdateBankPacket value) {
+      if (updateBankBuilder_ == null) {
+        if (typedPacketCase_ == 48 &&
+            typedPacket_ != org.y1000.network.gen.UpdateBankPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.UpdateBankPacket.newBuilder((org.y1000.network.gen.UpdateBankPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 48) {
+          updateBankBuilder_.mergeFrom(value);
+        } else {
+          updateBankBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 48;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+     */
+    public Builder clearUpdateBank() {
+      if (updateBankBuilder_ == null) {
+        if (typedPacketCase_ == 48) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 48) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        updateBankBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+     */
+    public org.y1000.network.gen.UpdateBankPacket.Builder getUpdateBankBuilder() {
+      return getUpdateBankFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UpdateBankPacketOrBuilder getUpdateBankOrBuilder() {
+      if ((typedPacketCase_ == 48) && (updateBankBuilder_ != null)) {
+        return updateBankBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 48) {
+          return (org.y1000.network.gen.UpdateBankPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.UpdateBankPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UpdateBankPacket, org.y1000.network.gen.UpdateBankPacket.Builder, org.y1000.network.gen.UpdateBankPacketOrBuilder> 
+        getUpdateBankFieldBuilder() {
+      if (updateBankBuilder_ == null) {
+        if (!(typedPacketCase_ == 48)) {
+          typedPacket_ = org.y1000.network.gen.UpdateBankPacket.getDefaultInstance();
+        }
+        updateBankBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.UpdateBankPacket, org.y1000.network.gen.UpdateBankPacket.Builder, org.y1000.network.gen.UpdateBankPacketOrBuilder>(
+                (org.y1000.network.gen.UpdateBankPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 48;
+      onChanged();
+      return updateBankBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

@@ -248,6 +248,18 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
     private Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate) {
+        if ("仓库管理员".equals(name)) {
+            return Banker.builder()
+                    .id(id)
+                    .coordinate(coordinate)
+                    .direction(Direction.DOWN)
+                    .name(npcSdb.getViewName(name))
+                    .realmMap(realmMap)
+                    .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
+                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                    .ai(new SubmissiveWanderingAI())
+                    .build();
+        }
         if (npcSdb.isSeller(name) && !StringUtils.isEmpty(npcSdb.getNpcText(name))) {
             return createMerchant(name, id, realmMap, coordinate);
         } else if (npcSdb.isProtector(name)){
@@ -262,7 +274,6 @@ public final class NpcFactoryImpl implements NpcFactory {
         Validate.notNull(name);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
-
         if (monsterSdb.contains(name)) {
             return createMonster(name, id, realmMap, coordinate, loadSpells(name), new MonsterWanderingAI());
         } else if (npcSdb.contains(name)) {

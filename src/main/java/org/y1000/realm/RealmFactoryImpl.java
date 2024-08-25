@@ -7,6 +7,7 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
+import org.y1000.repository.BankRepositoryImpl;
 import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.sdb.CreateGateSdb;
 import org.y1000.sdb.MapSdb;
@@ -81,7 +82,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
             var dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
                     new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id), crossRealmEventSender, realmMap);
-            var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager);
+            var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager, new BankManagerImpl(eventSender, npcManager, new BankRepositoryImpl()));
             var teleportManager = new TeleportManager(id, realmMap, createGateSdb, entityIdGenerator, aoiManager);
             var builder = RealmBuilder.builder()
                     .id(id)

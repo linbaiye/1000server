@@ -6,6 +6,7 @@ public enum NpcType implements ValueEnum  {
     MONSTER(1),
     MERCHANT(2),
     GUARDIAN(3),
+    BANKER(4),
     ;
     private final int v;
 

@@ -353,5 +353,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientSayPacketOrBuilder getSayOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+   * @return Whether the bankOperation field is set.
+   */
+  boolean hasBankOperation();
+  /**
+   * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+   * @return The bankOperation.
+   */
+  org.y1000.network.gen.ClientBankOperationPacket getBankOperation();
+  /**
+   * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
+   */
+  org.y1000.network.gen.ClientBankOperationPacketOrBuilder getBankOperationOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

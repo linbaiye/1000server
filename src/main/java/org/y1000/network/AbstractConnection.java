@@ -57,6 +57,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case SIMPLECOMMAND -> ClientSimpleCommandEvent.parse(clientPacket.getSimpleCommand().getCommand());
             case DYE -> new ClientDyeEvent(clientPacket.getDye().getDyedSlotId(), clientPacket.getDye().getDyeSlotId());
             case SAY -> ClientChatEvent.create(clientPacket.getSay().getText());
+            case BANKOPERATION -> ClientOperateBankEvent.fromPacket(clientPacket.getBankOperation());
             default -> throw new IllegalArgumentException();
         };
     }

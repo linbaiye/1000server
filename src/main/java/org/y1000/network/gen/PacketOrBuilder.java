@@ -653,5 +653,35 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.ChatPacketOrBuilder getChatOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+   * @return Whether the openBank field is set.
+   */
+  boolean hasOpenBank();
+  /**
+   * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+   * @return The openBank.
+   */
+  org.y1000.network.gen.OpenBankPacket getOpenBank();
+  /**
+   * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
+   */
+  org.y1000.network.gen.OpenBankPacketOrBuilder getOpenBankOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+   * @return Whether the updateBank field is set.
+   */
+  boolean hasUpdateBank();
+  /**
+   * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+   * @return The updateBank.
+   */
+  org.y1000.network.gen.UpdateBankPacket getUpdateBank();
+  /**
+   * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
+   */
+  org.y1000.network.gen.UpdateBankPacketOrBuilder getUpdateBankOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

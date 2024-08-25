@@ -44,4 +44,8 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
     public static UpdateInventorySlotEvent update(Player player, int slotId, Item item) {
         return new UpdateInventorySlotEvent(player, slotId, item);
     }
+
+    public static UpdateInventorySlotEvent update(Player player, int slotId) {
+        return new UpdateInventorySlotEvent(player, slotId, player.inventory().getItem(slotId));
+    }
 }
