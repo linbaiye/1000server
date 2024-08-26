@@ -11,6 +11,7 @@ import org.y1000.item.Item;
 import org.y1000.item.ItemType;
 import org.y1000.item.StackItem;
 import org.y1000.message.clientevent.ClientOperateBankEvent;
+import org.y1000.message.serverevent.UpdateBankEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.repository.BankRepository;
 
@@ -71,11 +72,13 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
 
     private void start(long bankerId, Player player) {
         if (playerTransactionMap.containsKey(player)) {
-            return;
+            BankTransaction bankTransaction = playerTransactionMap.get(player);
+            eventSender.notifySelf(new PlayerOpenBankEvent(player, bankTransaction.bank()));
+        } else {
+            npcManager.find(bankerId, Banker.class)
+                    .filter(banker -> banker.allowOperation(player))
+                    .ifPresent(b -> startTx(player, b));
         }
-        npcManager.find(bankerId, Banker.class)
-                .filter(banker -> banker.allowOperation(player))
-                .ifPresent(b -> startTx(player, b));
     }
 
 
@@ -107,16 +110,18 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
             start(event.bankerId(), player);
         } else if (event.isUnlock()) {
             unlock(player, event.fromSlot());
+        } else if (event.isInventoryToBank()) {
+            inventoryToBank(player, event.fromSlot(), event.toSlot(), event.number());
         }
     }
 
-    public void inventoryToBank(Player player, int inventorySlot, int bankSlot, long number) {
+    private void inventoryToBank(Player player, int inventorySlot, int bankSlot, long number) {
         BankTransaction transaction = playerTransactionMap.get(player);
         if (transaction == null) {
             return;
         }
         Inventory inventory = transaction.player().inventory();
-        if (inventory.hasEnough(inventorySlot, number)) {
+        if (!inventory.hasEnough(inventorySlot, number)) {
             return;
         }
         Item item = inventory.getItem(inventorySlot);
@@ -129,6 +134,9 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
         }
         Item removed = inventory.remove(inventorySlot, number);
         bank.put(bankSlot, removed);
+        bankRepository.save(player.id(), bank);
+        eventSender.notifySelf(UpdateInventorySlotEvent.update(player, inventorySlot));
+        eventSender.notifySelf(UpdateBankEvent.update(player, bank, bankSlot));
     }
 
     public void bankToInventory(Player player, int inventorySlot, int bankSlot, long number) {

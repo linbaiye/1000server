@@ -42,13 +42,17 @@ public record ClientOperateBankEvent(Operation operation, long bankerId, int fro
     public boolean isUnlock() {
         return operation == Operation.UNLOCK_SLOTS;
     }
+    public boolean isInventoryToBank() {
+        return operation == Operation.INVENTORY_TO_BANK;
+    }
+
     public static ClientOperateBankEvent fromPacket(ClientBankOperationPacket packet) {
         Operation op = Operation.fromValue(packet.getType());
         return switch (op) {
             case OPEN -> open(packet.getBankerId());
             case UNLOCK_SLOTS -> unlock(packet.getFromSlot());
             case INVENTORY_TO_BANK, BANK_TO_INVENTORY ->
-                    new ClientOperateBankEvent(op, packet.getBankerId(), packet.getFromSlot(), packet.getToSlot(), packet.getNumber());
+                    new ClientOperateBankEvent(op, 0, packet.getFromSlot(), packet.getToSlot(), packet.getNumber());
         };
     }
 }

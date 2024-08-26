@@ -12,9 +12,12 @@ class BankTest extends AbstractItemUnitTestFixture {
         Bank bank = Bank.open();
         assertFalse(bank.canPut(1, itemFactory.createItem("长剑")));
         bank.unlock();
+        assertFalse(bank.canPut(0, itemFactory.createItem("长剑")));
         assertTrue(bank.canPut(1, itemFactory.createItem("长剑")));
         assertTrue(bank.canPut(10, itemFactory.createItem("长剑")));
         assertFalse(bank.canPut(11, itemFactory.createItem("长剑")));
+        bank.put(1, itemFactory.createItem("长剑"));
+        assertFalse(bank.canPut(1, itemFactory.createItem("长剑")));
         bank.unlock();
         bank.unlock();
         bank.unlock();

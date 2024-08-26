@@ -3,11 +3,8 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.creatures.npc.Banker;
-import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.players.Player;
@@ -15,17 +12,23 @@ import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.entities.players.event.PlayerOpenBankEvent;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.event.EntityEvent;
 import org.y1000.item.AbstractItemUnitTestFixture;
+import org.y1000.item.Item;
 import org.y1000.item.ItemSdbImpl;
+import org.y1000.item.StackItem;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.message.clientevent.ClientOperateBankEvent;
+import org.y1000.message.serverevent.UpdateBankEvent;
+import org.y1000.message.serverevent.UpdateInventorySlotEvent;
+import org.y1000.network.gen.InventoryItemPacket;
 import org.y1000.network.gen.OpenBankPacket;
+import org.y1000.network.gen.UpdateBankPacket;
 import org.y1000.repository.BankRepository;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -75,6 +78,41 @@ class BankManagerImplTest extends AbstractItemUnitTestFixture {
         Inventory inventory = new Inventory();
         int add = inventory.add(item);
         when(player.inventory()).thenReturn(inventory);
+        AtomicReference<Bank> savedBank = new AtomicReference<>();
+        doAnswer(invocationOnMock -> {
+            savedBank.set(invocationOnMock.getArgument(1));
+            return null;
+        }).when(bankRepository).save(anyLong(), any(Bank.class));
         bankManager.handle(player, ClientOperateBankEvent.unlock(add));
+        assertEquals(10, savedBank.get().getUnlocked());
+        verify(eventSender, times(1)).notifySelf(any(AbstractPlayerEvent.class));
+        assertEquals(3, inventory.getStackItem(add, Item.class).get().number());
+    }
+
+    @Test
+    void inventoryToBank() {
+        var item = itemFactory.createItem("福袋", 4);
+        Inventory inventory = new Inventory();
+        int slot = inventory.add(item);
+        when(player.inventory()).thenReturn(inventory);
+        Bank bank = Bank.open();
+        bank.unlock();
+        when(bankRepository.find(anyLong())).thenReturn(Optional.of(bank));
+        bankManager.handle(player, ClientOperateBankEvent.open(banker.id()));
+        bankManager.handle(player, new ClientOperateBankEvent(ClientOperateBankEvent.Operation.INVENTORY_TO_BANK, 0, slot, 1, 1));
+        assertEquals("福袋", bank.getItem(1).name());
+        InventoryItemPacket updateSlot = testingEventListener.removeFirst(UpdateInventorySlotEvent.class).toPacket().getUpdateSlot();
+        assertEquals(slot, updateSlot.getSlotId());
+        assertEquals(3, inventory.getStackItem(slot, Item.class).get().number());
+        assertEquals(1, ((StackItem) bank.getItem(1)).number());
+        UpdateBankPacket updateBank = testingEventListener.removeFirst(UpdateBankEvent.class).toPacket().getUpdateBank();
+        assertEquals(1, updateBank.getUpdateSlot().getSlotId());
+        assertEquals("福袋", updateBank.getUpdateSlot().getName());
+
+        verify(bankRepository, times(1)).save(anyLong(), any(Bank.class));
+        slot = inventory.add(itemFactory.createItem("长剑"));
+        bankManager.handle(player, new ClientOperateBankEvent(ClientOperateBankEvent.Operation.INVENTORY_TO_BANK, 0, slot, 2, 1));
+        assertEquals("长剑", bank.getItem(2).name());
+        assertNull(inventory.getItem(slot));
     }
 }

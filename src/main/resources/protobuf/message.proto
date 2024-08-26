@@ -476,7 +476,7 @@ message OpenBankPacket {
 
 message UpdateBankPacket {
   int32 type = 1;
-  InventoryItemPacket updateSlot = 2;
+  optional InventoryItemPacket updateSlot = 2;
 }
 
 

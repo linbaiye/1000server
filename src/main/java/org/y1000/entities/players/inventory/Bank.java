@@ -17,7 +17,7 @@ public final class Bank extends AbstractInventory {
     }
 
     public boolean canPut(int slot, Item item) {
-        if (slot > unlocked || item == null) {
+        if (slot < 1 || slot > unlocked || item == null) {
             return false;
         }
         return canPut(item, slot);
