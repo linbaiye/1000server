@@ -1,5 +1,6 @@
 package org.y1000.realm;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.npc.Banker;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerOpenBankEvent;
@@ -18,6 +19,7 @@ import org.y1000.repository.BankRepository;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 final class BankManagerImpl implements EntityEventListener, BankManager {
 
     private record BankTransaction(Bank bank, Player player, Banker banker) {
@@ -54,16 +56,22 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
     }
 
     private void close(Player player) {
-        player.deregisterEventListener(this);
         BankTransaction transaction = playerTransactionMap.get(player);
         if (transaction != null) {
             transaction.banker().deregisterEventListener(this);
             bankRepository.save(player.id(), transaction.bank());
+            eventSender.notifySelf(UpdateBankEvent.close(player));
         }
+        player.deregisterEventListener(this);
     }
 
     private void startTx(Player player, Banker banker) {
-        Bank bank = bankRepository.find(player.id()).orElse(Bank.open());
+        Bank bank = bankRepository.find(player.id()).orElseGet(() -> {
+            var b = Bank.open();
+            b.unlock();
+            log.debug("Notifying ");
+            return b;
+        });
         playerTransactionMap.put(player, new BankTransaction(bank, player, banker));
         banker.registerEventListener(this);
         player.registerEventListener(this);
@@ -103,7 +111,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
 
     @Override
     public void handle(Player player, ClientOperateBankEvent event) {
-        if (event == null) {
+        if (event == null || player == null) {
             return;
         }
         if (event.isOpen()) {
@@ -112,6 +120,8 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
             unlock(player, event.fromSlot());
         } else if (event.isInventoryToBank()) {
             inventoryToBank(player, event.fromSlot(), event.toSlot(), event.number());
+        } else if (event.isClose()) {
+            close(player);
         }
     }
 

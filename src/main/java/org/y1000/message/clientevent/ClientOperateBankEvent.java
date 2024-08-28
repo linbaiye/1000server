@@ -12,6 +12,7 @@ public record ClientOperateBankEvent(Operation operation, long bankerId, int fro
         INVENTORY_TO_BANK(2),
         BANK_TO_INVENTORY(3),
         UNLOCK_SLOTS(4),
+        CLOSE(5),
         ;
 
         private final int v;
@@ -39,6 +40,10 @@ public record ClientOperateBankEvent(Operation operation, long bankerId, int fro
         return operation == Operation.OPEN;
     }
 
+    public boolean isClose() {
+        return operation == Operation.CLOSE;
+    }
+
     public boolean isUnlock() {
         return operation == Operation.UNLOCK_SLOTS;
     }
@@ -53,6 +58,7 @@ public record ClientOperateBankEvent(Operation operation, long bankerId, int fro
             case UNLOCK_SLOTS -> unlock(packet.getFromSlot());
             case INVENTORY_TO_BANK, BANK_TO_INVENTORY ->
                     new ClientOperateBankEvent(op, 0, packet.getFromSlot(), packet.getToSlot(), packet.getNumber());
+            case CLOSE -> new ClientOperateBankEvent(op, 0, 0, 0, 0);
         };
     }
 }
