@@ -174,4 +174,6 @@ public abstract class AbstractInventory {
         }
         return bankItem == null;
     }
+
+    public abstract boolean canPut(int slot, Item item);
 }

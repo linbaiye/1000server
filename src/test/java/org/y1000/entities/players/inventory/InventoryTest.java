@@ -262,4 +262,17 @@ class InventoryTest {
         assertEquals(1002, stackItem.number());
         assertEquals("生药", stackItem.name());
     }
+
+    @Test
+    void canPut() {
+        Item item = itemFactory.createItem("生药", 1000);
+        assertFalse(inventory.canPut(0, item));
+        assertFalse(inventory.canPut(inventory.capacity() + 1, item));
+        assertTrue(inventory.canPut(1, item));
+        assertTrue(inventory.canPut(inventory.capacity(), item));
+        inventory.put(1, item);
+        assertEquals(1000, inventory.getStackItem(1, Pill.class).get().number());
+        inventory.put(1, item);
+        assertEquals(2000, inventory.getStackItem(1, Pill.class).get().number());
+    }
 }

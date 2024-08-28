@@ -51,6 +51,10 @@ public record ClientOperateBankEvent(Operation operation, long bankerId, int fro
         return operation == Operation.INVENTORY_TO_BANK;
     }
 
+    public boolean isBankToInventory() {
+        return operation == Operation.BANK_TO_INVENTORY;
+    }
+
     public static ClientOperateBankEvent fromPacket(ClientBankOperationPacket packet) {
         Operation op = Operation.fromValue(packet.getType());
         return switch (op) {

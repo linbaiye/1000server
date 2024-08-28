@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.npc.Banker;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerOpenBankEvent;
+import org.y1000.entities.players.inventory.AbstractInventory;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.event.EntityEvent;
@@ -18,6 +19,7 @@ import org.y1000.repository.BankRepository;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 @Slf4j
 final class BankManagerImpl implements EntityEventListener, BankManager {
@@ -56,7 +58,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
     }
 
     private void close(Player player) {
-        BankTransaction transaction = playerTransactionMap.get(player);
+        BankTransaction transaction = playerTransactionMap.remove(player);
         if (transaction != null) {
             transaction.banker().deregisterEventListener(this);
             bankRepository.save(player.id(), transaction.bank());
@@ -81,6 +83,8 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
     private void start(long bankerId, Player player) {
         if (playerTransactionMap.containsKey(player)) {
             BankTransaction bankTransaction = playerTransactionMap.get(player);
+            bankTransaction.banker().registerEventListener(this);
+            player.registerEventListener(this);
             eventSender.notifySelf(new PlayerOpenBankEvent(player, bankTransaction.bank()));
         } else {
             npcManager.find(bankerId, Banker.class)
@@ -122,34 +126,49 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
             inventoryToBank(player, event.fromSlot(), event.toSlot(), event.number());
         } else if (event.isClose()) {
             close(player);
+        } else if (event.isBankToInventory()) {
+            bankToInventory(player, event.fromSlot(), event.toSlot(), event.number());
         }
     }
 
-    private void inventoryToBank(Player player, int inventorySlot, int bankSlot, long number) {
+    private boolean moveItem(AbstractInventory from, AbstractInventory to, int fromSlot, int toSlot, long number) {
+        if (!from.hasEnough(fromSlot, number)) {
+            return false;
+        }
+        Item item = from.getItem(fromSlot);
+        if (item instanceof StackItem stackItem) {
+            item = new StackItem(stackItem.item(), number);
+        }
+        if (!to.canPut(toSlot, item)) {
+            return false;
+        }
+        Item removed = from.remove(fromSlot, number);
+        to.put(toSlot, removed);
+        return true;
+    }
+
+    private void swapItem(Player player, int inventorySlot, int bankSlot, BiFunction<Bank, Inventory, Boolean> swapper) {
         BankTransaction transaction = playerTransactionMap.get(player);
         if (transaction == null) {
             return;
         }
-        Inventory inventory = transaction.player().inventory();
-        if (!inventory.hasEnough(inventorySlot, number)) {
+        var bank = transaction.bank();
+        var inventory = player.inventory();
+        if (!swapper.apply(bank, inventory)) {
             return;
         }
-        Item item = inventory.getItem(inventorySlot);
-        if (item instanceof StackItem stackItem) {
-            item = new StackItem(stackItem.item(), number);
-        }
-        Bank bank = transaction.bank();
-        if (!bank.canPut(bankSlot, item)) {
-            return;
-        }
-        Item removed = inventory.remove(inventorySlot, number);
-        bank.put(bankSlot, removed);
         bankRepository.save(player.id(), bank);
         eventSender.notifySelf(UpdateInventorySlotEvent.update(player, inventorySlot));
         eventSender.notifySelf(UpdateBankEvent.update(player, bank, bankSlot));
     }
 
-    public void bankToInventory(Player player, int inventorySlot, int bankSlot, long number) {
+    private void inventoryToBank(Player player, int inventorySlot, int bankSlot, long number) {
+        swapItem(player, inventorySlot, bankSlot,
+                (bank, inv) -> moveItem(inv, bank, inventorySlot, bankSlot, number));
+    }
 
+    public void bankToInventory(Player player, int bankSlot, int invSlot, long number) {
+        swapItem(player, invSlot, bankSlot,
+                (bank, inv) -> moveItem(bank, inv, bankSlot, invSlot, number));
     }
 }

@@ -286,4 +286,10 @@ public final class Inventory extends AbstractInventory {
             handleDropEvent(player, dropItemEvent, eventSender);
         }
     }
+
+    @Override
+    public boolean canPut(int slot, Item item) {
+        return slot > 0 && slot <= capacity()
+                && canPut(item, slot);
+    }
 }

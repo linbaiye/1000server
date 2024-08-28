@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
+import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.Banker;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
@@ -12,11 +13,9 @@ import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.entities.players.event.PlayerOpenBankEvent;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.item.AbstractItemUnitTestFixture;
-import org.y1000.item.Item;
-import org.y1000.item.ItemSdbImpl;
-import org.y1000.item.StackItem;
+import org.y1000.item.*;
 import org.y1000.kungfu.KungFuSdb;
+import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.clientevent.ClientOperateBankEvent;
 import org.y1000.message.serverevent.UpdateBankEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
@@ -36,7 +35,7 @@ import static org.mockito.Mockito.*;
 
 class BankManagerImplTest extends AbstractItemUnitTestFixture {
 
-    private BankManager bankManager;
+    private BankManagerImpl bankManager;
     private EntityEventSender eventSender;
     private NpcManager npcManager;
     private BankRepository bankRepository;
@@ -44,6 +43,7 @@ class BankManagerImplTest extends AbstractItemUnitTestFixture {
     private TestingEventListener testingEventListener;
     private final NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance,
             MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
+    private Inventory inventory;
 
     private Banker banker;
 
@@ -55,6 +55,8 @@ class BankManagerImplTest extends AbstractItemUnitTestFixture {
         bankManager = new BankManagerImpl(eventSender, npcManager, bankRepository);
         player = Mockito.mock(Player.class);
         when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
+        inventory = new Inventory();
+        when(player.inventory()).thenReturn(inventory);
         banker = (Banker) npcFactory.createNpc("仓库管理员", 2L, Mockito.mock(RealmMap.class), Coordinate.xy(2, 2));
         testingEventListener = new TestingEventListener();
         when(npcManager.find(2L, Banker.class)).thenReturn(Optional.of(banker));
@@ -70,6 +72,16 @@ class BankManagerImplTest extends AbstractItemUnitTestFixture {
         OpenBankPacket openBank = testingEventListener.removeFirst(PlayerOpenBankEvent.class).toPacket().getOpenBank();
         assertEquals(Bank.open().capacity(), openBank.getCapacity());
         assertEquals(Bank.open().getUnlocked(), openBank.getUnlocked());
+    }
+
+    @Test
+    void whenMoveFarFromBanker() {
+        bankManager.handle(player, new ClientOperateBankEvent(ClientOperateBankEvent.Operation.OPEN, banker.id(), 0, 0, 0));
+        testingEventListener.clearEvents();
+        when(player.coordinate()).thenReturn(Coordinate.xy(100, 100));
+        bankManager.onEvent(new PlayerMoveEvent(player, Direction.RIGHT, Coordinate.xy(100, 100)));
+        UpdateBankPacket updateBank = testingEventListener.removeFirst(UpdateBankEvent.class).toPacket().getUpdateBank();
+        assertEquals(2, updateBank.getType());
     }
 
     @Test
@@ -92,9 +104,7 @@ class BankManagerImplTest extends AbstractItemUnitTestFixture {
     @Test
     void inventoryToBank() {
         var item = itemFactory.createItem("福袋", 4);
-        Inventory inventory = new Inventory();
         int slot = inventory.add(item);
-        when(player.inventory()).thenReturn(inventory);
         Bank bank = Bank.open();
         bank.unlock();
         when(bankRepository.find(anyLong())).thenReturn(Optional.of(bank));
@@ -114,5 +124,27 @@ class BankManagerImplTest extends AbstractItemUnitTestFixture {
         bankManager.handle(player, new ClientOperateBankEvent(ClientOperateBankEvent.Operation.INVENTORY_TO_BANK, 0, slot, 2, 1));
         assertEquals("长剑", bank.getItem(2).name());
         assertNull(inventory.getItem(slot));
+    }
+
+    @Test
+    void bankToInventory() {
+        Bank bank = new Bank(40, 40);
+        bank.put(1, itemFactory.createItem("长剑"));
+        when(bankRepository.find(anyLong())).thenReturn(Optional.of(bank));
+        bankManager.handle(player, ClientOperateBankEvent.open(banker.id()));
+        bankManager.handle(player, new ClientOperateBankEvent(ClientOperateBankEvent.Operation.BANK_TO_INVENTORY, 0, 1, 1, 1));
+        assertNull(bank.getItem(1));
+        assertEquals("长剑", inventory.getItem(1).name());
+        assertNotNull(testingEventListener.removeFirst(UpdateBankEvent.class));
+        assertNotNull(testingEventListener.removeFirst(UpdateInventorySlotEvent.class));
+
+        testingEventListener.clearEvents();
+        bank.put(2, itemFactory.createItem("生药", 10));
+        bankManager.handle(player, new ClientOperateBankEvent(ClientOperateBankEvent.Operation.BANK_TO_INVENTORY, 0, 2, 2, 1));
+        StackItem stackItem = (StackItem) bank.getItem(2);
+        assertEquals(9, stackItem.number());
+        assertEquals(1, inventory.getStackItem(2, Pill.class).get().number());
+        assertNotNull(testingEventListener.removeFirst(UpdateBankEvent.class));
+        assertNotNull(testingEventListener.removeFirst(UpdateInventorySlotEvent.class));
     }
 }

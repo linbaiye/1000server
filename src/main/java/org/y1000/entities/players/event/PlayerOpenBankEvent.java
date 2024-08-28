@@ -17,10 +17,10 @@ public final class PlayerOpenBankEvent extends AbstractPlayerEvent {
         OpenBankPacket.Builder builder = OpenBankPacket.newBuilder()
                 .setCapacity(bank.capacity())
                 .setUnlocked(bank.getUnlocked());
+        bank.foreach((index, item) -> builder.addItems(JoinedRealmEvent.toPacket(index, item)));
         packet = Packet.newBuilder()
                 .setOpenBank(builder)
                 .build();
-        bank.foreach((index, item) -> builder.addItems(JoinedRealmEvent.toPacket(index, item)));
     }
 
     @Override
