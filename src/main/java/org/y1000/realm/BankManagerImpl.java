@@ -68,12 +68,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
     }
 
     private void startTx(Player player, Banker banker) {
-        Bank bank = bankRepository.find(player.id()).orElseGet(() -> {
-            var b = Bank.open();
-            b.unlock();
-            log.debug("Notifying ");
-            return b;
-        });
+        Bank bank = bankRepository.find(player.id()).orElse(Bank.open());
         playerTransactionMap.put(player, new BankTransaction(bank, player, banker));
         banker.registerEventListener(this);
         player.registerEventListener(this);
