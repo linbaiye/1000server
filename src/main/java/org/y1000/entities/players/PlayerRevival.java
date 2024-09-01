@@ -22,6 +22,10 @@ public final class PlayerRevival {
         return new PlayerRevival(experience.gainDefaultExp());
     }
 
+    public int exp() {
+        return experience.value();
+    }
+
     public int level() {
         return experience.level();
     }

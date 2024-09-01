@@ -39,6 +39,18 @@ class KungFuBookTest {
     }
 
     @Test
+    void addToSlot() {
+        AttackKungFu kungFu = bookFactory.createAttackKungFu("杨家枪法");
+        book.addToBasic(kungFu);
+        kungFu = bookFactory.createAttackKungFu("杨家枪法");
+        assertFalse(book.addToBasic(2, kungFu));
+        kungFu = bookFactory.createAttackKungFu("雷剑式");
+        assertFalse(book.addToBasic(0, kungFu));
+        assertFalse(book.addToBasic(1, kungFu));
+        assertTrue(book.addToBasic(2, kungFu));
+    }
+
+    @Test
     void findBasicSlot() {
         assertEquals(0, book.findBasicSlot("风灵旋"));
         assertNotEquals(0, book.addToBasic(kungFuFactory.create("风灵旋")));

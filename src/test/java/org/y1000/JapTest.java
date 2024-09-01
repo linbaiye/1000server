@@ -1,9 +1,7 @@
 package org.y1000;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -11,6 +9,8 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.y1000.exp.Experience;
+import org.y1000.persistence.KungFuPo;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +22,7 @@ public class JapTest {
     void setUp() {
         // A SessionFactory is set up once for an application!
         try {
-            entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.tutorial.jpa");
+            entityManagerFactory = Persistence.createEntityManagerFactory("org.y1000.test");
         }
         catch (Exception e) {
             // The registry would be destroyed by the SessionFactory, but we
@@ -49,4 +49,5 @@ public class JapTest {
             entityManager.close();
         }
     }
+
 }

@@ -1,12 +1,13 @@
 package org.y1000.repository;
 
+import jakarta.persistence.EntityManager;
 import org.y1000.entities.players.inventory.Bank;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public final class BankRepositoryImpl implements BankRepository{
+public final class BankRepositoryImpl implements BankRepository {
     private final Map<Long, Bank> playerBankMap;
 
     public BankRepositoryImpl() {
@@ -22,5 +23,10 @@ public final class BankRepositoryImpl implements BankRepository{
     @Override
     public Optional<Bank> find(long playerId) {
         return Optional.ofNullable(playerBankMap.get(playerId));
+    }
+
+    @Override
+    public void save(EntityManager entityManager, Bank bank) {
+
     }
 }

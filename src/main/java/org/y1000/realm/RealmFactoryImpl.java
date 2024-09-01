@@ -1,5 +1,6 @@
 package org.y1000.realm;
 
+import jakarta.persistence.EntityManagerFactory;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
@@ -24,6 +25,8 @@ public final class RealmFactoryImpl implements RealmFactory {
     private final DynamicObjectFactory dynamicObjectFactory;
     private final CreateGateSdb createGateSdb;
 
+    private final EntityManagerFactory entityManagerFactory;
+
     @Builder
     public RealmFactoryImpl(ItemFactory itemFactory,
                             NpcFactory npcFactory,
@@ -32,7 +35,9 @@ public final class RealmFactoryImpl implements RealmFactory {
                             MapSdb mapSdb,
                             CreateEntitySdbRepository createEntitySdbRepository,
                             DynamicObjectFactory dynamicObjectFactory,
-                            CreateGateSdb createGateSdb) {
+                            CreateGateSdb createGateSdb,
+                            EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
         Validate.notNull(itemFactory);
         Validate.notNull(npcFactory);
         Validate.notNull(itemSdb);

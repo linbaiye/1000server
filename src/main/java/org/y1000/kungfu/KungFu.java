@@ -6,6 +6,8 @@ public interface KungFu {
 
     int level();
 
+    int exp();
+
     /**
      * Gain experience.
      * @param value exp

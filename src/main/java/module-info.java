@@ -6,4 +6,10 @@ module Server {
     requires protobuf.java;
     requires io.netty.buffer;
     requires io.netty.codec;
+    requires jakarta.persistence;
+    requires org.hibernate.orm.core;
+
+    opens org.y1000.persistence;
+    opens org.y1000.account;
 }
+

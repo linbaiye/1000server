@@ -122,6 +122,8 @@ public abstract class AbstractInventory {
     }
 
     public boolean decrease(int slot, long number) {
+        if (number <= 0)
+            return false;
         Item item = items.get(slot);
         if (item == null) {
             return false;

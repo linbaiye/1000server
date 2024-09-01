@@ -147,4 +147,19 @@ public interface Player extends ViolentCreature {
     }
 
     void onProjectileReachTarget(Projectile projectile);
+
+    PlayerExperiencedAgedAttribute innerPowerAttribute();
+
+    PlayerExperiencedAgedAttribute outerPowerAttribute();
+
+    PlayerExperiencedAgedAttribute powerAttribute();
+
+    PlayerLife headLife();
+    PlayerLife armLife();
+
+    PlayerLife legLife();
+
+    YinYang yinyang();
+
+    int revivalExp();
 }

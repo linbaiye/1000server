@@ -1,5 +1,8 @@
 package org.y1000.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.*;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.*;
@@ -7,6 +10,7 @@ import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
+import org.y1000.persistence.PlayerPo;
 import org.y1000.util.Coordinate;
 
 import java.util.Random;
@@ -307,9 +311,9 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .head(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
                 .arm(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
                 .leg(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
-                .power(new PlayerExperiencedAgedAttribute("武功", PlayerDefaultAttributes.INSTANCE.power(), yinyang.age()))
-                .innerPower(new PlayerExperiencedAgedAttribute("内功", PlayerDefaultAttributes.INSTANCE.innerPower(), yinyang.age()))
-                .outerPower(new PlayerExperiencedAgedAttribute("外功", PlayerDefaultAttributes.INSTANCE.outerPower(), yinyang.age()))
+                .power(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.power(), yinyang.age()))
+                .innerPower(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.innerPower(), yinyang.age()))
+                .outerPower(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.outerPower(), yinyang.age()))
                 .pillSlots(new PillSlots())
                 .build();
     }
@@ -347,9 +351,9 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
                 .head(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
                 .arm(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
                 .leg(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
-                .power(new PlayerExperiencedAgedAttribute("武功", PlayerDefaultAttributes.INSTANCE.power(), yinyang.age()))
-                .innerPower(new PlayerExperiencedAgedAttribute("内功", PlayerDefaultAttributes.INSTANCE.innerPower(), yinyang.age()))
-                .outerPower(new PlayerExperiencedAgedAttribute("外功", PlayerDefaultAttributes.INSTANCE.outerPower(), yinyang.age()))
+                .power(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.power(), yinyang.age()))
+                .innerPower(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.innerPower(), yinyang.age()))
+                .outerPower(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.outerPower(), yinyang.age()))
                 .pillSlots(new PillSlots())
                 .build();
     }
@@ -361,8 +365,38 @@ public final class PlayerRepositoryImpl implements PlayerRepository {
     }
 
     @Override
-    public void save(Player player) {
+    public void update(Player player) {
         slots[(int)player.id()] = -1;
     }
 
+    @Override
+    public void update(EntityManager entityManager, Player player) {
+        Validate.notNull(entityManager);
+        Validate.notNull(player);
+        PlayerPo playerPo = entityManager.find(PlayerPo.class, player.id());
+        if (playerPo == null) {
+            return;
+        }
+        PlayerPo converted = PlayerPo.convert(player);
+        entityManager.merge(converted);
+        kungFuRepository.save(entityManager, converted.getId(), player.kungFuBook());
+    }
+
+    @Override
+    public void save(EntityManager entityManager, int accountId, Player player) {
+        Validate.notNull(entityManager);
+        Validate.notNull(player);
+        PlayerPo converted = PlayerPo.convert(player, accountId);
+        entityManager.persist(converted);
+        kungFuRepository.save(entityManager, converted.getId(), player.kungFuBook());
+    }
+
+    @Override
+    public int countByName(EntityManager entityManager, String name) {
+        Validate.notNull(entityManager);
+        Validate.notNull(name);
+        Query query = entityManager.createQuery("select count(p) from PlayerPo p where name = ?1");
+        query.setParameter(1, name);
+        return query.getFirstResult();
+    }
 }

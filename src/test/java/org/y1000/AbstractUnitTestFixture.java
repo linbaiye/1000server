@@ -43,6 +43,7 @@ public abstract class AbstractUnitTestFixture {
         when(mockedRealm.name()).thenReturn("realm");
         when(mockedRealm.bgm()).thenReturn("bgm");
         when(mockedRealm.map()).thenReturn(map);
+        when(mockedRealm.id()).thenReturn(1);
         return mockedRealm;
     }
 

@@ -1,12 +1,18 @@
 package org.y1000.repository;
 
+import jakarta.persistence.EntityManager;
 import org.y1000.entities.players.Player;
-import org.y1000.network.Connection;
 
 public interface PlayerRepository {
 
     Player load(String token);
 
-    void save(Player player);
+    void update(Player player);
+
+    void update(EntityManager entityManager, Player player);
+
+    void save(EntityManager entityManager, int accountId, Player player);
+
+    int countByName(EntityManager entityManager, String name);
 
 }

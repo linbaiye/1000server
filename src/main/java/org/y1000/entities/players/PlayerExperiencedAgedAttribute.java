@@ -8,17 +8,23 @@ public final class PlayerExperiencedAgedAttribute extends AbstractPlayerAgedAttr
 
     private boolean gainExpIfFillUp;
 
-    private final String name;
 
-    public PlayerExperiencedAgedAttribute(String name, int innateValue, int age) {
-        this(name, innateValue, new Experience(0), null, age);
+    public PlayerExperiencedAgedAttribute(int innateValue, int age) {
+        this(innateValue, new Experience(0), null, age);
     }
 
-    public PlayerExperiencedAgedAttribute(String name, int innateValue, Experience experience, Integer current, int age) {
+    public PlayerExperiencedAgedAttribute(int innateValue, int exp, Integer current, int age) {
+        this(innateValue, new Experience(exp), current, age);
+    }
+
+    public PlayerExperiencedAgedAttribute(int innateValue, Experience experience, Integer current, int age) {
         super(innateValue, experience.level()  + innateValue + age / 2, current, age);
-        this.name = name;
         this.experience = experience;
         gainExpIfFillUp = false;
+    }
+
+    public int exp() {
+        return experience.value();
     }
 
 
@@ -49,15 +55,15 @@ public final class PlayerExperiencedAgedAttribute extends AbstractPlayerAgedAttr
 
 
     public static PlayerExperiencedAgedAttribute createInnerPower() {
-        return new PlayerExperiencedAgedAttribute("内功", PlayerDefaultAttributes.INSTANCE.innerPower(), 100);
+        return new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.innerPower(), 100);
     }
 
     public static PlayerExperiencedAgedAttribute createOuterPower() {
-        return new PlayerExperiencedAgedAttribute("外功", PlayerDefaultAttributes.INSTANCE.outerPower(), 100);
+        return new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.outerPower(), 100);
     }
 
     public static PlayerExperiencedAgedAttribute createPower() {
-        return new PlayerExperiencedAgedAttribute("武功", PlayerDefaultAttributes.INSTANCE.power(), 100);
+        return new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.power(), 100);
     }
 
 }

@@ -69,11 +69,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     private YinYang yinYang;
 
-    private final PlayerAgedAttribute innerPower;
+    private final PlayerExperiencedAgedAttribute innerPower;
 
-    private final PlayerAgedAttribute power;
+    private final PlayerExperiencedAgedAttribute power;
 
-    private final PlayerAgedAttribute outerPower;
+    private final PlayerExperiencedAgedAttribute outerPower;
     private final PlayerLife life;
     private final PlayerLife headLife;
     private final PlayerLife armLife;
@@ -138,9 +138,9 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                       PlayerLife head,
                       PlayerLife arm,
                       PlayerLife leg,
-                      PlayerAgedAttribute power,
-                      PlayerAgedAttribute innerPower,
-                      PlayerAgedAttribute outerPower,
+                      PlayerExperiencedAgedAttribute power,
+                      PlayerExperiencedAgedAttribute innerPower,
+                      PlayerExperiencedAgedAttribute outerPower,
                       int revival,
                       YinYang yinYang,
                       PillSlots pillSlots) {
@@ -1022,6 +1022,46 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         assistantKungFu().ifPresentOrElse(
                 kf -> emitEvent(PlayerAttackAoeEvent.ranged(this, projectile.target(), projectile.direction(), projectile.damage(), kf)),
                 () -> projectile.target().attackedBy(projectile));
+    }
+
+    @Override
+    public PlayerExperiencedAgedAttribute innerPowerAttribute() {
+        return innerPower;
+    }
+
+    @Override
+    public PlayerExperiencedAgedAttribute outerPowerAttribute() {
+        return outerPower;
+    }
+
+    @Override
+    public PlayerExperiencedAgedAttribute powerAttribute() {
+        return power;
+    }
+
+    @Override
+    public PlayerLife headLife() {
+        return headLife;
+    }
+
+    @Override
+    public PlayerLife armLife() {
+        return armLife;
+    }
+
+    @Override
+    public PlayerLife legLife() {
+        return legLife;
+    }
+
+    @Override
+    public YinYang yinyang() {
+        return yinYang;
+    }
+
+    @Override
+    public int revivalExp() {
+        return revival.exp();
     }
 
     @Override

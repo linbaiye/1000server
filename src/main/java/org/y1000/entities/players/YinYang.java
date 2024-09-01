@@ -22,6 +22,14 @@ public final class YinYang {
         this(new Experience(yin), new Experience(yang), decider);
     }
 
+    public int yinExp() {
+        return yin.value();
+    }
+
+    public int yangExp() {
+        return yang.value();
+    }
+
     public YinYang(Experience yinExp, Experience yangExp, YinYangDecider decider) {
         this.yin = yinExp;
         this.yang = yangExp;

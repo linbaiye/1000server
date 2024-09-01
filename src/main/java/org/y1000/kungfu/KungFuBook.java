@@ -22,12 +22,17 @@ public final class KungFuBook {
         this.basic = new HashMap<>();
     }
 
+    private boolean basicExists(KungFu kungFu) {
+        return basic.values().stream().anyMatch(k -> k.name().equals(kungFu.name()));
+    }
+
+    private boolean isBasicFull() {
+        return basic.size() == BASIC_MAX;
+    }
+
     public int addToBasic(KungFu kungFu) {
         Validate.notNull(kungFu);
-        if (basic.size() == BASIC_MAX) {
-            return 0;
-        }
-        if (basic.values().stream().anyMatch(k -> k.name().equals(kungFu.name()))) {
+        if (isBasicFull() || basicExists(kungFu)) {
             return 0;
         }
         for (int i = 1; i <= BASIC_MAX; i++) {
@@ -37,6 +42,16 @@ public final class KungFuBook {
             }
         }
         return 0;
+    }
+
+    public boolean addToBasic(int slot, KungFu kungFu){
+        Validate.notNull(kungFu);
+        if (isBasicFull() || basicExists(kungFu) ||
+                slot <= 0 || slot > BASIC_MAX ||
+                basic.containsKey(slot)) {
+            return false;
+        }
+        return basic.put(slot, kungFu) == null;
     }
 
     public int findBasicSlot(String name) {
