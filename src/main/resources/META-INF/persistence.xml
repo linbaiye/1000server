@@ -27,6 +27,7 @@
             <property name="hibernate.hikari.maximumPoolSize" value="10" />
             <property name="hibernate.hikari.idleTimeout" value="30000" />
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
         </properties>
     </persistence-unit>
     <persistence-unit name="org.y1000.test">
@@ -48,6 +49,7 @@
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.highlight_sql" value="true" />
             <property name="hibernate.physical_naming_strategy" value="org.y1000.persistence.NamingStrategy" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
         </properties>
     </persistence-unit>
 </persistence>

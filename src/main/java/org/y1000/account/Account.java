@@ -19,10 +19,10 @@ import java.util.Set;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(unique = true)
-    private String user;
+    private String userName;
 
     private String hashedPassword;
 
