@@ -13,10 +13,9 @@ public final class AccountRepositoryImpl implements AccountRepository {
     public Optional<Account> find(EntityManager entityManager, String name) {
         Validate.notNull(entityManager);
         Validate.notNull(name);
-        TypedQuery<Account> query = entityManager.createQuery("select distinct a from Account a join fetch a.players where a.userName = ?1", Account.class);
+        TypedQuery<Account> query = entityManager.createQuery("select a from Account a where a.userName = ?1", Account.class);
         query.setParameter(1, name);
-        List<Account> resultList = query.getResultList();
-        return resultList.isEmpty()? Optional.empty() : Optional.of(resultList.get(0));
+        return Optional.ofNullable(query.getSingleResult());
     }
 
     @Override

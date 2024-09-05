@@ -28,8 +28,4 @@ public class Account {
 
     private String salt;
 
-    @OneToMany
-    @JoinColumn(name = "account_id")
-    private Set<PlayerPo> players;
-
 }

@@ -47,6 +47,5 @@ class AccountRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         playerRepository.save(em, account.getId(), player);
         entityManager.submitTx();
         Account test = accountRepository.find(em, "test").get();
-        test.getPlayers().forEach(System.out::println);
     }
 }
