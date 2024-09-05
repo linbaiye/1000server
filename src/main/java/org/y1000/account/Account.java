@@ -28,4 +28,9 @@ public class Account {
 
     private String salt;
 
+    private LocalDateTime createdTime;
+
+    @OneToMany(mappedBy = "accountId")
+    private Set<PlayerPo> players;
+
 }

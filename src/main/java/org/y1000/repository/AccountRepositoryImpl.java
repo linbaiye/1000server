@@ -25,5 +25,4 @@ public final class AccountRepositoryImpl implements AccountRepository {
         Validate.notNull(account);
         entityManager.persist(account);
     }
-
 }

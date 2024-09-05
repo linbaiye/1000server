@@ -66,7 +66,7 @@ public class PlayerPo {
 
     private int realmId;
 
-    @Column(updatable = false, name = "account_id")
+    @JoinColumn(name = "account_id")
     private int accountId;
 
 

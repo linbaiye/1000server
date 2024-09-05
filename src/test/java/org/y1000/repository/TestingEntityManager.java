@@ -28,6 +28,10 @@ class TestingEntityManager {
         return entityManager;
     }
 
+    public EntityManager newEntityManager() {
+        return entityManagerFactory.createEntityManager();
+    }
+
     public void submitTx() {
         transaction.commit();
     }
