@@ -3,6 +3,7 @@ package org.y1000.account;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 import org.apache.commons.lang3.Validate;
 import org.y1000.repository.AccountRepository;
 
@@ -11,6 +12,8 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
@@ -80,6 +83,25 @@ public final class AccountManager {
             return 409;
         }  
         var salt = saltSupplier.get();
+        byte[] hashedPasswd = hash(passwd.toCharArray(), salt);
+        Base64.Encoder encoder = Base64.getEncoder();
+        Account account = Account.builder()
+                .salt(new String(encoder.encode(salt)))
+                .hashedPassword(new String(hashedPasswd))
+                .userName(username)
+                .build();
+        accountRepository.save(entityManager, account);
+        transaction.commit();
+        return 200;
+    }
 
+    public LoginResponse login(String username, String passwd) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Account account = entityManager.createQuery("select a from Account a left join fetch a.players where a.userName = ?1",
+                        Account.class)
+                .setParameter(1, username).getSingleResult();
+        if (account == null) {
+            return new LoginResponse()
+        }
     }
 }
