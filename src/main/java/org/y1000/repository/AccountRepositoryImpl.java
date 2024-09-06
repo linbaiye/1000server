@@ -15,7 +15,7 @@ public final class AccountRepositoryImpl implements AccountRepository {
         Validate.notNull(name);
         TypedQuery<Account> query = entityManager.createQuery("select a from Account a where a.userName = ?1", Account.class);
         query.setParameter(1, name);
-        return Optional.ofNullable(query.getSingleResult());
+        return query.getResultList().stream().findFirst();
     }
 
     @Override

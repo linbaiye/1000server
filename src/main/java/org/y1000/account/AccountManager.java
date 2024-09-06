@@ -3,8 +3,8 @@ package org.y1000.account;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
 import org.apache.commons.lang3.Validate;
+import org.y1000.persistence.PlayerPo;
 import org.y1000.repository.AccountRepository;
 
 import javax.crypto.SecretKeyFactory;
@@ -13,9 +13,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public final class AccountManager {
 
@@ -30,11 +32,6 @@ public final class AccountManager {
         this(entityManagerFactory, accountRepository, AccountManager::randSalt);
     }
 
-    private static byte[] randSalt() {
-        byte[] salt = new byte[16];
-        ThreadLocalRandom.current().nextBytes(salt);
-        return salt;
-    }
 
     public AccountManager(EntityManagerFactory entityManagerFactory,
                           AccountRepository accountRepository,
@@ -45,6 +42,12 @@ public final class AccountManager {
         this.saltSupplier = saltSupplier;
         this.accountRepository = accountRepository;
         this.entityManagerFactory = entityManagerFactory;
+    }
+
+    private static byte[] randSalt() {
+        byte[] salt = new byte[16];
+        ThreadLocalRandom.current().nextBytes(salt);
+        return salt;
     }
 
     private byte[] hash(char[] password, byte[] salt) {
@@ -71,37 +74,46 @@ public final class AccountManager {
     }
 
     private boolean isExpectedPassword(String password, String salt, String expectedHash) {
-        return isExpectedPassword(password.toCharArray(), salt.getBytes(), expectedHash.getBytes());
+        Base64.Decoder decoder = Base64.getDecoder();
+        return isExpectedPassword(password.toCharArray(), decoder.decode(salt), decoder.decode(expectedHash));
     }
 
         // http status code.
     public int register(String username, String passwd) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        if (accountRepository.find(entityManager, username).isPresent()) {
-            return 409;
-        }  
-        var salt = saltSupplier.get();
-        byte[] hashedPasswd = hash(passwd.toCharArray(), salt);
-        Base64.Encoder encoder = Base64.getEncoder();
-        Account account = Account.builder()
-                .salt(new String(encoder.encode(salt)))
-                .hashedPassword(new String(hashedPasswd))
-                .userName(username)
-                .build();
-        accountRepository.save(entityManager, account);
-        transaction.commit();
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            EntityTransaction transaction = entityManager.getTransaction();
+            transaction.begin();
+            if (accountRepository.find(entityManager, username).isPresent()) {
+                return 409;
+            }
+            var salt = saltSupplier.get();
+            byte[] hashedPasswd = hash(passwd.toCharArray(), salt);
+            Base64.Encoder encoder = Base64.getEncoder();
+            Account account = Account.builder()
+                    .salt(new String(encoder.encode(salt)))
+                    .hashedPassword(new String(encoder.encode(hashedPasswd)))
+                    .userName(username)
+                    .build();
+            accountRepository.save(entityManager, account);
+            transaction.commit();
+        }
         return 200;
     }
 
     public LoginResponse login(String username, String passwd) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Account account = entityManager.createQuery("select a from Account a left join fetch a.players where a.userName = ?1",
-                        Account.class)
-                .setParameter(1, username).getSingleResult();
-        if (account == null) {
-            return new LoginResponse()
+        if (username == null || passwd == null) {
+            return LoginResponse.badRequest();
+        }
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            Optional<Account> accountOptional = accountRepository.find(entityManager, username);
+            if (accountOptional.isEmpty()) {
+                return LoginResponse.badCredentials();
+            }
+            Account account = accountOptional.get();
+            if (!isExpectedPassword(passwd, account.getSalt(), account.getHashedPassword())) {
+                return LoginResponse.badCredentials();
+            }
+            return new LoginResponse(200, account.getPlayers().stream().map(PlayerPo::getName).collect(Collectors.toList()));
         }
     }
 }

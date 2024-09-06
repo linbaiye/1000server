@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.y1000.persistence.PlayerPo;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -31,6 +32,6 @@ public class Account {
     private LocalDateTime createdTime;
 
     @OneToMany(mappedBy = "accountId")
-    private Set<PlayerPo> players;
+    private List<PlayerPo> players;
 
 }
