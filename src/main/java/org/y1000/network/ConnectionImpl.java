@@ -8,8 +8,8 @@ import org.y1000.realm.RealmManager;
 @Slf4j
 public final class ConnectionImpl extends AbstractConnection {
 
-    public ConnectionImpl(PlayerRepository playerRepository, RealmManager realmManager) {
-        super(realmManager, playerRepository);
+    public ConnectionImpl(RealmManager realmManager) {
+        super(realmManager);
     }
 
 

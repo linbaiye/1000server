@@ -23,8 +23,8 @@ import java.util.Objects;
 public class PlayerPo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @SequenceGenerator(initialValue = 100000000, name = "player_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "player_seq")
     private Long id;
 
     @Column(unique = true)
@@ -127,9 +127,10 @@ public class PlayerPo {
     public int hashCode() {
         return Objects.hash(name);
     }
-    public static PlayerPo convert(Player player, int accountId) {
+    public static PlayerPo convert(Player player, int accountId, int realmId) {
         PlayerPo playerPo = convert(player);
         playerPo.accountId = accountId;
+        playerPo.realmId = realmId;
         return playerPo;
     }
 
@@ -154,7 +155,7 @@ public class PlayerPo {
                 .x(player.coordinate().x())
                 .y(player.coordinate().y())
                 .state(player.stateEnum().value())
-                .realmId(player.getRealm().id())
+                .realmId(player.getRealm() != null ? player.getRealm().id() : 0)
                 .build();
     }
 }

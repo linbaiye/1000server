@@ -51,6 +51,7 @@ message PickItemPacket {
 
 message PlayerLoginPacket {
   string token = 1;
+  string charName = 2;
 }
 
 message CreatureDieEventPacket {

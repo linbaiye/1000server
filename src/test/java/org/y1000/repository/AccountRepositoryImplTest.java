@@ -1,15 +1,12 @@
 package org.y1000.repository;
 
-import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.account.Account;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
 import org.y1000.item.ItemFactory;
-import org.y1000.kungfu.KungFuBookFactory;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +14,7 @@ class AccountRepositoryImplTest extends AbstractPlayerUnitTestFixture {
 
     private AccountRepositoryImpl accountRepository;
 
-    private TestingEntityManager entityManager;
+    private JpaFixture entityManager;
 
     private PlayerRepository playerRepository;
 
@@ -25,8 +22,8 @@ class AccountRepositoryImplTest extends AbstractPlayerUnitTestFixture {
     void setUp() {
         setup();
         accountRepository = new AccountRepositoryImpl();
-        entityManager = new TestingEntityManager();
-        playerRepository = new PlayerRepositoryImpl(Mockito.mock(ItemFactory.class), new KungFuBookRepositoryImpl(), Mockito.mock(KungFuBookRepository.class));
+        entityManager = new JpaFixture();
+        playerRepository = new PlayerRepositoryImpl(Mockito.mock(ItemFactory.class), new KungFuBookRepositoryImpl(), Mockito.mock(KungFuBookRepository.class), Mockito.mock(EntityManagerFactory.class));
     }
 
     @Test

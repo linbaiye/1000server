@@ -7,13 +7,18 @@ import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.players.*;
 import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.item.ItemFactory;
+import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.kungfu.KungFuFactory;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
+import org.y1000.sdb.ItemDrugSdb;
+import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.util.Coordinate;
 
 import java.util.HashMap;
@@ -36,6 +41,10 @@ public abstract class AbstractUnitTestFixture {
         when(mockedMap.objectFile()).thenReturn("obj");
         when(mockedMap.roofFile()).thenReturn("rof");
         return mockedMap;
+    }
+
+    protected ItemFactory createItemFactory() {
+        return new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuFactory);
     }
 
     protected Realm mockRealm(RealmMap map) {

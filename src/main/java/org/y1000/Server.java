@@ -1,21 +1,24 @@
 package org.y1000;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.http.HttpRequestDecoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.account.AccountManager;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
+import org.y1000.factory.PlayerFactory;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.realm.RealmFactory;
@@ -37,7 +40,7 @@ public final class Server {
 
     private EventLoopGroup bossGroup;
 
-    private PlayerRepository playerRepository;
+    private PlayerRepositoryImpl playerRepository;
 
     private RealmManager realmManager;
 
@@ -53,6 +56,11 @@ public final class Server {
 
     private final ServerBootstrap accountServer;
 
+    private final AccountManager accountManager;
+
+    private final AccountRepository accountRepository;
+
+
     public Server(int port) {
         this.port = port;
         workerGroup = new NioEventLoopGroup();
@@ -62,14 +70,16 @@ public final class Server {
         entityManagerFactory = Persistence.createEntityManagerFactory("org.y1000");
         KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl();
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl);
-        playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl);
+        playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory);
         itemRepository = repository;
         npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, CreateEntitySdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
-                entityManagerFactory);
-        realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory);
+                entityManagerFactory, playerRepository);
+        accountRepository = new AccountRepositoryImpl();
+        accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, playerRepository);
+        realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory, accountManager, playerRepository);
     }
 
 
@@ -89,6 +99,7 @@ public final class Server {
 //        }
 //    }
 
+
     private void setupGameServer() {
         gameServer.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
@@ -100,16 +111,31 @@ public final class Server {
                     protected void initChannel(NioSocketChannel channel) throws Exception {
                         channel.pipeline()
                                 .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                .addLast("packetHandler", new DevelopingConnection(playerRepository, realmManager))
+                                .addLast("packetHandler", new DevelopingConnection(realmManager))
                                 .addLast("packetLengthAppender", new LengthFieldPrepender(4))
                                 .addLast("packetEncoder", MessageEncoder.ENCODER);
                     }
                 });
     }
 
-    private void setAccountServer() {
-        //accountServer.group(bossGroup, workerGroup)
+    private void setupAccountServer() {
+        accountServer.group(bossGroup, workerGroup)
+                .channel(NioServerSocketChannel.class)
+                .option(ChannelOption.SO_BACKLOG, 4096)
+                .childOption(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
+                .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                    @Override
+                    protected void initChannel(NioSocketChannel channel) throws Exception {
+                        ChannelPipeline p = channel.pipeline();
+                        p.addLast(new HttpRequestDecoder());
+                        p.addLast(new HttpResponseEncoder());
+                        p.addLast(new HttpConnectionHandler(accountManager));
+                    }
+                });
     }
+
+
 
     private void close(Channel channel) {
         if (channel != null) {
@@ -127,6 +153,7 @@ public final class Server {
         try {
             setupGameServer();
             gameSercerChannel = gameServer.bind(port).sync().channel();
+            setupAccountServer();
             accountChannel = accountServer.bind(accountPort).sync().channel();
         } catch (Exception e) {
             log.error("Caught exception, server exit now.", e);

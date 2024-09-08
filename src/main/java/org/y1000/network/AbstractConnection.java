@@ -9,7 +9,6 @@ import org.y1000.item.EquipmentType;
 import org.y1000.message.clientevent.*;
 import org.y1000.network.event.ConnectionClosedEvent;
 import org.y1000.network.event.ConnectionDataEvent;
-import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.gen.ClientPacket;
 import org.y1000.realm.RealmManager;
 import org.y1000.util.Coordinate;
@@ -21,14 +20,11 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     private final AtomicReference<ChannelHandlerContext> context;
 
-    private final PlayerRepository playerRepository;
-
     private final RealmManager realmManager;
 
-    public AbstractConnection(RealmManager realmManager, PlayerRepository playerRepository) {
+    public AbstractConnection(RealmManager realmManager) {
         this.realmManager = realmManager;
         context = new AtomicReference<>();
-        this.playerRepository = playerRepository;
     }
 
     private ClientEvent createMessage(ClientPacket clientPacket) {
@@ -72,18 +68,11 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
                     // Not something we can deal with.
                     return;
                 }
-                if (message instanceof LoginEvent loginEvent) {
-                    var player = playerRepository.load(loginEvent.getToken());
-                    realmManager.queueEvent(new ConnectionEstablishedEvent(0, player, this));
-                } else {
-                    realmManager.queueEvent(new ConnectionDataEvent(this, message));
-                }
+                realmManager.queueEvent(new ConnectionDataEvent(this, message));
                 //log.debug("Received message {}.", message);
             } catch (Exception e) {
                 log.error("Exception ", e);
-
             }
-            //clientEventListeners.forEach(clientEventListener -> clientEventListener.OnEvent(message));
         }
     }
 
@@ -93,7 +82,6 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        log.info("Channel closed.");
         realmManager.queueEvent(new ConnectionClosedEvent(this));
     }
 

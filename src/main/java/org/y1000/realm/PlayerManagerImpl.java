@@ -17,6 +17,7 @@ import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.util.Coordinate;
 
 import java.util.HashSet;
@@ -43,12 +44,15 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     private final BankManager bankManager;
 
+    private final PlayerRepository playerRepository;
+
     public PlayerManagerImpl(EntityEventSender eventSender,
                              GroundItemManager itemManager,
                              ItemFactory itemFactory,
                              DynamicObjectManager dynamicObjectManager,
-                             BankManager bankManager) {
-        this(eventSender, itemManager, itemFactory, new TradeManagerImpl(eventSender), dynamicObjectManager, bankManager);
+                             BankManager bankManager,
+                             PlayerRepository playerRepository) {
+        this(eventSender, itemManager, itemFactory, new TradeManagerImpl(eventSender), dynamicObjectManager, bankManager, playerRepository);
     }
 
     public PlayerManagerImpl(EntityEventSender eventSender,
@@ -56,10 +60,12 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                              ItemFactory itemFactory,
                              TradeManager tradeManager,
                              DynamicObjectManager dynamicObjectManager,
-                             BankManager bankManager) {
+                             BankManager bankManager,
+                             PlayerRepository playerRepository) {
         this.eventSender = eventSender;
         this.itemManager = itemManager;
         this.itemFactory = itemFactory;
+        this.playerRepository = playerRepository;
         this.projectileManager = new ProjectileManager();
         this.tradeManager = tradeManager;
         this.dynamicObjectManager = dynamicObjectManager;
@@ -187,6 +193,13 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         return getEntities();
     }
 
+    @Override
+    public void onPlayerDisconnected(Player player) {
+        if (player != null) {
+            playerRepository.update(player);
+            clearPlayer(player);
+        }
+    }
 
     @Override
     public void onEvent(EntityEvent entityEvent) {

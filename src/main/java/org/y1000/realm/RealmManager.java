@@ -1,14 +1,17 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.account.AccountManager;
 import org.y1000.entities.players.Player;
 import org.y1000.message.clientevent.ClientEvent;
+import org.y1000.message.clientevent.LoginEvent;
 import org.y1000.realm.event.*;
 import org.y1000.network.Connection;
 import org.y1000.network.ConnectionEventType;
 import org.y1000.network.event.ConnectionDataEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.event.ConnectionEvent;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.repository.PlayerRepositoryImpl;
 import org.y1000.sdb.MapSdb;
 
@@ -35,13 +38,20 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
 
     private volatile boolean shutdown;
 
-    private RealmManager() {
+    private final AccountManager accountManager;
+    private final PlayerRepository playerRepository;
+
+
+    private RealmManager(AccountManager accountManager,
+                         PlayerRepository playerRepository) {
         playerRealmMap = new ConcurrentHashMap<>();
         eventQueue = new ArrayDeque<>(100);
         connectionPlayerMap = new HashMap<>(500);
         shutdown = false;
         groups = new ArrayList<>();
         playerNameRealmIdMap = new HashMap<>();
+        this.playerRepository = playerRepository;
+        this.accountManager = accountManager;
     }
 
 
@@ -74,6 +84,25 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
     }
 
 
+    private void handleLogin(Player player, int realmId, Connection connection) {
+        if (playerRealmMap.containsKey(player)) {
+            // need to close current connection.
+            log.error("Duplicate connection for {}.", player);
+            connection.close();
+            return;
+        }
+        RealmGroup group = realmIdGroupMap.get(realmId);
+        if (group == null) {
+            log.error("Realm {} does not exist.", realmId);
+            connection.close();
+            return;
+        }
+        connectionPlayerMap.put(connection, player);
+        playerRealmMap.put(player, realmId);
+        playerNameRealmIdMap.put(player.viewName(), realmId);
+        group.handle(new ConnectionEstablishedEvent(realmId, player, connection));
+    }
+
     private void sendDataToRealm(ConnectionDataEvent dataEvent) {
         Player player = connectionPlayerMap.get(dataEvent.connection());
         if (player == null) {
@@ -100,8 +129,14 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
             handleNewConnection((ConnectionEstablishedEvent)event);
         } else if (event.type() == ConnectionEventType.CLOSED) {
             handleDisconnection(event.connection());
-        } else if (event.type() == ConnectionEventType.DATA) {
-            sendDataToRealm((ConnectionDataEvent)event);
+        } else if (event instanceof ConnectionDataEvent dataEvent) {
+            if (dataEvent.data() instanceof LoginEvent loginEvent) {
+                accountManager.removeToken(loginEvent.token())
+                        .flatMap(accountId -> playerRepository.find(accountId, loginEvent.charName()))
+                        .ifPresent(pair -> handleLogin(pair.getKey(), pair.getRight(), dataEvent.connection()));
+            } else {
+                sendDataToRealm(dataEvent);
+            }
         }
     }
 
@@ -176,11 +211,11 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         //return List.of(49);
     }
 
-    public static RealmManager create(MapSdb mapSdb, RealmFactory realmFactory) {
-
+    public static RealmManager create(MapSdb mapSdb, RealmFactory realmFactory,
+                                      AccountManager accountManager, PlayerRepository playerRepository) {
         List<Integer> realmIds = getRealmIds(mapSdb);
         List<Realm> realmList = new ArrayList<>();
-        var manager = new RealmManager();
+        var manager = new RealmManager(accountManager, playerRepository);
         for (Integer id : realmIds) {
             Realm realm = realmFactory.createRealm(id, manager);
             realmList.add(realm);

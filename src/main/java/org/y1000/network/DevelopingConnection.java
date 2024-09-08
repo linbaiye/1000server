@@ -22,8 +22,8 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
 
     private static final Set<Long> IDs = new HashSet<>();
 
-    public DevelopingConnection(PlayerRepository playerRepository, RealmManager realmManager) {
-        super(realmManager, playerRepository);
+    public DevelopingConnection(RealmManager realmManager) {
+        super(realmManager);
         messages = new ArrayList<>();
         sender = new Thread(this);
         sender.start();

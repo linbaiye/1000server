@@ -28,6 +28,7 @@
             <property name="hibernate.hikari.idleTimeout" value="30000" />
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+            <!--property name="jakarta.persistence.schema-generation.database.action" value="create" /-->
         </properties>
     </persistence-unit>
     <persistence-unit name="org.y1000.test">

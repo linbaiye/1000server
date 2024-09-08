@@ -4,15 +4,17 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import lombok.Data;
 
-class TestingEntityManager {
+@Data
+class JpaFixture {
 
     private EntityManagerFactory entityManagerFactory;
 
     private EntityManager entityManager;
     private EntityTransaction transaction;
 
-    public TestingEntityManager() {
+    public JpaFixture() {
         entityManagerFactory = Persistence.createEntityManagerFactory("org.y1000.test");
     }
 

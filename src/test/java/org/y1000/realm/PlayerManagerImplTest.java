@@ -13,6 +13,7 @@ import org.y1000.message.clientevent.ClientTradePlayerEvent;
 import org.y1000.message.clientevent.ClientTriggerDynamicObjectEvent;
 import org.y1000.message.clientevent.ClientUpdateTradeEvent;
 import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,7 +42,7 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
         itemManager = Mockito.mock(GroundItemManager.class);
         itemFactory = Mockito.mock(ItemFactory.class);
         dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);
-        playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, tradeManager, dynamicObjectManager, Mockito.mock(BankManager.class));
+        playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, tradeManager, dynamicObjectManager, Mockito.mock(BankManager.class), Mockito.mock(PlayerRepository.class));
         realmMap = mockRealmMap();
         realm = mockRealm(realmMap);
     }

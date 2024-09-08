@@ -9,6 +9,7 @@ import org.y1000.message.clientevent.chat.ClientChatEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
 import java.util.ArrayList;
@@ -169,7 +170,7 @@ abstract class AbstractRealm implements Realm {
                 playerManager.onPlayerConnected(connectedEvent.player(), this);
                 log().debug("Added player to realm {}.", id);
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
-                playerManager.clearPlayer(disconnectedEvent.player());
+                playerManager.onPlayerDisconnected(disconnectedEvent.player());
                 eventSender.remove(disconnectedEvent.player());
             } else if (event instanceof PlayerDataEvent dataEvent) {
                 handlePlayerDataEvent(dataEvent);
