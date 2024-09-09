@@ -1,9 +1,9 @@
 package org.y1000.repository;
 
-import org.y1000.item.Item;
+import jakarta.persistence.EntityManager;
+import org.y1000.entities.players.Player;
 
 public interface ItemRepository {
-
-    void save(long playerId, int slot, Item item);
+    void save(EntityManager entityManager, Player player);
 
 }

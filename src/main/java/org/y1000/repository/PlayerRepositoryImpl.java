@@ -38,15 +38,18 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
 
     private final EntityManagerFactory entityManagerFactory;
 
+    private final ItemRepository itemRepository;
 
     public PlayerRepositoryImpl(ItemFactory itemFactory,
                                 KungFuBookFactory kungFuBookFactory,
                                 KungFuBookRepository kungFuRepository,
-                                EntityManagerFactory entityManagerFactory) {
+                                EntityManagerFactory entityManagerFactory,
+                                ItemRepository itemRepository) {
         this.itemFactory = itemFactory;
         this.kungFuBookFactory = kungFuBookFactory;
         this.kungFuRepository = kungFuRepository;
         this.entityManagerFactory = entityManagerFactory;
+        this.itemRepository = itemRepository;
     }
 
     /** 姓 */
@@ -471,6 +474,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
             entityManager.merge(converted);
             kungFuRepository.save(entityManager, converted.getId(), player.kungFuBook());
             saveEquipments(entityManager, player);
+            itemRepository.save(entityManager, player);
             tx.commit();
         }
     }

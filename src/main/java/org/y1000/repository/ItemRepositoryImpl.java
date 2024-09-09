@@ -1,11 +1,16 @@
 package org.y1000.repository;
 
+import jakarta.persistence.EntityManager;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
+import org.y1000.entities.players.Player;
 import org.y1000.item.*;
 import org.y1000.kungfu.KungFuFactory;
+import org.y1000.persistence.ItemPo;
 import org.y1000.sdb.ItemDrugSdb;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
@@ -22,11 +27,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
         this.kungFuFactory = kungFuFactory;
     }
 
-
-    @Override
-    public void save(long playerId, int slot, Item item) {
-
-    }
 
     public Equipment createEquipment(String name) {
         return switch (itemSdb.getEquipmentType(name)) {
@@ -143,5 +143,14 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory {
         Validate.isTrue(name != null && itemSdb.getType(name) == ItemType.EQUIPMENT);
         return itemSdb.isColoring(name) ? new DecorativeEquipment(name, EquipmentType.CLOTHING, itemSdb, itemSdb.getColor(name))
                 : new Clothing(name, itemSdb);
+    }
+
+    @Override
+    public void save(EntityManager entityManager, Player player) {
+        Validate.notNull(entityManager);
+        Validate.notNull(player);
+        entityManager.createQuery("delete from ItemPo i where i.itemKey.playerId = ?1")
+                .setParameter(1, player.id()).executeUpdate();
+        player.inventory().foreach((slot, item) -> entityManager.persist(ItemPo.convert(player.id(), slot, item)));
     }
 }

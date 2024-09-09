@@ -34,6 +34,8 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
 
     private KungFuBookRepository kungFuBookRepository;
 
+    private ItemRepository itemRepository;
+
     @BeforeEach
     void setUp() {
         setup();
@@ -41,7 +43,8 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         kungFuBookFactory = Mockito.mock(KungFuBookFactory.class);
         kungFuBookRepository = Mockito.mock(KungFuBookRepository.class);
         jpaFixture = new JpaFixture();
-        playerRepository = new PlayerRepositoryImpl(itemFactory, kungFuBookFactory, kungFuBookRepository, jpaFixture.getEntityManagerFactory());
+        itemRepository = Mockito.mock(ItemRepository.class);
+        playerRepository = new PlayerRepositoryImpl(itemFactory, kungFuBookFactory, kungFuBookRepository, jpaFixture.getEntityManagerFactory(), itemRepository);
     }
 
     @AfterEach
@@ -130,6 +133,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         assertTrue(names.contains("女子黄龙手套"));
         assertTrue(names.contains("女子上衣"));
         assertTrue(names.contains("长剑"));
+        verify(itemRepository, times(1)).save(any(EntityManager.class), any(Player.class));
     }
 
     @Test

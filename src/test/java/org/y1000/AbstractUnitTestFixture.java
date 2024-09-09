@@ -15,6 +15,7 @@ import org.y1000.kungfu.KungFuFactory;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.repository.ItemRepository;
 import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.sdb.ItemDrugSdb;
@@ -44,6 +45,10 @@ public abstract class AbstractUnitTestFixture {
     }
 
     protected ItemFactory createItemFactory() {
+        return new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuFactory);
+    }
+
+    protected ItemRepository createItemRepository() {
         return new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuFactory);
     }
 
