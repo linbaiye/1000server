@@ -30,7 +30,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
 
     private TestingAttackKungFuParameters parameters;
 
-    private final ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
+    private final ItemFactory itemFactory = createItemFactory();
 
     @BeforeEach
     void setUp() {

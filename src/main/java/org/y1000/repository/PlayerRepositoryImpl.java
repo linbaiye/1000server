@@ -376,21 +376,13 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
     }
 
 
-    private Equipment restoreEquipment(EquipmentPo equipmentPo) {
-        Equipment eq = itemFactory.createEquipment(equipmentPo.getName());
-        if (eq instanceof DyableEquipment dyableEquipment) {
-            dyableEquipment.dye(equipmentPo.getColor());
-        }
-        return eq;
-    }
-
     private PlayerImpl.PlayerImplBuilder restoreEquipmentAndKungFu(PlayerImpl.PlayerImplBuilder builder,
                                                                    EntityManager entityManager,
                                                                    long playerId) {
         List<Equipment> equipment = entityManager.createQuery("select e from EquipmentPo e where e.playerId = ?1", EquipmentPo.class)
                 .setParameter(1, playerId)
                 .getResultStream()
-                .map(this::restoreEquipment)
+                .map(e -> itemFactory.createEquipment(e.getName(), e.getColor()))
                 .toList();
         find(equipment, ArmorEquipment.class, EquipmentType.BOOT).ifPresent(builder::boot);
         find(equipment, ArmorEquipment.class, EquipmentType.HAT).ifPresent(builder::hat);
@@ -412,7 +404,6 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
 
     private Player restore(EntityManager entityManager, PlayerPo playerPo) {
         PlayerDefaultAttributes innate = PlayerDefaultAttributes.INSTANCE;
-
         PlayerImpl.PlayerImplBuilder builder = PlayerImpl.builder()
                 .id(playerPo.getId())
                 .coordinate(playerPo.coordinate())
@@ -429,7 +420,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
                 .revival(playerPo.getRevivalExp())
                 .innateAttributesProvider(innate)
                 .pillSlots(new PillSlots())
-                .inventory(loadInventory());
+                .inventory(itemRepository.findInventory(entityManager, playerPo.getId()));
         return restoreEquipmentAndKungFu(builder, entityManager, playerPo.getId())
                 .build();
     }

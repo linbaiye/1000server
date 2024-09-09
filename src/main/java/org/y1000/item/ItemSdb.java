@@ -49,5 +49,9 @@ public interface ItemSdb {
 
     Integer getColor(String name);
 
+    default int getColorOrZero(String name) {
+        return getColor(name) != null ? getColor(name) : 0;
+    }
+
     boolean isColoring(String name);
 }

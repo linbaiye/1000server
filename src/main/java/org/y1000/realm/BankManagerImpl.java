@@ -68,7 +68,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
     }
 
     private void startTx(Player player, Banker banker) {
-        Bank bank = bankRepository.find(player.id()).orElse(Bank.open());
+        Bank bank = bankRepository.find(player.id()).orElseGet(Bank::open);
         playerTransactionMap.put(player, new BankTransaction(bank, player, banker));
         banker.registerEventListener(this);
         player.registerEventListener(this);
@@ -152,7 +152,6 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
         if (!swapper.apply(bank, inventory)) {
             return;
         }
-        bankRepository.save(player.id(), bank);
         eventSender.notifySelf(UpdateInventorySlotEvent.update(player, inventorySlot));
         eventSender.notifySelf(UpdateBankEvent.update(player, bank, bankSlot));
     }

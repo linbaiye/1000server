@@ -66,14 +66,14 @@ public final class Server {
         accountServer = new ServerBootstrap();
         entityManagerFactory = Persistence.createEntityManagerFactory("org.y1000");
         KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl();
-        ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl);
+        ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl, entityManagerFactory);
         itemRepository = repository;
         npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, CreateEntitySdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
-                entityManagerFactory, playerRepository);
+                entityManagerFactory, playerRepository, repository);
         accountRepository = new AccountRepositoryImpl();
         accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, playerRepository);
         realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory, accountManager, playerRepository);

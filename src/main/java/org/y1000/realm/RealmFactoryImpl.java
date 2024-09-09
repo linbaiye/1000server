@@ -8,7 +8,7 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
-import org.y1000.repository.BankRepositoryImpl;
+import org.y1000.repository.BankRepository;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.CreateEntitySdbRepository;
 import org.y1000.sdb.CreateGateSdb;
@@ -25,8 +25,9 @@ public final class RealmFactoryImpl implements RealmFactory {
     private final CreateEntitySdbRepository createEntitySdbRepository;
     private final DynamicObjectFactory dynamicObjectFactory;
     private final CreateGateSdb createGateSdb;
-    private final EntityManagerFactory entityManagerFactory;
     private final PlayerRepository playerRepository;
+
+    private final BankRepository bankRepository;
 
     @Builder
     public RealmFactoryImpl(ItemFactory itemFactory,
@@ -37,7 +38,10 @@ public final class RealmFactoryImpl implements RealmFactory {
                             CreateEntitySdbRepository createEntitySdbRepository,
                             DynamicObjectFactory dynamicObjectFactory,
                             CreateGateSdb createGateSdb,
-                            EntityManagerFactory entityManagerFactory, PlayerRepository playerRepository) {
+                            EntityManagerFactory entityManagerFactory,
+                            PlayerRepository playerRepository,
+                            BankRepository bankRepository) {
+        this.bankRepository = bankRepository;
         Validate.notNull(itemFactory);
         Validate.notNull(npcFactory);
         Validate.notNull(itemSdb);
@@ -56,7 +60,6 @@ public final class RealmFactoryImpl implements RealmFactory {
         this.createEntitySdbRepository = createEntitySdbRepository;
         this.dynamicObjectFactory = dynamicObjectFactory;
         this.createGateSdb = createGateSdb;
-        this.entityManagerFactory = entityManagerFactory;
         this.playerRepository = playerRepository;
     }
 
@@ -92,7 +95,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             var dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
                     new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id), crossRealmEventSender, realmMap);
             var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager,
-                    new BankManagerImpl(eventSender, npcManager, new BankRepositoryImpl()), playerRepository);
+                    new BankManagerImpl(eventSender, npcManager, bankRepository), playerRepository);
             var teleportManager = new TeleportManager(id, realmMap, createGateSdb, entityIdGenerator, aoiManager);
             var builder = RealmBuilder.builder()
                     .id(id)
@@ -195,12 +198,10 @@ public final class RealmFactoryImpl implements RealmFactory {
         }
 
         public Realm buildNormal() {
-            log.debug("Creating normal realm {}.", id);
             return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
         }
 
         public Realm buildDungeon(int interval) {
-            log.debug("Creating dungeon realm {}.", id);
             return new DungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager);
         }
     }

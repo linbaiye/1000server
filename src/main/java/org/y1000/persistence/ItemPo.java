@@ -21,6 +21,13 @@ public class ItemPo {
 
     private long number;
 
+    private int color;
+
+    public enum Type {
+        BANK,
+        INVENTORY,
+    }
+
     @Data
     @Builder
     @Embeddable
@@ -32,12 +39,22 @@ public class ItemPo {
         private long playerId;
 
         private int slot;
+
+        @Enumerated(EnumType.STRING)
+        private Type type;
     }
 
-    public static ItemPo convert(long playerId, int slot, Item item) {
+    public static ItemPo toInventoryItem(long playerId, int slot, Item item) {
         if (item instanceof StackItem stackItem) {
-            return new ItemPo(item.name(), new ItemKey(playerId, slot), ((StackItem) item).number());
+            return new ItemPo(item.name(), new ItemKey(playerId, slot, Type.INVENTORY), stackItem.number(), item.color());
         }
-        return new ItemPo(item.name(), new ItemKey(playerId, slot), 1);
+        return new ItemPo(item.name(), new ItemKey(playerId, slot, Type.INVENTORY), 1, item.color());
+    }
+
+    public static ItemPo toBankItem(long playerId, int slot, Item item) {
+        if (item instanceof StackItem stackItem) {
+            return new ItemPo(item.name(), new ItemKey(playerId, slot, Type.BANK), stackItem.number(), item.color());
+        }
+        return new ItemPo(item.name(), new ItemKey(playerId, slot, Type.BANK), 1, item.color());
     }
 }

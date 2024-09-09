@@ -3,6 +3,7 @@ package org.y1000.entities.players.inventory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.players.Player;
 import org.y1000.item.*;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-class InventoryTest {
+class InventoryTest extends AbstractUnitTestFixture {
 
     private Inventory inventory;
 
@@ -29,7 +30,7 @@ class InventoryTest {
 
     private ItemSdb itemSdb;
 
-    private final ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
+    private final ItemFactory itemFactory = createItemFactory();
 
     @BeforeEach
     void setUp() {

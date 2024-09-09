@@ -3,6 +3,7 @@ package org.y1000.entities.players;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.item.ItemFactory;
@@ -19,12 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
-class PillSlotsTest {
+class PillSlotsTest extends AbstractUnitTestFixture {
     private PillSlots slots;
 
     private Player player;
 
-    private ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
+    private ItemFactory itemFactory = createItemFactory();
 
     @BeforeEach
     void setUp() {

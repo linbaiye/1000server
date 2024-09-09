@@ -2,6 +2,7 @@ package org.y1000.item;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.event.OpenTradeWindowEvent;
 
 import java.util.Optional;
@@ -9,7 +10,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-class StackItemTest extends AbstractItemUnitTestFixture {
+class StackItemTest extends AbstractUnitTestFixture {
 
     @Test
     void hasEnough() {
@@ -62,7 +63,8 @@ class StackItemTest extends AbstractItemUnitTestFixture {
 
     @Test
     void origin() {
-        var stackItem = (StackItem)itemFactory.createItem("蓝色染剂", 1);
+        ItemFactory itemFactory = createItemFactory();
+        var stackItem = (StackItem) itemFactory.createItem("蓝色染剂", 1);
         assertTrue(stackItem.origin(Dye.class).isPresent());
     }
 }

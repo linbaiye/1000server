@@ -1,11 +1,14 @@
 package org.y1000.entities.players.inventory;
 
 import org.junit.jupiter.api.Test;
-import org.y1000.item.AbstractItemUnitTestFixture;
+import org.y1000.AbstractUnitTestFixture;
+import org.y1000.item.ItemFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BankTest extends AbstractItemUnitTestFixture {
+class BankTest extends AbstractUnitTestFixture {
+
+    private final ItemFactory itemFactory = createItemFactory();
 
     @Test
     void canPut() {

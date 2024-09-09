@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.players.*;
+import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.Weapon;
 import org.y1000.kungfu.KungFuBook;
@@ -190,7 +191,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
                 .build();
         player.joinRealm(mockedRealm, Coordinate.xy(1, 2));
         playerRepository.update(player);
-
+        when(itemRepository.findInventory(any(EntityManager.class), anyLong())).thenReturn(new Inventory());
         KungFuBook kungFuBook = new KungFuBookRepositoryImpl().create();
         when(kungFuBookRepository.find(any(EntityManager.class), anyLong())).thenReturn(Optional.of(kungFuBook));
         var p = playerRepository.find(1, player.viewName()).get().getLeft();
@@ -212,5 +213,6 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals("女子皮鞋", p.boot().get().name());
         assertEquals("女子上衣", p.clothing().get().name());
         assertEquals("无名剑法", p.attackKungFu().name());
+        verify(itemRepository, times(1)).findInventory(any(EntityManager.class), anyLong());
     }
 }

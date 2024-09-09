@@ -42,7 +42,7 @@ class YaohuaTest extends AbstractUnitTestFixture {
 
     @BeforeEach
     void setUp() {
-        itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, Mockito.mock(KungFuFactory.class));
+        itemFactory = createItemFactory();
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         realmMap = Mockito.mock(RealmMap.class);
         yaohua = (Yaohua) dynamicObjectFactory.createDynamicObject("妖华", 1L, realmMap, Coordinate.xy(1, 2));

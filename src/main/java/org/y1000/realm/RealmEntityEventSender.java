@@ -271,8 +271,4 @@ final class RealmEntityEventSender implements EntityEventListener,
         return playerConnectionMap.remove(player);
     }
 
-    @Override
-    public void updateScope(Player player) {
-        scopeManager.update(player);
-    }
 }

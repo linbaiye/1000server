@@ -1,5 +1,6 @@
 package org.y1000;
 
+import jakarta.persistence.EntityManagerFactory;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
@@ -15,6 +16,7 @@ import org.y1000.kungfu.KungFuFactory;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.repository.BankRepository;
 import org.y1000.repository.ItemRepository;
 import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
@@ -44,12 +46,20 @@ public abstract class AbstractUnitTestFixture {
         return mockedMap;
     }
 
+    private ItemRepositoryImpl createItemRepositoryImpl() {
+        return new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuFactory, Mockito.mock(EntityManagerFactory.class));
+    }
+
     protected ItemFactory createItemFactory() {
-        return new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuFactory);
+        return createItemRepositoryImpl();
     }
 
     protected ItemRepository createItemRepository() {
-        return new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuFactory);
+        return createItemRepositoryImpl();
+    }
+
+    protected BankRepository createBankRepository() {
+        return createItemRepositoryImpl();
     }
 
     protected Realm mockRealm(RealmMap map) {

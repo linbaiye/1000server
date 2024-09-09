@@ -39,7 +39,7 @@ class DevirtueMerchantTest extends AbstractNpcUnitTestFixture {
     private List<MerchantItem> buyItems;
     private List<MerchantItem> sellItems;
 
-    private final ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
+    private final ItemFactory itemFactory = createItemFactory();
 
     @BeforeEach
     void setUp() {

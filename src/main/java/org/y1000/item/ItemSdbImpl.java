@@ -314,7 +314,7 @@ MaxCount,        最多持有数量；
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
         for (String i: items) {
-            if (!i.contains("脱色")) {
+            if (17 != itemSdb.getTypeValue(i)) {
                 continue;
             }
             System.out.println("----------------------------");

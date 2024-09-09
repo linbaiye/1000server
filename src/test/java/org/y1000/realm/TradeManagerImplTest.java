@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Player;
@@ -30,7 +31,7 @@ import org.y1000.util.Coordinate;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TradeManagerImplTest {
+class TradeManagerImplTest extends AbstractUnitTestFixture {
     private TradeManager tradeManager;
     private Inventory traderInventory;
     private Inventory tradeeInventory;
@@ -46,7 +47,7 @@ class TradeManagerImplTest {
     @BeforeEach
     void setUp() {
         eventSender = Mockito.mock(EntityEventSender.class);
-        itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
+        itemFactory = createItemFactory();
         trader = Mockito.mock(Player.class);
         tradeManager = new TradeManagerImpl(eventSender);
         traderInventory = new Inventory();

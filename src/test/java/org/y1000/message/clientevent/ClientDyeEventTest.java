@@ -3,16 +3,17 @@ package org.y1000.message.clientevent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.item.AbstractItemUnitTestFixture;
+import org.y1000.item.ItemFactory;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.*;
 
-class ClientDyeEventTest extends AbstractItemUnitTestFixture {
+class ClientDyeEventTest extends AbstractUnitTestFixture {
 
     private Inventory inventory;
     private Player player;
@@ -26,6 +27,7 @@ class ClientDyeEventTest extends AbstractItemUnitTestFixture {
 
     @Test
     void handle() {
+        ItemFactory itemFactory = createItemFactory();
         int dyedSlot = inventory.add(itemFactory.createItem("女子皮鞋"));
         var before = inventory.getItem(dyedSlot).color();
         int dyeSlot = inventory.add(itemFactory.createItem("蓝色染剂"));

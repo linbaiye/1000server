@@ -3,6 +3,7 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.Banker;
@@ -33,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class BankManagerImplTest extends AbstractItemUnitTestFixture {
+class BankManagerImplTest extends AbstractUnitTestFixture  {
 
     private BankManagerImpl bankManager;
     private EntityEventSender eventSender;
@@ -41,6 +42,7 @@ class BankManagerImplTest extends AbstractItemUnitTestFixture {
     private BankRepository bankRepository;
     private Player player;
     private TestingEventListener testingEventListener;
+    private final ItemFactory itemFactory = createItemFactory();
     private final NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance,
             MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
     private Inventory inventory;
@@ -119,7 +121,6 @@ class BankManagerImplTest extends AbstractItemUnitTestFixture {
         assertEquals(1, updateBank.getUpdateSlot().getSlotId());
         assertEquals("福袋", updateBank.getUpdateSlot().getName());
 
-        verify(bankRepository, times(1)).save(anyLong(), any(Bank.class));
         slot = inventory.add(itemFactory.createItem("长剑"));
         bankManager.handle(player, new ClientOperateBankEvent(ClientOperateBankEvent.Operation.INVENTORY_TO_BANK, 0, slot, 2, 1));
         assertEquals("长剑", bank.getItem(2).name());
