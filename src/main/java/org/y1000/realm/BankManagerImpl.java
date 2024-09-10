@@ -97,7 +97,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
         if (item == null || item.itemType() != ItemType.BANK_INVENTORY) {
             return;
         }
-        Bank bank = bankRepository.find(player.id()).orElse(Bank.open());
+        Bank bank = bankRepository.find(player.id()).orElseGet(Bank::open);
         if (!bank.canUnlock()) {
             return;
         }

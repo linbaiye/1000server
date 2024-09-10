@@ -241,7 +241,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
     }
 
     private void merge(EntityManager entityManager, BankPo bankPo, Bank bank) {
-        bankPo.setUnlocked(bankPo.getUnlocked());
+        bankPo.setUnlocked(bank.getUnlocked());
         bankPo.setCapacity(bank.capacity());
         bank.foreach((slot, item) -> entityManager.persist(ItemPo.toBankItem(bankPo.getPlayerId(), slot, item)));
     }
