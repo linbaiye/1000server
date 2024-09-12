@@ -20,6 +20,7 @@ interface PlayerManager extends ActiveEntityManager<Player> {
 
     Set<Player> allPlayers();
 
-    void onPlayerDisconnected(Player player);
+
+    void onPlayerDisconnected(long playerId);
 
 }

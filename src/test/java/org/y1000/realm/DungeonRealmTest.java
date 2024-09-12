@@ -47,7 +47,7 @@ class DungeonRealmTest extends AbstractRealmUnitTextFixture {
             messageAtomicReference.set(argument);
             return null;
         }).when(connection).write(any(ServerMessage.class));
-        RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection);
+        RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection, 0);
 
         currentDateTime  = LocalDateTime.now().withMinute(6).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);
@@ -77,7 +77,7 @@ class DungeonRealmTest extends AbstractRealmUnitTextFixture {
         Player player = playerBuilder().build();
         player.leaveRealm();
         Connection connection = Mockito.mock(Connection.class);
-        RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection);
+        RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection, 0);
         currentDateTime  = LocalDateTime.now().withMinute(0).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);
         verify(playerManager, times(1)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
@@ -99,7 +99,7 @@ class DungeonRealmTest extends AbstractRealmUnitTextFixture {
             messageAtomicReference.set(argument);
             return null;
         }).when(connection).write(any(ServerMessage.class));
-        RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection);
+        RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection, 0);
         currentDateTime  = LocalDateTime.now().withMinute(5).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);
         verify(connection, times(1)).write(any(PlayerTextEvent.class));
@@ -113,7 +113,7 @@ class DungeonRealmTest extends AbstractRealmUnitTextFixture {
         Player player = playerBuilder().build();
         player.leaveRealm();
         Connection connection = Mockito.mock(Connection.class);
-        RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection);
+        RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection, 0);
         currentDateTime  = LocalDateTime.now().withMinute(0).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);
         verify(playerManager, times(1)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));

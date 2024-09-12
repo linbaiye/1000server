@@ -1,0 +1,62 @@
+package org.y1000.realm;
+
+import org.y1000.entities.players.Player;
+import org.y1000.realm.event.RealmTeleportEvent;
+import org.y1000.sdb.MapSdb;
+import org.y1000.util.Coordinate;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.function.Supplier;
+
+abstract class AbstractDungeonRealm extends AbstractRealm {
+
+    private final int interval;
+    private boolean closing;
+
+    AbstractDungeonRealm(int id, RealmMap realmMap, RealmEntityEventSender eventSender,
+                         GroundItemManager itemManager, NpcManager npcManager,
+                         PlayerManager playerManager, DynamicObjectManager dynamicObjectManager,
+                         TeleportManager teleportManager, CrossRealmEventSender crossRealmEventSender, MapSdb mapSdb,
+                         ChatManager chatManager, int interval) {
+        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+        if (interval != 180000 && interval != 360000) {
+            log().warn("Not a neat dungeon realm: {}.", id);
+        }
+        this.interval = interval;
+        closing = false;
+    }
+
+    public boolean isHalfHourInterval() {
+        return interval == 180000;
+    }
+
+    protected int exitRealmIt() {
+        return getMapSdb().getTargetServerID(id());
+    }
+
+    protected Coordinate exitCoordinate() {
+        return Coordinate.xy(getMapSdb().getTargetX(id()), getMapSdb().getTargetY(id()));
+    }
+
+    private void teleportOut(Player player) {
+        onPlayerTeleport(new RealmTeleportEvent(player, exitRealmIt(), exitCoordinate()));
+    }
+
+    boolean isClosing() {
+        return closing;
+    }
+
+    public void close() {
+        if (closing) {
+            return;
+        }
+        closing = true;
+        playerManager().allPlayers().forEach(this::teleportOut);
+    }
+
+    @Override
+    public void update() {
+        doUpdateEntities();
+    }
+}

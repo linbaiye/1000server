@@ -86,6 +86,10 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
         NINE_TAIL_FOX_SHIFT(15),
 
+        PLAYER_SHOUT(16),
+
+        PLAYER_WHISPER(18),
+
 
         CUSTOM(1000000);
         ;
@@ -224,8 +228,7 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         return new PlayerTextEvent(player, name + " 获得 " + number + "个。", TextType.CUSTOM, Location.LEFT);
     }
 
-
-    public static PlayerTextEvent privateChat(Player player, String content) {
-        return new PlayerTextEvent(player, content, TextType.CUSTOM, Location.DOWN, ColorType.PRIVATE_CHAT);
+    public static PlayerTextEvent whisper(Player player, String content) {
+        return new PlayerTextEvent(player, content, TextType.PLAYER_WHISPER, Location.DOWN, ColorType.PRIVATE_CHAT);
     }
 }

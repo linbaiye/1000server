@@ -46,12 +46,12 @@ final class TeleportManager {
     private void addTeleport(String idName, UnaryAction<PlayerRealmEvent> handler) {
         Teleport teleport;
         if (createGateSdb.isVisible(idName)) {
-            var port = new StaticTeleport(entityIdGenerator.next(), idName, createGateSdb, handler);
+            var port = new StaticTeleport(entityIdGenerator.next(), idName, createGateSdb, handler, realmId);
             aoiManager.add(port);
             teleports.add(port);
             teleport = port;
         } else {
-            teleport = new InvisibleTeleport(entityIdGenerator.next(), idName, createGateSdb, handler);
+            teleport = new InvisibleTeleport(entityIdGenerator.next(), idName, createGateSdb, handler, realmId);
         }
         realmMap.addTeleport(teleport);
         log.debug("Added port at {} in realm {}.", teleport.coordinate(), realmId);

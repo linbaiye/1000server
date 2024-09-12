@@ -9,7 +9,6 @@ import org.y1000.message.clientevent.chat.ClientChatEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
-import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
 import java.util.ArrayList;
@@ -90,7 +89,6 @@ abstract class AbstractRealm implements Realm {
         }
     }
 
-
     abstract Logger log();
 
     public void init() {
@@ -115,7 +113,6 @@ abstract class AbstractRealm implements Realm {
     public int id() {
         return id;
     }
-
 
     void onPlayerTeleport(PlayerRealmEvent event) {
         if (!(event instanceof RealmTeleportEvent realmTeleportEvent) ||
@@ -147,15 +144,16 @@ abstract class AbstractRealm implements Realm {
     }
 
 
-
-
     private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
-        if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent &&
-                commandEvent.isAskingPosition()) {
-            Set<Merchant> merchants = npcManager.findMerchants();
-            Set<StaticTeleport> staticTeleports = teleportManager.findStaticTeleports();
-            if (!merchants.isEmpty() || !staticTeleports.isEmpty())
-                eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
+        if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent) {
+            if (commandEvent.isAskingPosition()) {
+                Set<Merchant> merchants = npcManager.findMerchants();
+                Set<StaticTeleport> staticTeleports = teleportManager.findStaticTeleports();
+                if (!merchants.isEmpty() || !staticTeleports.isEmpty())
+                    eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
+            } else if (commandEvent.isQuit()) {
+                playerManager.onPlayerDisconnected(dataEvent.playerId());
+            }
         } else if (dataEvent.data() instanceof ClientChatEvent clientChatEvent) {
             chatManager.handleClientChat(dataEvent.playerId(), clientChatEvent);
         } else {
@@ -170,7 +168,7 @@ abstract class AbstractRealm implements Realm {
                 playerManager.onPlayerConnected(connectedEvent.player(), this);
                 log().debug("Added player to realm {}.", id);
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
-                playerManager.onPlayerDisconnected(disconnectedEvent.player());
+                playerManager.onPlayerDisconnected(disconnectedEvent.player().id());
                 eventSender.remove(disconnectedEvent.player());
             } else if (event instanceof PlayerDataEvent dataEvent) {
                 handlePlayerDataEvent(dataEvent);
@@ -180,7 +178,7 @@ abstract class AbstractRealm implements Realm {
                 playerManager().allPlayers().forEach(broadcastEvent::send);
             } else if (event instanceof RealmTriggerEvent letterEvent) {
                 npcManager.handleCrossRealmEvent(letterEvent);
-            } else if (event instanceof PrivateChatEvent privateMessageEvent) {
+            } else if (event instanceof PlayerWhisperEvent privateMessageEvent) {
                 chatManager.handleCrossRealmChat(privateMessageEvent);
             }
         } catch (Exception e) {

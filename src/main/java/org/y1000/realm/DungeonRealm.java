@@ -3,24 +3,20 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.sdb.MapSdb;
-import org.y1000.util.Coordinate;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Supplier;
 
 @Slf4j
-final class DungeonRealm extends AbstractRealm {
-
-    private final int interval;
-
+final class DungeonRealm extends AbstractDungeonRealm {
     private final Supplier<LocalDateTime> dateTimeSupplier;
-
-    private boolean closing;
+    private final Set<Integer> whitelistedIds;
 
     public DungeonRealm(int id,
                         RealmMap realmMap,
@@ -32,9 +28,10 @@ final class DungeonRealm extends AbstractRealm {
                         TeleportManager teleportManager,
                         CrossRealmEventSender crossRealmEventSender,
                         MapSdb mapSdb, int interval,
-                        ChatManager chatManager) {
+                        ChatManager chatManager,
+                        Set<Integer> whitelistedIds) {
         this(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
-                interval, LocalDateTime::now, chatManager);
+                interval, LocalDateTime::now, chatManager, whitelistedIds);
     }
 
     public DungeonRealm(int id,
@@ -48,35 +45,36 @@ final class DungeonRealm extends AbstractRealm {
                         CrossRealmEventSender crossRealmEventSender,
                         MapSdb mapSdb,
                         int interval,
-                        Supplier<LocalDateTime> timeSupplier, ChatManager chatManager) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
-        if (interval != 180000 && interval != 360000) {
-            log.warn("Not a neat dungeon realm: {}.", id);
-        }
+                        Supplier<LocalDateTime> timeSupplier,
+                        ChatManager chatManager) {
+        this(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, timeSupplier,
+                chatManager, Collections.emptySet());
+    }
+
+    public DungeonRealm(int id,
+                        RealmMap realmMap,
+                        RealmEntityEventSender eventSender,
+                        GroundItemManager itemManager,
+                        NpcManager npcManager,
+                        PlayerManager playerManager,
+                        DynamicObjectManager dynamicObjectManager,
+                        TeleportManager teleportManager,
+                        CrossRealmEventSender crossRealmEventSender,
+                        MapSdb mapSdb,
+                        int interval,
+                        Supplier<LocalDateTime> timeSupplier,
+                        ChatManager chatManager,
+                        Set<Integer> whitelistedIds) {
+        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, interval);
         Validate.notNull(timeSupplier);
-        this.interval = interval;
         this.dateTimeSupplier = timeSupplier;
-        closing = false;
+        this.whitelistedIds = whitelistedIds;
     }
 
     @Override
     protected Logger log() {
         return log;
     }
-
-    public boolean isHalfHourInterval() {
-        return interval == 180000;
-    }
-
-    private boolean isOpening() {
-        var minute = dateTimeSupplier.get().getMinute();
-        if (isHalfHourInterval()) {
-            return minute <= 4 || minute >= 30 && minute <= 34;
-        } else {
-            return minute <= 4;
-        }
-    }
-
 
     private String buildTip() {
         var now = dateTimeSupplier.get();
@@ -101,44 +99,31 @@ final class DungeonRealm extends AbstractRealm {
         return builder.append("后开启。").toString();
     }
 
+    private boolean isOpening() {
+        var minute = dateTimeSupplier.get().getMinute();
+        if (isHalfHourInterval()) {
+            return minute <= 4 || minute >= 30 && minute <= 34;
+        } else {
+            return minute <= 4;
+        }
+    }
+
     @Override
     void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
-        if (closing) {
+        if (isClosing()) {
             teleportEvent.getConnection().write(PlayerTextEvent.bottom(teleportEvent.player(), "当前无法进入，请稍后重试。"));
-            getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection()));
+            getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection(), id()));
         }
-        //acceptTeleport(teleportEvent);
+        if (whitelistedIds.contains(teleportEvent.fromRealmId())) {
+            acceptTeleport(teleportEvent);
+            return;
+        }
         if (isOpening()) {
             acceptTeleport(teleportEvent);
         } else {
             teleportEvent.getConnection().write(PlayerTextEvent.bottom(teleportEvent.player(), buildTip()));
-            getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection()));
+            getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection(), id()));
         }
-    }
-
-    private int exitRealmIt() {
-        return getMapSdb().getTargetServerID(id());
-    }
-
-    private Coordinate exitCoordinate() {
-        return Coordinate.xy(getMapSdb().getTargetX(id()), getMapSdb().getTargetY(id()));
-    }
-
-    private void teleportOut(Player player) {
-        onPlayerTeleport(new RealmTeleportEvent(player, exitRealmIt(), exitCoordinate()));
-    }
-
-    public void close() {
-        if (closing) {
-            return;
-        }
-        closing = true;
-        playerManager().allPlayers().forEach(this::teleportOut);
-    }
-
-    @Override
-    public void update() {
-        doUpdateEntities();
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.entities.players.event.PlayerSpeakEvent;
 
-public record ClientSpeakEvent(String content) implements ClientChatEvent {
+public record ClientSayEvent(String content) implements ClientChatEvent {
 
     public AbstractPlayerEvent toPlayerEvent(Player source) {
         Validate.notNull(source);

@@ -11,19 +11,27 @@ public final class RealmTeleportEvent implements PlayerRealmEvent {
     private final int realmId;
     private final Coordinate toCoordinate;
 
+    private final int fromId;
+
     @Getter
     @Setter
     private Connection connection;
 
     public RealmTeleportEvent(Player player, int realmId, Coordinate toCoordinate) {
-        this(player, realmId, toCoordinate, null);
+        this(player, realmId, toCoordinate, null, 0);
     }
 
-    public RealmTeleportEvent(Player player, int realmId, Coordinate toCoordinate, Connection connection) {
+    public RealmTeleportEvent(Player player, int realmId, Coordinate toCoordinate, int fromId) {
+        this(player, realmId, toCoordinate, null, fromId);
+    }
+
+    public RealmTeleportEvent(Player player, int realmId, Coordinate toCoordinate,
+                              Connection connection, int from) {
         this.player = player;
         this.realmId = realmId;
         this.toCoordinate = toCoordinate;
         this.connection = connection;
+        this.fromId = from;
     }
 
     @Override
@@ -33,6 +41,10 @@ public final class RealmTeleportEvent implements PlayerRealmEvent {
 
     public Coordinate toCoordinate() {
         return toCoordinate;
+    }
+
+    public int fromRealmId() {
+        return fromId;
     }
 
     @Override

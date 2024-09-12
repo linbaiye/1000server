@@ -7,6 +7,7 @@ create table account(
                         created_time datetime default now()
 )engine = InnoDB, charset = utf8mb4;
 
+
 create table player (
                         account_id integer,
                         arm_life integer not null,

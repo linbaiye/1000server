@@ -5,10 +5,10 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.message.clientevent.chat.ClientChatEvent;
 import org.y1000.message.clientevent.chat.ClientRealmChatEvent;
-import org.y1000.message.clientevent.chat.ClientSpeakEvent;
+import org.y1000.message.clientevent.chat.ClientSayEvent;
 
 import org.y1000.realm.event.RealmEvent;
-import org.y1000.realm.event.PrivateChatEvent;
+import org.y1000.realm.event.PlayerWhisperEvent;
 
 @Slf4j
 class ChatManagerImpl implements ChatManager {
@@ -36,7 +36,7 @@ class ChatManagerImpl implements ChatManager {
         }
         if (event instanceof ClientRealmChatEvent realmChatEvent) {
             crossRealmEventSender.send(realmChatEvent.toRealmEvent(player));
-        } else if (event instanceof ClientSpeakEvent speakEvent) {
+        } else if (event instanceof ClientSayEvent speakEvent) {
             eventSender.notifyVisiblePlayersAndSelf(player, speakEvent.toPlayerEvent(player));
         }
     }
@@ -48,7 +48,7 @@ class ChatManagerImpl implements ChatManager {
         playerManager.find(from).ifPresent(player -> handleClientChatEvent(player, clientChatEvent));
     }
 
-    private void handlePrivateChat(Player player, PrivateChatEvent chatEvent) {
+    private void handlePrivateChat(Player player, PlayerWhisperEvent chatEvent) {
         log.debug("Found by name {}.", player.viewName());
         player.emitEvent(chatEvent.toTextEvent(player));
         if (chatEvent.needConfirm())
@@ -60,7 +60,7 @@ class ChatManagerImpl implements ChatManager {
         if (realmEvent == null) {
             return;
         }
-        if (realmEvent instanceof PrivateChatEvent privateMessageEvent) {
+        if (realmEvent instanceof PlayerWhisperEvent privateMessageEvent) {
             playerManager.allPlayers().stream().filter(p -> privateMessageEvent.receiverName().equals(p.viewName()))
                     .findFirst().ifPresent(player -> handlePrivateChat(player, privateMessageEvent));
         }

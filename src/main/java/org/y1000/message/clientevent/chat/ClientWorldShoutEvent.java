@@ -11,7 +11,7 @@ public record ClientWorldShoutEvent(String content) implements ClientRealmChatEv
 
     @Override
     public RealmEvent toRealmEvent(Player player) {
-        return new BroadcastChatEvent(player.viewName() + "：" + content, PlayerTextEvent.TextType.CUSTOM,
+        return new BroadcastChatEvent(player.viewName() + "：" + content, PlayerTextEvent.TextType.PLAYER_SHOUT,
                 PlayerTextEvent.ColorType.EIGHT_GRADE);
     }
 

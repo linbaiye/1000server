@@ -69,7 +69,7 @@ public final class RealmGroup implements Runnable {
         log.debug("Trying to reset realms {}.", Arrays.stream(realms).toList());
         try {
             for (int i = 0; i < realms.length; i++) {
-                if (!(realms[i] instanceof DungeonRealm dungeonRealm)) {
+                if (!(realms[i] instanceof AbstractDungeonRealm dungeonRealm)) {
                     continue;
                 }
                 if (!dungeonRealm.isHalfHourInterval() && now.getMinute() != 59) {

@@ -15,6 +15,8 @@ import org.y1000.sdb.CreateGateSdb;
 import org.y1000.sdb.MapSdb;
 import org.y1000.sdb.MonstersSdb;
 
+import java.util.*;
+
 @Slf4j
 public final class RealmFactoryImpl implements RealmFactory {
     private final ItemFactory itemFactory;
@@ -28,6 +30,10 @@ public final class RealmFactoryImpl implements RealmFactory {
     private final PlayerRepository playerRepository;
 
     private final BankRepository bankRepository;
+
+    private static final Set<Integer> CONJUNCTION_IDS = Set.of(4, 20);
+
+    private static final Map<Integer, Set<Integer>> DUNGEON_WHITELIST_IDS = Map.of(19, Set.of(20), 3, Set.of(4));
 
     @Builder
     public RealmFactoryImpl(ItemFactory itemFactory,
@@ -104,6 +110,8 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .eventSender(eventSender)
                     .itemManager(itemManager)
                     .mapSdb(mapSdb)
+                    .whitelistIds(DUNGEON_WHITELIST_IDS.getOrDefault(id, Collections.emptySet()))
+                    .conjunction(CONJUNCTION_IDS.contains(id))
                     .npcManager(npcManager)
                     .playerManager(playerManager)
                     .realmMap(realmMap)
@@ -134,6 +142,10 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         private ChatManager chatManager;
 
+        private boolean conjunction;
+
+        private Set<Integer> whitelistIds;
+
         private RealmBuilder() {
         }
 
@@ -143,6 +155,11 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         public RealmBuilder realmMap(RealmMap realmMap) {
             this.realmMap = realmMap;
+            return this;
+        }
+
+        public RealmBuilder whitelistIds(Set<Integer> ids) {
+            this.whitelistIds = ids;
             return this;
         }
 
@@ -156,6 +173,10 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
+        public RealmBuilder conjunction(boolean c) {
+            this.conjunction = c;
+            return this;
+        }
 
         public RealmBuilder itemManager(ItemManagerImpl itemManager) {
             this.itemManager = itemManager;
@@ -202,7 +223,11 @@ public final class RealmFactoryImpl implements RealmFactory {
         }
 
         public Realm buildDungeon(int interval) {
-            return new DungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager);
+            if (conjunction) {
+                return new ConjunctionDungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager);
+            } else {
+                return new DungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager, whitelistIds);
+            }
         }
     }
 }

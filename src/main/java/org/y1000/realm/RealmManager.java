@@ -54,35 +54,9 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         this.accountManager = accountManager;
     }
 
-
     public void startRealms() {
         groups.forEach(executorService::submit);
     }
-
-    private int getPlayerLastRealm(Player player) {
-        return PlayerRepositoryImpl.lastRealmId();
-    }
-
-    private void handleNewConnection(ConnectionEstablishedEvent event) {
-        if (playerRealmMap.containsKey(event.player())) {
-            // need to close current connection.
-            log.error("Duplicate connection for {}.", event.player());
-            event.connection().close();
-            return;
-        }
-        var playerLastRealm = getPlayerLastRealm(event.player());
-        RealmGroup group = realmIdGroupMap.get(playerLastRealm);
-        if (group == null) {
-            log.error("Realm {} does not exist.", playerLastRealm);
-            event.connection().close();
-            return;
-        }
-        connectionPlayerMap.put(event.connection(), event.player());
-        playerRealmMap.put(event.player(), playerLastRealm);
-        playerNameRealmIdMap.put(event.player().viewName(), playerLastRealm);
-        group.handle(new ConnectionEstablishedEvent(playerLastRealm, event.player(), event.connection()));
-    }
-
 
     private void handleLogin(Player player, int realmId, Connection connection) {
         if (playerRealmMap.containsKey(player)) {
@@ -125,9 +99,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
     }
 
     private void handle(ConnectionEvent event) {
-        if (event.type() == ConnectionEventType.ESTABLISHED) {
-            handleNewConnection((ConnectionEstablishedEvent)event);
-        } else if (event.type() == ConnectionEventType.CLOSED) {
+        if (event.type() == ConnectionEventType.CLOSED) {
             handleDisconnection(event.connection());
         } else if (event instanceof ConnectionDataEvent dataEvent) {
             if (dataEvent.data() instanceof LoginEvent loginEvent) {
@@ -150,7 +122,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
             if (group != null) {
                 group.handle(realmTriggerEvent);
             }
-        } else if (realmEvent instanceof PrivateChatEvent privateChat) {
+        } else if (realmEvent instanceof PlayerWhisperEvent privateChat) {
             Integer realm = playerNameRealmIdMap.get(privateChat.receiverName());
             if (realm == null) {
                 if (playerNameRealmIdMap.containsKey(privateChat.senderName()))

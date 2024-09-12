@@ -6,6 +6,7 @@ public record ClientSimpleCommandEvent(org.y1000.message.clientevent.ClientSimpl
 
     public enum Command implements ValueEnum {
         NPC_POSITION(1),
+        CLIENT_QUIT(2)
         ;
         private final int v;
 
@@ -29,6 +30,10 @@ public record ClientSimpleCommandEvent(org.y1000.message.clientevent.ClientSimpl
 
     public boolean isAskingPosition() {
         return command == Command.NPC_POSITION;
+    }
+
+    public boolean isQuit() {
+        return command == Command.CLIENT_QUIT;
     }
 
 }

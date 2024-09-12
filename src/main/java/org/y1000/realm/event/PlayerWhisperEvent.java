@@ -5,13 +5,13 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
 
-public record PrivateChatEvent(String receiverName,
-                               String senderName,
-                               String content,
-                               Type type) implements RealmEvent {
+public record PlayerWhisperEvent(String receiverName,
+                                 String senderName,
+                                 String content,
+                                 Type type) implements RealmEvent {
 
-    public static PrivateChatEvent send(String receiverName, String senderName, String content) {
-        return new PrivateChatEvent(receiverName, senderName, content, Type.SEND);
+    public static PlayerWhisperEvent send(String receiverName, String senderName, String content) {
+        return new PlayerWhisperEvent(receiverName, senderName, content, Type.SEND);
     }
 
     private String formatReceiving() {
@@ -33,18 +33,18 @@ public record PrivateChatEvent(String receiverName,
 
     public PlayerTextEvent toTextEvent(Player player) {
         Validate.notNull(player);
-        return PlayerTextEvent.privateChat(player, formatReceiving());
+        return PlayerTextEvent.whisper(player, formatReceiving());
     }
 
-    public PrivateChatEvent createConfirmation() {
+    public PlayerWhisperEvent createConfirmation() {
         if (type == Type.SEND)
-            return new PrivateChatEvent(senderName, receiverName, content, Type.CONFIRM);
+            return new PlayerWhisperEvent(senderName, receiverName, content, Type.CONFIRM);
         throw new IllegalStateException();
     }
 
-    public PrivateChatEvent noRecipient() {
+    public PlayerWhisperEvent noRecipient() {
         if (type == Type.SEND)
-            return new PrivateChatEvent(senderName(), "", "玩家不在线。", Type.NOT_FOUND);
+            return new PlayerWhisperEvent(senderName(), "", "玩家不在线。", Type.NOT_FOUND);
         throw new IllegalStateException();
     }
 

@@ -9,7 +9,8 @@ public final class InvisibleTeleport extends AbstractTeleport {
 
     public InvisibleTeleport(long id, String idName,
                              CreateGateSdb createGateSdb,
-                             UnaryAction<PlayerRealmEvent> teleportEventHandler) {
-        super(id, idName, createGateSdb, teleportEventHandler);
+                             UnaryAction<PlayerRealmEvent> teleportEventHandler,
+                             int fromRealm) {
+        super(id, idName, createGateSdb, teleportEventHandler, fromRealm);
     }
 }

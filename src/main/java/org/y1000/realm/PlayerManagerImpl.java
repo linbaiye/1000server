@@ -193,13 +193,15 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         return getEntities();
     }
 
+
     @Override
-    public void onPlayerDisconnected(Player player) {
-        if (player != null) {
+    public void onPlayerDisconnected(long playerId) {
+        find(playerId).ifPresent( player -> {
             playerRepository.update(player);
             clearPlayer(player);
-        }
+        });
     }
+
 
     @Override
     public void onEvent(EntityEvent entityEvent) {

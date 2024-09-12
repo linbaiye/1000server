@@ -13,6 +13,6 @@ public interface ClientChatEvent extends ClientEvent {
         } else if (ClientWorldShoutEvent.isFormatCorrect(content)) {
             return ClientWorldShoutEvent.parse(content);
         }
-        return new ClientSpeakEvent(content);
+        return new ClientSayEvent(content);
     }
 }

@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.event.RealmEvent;
-import org.y1000.realm.event.PrivateChatEvent;
+import org.y1000.realm.event.PlayerWhisperEvent;
 public record ClientPrivateChatEvent(String receiver, String content) implements ClientRealmChatEvent {
 
     public ClientPrivateChatEvent {
@@ -35,6 +35,6 @@ public record ClientPrivateChatEvent(String receiver, String content) implements
     @Override
     public RealmEvent toRealmEvent(Player player) {
         Validate.notNull(player);
-        return PrivateChatEvent.send(receiver, player.viewName(), content);
+        return PlayerWhisperEvent.send(receiver, player.viewName(), content);
     }
 }

@@ -14,8 +14,10 @@ public final class StaticTeleport extends AbstractTeleport implements Entity  {
 
     private final String name;
 
-    public StaticTeleport(long id, String idName, CreateGateSdb createGateSdb, UnaryAction<PlayerRealmEvent> teleportEventHandler) {
-        super(id, idName, createGateSdb, teleportEventHandler);
+    public StaticTeleport(long id, String idName, CreateGateSdb createGateSdb,
+                          UnaryAction<PlayerRealmEvent> teleportEventHandler,
+                          int realmId) {
+        super(id, idName, createGateSdb, teleportEventHandler, realmId);
         shapeId = createGateSdb.getShape(idName);
         name = createGateSdb.getViewName(idName);
         Validate.notEmpty(name);
