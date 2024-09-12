@@ -8,8 +8,8 @@ public interface ClientChatEvent extends ClientEvent {
     boolean canSend(Player player);
 
     static ClientEvent create(String content) {
-        if (ClientPrivateChatEvent.isFormatCorrect(content)) {
-            return ClientPrivateChatEvent.parse(content);
+        if (ClientWhisperEvent.isFormatCorrect(content)) {
+            return ClientWhisperEvent.parse(content);
         } else if (ClientWorldShoutEvent.isFormatCorrect(content)) {
             return ClientWorldShoutEvent.parse(content);
         }

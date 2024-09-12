@@ -17,7 +17,6 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private CreatureHurtEventPacket() {
-    sound_ = "";
   }
 
   @java.lang.Override
@@ -117,45 +116,6 @@ private static final long serialVersionUID = 0L;
     return maxLife_;
   }
 
-  public static final int SOUND_FIELD_NUMBER = 8;
-  @SuppressWarnings("serial")
-  private volatile java.lang.Object sound_ = "";
-  /**
-   * <code>string sound = 8;</code>
-   * @return The sound.
-   */
-  @java.lang.Override
-  public java.lang.String getSound() {
-    java.lang.Object ref = sound_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      sound_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string sound = 8;</code>
-   * @return The bytes for sound.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString
-      getSoundBytes() {
-    java.lang.Object ref = sound_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      sound_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -190,9 +150,6 @@ private static final long serialVersionUID = 0L;
     }
     if (maxLife_ != 0) {
       output.writeInt32(7, maxLife_);
-    }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(sound_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, sound_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -231,9 +188,6 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(7, maxLife_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(sound_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, sound_);
-    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -263,8 +217,6 @@ private static final long serialVersionUID = 0L;
         != other.getCurrentLife()) return false;
     if (getMaxLife()
         != other.getMaxLife()) return false;
-    if (!getSound()
-        .equals(other.getSound())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -291,8 +243,6 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getCurrentLife();
     hash = (37 * hash) + MAXLIFE_FIELD_NUMBER;
     hash = (53 * hash) + getMaxLife();
-    hash = (37 * hash) + SOUND_FIELD_NUMBER;
-    hash = (53 * hash) + getSound().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -431,7 +381,6 @@ private static final long serialVersionUID = 0L;
       afterHurtState_ = 0;
       currentLife_ = 0;
       maxLife_ = 0;
-      sound_ = "";
       return this;
     }
 
@@ -485,9 +434,6 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000040) != 0)) {
         result.maxLife_ = maxLife_;
-      }
-      if (((from_bitField0_ & 0x00000080) != 0)) {
-        result.sound_ = sound_;
       }
     }
 
@@ -556,11 +502,6 @@ private static final long serialVersionUID = 0L;
       if (other.getMaxLife() != 0) {
         setMaxLife(other.getMaxLife());
       }
-      if (!other.getSound().isEmpty()) {
-        sound_ = other.sound_;
-        bitField0_ |= 0x00000080;
-        onChanged();
-      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -622,11 +563,6 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000040;
               break;
             } // case 56
-            case 66: {
-              sound_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000080;
-              break;
-            } // case 66
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -864,78 +800,6 @@ private static final long serialVersionUID = 0L;
     public Builder clearMaxLife() {
       bitField0_ = (bitField0_ & ~0x00000040);
       maxLife_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object sound_ = "";
-    /**
-     * <code>string sound = 8;</code>
-     * @return The sound.
-     */
-    public java.lang.String getSound() {
-      java.lang.Object ref = sound_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        sound_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>string sound = 8;</code>
-     * @return The bytes for sound.
-     */
-    public com.google.protobuf.ByteString
-        getSoundBytes() {
-      java.lang.Object ref = sound_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        sound_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string sound = 8;</code>
-     * @param value The sound to set.
-     * @return This builder for chaining.
-     */
-    public Builder setSound(
-        java.lang.String value) {
-      if (value == null) { throw new NullPointerException(); }
-      sound_ = value;
-      bitField0_ |= 0x00000080;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string sound = 8;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearSound() {
-      sound_ = getDefaultInstance().getSound();
-      bitField0_ = (bitField0_ & ~0x00000080);
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string sound = 8;</code>
-     * @param value The bytes for sound to set.
-     * @return This builder for chaining.
-     */
-    public Builder setSoundBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      sound_ = value;
-      bitField0_ |= 0x00000080;
       onChanged();
       return this;
     }

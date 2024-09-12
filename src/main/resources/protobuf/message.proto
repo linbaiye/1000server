@@ -56,7 +56,6 @@ message PlayerLoginPacket {
 
 message CreatureDieEventPacket {
   int64 id = 1;
-  string sound = 2;
 }
 
 message CreatureAttackEventPacket {
@@ -82,7 +81,6 @@ message CreatureHurtEventPacket {
   int32 afterHurtState = 5;
   int32 currentLife = 6;
   int32 maxLife = 7;
-  string sound = 8;
 }
 
 message ChangeStatePacket {

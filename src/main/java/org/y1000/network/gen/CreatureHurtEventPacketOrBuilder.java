@@ -49,16 +49,4 @@ public interface CreatureHurtEventPacketOrBuilder extends
    * @return The maxLife.
    */
   int getMaxLife();
-
-  /**
-   * <code>string sound = 8;</code>
-   * @return The sound.
-   */
-  java.lang.String getSound();
-  /**
-   * <code>string sound = 8;</code>
-   * @return The bytes for sound.
-   */
-  com.google.protobuf.ByteString
-      getSoundBytes();
 }

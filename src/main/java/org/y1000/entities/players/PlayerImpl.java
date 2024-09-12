@@ -571,6 +571,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         this.changeState(PlayerDeadState.die(this));
         emitEvent(new CreatureDieEvent(this));
+        dieSound().ifPresent(s -> new EntitySoundEvent(this, s));
     }
 
     private void gainProtectionExp(int bodyDamage) {
@@ -948,6 +949,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         life.consume(amount);
         if (life.currentValue() == 0) {
             onKilled();
+        } else {
+            emitEvent(new PlayerAttributeEvent(this));
         }
     }
 

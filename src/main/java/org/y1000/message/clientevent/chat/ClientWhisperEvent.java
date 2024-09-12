@@ -5,9 +5,9 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.event.RealmEvent;
 import org.y1000.realm.event.PlayerWhisperEvent;
-public record ClientPrivateChatEvent(String receiver, String content) implements ClientRealmChatEvent {
+public record ClientWhisperEvent(String receiver, String content) implements ClientRealmChatEvent {
 
-    public ClientPrivateChatEvent {
+    public ClientWhisperEvent {
         Validate.isTrue(receiver != null);
         Validate.isTrue(content != null);
     }
@@ -20,11 +20,11 @@ public record ClientPrivateChatEvent(String receiver, String content) implements
         return split.length >= 2 && StringUtils.isNotEmpty(split[1]);
     }
 
-    public static ClientPrivateChatEvent parse(String text) {
+    public static ClientWhisperEvent parse(String text) {
         Validate.isTrue(isFormatCorrect(text));
         String[] split = text.split(" ");
         String replace = text.replace("@纸条 " + split[1], "");
-        return new ClientPrivateChatEvent(split[1], replace.startsWith(" ") ? replace.substring(1) : replace);
+        return new ClientWhisperEvent(split[1], replace.startsWith(" ") ? replace.substring(1) : replace);
     }
 
     @Override

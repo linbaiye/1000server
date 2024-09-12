@@ -12,12 +12,40 @@ public record ClientWorldShoutEvent(String content) implements ClientRealmChatEv
     @Override
     public RealmEvent toRealmEvent(Player player) {
         return new BroadcastChatEvent(player.viewName() + "：" + content, PlayerTextEvent.TextType.PLAYER_SHOUT,
-                PlayerTextEvent.ColorType.EIGHT_GRADE);
+                computeLevel(player));
+    }
+
+    private PlayerTextEvent.ColorType computeLevel(Player player) {
+        int total = player.maxLife() + player.maxPower() + player.maxInnerPower()
+                + player.maxOuterPower() + player.age() / 2;
+        int i = total / 100;
+        if (i < 330) {
+            return PlayerTextEvent.ColorType.FIRST_GRADE;
+        } else if (i < 370) {
+            return PlayerTextEvent.ColorType.SECOND_GRADE;
+        } else if (i < 410) {
+            return PlayerTextEvent.ColorType.THIRD_GRADE;
+        } else if (i < 450) {
+            return PlayerTextEvent.ColorType.FOURTH_GRADE;
+        } else if (i < 490) {
+            return PlayerTextEvent.ColorType.FIVE_GRADE;
+        } else if (i < 530) {
+            return PlayerTextEvent.ColorType.SIX_GRADE;
+        } else if (i < 570) {
+            return PlayerTextEvent.ColorType.SEVEN_GRADE;
+        } else if (i < 610) {
+            return PlayerTextEvent.ColorType.EIGHT_GRADE;
+        } else if (i < 650) {
+            return PlayerTextEvent.ColorType.NINE_GRADE;
+        } else {
+            return PlayerTextEvent.ColorType.TEN_GRADE;
+        }
     }
 
     @Override
     public boolean canSend(Player player) {
-        return player != null && player.stateEnum() != State.DIE;
+        return player != null && player.stateEnum() != State.DIE
+                && player.currentLife() >= 5000;
     }
 
     public static boolean isFormatCorrect(String text) {

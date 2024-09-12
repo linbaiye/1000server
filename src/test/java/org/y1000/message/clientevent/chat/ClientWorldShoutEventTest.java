@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.realm.event.BroadcastChatEvent;
@@ -45,5 +46,18 @@ class ClientWorldShoutEventTest {
             return null;
         }).when(player).emitEvent(any(PlayerTextEvent.class));
         verify(player, times(1)).emitEvent(any(PlayerTextEvent.class));
+    }
+
+    @Test
+    void canSend() {
+        ClientWorldShoutEvent event = ClientWorldShoutEvent.parse("!test");
+        Player player = Mockito.mock(Player.class);
+        when(player.stateEnum()).thenReturn(State.DIE);
+        assertFalse(event.canSend(player));
+        when(player.stateEnum()).thenReturn(State.IDLE);
+        when(player.currentLife()).thenReturn(4999);
+        assertFalse(event.canSend(player));
+        when(player.currentLife()).thenReturn(5000);
+        assertTrue(event.canSend(player));
     }
 }

@@ -13,16 +13,4 @@ public interface CreatureDieEventPacketOrBuilder extends
    * @return The id.
    */
   long getId();
-
-  /**
-   * <code>string sound = 2;</code>
-   * @return The sound.
-   */
-  java.lang.String getSound();
-  /**
-   * <code>string sound = 2;</code>
-   * @return The bytes for sound.
-   */
-  com.google.protobuf.ByteString
-      getSoundBytes();
 }
