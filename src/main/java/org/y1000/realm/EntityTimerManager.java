@@ -4,16 +4,23 @@ import org.y1000.entities.ActiveEntity;
 
 import java.util.*;
 
-final class RespawningEntityManager<E extends ActiveEntity>  {
-    private final List<RespawningEntity<E>> respawningEntities;
+final class EntityTimerManager<E extends ActiveEntity>  {
+    private final List<EntityTimer<E>> entityTimers;
 
-    public RespawningEntityManager() {
-        respawningEntities = new ArrayList<>();
+    public EntityTimerManager() {
+        entityTimers = new ArrayList<>();
     }
 
     public void add(E entity, int millis) {
-        if (entity != null && millis >= 0)
-            respawningEntities.add(new RespawningEntity<>(entity, millis));
+        if (entity != null && millis >= 0 && !contains(entity))
+            entityTimers.add(new EntityTimer<>(entity, millis));
+    }
+
+    private boolean contains(E e) {
+        if (e == null) {
+            return false;
+        }
+        return entityTimers.stream().anyMatch(timer -> timer.e.equals(e));
     }
 
     /**
@@ -23,10 +30,10 @@ final class RespawningEntityManager<E extends ActiveEntity>  {
      */
     public Set<E> update(long delta) {
         Set<E> entities = null;
-        Iterator<RespawningEntity<E>> iterator = respawningEntities.iterator();
+        Iterator<EntityTimer<E>> iterator = entityTimers.iterator();
         while (iterator.hasNext()) {
-            RespawningEntity<E> next = iterator.next();
-            if (next.update(delta).canRespawn()) {
+            EntityTimer<E> next = iterator.next();
+            if (next.update(delta).timeUp()) {
                 iterator.remove();
                 if (entities == null) {
                     entities = new HashSet<>();
@@ -37,21 +44,21 @@ final class RespawningEntityManager<E extends ActiveEntity>  {
         return entities == null ? Collections.emptySet() : entities;
     }
 
-    private static class RespawningEntity<E extends ActiveEntity> {
+    private static class EntityTimer<E extends ActiveEntity> {
         private final E e;
         private int time;
 
-        RespawningEntity(E e, int time) {
+        EntityTimer(E e, int time) {
             this.e = e ;
             this.time = time;
         }
 
-        public RespawningEntity<E> update(long delta) {
+        public EntityTimer<E> update(long delta) {
             this.time -= (int) delta;
             return this;
         }
 
-        public boolean canRespawn() {
+        public boolean timeUp() {
             return this.time <= 0;
         }
 

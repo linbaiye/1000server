@@ -14,61 +14,44 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 @Slf4j
-final class DungeonRealm extends AbstractDungeonRealm {
+final class EntranceDungeonRealm extends AbstractDungeonRealm {
     private final Supplier<LocalDateTime> dateTimeSupplier;
     private final Set<Integer> whitelistedIds;
 
-    public DungeonRealm(int id,
-                        RealmMap realmMap,
-                        RealmEntityEventSender eventSender,
-                        GroundItemManager itemManager,
-                        NpcManager npcManager,
-                        PlayerManager playerManager,
-                        DynamicObjectManager dynamicObjectManager,
-                        TeleportManager teleportManager,
-                        CrossRealmEventSender crossRealmEventSender,
-                        MapSdb mapSdb, int interval,
-                        ChatManager chatManager,
-                        Set<Integer> whitelistedIds) {
+    public EntranceDungeonRealm(int id,
+                                RealmMap realmMap,
+                                RealmEntityEventSender eventSender,
+                                GroundItemManager itemManager,
+                                NpcManager npcManager,
+                                PlayerManager playerManager,
+                                DynamicObjectManager dynamicObjectManager,
+                                TeleportManager teleportManager,
+                                CrossRealmEventSender crossRealmEventSender,
+                                MapSdb mapSdb, int interval,
+                                ChatManager chatManager,
+                                Set<Integer> whitelistedIds) {
         this(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
                 interval, LocalDateTime::now, chatManager, whitelistedIds);
     }
 
-    public DungeonRealm(int id,
-                        RealmMap realmMap,
-                        RealmEntityEventSender eventSender,
-                        GroundItemManager itemManager,
-                        NpcManager npcManager,
-                        PlayerManager playerManager,
-                        DynamicObjectManager dynamicObjectManager,
-                        TeleportManager teleportManager,
-                        CrossRealmEventSender crossRealmEventSender,
-                        MapSdb mapSdb,
-                        int interval,
-                        Supplier<LocalDateTime> timeSupplier,
-                        ChatManager chatManager) {
-        this(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, timeSupplier,
-                chatManager, Collections.emptySet());
-    }
-
-    public DungeonRealm(int id,
-                        RealmMap realmMap,
-                        RealmEntityEventSender eventSender,
-                        GroundItemManager itemManager,
-                        NpcManager npcManager,
-                        PlayerManager playerManager,
-                        DynamicObjectManager dynamicObjectManager,
-                        TeleportManager teleportManager,
-                        CrossRealmEventSender crossRealmEventSender,
-                        MapSdb mapSdb,
-                        int interval,
-                        Supplier<LocalDateTime> timeSupplier,
-                        ChatManager chatManager,
-                        Set<Integer> whitelistedIds) {
+    public EntranceDungeonRealm(int id,
+                                RealmMap realmMap,
+                                RealmEntityEventSender eventSender,
+                                GroundItemManager itemManager,
+                                NpcManager npcManager,
+                                PlayerManager playerManager,
+                                DynamicObjectManager dynamicObjectManager,
+                                TeleportManager teleportManager,
+                                CrossRealmEventSender crossRealmEventSender,
+                                MapSdb mapSdb,
+                                int interval,
+                                Supplier<LocalDateTime> timeSupplier,
+                                ChatManager chatManager,
+                                Set<Integer> whitelistedIds) {
         super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, interval);
         Validate.notNull(timeSupplier);
         this.dateTimeSupplier = timeSupplier;
-        this.whitelistedIds = whitelistedIds;
+        this.whitelistedIds = whitelistedIds != null ? whitelistedIds : Collections.emptySet();
     }
 
     @Override
@@ -122,7 +105,8 @@ final class DungeonRealm extends AbstractDungeonRealm {
             acceptTeleport(teleportEvent);
         } else {
             teleportEvent.getConnection().write(PlayerTextEvent.bottom(teleportEvent.player(), buildTip()));
-            getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection(), id()));
+            getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(),
+                    teleportEvent.rejectCoordinate().orElse(exitCoordinate()), teleportEvent.getConnection(), id()));
         }
     }
 

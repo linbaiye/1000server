@@ -10,6 +10,4 @@ public interface NpcAI {
 
     void start(Npc npc);
 
-    NpcAI DONOTHING = NpcFrozenAI.INSTANCE;
-
 }

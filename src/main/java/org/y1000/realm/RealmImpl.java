@@ -2,6 +2,7 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
+import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.sdb.MapSdb;
 
@@ -29,6 +30,12 @@ final class RealmImpl extends AbstractRealm {
     @Override
     void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
         acceptTeleport(teleportEvent);
+    }
+
+    @Override
+    void handleConnectionEvent(ConnectionEstablishedEvent connectedEvent) {
+        getEventSender().add(connectedEvent.player(), connectedEvent.connection());
+        getPlayerManager().onPlayerConnected(connectedEvent.player(), this);
     }
 
     @Override

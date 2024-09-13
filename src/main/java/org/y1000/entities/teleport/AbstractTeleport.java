@@ -19,8 +19,6 @@ public abstract class AbstractTeleport implements Teleport {
 
     private final long id;
 
-    private final String idName;
-
     private final Coordinate coordinate;
 
     private final UnaryAction<PlayerRealmEvent> teleportEventHandler;
@@ -42,7 +40,6 @@ public abstract class AbstractTeleport implements Teleport {
         Validate.notNull(teleportEventHandler);
         Validate.notNull(createGateSdb);
         this.id = id;
-        this.idName = idName;
         this.coordinate = parseCoordinate(idName, createGateSdb);
         this.toCoordinate = Coordinate.xy(createGateSdb.getTX(idName), createGateSdb.getTY(idName));
         this.toRealm = createGateSdb.getServerId(idName);
@@ -50,10 +47,9 @@ public abstract class AbstractTeleport implements Teleport {
         this.teleportEventHandler = teleportEventHandler;
         Validate.notNull(coordinate);
         Validate.notNull(toCoordinate);
-        rejectCoordinate = Coordinate.Empty;
+        this.rejectCoordinate = createGateSdb.getEX(idName) != null ? Coordinate.xy(createGateSdb.getEX(idName), createGateSdb.getEY(idName)) : null;
         this.realmId = realmId;
     }
-
 
     public long id() {
         return id;
@@ -74,7 +70,7 @@ public abstract class AbstractTeleport implements Teleport {
         if (player == null) {
             return;
         }
-        teleportEventHandler.invoke(new RealmTeleportEvent(player, toRealm, toCoordinate, realmId));
+        teleportEventHandler.invoke(new RealmTeleportEvent(player, toRealm, toCoordinate, realmId, rejectCoordinate));
     }
 
     private static Set<Coordinate> parse(String name, Coordinate coordinate, CreateGateSdb gateSdb) {

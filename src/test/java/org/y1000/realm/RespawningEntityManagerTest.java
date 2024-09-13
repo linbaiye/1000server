@@ -11,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RespawningEntityManagerTest {
 
-    private RespawningEntityManager<Npc> manager;
+    private EntityTimerManager<Npc> manager;
 
 
     @BeforeEach
     void setUp() {
-        manager = new RespawningEntityManager<>();
+        manager = new EntityTimerManager<>();
     }
 
     @Test

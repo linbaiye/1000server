@@ -12,7 +12,7 @@ import org.y1000.realm.event.RealmEvent;
 import org.y1000.realm.event.PlayerWhisperEvent;
 
 @Slf4j
-class ChatManagerImpl implements ChatManager {
+final class ChatManagerImpl implements ChatManager {
 
     private final PlayerManager playerManager;
 

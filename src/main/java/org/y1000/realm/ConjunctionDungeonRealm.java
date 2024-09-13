@@ -6,7 +6,7 @@ import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.sdb.MapSdb;
 
 @Slf4j
-class ConjunctionDungeonRealm extends AbstractDungeonRealm {
+final class ConjunctionDungeonRealm extends AbstractDungeonRealm {
 
     public ConjunctionDungeonRealm(int id,
                                    RealmMap realmMap,

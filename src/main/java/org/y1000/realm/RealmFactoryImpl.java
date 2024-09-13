@@ -10,10 +10,8 @@ import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
 import org.y1000.repository.BankRepository;
 import org.y1000.repository.PlayerRepository;
-import org.y1000.sdb.CreateEntitySdbRepository;
-import org.y1000.sdb.CreateGateSdb;
-import org.y1000.sdb.MapSdb;
-import org.y1000.sdb.MonstersSdb;
+import org.y1000.sdb.*;
+import org.y1000.util.Coordinate;
 
 import java.util.*;
 
@@ -31,6 +29,8 @@ public final class RealmFactoryImpl implements RealmFactory {
 
     private final BankRepository bankRepository;
 
+    private final PosByDieSdb posByDieSdb;
+
     private static final Set<Integer> CONJUNCTION_IDS = Set.of(4, 20);
 
     private static final Map<Integer, Set<Integer>> DUNGEON_WHITELIST_IDS = Map.of(19, Set.of(20), 3, Set.of(4));
@@ -46,8 +46,8 @@ public final class RealmFactoryImpl implements RealmFactory {
                             CreateGateSdb createGateSdb,
                             EntityManagerFactory entityManagerFactory,
                             PlayerRepository playerRepository,
-                            BankRepository bankRepository) {
-        this.bankRepository = bankRepository;
+                            BankRepository bankRepository,
+                            PosByDieSdb posByDieSdb) {
         Validate.notNull(itemFactory);
         Validate.notNull(npcFactory);
         Validate.notNull(itemSdb);
@@ -58,6 +58,8 @@ public final class RealmFactoryImpl implements RealmFactory {
         Validate.notNull(createGateSdb);
         Validate.notNull(entityManagerFactory);
         Validate.notNull(playerRepository);
+        Validate.notNull(bankRepository);
+        Validate.notNull(posByDieSdb);
         this.itemFactory = itemFactory;
         this.npcFactory = npcFactory;
         this.itemSdb = itemSdb;
@@ -67,6 +69,8 @@ public final class RealmFactoryImpl implements RealmFactory {
         this.dynamicObjectFactory = dynamicObjectFactory;
         this.createGateSdb = createGateSdb;
         this.playerRepository = playerRepository;
+        this.bankRepository = bankRepository;
+        this.posByDieSdb = posByDieSdb;
     }
 
     private NpcManager createNpcManager(int id,
@@ -85,6 +89,12 @@ public final class RealmFactoryImpl implements RealmFactory {
                 new NpcManagerImpl(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap);
     }
 
+    private DeadPlayerTeleportManager deadPlayerTeleportManager(int id) {
+        return posByDieSdb.findIdByRealmId(id)
+                .map(server -> new DeadPlayerTeleportManagerImpl(posByDieSdb.getDestServer(server), Coordinate.xy(posByDieSdb.getDestX(server), posByDieSdb.getDestY(server))))
+                .orElse(null);
+    }
+
 
     @Override
     public Realm createRealm(int id,
@@ -101,7 +111,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             var dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
                     new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id), crossRealmEventSender, realmMap);
             var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager,
-                    new BankManagerImpl(eventSender, npcManager, bankRepository), playerRepository);
+                    new BankManagerImpl(eventSender, npcManager, bankRepository), playerRepository, deadPlayerTeleportManager(id));
             var teleportManager = new TeleportManager(id, realmMap, createGateSdb, entityIdGenerator, aoiManager);
             var builder = RealmBuilder.builder()
                     .id(id)
@@ -116,6 +126,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .playerManager(playerManager)
                     .realmMap(realmMap)
                     .teleportManager(teleportManager)
+                    .posByDieSdb(posByDieSdb)
                     .chatManager(new ChatManagerImpl(playerManager, eventSender, crossRealmEventSender))
                     ;
             return mapSdb.getRegenInterval(id)
@@ -146,6 +157,8 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         private Set<Integer> whitelistIds;
 
+        private PosByDieSdb posByDieSdb;
+
         private RealmBuilder() {
         }
 
@@ -160,6 +173,11 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         public RealmBuilder whitelistIds(Set<Integer> ids) {
             this.whitelistIds = ids;
+            return this;
+        }
+
+        public RealmBuilder posByDieSdb(PosByDieSdb pos) {
+            this.posByDieSdb = pos;
             return this;
         }
 
@@ -226,7 +244,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             if (conjunction) {
                 return new ConjunctionDungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager);
             } else {
-                return new DungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager, whitelistIds);
+                return new EntranceDungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager, whitelistIds);
             }
         }
     }

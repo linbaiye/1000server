@@ -21,7 +21,7 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
 
     private final Map<String, List<NpcSpawnSetting>> npcSpawnSettings;
 
-    private final RespawningEntityManager<Npc> respawningEntityManager;
+    private final EntityTimerManager<Npc> respawningEntityManager;
 
     private boolean initialized = false;
 
@@ -39,7 +39,7 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
                           CreateNpcSdb createNpcSdb,
                           RealmMap realmMap) {
         super(sender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, createMonsterSdb, createNpcSdb, realmMap);
-        this.respawningEntityManager = new RespawningEntityManager<>();
+        this.respawningEntityManager = new EntityTimerManager<>();
         this.npcSpawnSettings = new HashMap<>();
         this.shiftedNpcs = new HashMap<>();
     }

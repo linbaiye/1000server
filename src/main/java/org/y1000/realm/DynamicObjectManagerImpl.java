@@ -25,7 +25,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
     private final GroundItemManager itemManager;
 
-    private final RespawningEntityManager<RespawnDynamicObject> respawningEntityManager;
+    private final EntityTimerManager<RespawnDynamicObject> respawningEntityManager;
 
     private final CreateDynamicObjectSdb createDynamicObjectSdb;
 
@@ -47,7 +47,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         this.createDynamicObjectSdb = dynamicObjectSdb;
         this.crossRealmEventSender = crossRealmEventSender;
         this.realmMap = realmMap;
-        respawningEntityManager = new RespawningEntityManager<>();
+        respawningEntityManager = new EntityTimerManager<>();
     }
 
     @Override

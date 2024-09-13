@@ -91,6 +91,15 @@ abstract class AbstractRealm implements Realm {
 
     abstract Logger log();
 
+    RealmEntityEventSender getEventSender() {
+        return eventSender;
+    }
+
+    PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+
     public void init() {
         try {
             accumulatedMillis = System.currentTimeMillis();
@@ -99,6 +108,7 @@ abstract class AbstractRealm implements Realm {
             if (dynamicObjectManager != null)
                 dynamicObjectManager.init();
             teleportManager.init(this::onPlayerTeleport);
+            playerManager.setTeleportHandler(this::onPlayerTeleport);
             log().debug("Initialized {}.", this);
         } catch (Exception e) {
             log().error("Failed to init realm {}.", id, e);
@@ -113,6 +123,8 @@ abstract class AbstractRealm implements Realm {
     public int id() {
         return id;
     }
+
+
 
     void onPlayerTeleport(PlayerRealmEvent event) {
         if (!(event instanceof RealmTeleportEvent realmTeleportEvent) ||
@@ -139,6 +151,8 @@ abstract class AbstractRealm implements Realm {
 
     abstract void handleTeleportEvent(RealmTeleportEvent teleportEvent);
 
+    abstract void handleConnectionEvent(ConnectionEstablishedEvent connectedEvent);
+
     PlayerManager playerManager() {
         return playerManager;
     }
@@ -164,9 +178,7 @@ abstract class AbstractRealm implements Realm {
     public void handle(RealmEvent event) {
         try {
             if (event instanceof ConnectionEstablishedEvent connectedEvent) {
-                eventSender.add(connectedEvent.player(), connectedEvent.connection());
-                playerManager.onPlayerConnected(connectedEvent.player(), this);
-                log().debug("Added player to realm {}.", id);
+                handleConnectionEvent(connectedEvent);
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
                 playerManager.onPlayerDisconnected(disconnectedEvent.player().id());
                 eventSender.remove(disconnectedEvent.player());

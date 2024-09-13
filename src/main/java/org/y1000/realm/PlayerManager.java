@@ -2,8 +2,11 @@ package org.y1000.realm;
 
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerTeleportEvent;
 import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
+import org.y1000.util.UnaryAction;
 
 import java.util.Set;
 
@@ -22,5 +25,7 @@ interface PlayerManager extends ActiveEntityManager<Player> {
 
 
     void onPlayerDisconnected(long playerId);
+
+    void setTeleportHandler(UnaryAction<RealmTeleportEvent> teleportHandler);
 
 }

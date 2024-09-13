@@ -73,7 +73,7 @@ public final class Server {
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, CreateEntitySdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
-                entityManagerFactory, playerRepository, repository);
+                entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE);
         accountRepository = new AccountRepositoryImpl();
         accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, playerRepository);
         realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory, accountManager, playerRepository);

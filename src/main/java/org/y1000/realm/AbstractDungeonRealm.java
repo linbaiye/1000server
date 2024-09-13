@@ -1,13 +1,11 @@
 package org.y1000.realm;
 
 import org.y1000.entities.players.Player;
+import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.sdb.MapSdb;
 import org.y1000.util.Coordinate;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.function.Supplier;
 
 abstract class AbstractDungeonRealm extends AbstractRealm {
 
@@ -39,12 +37,19 @@ abstract class AbstractDungeonRealm extends AbstractRealm {
         return Coordinate.xy(getMapSdb().getTargetX(id()), getMapSdb().getTargetY(id()));
     }
 
-    private void teleportOut(Player player) {
+    protected void teleportOut(Player player) {
         onPlayerTeleport(new RealmTeleportEvent(player, exitRealmIt(), exitCoordinate()));
     }
 
     boolean isClosing() {
         return closing;
+    }
+
+    @Override
+    void handleConnectionEvent(ConnectionEstablishedEvent connectedEvent) {
+        getEventSender().add(connectedEvent.player(), connectedEvent.connection());
+        getPlayerManager().onPlayerConnected(connectedEvent.player(), this);
+        teleportOut(connectedEvent.player());
     }
 
     public void close() {
