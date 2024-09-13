@@ -11,4 +11,9 @@ public final class ViolentNpcWanderingAI extends AbstractWanderingNpcAI {
             throw new IllegalStateException();
         }
     }
+
+    @Override
+    public void onActionDone(Npc npc) {
+        defaultActionDone(npc);
+    }
 }

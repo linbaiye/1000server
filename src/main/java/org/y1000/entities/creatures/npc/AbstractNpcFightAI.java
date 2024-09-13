@@ -86,7 +86,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
         if (npc.canChaseOrAttack(enemy)) {
             fightProcess();
         } else {
-            npc.changeAI(new ViolentNpcWanderingAI());
+            npc.changeToIdleAI();
         }
     }
 
@@ -119,7 +119,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
     public void onEvent(EntityEvent entityEvent) {
         if (entityEvent != null && enemy.equals(entityEvent.source()) && !enemy.canBeAttackedNow()) {
             enemy.deregisterEventListener(this);
-            npc.changeAI(new ViolentNpcWanderingAI());
+            npc.changeToIdleAI();
         }
     }
 }

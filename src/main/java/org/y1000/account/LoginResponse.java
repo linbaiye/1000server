@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponse {
-    private int status;
+    private int code;
     private String token;
     private List<String> charNames;
     private String msg;

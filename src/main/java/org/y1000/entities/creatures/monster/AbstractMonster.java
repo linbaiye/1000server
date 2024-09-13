@@ -8,7 +8,6 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.npc.AbstractViolentNpc;
 import org.y1000.entities.creatures.npc.NpcAI;
 import org.y1000.entities.creatures.npc.NpcRangedSkill;
-import org.y1000.entities.creatures.npc.ViolentNpcWanderingAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.message.AbstractCreatureInterpolation;
 import org.y1000.message.NpcInterpolation;
@@ -36,14 +35,9 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
                 attributeProvider().animate(), attributeProvider().shape());
     }
 
-
     @Override
-    public void changeAI(NpcAI newAI) {
-        if (newAI instanceof ViolentNpcWanderingAI wanderingAI) {
-            super.changeAI(new MonsterWanderingAI(wanderingAI));
-        } else {
-            super.changeAI(newAI);
-        }
+    public void changeToIdleAI() {
+        changeAI(new MonsterWanderingAI());
     }
 
     @Override
@@ -59,6 +53,6 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
     @Override
     public void respawn(Coordinate coordinate) {
         doRevive(coordinate);
-        super.changeAI(initAi);
+        changeAI(initAi);
     }
 }

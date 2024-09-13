@@ -3,6 +3,7 @@ package org.y1000.realm;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.event.*;
+import org.y1000.entities.creatures.monster.AggressiveMonster;
 import org.y1000.entities.creatures.npc.AggressiveNpc;
 import org.y1000.entities.creatures.npc.NineTailFoxHuman;
 import org.y1000.entities.creatures.npc.Npc;
@@ -225,6 +226,8 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
             handleCloneEvent(cloneEvent);
         } else if (entityEvent instanceof SeekPlayerEvent seekPlayerEvent) {
             handleSeekPlayerEvent(seekPlayerEvent);
+        } else if (entityEvent instanceof SeekAggressiveMonsterEvent seekAggressiveMonsterEvent) {
+            seekAggressiveMonsterEvent.handle(getEntities().stream());
         } else {
             onUnhandledEvent(entityEvent);
         }

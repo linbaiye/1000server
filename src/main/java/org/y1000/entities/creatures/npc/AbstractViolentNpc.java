@@ -65,6 +65,10 @@ public abstract class AbstractViolentNpc
         this.ai.start(this);
     }
 
+    NpcAI getAi() {
+        return this.ai;
+    }
+
 
     @Override
     public void start() {

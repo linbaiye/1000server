@@ -24,7 +24,6 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
 
     }
 
-
     private void stayIdle(Npc npc) {
         int stateMillis = npc.getStateMillis(State.IDLE) ;
         int walkSpeed = npc.walkSpeed();
@@ -32,8 +31,7 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
         npc.stay(millis);
     }
 
-    @Override
-    public void onActionDone(Npc npc) {
+    void defaultActionDone(Npc npc) {
         switch (npc.stateEnum()) {
             case WALK -> onMoveDone(npc);
             case IDLE -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc),

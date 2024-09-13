@@ -21,4 +21,9 @@ public final class SubmissiveWanderingAI extends AbstractWanderingNpcAI {
 
     public SubmissiveWanderingAI() {
     }
+
+    @Override
+    public void onActionDone(Npc npc) {
+        defaultActionDone(npc);
+    }
 }

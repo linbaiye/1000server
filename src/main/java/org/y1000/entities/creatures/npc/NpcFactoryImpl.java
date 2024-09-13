@@ -240,10 +240,11 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .coordinate(coordinate)
                 .direction(Direction.DOWN)
                 .name(npcSdb.getViewName(name))
+                .width(npcSdb.getActionWidth(name))
                 .realmMap(realmMap)
                 .stateMillis(createActionLengthMap(animate))
                 .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .ai(new ViolentNpcWanderingAI())
+                .ai(new GuardWanderingAI())
                 .build();
     }
 

@@ -15,8 +15,6 @@ import org.y1000.repository.AccountRepositoryImpl;
 import org.y1000.repository.PlayerRepository;
 
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
@@ -61,14 +59,14 @@ class AccountManagerTest extends AbstractPlayerUnitTestFixture  {
     @Test
     void loginWithNotExistingUser() {
         LoginResponse response = accountManager.login("user", "passwd");
-        assertEquals(1, response.getStatus());
+        assertEquals(1, response.getCode());
     }
 
     @Test
     void loginWhenNoChars() {
         accountManager.register("user", "passwd");
         LoginResponse response = accountManager.login("user", "passwd");
-        assertEquals(0, response.getStatus());
+        assertEquals(0, response.getCode());
         assertTrue(response.getCharNames().isEmpty());
     }
 
@@ -83,7 +81,7 @@ class AccountManagerTest extends AbstractPlayerUnitTestFixture  {
         entityManager.persist(p);
         transaction.commit();
         LoginResponse response = accountManager.login("user", "passwd");
-        assertEquals(0, response.getStatus());
+        assertEquals(0, response.getCode());
         assertTrue(response.getCharNames().contains("test"));
     }
 

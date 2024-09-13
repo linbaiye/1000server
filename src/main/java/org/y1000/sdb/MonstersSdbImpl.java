@@ -180,8 +180,9 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
                 continue;
             }
              */
-            if (!ERROR_ANIMATES.contains(Integer.valueOf(monstersSdb.getAnimate(i))))
+            if (!i.startsWith("鹿")) {
                 continue;
+            }
             System.out.println("----------------------------");
             System.out.println(i);
             for (String name : names) {

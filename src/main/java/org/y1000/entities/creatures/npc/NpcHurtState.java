@@ -20,8 +20,6 @@ public final class NpcHurtState extends AbstractCreatureHurtState<Npc> implement
             this.previousState = hurtState.previousState;
         else
             this.previousState = previousState;
-        if (totalMillis == 0)
-            log.debug("Recovery {}", totalMillis);
     }
 
     public Creature attacker() {

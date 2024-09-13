@@ -135,7 +135,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             case FOOT -> createFootKungFu(name, exp);
             case BREATHING -> breathKungFu(name, exp);
             case PROTECTION -> protectKungFu(name, exp);
-            case ASSISTANT ->  AssistantKungFu.builder().name(name).exp(exp).build();
+            case ASSISTANT ->  AssistantKungFu.builder().name(name).eightDirection("灵动八方".equals(name)).exp(exp).build();
             default -> throw new IllegalStateException("Unexpected value: " + kungFuType);
         };
     }
