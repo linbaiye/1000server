@@ -5,12 +5,14 @@ import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
+import org.y1000.entities.players.event.PlayerKungFuFullEvent;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;
 import org.y1000.kungfu.KungFu;
 import org.y1000.kungfu.KungFuType;
 import org.y1000.event.EntityEvent;
+import org.y1000.message.PlayerTextEvent;
 import org.y1000.util.UnaryAction;
 
 public final class BreathKungFu extends AbstractKungFu {
@@ -85,6 +87,8 @@ public final class BreathKungFu extends AbstractKungFu {
         eventSender.invoke(new PlayerAttributeEvent(player));
         if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
             eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
+            if (isExpFull())
+                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
         }
     }
 

@@ -51,6 +51,8 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     private final DeadPlayerTeleportManager deadPlayerTeleportManager;
 
+    private final CrossRealmEventSender crossRealmEventSender;
+
 
     public PlayerManagerImpl(EntityEventSender eventSender,
                              GroundItemManager itemManager,
@@ -58,9 +60,10 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                              DynamicObjectManager dynamicObjectManager,
                              BankManager bankManager,
                              PlayerRepository playerRepository,
-                             DeadPlayerTeleportManager deadPlayerTeleportManager) {
+                             DeadPlayerTeleportManager deadPlayerTeleportManager,
+                             CrossRealmEventSender crossRealmEventSender) {
         this(eventSender, itemManager, itemFactory, new TradeManagerImpl(eventSender), dynamicObjectManager, bankManager, playerRepository,
-                deadPlayerTeleportManager);
+                deadPlayerTeleportManager, crossRealmEventSender);
     }
 
     public PlayerManagerImpl(EntityEventSender eventSender,
@@ -70,7 +73,8 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                              DynamicObjectManager dynamicObjectManager,
                              BankManager bankManager,
                              PlayerRepository playerRepository,
-                             DeadPlayerTeleportManager deadPlayerTeleportManager) {
+                             DeadPlayerTeleportManager deadPlayerTeleportManager,
+                             CrossRealmEventSender crossRealmEventSender) {
         this.eventSender = eventSender;
         this.itemManager = itemManager;
         this.itemFactory = itemFactory;
@@ -81,6 +85,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         this.bankManager = bankManager;
         ropes = new HashSet<>();
         this.deadPlayerTeleportManager = deadPlayerTeleportManager;
+        this.crossRealmEventSender = crossRealmEventSender;
     }
 
     @Override
@@ -160,7 +165,6 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     private void handleDragPlayerEvent(Player player, Player dragged, int ropeSlot) {
         if (player.canDrag(dragged, ropeSlot)) {
-            log().debug("Drag player {}.", dragged.id());
             player.consumeItem(ropeSlot);
             ropes.forEach(rope -> rope.breakIfDraggedAgain(dragged));
             ropes.add(new Rope(dragged, player));
@@ -240,6 +244,8 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                     dieEvent.source() instanceof Player player &&
                     deadPlayerTeleportManager != null) {
                 deadPlayerTeleportManager.onPlayerDead(player);
+            } else if (entityEvent instanceof PlayerKungFuFullEvent event) {
+                crossRealmEventSender.send(event);
             } else if (entityEvent instanceof AbstractPlayerEvent playerEvent && playerEvent.isSelfEvent()) {
                 eventSender.notifySelf(playerEvent);
             }

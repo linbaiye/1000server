@@ -30,6 +30,11 @@ public abstract class AbstractKungFu implements KungFu {
         return old != experience.level();
     }
 
+    @Override
+    public boolean isExpFull() {
+        return experience.value() == ExperienceUtil.MAX_EXP;
+    }
+
     private int getPermitExp(int value) {
         /*
         function  GetPermitExp (aLevel, addvalue: integer): integer;

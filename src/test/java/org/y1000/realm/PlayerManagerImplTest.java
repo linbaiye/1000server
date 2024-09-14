@@ -43,7 +43,7 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
         itemFactory = Mockito.mock(ItemFactory.class);
         dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);
         playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, tradeManager, dynamicObjectManager, Mockito.mock(BankManager.class),
-                Mockito.mock(PlayerRepository.class), null);
+                Mockito.mock(PlayerRepository.class), null, Mockito.mock(CrossRealmEventSender.class));
         realmMap = mockRealmMap();
         realm = mockRealm(realmMap);
     }

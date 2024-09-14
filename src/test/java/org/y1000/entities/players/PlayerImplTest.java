@@ -820,4 +820,10 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         TextMessagePacket text = eventListener.removeFirst(PlayerTextEvent.class).toPacket().getText();
         assertEquals(PlayerTextEvent.TextType.NO_MORE_PILL.value(), text.getType());
     }
+
+    @Test
+    void whenKungFuFull() {
+
+
+    }
 }

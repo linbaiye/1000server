@@ -142,11 +142,6 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         emitEvent(new NpcChangeStateEvent(this, stateEnum()));
     }
 
-    private void freeze() {
-        changeState(NpcCommonState.freeze(getStateMillis(State.FROZEN)));
-        emitEvent(new NpcChangeStateEvent(this, stateEnum()));
-    }
-
 
     @Override
     public void stay(int millis) {
