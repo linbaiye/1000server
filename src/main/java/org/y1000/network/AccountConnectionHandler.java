@@ -1,17 +1,18 @@
 package org.y1000.network;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import org.y1000.account.AccountManager;
-import org.y1000.item.EquipmentType;
-import org.y1000.message.clientevent.*;
-import org.y1000.message.clientevent.chat.ClientChatEvent;
-import org.y1000.network.event.ConnectionDataEvent;
-import org.y1000.network.event.ConnectionEstablishedEvent;
-import org.y1000.network.gen.ClientPacket;
-import org.y1000.util.Coordinate;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.http.*;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.y1000.account.*;
 
-public class AccountConnectionHandler extends ChannelInboundHandlerAdapter {
+import java.nio.charset.StandardCharsets;
+
+
+
+@Slf4j
+public class AccountConnectionHandler extends AbstractHttpConnectionHandler {
 
     private final AccountManager accountManager;
 
@@ -19,18 +20,42 @@ public class AccountConnectionHandler extends ChannelInboundHandlerAdapter {
         this.accountManager = accountManager;
     }
 
-
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof ClientPacket packet) {
-        }
+    private FullHttpResponse handleLogin(String requestBody) throws JsonProcessingException {
+        var req = getObjectMapper().readValue(requestBody, LoginRequest.class);
+        LoginResponse response = accountManager.login(req.getUsername(), req.getPassword());
+        String body = getObjectMapper().writeValueAsString(response);
+        return new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(body, StandardCharsets.UTF_8));
     }
 
+    private FullHttpResponse handleSingup(String requestBody) throws JsonProcessingException {
+        var req = getObjectMapper().readValue(requestBody, LoginRequest.class);
+        var response = accountManager.register(req.getUsername(), req.getPassword());
+        String body = getObjectMapper().writeValueAsString(response);
+        return new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(body, StandardCharsets.UTF_8));
+    }
+
+    private FullHttpResponse handleCreateCharacter(String requestBody) throws JsonProcessingException {
+        var req = getObjectMapper().readValue(requestBody, CreateCharacterRequest.class);
+        var response = accountManager.createCharacter(req.getToken(), req.getCharacterName(), req.isMale());
+        String body = getObjectMapper().writeValueAsString(response);
+        return new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(body, StandardCharsets.UTF_8));
+    }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (!ctx.channel().isActive()) {
-            ctx.close();
+    Logger log() {
+        return log;
+    }
+
+    @Override
+    protected FullHttpResponse handle(String type, String body) {
+        try {
+            return switch (RequestType.valueOf(type)) {
+                case CREATE_CHAR -> handleCreateCharacter(body);
+                case SIGNUP -> handleSingup(body);
+                case LOGIN -> handleLogin(body);
+            };
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

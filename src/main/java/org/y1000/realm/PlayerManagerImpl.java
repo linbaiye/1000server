@@ -201,7 +201,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         } else if (dataEvent.data() instanceof ClientOperateBankEvent bankEvent) {
             find(dataEvent.playerId()).ifPresent(player -> bankManager.handle(player, bankEvent));
         } else {
-            dataEvent.player().handleClientEvent(dataEvent.data());
+            find(dataEvent.playerId()).ifPresent(player -> player.handleClientEvent(dataEvent.data()));
         }
     }
 
@@ -224,6 +224,11 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         if (deadPlayerTeleportManager != null) {
             deadPlayerTeleportManager.setTeleportHandler(teleportHandler);
         }
+    }
+
+    @Override
+    public void shutdown() {
+        allPlayers().forEach(playerRepository::update);
     }
 
 

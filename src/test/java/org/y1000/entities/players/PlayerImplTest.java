@@ -822,8 +822,13 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     }
 
     @Test
-    void whenKungFuFull() {
-
-
+    void useQuanFa() {
+        PlayerImpl.PlayerImplBuilder builder = playerBuilder().attackKungFu(SwordKungFu.builder().name("test").exp(0).build())
+                .weapon(createWeapon("sword", AttackKungFuType.SWORD)).inventory(inventory);
+        var player  = builder.build();
+        player.handleClientEvent(new ClientToggleKungFuEvent(1, 1));
+        assertEquals(player.attackKungFu().name(), "无名拳法");
+        assertEquals("sword", inventory.getItem(1).name());
     }
+
 }

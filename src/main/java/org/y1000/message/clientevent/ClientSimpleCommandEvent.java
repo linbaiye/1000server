@@ -36,4 +36,6 @@ public record ClientSimpleCommandEvent(org.y1000.message.clientevent.ClientSimpl
         return command == Command.CLIENT_QUIT;
     }
 
+    public static ClientSimpleCommandEvent QUIT = new ClientSimpleCommandEvent(Command.CLIENT_QUIT);
+
 }

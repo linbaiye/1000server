@@ -180,7 +180,7 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
                 continue;
             }
              */
-            if (!i.startsWith("鹿")) {
+            if (!i.startsWith("白狐狸")) {
                 continue;
             }
             System.out.println("----------------------------");

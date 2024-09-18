@@ -8,11 +8,11 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.realm.event.BroadcastEvent;
 
 public final class PlayerKungFuFullEvent implements BroadcastEvent, PlayerEvent {
-    private final String kungFuName;
+    private final String text;
     private final Player player;
 
     public PlayerKungFuFullEvent(Player source, KungFu kungFu) {
-        this.kungFuName = kungFu.name();
+        text = source.viewName() +  " 恭喜你\n" + kungFu.name() + " 修炼值已到顶点";
         this.player = source;
     }
 
@@ -23,7 +23,7 @@ public final class PlayerKungFuFullEvent implements BroadcastEvent, PlayerEvent 
 
     @Override
     public void send(Player player) {
-        player.emitEvent(PlayerTextEvent.kungfuFull(player, kungFuName));
+        player.emitEvent(PlayerTextEvent.leftup(player, text));
     }
 
     @Override

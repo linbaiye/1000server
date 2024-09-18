@@ -14,5 +14,6 @@ module Server {
 
     opens org.y1000.persistence;
     opens org.y1000.account;
+    opens org.y1000.management;
 }
 

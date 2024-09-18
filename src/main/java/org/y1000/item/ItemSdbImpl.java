@@ -314,7 +314,7 @@ MaxCount,        最多持有数量；
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
         for (String i: items) {
-            if (17 != itemSdb.getTypeValue(i)) {
+            if (!i.startsWith("霜")) {
                 continue;
             }
             System.out.println("----------------------------");

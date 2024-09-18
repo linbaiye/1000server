@@ -27,7 +27,6 @@ abstract class AbstractRealm implements Realm {
     private final int id;
     private final CrossRealmEventSender crossRealmEventSender;
     private final MapSdb mapSdb;
-    private volatile boolean shutdown;
     private long accumulatedMillis;
     private final List<ActiveEntityManager<?>> entityManagers;
 
@@ -99,6 +98,11 @@ abstract class AbstractRealm implements Realm {
         return playerManager;
     }
 
+
+    @Override
+    public void shutdown() {
+        playerManager.shutdown();
+    }
 
     public void init() {
         try {

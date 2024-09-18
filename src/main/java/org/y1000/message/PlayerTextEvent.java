@@ -3,7 +3,6 @@ package org.y1000.message;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.AbstractPlayerEvent;
-import org.y1000.kungfu.KungFu;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.TextMessagePacket;
@@ -237,11 +236,12 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         return new PlayerTextEvent(player, content, TextType.PLAYER_WHISPER, Location.DOWN, ColorType.PRIVATE_CHAT);
     }
 
-    public static PlayerTextEvent kungfuFull(Player player, String name) {
-        return new PlayerTextEvent(player,player.viewName() +  ", 恭喜你, " + name + "的修炼值已经达到顶点", TextType.CUSTOM, Location.LEFT_UP, ColorType.SAY);
+    public static PlayerTextEvent leftup(Player player, String text) {
+        return new PlayerTextEvent(player,text, TextType.CUSTOM, Location.LEFT_UP, ColorType.SAY);
     }
 
-    public static PlayerTextEvent system(Player player, String content) {
+    public static PlayerTextEvent systemNotification(Player player, String content) {
         return new PlayerTextEvent(player, content, TextType.CUSTOM, Location.CENTER, ColorType.SAY);
     }
+
 }

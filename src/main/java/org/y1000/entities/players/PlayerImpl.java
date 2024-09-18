@@ -252,7 +252,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         Equipment equipped = equippedEquipments.remove(type);
         if (equipped == null) {
-            log.error("Trying to unequip from non equipped ropeSlot {}", type);
             return;
         }
         if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.QUANFA) {
@@ -309,7 +308,12 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         int slot = inventory.findWeaponSlot(newAttack.getType());
         if (slot == 0) {
-            emitEvent(PlayerTextEvent.noWeapon(this));
+            if (newAttack.getType() == AttackKungFuType.QUANFA) {
+                unequip(EquipmentType.WEAPON);
+                changeAttackKungFu(newAttack);
+            } else {
+                emitEvent(PlayerTextEvent.noWeapon(this));
+            }
             return;
         }
         equipWeaponFromSlot(slot, (Weapon) inventory.getItem(slot));
@@ -571,7 +575,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         this.changeState(PlayerDeadState.die(this));
         emitEvent(new CreatureDieEvent(this));
-        dieSound().ifPresent(s -> new EntitySoundEvent(this, s));
+        dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
     private void gainProtectionExp(int bodyDamage) {
@@ -581,7 +585,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         var exp = ExperienceUtil.DEFAULT_EXP - damagedLifeToExp(bodyDamage);
         if (protectKungFu.gainPermittedExp(exp)) {
             emitEvent(new PlayerGainExpEvent(this, protectKungFu.name(), protectKungFu.level()));
-            if (protectKungFu.isExpFull())
+            if (protectKungFu.isLevelFull())
                 emitEvent(new PlayerKungFuFullEvent(this, protectKungFu));
         }
     }
@@ -967,7 +971,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         if (kungFu.gainPermittedExp(amount)) {
             emitEvent(new PlayerGainExpEvent(this, kungFu.name(), kungFu.level()));
-            if (kungFu.isExpFull())
+            if (kungFu.isLevelFull())
                 emitEvent(new PlayerKungFuFullEvent(this, kungFu));
         }
     }

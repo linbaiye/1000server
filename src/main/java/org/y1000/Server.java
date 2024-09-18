@@ -51,11 +51,21 @@ public final class Server {
 
     private static final int accountPort = 9901;
 
+    private static final int managementPort = 9902;
+
     private final ServerBootstrap accountServer;
 
     private final AccountManager accountManager;
 
+
     private final AccountRepository accountRepository;
+
+    private Channel gameSercerChannel;
+    private Channel accountChannel;
+    private Channel managmentChannel;
+    private ServerBootstrap managementServer;
+
+    private boolean shutdown;
 
 
     public Server(int port) {
@@ -64,6 +74,7 @@ public final class Server {
         bossGroup = new NioEventLoopGroup();
         gameServer = new ServerBootstrap();
         accountServer = new ServerBootstrap();
+        managementServer = new ServerBootstrap();
         entityManagerFactory = Persistence.createEntityManagerFactory("org.y1000");
         KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl();
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl, entityManagerFactory);
@@ -123,7 +134,24 @@ public final class Server {
                         ChannelPipeline p = channel.pipeline();
                         p.addLast(new HttpRequestDecoder());
                         p.addLast(new HttpResponseEncoder());
-                        p.addLast(new HttpConnectionHandler(accountManager));
+                        p.addLast(new AccountConnectionHandler(accountManager));
+                    }
+                });
+    }
+
+    private void setupManagementServer() {
+        managementServer.group(bossGroup, workerGroup)
+                .channel(NioServerSocketChannel.class)
+                .option(ChannelOption.SO_BACKLOG, 4096)
+                .childOption(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
+                .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                    @Override
+                    protected void initChannel(NioSocketChannel channel) throws Exception {
+                        ChannelPipeline p = channel.pipeline();
+                        p.addLast(new HttpRequestDecoder());
+                        p.addLast(new HttpResponseEncoder());
+                        p.addLast(new ManagementHttpConnectionHandler(realmManager, Server.this::shutdown));
                     }
                 });
     }
@@ -133,28 +161,39 @@ public final class Server {
     private void close(Channel channel) {
         if (channel != null) {
             try {
-                channel.closeFuture().sync();
+                channel.close().sync();
             } catch (Exception e) {
                 // nothing to do.
             }
         }
     }
 
+    private synchronized void shutdown() {
+        if (shutdown) {
+            return;
+        }
+        realmManager.shut();
+        close(gameSercerChannel);
+        close(accountChannel);
+        close(managmentChannel);
+        workerGroup.shutdownGracefully();
+        bossGroup.shutdownGracefully();
+        entityManagerFactory.close();
+        System.exit(0);
+    }
+
     private void startNetworking() {
-        Channel gameSercerChannel = null;
-        Channel accountChannel = null;
         try {
             setupGameServer();
             gameSercerChannel = gameServer.bind(port).sync().channel();
             setupAccountServer();
             accountChannel = accountServer.bind(accountPort).sync().channel();
+            setupManagementServer();
+            managmentChannel = managementServer.bind(managementPort).sync().channel();
+            log.info("All servers ready.");
         } catch (Exception e) {
             log.error("Caught exception, server exit now.", e);
-        } finally {
-            close(gameSercerChannel);
-            close(accountChannel);
-            workerGroup.shutdownGracefully();
-            bossGroup.shutdownGracefully();
+            System.exit(1);
         }
     }
 

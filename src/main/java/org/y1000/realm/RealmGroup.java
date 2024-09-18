@@ -94,6 +94,7 @@ public final class RealmGroup implements Runnable {
 
     public void shutdown() {
         shutdown = true;
+        Stream.of(realms).forEach(Realm::shutdown);
     }
 
     private List<RealmEvent> pollPendingEvents() {

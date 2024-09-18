@@ -1,6 +1,7 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.y1000.account.AccountManager;
 import org.y1000.entities.players.Player;
 import org.y1000.message.clientevent.ClientEvent;
@@ -12,7 +13,6 @@ import org.y1000.network.event.ConnectionDataEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.event.ConnectionEvent;
 import org.y1000.repository.PlayerRepository;
-import org.y1000.repository.PlayerRepositoryImpl;
 import org.y1000.sdb.MapSdb;
 
 import java.util.*;
@@ -39,7 +39,10 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
     private volatile boolean shutdown;
 
     private final AccountManager accountManager;
+
     private final PlayerRepository playerRepository;
+
+    private final Map<Integer, Player> accountPlayerMap;
 
 
     private RealmManager(AccountManager accountManager,
@@ -50,6 +53,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         shutdown = false;
         groups = new ArrayList<>();
         playerNameRealmIdMap = new HashMap<>();
+        accountPlayerMap = new HashMap<>();
         this.playerRepository = playerRepository;
         this.accountManager = accountManager;
     }
@@ -58,7 +62,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         groups.forEach(executorService::submit);
     }
 
-    private void handleLogin(Player player, int realmId, Connection connection) {
+    private void loginToRealm(Player player, int realmId, Connection connection) {
         if (playerRealmMap.containsKey(player)) {
             // need to close current connection.
             log.error("Duplicate connection for {}.", player);
@@ -91,10 +95,41 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
 
     private void handleDisconnection(Connection connection) {
         Player removed = connectionPlayerMap.remove(connection);
-        if (removed != null) {
-            Integer realmId = playerRealmMap.remove(removed);
-            realmIdGroupMap.get(realmId).handle(new PlayerDisconnectedEvent(realmId, removed));
-            playerNameRealmIdMap.remove(removed.viewName());
+        if (removed == null) {
+            return;
+        }
+        Integer realmId = playerRealmMap.remove(removed);
+        realmIdGroupMap.get(realmId).handle(new PlayerDisconnectedEvent(realmId, removed));
+        playerNameRealmIdMap.remove(removed.viewName());
+        Integer found = null;
+        for (var accountId : accountPlayerMap.keySet()) {
+            if (accountPlayerMap.get(accountId).equals(removed)) {
+                found = accountId;
+                break;
+            }
+        }
+        if (found != null) {
+            accountPlayerMap.remove(found);
+        }
+    }
+
+    private void handleLogin(Integer accountId, String charName, Connection connection) {
+        Player currentLogged = accountPlayerMap.remove(accountId);
+        if (currentLogged != null) {
+            for (var kv : connectionPlayerMap.entrySet()) {
+                if (kv.getValue().equals(currentLogged)) {
+                    log.info("Kick player {} of account id {}.", currentLogged.viewName(), accountId);
+                    handleDisconnection(kv.getKey());
+                    break;
+                }
+            }
+            connection.close();
+        } else {
+            playerRepository.find(accountId, charName)
+                    .ifPresent(pair -> {
+                        accountPlayerMap.put(accountId, pair.getLeft());
+                        loginToRealm(pair.getLeft(), pair.getRight(), connection);
+                    });
         }
     }
 
@@ -104,8 +139,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         } else if (event instanceof ConnectionDataEvent dataEvent) {
             if (dataEvent.data() instanceof LoginEvent loginEvent) {
                 accountManager.removeToken(loginEvent.token())
-                        .flatMap(accountId -> playerRepository.find(accountId, loginEvent.charName()))
-                        .ifPresent(pair -> handleLogin(pair.getKey(), pair.getRight(), dataEvent.connection()));
+                        .ifPresent(accountId -> handleLogin(accountId, loginEvent.charName(), dataEvent.connection()));
             } else {
                 sendDataToRealm(dataEvent);
             }
@@ -136,10 +170,23 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         }
     }
 
-    public boolean shut() throws InterruptedException {
-        executorService.shutdown();
-        shutdown = true;
-        return executorService.awaitTermination(60, TimeUnit.SECONDS);
+    public void sendNotification(String text) {
+        if (StringUtils.isEmpty(text))
+            return;
+        var notification = new SystemNotificationEvent(text);
+        groups.forEach(groups -> groups.handle(notification));
+    }
+
+    public void shut() {
+        try {
+            shutdown = true;
+            groups.forEach(RealmGroup::shutdown);
+            executorService.shutdown();
+            executorService.awaitTermination(300, TimeUnit.SECONDS);
+            log.info("All realms shutdown.");
+        } catch (InterruptedException e) {
+            log.error("Failed to shutdown.", e);
+        }
     }
 
     public void queueEvent(Object event) {
@@ -162,6 +209,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
     public void send(RealmEvent realmEvent) {
         queueEvent(realmEvent);
     }
+
 
     private void setRealmGroups(List<RealmGroup> groups) {
         realmIdGroupMap = new ConcurrentHashMap<>();

@@ -15,7 +15,7 @@ public interface KungFu {
      */
     boolean gainPermittedExp(int value);
 
-    boolean isExpFull();
+    boolean isLevelFull();
 
 
     KungFuType kungFuType();
