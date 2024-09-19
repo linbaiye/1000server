@@ -92,8 +92,9 @@ public final class RealmGroup implements Runnable {
                 .findFirst();
     }
 
-    public void shutdown() {
+    public synchronized void shutdown() throws InterruptedException {
         shutdown = true;
+        Thread.sleep(100);
         Stream.of(realms).forEach(Realm::shutdown);
     }
 

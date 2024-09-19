@@ -29,10 +29,16 @@ public final class ManagementHttpConnectionHandler extends AbstractHttpConnectio
         return new NotificationResponse(0);
     }
 
+    private String handleKick(String body) {
+        manager.testKick();
+        return "Ok";
+    }
+
     @Override
     protected Object handle(String type, String body) {
         return switch (type.toLowerCase()) {
             case "notify" -> handleNotify(body);
+            case "kick" -> handleKick(body);
             case "shutdown" -> {
                 shutdownHandler.invoke();
                 yield "Ok";

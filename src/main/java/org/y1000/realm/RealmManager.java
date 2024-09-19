@@ -15,6 +15,8 @@ import org.y1000.network.event.ConnectionEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -111,6 +113,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         if (found != null) {
             accountPlayerMap.remove(found);
         }
+        connection.close();
     }
 
     private void handleLogin(Integer accountId, String charName, Connection connection) {
@@ -123,6 +126,8 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
                     break;
                 }
             }
+            // Close new connection, or should it be allowed as disconnection will occur first
+            // so no need to worry about ordering messing persistance.
             connection.close();
         } else {
             playerRepository.find(accountId, charName)
@@ -177,10 +182,23 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         groups.forEach(groups -> groups.handle(notification));
     }
 
-    public void shut() {
+    public synchronized void testKick() {
+        for (Map.Entry<Integer, Player> accountPlayer : accountPlayerMap.entrySet()) {
+            for (Map.Entry<Connection, Player> connectionPlayer : connectionPlayerMap.entrySet()) {
+                if (connectionPlayer.getValue().equals(accountPlayer.getValue())) {
+                    handleDisconnection(connectionPlayer.getKey());
+                }
+            }
+        }
+        accountPlayerMap.clear();
+    }
+
+    public synchronized void shut() {
         try {
             shutdown = true;
-            groups.forEach(RealmGroup::shutdown);
+            for (RealmGroup group : groups) {
+                group.shutdown();
+            }
             executorService.shutdown();
             executorService.awaitTermination(300, TimeUnit.SECONDS);
             log.info("All realms shutdown.");
@@ -226,9 +244,6 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         var allIds = new ArrayList<>(mapSdb.getAllIds());
         allIds.removeAll(IGNORED_REALMS);
         return allIds;
-        // return List.of(1, 3, 4, 19, 20, 49);
-        //return List.of(19);
-        //return List.of(49);
     }
 
     public static RealmManager create(MapSdb mapSdb, RealmFactory realmFactory,

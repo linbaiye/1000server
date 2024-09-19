@@ -90,20 +90,6 @@ public final class Server {
         realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory, accountManager, playerRepository);
     }
 
-
-
-
-//    private void startRealms() {
-//        Optional<Realm> realmOptional = Realm.create("start", createPlayerRepository());
-//        if (realmOptional.isPresent()) {
-//            realm = realmOptional.get();
-//            new Thread(realm).start();
-//        } else {
-//            throw new IllegalArgumentException();
-//        }
-//    }
-
-
     private void setupGameServer() {
         gameServer.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)

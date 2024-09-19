@@ -162,4 +162,6 @@ public interface Player extends ViolentCreature {
     YinYang yinyang();
 
     int revivalExp();
+
+    int team();
 }

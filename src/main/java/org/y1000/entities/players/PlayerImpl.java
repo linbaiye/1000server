@@ -69,6 +69,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     private YinYang yinYang;
 
+    private int team;
+
     private final PlayerExperiencedAgedAttribute innerPower;
 
     private final PlayerExperiencedAgedAttribute power;
@@ -177,6 +179,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         this.pillSlots = pillSlots;
         this.changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         setRegenerateTimer();
+        team = 0;
     }
 
     private void setRegenerateTimer() {
@@ -1073,6 +1076,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     @Override
     public int revivalExp() {
         return revival.exp();
+    }
+
+    @Override
+    public int team() {
+        return team;
     }
 
     @Override
