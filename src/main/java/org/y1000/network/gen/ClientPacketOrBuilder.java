@@ -368,5 +368,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientBankOperationPacketOrBuilder getBankOperationOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+   * @return Whether the changeTeam field is set.
+   */
+  boolean hasChangeTeam();
+  /**
+   * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+   * @return The changeTeam.
+   */
+  org.y1000.network.gen.ClientChangeTeamPacket getChangeTeam();
+  /**
+   * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+   */
+  org.y1000.network.gen.ClientChangeTeamPacketOrBuilder getChangeTeamOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

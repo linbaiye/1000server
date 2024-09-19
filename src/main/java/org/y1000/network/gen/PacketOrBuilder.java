@@ -683,5 +683,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.UpdateBankPacketOrBuilder getUpdateBankOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+   * @return Whether the nameColor field is set.
+   */
+  boolean hasNameColor();
+  /**
+   * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+   * @return The nameColor.
+   */
+  org.y1000.network.gen.NameColorPacket getNameColor();
+  /**
+   * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+   */
+  org.y1000.network.gen.NameColorPacketOrBuilder getNameColorOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

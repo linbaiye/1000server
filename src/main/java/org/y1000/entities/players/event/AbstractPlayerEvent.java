@@ -5,18 +5,37 @@ import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
 
 public abstract class AbstractPlayerEvent extends Abstract2ClientEntityEvent implements PlayerEvent {
 
-    private final boolean selfEvent;
+
+    private final Visibility visibility;
+
+    public enum Visibility {
+
+        SELF,
+
+        VISIBLE_PLAYERS,
+
+        SPECIFIC,
+    }
 
     public AbstractPlayerEvent(Player source) {
         this(source, false);
     }
     public AbstractPlayerEvent(Player source, boolean selfEvent) {
         super(source);
-        this.selfEvent = selfEvent;
+        visibility = selfEvent? Visibility.SELF : Visibility.SPECIFIC;
     }
 
-    public boolean isSelfEvent() {
-        return selfEvent;
+    public AbstractPlayerEvent(Player source, Visibility visibility) {
+        super(source);
+        this.visibility = visibility;
+    }
+
+    public boolean visibleToSelf() {
+        return visibility == Visibility.SELF;
+    }
+
+    public boolean visibleToPlayers() {
+        return visibility == Visibility.VISIBLE_PLAYERS;
     }
 
     public Player player() {

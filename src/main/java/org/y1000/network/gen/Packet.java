@@ -90,6 +90,7 @@ private static final long serialVersionUID = 0L;
     CHAT(46),
     OPENBANK(47),
     UPDATEBANK(48),
+    NAMECOLOR(49),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -152,6 +153,7 @@ private static final long serialVersionUID = 0L;
         case 46: return CHAT;
         case 47: return OPENBANK;
         case 48: return UPDATEBANK;
+        case 49: return NAMECOLOR;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1562,6 +1564,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.UpdateBankPacket.getDefaultInstance();
   }
 
+  public static final int NAMECOLOR_FIELD_NUMBER = 49;
+  /**
+   * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+   * @return Whether the nameColor field is set.
+   */
+  @java.lang.Override
+  public boolean hasNameColor() {
+    return typedPacketCase_ == 49;
+  }
+  /**
+   * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+   * @return The nameColor.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.NameColorPacket getNameColor() {
+    if (typedPacketCase_ == 49) {
+       return (org.y1000.network.gen.NameColorPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.NameColorPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.NameColorPacketOrBuilder getNameColorOrBuilder() {
+    if (typedPacketCase_ == 49) {
+       return (org.y1000.network.gen.NameColorPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.NameColorPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1710,6 +1743,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 48) {
       output.writeMessage(48, (org.y1000.network.gen.UpdateBankPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 49) {
+      output.writeMessage(49, (org.y1000.network.gen.NameColorPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1899,6 +1935,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 48) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(48, (org.y1000.network.gen.UpdateBankPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 49) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(49, (org.y1000.network.gen.NameColorPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2097,6 +2137,10 @@ private static final long serialVersionUID = 0L;
         if (!getUpdateBank()
             .equals(other.getUpdateBank())) return false;
         break;
+      case 49:
+        if (!getNameColor()
+            .equals(other.getNameColor())) return false;
+        break;
       case 0:
       default:
     }
@@ -2291,6 +2335,10 @@ private static final long serialVersionUID = 0L;
       case 48:
         hash = (37 * hash) + UPDATEBANK_FIELD_NUMBER;
         hash = (53 * hash) + getUpdateBank().hashCode();
+        break;
+      case 49:
+        hash = (37 * hash) + NAMECOLOR_FIELD_NUMBER;
+        hash = (53 * hash) + getNameColor().hashCode();
         break;
       case 0:
       default:
@@ -2562,6 +2610,9 @@ private static final long serialVersionUID = 0L;
       if (updateBankBuilder_ != null) {
         updateBankBuilder_.clear();
       }
+      if (nameColorBuilder_ != null) {
+        nameColorBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -2788,6 +2839,10 @@ private static final long serialVersionUID = 0L;
           updateBankBuilder_ != null) {
         result.typedPacket_ = updateBankBuilder_.build();
       }
+      if (typedPacketCase_ == 49 &&
+          nameColorBuilder_ != null) {
+        result.typedPacket_ = nameColorBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -3013,6 +3068,10 @@ private static final long serialVersionUID = 0L;
         }
         case UPDATEBANK: {
           mergeUpdateBank(other.getUpdateBank());
+          break;
+        }
+        case NAMECOLOR: {
+          mergeNameColor(other.getNameColor());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -3360,6 +3419,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 48;
               break;
             } // case 386
+            case 394: {
+              input.readMessage(
+                  getNameColorFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 49;
+              break;
+            } // case 394
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -9781,6 +9847,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 48;
       onChanged();
       return updateBankBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.NameColorPacket, org.y1000.network.gen.NameColorPacket.Builder, org.y1000.network.gen.NameColorPacketOrBuilder> nameColorBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+     * @return Whether the nameColor field is set.
+     */
+    @java.lang.Override
+    public boolean hasNameColor() {
+      return typedPacketCase_ == 49;
+    }
+    /**
+     * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+     * @return The nameColor.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.NameColorPacket getNameColor() {
+      if (nameColorBuilder_ == null) {
+        if (typedPacketCase_ == 49) {
+          return (org.y1000.network.gen.NameColorPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.NameColorPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 49) {
+          return nameColorBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.NameColorPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+     */
+    public Builder setNameColor(org.y1000.network.gen.NameColorPacket value) {
+      if (nameColorBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        nameColorBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 49;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+     */
+    public Builder setNameColor(
+        org.y1000.network.gen.NameColorPacket.Builder builderForValue) {
+      if (nameColorBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        nameColorBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 49;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+     */
+    public Builder mergeNameColor(org.y1000.network.gen.NameColorPacket value) {
+      if (nameColorBuilder_ == null) {
+        if (typedPacketCase_ == 49 &&
+            typedPacket_ != org.y1000.network.gen.NameColorPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.NameColorPacket.newBuilder((org.y1000.network.gen.NameColorPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 49) {
+          nameColorBuilder_.mergeFrom(value);
+        } else {
+          nameColorBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 49;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+     */
+    public Builder clearNameColor() {
+      if (nameColorBuilder_ == null) {
+        if (typedPacketCase_ == 49) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 49) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        nameColorBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+     */
+    public org.y1000.network.gen.NameColorPacket.Builder getNameColorBuilder() {
+      return getNameColorFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.NameColorPacketOrBuilder getNameColorOrBuilder() {
+      if ((typedPacketCase_ == 49) && (nameColorBuilder_ != null)) {
+        return nameColorBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 49) {
+          return (org.y1000.network.gen.NameColorPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.NameColorPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.NameColorPacket, org.y1000.network.gen.NameColorPacket.Builder, org.y1000.network.gen.NameColorPacketOrBuilder> 
+        getNameColorFieldBuilder() {
+      if (nameColorBuilder_ == null) {
+        if (!(typedPacketCase_ == 49)) {
+          typedPacket_ = org.y1000.network.gen.NameColorPacket.getDefaultInstance();
+        }
+        nameColorBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.NameColorPacket, org.y1000.network.gen.NameColorPacket.Builder, org.y1000.network.gen.NameColorPacketOrBuilder>(
+                (org.y1000.network.gen.NameColorPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 49;
+      onChanged();
+      return nameColorBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

@@ -563,6 +563,17 @@ private static final long serialVersionUID = 0L;
     return trouserColor_;
   }
 
+  public static final int NAMECOLOR_FIELD_NUMBER = 20;
+  private int nameColor_ = 0;
+  /**
+   * <code>int32 nameColor = 20;</code>
+   * @return The nameColor.
+   */
+  @java.lang.Override
+  public int getNameColor() {
+    return nameColor_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -630,6 +641,9 @@ private static final long serialVersionUID = 0L;
     }
     if (trouserColor_ != 0) {
       output.writeInt32(19, trouserColor_);
+    }
+    if (nameColor_ != 0) {
+      output.writeInt32(20, nameColor_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -702,6 +716,10 @@ private static final long serialVersionUID = 0L;
     if (trouserColor_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(19, trouserColor_);
+    }
+    if (nameColor_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(20, nameColor_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -778,6 +796,8 @@ private static final long serialVersionUID = 0L;
         != other.getClothingColor()) return false;
     if (getTrouserColor()
         != other.getTrouserColor()) return false;
+    if (getNameColor()
+        != other.getNameColor()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -843,6 +863,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getClothingColor();
     hash = (37 * hash) + TROUSERCOLOR_FIELD_NUMBER;
     hash = (53 * hash) + getTrouserColor();
+    hash = (37 * hash) + NAMECOLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getNameColor();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -992,6 +1014,7 @@ private static final long serialVersionUID = 0L;
       bootColor_ = 0;
       clothingColor_ = 0;
       trouserColor_ = 0;
+      nameColor_ = 0;
       return this;
     }
 
@@ -1087,6 +1110,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00020000) != 0)) {
         result.trouserColor_ = trouserColor_;
+      }
+      if (((from_bitField0_ & 0x00040000) != 0)) {
+        result.nameColor_ = nameColor_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -1207,6 +1233,9 @@ private static final long serialVersionUID = 0L;
       if (other.getTrouserColor() != 0) {
         setTrouserColor(other.getTrouserColor());
       }
+      if (other.getNameColor() != 0) {
+        setNameColor(other.getNameColor());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -1323,6 +1352,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00020000;
               break;
             } // case 152
+            case 160: {
+              nameColor_ = input.readInt32();
+              bitField0_ |= 0x00040000;
+              break;
+            } // case 160
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -2328,6 +2362,38 @@ private static final long serialVersionUID = 0L;
     public Builder clearTrouserColor() {
       bitField0_ = (bitField0_ & ~0x00020000);
       trouserColor_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int nameColor_ ;
+    /**
+     * <code>int32 nameColor = 20;</code>
+     * @return The nameColor.
+     */
+    @java.lang.Override
+    public int getNameColor() {
+      return nameColor_;
+    }
+    /**
+     * <code>int32 nameColor = 20;</code>
+     * @param value The nameColor to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNameColor(int value) {
+
+      nameColor_ = value;
+      bitField0_ |= 0x00040000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 nameColor = 20;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearNameColor() {
+      bitField0_ = (bitField0_ & ~0x00040000);
+      nameColor_ = 0;
       onChanged();
       return this;
     }

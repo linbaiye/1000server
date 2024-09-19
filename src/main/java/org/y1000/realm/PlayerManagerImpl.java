@@ -251,8 +251,12 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                 deadPlayerTeleportManager.onPlayerDead(player);
             } else if (entityEvent instanceof PlayerKungFuFullEvent event) {
                 crossRealmEventSender.send(event);
-            } else if (entityEvent instanceof AbstractPlayerEvent playerEvent && playerEvent.isSelfEvent()) {
-                eventSender.notifySelf(playerEvent);
+            } else if (entityEvent instanceof AbstractPlayerEvent playerEvent) {
+                if (playerEvent.visibleToSelf()) {
+                    eventSender.notifySelf(playerEvent);
+                } else if (playerEvent.visibleToPlayers()) {
+                    eventSender.notifyVisiblePlayersAndSelf(playerEvent.player(), playerEvent);
+                }
             }
         } catch (Exception e) {
             log.error("Failed to handle event.", e);

@@ -2,14 +2,22 @@ package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.PlayerEventVisitor;
+import org.y1000.network.gen.NameColorPacket;
 import org.y1000.network.gen.Packet;
 
-public class PlayerNameColorEvent extends AbstractPlayerEvent {
-    private final int color;
+public final class PlayerNameColorEvent extends AbstractPlayerEvent {
+
+    private final Packet packet;
 
     public PlayerNameColorEvent(Player source) {
-        super(source);
-        this.color = COLOR_TABLE[(source.team() * 2) % 256];
+        super(source, Visibility.VISIBLE_PLAYERS);
+        int color = COLOR_TABLE[(source.team() * 2) % 256];
+        packet = Packet.newBuilder()
+                .setNameColor(NameColorPacket.newBuilder()
+                        .setId(source.id())
+                        .setColor(color)
+                        .build())
+                .build();
     }
 
     private static final int[] COLOR_TABLE = {
@@ -41,6 +49,7 @@ public class PlayerNameColorEvent extends AbstractPlayerEvent {
             25224, 3, 16366, 3, 11738, 3, 22214, 3, 40769, 3, 16366, 3
     };
 
+
     @Override
     public void accept(PlayerEventVisitor playerEventHandler) {
 
@@ -48,6 +57,6 @@ public class PlayerNameColorEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
-        return null;
+        return packet;
     }
 }

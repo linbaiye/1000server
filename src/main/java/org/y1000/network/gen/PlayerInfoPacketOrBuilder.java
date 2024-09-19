@@ -209,4 +209,10 @@ public interface PlayerInfoPacketOrBuilder extends
    * @return The trouserColor.
    */
   int getTrouserColor();
+
+  /**
+   * <code>int32 nameColor = 20;</code>
+   * @return The nameColor.
+   */
+  int getNameColor();
 }

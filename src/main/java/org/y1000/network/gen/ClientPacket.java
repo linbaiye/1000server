@@ -69,6 +69,7 @@ private static final long serialVersionUID = 0L;
     DYE(22),
     SAY(23),
     BANKOPERATION(24),
+    CHANGETEAM(25),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -110,6 +111,7 @@ private static final long serialVersionUID = 0L;
         case 22: return DYE;
         case 23: return SAY;
         case 24: return BANKOPERATION;
+        case 25: return CHANGETEAM;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -869,6 +871,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
   }
 
+  public static final int CHANGETEAM_FIELD_NUMBER = 25;
+  /**
+   * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+   * @return Whether the changeTeam field is set.
+   */
+  @java.lang.Override
+  public boolean hasChangeTeam() {
+    return typeCase_ == 25;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+   * @return The changeTeam.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientChangeTeamPacket getChangeTeam() {
+    if (typeCase_ == 25) {
+       return (org.y1000.network.gen.ClientChangeTeamPacket) type_;
+    }
+    return org.y1000.network.gen.ClientChangeTeamPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientChangeTeamPacketOrBuilder getChangeTeamOrBuilder() {
+    if (typeCase_ == 25) {
+       return (org.y1000.network.gen.ClientChangeTeamPacket) type_;
+    }
+    return org.y1000.network.gen.ClientChangeTeamPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -954,6 +987,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 24) {
       output.writeMessage(24, (org.y1000.network.gen.ClientBankOperationPacket) type_);
+    }
+    if (typeCase_ == 25) {
+      output.writeMessage(25, (org.y1000.network.gen.ClientChangeTeamPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1059,6 +1095,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 24) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(24, (org.y1000.network.gen.ClientBankOperationPacket) type_);
+    }
+    if (typeCase_ == 25) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(25, (org.y1000.network.gen.ClientChangeTeamPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1173,6 +1213,10 @@ private static final long serialVersionUID = 0L;
         if (!getBankOperation()
             .equals(other.getBankOperation())) return false;
         break;
+      case 25:
+        if (!getChangeTeam()
+            .equals(other.getChangeTeam())) return false;
+        break;
       case 0:
       default:
     }
@@ -1283,6 +1327,10 @@ private static final long serialVersionUID = 0L;
       case 24:
         hash = (37 * hash) + BANKOPERATION_FIELD_NUMBER;
         hash = (53 * hash) + getBankOperation().hashCode();
+        break;
+      case 25:
+        hash = (37 * hash) + CHANGETEAM_FIELD_NUMBER;
+        hash = (53 * hash) + getChangeTeam().hashCode();
         break;
       case 0:
       default:
@@ -1490,6 +1538,9 @@ private static final long serialVersionUID = 0L;
       if (bankOperationBuilder_ != null) {
         bankOperationBuilder_.clear();
       }
+      if (changeTeamBuilder_ != null) {
+        changeTeamBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1626,6 +1677,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 24 &&
           bankOperationBuilder_ != null) {
         result.type_ = bankOperationBuilder_.build();
+      }
+      if (typeCase_ == 25 &&
+          changeTeamBuilder_ != null) {
+        result.type_ = changeTeamBuilder_.build();
       }
     }
 
@@ -1768,6 +1823,10 @@ private static final long serialVersionUID = 0L;
         }
         case BANKOPERATION: {
           mergeBankOperation(other.getBankOperation());
+          break;
+        }
+        case CHANGETEAM: {
+          mergeChangeTeam(other.getChangeTeam());
           break;
         }
         case TYPE_NOT_SET: {
@@ -1968,6 +2027,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 24;
               break;
             } // case 194
+            case 202: {
+              input.readMessage(
+                  getChangeTeamFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 25;
+              break;
+            } // case 202
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -5406,6 +5472,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 24;
       onChanged();
       return bankOperationBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientChangeTeamPacket, org.y1000.network.gen.ClientChangeTeamPacket.Builder, org.y1000.network.gen.ClientChangeTeamPacketOrBuilder> changeTeamBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+     * @return Whether the changeTeam field is set.
+     */
+    @java.lang.Override
+    public boolean hasChangeTeam() {
+      return typeCase_ == 25;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+     * @return The changeTeam.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientChangeTeamPacket getChangeTeam() {
+      if (changeTeamBuilder_ == null) {
+        if (typeCase_ == 25) {
+          return (org.y1000.network.gen.ClientChangeTeamPacket) type_;
+        }
+        return org.y1000.network.gen.ClientChangeTeamPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 25) {
+          return changeTeamBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientChangeTeamPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+     */
+    public Builder setChangeTeam(org.y1000.network.gen.ClientChangeTeamPacket value) {
+      if (changeTeamBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        changeTeamBuilder_.setMessage(value);
+      }
+      typeCase_ = 25;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+     */
+    public Builder setChangeTeam(
+        org.y1000.network.gen.ClientChangeTeamPacket.Builder builderForValue) {
+      if (changeTeamBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        changeTeamBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 25;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+     */
+    public Builder mergeChangeTeam(org.y1000.network.gen.ClientChangeTeamPacket value) {
+      if (changeTeamBuilder_ == null) {
+        if (typeCase_ == 25 &&
+            type_ != org.y1000.network.gen.ClientChangeTeamPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientChangeTeamPacket.newBuilder((org.y1000.network.gen.ClientChangeTeamPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 25) {
+          changeTeamBuilder_.mergeFrom(value);
+        } else {
+          changeTeamBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 25;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+     */
+    public Builder clearChangeTeam() {
+      if (changeTeamBuilder_ == null) {
+        if (typeCase_ == 25) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 25) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        changeTeamBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+     */
+    public org.y1000.network.gen.ClientChangeTeamPacket.Builder getChangeTeamBuilder() {
+      return getChangeTeamFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientChangeTeamPacketOrBuilder getChangeTeamOrBuilder() {
+      if ((typeCase_ == 25) && (changeTeamBuilder_ != null)) {
+        return changeTeamBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 25) {
+          return (org.y1000.network.gen.ClientChangeTeamPacket) type_;
+        }
+        return org.y1000.network.gen.ClientChangeTeamPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientChangeTeamPacket changeTeam = 25;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientChangeTeamPacket, org.y1000.network.gen.ClientChangeTeamPacket.Builder, org.y1000.network.gen.ClientChangeTeamPacketOrBuilder> 
+        getChangeTeamFieldBuilder() {
+      if (changeTeamBuilder_ == null) {
+        if (!(typeCase_ == 25)) {
+          type_ = org.y1000.network.gen.ClientChangeTeamPacket.getDefaultInstance();
+        }
+        changeTeamBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientChangeTeamPacket, org.y1000.network.gen.ClientChangeTeamPacket.Builder, org.y1000.network.gen.ClientChangeTeamPacketOrBuilder>(
+                (org.y1000.network.gen.ClientChangeTeamPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 25;
+      onChanged();
+      return changeTeamBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(
