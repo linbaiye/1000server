@@ -49,7 +49,6 @@ public final class PlayerNameColorEvent extends AbstractPlayerEvent {
             25224, 3, 16366, 3, 11738, 3, 22214, 3, 40769, 3, 16366, 3
     };
 
-
     @Override
     public void accept(PlayerEventVisitor playerEventHandler) {
 

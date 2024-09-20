@@ -8,6 +8,7 @@ import org.y1000.kungfu.attack.*;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.kungfu.protect.ProtectionParametersImpl;
+import org.y1000.message.clientevent.ClientCreateGuildKungFuEvent;
 import org.y1000.persistence.KungFuPo;
 
 import java.util.HashMap;
@@ -45,45 +46,65 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
                 new DefaultEventResourceParameters(name, kungFuSdb));
     }
 
-
-    private SwordKungFu createSword(String name, int exp) {
+    private SwordKungFu createSword(String name, int exp,
+                                    AttackKungFuParameters attackKungFuParameters) {
         return SwordKungFu.builder()
                 .name(name)
                 .exp(exp)
-                .parameters(createAttackKungFuParameter(name))
+                .parameters(attackKungFuParameters)
+                .build();
+    }
+
+    private SwordKungFu createSword(String name, int exp) {
+        return createSword(name, exp, createAttackKungFuParameter(name));
+    }
+
+    private QuanfaKungFu quanfaKungFu(String name, int exp, AttackKungFuParameters attackKungFuParameters) {
+        return QuanfaKungFu.builder()
+                .name(name)
+                .exp(exp)
+                .parameters(attackKungFuParameters)
                 .build();
     }
 
     private QuanfaKungFu quanfaKungFu(String name, int exp) {
-        return QuanfaKungFu.builder()
+        return quanfaKungFu(name, exp, createAttackKungFuParameter(name));
+    }
+
+    private BladeKungFu bladeKungFu(String name, int exp, AttackKungFuParameters attackKungFuParameters) {
+        return BladeKungFu.builder()
                 .name(name)
                 .exp(exp)
-                .parameters(createAttackKungFuParameter(name))
+                .parameters(attackKungFuParameters)
                 .build();
     }
 
     private BladeKungFu bladeKungFu(String name, int exp) {
-        return BladeKungFu.builder()
+        return bladeKungFu(name, exp, createAttackKungFuParameter(name));
+    }
+
+    private SpearKungFu spearKungFu(String name, int exp, AttackKungFuParameters attackKungFuParameters) {
+        return SpearKungFu.builder()
                 .name(name)
                 .exp(exp)
-                .parameters(createAttackKungFuParameter(name))
+                .parameters(attackKungFuParameters)
                 .build();
     }
 
     private SpearKungFu spearKungFu(String name, int exp) {
-        return SpearKungFu.builder()
+        return spearKungFu(name, exp, createAttackKungFuParameter(name));
+    }
+
+    private AxeKungFu axeKungFu(String name, int exp, AttackKungFuParameters attackKungFuParameters) {
+        return AxeKungFu.builder()
                 .name(name)
                 .exp(exp)
-                .parameters(createAttackKungFuParameter(name))
+                .parameters(attackKungFuParameters)
                 .build();
     }
 
     private AxeKungFu axeKungFu(String name, int exp) {
-        return AxeKungFu.builder()
-                .name(name)
-                .exp(exp)
-                .parameters(createAttackKungFuParameter(name))
-                .build();
+        return axeKungFu(name, exp, createAttackKungFuParameter(name));
     }
 
     private BowKungFu bowKungFu(String name, int exp) {
@@ -148,6 +169,82 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
     @Override
+    public AttackKungFu createGuildKungFu(ClientCreateGuildKungFuEvent request) {
+        if (checkGuildKungFuSpecification(request) != null) {
+            throw new IllegalArgumentException();
+        }
+        return null;
+    }
+
+
+    @Override
+    public String checkGuildKungFuSpecification(ClientCreateGuildKungFuEvent request) {
+        Validate.notNull(request);
+        if (!request.getType().isMelee()) {
+            return "武功只能是刀、剑、拳、槌、枪";
+        }
+        if (request.getSpeed() < 1 || request.getSpeed() > 99) {
+            return "速度需在1-99之间";
+        }
+        if (request.getRecovery() < 1 || request.getRecovery() > 99) {
+            return "恢复需在1-99之间";
+        }
+        if (request.getAvoid() < 1 || request.getAvoid() > 99) {
+            return "闪躲需在1-99之间";
+        }
+        if (request.getHeadDamage() < 10 || request.getHeadDamage() > 70) {
+            return "头攻需在10-70之间";
+        }
+        if (request.getArmDamage() < 10 || request.getArmDamage() > 70) {
+            return "手攻需在10-70之间";
+        }
+        if (request.getBodyDamage() < 10 || request.getBodyDamage() > 70) {
+            return "身攻需在10-70之间";
+        }
+        if (request.getHeadArmor() < 10 || request.getHeadArmor() > 70) {
+            return "头防需在10-70之间";
+        }
+        if (request.getArmArmor() < 10 || request.getArmArmor() > 70) {
+            return "手防需在10-70之间";
+        }
+        if (request.getBodyArmor() < 10 || request.getBodyArmor() > 70) {
+            return "身防需在10-70之间";
+        }
+        if (request.getLegArmor() < 10 || request.getLegArmor() > 70) {
+            return "脚防需在10-70之间";
+        }
+        if (request.getPowerToSwing() < 5 || request.getPowerToSwing() > 35) {
+            return "武功消耗需在5-35之间";
+        }
+        if (request.getInnerPowerToSwing() < 5 || request.getInnerPowerToSwing() > 35) {
+            return "内功消耗需在5-35之间";
+        }
+        if (request.getOuterPowerToSwing() < 5 || request.getOuterPowerToSwing() > 35) {
+            return "外功消耗需在5-35之间";
+        }
+        if (request.getLifeToSwing() < 5 || request.getLifeToSwing() > 35) {
+            return "活力消耗需在5-35之间";
+        }
+        if (request.getSpeed() + request.getBodyDamage() != 100) {
+            return "速度和身攻之和需要等于100";
+        }
+        if (request.getRecovery() + request.getAvoid() != 100) {
+            return "恢复和闪躲之和需要等于100";
+        }
+        if (request.getHeadDamage() + request.getArmDamage() + request.getLegDamage()
+            + request.getBodyArmor() + request.getHeadArmor() + request.getArmArmor()
+            + request.getLegArmor() != 228) {
+            return "头攻+手攻+脚攻+身防+头防+手防+脚防需要等于228";
+        }
+        if (request.getOuterPowerToSwing() + request.getLifeToSwing() + request.getPowerToSwing() +
+                request.getInnerPowerToSwing() != 80) {
+            return "外功消耗+内功消耗+武功消耗+活力消耗需要等于80";
+        }
+        return null;
+    }
+
+
+    @Override
     public KungFuBook create() {
         Map<Integer, KungFu> unnamed = new HashMap<>();
         for (int i = 1; i <= UNNAMED_NAMES.size(); i++ ){
@@ -177,9 +274,9 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
     private List<KungFuPo> getKungFuPoList(EntityManager entityManager, long playerId) {
-        Query query = entityManager.createQuery("select kf from KungFuPo kf where kf.key.playerId = ?1");
+        var query = entityManager.createQuery("select kf from KungFuPo kf where kf.key.playerId = ?1", KungFuPo.class);
         query.setParameter(1, playerId);
-        return  (List<KungFuPo>)query.getResultList();
+        return  query.getResultList();
     }
 
     @Override

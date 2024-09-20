@@ -244,4 +244,8 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         return new PlayerTextEvent(player, content, TextType.CUSTOM, Location.CENTER, ColorType.SAY);
     }
 
+    public static PlayerTextEvent playerClicked(Player source, Player clicked) {
+        return new PlayerTextEvent(source, clicked.viewName(), TextType.CUSTOM, Location.DOWN, ColorType.SAY);
+    }
+
 }
