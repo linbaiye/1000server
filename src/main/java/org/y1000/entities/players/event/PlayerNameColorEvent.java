@@ -48,6 +48,6 @@ public class PlayerNameColorEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
-        return null;
+        return Packet.newBuilder().build();
     }
 }

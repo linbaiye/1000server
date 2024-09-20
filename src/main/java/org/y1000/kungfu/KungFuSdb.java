@@ -174,7 +174,7 @@ public final class KungFuSdb extends AbstractSdbReader {
         Set<String> names = kungFuSdb.columnNames();
         Set<String> items = kungFuSdb.names();
         for (String i : items) {
-            if (!"12".equals(kungFuSdb.get(i, "MagicType"))) {
+            if (!i.startsWith("闪光")) {
                 continue;
             }
 //            if (!i.contains("标枪法"))
