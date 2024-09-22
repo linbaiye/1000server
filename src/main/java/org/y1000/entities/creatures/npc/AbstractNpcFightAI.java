@@ -86,7 +86,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
         if (npc.canChaseOrAttack(enemy)) {
             fightProcess();
         } else {
-            npc.changeToIdleAI();
+            npc.startIdleAI();
         }
     }
 

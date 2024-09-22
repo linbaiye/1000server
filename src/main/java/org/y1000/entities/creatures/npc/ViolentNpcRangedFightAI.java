@@ -39,7 +39,7 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
     private void rangedFightProcess(NpcRangedSkill rangedSkill) {
         var enemy = getEnemy();
         if (!rangedSkill.isAvailable()) {
-            npc.changeAI(new ViolentNpcMeleeFightAI(enemy, npc, SPEEDRATE));
+            npc.changeAndStartAI(new ViolentNpcMeleeFightAI(enemy, npc, SPEEDRATE));
             return;
         }
         var dis = npc.coordinate().directDistance(enemy.coordinate());
@@ -62,7 +62,7 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
     @Override
     protected void fightProcess() {
         npc.skill().ifPresentOrElse(this::rangedFightProcess,
-                () -> npc.changeAI(new ViolentNpcMeleeFightAI(getEnemy(), npc)));
+                () -> npc.changeAndStartAI(new ViolentNpcMeleeFightAI(getEnemy(), npc)));
     }
 
     @Override

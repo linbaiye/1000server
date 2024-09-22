@@ -244,7 +244,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .realmMap(realmMap)
                 .stateMillis(createActionLengthMap(animate))
                 .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .ai(new GuardWanderingAI())
+                .ai(new GuardWanderingAI(coordinate))
                 .build();
     }
 
@@ -276,7 +276,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
         if (monsterSdb.contains(name)) {
-            return createMonster(name, id, realmMap, coordinate, loadSpells(name), new MonsterWanderingAI());
+            return createMonster(name, id, realmMap, coordinate, loadSpells(name), new MonsterWanderingAI(coordinate));
         } else if (npcSdb.contains(name)) {
             return createNonMonsterNpc(name, id, realmMap, coordinate);
         }
@@ -288,7 +288,7 @@ public final class NpcFactoryImpl implements NpcFactory {
     public Npc createClonedNpc(Npc npc, long id, Coordinate coordinate) {
         Validate.notNull(npc);
         if (monsterSdb.contains(npc.idName())) {
-            return createMonster(npc.idName(), id, npc.realmMap(), coordinate, null, new MonsterWanderingAI());
+            return createMonster(npc.idName(), id, npc.realmMap(), coordinate, null, new MonsterWanderingAI(coordinate));
         }
         log.error("Name {} does not exist.", npc.idName());
         throw new NoSuchElementException(npc.idName());

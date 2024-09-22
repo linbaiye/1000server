@@ -8,10 +8,8 @@ import org.y1000.TestingEntityEventSender;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.BreakRopeEvent;
-import org.y1000.message.clientevent.ClientDragPlayerEvent;
-import org.y1000.message.clientevent.ClientTradePlayerEvent;
-import org.y1000.message.clientevent.ClientTriggerDynamicObjectEvent;
-import org.y1000.message.clientevent.ClientUpdateTradeEvent;
+import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.clientevent.*;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.util.Coordinate;
@@ -38,7 +36,7 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
     @BeforeEach
     void setUp() {
         tradeManager = Mockito.mock(TradeManager.class);
-        eventSender = new TestingEntityEventSender();
+        eventSender = Mockito.mock(EntityEventSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
         itemFactory = Mockito.mock(ItemFactory.class);
         dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);
@@ -56,9 +54,8 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
         return player;
     }
 
-
     @Test
-    void addNewPlayer() {
+    void onPlayerConnected() {
         var player = mockPlayer();
         when(player.id()).thenReturn(1L);
         playerManager.onPlayerConnected(player, realm);
@@ -127,5 +124,15 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
         playerManager.onClientEvent(dataEvent, Mockito.mock(ActiveEntityManager.class));
         verify(player3, times(1)).consumeItem(1);
         verify(player2, times(1)).emitEvent(any(BreakRopeEvent.class));
+    }
+
+    @Test
+    void handleClickPlayerEvent() {
+        Player clicked = playerBuilder().id(nextId()).build();
+        Player source = playerBuilder().id(nextId()).build();
+        playerManager.onPlayerConnected(clicked, realm);
+        playerManager.onPlayerConnected(source, realm);
+        playerManager.onClientEvent(new PlayerDataEvent(realm.id(), source, new ClientClickEvent(clicked.id())), Mockito.mock(ActiveEntityManager.class));
+        verify(eventSender, times(1)).notifySelf(any(PlayerTextEvent.class));
     }
 }

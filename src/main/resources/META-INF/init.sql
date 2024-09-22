@@ -33,7 +33,7 @@ create table player (
                         primary key (id)) engine=InnoDB, charset = utf8mb4;
 
 
-create table kung_fu (
+create table player_kung_fu (
                          exp integer not null,
                          slot integer not null,
                          player_id bigint not null,
@@ -45,15 +45,14 @@ CREATE TABLE `player_seq` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 insert into player_seq(next_val) values(100000000);
 
-CREATE TABLE `equipment` (
-                             id int primary key not null auto_increment,
+CREATE TABLE `player_equipment` (
                              player_id bigint not null,
                              `name` varchar(32) not null,
                              color int not null default 0,
-                             key `idx_player_id`(player_id)
+                             primary key (player_id, `name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
-create table item (
+create table player_item (
                       `number` bigint not null,
                       color int not null default 0,
                       slot integer not null,
@@ -69,3 +68,28 @@ create table bank (
 	capacity integer not null,
     unlocked integer not null
 ) ENGINE=InnoDB;
+
+
+create table attack_kungfu(
+id integer not null primary key auto_increment,
+`name` varchar(12) not null unique,
+`type` varchar(12) not null,
+attack_speed integer not null,
+recovery integer not null,
+avoid integer not null,
+body_damage integer not null,
+head_damage integer not null,
+arm_damage integer not null,
+leg_damage integer not null,
+body_armor integer not null,
+head_armor integer not null,
+arm_armor integer not null,
+leg_armor integer not null,
+swing_life integer not null,
+swing_inner_power integer not null,
+swing_power integer not null,
+swing_outer_power integer not null,
+strike_sound integer not null,
+swing_sound integer not null,
+effect_color integer not null
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

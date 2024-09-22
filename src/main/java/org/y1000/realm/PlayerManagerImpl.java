@@ -201,7 +201,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
             find(dragPlayerEvent.target()).ifPresent(dragged -> handleDragPlayerEvent(dataEvent.player(), dragged, dragPlayerEvent.ropeSlot()));
         } else if (dataEvent.data() instanceof ClientOperateBankEvent bankEvent) {
             find(dataEvent.playerId()).ifPresent(player -> bankManager.handle(player, bankEvent));
-        } else if (dataEvent.data() instanceof ClientClickPlayerEvent clickPlayerEvent) {
+        } else if (dataEvent.data() instanceof ClientClickEvent clickPlayerEvent) {
             find(dataEvent.playerId()).ifPresent(source -> find(clickPlayerEvent.clickedId())
                     .ifPresent(clicked -> eventSender.notifySelf(PlayerTextEvent.playerClicked(source, clicked))));
         } else {

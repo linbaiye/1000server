@@ -8,22 +8,21 @@ import org.y1000.item.Equipment;
 
 @Data
 @Entity
-@Table(name = "equipment")
+@Table(name = "player_equipment")
 @NoArgsConstructor
 @AllArgsConstructor
 public class EquipmentPo {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    private long playerId;
-
-    private String name;
+    @EmbeddedId
+    private PlayerIdNameKey key;
 
     private int color;
 
+    public String getName() {
+        return key.getName();
+    }
+
     public static EquipmentPo convert(long id, Equipment equipment) {
-        return new EquipmentPo(null, id, equipment.name(), equipment.color());
+        return new EquipmentPo(new PlayerIdNameKey(id, equipment.name()), equipment.color());
     }
 }

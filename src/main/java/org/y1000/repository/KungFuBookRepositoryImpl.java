@@ -1,7 +1,6 @@
 package org.y1000.repository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.*;
 import org.y1000.kungfu.attack.*;
@@ -42,7 +41,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
     private AttackKungFuParameters createAttackKungFuParameter(String name) {
-        return new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb),
+        return new SdbAttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb),
                 new DefaultEventResourceParameters(name, kungFuSdb));
     }
 

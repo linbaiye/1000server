@@ -1,6 +1,7 @@
 package org.y1000.message;
 
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerNameColorEvent;
 import org.y1000.network.gen.PlayerInfoPacket;
 
 public final class PlayerInfo {
@@ -9,6 +10,7 @@ public final class PlayerInfo {
         PlayerInfoPacket.Builder builder = PlayerInfoPacket.newBuilder()
                 .setId(player.id())
                 .setName(player.viewName())
+                .setNameColor(PlayerNameColorEvent.toColor(player.team()))
                 .setMale(player.isMale());
         player.weapon().ifPresent(weapon -> builder.setWeaponName(weapon.name()));
         player.hat().ifPresent(hat -> {

@@ -42,6 +42,6 @@ public final class AggressiveMonster extends AbstractMonster implements Aggressi
     @Override
     public void actAggressively(AttackableActiveEntity enemy) {
         if (canChaseOrAttack(enemy))
-            changeAI(new ViolentNpcMeleeFightAI(enemy, this));
+            changeAndStartAI(new ViolentNpcMeleeFightAI(enemy, this));
     }
 }

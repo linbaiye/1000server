@@ -37,7 +37,7 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
 
     @Override
     public void changeToIdleAI() {
-        changeAI(new MonsterWanderingAI());
+        changeAI(new MonsterWanderingAI(spawnCoordinate()));
     }
 
     @Override
@@ -53,6 +53,11 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
     @Override
     public void respawn(Coordinate coordinate) {
         doRevive(coordinate);
-        changeAI(initAi);
+        changeAndStartAI(initAi);
+    }
+
+    @Override
+    public void startIdleAI() {
+        changeAndStartAI(new MonsterWanderingAI(spawnCoordinate()));
     }
 }

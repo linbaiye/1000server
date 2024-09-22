@@ -45,6 +45,7 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         TEN_GRADE(10),
         SAY(11),
         PRIVATE_CHAT(12),
+        SYSTEM_TIP(13),
         ;
 
         private final int val;
@@ -94,6 +95,8 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
         PLAYER_WHISPER(18),
 
+        NOT_ENOUGH_HEAD_LIFE(19),
+
 
         CUSTOM(1000000);
         ;
@@ -128,7 +131,7 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
     public PlayerTextEvent(Player source, String text, TextType type, Location location, ColorType colorType) {
         super(source, true);
         if (type == TextType.CUSTOM) {
-            Validate.isTrue(text != null && text.length() <= 30);
+            Validate.isTrue(text != null && text.length() <= 120);
         }
         Validate.notNull(type);
         Validate.notNull(location);
@@ -212,6 +215,10 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         return new PlayerTextEvent(player, null, TextType.NOT_ENOUGH_ARM_LIFE);
     }
 
+    public static PlayerTextEvent headLifeTooLow(Player player) {
+        return new PlayerTextEvent(player, null, TextType.NOT_ENOUGH_HEAD_LIFE);
+    }
+
     public static PlayerTextEvent outOfAmmo(Player player) {
         return new PlayerTextEvent(player, null, TextType.OUT_OF_AMMO);
     }
@@ -245,7 +252,15 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
     }
 
     public static PlayerTextEvent playerClicked(Player source, Player clicked) {
-        return new PlayerTextEvent(source, clicked.viewName(), TextType.CUSTOM, Location.DOWN, ColorType.SAY);
+        StringBuilder stringBuilder = new StringBuilder("名称: ")
+                .append(clicked.viewName()).append("\r\n")
+                .append("使用武功: ")
+                .append(clicked.attackKungFu().name());
+        clicked.protectKungFu().ifPresent(p -> stringBuilder.append(" ").append(p.name()));
+        clicked.footKungFu().ifPresent(f -> stringBuilder.append(" ").append(f.name()));
+        clicked.assistantKungFu().ifPresent(a -> stringBuilder.append(" ").append(a.name()));
+        clicked.breathKungFu().ifPresent(b -> stringBuilder.append(" ").append(b.name()));
+        return new PlayerTextEvent(source, stringBuilder.toString(), TextType.CUSTOM, Location.DOWN, ColorType.SYSTEM_TIP);
     }
 
 }

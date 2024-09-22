@@ -379,7 +379,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
     private PlayerImpl.PlayerImplBuilder restoreEquipmentAndKungFu(PlayerImpl.PlayerImplBuilder builder,
                                                                    EntityManager entityManager,
                                                                    long playerId) {
-        List<Equipment> equipment = entityManager.createQuery("select e from EquipmentPo e where e.playerId = ?1", EquipmentPo.class)
+        List<Equipment> equipment = entityManager.createQuery("select e from EquipmentPo e where e.key.playerId = ?1", EquipmentPo.class)
                 .setParameter(1, playerId)
                 .getResultStream()
                 .map(e -> itemFactory.createEquipment(e.getName(), e.getColor()))
@@ -439,7 +439,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
 
 
     private void saveEquipments(EntityManager entityManager, Player player) {
-        entityManager.createQuery("delete from EquipmentPo e where e.playerId = ?1").setParameter(1, player.id())
+        entityManager.createQuery("delete from EquipmentPo e where e.key.playerId = ?1").setParameter(1, player.id())
                 .executeUpdate();
         player.hair().ifPresent(h -> entityManager.persist(EquipmentPo.convert(player.id(), h)));
         player.chest().ifPresent(e -> entityManager.persist(EquipmentPo.convert(player.id(), e)));

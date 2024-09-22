@@ -21,7 +21,7 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
     protected void fightProcess() {
         var enemy = getEnemy();
         if (npc.skill().isPresent() && npc.skill().get().isAvailable()) {
-            npc.changeAI(new ViolentNpcRangedFightAI(enemy, npc));
+            npc.changeAndStartAI(new ViolentNpcRangedFightAI(enemy, npc));
             return;
         }
         if (npc.coordinate().directDistance(enemy.coordinate()) > 1) {

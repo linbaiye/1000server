@@ -35,7 +35,7 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
         emitEvent(new EntityLifebarEvent(this, life, maxLife));
     }
 
-    abstract void handleDamaged(Damage damage);
+    protected abstract void handleDamaged(Damage damage);
 
     @Override
     public boolean attackedBy(Player attacker) {

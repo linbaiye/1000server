@@ -1,23 +1,26 @@
 package org.y1000.persistence;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.y1000.kungfu.KungFuType;
 import org.y1000.kungfu.attack.AttackKungFuParameters;
 
 @Data
 @Entity
 @Builder
-@Table(name = "guild_kungfu")
+@Table(name = "attack_kungfu")
 @NoArgsConstructor
 @AllArgsConstructor
-public class GuildKungFuParametersProvider implements AttackKungFuParameters {
-    private Long id;
+public class AttackKungFuParametersProvider implements AttackKungFuParameters {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String name;
-    private int speed;
+    private KungFuType type;
+    private int attackSpeed;
     private int recovery;
     private int avoid;
     private int headDamage;
@@ -28,20 +31,21 @@ public class GuildKungFuParametersProvider implements AttackKungFuParameters {
     private int armArmor;
     private int bodyArmor;
     private int legArmor;
-    private int powerToSwing;
-    private int innerPowerToSwing;
-    private int outerPowerToSwing;
-    private int lifeToSwing;
+    private int swingPower;
+    private int swingInnerPower;
+    private int swingOuterPower;
+    private int swingLife;
     private int swingSound;
     private int strikeSound;
+    private int effectColor;
     @Override
     public int powerToSwing() {
-        return powerToSwing;
+        return swingPower;
     }
 
     @Override
     public int innerPowerToSwing() {
-        return innerPowerToSwing;
+        return swingInnerPower;
     }
 
     @Override
@@ -51,12 +55,12 @@ public class GuildKungFuParametersProvider implements AttackKungFuParameters {
 
     @Override
     public int outerPowerToSwing() {
-        return outerPowerToSwing;
+        return swingOuterPower;
     }
 
     @Override
     public int lifeToSwing() {
-        return lifeToSwing;
+        return swingLife;
     }
 
     @Override
@@ -81,7 +85,7 @@ public class GuildKungFuParametersProvider implements AttackKungFuParameters {
 
     @Override
     public int attackSpeed() {
-        return speed;
+        return attackSpeed;
     }
 
     @Override
@@ -121,6 +125,6 @@ public class GuildKungFuParametersProvider implements AttackKungFuParameters {
 
     @Override
     public int effectId() {
-        return 0;
+        return effectColor;
     }
 }

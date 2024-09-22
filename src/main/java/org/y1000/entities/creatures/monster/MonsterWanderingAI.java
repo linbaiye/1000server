@@ -7,6 +7,7 @@ import org.y1000.entities.creatures.npc.AggressiveNpc;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcAI;
 import org.y1000.entities.creatures.npc.ViolentNpcWanderingAI;
+import org.y1000.util.Coordinate;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -26,10 +27,9 @@ public final class MonsterWanderingAI implements NpcAI {
         resetCounter();
     }
 
-    public MonsterWanderingAI() {
-        this(new ViolentNpcWanderingAI());
+    public MonsterWanderingAI(Coordinate dest) {
+        this(new ViolentNpcWanderingAI(dest));
     }
-
 
     @Override
     public void onActionDone(Npc npc) {

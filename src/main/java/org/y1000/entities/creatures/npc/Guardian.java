@@ -56,7 +56,7 @@ public final class Guardian extends AbstractViolentNpc {
             return;
         }
         if (getAi() instanceof GuardWanderingAI) {
-            changeAI(new ViolentNpcMeleeFightAI(monster, this));
+            changeAndStartAI(new ViolentNpcMeleeFightAI(monster, this));
         }
     }
 
@@ -75,6 +75,11 @@ public final class Guardian extends AbstractViolentNpc {
 
     @Override
     public void changeToIdleAI() {
-        changeAI(new GuardWanderingAI());
+        changeAI(new GuardWanderingAI(this.wanderingArea().random(coordinate())));
+    }
+
+    @Override
+    public void startIdleAI() {
+        changeAndStartAI(new GuardWanderingAI(this.wanderingArea().random(coordinate())));
     }
 }

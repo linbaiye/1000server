@@ -1,8 +1,13 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.event.SeekAggressiveMonsterEvent;
+import org.y1000.util.Coordinate;
 
 public final class GuardWanderingAI extends AbstractWanderingNpcAI {
+
+    public GuardWanderingAI(Coordinate dest) {
+        super(dest, Coordinate.Empty);
+    }
 
     @Override
     protected void onHurtDone(Npc npc) {
@@ -10,7 +15,7 @@ public final class GuardWanderingAI extends AbstractWanderingNpcAI {
             return;
         }
         if (npc.state() instanceof NpcHurtState hurtState) {
-            guardian.changeAI(new ViolentNpcMeleeFightAI(hurtState.attacker(), guardian));
+            guardian.changeAndStartAI(new ViolentNpcMeleeFightAI(hurtState.attacker(), guardian));
         }
     }
 

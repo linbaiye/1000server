@@ -248,7 +248,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
 
     private void unequip(EquipmentType type) {
-        log.debug("Received unequip type {}.", type);
         if (inventory.isFull()) {
             emitEvent(PlayerTextEvent.inventoryFull(this));
             return;
@@ -302,6 +301,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     private void handleClickAttackKungFu(AttackKungFu newAttack) {
+        if (headPercent() < 50) {
+            emitEvent(PlayerTextEvent.headLifeTooLow(this));
+            return;
+        }
         if (this.attackKungFu.name().equals(newAttack.name())) {
             return;
         }

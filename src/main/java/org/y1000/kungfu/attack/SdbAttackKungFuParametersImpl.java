@@ -7,7 +7,7 @@ import org.y1000.kungfu.KungFuSdb;
 import static org.y1000.kungfu.ParameterConstants.*;
 
 
-public final class AttackKungFuParametersImpl implements AttackKungFuParameters {
+public final class SdbAttackKungFuParametersImpl implements AttackKungFuParameters {
 
     private static final int INI_ADD_DAMAGE       = 40;
     private static final int INI_MUL_ATTACKSPEED  = 10;
@@ -44,8 +44,8 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
 
     private final KungFuSdb kungFuSdb;
 
-    public AttackKungFuParametersImpl(String name, KungFuSdb kungFuSdb, ArmorParameters armorParameters,
-                                      EventResourceParameters eventResourceParameters) {
+    public SdbAttackKungFuParametersImpl(String name, KungFuSdb kungFuSdb, ArmorParameters armorParameters,
+                                         EventResourceParameters eventResourceParameters) {
         this.name = name;
         this.armorParameters = armorParameters;
         recovery = (120 - kungFuSdb.getRecovery(name)) * INI_MUL_RECOVERY / INI_MAGIC_DIV_VALUE;

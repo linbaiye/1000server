@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "item")
+@Table(name = "player_item")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemPo {

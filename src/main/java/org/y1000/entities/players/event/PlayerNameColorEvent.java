@@ -11,13 +11,16 @@ public final class PlayerNameColorEvent extends AbstractPlayerEvent {
 
     public PlayerNameColorEvent(Player source) {
         super(source, Visibility.VISIBLE_PLAYERS);
-        int color = COLOR_TABLE[(source.team() * 2) % 256];
         packet = Packet.newBuilder()
                 .setNameColor(NameColorPacket.newBuilder()
                         .setId(source.id())
-                        .setColor(color)
+                        .setColor(toColor(source.team()))
                         .build())
                 .build();
+    }
+
+    public static int toColor(int team) {
+        return COLOR_TABLE[(team % 256) * 2];
     }
 
     private static final int[] COLOR_TABLE = {

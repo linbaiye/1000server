@@ -4,7 +4,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.message.clientevent.chat.ClientChatEvent;
-import org.y1000.repository.PlayerRepository;
 import org.y1000.item.EquipmentType;
 import org.y1000.message.clientevent.*;
 import org.y1000.network.event.ConnectionClosedEvent;
@@ -55,6 +54,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case SAY -> ClientChatEvent.create(clientPacket.getSay().getText());
             case BANKOPERATION -> ClientOperateBankEvent.fromPacket(clientPacket.getBankOperation());
             case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
+            case CLICKPACKET -> new ClientClickEvent(clientPacket.getClickPacket().getId());
             default -> throw new IllegalArgumentException();
         };
     }

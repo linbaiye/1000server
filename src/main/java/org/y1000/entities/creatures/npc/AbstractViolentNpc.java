@@ -60,9 +60,14 @@ public abstract class AbstractViolentNpc
     }
 
     @Override
-    public void changeAI(NpcAI newAI) {
+    public void changeAndStartAI(NpcAI newAI) {
         this.ai = newAI;
         this.ai.start(this);
+    }
+
+    @Override
+    public void changeAI(NpcAI newAI) {
+        this.ai = newAI;
     }
 
     NpcAI getAi() {
@@ -78,7 +83,7 @@ public abstract class AbstractViolentNpc
     @Override
     public void onActionDone() {
         if (stateEnum() == State.DIE) {
-            changeAI(NpcFrozenAI.INSTANCE);
+            changeAndStartAI(NpcFrozenAI.INSTANCE);
         }
         handleActionDone(() -> ai.onActionDone(this));
     }
