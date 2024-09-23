@@ -17,6 +17,7 @@ import org.y1000.entities.projectile.Projectile;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.exp.ExperienceUtil;
+import org.y1000.guild.GuildMembership;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.*;
@@ -1087,6 +1088,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     @Override
     public int team() {
         return team;
+    }
+
+    @Override
+    public Optional<GuildMembership> guildMembership() {
+        return Optional.empty();
     }
 
     @Override

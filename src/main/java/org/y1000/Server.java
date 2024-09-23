@@ -18,11 +18,9 @@ import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
-import org.y1000.realm.RealmFactory;
-import org.y1000.realm.RealmFactoryImpl;
+import org.y1000.realm.*;
 import org.y1000.repository.*;
 import org.y1000.network.*;
-import org.y1000.realm.RealmManager;
 import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
 
@@ -82,12 +80,14 @@ public final class Server {
         npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository);
+        GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, CreateEntitySdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
-                entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE);
+                entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE, guildRepository);
         accountRepository = new AccountRepositoryImpl();
         accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, playerRepository);
         realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory, accountManager, playerRepository);
+        shutdown = false;
     }
 
     private void setupGameServer() {
@@ -158,6 +158,7 @@ public final class Server {
         if (shutdown) {
             return;
         }
+        shutdown = true;
         realmManager.shut();
         close(gameSercerChannel);
         close(accountChannel);

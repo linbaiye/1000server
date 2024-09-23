@@ -3,31 +3,31 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
-import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientFoundGuildEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.sdb.MapSdb;
 
 @Slf4j
-final class RealmImpl extends AbstractRealm {
-
-
-    public RealmImpl(int id, RealmMap realmMap,
-                     RealmEntityEventSender eventSender,
-                     GroundItemManager itemManager,
-                     NpcManager npcManager,
-                     PlayerManager playerManager,
-                     DynamicObjectManager dynamicObjectManager,
-                     TeleportManager teleportManager,
-                     CrossRealmEventSender crossRealmEventSender,
-                     MapSdb mapSdb,
-                     ChatManager chatManager) {
+class GuildableRealm extends AbstractRealm {
+    private final GuildManager guildManager;
+    public GuildableRealm(int id, RealmMap realmMap,
+                          RealmEntityEventSender eventSender,
+                          GroundItemManager itemManager,
+                          NpcManager npcManager,
+                          PlayerManager playerManager,
+                          DynamicObjectManager dynamicObjectManager,
+                          TeleportManager teleportManager,
+                          CrossRealmEventSender crossRealmEventSender,
+                          MapSdb mapSdb,
+                          ChatManager chatManager,
+                          GuildManager guildManager) {
         super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+        this.guildManager = guildManager;
     }
 
     @Override
-    protected Logger log() {
+    Logger log() {
         return log;
     }
 
@@ -44,7 +44,7 @@ final class RealmImpl extends AbstractRealm {
 
     @Override
     void handleGuidCreation(Player source, ClientFoundGuildEvent event) {
-        source.emitEvent(PlayerTextEvent.forbidGuildCreation(source));
+        guildManager.create(source, event.coordinate(), event.name());
     }
 
     @Override
@@ -52,8 +52,4 @@ final class RealmImpl extends AbstractRealm {
         doUpdateEntities();
     }
 
-    @Override
-    public String toString() {
-        return "RealmImpl {id = " + id() + "}";
-    }
 }

@@ -5,6 +5,7 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.projectile.Projectile;
+import org.y1000.guild.GuildMembership;
 import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.item.*;
@@ -164,4 +165,6 @@ public interface Player extends ViolentCreature {
     int revivalExp();
 
     int team();
+
+    Optional<GuildMembership> guildMembership();
 }

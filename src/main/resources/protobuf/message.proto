@@ -235,6 +235,12 @@ message ClientChangeTeamPacket {
   int32 teamNumber = 1;
 }
 
+message ClientFoundGuildPacket{
+  string name = 1;
+  int32 x = 2;
+  int32 y = 3;
+}
+
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
@@ -262,6 +268,7 @@ message ClientPacket {
     ClientSayPacket say = 23;
     ClientBankOperationPacket bankOperation = 24;
     ClientChangeTeamPacket changeTeam = 25;
+    ClientFoundGuildPacket foundGuild = 26;
   }
 }
 

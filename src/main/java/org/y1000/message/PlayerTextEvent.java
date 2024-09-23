@@ -97,7 +97,6 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
         NOT_ENOUGH_HEAD_LIFE(19),
 
-
         CUSTOM(1000000);
         ;
 
@@ -249,6 +248,14 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
     public static PlayerTextEvent systemNotification(Player player, String content) {
         return new PlayerTextEvent(player, content, TextType.CUSTOM, Location.CENTER, ColorType.SAY);
+    }
+
+    public static PlayerTextEvent systemTip(Player player, String content) {
+        return new PlayerTextEvent(player, content, TextType.CUSTOM, Location.DOWN, ColorType.SYSTEM_TIP);
+    }
+
+    public static PlayerTextEvent forbidGuildCreation(Player player) {
+        return systemTip(player, "此地禁止创建门派。");
     }
 
     public static PlayerTextEvent playerClicked(Player source, Player clicked) {

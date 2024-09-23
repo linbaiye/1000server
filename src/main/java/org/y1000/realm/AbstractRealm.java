@@ -3,7 +3,9 @@ package org.y1000.realm;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.npc.Merchant;
+import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.StaticTeleport;
+import org.y1000.message.clientevent.ClientFoundGuildEvent;
 import org.y1000.message.clientevent.ClientSimpleCommandEvent;
 import org.y1000.message.clientevent.chat.ClientChatEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
@@ -161,6 +163,8 @@ abstract class AbstractRealm implements Realm {
         return playerManager;
     }
 
+    abstract void handleGuidCreation(Player source, ClientFoundGuildEvent event);
+
 
     private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
         if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent) {
@@ -172,6 +176,8 @@ abstract class AbstractRealm implements Realm {
             } else if (commandEvent.isQuit()) {
                 playerManager.onPlayerDisconnected(dataEvent.playerId());
             }
+        } else if (dataEvent.data() instanceof ClientFoundGuildEvent guildEvent) {
+            playerManager().find(dataEvent.playerId()).ifPresent(player -> handleGuidCreation(player, guildEvent));
         } else if (dataEvent.data() instanceof ClientChatEvent clientChatEvent) {
             chatManager.handleClientChat(dataEvent.playerId(), clientChatEvent);
         } else {

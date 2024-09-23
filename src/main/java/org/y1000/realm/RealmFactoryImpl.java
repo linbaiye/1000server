@@ -9,6 +9,7 @@ import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
 import org.y1000.repository.BankRepository;
+import org.y1000.repository.GuildRepository;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
@@ -29,7 +30,11 @@ public final class RealmFactoryImpl implements RealmFactory {
 
     private final BankRepository bankRepository;
 
+    private final EntityManagerFactory entityManagerFactory;
+
     private final PosByDieSdb posByDieSdb;
+
+    private final GuildRepository guildRepository;
 
     private static final Set<Integer> CONJUNCTION_IDS = Set.of(4, 20);
 
@@ -47,7 +52,9 @@ public final class RealmFactoryImpl implements RealmFactory {
                             EntityManagerFactory entityManagerFactory,
                             PlayerRepository playerRepository,
                             BankRepository bankRepository,
-                            PosByDieSdb posByDieSdb) {
+                            PosByDieSdb posByDieSdb,
+                            GuildRepository guildRepository) {
+        this.guildRepository = guildRepository;
         Validate.notNull(itemFactory);
         Validate.notNull(npcFactory);
         Validate.notNull(itemSdb);
@@ -71,6 +78,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         this.playerRepository = playerRepository;
         this.bankRepository = bankRepository;
         this.posByDieSdb = posByDieSdb;
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     private NpcManager createNpcManager(int id,
@@ -95,6 +103,10 @@ public final class RealmFactoryImpl implements RealmFactory {
                 .orElse(null);
     }
 
+
+    private boolean allowGuildCreation(int id) {
+        return 1 == id;
+    }
 
     @Override
     public Realm createRealm(int id,
@@ -127,9 +139,12 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .playerManager(playerManager)
                     .realmMap(realmMap)
                     .teleportManager(teleportManager)
-                    .posByDieSdb(posByDieSdb)
                     .chatManager(new ChatManagerImpl(playerManager, eventSender, crossRealmEventSender))
                     ;
+            if (allowGuildCreation(id)) {
+                GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, crossRealmEventSender, realmMap, guildRepository, id);
+                builder.guildManager(guildManager);
+            }
             return mapSdb.getRegenInterval(id)
                     .map(builder::buildDungeon)
                     .orElseGet(builder::buildNormal);
@@ -158,7 +173,7 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         private Set<Integer> whitelistIds;
 
-        private PosByDieSdb posByDieSdb;
+        private GuildManager guildManager;
 
         private RealmBuilder() {
         }
@@ -177,8 +192,8 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder posByDieSdb(PosByDieSdb pos) {
-            this.posByDieSdb = pos;
+        public RealmBuilder guildManager(GuildManager guildManager) {
+            this.guildManager = guildManager;
             return this;
         }
 
@@ -238,7 +253,10 @@ public final class RealmFactoryImpl implements RealmFactory {
         }
 
         public Realm buildNormal() {
-            return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+            if (guildManager == null)
+                return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+            else
+                return new GuildableRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, guildManager);
         }
 
         public Realm buildDungeon(int interval) {

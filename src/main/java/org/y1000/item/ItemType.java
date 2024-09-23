@@ -20,7 +20,7 @@ public enum ItemType implements ValueEnum  {
 
     KNIFE(8),
 
-    HOUSE_STONE(9),
+    GUILD_STONE(9),
 
     HOUSE_STONE_GUARDIAN(10),
 

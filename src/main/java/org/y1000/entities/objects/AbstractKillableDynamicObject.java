@@ -1,5 +1,6 @@
 package org.y1000.entities.objects;
 
+import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.EntityLifebarEvent;
 import org.y1000.entities.creatures.ViolentCreature;
@@ -14,17 +15,21 @@ import org.y1000.util.Coordinate;
 
 public abstract class AbstractKillableDynamicObject extends AbstractMutableDynamicObject {
     private final int armor;
+    @Getter
     private final int maxLife;
     private int life;
 
     public AbstractKillableDynamicObject(long id, Coordinate coordinate, RealmMap realmMap, DynamicObjectSdb dynamicObjectSdb, String idName, Animation[] animations) {
+        this(id, coordinate, realmMap, dynamicObjectSdb, dynamicObjectSdb.getLife(idName), idName, animations);
+    }
+
+    public AbstractKillableDynamicObject(long id, Coordinate coordinate, RealmMap realmMap, DynamicObjectSdb dynamicObjectSdb, int health, String idName, Animation[] animations) {
         super(id, coordinate, realmMap, dynamicObjectSdb, idName, animations);
         this.armor = dynamicObjectSdb.getArmor(idName);
         this.maxLife = dynamicObjectSdb.getLife(idName);
-        this.life = maxLife;
+        this.life = health;
         Validate.isTrue(maxLife > 0);
     }
-
 
     void damageLife(Damage damage) {
         if (!canBeAttackedNow()) {
@@ -35,7 +40,7 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
         emitEvent(new EntityLifebarEvent(this, life, maxLife));
     }
 
-    protected abstract void handleDamaged(Damage damage);
+    abstract void handleDamaged(Damage damage);
 
     @Override
     public boolean attackedBy(Player attacker) {
@@ -64,13 +69,11 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
             handleDamaged(damage);
     }
 
-    void resetLife() {
-        life = maxLife;
-    }
 
-    int currentLife() {
+    public int currentLife() {
         return life;
     }
+
 
     @Override
     public void update(int delta) {

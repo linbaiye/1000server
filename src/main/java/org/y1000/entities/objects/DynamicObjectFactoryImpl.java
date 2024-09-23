@@ -2,9 +2,13 @@ package org.y1000.entities.objects;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.y1000.guild.GuildStone;
+import org.y1000.persistence.GuildStonePo;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
@@ -61,5 +65,29 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
         }
         log.error("Unable to create dynamic object : " + name);
         return null;
+    }
+
+    @Override
+    public GuildStone createGuildStone(String name, int realmId, RealmMap realmMap, Coordinate coordinate) {
+        Validate.notNull(name);
+        Validate.notNull(realmMap);
+        Validate.notNull(coordinate);
+        GuildStonePo stonePo = GuildStonePo.builder()
+                .createdTime(LocalDateTime.now())
+                .x(coordinate.x())
+                .y(coordinate.y())
+                .currentHealth(2000000)
+                .maxHealth(2000000)
+                .realmId(realmId)
+                .name(name)
+                .build();
+        return GuildStone.builder()
+                .id(0)
+                .realmMap(realmMap)
+                .coordinate(coordinate)
+                .dynamicObjectSdb(stonePo)
+                .currentHealth(stonePo.getCurrentHealth())
+                .idName(stonePo.getName())
+                .build();
     }
 }
