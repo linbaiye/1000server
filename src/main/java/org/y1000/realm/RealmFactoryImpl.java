@@ -8,9 +8,7 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
-import org.y1000.repository.BankRepository;
-import org.y1000.repository.GuildRepository;
-import org.y1000.repository.PlayerRepository;
+import org.y1000.repository.*;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
@@ -36,6 +34,8 @@ public final class RealmFactoryImpl implements RealmFactory {
 
     private final GuildRepository guildRepository;
 
+    private final ItemRepository itemRepository;
+
     private static final Set<Integer> CONJUNCTION_IDS = Set.of(4, 20);
 
     private static final Map<Integer, Set<Integer>> DUNGEON_WHITELIST_IDS = Map.of(19, Set.of(20), 3, Set.of(4));
@@ -53,7 +53,8 @@ public final class RealmFactoryImpl implements RealmFactory {
                             PlayerRepository playerRepository,
                             BankRepository bankRepository,
                             PosByDieSdb posByDieSdb,
-                            GuildRepository guildRepository) {
+                            GuildRepository guildRepository,
+                            ItemRepository itemRepository) {
         this.guildRepository = guildRepository;
         Validate.notNull(itemFactory);
         Validate.notNull(npcFactory);
@@ -79,6 +80,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         this.bankRepository = bankRepository;
         this.posByDieSdb = posByDieSdb;
         this.entityManagerFactory = entityManagerFactory;
+        this.itemRepository = itemRepository;
     }
 
     private NpcManager createNpcManager(int id,
@@ -142,7 +144,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .chatManager(new ChatManagerImpl(playerManager, eventSender, crossRealmEventSender))
                     ;
             if (allowGuildCreation(id)) {
-                GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, crossRealmEventSender, realmMap, guildRepository, id);
+                GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, crossRealmEventSender, realmMap, guildRepository, itemRepository,entityManagerFactory,id);
                 builder.guildManager(guildManager);
             }
             return mapSdb.getRegenInterval(id)

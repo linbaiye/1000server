@@ -83,7 +83,7 @@ public final class Server {
         GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, CreateEntitySdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
-                entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE, guildRepository);
+                entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE, guildRepository, itemRepository);
         accountRepository = new AccountRepositoryImpl();
         accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, playerRepository);
         realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory, accountManager, playerRepository);

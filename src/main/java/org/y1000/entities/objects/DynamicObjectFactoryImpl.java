@@ -85,6 +85,7 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
                 .id(0)
                 .realmMap(realmMap)
                 .coordinate(coordinate)
+                .realmId(stonePo.getRealmId())
                 .dynamicObjectSdb(stonePo)
                 .currentHealth(stonePo.getCurrentHealth())
                 .idName(stonePo.getName())

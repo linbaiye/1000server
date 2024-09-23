@@ -53,6 +53,11 @@ final class RealmImpl extends AbstractRealm {
     }
 
     @Override
+    public void init() {
+        doInit();
+    }
+
+    @Override
     public String toString() {
         return "RealmImpl {id = " + id() + "}";
     }

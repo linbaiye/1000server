@@ -68,6 +68,11 @@ abstract class AbstractDungeonRealm extends AbstractRealm {
     }
 
     @Override
+    public void init() {
+        doInit();
+    }
+
+    @Override
     public void update() {
         doUpdateEntities();
     }

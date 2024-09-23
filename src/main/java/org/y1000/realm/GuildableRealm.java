@@ -44,7 +44,7 @@ class GuildableRealm extends AbstractRealm {
 
     @Override
     void handleGuidCreation(Player source, ClientFoundGuildEvent event) {
-        guildManager.create(source, event.coordinate(), event.name());
+        guildManager.foundGuild(source, event.coordinate(), event.name(), event.inventorySlot());
     }
 
     @Override
@@ -52,4 +52,9 @@ class GuildableRealm extends AbstractRealm {
         doUpdateEntities();
     }
 
+    @Override
+    public void init() {
+        doInit();
+        guildManager.init();
+    }
 }

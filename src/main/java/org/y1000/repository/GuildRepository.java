@@ -1,5 +1,6 @@
 package org.y1000.repository;
 
+import jakarta.persistence.EntityManager;
 import org.y1000.entities.players.Player;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
@@ -13,6 +14,6 @@ public interface GuildRepository {
 
     int countByName(String name);
 
-    void save(int realmId, GuildStone guildStone, Player creator, GuildMembership membership);
+    void save(EntityManager entityManager, GuildStone guildStone, long creator, GuildMembership membership);
 
 }

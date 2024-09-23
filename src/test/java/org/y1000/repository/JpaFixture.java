@@ -7,7 +7,7 @@ import jakarta.persistence.Persistence;
 import lombok.Data;
 
 @Data
-class JpaFixture {
+public class JpaFixture {
 
     private EntityManagerFactory entityManagerFactory;
 

@@ -8,10 +8,12 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
+import org.y1000.persistence.GuildMembershipPo;
 import org.y1000.persistence.GuildStonePo;
 import org.y1000.realm.EntityIdGenerator;
 import org.y1000.realm.RealmMap;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,12 +21,14 @@ public final class GuildRepositoryImpl implements GuildRepository {
 
     private final EntityManagerFactory entityManagerFactory;
 
-
     public GuildRepositoryImpl(EntityManagerFactory entityManagerFactory) {
+        Validate.notNull(entityManagerFactory);
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    private GuildStone restore(GuildStonePo stonePo, EntityIdGenerator entityIdGenerator, RealmMap realmMap) {
+    private GuildStone restore(GuildStonePo stonePo,
+                               EntityIdGenerator entityIdGenerator,
+                               RealmMap realmMap) {
         return GuildStone.builder()
                 .idName(stonePo.getName())
                 .currentHealth(stonePo.getCurrentHealth())
@@ -32,11 +36,15 @@ public final class GuildRepositoryImpl implements GuildRepository {
                 .realmMap(realmMap)
                 .id(entityIdGenerator.next())
                 .coordinate(stonePo.coordinate())
+                .persistentId(stonePo.getId())
+                .realmId(stonePo.getRealmId())
                 .build();
     }
 
     @Override
     public List<GuildStone> findByRealm(int realmId, EntityIdGenerator entityIdGenerator, RealmMap realmMap) {
+        Validate.notNull(entityIdGenerator);
+        Validate.notNull(realmMap);
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             return entityManager.createQuery("select gs from GuildStonePo gs where gs.realmId = ?1", GuildStonePo.class)
                     .setParameter(1, realmId)
@@ -60,15 +68,13 @@ public final class GuildRepositoryImpl implements GuildRepository {
 
 
     @Override
-    public void save(int realmId, GuildStone guildStone, Player creator, GuildMembership membership) {
+    public void save(EntityManager em, GuildStone guildStone,
+                     long creatorId, GuildMembership membership) {
         Validate.notNull(guildStone);
-        Validate.notNull(creator);
         Validate.notNull(membership);
-        try (var em = entityManagerFactory.createEntityManager()) {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-            em.persist(GuildStonePo.convert(guildStone, realmId));
-            em.persist();
-        }
+        GuildStonePo stonePo = GuildStonePo.convert(guildStone);
+        em.persist(stonePo);
+        guildStone.setPersistentId(stonePo.getId());
+        em.persist(new GuildMembershipPo(creatorId, stonePo.getId(), membership.guildRole(), LocalDateTime.now()));
     }
 }

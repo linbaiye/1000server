@@ -88,7 +88,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         return switch (type) {
             case EQUIPMENT -> createEquipment(name);
             case ARROW, KNIFE -> new Ammo(name, type, itemSdb);
-            case MONEY, SELLING_GOODS -> new SimpleItem(name, type, itemSdb);
+            case MONEY, SELLING_GOODS, GUILD_STONE -> new SimpleItem(name, type, itemSdb);
             case DYE -> new Dye(name, itemSdb);
             case PILL -> new Pill(name, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
             case KUNGFU -> createKungFuItem(name);

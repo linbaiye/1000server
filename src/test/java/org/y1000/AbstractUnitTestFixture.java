@@ -121,7 +121,8 @@ public abstract class AbstractUnitTestFixture {
                 .outerPower(PlayerExperiencedAgedAttribute.createOuterPower())
                 .power(PlayerExperiencedAgedAttribute.createPower())
                 .pillSlots(new PillSlots())
-                .inventory(new Inventory());
+                .inventory(new Inventory())
+                ;
     }
 
     protected int nextId() {

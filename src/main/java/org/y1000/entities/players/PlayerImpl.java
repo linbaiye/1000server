@@ -93,6 +93,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     private final PillSlots pillSlots;
 
+    private GuildMembership guildMembership;
+
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
         put(State.WALK, 840);
@@ -146,7 +148,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                       PlayerExperiencedAgedAttribute outerPower,
                       int revival,
                       YinYang yinYang,
-                      PillSlots pillSlots) {
+                      PillSlots pillSlots,
+                      GuildMembership guildMembership) {
         super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
         Objects.requireNonNull(kungFuBook, "kungFuBook can't be null.");
         Objects.requireNonNull(attackKungFu, "attackKungFu can't be null.");
@@ -181,6 +184,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         this.changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         setRegenerateTimer();
         team = 0;
+        this.guildMembership = guildMembership;
     }
 
     private void setRegenerateTimer() {
@@ -1092,7 +1096,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public Optional<GuildMembership> guildMembership() {
-        return Optional.empty();
+        return Optional.ofNullable(guildMembership);
     }
 
     @Override

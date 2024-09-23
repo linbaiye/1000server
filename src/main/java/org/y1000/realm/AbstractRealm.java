@@ -106,7 +106,7 @@ abstract class AbstractRealm implements Realm {
         playerManager.shutdown();
     }
 
-    public void init() {
+    protected void doInit() {
         try {
             accumulatedMillis = System.currentTimeMillis();
             if (npcManager != null)
@@ -121,6 +121,7 @@ abstract class AbstractRealm implements Realm {
             throw new RuntimeException(e);
         }
     }
+
 
     MapSdb getMapSdb() {
         return mapSdb;
