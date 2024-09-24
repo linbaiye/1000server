@@ -186,8 +186,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
                 .bodyArmor(request.getBodyArmor())
                 .legArmor(request.getLegArmor())
                 .name(request.getName())
-                .type(request.getType())
-
+                .type(request.getType());
         return null;
     }
 

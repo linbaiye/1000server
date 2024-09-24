@@ -164,7 +164,13 @@ abstract class AbstractRealm implements Realm {
         return playerManager;
     }
 
+    NpcManager npcManager() {
+        return npcManager;
+    }
+
     abstract void handleGuidCreation(Player source, ClientFoundGuildEvent event);
+
+    abstract void handleClientEvent(PlayerDataEvent dataEvent);
 
 
     private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
@@ -182,7 +188,7 @@ abstract class AbstractRealm implements Realm {
         } else if (dataEvent.data() instanceof ClientChatEvent clientChatEvent) {
             chatManager.handleClientChat(dataEvent.playerId(), clientChatEvent);
         } else {
-            playerManager.onClientEvent(dataEvent, npcManager);
+            handleClientEvent(dataEvent);
         }
     }
 

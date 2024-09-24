@@ -3,8 +3,12 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerAttackEvent;
+import org.y1000.guild.GuildStone;
+import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.ClientFoundGuildEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
+import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.sdb.MapSdb;
 
@@ -45,6 +49,21 @@ class GuildableRealm extends AbstractRealm {
     @Override
     void handleGuidCreation(Player source, ClientFoundGuildEvent event) {
         guildManager.foundGuild(source, event.coordinate(), event.name(), event.inventorySlot());
+    }
+
+    private void attackGuildStone(GuildStone guildStone, long playerId, ClientAttackEvent attackEvent) {
+        playerManager().find(playerId).ifPresent(player -> player.attack(attackEvent, guildStone));
+    }
+
+    @Override
+    void handleClientEvent(PlayerDataEvent dataEvent) {
+        if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
+            guildManager.find(attackEvent.entityId(), GuildStone.class)
+                    .ifPresentOrElse(guildStone -> attackGuildStone(guildStone, dataEvent.playerId(), attackEvent),
+                            () -> playerManager().onClientEvent(dataEvent, npcManager()));
+        } else {
+            playerManager().onClientEvent(dataEvent, npcManager());
+        }
     }
 
     @Override
