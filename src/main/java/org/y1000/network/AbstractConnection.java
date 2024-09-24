@@ -55,6 +55,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case BANKOPERATION -> ClientOperateBankEvent.fromPacket(clientPacket.getBankOperation());
             case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
             case CLICKPACKET -> new ClientClickEvent(clientPacket.getClickPacket().getId());
+            case FOUNDGUILD -> ClientFoundGuildEvent.parse(clientPacket.getFoundGuild());
             default -> throw new IllegalArgumentException();
         };
     }

@@ -34,10 +34,7 @@ public abstract class AbstractSimpleKillableDynamicObject extends AbstractKillab
         }
     }
 
-    @Override
-    public DynamicObjectType type() {
-        return DynamicObjectType.KILLABLE;
-    }
+
 
     @Override
     protected void onAnimationDone() {

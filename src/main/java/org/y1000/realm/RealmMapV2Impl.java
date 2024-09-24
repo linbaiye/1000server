@@ -89,6 +89,14 @@ final class RealmMapV2Impl implements RealmMap {
         if (!coordinateEntityMap.getOrDefault(coordinate, Collections.emptySet()).isEmpty()) {
             return false;
         }
+        return tileMovable(coordinate);
+    }
+
+    @Override
+    public boolean tileMovable(Coordinate coordinate) {
+        if (coordinate == null) {
+            return false;
+        }
         var cell = movableMask[coordinate.y()][coordinate.x()];
         return ((cell & 0x1) == 0) && ((cell & 0x2) == 0);
     }
@@ -122,16 +130,6 @@ final class RealmMapV2Impl implements RealmMap {
         if (c != null) {
             doRemoveCoordinate(entity, c);
         }
-    }
-
-    @Override
-    public int width() {
-        return width;
-    }
-
-    @Override
-    public int height() {
-        return height;
     }
 
 

@@ -1,11 +1,7 @@
 package org.y1000.repository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
+import jakarta.persistence.*;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.players.Player;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.persistence.GuildMembershipPo;
@@ -16,6 +12,7 @@ import org.y1000.realm.RealmMap;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public final class GuildRepositoryImpl implements GuildRepository {
 
@@ -69,12 +66,35 @@ public final class GuildRepositoryImpl implements GuildRepository {
 
     @Override
     public void save(EntityManager em, GuildStone guildStone,
-                     long creatorId, GuildMembership membership) {
+                     long creatorId) {
+        Validate.notNull(em);
         Validate.notNull(guildStone);
-        Validate.notNull(membership);
         GuildStonePo stonePo = GuildStonePo.convert(guildStone);
         em.persist(stonePo);
         guildStone.setPersistentId(stonePo.getId());
-        em.persist(new GuildMembershipPo(creatorId, stonePo.getId(), membership.guildRole(), LocalDateTime.now()));
+    }
+
+    @Override
+    public Optional<GuildMembership> findGuildMembership(EntityManager entityManager, long playerId) {
+        Validate.notNull(entityManager);
+        GuildMembershipPo membershipPo = entityManager.find(GuildMembershipPo.class, playerId);
+        if (membershipPo == null) {
+            return Optional.empty();
+        }
+        var stonePo = entityManager.find(GuildStonePo.class, membershipPo.getGuildId());
+        return stonePo == null ? Optional.empty() : Optional.of(new GuildMembership(stonePo.getId(), membershipPo.getRole(), stonePo.getName()));
+    }
+
+    @Override
+    public void update(EntityManager entityManager, long playerId, GuildMembership guildMembership) {
+        Validate.notNull(entityManager);
+        Validate.notNull(guildMembership);
+        var membershipPo = entityManager.find(GuildMembershipPo.class, playerId);
+        if (membershipPo != null) {
+            membershipPo.setRole(guildMembership.guildRole());
+        } else {
+            var po = new GuildMembershipPo(playerId, guildMembership.guildId(), guildMembership.guildRole(), LocalDateTime.now());
+            entityManager.persist(po);
+        }
     }
 }

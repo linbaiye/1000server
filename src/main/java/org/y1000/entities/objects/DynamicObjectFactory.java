@@ -8,6 +8,6 @@ public interface DynamicObjectFactory {
 
     DynamicObject createDynamicObject(String name, long id, RealmMap realmMap, Coordinate coordinate);
 
-    GuildStone createGuildStone(String name, int realmId, RealmMap realmMap, Coordinate coordinate);
+    GuildStone createGuildStone(long id, String name, int realmId, RealmMap realmMap, Coordinate coordinate);
 
 }

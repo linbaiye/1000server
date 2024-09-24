@@ -3,6 +3,7 @@ package org.y1000.guild;
 import lombok.Builder;
 import lombok.Getter;
 import org.y1000.entities.objects.AbstractSimpleKillableDynamicObject;
+import org.y1000.entities.objects.DynamicObjectType;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
@@ -47,5 +48,10 @@ public final class GuildStone extends AbstractSimpleKillableDynamicObject {
     @Override
     public int hashCode() {
         return Objects.hash(persistentId);
+    }
+
+    @Override
+    public DynamicObjectType type() {
+        return DynamicObjectType.GUILD_STONE;
     }
 }

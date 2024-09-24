@@ -260,9 +260,9 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
     public static PlayerTextEvent playerClicked(Player source, Player clicked) {
         StringBuilder stringBuilder = new StringBuilder("名称: ")
-                .append(clicked.viewName()).append("\r\n")
-                .append("使用武功: ")
-                .append(clicked.attackKungFu().name());
+                .append(clicked.viewName()).append("\r\n");
+        source.guildMembership().ifPresent(m -> m.append(stringBuilder));
+        stringBuilder.append("使用武功: ").append(clicked.attackKungFu().name());
         clicked.protectKungFu().ifPresent(p -> stringBuilder.append(" ").append(p.name()));
         clicked.footKungFu().ifPresent(f -> stringBuilder.append(" ").append(f.name()));
         clicked.assistantKungFu().ifPresent(a -> stringBuilder.append(" ").append(a.name()));

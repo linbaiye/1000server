@@ -12,11 +12,11 @@ import org.y1000.persistence.GuildMembershipPo;
 import org.y1000.persistence.GuildStonePo;
 import org.y1000.realm.EntityIdGenerator;
 import org.y1000.realm.RealmMap;
-import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.sdb.DynamicObjectSdbImpl;
 import org.y1000.util.Coordinate;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,15 +37,15 @@ class GuildRepositoryImplTest {
 
     private void saveStone(GuildStone stone, long creator) {
         EntityManager entityManager = jpaFixture.beginTx();
-        guildRepository.save(entityManager, stone, creator, new GuildMembership("founder", stone.idName()));
+        guildRepository.save(entityManager, stone, creator);
         entityManager.getTransaction().commit();
     }
 
     @Test
     void findByRealm() {
-        var stone1 = dynamicObjectFactory.createGuildStone("test", 1, realmMap, Coordinate.xy(2, 3));
+        var stone1 = dynamicObjectFactory.createGuildStone(1, "test", 1, realmMap, Coordinate.xy(2, 3));
         saveStone(stone1, 1L);
-        var stone2 = dynamicObjectFactory.createGuildStone("test2", 1, realmMap, Coordinate.xy(4, 5));
+        var stone2 = dynamicObjectFactory.createGuildStone(2, "test2", 1, realmMap, Coordinate.xy(4, 5));
         saveStone(stone2, 2L);
         List<GuildStone> guildStones = guildRepository.findByRealm(1, new EntityIdGenerator(), realmMap);
         assertEquals(2, guildStones.size());
@@ -58,14 +58,14 @@ class GuildRepositoryImplTest {
 
     @Test
     void countByName() {
-        var stone = dynamicObjectFactory.createGuildStone("test", 1, realmMap, Coordinate.xy(2, 3));
+        var stone = dynamicObjectFactory.createGuildStone(1, "test", 1, realmMap, Coordinate.xy(2, 3));
         saveStone(stone, 1L);
         assertEquals(1, guildRepository.countByName("test"));
     }
 
     @Test
     void save() {
-        var stone = dynamicObjectFactory.createGuildStone("test", 1, realmMap, Coordinate.xy(2, 3));
+        var stone = dynamicObjectFactory.createGuildStone(1, "test", 1, realmMap, Coordinate.xy(2, 3));
         saveStone(stone, 4L);
         GuildStonePo guildStonePo = jpaFixture.newEntityManager().createQuery("select s from GuildStonePo s where s.name = ?1", GuildStonePo.class)
                 .setParameter(1, "test").getResultList().get(0);
@@ -73,8 +73,17 @@ class GuildRepositoryImplTest {
         assertEquals(1, guildStonePo.getRealmId());
         assertEquals(2, guildStonePo.getX());
         assertEquals(3, guildStonePo.getY());
-        var membership = jpaFixture.newEntityManager().createQuery("select m from GuildMembershipPo m where m.playerId = ?1", GuildMembershipPo.class)
-                .setParameter(1, 4L).getResultList().get(0);
-        assertEquals("founder", membership.getRole());
+    }
+
+    @Test
+    void findGuildMembership() {
+        var stone = dynamicObjectFactory.createGuildStone(1, "test", 1, realmMap, Coordinate.xy(2, 3));
+        saveStone(stone, 4L);
+        EntityManager entityManager = jpaFixture.beginTx();
+        guildRepository.update(entityManager, 4L, new GuildMembership(stone.getPersistentId(), "test", "guild"));
+        jpaFixture.submitTx();
+        var guildMembership = guildRepository.findGuildMembership(jpaFixture.newEntityManager(), 4L);
+        assertTrue(guildMembership.isPresent());
+        assertEquals("test", guildMembership.get().guildName());
     }
 }

@@ -13,6 +13,8 @@ public enum DynamicObjectType implements ValueEnum  {
     YAOHUA(7),
 
     ENTRANCE(8),
+
+    GUILD_STONE(9),
     ;
 
     private final int v;

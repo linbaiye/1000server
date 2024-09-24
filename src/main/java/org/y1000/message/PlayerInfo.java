@@ -12,6 +12,7 @@ public final class PlayerInfo {
                 .setName(player.viewName())
                 .setNameColor(PlayerNameColorEvent.toColor(player.team()))
                 .setMale(player.isMale());
+        player.guildMembership().ifPresent(m -> builder.setGuildName(m.guildName()));
         player.weapon().ifPresent(weapon -> builder.setWeaponName(weapon.name()));
         player.hat().ifPresent(hat -> {
             builder.setHatName(hat.name());

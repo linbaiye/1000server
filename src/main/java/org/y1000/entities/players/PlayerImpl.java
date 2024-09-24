@@ -1100,6 +1100,15 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
+    public void joinGuild(GuildMembership membership) {
+        if (guildMembership().isPresent()) {
+            emitEvent(PlayerTextEvent.systemTip(this, "你已有门派。"));
+        } else {
+            guildMembership = membership;
+        }
+    }
+
+    @Override
     public Inventory inventory() {
         return inventory;
     }

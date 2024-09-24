@@ -45,7 +45,8 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         kungFuBookRepository = Mockito.mock(KungFuBookRepository.class);
         jpaFixture = new JpaFixture();
         itemRepository = Mockito.mock(ItemRepository.class);
-        playerRepository = new PlayerRepositoryImpl(itemFactory, kungFuBookFactory, kungFuBookRepository, jpaFixture.getEntityManagerFactory(), itemRepository);
+        GuildRepository guildRepository = Mockito.mock(GuildRepository.class);
+        playerRepository = new PlayerRepositoryImpl(itemFactory, kungFuBookFactory, kungFuBookRepository, jpaFixture.getEntityManagerFactory(), itemRepository, guildRepository);
     }
 
     @AfterEach

@@ -11,14 +11,11 @@ import java.util.Optional;
 public interface RealmMap {
 
     boolean movable(Coordinate coordinate);
+    boolean tileMovable(Coordinate coordinate);
 
     void occupy(Entity entity);
 
     void free(Entity creature);
-
-    int width();
-
-    int height();
 
     void occupy(DynamicObject dynamicObject);
 

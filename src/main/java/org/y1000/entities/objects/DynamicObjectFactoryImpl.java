@@ -68,7 +68,7 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
     }
 
     @Override
-    public GuildStone createGuildStone(String name, int realmId, RealmMap realmMap, Coordinate coordinate) {
+    public GuildStone createGuildStone(long id, String name, int realmId, RealmMap realmMap, Coordinate coordinate) {
         Validate.notNull(name);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
@@ -82,7 +82,7 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
                 .name(name)
                 .build();
         return GuildStone.builder()
-                .id(0)
+                .id(id)
                 .realmMap(realmMap)
                 .coordinate(coordinate)
                 .realmId(stonePo.getRealmId())

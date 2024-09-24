@@ -167,4 +167,6 @@ public interface Player extends ViolentCreature {
     int team();
 
     Optional<GuildMembership> guildMembership();
+
+    void joinGuild(GuildMembership membership);
 }

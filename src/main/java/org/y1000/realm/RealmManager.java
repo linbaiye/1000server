@@ -196,6 +196,8 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
     public synchronized void shut() {
         try {
             shutdown = true;
+            if (shutdown)
+                return;
             for (RealmGroup group : groups) {
                 group.shutdown();
             }

@@ -21,6 +21,10 @@ public final class KillableDynamicObject extends AbstractSimpleKillableDynamicOb
         return Objects.equals(id(), object.id());
     }
 
+    @Override
+    public DynamicObjectType type() {
+        return DynamicObjectType.KILLABLE;
+    }
 
     @Override
     public int hashCode() {

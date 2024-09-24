@@ -35,3 +35,5 @@ src/main/resources/maps/
 
 ### Mac OS ###
 .DS_Store
+java.proto
+message.proto

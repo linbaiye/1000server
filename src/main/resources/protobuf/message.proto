@@ -239,6 +239,7 @@ message ClientFoundGuildPacket{
   string name = 1;
   int32 x = 2;
   int32 y = 3;
+  int32 inventorySlot = 4;
 }
 
 message ClientPacket {
@@ -495,6 +496,11 @@ message NameColorPacket {
   int32 color = 2;
 }
 
+message JoinGuildPacket {
+  int64 id = 1;
+  string name = 2;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -544,6 +550,7 @@ message Packet {
     OpenBankPacket openBank = 47;
     UpdateBankPacket updateBank = 48;
     NameColorPacket nameColor = 49;
+    JoinGuildPacket joinGuild = 50;
   }
 }
 
@@ -578,6 +585,7 @@ message PlayerInfoPacket {
   int32 clothingColor = 18;
   int32 trouserColor = 19;
   int32 nameColor = 20;
+  optional string guildName = 21;
 }
 
 

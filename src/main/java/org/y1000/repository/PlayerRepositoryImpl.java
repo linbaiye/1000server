@@ -40,16 +40,20 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
 
     private final ItemRepository itemRepository;
 
+    private final GuildRepository guildRepository;
+
     public PlayerRepositoryImpl(ItemFactory itemFactory,
                                 KungFuBookFactory kungFuBookFactory,
                                 KungFuBookRepository kungFuRepository,
                                 EntityManagerFactory entityManagerFactory,
-                                ItemRepository itemRepository) {
+                                ItemRepository itemRepository,
+                                GuildRepository guildRepository) {
         this.itemFactory = itemFactory;
         this.kungFuBookFactory = kungFuBookFactory;
         this.kungFuRepository = kungFuRepository;
         this.entityManagerFactory = entityManagerFactory;
         this.itemRepository = itemRepository;
+        this.guildRepository = guildRepository;
     }
 
     /** 姓 */
@@ -420,6 +424,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
                 .revival(playerPo.getRevivalExp())
                 .innateAttributesProvider(innate)
                 .pillSlots(new PillSlots())
+                .guildMembership(guildRepository.findGuildMembership(entityManager, playerPo.getId()).orElse(null))
                 .inventory(itemRepository.findInventory(entityManager, playerPo.getId()));
         return restoreEquipmentAndKungFu(builder, entityManager, playerPo.getId())
                 .build();
@@ -477,6 +482,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         PlayerPo converted = PlayerPo.convert(player, accountId, DEFAULT_REALM_ID);
         entityManager.persist(converted);
         kungFuRepository.save(entityManager, converted.getId(), player.kungFuBook());
+        player.guildMembership().ifPresent(gm -> guildRepository.update(entityManager, player.id(), gm));
         return converted.getId();
     }
 
