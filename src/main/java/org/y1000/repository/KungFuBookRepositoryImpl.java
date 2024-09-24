@@ -1,6 +1,7 @@
 package org.y1000.repository;
 
 import jakarta.persistence.EntityManager;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.*;
 import org.y1000.kungfu.attack.*;
@@ -8,6 +9,7 @@ import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.kungfu.protect.ProtectionParametersImpl;
 import org.y1000.message.clientevent.ClientCreateGuildKungFuEvent;
+import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.persistence.KungFuPo;
 
 import java.util.HashMap;
@@ -172,6 +174,20 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         if (checkGuildKungFuSpecification(request) != null) {
             throw new IllegalArgumentException();
         }
+        AttackKungFuParametersProvider.builder()
+                .attackSpeed(request.getSpeed())
+                .recovery(request.getRecovery())
+                .avoid(request.getAvoid())
+                .headDamage(request.getHeadDamage())
+                .bodyDamage(request.getBodyDamage())
+                .armDamage(request.getArmDamage())
+                .legDamage(request.getLegDamage())
+                .headArmor(request.getHeadArmor())
+                .bodyArmor(request.getBodyArmor())
+                .legArmor(request.getLegArmor())
+                .name(request.getName())
+                .type(request.getType())
+
         return null;
     }
 
@@ -179,6 +195,12 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     @Override
     public String checkGuildKungFuSpecification(ClientCreateGuildKungFuEvent request) {
         Validate.notNull(request);
+        if (StringUtils.isBlank(request.getName())) {
+            return "请输入正确名字";
+        }
+        if (request.getName().length() >= 8) {
+            return "名字最长8字符";
+        }
         if (!request.getType().isMelee()) {
             return "武功只能是刀、剑、拳、槌、枪";
         }

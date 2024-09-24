@@ -1,6 +1,7 @@
 package org.y1000.entities.objects;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.guild.GuildStone;
 import org.y1000.persistence.GuildStonePo;
@@ -72,6 +73,8 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
         Validate.notNull(name);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
+        if (checkCreateGuildStone(name) != null)
+            throw new IllegalArgumentException();
         GuildStonePo stonePo = GuildStonePo.builder()
                 .createdTime(LocalDateTime.now())
                 .x(coordinate.x())
@@ -90,5 +93,14 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
                 .currentHealth(stonePo.getCurrentHealth())
                 .idName(stonePo.getName())
                 .build();
+    }
+
+    @Override
+    public String checkCreateGuildStone(String name) {
+        if (StringUtils.isEmpty(name))
+            return "请输入正确门派名字";
+        if (name.length() >= 8)
+            return "门派名字最长8个字";
+        return null;
     }
 }

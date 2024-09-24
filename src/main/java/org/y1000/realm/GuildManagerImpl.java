@@ -104,6 +104,11 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
             founder.emitEvent(PlayerTextEvent.systemTip(founder, "此门派名称已存在。"));
             return;
         }
+        var reason = factory.checkCreateGuildStone(name);
+        if (reason != null) {
+            founder.emitEvent(PlayerTextEvent.systemTip(founder, reason));
+            return;
+        }
         GuildStone guildstone = factory.createGuildStone(entityIdGenerator.next(), name, realmId, realmMap, coordinate);
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             EntityTransaction transaction = entityManager.getTransaction();

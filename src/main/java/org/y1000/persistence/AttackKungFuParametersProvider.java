@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.y1000.kungfu.KungFuType;
 import org.y1000.kungfu.attack.AttackKungFuParameters;
+import org.y1000.kungfu.attack.AttackKungFuType;
 
 @Data
 @Entity
@@ -19,7 +20,7 @@ public class AttackKungFuParametersProvider implements AttackKungFuParameters {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private KungFuType type;
+    private AttackKungFuType type;
     private int attackSpeed;
     private int recovery;
     private int avoid;
