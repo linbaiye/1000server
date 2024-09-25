@@ -31,7 +31,7 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
         Validate.isTrue(maxLife > 0);
     }
 
-    void damageLife(Damage damage) {
+    protected void damageLife(Damage damage) {
         if (!canBeAttackedNow()) {
             return;
         }
@@ -40,7 +40,7 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
         emitEvent(new EntityLifebarEvent(this, life, maxLife));
     }
 
-    abstract void handleDamaged(Damage damage);
+    protected abstract void handleDamaged(Damage damage);
 
     @Override
     public boolean attackedBy(Player attacker) {
@@ -74,12 +74,6 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
         return life;
     }
 
-
-    @Override
-    public void update(int delta) {
-        if (getAnimationIndex() != 0)
-            updateAnimation(delta);
-    }
 
     @Override
     public boolean canBeMeleeAt(Coordinate coordinate) {

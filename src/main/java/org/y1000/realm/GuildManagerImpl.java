@@ -6,16 +6,22 @@ import jakarta.persistence.EntityTransaction;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+import org.y1000.entities.EntityLifebarEvent;
+import org.y1000.entities.objects.DynamicObjectDieEvent;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerJoinedGuildEvent;
+import org.y1000.entities.players.event.PlayerUpdateGuildEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.item.Item;
 import org.y1000.item.ItemType;
 import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.RemoveEntityMessage;
+import org.y1000.message.serverevent.TextMessage;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
+import org.y1000.realm.event.BroadcastTextEvent;
+import org.y1000.realm.event.DismissGuildEvent;
 import org.y1000.repository.GuildRepository;
 import org.y1000.repository.ItemRepository;
 import org.y1000.util.Coordinate;
@@ -116,14 +122,14 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
             guildRepository.save(entityManager, guildstone, founder.id());
             GuildMembership membership = new GuildMembership(guildstone.getPersistentId(), "门主", guildstone.idName());
             founder.joinGuild(membership);
-            guildRepository.update(entityManager, founder.id(), membership);
+            guildRepository.upsertMembership(entityManager, founder.id(), membership);
             founder.inventory().remove(inventorySlot);
             itemRepository.save(entityManager, founder);
             transaction.commit();
             eventSender.notifySelf(UpdateInventorySlotEvent.remove(founder, inventorySlot));
             doAdd(guildstone);
             founder.emitEvent(PlayerTextEvent.systemTip(founder, "恭喜你，你已成为<" + guildstone.idName() + ">的门主。"));
-            eventSender.notifyVisiblePlayersAndSelf(founder, new PlayerJoinedGuildEvent(founder));
+            eventSender.notifyVisiblePlayersAndSelf(founder, new PlayerUpdateGuildEvent(founder));
         }
     }
 
@@ -140,8 +146,37 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
     }
 
     @Override
-    public void onEvent(EntityEvent entityEvent) {
+    public void shutdown() {
+        getEntities().forEach(guildRepository::update);
+    }
 
+    private void handleLifebarEvent(EntityLifebarEvent lifebarEvent) {
+        if (lifebarEvent.source() instanceof GuildStone guildStone) {
+            eventSender.notifyVisiblePlayers(lifebarEvent.source(), lifebarEvent);
+            eventSender.notifyVisiblePlayers(lifebarEvent.source(),
+                    TextMessage.leftside(guildStone.idName() + ": " + lifebarEvent.getCurrent() + "/" + lifebarEvent.getMax()));
+        }
+    }
+
+    private void handleDieEvent(DynamicObjectDieEvent dieEvent) {
+        if (dieEvent.source() instanceof GuildStone guildStone) {
+            crossRealmEventSender.send(BroadcastTextEvent.leftUp(guildStone.idName() + " 被灭门了"));
+            crossRealmEventSender.send(new DismissGuildEvent(guildStone.getPersistentId()));
+            eventSender.notifyVisiblePlayers(dieEvent.source(), new RemoveEntityMessage(dieEvent.source().id()));
+            remove(guildStone);
+            eventSender.remove(guildStone);
+            guildRepository.deleteGuildAndMembership(guildStone.getPersistentId());
+            guildStone.clearListeners();
+        }
+    }
+
+    @Override
+    public void onEvent(EntityEvent entityEvent) {
+        if (entityEvent instanceof EntityLifebarEvent lifebarEvent) {
+            handleLifebarEvent(lifebarEvent);
+        } else if (entityEvent instanceof DynamicObjectDieEvent dieEvent) {
+            handleDieEvent(dieEvent);
+        }
     }
 
     @Override
@@ -151,6 +186,6 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
 
     @Override
     public void update(long delta) {
-
+        getEntities().forEach(guildStone -> guildStone.update((int)delta));
     }
 }

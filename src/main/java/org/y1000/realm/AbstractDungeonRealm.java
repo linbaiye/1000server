@@ -65,6 +65,11 @@ abstract class AbstractDungeonRealm extends AbstractRealm {
         playerManager().onClientEvent(dataEvent, npcManager());
     }
 
+    @Override
+    public void shutdown() {
+        playerManager().shutdown();
+    }
+
     public void close() {
         if (closing) {
             return;
@@ -78,8 +83,4 @@ abstract class AbstractDungeonRealm extends AbstractRealm {
         doInit();
     }
 
-    @Override
-    public void update() {
-        doUpdateEntities();
-    }
 }

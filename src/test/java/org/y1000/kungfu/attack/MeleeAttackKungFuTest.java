@@ -20,6 +20,7 @@ import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.serverevent.TextMessage;
 import org.y1000.realm.Realm;
 import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.util.Coordinate;
@@ -223,7 +224,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, monster);
         PlayerTextEvent event = playerEventListener.dequeue(PlayerTextEvent.class);
-        assertEquals(PlayerTextEvent.TextType.NO_POWER.value(), event.toPacket().getText().getType());
+        assertEquals(TextMessage.TextType.NO_POWER.value(), event.toPacket().getText().getType());
         assertEquals(State.IDLE, player.stateEnum());
     }
 
@@ -238,7 +239,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, monster);
         PlayerTextEvent event = playerEventListener.removeFirst(PlayerTextEvent.class);
-        assertEquals(PlayerTextEvent.TextType.NO_LIFE.value(), event.toPacket().getText().getType());
+        assertEquals(TextMessage.TextType.NO_LIFE.value(), event.toPacket().getText().getType());
     }
 
     @Test

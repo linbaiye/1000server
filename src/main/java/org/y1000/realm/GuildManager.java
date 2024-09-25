@@ -8,4 +8,6 @@ public interface GuildManager extends ActiveEntityManager<GuildStone> {
     void foundGuild(Player founder, Coordinate coordinate, String name, int inventorySlot);
 
     void init();
+
+    void shutdown();
 }

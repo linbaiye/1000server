@@ -5,10 +5,10 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Damage;
 import org.y1000.event.CrossRealmEvent;
-import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.serverevent.TextMessage;
 import org.y1000.realm.RealmMap;
 import org.y1000.realm.event.BroadcastSoundEvent;
-import org.y1000.realm.event.BroadcastChatEvent;
+import org.y1000.realm.event.BroadcastTextEvent;
 import org.y1000.realm.event.RealmTriggerEvent;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
@@ -39,7 +39,6 @@ public final class Yaohua extends AbstractKillableDynamicObject
     public boolean canBeAttackedNow() {
         return currentLife() > 0 && getAnimationIndex() == 0 &&
                 fires.stream().filter(TriggerDynamicObject::isTriggered).count() == 4;
-
     }
 
 
@@ -54,12 +53,12 @@ public final class Yaohua extends AbstractKillableDynamicObject
     }
 
     @Override
-    void handleDamaged(Damage damage) {
+    protected void handleDamaged(Damage damage) {
         damageLife(damage);
         if (currentLife() <= 0) {
             emitEvent(new CrossRealmEvent(this, new BroadcastSoundEvent("8950")));
             emitEvent(new CrossRealmEvent(this, new RealmTriggerEvent(1, "九尾狐酒母")));
-            emitEvent(new CrossRealmEvent(this, new BroadcastChatEvent(null, PlayerTextEvent.TextType.NINE_TAIL_FOX_SHIFT, PlayerTextEvent.ColorType.SIX_GRADE)));
+            emitEvent(new CrossRealmEvent(this, new BroadcastTextEvent(null, TextMessage.TextType.NINE_TAIL_FOX_SHIFT, TextMessage.ColorType.SIX_GRADE)));
             changeAnimation(1);
         } else {
             dynamicObjectSdb().getSoundSpecial(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
@@ -86,5 +85,11 @@ public final class Yaohua extends AbstractKillableDynamicObject
         dynamicObjects.stream().filter(dynamicObject -> dynamicObject.idName().equals("狐狸火"))
                 .map(TriggerDynamicObject.class::cast)
                 .forEach(fires::add);
+    }
+
+    @Override
+    public void update(int delta) {
+        if (getAnimationIndex() != 0)
+            updateAnimation(delta);
     }
 }

@@ -2,13 +2,10 @@ package org.y1000.message.clientevent.chat;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.realm.event.BroadcastChatEvent;
-import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.BroadcastTextEvent;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -39,7 +36,7 @@ class ClientWorldShoutEventTest {
         ClientWorldShoutEvent event = ClientWorldShoutEvent.parse("!test");
         Player player = Mockito.mock(Player.class);
         when(player.viewName()).thenReturn("好犀利");
-        ((BroadcastChatEvent)event.toRealmEvent(player)).send(player);
+        ((BroadcastTextEvent)event.toRealmEvent(player)).send(player);
         doAnswer(invocationOnMock -> {
             PlayerTextEvent textEvent = invocationOnMock.getArgument(0);
             assertTrue(textEvent.toPacket().getText().getText().startsWith("好犀利：tes"));

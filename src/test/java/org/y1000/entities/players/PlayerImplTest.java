@@ -32,13 +32,12 @@ import org.y1000.message.RightClickType;
 import org.y1000.message.clientevent.*;
 import org.y1000.message.clientevent.input.RightMouseClick;
 import org.y1000.message.serverevent.PlayerEquipEvent;
+import org.y1000.message.serverevent.TextMessage;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.network.gen.*;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
-import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
-import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.util.Coordinate;
 
 
@@ -192,7 +191,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(0, eventListener.eventSize());
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 2));
         var text = eventListener.dequeue(PlayerTextEvent.class);
-        assertEquals(text.toPacket().getText().getType(), PlayerTextEvent.TextType.NO_WEAPON.value());
+        assertEquals(text.toPacket().getText().getType(), TextMessage.TextType.NO_WEAPON.value());
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 2));
     }
 
@@ -368,7 +367,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         player.kungFuBook().addToBasic(AssistantKungFu.builder().name("feng1").exp(0).build());
         player.handleClientEvent(new ClientToggleKungFuEvent(2, 1));
         PlayerTextEvent event = eventListener.removeFirst(PlayerTextEvent.class);
-        assertEquals(PlayerTextEvent.TextType.KUNGFU_LEVEL_LOW.value(), event.toPacket().getText().getType());
+        assertEquals(TextMessage.TextType.KUNGFU_LEVEL_LOW.value(), event.toPacket().getText().getType());
 
         while (player.attackKungFu().level() < 9999) {
             player.gainAttackExp(ExperienceUtil.DEFAULT_EXP);
@@ -480,7 +479,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         // no ammo.
         assertEquals(State.IDLE, player.stateEnum());
         PlayerTextEvent event = eventListener.removeFirst(PlayerTextEvent.class);
-        assertEquals(PlayerTextEvent.TextType.OUT_OF_AMMO.value(), event.toPacket().getText().getType());
+        assertEquals(TextMessage.TextType.OUT_OF_AMMO.value(), event.toPacket().getText().getType());
 
         player.inventory().add(itemFactory.createItem("箭", 1));
         eventListener.clearEvents();
@@ -746,7 +745,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         player.registerEventListener(eventListener);
         player.gainAttackExp(1000);
         var event = eventListener.removeFirst(PlayerTextEvent.class);
-        assertEquals(PlayerTextEvent.TextType.NOT_ENOUGH_ARM_LIFE.value(), event.toPacket().getText().getType());
+        assertEquals(TextMessage.TextType.NOT_ENOUGH_ARM_LIFE.value(), event.toPacket().getText().getType());
         assertEquals(100, player.attackKungFu().level());
         arm.gain(10);
         player.gainAttackExp(1000);
@@ -818,7 +817,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertEquals(1L, ((StackItem)player.inventory().getItem(slot)).number());
         TextMessagePacket text = eventListener.removeFirst(PlayerTextEvent.class).toPacket().getText();
-        assertEquals(PlayerTextEvent.TextType.NO_MORE_PILL.value(), text.getType());
+        assertEquals(TextMessage.TextType.NO_MORE_PILL.value(), text.getType());
     }
 
     @Test

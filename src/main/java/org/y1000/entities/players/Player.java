@@ -169,4 +169,7 @@ public interface Player extends ViolentCreature {
     Optional<GuildMembership> guildMembership();
 
     void joinGuild(GuildMembership membership);
+
+    void quitGuild();
 }
+

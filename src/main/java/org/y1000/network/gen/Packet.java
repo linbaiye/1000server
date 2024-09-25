@@ -94,7 +94,7 @@ private static final long serialVersionUID = 0L;
     OPENBANK(47),
     UPDATEBANK(48),
     NAMECOLOR(49),
-    JOINGUILD(50),
+    UPDATEGUILD(50),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -158,7 +158,7 @@ private static final long serialVersionUID = 0L;
         case 47: return OPENBANK;
         case 48: return UPDATEBANK;
         case 49: return NAMECOLOR;
-        case 50: return JOINGUILD;
+        case 50: return UPDATEGUILD;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1600,35 +1600,35 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.NameColorPacket.getDefaultInstance();
   }
 
-  public static final int JOINGUILD_FIELD_NUMBER = 50;
+  public static final int UPDATEGUILD_FIELD_NUMBER = 50;
   /**
-   * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
-   * @return Whether the joinGuild field is set.
+   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
+   * @return Whether the updateGuild field is set.
    */
   @java.lang.Override
-  public boolean hasJoinGuild() {
+  public boolean hasUpdateGuild() {
     return typedPacketCase_ == 50;
   }
   /**
-   * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
-   * @return The joinGuild.
+   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
+   * @return The updateGuild.
    */
   @java.lang.Override
-  public org.y1000.network.gen.JoinGuildPacket getJoinGuild() {
+  public org.y1000.network.gen.UpdateGuildPacket getUpdateGuild() {
     if (typedPacketCase_ == 50) {
-       return (org.y1000.network.gen.JoinGuildPacket) typedPacket_;
+       return (org.y1000.network.gen.UpdateGuildPacket) typedPacket_;
     }
-    return org.y1000.network.gen.JoinGuildPacket.getDefaultInstance();
+    return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
+   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
    */
   @java.lang.Override
-  public org.y1000.network.gen.JoinGuildPacketOrBuilder getJoinGuildOrBuilder() {
+  public org.y1000.network.gen.UpdateGuildPacketOrBuilder getUpdateGuildOrBuilder() {
     if (typedPacketCase_ == 50) {
-       return (org.y1000.network.gen.JoinGuildPacket) typedPacket_;
+       return (org.y1000.network.gen.UpdateGuildPacket) typedPacket_;
     }
-    return org.y1000.network.gen.JoinGuildPacket.getDefaultInstance();
+    return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -1784,7 +1784,7 @@ private static final long serialVersionUID = 0L;
       output.writeMessage(49, (org.y1000.network.gen.NameColorPacket) typedPacket_);
     }
     if (typedPacketCase_ == 50) {
-      output.writeMessage(50, (org.y1000.network.gen.JoinGuildPacket) typedPacket_);
+      output.writeMessage(50, (org.y1000.network.gen.UpdateGuildPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1981,7 +1981,7 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 50) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(50, (org.y1000.network.gen.JoinGuildPacket) typedPacket_);
+        .computeMessageSize(50, (org.y1000.network.gen.UpdateGuildPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2185,8 +2185,8 @@ private static final long serialVersionUID = 0L;
             .equals(other.getNameColor())) return false;
         break;
       case 50:
-        if (!getJoinGuild()
-            .equals(other.getJoinGuild())) return false;
+        if (!getUpdateGuild()
+            .equals(other.getUpdateGuild())) return false;
         break;
       case 0:
       default:
@@ -2388,8 +2388,8 @@ private static final long serialVersionUID = 0L;
         hash = (53 * hash) + getNameColor().hashCode();
         break;
       case 50:
-        hash = (37 * hash) + JOINGUILD_FIELD_NUMBER;
-        hash = (53 * hash) + getJoinGuild().hashCode();
+        hash = (37 * hash) + UPDATEGUILD_FIELD_NUMBER;
+        hash = (53 * hash) + getUpdateGuild().hashCode();
         break;
       case 0:
       default:
@@ -2664,8 +2664,8 @@ private static final long serialVersionUID = 0L;
       if (nameColorBuilder_ != null) {
         nameColorBuilder_.clear();
       }
-      if (joinGuildBuilder_ != null) {
-        joinGuildBuilder_.clear();
+      if (updateGuildBuilder_ != null) {
+        updateGuildBuilder_.clear();
       }
       typedPacketCase_ = 0;
       typedPacket_ = null;
@@ -2898,8 +2898,8 @@ private static final long serialVersionUID = 0L;
         result.typedPacket_ = nameColorBuilder_.build();
       }
       if (typedPacketCase_ == 50 &&
-          joinGuildBuilder_ != null) {
-        result.typedPacket_ = joinGuildBuilder_.build();
+          updateGuildBuilder_ != null) {
+        result.typedPacket_ = updateGuildBuilder_.build();
       }
     }
 
@@ -3100,8 +3100,8 @@ private static final long serialVersionUID = 0L;
           mergeNameColor(other.getNameColor());
           break;
         }
-        case JOINGUILD: {
-          mergeJoinGuild(other.getJoinGuild());
+        case UPDATEGUILD: {
+          mergeUpdateGuild(other.getUpdateGuild());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -3458,7 +3458,7 @@ private static final long serialVersionUID = 0L;
             } // case 394
             case 402: {
               input.readMessage(
-                  getJoinGuildFieldBuilder().getBuilder(),
+                  getUpdateGuildFieldBuilder().getBuilder(),
                   extensionRegistry);
               typedPacketCase_ = 50;
               break;
@@ -10029,71 +10029,71 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.SingleFieldBuilder<
-        org.y1000.network.gen.JoinGuildPacket, org.y1000.network.gen.JoinGuildPacket.Builder, org.y1000.network.gen.JoinGuildPacketOrBuilder> joinGuildBuilder_;
+        org.y1000.network.gen.UpdateGuildPacket, org.y1000.network.gen.UpdateGuildPacket.Builder, org.y1000.network.gen.UpdateGuildPacketOrBuilder> updateGuildBuilder_;
     /**
-     * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
-     * @return Whether the joinGuild field is set.
+     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
+     * @return Whether the updateGuild field is set.
      */
     @java.lang.Override
-    public boolean hasJoinGuild() {
+    public boolean hasUpdateGuild() {
       return typedPacketCase_ == 50;
     }
     /**
-     * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
-     * @return The joinGuild.
+     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
+     * @return The updateGuild.
      */
     @java.lang.Override
-    public org.y1000.network.gen.JoinGuildPacket getJoinGuild() {
-      if (joinGuildBuilder_ == null) {
+    public org.y1000.network.gen.UpdateGuildPacket getUpdateGuild() {
+      if (updateGuildBuilder_ == null) {
         if (typedPacketCase_ == 50) {
-          return (org.y1000.network.gen.JoinGuildPacket) typedPacket_;
+          return (org.y1000.network.gen.UpdateGuildPacket) typedPacket_;
         }
-        return org.y1000.network.gen.JoinGuildPacket.getDefaultInstance();
+        return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
       } else {
         if (typedPacketCase_ == 50) {
-          return joinGuildBuilder_.getMessage();
+          return updateGuildBuilder_.getMessage();
         }
-        return org.y1000.network.gen.JoinGuildPacket.getDefaultInstance();
+        return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
+     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
      */
-    public Builder setJoinGuild(org.y1000.network.gen.JoinGuildPacket value) {
-      if (joinGuildBuilder_ == null) {
+    public Builder setUpdateGuild(org.y1000.network.gen.UpdateGuildPacket value) {
+      if (updateGuildBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
         typedPacket_ = value;
         onChanged();
       } else {
-        joinGuildBuilder_.setMessage(value);
+        updateGuildBuilder_.setMessage(value);
       }
       typedPacketCase_ = 50;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
+     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
      */
-    public Builder setJoinGuild(
-        org.y1000.network.gen.JoinGuildPacket.Builder builderForValue) {
-      if (joinGuildBuilder_ == null) {
+    public Builder setUpdateGuild(
+        org.y1000.network.gen.UpdateGuildPacket.Builder builderForValue) {
+      if (updateGuildBuilder_ == null) {
         typedPacket_ = builderForValue.build();
         onChanged();
       } else {
-        joinGuildBuilder_.setMessage(builderForValue.build());
+        updateGuildBuilder_.setMessage(builderForValue.build());
       }
       typedPacketCase_ = 50;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
+     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
      */
-    public Builder mergeJoinGuild(org.y1000.network.gen.JoinGuildPacket value) {
-      if (joinGuildBuilder_ == null) {
+    public Builder mergeUpdateGuild(org.y1000.network.gen.UpdateGuildPacket value) {
+      if (updateGuildBuilder_ == null) {
         if (typedPacketCase_ == 50 &&
-            typedPacket_ != org.y1000.network.gen.JoinGuildPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.network.gen.JoinGuildPacket.newBuilder((org.y1000.network.gen.JoinGuildPacket) typedPacket_)
+            typedPacket_ != org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.UpdateGuildPacket.newBuilder((org.y1000.network.gen.UpdateGuildPacket) typedPacket_)
               .mergeFrom(value).buildPartial();
         } else {
           typedPacket_ = value;
@@ -10101,19 +10101,19 @@ private static final long serialVersionUID = 0L;
         onChanged();
       } else {
         if (typedPacketCase_ == 50) {
-          joinGuildBuilder_.mergeFrom(value);
+          updateGuildBuilder_.mergeFrom(value);
         } else {
-          joinGuildBuilder_.setMessage(value);
+          updateGuildBuilder_.setMessage(value);
         }
       }
       typedPacketCase_ = 50;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
+     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
      */
-    public Builder clearJoinGuild() {
-      if (joinGuildBuilder_ == null) {
+    public Builder clearUpdateGuild() {
+      if (updateGuildBuilder_ == null) {
         if (typedPacketCase_ == 50) {
           typedPacketCase_ = 0;
           typedPacket_ = null;
@@ -10124,50 +10124,50 @@ private static final long serialVersionUID = 0L;
           typedPacketCase_ = 0;
           typedPacket_ = null;
         }
-        joinGuildBuilder_.clear();
+        updateGuildBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
+     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
      */
-    public org.y1000.network.gen.JoinGuildPacket.Builder getJoinGuildBuilder() {
-      return getJoinGuildFieldBuilder().getBuilder();
+    public org.y1000.network.gen.UpdateGuildPacket.Builder getUpdateGuildBuilder() {
+      return getUpdateGuildFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
+     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
      */
     @java.lang.Override
-    public org.y1000.network.gen.JoinGuildPacketOrBuilder getJoinGuildOrBuilder() {
-      if ((typedPacketCase_ == 50) && (joinGuildBuilder_ != null)) {
-        return joinGuildBuilder_.getMessageOrBuilder();
+    public org.y1000.network.gen.UpdateGuildPacketOrBuilder getUpdateGuildOrBuilder() {
+      if ((typedPacketCase_ == 50) && (updateGuildBuilder_ != null)) {
+        return updateGuildBuilder_.getMessageOrBuilder();
       } else {
         if (typedPacketCase_ == 50) {
-          return (org.y1000.network.gen.JoinGuildPacket) typedPacket_;
+          return (org.y1000.network.gen.UpdateGuildPacket) typedPacket_;
         }
-        return org.y1000.network.gen.JoinGuildPacket.getDefaultInstance();
+        return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
+     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
      */
     private com.google.protobuf.SingleFieldBuilder<
-        org.y1000.network.gen.JoinGuildPacket, org.y1000.network.gen.JoinGuildPacket.Builder, org.y1000.network.gen.JoinGuildPacketOrBuilder> 
-        getJoinGuildFieldBuilder() {
-      if (joinGuildBuilder_ == null) {
+        org.y1000.network.gen.UpdateGuildPacket, org.y1000.network.gen.UpdateGuildPacket.Builder, org.y1000.network.gen.UpdateGuildPacketOrBuilder> 
+        getUpdateGuildFieldBuilder() {
+      if (updateGuildBuilder_ == null) {
         if (!(typedPacketCase_ == 50)) {
-          typedPacket_ = org.y1000.network.gen.JoinGuildPacket.getDefaultInstance();
+          typedPacket_ = org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
         }
-        joinGuildBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-            org.y1000.network.gen.JoinGuildPacket, org.y1000.network.gen.JoinGuildPacket.Builder, org.y1000.network.gen.JoinGuildPacketOrBuilder>(
-                (org.y1000.network.gen.JoinGuildPacket) typedPacket_,
+        updateGuildBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+            org.y1000.network.gen.UpdateGuildPacket, org.y1000.network.gen.UpdateGuildPacket.Builder, org.y1000.network.gen.UpdateGuildPacketOrBuilder>(
+                (org.y1000.network.gen.UpdateGuildPacket) typedPacket_,
                 getParentForChildren(),
                 isClean());
         typedPacket_ = null;
       }
       typedPacketCase_ = 50;
       onChanged();
-      return joinGuildBuilder_;
+      return updateGuildBuilder_;
     }
 
     // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.Packet)

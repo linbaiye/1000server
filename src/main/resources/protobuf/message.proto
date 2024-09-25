@@ -496,7 +496,7 @@ message NameColorPacket {
   int32 color = 2;
 }
 
-message JoinGuildPacket {
+message UpdateGuildPacket {
   int64 id = 1;
   string name = 2;
 }
@@ -550,7 +550,7 @@ message Packet {
     OpenBankPacket openBank = 47;
     UpdateBankPacket updateBank = 48;
     NameColorPacket nameColor = 49;
-    JoinGuildPacket joinGuild = 50;
+    UpdateGuildPacket updateGuild = 50;
   }
 }
 

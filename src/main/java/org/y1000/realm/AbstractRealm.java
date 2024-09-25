@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.StaticTeleport;
+import org.y1000.message.clientevent.ClientAttackEvent;
 import org.y1000.message.clientevent.ClientFoundGuildEvent;
 import org.y1000.message.clientevent.ClientSimpleCommandEvent;
 import org.y1000.message.clientevent.chat.ClientChatEvent;
@@ -70,6 +71,10 @@ abstract class AbstractRealm implements Realm {
         this.chatManager = chatManager;
     }
 
+    void addEntityManager(ActiveEntityManager<?> manager) {
+        entityManagers.add(manager);
+    }
+
     public RealmMap map() {
         return realmMap;
     }
@@ -82,14 +87,6 @@ abstract class AbstractRealm implements Realm {
         return mapSdb.getSoundBase(id);
     }
 
-    void doUpdateEntities() {
-        long current = System.currentTimeMillis();
-        while (accumulatedMillis <= current) {
-            entityManagers.forEach(m -> m.update(STEP_MILLIS));
-            accumulatedMillis += STEP_MILLIS;
-        }
-    }
-
     abstract Logger log();
 
     RealmEntityEventSender getEventSender() {
@@ -100,11 +97,16 @@ abstract class AbstractRealm implements Realm {
         return playerManager;
     }
 
-
     @Override
-    public void shutdown() {
-        playerManager.shutdown();
+    public void update() {
+        long current = System.currentTimeMillis();
+        while (accumulatedMillis <= current) {
+            entityManagers.forEach(m -> m.update(STEP_MILLIS));
+            accumulatedMillis += STEP_MILLIS;
+        }
     }
+
+
 
     protected void doInit() {
         try {

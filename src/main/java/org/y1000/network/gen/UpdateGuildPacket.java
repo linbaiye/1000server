@@ -6,12 +6,12 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.JoinGuildPacket}
+ * Protobuf type {@code org.y1000.network.gen.UpdateGuildPacket}
  */
-public final class JoinGuildPacket extends
+public final class UpdateGuildPacket extends
     com.google.protobuf.GeneratedMessage implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.JoinGuildPacket)
-    JoinGuildPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.UpdateGuildPacket)
+    UpdateGuildPacketOrBuilder {
 private static final long serialVersionUID = 0L;
   static {
     com.google.protobuf.RuntimeVersion.validateProtobufGencodeVersion(
@@ -20,27 +20,27 @@ private static final long serialVersionUID = 0L;
       /* minor= */ 28,
       /* patch= */ 0,
       /* suffix= */ "",
-      JoinGuildPacket.class.getName());
+      UpdateGuildPacket.class.getName());
   }
-  // Use JoinGuildPacket.newBuilder() to construct.
-  private JoinGuildPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+  // Use UpdateGuildPacket.newBuilder() to construct.
+  private UpdateGuildPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
     super(builder);
   }
-  private JoinGuildPacket() {
+  private UpdateGuildPacket() {
     name_ = "";
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_JoinGuildPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UpdateGuildPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_JoinGuildPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UpdateGuildPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.JoinGuildPacket.class, org.y1000.network.gen.JoinGuildPacket.Builder.class);
+            org.y1000.network.gen.UpdateGuildPacket.class, org.y1000.network.gen.UpdateGuildPacket.Builder.class);
   }
 
   public static final int ID_FIELD_NUMBER = 1;
@@ -139,10 +139,10 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.JoinGuildPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.UpdateGuildPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.JoinGuildPacket other = (org.y1000.network.gen.JoinGuildPacket) obj;
+    org.y1000.network.gen.UpdateGuildPacket other = (org.y1000.network.gen.UpdateGuildPacket) obj;
 
     if (getId()
         != other.getId()) return false;
@@ -169,44 +169,44 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static org.y1000.network.gen.JoinGuildPacket parseFrom(
+  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.JoinGuildPacket parseFrom(
+  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.JoinGuildPacket parseFrom(
+  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.JoinGuildPacket parseFrom(
+  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.JoinGuildPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.JoinGuildPacket parseFrom(
+  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.JoinGuildPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.JoinGuildPacket parseFrom(
+  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -214,26 +214,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.JoinGuildPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.UpdateGuildPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.JoinGuildPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.UpdateGuildPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.JoinGuildPacket parseFrom(
+  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.JoinGuildPacket parseFrom(
+  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -246,7 +246,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.JoinGuildPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.UpdateGuildPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -262,26 +262,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.JoinGuildPacket}
+   * Protobuf type {@code org.y1000.network.gen.UpdateGuildPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.JoinGuildPacket)
-      org.y1000.network.gen.JoinGuildPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.UpdateGuildPacket)
+      org.y1000.network.gen.UpdateGuildPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_JoinGuildPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UpdateGuildPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_JoinGuildPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UpdateGuildPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.JoinGuildPacket.class, org.y1000.network.gen.JoinGuildPacket.Builder.class);
+              org.y1000.network.gen.UpdateGuildPacket.class, org.y1000.network.gen.UpdateGuildPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.JoinGuildPacket.newBuilder()
+    // Construct using org.y1000.network.gen.UpdateGuildPacket.newBuilder()
     private Builder() {
 
     }
@@ -303,17 +303,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_JoinGuildPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UpdateGuildPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.JoinGuildPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.JoinGuildPacket.getDefaultInstance();
+    public org.y1000.network.gen.UpdateGuildPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.JoinGuildPacket build() {
-      org.y1000.network.gen.JoinGuildPacket result = buildPartial();
+    public org.y1000.network.gen.UpdateGuildPacket build() {
+      org.y1000.network.gen.UpdateGuildPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -321,14 +321,14 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.JoinGuildPacket buildPartial() {
-      org.y1000.network.gen.JoinGuildPacket result = new org.y1000.network.gen.JoinGuildPacket(this);
+    public org.y1000.network.gen.UpdateGuildPacket buildPartial() {
+      org.y1000.network.gen.UpdateGuildPacket result = new org.y1000.network.gen.UpdateGuildPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.JoinGuildPacket result) {
+    private void buildPartial0(org.y1000.network.gen.UpdateGuildPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.id_ = id_;
@@ -340,16 +340,16 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.JoinGuildPacket) {
-        return mergeFrom((org.y1000.network.gen.JoinGuildPacket)other);
+      if (other instanceof org.y1000.network.gen.UpdateGuildPacket) {
+        return mergeFrom((org.y1000.network.gen.UpdateGuildPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.JoinGuildPacket other) {
-      if (other == org.y1000.network.gen.JoinGuildPacket.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.y1000.network.gen.UpdateGuildPacket other) {
+      if (other == org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance()) return this;
       if (other.getId() != 0L) {
         setId(other.getId());
       }
@@ -515,23 +515,23 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.JoinGuildPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.UpdateGuildPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.JoinGuildPacket)
-  private static final org.y1000.network.gen.JoinGuildPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.UpdateGuildPacket)
+  private static final org.y1000.network.gen.UpdateGuildPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.JoinGuildPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.UpdateGuildPacket();
   }
 
-  public static org.y1000.network.gen.JoinGuildPacket getDefaultInstance() {
+  public static org.y1000.network.gen.UpdateGuildPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<JoinGuildPacket>
-      PARSER = new com.google.protobuf.AbstractParser<JoinGuildPacket>() {
+  private static final com.google.protobuf.Parser<UpdateGuildPacket>
+      PARSER = new com.google.protobuf.AbstractParser<UpdateGuildPacket>() {
     @java.lang.Override
-    public JoinGuildPacket parsePartialFrom(
+    public UpdateGuildPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -550,17 +550,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<JoinGuildPacket> parser() {
+  public static com.google.protobuf.Parser<UpdateGuildPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<JoinGuildPacket> getParserForType() {
+  public com.google.protobuf.Parser<UpdateGuildPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.JoinGuildPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.UpdateGuildPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

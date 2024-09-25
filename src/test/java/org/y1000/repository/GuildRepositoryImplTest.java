@@ -4,8 +4,11 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.entities.Direction;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
+import org.y1000.entities.players.Damage;
+import org.y1000.entities.players.Player;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.persistence.GuildMembershipPo;
@@ -16,9 +19,9 @@ import org.y1000.sdb.DynamicObjectSdbImpl;
 import org.y1000.util.Coordinate;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 class GuildRepositoryImplTest {
 
@@ -80,10 +83,34 @@ class GuildRepositoryImplTest {
         var stone = dynamicObjectFactory.createGuildStone(1, "test", 1, realmMap, Coordinate.xy(2, 3));
         saveStone(stone, 4L);
         EntityManager entityManager = jpaFixture.beginTx();
-        guildRepository.update(entityManager, 4L, new GuildMembership(stone.getPersistentId(), "test", "guild"));
+        guildRepository.upsertMembership(entityManager, 4L, new GuildMembership(stone.getPersistentId(), "test", "guild"));
         jpaFixture.submitTx();
         var guildMembership = guildRepository.findGuildMembership(jpaFixture.newEntityManager(), 4L);
         assertTrue(guildMembership.isPresent());
         assertEquals("test", guildMembership.get().guildName());
+    }
+
+    @Test
+    void update() {
+        var stone = dynamicObjectFactory.createGuildStone(1, "test", 1, realmMap, Coordinate.xy(2, 3));
+        saveStone(stone, 4L);
+        Player player = Mockito.mock(Player.class);
+        when(player.damage()).thenReturn(new Damage(1, 1,1,1));
+        when(player.coordinate()).thenReturn(stone.coordinate().moveBy(Direction.RIGHT));
+        stone.attackedBy(player);
+        guildRepository.update(stone);
+        GuildStonePo guildStonePo = jpaFixture.newEntityManager().find(GuildStonePo.class, stone.getPersistentId());
+        assertEquals(stone.getMaxLife() - 1, guildStonePo.getCurrentHealth());
+    }
+
+    @Test
+    void deleteGuildAndMembership() {
+        var stone = dynamicObjectFactory.createGuildStone(1, "test", 1, realmMap, Coordinate.xy(2, 3));
+        saveStone(stone, 4L);
+        EntityManager entityManager = jpaFixture.beginTx();
+        guildRepository.upsertMembership(entityManager, 4L, new GuildMembership(stone.getPersistentId(), "test", "guild"));
+        guildRepository.deleteGuildAndMembership(stone.getPersistentId());
+        assertNull(jpaFixture.newEntityManager().find(GuildStonePo.class, stone.getPersistentId()));
+        assertNull(jpaFixture.newEntityManager().find(GuildMembershipPo.class, 4L));
     }
 }

@@ -18,6 +18,10 @@ public interface GuildRepository {
 
     Optional<GuildMembership> findGuildMembership(EntityManager entityManager, long playerId);
 
-    void update(EntityManager entityManager, long playerId, GuildMembership guildMembership);
+    void upsertMembership(EntityManager entityManager, long playerId, GuildMembership guildMembership);
+
+    void deleteGuildAndMembership(int guildId);
+
+    void update(GuildStone guildStone);
 
 }

@@ -6,6 +6,8 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
+import org.y1000.entities.objects.DynamicObjectFactory;
+import org.y1000.entities.objects.DynamicObjectFactoryImpl;
 import org.y1000.entities.players.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.ItemFactory;
@@ -20,6 +22,7 @@ import org.y1000.repository.BankRepository;
 import org.y1000.repository.ItemRepository;
 import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
+import org.y1000.sdb.DynamicObjectSdbImpl;
 import org.y1000.sdb.ItemDrugSdb;
 import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.util.Coordinate;
@@ -48,6 +51,10 @@ public abstract class AbstractUnitTestFixture {
 
     private ItemRepositoryImpl createItemRepositoryImpl() {
         return new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuFactory, Mockito.mock(EntityManagerFactory.class));
+    }
+
+    protected DynamicObjectFactory createDynamicObjectFactory() {
+        return new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
     }
 
     protected ItemFactory createItemFactory() {

@@ -1109,6 +1109,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
+    public void quitGuild() {
+        guildMembership = null;
+    }
+
+    @Override
     public Inventory inventory() {
         return inventory;
     }

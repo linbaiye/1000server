@@ -482,7 +482,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         PlayerPo converted = PlayerPo.convert(player, accountId, DEFAULT_REALM_ID);
         entityManager.persist(converted);
         kungFuRepository.save(entityManager, converted.getId(), player.kungFuBook());
-        player.guildMembership().ifPresent(gm -> guildRepository.update(entityManager, player.id(), gm));
+        player.guildMembership().ifPresent(gm -> guildRepository.upsertMembership(entityManager, player.id(), gm));
         return converted.getId();
     }
 

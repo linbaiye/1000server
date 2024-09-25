@@ -27,6 +27,7 @@ class GuildableRealm extends AbstractRealm {
                           ChatManager chatManager,
                           GuildManager guildManager) {
         super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+        addEntityManager(guildManager);
         this.guildManager = guildManager;
     }
 
@@ -67,13 +68,14 @@ class GuildableRealm extends AbstractRealm {
     }
 
     @Override
-    public void update() {
-        doUpdateEntities();
-    }
-
-    @Override
     public void init() {
         doInit();
         guildManager.init();
+    }
+
+    @Override
+    public void shutdown() {
+        playerManager().shutdown();
+        guildManager.shutdown();
     }
 }

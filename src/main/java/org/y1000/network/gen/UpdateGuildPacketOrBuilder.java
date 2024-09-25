@@ -5,8 +5,8 @@
 
 package org.y1000.network.gen;
 
-public interface JoinGuildPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.JoinGuildPacket)
+public interface UpdateGuildPacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.UpdateGuildPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**

@@ -3,8 +3,6 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
@@ -13,19 +11,14 @@ import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.entities.players.event.OpenTradeWindowEvent;
 import org.y1000.entities.players.event.UpdateTradeWindowEvent;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.event.EntityEvent;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
-import org.y1000.item.ItemSdbImpl;
 import org.y1000.item.StackItem;
 import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.ServerMessage;
+import org.y1000.message.serverevent.TextMessage;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.network.gen.TextMessagePacket;
-import org.y1000.repository.ItemRepositoryImpl;
-import org.y1000.repository.KungFuBookRepositoryImpl;
-import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,7 +98,7 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
         when(trader.inventory()).thenReturn(inventory);
         tradeManager.start(trader, tradee, slot);
         TextMessagePacket text = traderEventListener.removeFirst(PlayerTextEvent.class).toPacket().getText();
-        assertEquals(PlayerTextEvent.TextType.TRADE_REJECTED.value(), text.getType());
+        assertEquals(TextMessage.TextType.TRADE_REJECTED.value(), text.getType());
         assertTrue(tradeeEventListener.isEmpty());
         assertTrue(traderEventListener.isEmpty());
     }
@@ -126,7 +119,7 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
 
         tradeManager.start(trader, tradee, slot);
         TextMessagePacket text = traderEventListener.removeFirst(PlayerTextEvent.class).toPacket().getText();
-        assertEquals(PlayerTextEvent.TextType.MULTI_TRADE.value(), text.getType());
+        assertEquals(TextMessage.TextType.MULTI_TRADE.value(), text.getType());
     }
 
     @Test

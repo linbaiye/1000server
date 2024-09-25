@@ -86,7 +86,7 @@ public final class GuildRepositoryImpl implements GuildRepository {
     }
 
     @Override
-    public void update(EntityManager entityManager, long playerId, GuildMembership guildMembership) {
+    public void upsertMembership(EntityManager entityManager, long playerId, GuildMembership guildMembership) {
         Validate.notNull(entityManager);
         Validate.notNull(guildMembership);
         var membershipPo = entityManager.find(GuildMembershipPo.class, playerId);
@@ -95,6 +95,32 @@ public final class GuildRepositoryImpl implements GuildRepository {
         } else {
             var po = new GuildMembershipPo(playerId, guildMembership.guildId(), guildMembership.guildRole(), LocalDateTime.now());
             entityManager.persist(po);
+        }
+    }
+
+    @Override
+    public void deleteGuildAndMembership(int guildId) {
+        try (var em = entityManagerFactory.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.createQuery("delete from GuildMembershipPo gm where gm.guildId = ?1")
+                    .setParameter(1, guildId).executeUpdate();
+            em.createQuery("delete from GuildStonePo gs where gs.id = ?1")
+                    .setParameter(1, guildId).executeUpdate();
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void update(GuildStone guildStone) {
+        Validate.notNull(guildStone);
+        try (var em = entityManagerFactory.createEntityManager()) {
+            em.getTransaction().begin();
+            GuildStonePo guildStonePo = em.find(GuildStonePo.class, guildStone.getPersistentId());
+            if (guildStonePo != null) {
+                guildStonePo.setCurrentHealth(guildStone.currentLife());
+            }
+            em.getTransaction().commit();
         }
     }
 }

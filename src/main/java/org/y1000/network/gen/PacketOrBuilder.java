@@ -700,19 +700,19 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.NameColorPacketOrBuilder getNameColorOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
-   * @return Whether the joinGuild field is set.
+   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
+   * @return Whether the updateGuild field is set.
    */
-  boolean hasJoinGuild();
+  boolean hasUpdateGuild();
   /**
-   * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
-   * @return The joinGuild.
+   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
+   * @return The updateGuild.
    */
-  org.y1000.network.gen.JoinGuildPacket getJoinGuild();
+  org.y1000.network.gen.UpdateGuildPacket getUpdateGuild();
   /**
-   * <code>.org.y1000.network.gen.JoinGuildPacket joinGuild = 50;</code>
+   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
    */
-  org.y1000.network.gen.JoinGuildPacketOrBuilder getJoinGuildOrBuilder();
+  org.y1000.network.gen.UpdateGuildPacketOrBuilder getUpdateGuildOrBuilder();
 
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

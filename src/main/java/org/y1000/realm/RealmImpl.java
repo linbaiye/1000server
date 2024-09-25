@@ -53,9 +53,10 @@ final class RealmImpl extends AbstractRealm {
         playerManager().onClientEvent(dataEvent, npcManager());
     }
 
+
     @Override
-    public void update() {
-        doUpdateEntities();
+    public void shutdown() {
+        playerManager().shutdown();
     }
 
     @Override

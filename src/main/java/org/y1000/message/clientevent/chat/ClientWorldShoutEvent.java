@@ -3,42 +3,42 @@ package org.y1000.message.clientevent.chat;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.realm.event.BroadcastChatEvent;
+import org.y1000.message.serverevent.TextMessage;
+import org.y1000.realm.event.BroadcastTextEvent;
 import org.y1000.realm.event.RealmEvent;
 
 public record ClientWorldShoutEvent(String content) implements ClientRealmChatEvent {
 
     @Override
     public RealmEvent toRealmEvent(Player player) {
-        return new BroadcastChatEvent(player.viewName() + "：" + content, PlayerTextEvent.TextType.PLAYER_SHOUT,
+        return new BroadcastTextEvent(player.viewName() + "：" + content, TextMessage.TextType.PLAYER_SHOUT,
                 computeLevel(player));
     }
 
-    private PlayerTextEvent.ColorType computeLevel(Player player) {
+    private TextMessage.ColorType computeLevel(Player player) {
         int total = player.maxLife() + player.maxPower() + player.maxInnerPower()
                 + player.maxOuterPower() + player.age() / 2;
         int i = total / 100;
         if (i < 330) {
-            return PlayerTextEvent.ColorType.FIRST_GRADE;
+            return TextMessage.ColorType.FIRST_GRADE;
         } else if (i < 370) {
-            return PlayerTextEvent.ColorType.SECOND_GRADE;
+            return TextMessage.ColorType.SECOND_GRADE;
         } else if (i < 410) {
-            return PlayerTextEvent.ColorType.THIRD_GRADE;
+            return TextMessage.ColorType.THIRD_GRADE;
         } else if (i < 450) {
-            return PlayerTextEvent.ColorType.FOURTH_GRADE;
+            return TextMessage.ColorType.FOURTH_GRADE;
         } else if (i < 490) {
-            return PlayerTextEvent.ColorType.FIVE_GRADE;
+            return TextMessage.ColorType.FIVE_GRADE;
         } else if (i < 530) {
-            return PlayerTextEvent.ColorType.SIX_GRADE;
+            return TextMessage.ColorType.SIX_GRADE;
         } else if (i < 570) {
-            return PlayerTextEvent.ColorType.SEVEN_GRADE;
+            return TextMessage.ColorType.SEVEN_GRADE;
         } else if (i < 610) {
-            return PlayerTextEvent.ColorType.EIGHT_GRADE;
+            return TextMessage.ColorType.EIGHT_GRADE;
         } else if (i < 650) {
-            return PlayerTextEvent.ColorType.NINE_GRADE;
+            return TextMessage.ColorType.NINE_GRADE;
         } else {
-            return PlayerTextEvent.ColorType.TEN_GRADE;
+            return TextMessage.ColorType.TEN_GRADE;
         }
     }
 

@@ -11,11 +11,8 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
-import org.y1000.item.ItemSdbImpl;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.repository.ItemRepositoryImpl;
-import org.y1000.repository.KungFuBookRepositoryImpl;
-import org.y1000.sdb.ItemDrugSdbImpl;
+import org.y1000.message.serverevent.TextMessage;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
@@ -54,7 +51,7 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         manager.pickItem(picker, 3);
         PlayerTextEvent textEvent = playerEventListener.removeFirst(PlayerTextEvent.class);
         // when too far.
-        assertEquals(PlayerTextEvent.TextType.FARAWAY.value(), textEvent.toPacket().getText().getType());
+        assertEquals(TextMessage.TextType.FARAWAY.value(), textEvent.toPacket().getText().getType());
 
         picker.changeCoordinate(Coordinate.xy(2, 2));
         manager.pickItem(picker, 3);

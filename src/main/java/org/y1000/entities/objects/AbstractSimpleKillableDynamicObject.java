@@ -14,14 +14,7 @@ public abstract class AbstractSimpleKillableDynamicObject extends AbstractKillab
         super(id, coordinate, realmMap, dynamicObjectSdb, idName, parseAnimationFrames(idName, dynamicObjectSdb));
     }
 
-    public AbstractSimpleKillableDynamicObject(long id, Coordinate coordinate, RealmMap realmMap,
-                                               DynamicObjectSdb dynamicObjectSdb,
-                                               int currentHealth,
-                                               String idName) {
-        super(id, coordinate, realmMap, dynamicObjectSdb, currentHealth, idName, parseAnimationFrames(idName, dynamicObjectSdb));
-    }
-
-    void handleDamaged(Damage damage) {
+    protected void handleDamaged(Damage damage) {
         damageLife(damage);
         if (currentLife() == 0) {
             changeAnimation(1, dynamicObjectSdb().getOpenedMillis(idName()));
@@ -34,7 +27,11 @@ public abstract class AbstractSimpleKillableDynamicObject extends AbstractKillab
         }
     }
 
-
+    @Override
+    public void update(int delta) {
+        if (getAnimationIndex() != 0)
+            updateAnimation(delta);
+    }
 
     @Override
     protected void onAnimationDone() {
