@@ -8,6 +8,7 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
+import org.y1000.kungfu.KungFuSdb;
 import org.y1000.repository.*;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
@@ -36,6 +37,8 @@ public final class RealmFactoryImpl implements RealmFactory {
 
     private final ItemRepository itemRepository;
 
+    private final KungFuBookRepository kungFuBookRepository;
+
     private static final Set<Integer> CONJUNCTION_IDS = Set.of(4, 20);
 
     private static final Map<Integer, Set<Integer>> DUNGEON_WHITELIST_IDS = Map.of(19, Set.of(20), 3, Set.of(4));
@@ -54,7 +57,8 @@ public final class RealmFactoryImpl implements RealmFactory {
                             BankRepository bankRepository,
                             PosByDieSdb posByDieSdb,
                             GuildRepository guildRepository,
-                            ItemRepository itemRepository) {
+                            ItemRepository itemRepository,
+                            KungFuBookRepository kungFuBookRepository) {
         this.guildRepository = guildRepository;
         Validate.notNull(itemFactory);
         Validate.notNull(npcFactory);
@@ -81,6 +85,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         this.posByDieSdb = posByDieSdb;
         this.entityManagerFactory = entityManagerFactory;
         this.itemRepository = itemRepository;
+        this.kungFuBookRepository = kungFuBookRepository;
     }
 
     private NpcManager createNpcManager(int id,
@@ -144,7 +149,8 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .chatManager(new ChatManagerImpl(playerManager, eventSender, crossRealmEventSender))
                     ;
             if (allowGuildCreation(id)) {
-                GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, crossRealmEventSender, realmMap, guildRepository, itemRepository,entityManagerFactory,id);
+                GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, crossRealmEventSender, realmMap, guildRepository, itemRepository,
+                        entityManagerFactory, id, KungFuSdb.INSTANCE, kungFuBookRepository);
                 builder.guildManager(guildManager);
             }
             return mapSdb.getRegenInterval(id)

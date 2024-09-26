@@ -20,6 +20,7 @@ import org.y1000.event.EntityEvent;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.item.ItemFactory;
+import org.y1000.kungfu.KungFuSdb;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.realm.event.BroadcastTextEvent;
@@ -72,7 +73,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
         when(em.getTransaction()).thenReturn(Mockito.mock(EntityTransaction.class));
         crossRealmEventSender = mock(CrossRealmEventSender.class);
         guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, entityEventSender, crossRealmEventSender,
-                realmMap, guildRepository, itemRepository, entityManagerFactory, 1);
+                realmMap, guildRepository, itemRepository, entityManagerFactory, 1, KungFuSdb.INSTANCE, createKungFuBookRepositoryImpl());
         stoneList = new ArrayList<>();
         when(guildRepository.findByRealm(anyInt(), any(EntityIdGenerator.class), any(RealmMap.class))).thenReturn(stoneList);
     }

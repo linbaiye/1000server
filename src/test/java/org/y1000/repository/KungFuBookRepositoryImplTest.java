@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.y1000.kungfu.KungFu;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.attack.AttackKungFu;
+import org.y1000.kungfu.attack.AttackKungFuParameters;
+import org.y1000.kungfu.attack.AttackKungFuType;
+import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.persistence.KungFuPo;
 
 import java.util.List;
@@ -52,7 +55,8 @@ class KungFuBookRepositoryImplTest {
 
     @AfterEach
     void tearDown() {
-        entityManager.close();
+        if (entityManager != null)
+            entityManager.close();
     }
 
 
@@ -119,5 +123,23 @@ class KungFuBookRepositoryImplTest {
         assertFalse(kungFu.isEmpty());
         assertEquals("雷剑式", kungFu.get().name());
         assertEquals(10, kungFu.get().exp());
+    }
+
+    @Test
+    void saveParameter() {
+        AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.
+                builder()
+                .name("test")
+                .type(AttackKungFuType.QUANFA)
+                .attackSpeed(1)
+                .avoid(2)
+                .build();
+        kungFuBookRepository.saveGuildKungFuParameter(provider);
+        AttackKungFuParametersProvider saved = entityManagerFactory.createEntityManager().find(AttackKungFuParametersProvider.class, provider.getId());
+        assertNotNull(saved);
+        assertEquals("test", saved.getName());
+        assertEquals(2, saved.getAvoid());
+        assertEquals(1, saved.getAttackSpeed());
+        assertEquals(AttackKungFuType.QUANFA, saved.getType());
     }
 }

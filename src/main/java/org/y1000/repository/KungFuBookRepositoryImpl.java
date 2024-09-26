@@ -2,6 +2,7 @@ package org.y1000.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.*;
@@ -194,115 +195,14 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
     @Override
-    public void saveGuildKungFuParameter(ClientCreateGuildKungFuEvent request) {
-        if (checkGuildKungFuSpecification(request) != null) {
-            throw new IllegalArgumentException();
-        }
-        String name;
-        switch (request.getType()) {
-            case AXE -> name = "无名槌法";
-            case QUANFA -> name = "无名拳法";
-            case SWORD -> name = "无名剑法";
-            case BLADE -> name = "无名刀法";
-            case SPEAR -> name = "无名枪术";
-            default -> throw new IllegalArgumentException("Invalid type " + request.getType().name());
-        }
-        AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.builder()
-                .attackSpeed(request.getSpeed())
-                .recovery(request.getRecovery())
-                .avoid(request.getAvoid())
-                .headDamage(request.getHeadDamage())
-                .bodyDamage(request.getBodyDamage())
-                .armDamage(request.getArmDamage())
-                .legDamage(request.getLegDamage())
-                .headArmor(request.getHeadArmor())
-                .bodyArmor(request.getBodyArmor())
-                .armArmor(request.getArmArmor())
-                .legArmor(request.getLegArmor())
-                .swingLife(request.getLifeToSwing())
-                .swingPower(request.getPowerToSwing())
-                .swingInnerPower(request.getInnerPowerToSwing())
-                .swingOuterPower(request.getOuterPowerToSwing())
-                .name(request.getName())
-                .effectColor(kungFuSdb.effectColor(name))
-                .type(request.getType())
-                .swingSound(Integer.parseInt(kungFuSdb.getSoundSwing(name)))
-                .strikeSound(Integer.parseInt(kungFuSdb.getSoundStrike(name)))
-                .build();
+    public void saveGuildKungFuParameter(AttackKungFuParametersProvider provider) {
+        Validate.notNull(provider);
         try (var em = entityManagerFactory.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
             em.persist(provider);
+            transaction.commit();
         }
-    }
-
-    private String checkGuildKungFuSpecification(ClientCreateGuildKungFuEvent request) {
-        Validate.notNull(request);
-        if (StringUtils.isBlank(request.getName())) {
-            return "请输入正确名字";
-        }
-        if (request.getName().length() > 8) {
-            return "名字最长8字符";
-        }
-        if (!request.getType().isMelee()) {
-            return "武功只能是刀、剑、拳、槌、枪";
-        }
-        if (request.getSpeed() < 1 || request.getSpeed() > 99) {
-            return "速度需在1-99之间";
-        }
-        if (request.getRecovery() < 1 || request.getRecovery() > 99) {
-            return "恢复需在1-99之间";
-        }
-        if (request.getAvoid() < 1 || request.getAvoid() > 99) {
-            return "闪躲需在1-99之间";
-        }
-        if (request.getHeadDamage() < 10 || request.getHeadDamage() > 70) {
-            return "头攻需在10-70之间";
-        }
-        if (request.getArmDamage() < 10 || request.getArmDamage() > 70) {
-            return "手攻需在10-70之间";
-        }
-        if (request.getBodyDamage() < 10 || request.getBodyDamage() > 70) {
-            return "身攻需在10-70之间";
-        }
-        if (request.getHeadArmor() < 10 || request.getHeadArmor() > 70) {
-            return "头防需在10-70之间";
-        }
-        if (request.getArmArmor() < 10 || request.getArmArmor() > 70) {
-            return "手防需在10-70之间";
-        }
-        if (request.getBodyArmor() < 10 || request.getBodyArmor() > 70) {
-            return "身防需在10-70之间";
-        }
-        if (request.getLegArmor() < 10 || request.getLegArmor() > 70) {
-            return "脚防需在10-70之间";
-        }
-        if (request.getPowerToSwing() < 5 || request.getPowerToSwing() > 35) {
-            return "武功消耗需在5-35之间";
-        }
-        if (request.getInnerPowerToSwing() < 5 || request.getInnerPowerToSwing() > 35) {
-            return "内功消耗需在5-35之间";
-        }
-        if (request.getOuterPowerToSwing() < 5 || request.getOuterPowerToSwing() > 35) {
-            return "外功消耗需在5-35之间";
-        }
-        if (request.getLifeToSwing() < 5 || request.getLifeToSwing() > 35) {
-            return "活力消耗需在5-35之间";
-        }
-        if (request.getSpeed() + request.getBodyDamage() != 100) {
-            return "速度和身攻之和需要等于100";
-        }
-        if (request.getRecovery() + request.getAvoid() != 100) {
-            return "恢复和闪躲之和需要等于100";
-        }
-        if (request.getHeadDamage() + request.getArmDamage() + request.getLegDamage()
-            + request.getBodyArmor() + request.getHeadArmor() + request.getArmArmor()
-            + request.getLegArmor() != 228) {
-            return "头攻+手攻+脚攻+身防+头防+手防+脚防需要等于228";
-        }
-        if (request.getOuterPowerToSwing() + request.getLifeToSwing() + request.getPowerToSwing() +
-                request.getInnerPowerToSwing() != 80) {
-            return "外功消耗+内功消耗+武功消耗+活力消耗需要等于80";
-        }
-        return null;
     }
 
 
