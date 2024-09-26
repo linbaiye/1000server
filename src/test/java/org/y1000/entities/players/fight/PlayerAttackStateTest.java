@@ -12,6 +12,7 @@ import org.y1000.entities.creatures.npc.NpcCommonState;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
 import org.y1000.item.ItemSdb;
 import org.y1000.item.WeaponImpl;
+import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.kungfu.attack.AttackKungFuParameters;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.attack.QuanfaKungFu;
@@ -65,7 +66,6 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
             return attackSpeed;
         }
     }
-
 
 
     @BeforeEach

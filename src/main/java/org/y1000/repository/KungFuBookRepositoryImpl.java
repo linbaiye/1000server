@@ -1,6 +1,7 @@
 package org.y1000.repository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.*;
@@ -12,14 +13,13 @@ import org.y1000.message.clientevent.ClientCreateGuildKungFuEvent;
 import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.persistence.KungFuPo;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class KungFuBookRepositoryImpl implements KungFuBookRepository, KungFuBookFactory, KungFuFactory {
     private final KungFuSdb kungFuSdb = KungFuSdb.INSTANCE;
+
+    private final EntityManagerFactory entityManagerFactory;
 
 
     private final static List<String> UNNAMED_NAMES = List.of(
@@ -27,7 +27,11 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             , "无名投法", "无名步法", "无名心法", "无名强身"
     );
 
-    public KungFuBookRepositoryImpl() {
+    private List<AttackKungFuParametersProvider> providers;
+
+    public KungFuBookRepositoryImpl(EntityManagerFactory entityManagerFactory) {
+        Validate.notNull(entityManagerFactory);
+        this.entityManagerFactory = entityManagerFactory;
     }
 
 
@@ -43,8 +47,12 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
     private AttackKungFuParameters createAttackKungFuParameter(String name) {
-        return new SdbAttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb),
-                new DefaultEventResourceParameters(name, kungFuSdb));
+        if (kungFuSdb.contains(name)) {
+            return new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb),
+                    new DefaultEventResourceParameters(name, kungFuSdb));
+        }
+        return getProvider(name).map(AttackKungFuParametersImpl::new)
+                .orElseThrow(() -> new IllegalArgumentException(name + "does not exist."));
     }
 
     private SwordKungFu createSword(String name, int exp,
@@ -144,8 +152,24 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
                 .build();
     }
 
+
+    private Optional<AttackKungFuParametersProvider> getProvider(String name) {
+        return getProviders().stream()
+                .filter(provider -> provider.getName().equals(name))
+                .findFirst();
+    }
+
     private KungFu create(String name, int exp) {
-        KungFuType kungFuType = kungFuSdb.getMagicType(name);
+        KungFuType kungFuType = null;
+        if (kungFuSdb.contains(name))
+            kungFuType = kungFuSdb.getMagicType(name);
+        else
+            kungFuType = getProvider(name)
+                    .map(provider -> provider.getType().toKungFuType())
+                    .orElse(null);
+        if (kungFuType == null) {
+            throw new IllegalStateException("Unknown kungfu: " + name);
+        }
         return switch (kungFuType) {
             case QUANFA -> quanfaKungFu(name, exp);
             case SWORD -> createSword(name, exp);
@@ -174,6 +198,15 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         if (checkGuildKungFuSpecification(request) != null) {
             throw new IllegalArgumentException();
         }
+        String name;
+        switch (request.getType()) {
+            case AXE -> name = "无名槌法";
+            case QUANFA -> name = "无名拳法";
+            case SWORD -> name = "无名剑法";
+            case BLADE -> name = "无名刀法";
+            case SPEAR -> name = "无名枪术";
+            default -> throw new IllegalArgumentException("Invalid type " + request.getType().name());
+        }
         AttackKungFuParametersProvider.builder()
                 .attackSpeed(request.getSpeed())
                 .recovery(request.getRecovery())
@@ -184,9 +217,19 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
                 .legDamage(request.getLegDamage())
                 .headArmor(request.getHeadArmor())
                 .bodyArmor(request.getBodyArmor())
+                .armArmor(request.getArmArmor())
                 .legArmor(request.getLegArmor())
+                .swingLife(request.getLifeToSwing())
+                .swingPower(request.getPowerToSwing())
+                .swingInnerPower(request.getInnerPowerToSwing())
+                .swingOuterPower(request.getOuterPowerToSwing())
                 .name(request.getName())
-                .type(request.getType());
+                .effectColor(kungFuSdb.effectColor(name))
+                .type(request.getType())
+                .swingSound(Integer.parseInt(kungFuSdb.getSoundSwing(name)))
+                .strikeSound(Integer.parseInt(kungFuSdb.getSoundStrike(name)))
+                .build();
+        ;
         return null;
     }
 
@@ -197,7 +240,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         if (StringUtils.isBlank(request.getName())) {
             return "请输入正确名字";
         }
-        if (request.getName().length() >= 8) {
+        if (request.getName().length() > 8) {
             return "名字最长8字符";
         }
         if (!request.getType().isMelee()) {
@@ -309,6 +352,22 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         kungFuBook.foreachUnnamed((slot, kungFu) -> addOrUpdate(slot, kungFu, namePoMap, entityManager, playerId));
         kungFuBook.foreachBasic((slot, kungFu) -> addOrUpdate(slot, kungFu, namePoMap, entityManager, playerId));
     }
+
+
+    private synchronized List<AttackKungFuParametersProvider> getProviders(EntityManager entityManager) {
+        if (providers == null) {
+            providers = entityManager.createQuery("select p from AttackKungFuParametersProvider p",
+                    AttackKungFuParametersProvider.class).getResultList();
+        }
+        return new ArrayList<>(providers);
+    }
+
+    private List<AttackKungFuParametersProvider> getProviders() {
+        try (var em = entityManagerFactory.createEntityManager()) {
+            return getProviders(em);
+        }
+    }
+
 
     @Override
     public Optional<KungFuBook> find(EntityManager entityManager, long playerId) {

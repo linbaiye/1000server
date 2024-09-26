@@ -46,7 +46,7 @@ class KungFuBookRepositoryImplTest {
     @BeforeEach
     void setUp() {
         entityManagerFactory = Persistence.createEntityManagerFactory("org.y1000.test");
-        kungFuBookRepository = new KungFuBookRepositoryImpl();
+        kungFuBookRepository = new KungFuBookRepositoryImpl(entityManagerFactory);
         kungFuBook = kungFuBookRepository.create();
     }
 

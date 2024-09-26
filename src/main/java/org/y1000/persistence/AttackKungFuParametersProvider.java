@@ -15,11 +15,12 @@ import org.y1000.kungfu.attack.AttackKungFuType;
 @Table(name = "attack_kungfu")
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttackKungFuParametersProvider implements AttackKungFuParameters {
+public class AttackKungFuParametersProvider {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Enumerated(EnumType.STRING)
     private AttackKungFuType type;
     private int attackSpeed;
     private int recovery;
@@ -39,6 +40,7 @@ public class AttackKungFuParametersProvider implements AttackKungFuParameters {
     private int swingSound;
     private int strikeSound;
     private int effectColor;
+   /*
     @Override
     public int powerToSwing() {
         return swingPower;
@@ -127,5 +129,5 @@ public class AttackKungFuParametersProvider implements AttackKungFuParameters {
     @Override
     public int effectId() {
         return effectColor;
-    }
+    }*/
 }

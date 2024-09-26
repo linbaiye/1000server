@@ -33,8 +33,6 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
 
     private PlayerImpl player;
 
-    private final KungFuBookFactory kungFuBookFactory = new KungFuBookRepositoryImpl();
-
     private ClientAttackEvent clientAttackEvent;
 
     private TestingEventListener playerEventListener;

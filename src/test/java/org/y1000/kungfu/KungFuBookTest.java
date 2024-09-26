@@ -2,6 +2,7 @@ package org.y1000.kungfu;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.attack.SwordKungFu;
@@ -9,11 +10,11 @@ import org.y1000.repository.KungFuBookRepositoryImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class KungFuBookTest {
+class KungFuBookTest extends AbstractUnitTestFixture {
 
     private KungFuBook book;
 
-    private final KungFuBookRepositoryImpl bookFactory = new KungFuBookRepositoryImpl();
+    private final KungFuBookRepositoryImpl bookFactory = createKungFuBookRepositoryImpl();
 
     private final KungFuFactory kungFuFactory = bookFactory;
 

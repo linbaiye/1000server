@@ -74,7 +74,7 @@ public final class Server {
         accountServer = new ServerBootstrap();
         managementServer = new ServerBootstrap();
         entityManagerFactory = Persistence.createEntityManagerFactory("org.y1000");
-        KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl();
+        KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl(entityManagerFactory);
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl, entityManagerFactory);
         itemRepository = repository;
         npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));

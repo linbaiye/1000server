@@ -1,13 +1,13 @@
 package org.y1000.kungfu.attack;
 
-import org.y1000.kungfu.ArmorParameters;
-import org.y1000.kungfu.EventResourceParameters;
-import org.y1000.kungfu.KungFuSdb;
+import org.apache.commons.lang3.Validate;
+import org.y1000.kungfu.*;
+import org.y1000.persistence.AttackKungFuParametersProvider;
 
 import static org.y1000.kungfu.ParameterConstants.*;
 
 
-public final class SdbAttackKungFuParametersImpl implements AttackKungFuParameters {
+public final class AttackKungFuParametersImpl implements AttackKungFuParameters {
 
     private static final int INI_ADD_DAMAGE       = 40;
     private static final int INI_MUL_ATTACKSPEED  = 10;
@@ -42,10 +42,10 @@ public final class SdbAttackKungFuParametersImpl implements AttackKungFuParamete
 
     private final EventResourceParameters eventResourceParameters;
 
-    private final KungFuSdb kungFuSdb;
+    private final int effectColor;
 
-    public SdbAttackKungFuParametersImpl(String name, KungFuSdb kungFuSdb, ArmorParameters armorParameters,
-                                         EventResourceParameters eventResourceParameters) {
+    public AttackKungFuParametersImpl(String name, KungFuSdb kungFuSdb, ArmorParameters armorParameters,
+                                      EventResourceParameters eventResourceParameters) {
         this.name = name;
         this.armorParameters = armorParameters;
         recovery = (120 - kungFuSdb.getRecovery(name)) * INI_MUL_RECOVERY / INI_MAGIC_DIV_VALUE;
@@ -57,8 +57,26 @@ public final class SdbAttackKungFuParametersImpl implements AttackKungFuParamete
         legDamage = valueOrZero(kungFuSdb.getDamageLeg(name), INI_MUL_DAMAGELEG);
         strikeSound = Integer.parseInt(kungFuSdb.getSoundStrike(name));
         swingSound = Integer.parseInt(kungFuSdb.getSoundSwing(name));
+        this.effectColor = kungFuSdb.effectColor(name);
         this.eventResourceParameters = eventResourceParameters;
-        this.kungFuSdb = kungFuSdb;
+    }
+
+    public AttackKungFuParametersImpl(AttackKungFuParametersProvider provider) {
+        Validate.notNull(provider);
+        eventResourceParameters = new DefaultEventResourceParameters(provider.getSwingLife(),
+                provider.getSwingPower(), provider.getSwingOuterPower(), provider.getSwingInnerPower());
+        armorParameters = new DefaultArmorParameters(provider.getBodyArmor(), provider.getHeadArmor(), provider.getArmArmor(), provider.getLegArmor());
+        name = provider.getName();
+        recovery = (120 - provider.getRecovery()) * INI_MUL_RECOVERY / INI_MAGIC_DIV_VALUE;
+        attackSpeed = (120 - provider.getAttackSpeed()) * INI_MUL_ATTACKSPEED / INI_MAGIC_DIV_VALUE;
+        avoidance = provider.getAvoid() * INI_MUL_AVOID / INI_MAGIC_DIV_VALUE;
+        bodyDamage = (provider.getBodyDamage() + INI_ADD_DAMAGE) * INI_MUL_DAMAGEBODY / INI_MAGIC_DIV_VALUE;
+        headDamage = valueOrZero(provider.getHeadDamage(), INI_MUL_DAMAGEHEAD);
+        armDamage = valueOrZero(provider.getArmDamage(), INI_MUL_DAMAGEARM);
+        legDamage = valueOrZero(provider.getLegDamage(), INI_MUL_DAMAGELEG);
+        strikeSound = provider.getStrikeSound();
+        swingSound = provider.getSwingSound();
+        effectColor = provider.getEffectColor();
     }
 
 
@@ -151,7 +169,7 @@ public final class SdbAttackKungFuParametersImpl implements AttackKungFuParamete
 
     @Override
     public int effectId() {
-        return kungFuSdb.effectColor(name);
+        return effectColor;
     }
 
     @Override

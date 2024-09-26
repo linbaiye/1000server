@@ -52,7 +52,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     private Inventory inventory;
 
     private final ItemFactory itemFactory = createItemFactory();
-    private final KungFuFactory kungFuFactory = new KungFuBookRepositoryImpl();
+    private final KungFuFactory kungFuFactory = createKungFuFactory();
 
     @BeforeEach
     public void setUp() {

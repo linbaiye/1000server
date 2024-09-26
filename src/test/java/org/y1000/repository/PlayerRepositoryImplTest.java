@@ -193,7 +193,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         player.joinRealm(mockedRealm, Coordinate.xy(1, 2));
         playerRepository.update(player);
         when(itemRepository.findInventory(any(EntityManager.class), anyLong())).thenReturn(new Inventory());
-        KungFuBook kungFuBook = new KungFuBookRepositoryImpl().create();
+        KungFuBook kungFuBook = createKungFuBookFactory().create();
         when(kungFuBookRepository.find(any(EntityManager.class), anyLong())).thenReturn(Optional.of(kungFuBook));
         var p = playerRepository.find(1, player.viewName()).get().getLeft();
         assertEquals(player.viewName(), p.viewName());

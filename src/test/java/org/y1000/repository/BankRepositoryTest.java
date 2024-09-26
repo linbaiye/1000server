@@ -10,7 +10,6 @@ import org.y1000.persistence.ItemPo;
 import org.y1000.sdb.ItemDrugSdbImpl;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +23,7 @@ class BankRepositoryTest extends AbstractUnitTestFixture {
     @BeforeEach
     void setUp() {
         jpaFixture = new JpaFixture();
-        bankRepository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl(), jpaFixture.getEntityManagerFactory());
+        bankRepository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, createKungFuBookRepositoryImpl(), jpaFixture.getEntityManagerFactory());
     }
 
     @Test

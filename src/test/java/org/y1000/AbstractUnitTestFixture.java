@@ -23,7 +23,6 @@ import org.y1000.repository.ItemRepository;
 import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.sdb.DynamicObjectSdbImpl;
-import org.y1000.sdb.ItemDrugSdb;
 import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.util.Coordinate;
 
@@ -35,8 +34,8 @@ import static org.mockito.Mockito.when;
 
 public abstract class AbstractUnitTestFixture {
 
-    protected final KungFuBookFactory kungFuBookFactory = new KungFuBookRepositoryImpl();
-    protected final KungFuFactory kungFuFactory = new KungFuBookRepositoryImpl();
+    protected final KungFuBookFactory kungFuBookFactory = createKungFuBookFactory();
+    protected final KungFuFactory kungFuFactory = createKungFuFactory();
 
     private int id;
 
@@ -67,6 +66,18 @@ public abstract class AbstractUnitTestFixture {
 
     protected BankRepository createBankRepository() {
         return createItemRepositoryImpl();
+    }
+
+    protected KungFuBookRepositoryImpl createKungFuBookRepositoryImpl() {
+        return new KungFuBookRepositoryImpl(Mockito.mock(EntityManagerFactory.class));
+    }
+
+    protected KungFuBookFactory createKungFuBookFactory() {
+        return createKungFuBookRepositoryImpl();
+    }
+
+    protected KungFuFactory createKungFuFactory() {
+        return createKungFuBookRepositoryImpl();
     }
 
     protected Realm mockRealm(RealmMap map) {

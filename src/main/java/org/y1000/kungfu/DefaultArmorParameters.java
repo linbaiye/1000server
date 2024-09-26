@@ -22,6 +22,13 @@ public final class DefaultArmorParameters implements ArmorParameters {
         legArmor = kungFuSdb.getArmorLeg(name) *  INI_MUL_ARMORLEG / INI_MAGIC_DIV_VALUE;
     }
 
+    public DefaultArmorParameters(int body, int head, int arm, int leg) {
+        bodyArmor = body *  INI_MUL_ARMORBODY / INI_MAGIC_DIV_VALUE;
+        headArmor = head *  INI_MUL_ARMORHEAD / INI_MAGIC_DIV_VALUE;
+        armArmor = arm *  INI_MUL_ARMORARM / INI_MAGIC_DIV_VALUE;
+        legArmor = leg *  INI_MUL_ARMORLEG / INI_MAGIC_DIV_VALUE;
+    }
+
     @Override
     public int bodyArmor() {
         return bodyArmor;

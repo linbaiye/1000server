@@ -28,7 +28,7 @@ import org.y1000.util.Coordinate;
 
 
 /**
- * Realms that supports guild creation.
+ * Realms that support guild operations.
  */
 @Slf4j
 public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildStone> implements GuildManager {
