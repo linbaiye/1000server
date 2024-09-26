@@ -160,7 +160,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
     private KungFu create(String name, int exp) {
-        KungFuType kungFuType = null;
+        KungFuType kungFuType;
         if (kungFuSdb.contains(name))
             kungFuType = kungFuSdb.getMagicType(name);
         else
@@ -194,7 +194,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
     @Override
-    public AttackKungFu createGuildKungFu(ClientCreateGuildKungFuEvent request) {
+    public void saveGuildKungFuParameter(ClientCreateGuildKungFuEvent request) {
         if (checkGuildKungFuSpecification(request) != null) {
             throw new IllegalArgumentException();
         }
@@ -207,7 +207,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             case SPEAR -> name = "无名枪术";
             default -> throw new IllegalArgumentException("Invalid type " + request.getType().name());
         }
-        AttackKungFuParametersProvider.builder()
+        AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.builder()
                 .attackSpeed(request.getSpeed())
                 .recovery(request.getRecovery())
                 .avoid(request.getAvoid())
@@ -229,13 +229,12 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
                 .swingSound(Integer.parseInt(kungFuSdb.getSoundSwing(name)))
                 .strikeSound(Integer.parseInt(kungFuSdb.getSoundStrike(name)))
                 .build();
-        ;
-        return null;
+        try (var em = entityManagerFactory.createEntityManager()) {
+            em.persist(provider);
+        }
     }
 
-
-    @Override
-    public String checkGuildKungFuSpecification(ClientCreateGuildKungFuEvent request) {
+    private String checkGuildKungFuSpecification(ClientCreateGuildKungFuEvent request) {
         Validate.notNull(request);
         if (StringUtils.isBlank(request.getName())) {
             return "请输入正确名字";

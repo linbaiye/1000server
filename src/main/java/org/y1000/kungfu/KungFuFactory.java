@@ -12,12 +12,7 @@ public interface KungFuFactory {
 
     KungFu create(String name);
 
-    AttackKungFu createGuildKungFu(ClientCreateGuildKungFuEvent request);
+    void saveGuildKungFuParameter(ClientCreateGuildKungFuEvent request);
 
-    /**
-     * Check if a guild kungfu can be created with the request.
-     * @param request
-     * @return null if specification qualified, specific reason if not.
-     */
-    String checkGuildKungFuSpecification(ClientCreateGuildKungFuEvent request);
+
 }
