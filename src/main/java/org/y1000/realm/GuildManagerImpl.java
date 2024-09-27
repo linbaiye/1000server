@@ -229,6 +229,9 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
                 request.getInnerPowerToSwing() != 80) {
             return "外功消耗+内功消耗+武功消耗+活力消耗需要等于80";
         }
+        if (kungFuBookRepository.countGuildKungFuParameter(request.getName()) > 0) {
+            return "武功名字已存在";
+        }
         return null;
     }
 

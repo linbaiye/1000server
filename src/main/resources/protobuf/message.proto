@@ -242,6 +242,26 @@ message ClientFoundGuildPacket{
   int32 inventorySlot = 4;
 }
 
+message ClientCreateGuildKungFuPacket {
+  int32 attackSpeed = 1;
+  int32 life = 2;
+  int32 avoidance = 3;
+  int32 power = 4;
+  int32 recovery = 5;
+  int32 innerPower = 6;
+  int32 outerPower = 8;
+  int32 bodyDamage = 7;
+  int32 headDamage = 9;
+  int32 armDamage = 11;
+  int32 legDamage = 12;
+  int32 bodyArmor = 13;
+  int32 headArmor = 14;
+  int32 armArmor = 15;
+  int32 legArmor = 16;
+  string name = 17;
+  int32 type = 18;
+}
+
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;

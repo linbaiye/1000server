@@ -3,6 +3,7 @@ package org.y1000.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.*;
@@ -202,6 +203,23 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             transaction.begin();
             em.persist(provider);
             transaction.commit();
+            addToList(provider);
+        }
+    }
+
+    @Override
+    public int countGuildKungFuParameter(String name) {
+        Validate.notNull(name);
+        try (var em = entityManagerFactory.createEntityManager()) {
+            Query query = em.createQuery("select count(p) from AttackKungFuParametersProvider p where p.name = ?1")
+                    .setParameter(1, name);
+            return ((Long)query.getSingleResult()).intValue();
+        }
+    }
+
+    private synchronized void addToList(AttackKungFuParametersProvider provider) {
+        if (providers != null) {
+            providers.add(provider);
         }
     }
 

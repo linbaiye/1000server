@@ -12,4 +12,6 @@ public interface KungFuBookRepository {
     Optional<KungFuBook> find(EntityManager entityManager, long playerId);
 
     void saveGuildKungFuParameter(AttackKungFuParametersProvider parametersProvider);
+
+    int countGuildKungFuParameter(String name);
 }
