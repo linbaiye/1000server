@@ -184,6 +184,8 @@ abstract class AbstractRealm implements Realm {
                     eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
             } else if (commandEvent.isQuit()) {
                 playerManager.onPlayerDisconnected(dataEvent.playerId());
+            } else {
+                handleClientEvent(dataEvent);
             }
         } else if (dataEvent.data() instanceof ClientFoundGuildEvent guildEvent) {
             playerManager().find(dataEvent.playerId()).ifPresent(player -> handleGuidCreation(player, guildEvent));

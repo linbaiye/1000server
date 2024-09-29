@@ -6,30 +6,42 @@ import jakarta.persistence.EntityTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Entity;
 import org.y1000.entities.objects.DynamicObjectDieEvent;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.entities.players.event.PlayerEvent;
+import org.y1000.entities.players.event.PlayerLearnKungFuEvent;
 import org.y1000.entities.players.event.PlayerUpdateGuildEvent;
 import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.event.EntityEvent;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.item.ItemFactory;
+import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.KungFuSdb;
+import org.y1000.kungfu.KungFuType;
+import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.clientevent.ClientCreateGuildKungFuEvent;
 import org.y1000.message.serverevent.UpdateGuildKungFuFormEvent;
+import org.y1000.network.gen.TextMessagePacket;
 import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.realm.event.BroadcastTextEvent;
 import org.y1000.realm.event.DismissGuildEvent;
+import org.y1000.realm.event.GuildBroadcastTextEvent;
 import org.y1000.repository.*;
 import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -210,5 +222,96 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
         verify(kungFuBookRepository, times(1)).saveGuildKungFuParameter(any(AttackKungFuParametersProvider.class), anyInt());
         verify(entityEventSender, times(1)).notifySelf(any(UpdateGuildKungFuFormEvent.class));
         verify(entityEventSender, times(1)).notifySelf(any(PlayerTextEvent.class));
+    }
+
+
+    @Test
+    void inviteMember() {
+        GuildStone stone = dynamicObjectFactory.createGuildStone(1, "test", 1, realmMap, Coordinate.xy(1, 1));
+        stone.setPersistentId(1);
+        stoneList.add(stone);
+        guildManager.init();
+        Player founder = Mockito.mock(Player.class);
+        Player invitee = Mockito.mock(Player.class);
+        TestingEventListener founderEvents = new TestingEventListener();
+        TestingEventListener inviteeEvents = new TestingEventListener();
+        doAnswer(invocationOnMock -> {
+            EntityEvent argument = invocationOnMock.getArgument(0);
+            if (argument.source() == founder)
+                founderEvents.onEvent(argument);
+            else
+                inviteeEvents.onEvent(argument);
+            return null; }).when(entityEventSender).notifySelf(any(AbstractPlayerEvent.class));
+        guildManager.inviteMember(founder, invitee);
+        var text = founderEvents.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
+        assertTrue(text.contains("没有门派"));
+        when(founder.guildMembership()).thenReturn(Optional.of(new GuildMembership(stone.getPersistentId(), "门主", "test")));
+        when(founder.coordinate()).thenReturn(Coordinate.xy(4, 4));
+        guildManager.inviteMember(founder, invitee);
+        text = founderEvents.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
+        assertTrue(text.contains("门派石距离"));
+        when(founder.coordinate()).thenReturn(Coordinate.xy(2, 2));
+        when(invitee.coordinate()).thenReturn(Coordinate.xy(5, 5));
+        guildManager.inviteMember(founder, invitee);
+        text = founderEvents.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
+        assertTrue(text.contains("玩家距离"));
+        when(invitee.coordinate()).thenReturn(Coordinate.xy(3, 3));
+        when(invitee.viewName()).thenReturn("invitee");
+        when(invitee.guildMembership()).thenReturn(Optional.of(new GuildMembership(3, "t", "t")));
+        guildManager.inviteMember(founder, invitee);
+        text = founderEvents.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
+        assertTrue(text.contains("invitee已有门派"));
+        when(invitee.guildMembership()).thenReturn(Optional.empty());
+        guildManager.inviteMember(founder, invitee);
+        verify(invitee, times(1)).joinGuild(any(GuildMembership.class));
+        verify(crossRealmEventSender, times(1)).send(any(GuildBroadcastTextEvent.class));
+    }
+
+    @Test
+    void teachGuildKungFu() {
+        GuildStone stone = dynamicObjectFactory.createGuildStone(1, "test", 1, realmMap, Coordinate.xy(1, 1));
+        stone.setPersistentId(1);
+        stoneList.add(stone);
+        guildManager.init();
+        Player founder = Mockito.mock(Player.class);
+        Player invitee = Mockito.mock(Player.class);
+        TestingEventListener founderEvents = new TestingEventListener();
+        TestingEventListener inviteeEvents = new TestingEventListener();
+        doAnswer(invocationOnMock -> {
+            EntityEvent argument = invocationOnMock.getArgument(0);
+            if (argument.source() == founder)
+                founderEvents.onEvent(argument);
+            else
+                inviteeEvents.onEvent(argument);
+            return null; }).when(entityEventSender).notifySelf(any(AbstractPlayerEvent.class));
+        guildManager.teachGuildKungFu(founder, invitee);
+        var text = founderEvents.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
+        assertTrue(text.contains("没有门派"));
+        when(founder.guildMembership()).thenReturn(Optional.of(new GuildMembership(stone.getPersistentId(), "门主", "test")));
+        when(founder.coordinate()).thenReturn(Coordinate.xy(4, 4));
+        guildManager.teachGuildKungFu(founder, invitee);
+        text = founderEvents.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
+        assertTrue(text.contains("门派石距离"));
+        when(founder.coordinate()).thenReturn(Coordinate.xy(2, 2));
+        when(invitee.coordinate()).thenReturn(Coordinate.xy(5, 5));
+        guildManager.teachGuildKungFu(founder, invitee);
+        text = founderEvents.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
+        assertTrue(text.contains("玩家距离"));
+        when(invitee.coordinate()).thenReturn(Coordinate.xy(3, 3));
+        when(invitee.viewName()).thenReturn("invitee");
+        when(invitee.guildMembership()).thenReturn(Optional.of(new GuildMembership(stone.getPersistentId() + 1, "", "test1")));
+        guildManager.teachGuildKungFu(founder, invitee);
+        text = founderEvents.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
+        assertTrue(text.contains("门派不同"));
+
+        var kf = mock(AttackKungFu.class);
+        when(kf.kungFuType()).thenReturn(KungFuType.SWORD);
+        when(kf.name()).thenReturn("test");
+        when(kungFuBookRepository.findGuildKungfu(anyInt())).thenReturn(Optional.of(kf));
+        when(invitee.guildMembership()).thenReturn(Optional.of(new GuildMembership(stone.getPersistentId(), "", "test")));
+        KungFuBook book = new KungFuBook(new HashMap<>());
+        when(invitee.kungFuBook()).thenReturn(book);
+        guildManager.teachGuildKungFu(founder, invitee);
+        assertNotNull(inviteeEvents.removeFirst(PlayerLearnKungFuEvent.class));
     }
 }

@@ -34,6 +34,8 @@ import org.y1000.repository.ItemRepository;
 import org.y1000.repository.KungFuBookRepository;
 import org.y1000.util.Coordinate;
 
+import java.util.Optional;
+
 
 /**
  * Realms that support guild operations.
@@ -165,6 +167,8 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
 
     @Override
     public void createGuildKungFu(Player applicant, ClientCreateGuildKungFuEvent event) {
+        Validate.notNull(applicant);
+        Validate.notNull(event);
         boolean founder = applicant.guildMembership()
                 .map(GuildMembership::isFounder).orElse(false);
         if (!founder) {
@@ -308,21 +312,35 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         }
     }
 
+    private String checkNotNullAndGuildRange(Player source, Player target) {
+        Validate.notNull(source);
+        Validate.notNull(target);
+        if (source.guildMembership().isEmpty()) {
+            return "你还没有门派。";
+        }
+        GuildMembership sourceMembership = source.guildMembership().get();
+        Optional<GuildStone> first = getEntities().stream().filter(guildStone -> guildStone.getPersistentId() == sourceMembership.guildId())
+                .findFirst();
+        if (first.isEmpty() || first.get().coordinate().directDistance(source.coordinate()) > 2) {
+            return "门派石距离太远。";
+        }
+        if (source.coordinate().directDistance(target.coordinate()) > 2) {
+            return "玩家距离太远。";
+        }
+        return null;
+    }
+
 
     @Override
     public void teachGuildKungFu(Player source, Player target) {
-        Validate.notNull(source);
-        Validate.notNull(target);
-        if (source.coordinate().directDistance(target.coordinate()) > 2) {
-            eventSender.notifySelf(PlayerTextEvent.systemTip(source, "玩家不在身边。"));
+        var ret = checkNotNullAndGuildRange(source, target);
+        if (ret != null) {
+            eventSender.notifySelf(PlayerTextEvent.systemTip(source, ret));
             return;
         }
-        if (source.guildMembership().isEmpty() || target.guildMembership().isEmpty()) {
-            eventSender.notifySelf(PlayerTextEvent.systemTip(source, "没有门派。"));
-            return;
-        }
-        GuildMembership sourceMembership = source.guildMembership().get();
-        if (sourceMembership.guildId() != target.guildMembership().get().guildId()) {
+        GuildMembership sourceMembership = source.guildMembership().orElseThrow();
+        if (target.guildMembership().isEmpty() || sourceMembership.guildId() !=
+                target.guildMembership().get().guildId()) {
             eventSender.notifySelf(PlayerTextEvent.systemTip(source, "门派不同，不可传授。"));
             return;
         }
@@ -341,21 +359,16 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
 
     @Override
     public void inviteMember(Player source, Player target) {
-        Validate.notNull(source);
-        Validate.notNull(target);
-        if (source.coordinate().directDistance(target.coordinate()) > 2) {
-            eventSender.notifySelf(PlayerTextEvent.systemTip(source, "玩家不在身边。"));
-            return;
-        }
-        if (source.guildMembership().isEmpty()) {
-            eventSender.notifySelf(PlayerTextEvent.systemTip(source, "你还没有门派。"));
+        var ret = checkNotNullAndGuildRange(source, target);
+        if (ret != null) {
+            eventSender.notifySelf(PlayerTextEvent.systemTip(source, ret));
             return;
         }
         if (target.guildMembership().isPresent()) {
             eventSender.notifySelf(PlayerTextEvent.systemTip(source, target.viewName() + "已有门派。"));
             return;
         }
-        GuildMembership sourceMembership = source.guildMembership().get();
+        GuildMembership sourceMembership = source.guildMembership().orElseThrow();
         if (!sourceMembership.canInvite()) {
             eventSender.notifySelf(PlayerTextEvent.systemTip(source, "门主或副门才能邀请门人。"));
             return;

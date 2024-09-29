@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.players.Player;
 import org.y1000.message.clientevent.ClientSimpleCommandEvent;
+import org.y1000.message.clientevent.SimpleCommand;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.Connection;
 import org.y1000.network.event.ConnectionEstablishedEvent;
@@ -36,7 +37,7 @@ class RealmImplTest extends AbstractRealmUnitTextFixture {
     @Test
     void handleNpcPositionEvent() {
         when(npcManager.findMerchants()).thenReturn(Collections.emptySet());
-        realm.handle(new PlayerDataEvent(1, player, new ClientSimpleCommandEvent(ClientSimpleCommandEvent.Command.NPC_POSITION)));
+        realm.handle(new PlayerDataEvent(1, player, new ClientSimpleCommandEvent(SimpleCommand.NPC_POSITION)));
         verify(connection, times(0)).write(any(NpcPositionEvent.class));
         Merchant m1 = Mockito.mock(Merchant.class);
         when(m1.coordinate()).thenReturn(Coordinate.xy(1, 1));
@@ -45,7 +46,7 @@ class RealmImplTest extends AbstractRealmUnitTextFixture {
         when(m2.coordinate()).thenReturn(Coordinate.xy(2, 2));
         when(m2.viewName()).thenReturn("m2");
         when(npcManager.findMerchants()).thenReturn(Set.of(m1, m2));
-        realm.handle(new PlayerDataEvent(1, player, new ClientSimpleCommandEvent(ClientSimpleCommandEvent.Command.NPC_POSITION)));
+        realm.handle(new PlayerDataEvent(1, player, new ClientSimpleCommandEvent(SimpleCommand.NPC_POSITION)));
         verify(connection, times(1)).write(any(NpcPositionEvent.class));
     }
 }
