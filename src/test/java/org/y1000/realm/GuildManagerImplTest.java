@@ -8,31 +8,28 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
-import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.objects.DynamicObjectDieEvent;
 import org.y1000.entities.objects.DynamicObjectFactory;
-import org.y1000.entities.objects.DynamicObjectFactoryImpl;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerUpdateGuildEvent;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.event.EntityEvent;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.item.ItemFactory;
 import org.y1000.kungfu.KungFuSdb;
+import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.RemoveEntityMessage;
+import org.y1000.message.clientevent.ClientCreateGuildKungFuEvent;
+import org.y1000.message.serverevent.UpdateGuildKungFuFormEvent;
+import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.realm.event.BroadcastTextEvent;
 import org.y1000.realm.event.DismissGuildEvent;
-import org.y1000.repository.GuildRepository;
-import org.y1000.repository.ItemRepository;
-import org.y1000.repository.JpaFixture;
-import org.y1000.sdb.DynamicObjectSdbImpl;
+import org.y1000.repository.*;
 import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +52,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
 
     private List<GuildStone> stoneList;
     private CrossRealmEventSender crossRealmEventSender;
+    private KungFuBookRepository kungFuBookRepository;
 
     @BeforeEach
     void setUp() {
@@ -72,8 +70,9 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
         when(entityManagerFactory.createEntityManager()).thenReturn(em);
         when(em.getTransaction()).thenReturn(Mockito.mock(EntityTransaction.class));
         crossRealmEventSender = mock(CrossRealmEventSender.class);
+        kungFuBookRepository = Mockito.mock(KungFuBookRepository.class);
         guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, entityEventSender, crossRealmEventSender,
-                realmMap, guildRepository, itemRepository, entityManagerFactory, 1, KungFuSdb.INSTANCE, createKungFuBookRepositoryImpl());
+                realmMap, guildRepository, itemRepository, entityManagerFactory, 1, KungFuSdb.INSTANCE, kungFuBookRepository);
         stoneList = new ArrayList<>();
         when(guildRepository.findByRealm(anyInt(), any(EntityIdGenerator.class), any(RealmMap.class))).thenReturn(stoneList);
     }
@@ -147,5 +146,69 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
         verify(crossRealmEventSender, times(1)).send(any(DismissGuildEvent.class));
         verify(entityEventSender, times(1)).notifyVisiblePlayers(any(Entity.class), any(RemoveEntityMessage.class));
         verify(guildRepository, times(1)).deleteGuildAndMembership(anyInt());
+    }
+
+    @Test
+    void createGuildKungFuWhenNotFounder() {
+        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.QUANFA)
+                        .build();
+        var founder = Mockito.mock(Player.class);
+        when(founder.guildMembership()).thenReturn(Optional.empty());
+        guildManager.createGuildKungFu(founder, event);
+        verify(kungFuBookRepository, times(0)).saveGuildKungFuParameter(any(AttackKungFuParametersProvider.class), anyInt());
+    }
+    @Test
+    void createGuildKungFuWhenNotCorrect() {
+        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.QUANFA)
+                .speed(10)
+                .bodyDamage(70)
+                .avoid(50)
+                .recovery(50)
+                .headDamage(40)
+                .armDamage(40)
+                .legDamage(40)
+                .bodyArmor(40)
+                .headArmor(40)
+                .armArmor(14)
+                .legArmor(14)
+                .innerPowerToSwing(20)
+                .outerPowerToSwing(20)
+                .powerToSwing(20)
+                .lifeToSwing(20)
+                .build();
+        var founder = Mockito.mock(Player.class);
+        when(founder.guildMembership())
+                .thenReturn(Optional.of(new GuildMembership(1, "门主", "test")));
+        guildManager.createGuildKungFu(founder, event);
+        verify(kungFuBookRepository, times(0)).saveGuildKungFuParameter(any(AttackKungFuParametersProvider.class), anyInt());
+        verify(entityEventSender, times(1)).notifySelf(any(UpdateGuildKungFuFormEvent.class));
+    }
+
+    @Test
+    void createGuildKungFuWhenCorrect() {
+        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.QUANFA)
+                .speed(30)
+                .bodyDamage(70)
+                .avoid(50)
+                .recovery(50)
+                .headDamage(40)
+                .armDamage(40)
+                .legDamage(40)
+                .bodyArmor(40)
+                .headArmor(40)
+                .armArmor(14)
+                .legArmor(14)
+                .innerPowerToSwing(20)
+                .outerPowerToSwing(20)
+                .powerToSwing(20)
+                .lifeToSwing(20)
+                .build();
+        var founder = Mockito.mock(Player.class);
+        when(founder.guildMembership())
+                .thenReturn(Optional.of(new GuildMembership(1, "门主", "test")));
+        guildManager.createGuildKungFu(founder, event);
+        verify(kungFuBookRepository, times(1)).saveGuildKungFuParameter(any(AttackKungFuParametersProvider.class), anyInt());
+        verify(entityEventSender, times(1)).notifySelf(any(UpdateGuildKungFuFormEvent.class));
+        verify(entityEventSender, times(1)).notifySelf(any(PlayerTextEvent.class));
     }
 }

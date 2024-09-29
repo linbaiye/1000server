@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.y1000.kungfu.KungFu;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.kungfu.attack.AttackKungFuParameters;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.persistence.KungFuPo;
@@ -134,12 +133,35 @@ class KungFuBookRepositoryImplTest {
                 .attackSpeed(1)
                 .avoid(2)
                 .build();
-        kungFuBookRepository.saveGuildKungFuParameter(provider);
+        kungFuBookRepository.saveGuildKungFuParameter(provider, 1);
         AttackKungFuParametersProvider saved = entityManagerFactory.createEntityManager().find(AttackKungFuParametersProvider.class, provider.getId());
         assertNotNull(saved);
         assertEquals("test", saved.getName());
         assertEquals(2, saved.getAvoid());
         assertEquals(1, saved.getAttackSpeed());
         assertEquals(AttackKungFuType.QUANFA, saved.getType());
+    }
+
+    @Test
+    void counts() {
+        AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.
+                builder()
+                .name("test")
+                .type(AttackKungFuType.QUANFA)
+                .build();
+        kungFuBookRepository.saveGuildKungFuParameter(provider, 1);
+        assertEquals(1, kungFuBookRepository.countGuildKungFu(1));
+        assertEquals(1, kungFuBookRepository.countGuildKungFuByName("test"));
+    }
+
+    @Test
+    void findGuildKungFu() {
+        AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.
+                builder()
+                .name("test")
+                .type(AttackKungFuType.QUANFA)
+                .build();
+        kungFuBookRepository.saveGuildKungFuParameter(provider, 1);
+        assertTrue(kungFuBookRepository.findGuildKungfu(1).isPresent());
     }
 }

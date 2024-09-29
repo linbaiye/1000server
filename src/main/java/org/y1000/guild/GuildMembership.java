@@ -10,4 +10,16 @@ public record GuildMembership(int guildId, String guildRole, String guildName) {
                 .append(guildRole)
                 .append("\r\n");
     }
+
+    public boolean isFounder() {
+        return "门主".equals(guildRole);
+    }
+
+    public boolean canGiveKungFu() {
+        return "门主".equals(guildRole) || "副门主".equals(guildRole);
+    }
+
+    public boolean canInvite() {
+        return canGiveKungFu();
+    }
 }

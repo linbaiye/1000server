@@ -4,15 +4,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.*;
 import org.y1000.kungfu.attack.*;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.kungfu.protect.ProtectionParametersImpl;
-import org.y1000.message.clientevent.ClientCreateGuildKungFuEvent;
 import org.y1000.persistence.AttackKungFuParametersProvider;
+import org.y1000.persistence.GuildKungFuPo;
 import org.y1000.persistence.KungFuPo;
 
 import java.util.*;
@@ -196,24 +195,50 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
     @Override
-    public void saveGuildKungFuParameter(AttackKungFuParametersProvider provider) {
+    public void saveGuildKungFuParameter(AttackKungFuParametersProvider provider, int guildId) {
         Validate.notNull(provider);
         try (var em = entityManagerFactory.createEntityManager()) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             em.persist(provider);
+            em.persist(new GuildKungFuPo(guildId, provider.getId()));
             transaction.commit();
             addToList(provider);
         }
     }
 
     @Override
-    public int countGuildKungFuParameter(String name) {
+    public int countGuildKungFuByName(String name) {
         Validate.notNull(name);
         try (var em = entityManagerFactory.createEntityManager()) {
             Query query = em.createQuery("select count(p) from AttackKungFuParametersProvider p where p.name = ?1")
                     .setParameter(1, name);
             return ((Long)query.getSingleResult()).intValue();
+        }
+    }
+
+    @Override
+    public int countGuildKungFu(int guildId) {
+        try (var em = entityManagerFactory.createEntityManager()) {
+            Query query = em.createQuery("select count(p) from GuildKungFuPo p where p.guildId = ?1")
+                    .setParameter(1, guildId);
+            return ((Long)query.getSingleResult()).intValue();
+        }
+    }
+
+    @Override
+    public Optional<AttackKungFu> findGuildKungfu(int guildId) {
+        try (var em = entityManagerFactory.createEntityManager()) {
+            GuildKungFuPo guildKungFuPo = em.find(GuildKungFuPo.class, guildId);
+            if (guildKungFuPo == null) {
+                return Optional.empty();
+            }
+            return getProviders()
+                    .stream()
+                    .filter(p -> p.getId() == guildKungFuPo.getAttackKungfuId())
+                    .map(p -> create(p.getName(), 0))
+                    .map(AttackKungFu.class::cast)
+                    .findFirst();
         }
     }
 

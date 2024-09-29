@@ -262,6 +262,11 @@ message ClientCreateGuildKungFuPacket {
   int32 type = 18;
 }
 
+message ClientManageGuildPacket {
+  int32 type = 1;
+  string target = 2;
+}
+
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
@@ -290,6 +295,8 @@ message ClientPacket {
     ClientBankOperationPacket bankOperation = 24;
     ClientChangeTeamPacket changeTeam = 25;
     ClientFoundGuildPacket foundGuild = 26;
+    ClientCreateGuildKungFuPacket createGuildKungFu = 27;
+    ClientManageGuildPacket manageGuild = 28;
   }
 }
 
@@ -346,6 +353,7 @@ message ToggleKungFuPacket {
   optional int32 level = 2;
   int64 id = 3;
   bool quietly = 4;
+  int32 type = 5;
 }
 
 message LifeBarPacket {
@@ -521,6 +529,11 @@ message UpdateGuildPacket {
   string name = 2;
 }
 
+message UpdateGuildKungFuFormPacket {
+  int32 command = 1;
+  string text = 2;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -571,6 +584,7 @@ message Packet {
     UpdateBankPacket updateBank = 48;
     NameColorPacket nameColor = 49;
     UpdateGuildPacket updateGuild = 50;
+    UpdateGuildKungFuFormPacket kungFuForm = 51;
   }
 }
 

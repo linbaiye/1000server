@@ -4,13 +4,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.serverevent.TextMessage;
 
-public final class BroadcastTextEvent implements BroadcastEvent {
-
-    private final String text;
-    private final TextMessage.TextType textType;
-    private final TextMessage.ColorType colorType;
-
-    private final TextMessage.Location location;
+public final class BroadcastTextEvent extends AbstractBroadcastTextEvent {
 
     public BroadcastTextEvent(String text,
                               TextMessage.TextType textType,
@@ -22,12 +16,8 @@ public final class BroadcastTextEvent implements BroadcastEvent {
                               TextMessage.TextType textType,
                               TextMessage.ColorType colorType,
                               TextMessage.Location location) {
-        this.text = text;
-        this.textType = textType;
-        this.colorType = colorType;
-        this.location = location;
+        super(text, textType, colorType, location);
     }
-
 
     @Override
     public void send(Player player) {
@@ -38,4 +28,5 @@ public final class BroadcastTextEvent implements BroadcastEvent {
     public static BroadcastTextEvent leftUp(String text) {
         return new BroadcastTextEvent(text, TextMessage.TextType.CUSTOM, TextMessage.ColorType.SAY, TextMessage.Location.LEFT_UP);
     }
+
 }

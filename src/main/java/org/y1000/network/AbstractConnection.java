@@ -56,6 +56,8 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
             case CLICKPACKET -> new ClientClickEvent(clientPacket.getClickPacket().getId());
             case FOUNDGUILD -> ClientFoundGuildEvent.parse(clientPacket.getFoundGuild());
+            case CREATEGUILDKUNGFU -> ClientCreateGuildKungFuEvent.parse(clientPacket.getCreateGuildKungFu());
+            case MANAGEGUILD -> new ClientManageGuildEvent(clientPacket.getManageGuild().getType(), clientPacket.getManageGuild().getTarget());
             default -> throw new IllegalArgumentException();
         };
     }
