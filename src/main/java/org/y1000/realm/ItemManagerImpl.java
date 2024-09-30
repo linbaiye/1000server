@@ -31,7 +31,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
 
     private record DropItem(String name, int number, int rate) {
         public boolean canDrop() {
-            return ThreadLocalRandom.current().nextInt(rate) == 0;
+            return ThreadLocalRandom.current().nextInt(0, rate) == 0;
         }
     }
 

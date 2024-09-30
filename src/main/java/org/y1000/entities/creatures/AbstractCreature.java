@@ -59,7 +59,7 @@ public abstract class AbstractCreature<C extends Creature, S extends CreatureSta
     }
 
     protected boolean randomAvoidance(int attackerHit) {
-        var rand = ThreadLocalRandom.current().nextInt(attackerHit + 75 + avoidance());
+        var rand = ThreadLocalRandom.current().nextInt(0, attackerHit + 75 + avoidance());
         return rand < avoidance();
     }
 

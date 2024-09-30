@@ -14,7 +14,7 @@ public final class MapSdbImpl extends AbstractSdbReader implements MapSdb {
     public static final MapSdbImpl INSTANCE = new MapSdbImpl();
 
     private MapSdbImpl() {
-        read("Map.sdb");
+        read("Map.sdb", "utf8");
     }
 
     public String getMapName(String id) {

@@ -10,7 +10,7 @@ import java.util.Set;
 public final class KungFuSdb extends AbstractSdbReader {
 
     private KungFuSdb() {
-        read("Magic.sdb");
+        read("Magic.sdb", "utf8");
     }
 
     public static final KungFuSdb INSTANCE = new KungFuSdb();

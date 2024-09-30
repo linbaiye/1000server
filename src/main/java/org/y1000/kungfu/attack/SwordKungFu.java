@@ -19,7 +19,7 @@ public final class SwordKungFu extends AbstractMeleeKungFu {
     @Override
     public State randomAttackState() {
         //return level() < 50 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.SWORD : State.SWORD2H;
-        return level() < 5000 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.SWORD : State.SWORD2H;
+        return level() < 5000 || ThreadLocalRandom.current().nextInt(0, 2) == 1 ? State.SWORD : State.SWORD2H;
     }
 
 

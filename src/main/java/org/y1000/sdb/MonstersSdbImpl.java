@@ -12,7 +12,7 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
     public static final MonstersSdbImpl INSTANCE = new MonstersSdbImpl();
 
     private MonstersSdbImpl() {
-        read("Monster.sdb");
+        read("Monster.sdb", "utf8");
     }
 
     @Override

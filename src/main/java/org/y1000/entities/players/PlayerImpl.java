@@ -741,7 +741,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public int attackSpeed() {
-        var spd = weapon().map(Weapon::attackSpeed).orElse(0) +
+        var spd = weapon().map(Weapon::attackSpeed).orElse(0) * -1 +
                 innateAttributesProvider.attackSpeed() + attackKungFu.attackSpeed();
         var p = legPercent();
         return p >= 50 ? spd : spd + spd * (50 - p )/ 50;
@@ -1221,7 +1221,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public Optional<String> hurtSound() {
-        if (ThreadLocalRandom.current().nextInt(100) < 40) {
+        if (ThreadLocalRandom.current().nextInt(0, 10) < 4) {
             return Optional.empty();
         }
         return Optional.of(age() < 6000 ?
