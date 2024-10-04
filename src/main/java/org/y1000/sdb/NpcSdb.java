@@ -50,5 +50,7 @@ public interface NpcSdb {
     String getShape(String name);
 
     int getViewWidth(String name);
+
+    boolean isQuester(String name);
 }
 

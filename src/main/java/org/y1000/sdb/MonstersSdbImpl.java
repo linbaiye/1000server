@@ -135,6 +135,16 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
         return getInt(name, "ViewWidth");
     }
 
+    @Override
+    public int getEscapeLife(String name) {
+        return getIntOrZero(name, "EscapeLife");
+    }
+
+    @Override
+    public int getRegenInterval(String name) {
+        return getIntOrZero(name, "RegenInterval");
+    }
+
 
     private static void check() {
 
@@ -164,11 +174,14 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
 //                if (!StringUtils.isEmpty(monstersSdb.get(i, name)))
 //                    System.out.println(name + ": " + monstersSdb.get(i, name));
 //            }
-        }
+    }
 
     }
 
     public static Set<Integer> ERROR_ANIMATES = Set.of(1);
+
+    private static Set<String> NAMES = Set.of("老虎", "熊", "犀牛", "幼虎");
+    private static Set<String> ATTRS = Set.of("Damage", "Life", "Armor");
 
     private static void dump( ) {
         MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;
@@ -176,23 +189,23 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
         Set<String> names = monstersSdb.columnNames();
         Set<String> items = monstersSdb.names();
         for (String i: items) {
-            /*if (monstersSdb.getRecovery(i) > 10 || i.contains("NK")) {
+            if (!NAMES.contains(i)) {
+                continue;
+            }
+        /*if (monstersSdb.getRecovery(i) > 10 || i.contains("NK")) {
                 continue;
             }
              */
-            if (!i.startsWith("白狐狸")) {
-                continue;
-            }
             System.out.println("----------------------------");
-            System.out.println(i);
+            System.out.println("Name: " + i);
             for (String name : names) {
-                if (!StringUtils.isEmpty(monstersSdb.get(i, name)))
+                if (!StringUtils.isEmpty(monstersSdb.get(i, name)) &&
+                ATTRS.contains(name))
                     System.out.println(name + ": " + monstersSdb.get(i, name));
             }
         }
 
     }
-
 
     public static void main(String[] args) {
         dump();

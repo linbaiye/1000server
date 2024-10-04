@@ -3,9 +3,9 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.message.clientevent.chat.ClientChatEvent;
+import org.y1000.message.clientevent.chat.ClientInputTextEvent;
 import org.y1000.message.clientevent.chat.ClientRealmChatEvent;
-import org.y1000.message.clientevent.chat.ClientSayEvent;
+import org.y1000.message.clientevent.chat.ClientChatEvent;
 
 import org.y1000.message.clientevent.chat.ClientWorldShoutEvent;
 import org.y1000.realm.event.RealmEvent;
@@ -31,7 +31,7 @@ final class ChatManagerImpl implements ChatManager {
         this.crossRealmEventSender = crossRealmEventSender;
     }
 
-    private void handleClientChatEvent(Player player, ClientChatEvent event) {
+    private void handleClientChatEvent(Player player, ClientInputTextEvent event) {
         if (!event.canSend(player)) {
             return;
         }
@@ -39,16 +39,16 @@ final class ChatManagerImpl implements ChatManager {
             if (realmChatEvent instanceof ClientWorldShoutEvent)
                 player.consumeLife(1000);
             crossRealmEventSender.send(realmChatEvent.toRealmEvent(player));
-        } else if (event instanceof ClientSayEvent speakEvent) {
+        } else if (event instanceof ClientChatEvent speakEvent) {
             eventSender.notifyVisiblePlayersAndSelf(player, speakEvent.toPlayerEvent(player));
         }
     }
 
     @Override
-    public void handleClientChat(long from, ClientChatEvent clientChatEvent) {
-        if (clientChatEvent == null)
+    public void handleClientChat(long from, ClientInputTextEvent clientInputTextEvent) {
+        if (clientInputTextEvent == null)
             return;
-        playerManager.find(from).ifPresent(player -> handleClientChatEvent(player, clientChatEvent));
+        playerManager.find(from).ifPresent(player -> handleClientChatEvent(player, clientInputTextEvent));
     }
 
     private void handlePrivateChat(Player player, PlayerWhisperEvent chatEvent) {

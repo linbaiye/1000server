@@ -265,7 +265,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             changeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA));
         }
         emitEvent(new PlayerUnequipEvent(this, equipped.equipmentType()));
-        int slot = inventory.add(equipped);
+        int slot = inventory.put(equipped);
         emitEvent(new UpdateInventorySlotEvent(this, slot, equipped));
         equipped.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
@@ -853,9 +853,9 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             return;
         }
         breathKungFu.update(this, delta, this::emitEvent);
-        if (!breathKungFu.canRegenerateResources(this)) {
+        /*if (!breathKungFu.canRegenerateResources(this)) {
             standUp(true);
-        }
+        }*/
     }
 
     @Override
@@ -1229,6 +1229,20 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                 (isMale() ? "2004" : "2204") );
     }
 
+    @Override
+    public boolean canChaseOrAttack(Entity target) {
+        var ret = target instanceof AttackableActiveEntity attackableEntity &&
+                attackableEntity.realmMap() == realmMap() &&
+                target.canBeSeenAt(coordinate()) &&
+                attackableEntity.canBeAttackedNow();
+        if (!ret) {
+            return false;
+        }
+        if (target instanceof Player another) {
+            return another.team() == 0 || this.team() == 0 || (another.team() != this.team());
+        }
+        return true;
+    }
 
     @Override
     public Optional<String> dieSound() {

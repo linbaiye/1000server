@@ -9,6 +9,9 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.AggressiveMonster;
+import org.y1000.entities.creatures.npc.AI.GuardWanderingAI;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
+import org.y1000.entities.creatures.npc.AI.ViolentNpcMeleeFightAI;
 import org.y1000.message.AbstractEntityInterpolation;
 import org.y1000.message.NpcInterpolation;
 import org.y1000.realm.RealmMap;
@@ -31,11 +34,6 @@ public final class Guardian extends AbstractViolentNpc {
 
 
     @Override
-    public void update(int delta) {
-        doUpdate(delta);
-    }
-
-    @Override
     public AbstractEntityInterpolation captureInterpolation() {
         return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), viewName(),
                 NpcType.GUARDIAN, attributeProvider().animate(), attributeProvider().shape());
@@ -46,16 +44,12 @@ public final class Guardian extends AbstractViolentNpc {
         return log;
     }
 
-    @Override
-    public void respawn(Coordinate coordinate) {
-        doRevive(coordinate);
-    }
 
     public void attackMonster(AggressiveMonster monster) {
         if (monster == null) {
             return;
         }
-        if (getAi() instanceof GuardWanderingAI) {
+        if (getAI() instanceof GuardWanderingAI) {
             changeAndStartAI(new ViolentNpcMeleeFightAI(monster, this));
         }
     }

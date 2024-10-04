@@ -3,7 +3,8 @@ package org.y1000.network;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.message.clientevent.chat.ClientChatEvent;
+import org.y1000.ServerContext;
+import org.y1000.message.clientevent.chat.ClientInputTextEvent;
 import org.y1000.item.EquipmentType;
 import org.y1000.message.clientevent.*;
 import org.y1000.network.event.ConnectionClosedEvent;
@@ -21,8 +22,12 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     private final RealmManager realmManager;
 
-    public AbstractConnection(RealmManager realmManager) {
+    private final ServerContext serverContext;
+
+    public AbstractConnection(RealmManager realmManager,
+                              ServerContext serverContext) {
         this.realmManager = realmManager;
+        this.serverContext = serverContext;
         context = new AtomicReference<>();
     }
 
@@ -51,13 +56,14 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case DRAGPLAYER -> new ClientDragPlayerEvent(clientPacket.getDragPlayer().getTargetId(), clientPacket.getDragPlayer().getRopeSlot());
             case SIMPLECOMMAND -> ClientSimpleCommandEvent.parse(clientPacket.getSimpleCommand().getCommand());
             case DYE -> new ClientDyeEvent(clientPacket.getDye().getDyedSlotId(), clientPacket.getDye().getDyeSlotId());
-            case SAY -> ClientChatEvent.create(clientPacket.getSay().getText());
+            case SAY -> ClientInputTextEvent.create(clientPacket.getSay().getText());
             case BANKOPERATION -> ClientOperateBankEvent.fromPacket(clientPacket.getBankOperation());
             case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
             case CLICKPACKET -> new ClientClickEvent(clientPacket.getClickPacket().getId());
             case FOUNDGUILD -> ClientFoundGuildEvent.parse(clientPacket.getFoundGuild());
             case CREATEGUILDKUNGFU -> ClientCreateGuildKungFuEvent.parse(clientPacket.getCreateGuildKungFu());
             case MANAGEGUILD -> new ClientManageGuildEvent(clientPacket.getManageGuild().getType(), clientPacket.getManageGuild().getTarget());
+            case SUBMITQUEST -> new ClientSubmitQuestEvent(clientPacket.getSubmitQuest().getId(), clientPacket.getSubmitQuest().getQuestName(), serverContext.getItemFactory());
             default -> throw new IllegalArgumentException();
         };
     }

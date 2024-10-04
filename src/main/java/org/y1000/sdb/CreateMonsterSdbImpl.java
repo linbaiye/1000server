@@ -16,7 +16,7 @@ public final class CreateMonsterSdbImpl extends AbstractCreateEntitySdb {
     }
 
     @Override
-    protected String parseName(String id) {
+    protected String getIdName(String id) {
         return get(id, "MonsterName");
     }
 

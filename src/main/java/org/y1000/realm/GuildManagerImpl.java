@@ -195,6 +195,9 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         if (request.getName().length() > 8) {
             return "名字最长8字符";
         }
+        if (kungFuSdb.contains(request.getName())) {
+            return "名字已被占用";
+        }
         if (!request.getType().isMelee()) {
             return "武功只能是刀、剑、拳、槌、枪";
         }

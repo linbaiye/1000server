@@ -12,14 +12,12 @@ import org.y1000.entities.creatures.npc.NpcCommonState;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
 import org.y1000.item.ItemSdb;
 import org.y1000.item.WeaponImpl;
-import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.kungfu.attack.AttackKungFuParameters;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.message.InputResponseMessage;
 import org.y1000.message.clientevent.ClientMovementEvent;
 import org.y1000.message.clientevent.input.RightMouseClick;
-import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -133,7 +131,7 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture  {
     void rangedAttackWhenTargetDead() {
         ItemSdb itemSdb = Mockito.mock(ItemSdb.class);
         when(itemSdb.getAttackKungFuType("bow")).thenReturn(AttackKungFuType.BOW);
-        player.inventory().add(new WeaponImpl("bow", itemSdb));
+        player.inventory().put(new WeaponImpl("bow", itemSdb));
         enableBowKungFu();
 
         var monster = monsterBuilder().coordinate(player.coordinate().move(3, 0)).build();

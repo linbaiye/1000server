@@ -121,7 +121,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             return;
         }
         if (!isRanged() && !player.getFightingEntity().canBeMeleeAt(player.coordinate())) {
-            player.changeState(new PlayerWaitDistanceState(player.getStateMillis(State.COOLDOWN)));
+            player.changeState(new PlayerWaitDistanceState(30));
             return;
         }
         var ok = checkResourcesAndSendError(player);

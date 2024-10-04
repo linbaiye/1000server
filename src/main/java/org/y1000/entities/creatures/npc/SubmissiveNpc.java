@@ -2,16 +2,13 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
-import org.y1000.message.AbstractEntityInterpolation;
-import org.y1000.message.NpcInterpolation;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -52,4 +49,5 @@ public final class SubmissiveNpc extends AbstractSubmissiveNpc {
     NpcType getType() {
         return NpcType.MONSTER;
     }
+
 }

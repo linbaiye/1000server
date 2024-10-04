@@ -28,9 +28,9 @@ class ClientDyeEventTest extends AbstractUnitTestFixture {
     @Test
     void handle() {
         ItemFactory itemFactory = createItemFactory();
-        int dyedSlot = inventory.add(itemFactory.createItem("女子皮鞋"));
+        int dyedSlot = inventory.put(itemFactory.createItem("女子皮鞋"));
         var before = inventory.getItem(dyedSlot).color();
-        int dyeSlot = inventory.add(itemFactory.createItem("蓝色染剂"));
+        int dyeSlot = inventory.put(itemFactory.createItem("蓝色染剂"));
         new ClientDyeEvent(dyedSlot, dyeSlot).handle(player);
         assertNotEquals(before, inventory.getItem(dyedSlot).color());
         verify(player, times(1)).consumeItem(dyeSlot);

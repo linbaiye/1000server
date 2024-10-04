@@ -8,5 +8,4 @@ public interface CreateNpcSdb {
     }
 
     List<NpcSpawnSetting> getAllSettings();
-
 }

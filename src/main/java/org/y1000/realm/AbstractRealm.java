@@ -2,13 +2,12 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.StaticTeleport;
-import org.y1000.message.clientevent.ClientAttackEvent;
-import org.y1000.message.clientevent.ClientFoundGuildEvent;
-import org.y1000.message.clientevent.ClientSimpleCommandEvent;
-import org.y1000.message.clientevent.chat.ClientChatEvent;
+import org.y1000.message.clientevent.*;
+import org.y1000.message.clientevent.chat.ClientInputTextEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
@@ -16,6 +15,7 @@ import org.y1000.sdb.MapSdb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 abstract class AbstractRealm implements Realm {
@@ -174,6 +174,15 @@ abstract class AbstractRealm implements Realm {
 
     abstract void handleClientEvent(PlayerDataEvent dataEvent);
 
+    private void findEntityAndHandle(Player player, ClientSingleInteractEvent event) {
+        for (ActiveEntityManager<?> entityManager : entityManagers) {
+            Optional<? extends ActiveEntity> entity = entityManager.find(event.targetId());
+            if (entity.isPresent()) {
+                event.handle(player, entity.get());
+                return;
+            }
+        }
+    }
 
     private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
         if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent) {
@@ -189,8 +198,11 @@ abstract class AbstractRealm implements Realm {
             }
         } else if (dataEvent.data() instanceof ClientFoundGuildEvent guildEvent) {
             playerManager().find(dataEvent.playerId()).ifPresent(player -> handleGuidCreation(player, guildEvent));
-        } else if (dataEvent.data() instanceof ClientChatEvent clientChatEvent) {
-            chatManager.handleClientChat(dataEvent.playerId(), clientChatEvent);
+        } else if (dataEvent.data() instanceof ClientInputTextEvent clientInputTextEvent) {
+            chatManager.handleClientChat(dataEvent.playerId(), clientInputTextEvent);
+        } else if (dataEvent.data() instanceof ClientSingleInteractEvent singleInteractEvent) {
+            playerManager.find(singleInteractEvent.getPlayerId())
+                    .ifPresent(player -> findEntityAndHandle(player, singleInteractEvent));
         } else {
             handleClientEvent(dataEvent);
         }

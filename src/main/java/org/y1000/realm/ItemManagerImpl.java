@@ -62,7 +62,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
             return;
         }
         Item slotItem = itemFactory.createItem(groundedItem);
-        int slot = picker.inventory().add(slotItem);
+        int slot = picker.inventory().put(slotItem);
         if (slot > 0) {
             picker.emitEvent(new UpdateInventorySlotEvent(picker, slot, picker.inventory().getItem(slot)));
             picker.emitEvent(PlayerTextEvent.pickedItem(picker, groundedItem.getName(), groundedItem.getNumber()));
@@ -101,9 +101,10 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
     public void dropItem(PlayerDropItemEvent dropItemEvent) {
         if (dropItemEvent == null)
             return;
-        GroundedItem groundedItem = dropItemEvent.createGroundedItem(idGenerator.next());
-        dropNewItem(groundedItem);
-        log.debug("Dropped item at {}", groundedItem.coordinate());
+        if (dropItemEvent.source().coordinate().directDistance(dropItemEvent.getCoordinate()) <= 3) {
+            GroundedItem groundedItem = dropItemEvent.createGroundedItem(idGenerator.next());
+            dropNewItem(groundedItem);
+        }
     }
 
 

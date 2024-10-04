@@ -8,4 +8,6 @@ public interface Monster extends ViolentNpc {
 
     Optional<String> normalSound();
 
+    int escapeLife();
+
 }

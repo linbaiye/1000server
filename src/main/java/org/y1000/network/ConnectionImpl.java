@@ -9,7 +9,7 @@ import org.y1000.realm.RealmManager;
 public final class ConnectionImpl extends AbstractConnection {
 
     public ConnectionImpl(RealmManager realmManager) {
-        super(realmManager);
+        super(realmManager, null);
     }
 
 

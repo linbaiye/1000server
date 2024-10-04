@@ -99,9 +99,10 @@ public final class RealmFactoryImpl implements RealmFactory {
         }
         var monsterSdb = createEntitySdbRepository.monsterSdbExists(id) ? createEntitySdbRepository.loadMonster(id) : null;
         var npcSdb = createEntitySdbRepository.npcSdbExists(id) ? createEntitySdbRepository.loadNpc(id) : null;
+        var haveItemSdb = createEntitySdbRepository.loadHaveItem(id);
         return mapSdb.getRegenInterval(id).isPresent() ?
-                new DungeonNpcManager(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap) :
-                new NpcManagerImpl(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap);
+                new DungeonNpcManager(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap, haveItemSdb) :
+                new NpcManagerImpl(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap, haveItemSdb);
     }
 
     private DeadPlayerTeleportManager deadPlayerTeleportManager(int id) {

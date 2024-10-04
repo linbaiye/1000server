@@ -69,7 +69,7 @@ class DynamicObjectManagerImplTest {
         when(player.inventory()).thenReturn(inv);
         Item item = Mockito.mock(Item.class);
         when(item.name()).thenReturn("骨钥匙");
-        var slot = player.inventory().add(item);
+        var slot = player.inventory().put(item);
         when(player.consumeItem(slot)).thenReturn(true);
         var eventListener = new TestingEventListener();
         triggerDynamicObject.registerEventListener(eventListener);

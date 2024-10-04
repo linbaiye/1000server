@@ -8,9 +8,11 @@ import org.y1000.TestingEntityEventSender;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.RemoveEntityEvent;
+import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
+import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.serverevent.TextMessage;
 import org.y1000.util.Coordinate;
@@ -19,6 +21,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 class ItemManagerTest extends AbstractUnitTestFixture {
 
@@ -79,4 +82,40 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         assertEquals(Coordinate.xy(2, 2), groundedItem.get().coordinate());
     }
 
+    @Test
+    void dropItemWhenPlayerFar() {
+        var player = Mockito.mock(Player.class);
+        when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
+        PlayerDropItemEvent event = new PlayerDropItemEvent(player, "test", 1, Coordinate.xy(5, 5), 0);
+        manager.dropItem(event);
+        assertTrue(manager.getEntities().isEmpty());
+    }
+
+    @Test
+    void playerDrop() {
+        var player = Mockito.mock(Player.class);
+        when(player.coordinate()).thenReturn(Coordinate.xy(4, 4));
+        PlayerDropItemEvent event = new PlayerDropItemEvent(player, "生药", 1, Coordinate.xy(5, 5), 0);
+        manager.dropItem(event);
+        assertFalse(manager.getEntities().isEmpty());
+    }
+
+    @Test
+    void name() {
+        int counter = 0;
+        for (int i = 0; i < 4000; i++) {
+            manager.dropItem("黄龙斧:1:400", Coordinate.xy(1, 1));
+            if (!manager.getEntities().isEmpty()) {
+                counter++;
+                manager.getEntities().clear();
+            }
+        }
+        System.out.println(counter);
+        /*double rate = 399/400f;
+        double total = 1;
+        for (int i = 0; i < 400; i++) {
+            total *= rate;
+        }
+        System.out.println(total);*/
+    }
 }

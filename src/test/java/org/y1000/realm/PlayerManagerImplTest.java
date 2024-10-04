@@ -126,13 +126,4 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
         verify(player2, times(1)).emitEvent(any(BreakRopeEvent.class));
     }
 
-    @Test
-    void handleClickPlayerEvent() {
-        Player clicked = playerBuilder().id(nextId()).build();
-        Player source = playerBuilder().id(nextId()).build();
-        playerManager.onPlayerConnected(clicked, realm);
-        playerManager.onPlayerConnected(source, realm);
-        playerManager.onClientEvent(new PlayerDataEvent(realm.id(), source, new ClientClickEvent(clicked.id())), Mockito.mock(ActiveEntityManager.class));
-        verify(eventSender, times(1)).notifySelf(any(PlayerTextEvent.class));
-    }
 }

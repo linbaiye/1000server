@@ -11,7 +11,9 @@ public interface PlayerEvent extends EntityEvent {
         return (Player) source();
     }
 
-    void accept(PlayerEventVisitor playerEventHandler);
+    default void accept(PlayerEventVisitor playerEventHandler) {
+
+    }
 
     default void accept(EntityEventVisitor visitor) {
         if (visitor instanceof PlayerEventVisitor playerEventHandler) {

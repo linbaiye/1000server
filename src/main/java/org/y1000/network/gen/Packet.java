@@ -93,6 +93,7 @@ private static final long serialVersionUID = 0L;
     NAMECOLOR(49),
     UPDATEGUILD(50),
     KUNGFUFORM(51),
+    QUESTWINDOW(52),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -158,6 +159,7 @@ private static final long serialVersionUID = 0L;
         case 49: return NAMECOLOR;
         case 50: return UPDATEGUILD;
         case 51: return KUNGFUFORM;
+        case 52: return QUESTWINDOW;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1661,6 +1663,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.UpdateGuildKungFuFormPacket.getDefaultInstance();
   }
 
+  public static final int QUESTWINDOW_FIELD_NUMBER = 52;
+  /**
+   * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+   * @return Whether the questWindow field is set.
+   */
+  @java.lang.Override
+  public boolean hasQuestWindow() {
+    return typedPacketCase_ == 52;
+  }
+  /**
+   * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+   * @return The questWindow.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UpdateQuestWindowPacket getQuestWindow() {
+    if (typedPacketCase_ == 52) {
+       return (org.y1000.network.gen.UpdateQuestWindowPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.UpdateQuestWindowPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UpdateQuestWindowPacketOrBuilder getQuestWindowOrBuilder() {
+    if (typedPacketCase_ == 52) {
+       return (org.y1000.network.gen.UpdateQuestWindowPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.UpdateQuestWindowPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1818,6 +1851,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 51) {
       output.writeMessage(51, (org.y1000.network.gen.UpdateGuildKungFuFormPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 52) {
+      output.writeMessage(52, (org.y1000.network.gen.UpdateQuestWindowPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -2019,6 +2055,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 51) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(51, (org.y1000.network.gen.UpdateGuildKungFuFormPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 52) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(52, (org.y1000.network.gen.UpdateQuestWindowPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2229,6 +2269,10 @@ private static final long serialVersionUID = 0L;
         if (!getKungFuForm()
             .equals(other.getKungFuForm())) return false;
         break;
+      case 52:
+        if (!getQuestWindow()
+            .equals(other.getQuestWindow())) return false;
+        break;
       case 0:
       default:
     }
@@ -2435,6 +2479,10 @@ private static final long serialVersionUID = 0L;
       case 51:
         hash = (37 * hash) + KUNGFUFORM_FIELD_NUMBER;
         hash = (53 * hash) + getKungFuForm().hashCode();
+        break;
+      case 52:
+        hash = (37 * hash) + QUESTWINDOW_FIELD_NUMBER;
+        hash = (53 * hash) + getQuestWindow().hashCode();
         break;
       case 0:
       default:
@@ -2715,6 +2763,9 @@ private static final long serialVersionUID = 0L;
       if (kungFuFormBuilder_ != null) {
         kungFuFormBuilder_.clear();
       }
+      if (questWindowBuilder_ != null) {
+        questWindowBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -2953,6 +3004,10 @@ private static final long serialVersionUID = 0L;
           kungFuFormBuilder_ != null) {
         result.typedPacket_ = kungFuFormBuilder_.build();
       }
+      if (typedPacketCase_ == 52 &&
+          questWindowBuilder_ != null) {
+        result.typedPacket_ = questWindowBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -3190,6 +3245,10 @@ private static final long serialVersionUID = 0L;
         }
         case KUNGFUFORM: {
           mergeKungFuForm(other.getKungFuForm());
+          break;
+        }
+        case QUESTWINDOW: {
+          mergeQuestWindow(other.getQuestWindow());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -3558,6 +3617,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 51;
               break;
             } // case 410
+            case 418: {
+              input.readMessage(
+                  getQuestWindowFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 52;
+              break;
+            } // case 418
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -10405,6 +10471,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 51;
       onChanged();
       return kungFuFormBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UpdateQuestWindowPacket, org.y1000.network.gen.UpdateQuestWindowPacket.Builder, org.y1000.network.gen.UpdateQuestWindowPacketOrBuilder> questWindowBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+     * @return Whether the questWindow field is set.
+     */
+    @java.lang.Override
+    public boolean hasQuestWindow() {
+      return typedPacketCase_ == 52;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+     * @return The questWindow.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UpdateQuestWindowPacket getQuestWindow() {
+      if (questWindowBuilder_ == null) {
+        if (typedPacketCase_ == 52) {
+          return (org.y1000.network.gen.UpdateQuestWindowPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.UpdateQuestWindowPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 52) {
+          return questWindowBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.UpdateQuestWindowPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+     */
+    public Builder setQuestWindow(org.y1000.network.gen.UpdateQuestWindowPacket value) {
+      if (questWindowBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        questWindowBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 52;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+     */
+    public Builder setQuestWindow(
+        org.y1000.network.gen.UpdateQuestWindowPacket.Builder builderForValue) {
+      if (questWindowBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        questWindowBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 52;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+     */
+    public Builder mergeQuestWindow(org.y1000.network.gen.UpdateQuestWindowPacket value) {
+      if (questWindowBuilder_ == null) {
+        if (typedPacketCase_ == 52 &&
+            typedPacket_ != org.y1000.network.gen.UpdateQuestWindowPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.UpdateQuestWindowPacket.newBuilder((org.y1000.network.gen.UpdateQuestWindowPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 52) {
+          questWindowBuilder_.mergeFrom(value);
+        } else {
+          questWindowBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 52;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+     */
+    public Builder clearQuestWindow() {
+      if (questWindowBuilder_ == null) {
+        if (typedPacketCase_ == 52) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 52) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        questWindowBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+     */
+    public org.y1000.network.gen.UpdateQuestWindowPacket.Builder getQuestWindowBuilder() {
+      return getQuestWindowFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UpdateQuestWindowPacketOrBuilder getQuestWindowOrBuilder() {
+      if ((typedPacketCase_ == 52) && (questWindowBuilder_ != null)) {
+        return questWindowBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 52) {
+          return (org.y1000.network.gen.UpdateQuestWindowPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.UpdateQuestWindowPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UpdateQuestWindowPacket, org.y1000.network.gen.UpdateQuestWindowPacket.Builder, org.y1000.network.gen.UpdateQuestWindowPacketOrBuilder> 
+        getQuestWindowFieldBuilder() {
+      if (questWindowBuilder_ == null) {
+        if (!(typedPacketCase_ == 52)) {
+          typedPacket_ = org.y1000.network.gen.UpdateQuestWindowPacket.getDefaultInstance();
+        }
+        questWindowBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.UpdateQuestWindowPacket, org.y1000.network.gen.UpdateQuestWindowPacket.Builder, org.y1000.network.gen.UpdateQuestWindowPacketOrBuilder>(
+                (org.y1000.network.gen.UpdateQuestWindowPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 52;
+      onChanged();
+      return questWindowBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

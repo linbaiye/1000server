@@ -41,9 +41,9 @@ class BankRepositoryTest extends AbstractUnitTestFixture {
     void saveNonEmptyBank() {
         Bank bank = Bank.open();
         bank.unlock();
-        bank.add(itemFactory.createItem("长剑"));
-        bank.add(itemFactory.createItem("生药", 12));
-        bank.add(itemFactory.createItem("女子黄龙弓服"));
+        bank.put(itemFactory.createItem("长剑"));
+        bank.put(itemFactory.createItem("生药", 12));
+        bank.put(itemFactory.createItem("女子黄龙弓服"));
         bankRepository.save(1L, bank);
         BankPo bankPo = jpaFixture.newEntityManager().createQuery("select b from BankPo b where b.playerId = ?1", BankPo.class)
                 .setParameter(1, 1L).getResultList().get(0);
@@ -61,12 +61,12 @@ class BankRepositoryTest extends AbstractUnitTestFixture {
         Bank bank = Bank.open();
         bank.unlock();
         bank.unlock();
-        bank.add(itemFactory.createItem("生药", 12));
-        bank.add(itemFactory.createItem("女子黄龙弓服"));
+        bank.put(itemFactory.createItem("生药", 12));
+        bank.put(itemFactory.createItem("女子黄龙弓服"));
         var equipment = (DecorativeEquipment)itemFactory.createItem("女子长发");
         Item item = itemFactory.createItem("红色染剂", 2);
         equipment.dye(item.color());
-        bank.add(equipment);
+        bank.put(equipment);
         bankRepository.save(1L, bank);
         var bank1 = bankRepository.find(1L).get();
         assertEquals(20, bank1.getUnlocked());
@@ -81,10 +81,10 @@ class BankRepositoryTest extends AbstractUnitTestFixture {
     void saveBankShouldBeIsolated() {
         Bank bank = Bank.open();
         bank.unlock();
-        bank.add(itemFactory.createItem("长剑"));
+        bank.put(itemFactory.createItem("长剑"));
         bankRepository.save(1L, bank);
 
-        bank.add(itemFactory.createItem("长刀"));
+        bank.put(itemFactory.createItem("长刀"));
         bankRepository.save(2L, bank);
         Bank bank2 = bankRepository.find(2L).get();
         assertEquals(10, bank2.getUnlocked());

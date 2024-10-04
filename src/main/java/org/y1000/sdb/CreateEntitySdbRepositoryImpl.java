@@ -24,7 +24,7 @@ public final class CreateEntitySdbRepositoryImpl implements CreateEntitySdbRepos
 
 
     @Override
-    public CreateNpcSdb loadNpc(int realmId) {
+    public CreateNonMonsterSdb loadNpc(int realmId) {
         return new CreateNpcSdbImpl(realmId);
     }
 
@@ -43,5 +43,11 @@ public final class CreateEntitySdbRepositoryImpl implements CreateEntitySdbRepos
     public boolean objectSdbExists(int realmId) {
         String fileName = CreateDynamicObjectSdbImpl.makeFileName(realmId);
         return getClass().getResource(AbstractSdbReader.SDB_PATH + "/" + fileName) != null;
+    }
+
+
+    @Override
+    public HaveItemSdb loadHaveItem(int realmId) {
+        return exists(HaveItemSdbImpl.makeFileName(realmId)) ? new HaveItemSdbImpl(realmId) : EmptyHaveItemSdb.INSTANCE;
     }
 }

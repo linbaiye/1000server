@@ -37,7 +37,6 @@ import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.network.gen.*;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
-import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.util.Coordinate;
 
 
@@ -107,7 +106,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void equipHatEvent() {
         Inventory inventory = new Inventory();
-        int slot = inventory.add(new ArmorEquipmentImpl("test", new TestArmorAttributeProvider(), EquipmentType.HAT));
+        int slot = inventory.put(new ArmorEquipmentImpl("test", new TestArmorAttributeProvider(), EquipmentType.HAT));
         player = playerBuilder().inventory(inventory).build();
         player.registerEventListener(eventListener);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
@@ -122,7 +121,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void equipNotSameTypeWeapon() {
         Weapon test = createWeapon("sword", AttackKungFuType.SWORD);
-        int slot = inventory.add(test);
+        int slot = inventory.put(test);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertTrue(player.weapon().isPresent());
         assertSame(player.attackKungFu().getType(), AttackKungFuType.SWORD);
@@ -139,11 +138,11 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void equipWeapon_swapEquipped() {
         Weapon sword = createWeapon("sword", AttackKungFuType.SWORD);
-        int slot1 = inventory.add(sword);
+        int slot1 = inventory.put(sword);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot1));
         eventListener.clearEvents();
         var axe = createWeapon("axe", AttackKungFuType.AXE);
-        int slot2 = inventory.add(axe);
+        int slot2 = inventory.put(axe);
 
         // act
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot2));
@@ -167,13 +166,13 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void equipWeaponWileAttacking() {
         Weapon sword = createWeapon("sword", AttackKungFuType.SWORD);
-        int slot1 = inventory.add(sword);
+        int slot1 = inventory.put(sword);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot1));
         player.setFightingEntity(createMonster(new Coordinate(1, 1)));
         player.changeState(PlayerAttackState.melee(player));
         eventListener.clearEvents();
         var axe = createWeapon("axe", AttackKungFuType.AXE);
-        int slot2 = inventory.add(axe);
+        int slot2 = inventory.put(axe);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot2));
 
         assertEquals(player.cooldown(), (PlayerImpl.INNATE_ATTACKSPEED + player.kungFuBook().findUnnamedAttack(AttackKungFuType.AXE).attackSpeed()) * Realm.STEP_MILLIS);
@@ -204,7 +203,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         player.setFightingEntity(createMonster(new Coordinate(1, 2)));
         player.changeState(PlayerAttackState.melee(player));
 
-        int slot = inventory.add(createWeapon("sword", AttackKungFuType.SWORD));
+        int slot = inventory.put(createWeapon("sword", AttackKungFuType.SWORD));
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 2));
         assertEquals(player.attackKungFu().getType(), AttackKungFuType.SWORD);
         assertTrue(player.weapon().isPresent());
@@ -355,7 +354,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertTrue(player.assistantKungFu().isPresent());
         assertEquals(AttackKungFuType.QUANFA, player.attackKungFu().getType());
 
-        player.inventory().add(itemFactory.createItem("长剑"));
+        player.inventory().put(itemFactory.createItem("长剑"));
         player.handleClientEvent(new ClientToggleKungFuEvent(1, 2));
         assertTrue(player.assistantKungFu().isEmpty());
     }
@@ -470,7 +469,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void startBowAttack() {
         PassiveMonster monster = createMonster(player.coordinate().move(2, 0));
-        player.inventory().add(createWeapon("bow", AttackKungFuType.BOW));
+        player.inventory().put(createWeapon("bow", AttackKungFuType.BOW));
         enableBowKungFu();
         // long enough to clean cooldown frozen because of equipping bow.
         player.update(100000);
@@ -481,7 +480,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         PlayerTextEvent event = eventListener.removeFirst(PlayerTextEvent.class);
         assertEquals(TextMessage.TextType.OUT_OF_AMMO.value(), event.toPacket().getText().getType());
 
-        player.inventory().add(itemFactory.createItem("箭", 1));
+        player.inventory().put(itemFactory.createItem("箭", 1));
         eventListener.clearEvents();
 
         player.attack(clientEvent, monster);
@@ -517,7 +516,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         enableProtectKungFu();
         assertEquals(player.attackKungFu().armor().add(player.protectKungFu().get().armor()).body(), player.bodyArmor());
         ArmorEquipment chest = itemFactory.createChest(player.isMale() ? "男子黄金铠甲" : "女子黄金铠甲");
-        int slot = player.inventory().add(chest);
+        int slot = player.inventory().put(chest);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertEquals(player.attackKungFu().armor().add(player.protectKungFu().get().armor())
                 .add(chest.armor()).body(), player.bodyArmor());
@@ -525,7 +524,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void rightClickInventorySlot() {
-        var slot = player.inventory().add(itemFactory.createItem("生药", 2));
+        var slot = player.inventory().put(itemFactory.createItem("生药", 2));
         player.handleClientEvent(new ClientRightClickEvent(RightClickType.INVENTORY, slot, 0));
         ItemOrKungFuAttributeEvent event = eventListener.removeFirst(ItemOrKungFuAttributeEvent.class);
         assertTrue(event.toPacket().getItemAttribute().getText().contains("身体"));
@@ -560,7 +559,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void doubleClickPill() {
-        int slot = player.inventory().add(itemFactory.createItem("生药", 2));
+        int slot = player.inventory().put(itemFactory.createItem("生药", 2));
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertEquals(1, ((StackItem)player.inventory().getItem(slot)).number());
     }
@@ -667,7 +666,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void learnKungFu() {
-        var slot = player.inventory().add(itemFactory.createItem("闪光剑破解"));
+        var slot = player.inventory().put(itemFactory.createItem("闪光剑破解"));
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertNull(player.inventory().getItem(slot));
         assertNotNull(player.kungFuBook().getKungFu(2, 1));
@@ -683,14 +682,14 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         when(weapon.avoidance()).thenReturn(1);
         when(weapon.equipmentType()).thenReturn(EquipmentType.WEAPON);
         when(weapon.kungFuType()).thenReturn(AttackKungFuType.QUANFA);
-        int slot = player.inventory().add(weapon);
+        int slot = player.inventory().put(weapon);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertEquals(2, player.avoidance());
 
         var hat = Mockito.mock(ArmorEquipment.class);
         when(hat.equipmentType()).thenReturn(EquipmentType.HAT);
         when(hat.avoidance()).thenReturn(5);
-        slot = player.inventory().add(hat);
+        slot = player.inventory().put(hat);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertEquals(7, player.avoidance());
     }
@@ -705,14 +704,14 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         when(weapon.recovery()).thenReturn(1);
         when(weapon.equipmentType()).thenReturn(EquipmentType.WEAPON);
         when(weapon.kungFuType()).thenReturn(AttackKungFuType.QUANFA);
-        int slot = player.inventory().add(weapon);
+        int slot = player.inventory().put(weapon);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertEquals(2, player.recovery());
         var chest = Mockito.mock(ArmorEquipment.class);
         when(chest.equipmentType()).thenReturn(EquipmentType.CHEST);
         when(chest.recovery()).thenReturn(1);
 
-        slot = player.inventory().add(chest);
+        slot = player.inventory().put(chest);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertEquals(1, player.recovery());
     }
@@ -728,7 +727,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         when(weapon.damage()).thenReturn(new Damage(1, 1,1,1));
         when(weapon.equipmentType()).thenReturn(EquipmentType.WEAPON);
         when(weapon.kungFuType()).thenReturn(AttackKungFuType.QUANFA);
-        int slot = player.inventory().add(weapon);
+        int slot = player.inventory().put(weapon);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertTrue(expected.add(new Damage(1,1,1,1)).equalTo(player.damage()));
     }
@@ -808,7 +807,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void takePill() {
-        int slot = player.inventory().add(itemFactory.createItem("生药", 4));
+        int slot = player.inventory().put(itemFactory.createItem("生药", 4));
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));

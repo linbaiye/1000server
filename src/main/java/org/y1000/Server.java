@@ -16,6 +16,7 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
+import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.realm.*;
@@ -25,7 +26,7 @@ import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
 
 @Slf4j
-public final class Server {
+public final class Server implements ServerContext {
 
     private final ServerBootstrap gameServer;
 
@@ -39,7 +40,7 @@ public final class Server {
 
     private RealmManager realmManager;
 
-    private ItemRepository itemRepository;
+    private final ItemRepositoryImpl itemRepository;
 
     private DynamicObjectFactory dynamicObjectFactory;
 
@@ -54,7 +55,6 @@ public final class Server {
     private final ServerBootstrap accountServer;
 
     private final AccountManager accountManager;
-
 
     private final AccountRepository accountRepository;
 
@@ -101,7 +101,7 @@ public final class Server {
                     protected void initChannel(NioSocketChannel channel) throws Exception {
                         channel.pipeline()
                                 .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                .addLast("packetHandler", new DevelopingConnection(realmManager))
+                                .addLast("packetHandler", new DevelopingConnection(realmManager, Server.this))
                                 .addLast("packetLengthAppender", new LengthFieldPrepender(4))
                                 .addLast("packetEncoder", MessageEncoder.ENCODER);
                     }
@@ -197,5 +197,10 @@ public final class Server {
         server.startRealms();
         server.loopEvent();
         server.startNetworking();
+    }
+
+    @Override
+    public ItemFactory getItemFactory() {
+        return itemRepository;
     }
 }

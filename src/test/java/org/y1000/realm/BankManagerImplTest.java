@@ -90,7 +90,7 @@ class BankManagerImplTest extends AbstractUnitTestFixture  {
     void unlock() {
         var item = itemFactory.createItem("福袋", 4);
         Inventory inventory = new Inventory();
-        int add = inventory.add(item);
+        int add = inventory.put(item);
         when(player.inventory()).thenReturn(inventory);
         AtomicReference<Bank> savedBank = new AtomicReference<>();
         doAnswer(invocationOnMock -> {
@@ -106,7 +106,7 @@ class BankManagerImplTest extends AbstractUnitTestFixture  {
     @Test
     void inventoryToBank() {
         var item = itemFactory.createItem("福袋", 4);
-        int slot = inventory.add(item);
+        int slot = inventory.put(item);
         Bank bank = Bank.open();
         bank.unlock();
         when(bankRepository.find(anyLong())).thenReturn(Optional.of(bank));
@@ -121,7 +121,7 @@ class BankManagerImplTest extends AbstractUnitTestFixture  {
         assertEquals(1, updateBank.getUpdateSlot().getSlotId());
         assertEquals("福袋", updateBank.getUpdateSlot().getName());
 
-        slot = inventory.add(itemFactory.createItem("长剑"));
+        slot = inventory.put(itemFactory.createItem("长剑"));
         bankManager.handle(player, new ClientOperateBankEvent(ClientOperateBankEvent.Operation.INVENTORY_TO_BANK, 0, slot, 2, 1));
         assertEquals("长剑", bank.getItem(2).name());
         assertNull(inventory.getItem(slot));

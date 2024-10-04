@@ -101,13 +101,14 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
             acceptTeleport(teleportEvent);
             return;
         }
-        if (isOpening()) {
+        acceptTeleport(teleportEvent);
+        /*if (isOpening()) {
             acceptTeleport(teleportEvent);
         } else {
             teleportEvent.getConnection().write(PlayerTextEvent.bottom(teleportEvent.player(), buildTip()));
             getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(),
                     teleportEvent.rejectCoordinate().orElse(exitCoordinate()), teleportEvent.getConnection(), id()));
-        }
+        }*/
     }
 
     @Override

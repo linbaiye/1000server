@@ -104,11 +104,16 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         Set<String> numbers = createDynamicObjectSdb.getNumbers();
         for (String number : numbers) {
             String name = createDynamicObjectSdb.getName(number);
-            var obj = factory.createDynamicObject(name, entityIdGenerator.next(),
-                    realmMap, Coordinate.xy(createDynamicObjectSdb.getX(number), createDynamicObjectSdb.getY(number)));
-            if (obj != null) {
-                addObject(obj);
-                //log.debug("Added dynamic object type {}, name {}.",obj.type(), obj.idName());
+            try {
+                var obj = factory.createDynamicObject(name, entityIdGenerator.next(),
+                        realmMap, Coordinate.xy(createDynamicObjectSdb.getX(number), createDynamicObjectSdb.getY(number)));
+                if (obj != null) {
+                    addObject(obj);
+                    //log.debug("Added dynamic object type {}, name {}.",obj.type(), obj.idName());
+                }
+            } catch (RuntimeException e) {
+                log().error("Failed to create {}.", name);
+                throw e;
             }
         }
         Set<DynamicObject> entities = getEntities();

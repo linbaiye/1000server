@@ -11,6 +11,7 @@ import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.NpcJoinedEvent;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
+import org.y1000.entities.creatures.monster.Monster;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.creatures.npc.Npc;
@@ -58,6 +59,8 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
 
     private RealmMap map;
 
+    private HaveItemSdb haveItemSdb;
+
 
     @BeforeEach
     void setUp() {
@@ -70,7 +73,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         when(monsterSdb.getAllSettings()).thenReturn(monsterSettings);
         when(monsterSdb.getSettings(anyString())).thenReturn(monsterSettings);
         npcSettings = new ArrayList<>();
-        CreateNpcSdb npcSdb = Mockito.mock(CreateNpcSdb.class);
+        CreateNonMonsterSdb npcSdb = Mockito.mock(CreateNonMonsterSdb.class);
         when(npcSdb.getAllSettings()).thenReturn(npcSettings);
         when(npcSdb.getSettings(anyString())).thenReturn(npcSettings);
         when(npcSdbRepository.loadMonster(anyInt())).thenReturn(monsterSdb);
@@ -80,7 +83,8 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         aoiManager = Mockito.mock(AOIManager.class);
         map = Mockito.mock(RealmMap.class);
         when(map.movable(any(Coordinate.class))).thenReturn(true);
-        npcManager = new NpcManagerImpl(eventSender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, monsterSdb, npcSdb, map);
+        haveItemSdb = Mockito.mock(HaveItemSdb.class);
+        npcManager = new NpcManagerImpl(eventSender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, monsterSdb, npcSdb, map, haveItemSdb);
     }
 
     @Test
@@ -101,7 +105,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
     @Test
     void respawnNpc() {
         Rectangle range = new Rectangle(Coordinate.xy(1, 1), Coordinate.xy(4, 4));
-        monsterSettings.add(new NpcSpawnSetting(range, 1, "一级牛"));
+        monsterSettings.add(new NpcSpawnSetting(range, 1, "牛"));
         when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
         npcManager.init();
         verify(eventSender, times(1)).notifyVisiblePlayers(any(ActiveEntity.class), any(NpcJoinedEvent.class));
@@ -118,7 +122,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         CreatureState<?> state = monster.state();
         npcManager.update(state.totalMillis());
         Npc recreatedNpc = npcManager.find(2L).get();
-        assertEquals("一级牛", recreatedNpc.idName());
+        assertEquals("牛", recreatedNpc.idName());
         verify(eventSender, times(2)).notifyVisiblePlayers(any(ActiveEntity.class), any(NpcJoinedEvent.class));
     }
 
@@ -167,5 +171,20 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         when(npcSdbRepository.npcSdbExists(49)).thenReturn(true);
         npcManager.init();
         assertFalse(npcManager.findMerchants().isEmpty());
+    }
+
+    @Test
+    void dropItem() {
+        when(haveItemSdb.containsMonster(anyString())).thenReturn(false);
+        when(monstersSdb.getHaveItem(anyString())).thenReturn("肉:4:1");
+        var monster = Mockito.mock(Monster.class);
+        when(monster.idName()).thenReturn("test");
+        when(monster.coordinate()).thenReturn(Coordinate.xy(1, 1));
+        npcManager.onEvent(new CreatureDieEvent(monster));
+        verify(itemManager, times(1)).dropItem("肉:4:1", Coordinate.xy(1, 1));
+        when(haveItemSdb.containsMonster(anyString())).thenReturn(true);
+        when(haveItemSdb.getHaveItem(anyString())).thenReturn(Optional.of("皮:2:1"));
+        npcManager.onEvent(new CreatureDieEvent(monster));
+        verify(itemManager, times(1)).dropItem("皮:2:1", Coordinate.xy(1, 1));
     }
 }

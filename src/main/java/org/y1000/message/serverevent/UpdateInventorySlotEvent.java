@@ -18,6 +18,10 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
         this.item = item;
     }
 
+    public UpdateInventorySlotEvent(Player source, int slot) {
+        this(source, slot, source.inventory().getItem(slot));
+    }
+
     @Override
     public void accept(PlayerEventVisitor playerEventHandler) {
         playerEventHandler.visit(this);

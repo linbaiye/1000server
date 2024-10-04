@@ -6,12 +6,14 @@ public interface CreateEntitySdbRepository {
 
     boolean monsterSdbExists(int realmId);
 
-    CreateNpcSdb loadNpc(int realmId);
+    CreateNonMonsterSdb loadNpc(int realmId);
 
     boolean npcSdbExists(int realmId);
 
     CreateDynamicObjectSdb loadObject(int realmId);
 
     boolean objectSdbExists(int realmId);
+
+    HaveItemSdb loadHaveItem(int realmId);
 
 }

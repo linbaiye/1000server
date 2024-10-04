@@ -6,8 +6,6 @@ import jakarta.persistence.EntityTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Entity;
@@ -15,9 +13,7 @@ import org.y1000.entities.objects.DynamicObjectDieEvent;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.AbstractPlayerEvent;
-import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.event.PlayerLearnKungFuEvent;
-import org.y1000.entities.players.event.PlayerUpdateGuildEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.event.EntityEvent;
 import org.y1000.guild.GuildMembership;
@@ -32,7 +28,6 @@ import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.clientevent.ClientCreateGuildKungFuEvent;
 import org.y1000.message.serverevent.UpdateGuildKungFuFormEvent;
-import org.y1000.network.gen.TextMessagePacket;
 import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.realm.event.BroadcastTextEvent;
 import org.y1000.realm.event.DismissGuildEvent;
@@ -92,7 +87,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
     @Test
     void foundGuildWhenCoordinateNotMovable() {
         when(realmMap.movable(any(Coordinate.class))).thenReturn(false);
-        int slot = inventory.add(itemFactory.createItem("门派石"));
+        int slot = inventory.put(itemFactory.createItem("门派石"));
         guildManager.foundGuild(player, Coordinate.xy(3, 3), "test", slot);
         String text = testingEventListener.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
         assertEquals("该位置不可放置门派石。", text);
@@ -107,7 +102,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
     void foundGuildWhenPlayerHasGuild() {
         player = playerBuilder().id(1L).inventory(inventory).guildMembership(new GuildMembership(1, "t", "w")).build();
         player.registerEventListener(testingEventListener);
-        int slot = inventory.add(itemFactory.createItem("门派石"));
+        int slot = inventory.put(itemFactory.createItem("门派石"));
         guildManager.foundGuild(player, Coordinate.xy(3, 3), "test", slot);
         String text = testingEventListener.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
         assertEquals("你已有门派。", text);
@@ -118,7 +113,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
         when(realmMap.movable(any(Coordinate.class))).thenReturn(true);
         when(realmMap.tileMovable(any(Coordinate.class))).thenReturn(true);
         when(guildRepository.countByName("test")).thenReturn(1);
-        int slot = inventory.add(itemFactory.createItem("门派石"));
+        int slot = inventory.put(itemFactory.createItem("门派石"));
         guildManager.foundGuild(player, Coordinate.xy(3, 3), "test", slot);
         String text = testingEventListener.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
         assertEquals("此门派名称已存在。", text);
@@ -133,7 +128,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
             ((GuildStone)invocationOnMock.getArgument(1)).setPersistentId(1);
             return null;
         }).when(guildRepository).save(any(EntityManager.class), any(GuildStone.class), anyLong());
-        int slot = inventory.add(itemFactory.createItem("门派石"));
+        int slot = inventory.put(itemFactory.createItem("门派石"));
         guildManager.foundGuild(player, Coordinate.xy(3, 3), "test", slot);
         Optional<GuildStone> guildStone = guildManager.find(1L);
         assertTrue(guildStone.isPresent());

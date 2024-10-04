@@ -33,8 +33,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
     private final KungFuBookFactory kungFuBookFactory;
     private final KungFuBookRepository kungFuRepository;
 
-    private static final int DEFAULT_REALM_ID = 49;
-    private static final Coordinate DEFAULT_COORDINATE = Coordinate.xy(106, 55);
+    private static final int DEFAULT_REALM_ID = 6;
+    private static final Coordinate DEFAULT_COORDINATE = Coordinate.xy(191, 238);
 
     private final EntityManagerFactory entityManagerFactory;
 
@@ -191,27 +191,27 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
 
     private Inventory loadInventory() {
         Inventory inventory = new Inventory();
-        inventory.add(itemFactory.createItem("箭", 10000));
-        inventory.add(itemFactory.createItem("太极斧"));
-        inventory.add(itemFactory.createItem("三叉戟"));
-        inventory.add(itemFactory.createItem("黄金手套"));
-        inventory.add(itemFactory.createItem("北海连环弓"));
-        inventory.add(itemFactory.createMoney( 10000));
-        inventory.add(itemFactory.createItem("金毛草", 10000));
-        inventory.add(itemFactory.createItem("大脉神弓"));
-        inventory.add(itemFactory.createItem("女子黄龙弓服"));
-        inventory.add(itemFactory.createItem("女子黄龙手套"));
-        inventory.add(itemFactory.createItem("女子黄龙鞋"));
-        inventory.add(itemFactory.createItem("血魔剑"));
-        inventory.add(itemFactory.createItem("血化戟"));
-        inventory.add(itemFactory.createItem("骨钥匙", 1000));
-        inventory.add(itemFactory.createItem("火石", 1000));
-        inventory.add(itemFactory.createItem("追魂索", 10000));
-        inventory.add(itemFactory.createItem("紫色染剂", 10));
-        inventory.add(itemFactory.createItem("女子束长发"));
-        inventory.add(itemFactory.createItem("红色染剂", 10));
-        inventory.add(itemFactory.createItem("脱色药", 10));
-        inventory.add(itemFactory.createItem("福袋", 10));
+        inventory.put(itemFactory.createItem("箭", 10000));
+        inventory.put(itemFactory.createItem("太极斧"));
+        inventory.put(itemFactory.createItem("三叉戟"));
+        inventory.put(itemFactory.createItem("黄金手套"));
+        inventory.put(itemFactory.createItem("北海连环弓"));
+        inventory.put(itemFactory.createMoney( 10000));
+        inventory.put(itemFactory.createItem("金毛草", 10000));
+        inventory.put(itemFactory.createItem("大脉神弓"));
+        inventory.put(itemFactory.createItem("女子黄龙弓服"));
+        inventory.put(itemFactory.createItem("女子黄龙手套"));
+        inventory.put(itemFactory.createItem("女子黄龙鞋"));
+        inventory.put(itemFactory.createItem("血魔剑"));
+        inventory.put(itemFactory.createItem("血化戟"));
+        inventory.put(itemFactory.createItem("骨钥匙", 1000));
+        inventory.put(itemFactory.createItem("火石", 1000));
+        inventory.put(itemFactory.createItem("追魂索", 10000));
+        inventory.put(itemFactory.createItem("紫色染剂", 10));
+        inventory.put(itemFactory.createItem("女子束长发"));
+        inventory.put(itemFactory.createItem("红色染剂", 10));
+        inventory.put(itemFactory.createItem("脱色药", 10));
+        inventory.put(itemFactory.createItem("福袋", 10));
         /*inventory.add(itemFactory.createItem("女子血魔道袍"));
         inventory.add(itemFactory.createItem("血化戟"));
         inventory.add(itemFactory.createItem("血皇斧"));*/

@@ -2,6 +2,7 @@ package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.PlayerEventVisitor;
+import org.y1000.message.serverevent.Visibility;
 import org.y1000.network.gen.NameColorPacket;
 import org.y1000.network.gen.Packet;
 

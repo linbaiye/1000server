@@ -7,12 +7,18 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.*;
+import org.y1000.entities.creatures.npc.AI.GuardWanderingAI;
+import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
+import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
+import org.y1000.entities.creatures.npc.AI.ViolentNpcWanderingAI;
 import org.y1000.entities.creatures.npc.spell.CloneSpell;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.creatures.npc.spell.NpcSpellType;
 import org.y1000.entities.creatures.npc.spell.ShiftSpell;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.kungfu.KungFuType;
+import org.y1000.quest.Quest;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
@@ -199,15 +205,18 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (animate == null) {
             throw new NotImplementedException(name + " has no action sdb.");
         }
-        //boolean passive = true;
         boolean passive = monsterSdb.isPassive(name);
         return passive ? createPassiveCreature(name, id, realmMap, coordinate, spells, ai) : createAggressiveCreature(name, id, realmMap, coordinate, spells, ai);
     }
 
 
-
     @Override
     public Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate) {
+        return createMerchant(name, id, realmMap, coordinate, null);
+    }
+
+    @Override
+    public Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate, String configName) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(realmMap);
         Objects.requireNonNull(coordinate);
@@ -215,9 +224,24 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (animate == null) {
             throw new NotImplementedException(name + " has no action sdb.");
         }
-        String npcText = npcSdb.getNpcText(name);
+        var npcText = configName == null ? npcSdb.getNpcText(name) : configName;
         MerchantItemSdb merchantItemSdb = merchantItemSdbRepository.load(npcText);
-        return DevirtueMerchant.builder()
+        boolean violent = npcSdb.isProtector(name);
+        Merchantable merchantable = new MerchantableImpl(merchantItemSdb.buy(), merchantItemSdb.sell());
+
+        return violent ? ViolentMerchant.builder()
+                .id(id)
+                .coordinate(coordinate)
+                .direction(Direction.DOWN)
+                .name(npcSdb.getViewName(name))
+                .realmMap(realmMap)
+                .stateMillis(createActionLengthMap(animate))
+                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                .ai(new ViolentNpcWanderingAI(coordinate))
+                .merchantable(merchantable)
+                .fileName(npcText)
+                .build() :
+                SubmissiveMerchant.builder()
                 .id(id)
                 .coordinate(coordinate)
                 .direction(Direction.DOWN)
@@ -226,9 +250,8 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .stateMillis(createDevirtueActionLengthMap(animate))
                 .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
                 .ai(new SubmissiveWanderingAI())
-                .textFileName(npcText)
-                .sell(merchantItemSdb.sell())
-                .buy(merchantItemSdb.buy())
+                .merchantable(merchantable)
+                .fileName(npcText)
                 .build();
     }
 
@@ -248,6 +271,33 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .build();
     }
 
+    private Quester createQuester(String name, long id, RealmMap realmMap, Coordinate coordinate) {
+        String animate = npcSdb.getAnimate(name);
+        QuestSdb questSdb = QuestSdb.forNpc(name);
+        List<String> names = questSdb.getNames();
+        boolean violent = npcSdb.isProtector(name);
+        return violent ? ViolentQuester.builder()
+                .id(id)
+                .coordinate(coordinate)
+                .direction(Direction.DOWN)
+                .name(npcSdb.getViewName(name))
+                .realmMap(realmMap)
+                .stateMillis(createActionLengthMap(animate))
+                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                .quest(Quest.parse(names.get(0), questSdb))
+                .build() :
+                SubmitssiveQuester.builder()
+                .id(id)
+                .coordinate(coordinate)
+                .direction(Direction.DOWN)
+                .name(npcSdb.getViewName(name))
+                .realmMap(realmMap)
+                .stateMillis(createActionLengthMap(animate))
+                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                .quest(Quest.parse(names.get(0), questSdb))
+                .build();
+    }
+
     private Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate) {
         if ("仓库管理员".equals(name)) {
             return Banker.builder()
@@ -261,14 +311,19 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .ai(new SubmissiveWanderingAI())
                     .build();
         }
-        if (npcSdb.isSeller(name) && !StringUtils.isEmpty(npcSdb.getNpcText(name))) {
+        // order matters.
+        if (npcSdb.isSeller(name) &&
+                !StringUtils.isEmpty(npcSdb.getNpcText(name))) {
             return createMerchant(name, id, realmMap, coordinate);
-        } else if (npcSdb.isProtector(name)){
+        } else if (npcSdb.isQuester(name)) {
+            return createQuester(name, id, realmMap, coordinate);
+        } else if (npcSdb.isProtector(name)) {
             return createGuardian(name, id, realmMap, coordinate);
         } else {
             return createSubmissiveNpc(name, id, realmMap, coordinate, Collections.emptyList());
         }
     }
+
 
     @Override
     public Npc createNpc(String name, long id, RealmMap realmMap, Coordinate coordinate) {

@@ -1,6 +1,7 @@
 package org.y1000.entities.players.inventory;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
@@ -19,7 +20,6 @@ import org.y1000.trade.TradeItem;
 import org.y1000.util.UnaryAction;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
@@ -150,6 +150,29 @@ public final class Inventory extends AbstractInventory {
                 .orElse(false);
     }
 
+    public boolean hasEnough(String name, int number) {
+        if (StringUtils.isEmpty(name) || number <= 0) {
+            return false;
+        }
+        int slot = findFirstSlot(name);
+        return slot != 0 && hasEnough(slot, number);
+    }
+
+    /**
+     * Consume item by name and number.
+     * @param name item name.
+     * @param number item number.
+     * @return the slot if consumed, 0 if not.
+     */
+    public int consume(String name, int number) {
+        if (!hasEnough(name, number)) {
+            return 0;
+        }
+        int firstSlot = findFirstSlot(name);
+        return remove(firstSlot, number) != null ? firstSlot : 0;
+    }
+
+
     public boolean canSell(Collection<TradeItem> items) {
         Validate.notNull(items);
         for (TradeItem sellingItem : items) {
@@ -219,7 +242,7 @@ public final class Inventory extends AbstractInventory {
             }
             player.emitEvent(new UpdateInventorySlotEvent(player, sellingItem.slotId(), getItem(sellingItem.slotId())));
         }
-        add(profit);
+        put(profit);
         int n = findFirstSlot(ItemType.MONEY_NAME);
         player.emitEvent(new UpdateInventorySlotEvent(player, n, getItem(n)));
     }

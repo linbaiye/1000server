@@ -102,20 +102,6 @@ public final class AccountManager {
     }
 
 
-    private <R> R doTransaction(Function<EntityManager, R> action) {
-        EntityTransaction transaction = null;
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-            var r = action.apply(entityManager);
-            transaction.commit();
-            return r;
-        } catch (Exception e) {
-            if (transaction != null)
-                transaction.rollback();
-            throw new RuntimeException(e);
-        }
-    }
 
         // http status code.
     public RegisterResponse register(String username, String passwd) {

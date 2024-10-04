@@ -314,7 +314,7 @@ MaxCount,        最多持有数量；
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
         for (String i: items) {
-            if (itemSdb.getInt(i, "Price") == null) {
+            if (itemSdb.getTypeValue(i) != ItemType.EQUIPMENT.value()) {
                 continue;
             }
             System.out.println("----------------------------");
@@ -326,7 +326,7 @@ MaxCount,        最多持有数量；
         }
     }
     public static void main(String[] args) {
-        //dump();
-        checkDuplicateNames();
+        dump();
+        //checkDuplicateNames();
     }
 }

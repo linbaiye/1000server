@@ -10,7 +10,6 @@ import org.y1000.entities.trade.PlayerTrade;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
-import org.y1000.message.AbstractPositionEvent;
 import org.y1000.message.InputResponseMessage;
 import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.PlayerTextEvent;
@@ -116,7 +115,7 @@ public final class TradeManagerImpl implements TradeManager {
 
 
     private void addToInventory(Player player, Item item) {
-        int slot = player.inventory().add(item);
+        int slot = player.inventory().put(item);
         if (slot != 0) {
             eventSender.notifySelf(new UpdateInventorySlotEvent(player, slot, player.inventory().getItem(slot)));
             return;

@@ -1,6 +1,5 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.event.EntityEvent;
 import org.y1000.message.AbstractServerMessage;

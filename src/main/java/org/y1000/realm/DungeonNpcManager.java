@@ -7,7 +7,9 @@ import org.y1000.entities.creatures.event.NpcShiftEvent;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.event.EntityEvent;
+import org.y1000.sdb.CreateNonMonsterSdb;
 import org.y1000.sdb.CreateNpcSdb;
+import org.y1000.sdb.HaveItemSdb;
 import org.y1000.sdb.MonstersSdb;
 
 @Slf4j
@@ -20,9 +22,10 @@ final class DungeonNpcManager extends AbstractNpcManager {
                              MonstersSdb monstersSdb,
                              AOIManager aoiManager,
                              CreateNpcSdb createMonsterSdb,
-                             CreateNpcSdb createNpcSdb,
-                             RealmMap realmMap) {
-        super(sender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, createMonsterSdb, createNpcSdb, realmMap);
+                             CreateNonMonsterSdb createNpcSdb,
+                             RealmMap realmMap,
+                             HaveItemSdb haveItemSdb) {
+        super(sender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, createMonsterSdb, createNpcSdb, realmMap, haveItemSdb);
     }
 
     @Override

@@ -92,6 +92,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         }
         int realmId = playerRealmMap.get(player);
         ClientEvent data = dataEvent.data();
+        data.setPlayerId(player.id());
         realmIdGroupMap.get(realmId).handle(new PlayerDataEvent(realmId, player, data));
     }
 
@@ -222,6 +223,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         playerRealmMap.put(teleportEvent.player(), realmId);
         playerNameRealmIdMap.put(teleportEvent.player().viewName(), realmId);
         RealmGroup group = realmIdGroupMap.get(realmId);
+        log.debug("Teleporting player {} to realm {} from realm {}.", teleportEvent.player(), realmId, teleportEvent.fromRealmId());
         group.handle(teleportEvent);
     }
 

@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.npc.NpcAI;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.NpcRangedSkill;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.realm.RealmMap;

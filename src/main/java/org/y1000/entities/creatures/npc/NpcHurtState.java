@@ -3,6 +3,7 @@ package org.y1000.entities.creatures.npc;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.AbstractCreatureHurtState;
 import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.creatures.ViolentCreature;
 
 @Slf4j
 public final class NpcHurtState extends AbstractCreatureHurtState<Npc> implements NpcState {
@@ -11,9 +12,9 @@ public final class NpcHurtState extends AbstractCreatureHurtState<Npc> implement
      */
     private final NpcState previousState;
 
-    private final Creature attacker;
+    private final ViolentCreature attacker;
 
-    public NpcHurtState(int totalMillis, NpcState previousState, Creature attacker) {
+    public NpcHurtState(int totalMillis, NpcState previousState, ViolentCreature attacker) {
         super(totalMillis);
         this.attacker = attacker;
         if (previousState instanceof NpcHurtState hurtState)
@@ -22,7 +23,7 @@ public final class NpcHurtState extends AbstractCreatureHurtState<Npc> implement
             this.previousState = previousState;
     }
 
-    public Creature attacker() {
+    public ViolentCreature attacker() {
         return attacker;
     }
 

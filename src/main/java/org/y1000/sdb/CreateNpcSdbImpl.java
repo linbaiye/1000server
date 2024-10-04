@@ -1,10 +1,12 @@
 package org.y1000.sdb;
 
 import org.apache.commons.lang3.StringUtils;
+import org.y1000.entities.creatures.NpcType;
 
+import java.util.Optional;
 import java.util.Set;
 
-public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb {
+public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements CreateNonMonsterSdb {
 
     public CreateNpcSdbImpl(int realmId) {
         super(makeFileName(realmId));
@@ -15,7 +17,7 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb {
     }
 
     @Override
-    protected String parseName(String id) {
+    protected String getIdName(String id) {
         return get(id, "NpcName");
     }
 
@@ -38,5 +40,38 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb {
     }
 
 
+    private String getValue(String npcName, String key) {
+        String id = idNameToId(npcName);
+        if (id == null)
+            return null;
+        return get(id, key);
+    }
+
+    @Override
+    public Optional<NpcType> getType(String idName) {
+        String type = getValue(idName, "Type");
+        return StringUtils.isEmpty(type) ? Optional.empty() : Optional.of(NpcType.valueOf(type));
+    }
+
+    @Override
+    public Optional<String> getConfig(String idName) {
+        String config = getValue(idName, "Config");
+        return StringUtils.isEmpty(config) ? Optional.empty() : Optional.of(config);
+    }
+
+    private String idNameToId(String npcName) {
+        for (String id: names()) {
+            String viewName = getIdName(id);
+            if (viewName.equals(npcName)) {
+                return id;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean containsNpc(String idName) {
+        return idNameToId(idName) != null;
+    }
 }
 

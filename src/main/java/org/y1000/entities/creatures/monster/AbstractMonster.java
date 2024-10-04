@@ -5,8 +5,9 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
 import org.y1000.entities.creatures.npc.AbstractViolentNpc;
-import org.y1000.entities.creatures.npc.NpcAI;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.NpcRangedSkill;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.message.AbstractCreatureInterpolation;
@@ -45,19 +46,14 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
         return attributeProvider().normalSound();
     }
 
-    @Override
-    public void update(int delta) {
-        doUpdate(delta);
-    }
-
-    @Override
-    public void respawn(Coordinate coordinate) {
-        doRevive(coordinate);
-        changeAndStartAI(initAi);
-    }
 
     @Override
     public void startIdleAI() {
         changeAndStartAI(new MonsterWanderingAI(spawnCoordinate()));
+    }
+
+    @Override
+    public int escapeLife() {
+        return attributeProvider().escapeLife();
     }
 }

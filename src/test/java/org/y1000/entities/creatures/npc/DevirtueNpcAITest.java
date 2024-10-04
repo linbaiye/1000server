@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
-import org.y1000.message.SetPositionEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -25,13 +25,15 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
 
     private SubmissiveWanderingAI ai;
 
-    private DevirtueMerchant merchant;
+    private SubmissiveMerchant merchant;
 
     private TestingMonsterAttributeProvider testingMonsterAttributeProvider;
 
     private RealmMap map;
 
     private TestingEventListener testingEventListener;
+
+    private Merchantable merchantable;
 
     @BeforeEach
     void setUp() {
@@ -40,7 +42,8 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
         ai = new SubmissiveWanderingAI(Coordinate.xy(1, 1), Coordinate.Empty);
         map = Mockito.mock(RealmMap.class);
         testingEventListener = new TestingEventListener();
-        merchant = DevirtueMerchant.builder()
+        merchantable = Mockito.mock(Merchantable.class);
+        merchant = SubmissiveMerchant.builder()
                 .id(nextId())
                 .realmMap(map)
                 .stateMillis(MONSTER_STATE_MILLIS)
@@ -50,9 +53,8 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
                 .direction(Direction.DOWN)
                 .stateMillis(MONSTER_STATE_MILLIS)
                 .coordinate(Coordinate.xy(3, 3))
-                .textFileName("items.text")
-                .sell(Collections.emptyList())
-                .buy(Collections.emptyList())
+                .merchantable(merchantable)
+                .fileName("test")
                 .build();
         merchant.registerEventListener(testingEventListener);
     }

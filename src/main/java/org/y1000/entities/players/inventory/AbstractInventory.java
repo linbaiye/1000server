@@ -5,7 +5,6 @@ import org.y1000.item.Item;
 import org.y1000.item.StackItem;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -43,7 +42,7 @@ public abstract class AbstractInventory {
         return capacity() - itemCount();
     }
 
-    public int add(Item item) {
+    public int put(Item item) {
         if (item == null) {
             return 0;
         }

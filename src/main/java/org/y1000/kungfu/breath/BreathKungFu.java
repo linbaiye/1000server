@@ -66,7 +66,7 @@ public final class BreathKungFu extends AbstractKungFu {
             return 0;
         }
         int max = playerMaxResource / (6 + (12000 - level()) * 14 / 12000);
-        return max * inParameter / 100;
+        return 5 * max * inParameter / 100 ;
     }
 
     public void update(Player player, int delta, UnaryAction<? super EntityEvent> eventSender) {
@@ -75,9 +75,9 @@ public final class BreathKungFu extends AbstractKungFu {
             return;
         }
         setTimer();
-        if (!canRegenerateResources(player)) {
+        /*if (!canRegenerateResources(player)) {
             return;
-        }
+        }*/
         eventSender.invoke(new EntitySoundEvent(player, computeSound(player.isMale())));
         player.gainLife(computeResource(player.maxLife(), parameters.life()));
         player.gainPower(computeResource(player.maxPower(), parameters.power()));

@@ -8,9 +8,9 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.npc.AggressiveNpc;
-import org.y1000.entities.creatures.npc.NpcAI;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.NpcRangedSkill;
-import org.y1000.entities.creatures.npc.ViolentNpcMeleeFightAI;
+import org.y1000.entities.creatures.npc.AI.ViolentNpcMeleeFightAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -32,11 +32,6 @@ public final class AggressiveMonster extends AbstractMonster implements Aggressi
     @Override
     protected Logger log() {
         return log;
-    }
-
-    @Override
-    public int viewWidth() {
-        return attributeProvider().viewWidth();
     }
 
     @Override

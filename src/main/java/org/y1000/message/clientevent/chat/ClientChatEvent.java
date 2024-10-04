@@ -1,18 +1,18 @@
 package org.y1000.message.clientevent.chat;
 
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.message.clientevent.ClientEvent;
+import org.y1000.message.serverevent.EntityChatEvent;
 
-public interface ClientChatEvent extends ClientEvent {
+public record ClientChatEvent(String content) implements ClientInputTextEvent {
 
-    boolean canSend(Player player);
+    public EntityChatEvent toPlayerEvent(Player source) {
+        Validate.notNull(source);
+        return new EntityChatEvent(source, source.viewName() + "：" + content);
+    }
 
-    static ClientEvent create(String content) {
-        if (ClientWhisperEvent.isFormatCorrect(content)) {
-            return ClientWhisperEvent.parse(content);
-        } else if (ClientWorldShoutEvent.isFormatCorrect(content)) {
-            return ClientWorldShoutEvent.parse(content);
-        }
-        return new ClientSayEvent(content);
+    @Override
+    public boolean canSend(Player player) {
+        return player != null;
     }
 }

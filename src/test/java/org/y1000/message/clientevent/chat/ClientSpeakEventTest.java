@@ -11,12 +11,12 @@ class ClientSpeakEventTest {
 
     @Test
     void canSend() {
-        assertTrue(new ClientSayEvent("te").canSend(Mockito.mock(Player.class)));
+        assertTrue(new ClientChatEvent("te").canSend(Mockito.mock(Player.class)));
     }
 
     @Test
     void toPlayerEvent() {
-        ClientSayEvent event = new ClientSayEvent("你好啊");
+        ClientChatEvent event = new ClientChatEvent("你好啊");
         Player player = Mockito.mock(Player.class);
         when(player.viewName()).thenReturn("测");
         String content = event.toPlayerEvent(player).toPacket().getChat().getContent();

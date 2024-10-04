@@ -6,6 +6,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.message.AbstractEntityInterpolation;
 import org.y1000.message.NpcInterpolation;
@@ -17,14 +18,11 @@ import java.util.Map;
 
 public abstract class AbstractSubmissiveNpc extends AbstractNpc {
 
-    protected final NpcAI ai;
-
     public AbstractSubmissiveNpc(long id, Coordinate coordinate, Direction direction, String name, Map<State, Integer> stateMillis,
                                  AttributeProvider attributeProvider, RealmMap realmMap,
                                  List<NpcSpell> spells, NpcAI ai) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, spells);
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, spells, ai);
         Validate.notNull(ai);
-        this.ai = ai;
     }
 
     abstract NpcType getType();
@@ -44,23 +42,13 @@ public abstract class AbstractSubmissiveNpc extends AbstractNpc {
         doHurtAction(attacker, getStateMillis(State.HURT));
     }
 
+
     @Override
-    public void onActionDone() {
-        handleActionDone(() -> ai.onActionDone(this));
+    public void changeToIdleAI() {
     }
 
     @Override
-    public void onMoveFailed() {
-        ai.onMoveFailed(this);
-    }
-
-    @Override
-    public void respawn(Coordinate coordinate) {
-        doRevive(coordinate);
-    }
-
-    @Override
-    public void start() {
-        ai.start(this);
+    public void startIdleAI() {
+        getAI().start(this);
     }
 }

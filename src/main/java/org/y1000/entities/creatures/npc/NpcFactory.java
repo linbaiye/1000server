@@ -5,8 +5,9 @@ import org.y1000.util.Coordinate;
 
 public interface NpcFactory {
 
-
     Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate);
+
+    Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate, String configName);
 
     Npc createNpc(String name, long id, RealmMap realmMap, Coordinate coordinate);
 

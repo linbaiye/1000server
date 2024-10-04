@@ -9,6 +9,7 @@ import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
+import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.message.AbstractEntityInterpolation;
 import org.y1000.message.NpcInterpolation;
 import org.y1000.realm.RealmMap;
@@ -19,14 +20,12 @@ import java.util.Map;
 
 @Slf4j
 public final class NineTailFoxHuman extends AbstractNpc {
-    private final SubmissiveWanderingAI ai;
 
     @Builder
     public NineTailFoxHuman(long id, Coordinate coordinate, Direction direction, String name,
                             Map<State, Integer> stateMillis, AttributeProvider attributeProvider,
                             RealmMap realmMap, SubmissiveWanderingAI ai) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, Collections.emptyList());
-        this.ai = ai;
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, Collections.emptyList(), ai);
     }
 
     @Override
@@ -50,29 +49,19 @@ public final class NineTailFoxHuman extends AbstractNpc {
         return log;
     }
 
-    @Override
-    public void onActionDone() {
-        handleActionDone(() -> ai.onActionDone(this));
-    }
 
     public void shift() {
         emitEvent(new NpcShiftEvent("九尾狐变身", this));
-        log.debug("Shift event sent.");
+    }
+
+
+    @Override
+    public void changeToIdleAI() {
     }
 
     @Override
-    public void onMoveFailed() {
-        ai.onMoveFailed(this);
+    public void startIdleAI() {
+        getAI().start(this);
     }
 
-    @Override
-    public void respawn(Coordinate coordinate) {
-        doRevive(coordinate);
-        ai.start(this);
-    }
-
-    @Override
-    public void start() {
-        ai.start(this);
-    }
 }

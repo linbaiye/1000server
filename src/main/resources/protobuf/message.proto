@@ -267,6 +267,11 @@ message ClientManageGuildPacket {
   string target = 2;
 }
 
+message ClientSubmitQuestPacket {
+  int64 id = 1;
+  string questName = 2;
+}
+
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
@@ -297,6 +302,7 @@ message ClientPacket {
     ClientFoundGuildPacket foundGuild = 26;
     ClientCreateGuildKungFuPacket createGuildKungFu = 27;
     ClientManageGuildPacket manageGuild = 28;
+    ClientSubmitQuestPacket submitQuest = 29;
   }
 }
 
@@ -534,6 +540,14 @@ message UpdateGuildKungFuFormPacket {
   string text = 2;
 }
 
+message UpdateQuestWindowPacket {
+  int64 id = 1;
+  string questName = 2;
+  string questDescription = 3;
+  string submitText = 4;
+  string npcName = 5;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -585,6 +599,7 @@ message Packet {
     NameColorPacket nameColor = 49;
     UpdateGuildPacket updateGuild = 50;
     UpdateGuildKungFuFormPacket kungFuForm = 51;
+    UpdateQuestWindowPacket questWindow = 52;
   }
 }
 

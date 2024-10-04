@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.AiPathUtil;
+import org.y1000.entities.creatures.npc.AI.AiPathUtil;
 import org.y1000.entities.creatures.State;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;

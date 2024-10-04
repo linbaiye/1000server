@@ -44,7 +44,7 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
         trader = Mockito.mock(Player.class);
         tradeManager = new TradeManagerImpl(eventSender);
         traderInventory = new Inventory();
-        traderInventory.add(itemFactory.createItem("长剑"));
+        traderInventory.put(itemFactory.createItem("长剑"));
         when(trader.inventory()).thenReturn(traderInventory);
         when(trader.coordinate()).thenReturn(Coordinate.xy(1, 1));
 
@@ -68,7 +68,7 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
     @Test
     void start() {
         Inventory inventory = new Inventory();
-        var slot = inventory.add(Mockito.mock(Item.class));
+        var slot = inventory.put(Mockito.mock(Item.class));
         when(tradee.tradeEnabled()).thenReturn(true);
         when(trader.inventory()).thenReturn(inventory);
         tradeManager.start(trader, tradee, slot);
@@ -82,7 +82,7 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
     @Test
     void startDoesNothingWhenSamePlayer() {
         Inventory inventory = new Inventory();
-        var slot = inventory.add(Mockito.mock(Item.class));
+        var slot = inventory.put(Mockito.mock(Item.class));
         when(tradee.tradeEnabled()).thenReturn(true);
         when(trader.inventory()).thenReturn(inventory);
         tradeManager.start(trader, trader, slot);
@@ -93,7 +93,7 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
     @Test
     void startWhenTradeDisabled() {
         Inventory inventory = new Inventory();
-        var slot = inventory.add(Mockito.mock(Item.class));
+        var slot = inventory.put(Mockito.mock(Item.class));
         when(tradee.tradeEnabled()).thenReturn(false);
         when(trader.inventory()).thenReturn(inventory);
         tradeManager.start(trader, tradee, slot);
@@ -106,12 +106,12 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
     @Test
     void startWhenTrading() {
         Inventory inventory = new Inventory();
-        var slot = inventory.add(Mockito.mock(Item.class));
+        var slot = inventory.put(Mockito.mock(Item.class));
         when(tradee.tradeEnabled()).thenReturn(true);
         when(trader.inventory()).thenReturn(inventory);
         var tradingTrader = Mockito.mock(Player.class);
         inventory = new Inventory();
-        slot = inventory.add(Mockito.mock(Item.class));
+        slot = inventory.put(Mockito.mock(Item.class));
         when(tradingTrader.inventory()).thenReturn(inventory);
         when(tradingTrader.coordinate()).thenReturn(Coordinate.xy(2, 3));
         tradeManager.start(tradingTrader,tradee, slot);
@@ -175,7 +175,7 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
         when(trader.tradeEnabled()).thenReturn(true);
         tradeManager.start(trader, tradee, 1);
         tradeManager.addTradeItem(trader, 1, 1);
-        var tradeeSlot = tradeeInventory.add(itemFactory.createItem("生药", 3));
+        var tradeeSlot = tradeeInventory.put(itemFactory.createItem("生药", 3));
         tradeManager.addTradeItem(tradee, tradeeSlot, 1);
         assertEquals(2, ((StackItem)tradeeInventory.getItem(tradeeSlot)).number());
         assertNull(traderInventory.getItem(1));
@@ -190,13 +190,13 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
         when(trader.tradeEnabled()).thenReturn(true);
         int slots = traderInventory.availableSlots();
         for (int i = 0; i < slots; i++) {
-            traderInventory.add(itemFactory.createItem("长刀"));
+            traderInventory.put(itemFactory.createItem("长刀"));
         }
         tradeManager.start(trader, tradee, 1);
         tradeManager.addTradeItem(trader, 1, 1);
-        var tradeeSlot = tradeeInventory.add(itemFactory.createItem("生药", 3));
+        var tradeeSlot = tradeeInventory.put(itemFactory.createItem("生药", 3));
         tradeManager.addTradeItem(tradee, tradeeSlot, 1);
-        tradeeSlot = tradeeInventory.add(itemFactory.createItem("丸药", 2));
+        tradeeSlot = tradeeInventory.put(itemFactory.createItem("丸药", 2));
         tradeManager.addTradeItem(tradee, tradeeSlot, 1);
         traderEventListener.clearEvents();
         tradeeEventListener.clearEvents();
@@ -237,7 +237,7 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
         when(trader.tradeEnabled()).thenReturn(true);
         tradeManager.start(trader, tradee, 1);
         tradeManager.addTradeItem(trader, 1, 1);
-        tradeeInventory.add(itemFactory.createItem("生药", 3));
+        tradeeInventory.put(itemFactory.createItem("生药", 3));
         tradeManager.addTradeItem(tradee, 1, 1);
         traderEventListener.clearEvents();
         tradeeEventListener.clearEvents();

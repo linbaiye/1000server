@@ -9,7 +9,7 @@ import static org.y1000.sdb.MonstersSdbImpl.ERROR_ANIMATES;
 public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
     public static final NpcSdbImpl Instance = new NpcSdbImpl();
     private NpcSdbImpl() {
-        read("Npc.sdb");
+        read("Npc.sdb", "utf8");
     }
 
     @Override
@@ -134,6 +134,11 @@ public final class NpcSdbImpl extends AbstractSdbReader implements NpcSdb {
     @Override
     public int getViewWidth(String name) {
         return getInt(name, "ViewWidth");
+    }
+
+    @Override
+    public boolean isQuester(String name) {
+        return "TRUE".equals(get(name, "boQuester"));
     }
 
     public static void main(String[] args) {

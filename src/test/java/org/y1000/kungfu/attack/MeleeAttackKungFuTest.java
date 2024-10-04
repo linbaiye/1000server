@@ -295,4 +295,15 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         assertEquals(138, blade.armDamage());
         assertEquals(138, blade.headDamage());
     }
+
+    @Test
+    void name() {
+        var kungFuFactory = createKungFuFactory();
+        var kf = kungFuFactory.createAttackKungFu("无击阵");
+        while (kf.level() < 8000) {
+            kf.gainPermittedExp(1000);
+        }
+        System.out.println(kf.exp());
+        System.out.println(kf.damage());
+    }
 }

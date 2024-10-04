@@ -428,5 +428,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientManageGuildPacketOrBuilder getManageGuildOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+   * @return Whether the submitQuest field is set.
+   */
+  boolean hasSubmitQuest();
+  /**
+   * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+   * @return The submitQuest.
+   */
+  org.y1000.network.gen.ClientSubmitQuestPacket getSubmitQuest();
+  /**
+   * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+   */
+  org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder getSubmitQuestOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

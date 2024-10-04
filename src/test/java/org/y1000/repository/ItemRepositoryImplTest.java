@@ -3,17 +3,13 @@ package org.y1000.repository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.*;
-import org.y1000.kungfu.KungFuFactory;
 import org.y1000.persistence.ItemPo;
-import org.y1000.sdb.ItemDrugSdbImpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,11 +41,11 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
     void findInventory() {
         PlayerImpl player = playerBuilder().id(11).build();
         Inventory inventory = player.inventory();
-        int slot1 = inventory.add(itemFactory.createItem("丸药", 2));
+        int slot1 = inventory.put(itemFactory.createItem("丸药", 2));
         DecorativeEquipment equipment = (DecorativeEquipment) itemFactory.createItem("女子长发", 1);
         StackItem dye = (StackItem) itemFactory.createItem("天蓝染剂", 1);
         equipment.dye(dye.color());
-        int slot2 = inventory.add(equipment);
+        int slot2 = inventory.put(equipment);
         EntityManager entityManager = jpaFixture.beginTx();
         itemRepository.save(entityManager, player);
         jpaFixture.submitTx();
@@ -65,9 +61,9 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
     void save() {
         PlayerImpl player = playerBuilder().id(11).build();
         Inventory inventory = player.inventory();
-        inventory.add(itemFactory.createItem("生药", 1));
-        int slot1 = inventory.add(itemFactory.createItem("丸药", 2));
-        int slot2 = inventory.add(itemFactory.createItem("长剑", 1));
+        inventory.put(itemFactory.createItem("生药", 1));
+        int slot1 = inventory.put(itemFactory.createItem("丸药", 2));
+        int slot2 = inventory.put(itemFactory.createItem("长剑", 1));
         EntityManager entityManager = jpaFixture.beginTx();
         itemRepository.save(entityManager, player);
         jpaFixture.submitTx();

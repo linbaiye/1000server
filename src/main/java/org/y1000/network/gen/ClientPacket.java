@@ -73,6 +73,7 @@ private static final long serialVersionUID = 0L;
     FOUNDGUILD(26),
     CREATEGUILDKUNGFU(27),
     MANAGEGUILD(28),
+    SUBMITQUEST(29),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -118,6 +119,7 @@ private static final long serialVersionUID = 0L;
         case 26: return FOUNDGUILD;
         case 27: return CREATEGUILDKUNGFU;
         case 28: return MANAGEGUILD;
+        case 29: return SUBMITQUEST;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -1001,6 +1003,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
   }
 
+  public static final int SUBMITQUEST_FIELD_NUMBER = 29;
+  /**
+   * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+   * @return Whether the submitQuest field is set.
+   */
+  @java.lang.Override
+  public boolean hasSubmitQuest() {
+    return typeCase_ == 29;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+   * @return The submitQuest.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientSubmitQuestPacket getSubmitQuest() {
+    if (typeCase_ == 29) {
+       return (org.y1000.network.gen.ClientSubmitQuestPacket) type_;
+    }
+    return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder getSubmitQuestOrBuilder() {
+    if (typeCase_ == 29) {
+       return (org.y1000.network.gen.ClientSubmitQuestPacket) type_;
+    }
+    return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1098,6 +1131,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 28) {
       output.writeMessage(28, (org.y1000.network.gen.ClientManageGuildPacket) type_);
+    }
+    if (typeCase_ == 29) {
+      output.writeMessage(29, (org.y1000.network.gen.ClientSubmitQuestPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1219,6 +1255,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 28) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(28, (org.y1000.network.gen.ClientManageGuildPacket) type_);
+    }
+    if (typeCase_ == 29) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(29, (org.y1000.network.gen.ClientSubmitQuestPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1349,6 +1389,10 @@ private static final long serialVersionUID = 0L;
         if (!getManageGuild()
             .equals(other.getManageGuild())) return false;
         break;
+      case 29:
+        if (!getSubmitQuest()
+            .equals(other.getSubmitQuest())) return false;
+        break;
       case 0:
       default:
     }
@@ -1475,6 +1519,10 @@ private static final long serialVersionUID = 0L;
       case 28:
         hash = (37 * hash) + MANAGEGUILD_FIELD_NUMBER;
         hash = (53 * hash) + getManageGuild().hashCode();
+        break;
+      case 29:
+        hash = (37 * hash) + SUBMITQUEST_FIELD_NUMBER;
+        hash = (53 * hash) + getSubmitQuest().hashCode();
         break;
       case 0:
       default:
@@ -1694,6 +1742,9 @@ private static final long serialVersionUID = 0L;
       if (manageGuildBuilder_ != null) {
         manageGuildBuilder_.clear();
       }
+      if (submitQuestBuilder_ != null) {
+        submitQuestBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1846,6 +1897,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 28 &&
           manageGuildBuilder_ != null) {
         result.type_ = manageGuildBuilder_.build();
+      }
+      if (typeCase_ == 29 &&
+          submitQuestBuilder_ != null) {
+        result.type_ = submitQuestBuilder_.build();
       }
     }
 
@@ -2004,6 +2059,10 @@ private static final long serialVersionUID = 0L;
         }
         case MANAGEGUILD: {
           mergeManageGuild(other.getManageGuild());
+          break;
+        }
+        case SUBMITQUEST: {
+          mergeSubmitQuest(other.getSubmitQuest());
           break;
         }
         case TYPE_NOT_SET: {
@@ -2232,6 +2291,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 28;
               break;
             } // case 226
+            case 234: {
+              input.readMessage(
+                  getSubmitQuestFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 29;
+              break;
+            } // case 234
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -6238,6 +6304,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 28;
       onChanged();
       return manageGuildBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientSubmitQuestPacket, org.y1000.network.gen.ClientSubmitQuestPacket.Builder, org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder> submitQuestBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+     * @return Whether the submitQuest field is set.
+     */
+    @java.lang.Override
+    public boolean hasSubmitQuest() {
+      return typeCase_ == 29;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+     * @return The submitQuest.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientSubmitQuestPacket getSubmitQuest() {
+      if (submitQuestBuilder_ == null) {
+        if (typeCase_ == 29) {
+          return (org.y1000.network.gen.ClientSubmitQuestPacket) type_;
+        }
+        return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 29) {
+          return submitQuestBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+     */
+    public Builder setSubmitQuest(org.y1000.network.gen.ClientSubmitQuestPacket value) {
+      if (submitQuestBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        submitQuestBuilder_.setMessage(value);
+      }
+      typeCase_ = 29;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+     */
+    public Builder setSubmitQuest(
+        org.y1000.network.gen.ClientSubmitQuestPacket.Builder builderForValue) {
+      if (submitQuestBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        submitQuestBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 29;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+     */
+    public Builder mergeSubmitQuest(org.y1000.network.gen.ClientSubmitQuestPacket value) {
+      if (submitQuestBuilder_ == null) {
+        if (typeCase_ == 29 &&
+            type_ != org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientSubmitQuestPacket.newBuilder((org.y1000.network.gen.ClientSubmitQuestPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 29) {
+          submitQuestBuilder_.mergeFrom(value);
+        } else {
+          submitQuestBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 29;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+     */
+    public Builder clearSubmitQuest() {
+      if (submitQuestBuilder_ == null) {
+        if (typeCase_ == 29) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 29) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        submitQuestBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+     */
+    public org.y1000.network.gen.ClientSubmitQuestPacket.Builder getSubmitQuestBuilder() {
+      return getSubmitQuestFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder getSubmitQuestOrBuilder() {
+      if ((typeCase_ == 29) && (submitQuestBuilder_ != null)) {
+        return submitQuestBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 29) {
+          return (org.y1000.network.gen.ClientSubmitQuestPacket) type_;
+        }
+        return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClientSubmitQuestPacket, org.y1000.network.gen.ClientSubmitQuestPacket.Builder, org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder> 
+        getSubmitQuestFieldBuilder() {
+      if (submitQuestBuilder_ == null) {
+        if (!(typeCase_ == 29)) {
+          type_ = org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
+        }
+        submitQuestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClientSubmitQuestPacket, org.y1000.network.gen.ClientSubmitQuestPacket.Builder, org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder>(
+                (org.y1000.network.gen.ClientSubmitQuestPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 29;
+      onChanged();
+      return submitQuestBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

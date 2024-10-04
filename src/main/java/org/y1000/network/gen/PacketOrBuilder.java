@@ -728,5 +728,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.UpdateGuildKungFuFormPacketOrBuilder getKungFuFormOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+   * @return Whether the questWindow field is set.
+   */
+  boolean hasQuestWindow();
+  /**
+   * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+   * @return The questWindow.
+   */
+  org.y1000.network.gen.UpdateQuestWindowPacket getQuestWindow();
+  /**
+   * <code>.org.y1000.network.gen.UpdateQuestWindowPacket questWindow = 52;</code>
+   */
+  org.y1000.network.gen.UpdateQuestWindowPacketOrBuilder getQuestWindowOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }
