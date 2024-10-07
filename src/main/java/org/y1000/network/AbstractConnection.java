@@ -10,6 +10,7 @@ import org.y1000.message.clientevent.*;
 import org.y1000.network.event.ConnectionClosedEvent;
 import org.y1000.network.event.ConnectionDataEvent;
 import org.y1000.network.gen.ClientPacket;
+import org.y1000.network.gen.ClientSimpleCommandPacket;
 import org.y1000.realm.RealmManager;
 import org.y1000.util.Coordinate;
 
@@ -29,6 +30,16 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         this.realmManager = realmManager;
         this.serverContext = serverContext;
         context = new AtomicReference<>();
+    }
+
+    private ClientEvent parseSimpleCommand(ClientSimpleCommandPacket packet) {
+        if (packet.getCommand() == SimpleCommand.CANCEL_BUFF.value()) {
+            return new CancelBuffEvent();
+        } else if (packet.getCommand() == SimpleCommand.PONG.value()) {
+            log.info("Received ping from.");
+            return null;
+        }
+        return ClientSimpleCommandEvent.parse(packet.getCommand());
     }
 
     private ClientEvent createMessage(ClientPacket clientPacket) {
@@ -54,7 +65,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case TRIGGERDYNAMICOBJECT -> new ClientTriggerDynamicObjectEvent(clientPacket.getTriggerDynamicObject().getId(), clientPacket.getTriggerDynamicObject().getUseSlot());
             case SWAPKUNGFUSLOT -> new ClientSwapKungFuSlotEvent(clientPacket.getSwapKungFuSlot().getPage(), clientPacket.getSwapKungFuSlot().getSlot1(), clientPacket.getSwapKungFuSlot().getSlot2());
             case DRAGPLAYER -> new ClientDragPlayerEvent(clientPacket.getDragPlayer().getTargetId(), clientPacket.getDragPlayer().getRopeSlot());
-            case SIMPLECOMMAND -> ClientSimpleCommandEvent.parse(clientPacket.getSimpleCommand().getCommand());
+            case SIMPLECOMMAND -> parseSimpleCommand(clientPacket.getSimpleCommand());
             case DYE -> new ClientDyeEvent(clientPacket.getDye().getDyedSlotId(), clientPacket.getDye().getDyeSlotId());
             case SAY -> ClientInputTextEvent.create(clientPacket.getSay().getText());
             case BANKOPERATION -> ClientOperateBankEvent.fromPacket(clientPacket.getBankOperation());

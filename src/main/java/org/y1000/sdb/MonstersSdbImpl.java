@@ -7,7 +7,7 @@ import org.y1000.kungfu.KungFuType;
 
 import java.util.Set;
 
-public final class MonstersSdbImpl extends AbstractSdbReader implements MonstersSdb {
+public final class MonstersSdbImpl extends AbstractCSVSdbReader implements MonstersSdb {
 
     public static final MonstersSdbImpl INSTANCE = new MonstersSdbImpl();
 
@@ -180,7 +180,7 @@ public final class MonstersSdbImpl extends AbstractSdbReader implements Monsters
 
     public static Set<Integer> ERROR_ANIMATES = Set.of(1);
 
-    private static Set<String> NAMES = Set.of("老虎", "熊", "犀牛", "幼虎");
+    private static Set<String> NAMES = Set.of("白老虎", "犀牛王", "犀牛王后", "石巨人", "土巨人", "蝎子");
     private static Set<String> ATTRS = Set.of("Damage", "Life", "Armor");
 
     private static void dump( ) {

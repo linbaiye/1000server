@@ -25,7 +25,7 @@ public abstract class AbstractSubmissiveNpc extends AbstractNpc {
         Validate.notNull(ai);
     }
 
-    abstract NpcType getType();
+    protected abstract NpcType getType();
 
     @Override
     public AbstractEntityInterpolation captureInterpolation() {

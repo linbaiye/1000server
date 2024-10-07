@@ -2,7 +2,7 @@ package org.y1000.sdb;
 
 import java.util.Optional;
 
-public class HaveItemSdbImpl extends AbstractSdbReader implements HaveItemSdb {
+public class HaveItemSdbImpl extends AbstractCSVSdbReader implements HaveItemSdb {
 
     public HaveItemSdbImpl(int realmId) {
         read(AbstractCreateEntitySdb.SETTING_PATH +  "/" + makeFileName(realmId), "utf8");

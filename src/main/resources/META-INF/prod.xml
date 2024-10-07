@@ -1,0 +1,27 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="org.y1000">
+
+        <jar-file>file:./org/y1000/persistence</jar-file>
+        <jar-file>file:./org/y1000/account</jar-file>
+
+        <properties>
+            <!-- Database connection settings -->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/y1000" />
+            <property name="jakarta.persistence.jdbc.user" value="qn" />
+            <property name="jakarta.persistence.jdbc.password" value="43b305bd3d55f8faec5e5175cbe35533" />
+
+            <!-- Echo all executed SQL to console -->
+            <property name="hibernate.physical_naming_strategy" value="org.y1000.persistence.NamingStrategy" />
+
+            <property name="hibernate.hikari.minimumIdle" value="5" />
+            <property name="hibernate.hikari.maximumPoolSize" value="10" />
+            <property name="hibernate.hikari.idleTimeout" value="30000" />
+            <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+        </properties>
+    </persistence-unit>
+</persistence>

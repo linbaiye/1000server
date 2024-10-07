@@ -59,6 +59,12 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
         return StringUtils.isEmpty(config) ? Optional.empty() : Optional.of(config);
     }
 
+    @Override
+    public Optional<String> getDialog(String idName) {
+        String config = getValue(idName, "Dialog");
+        return StringUtils.isEmpty(config) ? Optional.empty() : Optional.of(config);
+    }
+
     private String idNameToId(String npcName) {
         for (String id: names()) {
             String viewName = getIdName(id);
@@ -67,11 +73,6 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean containsNpc(String idName) {
-        return idNameToId(idName) != null;
     }
 }
 

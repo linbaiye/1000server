@@ -829,4 +829,55 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals("sword", inventory.getItem(1).name());
     }
 
+    @Test
+    void learnAssistantKungFu() {
+        int slot = player.inventory().put(itemFactory.createItem("灵动八方"));
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        String text = eventListener.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
+        assertTrue(text.contains("风灵旋"));
+        assertFalse(player.kungFuBook().findBasic("灵动八方").isPresent());
+    }
+
+    @Test
+    void haveBuffPill() {
+        int slot = player.inventory().put(new StackItem(new BuffPill("test", "test", "ue","test", 21, 10000, 0), 2));
+        var currentDamage = player.damage();
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        String text = eventListener.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
+        assertTrue(text.contains("服用了test"));
+        assertEquals(currentDamage.add(new Damage(21, 0,0,0)), player.damage());
+        assertEquals("ue", eventListener.removeFirst(EntitySoundEvent.class).toPacket().getSound().getSound());
+        assertNotNull(eventListener.removeFirst(UpdateInventorySlotEvent.class));
+        assertNotNull(eventListener.removeFirst(UpdateBuffEvent.class));
+        eventListener.clearEvents();
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        assertEquals(TextMessage.TextType.NO_MORE_PILL.value(), eventListener.removeFirst(PlayerTextEvent.class).toPacket().getText().getType());
+        player.update(10000);
+        assertEquals(currentDamage, player.damage());
+        assertNotNull(eventListener.removeFirst(UpdateBuffEvent.class));
+    }
+
+    @Test
+    void cancelBuff() {
+        player.cancelBuff();
+        assertNull(eventListener.removeFirst(UpdateBuffEvent.class));
+        var dmgBefore = player.damage();
+        int slot = player.inventory().put(new StackItem(new BuffPill("test", "test", "ue","test", 21, 10000, 0), 2));
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        eventListener.clearEvents();
+        player.cancelBuff();
+        assertEquals(dmgBefore, player.damage());
+        assertEquals(2, eventListener.removeFirst(UpdateBuffEvent.class).toPacket().getUpdateBuff().getType());
+    }
+
+    @Test
+    void updateBuff() {
+        int slot = player.inventory().put(new StackItem(new BuffPill("test", "test", "ue","test", 21, 10000, 0), 2));
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
+        eventListener.clearEvents();
+        player.update(10000);
+        assertEquals(2, eventListener.removeFirst(UpdateBuffEvent.class).toPacket().getUpdateBuff().getType());
+        player.update(10000);
+        assertNull(eventListener.removeFirst(UpdateBuffEvent.class));
+    }
 }

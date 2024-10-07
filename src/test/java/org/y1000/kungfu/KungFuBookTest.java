@@ -72,4 +72,12 @@ class KungFuBookTest extends AbstractUnitTestFixture {
         assertEquals("风灵旋", book.getKungFu(2, 1).map(KungFu::name).orElse(null));
         assertEquals("雷剑式", book.getKungFu(2, 2).map(KungFu::name).orElse(null));
     }
+
+    @Test
+    void findBasicKungFu() {
+        assertFalse(book.findBasic("风灵旋").isPresent());
+        book.addToBasic(kungFuFactory.create("风灵旋"));
+        assertTrue(book.findBasic("风灵旋").isPresent());
+        assertFalse(book.findBasic("无名拳法").isPresent());
+    }
 }

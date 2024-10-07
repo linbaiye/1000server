@@ -6,7 +6,7 @@ import org.y1000.entities.creatures.State;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class ActionSdb extends AbstractSdbReader {
+public final class ActionSdb extends AbstractCSVSdbReader {
     public static final ActionSdb INSTANCE = new ActionSdb();
     private ActionSdb() {
         read("Action.sdb");

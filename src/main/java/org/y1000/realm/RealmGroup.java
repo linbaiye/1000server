@@ -120,9 +120,9 @@ public final class RealmGroup implements Runnable {
 
     private void handleRealmEvent(RealmEvent realmEvent){
         if (realmEvent instanceof PlayerRealmEvent playerRealmEvent) {
-            find(playerRealmEvent.realmId()).ifPresent(realm -> realm.handle(playerRealmEvent));
+            find(playerRealmEvent.toRealmId()).ifPresent(realm -> realm.handle(playerRealmEvent));
         } else if (realmEvent instanceof RealmTriggerEvent letterEvent) {
-            find(letterEvent.realmId()).ifPresent(realm -> realm.handle(letterEvent));
+            find(letterEvent.toRealmId()).ifPresent(realm -> realm.handle(letterEvent));
         } else {
             Arrays.stream(realms).forEach(realm -> realm.handle(realmEvent));
         }

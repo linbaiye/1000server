@@ -48,8 +48,10 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
                        Map<State, Integer> stateMillis,
                        AttributeProvider attributeProvider,
                        RealmMap realmMap,
-                       List<NpcSpell> spells, NpcAI ai) {
+                       List<NpcSpell> spells,
+                       NpcAI ai) {
         super(id, coordinate, direction, name, stateMillis);
+        Validate.notNull(ai);
         this.attributeProvider = attributeProvider;
         this.realmMap = realmMap;
         this.spells = spells == null ? Collections.emptyList() : spells;
@@ -165,6 +167,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         changeState(NpcCommonState.die(getStateMillis(State.DIE) + (findShiftSpell().isPresent() ? 2000 : 8000)));
         emitEvent(new CreatureDieEvent(this));
         dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+        ai.onDead(this);
     }
 
 

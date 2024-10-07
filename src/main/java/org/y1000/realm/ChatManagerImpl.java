@@ -54,7 +54,7 @@ final class ChatManagerImpl implements ChatManager {
     private void handlePrivateChat(Player player, PlayerWhisperEvent chatEvent) {
         player.emitEvent(chatEvent.toTextEvent(player));
         if (chatEvent.needConfirm())
-            handleCrossRealmChat(chatEvent.createConfirmation());
+            crossRealmEventSender.send(chatEvent.createConfirmation());
     }
 
     @Override

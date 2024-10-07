@@ -10,6 +10,7 @@ import org.y1000.util.UnaryAction;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -31,14 +32,19 @@ public abstract class AbstractTeleport implements Teleport {
 
     private final int realmId;
 
+    private final List<TeleportCost> costs;
+
+
     public AbstractTeleport(long id,
                             String idName,
                             CreateGateSdb createGateSdb,
                             UnaryAction<PlayerRealmEvent> teleportEventHandler,
-                            int realmId) {
+                            int realmId,
+                            List<TeleportCost> costs) {
         Validate.notNull(idName);
         Validate.notNull(teleportEventHandler);
         Validate.notNull(createGateSdb);
+        this.costs = costs != null ? costs : Collections.emptyList();
         this.id = id;
         this.coordinate = parseCoordinate(idName, createGateSdb);
         this.toCoordinate = Coordinate.xy(createGateSdb.getTX(idName), createGateSdb.getTY(idName));
@@ -70,7 +76,7 @@ public abstract class AbstractTeleport implements Teleport {
         if (player == null) {
             return;
         }
-        teleportEventHandler.invoke(new RealmTeleportEvent(player, toRealm, toCoordinate, realmId, rejectCoordinate));
+        teleportEventHandler.invoke(new RealmTeleportEvent(player, toRealm, toCoordinate, realmId, rejectCoordinate, costs));
     }
 
     private static Set<Coordinate> parse(String name, Coordinate coordinate, CreateGateSdb gateSdb) {

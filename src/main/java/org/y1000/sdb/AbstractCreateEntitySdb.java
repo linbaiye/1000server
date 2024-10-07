@@ -6,7 +6,7 @@ import org.y1000.util.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractCreateEntitySdb extends AbstractSdbReader implements CreateNpcSdb {
+public abstract class AbstractCreateEntitySdb extends AbstractCSVSdbReader implements CreateNpcSdb {
 
     private final List<NpcSpawnSetting> settings;
 

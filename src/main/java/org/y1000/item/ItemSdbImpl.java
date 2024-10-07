@@ -3,12 +3,12 @@ package org.y1000.item;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.sdb.AbstractSdbReader;
+import org.y1000.sdb.AbstractCSVSdbReader;
 
 import java.util.*;
 
 @Slf4j
-public final class ItemSdbImpl extends AbstractSdbReader implements ItemSdb {
+public final class ItemSdbImpl extends AbstractCSVSdbReader implements ItemSdb {
 
     // "Name,ViewName,Kind,Desc,Grade,QuestNum,NeedItem,NotHaveItem,DelItem,AddItem,boDouble,boColoring,Shape,WearPos,WearShape,ActionImage,HitMotion,HitType,Color,Sex,Weight,NeedGrade,Price,BuyPrice,RepairPrice,ServerId,X,Y,SoundEvent,SoundDrop,boPower,AttackSpeed,Recovery,LongAvoid,Avoid,LongAccuracy,Accuracy,KeepRecovery,DamageBody,DamageHead,DamageArm,DamageLeg,ArmorBody,ArmorHead,ArmorArm,ArmorLeg,RandomCount,NameParam1,NameParam2,Material,JobKind,boUpgrade,MaxUpgrade,boTalentExp,boDurability,Durability,DecDelay,DecSize,Abrasion,ToolConst,SuccessRate,boNotTrade,boNotExchange,boNotDrop,boNotSkill,boNotSSamzie,cLife,Attribute,SpecialKind,RoleType,Script,MaxCount,BoNotSave,ExtJobExp"
     /*
@@ -279,6 +279,11 @@ MaxCount,        最多持有数量；
     @Override
     public boolean isColoring(String name) {
         return "TRUE".equals(get(name, "boColoring"));
+    }
+
+    @Override
+    public int getShape(String name) {
+        return getInt(name, "Shape");
     }
 
     public static final ItemSdbImpl INSTANCE = read();

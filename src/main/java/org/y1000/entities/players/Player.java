@@ -171,5 +171,7 @@ public interface Player extends ViolentCreature {
     void joinGuild(GuildMembership membership);
 
     void quitGuild();
+
+    void cancelBuff();
 }
 

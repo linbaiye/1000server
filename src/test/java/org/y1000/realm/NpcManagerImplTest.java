@@ -45,7 +45,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
 
     private GroundItemManager itemManager;
 
-    private CreateEntitySdbRepository npcSdbRepository;
+    private RealmSpecificSdbRepository npcSdbRepository;
 
     private List<NpcSpawnSetting> monsterSettings;
 
@@ -64,10 +64,10 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
 
     @BeforeEach
     void setUp() {
-        NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
+        NpcFactory npcFactory = createNpcFactory();
         eventSender = Mockito.mock(EntityEventSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
-        npcSdbRepository = Mockito.mock(CreateEntitySdbRepository.class);
+        npcSdbRepository = Mockito.mock(RealmSpecificSdbRepository.class);
         monsterSettings = new ArrayList<>();
         CreateNpcSdb monsterSdb = Mockito.mock(CreateNpcSdb.class);
         when(monsterSdb.getAllSettings()).thenReturn(monsterSettings);
@@ -76,8 +76,8 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         CreateNonMonsterSdb npcSdb = Mockito.mock(CreateNonMonsterSdb.class);
         when(npcSdb.getAllSettings()).thenReturn(npcSettings);
         when(npcSdb.getSettings(anyString())).thenReturn(npcSettings);
-        when(npcSdbRepository.loadMonster(anyInt())).thenReturn(monsterSdb);
-        when(npcSdbRepository.loadNpc(anyInt())).thenReturn(npcSdb);
+        when(npcSdbRepository.loadCreateMonster(anyInt())).thenReturn(monsterSdb);
+        when(npcSdbRepository.loadCreateNpc(anyInt())).thenReturn(npcSdb);
         idGenerator = new EntityIdGenerator();
         monstersSdb = Mockito.mock(MonstersSdb.class);
         aoiManager = Mockito.mock(AOIManager.class);

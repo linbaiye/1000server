@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
 
-public abstract class AbstractSdbReader {
+public abstract class AbstractCSVSdbReader {
 
     private final Map<String, String[]> values;
 
@@ -17,7 +17,7 @@ public abstract class AbstractSdbReader {
 
     public static final String SDB_PATH = "/sdb";
 
-    protected AbstractSdbReader() {
+    protected AbstractCSVSdbReader() {
         values = new HashMap<>();
         headerIndex = new HashMap<>();
     }
@@ -60,7 +60,7 @@ public abstract class AbstractSdbReader {
         if (index == null || index >= strings.length) {
             return null;
         }
-        return strings[index];
+        return strings[index].trim();
     }
 
     Optional<String> getOptional(String name, String value) {
@@ -110,8 +110,9 @@ public abstract class AbstractSdbReader {
             if (inputstream == null) {
                 throw new NoSuchElementException("Sdb does not exist, " + name);
             }
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream, Charset.forName(charset)));
-            read(bufferedReader);
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream, Charset.forName(charset)))) {
+                read(bufferedReader);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

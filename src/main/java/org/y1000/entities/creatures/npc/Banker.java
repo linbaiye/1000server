@@ -47,7 +47,7 @@ public final class Banker extends AbstractSubmissiveNpc {
         return obj == this || ((Banker) obj).id() == id();
     }
     @Override
-    NpcType getType() {
+    protected NpcType getType() {
         return NpcType.BANKER;
     }
 

@@ -71,7 +71,7 @@ class YaohuaTest extends AbstractUnitTestFixture {
             yaohua.attackedBy(attacker);
         assertInstanceOf(BroadcastSoundEvent.class, eventListener.removeFirst(CrossRealmEvent.class).realmEvent());
         var realmEvent = (RealmTriggerEvent)eventListener.removeFirst(CrossRealmEvent.class).realmEvent();
-        assertEquals(1, realmEvent.realmId());
+        assertEquals(1, realmEvent.toRealmId());
         assertEquals("九尾狐酒母", realmEvent.toName());
     }
 }

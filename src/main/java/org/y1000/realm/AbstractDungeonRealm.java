@@ -56,7 +56,7 @@ abstract class AbstractDungeonRealm extends AbstractRealm {
     }
 
     @Override
-    void handleGuidCreation(Player source, ClientFoundGuildEvent event) {
+    void handleGuildCreation(Player source, ClientFoundGuildEvent event) {
         source.emitEvent(PlayerTextEvent.forbidGuildCreation(source));
     }
 

@@ -43,8 +43,7 @@ class BankManagerImplTest extends AbstractUnitTestFixture  {
     private Player player;
     private TestingEventListener testingEventListener;
     private final ItemFactory itemFactory = createItemFactory();
-    private final NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance,
-            MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
+    private final NpcFactory npcFactory = createNpcFactory();
     private Inventory inventory;
 
     private Banker banker;

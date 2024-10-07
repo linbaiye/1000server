@@ -1,4 +1,5 @@
 package org.y1000.kungfu;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.attack.*;
 import org.y1000.kungfu.breath.BreathKungFu;
@@ -14,6 +15,8 @@ public final class KungFuBook {
 
     private final Map<Integer, KungFu> unnamed;
     private final Map<Integer, KungFu> basic;
+
+    private static final int BASIC_PAGE = 2;
 
     private static final int BASIC_MAX = 30;
 
@@ -61,6 +64,17 @@ public final class KungFuBook {
             }
         }
         return 0;
+    }
+
+    public Optional<KungFu> findBasic(String name) {
+        if (StringUtils.isEmpty(name)) {
+            return Optional.empty();
+        }
+        int slot = findBasicSlot(name);
+        if (slot == 0) {
+            return Optional.empty();
+        }
+        return getKungFu(BASIC_PAGE, slot);
     }
 
     public void foreachUnnamed(BiConsumer<Integer, KungFu> kungFuBiConsumer) {

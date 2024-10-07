@@ -3,6 +3,7 @@ package org.y1000.entities.creatures.npc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.item.ItemSdbImpl;
@@ -14,10 +15,9 @@ import org.y1000.util.Coordinate;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class NpcFactoryImplTest {
+class NpcFactoryImplTest extends AbstractUnitTestFixture  {
 
-    private final NpcFactoryImpl npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE,
-            NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
+    private final NpcFactoryImpl npcFactory = createNpcFactory();
     private RealmMap map;
 
     @BeforeEach
@@ -47,7 +47,7 @@ class NpcFactoryImplTest {
     @Test
     void createSubmissiveNpc() {
         var npc = npcFactory.createNpc("稻草人", 1L, map, Coordinate.xy(2, 2));
-        assertInstanceOf(SubmissiveNpc.class, npc);
+        assertInstanceOf(Scarecrow.class, npc);
         assertEquals(1, npc.id());
         assertEquals(Coordinate.xy(2, 2), npc.coordinate());
         assertEquals(State.IDLE, npc.stateEnum());

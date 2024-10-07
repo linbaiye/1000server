@@ -15,8 +15,6 @@ import org.y1000.network.event.ConnectionEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -158,7 +156,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         } else if (realmEvent instanceof BroadcastEvent) {
             groups.forEach(realmGroup -> realmGroup.handle(realmEvent));
         } else if (realmEvent instanceof RealmTriggerEvent realmTriggerEvent) {
-            RealmGroup group = realmIdGroupMap.get(realmTriggerEvent.realmId());
+            RealmGroup group = realmIdGroupMap.get(realmTriggerEvent.toRealmId());
             if (group != null) {
                 group.handle(realmTriggerEvent);
             }
@@ -218,7 +216,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
     }
 
     private void handleTeleport(RealmTeleportEvent teleportEvent) {
-        int realmId = teleportEvent.realmId();
+        int realmId = teleportEvent.toRealmId();
         playerRealmMap.remove(teleportEvent.player());
         playerRealmMap.put(teleportEvent.player(), realmId);
         playerNameRealmIdMap.put(teleportEvent.player().viewName(), realmId);

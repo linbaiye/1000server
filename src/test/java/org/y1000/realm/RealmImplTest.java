@@ -11,6 +11,7 @@ import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.Connection;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
 
 import java.util.Collections;

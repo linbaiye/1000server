@@ -1,6 +1,7 @@
 package org.y1000.kungfu;
 
 import lombok.Builder;
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
@@ -62,6 +63,17 @@ public final class AssistantKungFu extends AbstractKungFu {
     @Override
     public String description() {
         return getDescriptionBuilder().toString();
+    }
+
+    public String checkPreconditions(Player player) {
+        Validate.notNull(player);
+        if (!eightDirection) {
+            return null;
+        }
+        String error = "需要风灵旋满方可修炼。";
+        return player.kungFuBook().findBasic("风灵旋")
+                .map(kf -> kf.isLevelFull() ? null : error)
+                .orElse(error);
     }
 
     @Override

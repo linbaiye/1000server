@@ -46,7 +46,7 @@ public final class SubmissiveNpc extends AbstractSubmissiveNpc {
     }
 
     @Override
-    NpcType getType() {
+    protected NpcType getType() {
         return NpcType.MONSTER;
     }
 

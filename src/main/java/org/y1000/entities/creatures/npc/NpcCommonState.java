@@ -42,10 +42,6 @@ public final class NpcCommonState extends AbstractCreatureState<Npc> implements 
         return new NpcCommonState(total, State.DIE);
     }
 
-    public static NpcCommonState freeze(int total) {
-        return new NpcCommonState(total, State.FROZEN);
-    }
-
     @Override
     public void afterHurt(Npc npc) {
         if (stateEnum() == State.ATTACK || elapse(npc.getStateMillis(State.HURT))) {

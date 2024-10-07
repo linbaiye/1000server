@@ -35,13 +35,6 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
         return textMessage.toPacket();
     }
 
-    public static PlayerTextEvent leftside(Player player, String text) {
-        return new PlayerTextEvent(player, text, TextMessage.TextType.CUSTOM, TextMessage.Location.LEFT);
-    }
-
-    public static PlayerTextEvent bottom(Player player, String text) {
-        return new PlayerTextEvent(player, text, TextMessage.TextType.CUSTOM, TextMessage.Location.DOWN);
-    }
 
     public static PlayerTextEvent havePill(Player player, String pillName) {
         return new PlayerTextEvent(player, "服用了" + pillName + "。", TextMessage.TextType.CUSTOM, TextMessage.Location.LEFT);
@@ -53,11 +46,6 @@ public final class PlayerTextEvent extends AbstractPlayerEvent {
 
     public static PlayerTextEvent tooFarAway(Player player) {
         return new PlayerTextEvent(player, null, TextMessage.TextType.FARAWAY);
-    }
-
-
-    public static PlayerTextEvent unableToAttack(Player player) {
-        return new PlayerTextEvent(player, null, TextMessage.TextType.CANT_ATTACK);
     }
 
 

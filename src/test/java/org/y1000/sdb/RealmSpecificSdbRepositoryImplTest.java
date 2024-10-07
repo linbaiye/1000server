@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CreateEntitySdbRepositoryImplTest {
-    private CreateEntitySdbRepository repository = CreateEntitySdbRepositoryImpl.INSTANCE;
+class RealmSpecificSdbRepositoryImplTest {
+    private RealmSpecificSdbRepository repository = RealmSpecificSdbRepositoryImpl.INSTANCE;
 
     @Test
     void dynamicObject() {

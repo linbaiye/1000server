@@ -94,6 +94,7 @@ private static final long serialVersionUID = 0L;
     UPDATEGUILD(50),
     KUNGFUFORM(51),
     QUESTWINDOW(52),
+    UPDATEBUFF(53),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -160,6 +161,7 @@ private static final long serialVersionUID = 0L;
         case 50: return UPDATEGUILD;
         case 51: return KUNGFUFORM;
         case 52: return QUESTWINDOW;
+        case 53: return UPDATEBUFF;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1694,6 +1696,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.UpdateQuestWindowPacket.getDefaultInstance();
   }
 
+  public static final int UPDATEBUFF_FIELD_NUMBER = 53;
+  /**
+   * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+   * @return Whether the updateBuff field is set.
+   */
+  @java.lang.Override
+  public boolean hasUpdateBuff() {
+    return typedPacketCase_ == 53;
+  }
+  /**
+   * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+   * @return The updateBuff.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UpdateBuffPacket getUpdateBuff() {
+    if (typedPacketCase_ == 53) {
+       return (org.y1000.network.gen.UpdateBuffPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.UpdateBuffPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UpdateBuffPacketOrBuilder getUpdateBuffOrBuilder() {
+    if (typedPacketCase_ == 53) {
+       return (org.y1000.network.gen.UpdateBuffPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.UpdateBuffPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1854,6 +1887,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 52) {
       output.writeMessage(52, (org.y1000.network.gen.UpdateQuestWindowPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 53) {
+      output.writeMessage(53, (org.y1000.network.gen.UpdateBuffPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -2059,6 +2095,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 52) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(52, (org.y1000.network.gen.UpdateQuestWindowPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 53) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(53, (org.y1000.network.gen.UpdateBuffPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2273,6 +2313,10 @@ private static final long serialVersionUID = 0L;
         if (!getQuestWindow()
             .equals(other.getQuestWindow())) return false;
         break;
+      case 53:
+        if (!getUpdateBuff()
+            .equals(other.getUpdateBuff())) return false;
+        break;
       case 0:
       default:
     }
@@ -2483,6 +2527,10 @@ private static final long serialVersionUID = 0L;
       case 52:
         hash = (37 * hash) + QUESTWINDOW_FIELD_NUMBER;
         hash = (53 * hash) + getQuestWindow().hashCode();
+        break;
+      case 53:
+        hash = (37 * hash) + UPDATEBUFF_FIELD_NUMBER;
+        hash = (53 * hash) + getUpdateBuff().hashCode();
         break;
       case 0:
       default:
@@ -2766,6 +2814,9 @@ private static final long serialVersionUID = 0L;
       if (questWindowBuilder_ != null) {
         questWindowBuilder_.clear();
       }
+      if (updateBuffBuilder_ != null) {
+        updateBuffBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -3008,6 +3059,10 @@ private static final long serialVersionUID = 0L;
           questWindowBuilder_ != null) {
         result.typedPacket_ = questWindowBuilder_.build();
       }
+      if (typedPacketCase_ == 53 &&
+          updateBuffBuilder_ != null) {
+        result.typedPacket_ = updateBuffBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -3249,6 +3304,10 @@ private static final long serialVersionUID = 0L;
         }
         case QUESTWINDOW: {
           mergeQuestWindow(other.getQuestWindow());
+          break;
+        }
+        case UPDATEBUFF: {
+          mergeUpdateBuff(other.getUpdateBuff());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -3624,6 +3683,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 52;
               break;
             } // case 418
+            case 426: {
+              input.readMessage(
+                  getUpdateBuffFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 53;
+              break;
+            } // case 426
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -10613,6 +10679,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 52;
       onChanged();
       return questWindowBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UpdateBuffPacket, org.y1000.network.gen.UpdateBuffPacket.Builder, org.y1000.network.gen.UpdateBuffPacketOrBuilder> updateBuffBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+     * @return Whether the updateBuff field is set.
+     */
+    @java.lang.Override
+    public boolean hasUpdateBuff() {
+      return typedPacketCase_ == 53;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+     * @return The updateBuff.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UpdateBuffPacket getUpdateBuff() {
+      if (updateBuffBuilder_ == null) {
+        if (typedPacketCase_ == 53) {
+          return (org.y1000.network.gen.UpdateBuffPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.UpdateBuffPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 53) {
+          return updateBuffBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.UpdateBuffPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+     */
+    public Builder setUpdateBuff(org.y1000.network.gen.UpdateBuffPacket value) {
+      if (updateBuffBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        updateBuffBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 53;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+     */
+    public Builder setUpdateBuff(
+        org.y1000.network.gen.UpdateBuffPacket.Builder builderForValue) {
+      if (updateBuffBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        updateBuffBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 53;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+     */
+    public Builder mergeUpdateBuff(org.y1000.network.gen.UpdateBuffPacket value) {
+      if (updateBuffBuilder_ == null) {
+        if (typedPacketCase_ == 53 &&
+            typedPacket_ != org.y1000.network.gen.UpdateBuffPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.UpdateBuffPacket.newBuilder((org.y1000.network.gen.UpdateBuffPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 53) {
+          updateBuffBuilder_.mergeFrom(value);
+        } else {
+          updateBuffBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 53;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+     */
+    public Builder clearUpdateBuff() {
+      if (updateBuffBuilder_ == null) {
+        if (typedPacketCase_ == 53) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 53) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        updateBuffBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+     */
+    public org.y1000.network.gen.UpdateBuffPacket.Builder getUpdateBuffBuilder() {
+      return getUpdateBuffFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UpdateBuffPacketOrBuilder getUpdateBuffOrBuilder() {
+      if ((typedPacketCase_ == 53) && (updateBuffBuilder_ != null)) {
+        return updateBuffBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 53) {
+          return (org.y1000.network.gen.UpdateBuffPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.UpdateBuffPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UpdateBuffPacket, org.y1000.network.gen.UpdateBuffPacket.Builder, org.y1000.network.gen.UpdateBuffPacketOrBuilder> 
+        getUpdateBuffFieldBuilder() {
+      if (updateBuffBuilder_ == null) {
+        if (!(typedPacketCase_ == 53)) {
+          typedPacket_ = org.y1000.network.gen.UpdateBuffPacket.getDefaultInstance();
+        }
+        updateBuffBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.UpdateBuffPacket, org.y1000.network.gen.UpdateBuffPacket.Builder, org.y1000.network.gen.UpdateBuffPacketOrBuilder>(
+                (org.y1000.network.gen.UpdateBuffPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 53;
+      onChanged();
+      return updateBuffBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

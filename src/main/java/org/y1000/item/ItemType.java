@@ -26,6 +26,8 @@ public enum ItemType implements ValueEnum  {
 
     PILL(13),
 
+    BUFF_PILL(14),
+
 //    ETC(17),
 
     BANK_INVENTORY(21),

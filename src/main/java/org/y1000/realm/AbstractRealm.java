@@ -6,6 +6,7 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.StaticTeleport;
+import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.*;
 import org.y1000.message.clientevent.chat.ClientInputTextEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
@@ -151,11 +152,19 @@ abstract class AbstractRealm implements Realm {
         return crossRealmEventSender;
     }
 
-    void acceptTeleport(RealmTeleportEvent teleportEvent) {
+    void acceptIfAffordableElseReject(RealmTeleportEvent teleportEvent) {
+        var unaffordableCost = teleportEvent.checkCost();
+        if (unaffordableCost != null) {
+            teleportEvent.getConnection().write(PlayerTextEvent.systemTip(teleportEvent.player(), unaffordableCost));
+            teleportEvent.rejectEvent().ifPresentOrElse(getCrossRealmEventHandler()::send, () ->
+                    log().error("Bad teleport config at {} in realm {}.", teleportEvent.toCoordinate(), teleportEvent.toRealmId()));
+            return;
+        }
         // order matters, so AOI can be computed correctly.
         teleportEvent.player().joinRealm(this, teleportEvent.toCoordinate());
         eventSender.add(teleportEvent.player(), teleportEvent.getConnection());
         playerManager.teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate());
+        teleportEvent.getCosts().forEach(teleportCost -> teleportCost.charge(teleportEvent.player()));
     }
 
     abstract void handleTeleportEvent(RealmTeleportEvent teleportEvent);
@@ -170,7 +179,7 @@ abstract class AbstractRealm implements Realm {
         return npcManager;
     }
 
-    abstract void handleGuidCreation(Player source, ClientFoundGuildEvent event);
+    abstract void handleGuildCreation(Player source, ClientFoundGuildEvent event);
 
     abstract void handleClientEvent(PlayerDataEvent dataEvent);
 
@@ -197,7 +206,7 @@ abstract class AbstractRealm implements Realm {
                 handleClientEvent(dataEvent);
             }
         } else if (dataEvent.data() instanceof ClientFoundGuildEvent guildEvent) {
-            playerManager().find(dataEvent.playerId()).ifPresent(player -> handleGuidCreation(player, guildEvent));
+            playerManager().find(dataEvent.playerId()).ifPresent(player -> handleGuildCreation(player, guildEvent));
         } else if (dataEvent.data() instanceof ClientInputTextEvent clientInputTextEvent) {
             chatManager.handleClientChat(dataEvent.playerId(), clientInputTextEvent);
         } else if (dataEvent.data() instanceof ClientSingleInteractEvent singleInteractEvent) {
@@ -207,6 +216,7 @@ abstract class AbstractRealm implements Realm {
             handleClientEvent(dataEvent);
         }
     }
+
 
     public void handle(RealmEvent event) {
         try {

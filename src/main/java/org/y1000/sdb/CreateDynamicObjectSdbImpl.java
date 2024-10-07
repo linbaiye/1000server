@@ -4,7 +4,7 @@ package org.y1000.sdb;
 import java.util.Optional;
 import java.util.Set;
 
-public final class CreateDynamicObjectSdbImpl extends AbstractSdbReader implements CreateDynamicObjectSdb {
+public final class CreateDynamicObjectSdbImpl extends AbstractCSVSdbReader implements CreateDynamicObjectSdb {
 
     public CreateDynamicObjectSdbImpl(int id) {
         read(makeFileName(id), "utf8");

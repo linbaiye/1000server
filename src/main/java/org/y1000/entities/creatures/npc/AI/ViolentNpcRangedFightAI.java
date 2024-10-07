@@ -75,4 +75,9 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
         return true;
     }
 
+    @Override
+    protected void onFightDone(Npc npc) {
+        npc.startIdleAI();
+    }
+
 }

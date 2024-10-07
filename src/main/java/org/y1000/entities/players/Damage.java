@@ -1,16 +1,8 @@
 package org.y1000.entities.players;
 
-import org.apache.commons.lang3.Validate;
 
 
 public record Damage(int bodyDamage, int headDamage, int armDamage, int legDamage) {
-
-    public Damage {
-        Validate.isTrue(bodyDamage >= 0);
-        Validate.isTrue(headDamage >= 0);
-        Validate.isTrue(armDamage >= 0);
-        Validate.isTrue(legDamage >= 0);
-    }
 
     public static final Damage DEFAULT = new Damage(41,41,41,41);
 
@@ -19,6 +11,15 @@ public record Damage(int bodyDamage, int headDamage, int armDamage, int legDamag
                 headDamage + another.headDamage,
                 armDamage + another.armDamage,
                 legDamage + another.legDamage);
+    }
+
+
+    public Damage addNoNegative(Damage another) {
+        if (another == null)
+            return this;
+        Damage added = add(another);
+        return new Damage(Math.max(added.bodyDamage, 0), Math.max(added.headDamage, 0),
+                Math.max(added.armDamage, 0), Math.max(added.legDamage, 0));
     }
 
     public Damage multiply(float m) {

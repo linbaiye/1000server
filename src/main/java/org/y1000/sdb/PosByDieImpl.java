@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Optional;
 import java.util.Set;
 
-public final class PosByDieImpl extends AbstractSdbReader implements PosByDieSdb {
+public final class PosByDieImpl extends AbstractCSVSdbReader implements PosByDieSdb {
 
     public static final PosByDieImpl INSTANCE = new PosByDieImpl();
     private PosByDieImpl() {

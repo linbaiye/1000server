@@ -743,5 +743,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.UpdateQuestWindowPacketOrBuilder getQuestWindowOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+   * @return Whether the updateBuff field is set.
+   */
+  boolean hasUpdateBuff();
+  /**
+   * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+   * @return The updateBuff.
+   */
+  org.y1000.network.gen.UpdateBuffPacket getUpdateBuff();
+  /**
+   * <code>.org.y1000.network.gen.UpdateBuffPacket updateBuff = 53;</code>
+   */
+  org.y1000.network.gen.UpdateBuffPacketOrBuilder getUpdateBuffOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

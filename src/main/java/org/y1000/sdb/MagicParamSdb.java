@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Set;
 
-public final class MagicParamSdb extends AbstractSdbReader {
+public final class MagicParamSdb extends AbstractCSVSdbReader {
     public static final MagicParamSdb INSTANCE = new MagicParamSdb();
     private MagicParamSdb() {
         read("Init/MagicParam.sdb", "utf8");

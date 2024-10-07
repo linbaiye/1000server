@@ -48,9 +48,7 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
                 .realmMap(map)
                 .stateMillis(MONSTER_STATE_MILLIS)
                 .name("merchant")
-                .ai(ai)
                 .attributeProvider(testingMonsterAttributeProvider)
-                .direction(Direction.DOWN)
                 .stateMillis(MONSTER_STATE_MILLIS)
                 .coordinate(Coordinate.xy(3, 3))
                 .merchantable(merchantable)
@@ -64,6 +62,8 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
     void afterIdle() {
         when(map.movable(any(Coordinate.class))).thenReturn(true);
         var previousDire = merchant.direction();
+        merchant.changeAndStartAI(ai);
+        merchant.changeState(NpcCommonState.idle(merchant.getStateMillis(State.IDLE)));
         merchant.update(merchant.getStateMillis(State.IDLE));
         assertTrue(previousDire != merchant.direction() || State.WALK == merchant.stateEnum());
     }

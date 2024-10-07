@@ -77,6 +77,13 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
     }
 
 
+    private BuffPill createBuffPill(String name) {
+        int last = itemDrugSdb.getStillInterval(name);
+        int damage = itemDrugSdb.getDamageBody(name);
+        return new BuffPill(name, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name), itemSdb.getDesc(name), damage, last,
+                itemSdb.getShape(name));
+    }
+
     private Item create(String name) {
         if (!itemSdb.contains(name)) {
             throw new NoSuchElementException(name + " is not a valid item.");
@@ -93,6 +100,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
             case PILL -> new Pill(name, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
             case KUNGFU -> createKungFuItem(name);
             case BANK_INVENTORY -> new BankInventory(name, itemSdb);
+            case BUFF_PILL -> createBuffPill(name);
             default -> SimpleItem.uncategoried(name, itemSdb);
         };
     }

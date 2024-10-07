@@ -95,6 +95,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     private GuildMembership guildMembership;
 
+    private final BuffPillSlot buffPillSlot;
+
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
         put(State.IDLE, 2200);
         put(State.WALK, 840);
@@ -185,6 +187,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         setRegenerateTimer();
         team = 0;
         this.guildMembership = guildMembership;
+        this.buffPillSlot = new BuffPillSlot();
     }
 
     private void setRegenerateTimer() {
@@ -272,6 +275,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
 
     private void learnKungFu(int inventorySlotId, KungFuItem kungFuItem) {
+        if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {
+            String ret = kf.checkPreconditions(this);
+            if (ret != null) {
+                emitEvent(PlayerTextEvent.systemTip(this, ret));
+                return;
+            }
+        }
         KungFu kungFu = kungFuItem.kungFu().duplicate();
         var slot = kungFuBook().addToBasic(kungFu);
         if (slot == 0) {
@@ -301,6 +311,18 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                 }
             } else if (stackItem.item() instanceof KungFuItem kungFuItem) {
                 learnKungFu(slotId, kungFuItem);
+            } else if (stackItem.item() instanceof BuffPill p) {
+                if (!buffPillSlot.canTake()) {
+                    emitEvent(PlayerTextEvent.noMorePill(this));
+                    return;
+                }
+                if (inventory.decrease(slotId)) {
+                    buffPillSlot.take(p);
+                    emitEvent(new UpdateInventorySlotEvent(this, slotId));
+                    emitEvent(PlayerTextEvent.havePill(this, p.name()));
+                    p.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+                    emitEvent(UpdateBuffEvent.gain(this, p));
+                }
             }
         }
     }
@@ -858,12 +880,22 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }*/
     }
 
+    private void updateBuff(int delta) {
+        boolean previousEffective = buffPillSlot.isEffective();
+        buffPillSlot.update(delta);
+        if (previousEffective && !buffPillSlot.isEffective()) {
+            buffPillSlot.cancel();
+            emitEvent(UpdateBuffEvent.fade(this));
+        }
+    }
+
     @Override
     public void update(int delta) {
         cooldown(delta);
         regenerate(delta);
         updateKungFu(delta);
         pillSlots.update(this, delta);
+        updateBuff(delta);
         state().update(this, delta);
     }
 
@@ -1114,6 +1146,14 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
+    public void cancelBuff() {
+        if (buffPillSlot.isEffective()) {
+            buffPillSlot.cancel();
+            emitEvent(UpdateBuffEvent.fade(this));
+        }
+    }
+
+    @Override
     public Inventory inventory() {
         return inventory;
     }
@@ -1128,6 +1168,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         var dmg = weapon().map(Weapon::damage).orElse(Damage.ZERO)
                 .add(innateAttributesProvider.damage())
                 .add(attackKungFu().damage());
+        dmg = buffPillSlot.apply(dmg);
         int percent = armLife.percent();
         if (percent >= 50)
             return dmg;

@@ -40,7 +40,7 @@ public class SubmitssiveQuester extends AbstractSubmissiveNpc implements Quester
     }
 
     @Override
-    NpcType getType() {
+    protected NpcType getType() {
         return NpcType.QUESTER;
     }
 

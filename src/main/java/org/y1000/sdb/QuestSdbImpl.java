@@ -5,7 +5,7 @@ import org.apache.commons.lang3.Validate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestSdbImpl extends AbstractSdbReader implements QuestSdb {
+public class QuestSdbImpl extends AbstractCSVSdbReader implements QuestSdb {
 
     public QuestSdbImpl(String name) {
         Validate.notNull(name);

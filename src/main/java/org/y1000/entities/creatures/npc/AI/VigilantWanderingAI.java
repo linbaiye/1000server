@@ -4,9 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.event.SeekPlayerEvent;
 import org.y1000.entities.creatures.monster.Monster;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcHurtState;
 import org.y1000.entities.creatures.npc.ViolentNpc;
 import org.y1000.entities.players.Player;
+import org.y1000.util.Coordinate;
 
 import java.util.Comparator;
 import java.util.function.Function;
@@ -30,5 +32,10 @@ public final class VigilantWanderingAI extends AbstractMonsterWanderingAI {
         event.getPlayers().stream().filter(player -> distance.apply(player) < npc.viewWidth())
                 .min(Comparator.comparing(distance))
                 .ifPresentOrElse(p -> escape(npc,p), () -> continueWander(npc));
+    }
+
+    @Override
+    protected Coordinate random(Npc npc) {
+        return npc.wanderingArea().random(npc.coordinate());
     }
 }

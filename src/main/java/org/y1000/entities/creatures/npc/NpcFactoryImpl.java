@@ -5,13 +5,10 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.*;
-import org.y1000.entities.creatures.npc.AI.GuardWanderingAI;
-import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
-import org.y1000.entities.creatures.npc.AI.NpcAI;
-import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
-import org.y1000.entities.creatures.npc.AI.ViolentNpcWanderingAI;
+import org.y1000.entities.creatures.npc.AI.*;
 import org.y1000.entities.creatures.npc.spell.CloneSpell;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.creatures.npc.spell.NpcSpellType;
@@ -37,18 +34,23 @@ public final class NpcFactoryImpl implements NpcFactory {
     private final MagicParamSdb magicParamSdb;
     private final MerchantItemSdbRepository merchantItemSdbRepository;
 
+    private final RealmSpecificSdbRepository realmSpecificSdbRepository;
+
     public NpcFactoryImpl(ActionSdb actionSdb,
                           MonstersSdb monsterSdb,
                           KungFuSdb kungFuSdb,
                           NpcSdb npcSdb,
                           MagicParamSdb magicParamSdb,
-                          MerchantItemSdbRepository merchantItemSdbRepository) {
+                          MerchantItemSdbRepository merchantItemSdbRepository,
+                          RealmSpecificSdbRepository realmSpecificSdbRepository
+                          ) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
         this.kungFuSdb = kungFuSdb;
         this.npcSdb = npcSdb;
         this.magicParamSdb = magicParamSdb;
         this.merchantItemSdbRepository = merchantItemSdbRepository;
+        this.realmSpecificSdbRepository = realmSpecificSdbRepository;
     }
 
 
@@ -131,6 +133,16 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private Npc createSubmissiveMonster(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
 
+        if (name.equals("稻草人")) {
+            return Scarecrow.builder()
+                    .id(id)
+                    .coordinate(coordinate)
+                    .name(monsterSdb.getViewName(name))
+                    .realmMap(map)
+                    .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
+                    .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
+                    .build();
+        }
         int actionWidth = monsterSdb.getActionWidth(name);
         var npcAI = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
         return SubmissiveNpc.builder()
@@ -212,14 +224,13 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     @Override
     public Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate) {
-        return createMerchant(name, id, realmMap, coordinate, null);
-    }
-
-    @Override
-    public Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate, String configName) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(realmMap);
         Objects.requireNonNull(coordinate);
+        return createMerchant(name, id, realmMap, coordinate, null);
+    }
+
+    private Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate, String configName) {
         String animate = npcSdb.getAnimate(name);
         if (animate == null) {
             throw new NotImplementedException(name + " has no action sdb.");
@@ -228,35 +239,57 @@ public final class NpcFactoryImpl implements NpcFactory {
         MerchantItemSdb merchantItemSdb = merchantItemSdbRepository.load(npcText);
         boolean violent = npcSdb.isProtector(name);
         Merchantable merchantable = new MerchantableImpl(merchantItemSdb.buy(), merchantItemSdb.sell());
-
-        return violent ? ViolentMerchant.builder()
-                .id(id)
-                .coordinate(coordinate)
-                .direction(Direction.DOWN)
-                .name(npcSdb.getViewName(name))
-                .realmMap(realmMap)
-                .stateMillis(createActionLengthMap(animate))
-                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .ai(new ViolentNpcWanderingAI(coordinate))
-                .merchantable(merchantable)
-                .fileName(npcText)
-                .build() :
+        if (violent) {
+            return ViolentMerchant.builder()
+                    .id(id)
+                    .coordinate(coordinate)
+                    .direction(Direction.DOWN)
+                    .name(npcSdb.getViewName(name))
+                    .realmMap(realmMap)
+                    .stateMillis(createActionLengthMap(animate))
+                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                    .ai(new ViolentNpcWanderingAI(coordinate))
+                    .merchantable(merchantable)
+                    .fileName(npcText)
+                    .build();
+        }
+        return npcSdb.isQuester(name) ?
+                SubmissiveMerchantQuester.builder()
+                        .id(id)
+                        .coordinate(coordinate)
+                        .name(npcSdb.getViewName(name))
+                        .realmMap(realmMap)
+                        .stateMillis(createDevirtueActionLengthMap(animate))
+                        .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                        .merchantable(merchantable)
+                        .merchantFile(npcText)
+                        .quest(getQuest(name))
+                        .build() :
                 SubmissiveMerchant.builder()
-                .id(id)
-                .coordinate(coordinate)
-                .direction(Direction.DOWN)
-                .name(npcSdb.getViewName(name))
-                .realmMap(realmMap)
-                .stateMillis(createDevirtueActionLengthMap(animate))
-                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .ai(new SubmissiveWanderingAI())
-                .merchantable(merchantable)
-                .fileName(npcText)
-                .build();
+                        .id(id)
+                        .coordinate(coordinate)
+                        .name(npcSdb.getViewName(name))
+                        .realmMap(realmMap)
+                        .stateMillis(createDevirtueActionLengthMap(animate))
+                        .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                        .merchantable(merchantable)
+                        .fileName(npcText)
+                        .build();
     }
 
 
-    private Guardian createGuardian(String name, long id, RealmMap realmMap, Coordinate coordinate) {
+
+    private Guardian createGuardian(String name, long id,
+                                    RealmMap realmMap,
+                                    Coordinate coordinate,
+                                    String dialogFile) {
+        List<String> dialogs = Collections.emptyList();
+        if (dialogFile != null) {
+            dialogs = realmSpecificSdbRepository.loadDialog(dialogFile)
+                    .map(NpcDialogSdb::idleDialogs)
+                    .orElse(Collections.emptyList());
+        }
+        var ai = new GuardWanderingAI(coordinate, !dialogs.isEmpty() ? new Chatter(dialogs) : null);
         String animate = npcSdb.getAnimate(name);
         return Guardian.builder()
                 .id(id)
@@ -267,35 +300,40 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .realmMap(realmMap)
                 .stateMillis(createActionLengthMap(animate))
                 .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .ai(new GuardWanderingAI(coordinate))
+                .ai(ai)
                 .build();
+    }
+
+    private Quest getQuest(String idName) {
+        QuestSdb questSdb = QuestSdb.forNpc(idName);
+        List<String> names = questSdb.getNames();
+        return Quest.parse(names.get(0), questSdb);
     }
 
     private Quester createQuester(String name, long id, RealmMap realmMap, Coordinate coordinate) {
         String animate = npcSdb.getAnimate(name);
-        QuestSdb questSdb = QuestSdb.forNpc(name);
-        List<String> names = questSdb.getNames();
         boolean violent = npcSdb.isProtector(name);
-        return violent ? ViolentQuester.builder()
-                .id(id)
-                .coordinate(coordinate)
-                .direction(Direction.DOWN)
-                .name(npcSdb.getViewName(name))
-                .realmMap(realmMap)
-                .stateMillis(createActionLengthMap(animate))
-                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .quest(Quest.parse(names.get(0), questSdb))
-                .build() :
+        return violent ?
+                ViolentQuester.builder()
+                        .id(id)
+                        .coordinate(coordinate)
+                        .direction(Direction.DOWN)
+                        .name(npcSdb.getViewName(name))
+                        .realmMap(realmMap)
+                        .stateMillis(createActionLengthMap(animate))
+                        .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                        .quest(getQuest(name))
+                        .build() :
                 SubmitssiveQuester.builder()
-                .id(id)
-                .coordinate(coordinate)
-                .direction(Direction.DOWN)
-                .name(npcSdb.getViewName(name))
-                .realmMap(realmMap)
-                .stateMillis(createActionLengthMap(animate))
-                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .quest(Quest.parse(names.get(0), questSdb))
-                .build();
+                        .id(id)
+                        .coordinate(coordinate)
+                        .direction(Direction.DOWN)
+                        .name(npcSdb.getViewName(name))
+                        .realmMap(realmMap)
+                        .stateMillis(createActionLengthMap(animate))
+                        .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                        .quest(getQuest(name))
+                        .build();
     }
 
     private Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate) {
@@ -318,7 +356,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         } else if (npcSdb.isQuester(name)) {
             return createQuester(name, id, realmMap, coordinate);
         } else if (npcSdb.isProtector(name)) {
-            return createGuardian(name, id, realmMap, coordinate);
+            return createGuardian(name, id, realmMap, coordinate, null);
         } else {
             return createSubmissiveNpc(name, id, realmMap, coordinate, Collections.emptyList());
         }
@@ -342,10 +380,28 @@ public final class NpcFactoryImpl implements NpcFactory {
     @Override
     public Npc createClonedNpc(Npc npc, long id, Coordinate coordinate) {
         Validate.notNull(npc);
+        Validate.notNull(coordinate);
         if (monsterSdb.contains(npc.idName())) {
             return createMonster(npc.idName(), id, npc.realmMap(), coordinate, null, new MonsterWanderingAI(coordinate));
         }
         log.error("Name {} does not exist.", npc.idName());
         throw new NoSuchElementException(npc.idName());
+    }
+
+    @Override
+    public Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate, CreateNonMonsterSdb createNpcSdb) {
+        Validate.notNull(name);
+        Validate.notNull(realmMap);
+        Validate.notNull(coordinate);
+        Validate.notNull(createNpcSdb);
+        Optional<NpcType> type = createNpcSdb.getType(name);
+        if (type.isEmpty()) {
+            return createNpc(name, id, realmMap, coordinate);
+        }
+        return switch (type.get()) {
+            case MERCHANT -> createMerchant(name, id, realmMap, coordinate, createNpcSdb.getConfig(name).orElse(null));
+            case GUARDIAN -> createGuardian(name, id, realmMap, coordinate, createNpcSdb.getDialog(name).orElse(null));
+            default -> createNpc(name, id, realmMap, coordinate);
+        };
     }
 }

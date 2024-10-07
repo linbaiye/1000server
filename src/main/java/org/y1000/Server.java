@@ -30,7 +30,6 @@ public final class Server implements ServerContext {
 
     private final ServerBootstrap gameServer;
 
-    private final int port;
 
     private EventLoopGroup workerGroup;
 
@@ -48,6 +47,7 @@ public final class Server implements ServerContext {
 
     private final EntityManagerFactory entityManagerFactory;
 
+    private static final int port = 9999;
     private static final int accountPort = 9901;
 
     private static final int managementPort = 9902;
@@ -66,8 +66,7 @@ public final class Server implements ServerContext {
     private boolean shutdown;
 
 
-    public Server(int port) {
-        this.port = port;
+    public Server() {
         workerGroup = new NioEventLoopGroup();
         bossGroup = new NioEventLoopGroup();
         gameServer = new ServerBootstrap();
@@ -77,12 +76,13 @@ public final class Server implements ServerContext {
         KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl(entityManagerFactory);
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl, entityManagerFactory);
         itemRepository = repository;
-        npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE));
+        npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE,
+                NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE), RealmSpecificSdbRepositoryImpl.INSTANCE);
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
-                MapSdbImpl.INSTANCE, CreateEntitySdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
+                MapSdbImpl.INSTANCE, RealmSpecificSdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
                 entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE, guildRepository, itemRepository, kungFuRepositoryImpl);
         accountRepository = new AccountRepositoryImpl();
         accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, playerRepository);
@@ -101,7 +101,7 @@ public final class Server implements ServerContext {
                     protected void initChannel(NioSocketChannel channel) throws Exception {
                         channel.pipeline()
                                 .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                .addLast("packetHandler", new DevelopingConnection(realmManager, Server.this))
+                                .addLast("packetHandler", new ConnectionImpl(realmManager, Server.this))
                                 .addLast("packetLengthAppender", new LengthFieldPrepender(4))
                                 .addLast("packetEncoder", MessageEncoder.ENCODER);
                     }
@@ -193,7 +193,7 @@ public final class Server implements ServerContext {
     }
 
     public static void main(String[] args) {
-        Server server = new Server(9999);
+        Server server = new Server();
         server.startRealms();
         server.loopEvent();
         server.startNetworking();

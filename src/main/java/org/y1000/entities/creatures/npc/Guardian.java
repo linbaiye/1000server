@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public final class Guardian extends AbstractViolentNpc {
+public final class Guardian extends AbstractViolentNpc implements HumanNpc {
 
     @Getter
     private final int width;
@@ -44,15 +44,6 @@ public final class Guardian extends AbstractViolentNpc {
         return log;
     }
 
-
-    public void attackMonster(AggressiveMonster monster) {
-        if (monster == null) {
-            return;
-        }
-        if (getAI() instanceof GuardWanderingAI) {
-            changeAndStartAI(new ViolentNpcMeleeFightAI(monster, this));
-        }
-    }
 
     @Override
     public boolean equals(Object obj) {

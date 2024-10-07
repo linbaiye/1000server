@@ -56,7 +56,6 @@ public interface Npc extends Creature {
 
     int viewWidth();
 
-
     NpcAI getAI();
 
     void changeAndStartAI(NpcAI newAI);

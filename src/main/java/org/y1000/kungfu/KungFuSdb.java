@@ -1,13 +1,11 @@
 package org.y1000.kungfu;
 
 import org.apache.commons.lang3.StringUtils;
-import org.y1000.item.ItemSdbImpl;
-import org.y1000.sdb.AbstractSdbReader;
-import org.y1000.sdb.MagicParamSdb;
+import org.y1000.sdb.AbstractCSVSdbReader;
 
 import java.util.Set;
 
-public final class KungFuSdb extends AbstractSdbReader {
+public final class KungFuSdb extends AbstractCSVSdbReader {
 
     private KungFuSdb() {
         read("Magic.sdb", "utf8");

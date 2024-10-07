@@ -7,7 +7,6 @@ import org.y1000.guild.GuildStone;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.*;
 import org.y1000.network.event.ConnectionEstablishedEvent;
-import org.y1000.network.gen.ClientSimpleCommandPacket;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.sdb.MapSdb;
@@ -40,7 +39,7 @@ class GuildableRealm extends AbstractRealm {
 
     @Override
     void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
-        acceptTeleport(teleportEvent);
+        acceptIfAffordableElseReject(teleportEvent);
     }
 
     @Override
@@ -50,7 +49,7 @@ class GuildableRealm extends AbstractRealm {
     }
 
     @Override
-    void handleGuidCreation(Player source, ClientFoundGuildEvent event) {
+    void handleGuildCreation(Player source, ClientFoundGuildEvent event) {
         guildManager.foundGuild(source, event.coordinate(), event.name(), event.inventorySlot());
     }
 

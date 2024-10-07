@@ -30,6 +30,6 @@ final class ConjunctionDungeonRealm extends AbstractDungeonRealm {
 
     @Override
     void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
-        acceptTeleport(teleportEvent);
+        acceptIfAffordableElseReject(teleportEvent);
     }
 }

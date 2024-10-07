@@ -548,6 +548,14 @@ message UpdateQuestWindowPacket {
   string npcName = 5;
 }
 
+message UpdateBuffPacket {
+  int32 type = 1;
+  int32 icon = 2;
+  int32 color = 3;
+  int32 seconds = 4;
+  optional string description = 5;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -600,6 +608,7 @@ message Packet {
     UpdateGuildPacket updateGuild = 50;
     UpdateGuildKungFuFormPacket kungFuForm = 51;
     UpdateQuestWindowPacket questWindow = 52;
+    UpdateBuffPacket updateBuff = 53;
   }
 }
 
@@ -611,6 +620,7 @@ message CreatureInterpolationPacket {
   optional string merchantFile = 5;
   string shape = 6;
   string animate = 7;
+  repeated string menus = 8;
 }
 
 

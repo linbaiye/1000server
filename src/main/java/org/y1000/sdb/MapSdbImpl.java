@@ -3,13 +3,11 @@ package org.y1000.sdb;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public final class MapSdbImpl extends AbstractSdbReader implements MapSdb {
+public final class MapSdbImpl extends AbstractCSVSdbReader implements MapSdb {
 
     public static final MapSdbImpl INSTANCE = new MapSdbImpl();
 

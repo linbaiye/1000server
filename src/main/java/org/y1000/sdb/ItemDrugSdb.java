@@ -22,4 +22,6 @@ public interface ItemDrugSdb {
     int getEArmLife(String name);
 
     int getELegLife(String name);
+
+    int getDamageBody(String name);
 }

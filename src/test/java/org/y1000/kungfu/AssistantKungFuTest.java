@@ -73,4 +73,15 @@ class AssistantKungFuTest extends AbstractUnitTestFixture  {
         assertEquals(1, damage.armDamage());
         assertEquals(0, damage.legDamage());
     }
+
+    @Test
+    void checkPreconditions() {
+        create(true);
+        var player = playerBuilder().coordinate(Coordinate.xy(2, 2)).build();
+        var ret = assistantKungFu.checkPreconditions(player);
+        assertEquals("需要风灵旋满方可修炼。", ret);
+        create(false);
+        ret = assistantKungFu.checkPreconditions(player);
+        assertNull(ret);
+    }
 }

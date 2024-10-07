@@ -15,7 +15,7 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
     protected abstract void onHurtDone(Npc npc);
 
     public AbstractWanderingNpcAI(Coordinate destination, Coordinate previousCoordinate) {
-        this.destination = destination;
+        this.destination = destination ;
         this.previousCoordinate = previousCoordinate;
     }
 
@@ -60,9 +60,9 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
             return;
         }
         if (destination == null) {
-            previousCoordinate = npc.coordinate();
             destination = npc.wanderingArea().random(npc.spawnCoordinate());
         }
+        previousCoordinate = Coordinate.Empty;
         stayIdle(npc);
     }
 

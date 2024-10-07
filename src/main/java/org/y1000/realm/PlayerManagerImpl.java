@@ -13,7 +13,6 @@ import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.PlayerDropItemEvent;
-import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
@@ -202,6 +201,8 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
             find(dragPlayerEvent.target()).ifPresent(dragged -> handleDragPlayerEvent(dataEvent.player(), dragged, dragPlayerEvent.ropeSlot()));
         } else if (dataEvent.data() instanceof ClientOperateBankEvent bankEvent) {
             find(dataEvent.playerId()).ifPresent(player -> bankManager.handle(player, bankEvent));
+        } else if (dataEvent.data() instanceof ClientSelfInteractEvent selfInteractEvent) {
+            find(selfInteractEvent.getPlayerId()).ifPresent(selfInteractEvent::handle);
         } else {
             find(dataEvent.playerId()).ifPresent(player -> player.handleClientEvent(dataEvent.data()));
         }

@@ -239,7 +239,7 @@ final class RealmMapV2Impl implements RealmMap {
             for (int h = 0; h < header.height / BLOCK_SIZE; h++) {
                 for (int w = 0; w < header.width / BLOCK_SIZE; w++) {
                     if (is.read(blockData.array()) != MAP_BLOCK_DATA_SIZE) {
-                        log.error("Failed to read map block.");
+                        log.error("Failed to read map block for map {}.", name);
                         return Optional.empty();
                     }
                     for (int y = 0; y < BLOCK_SIZE; y++) {

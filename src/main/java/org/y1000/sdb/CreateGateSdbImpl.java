@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public final class CreateGateSdbImpl extends AbstractSdbReader implements CreateGateSdb {
+public final class CreateGateSdbImpl extends AbstractCSVSdbReader implements CreateGateSdb {
 
     private CreateGateSdbImpl() {
         read("Setting/CreateGate.sdb", "utf8");
@@ -105,5 +105,10 @@ public final class CreateGateSdbImpl extends AbstractSdbReader implements Create
     @Override
     public String getViewName(String name) {
         return get(name, "ViewName");
+    }
+
+    @Override
+    public String getNeedItem(String name) {
+        return get(name, "NeedItem");
     }
 }

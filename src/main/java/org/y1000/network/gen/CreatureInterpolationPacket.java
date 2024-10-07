@@ -21,6 +21,8 @@ private static final long serialVersionUID = 0L;
     merchantFile_ = "";
     shape_ = "";
     animate_ = "";
+    menus_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
   }
 
   @java.lang.Override
@@ -256,6 +258,43 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int MENUS_FIELD_NUMBER = 8;
+  @SuppressWarnings("serial")
+  private com.google.protobuf.LazyStringArrayList menus_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
+  /**
+   * <code>repeated string menus = 8;</code>
+   * @return A list containing the menus.
+   */
+  public com.google.protobuf.ProtocolStringList
+      getMenusList() {
+    return menus_;
+  }
+  /**
+   * <code>repeated string menus = 8;</code>
+   * @return The count of menus.
+   */
+  public int getMenusCount() {
+    return menus_.size();
+  }
+  /**
+   * <code>repeated string menus = 8;</code>
+   * @param index The index of the element to return.
+   * @return The menus at the given index.
+   */
+  public java.lang.String getMenus(int index) {
+    return menus_.get(index);
+  }
+  /**
+   * <code>repeated string menus = 8;</code>
+   * @param index The index of the value to return.
+   * @return The bytes of the menus at the given index.
+   */
+  public com.google.protobuf.ByteString
+      getMenusBytes(int index) {
+    return menus_.getByteString(index);
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -291,6 +330,9 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(animate_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, animate_);
     }
+    for (int i = 0; i < menus_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, menus_.getRaw(i));
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -323,6 +365,14 @@ private static final long serialVersionUID = 0L;
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(animate_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, animate_);
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < menus_.size(); i++) {
+        dataSize += computeStringSizeNoTag(menus_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getMenusList().size();
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -359,6 +409,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getShape())) return false;
     if (!getAnimate()
         .equals(other.getAnimate())) return false;
+    if (!getMenusList()
+        .equals(other.getMenusList())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -389,6 +441,10 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getShape().hashCode();
     hash = (37 * hash) + ANIMATE_FIELD_NUMBER;
     hash = (53 * hash) + getAnimate().hashCode();
+    if (getMenusCount() > 0) {
+      hash = (37 * hash) + MENUS_FIELD_NUMBER;
+      hash = (53 * hash) + getMenusList().hashCode();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -537,6 +593,8 @@ private static final long serialVersionUID = 0L;
       merchantFile_ = "";
       shape_ = "";
       animate_ = "";
+      menus_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
       return this;
     }
 
@@ -595,6 +653,10 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000040) != 0)) {
         result.animate_ = animate_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        menus_.makeImmutable();
+        result.menus_ = menus_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -672,6 +734,16 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000040;
         onChanged();
       }
+      if (!other.menus_.isEmpty()) {
+        if (menus_.isEmpty()) {
+          menus_ = other.menus_;
+          bitField0_ |= 0x00000080;
+        } else {
+          ensureMenusIsMutable();
+          menus_.addAll(other.menus_);
+        }
+        onChanged();
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -735,6 +807,12 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000040;
               break;
             } // case 58
+            case 66: {
+              java.lang.String s = input.readStringRequireUtf8();
+              ensureMenusIsMutable();
+              menus_.add(s);
+              break;
+            } // case 66
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1228,6 +1306,117 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       animate_ = value;
       bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.LazyStringArrayList menus_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+    private void ensureMenusIsMutable() {
+      if (!menus_.isModifiable()) {
+        menus_ = new com.google.protobuf.LazyStringArrayList(menus_);
+      }
+      bitField0_ |= 0x00000080;
+    }
+    /**
+     * <code>repeated string menus = 8;</code>
+     * @return A list containing the menus.
+     */
+    public com.google.protobuf.ProtocolStringList
+        getMenusList() {
+      menus_.makeImmutable();
+      return menus_;
+    }
+    /**
+     * <code>repeated string menus = 8;</code>
+     * @return The count of menus.
+     */
+    public int getMenusCount() {
+      return menus_.size();
+    }
+    /**
+     * <code>repeated string menus = 8;</code>
+     * @param index The index of the element to return.
+     * @return The menus at the given index.
+     */
+    public java.lang.String getMenus(int index) {
+      return menus_.get(index);
+    }
+    /**
+     * <code>repeated string menus = 8;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the menus at the given index.
+     */
+    public com.google.protobuf.ByteString
+        getMenusBytes(int index) {
+      return menus_.getByteString(index);
+    }
+    /**
+     * <code>repeated string menus = 8;</code>
+     * @param index The index to set the value at.
+     * @param value The menus to set.
+     * @return This builder for chaining.
+     */
+    public Builder setMenus(
+        int index, java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      ensureMenusIsMutable();
+      menus_.set(index, value);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string menus = 8;</code>
+     * @param value The menus to add.
+     * @return This builder for chaining.
+     */
+    public Builder addMenus(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      ensureMenusIsMutable();
+      menus_.add(value);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string menus = 8;</code>
+     * @param values The menus to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllMenus(
+        java.lang.Iterable<java.lang.String> values) {
+      ensureMenusIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, menus_);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string menus = 8;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearMenus() {
+      menus_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+      bitField0_ = (bitField0_ & ~0x00000080);;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string menus = 8;</code>
+     * @param value The bytes of the menus to add.
+     * @return This builder for chaining.
+     */
+    public Builder addMenusBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      ensureMenusIsMutable();
+      menus_.add(value);
+      bitField0_ |= 0x00000080;
       onChanged();
       return this;
     }

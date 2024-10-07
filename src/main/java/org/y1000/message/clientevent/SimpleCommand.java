@@ -4,7 +4,12 @@ import org.y1000.message.ValueEnum;
 
 public enum SimpleCommand implements ValueEnum {
     NPC_POSITION(1),
+
     CLIENT_QUIT(2),
+
+    CANCEL_BUFF(3),
+    PING(4),
+    PONG(5),
     ;
     private final int v;
 

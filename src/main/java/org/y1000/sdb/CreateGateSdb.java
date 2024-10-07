@@ -32,4 +32,6 @@ public interface CreateGateSdb {
     int getShape(String name);
 
     String getViewName(String name);
+
+    String getNeedItem(String name);
 }

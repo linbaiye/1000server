@@ -6,6 +6,9 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
+import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
+import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
 import org.y1000.entities.players.*;
@@ -15,6 +18,7 @@ import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.kungfu.KungFuFactory;
+import org.y1000.kungfu.KungFuSdb;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
@@ -22,8 +26,7 @@ import org.y1000.repository.BankRepository;
 import org.y1000.repository.ItemRepository;
 import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
-import org.y1000.sdb.DynamicObjectSdbImpl;
-import org.y1000.sdb.ItemDrugSdbImpl;
+import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
 import java.util.HashMap;
@@ -71,6 +74,10 @@ public abstract class AbstractUnitTestFixture {
     protected KungFuBookRepositoryImpl createKungFuBookRepositoryImpl() {
         return new KungFuBookRepositoryImpl(Mockito.mock(EntityManagerFactory.class));
     }
+    protected NpcFactoryImpl createNpcFactory() {
+        return new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance,
+                MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE), RealmSpecificSdbRepositoryImpl.INSTANCE);
+    }
 
     protected KungFuBookFactory createKungFuBookFactory() {
         return createKungFuBookRepositoryImpl();
@@ -117,6 +124,7 @@ public abstract class AbstractUnitTestFixture {
                 .realmMap(Mockito.mock(RealmMap.class))
                 .skill(null)
                 .attributeProvider(new TestingMonsterAttributeProvider())
+                .ai(new MonsterWanderingAI(Coordinate.xy(1, 1)))
                 .stateMillis(MONSTER_STATE_MILLIS)
                 ;
     }

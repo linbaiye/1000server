@@ -17,6 +17,7 @@ import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
 
 @Slf4j
+@Deprecated
 public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
     private AttackableActiveEntity enemy;
 
@@ -84,11 +85,13 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
         }
     }
 
+    protected abstract void onFightDone(Npc npc);
+
     private void wanderOrFight() {
         if (npc.canChaseOrAttack(enemy)) {
             fightProcess();
         } else {
-            npc.startIdleAI();
+            onFightDone(npc);
         }
     }
 
@@ -130,7 +133,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
     public void onEvent(EntityEvent entityEvent) {
         if (entityEvent != null && enemy.equals(entityEvent.source()) && !enemy.canBeAttackedNow()) {
             enemy.deregisterEventListener(this);
-            npc.changeToIdleAI();
+            onFightDone(npc);
         }
     }
 }

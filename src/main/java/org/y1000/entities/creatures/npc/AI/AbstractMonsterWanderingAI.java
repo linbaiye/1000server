@@ -24,6 +24,7 @@ public abstract class AbstractMonsterWanderingAI extends AbstractWanderingAI<Mon
         return Monster.class;
     }
 
+
     @Override
     protected void onActionDoneNotDead(Monster monster) {
         if (soundCounter-- <= 0 &&

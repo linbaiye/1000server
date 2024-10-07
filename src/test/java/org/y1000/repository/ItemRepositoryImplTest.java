@@ -57,6 +57,7 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
         assertEquals(equipment.color(), inv.getItem(slot2).color());
     }
 
+
     @Test
     void save() {
         PlayerImpl player = playerBuilder().id(11).build();
@@ -82,6 +83,8 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
             itemPo = resultList.stream().filter(i -> i.getName().equals("长剑")).findFirst().get();
             assertEquals(slot2, itemPo.getItemKey().getSlot());
         }
+
+
 
     }
 }

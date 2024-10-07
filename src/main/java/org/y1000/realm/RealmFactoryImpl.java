@@ -22,7 +22,7 @@ public final class RealmFactoryImpl implements RealmFactory {
     private final ItemSdb itemSdb;
     private final MonstersSdb monstersSdb;
     private final MapSdb mapSdb;
-    private final CreateEntitySdbRepository createEntitySdbRepository;
+    private final RealmSpecificSdbRepository realmSpecificSdbRepository;
     private final DynamicObjectFactory dynamicObjectFactory;
     private final CreateGateSdb createGateSdb;
     private final PlayerRepository playerRepository;
@@ -49,7 +49,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                             ItemSdb itemSdb,
                             MonstersSdb monstersSdb,
                             MapSdb mapSdb,
-                            CreateEntitySdbRepository createEntitySdbRepository,
+                            RealmSpecificSdbRepository realmSpecificSdbRepository,
                             DynamicObjectFactory dynamicObjectFactory,
                             CreateGateSdb createGateSdb,
                             EntityManagerFactory entityManagerFactory,
@@ -65,7 +65,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         Validate.notNull(itemSdb);
         Validate.notNull(monstersSdb);
         Validate.notNull(mapSdb);
-        Validate.notNull(createEntitySdbRepository);
+        Validate.notNull(realmSpecificSdbRepository);
         Validate.notNull(dynamicObjectFactory);
         Validate.notNull(createGateSdb);
         Validate.notNull(entityManagerFactory);
@@ -77,7 +77,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         this.itemSdb = itemSdb;
         this.monstersSdb = monstersSdb;
         this.mapSdb = mapSdb;
-        this.createEntitySdbRepository = createEntitySdbRepository;
+        this.realmSpecificSdbRepository = realmSpecificSdbRepository;
         this.dynamicObjectFactory = dynamicObjectFactory;
         this.createGateSdb = createGateSdb;
         this.playerRepository = playerRepository;
@@ -94,12 +94,12 @@ public final class RealmFactoryImpl implements RealmFactory {
                                                 GroundItemManager itemManager,
                                                 EntityEventSender entityEventSender,
                                                 RealmMap realmMap) {
-        if (!createEntitySdbRepository.monsterSdbExists(id) && !createEntitySdbRepository.npcSdbExists(id)) {
+        if (!realmSpecificSdbRepository.monsterSdbExists(id) && !realmSpecificSdbRepository.npcSdbExists(id)) {
             return NpcManager.EMPTY;
         }
-        var monsterSdb = createEntitySdbRepository.monsterSdbExists(id) ? createEntitySdbRepository.loadMonster(id) : null;
-        var npcSdb = createEntitySdbRepository.npcSdbExists(id) ? createEntitySdbRepository.loadNpc(id) : null;
-        var haveItemSdb = createEntitySdbRepository.loadHaveItem(id);
+        var monsterSdb = realmSpecificSdbRepository.monsterSdbExists(id) ? realmSpecificSdbRepository.loadCreateMonster(id) : null;
+        var npcSdb = realmSpecificSdbRepository.npcSdbExists(id) ? realmSpecificSdbRepository.loadCreateNpc(id) : null;
+        var haveItemSdb = realmSpecificSdbRepository.loadHaveItem(id);
         return mapSdb.getRegenInterval(id).isPresent() ?
                 new DungeonNpcManager(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap, haveItemSdb) :
                 new NpcManagerImpl(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap, haveItemSdb);
@@ -128,8 +128,8 @@ public final class RealmFactoryImpl implements RealmFactory {
             var eventSender = new RealmEntityEventSender(aoiManager);
             var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
             var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
-            var dynamicObjectManager = !createEntitySdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
-                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, createEntitySdbRepository.loadObject(id), crossRealmEventSender, realmMap);
+            var dynamicObjectManager = !realmSpecificSdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
+                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, realmSpecificSdbRepository.loadCreateObject(id), crossRealmEventSender, realmMap);
             var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager,
                     new BankManagerImpl(eventSender, npcManager, bankRepository), playerRepository, deadPlayerTeleportManager(id),
                     crossRealmEventSender);

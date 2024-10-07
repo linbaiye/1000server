@@ -2,7 +2,6 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.npc.AggressiveNpc;
 import org.y1000.entities.creatures.npc.NineTailFoxHuman;
@@ -84,24 +83,10 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     }
 
 
-    private Npc createNpc(NpcType type, String name, Coordinate coordinate) {
-        if (type == NpcType.MERCHANT)
-            return npcFactory.createMerchant(name, idGenerator.next(), realmMap, coordinate, createNpcSdb.getConfig(name).orElse(null));
-        else
-            return defaultCreateNpc(name, coordinate);
-    }
-
-    private Npc defaultCreateNpc(String name, Coordinate coordinate) {
-        return npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate);
-    }
-
     protected Npc createNpc(String name, Coordinate coordinate) {
-        if (createNpcSdb == null || !createNpcSdb.containsNpc(name)) {
-            return defaultCreateNpc(name, coordinate);
-        }
-        return createNpcSdb.getType(name)
-                .map(type -> createNpc(type, name, coordinate))
-                .orElseGet(() -> defaultCreateNpc(name, coordinate));
+        return createNpcSdb != null ?
+                npcFactory.createNonMonsterNpc(name, idGenerator.next(), realmMap, coordinate, createNpcSdb) :
+                npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate);
     }
 
     void spawnNPCs(CreateNpcSdb createNpcSdb) {

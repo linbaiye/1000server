@@ -87,4 +87,29 @@ public interface CreatureInterpolationPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getAnimateBytes();
+
+  /**
+   * <code>repeated string menus = 8;</code>
+   * @return A list containing the menus.
+   */
+  java.util.List<java.lang.String>
+      getMenusList();
+  /**
+   * <code>repeated string menus = 8;</code>
+   * @return The count of menus.
+   */
+  int getMenusCount();
+  /**
+   * <code>repeated string menus = 8;</code>
+   * @param index The index of the element to return.
+   * @return The menus at the given index.
+   */
+  java.lang.String getMenus(int index);
+  /**
+   * <code>repeated string menus = 8;</code>
+   * @param index The index of the value to return.
+   * @return The bytes of the menus at the given index.
+   */
+  com.google.protobuf.ByteString
+      getMenusBytes(int index);
 }
