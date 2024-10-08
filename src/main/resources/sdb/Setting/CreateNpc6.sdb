@@ -1,0 +1,9 @@
+Name,NpcName,X,Y,Count,Width,Type,Config,Dialog
+1,风兄,150,209,1,1,MERCHANT,风兄6.txt,
+2,牛美,170,244,1,1,MERCHANT,牛美6.txt,
+3,铁匠,121,213,1,1,MERCHANT,铁匠6.txt,
+4,船夫,25,231,1,1,MERCHANT,船夫.txt,
+6,老板娘,156,244,1,1,MERCHANT,,
+7,药材商,176,218,1,1,MERCHANT,,
+7,向导,169,229,1,1,GUARDIAN,,渔隐村向导.txt
+,,,,,,,

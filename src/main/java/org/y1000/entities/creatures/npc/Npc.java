@@ -3,6 +3,7 @@ package org.y1000.entities.creatures.npc;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.players.Damage;
 import org.y1000.util.Coordinate;
@@ -25,8 +26,6 @@ public interface Npc extends Creature {
     Rectangle wanderingArea();
 
     Coordinate spawnCoordinate();
-
-    void respawn(Coordinate coordinate);
 
     <S extends NpcSpell> Optional<S> findSpell(Class<S> type);
 
@@ -55,4 +54,15 @@ public interface Npc extends Creature {
 
     int walkSpeed();
 
+    int viewWidth();
+
+    NpcAI getAI();
+
+    void changeAndStartAI(NpcAI newAI);
+
+    void changeAI(NpcAI newAI);
+
+    void changeToIdleAI();
+
+    void startIdleAI();
 }

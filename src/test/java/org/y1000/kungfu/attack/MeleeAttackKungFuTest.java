@@ -20,6 +20,7 @@ import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.serverevent.TextMessage;
 import org.y1000.realm.Realm;
 import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.util.Coordinate;
@@ -31,8 +32,6 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     private QuanfaKungFu kungFu;
 
     private PlayerImpl player;
-
-    private final KungFuBookFactory kungFuBookFactory = new KungFuBookRepositoryImpl();
 
     private ClientAttackEvent clientAttackEvent;
 
@@ -223,7 +222,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, monster);
         PlayerTextEvent event = playerEventListener.dequeue(PlayerTextEvent.class);
-        assertEquals(PlayerTextEvent.TextType.NO_POWER.value(), event.toPacket().getText().getType());
+        assertEquals(TextMessage.TextType.NO_POWER.value(), event.toPacket().getText().getType());
         assertEquals(State.IDLE, player.stateEnum());
     }
 
@@ -238,7 +237,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, monster);
         PlayerTextEvent event = playerEventListener.removeFirst(PlayerTextEvent.class);
-        assertEquals(PlayerTextEvent.TextType.NO_LIFE.value(), event.toPacket().getText().getType());
+        assertEquals(TextMessage.TextType.NO_LIFE.value(), event.toPacket().getText().getType());
     }
 
     @Test
@@ -295,5 +294,16 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         assertEquals(138, blade.legDamage());
         assertEquals(138, blade.armDamage());
         assertEquals(138, blade.headDamage());
+    }
+
+    @Test
+    void name() {
+        var kungFuFactory = createKungFuFactory();
+        var kf = kungFuFactory.createAttackKungFu("无击阵");
+        while (kf.level() < 8000) {
+            kf.gainPermittedExp(1000);
+        }
+        System.out.println(kf.exp());
+        System.out.println(kf.damage());
     }
 }

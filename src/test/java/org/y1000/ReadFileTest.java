@@ -1,10 +1,13 @@
 package org.y1000;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ReadFileTest {
     public static void main(String[] args) throws IOException {
@@ -22,5 +25,17 @@ public class ReadFileTest {
             System.out.println();
         }
         br.close();
+    }
+
+    @Test
+    void random() {
+        int odd = 0, even = 0;
+        int[] arr = new int[2];
+        for (int i = 0; i < 1000000; i++) {
+            int index = ThreadLocalRandom.current().nextInt(0, 2) % 2 ;
+            arr[index]++;
+        }
+        System.out.println(arr[0]);
+        System.out.println(arr[1]);
     }
 }

@@ -4,7 +4,6 @@ import org.y1000.entities.AttackableActiveEntity;
 
 public interface AggressiveNpc extends ViolentNpc {
 
-    int viewWidth();
 
     void actAggressively(AttackableActiveEntity enemy);
 

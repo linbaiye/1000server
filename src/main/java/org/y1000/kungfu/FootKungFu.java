@@ -7,6 +7,7 @@ import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
+import org.y1000.entities.players.event.PlayerKungFuFullEvent;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.event.EntityEvent;
 import org.y1000.util.UnaryAction;
@@ -58,6 +59,8 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
         eventSender.invoke(new EntitySoundEvent(player, String.valueOf(snd)));
         if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
             eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
+            if (isLevelFull())
+                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
         }
         int life = applyLevelToValue(eventResourceParameters.life());
         int useLife =  player.currentLife() > life ? life : player.currentLife() - 1;

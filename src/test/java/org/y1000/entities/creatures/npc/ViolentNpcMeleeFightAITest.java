@@ -7,10 +7,10 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
-import org.y1000.entities.creatures.monster.MonsterWanderingAI;
+import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
+import org.y1000.entities.creatures.npc.AI.ViolentNpcMeleeFightAI;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.realm.Realm;
-import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.Set;
@@ -45,7 +45,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         var player = playerBuilder().coordinate(Coordinate.xy(3, 4)).build();
         player.joinRealm(realm);
         ai = new ViolentNpcMeleeFightAI(player, monster);
-        monster.changeAI(ai);
+        monster.changeAndStartAI(ai);
         assertEquals(State.ATTACK, monster.stateEnum());
         monster.update(monster.getStateMillis(State.ATTACK) - 10);
         player.leaveRealm();
@@ -60,7 +60,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         Set<Coordinate> notMovable = Set.of(Coordinate.xy(2, 4), Coordinate.xy(3, 4), Coordinate.xy(4, 4));
         when(realmMap.movable(any(Coordinate.class))).thenAnswer(invocationOnMock -> !notMovable.contains(invocationOnMock.getArgument(0)));
         when(enemy.coordinate()).thenReturn(Coordinate.xy(3, 5));
-        monster.changeAI(ai);
+        monster.changeAndStartAI(ai);
         assertEquals(Direction.RIGHT, monster.direction());
         assertEquals(State.IDLE, monster.stateEnum());
 
@@ -97,7 +97,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
                 Coordinate.xy(5, 4), Coordinate.xy(6, 4), Coordinate.xy(7, 4));
         when(realmMap.movable(any(Coordinate.class))).thenAnswer(invocationOnMock -> !notMovable.contains(invocationOnMock.getArgument(0)));
         when(enemy.coordinate()).thenReturn(Coordinate.xy(4, 5));
-        monster.changeAI(ai);
+        monster.changeAndStartAI(ai);
         assertEquals(Direction.RIGHT, monster.direction());
         assertEquals(State.IDLE, monster.stateEnum());
 
@@ -127,7 +127,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         monster.changeCoordinate(Coordinate.xy(3, 3));
         monster.changeDirection(Direction.UP);
         when(enemy.coordinate()).thenReturn(Coordinate.xy(3, 4));
-        monster.changeAI(ai);
+        monster.changeAndStartAI(ai);
         assertEquals(State.ATTACK, monster.stateEnum());
         monster.update(monster.getStateMillis(State.ATTACK) - 10);
         reset(enemy);
@@ -141,7 +141,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         monster.changeCoordinate(Coordinate.xy(3, 3));
         monster.changeDirection(Direction.UP);
         when(enemy.coordinate()).thenReturn(Coordinate.xy(3, 4));
-        monster.changeAI(ai);
+        monster.changeAndStartAI(ai);
         assertEquals(State.ATTACK, monster.stateEnum());
         monster.update(monster.getStateMillis(State.ATTACK) - 10);
         monster.changeState(NpcCommonState.die(10000));
@@ -153,7 +153,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
     void changeEnemyIfCurrentEnemyFar() {
         PlayerImpl player = playerBuilder().coordinate(monster.coordinate().move(1, 0)).build();
         player.joinRealm(realm);
-        monster.changeAI(new MonsterWanderingAI());
+        monster.changeAndStartAI(new MonsterWanderingAI(monster.coordinate()));
         monster.attackedBy(player);
         monster.update(monster.cooldown());
         assertEquals(State.ATTACK, monster.stateEnum());

@@ -37,7 +37,7 @@ class DynamicObjectManagerImplTest {
 
     private CreateDynamicObjectSdb createDynamicObjectSdb;
 
-    private RealmEventHandler eventHandler;
+    private CrossRealmEventSender eventHandler;
 
 
     @BeforeEach
@@ -47,7 +47,7 @@ class DynamicObjectManagerImplTest {
         entityEventSender = Mockito.mock(EntityEventSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
         createDynamicObjectSdb = Mockito.mock(CreateDynamicObjectSdb.class);
-        eventHandler = Mockito.mock(RealmEventHandler.class);
+        eventHandler = Mockito.mock(CrossRealmEventSender.class);
         realmMap = Mockito.mock(RealmMap.class);
         manager = new DynamicObjectManagerImpl(factory, entityIdGenerator, entityEventSender, itemManager, createDynamicObjectSdb, eventHandler, realmMap);
     }
@@ -69,7 +69,7 @@ class DynamicObjectManagerImplTest {
         when(player.inventory()).thenReturn(inv);
         Item item = Mockito.mock(Item.class);
         when(item.name()).thenReturn("骨钥匙");
-        var slot = player.inventory().add(item);
+        var slot = player.inventory().put(item);
         when(player.consumeItem(slot)).thenReturn(true);
         var eventListener = new TestingEventListener();
         triggerDynamicObject.registerEventListener(eventListener);

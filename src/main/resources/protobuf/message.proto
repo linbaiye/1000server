@@ -51,11 +51,11 @@ message PickItemPacket {
 
 message PlayerLoginPacket {
   string token = 1;
+  string charName = 2;
 }
 
 message CreatureDieEventPacket {
   int64 id = 1;
-  string sound = 2;
 }
 
 message CreatureAttackEventPacket {
@@ -81,7 +81,6 @@ message CreatureHurtEventPacket {
   int32 afterHurtState = 5;
   int32 currentLife = 6;
   int32 maxLife = 7;
-  string sound = 8;
 }
 
 message ChangeStatePacket {
@@ -159,6 +158,7 @@ message ShowItemPacket {
   int32 coordinateX = 5;
   int32 coordinateY = 6;
   string name = 7;
+  int32 color = 8;
 }
 
 message ShowTeleportPacket {
@@ -214,6 +214,64 @@ message ClientDragPlayerPacket {
   int32 ropeSlot = 2;
 }
 
+message ClientDyePacket {
+  int32 dyedSlotId = 1;
+  int32 dyeSlotId = 2;
+}
+
+message ClientSayPacket {
+  string text = 1;
+}
+
+message ClientBankOperationPacket {
+  int32 type = 1;
+  int32 fromSlot = 2;
+  int32 toSlot = 3;
+  int64 number = 4;
+  int64 bankerId = 5;
+}
+
+message ClientChangeTeamPacket {
+  int32 teamNumber = 1;
+}
+
+message ClientFoundGuildPacket{
+  string name = 1;
+  int32 x = 2;
+  int32 y = 3;
+  int32 inventorySlot = 4;
+}
+
+message ClientCreateGuildKungFuPacket {
+  int32 attackSpeed = 1;
+  int32 life = 2;
+  int32 avoidance = 3;
+  int32 power = 4;
+  int32 recovery = 5;
+  int32 innerPower = 6;
+  int32 outerPower = 8;
+  int32 bodyDamage = 7;
+  int32 headDamage = 9;
+  int32 armDamage = 11;
+  int32 legDamage = 12;
+  int32 bodyArmor = 13;
+  int32 headArmor = 14;
+  int32 armArmor = 15;
+  int32 legArmor = 16;
+  string name = 17;
+  int32 type = 18;
+}
+
+message ClientManageGuildPacket {
+  int32 type = 1;
+  string target = 2;
+}
+
+message ClientSubmitQuestPacket {
+  int64 id = 1;
+  string questName = 2;
+}
+
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
@@ -237,6 +295,14 @@ message ClientPacket {
     ClientSwapKungFuSlotPacket swapKungFuSlot = 19;
     ClientDragPlayerPacket dragPlayer = 20;
     ClientSimpleCommandPacket simpleCommand = 21;
+    ClientDyePacket dye = 22;
+    ClientSayPacket say = 23;
+    ClientBankOperationPacket bankOperation = 24;
+    ClientChangeTeamPacket changeTeam = 25;
+    ClientFoundGuildPacket foundGuild = 26;
+    ClientCreateGuildKungFuPacket createGuildKungFu = 27;
+    ClientManageGuildPacket manageGuild = 28;
+    ClientSubmitQuestPacket submitQuest = 29;
   }
 }
 
@@ -286,6 +352,7 @@ message TextMessagePacket {
   optional string text = 2;
   int32 location = 3;
   int32 colorType = 4;
+  optional string fromPlayer = 5;
 }
 
 message ToggleKungFuPacket {
@@ -293,6 +360,7 @@ message ToggleKungFuPacket {
   optional int32 level = 2;
   int64 id = 3;
   bool quietly = 4;
+  int32 type = 5;
 }
 
 message LifeBarPacket {
@@ -442,6 +510,54 @@ message NpcPositionPacket {
   repeated string nameList = 3;
 }
 
+message ChatPacket {
+  int64 id = 1;
+  string content = 2;
+  optional string fromPlayer = 3;
+}
+
+message OpenBankPacket {
+  repeated InventoryItemPacket items = 1;
+  int32 capacity = 2;
+  int32 unlocked = 3;
+}
+
+message UpdateBankPacket {
+  int32 type = 1;
+  optional InventoryItemPacket updateSlot = 2;
+}
+
+message NameColorPacket {
+  int64 id = 1;
+  int32 color = 2;
+}
+
+message UpdateGuildPacket {
+  int64 id = 1;
+  string name = 2;
+}
+
+message UpdateGuildKungFuFormPacket {
+  int32 command = 1;
+  string text = 2;
+}
+
+message UpdateQuestWindowPacket {
+  int64 id = 1;
+  string questName = 2;
+  string questDescription = 3;
+  string submitText = 4;
+  string npcName = 5;
+}
+
+message UpdateBuffPacket {
+  int32 type = 1;
+  int32 icon = 2;
+  int32 color = 3;
+  int32 seconds = 4;
+  optional string description = 5;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -487,6 +603,14 @@ message Packet {
     ShowTeleportPacket showTeleport = 43;
     BreakRopePacket breakRope = 44;
     NpcPositionPacket npcPosition = 45;
+    ChatPacket chat = 46;
+    OpenBankPacket openBank = 47;
+    UpdateBankPacket updateBank = 48;
+    NameColorPacket nameColor = 49;
+    UpdateGuildPacket updateGuild = 50;
+    UpdateGuildKungFuFormPacket kungFuForm = 51;
+    UpdateQuestWindowPacket questWindow = 52;
+    UpdateBuffPacket updateBuff = 53;
   }
 }
 
@@ -498,6 +622,7 @@ message CreatureInterpolationPacket {
   optional string merchantFile = 5;
   string shape = 6;
   string animate = 7;
+  repeated string menus = 8;
 }
 
 
@@ -520,6 +645,8 @@ message PlayerInfoPacket {
   int32 bootColor = 17;
   int32 clothingColor = 18;
   int32 trouserColor = 19;
+  int32 nameColor = 20;
+  optional string guildName = 21;
 }
 
 

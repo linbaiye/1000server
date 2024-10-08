@@ -139,12 +139,6 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
     }
 
     @Override
-    public void respawn() {
-        realmMap().occupy(this);
-        changeState(DynamicObjectState.INITIAL);
-    }
-
-    @Override
     public int respawnTime() {
         return dynamicObjectSdb().getRegenInterval(idName()) * 10;
     }

@@ -2,15 +2,15 @@ package org.y1000.entities.creatures.npc;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
+import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.network.gen.CreatureInterpolationPacket;
@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
 
@@ -64,18 +63,6 @@ class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
         assertEquals(Direction.DOWN.value(), creatureInterpolation.getInterpolation().getDirection());
     }
 
-    @Test
-    void revive() {
-        PlayerImpl player = playerBuilder().coordinate(npc.coordinate().moveBy(Direction.RIGHT)).build();
-        npc.attackedBy(player);
-        assertEquals(State.DIE, npc.stateEnum());
-        Mockito.reset(mockedMap);
-        npc.respawn(npc.coordinate().move(0, 1));
-        assertEquals(State.IDLE, npc.stateEnum());
-        assertEquals(npc.coordinate(), Coordinate.xy(2, 4));
-        assertEquals(npc.spawnCoordinate(), Coordinate.xy(2, 4));
-        Mockito.verify(mockedMap, Mockito.times(1)).occupy(npc);
-    }
 
     @Test
     void equalsAndHashCode() {

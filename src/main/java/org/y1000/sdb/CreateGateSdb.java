@@ -21,6 +21,10 @@ public interface CreateGateSdb {
 
     int getY(String name);
 
+    Integer getEX(String name);
+
+    Integer getEY(String name);
+
     boolean isVisible(String name);
 
     String getRandomPos(String name);
@@ -28,4 +32,6 @@ public interface CreateGateSdb {
     int getShape(String name);
 
     String getViewName(String name);
+
+    String getNeedItem(String name);
 }

@@ -1,6 +1,6 @@
 package org.y1000.sdb;
 
-public final class ItemDrugSdbImpl extends AbstractSdbReader implements ItemDrugSdb {
+public final class ItemDrugSdbImpl extends AbstractCSVSdbReader implements ItemDrugSdb {
 
     public static final ItemDrugSdb INSTANCE = new ItemDrugSdbImpl();
 
@@ -65,5 +65,10 @@ public final class ItemDrugSdbImpl extends AbstractSdbReader implements ItemDrug
     @Override
     public int getELegLife(String name) {
         return getIntOrZero(name, "eLegLife");
+    }
+
+    @Override
+    public int getDamageBody(String name) {
+        return getIntOrZero(name, "DamageBody");
     }
 }

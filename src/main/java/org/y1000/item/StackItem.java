@@ -27,6 +27,10 @@ public record StackItem(Item item, long number) implements Item {
         return MAX_NUMBER;
     }
 
+    public <T extends Item> Optional<T> origin(Class<T> type) {
+        return type.isAssignableFrom(item.getClass()) ? Optional.of(type.cast(item)) : Optional.empty();
+    }
+
     @Override
     public ItemType itemType() {
         return item.itemType();
@@ -67,6 +71,20 @@ public record StackItem(Item item, long number) implements Item {
     public boolean containsSameItem(Item item) {
         return item != null && name().equals(item.name());
     }
+
+    public boolean canMerge(Item item) {
+        return item instanceof StackItem stackItem &&
+                stackItem.name().equals(name())
+                && hasMoreSpace(stackItem.number());
+    }
+
+    public StackItem merge(Item item) {
+        if (!canMerge(item)) {
+            throw new IllegalArgumentException();
+        }
+        return increase(((StackItem)item).number());
+    }
+
 
     public StackItem decrease(long n) {
         Validate.isTrue(n > 0);

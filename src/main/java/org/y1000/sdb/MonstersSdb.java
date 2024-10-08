@@ -48,4 +48,8 @@ public interface MonstersSdb {
     String getHaveMagic(String name);
 
     int getViewWidth(String name);
+
+    int getEscapeLife(String name);
+
+    int getRegenInterval(String name);
 }

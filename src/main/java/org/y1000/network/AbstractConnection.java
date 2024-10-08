@@ -3,14 +3,14 @@ package org.y1000.network;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.objects.TriggerDynamicObject;
-import org.y1000.repository.PlayerRepository;
+import org.y1000.ServerContext;
+import org.y1000.message.clientevent.chat.ClientInputTextEvent;
 import org.y1000.item.EquipmentType;
 import org.y1000.message.clientevent.*;
 import org.y1000.network.event.ConnectionClosedEvent;
 import org.y1000.network.event.ConnectionDataEvent;
-import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.network.gen.ClientPacket;
+import org.y1000.network.gen.ClientSimpleCommandPacket;
 import org.y1000.realm.RealmManager;
 import org.y1000.util.Coordinate;
 
@@ -21,14 +21,25 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     private final AtomicReference<ChannelHandlerContext> context;
 
-    private final PlayerRepository playerRepository;
-
     private final RealmManager realmManager;
 
-    public AbstractConnection(RealmManager realmManager, PlayerRepository playerRepository) {
+    private final ServerContext serverContext;
+
+    public AbstractConnection(RealmManager realmManager,
+                              ServerContext serverContext) {
         this.realmManager = realmManager;
+        this.serverContext = serverContext;
         context = new AtomicReference<>();
-        this.playerRepository = playerRepository;
+    }
+
+    private ClientEvent parseSimpleCommand(ClientSimpleCommandPacket packet) {
+        if (packet.getCommand() == SimpleCommand.CANCEL_BUFF.value()) {
+            return new CancelBuffEvent();
+        } else if (packet.getCommand() == SimpleCommand.PONG.value()) {
+            log.info("Received ping from.");
+            return null;
+        }
+        return ClientSimpleCommandEvent.parse(packet.getCommand());
     }
 
     private ClientEvent createMessage(ClientPacket clientPacket) {
@@ -54,7 +65,16 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case TRIGGERDYNAMICOBJECT -> new ClientTriggerDynamicObjectEvent(clientPacket.getTriggerDynamicObject().getId(), clientPacket.getTriggerDynamicObject().getUseSlot());
             case SWAPKUNGFUSLOT -> new ClientSwapKungFuSlotEvent(clientPacket.getSwapKungFuSlot().getPage(), clientPacket.getSwapKungFuSlot().getSlot1(), clientPacket.getSwapKungFuSlot().getSlot2());
             case DRAGPLAYER -> new ClientDragPlayerEvent(clientPacket.getDragPlayer().getTargetId(), clientPacket.getDragPlayer().getRopeSlot());
-            case SIMPLECOMMAND -> ClientSimpleCommandEvent.parse(clientPacket.getSimpleCommand().getCommand());
+            case SIMPLECOMMAND -> parseSimpleCommand(clientPacket.getSimpleCommand());
+            case DYE -> new ClientDyeEvent(clientPacket.getDye().getDyedSlotId(), clientPacket.getDye().getDyeSlotId());
+            case SAY -> ClientInputTextEvent.create(clientPacket.getSay().getText());
+            case BANKOPERATION -> ClientOperateBankEvent.fromPacket(clientPacket.getBankOperation());
+            case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
+            case CLICKPACKET -> new ClientClickEvent(clientPacket.getClickPacket().getId());
+            case FOUNDGUILD -> ClientFoundGuildEvent.parse(clientPacket.getFoundGuild());
+            case CREATEGUILDKUNGFU -> ClientCreateGuildKungFuEvent.parse(clientPacket.getCreateGuildKungFu());
+            case MANAGEGUILD -> new ClientManageGuildEvent(clientPacket.getManageGuild().getType(), clientPacket.getManageGuild().getTarget());
+            case SUBMITQUEST -> new ClientSubmitQuestEvent(clientPacket.getSubmitQuest().getId(), clientPacket.getSubmitQuest().getQuestName(), serverContext.getItemFactory());
             default -> throw new IllegalArgumentException();
         };
     }
@@ -65,18 +85,15 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         if (msg instanceof ClientPacket packet) {
             try {
                 var message = createMessage(packet);
-                if (message instanceof LoginEvent loginEvent) {
-                    var player = playerRepository.load(loginEvent.getToken());
-                    realmManager.queueEvent(new ConnectionEstablishedEvent(0, player, this));
-                } else {
-                    realmManager.queueEvent(new ConnectionDataEvent(this, message));
+                if (message == null) {
+                    // Not something we can deal with.
+                    return;
                 }
+                realmManager.queueEvent(new ConnectionDataEvent(this, message));
                 //log.debug("Received message {}.", message);
             } catch (Exception e) {
                 log.error("Exception ", e);
-
             }
-            //clientEventListeners.forEach(clientEventListener -> clientEventListener.OnEvent(message));
         }
     }
 
@@ -86,7 +103,6 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        log.info("Channel closed.");
         realmManager.queueEvent(new ConnectionClosedEvent(this));
     }
 

@@ -27,7 +27,7 @@ class InvisibleTeleportTest {
 
     @Test
     void randomPosition() {
-        var teleport = new InvisibleTeleport(1L, "te", createGateSdb, e -> {});
+        var teleport = new InvisibleTeleport(1L, "te", createGateSdb, e -> {}, 0, null);
         assertEquals(9, teleport.teleportCoordinates().size());
         assertTrue(teleport.coordinate().equals(Coordinate.xy(12, 11)) || teleport.coordinate().equals(Coordinate.xy(33, 44)));
         assertEquals(1L, teleport.id());

@@ -1,5 +1,6 @@
 package org.y1000.message.serverevent;
 
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.item.Item;
@@ -17,6 +18,10 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
         this.item = item;
     }
 
+    public UpdateInventorySlotEvent(Player source, int slot) {
+        this(source, slot, source.inventory().getItem(slot));
+    }
+
     @Override
     public void accept(PlayerEventVisitor playerEventHandler) {
         playerEventHandler.visit(this);
@@ -24,6 +29,12 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
+        return Packet.newBuilder()
+                .setUpdateSlot(toPacket(slot, item))
+                .build();
+    }
+
+    public static InventoryItemPacket toPacket(int slot, Item item) {
         InventoryItemPacket.Builder builder = InventoryItemPacket.newBuilder()
                 .setSlotId(slot)
                 .setColor(item != null ? item.color() : 0)
@@ -32,9 +43,7 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
         if (number != null) {
             builder.setNumber(number);
         }
-        return Packet.newBuilder()
-                .setUpdateSlot(builder)
-                .build();
+        return builder.build();
     }
 
     public static UpdateInventorySlotEvent remove(Player player, int slotId) {
@@ -43,5 +52,9 @@ public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
 
     public static UpdateInventorySlotEvent update(Player player, int slotId, Item item) {
         return new UpdateInventorySlotEvent(player, slotId, item);
+    }
+
+    public static UpdateInventorySlotEvent update(Player player, int slotId) {
+        return new UpdateInventorySlotEvent(player, slotId, player.inventory().getItem(slotId));
     }
 }

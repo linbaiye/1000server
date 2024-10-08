@@ -89,6 +89,14 @@ final class RealmMapV2Impl implements RealmMap {
         if (!coordinateEntityMap.getOrDefault(coordinate, Collections.emptySet()).isEmpty()) {
             return false;
         }
+        return tileMovable(coordinate);
+    }
+
+    @Override
+    public boolean tileMovable(Coordinate coordinate) {
+        if (coordinate == null) {
+            return false;
+        }
         var cell = movableMask[coordinate.y()][coordinate.x()];
         return ((cell & 0x1) == 0) && ((cell & 0x2) == 0);
     }
@@ -122,16 +130,6 @@ final class RealmMapV2Impl implements RealmMap {
         if (c != null) {
             doRemoveCoordinate(entity, c);
         }
-    }
-
-    @Override
-    public int width() {
-        return width;
-    }
-
-    @Override
-    public int height() {
-        return height;
     }
 
 
@@ -241,7 +239,7 @@ final class RealmMapV2Impl implements RealmMap {
             for (int h = 0; h < header.height / BLOCK_SIZE; h++) {
                 for (int w = 0; w < header.width / BLOCK_SIZE; w++) {
                     if (is.read(blockData.array()) != MAP_BLOCK_DATA_SIZE) {
-                        log.error("Failed to read map block.");
+                        log.error("Failed to read map block for map {}.", name);
                         return Optional.empty();
                     }
                     for (int y = 0; y < BLOCK_SIZE; y++) {

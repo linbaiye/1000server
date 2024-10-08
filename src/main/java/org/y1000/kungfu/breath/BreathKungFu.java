@@ -5,6 +5,7 @@ import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
+import org.y1000.entities.players.event.PlayerKungFuFullEvent;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;
@@ -65,7 +66,7 @@ public final class BreathKungFu extends AbstractKungFu {
             return 0;
         }
         int max = playerMaxResource / (6 + (12000 - level()) * 14 / 12000);
-        return max * inParameter / 100;
+        return 5 * max * inParameter / 100 ;
     }
 
     public void update(Player player, int delta, UnaryAction<? super EntityEvent> eventSender) {
@@ -74,9 +75,9 @@ public final class BreathKungFu extends AbstractKungFu {
             return;
         }
         setTimer();
-        if (!canRegenerateResources(player)) {
+        /*if (!canRegenerateResources(player)) {
             return;
-        }
+        }*/
         eventSender.invoke(new EntitySoundEvent(player, computeSound(player.isMale())));
         player.gainLife(computeResource(player.maxLife(), parameters.life()));
         player.gainPower(computeResource(player.maxPower(), parameters.power()));
@@ -85,6 +86,8 @@ public final class BreathKungFu extends AbstractKungFu {
         eventSender.invoke(new PlayerAttributeEvent(player));
         if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
             eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
+            if (isLevelFull())
+                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
         }
     }
 

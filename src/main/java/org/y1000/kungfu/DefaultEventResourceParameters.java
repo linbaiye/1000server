@@ -22,6 +22,12 @@ public final class DefaultEventResourceParameters implements EventResourceParame
         outerPower = kungFuSdb.getEOutPower(name) * INI_MUL_EVENTOUTPOWER / INI_MAGIC_DIV_VALUE;
         innerPower = kungFuSdb.getEInPower(name) * INI_MUL_EVENTINPOWER / INI_MAGIC_DIV_VALUE;
     }
+    public DefaultEventResourceParameters(int life, int power, int outerPower, int innerPower) {
+        this.life = life * INI_MUL_EVENTLIFE / INI_MAGIC_DIV_VALUE;
+        this.power = power * INI_MUL_EVENTPOWER / INI_MAGIC_DIV_VALUE;
+        this.outerPower = outerPower * INI_MUL_EVENTOUTPOWER / INI_MAGIC_DIV_VALUE;
+        this.innerPower = innerPower * INI_MUL_EVENTINPOWER / INI_MAGIC_DIV_VALUE;
+    }
 
 
     @Override

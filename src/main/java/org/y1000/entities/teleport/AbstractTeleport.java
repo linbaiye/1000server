@@ -10,6 +10,7 @@ import org.y1000.util.UnaryAction;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -18,8 +19,6 @@ public abstract class AbstractTeleport implements Teleport {
     private final Set<Coordinate> coordinates;
 
     private final long id;
-
-    private final String idName;
 
     private final Coordinate coordinate;
 
@@ -30,17 +29,23 @@ public abstract class AbstractTeleport implements Teleport {
     private final Coordinate toCoordinate;
 
     private final Coordinate rejectCoordinate;
+
     private final int realmId;
+
+    private final List<TeleportCost> costs;
+
 
     public AbstractTeleport(long id,
                             String idName,
                             CreateGateSdb createGateSdb,
-                            UnaryAction<PlayerRealmEvent> teleportEventHandler) {
+                            UnaryAction<PlayerRealmEvent> teleportEventHandler,
+                            int realmId,
+                            List<TeleportCost> costs) {
         Validate.notNull(idName);
         Validate.notNull(teleportEventHandler);
         Validate.notNull(createGateSdb);
+        this.costs = costs != null ? costs : Collections.emptyList();
         this.id = id;
-        this.idName = idName;
         this.coordinate = parseCoordinate(idName, createGateSdb);
         this.toCoordinate = Coordinate.xy(createGateSdb.getTX(idName), createGateSdb.getTY(idName));
         this.toRealm = createGateSdb.getServerId(idName);
@@ -48,10 +53,9 @@ public abstract class AbstractTeleport implements Teleport {
         this.teleportEventHandler = teleportEventHandler;
         Validate.notNull(coordinate);
         Validate.notNull(toCoordinate);
-        rejectCoordinate = Coordinate.Empty;
-        realmId = 0;
+        this.rejectCoordinate = createGateSdb.getEX(idName) != null ? Coordinate.xy(createGateSdb.getEX(idName), createGateSdb.getEY(idName)) : null;
+        this.realmId = realmId;
     }
-
 
     public long id() {
         return id;
@@ -72,7 +76,7 @@ public abstract class AbstractTeleport implements Teleport {
         if (player == null) {
             return;
         }
-        teleportEventHandler.invoke(new RealmTeleportEvent(player, toRealm, toCoordinate));
+        teleportEventHandler.invoke(new RealmTeleportEvent(player, toRealm, toCoordinate, realmId, rejectCoordinate, costs));
     }
 
     private static Set<Coordinate> parse(String name, Coordinate coordinate, CreateGateSdb gateSdb) {

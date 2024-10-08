@@ -26,7 +26,7 @@ htmlReport/
 /nbdist/
 /.nb-gradle/
 build/
-src/main/resources/maps/
+#src/main/resources/maps/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
@@ -35,3 +35,5 @@ src/main/resources/maps/
 
 ### Mac OS ###
 .DS_Store
+java.proto
+message.proto

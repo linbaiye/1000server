@@ -1,19 +1,32 @@
 package org.y1000;
 
+import jakarta.persistence.EntityManagerFactory;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
+import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
+import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.creatures.npc.NpcFactoryImpl;
+import org.y1000.entities.objects.DynamicObjectFactory;
+import org.y1000.entities.objects.DynamicObjectFactoryImpl;
 import org.y1000.entities.players.*;
 import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.item.ItemFactory;
+import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.kungfu.KungFuFactory;
+import org.y1000.kungfu.KungFuSdb;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.repository.BankRepository;
+import org.y1000.repository.ItemRepository;
+import org.y1000.repository.ItemRepositoryImpl;
 import org.y1000.repository.KungFuBookRepositoryImpl;
+import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
 import java.util.HashMap;
@@ -24,8 +37,8 @@ import static org.mockito.Mockito.when;
 
 public abstract class AbstractUnitTestFixture {
 
-    protected final KungFuBookFactory kungFuBookFactory = new KungFuBookRepositoryImpl();
-    protected final KungFuFactory kungFuFactory = new KungFuBookRepositoryImpl();
+    protected final KungFuBookFactory kungFuBookFactory = createKungFuBookFactory();
+    protected final KungFuFactory kungFuFactory = createKungFuFactory();
 
     private int id;
 
@@ -38,11 +51,48 @@ public abstract class AbstractUnitTestFixture {
         return mockedMap;
     }
 
+    private ItemRepositoryImpl createItemRepositoryImpl() {
+        return new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuFactory, Mockito.mock(EntityManagerFactory.class));
+    }
+
+    protected DynamicObjectFactory createDynamicObjectFactory() {
+        return new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
+    }
+
+    protected ItemFactory createItemFactory() {
+        return createItemRepositoryImpl();
+    }
+
+    protected ItemRepository createItemRepository() {
+        return createItemRepositoryImpl();
+    }
+
+    protected BankRepository createBankRepository() {
+        return createItemRepositoryImpl();
+    }
+
+    protected KungFuBookRepositoryImpl createKungFuBookRepositoryImpl() {
+        return new KungFuBookRepositoryImpl(Mockito.mock(EntityManagerFactory.class));
+    }
+    protected NpcFactoryImpl createNpcFactory() {
+        return new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance,
+                MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE), RealmSpecificSdbRepositoryImpl.INSTANCE);
+    }
+
+    protected KungFuBookFactory createKungFuBookFactory() {
+        return createKungFuBookRepositoryImpl();
+    }
+
+    protected KungFuFactory createKungFuFactory() {
+        return createKungFuBookRepositoryImpl();
+    }
+
     protected Realm mockRealm(RealmMap map) {
         Realm mockedRealm = Mockito.mock(Realm.class);
         when(mockedRealm.name()).thenReturn("realm");
         when(mockedRealm.bgm()).thenReturn("bgm");
         when(mockedRealm.map()).thenReturn(map);
+        when(mockedRealm.id()).thenReturn(1);
         return mockedRealm;
     }
 
@@ -74,6 +124,7 @@ public abstract class AbstractUnitTestFixture {
                 .realmMap(Mockito.mock(RealmMap.class))
                 .skill(null)
                 .attributeProvider(new TestingMonsterAttributeProvider())
+                .ai(new MonsterWanderingAI(Coordinate.xy(1, 1)))
                 .stateMillis(MONSTER_STATE_MILLIS)
                 ;
     }
@@ -96,7 +147,8 @@ public abstract class AbstractUnitTestFixture {
                 .outerPower(PlayerExperiencedAgedAttribute.createOuterPower())
                 .power(PlayerExperiencedAgedAttribute.createPower())
                 .pillSlots(new PillSlots())
-                .inventory(new Inventory());
+                .inventory(new Inventory())
+                ;
     }
 
     protected int nextId() {

@@ -7,5 +7,7 @@ public interface EntityEvent {
 
     Entity source();
 
-    void accept(EntityEventVisitor visitor);
+    default void accept(EntityEventVisitor visitor) {
+
+    }
 }

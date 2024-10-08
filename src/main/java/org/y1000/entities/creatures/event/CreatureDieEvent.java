@@ -15,7 +15,6 @@ public final class CreatureDieEvent extends AbstractCreatureEvent {
     protected Packet buildPacket() {
         return Packet.newBuilder()
                 .setDie(CreatureDieEventPacket.newBuilder().setId(source().id())
-                        .setSound(((Creature)source()).dieSound().orElse(""))
                         .build()).build();
     }
 

@@ -44,4 +44,8 @@ public interface AttributeProvider {
     default Optional<String> dieSound() {
         return Optional.empty();
     }
+
+    default int escapeLife() {
+        return 0;
+    }
 }

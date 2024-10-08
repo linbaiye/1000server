@@ -31,7 +31,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
 
     private record DropItem(String name, int number, int rate) {
         public boolean canDrop() {
-            return ThreadLocalRandom.current().nextInt(rate) == 0;
+            return ThreadLocalRandom.current().nextInt(0, rate) == 0;
         }
     }
 
@@ -62,7 +62,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
             return;
         }
         Item slotItem = itemFactory.createItem(groundedItem);
-        int slot = picker.inventory().add(slotItem);
+        int slot = picker.inventory().put(slotItem);
         if (slot > 0) {
             picker.emitEvent(new UpdateInventorySlotEvent(picker, slot, picker.inventory().getItem(slot)));
             picker.emitEvent(PlayerTextEvent.pickedItem(picker, groundedItem.getName(), groundedItem.getNumber()));
@@ -97,6 +97,16 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         dropNewItem(createGroundItem(name, at, number));
     }
 
+    @Override
+    public void dropItem(PlayerDropItemEvent dropItemEvent) {
+        if (dropItemEvent == null)
+            return;
+        if (dropItemEvent.source().coordinate().directDistance(dropItemEvent.getCoordinate()) <= 3) {
+            GroundedItem groundedItem = dropItemEvent.createGroundedItem(idGenerator.next());
+            dropNewItem(groundedItem);
+        }
+    }
+
 
     private GroundedItem createGroundItem(String name,
                                           Coordinate coordinate,
@@ -122,7 +132,6 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         updateManagedEntities(delta);
     }
 
-
     @Override
     public void visit(RemoveEntityEvent event) {
         if (event.source() instanceof GroundedItem item) {
@@ -139,14 +148,6 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         add(item);
         item.dropSound().ifPresent(s -> eventSender.sendEvent(new EntitySoundEvent(item, s)));
     }
-
-    @Override
-    public void visit(PlayerDropItemEvent event) {
-        GroundedItem groundedItem = event.createGroundedItem(idGenerator.next());
-        dropNewItem(groundedItem);
-        log.debug("Dropped item at {}", groundedItem.coordinate());
-    }
-
 
     @Override
     public void onEvent(EntityEvent entityEvent) {

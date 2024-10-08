@@ -1,6 +1,7 @@
 package org.y1000.entities.players.inventory;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
@@ -19,215 +20,23 @@ import org.y1000.trade.TradeItem;
 import org.y1000.util.UnaryAction;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 @Slf4j
-public final class Inventory {
+public final class Inventory extends AbstractInventory {
 
     private static final int MAX_CAP = 30;
 
-    private final Map<Integer, Item> items = new HashMap<>(MAX_CAP);
-
-    public boolean isFull() {
-        return items.size() >= MAX_CAP;
-    }
-
-    public void foreach(BiConsumer<Integer, Item> consumer) {
-        items.forEach(consumer);
-    }
-
-    public int capacity() {
-        return MAX_CAP;
-    }
-
-    public int itemCount() {
-        return items.size();
-    }
-
-    public int availableSlots() {
-        return MAX_CAP - itemCount();
+    public Inventory() {
+        super(MAX_CAP);
     }
 
     private Optional<StackItem> findStackItem(String name) {
-        return items.values().stream()
+        return items().values().stream()
                 .filter(item -> item instanceof StackItem stackItem && stackItem.name().equals(name))
                 .findFirst()
                 .map(StackItem.class::cast);
-    }
-
-
-    public int add(Item item) {
-        if (item == null) {
-            return 0;
-        }
-        if (item instanceof StackItem stackItem) {
-            var targetSlot = -1;
-            for (int slot : items.keySet()) {
-                Item slotItem = items.get(slot);
-                if (slotItem instanceof StackItem slotStackItem && slotStackItem.containsSameItem(stackItem)) {
-                    targetSlot = slot;
-                    break;
-                }
-            }
-            if (targetSlot != -1)  {
-                var slotStackItem = ((StackItem)items.get(targetSlot));
-                if (slotStackItem.hasMoreSpace(stackItem.number())) {
-                    items.put(targetSlot, slotStackItem.increase(stackItem.number()));
-                    return targetSlot;
-                }
-                return 0;
-            }
-        }
-        if (isFull()) {
-            return 0;
-        }
-        for (int i = 1; i <= MAX_CAP; i++) {
-            if (!items.containsKey(i)) {
-                items.put(i, item);
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    public Item remove(int slot) {
-        return items.remove(slot);
-    }
-
-    public boolean swap(int from, int to) {
-        if (!items.containsKey(from) && !items.containsKey(to)) {
-            return false;
-        }
-        Item fromItem = items.remove(from);
-        Item toItem = items.remove(to);
-        if (fromItem != null)
-            items.put(to, fromItem);
-        if (toItem != null)
-            items.put(from, toItem);
-        return true;
-    }
-
-    public Item getItem(int slot) {
-        return items.get(slot);
-    }
-
-    public void put(int slot, Item item) {
-        Validate.notNull(item, "item must not be null.");
-        Item current = items.get(slot);
-        if (current == null) {
-            items.put(slot, item);
-            return;
-        }
-        throw new UnsupportedOperationException("Slot " + slot + " has item already.");
-    }
-
-    private <T extends Item> Optional<T> findFirst(Predicate<T> predicate, Class<T> type) {
-        return items.values().stream()
-                .filter(i -> type.isAssignableFrom(i.getClass()))
-                .map(type::cast)
-                .filter(predicate)
-                .findFirst();
-    }
-
-    public Optional<StackItem> findFirstStackItem(String name) {
-        return findFirst(i -> i.name().equals(name), StackItem.class);
-    }
-
-
-    public Optional<Weapon> findWeapon(AttackKungFuType type) {
-        Objects.requireNonNull(type, "type can't be null.");
-        return findFirst(weapon -> weapon.kungFuType() == type, Weapon.class);
-    }
-
-    public int findWeaponSlot(AttackKungFuType type) {
-        Objects.requireNonNull(type, "type can't be null.");
-        for (Integer i : items.keySet()) {
-            if (items.get(i) instanceof Weapon weapon && weapon.kungFuType() == type) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    public boolean contains(String name) {
-        return items.values().stream().anyMatch(item -> item.name().equals(name));
-    }
-
-    private void assertRange(int slot) {
-        Validate.isTrue(slot >= 1 && slot <= capacity(), "Slot out of range.");
-    }
-
-    public boolean hasEnough(int slot, long number) {
-        var item = getItem(slot);
-        if (item == null) {
-            return false;
-        }
-        if (item instanceof StackItem stackItem) {
-            return stackItem.number() >= number;
-        }
-        return number == 1;
-    }
-
-
-    public boolean decrease(int slot, long number) {
-        Item item = items.get(slot);
-        if (item == null) {
-            return false;
-        }
-        if (item instanceof StackItem) {
-            decreaseStack(slot, number);
-        } else {
-            items.remove(slot);
-        }
-        return true;
-    }
-
-
-    public boolean canPick(GroundedItem item) {
-        for (Item value : items.values()) {
-            if (value instanceof StackItem stackItem
-                    && stackItem.name().equals(item.getName())) {
-                return stackItem.hasMoreSpace(item.getNumber());
-            }
-        }
-        return !isFull();
-    }
-
-    public boolean canBuy(Collection<TradeItem> buyingItems, long cost) {
-        Validate.notNull(buyingItems);
-        for (TradeItem buyingItem : buyingItems) {
-            assertRange(buyingItem.slotId());
-            Item item = getItem(buyingItem.slotId());
-            if (item == null) {
-                continue;
-            }
-            if (item instanceof StackItem stackItem &&
-                    stackItem.name().equals(buyingItem.name()) &&
-                    stackItem.hasMoreSpace(buyingItem.number())) {
-                continue;
-            }
-            return false;
-        }
-        return findStackItem(ItemType.MONEY_NAME)
-                .map(money -> money.number() >= cost)
-                .orElse(false);
-    }
-
-    public boolean canSell(Collection<TradeItem> items) {
-        Validate.notNull(items);
-        for (TradeItem sellingItem : items) {
-            assertRange(sellingItem.slotId());
-            Item item = getItem(sellingItem.slotId());
-            if (item == null || !item.name().equals(sellingItem.name())) {
-                return false;
-            }
-            if (item instanceof StackItem stackItem && stackItem.number() < sellingItem.number()) {
-                return false;
-            }
-        }
-        return contains(ItemType.MONEY_NAME) || availableSlots() > 0;
     }
 
     private int requiredSpace(List<StackItem> items) {
@@ -258,7 +67,129 @@ public final class Inventory {
         return nonStackSize + space <= availableSlots();
     }
 
+    private <T extends Item> Optional<T> findFirst(Predicate<T> predicate, Class<T> type) {
+        return items().values().stream()
+                .filter(i -> type.isAssignableFrom(i.getClass()))
+                .map(type::cast)
+                .filter(predicate)
+                .findFirst();
+    }
+
+    public <T extends Item> Optional<StackItem> getStackItem(int slot, Class<T> type) {
+        Validate.notNull(type);
+        Item item = getItem(slot);
+        return item instanceof StackItem stackItem && stackItem.origin(type).isPresent() ?
+                Optional.of(stackItem) : Optional.empty();
+    }
+
+    public <T extends Item> Optional<T> getItem(int slot, Class<T> type) {
+        Validate.notNull(type);
+        Item item = getItem(slot);
+        return item != null && type.isAssignableFrom(item.getClass()) ?
+                Optional.of(type.cast(item)) : Optional.empty();
+    }
+
+    public Optional<StackItem> findFirstStackItem(String name) {
+        return findFirst(i -> i.name().equals(name), StackItem.class);
+    }
+
+
+    public Optional<Weapon> findWeapon(AttackKungFuType type) {
+        Objects.requireNonNull(type, "type can't be null.");
+        return findFirst(weapon -> weapon.kungFuType() == type, Weapon.class);
+    }
+
+    public int findWeaponSlot(AttackKungFuType type) {
+        Objects.requireNonNull(type, "type can't be null.");
+        var items = items();
+        for (Integer i : items.keySet()) {
+            if (items.get(i) instanceof Weapon weapon && weapon.kungFuType() == type) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public boolean contains(String name) {
+        return items().values().stream().anyMatch(item -> item.name().equals(name));
+    }
+
+    private void assertRange(int slot) {
+        Validate.isTrue(slot >= 1 && slot <= capacity(), "Slot out of range.");
+    }
+
+
+    public boolean canPick(GroundedItem item) {
+        var items = items();
+        for (Item value : items.values()) {
+            if (value instanceof StackItem stackItem
+                    && stackItem.name().equals(item.getName())) {
+                return stackItem.hasMoreSpace(item.getNumber());
+            }
+        }
+        return !isFull();
+    }
+
+    public boolean canBuy(Collection<TradeItem> buyingItems, long cost) {
+        Validate.notNull(buyingItems);
+        for (TradeItem buyingItem : buyingItems) {
+            assertRange(buyingItem.slotId());
+            Item item = getItem(buyingItem.slotId());
+            if (item == null) {
+                continue;
+            }
+            if (item instanceof StackItem stackItem &&
+                    stackItem.name().equals(buyingItem.name()) &&
+                    stackItem.hasMoreSpace(buyingItem.number())) {
+                continue;
+            }
+            return false;
+        }
+        return findStackItem(ItemType.MONEY_NAME)
+                .map(money -> money.number() >= cost)
+                .orElse(false);
+    }
+
+    public boolean hasEnough(String name, int number) {
+        if (StringUtils.isEmpty(name) || number <= 0) {
+            return false;
+        }
+        int slot = findFirstSlot(name);
+        return slot != 0 && hasEnough(slot, number);
+    }
+
+    /**
+     * Consume item by name and number.
+     * @param name item name.
+     * @param number item number.
+     * @return the slot if consumed, 0 if not.
+     */
+    public int consume(String name, int number) {
+        if (!hasEnough(name, number)) {
+            return 0;
+        }
+        int firstSlot = findFirstSlot(name);
+        return remove(firstSlot, number) != null ? firstSlot : 0;
+    }
+
+
+    public boolean canSell(Collection<TradeItem> items) {
+        Validate.notNull(items);
+        for (TradeItem sellingItem : items) {
+            assertRange(sellingItem.slotId());
+            Item item = getItem(sellingItem.slotId());
+            if (item == null || !item.name().equals(sellingItem.name())) {
+                return false;
+            }
+            if (item instanceof StackItem stackItem && stackItem.number() < sellingItem.number()) {
+                return false;
+            }
+        }
+        return contains(ItemType.MONEY_NAME) || availableSlots() > 0;
+    }
+
     private int findFirstSlot(Predicate<? super Item> predicate) {
+        var items = items();
         for (int i = 1; i <= MAX_CAP; i++) {
             if (items.containsKey(i) && predicate.test(items.get(i))) {
                 return i;
@@ -278,6 +209,7 @@ public final class Inventory {
         if (!canBuy(buyingItems, cost)) {
             throw new IllegalArgumentException();
         }
+        var items = items();
         for (TradeItem buyingItem : buyingItems) {
             Item item = getItem(buyingItem.slotId());
             if (item == null) {
@@ -292,22 +224,6 @@ public final class Inventory {
             decreaseStack(moneySlot, cost);
             player.emitEvent(new UpdateInventorySlotEvent(player, moneySlot, getItem(moneySlot)));
         }
-    }
-
-    private void decreaseStack(int slot, long number) {
-        var item =  getItem(slot);
-        if (item instanceof StackItem stackItem) {
-            var decreased = stackItem.decrease(number);
-            if (decreased.number() <= 0) {
-                remove(slot);
-            } else {
-                items.put(slot, decreased);
-            }
-        }
-    }
-
-    public boolean decrease(int slotId) {
-        return decrease(slotId, 1);
     }
 
     public void sell(Collection<TradeItem> items, StackItem profit, Player player) {
@@ -326,7 +242,7 @@ public final class Inventory {
             }
             player.emitEvent(new UpdateInventorySlotEvent(player, sellingItem.slotId(), getItem(sellingItem.slotId())));
         }
-        add(profit);
+        put(profit);
         int n = findFirstSlot(ItemType.MONEY_NAME);
         player.emitEvent(new UpdateInventorySlotEvent(player, n, getItem(n)));
     }
@@ -336,20 +252,18 @@ public final class Inventory {
         assertRange(dropItemEvent.sourceSlot());
         Item item = getItem(dropItemEvent.sourceSlot());
         if (item == null) {
-            log.warn("Nothing to drop.");
             return;
         }
         if (decrease(dropItemEvent.sourceSlot(), dropItemEvent.number())) {
-            log.debug("Dropped item {}", item);
             UpdateInventorySlotEvent event = new UpdateInventorySlotEvent(player, dropItemEvent.sourceSlot(), getItem(dropItemEvent.sourceSlot()));
             eventSender.invoke(event);
-            eventSender.invoke(new PlayerDropItemEvent(player, item.name(), dropItemEvent.number(), dropItemEvent.coordinate()));
+            eventSender.invoke(new PlayerDropItemEvent(player, item.name(), dropItemEvent.number(), dropItemEvent.coordinate(), item.color()));
             item.dropSound().ifPresent(s -> eventSender.invoke(new EntitySoundEvent(player, s)));
         }
     }
 
     public boolean contains(ItemType type) {
-        return items.values().stream().anyMatch(i -> i.itemType() == type);
+        return items().values().stream().anyMatch(i -> i.itemType() == type);
     }
 
 
@@ -357,6 +271,7 @@ public final class Inventory {
         if (targetSlot == 0) {
             return null;
         }
+        var items = items();
         var stackItem = ((StackItem)items.get(targetSlot));
         var decreased = stackItem.decrease(1);
         if (decreased.number() == 0) {
@@ -393,5 +308,11 @@ public final class Inventory {
         } else if (inventoryEvent instanceof ClientDropItemEvent dropItemEvent) {
             handleDropEvent(player, dropItemEvent, eventSender);
         }
+    }
+
+    @Override
+    public boolean canPut(int slot, Item item) {
+        return slot > 0 && slot <= capacity()
+                && canPut(item, slot);
     }
 }

@@ -5,7 +5,7 @@ import org.y1000.network.Connection;
 import org.y1000.network.ConnectionEventType;
 import org.y1000.realm.event.PlayerRealmEvent;
 
-public record ConnectionEstablishedEvent(int realmId, Player player,
+public record ConnectionEstablishedEvent(int toRealmId, Player player,
                                          Connection connection)
         implements ConnectionEvent, PlayerRealmEvent {
     @Override

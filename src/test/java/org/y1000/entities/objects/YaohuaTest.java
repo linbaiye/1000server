@@ -10,14 +10,10 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.event.CrossRealmEvent;
 import org.y1000.item.ItemFactory;
-import org.y1000.item.ItemSdbImpl;
-import org.y1000.kungfu.KungFuFactory;
 import org.y1000.realm.RealmMap;
 import org.y1000.realm.event.BroadcastSoundEvent;
-import org.y1000.realm.event.RealmLetterEvent;
-import org.y1000.repository.ItemRepositoryImpl;
+import org.y1000.realm.event.RealmTriggerEvent;
 import org.y1000.sdb.DynamicObjectSdbImpl;
-import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.util.Coordinate;
 
 import java.util.HashSet;
@@ -42,7 +38,7 @@ class YaohuaTest extends AbstractUnitTestFixture {
 
     @BeforeEach
     void setUp() {
-        itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, Mockito.mock(KungFuFactory.class));
+        itemFactory = createItemFactory();
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         realmMap = Mockito.mock(RealmMap.class);
         yaohua = (Yaohua) dynamicObjectFactory.createDynamicObject("妖华", 1L, realmMap, Coordinate.xy(1, 2));
@@ -60,7 +56,7 @@ class YaohuaTest extends AbstractUnitTestFixture {
     void canBeAttacked() {
         assertFalse(yaohua.canBeAttackedNow());
         PlayerImpl player = playerBuilder().coordinate(Coordinate.xy(2, 6)).build();
-        int slot = player.inventory().add(itemFactory.createItem("火石", 4));
+        int slot = player.inventory().put(itemFactory.createItem("火石", 4));
         foxfires.forEach(dynamicObject -> ((TriggerDynamicObject)dynamicObject).trigger(player, slot));
         assertTrue(yaohua.canBeAttackedNow());
     }
@@ -68,14 +64,14 @@ class YaohuaTest extends AbstractUnitTestFixture {
     @Test
     void attackedByPlayer() {
         Player player = playerBuilder().coordinate(Coordinate.xy(2, 6)).build();
-        int slot = player.inventory().add(itemFactory.createItem("火石", 4));
+        int slot = player.inventory().put(itemFactory.createItem("火石", 4));
         foxfires.forEach(dynamicObject -> ((TriggerDynamicObject)dynamicObject).trigger(player, slot));
         var attacker = playerBuilder().coordinate(yaohua.coordinate().moveBy(Direction.RIGHT)).build();
         while (yaohua.currentLife() > 0)
             yaohua.attackedBy(attacker);
         assertInstanceOf(BroadcastSoundEvent.class, eventListener.removeFirst(CrossRealmEvent.class).realmEvent());
-        var realmEvent = (RealmLetterEvent<?>)eventListener.removeFirst(CrossRealmEvent.class).realmEvent();
-        assertEquals(1, realmEvent.realmId());
+        var realmEvent = (RealmTriggerEvent)eventListener.removeFirst(CrossRealmEvent.class).realmEvent();
+        assertEquals(1, realmEvent.toRealmId());
         assertEquals("九尾狐酒母", realmEvent.toName());
     }
 }

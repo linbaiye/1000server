@@ -17,16 +17,15 @@ public final class RespawnKillableDynamicObject extends AbstractSimpleKillableDy
         super(id, coordinate, realmMap, dynamicObjectSdb, idName);
     }
 
-    @Override
-    public void respawn() {
-        resetLife();
-        realmMap().occupy(this);
-        changeAnimation(0);
-    }
 
     @Override
     public int respawnTime() {
         return dynamicObjectSdb().getRegenInterval(idName()) * 10;
+    }
+
+    @Override
+    public DynamicObjectType type() {
+        return DynamicObjectType.KILLABLE;
     }
 
     @Override

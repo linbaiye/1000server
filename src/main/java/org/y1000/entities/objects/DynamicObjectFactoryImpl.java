@@ -1,10 +1,15 @@
 package org.y1000.entities.objects;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.y1000.guild.GuildStone;
+import org.y1000.persistence.GuildStonePo;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
@@ -60,6 +65,42 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
 
         }
         log.error("Unable to create dynamic object : " + name);
+        return null;
+    }
+
+    @Override
+    public GuildStone createGuildStone(long id, String name, int realmId, RealmMap realmMap, Coordinate coordinate) {
+        Validate.notNull(name);
+        Validate.notNull(realmMap);
+        Validate.notNull(coordinate);
+        if (checkCreateGuildStone(name) != null)
+            throw new IllegalArgumentException();
+        GuildStonePo stonePo = GuildStonePo.builder()
+                .createdTime(LocalDateTime.now())
+                .x(coordinate.x())
+                .y(coordinate.y())
+                .currentHealth(2000000)
+                .maxHealth(2000000)
+                .realmId(realmId)
+                .name(name)
+                .build();
+        return GuildStone.builder()
+                .id(id)
+                .realmMap(realmMap)
+                .coordinate(coordinate)
+                .realmId(stonePo.getRealmId())
+                .dynamicObjectSdb(stonePo)
+                .currentHealth(stonePo.getCurrentHealth())
+                .idName(stonePo.getName())
+                .build();
+    }
+
+    @Override
+    public String checkCreateGuildStone(String name) {
+        if (StringUtils.isEmpty(name))
+            return "请输入正确门派名字";
+        if (name.length() >= 8)
+            return "门派名字最长8个字";
         return null;
     }
 }

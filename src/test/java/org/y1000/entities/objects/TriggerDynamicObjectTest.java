@@ -62,7 +62,7 @@ class TriggerDynamicObjectTest {
         Inventory inventory = new Inventory();
         Item item = Mockito.mock(Item.class);
         when(item.name()).thenReturn("key");
-        var slot = inventory.add(item);
+        var slot = inventory.put(item);
         when(player.inventory()).thenReturn(inventory);
         when(player.consumeItem(slot)).thenReturn(true);
     }

@@ -132,7 +132,6 @@ public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity 
     }
 
 
-
     public String shape() {
         return dynamicObjectSdb.getShape(idName);
     }

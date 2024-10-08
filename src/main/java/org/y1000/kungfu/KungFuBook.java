@@ -1,4 +1,5 @@
 package org.y1000.kungfu;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.attack.*;
 import org.y1000.kungfu.breath.BreathKungFu;
@@ -15,6 +16,8 @@ public final class KungFuBook {
     private final Map<Integer, KungFu> unnamed;
     private final Map<Integer, KungFu> basic;
 
+    private static final int BASIC_PAGE = 2;
+
     private static final int BASIC_MAX = 30;
 
     public KungFuBook(Map<Integer, KungFu> unnamed) {
@@ -22,12 +25,17 @@ public final class KungFuBook {
         this.basic = new HashMap<>();
     }
 
+    private boolean basicExists(KungFu kungFu) {
+        return basic.values().stream().anyMatch(k -> k.name().equals(kungFu.name()));
+    }
+
+    private boolean isBasicFull() {
+        return basic.size() == BASIC_MAX;
+    }
+
     public int addToBasic(KungFu kungFu) {
         Validate.notNull(kungFu);
-        if (basic.size() == BASIC_MAX) {
-            return 0;
-        }
-        if (basic.values().stream().anyMatch(k -> k.name().equals(kungFu.name()))) {
+        if (isBasicFull() || basicExists(kungFu)) {
             return 0;
         }
         for (int i = 1; i <= BASIC_MAX; i++) {
@@ -39,6 +47,16 @@ public final class KungFuBook {
         return 0;
     }
 
+    public boolean addToBasic(int slot, KungFu kungFu){
+        Validate.notNull(kungFu);
+        if (isBasicFull() || basicExists(kungFu) ||
+                slot <= 0 || slot > BASIC_MAX ||
+                basic.containsKey(slot)) {
+            return false;
+        }
+        return basic.put(slot, kungFu) == null;
+    }
+
     public int findBasicSlot(String name) {
         for (int i = 1; i <= BASIC_MAX; i++) {
             if (basic.containsKey(i) && basic.get(i).name().equals(name)) {
@@ -46,6 +64,17 @@ public final class KungFuBook {
             }
         }
         return 0;
+    }
+
+    public Optional<KungFu> findBasic(String name) {
+        if (StringUtils.isEmpty(name)) {
+            return Optional.empty();
+        }
+        int slot = findBasicSlot(name);
+        if (slot == 0) {
+            return Optional.empty();
+        }
+        return getKungFu(BASIC_PAGE, slot);
     }
 
     public void foreachUnnamed(BiConsumer<Integer, KungFu> kungFuBiConsumer) {

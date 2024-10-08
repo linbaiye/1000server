@@ -46,13 +46,4 @@ class KillableDynamicObjectTest extends AbstractObjectUnitTestFixture {
         killableDynamicObject.update(10000);
         assertNotNull(eventListener.removeFirst(RemoveEntityEvent.class));
     }
-
-    @Test
-    void test() {
-        var object =dynamicObjectFactory.createDynamicObject("鬼面门", 2L, realmMap, Coordinate.xy(5, 5));
-        object.registerEventListener(eventListener);
-        var player = playerBuilder().coordinate((object.coordinate().moveBy(Direction.RIGHT))).build();
-        object.attackedBy(player);
-        System.out.println(object.getClass());
-    }
 }

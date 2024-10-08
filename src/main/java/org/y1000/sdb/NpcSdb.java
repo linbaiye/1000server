@@ -43,10 +43,14 @@ public interface NpcSdb {
 
     boolean isSeller(String name);
 
+    boolean isBanker(String name);
+
     String getViewName(String name);
 
     String getShape(String name);
 
     int getViewWidth(String name);
+
+    boolean isQuester(String name);
 }
 

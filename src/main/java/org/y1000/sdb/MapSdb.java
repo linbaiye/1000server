@@ -1,5 +1,6 @@
 package org.y1000.sdb;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MapSdb {
@@ -23,5 +24,7 @@ public interface MapSdb {
     int getTargetX(int id);
 
     int getTargetY(int id);
+
+    List<Integer> getAllIds();
 
 }

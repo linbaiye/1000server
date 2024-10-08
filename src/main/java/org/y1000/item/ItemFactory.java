@@ -30,4 +30,6 @@ public interface ItemFactory {
     SexualEquipment createClothing(String name);
 
     Equipment createEquipment(String name);
+
+    Equipment createEquipment(String name, int color);
 }

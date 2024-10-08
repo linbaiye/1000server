@@ -11,7 +11,7 @@ class PlayerExperiencedAgedAttributeTest {
 
     @BeforeEach
     void setUp() {
-        attribute = new PlayerExperiencedAgedAttribute("test", 0, 100);
+        attribute = new PlayerExperiencedAgedAttribute( 0, 100);
     }
 
     @Test

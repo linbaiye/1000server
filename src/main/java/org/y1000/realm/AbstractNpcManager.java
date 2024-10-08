@@ -10,11 +10,10 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
+import org.y1000.message.RemoveEntityMessage;
 import org.y1000.realm.event.RealmEvent;
-import org.y1000.realm.event.RealmLetterEvent;
-import org.y1000.sdb.CreateNpcSdb;
-import org.y1000.sdb.MonstersSdb;
-import org.y1000.sdb.NpcSpawnSetting;
+import org.y1000.realm.event.RealmTriggerEvent;
+import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
 
@@ -43,9 +42,11 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     private final CreateNpcSdb createMonsterSdb;
 
-    private final CreateNpcSdb createNpcSdb;
+    private final CreateNonMonsterSdb createNpcSdb;
 
     private final RealmMap realmMap;
+
+    private final HaveItemSdb haveItemSdb;
 
     public AbstractNpcManager(EntityEventSender sender,
                               EntityIdGenerator idGenerator,
@@ -54,8 +55,9 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
                               MonstersSdb monstersSdb,
                               AOIManager aoiManager,
                               CreateNpcSdb createMonsterSdb,
-                              CreateNpcSdb createNpcSdb,
-                              RealmMap realmMap) {
+                              CreateNonMonsterSdb createNpcSdb,
+                              RealmMap realmMap,
+                              HaveItemSdb haveItemSdb) {
         Validate.notNull(sender);
         Validate.notNull(idGenerator);
         Validate.notNull(itemManager);
@@ -64,6 +66,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         Validate.notNull(aoiManager);
         Validate.isTrue(createMonsterSdb != null || createNpcSdb != null);
         Validate.notNull(realmMap);
+        Validate.notNull(haveItemSdb);
         this.createMonsterSdb = createMonsterSdb;
         this.createNpcSdb = createNpcSdb;
         this.sender = sender;
@@ -72,6 +75,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         this.itemManager = itemManager;
         this.monstersSdb = monstersSdb;
         this.aoiManager = aoiManager;
+        this.haveItemSdb = haveItemSdb;
         this.realmMap = realmMap;
         projectileManager = new ProjectileManager();
         linked = new HashMap<>();
@@ -79,16 +83,10 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     }
 
 
-    NpcFactory getNpcFactory() {
-        return npcFactory;
-    }
-
-    EntityEventSender getEventSender() {
-        return sender;
-    }
-
-    EntityIdGenerator getIdGenerator() {
-        return idGenerator;
+    protected Npc createNpc(String name, Coordinate coordinate) {
+        return createNpcSdb != null ?
+                npcFactory.createNonMonsterNpc(name, idGenerator.next(), realmMap, coordinate, createNpcSdb) :
+                npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate);
     }
 
     void spawnNPCs(CreateNpcSdb createNpcSdb) {
@@ -103,7 +101,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
                     Coordinate coordinate = range.random(realmMap::movable)
                             .or(() -> range.findFirst(realmMap::movable))
                             .orElse(range.start());
-                    addNpc(npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate));
+                    addNpc(createNpc(name, coordinate));
                 } catch (Exception e) {
                     log().error("Failed to create npc {}.", name, e);
                     throw new RuntimeException(e);
@@ -127,8 +125,8 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         projectileManager.update(delta);
     }
 
-
     protected void removeNpc(Npc npc) {
+        sender.notifyVisiblePlayers(npc, new RemoveEntityMessage(npc.id()));
         sender.remove(npc);
         npc.deregisterEventListener(this);
         remove(npc);
@@ -147,7 +145,12 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         if (!(event.source() instanceof Npc npc)) {
             return;
         }
-        var dropItems = monstersSdb.getHaveItem(npc.idName());
+        String dropItems;
+        if (haveItemSdb.containsMonster(npc.idName())) {
+            dropItems = haveItemSdb.getHaveItem(npc.idName()).orElse(null);
+        } else {
+            dropItems = monstersSdb.getHaveItem(npc.idName());
+        }
         if (!StringUtils.isEmpty(dropItems)) {
             itemManager.dropItem(dropItems, event.source().coordinate());
         }
@@ -156,9 +159,13 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         }
     }
 
+    protected int getRespawnMillis(String idName) {
+        return monstersSdb.getRegenInterval(idName) * 10;
+    }
+
     @Override
     public void handleCrossRealmEvent(RealmEvent crossRealmEvent) {
-        if (!(crossRealmEvent instanceof RealmLetterEvent<?> letterEvent)) {
+        if (!(crossRealmEvent instanceof RealmTriggerEvent letterEvent)) {
             return;
         }
         find(npc -> npc.idName().equals(letterEvent.toName()) && NineTailFoxHuman.class.isAssignableFrom(npc.getClass()))
@@ -170,9 +177,8 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     Npc replaceNpc(NpcShiftEvent shiftEvent) {
         Npc npc = shiftEvent.npc();
-        getEventSender().notifyVisiblePlayers(npc, shiftEvent.createRemoveEvent());
         removeNpc(npc);
-        Npc newNpc = getNpcFactory().createNpc(shiftEvent.shiftToName(), getIdGenerator().next(), npc.realmMap(), npc.coordinate());
+        Npc newNpc = createNpc(shiftEvent.shiftToName(), npc.coordinate());
         addNpc(newNpc);
         return newNpc;
     }
@@ -210,8 +216,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     private void handleSeekPlayerEvent(SeekPlayerEvent event) {
         Set<Player> players = aoiManager.filterVisibleEntities(event.source(), Player.class);
-        AggressiveNpc npc = event.aggressiveNpc();
-        players.stream().filter(npc::canActAggressively).findFirst().ifPresent(npc::actAggressively);
+        event.setPlayers(players);
     }
 
     @Override
@@ -225,6 +230,10 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
             handleCloneEvent(cloneEvent);
         } else if (entityEvent instanceof SeekPlayerEvent seekPlayerEvent) {
             handleSeekPlayerEvent(seekPlayerEvent);
+        } else if (entityEvent instanceof SeekAggressiveMonsterEvent seekAggressiveMonsterEvent) {
+            seekAggressiveMonsterEvent.handle(getEntities().stream());
+        } else if (entityEvent instanceof Npc2ClientEvent clientEvent) {
+            sender.notifyVisiblePlayers(clientEvent.source(), clientEvent);
         } else {
             onUnhandledEvent(entityEvent);
         }

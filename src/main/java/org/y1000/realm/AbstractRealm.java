@@ -2,9 +2,13 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.npc.Merchant;
+import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.StaticTeleport;
-import org.y1000.message.clientevent.ClientSimpleCommandEvent;
+import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.clientevent.*;
+import org.y1000.message.clientevent.chat.ClientInputTextEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
@@ -12,6 +16,7 @@ import org.y1000.sdb.MapSdb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 abstract class AbstractRealm implements Realm {
@@ -24,11 +29,12 @@ abstract class AbstractRealm implements Realm {
     private final TeleportManager teleportManager;
 
     private final int id;
-    private final RealmEventHandler crossRealmEventHandler;
+    private final CrossRealmEventSender crossRealmEventSender;
     private final MapSdb mapSdb;
-    private volatile boolean shutdown;
     private long accumulatedMillis;
     private final List<ActiveEntityManager<?>> entityManagers;
+
+    private final ChatManager chatManager;
 
     public AbstractRealm(int id,
                          RealmMap realmMap,
@@ -38,13 +44,14 @@ abstract class AbstractRealm implements Realm {
                          PlayerManager playerManager,
                          DynamicObjectManager dynamicObjectManager,
                          TeleportManager teleportManager,
-                         RealmEventHandler crossRealmEventHandler,
-                         MapSdb mapSdb) {
+                         CrossRealmEventSender crossRealmEventSender,
+                         MapSdb mapSdb,
+                         ChatManager chatManager) {
         Validate.notNull(realmMap);
         Validate.notNull(eventSender);
         Validate.notNull(itemManager);
         Validate.notNull(playerManager);
-        Validate.notNull(crossRealmEventHandler);
+        Validate.notNull(crossRealmEventSender);
         Validate.notNull(mapSdb);
         this.realmMap = realmMap;
         this.eventSender = eventSender;
@@ -53,7 +60,7 @@ abstract class AbstractRealm implements Realm {
         this.dynamicObjectManager = dynamicObjectManager;
         this.teleportManager = teleportManager;
         this.id = id;
-        this.crossRealmEventHandler = crossRealmEventHandler;
+        this.crossRealmEventSender = crossRealmEventSender;
         this.mapSdb = mapSdb;
         this.entityManagers = new ArrayList<>();
         entityManagers.add(playerManager);
@@ -62,6 +69,11 @@ abstract class AbstractRealm implements Realm {
             entityManagers.add(dynamicObjectManager);
         if (npcManager != null)
             entityManagers.add(npcManager);
+        this.chatManager = chatManager;
+    }
+
+    void addEntityManager(ActiveEntityManager<?> manager) {
+        entityManagers.add(manager);
     }
 
     public RealmMap map() {
@@ -76,7 +88,18 @@ abstract class AbstractRealm implements Realm {
         return mapSdb.getSoundBase(id);
     }
 
-    void doUpdateEntities() {
+    abstract Logger log();
+
+    RealmEntityEventSender getEventSender() {
+        return eventSender;
+    }
+
+    PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    @Override
+    public void update() {
         long current = System.currentTimeMillis();
         while (accumulatedMillis <= current) {
             entityManagers.forEach(m -> m.update(STEP_MILLIS));
@@ -85,9 +108,8 @@ abstract class AbstractRealm implements Realm {
     }
 
 
-    abstract Logger log();
 
-    public void init() {
+    protected void doInit() {
         try {
             accumulatedMillis = System.currentTimeMillis();
             if (npcManager != null)
@@ -95,12 +117,14 @@ abstract class AbstractRealm implements Realm {
             if (dynamicObjectManager != null)
                 dynamicObjectManager.init();
             teleportManager.init(this::onPlayerTeleport);
+            playerManager.setTeleportHandler(this::onPlayerTeleport);
             log().debug("Initialized {}.", this);
         } catch (Exception e) {
             log().error("Failed to init realm {}.", id, e);
             throw new RuntimeException(e);
         }
     }
+
 
     MapSdb getMapSdb() {
         return mapSdb;
@@ -111,6 +135,7 @@ abstract class AbstractRealm implements Realm {
     }
 
 
+
     void onPlayerTeleport(PlayerRealmEvent event) {
         if (!(event instanceof RealmTeleportEvent realmTeleportEvent) ||
                 !playerManager.contains(event.player())) {
@@ -119,47 +144,86 @@ abstract class AbstractRealm implements Realm {
         playerManager.clearPlayer(event.player());
         var connection = eventSender.remove(event.player());
         realmTeleportEvent.setConnection(connection);
-        crossRealmEventHandler.handle(event);
+        crossRealmEventSender.send(event);
         log().debug("Removed player {}.", event.player().id());
     }
 
-    RealmEventHandler getCrossRealmEventHandler() {
-        return crossRealmEventHandler;
+    CrossRealmEventSender getCrossRealmEventHandler() {
+        return crossRealmEventSender;
     }
 
-    void acceptTeleport(RealmTeleportEvent teleportEvent) {
+    void acceptIfAffordableElseReject(RealmTeleportEvent teleportEvent) {
+        var unaffordableCost = teleportEvent.checkCost();
+        if (unaffordableCost != null) {
+            teleportEvent.getConnection().write(PlayerTextEvent.systemTip(teleportEvent.player(), unaffordableCost));
+            teleportEvent.rejectEvent().ifPresentOrElse(getCrossRealmEventHandler()::send, () ->
+                    log().error("Bad teleport config at {} in realm {}.", teleportEvent.toCoordinate(), teleportEvent.toRealmId()));
+            return;
+        }
         // order matters, so AOI can be computed correctly.
         teleportEvent.player().joinRealm(this, teleportEvent.toCoordinate());
         eventSender.add(teleportEvent.player(), teleportEvent.getConnection());
         playerManager.teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate());
+        teleportEvent.getCosts().forEach(teleportCost -> teleportCost.charge(teleportEvent.player()));
     }
 
     abstract void handleTeleportEvent(RealmTeleportEvent teleportEvent);
+
+    abstract void handleConnectionEvent(ConnectionEstablishedEvent connectedEvent);
 
     PlayerManager playerManager() {
         return playerManager;
     }
 
-    private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
-        if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent &&
-                commandEvent.isAskingPosition()) {
-            Set<Merchant> merchants = npcManager.findMerchants();
-            Set<StaticTeleport> staticTeleports = teleportManager.findStaticTeleports();
-            if (!merchants.isEmpty() || !staticTeleports.isEmpty())
-                eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
-        } else {
-            playerManager.onClientEvent(dataEvent, npcManager);
+    NpcManager npcManager() {
+        return npcManager;
+    }
+
+    abstract void handleGuildCreation(Player source, ClientFoundGuildEvent event);
+
+    abstract void handleClientEvent(PlayerDataEvent dataEvent);
+
+    private void findEntityAndHandle(Player player, ClientSingleInteractEvent event) {
+        for (ActiveEntityManager<?> entityManager : entityManagers) {
+            Optional<? extends ActiveEntity> entity = entityManager.find(event.targetId());
+            if (entity.isPresent()) {
+                event.handle(player, entity.get());
+                return;
+            }
         }
     }
+
+    private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
+        if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent) {
+            if (commandEvent.isAskingPosition()) {
+                Set<Merchant> merchants = npcManager.findMerchants();
+                Set<StaticTeleport> staticTeleports = teleportManager.findStaticTeleports();
+                if (!merchants.isEmpty() || !staticTeleports.isEmpty())
+                    eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
+            } else if (commandEvent.isQuit()) {
+                playerManager.onPlayerDisconnected(dataEvent.playerId());
+            } else {
+                handleClientEvent(dataEvent);
+            }
+        } else if (dataEvent.data() instanceof ClientFoundGuildEvent guildEvent) {
+            playerManager().find(dataEvent.playerId()).ifPresent(player -> handleGuildCreation(player, guildEvent));
+        } else if (dataEvent.data() instanceof ClientInputTextEvent clientInputTextEvent) {
+            chatManager.handleClientChat(dataEvent.playerId(), clientInputTextEvent);
+        } else if (dataEvent.data() instanceof ClientSingleInteractEvent singleInteractEvent) {
+            playerManager.find(singleInteractEvent.getPlayerId())
+                    .ifPresent(player -> findEntityAndHandle(player, singleInteractEvent));
+        } else {
+            handleClientEvent(dataEvent);
+        }
+    }
+
 
     public void handle(RealmEvent event) {
         try {
             if (event instanceof ConnectionEstablishedEvent connectedEvent) {
-                eventSender.add(connectedEvent.player(), connectedEvent.connection());
-                playerManager.onPlayerConnected(connectedEvent.player(), this);
-                log().debug("Added player to realm {}.", id);
+                handleConnectionEvent(connectedEvent);
             } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
-                playerManager.clearPlayer(disconnectedEvent.player());
+                playerManager.onPlayerDisconnected(disconnectedEvent.player().id());
                 eventSender.remove(disconnectedEvent.player());
             } else if (event instanceof PlayerDataEvent dataEvent) {
                 handlePlayerDataEvent(dataEvent);
@@ -167,8 +231,10 @@ abstract class AbstractRealm implements Realm {
                 handleTeleportEvent(teleportEvent);
             } else if (event instanceof BroadcastEvent broadcastEvent) {
                 playerManager().allPlayers().forEach(broadcastEvent::send);
-            } else if (event instanceof RealmLetterEvent<?> letterEvent) {
+            } else if (event instanceof RealmTriggerEvent letterEvent) {
                 npcManager.handleCrossRealmEvent(letterEvent);
+            } else if (event instanceof PlayerWhisperEvent privateMessageEvent) {
+                chatManager.handleCrossRealmChat(privateMessageEvent);
             }
         } catch (Exception e) {
             log().error("Exception when handling event .", e);

@@ -1,18 +1,10 @@
 package org.y1000.message.clientevent;
 
 import lombok.Getter;
-import org.y1000.entities.players.PlayerImpl;
 import org.y1000.network.gen.PlayerLoginPacket;
 
-@Getter
-public final class LoginEvent implements ClientEvent {
-    private final String token;
-
-    public LoginEvent(String token) {
-        this.token = token;
-    }
-
+public record LoginEvent(String token, String charName) implements ClientEvent {
     public static LoginEvent fromPacket(PlayerLoginPacket packet) {
-        return new LoginEvent(packet.getToken());
+        return new LoginEvent(packet.getToken(), packet.getCharName());
     }
 }

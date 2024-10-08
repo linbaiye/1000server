@@ -103,6 +103,10 @@ public final class MonsterAttributeProvider implements AttributeProvider {
         return monsterSdb.getShape(name);
     }
 
+    @Override
+    public int escapeLife() {
+        return monsterSdb.getEscapeLife(name);
+    }
 
     @Override
     public Optional<String> dieSound() {

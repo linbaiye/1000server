@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.AttributeProvider;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.creatures.npc.spell.ShiftSpell;
 import org.y1000.entities.players.Damage;
@@ -27,6 +28,8 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
 
     private final RealmMap realmMap;
 
+    private NpcAI ai;
+
     private int currentLife;
 
     private Coordinate spwanCoordinate;
@@ -45,24 +48,20 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
                        Map<State, Integer> stateMillis,
                        AttributeProvider attributeProvider,
                        RealmMap realmMap,
-                       List<NpcSpell> spells) {
+                       List<NpcSpell> spells,
+                       NpcAI ai) {
         super(id, coordinate, direction, name, stateMillis);
+        Validate.notNull(ai);
         this.attributeProvider = attributeProvider;
         this.realmMap = realmMap;
         this.spells = spells == null ? Collections.emptyList() : spells;
-        doRevive(coordinate);
-    }
-
-
-    protected void doRevive(Coordinate coordinate) {
+        this.ai = ai;
         int range = attributeProvider.wanderingRange();
-        spwanCoordinate = coordinate;
-        wanderingArea = new Rectangle(coordinate.move(-range, -range), coordinate.move(range, range));
-        currentLife = attributeProvider.life();
-        changeCoordinate(coordinate);
+        this.spwanCoordinate = coordinate;
+        this.wanderingArea = new Rectangle(coordinate.move(-range, -range), coordinate.move(range, range));
+        this.currentLife = attributeProvider.life();
         this.changeState(NpcCommonState.idle(getStateMillis(State.IDLE)));
-        spells.forEach(NpcSpell::reset);
-        clearListeners();
+        changeCoordinate(coordinate);
     }
 
     protected AttributeProvider attributeProvider() {
@@ -121,6 +120,11 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         }
     }
 
+    @Override
+    public void onMoveFailed() {
+        this.getAI().onMoveFailed(this);
+    }
+
     /**
      * Invoked when the npc gets hurt.
      * @param attacker the attacker.
@@ -139,11 +143,6 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
 
     private void idle() {
         changeState(NpcCommonState.idle(getStateMillis(State.IDLE) * 2));
-        emitEvent(new NpcChangeStateEvent(this, stateEnum()));
-    }
-
-    private void freeze() {
-        changeState(NpcCommonState.freeze(getStateMillis(State.FROZEN)));
         emitEvent(new NpcChangeStateEvent(this, stateEnum()));
     }
 
@@ -168,19 +167,40 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         changeState(NpcCommonState.die(getStateMillis(State.DIE) + (findShiftSpell().isPresent() ? 2000 : 8000)));
         emitEvent(new CreatureDieEvent(this));
         dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+        ai.onDead(this);
     }
 
 
     protected abstract Logger log();
 
-    protected void handleActionDone(Action action) {
+    public void changeAndStartAI(NpcAI newAI) {
+        changeAI(newAI);
+        start();
+    }
+
+    public void changeAI(NpcAI newAI) {
+        Validate.notNull(newAI);
+        this.ai = newAI;
+    }
+
+
+    @Override
+    public NpcAI getAI() {
+        return ai;
+    }
+
+    @Override
+    public void start() {
+        this.ai.start(this);
+    }
+
+    @Override
+    public void onActionDone() {
         if (stateEnum() == State.DIE) {
             realmMap.free(this);
-            findShiftSpell().ifPresentOrElse(shiftSpell -> shiftSpell.cast(this),
-                    () -> emitEvent(new RemoveEntityEvent(this)));
-        } else {
-            action.invoke();
+            emitEvent(new RemoveEntityEvent(this));
         }
+        ai.onActionDone(this);
     }
 
     @Override
@@ -262,4 +282,11 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     public int walkSpeed() {
         return attributeProvider.walkSpeed();
     }
+
+    @Override
+    public int viewWidth() {
+        return attributeProvider.viewWidth();
+    }
+
+
 }

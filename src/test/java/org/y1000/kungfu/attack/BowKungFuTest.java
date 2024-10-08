@@ -13,14 +13,11 @@ import org.y1000.entities.players.event.PlayerAttackEventResponse;
 import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.item.ItemFactory;
-import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.serverevent.TextMessage;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
-import org.y1000.repository.ItemRepositoryImpl;
-import org.y1000.repository.KungFuBookRepositoryImpl;
-import org.y1000.sdb.ItemDrugSdbImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +27,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
 
     private TestingAttackKungFuParameters parameters;
 
-    private final ItemFactory itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
+    private final ItemFactory itemFactory = createItemFactory();
 
     @BeforeEach
     void setUp() {
@@ -38,7 +35,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         parameters = new TestingAttackKungFuParameters();
         bowKungFu = BowKungFu.builder().name("test").parameters(parameters).exp(0).build();
         player.kungFuBook().addToBasic(bowKungFu);
-        player.inventory().add(itemFactory.createItem("木弓"));
+        player.inventory().put(itemFactory.createItem("木弓"));
         enableBasicKungFu(1);
         player.update(player.cooldown());
     }
@@ -50,14 +47,14 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         bowKungFu.startAttack(player, clientAttackEvent, monster);
         // no ammo.
         PlayerTextEvent event = eventListener.removeFirst(PlayerTextEvent.class);
-        assertEquals(PlayerTextEvent.TextType.OUT_OF_AMMO.value(), event.toPacket().getText().getType());
+        assertEquals(TextMessage.TextType.OUT_OF_AMMO.value(), event.toPacket().getText().getType());
         var response = eventListener.removeFirst(PlayerAttackEventResponse.class);
         assertFalse(response.isAccepted());
         assertTrue(response.toPacket().getAttackEventResponsePacket().hasBackToState());
         assertTrue(player.state() instanceof PlayerStillState);
 
         eventListener.clearEvents();
-        player.inventory().add(itemFactory.createItem("箭", 3));
+        player.inventory().put(itemFactory.createItem("箭", 3));
         bowKungFu.startAttack(player, clientAttackEvent, monster);
         response = eventListener.removeFirst(PlayerAttackEventResponse.class);
         assertTrue(player.state() instanceof PlayerAttackState);
@@ -68,7 +65,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
     @Test
     void attackAgainNoPower() {
         PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).realmMap(mockedRealm.map()).build();
-        player.inventory().add(itemFactory.createItem("箭", 3));
+        player.inventory().put(itemFactory.createItem("箭", 3));
         ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), State.BOW, Direction.RIGHT);
         // trigger attack counter.
         bowKungFu.startAttack(player, clientAttackEvent, monster);
@@ -83,7 +80,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         player.update(player.cooldown());
         assertTrue(player.state() instanceof PlayerCooldownState);
         PlayerTextEvent textEvent = eventListener.removeFirst(PlayerTextEvent.class);
-        assertEquals(PlayerTextEvent.TextType.NO_POWER.value(), textEvent.toPacket().getText().getType());
+        assertEquals(TextMessage.TextType.NO_POWER.value(), textEvent.toPacket().getText().getType());
         assertNotNull(eventListener.removeFirst(PlayerShootEvent.class));
         assertEquals(0, eventListener.eventSize());
     }
@@ -91,7 +88,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
     @Test
     void attackAgain() {
         PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).realmMap(mockedRealm.map()).build();
-        player.inventory().add(itemFactory.createItem("箭", 3));
+        player.inventory().put(itemFactory.createItem("箭", 3));
         ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), State.BOW, Direction.RIGHT);
         // trigger attack counter.
         bowKungFu.startAttack(player, clientAttackEvent, monster);

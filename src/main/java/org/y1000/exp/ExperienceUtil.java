@@ -212,18 +212,19 @@ begin
 
     //private static int currentlevel = 100;
 
-    private static int currentExp = 0;
+    private static int currentExp = 1025323333;
 
     public static void main(String[] args) {
+//        99, 1025323333, 59814839, 99691,
+        System.out.println(new Experience(MAX_EXP - 1000).level());
         //int i = ComputeLevel(10000);
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000000000; i++) {
             var level = computeLevel(currentExp);
-            int n = GetLevelMaxExp(level) * 3;
-            if (n > 10000) {
-                n = 10000;
+            if (level == 9999) {
+                System.out.println("Level " + level + ", exp " + (currentExp - 1));
+                break;
             }
-            currentExp += n;
-            System.out.println("Level " + level + ", exp " + currentExp);
+            currentExp += 1;
         }
     }
 }

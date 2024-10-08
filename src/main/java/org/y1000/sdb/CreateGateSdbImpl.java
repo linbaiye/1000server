@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public final class CreateGateSdbImpl extends AbstractSdbReader implements CreateGateSdb {
+public final class CreateGateSdbImpl extends AbstractCSVSdbReader implements CreateGateSdb {
 
     private CreateGateSdbImpl() {
         read("Setting/CreateGate.sdb", "utf8");
@@ -19,7 +19,7 @@ public final class CreateGateSdbImpl extends AbstractSdbReader implements Create
         Set<String> names = monstersSdb.columnNames();
         Set<String> items = monstersSdb.names();
         for (String i: items) {
-            if (!i.equals("70"))
+            if (monstersSdb.getEX(i) != null)
                 continue;
             System.out.println("----------------------------");
             System.out.println(i);
@@ -73,6 +73,16 @@ public final class CreateGateSdbImpl extends AbstractSdbReader implements Create
     }
 
     @Override
+    public Integer getEX(String name) {
+        return getInt(name, "EX");
+    }
+
+    @Override
+    public Integer getEY(String name) {
+        return getInt(name, "EY");
+    }
+
+    @Override
     public boolean isVisible(String name) {
         if (!"TRUE".equals(get(name, "boShow"))) {
             return false;
@@ -80,6 +90,7 @@ public final class CreateGateSdbImpl extends AbstractSdbReader implements Create
         var shape = getShape(name);
         return shape == 69 || shape == 70;
     }
+
 
     @Override
     public String getRandomPos(String name) {
@@ -94,5 +105,10 @@ public final class CreateGateSdbImpl extends AbstractSdbReader implements Create
     @Override
     public String getViewName(String name) {
         return get(name, "ViewName");
+    }
+
+    @Override
+    public String getNeedItem(String name) {
+        return get(name, "NeedItem");
     }
 }

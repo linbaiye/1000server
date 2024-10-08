@@ -7,7 +7,7 @@ import org.y1000.entities.objects.DynamicObjectType;
 import java.util.Optional;
 import java.util.Set;
 
-public final class DynamicObjectSdbImpl extends AbstractSdbReader implements DynamicObjectSdb {
+public final class DynamicObjectSdbImpl extends AbstractCSVSdbReader implements DynamicObjectSdb {
 
     public static final DynamicObjectSdbImpl INSTANCE = new DynamicObjectSdbImpl();
     private DynamicObjectSdbImpl() {

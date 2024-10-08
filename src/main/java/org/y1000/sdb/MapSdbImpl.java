@@ -3,15 +3,16 @@ package org.y1000.sdb;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public final class MapSdbImpl extends AbstractSdbReader implements MapSdb {
+public final class MapSdbImpl extends AbstractCSVSdbReader implements MapSdb {
 
     public static final MapSdbImpl INSTANCE = new MapSdbImpl();
 
     private MapSdbImpl() {
-        read("Map.sdb");
+        read("Map.sdb", "utf8");
     }
 
     public String getMapName(String id) {
@@ -66,6 +67,11 @@ public final class MapSdbImpl extends AbstractSdbReader implements MapSdb {
     @Override
     public int getTargetY(int id) {
         return getInt(String.valueOf(id), "TargetY");
+    }
+
+    @Override
+    public List<Integer> getAllIds() {
+        return names().stream().map(Integer::parseInt).toList();
     }
 
 

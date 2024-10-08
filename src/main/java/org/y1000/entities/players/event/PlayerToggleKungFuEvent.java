@@ -2,6 +2,7 @@ package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
 import org.y1000.kungfu.KungFu;
+import org.y1000.kungfu.KungFuType;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ToggleKungFuPacket;
@@ -10,29 +11,31 @@ public final class PlayerToggleKungFuEvent extends AbstractPlayerEvent {
     private final Integer level;
     private final String name;
     private final boolean quietly;
+    private final int type;
 
     public PlayerToggleKungFuEvent(Player source, KungFu kungFu) {
-        this(source, kungFu.name(), kungFu.level(), false);
+        this(source, kungFu.name(), kungFu.level(), false, kungFu.kungFuType());
     }
 
-    public PlayerToggleKungFuEvent(Player source, String name, Integer level, boolean quietly) {
+    private PlayerToggleKungFuEvent(Player source, String name, Integer level, boolean quietly, KungFuType type) {
         super(source);
         this.name = name;
         this.level = level;
         this.quietly = quietly;
+        this.type = type.value();
     }
 
 
     public static PlayerToggleKungFuEvent enable(Player player, KungFu kungFu) {
-        return new PlayerToggleKungFuEvent(player, kungFu.name(), kungFu.level(), false);
+        return new PlayerToggleKungFuEvent(player, kungFu.name(), kungFu.level(), false, kungFu.kungFuType());
     }
 
     public static PlayerToggleKungFuEvent disable(Player player, KungFu kungFu) {
-        return new PlayerToggleKungFuEvent(player, kungFu.name(), null, false);
+        return new PlayerToggleKungFuEvent(player, kungFu.name(), null, false, kungFu.kungFuType());
     }
 
     public static PlayerToggleKungFuEvent disableNoTip(Player player, KungFu kungFu) {
-        return new PlayerToggleKungFuEvent(player, kungFu.name(), null, true);
+        return new PlayerToggleKungFuEvent(player, kungFu.name(), null, true, kungFu.kungFuType());
     }
 
     @Override
@@ -45,6 +48,7 @@ public final class PlayerToggleKungFuEvent extends AbstractPlayerEvent {
         ToggleKungFuPacket.Builder builder = ToggleKungFuPacket.newBuilder()
                 .setName(name)
                 .setQuietly(quietly)
+                .setType(type)
                 .setId(source().id());
         if (level != null) {
             builder.setLevel(level);

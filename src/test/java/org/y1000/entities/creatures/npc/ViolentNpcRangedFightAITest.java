@@ -7,9 +7,8 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
+import org.y1000.entities.creatures.npc.AI.ViolentNpcRangedFightAI;
 import org.y1000.util.Coordinate;
-
-import java.util.logging.Level;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,7 +35,7 @@ class ViolentNpcRangedFightAITest extends AbstractMonsterUnitTestFixture  {
     void whenInShootRange() {
         Coordinate coordinate = monster.coordinate().move(4, 0);
         when(enemy.coordinate()).thenReturn(coordinate);
-        monster.changeAI(ai);
+        monster.changeAndStartAI(ai);
         assertEquals(State.ATTACK, monster.stateEnum());
     }
 
@@ -46,7 +45,7 @@ class ViolentNpcRangedFightAITest extends AbstractMonsterUnitTestFixture  {
         when(monster.realmMap().movable(any(Coordinate.class))).thenReturn(true);
         Coordinate coordinate = monster.coordinate().moveBy(monster.direction());
         when(enemy.coordinate()).thenReturn(coordinate);
-        monster.changeAI(ai);
+        monster.changeAndStartAI(ai);
         assertEquals(Direction.LEFT, monster.direction());
         assertEquals(State.IDLE, monster.stateEnum());
         monster.update(monster.getStateMillis(State.IDLE));

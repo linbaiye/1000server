@@ -3,8 +3,7 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Player;
@@ -12,25 +11,20 @@ import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.entities.players.event.OpenTradeWindowEvent;
 import org.y1000.entities.players.event.UpdateTradeWindowEvent;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.event.EntityEvent;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
-import org.y1000.item.ItemSdbImpl;
 import org.y1000.item.StackItem;
 import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.ServerMessage;
+import org.y1000.message.serverevent.TextMessage;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.network.gen.TextMessagePacket;
-import org.y1000.repository.ItemRepositoryImpl;
-import org.y1000.repository.KungFuBookRepositoryImpl;
-import org.y1000.sdb.ItemDrugSdbImpl;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TradeManagerImplTest {
+class TradeManagerImplTest extends AbstractUnitTestFixture {
     private TradeManager tradeManager;
     private Inventory traderInventory;
     private Inventory tradeeInventory;
@@ -46,11 +40,11 @@ class TradeManagerImplTest {
     @BeforeEach
     void setUp() {
         eventSender = Mockito.mock(EntityEventSender.class);
-        itemFactory = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, new KungFuBookRepositoryImpl());
+        itemFactory = createItemFactory();
         trader = Mockito.mock(Player.class);
         tradeManager = new TradeManagerImpl(eventSender);
         traderInventory = new Inventory();
-        traderInventory.add(itemFactory.createItem("长剑"));
+        traderInventory.put(itemFactory.createItem("长剑"));
         when(trader.inventory()).thenReturn(traderInventory);
         when(trader.coordinate()).thenReturn(Coordinate.xy(1, 1));
 
@@ -74,7 +68,7 @@ class TradeManagerImplTest {
     @Test
     void start() {
         Inventory inventory = new Inventory();
-        var slot = inventory.add(Mockito.mock(Item.class));
+        var slot = inventory.put(Mockito.mock(Item.class));
         when(tradee.tradeEnabled()).thenReturn(true);
         when(trader.inventory()).thenReturn(inventory);
         tradeManager.start(trader, tradee, slot);
@@ -88,7 +82,7 @@ class TradeManagerImplTest {
     @Test
     void startDoesNothingWhenSamePlayer() {
         Inventory inventory = new Inventory();
-        var slot = inventory.add(Mockito.mock(Item.class));
+        var slot = inventory.put(Mockito.mock(Item.class));
         when(tradee.tradeEnabled()).thenReturn(true);
         when(trader.inventory()).thenReturn(inventory);
         tradeManager.start(trader, trader, slot);
@@ -99,12 +93,12 @@ class TradeManagerImplTest {
     @Test
     void startWhenTradeDisabled() {
         Inventory inventory = new Inventory();
-        var slot = inventory.add(Mockito.mock(Item.class));
+        var slot = inventory.put(Mockito.mock(Item.class));
         when(tradee.tradeEnabled()).thenReturn(false);
         when(trader.inventory()).thenReturn(inventory);
         tradeManager.start(trader, tradee, slot);
         TextMessagePacket text = traderEventListener.removeFirst(PlayerTextEvent.class).toPacket().getText();
-        assertEquals(PlayerTextEvent.TextType.TRADE_REJECTED.value(), text.getType());
+        assertEquals(TextMessage.TextType.TRADE_REJECTED.value(), text.getType());
         assertTrue(tradeeEventListener.isEmpty());
         assertTrue(traderEventListener.isEmpty());
     }
@@ -112,12 +106,12 @@ class TradeManagerImplTest {
     @Test
     void startWhenTrading() {
         Inventory inventory = new Inventory();
-        var slot = inventory.add(Mockito.mock(Item.class));
+        var slot = inventory.put(Mockito.mock(Item.class));
         when(tradee.tradeEnabled()).thenReturn(true);
         when(trader.inventory()).thenReturn(inventory);
         var tradingTrader = Mockito.mock(Player.class);
         inventory = new Inventory();
-        slot = inventory.add(Mockito.mock(Item.class));
+        slot = inventory.put(Mockito.mock(Item.class));
         when(tradingTrader.inventory()).thenReturn(inventory);
         when(tradingTrader.coordinate()).thenReturn(Coordinate.xy(2, 3));
         tradeManager.start(tradingTrader,tradee, slot);
@@ -125,7 +119,7 @@ class TradeManagerImplTest {
 
         tradeManager.start(trader, tradee, slot);
         TextMessagePacket text = traderEventListener.removeFirst(PlayerTextEvent.class).toPacket().getText();
-        assertEquals(PlayerTextEvent.TextType.MULTI_TRADE.value(), text.getType());
+        assertEquals(TextMessage.TextType.MULTI_TRADE.value(), text.getType());
     }
 
     @Test
@@ -181,7 +175,7 @@ class TradeManagerImplTest {
         when(trader.tradeEnabled()).thenReturn(true);
         tradeManager.start(trader, tradee, 1);
         tradeManager.addTradeItem(trader, 1, 1);
-        var tradeeSlot = tradeeInventory.add(itemFactory.createItem("生药", 3));
+        var tradeeSlot = tradeeInventory.put(itemFactory.createItem("生药", 3));
         tradeManager.addTradeItem(tradee, tradeeSlot, 1);
         assertEquals(2, ((StackItem)tradeeInventory.getItem(tradeeSlot)).number());
         assertNull(traderInventory.getItem(1));
@@ -196,13 +190,13 @@ class TradeManagerImplTest {
         when(trader.tradeEnabled()).thenReturn(true);
         int slots = traderInventory.availableSlots();
         for (int i = 0; i < slots; i++) {
-            traderInventory.add(itemFactory.createItem("长刀"));
+            traderInventory.put(itemFactory.createItem("长刀"));
         }
         tradeManager.start(trader, tradee, 1);
         tradeManager.addTradeItem(trader, 1, 1);
-        var tradeeSlot = tradeeInventory.add(itemFactory.createItem("生药", 3));
+        var tradeeSlot = tradeeInventory.put(itemFactory.createItem("生药", 3));
         tradeManager.addTradeItem(tradee, tradeeSlot, 1);
-        tradeeSlot = tradeeInventory.add(itemFactory.createItem("丸药", 2));
+        tradeeSlot = tradeeInventory.put(itemFactory.createItem("丸药", 2));
         tradeManager.addTradeItem(tradee, tradeeSlot, 1);
         traderEventListener.clearEvents();
         tradeeEventListener.clearEvents();
@@ -243,7 +237,7 @@ class TradeManagerImplTest {
         when(trader.tradeEnabled()).thenReturn(true);
         tradeManager.start(trader, tradee, 1);
         tradeManager.addTradeItem(trader, 1, 1);
-        tradeeInventory.add(itemFactory.createItem("生药", 3));
+        tradeeInventory.put(itemFactory.createItem("生药", 3));
         tradeManager.addTradeItem(tradee, 1, 1);
         traderEventListener.clearEvents();
         tradeeEventListener.clearEvents();

@@ -1,16 +1,14 @@
 package org.y1000.kungfu;
 
 import org.apache.commons.lang3.StringUtils;
-import org.y1000.item.ItemSdbImpl;
-import org.y1000.sdb.AbstractSdbReader;
-import org.y1000.sdb.MagicParamSdb;
+import org.y1000.sdb.AbstractCSVSdbReader;
 
 import java.util.Set;
 
-public final class KungFuSdb extends AbstractSdbReader {
+public final class KungFuSdb extends AbstractCSVSdbReader {
 
     private KungFuSdb() {
-        read("Magic.sdb");
+        read("Magic.sdb", "utf8");
     }
 
     public static final KungFuSdb INSTANCE = new KungFuSdb();
@@ -174,7 +172,7 @@ public final class KungFuSdb extends AbstractSdbReader {
         Set<String> names = kungFuSdb.columnNames();
         Set<String> items = kungFuSdb.names();
         for (String i : items) {
-            if (!"12".equals(kungFuSdb.get(i, "MagicType"))) {
+            if (!i.startsWith("闪光")) {
                 continue;
             }
 //            if (!i.contains("标枪法"))

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
+import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
 import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
@@ -71,20 +72,6 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
         PlayerProjectile projectile = new PlayerProjectile(attacker, monster,  new Damage(1000, 1,1,1), 100, 0);
         monster.attackedBy(projectile);
         verify(attacker).gainRangedAttackExp(any(Integer.class));
-    }
-
-    @Test
-    void revive() {
-        attributeProvider.life = 1000;
-        monster = monsterBuilder().ai(new MonsterWanderingAI()).attributeProvider(attributeProvider).build();
-        Player attacker = Mockito.mock(Player.class);
-        when(attacker.damage()).thenReturn(new Damage(10000, 100, 100, 100));
-        monster.attackedBy(attacker);
-        assertEquals(0, monster.currentLife());
-        assertEquals(State.DIE, monster.stateEnum());
-        monster.respawn(monster.coordinate());
-        assertEquals(1000, monster.currentLife());
-        assertEquals(State.IDLE, monster.stateEnum());
     }
 
     @Test

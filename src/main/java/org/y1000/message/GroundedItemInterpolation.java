@@ -10,11 +10,14 @@ public final class GroundedItemInterpolation extends AbstractEntityInterpolation
     private final Integer number;
     private Packet packet;
 
+    private final int color;
+
     @Builder
-    public GroundedItemInterpolation(long id, Coordinate coordinate, String name, Integer number) {
+    public GroundedItemInterpolation(long id, Coordinate coordinate, String name, Integer number, int color) {
         super(id, coordinate);
         this.name = name;
         this.number = number;
+        this.color = color;
     }
 
     @Override
@@ -26,6 +29,7 @@ public final class GroundedItemInterpolation extends AbstractEntityInterpolation
                 .setCoordinateX(coordinate().x())
                 .setCoordinateY(coordinate().y())
                 .setName(name)
+                .setColor(color)
                 .setId(getId());
         if (number != null) {
             showItemBuidler.setNumber(number);

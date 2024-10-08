@@ -21,7 +21,7 @@ public final class RealmGroup implements Runnable {
 
     private final RealmFactory realmFactory;
 
-    private final RealmEventHandler crossRealmEventHandler;
+    private final CrossRealmEventSender crossRealmEventSender;
 
     private final Supplier<LocalDateTime> dateTimeSupplier;
 
@@ -29,17 +29,17 @@ public final class RealmGroup implements Runnable {
 
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
-                      RealmEventHandler crossRealmEventHandler,
+                      CrossRealmEventSender crossRealmEventSender,
                       Supplier<LocalDateTime> dateTimeSupplier) {
         Validate.isTrue(realms != null && !realms.isEmpty());
         Validate.notNull(realmFactory);
-        Validate.notNull(crossRealmEventHandler);
+        Validate.notNull(crossRealmEventSender);
         Validate.notNull(dateTimeSupplier);
         this.realms = realms.toArray(new Realm[0]);
         this.realmFactory = realmFactory;
         pendingEvents = new ArrayList<>();
         shutdown = false;
-        this.crossRealmEventHandler = crossRealmEventHandler;
+        this.crossRealmEventSender = crossRealmEventSender;
         this.dateTimeSupplier = dateTimeSupplier;
         LocalDateTime now = dateTimeSupplier.get();
         this.nextResetTime = now.getMinute() < 30 ? now.withMinute(29).withSecond(58).withNano(0) :
@@ -49,8 +49,8 @@ public final class RealmGroup implements Runnable {
 
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
-                      RealmEventHandler crossRealmEventHandler) {
-        this(realms, realmFactory, crossRealmEventHandler, LocalDateTime::now);
+                      CrossRealmEventSender crossRealmEventSender) {
+        this(realms, realmFactory, crossRealmEventSender, LocalDateTime::now);
     }
 
     private void updateRealm(Realm realm) {
@@ -69,14 +69,14 @@ public final class RealmGroup implements Runnable {
         log.debug("Trying to reset realms {}.", Arrays.stream(realms).toList());
         try {
             for (int i = 0; i < realms.length; i++) {
-                if (!(realms[i] instanceof DungeonRealm dungeonRealm)) {
+                if (!(realms[i] instanceof AbstractDungeonRealm dungeonRealm)) {
                     continue;
                 }
                 if (!dungeonRealm.isHalfHourInterval() && now.getMinute() != 59) {
                     continue;
                 }
                 dungeonRealm.close();
-                realms[i] = realmFactory.createRealm(dungeonRealm.id(), crossRealmEventHandler);
+                realms[i] = realmFactory.createRealm(dungeonRealm.id(), crossRealmEventSender);
                 realms[i].init();
             }
         } catch (Exception e) {
@@ -92,8 +92,10 @@ public final class RealmGroup implements Runnable {
                 .findFirst();
     }
 
-    public void shutdown() {
+    public synchronized void shutdown() throws InterruptedException {
         shutdown = true;
+        Thread.sleep(100);
+        Stream.of(realms).forEach(Realm::shutdown);
     }
 
     private List<RealmEvent> pollPendingEvents() {
@@ -118,11 +120,11 @@ public final class RealmGroup implements Runnable {
 
     private void handleRealmEvent(RealmEvent realmEvent){
         if (realmEvent instanceof PlayerRealmEvent playerRealmEvent) {
-            find(playerRealmEvent.realmId()).ifPresent(realm -> realm.handle(playerRealmEvent));
-        } else if (realmEvent.realmEventType() == RealmEventType.BROADCAST ) {
+            find(playerRealmEvent.toRealmId()).ifPresent(realm -> realm.handle(playerRealmEvent));
+        } else if (realmEvent instanceof RealmTriggerEvent letterEvent) {
+            find(letterEvent.toRealmId()).ifPresent(realm -> realm.handle(letterEvent));
+        } else {
             Arrays.stream(realms).forEach(realm -> realm.handle(realmEvent));
-        } else if (realmEvent instanceof RealmLetterEvent<?> letterEvent) {
-            find(letterEvent.realmId()).ifPresent(realm -> realm.handle(letterEvent));
         }
     }
 

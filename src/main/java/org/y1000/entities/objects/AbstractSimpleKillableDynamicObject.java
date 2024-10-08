@@ -13,7 +13,8 @@ public abstract class AbstractSimpleKillableDynamicObject extends AbstractKillab
                                                String idName) {
         super(id, coordinate, realmMap, dynamicObjectSdb, idName, parseAnimationFrames(idName, dynamicObjectSdb));
     }
-    void handleDamaged(Damage damage) {
+
+    protected void handleDamaged(Damage damage) {
         damageLife(damage);
         if (currentLife() == 0) {
             changeAnimation(1, dynamicObjectSdb().getOpenedMillis(idName()));
@@ -25,9 +26,11 @@ public abstract class AbstractSimpleKillableDynamicObject extends AbstractKillab
             dynamicObjectSdb().getSoundSpecial(idName()).ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         }
     }
+
     @Override
-    public DynamicObjectType type() {
-        return DynamicObjectType.KILLABLE;
+    public void update(int delta) {
+        if (getAnimationIndex() != 0)
+            updateAnimation(delta);
     }
 
     @Override

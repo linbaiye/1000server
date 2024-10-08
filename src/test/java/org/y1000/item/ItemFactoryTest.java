@@ -1,13 +1,12 @@
 package org.y1000.item;
 
 import org.junit.jupiter.api.Test;
-import org.y1000.repository.ItemRepositoryImpl;
-import org.y1000.repository.KungFuBookRepositoryImpl;
-import org.y1000.sdb.ItemDrugSdbImpl;
+import org.y1000.AbstractUnitTestFixture;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ItemFactoryTest extends AbstractItemUnitTestFixture{
+class ItemFactoryTest extends AbstractUnitTestFixture {
+    private final ItemFactory itemFactory = createItemFactory();
 
     @Test
     void createBoot() {

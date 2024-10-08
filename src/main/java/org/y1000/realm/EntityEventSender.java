@@ -33,7 +33,4 @@ public interface EntityEventSender {
 
     }
 
-    default void updateScope(Player player) {
-
-    }
 }

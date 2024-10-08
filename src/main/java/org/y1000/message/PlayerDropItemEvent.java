@@ -21,13 +21,18 @@ public final class PlayerDropItemEvent implements ItemEvent {
 
     private final Player source;
 
+    private final int color;
+
     public PlayerDropItemEvent(Player source,
                                String droppedItemName,
-                               Integer groundNumber, Coordinate coordinate) {
+                               Integer groundNumber,
+                               Coordinate coordinate,
+                               int color) {
         this.droppedItemName = droppedItemName;
         this.numberOnGround = groundNumber;
         this.coordinate = coordinate;
         this.source = source;
+        this.color = color;
     }
 
     public GroundedItem createGroundedItem(long id) {
@@ -36,6 +41,7 @@ public final class PlayerDropItemEvent implements ItemEvent {
                 .name(droppedItemName)
                 .id(id)
                 .number(numberOnGround)
+                .color(color)
                 ;
         return builder.build();
     }

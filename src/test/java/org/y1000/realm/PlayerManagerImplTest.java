@@ -8,11 +8,10 @@ import org.y1000.TestingEntityEventSender;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.BreakRopeEvent;
-import org.y1000.message.clientevent.ClientDragPlayerEvent;
-import org.y1000.message.clientevent.ClientTradePlayerEvent;
-import org.y1000.message.clientevent.ClientTriggerDynamicObjectEvent;
-import org.y1000.message.clientevent.ClientUpdateTradeEvent;
+import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.clientevent.*;
 import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,11 +36,12 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
     @BeforeEach
     void setUp() {
         tradeManager = Mockito.mock(TradeManager.class);
-        eventSender = new TestingEntityEventSender();
+        eventSender = Mockito.mock(EntityEventSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
         itemFactory = Mockito.mock(ItemFactory.class);
         dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);
-        playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, tradeManager, dynamicObjectManager);
+        playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, tradeManager, dynamicObjectManager, Mockito.mock(BankManager.class),
+                Mockito.mock(PlayerRepository.class), null, Mockito.mock(CrossRealmEventSender.class));
         realmMap = mockRealmMap();
         realm = mockRealm(realmMap);
     }
@@ -54,9 +54,8 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
         return player;
     }
 
-
     @Test
-    void addNewPlayer() {
+    void onPlayerConnected() {
         var player = mockPlayer();
         when(player.id()).thenReturn(1L);
         playerManager.onPlayerConnected(player, realm);
@@ -126,4 +125,5 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
         verify(player3, times(1)).consumeItem(1);
         verify(player2, times(1)).emitEvent(any(BreakRopeEvent.class));
     }
+
 }

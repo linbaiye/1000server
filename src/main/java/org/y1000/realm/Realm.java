@@ -19,4 +19,6 @@ public interface Realm {
     void init();
 
     int id();
+
+    void shutdown();
 }

@@ -4,6 +4,7 @@ import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
@@ -26,16 +27,13 @@ public abstract class AbstractViolentNpc
 
     private final Damage damage;
 
-    private NpcAI ai;
-
     private final NpcRangedSkill skill;
 
     public AbstractViolentNpc(long id, Coordinate coordinate, Direction direction, String name,
                               Map<State, Integer> stateMillis, AttributeProvider attributeProvider,
                               RealmMap realmMap, NpcAI ai, NpcRangedSkill skill, List<NpcSpell> spellList) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, spellList);
+        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, spellList, ai);
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
-        this.ai = ai;
         this.skill = skill;
     }
 
@@ -59,30 +57,6 @@ public abstract class AbstractViolentNpc
         return Optional.ofNullable(skill);
     }
 
-    @Override
-    public void changeAI(NpcAI newAI) {
-        this.ai = newAI;
-        this.ai.start(this);
-    }
-
-
-    @Override
-    public void start() {
-        this.ai.start(this);
-    }
-
-    @Override
-    public void onActionDone() {
-        if (stateEnum() == State.DIE) {
-            changeAI(NpcFrozenAI.INSTANCE);
-        }
-        handleActionDone(() -> ai.onActionDone(this));
-    }
-
-    @Override
-    public void onMoveFailed() {
-        this.ai.onMoveFailed(this);
-    }
 
     @Override
     public int attackCooldown() {
@@ -144,7 +118,8 @@ public abstract class AbstractViolentNpc
         }
     }
 
-    protected void doUpdate(int delta) {
+    @Override
+    public void update(int delta) {
         cooldown(delta);
         skill().ifPresent(s -> s.cooldown(delta));
         state().update(this, delta);

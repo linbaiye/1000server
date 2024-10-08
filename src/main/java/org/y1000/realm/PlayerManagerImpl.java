@@ -3,6 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.creatures.npc.Npc;
@@ -17,7 +18,10 @@ import org.y1000.message.clientevent.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.realm.event.PlayerDataEvent;
+import org.y1000.realm.event.RealmTeleportEvent;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.util.Coordinate;
+import org.y1000.util.UnaryAction;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,25 +45,48 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     private final Set<Rope> ropes;
 
+    private final BankManager bankManager;
+
+    private final PlayerRepository playerRepository;
+
+    private final DeadPlayerTeleportManager deadPlayerTeleportManager;
+
+    private final CrossRealmEventSender crossRealmEventSender;
+
+
+
     public PlayerManagerImpl(EntityEventSender eventSender,
                              GroundItemManager itemManager,
                              ItemFactory itemFactory,
-                             DynamicObjectManager dynamicObjectManager) {
-        this(eventSender, itemManager, itemFactory, new TradeManagerImpl(eventSender), dynamicObjectManager);
+                             DynamicObjectManager dynamicObjectManager,
+                             BankManager bankManager,
+                             PlayerRepository playerRepository,
+                             DeadPlayerTeleportManager deadPlayerTeleportManager,
+                             CrossRealmEventSender crossRealmEventSender) {
+        this(eventSender, itemManager, itemFactory, new TradeManagerImpl(eventSender), dynamicObjectManager, bankManager, playerRepository,
+                deadPlayerTeleportManager, crossRealmEventSender);
     }
 
     public PlayerManagerImpl(EntityEventSender eventSender,
                              GroundItemManager itemManager,
                              ItemFactory itemFactory,
                              TradeManager tradeManager,
-                             DynamicObjectManager dynamicObjectManager) {
+                             DynamicObjectManager dynamicObjectManager,
+                             BankManager bankManager,
+                             PlayerRepository playerRepository,
+                             DeadPlayerTeleportManager deadPlayerTeleportManager,
+                             CrossRealmEventSender crossRealmEventSender) {
         this.eventSender = eventSender;
         this.itemManager = itemManager;
         this.itemFactory = itemFactory;
+        this.playerRepository = playerRepository;
         this.projectileManager = new ProjectileManager();
         this.tradeManager = tradeManager;
         this.dynamicObjectManager = dynamicObjectManager;
+        this.bankManager = bankManager;
         ropes = new HashSet<>();
+        this.deadPlayerTeleportManager = deadPlayerTeleportManager;
+        this.crossRealmEventSender = crossRealmEventSender;
     }
 
     @Override
@@ -102,6 +129,9 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         updateManagedEntities(delta);
         projectileManager.update(delta);
         updateRopes(delta);
+        if (deadPlayerTeleportManager != null) {
+            deadPlayerTeleportManager.update(delta);
+        }
     }
 
     private void updateRopes(long delta) {
@@ -136,7 +166,6 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     private void handleDragPlayerEvent(Player player, Player dragged, int ropeSlot) {
         if (player.canDrag(dragged, ropeSlot)) {
-            log().debug("Drag player {}.", dragged.id());
             player.consumeItem(ropeSlot);
             ropes.forEach(rope -> rope.breakIfDraggedAgain(dragged));
             ropes.add(new Rope(dragged, player));
@@ -170,8 +199,12 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
             dynamicObjectManager.triggerDynamicObject(triggerDynamicObjectEvent.id(), dataEvent.player(), triggerDynamicObjectEvent.useSlot());
         } else if (dataEvent.data() instanceof ClientDragPlayerEvent dragPlayerEvent) {
             find(dragPlayerEvent.target()).ifPresent(dragged -> handleDragPlayerEvent(dataEvent.player(), dragged, dragPlayerEvent.ropeSlot()));
+        } else if (dataEvent.data() instanceof ClientOperateBankEvent bankEvent) {
+            find(dataEvent.playerId()).ifPresent(player -> bankManager.handle(player, bankEvent));
+        } else if (dataEvent.data() instanceof ClientSelfInteractEvent selfInteractEvent) {
+            find(selfInteractEvent.getPlayerId()).ifPresent(selfInteractEvent::handle);
         } else {
-            dataEvent.player().handleClientEvent(dataEvent.data());
+            find(dataEvent.playerId()).ifPresent(player -> player.handleClientEvent(dataEvent.data()));
         }
     }
 
@@ -179,6 +212,28 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     public Set<Player> allPlayers() {
         return getEntities();
     }
+
+
+    @Override
+    public void onPlayerDisconnected(long playerId) {
+        find(playerId).ifPresent( player -> {
+            playerRepository.update(player);
+            clearPlayer(player);
+        });
+    }
+
+    @Override
+    public void setTeleportHandler(UnaryAction<RealmTeleportEvent> teleportHandler) {
+        if (deadPlayerTeleportManager != null) {
+            deadPlayerTeleportManager.setTeleportHandler(teleportHandler);
+        }
+    }
+
+    @Override
+    public void shutdown() {
+        allPlayers().forEach(playerRepository::update);
+    }
+
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
@@ -192,9 +247,19 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
             } else if (entityEvent instanceof PlayerAttackEvent attackEvent) {
                 eventSender.notifyVisiblePlayersAndSelf(attackEvent.source(), attackEvent);
             } else if (entityEvent instanceof PlayerDropItemEvent dropItemEvent) {
-                itemManager.dropItem(dropItemEvent.getDroppedItemName(), dropItemEvent.getNumberOnGround(), dropItemEvent.getCoordinate());
-            } else if (entityEvent instanceof AbstractPlayerEvent playerEvent && playerEvent.isSelfEvent()) {
-                eventSender.notifySelf(playerEvent);
+                itemManager.dropItem(dropItemEvent);
+            } else if (entityEvent instanceof CreatureDieEvent dieEvent &&
+                    dieEvent.source() instanceof Player player &&
+                    deadPlayerTeleportManager != null) {
+                deadPlayerTeleportManager.onPlayerDead(player);
+            } else if (entityEvent instanceof PlayerKungFuFullEvent event) {
+                crossRealmEventSender.send(event);
+            } else if (entityEvent instanceof AbstractPlayerEvent playerEvent) {
+                if (playerEvent.visibleToSelf()) {
+                    eventSender.notifySelf(playerEvent);
+                } else if (playerEvent.visibleToPlayers()) {
+                    eventSender.notifyVisiblePlayersAndSelf(playerEvent.player(), playerEvent);
+                }
             }
         } catch (Exception e) {
             log.error("Failed to handle event.", e);

@@ -8,8 +8,13 @@ public class PlayerTestingAttribute extends AbstractPlayerAgedAttribute {
         super(0, max, null, 0);
     }
 
-    public static PlayerTestingAttribute of(int max) {
-        return new PlayerTestingAttribute(max);
+    public static PlayerExperiencedAgedAttribute of(int max) {
+        int age = 0;
+        PlayerExperiencedAgedAttribute attribute = new PlayerExperiencedAgedAttribute(0, age);
+        while(attribute.maxValue() < max) {
+            attribute.onAgeIncreased(age++);
+        }
+        return new PlayerExperiencedAgedAttribute(0, attribute.exp(), max, age);
     }
 
     @Override
