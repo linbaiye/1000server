@@ -2,7 +2,6 @@ package org.y1000.message.serverevent;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.message.AbstractServerMessage;
-import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.ValueEnum;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.TextMessagePacket;
@@ -11,10 +10,18 @@ public class TextMessage extends AbstractServerMessage {
     private final String text;
     private final TextType type;
     private final Location location;
-
     private final ColorType colorType;
 
+    private final String fromPlayer;
+
+
     public TextMessage(String text, TextType type, Location location, ColorType colorType) {
+        this(text, type, location, colorType, null);
+    }
+
+    public TextMessage(String text, TextType type, Location location,
+                       ColorType colorType,
+                       String sourcePlayer) {
         if (type == TextMessage.TextType.CUSTOM) {
             Validate.isTrue(text != null && text.length() <= 60);
         }
@@ -25,6 +32,7 @@ public class TextMessage extends AbstractServerMessage {
         this.type = type;
         this.location = location;
         this.colorType = colorType;
+        this.fromPlayer = sourcePlayer;
     }
 
     @Override
@@ -34,6 +42,9 @@ public class TextMessage extends AbstractServerMessage {
                 .setLocation(location.value());
         if (text != null) {
             buider.setText(text);
+        }
+        if (fromPlayer != null) {
+            buider.setFromPlayer(fromPlayer);
         }
         return Packet.newBuilder()
                 .setText(buider)

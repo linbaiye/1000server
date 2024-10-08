@@ -352,6 +352,7 @@ message TextMessagePacket {
   optional string text = 2;
   int32 location = 3;
   int32 colorType = 4;
+  optional string fromPlayer = 5;
 }
 
 message ToggleKungFuPacket {
@@ -512,6 +513,7 @@ message NpcPositionPacket {
 message ChatPacket {
   int64 id = 1;
   string content = 2;
+  optional string fromPlayer = 3;
 }
 
 message OpenBankPacket {
