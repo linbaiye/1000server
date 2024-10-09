@@ -29,7 +29,7 @@ class RelevantScopeTest extends AbstractMonsterUnitTestFixture {
         RelevantScope relevantScope = new RelevantScope(entity);
         Entity another = createMonster(16, 16);
         assertTrue(relevantScope.outOfScope(another));
-        another = createMonster(15, 15);
+        another = createMonster(15, 13);
         assertFalse(relevantScope.outOfScope(another));
     }
 
@@ -38,7 +38,7 @@ class RelevantScopeTest extends AbstractMonsterUnitTestFixture {
         Entity entity = createMonster(0, 0);
         RelevantScope relevantScope = new RelevantScope(entity);
         assertFalse(relevantScope.addIfVisible(createMonster(new Coordinate(16, 16))));
-        Entity another = createMonster(new Coordinate(15, 15));
+        Entity another = createMonster(new Coordinate(15, 13));
         assertTrue(relevantScope.addIfVisible(another));
         assertFalse(relevantScope.addIfVisible(another));
     }

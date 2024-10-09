@@ -8,7 +8,7 @@ import org.y1000.util.Coordinate;
  */
 public interface Entity {
     int VISIBLE_X_RANGE = 15;
-    int VISIBLE_Y_RANGE = 15;
+    int VISIBLE_Y_RANGE = 13;
 
     long id();
 
