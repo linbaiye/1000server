@@ -51,12 +51,14 @@ class Mover<N extends Npc> {
             npc.changeDirection(direction);
             npc.emitEvent(SetPositionEvent.of(npc));
             if (idleMillis > 0) {
+                log.debug("Stay");
                 npc.stay(idleMillis);
                 totalMillis += idleMillis;
                 return;
             }
         }
         if (npc.realmMap().movable(npc.coordinate().moveBy(direction))) {
+            log.debug("Move");
             npc.move(moveMillis);
             totalMillis += moveMillis;
         } else {
@@ -74,13 +76,16 @@ class Mover<N extends Npc> {
         if (isArrived())
             return;
         if (npc.stateEnum() == State.WALK) {
+            log.debug("Walk done.");
             previous = npc.coordinate().moveBy(npc.direction().opposite());
         }
         if (npc.stateEnum() == State.IDLE) {
+            log.debug("Idle done.");
             doMove(noPathAction);
             return;
         }
         if (idleMillis > 0) {
+            log.debug("Stay idle.");
             npc.stay(idleMillis);
             totalMillis += idleMillis;
         } else {
@@ -118,14 +123,14 @@ class Mover<N extends Npc> {
     private void computeWalkMillis() {
         int walkSpeed = npc.walkSpeed();
         var stateMillis = npc.getStateMillis(State.WALK);
-        int walkMillis = Math.max(stateMillis, walkSpeed);
+        int walkMillis = Math.min(stateMillis, walkSpeed);
         moveMillis = Math.max(walkMillis, 200);
         idleMillis = Math.max(walkSpeed - walkMillis, npc.getStateMillis(State.IDLE));
     }
 
     private void computeRunMillis() {
         int walkSpeed = npc.walkSpeed() / 2;
-        var stateMillis = npc.getStateMillis(State.WALK) / 2;
+        var stateMillis = npc.getStateMillis(State.WALK);
         int walkMillis = Math.min(stateMillis, walkSpeed);
         moveMillis = Math.max(walkMillis, 200);
         idleMillis = walkSpeed - walkMillis;
