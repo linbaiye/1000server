@@ -62,7 +62,5 @@ public interface Npc extends Creature {
 
     void changeAI(NpcAI newAI);
 
-    void changeToIdleAI();
-
     void startIdleAI();
 }

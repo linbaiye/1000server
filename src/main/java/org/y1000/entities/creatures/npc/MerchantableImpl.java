@@ -83,4 +83,14 @@ final class MerchantableImpl implements Merchantable {
             player.inventory().buy(items, cost, player, itemCreator);
         }
     }
+
+    @Override
+    public void appendAbilityNames(List<String> names) {
+        if (names == null)
+            return;
+        if (!sellItems.isEmpty())
+            names.add("买物品");
+        if (!buyItems.isEmpty())
+            names.add("卖物品");
+    }
 }

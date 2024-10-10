@@ -58,10 +58,6 @@ public final class Guardian extends AbstractViolentNpc implements HumanNpc {
         return Objects.hashCode(id());
     }
 
-    @Override
-    public void changeToIdleAI() {
-        changeAI(new GuardWanderingAI(this.wanderingArea().random(coordinate())));
-    }
 
     @Override
     public void startIdleAI() {

@@ -98,6 +98,7 @@ private static final long serialVersionUID = 0L;
     KUNGFUFORM(51),
     QUESTWINDOW(52),
     UPDATEBUFF(53),
+    INTERACTIONMENU(54),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -165,6 +166,7 @@ private static final long serialVersionUID = 0L;
         case 51: return KUNGFUFORM;
         case 52: return QUESTWINDOW;
         case 53: return UPDATEBUFF;
+        case 54: return INTERACTIONMENU;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1730,6 +1732,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.UpdateBuffPacket.getDefaultInstance();
   }
 
+  public static final int INTERACTIONMENU_FIELD_NUMBER = 54;
+  /**
+   * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+   * @return Whether the interactionMenu field is set.
+   */
+  @java.lang.Override
+  public boolean hasInteractionMenu() {
+    return typedPacketCase_ == 54;
+  }
+  /**
+   * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+   * @return The interactionMenu.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.NpcInteractionMenuPacket getInteractionMenu() {
+    if (typedPacketCase_ == 54) {
+       return (org.y1000.network.gen.NpcInteractionMenuPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.NpcInteractionMenuPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.NpcInteractionMenuPacketOrBuilder getInteractionMenuOrBuilder() {
+    if (typedPacketCase_ == 54) {
+       return (org.y1000.network.gen.NpcInteractionMenuPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.NpcInteractionMenuPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1893,6 +1926,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 53) {
       output.writeMessage(53, (org.y1000.network.gen.UpdateBuffPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 54) {
+      output.writeMessage(54, (org.y1000.network.gen.NpcInteractionMenuPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -2102,6 +2138,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 53) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(53, (org.y1000.network.gen.UpdateBuffPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 54) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(54, (org.y1000.network.gen.NpcInteractionMenuPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2320,6 +2360,10 @@ private static final long serialVersionUID = 0L;
         if (!getUpdateBuff()
             .equals(other.getUpdateBuff())) return false;
         break;
+      case 54:
+        if (!getInteractionMenu()
+            .equals(other.getInteractionMenu())) return false;
+        break;
       case 0:
       default:
     }
@@ -2534,6 +2578,10 @@ private static final long serialVersionUID = 0L;
       case 53:
         hash = (37 * hash) + UPDATEBUFF_FIELD_NUMBER;
         hash = (53 * hash) + getUpdateBuff().hashCode();
+        break;
+      case 54:
+        hash = (37 * hash) + INTERACTIONMENU_FIELD_NUMBER;
+        hash = (53 * hash) + getInteractionMenu().hashCode();
         break;
       case 0:
       default:
@@ -2820,6 +2868,9 @@ private static final long serialVersionUID = 0L;
       if (updateBuffBuilder_ != null) {
         updateBuffBuilder_.clear();
       }
+      if (interactionMenuBuilder_ != null) {
+        interactionMenuBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -3066,6 +3117,10 @@ private static final long serialVersionUID = 0L;
           updateBuffBuilder_ != null) {
         result.typedPacket_ = updateBuffBuilder_.build();
       }
+      if (typedPacketCase_ == 54 &&
+          interactionMenuBuilder_ != null) {
+        result.typedPacket_ = interactionMenuBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -3279,6 +3334,10 @@ private static final long serialVersionUID = 0L;
         }
         case UPDATEBUFF: {
           mergeUpdateBuff(other.getUpdateBuff());
+          break;
+        }
+        case INTERACTIONMENU: {
+          mergeInteractionMenu(other.getInteractionMenu());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -3661,6 +3720,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 53;
               break;
             } // case 426
+            case 434: {
+              input.readMessage(
+                  getInteractionMenuFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 54;
+              break;
+            } // case 434
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -10792,6 +10858,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 53;
       onChanged();
       return updateBuffBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilder<
+        org.y1000.network.gen.NpcInteractionMenuPacket, org.y1000.network.gen.NpcInteractionMenuPacket.Builder, org.y1000.network.gen.NpcInteractionMenuPacketOrBuilder> interactionMenuBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+     * @return Whether the interactionMenu field is set.
+     */
+    @java.lang.Override
+    public boolean hasInteractionMenu() {
+      return typedPacketCase_ == 54;
+    }
+    /**
+     * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+     * @return The interactionMenu.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.NpcInteractionMenuPacket getInteractionMenu() {
+      if (interactionMenuBuilder_ == null) {
+        if (typedPacketCase_ == 54) {
+          return (org.y1000.network.gen.NpcInteractionMenuPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.NpcInteractionMenuPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 54) {
+          return interactionMenuBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.NpcInteractionMenuPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+     */
+    public Builder setInteractionMenu(org.y1000.network.gen.NpcInteractionMenuPacket value) {
+      if (interactionMenuBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        interactionMenuBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 54;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+     */
+    public Builder setInteractionMenu(
+        org.y1000.network.gen.NpcInteractionMenuPacket.Builder builderForValue) {
+      if (interactionMenuBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        interactionMenuBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 54;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+     */
+    public Builder mergeInteractionMenu(org.y1000.network.gen.NpcInteractionMenuPacket value) {
+      if (interactionMenuBuilder_ == null) {
+        if (typedPacketCase_ == 54 &&
+            typedPacket_ != org.y1000.network.gen.NpcInteractionMenuPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.NpcInteractionMenuPacket.newBuilder((org.y1000.network.gen.NpcInteractionMenuPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 54) {
+          interactionMenuBuilder_.mergeFrom(value);
+        } else {
+          interactionMenuBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 54;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+     */
+    public Builder clearInteractionMenu() {
+      if (interactionMenuBuilder_ == null) {
+        if (typedPacketCase_ == 54) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 54) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        interactionMenuBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+     */
+    public org.y1000.network.gen.NpcInteractionMenuPacket.Builder getInteractionMenuBuilder() {
+      return getInteractionMenuFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.NpcInteractionMenuPacketOrBuilder getInteractionMenuOrBuilder() {
+      if ((typedPacketCase_ == 54) && (interactionMenuBuilder_ != null)) {
+        return interactionMenuBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 54) {
+          return (org.y1000.network.gen.NpcInteractionMenuPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.NpcInteractionMenuPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilder<
+        org.y1000.network.gen.NpcInteractionMenuPacket, org.y1000.network.gen.NpcInteractionMenuPacket.Builder, org.y1000.network.gen.NpcInteractionMenuPacketOrBuilder> 
+        getInteractionMenuFieldBuilder() {
+      if (interactionMenuBuilder_ == null) {
+        if (!(typedPacketCase_ == 54)) {
+          typedPacket_ = org.y1000.network.gen.NpcInteractionMenuPacket.getDefaultInstance();
+        }
+        interactionMenuBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+            org.y1000.network.gen.NpcInteractionMenuPacket, org.y1000.network.gen.NpcInteractionMenuPacket.Builder, org.y1000.network.gen.NpcInteractionMenuPacketOrBuilder>(
+                (org.y1000.network.gen.NpcInteractionMenuPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 54;
+      onChanged();
+      return interactionMenuBuilder_;
     }
 
     // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.Packet)

@@ -759,5 +759,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.UpdateBuffPacketOrBuilder getUpdateBuffOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+   * @return Whether the interactionMenu field is set.
+   */
+  boolean hasInteractionMenu();
+  /**
+   * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+   * @return The interactionMenu.
+   */
+  org.y1000.network.gen.NpcInteractionMenuPacket getInteractionMenu();
+  /**
+   * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+   */
+  org.y1000.network.gen.NpcInteractionMenuPacketOrBuilder getInteractionMenuOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

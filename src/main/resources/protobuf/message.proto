@@ -558,6 +558,15 @@ message UpdateBuffPacket {
   optional string description = 5;
 }
 
+message NpcInteractionMenuPacket {
+  int64 id = 1;
+  string viewName = 2;
+  string shape = 3;
+  int32 avatarIdx = 4;
+  string text = 5;
+  repeated string interactions = 6;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -611,6 +620,7 @@ message Packet {
     UpdateGuildKungFuFormPacket kungFuForm = 51;
     UpdateQuestWindowPacket questWindow = 52;
     UpdateBuffPacket updateBuff = 53;
+    NpcInteractionMenuPacket interactionMenu = 54;
   }
 }
 

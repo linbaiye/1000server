@@ -32,4 +32,8 @@ public interface Creature extends AttackableActiveEntity {
 
     int getStateMillis(State state);
 
+    default boolean isDead() {
+        return stateEnum() == State.DIE;
+    }
+
 }

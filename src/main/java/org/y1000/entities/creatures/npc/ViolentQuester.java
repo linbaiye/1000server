@@ -51,10 +51,6 @@ public final class ViolentQuester extends AbstractViolentNpc implements Quester 
                 attributeProvider().animate(), attributeProvider().shape());
     }
 
-    @Override
-    public void changeToIdleAI() {
-        changeAI(new ViolentNpcWanderingAI(spawnCoordinate()));
-    }
 
     @Override
     public void startIdleAI() {

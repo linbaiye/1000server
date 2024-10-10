@@ -44,10 +44,6 @@ public abstract class AbstractSubmissiveNpc extends AbstractNpc {
 
 
     @Override
-    public void changeToIdleAI() {
-    }
-
-    @Override
     public void startIdleAI() {
         getAI().start(this);
     }
