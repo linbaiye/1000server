@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.util.Coordinate;
@@ -43,7 +44,7 @@ public final class EscapeAI extends AbstractAI<Npc> {
     @Override
     protected void onStartNotDead(Npc violentNpc) {
         if (mover == null)
-            mover = Mover.run(violentNpc, computeEscapePoint(violentNpc));
+            mover = Mover.ofRun(violentNpc, computeEscapePoint(violentNpc));
         mover.nextMove(this::onNoPath);
     }
 
@@ -70,7 +71,13 @@ public final class EscapeAI extends AbstractAI<Npc> {
         mover.nextMove(this::onNoPath);
     }
 
+    @Override
+    protected Logger log() {
+        return log;
+    }
+
     private void onNoPath(Npc npc) {
+        log().debug("No path, changing to wandering");
         npc.changeAndStartAI(new VigilantWanderingAI());
     }
 }

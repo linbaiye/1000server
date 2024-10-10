@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.event.SeekPlayerEvent;
 import org.y1000.entities.creatures.monster.Monster;
@@ -36,6 +37,11 @@ public final class VigilantWanderingAI extends AbstractMonsterWanderingAI {
 
     @Override
     protected Coordinate random(Npc npc) {
-        return npc.wanderingArea().random(npc.coordinate());
+        return npc.wanderingArea().randomOutSpawnScope(npc.coordinate());
+    }
+
+    @Override
+    protected Logger log() {
+        return log;
     }
 }

@@ -1,10 +1,13 @@
-<configuration>
-    <File name="File" fileName="server.log">
-        <PatternLayout>
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appender name="File"  class="ch.qos.logback.core.FileAppender">
+        <file>Server.log</file>
+        <append>true</append>
+        <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </PatternLayout>
-    </File>
+        </encoder>
+    </Appender>
     <root level="INFO">
         <appender-ref ref="File" />
     </root>
-</configuration>
+</Configuration>

@@ -11,8 +11,8 @@
         <properties>
             <!-- Database connection settings -->
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/y1000" />
-            <property name="jakarta.persistence.jdbc.user" value="qn" />
-            <property name="jakarta.persistence.jdbc.password" value="43b305bd3d55f8faec5e5175cbe35533" />
+            <property name="jakarta.persistence.jdbc.user" value="1000y" />
+            <property name="jakarta.persistence.jdbc.password" value="1000yearsOld!" />
 
             <!-- Echo all executed SQL to console -->
             <property name="hibernate.physical_naming_strategy" value="org.y1000.persistence.NamingStrategy" />

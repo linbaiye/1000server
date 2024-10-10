@@ -1,6 +1,7 @@
 package org.y1000.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.creatures.npc.WanderArea;
 
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -24,6 +25,14 @@ public record Rectangle(Coordinate start, Coordinate end) {
         int minY = Math.max(origin.y() - 3, start.y());
         int maxY = Math.min(origin.y() + 3, end.y());
         var y = ThreadLocalRandom.current().nextInt(minY, maxY + 1);
+        return new Coordinate(x, y);
+    }
+
+    public Coordinate randomOutSpawnScope(Coordinate coordinate) {
+        var xdist = Math.max((end.x() - start.x()) / 2, 3);
+        var ydist = Math.max((end.y() - start.y()) / 2, 3);
+        var x = ThreadLocalRandom.current().nextInt(coordinate.x() - xdist, coordinate.x() + xdist);
+        var y = ThreadLocalRandom.current().nextInt(coordinate.y() - ydist, coordinate.y() + ydist);
         return new Coordinate(x, y);
     }
 

@@ -1,19 +1,14 @@
 package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
-import org.glassfish.jaxb.core.v2.model.core.ID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -84,7 +79,7 @@ class MoverTest {
         when(npc.getStateMillis(State.WALK)).thenReturn(200);
         when(npc.walkSpeed()).thenReturn(200);
         when(npc.realmMap()).thenReturn(map);
-        Mover<Npc> mover = Mover.walk(npc, Coordinate.xy(2, 1));
+        Mover<Npc> mover = Mover.ofWalk(npc, Coordinate.xy(2, 1));
         mover.nextMove(this::cantbe);
         verify(npc, times(1)).move(200);;
         assertEquals(Direction.RIGHT, direction);
@@ -96,24 +91,44 @@ class MoverTest {
     }
 
     @Test
-    void testSpeeds() {
-        int[][] mapmask = {
-                {0,0,0,0,0,0}, // y:0
-                {0,0,0,0,0,0}, // y:1
-                {0,1,1,1,1,0}, // y:2
-                {0,0,0,0,0,0}, // y:3
-             //x:0,1,2,3,4,5
-        };
-        RealmMap map = buildMap(mapmask);
-        coordinate = Coordinate.xy(2, 3);
-        direction = Direction.UP;
+    void walkSpeed() {
+        RealmMap map = Mockito.mock(RealmMap.class);
+        when(map.movable(any(Coordinate.class))).thenReturn(true);
         when(npc.realmMap()).thenReturn(map);
+        coordinate = Coordinate.xy(2, 3);
+        direction = Direction.DOWN;
+        when(npc.getStateMillis(State.IDLE)).thenReturn(200);
+        when(npc.getStateMillis(State.WALK)).thenReturn(240);
+        when(npc.walkSpeed()).thenReturn(500);
+        Mover<Npc> mover = Mover.ofWalk(npc, Coordinate.xy(2, 10));
+        mover.nextMove(this::cantbe);
+        verify(npc, times(1)).move(240);;
+        mover.nextMove(this::cantbe);
+        verify(npc, times(1)).stay(260);;
         when(npc.getStateMillis(State.IDLE)).thenReturn(100);
         when(npc.getStateMillis(State.WALK)).thenReturn(100);
         when(npc.walkSpeed()).thenReturn(100);
-        Mover<Npc> mover = Mover.walk(npc, Coordinate.xy(2, 1));
-        mover.run(this::cantbe);
-        verify(npc, times(0)).stay(50);;
+        mover = Mover.ofWalk(npc, Coordinate.xy(2, 10));
+        mover.nextMove(this::cantbe);
         verify(npc, times(1)).move(200);;
+        mover.nextMove(this::cantbe);
+        verify(npc, times(0)).stay(0);;
+    }
+
+    @Test
+    void run() {
+        RealmMap map = Mockito.mock(RealmMap.class);
+        when(map.movable(any(Coordinate.class))).thenReturn(true);
+        when(npc.realmMap()).thenReturn(map);
+        coordinate = Coordinate.xy(2, 3);
+        direction = Direction.DOWN;
+        when(npc.getStateMillis(State.IDLE)).thenReturn(200);
+        when(npc.getStateMillis(State.WALK)).thenReturn(210);
+        when(npc.walkSpeed()).thenReturn(1000);
+        Mover<Npc> mover = Mover.ofRun(npc, Coordinate.xy(2, 10));
+        mover.run(this::cantbe);
+        verify(npc, times(1)).move(210);
+        mover.run(this::cantbe);
+        verify(npc, times(1)).stay(290);
     }
 }

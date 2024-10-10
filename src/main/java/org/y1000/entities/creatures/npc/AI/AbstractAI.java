@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.npc.AI;
 
+import org.slf4j.Logger;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFrozenAI;
@@ -27,6 +28,8 @@ public abstract class AbstractAI<N extends Npc> implements NpcAI {
             consumer.accept(type.cast(npc));
         }
     }
+
+    protected abstract Logger log();
 
     @Override
     public void onActionDone(Npc npc) {

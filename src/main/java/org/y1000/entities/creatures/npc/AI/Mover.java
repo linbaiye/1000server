@@ -115,27 +115,28 @@ class Mover<N extends Npc> {
         totalMillis = 0;
     }
 
-    private void computeWalkMillis() {
-        int walkSpeed = npc.walkSpeed();
+
+    private void computeMillis(int speedRate, int maxIdleMillis) {
+        int walkSpeed = npc.walkSpeed() / speedRate;
         var stateMillis = npc.getStateMillis(State.WALK);
-        int walkMillis = Math.max(stateMillis, walkSpeed);
+        int walkMillis = Math.min(stateMillis, walkSpeed);
         moveMillis = Math.max(walkMillis, 200);
-        idleMillis = Math.max(walkSpeed - walkMillis, npc.getStateMillis(State.IDLE));
+        idleMillis = Math.max(walkSpeed - walkMillis, maxIdleMillis);
+    }
+
+    private void computeWalkMillis() {
+        computeMillis(1, npc.getStateMillis(State.IDLE));
     }
 
     private void computeRunMillis() {
-        int walkSpeed = npc.walkSpeed() / 2;
-        var stateMillis = npc.getStateMillis(State.WALK) / 2;
-        int walkMillis = Math.min(stateMillis, walkSpeed);
-        moveMillis = Math.max(walkMillis, 200);
-        idleMillis = walkSpeed - walkMillis;
+        computeMillis(2, 0);
     }
 
-    public static <N extends Npc> Mover<N> walk(N npc, Coordinate destination) {
+    public static <N extends Npc> Mover<N> ofWalk(N npc, Coordinate destination) {
         return new Mover<>(npc, destination, true);
     }
 
-    public static <N extends Npc> Mover<N> run(N npc, Coordinate destination) {
+    public static <N extends Npc> Mover<N> ofRun(N npc, Coordinate destination) {
         return new Mover<>(npc, destination, false);
     }
 }
