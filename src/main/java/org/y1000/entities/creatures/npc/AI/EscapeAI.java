@@ -44,7 +44,7 @@ public final class EscapeAI extends AbstractAI<Npc> {
     @Override
     protected void onStartNotDead(Npc violentNpc) {
         if (mover == null)
-            mover = Mover.run(violentNpc, computeEscapePoint(violentNpc));
+            mover = Mover.ofRun(violentNpc, computeEscapePoint(violentNpc));
         mover.nextMove(this::onNoPath);
     }
 

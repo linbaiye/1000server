@@ -11,7 +11,7 @@ public abstract class AbstractWanderingAI<N extends Npc> extends AbstractAI<N> {
     @Override
     protected void onStartNotDead(N npc) {
         if (mover == null) {
-            mover = Mover.walk(npc, random(npc));
+            mover = Mover.ofWalk(npc, random(npc));
             mover.walk(this::moveToNextRandom);
         } else {
             continueWander(npc);
