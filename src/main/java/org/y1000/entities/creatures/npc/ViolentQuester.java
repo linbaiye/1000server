@@ -56,17 +56,4 @@ public final class ViolentQuester extends AbstractViolentNpc implements Quester 
     public void startIdleAI() {
         changeAndStartAI(new ViolentNpcWanderingAI(spawnCoordinate()));
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        return obj == this || ((ViolentQuester) obj).id() == id();
-    }
 }

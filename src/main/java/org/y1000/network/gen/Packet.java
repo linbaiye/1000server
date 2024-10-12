@@ -99,6 +99,7 @@ private static final long serialVersionUID = 0L;
     QUESTWINDOW(52),
     UPDATEBUFF(53),
     INTERACTIONMENU(54),
+    MERCHANTMENU(55),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -167,6 +168,7 @@ private static final long serialVersionUID = 0L;
         case 52: return QUESTWINDOW;
         case 53: return UPDATEBUFF;
         case 54: return INTERACTIONMENU;
+        case 55: return MERCHANTMENU;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1763,6 +1765,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.NpcInteractionMenuPacket.getDefaultInstance();
   }
 
+  public static final int MERCHANTMENU_FIELD_NUMBER = 55;
+  /**
+   * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+   * @return Whether the merchantMenu field is set.
+   */
+  @java.lang.Override
+  public boolean hasMerchantMenu() {
+    return typedPacketCase_ == 55;
+  }
+  /**
+   * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+   * @return The merchantMenu.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.MerchantMenuPacket getMerchantMenu() {
+    if (typedPacketCase_ == 55) {
+       return (org.y1000.network.gen.MerchantMenuPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.MerchantMenuPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.MerchantMenuPacketOrBuilder getMerchantMenuOrBuilder() {
+    if (typedPacketCase_ == 55) {
+       return (org.y1000.network.gen.MerchantMenuPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.MerchantMenuPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1929,6 +1962,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 54) {
       output.writeMessage(54, (org.y1000.network.gen.NpcInteractionMenuPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 55) {
+      output.writeMessage(55, (org.y1000.network.gen.MerchantMenuPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -2142,6 +2178,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 54) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(54, (org.y1000.network.gen.NpcInteractionMenuPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 55) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(55, (org.y1000.network.gen.MerchantMenuPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2364,6 +2404,10 @@ private static final long serialVersionUID = 0L;
         if (!getInteractionMenu()
             .equals(other.getInteractionMenu())) return false;
         break;
+      case 55:
+        if (!getMerchantMenu()
+            .equals(other.getMerchantMenu())) return false;
+        break;
       case 0:
       default:
     }
@@ -2582,6 +2626,10 @@ private static final long serialVersionUID = 0L;
       case 54:
         hash = (37 * hash) + INTERACTIONMENU_FIELD_NUMBER;
         hash = (53 * hash) + getInteractionMenu().hashCode();
+        break;
+      case 55:
+        hash = (37 * hash) + MERCHANTMENU_FIELD_NUMBER;
+        hash = (53 * hash) + getMerchantMenu().hashCode();
         break;
       case 0:
       default:
@@ -2871,6 +2919,9 @@ private static final long serialVersionUID = 0L;
       if (interactionMenuBuilder_ != null) {
         interactionMenuBuilder_.clear();
       }
+      if (merchantMenuBuilder_ != null) {
+        merchantMenuBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -3121,6 +3172,10 @@ private static final long serialVersionUID = 0L;
           interactionMenuBuilder_ != null) {
         result.typedPacket_ = interactionMenuBuilder_.build();
       }
+      if (typedPacketCase_ == 55 &&
+          merchantMenuBuilder_ != null) {
+        result.typedPacket_ = merchantMenuBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -3338,6 +3393,10 @@ private static final long serialVersionUID = 0L;
         }
         case INTERACTIONMENU: {
           mergeInteractionMenu(other.getInteractionMenu());
+          break;
+        }
+        case MERCHANTMENU: {
+          mergeMerchantMenu(other.getMerchantMenu());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -3727,6 +3786,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 54;
               break;
             } // case 434
+            case 442: {
+              input.readMessage(
+                  getMerchantMenuFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 55;
+              break;
+            } // case 442
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -11000,6 +11066,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 54;
       onChanged();
       return interactionMenuBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilder<
+        org.y1000.network.gen.MerchantMenuPacket, org.y1000.network.gen.MerchantMenuPacket.Builder, org.y1000.network.gen.MerchantMenuPacketOrBuilder> merchantMenuBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+     * @return Whether the merchantMenu field is set.
+     */
+    @java.lang.Override
+    public boolean hasMerchantMenu() {
+      return typedPacketCase_ == 55;
+    }
+    /**
+     * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+     * @return The merchantMenu.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.MerchantMenuPacket getMerchantMenu() {
+      if (merchantMenuBuilder_ == null) {
+        if (typedPacketCase_ == 55) {
+          return (org.y1000.network.gen.MerchantMenuPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.MerchantMenuPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 55) {
+          return merchantMenuBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.MerchantMenuPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+     */
+    public Builder setMerchantMenu(org.y1000.network.gen.MerchantMenuPacket value) {
+      if (merchantMenuBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        merchantMenuBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 55;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+     */
+    public Builder setMerchantMenu(
+        org.y1000.network.gen.MerchantMenuPacket.Builder builderForValue) {
+      if (merchantMenuBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        merchantMenuBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 55;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+     */
+    public Builder mergeMerchantMenu(org.y1000.network.gen.MerchantMenuPacket value) {
+      if (merchantMenuBuilder_ == null) {
+        if (typedPacketCase_ == 55 &&
+            typedPacket_ != org.y1000.network.gen.MerchantMenuPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.MerchantMenuPacket.newBuilder((org.y1000.network.gen.MerchantMenuPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 55) {
+          merchantMenuBuilder_.mergeFrom(value);
+        } else {
+          merchantMenuBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 55;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+     */
+    public Builder clearMerchantMenu() {
+      if (merchantMenuBuilder_ == null) {
+        if (typedPacketCase_ == 55) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 55) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        merchantMenuBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+     */
+    public org.y1000.network.gen.MerchantMenuPacket.Builder getMerchantMenuBuilder() {
+      return getMerchantMenuFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.MerchantMenuPacketOrBuilder getMerchantMenuOrBuilder() {
+      if ((typedPacketCase_ == 55) && (merchantMenuBuilder_ != null)) {
+        return merchantMenuBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 55) {
+          return (org.y1000.network.gen.MerchantMenuPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.MerchantMenuPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilder<
+        org.y1000.network.gen.MerchantMenuPacket, org.y1000.network.gen.MerchantMenuPacket.Builder, org.y1000.network.gen.MerchantMenuPacketOrBuilder> 
+        getMerchantMenuFieldBuilder() {
+      if (merchantMenuBuilder_ == null) {
+        if (!(typedPacketCase_ == 55)) {
+          typedPacket_ = org.y1000.network.gen.MerchantMenuPacket.getDefaultInstance();
+        }
+        merchantMenuBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+            org.y1000.network.gen.MerchantMenuPacket, org.y1000.network.gen.MerchantMenuPacket.Builder, org.y1000.network.gen.MerchantMenuPacketOrBuilder>(
+                (org.y1000.network.gen.MerchantMenuPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 55;
+      onChanged();
+      return merchantMenuBuilder_;
     }
 
     // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.Packet)

@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -7,6 +8,8 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
+import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
+import org.y1000.entities.creatures.npc.interactability.NpcInteractor;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -19,14 +22,16 @@ public final class SubmissiveInteractableNpc extends AbstractSubmissiveNpc imple
 
     private final NpcInteractor interactor;
 
+    @Builder
     public SubmissiveInteractableNpc(long id,
                                      Coordinate coordinate,
                                      String name,
                                      Map<State, Integer> stateMillis,
                                      NonMonsterNpcAttributeProvider attributeProvider,
                                      RealmMap realmMap,
-                                     NpcInteractor interactor) {
-        super(id, coordinate, Direction.DOWN, name, stateMillis, attributeProvider, realmMap, null, new SubmissiveWanderingAI());
+                                     NpcInteractor interactor,
+                                     SubmissiveWanderingAI ai) {
+        super(id, coordinate, Direction.DOWN, name, stateMillis, attributeProvider, realmMap, null, ai);
         Validate.notNull(interactor);
         this.interactor = interactor;
     }
@@ -43,20 +48,26 @@ public final class SubmissiveInteractableNpc extends AbstractSubmissiveNpc imple
 
     @Override
     public void onClicked(Player player) {
-        if (isDead())
-            return;
-        interactor.onNpcClicked(player, this, attributeProvider().shape(), ((NonMonsterNpcAttributeProvider)attributeProvider()).image());
+        interactor.onNpcClicked(player, this);
     }
 
     @Override
     public void interact(Player player, String name) {
-        if (isDead())
-            return;
         interactor.onInteractabilityClicked(player, this, name);
     }
 
     @Override
-    public Optional<NpcInteractability> findAbility(String name) {
-        return interactor.findAbility(name);
+    public String shape() {
+        return attributeProvider().shape();
+    }
+
+    @Override
+    public int avatarImageId() {
+        return ((NonMonsterNpcAttributeProvider)attributeProvider()).image();
+    }
+
+    @Override
+    public String mainMenuDialog() {
+        return interactor.getMainText();
     }
 }

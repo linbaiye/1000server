@@ -9,6 +9,10 @@ import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.*;
 import org.y1000.entities.creatures.npc.AI.*;
+import org.y1000.entities.creatures.npc.interactability.BuyInteractability;
+import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
+import org.y1000.entities.creatures.npc.interactability.NpcInteractor;
+import org.y1000.entities.creatures.npc.interactability.SellInteractability;
 import org.y1000.entities.creatures.npc.spell.CloneSpell;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.creatures.npc.spell.NpcSpellType;
@@ -96,6 +100,10 @@ public final class NpcFactoryImpl implements NpcFactory {
         return result;
     }
 
+    private Map<State, Integer> createSubmissiveNpcActionLengthMap(String idName) {
+        return createDevirtueActionLengthMap(npcSdb.getAnimate(idName));
+    }
+
     private Map<State, Integer> createActionLengthMap(String animate) {
         Map<State, Integer> result = createDevirtueActionLengthMap(animate);
         int attack = actionSdb.getActionLength(animate, State.ATTACK);
@@ -148,7 +156,6 @@ public final class NpcFactoryImpl implements NpcFactory {
         return SubmissiveNpc.builder()
                 .id(id)
                 .coordinate(coordinate)
-                .direction(Direction.DOWN)
                 .name(monsterSdb.getViewName(name))
                 .realmMap(map)
                 .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
@@ -176,7 +183,6 @@ public final class NpcFactoryImpl implements NpcFactory {
         return SubmissiveNpc.builder()
                 .id(id)
                 .coordinate(coordinate)
-                .direction(Direction.DOWN)
                 .name(npcSdb.getViewName(name))
                 .realmMap(map)
                 .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
@@ -336,6 +342,49 @@ public final class NpcFactoryImpl implements NpcFactory {
                         .build();
     }
 
+
+    private NpcInteractor createNpcInteractor(String name, String merchantSdb) {
+        List<NpcInteractability> abilities = new ArrayList<>();
+        if (npcSdb.isSeller(name)) {
+            var sdbFile = merchantSdb == null ? npcSdb.getNpcText(name) : merchantSdb;
+            MerchantItemSdb merchantItemSdb = merchantItemSdbRepository.load(sdbFile);
+            if (!merchantItemSdb.buy().isEmpty())
+                abilities.add(new BuyInteractability(merchantItemSdb.buy()));
+            if (!merchantItemSdb.sell().isEmpty())
+                abilities.add(new SellInteractability(merchantItemSdb.sell()));
+        }
+        if (npcSdb.isQuester(name)) {
+            abilities.add(getQuest(name));
+        }
+        return abilities.isEmpty() ? null : new NpcInteractor("有什么可以帮助你的吗？", abilities);
+    }
+
+
+    private Npc createSubmissiveNpc(String name, long id, RealmMap realmMap,
+                                    Coordinate coordinate,
+                                    String merchantSdb, String dialogSdb) {
+        NpcInteractor npcInteractor = createNpcInteractor(name, merchantSdb);
+        if (npcInteractor == null) {
+            return createSubmissiveNpc(name, id, realmMap, coordinate, null);
+        }
+        List<String> dialogs = Collections.emptyList();
+        if (dialogSdb != null) {
+            dialogs = realmSpecificSdbRepository.loadDialog(dialogSdb)
+                    .map(NpcDialogSdb::idleDialogs)
+                    .orElse(Collections.emptyList());
+        }
+        return SubmissiveInteractableNpc.builder()
+                .id(id)
+                .realmMap(realmMap)
+                .interactor(npcInteractor)
+                .name(npcSdb.getViewName(name))
+                .coordinate(coordinate)
+                .stateMillis(createSubmissiveNpcActionLengthMap(name))
+                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                .ai(new SubmissiveWanderingAI(dialogs.isEmpty() ? null : new Chatter(dialogs)))
+                .build();
+    }
+
     private Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate) {
         if ("仓库管理员".equals(name)) {
             return Banker.builder()
@@ -398,6 +447,8 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (type.isEmpty()) {
             return createNpc(name, id, realmMap, coordinate);
         }
+        if (!npcSdb.isProtector(name))
+            return createSubmissiveNpc(name, id, realmMap, coordinate, createNpcSdb.getConfig(name).orElse(null), createNpcSdb.getDialog(name).orElse(null));
         return switch (type.get()) {
             case MERCHANT -> createMerchant(name, id, realmMap, coordinate, createNpcSdb.getConfig(name).orElse(null));
             case GUARDIAN -> createGuardian(name, id, realmMap, coordinate, createNpcSdb.getDialog(name).orElse(null));

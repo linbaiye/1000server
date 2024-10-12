@@ -15,6 +15,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class AbstractSubmissiveNpc extends AbstractNpc {
 

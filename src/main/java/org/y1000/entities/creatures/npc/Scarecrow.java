@@ -12,7 +12,6 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 public final class Scarecrow extends AbstractSubmissiveNpc {
@@ -40,19 +39,6 @@ public final class Scarecrow extends AbstractSubmissiveNpc {
             if (canGainExp)
                 attacker.gainAttackExp(amount);
         }, attacker);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        return obj == this || ((Scarecrow) obj).id() == id();
     }
 
     @Override

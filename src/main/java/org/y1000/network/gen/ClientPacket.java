@@ -77,6 +77,7 @@ private static final long serialVersionUID = 0L;
     CREATEGUILDKUNGFU(27),
     MANAGEGUILD(28),
     SUBMITQUEST(29),
+    INTERACT(30),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -123,6 +124,7 @@ private static final long serialVersionUID = 0L;
         case 27: return CREATEGUILDKUNGFU;
         case 28: return MANAGEGUILD;
         case 29: return SUBMITQUEST;
+        case 30: return INTERACT;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -1037,6 +1039,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
   }
 
+  public static final int INTERACT_FIELD_NUMBER = 30;
+  /**
+   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+   * @return Whether the interact field is set.
+   */
+  @java.lang.Override
+  public boolean hasInteract() {
+    return typeCase_ == 30;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+   * @return The interact.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientClickInteractabilityPacket getInteract() {
+    if (typeCase_ == 30) {
+       return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
+    }
+    return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder getInteractOrBuilder() {
+    if (typeCase_ == 30) {
+       return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
+    }
+    return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1137,6 +1170,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 29) {
       output.writeMessage(29, (org.y1000.network.gen.ClientSubmitQuestPacket) type_);
+    }
+    if (typeCase_ == 30) {
+      output.writeMessage(30, (org.y1000.network.gen.ClientClickInteractabilityPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1262,6 +1298,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 29) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(29, (org.y1000.network.gen.ClientSubmitQuestPacket) type_);
+    }
+    if (typeCase_ == 30) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(30, (org.y1000.network.gen.ClientClickInteractabilityPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1396,6 +1436,10 @@ private static final long serialVersionUID = 0L;
         if (!getSubmitQuest()
             .equals(other.getSubmitQuest())) return false;
         break;
+      case 30:
+        if (!getInteract()
+            .equals(other.getInteract())) return false;
+        break;
       case 0:
       default:
     }
@@ -1526,6 +1570,10 @@ private static final long serialVersionUID = 0L;
       case 29:
         hash = (37 * hash) + SUBMITQUEST_FIELD_NUMBER;
         hash = (53 * hash) + getSubmitQuest().hashCode();
+        break;
+      case 30:
+        hash = (37 * hash) + INTERACT_FIELD_NUMBER;
+        hash = (53 * hash) + getInteract().hashCode();
         break;
       case 0:
       default:
@@ -1748,6 +1796,9 @@ private static final long serialVersionUID = 0L;
       if (submitQuestBuilder_ != null) {
         submitQuestBuilder_.clear();
       }
+      if (interactBuilder_ != null) {
+        interactBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1905,6 +1956,10 @@ private static final long serialVersionUID = 0L;
           submitQuestBuilder_ != null) {
         result.type_ = submitQuestBuilder_.build();
       }
+      if (typeCase_ == 30 &&
+          interactBuilder_ != null) {
+        result.type_ = interactBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -2034,6 +2089,10 @@ private static final long serialVersionUID = 0L;
         }
         case SUBMITQUEST: {
           mergeSubmitQuest(other.getSubmitQuest());
+          break;
+        }
+        case INTERACT: {
+          mergeInteract(other.getInteract());
           break;
         }
         case TYPE_NOT_SET: {
@@ -2269,6 +2328,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 29;
               break;
             } // case 234
+            case 242: {
+              input.readMessage(
+                  getInteractFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 30;
+              break;
+            } // case 242
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -6417,6 +6483,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 29;
       onChanged();
       return submitQuestBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilder<
+        org.y1000.network.gen.ClientClickInteractabilityPacket, org.y1000.network.gen.ClientClickInteractabilityPacket.Builder, org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder> interactBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+     * @return Whether the interact field is set.
+     */
+    @java.lang.Override
+    public boolean hasInteract() {
+      return typeCase_ == 30;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+     * @return The interact.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientClickInteractabilityPacket getInteract() {
+      if (interactBuilder_ == null) {
+        if (typeCase_ == 30) {
+          return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
+        }
+        return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 30) {
+          return interactBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+     */
+    public Builder setInteract(org.y1000.network.gen.ClientClickInteractabilityPacket value) {
+      if (interactBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        interactBuilder_.setMessage(value);
+      }
+      typeCase_ = 30;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+     */
+    public Builder setInteract(
+        org.y1000.network.gen.ClientClickInteractabilityPacket.Builder builderForValue) {
+      if (interactBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        interactBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 30;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+     */
+    public Builder mergeInteract(org.y1000.network.gen.ClientClickInteractabilityPacket value) {
+      if (interactBuilder_ == null) {
+        if (typeCase_ == 30 &&
+            type_ != org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClientClickInteractabilityPacket.newBuilder((org.y1000.network.gen.ClientClickInteractabilityPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 30) {
+          interactBuilder_.mergeFrom(value);
+        } else {
+          interactBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 30;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+     */
+    public Builder clearInteract() {
+      if (interactBuilder_ == null) {
+        if (typeCase_ == 30) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 30) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        interactBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+     */
+    public org.y1000.network.gen.ClientClickInteractabilityPacket.Builder getInteractBuilder() {
+      return getInteractFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder getInteractOrBuilder() {
+      if ((typeCase_ == 30) && (interactBuilder_ != null)) {
+        return interactBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 30) {
+          return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
+        }
+        return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilder<
+        org.y1000.network.gen.ClientClickInteractabilityPacket, org.y1000.network.gen.ClientClickInteractabilityPacket.Builder, org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder> 
+        getInteractFieldBuilder() {
+      if (interactBuilder_ == null) {
+        if (!(typeCase_ == 30)) {
+          type_ = org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
+        }
+        interactBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+            org.y1000.network.gen.ClientClickInteractabilityPacket, org.y1000.network.gen.ClientClickInteractabilityPacket.Builder, org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder>(
+                (org.y1000.network.gen.ClientClickInteractabilityPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 30;
+      onChanged();
+      return interactBuilder_;
     }
 
     // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClientPacket)

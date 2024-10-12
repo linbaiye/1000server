@@ -1,42 +1,66 @@
 package org.y1000.message.serverevent;
 
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.creatures.npc.InteractableNpc;
+import org.y1000.entities.creatures.npc.MerchantItem;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.network.gen.MerchantMenuPacket;
 import org.y1000.network.gen.NpcInteractionMenuPacket;
+import org.y1000.network.gen.NpcItemPacket;
 import org.y1000.network.gen.Packet;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class InteractionMenuEvent extends AbstractPlayerEvent {
 
     private final Packet packet;
 
-    public InteractionMenuEvent(Player source,
-                                String npcName,
-                                long npcId,
-                                String shape,
-                                int avatar,
-                                String text,
-                                List<String> actions) {
+    private InteractionMenuEvent(Player source,
+                                Packet packet) {
         super(source, Visibility.SELF);
-        Validate.notNull(npcName);
-        Validate.notNull(shape);
-        Validate.notNull(text);
-        Validate.notNull(actions);
-        packet = Packet.newBuilder()
-                .setInteractionMenu(NpcInteractionMenuPacket.newBuilder()
-                        .setId(npcId)
-                        .setText(text)
-                        .setShape(shape)
-                        .setAvatarIdx(avatar)
-                        .setViewName(npcName)
-                        .addAllInteractions(actions)
-                ).build();
+        this.packet = packet;
     }
 
     @Override
     protected Packet buildPacket() {
         return packet;
     }
+
+    public static InteractionMenuEvent mainMenu(Player source, InteractableNpc npc, List<String> interactabilities) {
+        Validate.notNull(source);
+        Validate.notNull(npc);
+        Validate.notEmpty(interactabilities);
+        var packet = Packet.newBuilder()
+                .setInteractionMenu(NpcInteractionMenuPacket.newBuilder()
+                        .setId(npc.id())
+                        .setText(npc.mainMenuDialog())
+                        .setShape(npc.shape())
+                        .setAvatarIdx(npc.avatarImageId())
+                        .setViewName(npc.viewName())
+                        .addAllInteractions(interactabilities)
+                ).build();
+        return new InteractionMenuEvent(source, packet);
+    }
+
+    public static InteractionMenuEvent sellingMenu(Player source, InteractableNpc npc,
+                                                   String dialog, List<MerchantItem> items) {
+        Validate.notNull(source);
+        Validate.notNull(npc);
+        Validate.notEmpty(items);
+        var list = items.stream().map(i -> NpcItemPacket.newBuilder().build()).collect(Collectors.toList());
+        var packet = Packet.newBuilder()
+                .setMerchantMenu(MerchantMenuPacket.newBuilder()
+                        .setId(npc.id())
+                        .setText(dialog != null ? dialog : "")
+                        .setShape(npc.shape())
+                        .setAvatarIdx(npc.avatarImageId())
+                        .setViewName(npc.viewName())
+                        .setSell(true)
+                        .addAllItems(list)
+                ).build();
+        return new InteractionMenuEvent(source, packet);
+    }
+
 }

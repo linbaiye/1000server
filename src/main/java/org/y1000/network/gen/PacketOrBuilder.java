@@ -774,5 +774,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.NpcInteractionMenuPacketOrBuilder getInteractionMenuOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+   * @return Whether the merchantMenu field is set.
+   */
+  boolean hasMerchantMenu();
+  /**
+   * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+   * @return The merchantMenu.
+   */
+  org.y1000.network.gen.MerchantMenuPacket getMerchantMenu();
+  /**
+   * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+   */
+  org.y1000.network.gen.MerchantMenuPacketOrBuilder getMerchantMenuOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

@@ -444,5 +444,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder getSubmitQuestOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+   * @return Whether the interact field is set.
+   */
+  boolean hasInteract();
+  /**
+   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+   * @return The interact.
+   */
+  org.y1000.network.gen.ClientClickInteractabilityPacket getInteract();
+  /**
+   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
+   */
+  org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder getInteractOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

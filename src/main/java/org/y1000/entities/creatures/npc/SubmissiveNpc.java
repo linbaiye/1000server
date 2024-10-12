@@ -20,10 +20,10 @@ import java.util.Objects;
 public final class SubmissiveNpc extends AbstractSubmissiveNpc {
 
     @Builder
-    public SubmissiveNpc(long id, Coordinate coordinate, Direction direction, String name, Map<State, Integer> stateMillis,
+    public SubmissiveNpc(long id, Coordinate coordinate, String name, Map<State, Integer> stateMillis,
                          AttributeProvider attributeProvider,
                          RealmMap realmMap, NpcAI ai, List<NpcSpell> spells) {
-        super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, spells, ai);
+        super(id, coordinate, Direction.DOWN, name, stateMillis, attributeProvider, realmMap, spells, ai);
     }
 
     @Override
