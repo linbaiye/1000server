@@ -16,6 +16,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Slf4j
 public final class SubmissiveInteractableNpc extends AbstractSubmissiveNpc implements InteractableNpc {
@@ -69,5 +70,10 @@ public final class SubmissiveInteractableNpc extends AbstractSubmissiveNpc imple
     @Override
     public String mainMenuDialog() {
         return interactor.getMainText();
+    }
+
+    @Override
+    public Optional<NpcInteractability> findFirstInteractability(Predicate<? super NpcInteractability> predicate) {
+        return interactor.findFirstInteractbility(predicate);
     }
 }

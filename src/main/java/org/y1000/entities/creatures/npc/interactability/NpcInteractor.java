@@ -3,6 +3,7 @@ package org.y1000.entities.creatures.npc.interactability;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.hibernate.cfg.ValidationSettings;
 import org.y1000.entities.creatures.npc.InteractableNpc;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.InteractionMenuEvent;
@@ -10,6 +11,7 @@ import org.y1000.message.serverevent.InteractionMenuEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public final class NpcInteractor {
 
@@ -46,11 +48,14 @@ public final class NpcInteractor {
                                          InteractableNpc npc,
                                          String name) {
         if (canInteract(player, npc) && !StringUtils.isEmpty(name))
-            findAbility(name).ifPresent(a -> a.interact(player, npc));
+            findInteractbility(name).ifPresent(a -> a.interact(player, npc));
     }
 
-    public Optional<NpcInteractability> findAbility(String name) {
-        return abilities.stream().filter(a -> a.playerSeeingName().equals(name))
-                .findFirst();
+    public Optional<NpcInteractability> findFirstInteractbility(Predicate<? super NpcInteractability> predicate) {
+        return abilities.stream().filter(predicate).findFirst();
+    }
+
+    private Optional<NpcInteractability> findInteractbility(String name) {
+        return findFirstInteractbility(a -> a.playerSeeingName().equals(name));
     }
 }

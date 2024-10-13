@@ -360,6 +360,7 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
+
     private Npc createSubmissiveNpc(String name, long id, RealmMap realmMap,
                                     Coordinate coordinate,
                                     String merchantSdb, String dialogSdb) {
@@ -444,11 +445,11 @@ public final class NpcFactoryImpl implements NpcFactory {
         Validate.notNull(coordinate);
         Validate.notNull(createNpcSdb);
         Optional<NpcType> type = createNpcSdb.getType(name);
+        if (!npcSdb.isProtector(name))
+            return createSubmissiveNpc(name, id, realmMap, coordinate, createNpcSdb.getConfig(name).orElse(null), createNpcSdb.getDialog(name).orElse(null));
         if (type.isEmpty()) {
             return createNpc(name, id, realmMap, coordinate);
         }
-        if (!npcSdb.isProtector(name))
-            return createSubmissiveNpc(name, id, realmMap, coordinate, createNpcSdb.getConfig(name).orElse(null), createNpcSdb.getDialog(name).orElse(null));
         return switch (type.get()) {
             case MERCHANT -> createMerchant(name, id, realmMap, coordinate, createNpcSdb.getConfig(name).orElse(null));
             case GUARDIAN -> createGuardian(name, id, realmMap, coordinate, createNpcSdb.getDialog(name).orElse(null));

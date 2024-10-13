@@ -5,6 +5,7 @@ import org.y1000.entities.creatures.npc.InteractableNpc;
 import org.y1000.entities.creatures.npc.MerchantItem;
 import org.y1000.entities.players.Player;
 import org.y1000.item.StackItem;
+import org.y1000.message.serverevent.InteractionMenuEvent;
 import org.y1000.trade.TradeItem;
 
 import java.util.Collection;
@@ -37,6 +38,8 @@ public final class BuyInteractability extends AbstractMerchantInteractability {
 
     @Override
     public void interact(Player clicker, InteractableNpc npc) {
-
+        if (clicker == null || npc == null)
+            return;
+        clicker.emitEvent(InteractionMenuEvent.buyingMenu(clicker, npc, "需要卖什么吗？", buyItems));
     }
 }

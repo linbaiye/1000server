@@ -336,6 +336,7 @@ message NpcItemPacket {
   int32 icon = 2;
   int32 color = 3;
   int32 price = 4;
+  bool canStack = 5;
 }
 
 message OpenTradeWindowPacket {

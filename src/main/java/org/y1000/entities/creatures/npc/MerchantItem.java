@@ -10,15 +10,22 @@ public final class MerchantItem {
     @Getter
     private final int color;
 
+    private final boolean stack;
+
     public MerchantItem(String name, int price) {
-        this(name, price, 0, 0);
+        this(name, price, 0, 0, false);
     }
 
-    public MerchantItem(String name, int price, int icon, int color) {
+    public MerchantItem(String name, int price, int icon, int color, boolean canStack) {
         this.name = name;
         this.price = price;
         this.icon = icon;
         this.color = color;
+        this.stack = canStack;
+    }
+
+    public boolean canStack() {
+        return stack;
     }
 
     public String name() {
