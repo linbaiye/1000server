@@ -60,9 +60,24 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
     }
 
     @Override
-    public Optional<String> getDialog(String idName) {
-        String config = getValue(idName, "Dialog");
+    public boolean containsNpc(String idName) {
+        return contains(idName);
+    }
+
+
+    private Optional<String> getOptionalString(String idName, String key) {
+        String config = getValue(idName, key);
         return StringUtils.isEmpty(config) ? Optional.empty() : Optional.of(config);
+    }
+
+    @Override
+    public Optional<String> getMerchant(String idName) {
+        return getOptionalString(idName, "Merchant");
+    }
+
+    @Override
+    public Optional<String> getDialog(String idName) {
+        return getOptionalString(idName, "Dialog");
     }
 
     private String idNameToId(String npcName) {

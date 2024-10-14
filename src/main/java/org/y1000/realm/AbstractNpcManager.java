@@ -84,7 +84,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
 
     protected Npc createNpc(String name, Coordinate coordinate) {
-        return createNpcSdb != null ?
+        return createNpcSdb != null && createNpcSdb.containsNpc(name)?
                 npcFactory.createNonMonsterNpc(name, idGenerator.next(), realmMap, coordinate, createNpcSdb) :
                 npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate);
     }

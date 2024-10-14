@@ -11,7 +11,6 @@ import org.y1000.network.gen.NpcItemPacket;
 import org.y1000.network.gen.Packet;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class InteractionMenuEvent extends AbstractPlayerEvent {

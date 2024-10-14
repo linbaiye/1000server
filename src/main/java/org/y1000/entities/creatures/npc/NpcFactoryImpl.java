@@ -343,11 +343,10 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private NpcInteractor createNpcInteractor(String name, String merchantSdb) {
+    private NpcInteractor createNpcInteractor(String name, String merchantSdbFile) {
         List<NpcInteractability> abilities = new ArrayList<>();
-        if (npcSdb.isSeller(name)) {
-            var sdbFile = merchantSdb == null ? npcSdb.getNpcText(name) : merchantSdb;
-            MerchantItemSdb merchantItemSdb = merchantItemSdbRepository.load(sdbFile);
+        if (StringUtils.isEmpty(merchantSdbFile)) {
+            MerchantItemSdb merchantItemSdb = merchantItemSdbRepository.load(merchantSdbFile);
             if (!merchantItemSdb.buy().isEmpty())
                 abilities.add(new BuyInteractability(merchantItemSdb.buy()));
             if (!merchantItemSdb.sell().isEmpty())
@@ -360,19 +359,26 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
+    private Optional<Chatter> loadChatter(String dialogSdb) {
+        if (dialogSdb == null)
+            return Optional.empty();
+        var dialogs = realmSpecificSdbRepository.loadDialog(dialogSdb)
+                .map(NpcDialogSdb::idleDialogs)
+                .orElse(Collections.emptyList());
+        if (dialogs.isEmpty())
+            return Optional.empty();
+        return Optional.of(new Chatter(dialogs));
+    }
+
+
 
     private Npc createSubmissiveNpc(String name, long id, RealmMap realmMap,
                                     Coordinate coordinate,
-                                    String merchantSdb, String dialogSdb) {
-        NpcInteractor npcInteractor = createNpcInteractor(name, merchantSdb);
+                                    String merchantSdbFile,
+                                    String dialogSdb) {
+        NpcInteractor npcInteractor = createNpcInteractor(name, merchantSdbFile);
         if (npcInteractor == null) {
             return createSubmissiveNpc(name, id, realmMap, coordinate, null);
-        }
-        List<String> dialogs = Collections.emptyList();
-        if (dialogSdb != null) {
-            dialogs = realmSpecificSdbRepository.loadDialog(dialogSdb)
-                    .map(NpcDialogSdb::idleDialogs)
-                    .orElse(Collections.emptyList());
         }
         return SubmissiveInteractableNpc.builder()
                 .id(id)
@@ -382,7 +388,36 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .coordinate(coordinate)
                 .stateMillis(createSubmissiveNpcActionLengthMap(name))
                 .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .ai(new SubmissiveWanderingAI(dialogs.isEmpty() ? null : new Chatter(dialogs)))
+                .ai(new SubmissiveWanderingAI(loadChatter(dialogSdb).orElse(null)))
+                .build();
+    }
+
+    private Npc createViolentNpc(String name, long id, RealmMap realmMap,
+                                    Coordinate coordinate,
+                                    String merchantSdbFile) {
+        NpcInteractor npcInteractor = createNpcInteractor(name, merchantSdbFile);
+        if (npcInteractor == null) {
+            String animate = npcSdb.getAnimate(name);
+            return Guardian.builder()
+                    .id(id)
+                    .coordinate(coordinate)
+                    .direction(Direction.DOWN)
+                    .name(npcSdb.getViewName(name))
+                    .width(npcSdb.getActionWidth(name))
+                    .realmMap(realmMap)
+                    .stateMillis(createActionLengthMap(animate))
+                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                    .build();
+        }
+        return ViolentInteractableNpc.builder()
+                .id(id)
+                .realmMap(realmMap)
+                .interactor(npcInteractor)
+                .name(npcSdb.getViewName(name))
+                .coordinate(coordinate)
+                .stateMillis(createSubmissiveNpcActionLengthMap(name))
+                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                .ai(new ViolentNpcWanderingAI(coordinate))
                 .build();
     }
 
@@ -438,22 +473,26 @@ public final class NpcFactoryImpl implements NpcFactory {
         throw new NoSuchElementException(npc.idName());
     }
 
+
+
     @Override
     public Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate, CreateNonMonsterSdb createNpcSdb) {
         Validate.notNull(name);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
         Validate.notNull(createNpcSdb);
-        Optional<NpcType> type = createNpcSdb.getType(name);
+        var merchantFile = createNpcSdb.getMerchant(name).orElse(npcSdb.getNpcText(name));
         if (!npcSdb.isProtector(name))
-            return createSubmissiveNpc(name, id, realmMap, coordinate, createNpcSdb.getConfig(name).orElse(null), createNpcSdb.getDialog(name).orElse(null));
-        if (type.isEmpty()) {
-            return createNpc(name, id, realmMap, coordinate);
-        }
-        return switch (type.get()) {
-            case MERCHANT -> createMerchant(name, id, realmMap, coordinate, createNpcSdb.getConfig(name).orElse(null));
-            case GUARDIAN -> createGuardian(name, id, realmMap, coordinate, createNpcSdb.getDialog(name).orElse(null));
-            default -> createNpc(name, id, realmMap, coordinate);
-        };
+            return createSubmissiveNpc(name, id, realmMap, coordinate, merchantFile, createNpcSdb.getDialog(name).orElse(null));
+        return createViolentNpc(name, id, realmMap, coordinate, merchantFile);
+//        Optional<NpcType> type = createNpcSdb.getType(name);
+//        if (type.isEmpty()) {
+//            return createNpc(name, id, realmMap, coordinate);
+//        }
+//        return switch (type.get()) {
+//            case MERCHANT -> createMerchant(name, id, realmMap, coordinate, merchantFile);
+//            case GUARDIAN -> createGuardian(name, id, realmMap, coordinate, createNpcSdb.getDialog(name).orElse(null));
+//            default -> createNpc(name, id, realmMap, coordinate);
+//        };
     }
 }

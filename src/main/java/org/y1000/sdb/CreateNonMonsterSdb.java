@@ -11,5 +11,9 @@ public interface CreateNonMonsterSdb extends CreateNpcSdb {
 
     Optional<String> getConfig(String idName);
 
+    boolean containsNpc(String idName);
+
+    Optional<String> getMerchant(String idName);
+
     Optional<String> getDialog(String idName);
 }
