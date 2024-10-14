@@ -1,7 +1,6 @@
 package org.y1000.sdb;
 
 import org.y1000.entities.creatures.NpcType;
-import org.y1000.message.clientevent.ClientOperateBankEvent;
 
 import java.util.Optional;
 
@@ -11,9 +10,9 @@ public interface CreateNonMonsterSdb extends CreateNpcSdb {
 
     Optional<String> getConfig(String idName);
 
-    boolean containsNpc(String idName);
+    boolean containsNpc(String viewName);
 
-    Optional<String> getMerchant(String idName);
+    Optional<String> getMerchant(String viewName);
 
     Optional<String> getDialog(String idName);
 }

@@ -74,7 +74,7 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
     private void init(CreateNpcSdb createNpcSdb) {
         spawnNPCs(createNpcSdb);
         for (NpcSpawnSetting setting: createNpcSdb.getAllSettings()) {
-            npcSpawnSettings.put(setting.idName(), createNpcSdb.getSettings(setting.idName()));
+            npcSpawnSettings.put(setting.viewName(), createNpcSdb.getSettings(setting.viewName()));
         }
     }
 

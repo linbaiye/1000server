@@ -109,7 +109,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
                         realmMap, Coordinate.xy(createDynamicObjectSdb.getX(number), createDynamicObjectSdb.getY(number)));
                 if (obj != null) {
                     addObject(obj);
-                    //log.debug("Added dynamic object type {}, name {}.",obj.type(), obj.idName());
+                    //log.debug("Added dynamic object type {}, name {}.",obj.type(), obj.viewName());
                 }
             } catch (RuntimeException e) {
                 log().error("Failed to create {}.", name);

@@ -38,8 +38,8 @@ public interface Npc extends Creature {
     void start();
 
     /**
-     * An idName is used identify a npc uniquely as different NPCs can have the same idName.
-     * @return the unique idName.
+     * An viewName is used identify a npc uniquely as different NPCs can have the same viewName.
+     * @return the unique viewName.
      */
     String idName();
 

@@ -305,7 +305,7 @@ MaxCount,        最多持有数量；
                 duplicateNames.put(viewName, new HashSet<>());
             }
             duplicateNames.get(viewName).add(i);
-            //String v = itemSdb.get("生药", idName);
+            //String v = itemSdb.get("生药", viewName);
         }
         for (String s : duplicateNames.keySet()) {
             if (duplicateNames.get(s).size() > 1) {

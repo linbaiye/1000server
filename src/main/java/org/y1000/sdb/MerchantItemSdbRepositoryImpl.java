@@ -19,7 +19,7 @@ public final class MerchantItemSdbRepositoryImpl implements MerchantItemSdbRepos
 
     @Override
     public MerchantItemSdb load(String name) {
-        Validate.notNull(name, "file idName can't be null.");
+        Validate.notNull(name, "file viewName can't be null.");
         try (var inputstream = getClass().getResourceAsStream("/sdb/NpcSetting/" + name)) {
             if (inputstream == null) {
                 throw new NoSuchElementException("Sdb does not exist, " + name);

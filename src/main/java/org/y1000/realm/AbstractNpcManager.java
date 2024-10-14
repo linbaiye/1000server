@@ -93,7 +93,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         List<NpcSpawnSetting> allSettings = createNpcSdb.getAllSettings();
         int total = 0;
         for (NpcSpawnSetting setting : allSettings) {
-            var name = setting.idName();
+            var name = setting.viewName();
             for (int i = 0; i < setting.number(); i++) {
                 try {
                     total += setting.number();

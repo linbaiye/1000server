@@ -82,7 +82,7 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
     }
 
     //    @Test
-//    void idName() {
+//    void viewName() {
 //        MonsterFactoryImpl monsterFactory = new MonsterFactoryImpl(ActionSdb.INSTANCE, MonsterSdb.INSTANCE);
 //        RealmMap mock = Mockito.mock(RealmMap.class);
 //        AbstractMonster monster = monsterFactory.createMonster("狗", 1L, mock, Coordinate.xy(1, 1));

@@ -345,7 +345,7 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private NpcInteractor createNpcInteractor(String name, String merchantSdbFile) {
         List<NpcInteractability> abilities = new ArrayList<>();
-        if (StringUtils.isEmpty(merchantSdbFile)) {
+        if (!StringUtils.isEmpty(merchantSdbFile)) {
             MerchantItemSdb merchantItemSdb = merchantItemSdbRepository.load(merchantSdbFile);
             if (!merchantItemSdb.buy().isEmpty())
                 abilities.add(new BuyInteractability(merchantItemSdb.buy()));
@@ -406,6 +406,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .width(npcSdb.getActionWidth(name))
                     .realmMap(realmMap)
                     .stateMillis(createActionLengthMap(animate))
+                    .ai(new ViolentNpcWanderingAI(coordinate))
                     .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
                     .build();
         }
