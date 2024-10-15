@@ -32,18 +32,6 @@ public final class SubmissiveNpc extends AbstractSubmissiveNpc {
     }
 
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        return obj == this || ((SubmissiveNpc) obj).id() == id();
-    }
 
     @Override
     protected NpcType getType() {

@@ -5,14 +5,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.monster.PassiveMonster;
-import org.y1000.item.ItemSdbImpl;
-import org.y1000.kungfu.KungFuSdb;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 
 class NpcFactoryImplTest extends AbstractUnitTestFixture  {
@@ -20,8 +21,12 @@ class NpcFactoryImplTest extends AbstractUnitTestFixture  {
     private final NpcFactoryImpl npcFactory = createNpcFactory();
     private RealmMap map;
 
+    private CreateNonMonsterSdb nonMonsterSdb;
+
     @BeforeEach
     void setUp() {
+        nonMonsterSdb = Mockito.mock(CreateNonMonsterSdb.class);
+        when(nonMonsterSdb.getMerchant(anyString())).thenReturn(Optional.empty());
         map = Mockito.mock(RealmMap.class);
     }
 
@@ -45,7 +50,7 @@ class NpcFactoryImplTest extends AbstractUnitTestFixture  {
 
     @Test
     void createGuardian() {
-        var npc = npcFactory.createNpc("男卒兵", 3L, map, Coordinate.xy(2, 2));
+        var npc = npcFactory.createNonMonsterNpc("男卒兵", 3L, map, Coordinate.xy(2, 2), nonMonsterSdb);
         assertInstanceOf(Guardian.class, npc);
         assertEquals(3, npc.id());
         assertEquals(Coordinate.xy(2, 2), npc.coordinate());

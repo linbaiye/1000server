@@ -58,7 +58,9 @@ class BankManagerImplTest extends AbstractUnitTestFixture  {
         when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
         inventory = new Inventory();
         when(player.inventory()).thenReturn(inventory);
-        banker = (Banker) npcFactory.createNpc("仓库管理员", 2L, Mockito.mock(RealmMap.class), Coordinate.xy(2, 2));
+        CreateNonMonsterSdb sdb = Mockito.mock(CreateNonMonsterSdb.class);
+        when(sdb.getMerchant(anyString())).thenReturn(Optional.empty());
+        banker = (Banker) npcFactory.createNonMonsterNpc("仓库管理员", 2L, Mockito.mock(RealmMap.class), Coordinate.xy(2, 2), sdb);
         testingEventListener = new TestingEventListener();
         when(npcManager.find(2L, Banker.class)).thenReturn(Optional.of(banker));
         doAnswer(invocationOnMock -> {
