@@ -5,7 +5,6 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.monster.*;
 import org.y1000.entities.creatures.npc.AI.*;
@@ -228,120 +227,11 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    @Override
-    public Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate) {
-        Objects.requireNonNull(name);
-        Objects.requireNonNull(realmMap);
-        Objects.requireNonNull(coordinate);
-        return createMerchant(name, id, realmMap, coordinate, null);
-    }
-
-    private Npc createMerchant(String name, long id, RealmMap realmMap, Coordinate coordinate, String configName) {
-        String animate = npcSdb.getAnimate(name);
-        if (animate == null) {
-            throw new NotImplementedException(name + " has no action sdb.");
-        }
-        var npcText = configName == null ? npcSdb.getNpcText(name) : configName;
-        MerchantItemSdb merchantItemSdb = merchantItemSdbRepository.load(npcText);
-        boolean violent = npcSdb.isProtector(name);
-        Merchantable merchantable = new MerchantableImpl(merchantItemSdb.buy(), merchantItemSdb.sell());
-        if (violent) {
-            return ViolentMerchant.builder()
-                    .id(id)
-                    .coordinate(coordinate)
-                    .direction(Direction.DOWN)
-                    .name(npcSdb.getViewName(name))
-                    .realmMap(realmMap)
-                    .stateMillis(createActionLengthMap(animate))
-                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                    .ai(new ViolentNpcWanderingAI(coordinate))
-                    .merchantable(merchantable)
-                    .fileName(npcText)
-                    .build();
-        }
-        return npcSdb.isQuester(name) ?
-                SubmissiveMerchantQuester.builder()
-                        .id(id)
-                        .coordinate(coordinate)
-                        .name(npcSdb.getViewName(name))
-                        .realmMap(realmMap)
-                        .stateMillis(createDevirtueActionLengthMap(animate))
-                        .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                        .merchantable(merchantable)
-                        .merchantFile(npcText)
-                        .quest(getQuest(name))
-                        .build() :
-                SubmissiveMerchant.builder()
-                        .id(id)
-                        .coordinate(coordinate)
-                        .name(npcSdb.getViewName(name))
-                        .realmMap(realmMap)
-                        .stateMillis(createDevirtueActionLengthMap(animate))
-                        .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                        .merchantable(merchantable)
-                        .fileName(npcText)
-                        .build();
-    }
-
-
-
-    private Guardian createGuardian(String name, long id,
-                                    RealmMap realmMap,
-                                    Coordinate coordinate,
-                                    String dialogFile) {
-        List<String> dialogs = Collections.emptyList();
-        if (dialogFile != null) {
-            dialogs = realmSpecificSdbRepository.loadDialog(dialogFile)
-                    .map(NpcDialogSdb::idleDialogs)
-                    .orElse(Collections.emptyList());
-        }
-        var ai = new GuardWanderingAI(coordinate, !dialogs.isEmpty() ? new Chatter(dialogs) : null);
-        String animate = npcSdb.getAnimate(name);
-        return Guardian.builder()
-                .id(id)
-                .coordinate(coordinate)
-                .direction(Direction.DOWN)
-                .name(npcSdb.getViewName(name))
-                .width(npcSdb.getActionWidth(name))
-                .realmMap(realmMap)
-                .stateMillis(createActionLengthMap(animate))
-                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .ai(ai)
-                .build();
-    }
-
     private Quest getQuest(String idName) {
         QuestSdb questSdb = QuestSdb.forNpc(idName);
         List<String> names = questSdb.getNames();
         return Quest.parse(names.get(0), questSdb);
     }
-
-    private Quester createQuester(String name, long id, RealmMap realmMap, Coordinate coordinate) {
-        String animate = npcSdb.getAnimate(name);
-        boolean violent = npcSdb.isProtector(name);
-        return violent ?
-                ViolentQuester.builder()
-                        .id(id)
-                        .coordinate(coordinate)
-                        .direction(Direction.DOWN)
-                        .name(npcSdb.getViewName(name))
-                        .realmMap(realmMap)
-                        .stateMillis(createActionLengthMap(animate))
-                        .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                        .quest(getQuest(name))
-                        .build() :
-                SubmitssiveQuester.builder()
-                        .id(id)
-                        .coordinate(coordinate)
-                        .direction(Direction.DOWN)
-                        .name(npcSdb.getViewName(name))
-                        .realmMap(realmMap)
-                        .stateMillis(createActionLengthMap(animate))
-                        .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                        .quest(getQuest(name))
-                        .build();
-    }
-
 
     private NpcInteractor createNpcInteractor(String name, String merchantSdbFile) {
         List<NpcInteractability> abilities = new ArrayList<>();
@@ -370,12 +260,22 @@ public final class NpcFactoryImpl implements NpcFactory {
         return Optional.of(new Chatter(dialogs));
     }
 
-
-
     private Npc createSubmissiveNpc(String name, long id, RealmMap realmMap,
                                     Coordinate coordinate,
                                     String merchantSdbFile,
                                     String dialogSdb) {
+        if ("仓库管理员".equals(name)) {
+            return Banker.builder()
+                    .id(id)
+                    .coordinate(coordinate)
+                    .direction(Direction.DOWN)
+                    .name(npcSdb.getViewName(name))
+                    .realmMap(realmMap)
+                    .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
+                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+                    .ai(new SubmissiveWanderingAI())
+                    .build();
+        }
         NpcInteractor npcInteractor = createNpcInteractor(name, merchantSdbFile);
         if (npcInteractor == null) {
             return createSubmissiveNpc(name, id, realmMap, coordinate, null);
@@ -396,8 +296,8 @@ public final class NpcFactoryImpl implements NpcFactory {
                                     Coordinate coordinate,
                                     String merchantSdbFile) {
         NpcInteractor npcInteractor = createNpcInteractor(name, merchantSdbFile);
+        String animate = npcSdb.getAnimate(name);
         if (npcInteractor == null) {
-            String animate = npcSdb.getAnimate(name);
             return Guardian.builder()
                     .id(id)
                     .coordinate(coordinate)
@@ -416,36 +316,10 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .interactor(npcInteractor)
                 .name(npcSdb.getViewName(name))
                 .coordinate(coordinate)
-                .stateMillis(createSubmissiveNpcActionLengthMap(name))
+                .stateMillis(createActionLengthMap(animate))
                 .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
                 .ai(new ViolentNpcWanderingAI(coordinate))
                 .build();
-    }
-
-    private Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate) {
-        if ("仓库管理员".equals(name)) {
-            return Banker.builder()
-                    .id(id)
-                    .coordinate(coordinate)
-                    .direction(Direction.DOWN)
-                    .name(npcSdb.getViewName(name))
-                    .realmMap(realmMap)
-                    .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
-                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                    .ai(new SubmissiveWanderingAI())
-                    .build();
-        }
-        // order matters.
-        if (npcSdb.isSeller(name) &&
-                !StringUtils.isEmpty(npcSdb.getNpcText(name))) {
-            return createMerchant(name, id, realmMap, coordinate);
-        } else if (npcSdb.isQuester(name)) {
-            return createQuester(name, id, realmMap, coordinate);
-        } else if (npcSdb.isProtector(name)) {
-            return createGuardian(name, id, realmMap, coordinate, null);
-        } else {
-            return createSubmissiveNpc(name, id, realmMap, coordinate, Collections.emptyList());
-        }
     }
 
 
@@ -456,8 +330,6 @@ public final class NpcFactoryImpl implements NpcFactory {
         Validate.notNull(coordinate);
         if (monsterSdb.contains(name)) {
             return createMonster(name, id, realmMap, coordinate, loadSpells(name), new MonsterWanderingAI(coordinate));
-        } else if (npcSdb.contains(name)) {
-            return createNonMonsterNpc(name, id, realmMap, coordinate);
         }
         log.error("Name {} does not exist.", name);
         throw new NoSuchElementException(name);
@@ -475,7 +347,6 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-
     @Override
     public Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate, CreateNonMonsterSdb createNpcSdb) {
         Validate.notNull(name);
@@ -486,14 +357,5 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (!npcSdb.isProtector(name))
             return createSubmissiveNpc(name, id, realmMap, coordinate, merchantFile, createNpcSdb.getDialog(name).orElse(null));
         return createViolentNpc(name, id, realmMap, coordinate, merchantFile);
-//        Optional<NpcType> type = createNpcSdb.getType(name);
-//        if (type.isEmpty()) {
-//            return createNpc(name, id, realmMap, coordinate);
-//        }
-//        return switch (type.get()) {
-//            case MERCHANT -> createMerchant(name, id, realmMap, coordinate, merchantFile);
-//            case GUARDIAN -> createGuardian(name, id, realmMap, coordinate, createNpcSdb.getDialog(name).orElse(null));
-//            default -> createNpc(name, id, realmMap, coordinate);
-//        };
     }
 }

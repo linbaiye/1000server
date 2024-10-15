@@ -57,6 +57,7 @@ class NpcInteractorTest {
         when(npc.viewName()).thenReturn("name");
         when(npc.shape()).thenReturn("shape");
         when(npc.avatarImageId()).thenReturn(2);
+        when(npc.mainMenuDialog()).thenReturn(npcInteractor.getMainText());
     }
 
     @Test

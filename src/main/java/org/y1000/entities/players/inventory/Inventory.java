@@ -11,6 +11,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.InventorySlotSwappedEvent;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.PlayerDropItemEvent;
+import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.clientevent.ClientDropItemEvent;
 import org.y1000.message.clientevent.ClientInventoryEvent;
 import org.y1000.message.clientevent.ClientSwapInventoryEvent;
@@ -249,6 +250,10 @@ public final class Inventory extends AbstractInventory {
 
 
     private void handleDropEvent(Player player, ClientDropItemEvent dropItemEvent, UnaryAction<EntityEvent> eventSender) {
+        if (dropItemEvent.coordinate().directDistance(player.coordinate()) > 3) {
+            eventSender.invoke(PlayerTextEvent.tooFarAway(player));
+            return;
+        }
         assertRange(dropItemEvent.sourceSlot());
         Item item = getItem(dropItemEvent.sourceSlot());
         if (item == null) {

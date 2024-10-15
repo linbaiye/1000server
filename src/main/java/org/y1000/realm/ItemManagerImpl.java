@@ -101,10 +101,8 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
     public void dropItem(PlayerDropItemEvent dropItemEvent) {
         if (dropItemEvent == null)
             return;
-        if (dropItemEvent.source().coordinate().directDistance(dropItemEvent.getCoordinate()) <= 3) {
-            GroundedItem groundedItem = dropItemEvent.createGroundedItem(idGenerator.next());
-            dropNewItem(groundedItem);
-        }
+        GroundedItem groundedItem = dropItemEvent.createGroundedItem(idGenerator.next());
+        dropNewItem(groundedItem);
     }
 
 

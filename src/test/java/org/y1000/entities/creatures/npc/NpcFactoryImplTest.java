@@ -25,16 +25,6 @@ class NpcFactoryImplTest extends AbstractUnitTestFixture  {
         map = Mockito.mock(RealmMap.class);
     }
 
-    @Test
-    void createNpc() {
-        var npc = npcFactory.createNpc("牛", 1L, map, Coordinate.xy(2, 2));
-        assertEquals("牛", npc.viewName());
-        assertInstanceOf(PassiveMonster.class, npc);
-        var lbn = npcFactory.createMerchant("老板娘", 1L, map, Coordinate.xy(2, 2));
-        assertEquals("老板娘", lbn.viewName());
-        var merchant = (SubmissiveMerchant)npcFactory.createNpc("老板娘", 1L, map, Coordinate.xy(2, 2));
-        assertEquals("老板娘", merchant.viewName());
-    }
 
     @Test
     void createMonster() {

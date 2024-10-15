@@ -82,14 +82,7 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         assertEquals(Coordinate.xy(2, 2), groundedItem.get().coordinate());
     }
 
-    @Test
-    void dropItemWhenPlayerFar() {
-        var player = Mockito.mock(Player.class);
-        when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
-        PlayerDropItemEvent event = new PlayerDropItemEvent(player, "test", 1, Coordinate.xy(5, 5), 0);
-        manager.dropItem(event);
-        assertTrue(manager.getEntities().isEmpty());
-    }
+
 
     @Test
     void playerDrop() {
