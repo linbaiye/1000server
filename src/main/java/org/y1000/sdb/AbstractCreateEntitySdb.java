@@ -17,7 +17,7 @@ public abstract class AbstractCreateEntitySdb extends AbstractCSVSdbReader imple
         settings = parse();
     }
 
-    protected abstract String getIdName(String id);
+    protected abstract String getViewName(String id);
 
     private List<NpcSpawnSetting> parse() {
         /*
@@ -26,7 +26,7 @@ public abstract class AbstractCreateEntitySdb extends AbstractCSVSdbReader imple
          */
         List<NpcSpawnSetting> settingList = new ArrayList<>();
         for (String name : names()) {
-            String viewName = getIdName(name);
+            String viewName = getViewName(name);
             int x = getInt(name, "X");
             int y = getInt(name, "Y");
             int count = getInt(name, "Count");

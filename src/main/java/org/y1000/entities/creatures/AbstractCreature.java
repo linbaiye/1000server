@@ -33,7 +33,7 @@ public abstract class AbstractCreature<C extends Creature, S extends CreatureSta
         super(id);
         Objects.requireNonNull(coordinate, "coordinate can't be null.");
         Objects.requireNonNull(direction, "direction can't be null.");
-        Objects.requireNonNull(name, "idName can't be null.");
+        Objects.requireNonNull(name, "viewName can't be null.");
         Objects.requireNonNull(stateMillis, "stateMillis can't be null.");
         this.coordinate = coordinate;
         this.direction = direction;

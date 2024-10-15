@@ -34,18 +34,7 @@ public final class Banker extends AbstractSubmissiveNpc {
     protected Logger log() {
         return log;
     }
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id());
-    }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        return obj == this || ((Banker) obj).id() == id();
-    }
     @Override
     protected NpcType getType() {
         return NpcType.BANKER;

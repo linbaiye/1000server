@@ -52,5 +52,7 @@ public interface NpcSdb {
     int getViewWidth(String name);
 
     boolean isQuester(String name);
+
+    int getImage(String name);
 }
 

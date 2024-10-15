@@ -264,6 +264,19 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
 
 
     @Override
+    public int hashCode() {
+        return Objects.hashCode(id());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        return obj == this || (this.getClass().cast(obj)).id() == id();
+    }
+
+    @Override
     public Optional<String> dieSound() {
         return attributeProvider.dieSound();
     }

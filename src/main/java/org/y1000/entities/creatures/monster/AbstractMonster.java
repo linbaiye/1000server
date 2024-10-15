@@ -36,10 +36,6 @@ public abstract class AbstractMonster extends AbstractViolentNpc implements Mons
                 attributeProvider().animate(), attributeProvider().shape());
     }
 
-    @Override
-    public void changeToIdleAI() {
-        changeAI(new MonsterWanderingAI(spawnCoordinate()));
-    }
 
     @Override
     public Optional<String> normalSound() {

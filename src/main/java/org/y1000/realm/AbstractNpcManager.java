@@ -84,7 +84,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
 
     protected Npc createNpc(String name, Coordinate coordinate) {
-        return createNpcSdb != null ?
+        return createNpcSdb != null && createNpcSdb.containsNpc(name)?
                 npcFactory.createNonMonsterNpc(name, idGenerator.next(), realmMap, coordinate, createNpcSdb) :
                 npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate);
     }
@@ -93,7 +93,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         List<NpcSpawnSetting> allSettings = createNpcSdb.getAllSettings();
         int total = 0;
         for (NpcSpawnSetting setting : allSettings) {
-            var name = setting.idName();
+            var name = setting.viewName();
             for (int i = 0; i < setting.number(); i++) {
                 try {
                     total += setting.number();

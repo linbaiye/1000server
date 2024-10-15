@@ -17,7 +17,7 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
     }
 
     @Override
-    protected String getIdName(String id) {
+    protected String getViewName(String id) {
         return get(id, "NpcName");
     }
 
@@ -60,14 +60,33 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
     }
 
     @Override
-    public Optional<String> getDialog(String idName) {
-        String config = getValue(idName, "Dialog");
+    public boolean containsNpc(String viewName) {
+        for (String name : names()) {
+            if (viewName != null && viewName.equals(get(name, "NpcName")))
+                return true;
+        }
+        return false;
+    }
+
+
+    private Optional<String> getOptionalString(String idName, String key) {
+        String config = getValue(idName, key);
         return StringUtils.isEmpty(config) ? Optional.empty() : Optional.of(config);
+    }
+
+    @Override
+    public Optional<String> getMerchant(String viewName) {
+        return getOptionalString(viewName, "Merchant");
+    }
+
+    @Override
+    public Optional<String> getDialog(String idName) {
+        return getOptionalString(idName, "Dialog");
     }
 
     private String idNameToId(String npcName) {
         for (String id: names()) {
-            String viewName = getIdName(id);
+            String viewName = getViewName(id);
             if (viewName.equals(npcName)) {
                 return id;
             }

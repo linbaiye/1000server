@@ -3,6 +3,7 @@ package org.y1000.message.clientevent;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.creatures.npc.InteractableNpc;
 import org.y1000.entities.creatures.npc.Quester;
 import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
@@ -31,6 +32,8 @@ public class ClientClickEvent extends AbstractClientEvent implements ClientSingl
             source.emitEvent(PlayerTextEvent.playerClicked(source, player));
         } else if (clicked instanceof Quester quester) {
             source.emitEvent(new UpdateQuestWindowEvent(source, quester));
+        } else if (clicked instanceof InteractableNpc interactableNpc) {
+            interactableNpc.onClicked(source);
         }
     }
 }

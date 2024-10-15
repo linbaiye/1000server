@@ -101,6 +101,10 @@ public final class NonMonsterNpcAttributeProvider implements AttributeProvider {
         return npcSdb.getShape(name);
     }
 
+    public int image() {
+        return npcSdb.getImage(name);
+    }
+
 
     @Override
     public Optional<String> dieSound() {

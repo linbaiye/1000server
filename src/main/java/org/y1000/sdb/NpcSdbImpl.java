@@ -139,6 +139,11 @@ public final class NpcSdbImpl extends AbstractCSVSdbReader implements NpcSdb {
         return "TRUE".equals(get(name, "boQuester"));
     }
 
+    @Override
+    public int getImage(String name) {
+        return getInt(name, "Image");
+    }
+
     public static void main(String[] args) {
         NpcSdbImpl sdb= NpcSdbImpl.Instance;
 //        Set<String> names = itemSdb.names();

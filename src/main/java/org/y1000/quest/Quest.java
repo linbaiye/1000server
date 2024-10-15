@@ -3,6 +3,8 @@ package org.y1000.quest;
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
+import org.y1000.entities.creatures.npc.InteractableNpc;
+import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 import org.y1000.message.PlayerTextEvent;
@@ -13,7 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public final class Quest {
+public final class Quest implements NpcInteractability  {
+
+    @Override
+    public String playerSeeingName() {
+        return questName;
+    }
+
+    @Override
+    public void interact(Player clicker, InteractableNpc npc) {
+
+    }
 
     public record QuestItem(String itemName, int number) {
     }

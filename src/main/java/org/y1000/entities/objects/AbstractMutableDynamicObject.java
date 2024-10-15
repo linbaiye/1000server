@@ -53,7 +53,7 @@ public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity 
         }
         String[] tokens = guardPos.split(":");
         if (tokens.length % 2 != 0) {
-            throw new IllegalArgumentException("Invalid guardPos: " + guardPos + ", idName:" + idName);
+            throw new IllegalArgumentException("Invalid guardPos: " + guardPos + ", viewName:" + idName);
         }
         Coordinate[] guardCoordinates = new Coordinate[tokens.length / 2 + 1];
         guardCoordinates[0] = coordinate;

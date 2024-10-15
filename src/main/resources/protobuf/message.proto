@@ -272,6 +272,11 @@ message ClientSubmitQuestPacket {
   string questName = 2;
 }
 
+message ClientClickInteractabilityPacket {
+  int64 id = 1;
+  string name = 2;
+}
+
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
@@ -303,6 +308,7 @@ message ClientPacket {
     ClientCreateGuildKungFuPacket createGuildKungFu = 27;
     ClientManageGuildPacket manageGuild = 28;
     ClientSubmitQuestPacket submitQuest = 29;
+    ClientClickInteractabilityPacket interact = 30;
   }
 }
 
@@ -323,6 +329,14 @@ message InventoryItemPacket {
   int32 slotId = 2;
   optional int64 number = 3;
   int32 color = 4;
+}
+
+message NpcItemPacket {
+  string name = 1;
+  int32 icon = 2;
+  int32 color = 3;
+  int32 price = 4;
+  bool canStack = 5;
 }
 
 message OpenTradeWindowPacket {
@@ -558,6 +572,25 @@ message UpdateBuffPacket {
   optional string description = 5;
 }
 
+message NpcInteractionMenuPacket {
+  int64 id = 1;
+  string viewName = 2;
+  string shape = 3;
+  int32 avatarIdx = 4;
+  string text = 5;
+  repeated string interactions = 6;
+}
+
+message MerchantMenuPacket {
+  int64 id = 1;
+  string viewName = 2;
+  string shape = 3;
+  int32 avatarIdx = 4;
+  string text = 5;
+  repeated NpcItemPacket items = 6;
+  bool sell = 7;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -611,6 +644,8 @@ message Packet {
     UpdateGuildKungFuFormPacket kungFuForm = 51;
     UpdateQuestWindowPacket questWindow = 52;
     UpdateBuffPacket updateBuff = 53;
+    NpcInteractionMenuPacket interactionMenu = 54;
+    MerchantMenuPacket merchantMenu = 55;
   }
 }
 

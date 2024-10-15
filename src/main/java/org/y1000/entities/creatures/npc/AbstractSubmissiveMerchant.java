@@ -53,10 +53,6 @@ public abstract class AbstractSubmissiveMerchant extends AbstractNpc implements 
         merchantable.buy(player, items, moneyCreator, coordinate());
     }
 
-    @Override
-    public void changeToIdleAI() {
-
-    }
 
     @Override
     public void startIdleAI() {

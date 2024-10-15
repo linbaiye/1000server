@@ -53,10 +53,6 @@ public final class ViolentMerchant extends AbstractViolentNpc implements Merchan
                 NpcType.MERCHANT, attributeProvider().animate(), attributeProvider().shape(), fileName);
     }
 
-    @Override
-    public void changeToIdleAI() {
-        changeAI(new ViolentNpcWanderingAI(spawnCoordinate()));
-    }
 
     @Override
     public void startIdleAI() {

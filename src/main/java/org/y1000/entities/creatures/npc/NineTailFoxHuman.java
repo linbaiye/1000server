@@ -55,9 +55,6 @@ public final class NineTailFoxHuman extends AbstractNpc {
     }
 
 
-    @Override
-    public void changeToIdleAI() {
-    }
 
     @Override
     public void startIdleAI() {

@@ -57,8 +57,8 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case TOGGLEKUNGFU -> new ClientToggleKungFuEvent(clientPacket.getToggleKungFu().getTab(), clientPacket.getToggleKungFu().getSlot());
             case SITDOWN -> new ClientSitDownEvent(new Coordinate(clientPacket.getSitDown().getX(), clientPacket.getSitDown().getY()));
             case STANDUP -> ClientStandUpEvent.INSTANCE;
-            case SELLITEMS -> ClientSellEvent.fromPacket(clientPacket.getSellItems());
-            case BUYITEMS -> ClientBuyItemsEvent.fromPacket(clientPacket.getBuyItems());
+            case SELLITEMS -> ClientSellEvent.fromPacket(clientPacket.getSellItems(), serverContext.getItemFactory());
+            case BUYITEMS -> ClientBuyItemsEvent.fromPacket(clientPacket.getBuyItems(), serverContext.getItemFactory());
             case RIGHTCLICK -> ClientRightClickEvent.fromPacket(clientPacket.getRightClick());
             case TRADEREQUEST -> new ClientTradePlayerEvent(clientPacket.getTradeRequest().getTargetId(), clientPacket.getTradeRequest().getSlot());
             case UPDATETRADE -> ClientUpdateTradeEvent.fromPacket(clientPacket.getUpdateTrade());
@@ -75,6 +75,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case CREATEGUILDKUNGFU -> ClientCreateGuildKungFuEvent.parse(clientPacket.getCreateGuildKungFu());
             case MANAGEGUILD -> new ClientManageGuildEvent(clientPacket.getManageGuild().getType(), clientPacket.getManageGuild().getTarget());
             case SUBMITQUEST -> new ClientSubmitQuestEvent(clientPacket.getSubmitQuest().getId(), clientPacket.getSubmitQuest().getQuestName(), serverContext.getItemFactory());
+            case INTERACT -> new ClientClickInteractabilityEvent(clientPacket.getInteract().getId(), clientPacket.getInteract().getName());
             default -> throw new IllegalArgumentException();
         };
     }
@@ -102,19 +103,19 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         realmManager.queueEvent(new ConnectionClosedEvent(this));
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         if (!ctx.channel().isActive()) {
             context.get().close();
         }
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         context.set(ctx);
     }
 

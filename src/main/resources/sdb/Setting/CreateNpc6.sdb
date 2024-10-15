@@ -1,4 +1,4 @@
-Name,NpcName,X,Y,Count,Width,Type,Config,Dialog
+Name,NpcName,X,Y,Count,Width,Type,Merchant,Dialog
 1,风兄,150,209,1,1,MERCHANT,风兄6.txt,
 2,牛美,170,244,1,1,MERCHANT,牛美6.txt,
 3,铁匠,121,213,1,1,MERCHANT,铁匠6.txt,

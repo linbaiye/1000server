@@ -175,7 +175,7 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
     @Override
     public String toString() {
         return "AttackKungFuFixedParametersImpl{" +
-                "idName='" + name + '\'' +
+                "viewName='" + name + '\'' +
                 ", recovery=" + recovery +
                 ", bodyDamage=" + bodyDamage +
                 ", headDamage=" + headDamage +

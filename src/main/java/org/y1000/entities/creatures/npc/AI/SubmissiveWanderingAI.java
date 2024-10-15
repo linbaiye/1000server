@@ -7,6 +7,8 @@ import org.y1000.util.Coordinate;
 
 public final class SubmissiveWanderingAI extends AbstractWanderingNpcAI {
 
+    private final Chatter chatter;
+
     @Override
     protected void onHurtDone(Npc npc) {
         if (npc.state() instanceof NpcHurtState hurtState) {
@@ -19,13 +21,21 @@ public final class SubmissiveWanderingAI extends AbstractWanderingNpcAI {
 
     public SubmissiveWanderingAI(Coordinate destination, Coordinate previousCoordinate) {
         super(destination, previousCoordinate);
+        chatter = null;
     }
 
     public SubmissiveWanderingAI() {
+        this(null);
+    }
+
+    public SubmissiveWanderingAI(Chatter chatter) {
+        this.chatter = chatter;
     }
 
     @Override
     public void onActionDone(Npc npc) {
+        if (chatter != null)
+            chatter.onActionDone(npc);
         defaultActionDone(npc);
     }
 }

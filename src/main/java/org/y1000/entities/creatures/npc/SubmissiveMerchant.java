@@ -34,18 +34,6 @@ public final class SubmissiveMerchant extends AbstractSubmissiveMerchant {
                 NpcType.MERCHANT, attributeProvider().animate(), attributeProvider().shape(), getMerchantFile());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        return obj == this || ((SubmissiveMerchant) obj).id() == id();
-    }
 
     @Override
     protected Logger log() {

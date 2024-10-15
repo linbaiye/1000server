@@ -185,12 +185,6 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                     .or(() -> find(attackEvent.entityId(), AttackableActiveEntity.class))
                     .or(() -> dynamicObjectManager.find(attackEvent.entityId(), AttackableActiveEntity.class))
                     .ifPresent(attackableEntity -> dataEvent.player().attack(attackEvent, attackableEntity));
-        } else if (dataEvent.data() instanceof ClientSellEvent sellEvent) {
-            npcManager.find(sellEvent.merchantId(), Merchant.class)
-                    .ifPresent(merchant -> merchant.buy(dataEvent.player(), sellEvent.items(), itemFactory::createMoney));
-        } else if (dataEvent.data() instanceof ClientBuyItemsEvent buyItemsEvent) {
-            npcManager.find(buyItemsEvent.merchantId(), Merchant.class)
-                    .ifPresent(merchant -> merchant.sell(dataEvent.player(), buyItemsEvent.items(), itemFactory::createItem));
         } else if (dataEvent.data() instanceof ClientTradePlayerEvent tradePlayerEvent) {
             find(tradePlayerEvent.targetId(), Player.class).ifPresent(tradee -> tradeManager.start(dataEvent.player(), tradee, tradePlayerEvent.slot()));
         } else if (dataEvent.data() instanceof ClientUpdateTradeEvent updateTradeEvent) {
