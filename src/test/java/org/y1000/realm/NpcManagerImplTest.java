@@ -61,6 +61,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
 
     private HaveItemSdb haveItemSdb;
 
+    private CreateNonMonsterSdb npcSdb;
 
     @BeforeEach
     void setUp() {
@@ -73,7 +74,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         when(monsterSdb.getAllSettings()).thenReturn(monsterSettings);
         when(monsterSdb.getSettings(anyString())).thenReturn(monsterSettings);
         npcSettings = new ArrayList<>();
-        CreateNonMonsterSdb npcSdb = Mockito.mock(CreateNonMonsterSdb.class);
+        npcSdb = Mockito.mock(CreateNonMonsterSdb.class);
         when(npcSdb.getAllSettings()).thenReturn(npcSettings);
         when(npcSdb.getSettings(anyString())).thenReturn(npcSettings);
         when(npcSdbRepository.loadCreateMonster(anyInt())).thenReturn(monsterSdb);
@@ -84,6 +85,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         map = Mockito.mock(RealmMap.class);
         when(map.movable(any(Coordinate.class))).thenReturn(true);
         haveItemSdb = Mockito.mock(HaveItemSdb.class);
+        when(npcSdb.getMerchant(anyString())).thenReturn(Optional.empty());
         npcManager = new NpcManagerImpl(eventSender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, monsterSdb, npcSdb, map, haveItemSdb);
     }
 
@@ -169,6 +171,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         Rectangle range = new Rectangle(Coordinate.xy(1, 1), Coordinate.xy(4, 4));
         npcSettings.add(new NpcSpawnSetting(range, 1, "老板娘"));
         when(npcSdbRepository.npcSdbExists(49)).thenReturn(true);
+        when(npcSdb.containsNpc(anyString())).thenReturn(true);
         npcManager.init();
         assertFalse(npcManager.findMerchants().isEmpty());
     }

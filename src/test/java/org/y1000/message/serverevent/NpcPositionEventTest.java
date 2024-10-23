@@ -2,6 +2,7 @@ package org.y1000.message.serverevent;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.entities.creatures.npc.InteractableNpc;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.NpcPositionPacket;
@@ -18,7 +19,7 @@ class NpcPositionEventTest {
 
     @Test
     void packet() {
-        var m1 = Mockito.mock(Merchant.class);
+        var m1 = Mockito.mock(InteractableNpc.class);
         when(m1.coordinate()).thenReturn(Coordinate.xy(1, 1));
         when(m1.viewName()).thenReturn("m1");
         var player = Mockito.mock(Player.class);

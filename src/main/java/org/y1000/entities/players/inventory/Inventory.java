@@ -287,7 +287,6 @@ public final class Inventory extends AbstractInventory {
             eventSender.invoke(UpdateInventorySlotEvent.update(player, targetSlot, getItem(targetSlot)));
         }
         return stackItem.item();
-
     }
 
     public Item consumeStackItem(Player player,

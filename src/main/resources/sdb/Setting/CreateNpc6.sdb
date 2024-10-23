@@ -5,5 +5,5 @@ Name,NpcName,X,Y,Count,Width,Type,Merchant,Dialog
 4,船夫,25,231,1,1,MERCHANT,船夫.txt,
 6,老板娘,156,244,1,1,MERCHANT,,
 7,药材商,176,218,1,1,MERCHANT,,
-7,向导,169,229,1,1,GUARDIAN,,渔隐村向导.txt
+8,向导,169,229,1,1,GUARDIAN,,渔隐村向导.txt
 ,,,,,,,

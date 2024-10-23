@@ -3,6 +3,7 @@ package org.y1000.realm;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.creatures.npc.InteractableNpc;
 import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.StaticTeleport;
@@ -196,7 +197,7 @@ abstract class AbstractRealm implements Realm {
     private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
         if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent) {
             if (commandEvent.isAskingPosition()) {
-                Set<Merchant> merchants = npcManager.findMerchants();
+                Set<InteractableNpc> merchants = npcManager.findMerchants();
                 Set<StaticTeleport> staticTeleports = teleportManager.findStaticTeleports();
                 if (!merchants.isEmpty() || !staticTeleports.isEmpty())
                     eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));

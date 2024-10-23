@@ -52,6 +52,8 @@ CREATE TABLE `player_equipment` (
                              primary key (player_id, `name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
+
+
 create table player_item (
                       `number` bigint not null,
                       color int not null default 0,
@@ -60,6 +62,13 @@ create table player_item (
                       `name` varchar(32) not null,
                       `type` varchar(16) not null comment 'BANK or INVENTORY',
                       primary key (player_id, `slot`, `type`)) engine=InnoDB, charset=utf8mb4;
+
+
+create table upgradable_equipment(
+    id bigint primary key not null auto_increment,
+    `name` varchar(32) not null,
+    attributes
+);
 
 
 create table bank (

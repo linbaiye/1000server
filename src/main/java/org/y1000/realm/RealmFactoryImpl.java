@@ -59,7 +59,6 @@ public final class RealmFactoryImpl implements RealmFactory {
                             GuildRepository guildRepository,
                             ItemRepository itemRepository,
                             KungFuBookRepository kungFuBookRepository) {
-        this.guildRepository = guildRepository;
         Validate.notNull(itemFactory);
         Validate.notNull(npcFactory);
         Validate.notNull(itemSdb);
@@ -72,6 +71,8 @@ public final class RealmFactoryImpl implements RealmFactory {
         Validate.notNull(playerRepository);
         Validate.notNull(bankRepository);
         Validate.notNull(posByDieSdb);
+        Validate.notNull(guildRepository);
+        this.guildRepository = guildRepository;
         this.itemFactory = itemFactory;
         this.npcFactory = npcFactory;
         this.itemSdb = itemSdb;
