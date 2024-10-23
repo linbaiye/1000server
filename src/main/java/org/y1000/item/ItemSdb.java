@@ -56,4 +56,6 @@ public interface ItemSdb {
     boolean isColoring(String name);
 
     int getShape(String name);
+
+    boolean isUpgrade(String name);
 }

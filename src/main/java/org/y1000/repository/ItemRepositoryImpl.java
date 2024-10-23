@@ -39,7 +39,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
 
     public Equipment createEquipment(String name) {
         return switch (itemSdb.getEquipmentType(name)) {
-            case WEAPON -> new WeaponImpl(name, itemSdb);
+            case WEAPON -> createWeapon(name);
             case HAT -> createHat(name);
             case CHEST -> createChest(name);
             case TROUSER -> createTrouser(name);
@@ -54,7 +54,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
     public Equipment createEquipment(String name, int color) {
         Validate.notNull(name);
         return switch (itemSdb.getEquipmentType(name)) {
-            case WEAPON -> new WeaponImpl(name, itemSdb);
+            case WEAPON -> createWeapon(name);
             case HAT -> createHat(name, color);
             case CHEST -> createChest(name, color);
             case TROUSER -> createTrouser(name, color);
@@ -103,6 +103,10 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
             case BUFF_PILL -> createBuffPill(name);
             default -> SimpleItem.uncategoried(name, itemSdb);
         };
+    }
+
+    private Weapon createWeapon(String name) {
+        return itemSdb.isUpgrade(name) ? new UpgradableWeapon(name, itemSdb) : new WeaponImpl(name, itemSdb);
     }
 
     @Override

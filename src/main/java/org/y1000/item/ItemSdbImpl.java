@@ -286,6 +286,11 @@ MaxCount,        最多持有数量；
         return getInt(name, "Shape");
     }
 
+    @Override
+    public boolean isUpgrade(String name) {
+        return "TRUE".equals(get(name, "boUpgrade"));
+    }
+
     public static final ItemSdbImpl INSTANCE = read();
 
     private static ItemSdbImpl read() {
