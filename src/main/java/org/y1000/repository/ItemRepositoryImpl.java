@@ -14,9 +14,7 @@ import org.y1000.persistence.BankPo;
 import org.y1000.persistence.ItemPo;
 import org.y1000.sdb.ItemDrugSdb;
 
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, BankRepository {
@@ -37,31 +35,30 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
     }
 
 
+    private Set<Object> buildEquipmentAbilities(String name, int color) {
+        Set<Object> abilities = new HashSet<>();
+        if (itemSdb.isUpgrade(name)) {
+            abilities.add(new UpgradableImpl());
+        }
+        if (itemSdb.isColoring(name)) {
+            abilities.add(new DyableImpl(color));
+        }
+        return abilities;
+    }
+
     public Equipment createEquipment(String name) {
-        return switch (itemSdb.getEquipmentType(name)) {
-            case WEAPON -> createWeapon(name);
-            case HAT -> createHat(name);
-            case CHEST -> createChest(name);
-            case TROUSER -> createTrouser(name);
-            case CLOTHING -> createClothing(name);
-            case BOOT -> createBoot(name);
-            case HAIR -> createHair(name);
-            case WRIST, WRIST_CHESTED -> createWrist(name);
-        };
+        return createEquipment(name, itemSdb.getColor(name));
     }
 
     @Override
     public Equipment createEquipment(String name, int color) {
         Validate.notNull(name);
-        return switch (itemSdb.getEquipmentType(name)) {
-            case WEAPON -> createWeapon(name);
-            case HAT -> createHat(name, color);
-            case CHEST -> createChest(name, color);
-            case TROUSER -> createTrouser(name, color);
-            case CLOTHING -> createClothing(name, color);
-            case BOOT -> createBoot(name, color);
-            case HAIR -> createHair(name, color);
-            case WRIST, WRIST_CHESTED -> createWrist(name, color);
+        Set<Object> abilities = buildEquipmentAbilities(name, color);
+        EquipmentType equipmentType = itemSdb.getEquipmentType(name);
+        return switch (equipmentType) {
+            case WEAPON -> new WeaponImpl(name, itemSdb, abilities);
+            case TROUSER, CLOTHING, HAIR -> new SexualEquipmentImpl(name, itemSdb, equipmentType, abilities);
+            case HAT, CHEST, BOOT, WRIST, WRIST_CHESTED -> new ArmorImpl(name, itemSdb, abilities);
         };
     }
 
@@ -70,8 +67,8 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         Validate.notNull(item, "item must not be null");
         Item restored = item.getNumber() != null ?
                 createItem(item.getName(), item.getNumber()) : createItem(item.getName());
-        if (restored instanceof DyableEquipment dyableEquipment) {
-            dyableEquipment.dye(item.getColor());
+        if (restored instanceof Equipment equipment) {
+            equipment.findAbility(Dyable.class).ifPresent(d -> d.dye(item.getColor()));
         }
         return restored;
     }
@@ -105,10 +102,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         };
     }
 
-    private Weapon createWeapon(String name) {
-        return itemSdb.isUpgrade(name) ? new UpgradableWeapon(name, itemSdb) : new WeaponImpl(name, itemSdb);
-    }
-
     @Override
     public Item createItem(String name) {
         return createItem(name, 1);
@@ -132,83 +125,39 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         return itemSdb.canStack(name) ? new StackItem(item, number) : item;
     }
 
-    private SexualEquipment createTrouser(String name, int color) {
-        return itemSdb.isColoring(name) ? new DecorativeEquipment(name, EquipmentType.TROUSER, itemSdb, color)
-                : new Trouser(name, itemSdb);
-    }
-
     @Override
     public SexualEquipment createTrouser(String name) {
-        return createTrouser(name, itemSdb.getColorOrZero(name));
-    }
-
-    private ArmorEquipment createHat(String name, int color) {
-        return itemSdb.isColoring(name) ?
-                new DyableArmorEquipment(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.HAT, color) :
-                new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.HAT);
+        return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
     }
 
     @Override
     public ArmorEquipment createHat(String name) {
-        return createHat(name, itemSdb.getColorOrZero(name));
-    }
-
-    private ArmorEquipment createChest(String name, int color) {
-        return itemSdb.isColoring(name) ?
-                new DyableArmorEquipment(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.CHEST, color) :
-                new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.CHEST);
+        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
     }
 
     @Override
     public ArmorEquipment createChest(String name) {
-        return createChest(name, itemSdb.getColorOrZero(name));
-    }
-
-    private SexualEquipment createHair(String name, int color) {
-        Validate.isTrue(name != null && itemSdb.getType(name) == ItemType.EQUIPMENT);
-        return itemSdb.isColoring(name) ? new DecorativeEquipment(name, EquipmentType.HAIR, itemSdb, color) :
-                new Hair(name, itemSdb);
+        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
     }
 
     @Override
     public SexualEquipment createHair(String name) {
-        return createHair(name, itemSdb.getColorOrZero(name));
-    }
-
-
-    private ArmorEquipment createBoot(String name, int color) {
-        Validate.isTrue(name != null && itemSdb.getType(name) == ItemType.EQUIPMENT);
-        return itemSdb.isColoring(name) ?
-                new DyableArmorEquipment(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.BOOT, color) :
-                new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.BOOT);
+        return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
     }
 
     @Override
     public ArmorEquipment createBoot(String name) {
-        return createBoot(name, itemSdb.getColorOrZero(name));
-    }
-
-    private ArmorEquipment createWrist(String name, int color) {
-        return itemSdb.isColoring(name) ?
-                new DyableArmorEquipment(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.WRIST, color) :
-                new ArmorEquipmentImpl(name, new DefaultArmorAttributeProvider(name, itemSdb), EquipmentType.WRIST);
+        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
     }
 
     @Override
     public ArmorEquipment createWrist(String name) {
-        return createWrist(name, itemSdb.getColorOrZero(name));
-    }
-
-    private SexualEquipment createClothing(String name, int color) {
-        Validate.isTrue(name != null && itemSdb.getType(name) == ItemType.EQUIPMENT);
-        return itemSdb.isColoring(name) ? new DecorativeEquipment(name, EquipmentType.CLOTHING, itemSdb, color)
-                : new Clothing(name, itemSdb);
+        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
     }
 
     @Override
     public SexualEquipment createClothing(String name) {
-        Validate.isTrue(name != null && itemSdb.getType(name) == ItemType.EQUIPMENT);
-        return createClothing(name, itemSdb.getColorOrZero(name));
+        return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
     }
 
     private void deleteItems(EntityManager entityManager, long playerId, ItemPo.Type type) {
@@ -283,7 +232,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                 .setParameter(1, playerId)
                 .getResultStream()
                 .findFirst();
-
     }
 
     private Bank convert(EntityManager entityManager, BankPo bankPo) {

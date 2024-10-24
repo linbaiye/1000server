@@ -4,6 +4,10 @@ public final class DyableImpl implements Dyable {
 
     private int color;
 
+    public DyableImpl(int color) {
+        this.color = color;
+    }
+
     @Override
     public void dye(int color) {
         this.color = color;

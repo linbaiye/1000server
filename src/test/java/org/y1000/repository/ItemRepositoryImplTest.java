@@ -42,9 +42,9 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
         PlayerImpl player = playerBuilder().id(11).build();
         Inventory inventory = player.inventory();
         int slot1 = inventory.put(itemFactory.createItem("丸药", 2));
-        DecorativeEquipment equipment = (DecorativeEquipment) itemFactory.createItem("女子长发", 1);
+        var equipment =  itemFactory.createHair("女子长发" );
         StackItem dye = (StackItem) itemFactory.createItem("天蓝染剂", 1);
-        equipment.dye(dye.color());
+        equipment.findAbility(Dyable.class).ifPresent(p -> p.dye(dye.color()));
         int slot2 = inventory.put(equipment);
         EntityManager entityManager = jpaFixture.beginTx();
         itemRepository.save(entityManager, player);

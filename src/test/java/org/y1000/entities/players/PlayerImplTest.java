@@ -80,24 +80,25 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void hat() {
-        player = playerBuilder().hat(new ArmorEquipmentImpl("test", new TestArmorAttributeProvider(), EquipmentType.HAT)).build();
-        assertEquals("test", player.hat().get().name());
+        player = playerBuilder().male(true).hat(itemFactory.createHat("男子斗笠")).build();
+        assertEquals("男子斗笠", player.hat().get().name());
         player.handleClientEvent(new ClientUnequipEvent(EquipmentType.HAT));
         assertTrue(player.hat().isEmpty());
     }
 
     @Test
     void chest() {
-        player = playerBuilder().chest(new ArmorEquipmentImpl("chest", new TestArmorAttributeProvider(), EquipmentType.CHEST)).build();
-        assertEquals("chest", player.chest().get().name());
+        player = playerBuilder().chest(itemFactory.createChest("男子黄龙弓服")).build();
+        assertEquals("男子黄龙弓服", player.chest().get().name());
         player.handleClientEvent(new ClientUnequipEvent(EquipmentType.CHEST));
         assertTrue(player.chest().isEmpty());
     }
 
     @Test
     void boot() {
-        player = playerBuilder().boot(new ArmorEquipmentImpl("boot", new TestArmorAttributeProvider(), EquipmentType.BOOT)).build();
-        assertEquals("boot", player.boot().get().name());
+        var boot = itemFactory.createBoot("男子木屐");
+        player = playerBuilder().boot(boot).build();
+        assertEquals("男子木屐", player.boot().get().name());
         player.handleClientEvent(new ClientUnequipEvent(EquipmentType.BOOT));
         assertTrue(player.boot().isEmpty());
     }
@@ -106,13 +107,14 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void equipHatEvent() {
         Inventory inventory = new Inventory();
-        int slot = inventory.put(new ArmorEquipmentImpl("test", new TestArmorAttributeProvider(), EquipmentType.HAT));
+        var test = itemFactory.createHair("女子长发");
+        int slot = inventory.put(test);
         player = playerBuilder().inventory(inventory).build();
         player.registerEventListener(eventListener);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         PlayerEquipEvent first = eventListener.dequeue(PlayerEquipEvent.class);
         assertEquals(first.player(), player);
-        assertEquals(first.toPacket().getEquip().getEquipmentName(), "test");
+        assertEquals(first.toPacket().getEquip().getEquipmentName(), "女子长发");
         UpdateInventorySlotEvent second = eventListener.dequeue(UpdateInventorySlotEvent.class);
         assertEquals(second.toPacket().getUpdateSlot().getSlotId(), slot);
         assertEquals(second.toPacket().getUpdateSlot().getName(), "");

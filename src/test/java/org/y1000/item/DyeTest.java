@@ -12,24 +12,25 @@ import static org.mockito.Mockito.verify;
 
 class DyeTest extends AbstractUnitTestFixture {
 
-    private DyableEquipment dyableEquipment;
+
+    private Dyable dyable;
 
 
     @BeforeEach
     void setUp() {
-        dyableEquipment = Mockito.mock(DyableEquipment.class);
+        dyable = Mockito.mock(Dyable.class);
     }
 
     @Test
     void dye() {
         ItemFactory itemFactory = createItemFactory();
         StackItem stackItem = (StackItem) itemFactory.createItem("脱色药");
-        stackItem.origin(Dye.class).ifPresent(d ->  d.dye(dyableEquipment));
-        verify(dyableEquipment, times(1)).bleach(anyInt());
+        stackItem.origin(Dye.class).ifPresent(d ->  d.dye(dyable));
+        verify(dyable, times(1)).bleach(anyInt());
 
 
         stackItem = (StackItem) itemFactory.createItem("红色染剂");
-        stackItem.origin(Dye.class).ifPresent(d ->  d.dye(dyableEquipment));
-        verify(dyableEquipment, times(1)).dye(anyInt());
+        stackItem.origin(Dye.class).ifPresent(d ->  d.dye(dyable));
+        verify(dyable, times(1)).dye(anyInt());
     }
 }

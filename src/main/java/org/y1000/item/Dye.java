@@ -9,14 +9,14 @@ public final class Dye extends AbstractItem {
         color = itemSdb.getColor(name);
     }
 
-    public void dye(DyableEquipment equipment) {
-        if (equipment == null) {
+    public void dye(Dyable dyable) {
+        if (dyable == null) {
             return;
         }
         if ("脱色药".equals(name())) {
-            equipment.bleach(color);
+            dyable.bleach(color);
         } else {
-            equipment.dye(color);
+            dyable.dye(color);
         }
     }
 

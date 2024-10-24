@@ -63,9 +63,9 @@ class BankRepositoryTest extends AbstractUnitTestFixture {
         bank.unlock();
         bank.put(itemFactory.createItem("生药", 12));
         bank.put(itemFactory.createItem("女子黄龙弓服"));
-        var equipment = (DecorativeEquipment)itemFactory.createItem("女子长发");
+        var equipment = itemFactory.createHair("女子长发");
         Item item = itemFactory.createItem("红色染剂", 2);
-        equipment.dye(item.color());
+        equipment.findAbility(Dyable.class).ifPresent(d -> d.dye(item.color()));
         bank.put(equipment);
         bankRepository.save(1L, bank);
         var bank1 = bankRepository.find(1L).get();

@@ -54,9 +54,9 @@ CREATE TABLE `player_equipment` (
 
 
 
-create table equipment_ownership (
-                                     player_inventory_slot_id bigint not null primary key references player_inventory_slot(id),
-                                     equipment_id bigint not null unique) ENGINE=InnoDB;
+create table inventory_equipment (
+    player_inventory_slot_id bigint not null primary key references player_inventory_slot(id),
+    equipment_id bigint not null unique) ENGINE=InnoDB;
 
 
 create table inventory_item (
@@ -65,6 +65,15 @@ create table inventory_item (
                                 `number` bigint not null,
                                 color int not null default 0
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment "Extending attributes if not an equipment.";
+
+
+create table item(
+                     id bigint primary key not null auto_increment,
+                     `name` varchar(32) not null,
+                     level int not null default 0,
+                     color int not null default 0,
+                     number int not null default 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 
 

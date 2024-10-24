@@ -273,7 +273,8 @@ MaxCount,        最多持有数量；
 
     @Override
     public Integer getColor(String name) {
-        return getInt(name, "Color");
+        Integer color = getInt(name, "Color");
+        return color != null ? color : 0;
     }
 
     @Override

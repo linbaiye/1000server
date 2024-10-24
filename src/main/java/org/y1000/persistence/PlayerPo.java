@@ -12,7 +12,10 @@ import org.y1000.entities.players.PlayerLife;
 import org.y1000.entities.players.YinYang;
 import org.y1000.util.Coordinate;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 @Data
 @Builder
@@ -72,6 +75,13 @@ public class PlayerPo {
 
     @Transient
     private YinYang yinYang;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "player_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id")
+    )
+    private Set<EquipmentPo> equipments;
 
     public YinYang yinYang() {
         if (yinYang == null)
@@ -134,7 +144,21 @@ public class PlayerPo {
         return playerPo;
     }
 
+    public Optional<EquipmentPo> findEquipment(String name) {
+        return equipments != null ? equipments.stream().filter(e -> e.getName().equals(name)).findFirst() :
+                Optional.empty();
+    }
+
     public static PlayerPo convert(Player player) {
+        Set<EquipmentPo> equipments = new HashSet<>();
+        player.hat().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
+        player.hair().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
+        player.chest().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
+        player.boot().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
+        player.trouser().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
+        player.clothing().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
+        player.wrist().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
+        player.weapon().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
         return PlayerPo.builder()
                 .id(player.id() == 0 ? null : player.id())
                 .name(player.viewName())
@@ -156,6 +180,7 @@ public class PlayerPo {
                 .y(player.coordinate().y())
                 .state(player.stateEnum().value())
                 .realmId(player.getRealm() != null ? player.getRealm().id() : 0)
+                .equipments(equipments)
                 .build();
     }
 }

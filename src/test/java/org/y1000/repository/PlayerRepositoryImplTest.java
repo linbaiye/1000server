@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.players.*;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.item.ItemFactory;
-import org.y1000.item.Weapon;
+import org.y1000.item.*;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.KungFuBookFactory;
 import org.y1000.persistence.EquipmentPo;
@@ -66,6 +65,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
                 .power(new PlayerExperiencedAgedAttribute(0, 1, 14, 100))
                 .innerPower(new PlayerExperiencedAgedAttribute(0, 2, 15, 100))
                 .outerPower(new PlayerExperiencedAgedAttribute(0, 3, 16, 100))
+                .hair(itemFactory.createHair("女子长发"))
                 .revival(17)
                 .build();
         player.joinRealm(mockedRealm, Coordinate.xy(1, 2));
@@ -74,7 +74,6 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         jpaFixture.submitTx();
         List resultList = em.createQuery("select p from PlayerPo p").getResultList();
         var playerPo = (PlayerPo)resultList.get(0);
-        //PlayerPo playerPo = em.find(PlayerPo.class, player.id());
         assertEquals(100, playerPo.getYin());
         assertEquals(200, playerPo.getYang());
         assertEquals(10, playerPo.getLife());
@@ -90,6 +89,8 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(player.coordinate(), playerPo.coordinate());
         assertNotEquals(0, playerPo.getRealmId());
         assertEquals(1, playerPo.getAccountId());
+        assertEquals(1, playerPo.getEquipments().size());
+        assertNotNull(player.hair().get().id());
         doAnswer(invocationOnMock -> {
             assertEquals(playerPo.getId(), invocationOnMock.getArgument(1));
             return null;
@@ -99,9 +100,15 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void update() {
+        Item dye = itemFactory.createItem("天蓝染剂", 1);
         var em = jpaFixture.beginTx();
+        SexualEquipment hair = itemFactory.createHair("女子长发");
+        ArmorEquipment boot = itemFactory.createBoot("女子皮鞋");
+        hair.findAbility(Dyable.class).get().dye(dye.color());
+        player = playerBuilder().id(0L).hair(hair).boot(boot).build();
         long id = playerRepository.save(em, 1, player);
         jpaFixture.submitTx();
+        hair.findAbility(Dyable.class).get().dye(dye.color() + 1);
         player = playerBuilder().yinYang(new YinYang(3000, 4000))
                 .id(id)
                 .life(new PlayerLife(0, 100, 10))
@@ -109,9 +116,8 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
                 .arm(new PlayerLife(0, 100, 12))
                 .leg(new PlayerLife(0, 100, 13))
                 .male(false)
-                .hair(itemFactory.createHair("女子长发"))
+                .hair(hair)
                 .trouser(itemFactory.createTrouser("女子长裤"))
-                .boot(itemFactory.createBoot("女子皮鞋"))
                 .hat(itemFactory.createHat("女子斗笠"))
                 .chest(itemFactory.createChest("女子黄龙弓服"))
                 .wrist(itemFactory.createWrist("女子黄龙手套"))
@@ -126,16 +132,16 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         var playerPo = (PlayerPo)resultList.get(0);
         assertEquals(3000, playerPo.yinYang().yinExp());
         assertEquals(4000, playerPo.yinYang().yangExp());
-        List<String> names = em.createQuery("select e from EquipmentPo e", EquipmentPo.class).getResultStream().map(EquipmentPo::getName).toList();
-        assertTrue(names.contains("女子长发"));
+        List<String> names = playerPo.getEquipments().stream().map(EquipmentPo::getName).toList();
         assertTrue(names.contains("女子长裤"));
-        assertTrue(names.contains("女子皮鞋"));
+        assertFalse(names.contains("女子皮鞋"));
         assertTrue(names.contains("女子斗笠"));
         assertTrue(names.contains("女子黄龙弓服"));
         assertTrue(names.contains("女子黄龙手套"));
         assertTrue(names.contains("女子上衣"));
         assertTrue(names.contains("长剑"));
         verify(itemRepository, times(1)).save(any(EntityManager.class), any(Player.class));
+        assertEquals(dye.color() + 1, playerPo.findEquipment(hair.name()).get().getColor());
     }
 
     @Test
