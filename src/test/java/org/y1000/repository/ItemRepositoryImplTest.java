@@ -7,9 +7,15 @@ import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.*;
-import org.y1000.persistence.ItemPo;
+import org.y1000.persistence.EquipmentPo;
+import org.y1000.persistence.InventoryPo;
+import org.y1000.persistence.PlayerItemPo;
+import org.y1000.persistence.SlotItem;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,54 +43,58 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
         assertEquals(ItemType.KNIFE, item.itemType());
     }
 
+
+    @Test
+    void saveEmptyInventory() {
+        PlayerImpl player = playerBuilder().id(11).build();
+        Inventory inventory = player.inventory();
+        EntityManager entityManager = jpaFixture.beginTx();
+        itemRepository.saveInventory(entityManager, player.id(), inventory);
+        jpaFixture.submitTx();
+        entityManager = jpaFixture.newEntityManager();
+        InventoryPo inventoryPo = entityManager.createQuery("select i from InventoryPo i where i.playerId = ?1", InventoryPo.class)
+                .setParameter(1, player.id())
+                .getResultList().get(0);
+        assertTrue(inventoryPo.getSlots().isEmpty());
+    }
+
+    @Test
+    void saveInventory() {
+        PlayerImpl player = playerBuilder().id(11).build();
+        Inventory inventory = player.inventory();
+        int slot0 = inventory.put(itemFactory.createItem("生药", 1));
+        int slot1 = inventory.put(itemFactory.createItem("丸药", 2));
+        int slot2 = inventory.put(itemFactory.createItem("长剑", 1));
+        EntityManager entityManager = jpaFixture.beginTx();
+        itemRepository.saveInventory(entityManager, player.id(), inventory);
+        jpaFixture.submitTx();
+        entityManager = jpaFixture.newEntityManager();
+        InventoryPo inventoryPo = entityManager.createQuery("select i from InventoryPo i where i.playerId = ?1", InventoryPo.class)
+                .setParameter(1, player.id())
+                .getResultList().get(0);
+        assertTrue(inventoryPo.getSlots().stream().map(SlotItem::getSlot).collect(Collectors.toSet()).containsAll(Set.of(slot0, slot1, slot2)));
+        assertNotNull(inventory.getItem(slot2, Equipment.class).get().id());
+        assertFalse(entityManager.createQuery("select e from EquipmentPo e where id = ?1")
+                .setParameter(1, inventory.getItem(slot2, Equipment.class).get().id())
+                .getResultList().isEmpty());
+    }
+
     @Test
     void findInventory() {
         PlayerImpl player = playerBuilder().id(11).build();
         Inventory inventory = player.inventory();
-        int slot1 = inventory.put(itemFactory.createItem("丸药", 2));
-        var equipment =  itemFactory.createHair("女子长发" );
-        StackItem dye = (StackItem) itemFactory.createItem("天蓝染剂", 1);
-        equipment.findAbility(Dyable.class).ifPresent(p -> p.dye(dye.color()));
+        int slot1 = inventory.put(itemFactory.createItem("生药", 2));
+        Equipment equipment = itemFactory.createEquipment("女子黄龙弓服", 4);
+        equipment.findAbility(Upgradable.class).get().upgrade();
         int slot2 = inventory.put(equipment);
         EntityManager entityManager = jpaFixture.beginTx();
-        itemRepository.save(entityManager, player);
+        itemRepository.saveInventory(entityManager, player.id(), inventory);
         jpaFixture.submitTx();
-
-        Inventory inv = itemRepository.findInventory(jpaFixture.newEntityManager(), player.id());
-        assertEquals("丸药", inv.getItem(slot1).name());
-        assertEquals(2, ((StackItem)inv.getItem(slot1)).number());
-        assertEquals("女子长发", inv.getItem(slot2).name());
-        assertEquals(equipment.color(), inv.getItem(slot2).color());
-    }
-
-
-    @Test
-    void save() {
-        PlayerImpl player = playerBuilder().id(11).build();
-        Inventory inventory = player.inventory();
-        inventory.put(itemFactory.createItem("生药", 1));
-        int slot1 = inventory.put(itemFactory.createItem("丸药", 2));
-        int slot2 = inventory.put(itemFactory.createItem("长剑", 1));
-        EntityManager entityManager = jpaFixture.beginTx();
-        itemRepository.save(entityManager, player);
-        jpaFixture.submitTx();
-        try (var em = jpaFixture.newEntityManager()) {
-            List<ItemPo> resultList = em.createQuery("select i from ItemPo i where i.itemKey.playerId = ?1", ItemPo.class)
-                    .setParameter(1, player.id())
-                    .getResultList();
-            assertEquals(player.id(), resultList.get(0).getItemKey().getPlayerId());
-            List<String> names = resultList.stream().map(ItemPo::getName).toList();
-            assertTrue(names.contains("生药"));
-            assertTrue(names.contains("丸药"));
-            assertTrue(names.contains("长剑"));
-            ItemPo itemPo = resultList.stream().filter(i -> i.getName().equals("丸药")).findFirst().get();
-            assertEquals(2, itemPo.getNumber());
-            assertEquals(slot1, itemPo.getItemKey().getSlot());
-            itemPo = resultList.stream().filter(i -> i.getName().equals("长剑")).findFirst().get();
-            assertEquals(slot2, itemPo.getItemKey().getSlot());
-        }
-
-
-
+        Inventory loaded = itemRepository.findInventory(entityManager, player.id()).get();
+        StackItem stackItem = loaded.getStackItem(slot1, Pill.class).get();
+        assertEquals(2, stackItem.number());
+        assertEquals("生药", stackItem.name());
+        Equipment loadedEquipment = loaded.getItem(slot2, Equipment.class).get();
+        assertEquals(1, loadedEquipment.findAbility(Upgradable.class).get().level());
     }
 }

@@ -13,7 +13,6 @@ public abstract class AbstractItem implements Item {
     private final String dropSound;
     private final String eventSound;
     private final String description;
-
     public AbstractItem(String name,
                         ItemType type,
                         String dropSound,
@@ -61,4 +60,5 @@ public abstract class AbstractItem implements Item {
     public ItemType itemType() {
         return type;
     }
+
 }

@@ -21,4 +21,5 @@ public interface Item {
     default int color() {
         return 0;
     }
+
 }

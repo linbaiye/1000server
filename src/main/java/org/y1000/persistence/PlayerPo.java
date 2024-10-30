@@ -5,17 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerExperiencedAgedAttribute;
 import org.y1000.entities.players.PlayerLife;
 import org.y1000.entities.players.YinYang;
+import org.y1000.item.Equipment;
 import org.y1000.util.Coordinate;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -81,7 +82,7 @@ public class PlayerPo {
             joinColumns = @JoinColumn(name = "player_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id")
     )
-    private Set<EquipmentPo> equipments;
+    private List<EquipmentPo> equipments = new ArrayList<>();
 
     public YinYang yinYang() {
         if (yinYang == null)
@@ -137,20 +138,9 @@ public class PlayerPo {
     public int hashCode() {
         return Objects.hash(name);
     }
+
     public static PlayerPo convert(Player player, int accountId, int realmId) {
-        PlayerPo playerPo = convert(player);
-        playerPo.accountId = accountId;
-        playerPo.realmId = realmId;
-        return playerPo;
-    }
-
-    public Optional<EquipmentPo> findEquipment(String name) {
-        return equipments != null ? equipments.stream().filter(e -> e.getName().equals(name)).findFirst() :
-                Optional.empty();
-    }
-
-    public static PlayerPo convert(Player player) {
-        Set<EquipmentPo> equipments = new HashSet<>();
+        List<EquipmentPo> equipments = new ArrayList<>();
         player.hat().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
         player.hair().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
         player.chest().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
@@ -179,8 +169,46 @@ public class PlayerPo {
                 .x(player.coordinate().x())
                 .y(player.coordinate().y())
                 .state(player.stateEnum().value())
-                .realmId(player.getRealm() != null ? player.getRealm().id() : 0)
                 .equipments(equipments)
+                .accountId(accountId)
+                .realmId(realmId)
                 .build();
+    }
+
+    public void merge(Player player) {
+        Validate.notNull(player);
+        yin = player.yinyang().yinExp();
+        yang = player.yinyang().yangExp();
+        life = player.currentLife();
+        armLife = player.armLife().currentValue();
+        headLife = player.headLife().currentValue();
+        legLife = player.legLife().currentValue();
+        innerPower = player.innerPower();
+        outerPower = player.outerPower();
+        revivalExp = player.revivalExp();
+        power = player.power();
+        innerPowerExp = player.innerPowerAttribute().exp();
+        outerPowerExp = player.outerPowerAttribute().exp();
+        powerExp = player.powerAttribute().exp();
+        x = player.coordinate().x();
+        y = player.coordinate().y();
+        realmId = player.getRealm() != null ? player.getRealm().id() : 0;
+        List<Equipment> equipped = player.getEquipments();
+        Map<Long, Equipment> current = equipped.stream()
+                .filter(e -> e.id() != null)
+                .collect(Collectors.toMap(Equipment::id, Function.identity()));
+        for (var it = equipments.iterator(); it.hasNext();) {
+            EquipmentPo next = it.next();
+            if (!current.containsKey(next.getId()))
+                it.remove();
+            else
+                next.merge(current.get(next.getId()));
+        }
+        equipped.stream().filter(e -> e.id() == null).forEach(e -> equipments.add(EquipmentPo.convert(e)));
+    }
+
+    public Optional<EquipmentPo> findEquipment(String name) {
+        return equipments != null ? equipments.stream().filter(e -> e.getName().equals(name)).findFirst() :
+                Optional.empty();
     }
 }

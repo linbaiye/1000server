@@ -54,50 +54,22 @@ CREATE TABLE `player_equipment` (
 
 
 
-create table inventory_equipment (
-    player_inventory_slot_id bigint not null primary key references player_inventory_slot(id),
-    equipment_id bigint not null unique) ENGINE=InnoDB;
+create table equipment (id bigint primary key not null auto_increment,
+                        level int not null default 0,
+                        `name` varchar(32) not null,
+                        color int not null default 0
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-create table inventory_item (
-                                id bigint not null primary key references player_inventory_slot(id),
-                                `name` varchar(32) not null,
-                                `number` bigint not null,
-                                color int not null default 0
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment "Extending attributes if not an equipment.";
+create table inventory(id bigint primary key auto_increment,
+                       player_id bigint not null unique,
+                       slots json default '[]');
 
-
-create table item(
-                     id bigint primary key not null auto_increment,
-                     `name` varchar(32) not null,
-                     level int not null default 0,
-                     color int not null default 0,
-                     number int not null default 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-
-
-
-create table player_inventory_slot (
-                                       id bigint primary key auto_increment not null,
-                                       slot integer not null,
-                                       player_id bigint not null,
-                                       `type` varchar(16) not null comment 'BANK, INVENTORY',
-                                       item_type varchar(16) not null comment 'ITEM, EQUIPMENT',
-                                       unique (player_id, `slot`, `type`)) engine=InnoDB, charset=utf8mb4;
-
-create table equipment(
-                          id bigint primary key not null auto_increment,
-                          `name` varchar(32) not null,
-                          level int not null default 0,
-                          color int not null default 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment "Equipments that dropped/bought from npc.";
-
-
-create table bank (
-                      id bigint primary key auto_increment,
-                      player_id bigint not null unique,
-                      capacity integer not null,
-                      unlocked integer not null
+create table bank (id bigint primary key auto_increment,
+                   player_id bigint not null unique,
+                   capacity integer not null,
+                   unlocked integer not null,
+                   slots json default '[]'
 ) ENGINE=InnoDB;
 
 

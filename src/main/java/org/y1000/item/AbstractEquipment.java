@@ -15,16 +15,6 @@ public abstract class AbstractEquipment extends AbstractItem implements Equipmen
 
     private final int originColor;
 
-    public AbstractEquipment(String name,
-                             String drop,
-                             String eventSound,
-                             String description,
-                             int color) {
-        super(name, ItemType.EQUIPMENT, drop, eventSound, description);
-        abilities = new HashSet<>();
-        this.originColor = color;
-    }
-
     public AbstractEquipment(String name, ItemSdb itemSdb, Set<Object> abilities) {
         super(name, ItemType.EQUIPMENT, itemSdb);
         this.abilities = abilities != null ? abilities : new HashSet<>();

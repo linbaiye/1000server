@@ -2,16 +2,13 @@ package org.y1000.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
-import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.*;
 import org.y1000.kungfu.KungFuFactory;
-import org.y1000.persistence.BankPo;
-import org.y1000.persistence.ItemPo;
+import org.y1000.persistence.*;
 import org.y1000.sdb.ItemDrugSdb;
 
 import java.util.*;
@@ -160,57 +157,120 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
     }
 
-    private void deleteItems(EntityManager entityManager, long playerId, ItemPo.Type type) {
-        entityManager.createQuery("delete from ItemPo i where i.itemKey.playerId = ?1 and i.itemKey.type = ?2")
+    private void deleteItems(EntityManager entityManager, long playerId, SlotKey.Type type) {
+        entityManager.createQuery("delete from PlayerItemPo i where i.itemKey.playerId = ?1 and i.itemKey.type = ?2")
                 .setParameter(1, playerId)
                 .setParameter(2, type)
                 .executeUpdate();
     }
 
-    @Override
-    public void save(EntityManager entityManager, Player player) {
-        Validate.notNull(entityManager);
-        Validate.notNull(player);
-        deleteItems(entityManager, player.id(), ItemPo.Type.INVENTORY);
-        player.inventory().foreach((slot, item) -> entityManager.persist(ItemPo.toInventoryItem(player.id(), slot, item)));
-    }
-
-    private Item restore(ItemPo itemPo) {
-        var type = itemSdb.getTypeValue(itemPo.getName());
+    private Item createEquipment(PlayerItemPo playerItemPo) {
+        var type = itemSdb.getTypeValue(playerItemPo.getName());
         if (ItemType.contains(type) && type == ItemType.EQUIPMENT.value()) {
-            return createEquipment(itemPo.getName(), itemPo.getColor());
+            return createEquipment(playerItemPo.getName(), playerItemPo.getColor());
         } else {
-            return createItem(itemPo.getName(), itemPo.getNumber());
+            return createItem(playerItemPo.getName(), playerItemPo.getNumber());
         }
     }
 
-    private Map<Integer, Item> findItems(EntityManager entityManager, long playerId, ItemPo.Type type) {
-        return entityManager.createQuery("select i from ItemPo i where i.itemKey.playerId = ?1 and i.itemKey.type = ?2", ItemPo.class)
+    private Map<Integer, Item> findItems(EntityManager entityManager, long playerId, SlotKey.Type type) {
+        return entityManager.createQuery("select i from PlayerItemPo i where i.itemKey.playerId = ?1 and i.itemKey.type = ?2", PlayerItemPo.class)
                 .setParameter(1, playerId)
                 .setParameter(2, type)
                 .getResultStream()
-                .collect(Collectors.toMap(i -> i.getItemKey().getSlot(), this::restore));
+                .collect(Collectors.toMap(i -> i.getItemKey().getSlot(), this::createEquipment));
     }
 
     @Override
-    public Inventory findInventory(EntityManager entityManager, long playerId) {
-        Validate.notNull(entityManager);
-        Map<Integer, Item> items = findItems(entityManager, playerId, ItemPo.Type.INVENTORY);
+    public Equipment createEquipment(EquipmentPo equipmentPo) {
+        var e = createEquipment(equipmentPo.getName(), equipmentPo.getColor());
+        e.setId(equipmentPo.getId());
+        e.findAbility(Upgradable.class).ifPresent(u -> {
+            while (u.level() < equipmentPo.getLevel())
+                u.upgrade();
+        });
+        return e;
+    }
+
+    private Inventory createEquipment(EntityManager entityManager, InventoryPo inventoryPo) {
+        Set<Long> ids = inventoryPo.selectEquipmentIds();
         Inventory inventory = new Inventory();
-        items.forEach(inventory::put);
+        Map<Long, Equipment> equipments = Collections.emptyMap();
+        if (!ids.isEmpty()) {
+            equipments = entityManager.createQuery("select e from EquipmentPo e where e.id in ?1", EquipmentPo.class)
+                    .setParameter(1, ids)
+                    .getResultStream()
+                    .collect(Collectors.toMap(EquipmentPo::getId, this::createEquipment));
+        }
+        for (SlotItem slotItem : inventoryPo.getSlots()) {
+            if (slotItem.isEquipment()) {
+                inventory.put(slotItem.getSlot(), equipments.get(slotItem.getEquipmentId()));
+            } else {
+                inventory.put(slotItem.getSlot(), createItem(slotItem.getName(), slotItem.getNumber()));
+            }
+        }
         return inventory;
+    }
+
+    @Override
+    public Optional<Inventory> findInventory(EntityManager entityManager, long playerId) {
+        Validate.notNull(entityManager);
+        Optional<InventoryPo> queryResult = entityManager.createQuery("select i from InventoryPo i where i.playerId = ?1", InventoryPo.class)
+                .setParameter(1, playerId)
+                .getResultStream()
+                .findFirst();
+        return queryResult.map(i -> createEquipment(entityManager, i));
+    }
+
+    private void persistEquipments(EntityManager entityManager, Inventory inventory) {
+        List<Equipment> toInsert = new ArrayList<>();
+        Map<Long, Equipment> toUpdate = new HashMap<>();
+        inventory.foreach((slot, item) -> {
+            if (item instanceof Equipment equipment) {
+                if (equipment.id() == null)
+                    toInsert.add(equipment);
+                else
+                    toUpdate.put(equipment.id(), equipment);
+            }
+        });
+        for (Equipment equipment : toInsert) {
+            EquipmentPo converted = EquipmentPo.convert(equipment);
+            entityManager.persist(converted);
+            equipment.setId(converted.getId());
+        }
+        if (toUpdate.isEmpty())
+            return;
+        List<EquipmentPo> equipmentPos = entityManager.createQuery("select e from EquipmentPo e where e.id in ?1", EquipmentPo.class)
+                .setParameter(1, toUpdate.keySet())
+                .getResultList();
+        for (EquipmentPo equipmentPo : equipmentPos) {
+            Equipment equipment = toUpdate.get(equipmentPo.getId());
+            equipmentPo.merge(equipment);
+        }
+    }
+
+    @Override
+    public void saveInventory(EntityManager entityManager, long playerId, Inventory inventory) {
+        Validate.notNull(entityManager);
+        Validate.notNull(inventory);
+        persistEquipments(entityManager, inventory);
+        Optional<InventoryPo> queryResult = entityManager.createQuery("select i from InventoryPo i where i.playerId = ?1", InventoryPo.class)
+                .setParameter(1, playerId)
+                .getResultStream().findFirst();
+        queryResult.ifPresentOrElse(inventoryPo -> inventoryPo.merge(inventory),
+                () -> entityManager.persist(InventoryPo.convert(playerId, inventory)));
     }
 
     private void merge(EntityManager entityManager, BankPo bankPo, Bank bank) {
         bankPo.setUnlocked(bank.getUnlocked());
         bankPo.setCapacity(bank.capacity());
-        bank.foreach((slot, item) -> entityManager.persist(ItemPo.toBankItem(bankPo.getPlayerId(), slot, item)));
+        bank.foreach((slot, item) -> entityManager.persist(PlayerItemPo.toBankItem(bankPo.getPlayerId(), slot, item)));
     }
 
     private void persist(EntityManager entityManager, long playerId, Bank bank) {
         BankPo bankPo = new BankPo(null, playerId, bank.capacity(), bank.getUnlocked());
         entityManager.persist(bankPo);
-        bank.foreach((slot, item) -> entityManager.persist(ItemPo.toBankItem(bankPo.getPlayerId(), slot, item)));
+        bank.foreach((slot, item) -> entityManager.persist(PlayerItemPo.toBankItem(bankPo.getPlayerId(), slot, item)));
     }
 
     @Override
@@ -219,7 +279,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             var tx = entityManager.getTransaction();
             tx.begin();
-            deleteItems(entityManager, playerId, ItemPo.Type.BANK);
+            deleteItems(entityManager, playerId, SlotKey.Type.BANK);
             findBankPo(entityManager, playerId)
                     .ifPresentOrElse(bankPo -> merge(entityManager, bankPo, bank),
                             () -> persist(entityManager, playerId, bank));
@@ -236,7 +296,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
 
     private Bank convert(EntityManager entityManager, BankPo bankPo) {
         Bank bank = new Bank(bankPo.getCapacity(), bankPo.getUnlocked());
-        Map<Integer, Item> items = findItems(entityManager, bankPo.getPlayerId(), ItemPo.Type.BANK);
+        Map<Integer, Item> items = findItems(entityManager, bankPo.getPlayerId(), SlotKey.Type.BANK);
         items.forEach(bank::put);
         return bank;
     }
