@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
+import org.y1000.entities.players.inventory.AbstractInventory;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.*;
@@ -157,30 +158,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
     }
 
-    private void deleteItems(EntityManager entityManager, long playerId, SlotKey.Type type) {
-        entityManager.createQuery("delete from PlayerItemPo i where i.itemKey.playerId = ?1 and i.itemKey.type = ?2")
-                .setParameter(1, playerId)
-                .setParameter(2, type)
-                .executeUpdate();
-    }
-
-    private Item createEquipment(PlayerItemPo playerItemPo) {
-        var type = itemSdb.getTypeValue(playerItemPo.getName());
-        if (ItemType.contains(type) && type == ItemType.EQUIPMENT.value()) {
-            return createEquipment(playerItemPo.getName(), playerItemPo.getColor());
-        } else {
-            return createItem(playerItemPo.getName(), playerItemPo.getNumber());
-        }
-    }
-
-    private Map<Integer, Item> findItems(EntityManager entityManager, long playerId, SlotKey.Type type) {
-        return entityManager.createQuery("select i from PlayerItemPo i where i.itemKey.playerId = ?1 and i.itemKey.type = ?2", PlayerItemPo.class)
-                .setParameter(1, playerId)
-                .setParameter(2, type)
-                .getResultStream()
-                .collect(Collectors.toMap(i -> i.getItemKey().getSlot(), this::createEquipment));
-    }
-
     @Override
     public Equipment createEquipment(EquipmentPo equipmentPo) {
         var e = createEquipment(equipmentPo.getName(), equipmentPo.getColor());
@@ -192,9 +169,9 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         return e;
     }
 
-    private Inventory createEquipment(EntityManager entityManager, InventoryPo inventoryPo) {
+
+    private void restoreInventory(EntityManager entityManager, AbstractInventoryPo inventoryPo, AbstractInventory inventory) {
         Set<Long> ids = inventoryPo.selectEquipmentIds();
-        Inventory inventory = new Inventory();
         Map<Long, Equipment> equipments = Collections.emptyMap();
         if (!ids.isEmpty()) {
             equipments = entityManager.createQuery("select e from EquipmentPo e where e.id in ?1", EquipmentPo.class)
@@ -209,7 +186,18 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                 inventory.put(slotItem.getSlot(), createItem(slotItem.getName(), slotItem.getNumber()));
             }
         }
+    }
+
+    private Inventory restoreInventory(EntityManager entityManager, InventoryPo inventoryPo) {
+        Inventory inventory = new Inventory();
+        restoreInventory(entityManager, inventoryPo, inventory);
         return inventory;
+    }
+
+    private Bank restoreBank(EntityManager entityManager, BankPo bankPo) {
+        Bank bank = new Bank(bankPo.getCapacity(), bankPo.getUnlocked());
+        restoreInventory(entityManager, bankPo, bank);
+        return bank;
     }
 
     @Override
@@ -219,10 +207,10 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                 .setParameter(1, playerId)
                 .getResultStream()
                 .findFirst();
-        return queryResult.map(i -> createEquipment(entityManager, i));
+        return queryResult.map(i -> restoreInventory(entityManager, i));
     }
 
-    private void persistEquipments(EntityManager entityManager, Inventory inventory) {
+    private void persistEquipments(EntityManager entityManager, AbstractInventory inventory) {
         List<Equipment> toInsert = new ArrayList<>();
         Map<Long, Equipment> toUpdate = new HashMap<>();
         inventory.foreach((slot, item) -> {
@@ -261,16 +249,10 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                 () -> entityManager.persist(InventoryPo.convert(playerId, inventory)));
     }
 
-    private void merge(EntityManager entityManager, BankPo bankPo, Bank bank) {
-        bankPo.setUnlocked(bank.getUnlocked());
-        bankPo.setCapacity(bank.capacity());
-        bank.foreach((slot, item) -> entityManager.persist(PlayerItemPo.toBankItem(bankPo.getPlayerId(), slot, item)));
-    }
-
     private void persist(EntityManager entityManager, long playerId, Bank bank) {
         BankPo bankPo = new BankPo(null, playerId, bank.capacity(), bank.getUnlocked());
+        bankPo.merge(bank);
         entityManager.persist(bankPo);
-        bank.foreach((slot, item) -> entityManager.persist(PlayerItemPo.toBankItem(bankPo.getPlayerId(), slot, item)));
     }
 
     @Override
@@ -279,9 +261,9 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             var tx = entityManager.getTransaction();
             tx.begin();
-            deleteItems(entityManager, playerId, SlotKey.Type.BANK);
+            persistEquipments(entityManager, bank);
             findBankPo(entityManager, playerId)
-                    .ifPresentOrElse(bankPo -> merge(entityManager, bankPo, bank),
+                    .ifPresentOrElse(bankPo -> bankPo.merge(bank),
                             () -> persist(entityManager, playerId, bank));
             tx.commit();
         }
@@ -294,17 +276,10 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                 .findFirst();
     }
 
-    private Bank convert(EntityManager entityManager, BankPo bankPo) {
-        Bank bank = new Bank(bankPo.getCapacity(), bankPo.getUnlocked());
-        Map<Integer, Item> items = findItems(entityManager, bankPo.getPlayerId(), SlotKey.Type.BANK);
-        items.forEach(bank::put);
-        return bank;
-    }
-
     @Override
     public Optional<Bank> find(long playerId) {
         try (var em = entityManagerFactory.createEntityManager()) {
-            return findBankPo(em, playerId).map(bankPo -> convert(em, bankPo));
+            return findBankPo(em, playerId).map(bankPo -> restoreBank(em, bankPo));
         }
     }
 }

@@ -26,8 +26,6 @@ public class EquipmentPo {
 
     private int color;
 
-    private Long number;
-
     private int level;
 
     public void merge(Equipment equipment) {
@@ -52,6 +50,6 @@ public class EquipmentPo {
 
     public static EquipmentPo convert(Equipment equipment) {
         int level = equipment.findAbility(Upgradable.class).map(Upgradable::level).orElse(0);
-        return new EquipmentPo(equipment.id(), equipment.name(), equipment.color(), 1L, level);
+        return new EquipmentPo(equipment.id(), equipment.name(), equipment.color(), level);
     }
 }

@@ -141,6 +141,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
             kungFuRepository.save(entityManager, playerPo.getId(), player.kungFuBook());
             itemRepository.saveInventory(entityManager, player.id(), player.inventory());
             tx.commit();
+            setEquipmentIds(playerPo, player);
         }
     }
 

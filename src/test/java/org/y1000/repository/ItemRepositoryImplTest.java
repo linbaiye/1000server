@@ -7,13 +7,9 @@ import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.*;
-import org.y1000.persistence.EquipmentPo;
 import org.y1000.persistence.InventoryPo;
-import org.y1000.persistence.PlayerItemPo;
 import org.y1000.persistence.SlotItem;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

@@ -53,7 +53,6 @@ CREATE TABLE `player_equipment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 
-
 create table equipment (id bigint primary key not null auto_increment,
                         level int not null default 0,
                         `name` varchar(32) not null,
@@ -63,14 +62,14 @@ create table equipment (id bigint primary key not null auto_increment,
 
 create table inventory(id bigint primary key auto_increment,
                        player_id bigint not null unique,
-                       slots json default '[]');
+                       slots json) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 create table bank (id bigint primary key auto_increment,
                    player_id bigint not null unique,
                    capacity integer not null,
                    unlocked integer not null,
-                   slots json default '[]'
-) ENGINE=InnoDB;
+                   slots json
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 create table attack_kungfu(

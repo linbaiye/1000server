@@ -1,12 +1,11 @@
 package org.y1000.persistence;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.Validate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.y1000.entities.players.inventory.AbstractInventory;
 import org.y1000.entities.players.inventory.Inventory;
 
 import java.util.ArrayList;
@@ -15,12 +14,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Data
+@Setter
+@Getter
 @Entity
 @Table(name = "inventory")
 @NoArgsConstructor
-@AllArgsConstructor
-public class InventoryPo {
+public class InventoryPo extends AbstractInventoryPo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,27 +27,14 @@ public class InventoryPo {
 
     private long playerId;
 
-    @JoinColumn
-    @JdbcTypeCode(SqlTypes.JSON)
-    private List<SlotItem> slots;
-
-
-    public Set<Long> selectEquipmentIds() {
-        return slots == null ? Collections.emptySet() :
-                slots.stream().filter(SlotItem::isEquipment)
-                        .map(SlotItem::getEquipmentId)
-                        .collect(Collectors.toSet());
-    }
-
-    public void merge(Inventory inventory) {
-        Validate.notNull(inventory);
-        slots = new ArrayList<>();
-        inventory.foreach((slot, item) -> slots.add(SlotItem.of(slot, item)));
+    public InventoryPo(Long id, long playerId) {
+        this.id = id;
+        this.playerId = playerId;
     }
 
     public static InventoryPo convert(long playerId, Inventory inventory) {
         Validate.notNull(inventory);
-        var ret = new InventoryPo(null, playerId, null);
+        var ret = new InventoryPo(null, playerId);
         ret.merge(inventory);
         return ret;
     }
