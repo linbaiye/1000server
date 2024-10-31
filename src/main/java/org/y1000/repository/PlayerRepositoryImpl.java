@@ -131,12 +131,14 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
     public void update(Player player) {
         Validate.notNull(player);
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()){
-            PlayerPo playerPo = entityManager.find(PlayerPo.class, player.id());
-            if (playerPo == null) {
-                return;
-            }
             EntityTransaction tx = entityManager.getTransaction();
             tx.begin();
+            PlayerPo playerPo = entityManager.find(PlayerPo.class, player.id());
+            if (playerPo == null) {
+                tx.rollback();
+                return;
+            }
+            itemRepository.saveEquipments(entityManager, player.getEquipments());
             playerPo.merge(player);
             kungFuRepository.save(entityManager, playerPo.getId(), player.kungFuBook());
             itemRepository.saveInventory(entityManager, player.id(), player.inventory());
@@ -168,8 +170,9 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         Validate.notNull(entityManager);
         Validate.notNull(player);
         PlayerPo converted = PlayerPo.convert(player, accountId, DEFAULT_REALM_ID);
+        itemRepository.saveEquipments(entityManager, player.getEquipments());
+        converted.addEquipments(player.getEquipments());
         entityManager.persist(converted);
-        setEquipmentIds(converted, player);
         kungFuRepository.save(entityManager, converted.getId(), player.kungFuBook());
         itemRepository.saveInventory(entityManager, player.id(), player.inventory());
         player.guildMembership().ifPresent(gm -> guildRepository.upsertMembership(entityManager, player.id(), gm));

@@ -210,6 +210,43 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         return queryResult.map(i -> restoreInventory(entityManager, i));
     }
 
+
+
+    private void persistEquipments(EntityManager entityManager,
+                                   Collection<Equipment> toInsert,
+                                   Map<Long, Equipment> toUpdate) {
+        List<EquipmentPo> equipmentPos = toUpdate.isEmpty() ? Collections.emptyList() :
+                entityManager.createQuery("select e from EquipmentPo e where e.id in ?1", EquipmentPo.class)
+                .setParameter(1, toUpdate.keySet())
+                .getResultList();
+        for (Equipment equipment : toInsert) {
+            EquipmentPo converted = EquipmentPo.convert(equipment);
+            entityManager.persist(converted);
+            equipment.setId(converted.getId());
+        }
+        for (EquipmentPo equipmentPo : equipmentPos) {
+            Equipment equipment = toUpdate.get(equipmentPo.getId());
+            equipmentPo.merge(equipment);
+        }
+    }
+
+    @Override
+    public void saveEquipments(EntityManager entityManager, Collection<Equipment> equipments) {
+        Validate.notNull(entityManager);
+        Validate.notNull(equipments);
+        if (equipments.isEmpty())
+            return;
+        List<Equipment> toInsert = new ArrayList<>();
+        Map<Long, Equipment> toUpdate = new HashMap<>();
+        equipments.forEach(equipment -> {
+            if (equipment.id() == null)
+                toInsert.add(equipment);
+            else
+                toUpdate.put(equipment.id(), equipment);
+        });
+        persistEquipments(entityManager, toInsert, toUpdate);
+    }
+
     private void persistEquipments(EntityManager entityManager, AbstractInventory inventory) {
         List<Equipment> toInsert = new ArrayList<>();
         Map<Long, Equipment> toUpdate = new HashMap<>();
@@ -221,21 +258,9 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                     toUpdate.put(equipment.id(), equipment);
             }
         });
-        for (Equipment equipment : toInsert) {
-            EquipmentPo converted = EquipmentPo.convert(equipment);
-            entityManager.persist(converted);
-            equipment.setId(converted.getId());
-        }
-        if (toUpdate.isEmpty())
-            return;
-        List<EquipmentPo> equipmentPos = entityManager.createQuery("select e from EquipmentPo e where e.id in ?1", EquipmentPo.class)
-                .setParameter(1, toUpdate.keySet())
-                .getResultList();
-        for (EquipmentPo equipmentPo : equipmentPos) {
-            Equipment equipment = toUpdate.get(equipmentPo.getId());
-            equipmentPo.merge(equipment);
-        }
+        persistEquipments(entityManager, toInsert, toUpdate);
     }
+
 
     @Override
     public void saveInventory(EntityManager entityManager, long playerId, Inventory inventory) {
@@ -248,6 +273,8 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         queryResult.ifPresentOrElse(inventoryPo -> inventoryPo.merge(inventory),
                 () -> entityManager.persist(InventoryPo.convert(playerId, inventory)));
     }
+
+
 
     private void persist(EntityManager entityManager, long playerId, Bank bank) {
         BankPo bankPo = new BankPo(null, playerId, bank.capacity(), bank.getUnlocked());

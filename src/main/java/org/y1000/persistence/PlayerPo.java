@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.Validate;
+import org.hibernate.annotations.Cascade;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerExperiencedAgedAttribute;
@@ -17,6 +18,7 @@ import org.y1000.util.Coordinate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @Builder
@@ -77,7 +79,7 @@ public class PlayerPo {
     @Transient
     private YinYang yinYang;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             joinColumns = @JoinColumn(name = "player_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id")
@@ -126,57 +128,26 @@ public class PlayerPo {
         return new PlayerExperiencedAgedAttribute(innate, outerPowerExp, outerPower, yinYang().age());
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PlayerPo playerPo = (PlayerPo) o;
-        return Objects.equals(name, playerPo.name);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
+    public void addEquipments(Collection<Equipment> equipmentSet) {
+        equipments.clear();
+        equipmentSet.stream().map(EquipmentPo::convert)
+                .forEach(equipments::add);
     }
 
     public static PlayerPo convert(Player player, int accountId, int realmId) {
-        List<EquipmentPo> equipments = new ArrayList<>();
-        player.hat().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
-        player.hair().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
-        player.chest().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
-        player.boot().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
-        player.trouser().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
-        player.clothing().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
-        player.wrist().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
-        player.weapon().ifPresent(e -> equipments.add(EquipmentPo.convert(e)));
-        return PlayerPo.builder()
-                .id(player.id() == 0 ? null : player.id())
-                .name(player.viewName())
-                .yin(player.yinyang().yinExp())
-                .yang(player.yinyang().yangExp())
-                .male(player.isMale())
-                .life(player.currentLife())
-                .armLife(player.armLife().currentValue())
-                .headLife(player.headLife().currentValue())
-                .legLife(player.legLife().currentValue())
-                .innerPower(player.innerPower())
-                .outerPower(player.outerPower())
-                .revivalExp(player.revivalExp())
-                .power(player.power())
-                .innerPowerExp(player.innerPowerAttribute().exp())
-                .outerPowerExp(player.outerPowerAttribute().exp())
-                .powerExp(player.powerAttribute().exp())
-                .x(player.coordinate().x())
-                .y(player.coordinate().y())
-                .state(player.stateEnum().value())
-                .equipments(equipments)
-                .accountId(accountId)
-                .realmId(realmId)
-                .build();
+        Validate.notNull(player);
+        PlayerPo playerPo = new PlayerPo();
+        playerPo.mergeWithoutEquipments(player);
+        playerPo.setAccountId(accountId);
+        playerPo.setRealmId(realmId);
+        playerPo.setMale(player.isMale());
+        playerPo.setName(player.viewName());
+        playerPo.setId(null);
+        return playerPo;
     }
 
-    public void merge(Player player) {
-        Validate.notNull(player);
+    private void mergeWithoutEquipments(Player player) {
         yin = player.yinyang().yinExp();
         yang = player.yinyang().yangExp();
         life = player.currentLife();
@@ -193,7 +164,13 @@ public class PlayerPo {
         x = player.coordinate().x();
         y = player.coordinate().y();
         realmId = player.getRealm() != null ? player.getRealm().id() : 0;
-        List<Equipment> equipped = player.getEquipments();
+    }
+
+    public void merge(Player player) {
+        Validate.notNull(player);
+        mergeWithoutEquipments(player);
+        addEquipments(player.getEquipments());
+        /*List<Equipment> equipped = player.getEquipments();
         Map<Long, Equipment> current = equipped.stream()
                 .filter(e -> e.id() != null)
                 .collect(Collectors.toMap(Equipment::id, Function.identity()));
@@ -204,7 +181,9 @@ public class PlayerPo {
             else
                 next.merge(current.get(next.getId()));
         }
-        equipped.stream().filter(e -> e.id() == null).forEach(e -> equipments.add(EquipmentPo.convert(e)));
+        var ids = equipments.stream().map(EquipmentPo::getId).collect(Collectors.toSet());
+        equipped.stream().filter(e -> e.id() == null || !ids.contains(e.id()))
+                .forEach(e -> equipments.add(EquipmentPo.convert(e)));*/
     }
 
     public Optional<EquipmentPo> findEquipment(String name) {

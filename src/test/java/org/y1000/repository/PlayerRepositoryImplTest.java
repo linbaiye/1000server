@@ -10,7 +10,6 @@ import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.*;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.KungFuBookFactory;
-import org.y1000.persistence.EquipmentPo;
 import org.y1000.persistence.PlayerPo;
 import org.y1000.util.Coordinate;
 
@@ -43,7 +42,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         kungFuBookFactory = Mockito.mock(KungFuBookFactory.class);
         kungFuBookRepository = Mockito.mock(KungFuBookRepository.class);
         jpaFixture = new JpaFixture();
-        itemRepository = Mockito.mock(ItemRepository.class);
+        itemRepository = createItemRepository();
         GuildRepository guildRepository = Mockito.mock(GuildRepository.class);
         playerRepository = new PlayerRepositoryImpl(itemFactory, kungFuBookFactory, kungFuBookRepository, jpaFixture.getEntityManagerFactory(), itemRepository, guildRepository);
     }
@@ -100,6 +99,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void update() {
+        Inventory inventory = new Inventory();
         Item dye = itemFactory.createItem("天蓝染剂", 1);
         var em = jpaFixture.beginTx();
         SexualEquipment hair = itemFactory.createHair("女子长发");
@@ -122,9 +122,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
                 .weapon(w2)
                 .build();
         player.joinRealm(mockAllFlatRealm(), Coordinate.xy(1, 3));
-        jpaFixture.beginTx();
         playerRepository.update(player);
-        jpaFixture.submitTx();
         KungFuBook kungFuBook = createKungFuBookFactory().create();
         when(kungFuBookRepository.find(any(EntityManager.class), anyLong())).thenReturn(Optional.of(kungFuBook));
         var updated = playerRepository.find(1, "123").get().getKey();
@@ -187,7 +185,6 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         player.joinRealm(mockedRealm, Coordinate.xy(1, 2));
         playerRepository.save(em, 1, player);
         jpaFixture.submitTx();
-        when(itemRepository.findInventory(any(EntityManager.class), anyLong())).thenReturn(Optional.empty());
         KungFuBook kungFuBook = createKungFuBookFactory().create();
         when(kungFuBookRepository.find(any(EntityManager.class), anyLong())).thenReturn(Optional.of(kungFuBook));
         var p = playerRepository.find(1, player.viewName()).get().getLeft();
@@ -209,6 +206,5 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals("女子皮鞋", p.boot().get().name());
         assertEquals("女子上衣", p.clothing().get().name());
         assertEquals("无名剑法", p.attackKungFu().name());
-        verify(itemRepository, times(1)).findInventory(any(EntityManager.class), anyLong());
     }
 }

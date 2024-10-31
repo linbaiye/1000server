@@ -9,8 +9,6 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.item.Equipment;
 import org.y1000.item.Upgradable;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "equipment")
 @NoArgsConstructor
@@ -34,18 +32,6 @@ public class EquipmentPo {
                 .map(Upgradable::level)
                 .orElse(0);
         color = equipment.color();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof EquipmentPo that)) return false;
-        return Objects.equals(getId(), that.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 
     public static EquipmentPo convert(Equipment equipment) {
