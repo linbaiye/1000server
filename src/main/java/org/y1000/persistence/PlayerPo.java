@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.Validate;
-import org.hibernate.annotations.Cascade;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerExperiencedAgedAttribute;
@@ -16,9 +15,6 @@ import org.y1000.item.Equipment;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Data
 @Builder
@@ -170,20 +166,6 @@ public class PlayerPo {
         Validate.notNull(player);
         mergeWithoutEquipments(player);
         addEquipments(player.getEquipments());
-        /*List<Equipment> equipped = player.getEquipments();
-        Map<Long, Equipment> current = equipped.stream()
-                .filter(e -> e.id() != null)
-                .collect(Collectors.toMap(Equipment::id, Function.identity()));
-        for (var it = equipments.iterator(); it.hasNext();) {
-            EquipmentPo next = it.next();
-            if (!current.containsKey(next.getId()))
-                it.remove();
-            else
-                next.merge(current.get(next.getId()));
-        }
-        var ids = equipments.stream().map(EquipmentPo::getId).collect(Collectors.toSet());
-        equipped.stream().filter(e -> e.id() == null || !ids.contains(e.id()))
-                .forEach(e -> equipments.add(EquipmentPo.convert(e)));*/
     }
 
     public Optional<EquipmentPo> findEquipment(String name) {
