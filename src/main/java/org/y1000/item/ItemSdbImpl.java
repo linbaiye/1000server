@@ -296,6 +296,7 @@ MaxCount,        最多持有数量；
 
     private static ItemSdbImpl read() {
         ItemSdbImpl itemSdb = new ItemSdbImpl();
+        //itemSdb.read("Init/Item.sdb", "utf8");
         itemSdb.read("Init/1.0Item.sdb", "utf8");
         return itemSdb;
     }
