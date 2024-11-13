@@ -6,10 +6,11 @@ import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.item.*;
 import org.y1000.persistence.BankPo;
-import org.y1000.persistence.ItemPo;
+import org.y1000.persistence.SlotItem;
 import org.y1000.sdb.ItemDrugSdbImpl;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,11 +49,10 @@ class BankRepositoryTest extends AbstractUnitTestFixture {
         BankPo bankPo = jpaFixture.newEntityManager().createQuery("select b from BankPo b where b.playerId = ?1", BankPo.class)
                 .setParameter(1, 1L).getResultList().get(0);
         assertEquals(bank.getUnlocked(), bankPo.getUnlocked());
-        List<ItemPo> items = jpaFixture.newEntityManager().createQuery("select i from ItemPo i where i.itemKey.playerId = ?1", ItemPo.class)
-                .setParameter(1, 1L).getResultList();
-        List<String> names = items.stream().map(ItemPo::getName).toList();
-        assertTrue(names.contains("长剑"));
-        assertTrue(names.contains("女子黄龙弓服"));
+        List<SlotItem> items = bankPo.getSlots();
+        List<String> names = items.stream().map(SlotItem::getName).filter(Objects::nonNull).toList();
+        assertTrue(names.contains("生药"));
+        assertEquals(1, names.size());
         assertEquals(3, items.size());
     }
 
@@ -63,9 +63,9 @@ class BankRepositoryTest extends AbstractUnitTestFixture {
         bank.unlock();
         bank.put(itemFactory.createItem("生药", 12));
         bank.put(itemFactory.createItem("女子黄龙弓服"));
-        var equipment = (DecorativeEquipment)itemFactory.createItem("女子长发");
+        var equipment = itemFactory.createHair("女子长发");
         Item item = itemFactory.createItem("红色染剂", 2);
-        equipment.dye(item.color());
+        equipment.findAbility(Dyable.class).ifPresent(d -> d.dye(item.color()));
         bank.put(equipment);
         bankRepository.save(1L, bank);
         var bank1 = bankRepository.find(1L).get();

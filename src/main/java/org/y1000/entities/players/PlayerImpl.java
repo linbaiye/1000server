@@ -531,8 +531,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             handleRightClick(event);
         } else if (clientEvent instanceof ClientSwapKungFuSlotEvent swapKungfuSlotEvent) {
             handleSwapKungFuSlot(swapKungfuSlotEvent);
-        } else if (clientEvent instanceof ClientDyeEvent dyeEvent) {
-            dyeEvent.handle(this);
         } else if (clientEvent instanceof ClientChangeTeamEvent teamEvent) {
             team = teamEvent.team();
             emitEvent(new PlayerNameColorEvent(this));

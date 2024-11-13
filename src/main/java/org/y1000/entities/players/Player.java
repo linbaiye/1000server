@@ -18,7 +18,7 @@ import org.y1000.message.clientevent.ClientEvent;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
-import java.util.Optional;
+import java.util.*;
 
 public interface Player extends ViolentCreature {
 
@@ -173,5 +173,18 @@ public interface Player extends ViolentCreature {
     void quitGuild();
 
     void cancelBuff();
+
+    default List<Equipment> getEquipments() {
+        List<Equipment> ret = new ArrayList<>();
+        weapon().ifPresent(ret::add);
+        hat().ifPresent(ret::add);
+        hair().ifPresent(ret::add);
+        chest().ifPresent(ret::add);
+        clothing().ifPresent(ret::add);
+        boot().ifPresent(ret::add);
+        trouser().ifPresent(ret::add);
+        wrist().ifPresent(ret::add);
+        return ret;
+    }
 }
 

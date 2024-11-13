@@ -37,8 +37,8 @@ class InventoryTest extends AbstractUnitTestFixture {
         player = Mockito.mock(Player.class);
     }
 
-    private Hair createHair() {
-        return new Hair("男子长发", ItemSdbImpl.INSTANCE);
+    private SexualEquipment createHair() {
+        return itemFactory.createHair("男子长发");
     }
 
     @Test

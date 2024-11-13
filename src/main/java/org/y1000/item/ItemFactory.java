@@ -2,6 +2,7 @@ package org.y1000.item;
 
 
 import org.y1000.entities.GroundedItem;
+import org.y1000.persistence.EquipmentPo;
 
 public interface ItemFactory {
 
@@ -32,4 +33,6 @@ public interface ItemFactory {
     Equipment createEquipment(String name);
 
     Equipment createEquipment(String name, int color);
+
+    Equipment createEquipment(EquipmentPo equipmentPo);
 }

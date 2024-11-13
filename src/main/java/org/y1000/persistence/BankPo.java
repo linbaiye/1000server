@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.y1000.entities.players.inventory.Bank;
 
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "bank")
-public class BankPo {
+public class BankPo extends AbstractInventoryPo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,16 +25,10 @@ public class BankPo {
 
     private int unlocked;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BankPo bankPo = (BankPo) o;
-        return playerId == bankPo.playerId;
+    public void merge(Bank bank) {
+        this.capacity = bank.capacity();
+        this.unlocked = bank.getUnlocked();
+        super.merge(bank);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(playerId);
-    }
 }

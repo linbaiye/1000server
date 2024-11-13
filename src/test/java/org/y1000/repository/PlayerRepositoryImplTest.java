@@ -7,11 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.players.*;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.item.ItemFactory;
-import org.y1000.item.Weapon;
+import org.y1000.item.*;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.KungFuBookFactory;
-import org.y1000.persistence.EquipmentPo;
 import org.y1000.persistence.PlayerPo;
 import org.y1000.util.Coordinate;
 
@@ -44,7 +42,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         kungFuBookFactory = Mockito.mock(KungFuBookFactory.class);
         kungFuBookRepository = Mockito.mock(KungFuBookRepository.class);
         jpaFixture = new JpaFixture();
-        itemRepository = Mockito.mock(ItemRepository.class);
+        itemRepository = createItemRepository();
         GuildRepository guildRepository = Mockito.mock(GuildRepository.class);
         playerRepository = new PlayerRepositoryImpl(itemFactory, kungFuBookFactory, kungFuBookRepository, jpaFixture.getEntityManagerFactory(), itemRepository, guildRepository);
     }
@@ -66,6 +64,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
                 .power(new PlayerExperiencedAgedAttribute(0, 1, 14, 100))
                 .innerPower(new PlayerExperiencedAgedAttribute(0, 2, 15, 100))
                 .outerPower(new PlayerExperiencedAgedAttribute(0, 3, 16, 100))
+                .hair(itemFactory.createHair("女子长发"))
                 .revival(17)
                 .build();
         player.joinRealm(mockedRealm, Coordinate.xy(1, 2));
@@ -74,7 +73,6 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         jpaFixture.submitTx();
         List resultList = em.createQuery("select p from PlayerPo p").getResultList();
         var playerPo = (PlayerPo)resultList.get(0);
-        //PlayerPo playerPo = em.find(PlayerPo.class, player.id());
         assertEquals(100, playerPo.getYin());
         assertEquals(200, playerPo.getYang());
         assertEquals(10, playerPo.getLife());
@@ -90,6 +88,8 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(player.coordinate(), playerPo.coordinate());
         assertNotEquals(0, playerPo.getRealmId());
         assertEquals(1, playerPo.getAccountId());
+        assertEquals(1, playerPo.getEquipments().size());
+        assertNotNull(player.hair().get().id());
         doAnswer(invocationOnMock -> {
             assertEquals(playerPo.getId(), invocationOnMock.getArgument(1));
             return null;
@@ -99,43 +99,37 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void update() {
+        Inventory inventory = new Inventory();
+        Item dye = itemFactory.createItem("天蓝染剂", 1);
         var em = jpaFixture.beginTx();
+        SexualEquipment hair = itemFactory.createHair("女子长发");
+        ArmorEquipment boot = itemFactory.createBoot("女子皮鞋");
+        hair.findAbility(Dyable.class).get().dye(dye.color());
+        Weapon w1 = (Weapon) itemFactory.createEquipment("新罗宝剑");
+        player = playerBuilder().male(true).id(0L).name("123").hair(hair).boot(boot).weapon(w1).build();
         long id = playerRepository.save(em, 1, player);
         jpaFixture.submitTx();
+        hair.findAbility(Dyable.class).get().dye(dye.color() + 1);
+        Weapon w2 = (Weapon) itemFactory.createEquipment("新罗宝剑");
         player = playerBuilder().yinYang(new YinYang(3000, 4000))
                 .id(id)
                 .life(new PlayerLife(0, 100, 10))
                 .head(new PlayerLife(0, 100, 11))
                 .arm(new PlayerLife(0, 100, 12))
                 .leg(new PlayerLife(0, 100, 13))
-                .male(false)
-                .hair(itemFactory.createHair("女子长发"))
-                .trouser(itemFactory.createTrouser("女子长裤"))
-                .boot(itemFactory.createBoot("女子皮鞋"))
-                .hat(itemFactory.createHat("女子斗笠"))
-                .chest(itemFactory.createChest("女子黄龙弓服"))
-                .wrist(itemFactory.createWrist("女子黄龙手套"))
-                .clothing(itemFactory.createClothing("女子上衣"))
-                .weapon((Weapon) itemFactory.createEquipment("长剑"))
+                .hair(hair)
+                .chest(itemFactory.createChest("男子黄龙弓服"))
+                .weapon(w2)
                 .build();
         player.joinRealm(mockAllFlatRealm(), Coordinate.xy(1, 3));
-        em = jpaFixture.beginTx();
         playerRepository.update(player);
-        jpaFixture.submitTx();
-        var resultList = em.createQuery("select p from PlayerPo p").getResultList();
-        var playerPo = (PlayerPo)resultList.get(0);
-        assertEquals(3000, playerPo.yinYang().yinExp());
-        assertEquals(4000, playerPo.yinYang().yangExp());
-        List<String> names = em.createQuery("select e from EquipmentPo e", EquipmentPo.class).getResultStream().map(EquipmentPo::getName).toList();
-        assertTrue(names.contains("女子长发"));
-        assertTrue(names.contains("女子长裤"));
-        assertTrue(names.contains("女子皮鞋"));
-        assertTrue(names.contains("女子斗笠"));
-        assertTrue(names.contains("女子黄龙弓服"));
-        assertTrue(names.contains("女子黄龙手套"));
-        assertTrue(names.contains("女子上衣"));
-        assertTrue(names.contains("长剑"));
-        verify(itemRepository, times(1)).save(any(EntityManager.class), any(Player.class));
+        KungFuBook kungFuBook = createKungFuBookFactory().create();
+        when(kungFuBookRepository.find(any(EntityManager.class), anyLong())).thenReturn(Optional.of(kungFuBook));
+        var updated = playerRepository.find(1, "123").get().getKey();
+        assertEquals(w2.id(), updated.weapon().get().id());
+        assertEquals(dye.color() + 1, updated.hair().get().color());
+        assertFalse(updated.boot().isPresent());
+        assertTrue(updated.chest().isPresent());
     }
 
     @Test
@@ -168,10 +162,8 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         PlayerDefaultAttributes innate = PlayerDefaultAttributes.INSTANCE;
         YinYang yinYang = new YinYang(100, 200);
         var em = jpaFixture.beginTx();
-        long id = playerRepository.save(em, 1, player);
-        jpaFixture.submitTx();
         player = playerBuilder().yinYang(yinYang)
-                .id(id)
+                .id(0)
                 .life(new PlayerLife(innate.life(), yinYang.age(), 10))
                 .head(new PlayerLife(innate.life(), yinYang.age(), 11))
                 .arm(new PlayerLife(innate.life(), yinYang.age(), 12))
@@ -191,8 +183,8 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
                 .weapon((Weapon) itemFactory.createEquipment("长剑"))
                 .build();
         player.joinRealm(mockedRealm, Coordinate.xy(1, 2));
-        playerRepository.update(player);
-        when(itemRepository.findInventory(any(EntityManager.class), anyLong())).thenReturn(new Inventory());
+        playerRepository.save(em, 1, player);
+        jpaFixture.submitTx();
         KungFuBook kungFuBook = createKungFuBookFactory().create();
         when(kungFuBookRepository.find(any(EntityManager.class), anyLong())).thenReturn(Optional.of(kungFuBook));
         var p = playerRepository.find(1, player.viewName()).get().getLeft();
@@ -214,6 +206,5 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals("女子皮鞋", p.boot().get().name());
         assertEquals("女子上衣", p.clothing().get().name());
         assertEquals("无名剑法", p.attackKungFu().name());
-        verify(itemRepository, times(1)).findInventory(any(EntityManager.class), anyLong());
     }
 }

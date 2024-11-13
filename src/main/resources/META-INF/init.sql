@@ -5,7 +5,7 @@ create table account(
                         hashed_password varchar(128) not null,
                         salt varchar(32) not null,
                         created_time datetime default now()
-)engine = InnoDB, charset = utf8mb4;
+) engine = InnoDB charset = utf8mb4;
 
 
 create table player (
@@ -34,49 +34,42 @@ create table player (
 
 
 create table player_kung_fu (
-                         exp integer not null,
-                         slot integer not null,
-                         player_id bigint not null,
-                         `name` varchar(32) not null,
-                         primary key (player_id, `name`)) engine=InnoDB, charset=utf8mb4;
+                                exp integer not null,
+                                slot integer not null,
+                                player_id bigint not null,
+                                `name` varchar(32) not null,
+                                primary key (player_id, `name`)) engine=InnoDB, charset=utf8mb4;
 
 CREATE TABLE `player_seq` (
     `next_val` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+
 insert into player_seq(next_val) values(100000000);
 
 CREATE TABLE `player_equipment` (
-                             player_id bigint not null,
-                             `name` varchar(32) not null,
-                             color int not null default 0,
-                             primary key (player_id, `name`)
+                                    player_id bigint not null,
+                                    equipment_id bigint not null unique,
+                                    primary key (player_id, `equipment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 
-
-create table player_item (
-                      `number` bigint not null,
-                      color int not null default 0,
-                      slot integer not null,
-                      player_id bigint not null,
-                      `name` varchar(32) not null,
-                      `type` varchar(16) not null comment 'BANK or INVENTORY',
-                      primary key (player_id, `slot`, `type`)) engine=InnoDB, charset=utf8mb4;
+create table equipment (id bigint primary key not null auto_increment,
+                        level int not null default 0,
+                        `name` varchar(32) not null,
+                        color int not null default 0
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-create table upgradable_equipment(
-    id bigint primary key not null auto_increment,
-    `name` varchar(32) not null,
-    attributes
-);
+create table inventory(id bigint primary key auto_increment,
+                       player_id bigint not null unique,
+                       slots json) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-create table bank (
-                      id bigint primary key auto_increment,
-                      player_id bigint not null unique,
-                      capacity integer not null,
-                      unlocked integer not null
-) ENGINE=InnoDB;
+create table bank (id bigint primary key auto_increment,
+                   player_id bigint not null unique,
+                   capacity integer not null,
+                   unlocked integer not null,
+                   slots json
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 create table attack_kungfu(
@@ -105,26 +98,26 @@ create table attack_kungfu(
 
 
 create table guild_stone (
-    id integer not null primary key auto_increment,
-    `name` varchar(12) not null unique,
-    realm_id integer not null,
-    x integer not null,
-    y integer not null,
-    max_health integer not null,
-    current_health integer not null,
-    created_time timestamp not null default now()
+                             id integer not null primary key auto_increment,
+                             `name` varchar(12) not null unique,
+                             realm_id integer not null,
+                             x integer not null,
+                             y integer not null,
+                             max_health integer not null,
+                             current_health integer not null,
+                             created_time timestamp not null default now()
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 create table guild_membership (
-    player_id bigint not null primary key,
-    role varchar(12) not null,
-    guild_id integer not null,
-    created_time timestamp not null default now(),
-    key idx_guild_id (`guild_id`)
+                                  player_id bigint not null primary key,
+                                  role varchar(12) not null,
+                                  guild_id integer not null,
+                                  created_time timestamp not null default now(),
+                                  key idx_guild_id (`guild_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 create table guild_kungfu (
-    guild_id integer not null primary key,
-    attack_kungfu_id integer not null unique
+                              guild_id integer not null primary key,
+                              attack_kungfu_id integer not null unique
 )ENGINE=InnoDB;
 

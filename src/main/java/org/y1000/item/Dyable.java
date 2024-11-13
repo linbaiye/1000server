@@ -1,7 +1,10 @@
 package org.y1000.item;
 
-public interface DyableEquipment extends Equipment {
+public interface Dyable {
+
     void dye(int color);
 
     void bleach(int color);
+
+    int color();
 }

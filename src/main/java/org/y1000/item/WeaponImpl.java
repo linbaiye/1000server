@@ -3,6 +3,9 @@ package org.y1000.item;
 import org.y1000.entities.players.Damage;
 import org.y1000.kungfu.attack.AttackKungFuType;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public final class WeaponImpl extends AbstractEquipment implements Weapon {
 
     private final ItemSdb itemSdb;
@@ -10,7 +13,11 @@ public final class WeaponImpl extends AbstractEquipment implements Weapon {
     private final Damage damage;
 
     public WeaponImpl(String name, ItemSdb itemSdb) {
-        super(name, itemSdb.getSoundDrop(name), itemSdb.getSoundEvent(name), itemSdb.getDesc(name));
+        this(name, itemSdb, new HashSet<>());
+    }
+
+    public WeaponImpl(String name, ItemSdb itemSdb, Set<Object> abilities) {
+        super(name, itemSdb, abilities);
         this.itemSdb = itemSdb;
         this.damage = new Damage(itemSdb.getDamageBody(name()), itemSdb.getDamageHead(name()), itemSdb.getDamageArm(name()), itemSdb.getDamageLeg(name()));
     }
@@ -26,26 +33,31 @@ public final class WeaponImpl extends AbstractEquipment implements Weapon {
     }
 
     @Override
-    public int avoidance() {
-        return itemSdb.getAvoid(name());
-    }
-
-    @Override
     public int recovery() {
         return itemSdb.getRecovery(name());
     }
-
-
     @Override
     public EquipmentType equipmentType() {
         return EquipmentType.WEAPON;
     }
 
-    @Override
-    public Damage damage() {
-        return damage;
+    private int getOriginAvoid() {
+        return itemSdb.getAvoid(name());
     }
 
+    @Override
+    public int avoidance() {
+        return findAbility(Upgradable.class)
+                .map(upgradable -> getOriginAvoid() + (int)(getOriginAvoid() * upgradable.percentage()))
+                .orElseGet(this::getOriginAvoid);
+    }
+
+    @Override
+    public Damage damage() {
+        return findAbility(Upgradable.class)
+                .map(upgradable -> damage.add(damage.multiply(upgradable.percentage())))
+                .orElse(damage);
+    }
 
     @Override
     public String description() {

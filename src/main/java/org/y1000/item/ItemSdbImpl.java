@@ -273,7 +273,8 @@ MaxCount,        最多持有数量；
 
     @Override
     public Integer getColor(String name) {
-        return getInt(name, "Color");
+        Integer color = getInt(name, "Color");
+        return color != null ? color : 0;
     }
 
     @Override
@@ -286,10 +287,16 @@ MaxCount,        最多持有数量；
         return getInt(name, "Shape");
     }
 
+    @Override
+    public boolean isUpgrade(String name) {
+        return "TRUE".equals(get(name, "boUpgrade"));
+    }
+
     public static final ItemSdbImpl INSTANCE = read();
 
     private static ItemSdbImpl read() {
         ItemSdbImpl itemSdb = new ItemSdbImpl();
+        //itemSdb.read("Init/Item.sdb", "utf8");
         itemSdb.read("Init/1.0Item.sdb", "utf8");
         return itemSdb;
     }
