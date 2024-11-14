@@ -46,4 +46,13 @@ public final class ArmorImpl extends AbstractSexualEquipment implements ArmorEqu
         var type = itemSdb.getEquipmentType(name());
         return type != EquipmentType.WRIST_CHESTED ? type : EquipmentType.WRIST;
     }
+    @Override
+    public String description() {
+        StringBuilder descriptionBuilder = getDescriptionBuilder();
+        descriptionBuilder.append("恢复: ").append(recovery()).append("\t")
+                .append("闪躲: ").append(avoidance()).append("\n");
+        Armor armor = armor();
+        descriptionBuilder.append(String.format("防御力: %d / %d / %d / %d", armor.body(), armor.head(), armor.arm(), armor.leg()));
+        return descriptionBuilder.toString();
+    }
 }
