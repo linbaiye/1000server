@@ -147,6 +147,17 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         }
     }
 
+    @Override
+    public Optional<Player> load(long id) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            return entityManager.createQuery("select p from PlayerPo p where p.id = ?1", PlayerPo.class)
+                    .setParameter(1, id)
+                    .getResultStream()
+                    .findFirst()
+                    .map(playerPo -> restore(entityManager, playerPo));
+        }
+    }
+
     private void setEquipmentIdIfNull(Equipment equipment, PlayerPo playerPo) {
         if (equipment.id() != null)
             return;

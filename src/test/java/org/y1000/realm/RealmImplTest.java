@@ -4,15 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.creatures.npc.InteractableNpc;
-import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.players.Player;
-import org.y1000.message.clientevent.ClientSimpleCommandEvent;
-import org.y1000.message.clientevent.SimpleCommand;
+import org.y1000.message.input.ClientSimpleCommandEvent;
+import org.y1000.message.input.SimpleCommand;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.Connection;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
-import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
 
 import java.util.Collections;
@@ -31,7 +29,7 @@ class RealmImplTest extends AbstractRealmUnitTextFixture {
     void setUp() {
         setup();
         player = Mockito.mock(Player.class);
-        realm = new RealmImpl(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+        realm = new RealmImpl(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, playerRepository);
         connection = Mockito.mock(Connection.class);
         realm.handle(new ConnectionEstablishedEvent(realm.id(), player, connection));
     }

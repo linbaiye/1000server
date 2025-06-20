@@ -2,7 +2,7 @@ package org.y1000.realm.event;
 
 
 import org.y1000.entities.players.Player;
-import org.y1000.message.clientevent.ClientEvent;
+import org.y1000.message.input.ClientEvent;
 
 public record PlayerDataEvent(int toRealmId, @Deprecated Player player, ClientEvent data) implements PlayerRealmEvent {
 

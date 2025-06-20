@@ -693,3 +693,13 @@ message PlayerInterpolationPacket {
 message RemoveEntityPacket {
   int64 id = 1;
 }
+
+message MoveInputPacket {
+  int32 x = 1;
+  int32 y = 2;
+  int32 direction = 3;
+}
+
+message DebugPacket {
+  int32 padding = 1;
+}

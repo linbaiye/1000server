@@ -13,8 +13,8 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
-import org.y1000.message.clientevent.ClientAttackEvent;
-import org.y1000.message.clientevent.ClientEvent;
+import org.y1000.message.input.ClientAttackEvent;
+import org.y1000.message.input.ClientEvent;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 

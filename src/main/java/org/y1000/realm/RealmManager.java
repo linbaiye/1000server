@@ -4,14 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.account.AccountManager;
 import org.y1000.entities.players.Player;
-import org.y1000.message.clientevent.ClientEvent;
-import org.y1000.message.clientevent.LoginEvent;
+import org.y1000.message.input.ClientEvent;
+import org.y1000.message.input.DebugInput;
+import org.y1000.message.input.LoginEvent;
 import org.y1000.realm.event.*;
 import org.y1000.network.Connection;
 import org.y1000.network.ConnectionEventType;
 import org.y1000.network.event.ConnectionDataEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
-import org.y1000.network.event.ConnectionEvent;
+import org.y1000.network.event.IConnectionEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
@@ -34,8 +35,6 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
 
     private Map<Integer, RealmGroup> realmIdGroupMap;
 
-    private final List<RealmGroup> groups;
-
     private volatile boolean shutdown;
 
     private final AccountManager accountManager;
@@ -44,6 +43,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
 
     private final Map<Integer, Player> accountPlayerMap;
 
+    private final Map<Connection, Long> connectionPlayerIdMap;
 
     private RealmManager(AccountManager accountManager,
                          PlayerRepository playerRepository) {
@@ -51,15 +51,15 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         eventQueue = new ArrayDeque<>(100);
         connectionPlayerMap = new HashMap<>(500);
         shutdown = false;
-        groups = new ArrayList<>();
         playerNameRealmIdMap = new HashMap<>();
         accountPlayerMap = new HashMap<>();
+        connectionPlayerIdMap = new HashMap<>();
         this.playerRepository = playerRepository;
         this.accountManager = accountManager;
     }
 
     public void startRealms() {
-        groups.forEach(executorService::submit);
+        realmIdGroupMap.values().forEach(executorService::submit);
     }
 
     private void loginToRealm(Player player, int realmId, Connection connection) {
@@ -137,14 +137,15 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         }
     }
 
-    private void handle(ConnectionEvent event) {
+    private void handle(IConnectionEvent event) {
         if (event.type() == ConnectionEventType.CLOSED) {
             handleDisconnection(event.connection());
         } else if (event instanceof ConnectionDataEvent dataEvent) {
             if (dataEvent.data() instanceof LoginEvent loginEvent) {
                 accountManager.removeToken(loginEvent.token())
                         .ifPresent(accountId -> handleLogin(accountId, loginEvent.charName(), dataEvent.connection()));
-            } else {
+            }
+            else {
                 sendDataToRealm(dataEvent);
             }
         }
@@ -154,7 +155,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         if (realmEvent instanceof RealmTeleportEvent teleportEvent) {
             handleTeleport(teleportEvent);
         } else if (realmEvent instanceof BroadcastEvent) {
-            groups.forEach(realmGroup -> realmGroup.handle(realmEvent));
+            realmIdGroupMap.values().forEach(realmGroup -> realmGroup.handle(realmEvent));
         } else if (realmEvent instanceof RealmTriggerEvent realmTriggerEvent) {
             RealmGroup group = realmIdGroupMap.get(realmTriggerEvent.toRealmId());
             if (group != null) {
@@ -178,7 +179,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         if (StringUtils.isEmpty(text))
             return;
         var notification = new SystemNotificationEvent(text);
-        groups.forEach(groups -> groups.handle(notification));
+        realmIdGroupMap.values().forEach(groups -> groups.handle(notification));
     }
 
     public synchronized void testKick() {
@@ -197,7 +198,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
             shutdown = true;
             if (shutdown)
                 return;
-            for (RealmGroup group : groups) {
+            for (RealmGroup group : realmIdGroupMap.values()) {
                 group.shutdown();
             }
             executorService.shutdown();
@@ -237,7 +238,6 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
             group.realmIds().forEach(id -> realmIdGroupMap.put(id,group));
         }
         this.executorService = Executors.newFixedThreadPool(groups.size());
-        this.groups.addAll(groups);
     }
 
     private static final Set<Integer> IGNORED_REALMS = Set.of(31, 43, 46, 70, 71, 89);
@@ -283,7 +283,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
                     event = eventQueue.poll();
                     eventQueue.notifyAll();
                 }
-                if (event instanceof ConnectionEvent connectionEvent)
+                if (event instanceof IConnectionEvent connectionEvent)
                     handle(connectionEvent);
                 else if (event instanceof RealmEvent realmEvent)
                     handle(realmEvent);

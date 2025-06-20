@@ -8,6 +8,8 @@ public interface Realm {
 
     void handle(RealmEvent event);
 
+    void handle(Object event);
+
     RealmMap map();
 
     String name();

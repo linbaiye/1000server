@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
-import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.Rope;
@@ -14,7 +13,7 @@ import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.RemoveEntityMessage;
-import org.y1000.message.clientevent.*;
+import org.y1000.message.input.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.realm.event.PlayerDataEvent;
@@ -25,6 +24,7 @@ import org.y1000.util.UnaryAction;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 

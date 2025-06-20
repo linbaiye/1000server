@@ -25,7 +25,7 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
-import org.y1000.message.clientevent.*;
+import org.y1000.message.input.*;
 import org.y1000.message.serverevent.*;
 import org.y1000.message.*;
 import org.y1000.realm.Realm;
@@ -98,7 +98,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     private final BuffPillSlot buffPillSlot;
 
     private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
-        put(State.IDLE, 2200);
+        put(State.IDLE, 1800);
         put(State.WALK, 840);
         put(State.RUN, 420);
         put(State.FLY, 360);

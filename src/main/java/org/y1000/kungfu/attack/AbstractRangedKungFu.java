@@ -8,7 +8,7 @@ import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.item.Ammo;
 import org.y1000.item.ItemType;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.input.ClientAttackEvent;
 
 public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
     private int count;

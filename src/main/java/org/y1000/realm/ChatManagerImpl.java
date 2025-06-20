@@ -3,11 +3,11 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.message.clientevent.chat.ClientInputTextEvent;
-import org.y1000.message.clientevent.chat.ClientRealmChatEvent;
-import org.y1000.message.clientevent.chat.ClientChatEvent;
+import org.y1000.message.input.chat.ClientInputTextEvent;
+import org.y1000.message.input.chat.ClientRealmChatEvent;
+import org.y1000.message.input.chat.ClientChatEvent;
 
-import org.y1000.message.clientevent.chat.ClientWorldShoutEvent;
+import org.y1000.message.input.chat.ClientWorldShoutEvent;
 import org.y1000.realm.event.RealmEvent;
 import org.y1000.realm.event.PlayerWhisperEvent;
 

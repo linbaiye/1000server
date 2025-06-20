@@ -5,8 +5,7 @@ import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.fight.PlayerAttackState;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.input.ClientAttackEvent;
 
 public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {
 

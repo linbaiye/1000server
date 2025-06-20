@@ -7,7 +7,7 @@ import org.y1000.realm.event.PlayerRealmEvent;
 
 public record ConnectionEstablishedEvent(int toRealmId, Player player,
                                          Connection connection)
-        implements ConnectionEvent, PlayerRealmEvent {
+        implements IConnectionEvent, PlayerRealmEvent {
     @Override
     public ConnectionEventType type() {
         return ConnectionEventType.ESTABLISHED;

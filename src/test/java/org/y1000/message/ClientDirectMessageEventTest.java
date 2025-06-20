@@ -1,7 +1,7 @@
 package org.y1000.message;
 
 import org.junit.jupiter.api.Test;
-import org.y1000.message.clientevent.chat.ClientWhisperEvent;
+import org.y1000.message.input.chat.ClientWhisperEvent;
 
 import static org.junit.jupiter.api.Assertions.*;
 

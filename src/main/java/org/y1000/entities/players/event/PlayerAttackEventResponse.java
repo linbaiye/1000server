@@ -3,7 +3,7 @@ package org.y1000.entities.players.event;
 import lombok.Getter;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
-import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.input.ClientAttackEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.ClientAttackResponsePacket;
 import org.y1000.network.gen.Packet;

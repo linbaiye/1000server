@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 @Slf4j
 public final class RealmGroup implements Runnable {
 
-    private final List<RealmEvent> pendingEvents;
+    private final List<Envelop> pendingEvents;
 
     private volatile boolean shutdown;
 
@@ -98,8 +98,8 @@ public final class RealmGroup implements Runnable {
         Stream.of(realms).forEach(Realm::shutdown);
     }
 
-    private List<RealmEvent> pollPendingEvents() {
-        List<RealmEvent> events = Collections.emptyList();
+    private List<Envelop> pollPendingEvents() {
+        List<Envelop> events = Collections.emptyList();
         try {
             synchronized (pendingEvents) {
                 if (pendingEvents.isEmpty()) {
@@ -118,14 +118,15 @@ public final class RealmGroup implements Runnable {
     }
 
 
-    private void handleRealmEvent(RealmEvent realmEvent){
-        if (realmEvent instanceof PlayerRealmEvent playerRealmEvent) {
-            find(playerRealmEvent.toRealmId()).ifPresent(realm -> realm.handle(playerRealmEvent));
-        } else if (realmEvent instanceof RealmTriggerEvent letterEvent) {
-            find(letterEvent.toRealmId()).ifPresent(realm -> realm.handle(letterEvent));
-        } else {
-            Arrays.stream(realms).forEach(realm -> realm.handle(realmEvent));
-        }
+    private void handleRealmEvent(Envelop envelop){
+        find(envelop.realmId()).ifPresent(realm -> realm.handle(envelop.event()));
+//        if (realmEvent instanceof PlayerRealmEvent playerRealmEvent) {
+//            find(playerRealmEvent.toRealmId()).ifPresent(realm -> realm.handle(playerRealmEvent));
+//        } else if (realmEvent instanceof RealmTriggerEvent letterEvent) {
+//            find(letterEvent.toRealmId()).ifPresent(realm -> realm.handle(letterEvent));
+//        } else {
+//            Arrays.stream(realms).forEach(realm -> realm.handle(realmEvent));
+//        }
     }
 
     @Override
@@ -140,8 +141,31 @@ public final class RealmGroup implements Runnable {
         while (!shutdown) {
             Arrays.stream(realms).forEach(this::updateRealm);
             resetDungeonsIfTimeUp();
-            List<RealmEvent> newEvents = pollPendingEvents();
+            List<Envelop> newEvents = pollPendingEvents();
             newEvents.forEach(this::handleRealmEvent);
+        }
+    }
+
+    private record Envelop(int realmId, Object event) {
+    }
+
+
+    public void handle(int realmId, Object event) {
+        if (!realmIds().contains(realmId) || event == null)
+            return;
+        synchronized (pendingEvents) {
+            pendingEvents.add(new Envelop(realmId, event));
+            pendingEvents.notify();
+        }
+    }
+
+    public void broadcast(Object event) {
+        if (event == null) {
+            return;
+        }
+        synchronized (pendingEvents) {
+            realmIds().forEach(id -> pendingEvents.add(new Envelop(id, event)));
+            pendingEvents.notify();
         }
     }
 
@@ -150,8 +174,8 @@ public final class RealmGroup implements Runnable {
             return;
         }
         synchronized (pendingEvents) {
-            pendingEvents.add(realmEvent);
-            pendingEvents.notify();
+//            pendingEvents.add(realmEvent);
+//            pendingEvents.notify();
         }
     }
 

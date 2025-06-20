@@ -12,7 +12,7 @@ import org.y1000.event.EntityEventListener;
 import org.y1000.item.Item;
 import org.y1000.item.ItemType;
 import org.y1000.item.StackItem;
-import org.y1000.message.clientevent.ClientOperateBankEvent;
+import org.y1000.message.input.ClientOperateBankEvent;
 import org.y1000.message.serverevent.UpdateBankEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.repository.BankRepository;

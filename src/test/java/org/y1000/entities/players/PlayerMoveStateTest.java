@@ -3,8 +3,8 @@ package org.y1000.entities.players;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.entities.Direction;
-import org.y1000.message.clientevent.ClientMovementEvent;
-import org.y1000.message.clientevent.input.RightMouseClick;
+import org.y1000.message.input.ClientMovementEvent;
+import org.y1000.message.input.input.RightMouseClick;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

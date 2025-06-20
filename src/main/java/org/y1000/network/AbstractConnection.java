@@ -4,9 +4,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.ServerContext;
-import org.y1000.message.clientevent.chat.ClientInputTextEvent;
+import org.y1000.message.input.chat.ClientInputTextEvent;
 import org.y1000.item.EquipmentType;
-import org.y1000.message.clientevent.*;
+import org.y1000.message.input.*;
 import org.y1000.network.event.ConnectionClosedEvent;
 import org.y1000.network.event.ConnectionDataEvent;
 import org.y1000.network.gen.ClientPacket;
@@ -104,7 +104,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        realmManager.queueEvent(new ConnectionClosedEvent(this));
+        realmManager.queueEvent(ConnectionEvent.Close(this));
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.kungfu.KungFu;
-import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.input.ClientAttackEvent;
 
 public interface AttackKungFu extends KungFu {
 

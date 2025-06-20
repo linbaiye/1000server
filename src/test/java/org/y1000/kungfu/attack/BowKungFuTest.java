@@ -15,7 +15,7 @@ import org.y1000.entities.players.fight.PlayerCooldownState;
 import org.y1000.item.ItemFactory;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.message.input.ClientAttackEvent;
 import org.y1000.message.serverevent.TextMessage;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 

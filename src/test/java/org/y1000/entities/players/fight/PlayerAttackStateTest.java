@@ -16,8 +16,8 @@ import org.y1000.kungfu.attack.AttackKungFuParameters;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.message.InputResponseMessage;
-import org.y1000.message.clientevent.ClientMovementEvent;
-import org.y1000.message.clientevent.input.RightMouseClick;
+import org.y1000.message.input.ClientMovementEvent;
+import org.y1000.message.input.input.RightMouseClick;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;

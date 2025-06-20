@@ -4,12 +4,11 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.npc.InteractableNpc;
-import org.y1000.entities.creatures.npc.Merchant;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.StaticTeleport;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.clientevent.*;
-import org.y1000.message.clientevent.chat.ClientInputTextEvent;
+import org.y1000.message.input.*;
+import org.y1000.message.input.chat.ClientInputTextEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
@@ -218,6 +217,14 @@ abstract class AbstractRealm implements Realm {
         }
     }
 
+    protected abstract void handleLogin(Login login);
+
+    @Override
+    public void handle(Object event) {
+        if (event instanceof Login login) {
+            handleLogin(login);
+        }
+    }
 
     public void handle(RealmEvent event) {
         try {

@@ -4,15 +4,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.clientevent.ClientFoundGuildEvent;
+import org.y1000.message.input.ClientFoundGuildEvent;
+import org.y1000.message.input.Login;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
 @Slf4j
 final class RealmImpl extends AbstractRealm {
 
+    private final PlayerRepository playerRepository;
 
     public RealmImpl(int id, RealmMap realmMap,
                      RealmEntityEventSender eventSender,
@@ -23,8 +26,10 @@ final class RealmImpl extends AbstractRealm {
                      TeleportManager teleportManager,
                      CrossRealmEventSender crossRealmEventSender,
                      MapSdb mapSdb,
-                     ChatManager chatManager) {
+                     ChatManager chatManager,
+                     PlayerRepository playerRepository) {
         super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+        this.playerRepository = playerRepository;
     }
 
     @Override
@@ -51,6 +56,12 @@ final class RealmImpl extends AbstractRealm {
     @Override
     void handleClientEvent(PlayerDataEvent dataEvent) {
         playerManager().onClientEvent(dataEvent, npcManager());
+    }
+
+    @Override
+    protected void handleLogin(Login login) {
+        playerRepository.
+        getEventSender().add(login.player(), login.connection());
     }
 
 

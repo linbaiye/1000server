@@ -7,6 +7,7 @@ import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
 
+import java.util.Optional;
 import java.util.Set;
 
 interface PlayerManager extends ActiveEntityManager<Player> {
@@ -21,7 +22,6 @@ interface PlayerManager extends ActiveEntityManager<Player> {
                        ActiveEntityManager<Npc> npcManager);
 
     Set<Player> allPlayers();
-
 
     void onPlayerDisconnected(long playerId);
 

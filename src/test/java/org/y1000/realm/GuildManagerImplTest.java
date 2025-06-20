@@ -26,7 +26,7 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.RemoveEntityMessage;
-import org.y1000.message.clientevent.ClientCreateGuildKungFuEvent;
+import org.y1000.message.input.ClientCreateGuildKungFuEvent;
 import org.y1000.message.serverevent.UpdateGuildKungFuFormEvent;
 import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.realm.event.BroadcastTextEvent;

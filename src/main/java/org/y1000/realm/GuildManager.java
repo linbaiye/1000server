@@ -1,9 +1,8 @@
 package org.y1000.realm;
 
 import org.y1000.entities.players.Player;
-import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
-import org.y1000.message.clientevent.ClientCreateGuildKungFuEvent;
+import org.y1000.message.input.ClientCreateGuildKungFuEvent;
 import org.y1000.util.Coordinate;
 
 public interface GuildManager extends ActiveEntityManager<GuildStone> {

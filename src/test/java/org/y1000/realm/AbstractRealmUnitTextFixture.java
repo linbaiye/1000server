@@ -2,6 +2,7 @@ package org.y1000.realm;
 
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.CreateGateSdb;
 import org.y1000.sdb.MapSdb;
 
@@ -29,6 +30,8 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
 
     ChatManager chatManager;
 
+    PlayerRepository playerRepository;
+
     void setup() {
         eventSender = new RealmEntityEventSender(Mockito.mock(AOIManager.class));
         realmMap = mockRealmMap();
@@ -42,6 +45,7 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
         crossRealmEventSender = Mockito.mock(CrossRealmEventSender.class);
         mapSdb = Mockito.mock(MapSdb.class);
         chatManager = Mockito.mock(ChatManager.class);
+        playerRepository = Mockito.mock(PlayerRepository.class);
     }
 
     EntranceDungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> wl) {

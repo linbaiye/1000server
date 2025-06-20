@@ -148,6 +148,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .playerManager(playerManager)
                     .realmMap(realmMap)
                     .teleportManager(teleportManager)
+                    .playerRepository(playerRepository)
                     .chatManager(new ChatManagerImpl(playerManager, eventSender, crossRealmEventSender))
                     ;
             if (allowGuildCreation(id)) {
@@ -184,6 +185,8 @@ public final class RealmFactoryImpl implements RealmFactory {
         private Set<Integer> whitelistIds;
 
         private GuildManager guildManager;
+
+        private PlayerRepository playerRepository;
 
         private RealmBuilder() {
         }
@@ -257,6 +260,11 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
+        public RealmBuilder playerRepository(PlayerRepository playerRepository) {
+            this.playerRepository = playerRepository;
+            return this;
+        }
+
         public RealmBuilder mapSdb(MapSdb mapSdb) {
             this.mapSdb = mapSdb;
             return this;
@@ -264,7 +272,7 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         public Realm buildNormal() {
             if (guildManager == null)
-                return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+                return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, playerRepository);
             else
                 return new GuildableRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, guildManager);
         }

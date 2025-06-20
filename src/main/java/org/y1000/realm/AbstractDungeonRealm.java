@@ -2,7 +2,7 @@ package org.y1000.realm;
 
 import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.clientevent.ClientFoundGuildEvent;
+import org.y1000.message.input.ClientFoundGuildEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.RealmTeleportEvent;

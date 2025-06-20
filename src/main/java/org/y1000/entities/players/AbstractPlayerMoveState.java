@@ -4,7 +4,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
 import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.event.RewindEvent;
-import org.y1000.message.clientevent.ClientMovementEvent;
+import org.y1000.message.input.ClientMovementEvent;
 import org.y1000.util.Coordinate;
 
 public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements PlayerState {

@@ -21,7 +21,7 @@ import org.y1000.item.ItemType;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.RemoveEntityMessage;
-import org.y1000.message.clientevent.ClientCreateGuildKungFuEvent;
+import org.y1000.message.input.ClientCreateGuildKungFuEvent;
 import org.y1000.message.serverevent.TextMessage;
 import org.y1000.message.serverevent.UpdateGuildKungFuFormEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
