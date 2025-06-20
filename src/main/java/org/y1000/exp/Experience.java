@@ -17,6 +17,7 @@ public final class Experience {
         return gainPermitExp(ExperienceUtil.DEFAULT_EXP);
     }
 
+
     public Experience gainPermitExp(int expValue) {
     /*
 
