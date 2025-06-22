@@ -12,6 +12,7 @@ import org.y1000.message.input.chat.ClientInputTextEvent;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ abstract class AbstractRealm implements Realm {
 
     private final ChatManager chatManager;
 
+    private final PlayerRepository playerRepository;
+
     public AbstractRealm(int id,
                          RealmMap realmMap,
                          RealmEntityEventSender eventSender,
@@ -46,7 +49,8 @@ abstract class AbstractRealm implements Realm {
                          TeleportManager teleportManager,
                          CrossRealmEventSender crossRealmEventSender,
                          MapSdb mapSdb,
-                         ChatManager chatManager) {
+                         ChatManager chatManager,
+                         PlayerRepository playerRepository) {
         Validate.notNull(realmMap);
         Validate.notNull(eventSender);
         Validate.notNull(itemManager);
@@ -70,6 +74,7 @@ abstract class AbstractRealm implements Realm {
         if (npcManager != null)
             entityManagers.add(npcManager);
         this.chatManager = chatManager;
+        this.playerRepository = playerRepository;
     }
 
     void addEntityManager(ActiveEntityManager<?> manager) {
@@ -219,10 +224,23 @@ abstract class AbstractRealm implements Realm {
 
     protected abstract void handleLogin(Login login);
 
+    protected void acceptLogin(Login login) {
+        playerManager().onPlayerDisconnected(login.playerId());
+        playerRepository.load(login.playerId())
+                .ifPresent(p -> {
+                    getEventSender().add(p, login.connection());
+                    playerManager().onPlayerConnected(p, this);
+                });
+    }
+
     @Override
     public void handle(Object event) {
-        if (event instanceof Login login) {
-            handleLogin(login);
+        try {
+            if (event instanceof Login login) {
+                handleLogin(login);
+            }
+        } catch (Exception e) {
+            log().error("Failed to handle event.", e);
         }
     }
 

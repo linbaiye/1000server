@@ -2,7 +2,7 @@ package org.y1000.message;
 
 import org.y1000.util.Coordinate;
 
-public abstract class AbstractEntityInterpolation implements ServerMessage {
+public abstract class AbstractEntityInterpolation implements I2ClientMessage {
 
     private final long id;
 

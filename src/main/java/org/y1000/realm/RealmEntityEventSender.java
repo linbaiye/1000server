@@ -43,7 +43,7 @@ final class RealmEntityEventSender implements EntityEventListener,
         }
     }
 
-    private void sendMessage(Player player, ServerMessage serverMessage) {
+    private void sendMessage(Player player, I2ClientMessage serverMessage) {
         if (playerConnectionMap.containsKey(player))
             playerConnectionMap.get(player).write(serverMessage);
     }
@@ -111,12 +111,12 @@ final class RealmEntityEventSender implements EntityEventListener,
                 .ifPresent(e -> doNotifyVisiblePlayers(event.source(), e));
     }
 
-    private void doNotifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
+    private void doNotifyVisiblePlayers(Entity source, I2ClientMessage serverMessage) {
         scopeManager.filterVisibleEntities(source, Player.class)
                 .forEach(player -> sendMessage(player, serverMessage));
     }
 
-    public void notifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
+    public void notifyVisiblePlayers(Entity source, I2ClientMessage serverMessage) {
         Validate.notNull(source, "source can't be null.");
         Validate.notNull(serverMessage, "serverMessage can't be null.");
         doNotifyVisiblePlayers(source, serverMessage);
@@ -128,7 +128,7 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
     public void notifyVisiblePlayersAndSelf(Entity source,
-                                            ServerMessage message) {
+                                            I2ClientMessage message) {
         Validate.notNull(source);
         Validate.notNull(message);
         doNotifyVisiblePlayers(source, message);
@@ -170,6 +170,7 @@ final class RealmEntityEventSender implements EntityEventListener,
             sendMessage(event.player(), event);
         }
     }
+
 
     @Override
     public void visit(PlayerStandUpEvent event) {

@@ -2,8 +2,7 @@ package org.y1000.network;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.ServerContext;
-import org.y1000.repository.PlayerRepository;
-import org.y1000.message.ServerMessage;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.RealmManager;
 
 @Slf4j
@@ -14,7 +13,7 @@ public final class ConnectionImpl extends AbstractConnection {
     }
 
     @Override
-    public void write(ServerMessage message) {
+    public void write(I2ClientMessage message) {
         var context = getContext();
         if (context == null) {
             return;

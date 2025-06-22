@@ -23,6 +23,7 @@ private static final long serialVersionUID = 0L;
     rof_ = "";
     bgm_ = "";
     realm_ = "";
+    resource_ = "";
   }
 
   @java.lang.Override
@@ -301,6 +302,45 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int RESOURCE_FIELD_NUMBER = 9;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object resource_ = "";
+  /**
+   * <code>string resource = 9;</code>
+   * @return The resource.
+   */
+  @java.lang.Override
+  public java.lang.String getResource() {
+    java.lang.Object ref = resource_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      resource_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string resource = 9;</code>
+   * @return The bytes for resource.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getResourceBytes() {
+    java.lang.Object ref = resource_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      resource_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -339,6 +379,9 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(realm_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 8, realm_);
     }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(resource_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 9, resource_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -374,6 +417,9 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(realm_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, realm_);
     }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(resource_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, resource_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -405,6 +451,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getBgm())) return false;
     if (!getRealm()
         .equals(other.getRealm())) return false;
+    if (!getResource()
+        .equals(other.getResource())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -432,6 +480,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getBgm().hashCode();
     hash = (37 * hash) + REALM_FIELD_NUMBER;
     hash = (53 * hash) + getRealm().hashCode();
+    hash = (37 * hash) + RESOURCE_FIELD_NUMBER;
+    hash = (53 * hash) + getResource().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -571,6 +621,7 @@ private static final long serialVersionUID = 0L;
       rof_ = "";
       bgm_ = "";
       realm_ = "";
+      resource_ = "";
       return this;
     }
 
@@ -627,6 +678,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000080) != 0)) {
         result.realm_ = realm_;
+      }
+      if (((from_bitField0_ & 0x00000100) != 0)) {
+        result.resource_ = resource_;
       }
     }
 
@@ -710,6 +764,11 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000080;
         onChanged();
       }
+      if (!other.getResource().isEmpty()) {
+        resource_ = other.resource_;
+        bitField0_ |= 0x00000100;
+        onChanged();
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -776,6 +835,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000080;
               break;
             } // case 66
+            case 74: {
+              resource_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00000100;
+              break;
+            } // case 74
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1285,6 +1349,78 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       realm_ = value;
       bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object resource_ = "";
+    /**
+     * <code>string resource = 9;</code>
+     * @return The resource.
+     */
+    public java.lang.String getResource() {
+      java.lang.Object ref = resource_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        resource_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string resource = 9;</code>
+     * @return The bytes for resource.
+     */
+    public com.google.protobuf.ByteString
+        getResourceBytes() {
+      java.lang.Object ref = resource_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        resource_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string resource = 9;</code>
+     * @param value The resource to set.
+     * @return This builder for chaining.
+     */
+    public Builder setResource(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      resource_ = value;
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string resource = 9;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearResource() {
+      resource_ = getDefaultInstance().getResource();
+      bitField0_ = (bitField0_ & ~0x00000100);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string resource = 9;</code>
+     * @param value The bytes for resource to set.
+     * @return This builder for chaining.
+     */
+    public Builder setResourceBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      resource_ = value;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }

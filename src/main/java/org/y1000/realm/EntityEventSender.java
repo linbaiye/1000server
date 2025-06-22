@@ -4,7 +4,7 @@ import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.event.EntityEvent;
-import org.y1000.message.ServerMessage;
+import org.y1000.message.I2ClientMessage;
 
 public interface EntityEventSender {
     /**
@@ -17,9 +17,9 @@ public interface EntityEventSender {
 
     void sendEvent(EntityEvent entityEvent);
 
-    void notifyVisiblePlayers(Entity source, ServerMessage serverMessage);
+    void notifyVisiblePlayers(Entity source, I2ClientMessage serverMessage);
 
-    void notifyVisiblePlayersAndSelf(Entity source, ServerMessage serverMessage);
+    void notifyVisiblePlayersAndSelf(Entity source, I2ClientMessage serverMessage);
 
     default void notifySelf(AbstractPlayerEvent playerEvent) {
 

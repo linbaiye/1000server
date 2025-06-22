@@ -3,7 +3,7 @@ package org.y1000.network;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.ServerContext;
-import org.y1000.message.ServerMessage;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.RealmManager;
 
 import java.util.*;
@@ -14,7 +14,7 @@ import java.util.*;
 @Slf4j
 public final class DevelopingConnection extends AbstractConnection implements Runnable {
 
-    private final List<ServerMessage> messages;
+    private final List<I2ClientMessage> messages;
 
     public final Thread sender;
 
@@ -29,7 +29,7 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
 
 
     @Override
-    public void write(ServerMessage message) {
+    public void write(I2ClientMessage message) {
         synchronized (messages) {
             messages.add(message);
         }

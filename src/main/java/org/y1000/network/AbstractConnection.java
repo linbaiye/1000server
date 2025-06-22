@@ -42,7 +42,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         return ClientSimpleCommandEvent.parse(packet.getCommand());
     }
 
-    private ClientEvent createMessage(ClientPacket clientPacket) {
+    private Object createMessage(ClientPacket clientPacket) {
         return switch (clientPacket.getTypeCase()) {
             case MOVEEVENTPACKET -> ClientMovementEvent.fromPacket(clientPacket);
             case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
@@ -76,22 +76,20 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case MANAGEGUILD -> new ClientManageGuildEvent(clientPacket.getManageGuild().getType(), clientPacket.getManageGuild().getTarget());
             case SUBMITQUEST -> new ClientSubmitQuestEvent(clientPacket.getSubmitQuest().getId(), clientPacket.getSubmitQuest().getQuestName(), serverContext.getItemFactory());
             case INTERACT -> new ClientClickInteractabilityEvent(clientPacket.getInteract().getId(), clientPacket.getInteract().getName());
+            case DEBUG -> new DebugInput(1);
             default -> throw new IllegalArgumentException();
         };
     }
 
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (msg instanceof ClientPacket packet) {
             try {
                 var message = createMessage(packet);
-                if (message == null) {
-                    // Not something we can deal with.
-                    return;
+                if (message != null) {
+                    realmManager.queueEvent(ConnectionEvent.Data(this, message));
                 }
-                realmManager.queueEvent(new ConnectionDataEvent(this, message));
-                //log.debug("Received message {}.", message);
             } catch (Exception e) {
                 log.error("Exception ", e);
             }

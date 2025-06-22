@@ -26,6 +26,7 @@ public class PlayerTeleportEvent extends AbstractPlayerEvent {
                 .setTile(realm.map().tileFile())
                 .setObj(realm.map().objectFile())
                 .setRof(realm.map().roofFile())
+                .setResource("south")
                 .build();
     }
 

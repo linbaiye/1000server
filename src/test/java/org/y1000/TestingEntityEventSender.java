@@ -4,7 +4,7 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
-import org.y1000.message.ServerMessage;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.network.Connection;
 import org.y1000.realm.EntityEventSender;
 
@@ -15,7 +15,7 @@ public final class TestingEntityEventSender implements EntityEventSender {
 
     private final Set<Entity> entities;
 
-    private final Map<Entity, List<ServerMessage>> entityMessages;
+    private final Map<Entity, List<I2ClientMessage>> entityMessages;
 
     private final Map<Player, Connection> connectionMap;
 
@@ -81,11 +81,11 @@ public final class TestingEntityEventSender implements EntityEventSender {
         eventListener.onEvent(entityEvent);
     }
 
-    public <T extends ServerMessage> T removeFirst(Entity source, Class<T> clazz) {
-        List<ServerMessage> messages = entityMessages.get(source);
-        Iterator<ServerMessage> iterator = messages.iterator();
+    public <T extends I2ClientMessage> T removeFirst(Entity source, Class<T> clazz) {
+        List<I2ClientMessage> messages = entityMessages.get(source);
+        Iterator<I2ClientMessage> iterator = messages.iterator();
         while (iterator.hasNext()) {
-            ServerMessage next = iterator.next();
+            I2ClientMessage next = iterator.next();
             if (clazz.isAssignableFrom(next.getClass())) {
                 iterator.remove();
                 return clazz.cast(next);
@@ -96,13 +96,13 @@ public final class TestingEntityEventSender implements EntityEventSender {
 
 
     @Override
-    public void notifyVisiblePlayers(Entity source, ServerMessage serverMessage) {
+    public void notifyVisiblePlayers(Entity source, I2ClientMessage serverMessage) {
         entityMessages.putIfAbsent(source, new ArrayList<>());
         entityMessages.get(source).add(serverMessage);
     }
 
     @Override
-    public void notifyVisiblePlayersAndSelf(Entity source, ServerMessage serverMessage) {
+    public void notifyVisiblePlayersAndSelf(Entity source, I2ClientMessage serverMessage) {
 
     }
 }

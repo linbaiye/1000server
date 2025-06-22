@@ -458,5 +458,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder getInteractOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+   * @return Whether the debug field is set.
+   */
+  boolean hasDebug();
+  /**
+   * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+   * @return The debug.
+   */
+  org.y1000.network.gen.DebugPacket getDebug();
+  /**
+   * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+   */
+  org.y1000.network.gen.DebugPacketOrBuilder getDebugOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

@@ -13,11 +13,12 @@ import org.y1000.entities.players.Player;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
-public final class JoinedRealmEvent extends AbstractPlayerEvent{
+public final class JoinedRealmEvent extends AbstractPlayerEvent {
 
     private final Inventory playerInventory;
 
     private final TeleportPacket teleportPacket;
+
 
     public JoinedRealmEvent(Player player, Coordinate coordinate, Inventory playerInventory, Realm realm) {
         super(player);

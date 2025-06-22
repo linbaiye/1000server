@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.input.Login;
 import org.y1000.realm.event.RealmTeleportEvent;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
 import java.time.LocalDateTime;
@@ -29,9 +31,10 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
                                 CrossRealmEventSender crossRealmEventSender,
                                 MapSdb mapSdb, int interval,
                                 ChatManager chatManager,
-                                Set<Integer> whitelistedIds) {
+                                Set<Integer> whitelistedIds,
+                                PlayerRepository playerRepository) {
         this(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
-                interval, LocalDateTime::now, chatManager, whitelistedIds);
+                interval, LocalDateTime::now, chatManager, whitelistedIds, playerRepository);
     }
 
     public EntranceDungeonRealm(int id,
@@ -47,8 +50,8 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
                                 int interval,
                                 Supplier<LocalDateTime> timeSupplier,
                                 ChatManager chatManager,
-                                Set<Integer> whitelistedIds) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, interval);
+                                Set<Integer> whitelistedIds, PlayerRepository playerRepository) {
+        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, interval, playerRepository);
         Validate.notNull(timeSupplier);
         this.dateTimeSupplier = timeSupplier;
         this.whitelistedIds = whitelistedIds != null ? whitelistedIds : Collections.emptySet();
@@ -108,6 +111,12 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
             getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(),
                     teleportEvent.rejectCoordinate().orElse(exitCoordinate()), teleportEvent.getConnection(), id()));
         }
+    }
+
+    @Override
+    protected void handleLogin(Login login) {
+        acceptLogin(login);
+
     }
 
     @Override

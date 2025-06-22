@@ -9,7 +9,7 @@ import org.y1000.event.EntityEventVisitor;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 
 public record InputResponseMessage(long sequence, AbstractPositionEvent positionMessage) implements EntityEvent,
-        ServerMessage {
+        I2ClientMessage {
 
     @Override
     public Packet toPacket() {

@@ -50,7 +50,7 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
 
     EntranceDungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> wl) {
         return new EntranceDungeonRealm(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
-                interval, dateTimeSupplier, chatManager, wl);
+                interval, dateTimeSupplier, chatManager, wl, playerRepository);
     }
 
     EntranceDungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier) {

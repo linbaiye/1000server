@@ -450,6 +450,16 @@ public final class Java {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_org_y1000_network_gen_RemoveEntityPacket_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_org_y1000_network_gen_MoveInputPacket_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_org_y1000_network_gen_MoveInputPacket_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_org_y1000_network_gen_DebugPacket_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_org_y1000_network_gen_DebugPacket_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -548,8 +558,8 @@ public final class Java {
       "ldPacket\022\014\n\004type\030\001 \001(\005\022\016\n\006target\030\002 \001(\t\"8" +
       "\n\027ClientSubmitQuestPacket\022\n\n\002id\030\001 \001(\003\022\021\n" +
       "\tquestName\030\002 \001(\t\"<\n ClientClickInteracta" +
-      "bilityPacket\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\"\336" +
-      "\020\n\014ClientPacket\022A\n\017moveEventPacket\030\001 \001(\013" +
+      "bilityPacket\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\"\223" +
+      "\021\n\014ClientPacket\022A\n\017moveEventPacket\030\001 \001(\013" +
       "2&.org.y1000.network.gen.MoveEventPacket" +
       "H\000\0229\n\013clickPacket\030\002 \001(\0132\".org.y1000.netw" +
       "ork.gen.ClickPacketH\000\022?\n\013loginPacket\030\003 \001" +
@@ -602,230 +612,234 @@ public final class Java {
       "st\030\035 \001(\0132..org.y1000.network.gen.ClientS" +
       "ubmitQuestPacketH\000\022K\n\010interact\030\036 \001(\01327.o" +
       "rg.y1000.network.gen.ClientClickInteract" +
-      "abilityPacketH\000B\006\n\004Type\"d\n\023Interpolation" +
-      "Packet\022\r\n\005state\030\002 \001(\005\022\025\n\relapsedMillis\030\005" +
-      " \001(\005\022\021\n\tdirection\030\007 \001(\005\022\t\n\001x\030\010 \001(\005\022\t\n\001y\030" +
-      "\t \001(\005\"Z\n\024InterpolationsPacket\022B\n\016interpo" +
-      "lations\030\001 \003(\0132*.org.y1000.network.gen.In" +
-      "terpolationPacket\"b\n\023InventoryItemPacket" +
-      "\022\014\n\004name\030\001 \001(\t\022\016\n\006slotId\030\002 \001(\005\022\023\n\006number" +
-      "\030\003 \001(\003H\000\210\001\001\022\r\n\005color\030\004 \001(\005B\t\n\007_number\"[\n" +
-      "\rNpcItemPacket\022\014\n\004name\030\001 \001(\t\022\014\n\004icon\030\002 \001" +
-      "(\005\022\r\n\005color\030\003 \001(\005\022\r\n\005price\030\004 \001(\005\022\020\n\010canS" +
-      "tack\030\005 \001(\010\"L\n\025OpenTradeWindowPacket\022\027\n\017a" +
-      "notherPlayerId\030\001 \001(\003\022\021\n\004slot\030\002 \001(\005H\000\210\001\001B" +
-      "\007\n\005_slot\"\252\001\n\027UpdateTradeWindowPacket\022\014\n\004" +
-      "type\030\001 \001(\005\022\021\n\004name\030\002 \001(\tH\000\210\001\001\022\023\n\006number\030" +
-      "\003 \001(\003H\001\210\001\001\022\021\n\004slot\030\004 \001(\005H\002\210\001\001\022\021\n\004self\030\005 " +
-      "\001(\010H\003\210\001\001\022\r\n\005color\030\006 \001(\005B\007\n\005_nameB\t\n\007_num" +
-      "berB\007\n\005_slotB\007\n\005_self\"G\n\014KungFuPacket\022\014\n" +
-      "\004name\030\001 \001(\t\022\r\n\005level\030\002 \001(\005\022\014\n\004slot\030\003 \001(\005" +
-      "\022\014\n\004type\030\004 \001(\005\"\212\001\n\021TextMessagePacket\022\014\n\004" +
-      "type\030\001 \001(\005\022\021\n\004text\030\002 \001(\tH\000\210\001\001\022\020\n\010locatio" +
-      "n\030\003 \001(\005\022\021\n\tcolorType\030\004 \001(\005\022\027\n\nfromPlayer" +
-      "\030\005 \001(\tH\001\210\001\001B\007\n\005_textB\r\n\013_fromPlayer\"k\n\022T" +
-      "oggleKungFuPacket\022\014\n\004name\030\001 \001(\t\022\022\n\005level" +
-      "\030\002 \001(\005H\000\210\001\001\022\n\n\002id\030\003 \001(\003\022\017\n\007quietly\030\004 \001(\010" +
-      "\022\014\n\004type\030\005 \001(\005B\010\n\006_level\",\n\rLifeBarPacke" +
-      "t\022\n\n\002id\030\001 \001(\003\022\017\n\007percent\030\002 \001(\005\"w\n\016Telepo" +
-      "rtPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\013\n\003map\030\003 " +
-      "\001(\t\022\014\n\004tile\030\004 \001(\t\022\013\n\003obj\030\005 \001(\t\022\013\n\003rof\030\006 " +
-      "\001(\t\022\013\n\003bgm\030\007 \001(\t\022\r\n\005realm\030\010 \001(\t\"\326\004\n\013Logi" +
-      "nPacket\0227\n\010teleport\030\001 \001(\0132%.org.y1000.ne" +
-      "twork.gen.TeleportPacket\0225\n\004info\030\002 \001(\0132\'" +
-      ".org.y1000.network.gen.PlayerInfoPacket\022" +
-      "\030\n\020attackKungFuName\030\003 \001(\t\022\033\n\016footKungFuN" +
-      "ame\030\010 \001(\tH\000\210\001\001\022B\n\016inventoryItems\030\t \003(\0132*" +
-      ".org.y1000.network.gen.InventoryItemPack" +
-      "et\022>\n\021unnamedKungFuList\030\013 \003(\0132#.org.y100" +
-      "0.network.gen.KungFuPacket\022<\n\017basicKungF" +
-      "uList\030\014 \003(\0132#.org.y1000.network.gen.Kung" +
-      "FuPacket\022\035\n\020protectionKungFu\030\r \001(\tH\001\210\001\001\022" +
-      "\034\n\017assistantKungFu\030\016 \001(\tH\002\210\001\001\022\031\n\014breathK" +
-      "ungFu\030\017 \001(\tH\003\210\001\001\0229\n\tattribute\030\021 \001(\0132&.or" +
-      "g.y1000.network.gen.AttributePacketB\021\n\017_" +
-      "footKungFuNameB\023\n\021_protectionKungFuB\022\n\020_" +
-      "assistantKungFuB\017\n\r_breathKungFu\"\226\002\n\017Att" +
-      "ributePacket\022\017\n\007curLife\030\001 \001(\005\022\017\n\007maxLife" +
-      "\030\002 \001(\005\022\020\n\010curPower\030\003 \001(\005\022\020\n\010maxPower\030\004 \001" +
-      "(\005\022\025\n\rcurInnerPower\030\005 \001(\005\022\025\n\rmaxInnerPow" +
-      "er\030\006 \001(\005\022\025\n\rcurOuterPower\030\007 \001(\005\022\025\n\rmaxOu" +
-      "terPower\030\010 \001(\005\022\021\n\tcurEnergy\030\t \001(\005\022\021\n\tmax" +
-      "Energy\030\n \001(\005\022\023\n\013headPercent\030\013 \001(\005\022\022\n\narm" +
-      "Percent\030\014 \001(\005\022\022\n\nlegPercent\030\r \001(\005\"\344\002\n\037Pl" +
-      "ayerRightClickAttributePacket\022\023\n\013attackS" +
-      "peed\030\001 \001(\005\022\017\n\007maxLife\030\002 \001(\005\022\021\n\tavoidance" +
-      "\030\003 \001(\005\022\020\n\010maxPower\030\004 \001(\005\022\020\n\010recovery\030\005 \001" +
-      "(\005\022\025\n\rmaxInnerPower\030\006 \001(\005\022\025\n\rmaxOuterPow" +
-      "er\030\010 \001(\005\022\021\n\tmaxEnergy\030\n \001(\005\022\022\n\nbodyDamag" +
-      "e\030\007 \001(\005\022\022\n\nheadDamage\030\t \001(\005\022\021\n\tarmDamage" +
-      "\030\013 \001(\005\022\021\n\tlegDamage\030\014 \001(\005\022\021\n\tbodyArmor\030\r" +
-      " \001(\005\022\021\n\theadArmor\030\016 \001(\005\022\020\n\010armArmor\030\017 \001(" +
-      "\005\022\020\n\010legArmor\030\020 \001(\005\022\013\n\003age\030\021 \001(\005\"8\n\023Play" +
-      "erUnequipPacket\022\n\n\002id\030\001 \001(\003\022\025\n\requipment" +
-      "Type\030\002 \001(\005\"E\n\021PlayerEquipPacket\022\n\n\002id\030\001 " +
-      "\001(\003\022\025\n\requipmentName\030\002 \001(\t\022\r\n\005color\030\003 \001(" +
-      "\005\"!\n\023PlayerSitDownPacket\022\n\n\002id\030\001 \001(\003\"!\n\023" +
-      "PlayerStandUpPacket\022\n\n\002id\030\001 \001(\003\"\"\n\024Playe" +
-      "rCooldownPacket\022\n\n\002id\030\001 \001(\003\" \n\022PlayerRev" +
-      "ivePacket\022\n\n\002id\030\001 \001(\003\"B\n\023PlayerGainExpPa" +
-      "cket\022\014\n\004name\030\001 \001(\t\022\r\n\005level\030\002 \001(\005\022\016\n\006kun" +
-      "gFu\030\003 \001(\010\"Z\n\020ProjectilePacket\022\n\n\002id\030\001 \001(" +
-      "\003\022\020\n\010targetId\030\002 \001(\003\022\030\n\020flyingTimeMillis\030" +
-      "\003 \001(\005\022\016\n\006sprite\030\004 \001(\005\"]\n\023ItemAttributePa" +
-      "cket\022\014\n\004type\030\001 \001(\005\022\016\n\006slotId\030\002 \001(\005\022\021\n\004pa" +
-      "ge\030\003 \001(\005H\000\210\001\001\022\014\n\004text\030\004 \001(\tB\007\n\005_page\"\373\001\n" +
-      "\027ShowDynamicObjectPacket\022\n\n\002id\030\001 \001(\003\022\t\n\001" +
-      "x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004type\030\004 \001(\005\022\r\n\005star" +
-      "t\030\005 \001(\005\022\013\n\003end\030\006 \001(\005\022\r\n\005shape\030\007 \001(\t\022\017\n\007e" +
-      "lapsed\030\010 \001(\005\022\021\n\004name\030\t \001(\tH\000\210\001\001\022\016\n\006guard" +
-      "X\030\n \003(\005\022\016\n\006guardY\030\013 \003(\005\022\031\n\014requiredItem\030" +
-      "\014 \001(\tH\001\210\001\001\022\014\n\004loop\030\r \001(\010B\007\n\005_nameB\017\n\r_re" +
-      "quiredItem\"Q\n\031UpdateDynamicObjectPacket\022" +
-      "\n\n\002id\030\001 \001(\003\022\r\n\005start\030\002 \001(\005\022\013\n\003end\030\003 \001(\005\022" +
-      "\014\n\004loop\030\004 \001(\010\"\035\n\017BreakRopePacket\022\n\n\002id\030\001" +
-      " \001(\003\"C\n\021NpcPositionPacket\022\r\n\005xList\030\001 \003(\005" +
-      "\022\r\n\005yList\030\002 \003(\005\022\020\n\010nameList\030\003 \003(\t\"Q\n\nCha" +
-      "tPacket\022\n\n\002id\030\001 \001(\003\022\017\n\007content\030\002 \001(\t\022\027\n\n" +
-      "fromPlayer\030\003 \001(\tH\000\210\001\001B\r\n\013_fromPlayer\"o\n\016" +
-      "OpenBankPacket\0229\n\005items\030\001 \003(\0132*.org.y100" +
-      "0.network.gen.InventoryItemPacket\022\020\n\010cap" +
-      "acity\030\002 \001(\005\022\020\n\010unlocked\030\003 \001(\005\"t\n\020UpdateB" +
-      "ankPacket\022\014\n\004type\030\001 \001(\005\022C\n\nupdateSlot\030\002 " +
+      "abilityPacketH\000\0223\n\005debug\030\037 \001(\0132\".org.y10" +
+      "00.network.gen.DebugPacketH\000B\006\n\004Type\"d\n\023" +
+      "InterpolationPacket\022\r\n\005state\030\002 \001(\005\022\025\n\rel" +
+      "apsedMillis\030\005 \001(\005\022\021\n\tdirection\030\007 \001(\005\022\t\n\001" +
+      "x\030\010 \001(\005\022\t\n\001y\030\t \001(\005\"Z\n\024InterpolationsPack" +
+      "et\022B\n\016interpolations\030\001 \003(\0132*.org.y1000.n" +
+      "etwork.gen.InterpolationPacket\"b\n\023Invent" +
+      "oryItemPacket\022\014\n\004name\030\001 \001(\t\022\016\n\006slotId\030\002 " +
+      "\001(\005\022\023\n\006number\030\003 \001(\003H\000\210\001\001\022\r\n\005color\030\004 \001(\005B" +
+      "\t\n\007_number\"[\n\rNpcItemPacket\022\014\n\004name\030\001 \001(" +
+      "\t\022\014\n\004icon\030\002 \001(\005\022\r\n\005color\030\003 \001(\005\022\r\n\005price\030" +
+      "\004 \001(\005\022\020\n\010canStack\030\005 \001(\010\"L\n\025OpenTradeWind" +
+      "owPacket\022\027\n\017anotherPlayerId\030\001 \001(\003\022\021\n\004slo" +
+      "t\030\002 \001(\005H\000\210\001\001B\007\n\005_slot\"\252\001\n\027UpdateTradeWin" +
+      "dowPacket\022\014\n\004type\030\001 \001(\005\022\021\n\004name\030\002 \001(\tH\000\210" +
+      "\001\001\022\023\n\006number\030\003 \001(\003H\001\210\001\001\022\021\n\004slot\030\004 \001(\005H\002\210" +
+      "\001\001\022\021\n\004self\030\005 \001(\010H\003\210\001\001\022\r\n\005color\030\006 \001(\005B\007\n\005" +
+      "_nameB\t\n\007_numberB\007\n\005_slotB\007\n\005_self\"G\n\014Ku" +
+      "ngFuPacket\022\014\n\004name\030\001 \001(\t\022\r\n\005level\030\002 \001(\005\022" +
+      "\014\n\004slot\030\003 \001(\005\022\014\n\004type\030\004 \001(\005\"\212\001\n\021TextMess" +
+      "agePacket\022\014\n\004type\030\001 \001(\005\022\021\n\004text\030\002 \001(\tH\000\210" +
+      "\001\001\022\020\n\010location\030\003 \001(\005\022\021\n\tcolorType\030\004 \001(\005\022" +
+      "\027\n\nfromPlayer\030\005 \001(\tH\001\210\001\001B\007\n\005_textB\r\n\013_fr" +
+      "omPlayer\"k\n\022ToggleKungFuPacket\022\014\n\004name\030\001" +
+      " \001(\t\022\022\n\005level\030\002 \001(\005H\000\210\001\001\022\n\n\002id\030\003 \001(\003\022\017\n\007" +
+      "quietly\030\004 \001(\010\022\014\n\004type\030\005 \001(\005B\010\n\006_level\",\n" +
+      "\rLifeBarPacket\022\n\n\002id\030\001 \001(\003\022\017\n\007percent\030\002 " +
+      "\001(\005\"\211\001\n\016TeleportPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002" +
+      " \001(\005\022\013\n\003map\030\003 \001(\t\022\014\n\004tile\030\004 \001(\t\022\013\n\003obj\030\005" +
+      " \001(\t\022\013\n\003rof\030\006 \001(\t\022\013\n\003bgm\030\007 \001(\t\022\r\n\005realm\030" +
+      "\010 \001(\t\022\020\n\010resource\030\t \001(\t\"\326\004\n\013LoginPacket\022" +
+      "7\n\010teleport\030\001 \001(\0132%.org.y1000.network.ge" +
+      "n.TeleportPacket\0225\n\004info\030\002 \001(\0132\'.org.y10" +
+      "00.network.gen.PlayerInfoPacket\022\030\n\020attac" +
+      "kKungFuName\030\003 \001(\t\022\033\n\016footKungFuName\030\010 \001(" +
+      "\tH\000\210\001\001\022B\n\016inventoryItems\030\t \003(\0132*.org.y10" +
+      "00.network.gen.InventoryItemPacket\022>\n\021un" +
+      "namedKungFuList\030\013 \003(\0132#.org.y1000.networ" +
+      "k.gen.KungFuPacket\022<\n\017basicKungFuList\030\014 " +
+      "\003(\0132#.org.y1000.network.gen.KungFuPacket" +
+      "\022\035\n\020protectionKungFu\030\r \001(\tH\001\210\001\001\022\034\n\017assis" +
+      "tantKungFu\030\016 \001(\tH\002\210\001\001\022\031\n\014breathKungFu\030\017 " +
+      "\001(\tH\003\210\001\001\0229\n\tattribute\030\021 \001(\0132&.org.y1000." +
+      "network.gen.AttributePacketB\021\n\017_footKung" +
+      "FuNameB\023\n\021_protectionKungFuB\022\n\020_assistan" +
+      "tKungFuB\017\n\r_breathKungFu\"\226\002\n\017AttributePa" +
+      "cket\022\017\n\007curLife\030\001 \001(\005\022\017\n\007maxLife\030\002 \001(\005\022\020" +
+      "\n\010curPower\030\003 \001(\005\022\020\n\010maxPower\030\004 \001(\005\022\025\n\rcu" +
+      "rInnerPower\030\005 \001(\005\022\025\n\rmaxInnerPower\030\006 \001(\005" +
+      "\022\025\n\rcurOuterPower\030\007 \001(\005\022\025\n\rmaxOuterPower" +
+      "\030\010 \001(\005\022\021\n\tcurEnergy\030\t \001(\005\022\021\n\tmaxEnergy\030\n" +
+      " \001(\005\022\023\n\013headPercent\030\013 \001(\005\022\022\n\narmPercent\030" +
+      "\014 \001(\005\022\022\n\nlegPercent\030\r \001(\005\"\344\002\n\037PlayerRigh" +
+      "tClickAttributePacket\022\023\n\013attackSpeed\030\001 \001" +
+      "(\005\022\017\n\007maxLife\030\002 \001(\005\022\021\n\tavoidance\030\003 \001(\005\022\020" +
+      "\n\010maxPower\030\004 \001(\005\022\020\n\010recovery\030\005 \001(\005\022\025\n\rma" +
+      "xInnerPower\030\006 \001(\005\022\025\n\rmaxOuterPower\030\010 \001(\005" +
+      "\022\021\n\tmaxEnergy\030\n \001(\005\022\022\n\nbodyDamage\030\007 \001(\005\022" +
+      "\022\n\nheadDamage\030\t \001(\005\022\021\n\tarmDamage\030\013 \001(\005\022\021" +
+      "\n\tlegDamage\030\014 \001(\005\022\021\n\tbodyArmor\030\r \001(\005\022\021\n\t" +
+      "headArmor\030\016 \001(\005\022\020\n\010armArmor\030\017 \001(\005\022\020\n\010leg" +
+      "Armor\030\020 \001(\005\022\013\n\003age\030\021 \001(\005\"8\n\023PlayerUnequi" +
+      "pPacket\022\n\n\002id\030\001 \001(\003\022\025\n\requipmentType\030\002 \001" +
+      "(\005\"E\n\021PlayerEquipPacket\022\n\n\002id\030\001 \001(\003\022\025\n\re" +
+      "quipmentName\030\002 \001(\t\022\r\n\005color\030\003 \001(\005\"!\n\023Pla" +
+      "yerSitDownPacket\022\n\n\002id\030\001 \001(\003\"!\n\023PlayerSt" +
+      "andUpPacket\022\n\n\002id\030\001 \001(\003\"\"\n\024PlayerCooldow" +
+      "nPacket\022\n\n\002id\030\001 \001(\003\" \n\022PlayerRevivePacke" +
+      "t\022\n\n\002id\030\001 \001(\003\"B\n\023PlayerGainExpPacket\022\014\n\004" +
+      "name\030\001 \001(\t\022\r\n\005level\030\002 \001(\005\022\016\n\006kungFu\030\003 \001(" +
+      "\010\"Z\n\020ProjectilePacket\022\n\n\002id\030\001 \001(\003\022\020\n\010tar" +
+      "getId\030\002 \001(\003\022\030\n\020flyingTimeMillis\030\003 \001(\005\022\016\n" +
+      "\006sprite\030\004 \001(\005\"]\n\023ItemAttributePacket\022\014\n\004" +
+      "type\030\001 \001(\005\022\016\n\006slotId\030\002 \001(\005\022\021\n\004page\030\003 \001(\005" +
+      "H\000\210\001\001\022\014\n\004text\030\004 \001(\tB\007\n\005_page\"\373\001\n\027ShowDyn" +
+      "amicObjectPacket\022\n\n\002id\030\001 \001(\003\022\t\n\001x\030\002 \001(\005\022" +
+      "\t\n\001y\030\003 \001(\005\022\014\n\004type\030\004 \001(\005\022\r\n\005start\030\005 \001(\005\022" +
+      "\013\n\003end\030\006 \001(\005\022\r\n\005shape\030\007 \001(\t\022\017\n\007elapsed\030\010" +
+      " \001(\005\022\021\n\004name\030\t \001(\tH\000\210\001\001\022\016\n\006guardX\030\n \003(\005\022" +
+      "\016\n\006guardY\030\013 \003(\005\022\031\n\014requiredItem\030\014 \001(\tH\001\210" +
+      "\001\001\022\014\n\004loop\030\r \001(\010B\007\n\005_nameB\017\n\r_requiredIt" +
+      "em\"Q\n\031UpdateDynamicObjectPacket\022\n\n\002id\030\001 " +
+      "\001(\003\022\r\n\005start\030\002 \001(\005\022\013\n\003end\030\003 \001(\005\022\014\n\004loop\030" +
+      "\004 \001(\010\"\035\n\017BreakRopePacket\022\n\n\002id\030\001 \001(\003\"C\n\021" +
+      "NpcPositionPacket\022\r\n\005xList\030\001 \003(\005\022\r\n\005yLis" +
+      "t\030\002 \003(\005\022\020\n\010nameList\030\003 \003(\t\"Q\n\nChatPacket\022" +
+      "\n\n\002id\030\001 \001(\003\022\017\n\007content\030\002 \001(\t\022\027\n\nfromPlay" +
+      "er\030\003 \001(\tH\000\210\001\001B\r\n\013_fromPlayer\"o\n\016OpenBank" +
+      "Packet\0229\n\005items\030\001 \003(\0132*.org.y1000.networ" +
+      "k.gen.InventoryItemPacket\022\020\n\010capacity\030\002 " +
+      "\001(\005\022\020\n\010unlocked\030\003 \001(\005\"t\n\020UpdateBankPacke" +
+      "t\022\014\n\004type\030\001 \001(\005\022C\n\nupdateSlot\030\002 \001(\0132*.or" +
+      "g.y1000.network.gen.InventoryItemPacketH" +
+      "\000\210\001\001B\r\n\013_updateSlot\",\n\017NameColorPacket\022\n" +
+      "\n\002id\030\001 \001(\003\022\r\n\005color\030\002 \001(\005\"-\n\021UpdateGuild" +
+      "Packet\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\"<\n\033Upda" +
+      "teGuildKungFuFormPacket\022\017\n\007command\030\001 \001(\005" +
+      "\022\014\n\004text\030\002 \001(\t\"w\n\027UpdateQuestWindowPacke" +
+      "t\022\n\n\002id\030\001 \001(\003\022\021\n\tquestName\030\002 \001(\t\022\030\n\020ques" +
+      "tDescription\030\003 \001(\t\022\022\n\nsubmitText\030\004 \001(\t\022\017" +
+      "\n\007npcName\030\005 \001(\t\"x\n\020UpdateBuffPacket\022\014\n\004t" +
+      "ype\030\001 \001(\005\022\014\n\004icon\030\002 \001(\005\022\r\n\005color\030\003 \001(\005\022\017" +
+      "\n\007seconds\030\004 \001(\005\022\030\n\013description\030\005 \001(\tH\000\210\001" +
+      "\001B\016\n\014_description\"~\n\030NpcInteractionMenuP" +
+      "acket\022\n\n\002id\030\001 \001(\003\022\020\n\010viewName\030\002 \001(\t\022\r\n\005s" +
+      "hape\030\003 \001(\t\022\021\n\tavatarIdx\030\004 \001(\005\022\014\n\004text\030\005 " +
+      "\001(\t\022\024\n\014interactions\030\006 \003(\t\"\245\001\n\022MerchantMe" +
+      "nuPacket\022\n\n\002id\030\001 \001(\003\022\020\n\010viewName\030\002 \001(\t\022\r" +
+      "\n\005shape\030\003 \001(\t\022\021\n\tavatarIdx\030\004 \001(\005\022\014\n\004text" +
+      "\030\005 \001(\t\0223\n\005items\030\006 \003(\0132$.org.y1000.networ" +
+      "k.gen.NpcItemPacket\022\014\n\004sell\030\007 \001(\010\"\332\033\n\006Pa" +
+      "cket\022?\n\016positionPacket\030\001 \001(\0132%.org.y1000" +
+      ".network.gen.PositionPacketH\000\022S\n\025creatur" +
+      "eInterpolation\030\002 \001(\01322.org.y1000.network" +
+      ".gen.CreatureInterpolationPacketH\000\0229\n\013lo" +
+      "ginPacket\030\004 \001(\0132\".org.y1000.network.gen." +
+      "LoginPacketH\000\022E\n\016interpolations\030\005 \001(\0132+." +
+      "org.y1000.network.gen.InterpolationsPack" +
+      "etH\000\022D\n\016responsePacket\030\006 \001(\0132*.org.y1000" +
+      ".network.gen.InputResponsePacketH\000\022O\n\023pl" +
+      "ayerInterpolation\030\007 \001(\01320.org.y1000.netw" +
+      "ork.gen.PlayerInterpolationPacketH\000\022A\n\014r" +
+      "emoveEntity\030\010 \001(\0132).org.y1000.network.ge" +
+      "n.RemoveEntityPacketH\000\022V\n\031attackEventRes" +
+      "ponsePacket\030\t \001(\01321.org.y1000.network.ge" +
+      "n.ClientAttackResponsePacketH\000\022M\n\021attack" +
+      "EventPacket\030\n \001(\01320.org.y1000.network.ge" +
+      "n.CreatureAttackEventPacketH\000\022I\n\017hurtEve" +
+      "ntPacket\030\013 \001(\0132..org.y1000.network.gen.C" +
+      "reatureHurtEventPacketH\000\022E\n\021changeStateP" +
+      "acket\030\014 \001(\0132(.org.y1000.network.gen.Chan" +
+      "geStatePacketH\000\022Q\n\027swapInventorySlotPack" +
+      "et\030\r \001(\0132..org.y1000.network.gen.SwapInv" +
+      "entorySlotPacketH\000\022@\n\010dropItem\030\020 \001(\0132,.o" +
+      "rg.y1000.network.gen.DropItemConfirmPack" +
+      "etH\000\0229\n\010showItem\030\021 \001(\0132%.org.y1000.netwo" +
+      "rk.gen.ShowItemPacketH\000\022@\n\nupdateSlot\030\022 " +
       "\001(\0132*.org.y1000.network.gen.InventoryIte" +
-      "mPacketH\000\210\001\001B\r\n\013_updateSlot\",\n\017NameColor" +
-      "Packet\022\n\n\002id\030\001 \001(\003\022\r\n\005color\030\002 \001(\005\"-\n\021Upd" +
-      "ateGuildPacket\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t" +
-      "\"<\n\033UpdateGuildKungFuFormPacket\022\017\n\007comma" +
-      "nd\030\001 \001(\005\022\014\n\004text\030\002 \001(\t\"w\n\027UpdateQuestWin" +
-      "dowPacket\022\n\n\002id\030\001 \001(\003\022\021\n\tquestName\030\002 \001(\t" +
-      "\022\030\n\020questDescription\030\003 \001(\t\022\022\n\nsubmitText" +
-      "\030\004 \001(\t\022\017\n\007npcName\030\005 \001(\t\"x\n\020UpdateBuffPac" +
-      "ket\022\014\n\004type\030\001 \001(\005\022\014\n\004icon\030\002 \001(\005\022\r\n\005color" +
-      "\030\003 \001(\005\022\017\n\007seconds\030\004 \001(\005\022\030\n\013description\030\005" +
-      " \001(\tH\000\210\001\001B\016\n\014_description\"~\n\030NpcInteract" +
-      "ionMenuPacket\022\n\n\002id\030\001 \001(\003\022\020\n\010viewName\030\002 " +
-      "\001(\t\022\r\n\005shape\030\003 \001(\t\022\021\n\tavatarIdx\030\004 \001(\005\022\014\n" +
-      "\004text\030\005 \001(\t\022\024\n\014interactions\030\006 \003(\t\"\245\001\n\022Me" +
-      "rchantMenuPacket\022\n\n\002id\030\001 \001(\003\022\020\n\010viewName" +
-      "\030\002 \001(\t\022\r\n\005shape\030\003 \001(\t\022\021\n\tavatarIdx\030\004 \001(\005" +
-      "\022\014\n\004text\030\005 \001(\t\0223\n\005items\030\006 \003(\0132$.org.y100" +
-      "0.network.gen.NpcItemPacket\022\014\n\004sell\030\007 \001(" +
-      "\010\"\332\033\n\006Packet\022?\n\016positionPacket\030\001 \001(\0132%.o" +
-      "rg.y1000.network.gen.PositionPacketH\000\022S\n" +
-      "\025creatureInterpolation\030\002 \001(\01322.org.y1000" +
-      ".network.gen.CreatureInterpolationPacket" +
-      "H\000\0229\n\013loginPacket\030\004 \001(\0132\".org.y1000.netw" +
-      "ork.gen.LoginPacketH\000\022E\n\016interpolations\030" +
-      "\005 \001(\0132+.org.y1000.network.gen.Interpolat" +
-      "ionsPacketH\000\022D\n\016responsePacket\030\006 \001(\0132*.o" +
-      "rg.y1000.network.gen.InputResponsePacket" +
-      "H\000\022O\n\023playerInterpolation\030\007 \001(\01320.org.y1" +
-      "000.network.gen.PlayerInterpolationPacke" +
-      "tH\000\022A\n\014removeEntity\030\010 \001(\0132).org.y1000.ne" +
-      "twork.gen.RemoveEntityPacketH\000\022V\n\031attack" +
-      "EventResponsePacket\030\t \001(\01321.org.y1000.ne" +
-      "twork.gen.ClientAttackResponsePacketH\000\022M" +
-      "\n\021attackEventPacket\030\n \001(\01320.org.y1000.ne" +
-      "twork.gen.CreatureAttackEventPacketH\000\022I\n" +
-      "\017hurtEventPacket\030\013 \001(\0132..org.y1000.netwo" +
-      "rk.gen.CreatureHurtEventPacketH\000\022E\n\021chan" +
-      "geStatePacket\030\014 \001(\0132(.org.y1000.network." +
-      "gen.ChangeStatePacketH\000\022Q\n\027swapInventory" +
-      "SlotPacket\030\r \001(\0132..org.y1000.network.gen" +
-      ".SwapInventorySlotPacketH\000\022@\n\010dropItem\030\020" +
-      " \001(\0132,.org.y1000.network.gen.DropItemCon" +
-      "firmPacketH\000\0229\n\010showItem\030\021 \001(\0132%.org.y10" +
-      "00.network.gen.ShowItemPacketH\000\022@\n\nupdat" +
-      "eSlot\030\022 \001(\0132*.org.y1000.network.gen.Inve" +
-      "ntoryItemPacketH\000\0228\n\004text\030\023 \001(\0132(.org.y1" +
-      "000.network.gen.TextMessagePacketH\000\022=\n\007u" +
-      "nequip\030\024 \001(\0132*.org.y1000.network.gen.Pla" +
-      "yerUnequipPacketH\000\0229\n\005equip\030\025 \001(\0132(.org." +
-      "y1000.network.gen.PlayerEquipPacketH\000\022G\n" +
-      "\017openTradeWindow\030\026 \001(\0132,.org.y1000.netwo" +
-      "rk.gen.OpenTradeWindowPacketH\000\022A\n\014toggle" +
-      "KungFu\030\027 \001(\0132).org.y1000.network.gen.Tog" +
-      "gleKungFuPacketH\000\022=\n\007sitDown\030\030 \001(\0132*.org" +
-      ".y1000.network.gen.PlayerSitDownPacketH\000" +
-      "\022=\n\007standUp\030\031 \001(\0132*.org.y1000.network.ge" +
-      "n.PlayerStandUpPacketH\000\022?\n\010cooldown\030\032 \001(" +
-      "\0132+.org.y1000.network.gen.PlayerCooldown" +
-      "PacketH\000\022;\n\tattribute\030\033 \001(\0132&.org.y1000." +
-      "network.gen.AttributePacketH\000\022@\n\005sound\030\034" +
-      " \001(\0132/.org.y1000.network.gen.CreatureSou" +
-      "ndEventPacketH\000\022<\n\003die\030\035 \001(\0132-.org.y1000" +
-      ".network.gen.CreatureDieEventPacketH\000\022A\n" +
-      "\014playerRevive\030\036 \001(\0132).org.y1000.network." +
-      "gen.PlayerRevivePacketH\000\022=\n\007gainExp\030\037 \001(" +
-      "\0132*.org.y1000.network.gen.PlayerGainExpP" +
-      "acketH\000\022=\n\nprojectile\030  \001(\0132\'.org.y1000." +
-      "network.gen.ProjectilePacketH\000\022D\n\013monste" +
-      "rMove\030! \001(\0132-.org.y1000.network.gen.Mons" +
-      "terMoveEventPacketH\000\022:\n\013learnKungFu\030\" \001(" +
-      "\0132#.org.y1000.network.gen.KungFuPacketH\000" +
-      "\022C\n\ritemAttribute\030# \001(\0132*.org.y1000.netw" +
-      "ork.gen.ItemAttributePacketH\000\022U\n\023rightCl" +
-      "ickAttribute\030$ \001(\01326.org.y1000.network.g" +
-      "en.PlayerRightClickAttributePacketH\000\022K\n\021" +
-      "updateTradeWindow\030% \001(\0132..org.y1000.netw" +
-      "ork.gen.UpdateTradeWindowPacketH\000\022K\n\021sho" +
-      "wDynamicObject\030& \001(\0132..org.y1000.network" +
-      ".gen.ShowDynamicObjectPacketH\000\022O\n\023update" +
-      "DynamicObject\030\' \001(\01320.org.y1000.network." +
-      "gen.UpdateDynamicObjectPacketH\000\0229\n\010telep" +
-      "ort\030( \001(\0132%.org.y1000.network.gen.Telepo" +
-      "rtPacketH\000\0227\n\007lifebar\030) \001(\0132$.org.y1000." +
-      "network.gen.LifeBarPacketH\000\022?\n\020updateKun" +
-      "gFuSlot\030* \001(\0132#.org.y1000.network.gen.Ku" +
-      "ngFuPacketH\000\022A\n\014showTeleport\030+ \001(\0132).org" +
-      ".y1000.network.gen.ShowTeleportPacketH\000\022" +
-      ";\n\tbreakRope\030, \001(\0132&.org.y1000.network.g" +
-      "en.BreakRopePacketH\000\022?\n\013npcPosition\030- \001(" +
-      "\0132(.org.y1000.network.gen.NpcPositionPac" +
-      "ketH\000\0221\n\004chat\030. \001(\0132!.org.y1000.network." +
-      "gen.ChatPacketH\000\0229\n\010openBank\030/ \001(\0132%.org" +
-      ".y1000.network.gen.OpenBankPacketH\000\022=\n\nu" +
-      "pdateBank\0300 \001(\0132\'.org.y1000.network.gen." +
-      "UpdateBankPacketH\000\022;\n\tnameColor\0301 \001(\0132&." +
-      "org.y1000.network.gen.NameColorPacketH\000\022" +
-      "?\n\013updateGuild\0302 \001(\0132(.org.y1000.network" +
-      ".gen.UpdateGuildPacketH\000\022H\n\nkungFuForm\0303" +
-      " \001(\01322.org.y1000.network.gen.UpdateGuild" +
-      "KungFuFormPacketH\000\022E\n\013questWindow\0304 \001(\0132" +
-      "..org.y1000.network.gen.UpdateQuestWindo" +
-      "wPacketH\000\022=\n\nupdateBuff\0305 \001(\0132\'.org.y100" +
-      "0.network.gen.UpdateBuffPacketH\000\022J\n\017inte" +
-      "ractionMenu\0306 \001(\0132/.org.y1000.network.ge" +
-      "n.NpcInteractionMenuPacketH\000\022A\n\014merchant" +
-      "Menu\0307 \001(\0132).org.y1000.network.gen.Merch" +
-      "antMenuPacketH\000B\r\n\013TypedPacket\"\343\001\n\033Creat" +
-      "ureInterpolationPacket\022A\n\rinterpolation\030" +
-      "\001 \001(\0132*.org.y1000.network.gen.Interpolat" +
-      "ionPacket\022\n\n\002id\030\002 \001(\003\022\014\n\004name\030\003 \001(\t\022\014\n\004t" +
-      "ype\030\004 \001(\005\022\031\n\014merchantFile\030\005 \001(\tH\000\210\001\001\022\r\n\005" +
-      "shape\030\006 \001(\t\022\017\n\007animate\030\007 \001(\t\022\r\n\005menus\030\010 " +
-      "\003(\tB\017\n\r_merchantFile\"\264\004\n\020PlayerInfoPacke" +
-      "t\022\n\n\002id\030\002 \001(\003\022\014\n\004male\030\003 \001(\010\022\014\n\004name\030\004 \001(" +
-      "\t\022\027\n\nweaponName\030\005 \001(\tH\000\210\001\001\022\026\n\tchestName\030" +
-      "\006 \001(\tH\001\210\001\001\022\025\n\010hairName\030\007 \001(\tH\002\210\001\001\022\024\n\007hat" +
-      "Name\030\010 \001(\tH\003\210\001\001\022\026\n\twristName\030\t \001(\tH\004\210\001\001\022" +
-      "\025\n\010bootName\030\n \001(\tH\005\210\001\001\022\031\n\014clothingName\030\013" +
-      " \001(\tH\006\210\001\001\022\030\n\013trouserName\030\014 \001(\tH\007\210\001\001\022\022\n\nc" +
-      "hestColor\030\r \001(\005\022\021\n\thairColor\030\016 \001(\005\022\020\n\010ha" +
-      "tColor\030\017 \001(\005\022\022\n\nwristColor\030\020 \001(\005\022\021\n\tboot" +
-      "Color\030\021 \001(\005\022\025\n\rclothingColor\030\022 \001(\005\022\024\n\014tr" +
-      "ouserColor\030\023 \001(\005\022\021\n\tnameColor\030\024 \001(\005\022\026\n\tg" +
-      "uildName\030\025 \001(\tH\010\210\001\001B\r\n\013_weaponNameB\014\n\n_c" +
-      "hestNameB\013\n\t_hairNameB\n\n\010_hatNameB\014\n\n_wr" +
-      "istNameB\013\n\t_bootNameB\017\n\r_clothingNameB\016\n" +
-      "\014_trouserNameB\014\n\n_guildName\"\225\001\n\031PlayerIn" +
-      "terpolationPacket\022A\n\rinterpolation\030\001 \001(\013" +
-      "2*.org.y1000.network.gen.InterpolationPa" +
-      "cket\0225\n\004info\030\002 \001(\0132\'.org.y1000.network.g" +
-      "en.PlayerInfoPacket\" \n\022RemoveEntityPacke" +
-      "t\022\n\n\002id\030\001 \001(\003B\031\n\025org.y1000.network.genP\001" +
-      "b\006proto3"
+      "mPacketH\000\0228\n\004text\030\023 \001(\0132(.org.y1000.netw" +
+      "ork.gen.TextMessagePacketH\000\022=\n\007unequip\030\024" +
+      " \001(\0132*.org.y1000.network.gen.PlayerUnequ" +
+      "ipPacketH\000\0229\n\005equip\030\025 \001(\0132(.org.y1000.ne" +
+      "twork.gen.PlayerEquipPacketH\000\022G\n\017openTra" +
+      "deWindow\030\026 \001(\0132,.org.y1000.network.gen.O" +
+      "penTradeWindowPacketH\000\022A\n\014toggleKungFu\030\027" +
+      " \001(\0132).org.y1000.network.gen.ToggleKungF" +
+      "uPacketH\000\022=\n\007sitDown\030\030 \001(\0132*.org.y1000.n" +
+      "etwork.gen.PlayerSitDownPacketH\000\022=\n\007stan" +
+      "dUp\030\031 \001(\0132*.org.y1000.network.gen.Player" +
+      "StandUpPacketH\000\022?\n\010cooldown\030\032 \001(\0132+.org." +
+      "y1000.network.gen.PlayerCooldownPacketH\000" +
+      "\022;\n\tattribute\030\033 \001(\0132&.org.y1000.network." +
+      "gen.AttributePacketH\000\022@\n\005sound\030\034 \001(\0132/.o" +
+      "rg.y1000.network.gen.CreatureSoundEventP" +
+      "acketH\000\022<\n\003die\030\035 \001(\0132-.org.y1000.network" +
+      ".gen.CreatureDieEventPacketH\000\022A\n\014playerR" +
+      "evive\030\036 \001(\0132).org.y1000.network.gen.Play" +
+      "erRevivePacketH\000\022=\n\007gainExp\030\037 \001(\0132*.org." +
+      "y1000.network.gen.PlayerGainExpPacketH\000\022" +
+      "=\n\nprojectile\030  \001(\0132\'.org.y1000.network." +
+      "gen.ProjectilePacketH\000\022D\n\013monsterMove\030! " +
+      "\001(\0132-.org.y1000.network.gen.MonsterMoveE" +
+      "ventPacketH\000\022:\n\013learnKungFu\030\" \001(\0132#.org." +
+      "y1000.network.gen.KungFuPacketH\000\022C\n\ritem" +
+      "Attribute\030# \001(\0132*.org.y1000.network.gen." +
+      "ItemAttributePacketH\000\022U\n\023rightClickAttri" +
+      "bute\030$ \001(\01326.org.y1000.network.gen.Playe" +
+      "rRightClickAttributePacketH\000\022K\n\021updateTr" +
+      "adeWindow\030% \001(\0132..org.y1000.network.gen." +
+      "UpdateTradeWindowPacketH\000\022K\n\021showDynamic" +
+      "Object\030& \001(\0132..org.y1000.network.gen.Sho" +
+      "wDynamicObjectPacketH\000\022O\n\023updateDynamicO" +
+      "bject\030\' \001(\01320.org.y1000.network.gen.Upda" +
+      "teDynamicObjectPacketH\000\0229\n\010teleport\030( \001(" +
+      "\0132%.org.y1000.network.gen.TeleportPacket" +
+      "H\000\0227\n\007lifebar\030) \001(\0132$.org.y1000.network." +
+      "gen.LifeBarPacketH\000\022?\n\020updateKungFuSlot\030" +
+      "* \001(\0132#.org.y1000.network.gen.KungFuPack" +
+      "etH\000\022A\n\014showTeleport\030+ \001(\0132).org.y1000.n" +
+      "etwork.gen.ShowTeleportPacketH\000\022;\n\tbreak" +
+      "Rope\030, \001(\0132&.org.y1000.network.gen.Break" +
+      "RopePacketH\000\022?\n\013npcPosition\030- \001(\0132(.org." +
+      "y1000.network.gen.NpcPositionPacketH\000\0221\n" +
+      "\004chat\030. \001(\0132!.org.y1000.network.gen.Chat" +
+      "PacketH\000\0229\n\010openBank\030/ \001(\0132%.org.y1000.n" +
+      "etwork.gen.OpenBankPacketH\000\022=\n\nupdateBan" +
+      "k\0300 \001(\0132\'.org.y1000.network.gen.UpdateBa" +
+      "nkPacketH\000\022;\n\tnameColor\0301 \001(\0132&.org.y100" +
+      "0.network.gen.NameColorPacketH\000\022?\n\013updat" +
+      "eGuild\0302 \001(\0132(.org.y1000.network.gen.Upd" +
+      "ateGuildPacketH\000\022H\n\nkungFuForm\0303 \001(\01322.o" +
+      "rg.y1000.network.gen.UpdateGuildKungFuFo" +
+      "rmPacketH\000\022E\n\013questWindow\0304 \001(\0132..org.y1" +
+      "000.network.gen.UpdateQuestWindowPacketH" +
+      "\000\022=\n\nupdateBuff\0305 \001(\0132\'.org.y1000.networ" +
+      "k.gen.UpdateBuffPacketH\000\022J\n\017interactionM" +
+      "enu\0306 \001(\0132/.org.y1000.network.gen.NpcInt" +
+      "eractionMenuPacketH\000\022A\n\014merchantMenu\0307 \001" +
+      "(\0132).org.y1000.network.gen.MerchantMenuP" +
+      "acketH\000B\r\n\013TypedPacket\"\343\001\n\033CreatureInter" +
+      "polationPacket\022A\n\rinterpolation\030\001 \001(\0132*." +
+      "org.y1000.network.gen.InterpolationPacke" +
+      "t\022\n\n\002id\030\002 \001(\003\022\014\n\004name\030\003 \001(\t\022\014\n\004type\030\004 \001(" +
+      "\005\022\031\n\014merchantFile\030\005 \001(\tH\000\210\001\001\022\r\n\005shape\030\006 " +
+      "\001(\t\022\017\n\007animate\030\007 \001(\t\022\r\n\005menus\030\010 \003(\tB\017\n\r_" +
+      "merchantFile\"\264\004\n\020PlayerInfoPacket\022\n\n\002id\030" +
+      "\002 \001(\003\022\014\n\004male\030\003 \001(\010\022\014\n\004name\030\004 \001(\t\022\027\n\nwea" +
+      "ponName\030\005 \001(\tH\000\210\001\001\022\026\n\tchestName\030\006 \001(\tH\001\210" +
+      "\001\001\022\025\n\010hairName\030\007 \001(\tH\002\210\001\001\022\024\n\007hatName\030\010 \001" +
+      "(\tH\003\210\001\001\022\026\n\twristName\030\t \001(\tH\004\210\001\001\022\025\n\010bootN" +
+      "ame\030\n \001(\tH\005\210\001\001\022\031\n\014clothingName\030\013 \001(\tH\006\210\001" +
+      "\001\022\030\n\013trouserName\030\014 \001(\tH\007\210\001\001\022\022\n\nchestColo" +
+      "r\030\r \001(\005\022\021\n\thairColor\030\016 \001(\005\022\020\n\010hatColor\030\017" +
+      " \001(\005\022\022\n\nwristColor\030\020 \001(\005\022\021\n\tbootColor\030\021 " +
+      "\001(\005\022\025\n\rclothingColor\030\022 \001(\005\022\024\n\014trouserCol" +
+      "or\030\023 \001(\005\022\021\n\tnameColor\030\024 \001(\005\022\026\n\tguildName" +
+      "\030\025 \001(\tH\010\210\001\001B\r\n\013_weaponNameB\014\n\n_chestName" +
+      "B\013\n\t_hairNameB\n\n\010_hatNameB\014\n\n_wristNameB" +
+      "\013\n\t_bootNameB\017\n\r_clothingNameB\016\n\014_trouse" +
+      "rNameB\014\n\n_guildName\"\225\001\n\031PlayerInterpolat" +
+      "ionPacket\022A\n\rinterpolation\030\001 \001(\0132*.org.y" +
+      "1000.network.gen.InterpolationPacket\0225\n\004" +
+      "info\030\002 \001(\0132\'.org.y1000.network.gen.Playe" +
+      "rInfoPacket\" \n\022RemoveEntityPacket\022\n\n\002id\030" +
+      "\001 \001(\003\":\n\017MoveInputPacket\022\t\n\001x\030\001 \001(\005\022\t\n\001y" +
+      "\030\002 \001(\005\022\021\n\tdirection\030\003 \001(\005\"\036\n\013DebugPacket" +
+      "\022\017\n\007padding\030\001 \001(\005B\031\n\025org.y1000.network.g" +
+      "enP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1100,7 +1114,7 @@ public final class Java {
     internal_static_org_y1000_network_gen_ClientPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_ClientPacket_descriptor,
-        new java.lang.String[] { "MoveEventPacket", "ClickPacket", "LoginPacket", "AttackEventPacket", "SwapInventorySlotPacket", "DoubleClickInventorySlotPacket", "DropItem", "PickItem", "Unequip", "ToggleKungFu", "SitDown", "StandUp", "SellItems", "BuyItems", "RightClick", "TradeRequest", "UpdateTrade", "TriggerDynamicObject", "SwapKungFuSlot", "DragPlayer", "SimpleCommand", "Dye", "Say", "BankOperation", "ChangeTeam", "FoundGuild", "CreateGuildKungFu", "ManageGuild", "SubmitQuest", "Interact", "Type", });
+        new java.lang.String[] { "MoveEventPacket", "ClickPacket", "LoginPacket", "AttackEventPacket", "SwapInventorySlotPacket", "DoubleClickInventorySlotPacket", "DropItem", "PickItem", "Unequip", "ToggleKungFu", "SitDown", "StandUp", "SellItems", "BuyItems", "RightClick", "TradeRequest", "UpdateTrade", "TriggerDynamicObject", "SwapKungFuSlot", "DragPlayer", "SimpleCommand", "Dye", "Say", "BankOperation", "ChangeTeam", "FoundGuild", "CreateGuildKungFu", "ManageGuild", "SubmitQuest", "Interact", "Debug", "Type", });
     internal_static_org_y1000_network_gen_InterpolationPacket_descriptor =
       getDescriptor().getMessageTypes().get(45);
     internal_static_org_y1000_network_gen_InterpolationPacket_fieldAccessorTable = new
@@ -1166,7 +1180,7 @@ public final class Java {
     internal_static_org_y1000_network_gen_TeleportPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_TeleportPacket_descriptor,
-        new java.lang.String[] { "X", "Y", "Map", "Tile", "Obj", "Rof", "Bgm", "Realm", });
+        new java.lang.String[] { "X", "Y", "Map", "Tile", "Obj", "Rof", "Bgm", "Realm", "Resource", });
     internal_static_org_y1000_network_gen_LoginPacket_descriptor =
       getDescriptor().getMessageTypes().get(56);
     internal_static_org_y1000_network_gen_LoginPacket_fieldAccessorTable = new
@@ -1353,6 +1367,18 @@ public final class Java {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_RemoveEntityPacket_descriptor,
         new java.lang.String[] { "Id", });
+    internal_static_org_y1000_network_gen_MoveInputPacket_descriptor =
+      getDescriptor().getMessageTypes().get(87);
+    internal_static_org_y1000_network_gen_MoveInputPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_org_y1000_network_gen_MoveInputPacket_descriptor,
+        new java.lang.String[] { "X", "Y", "Direction", });
+    internal_static_org_y1000_network_gen_DebugPacket_descriptor =
+      getDescriptor().getMessageTypes().get(88);
+    internal_static_org_y1000_network_gen_DebugPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_org_y1000_network_gen_DebugPacket_descriptor,
+        new java.lang.String[] { "Padding", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

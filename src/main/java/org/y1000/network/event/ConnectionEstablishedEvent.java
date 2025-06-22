@@ -10,6 +10,6 @@ public record ConnectionEstablishedEvent(int toRealmId, Player player,
         implements IConnectionEvent, PlayerRealmEvent {
     @Override
     public ConnectionEventType type() {
-        return ConnectionEventType.ESTABLISHED;
+        return ConnectionEventType.CLOSED;
     }
 }

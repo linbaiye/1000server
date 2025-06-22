@@ -1,12 +1,10 @@
 package org.y1000.network;
 
-import org.y1000.message.ServerMessage;
-
-import java.util.List;
+import org.y1000.message.I2ClientMessage;
 
 public interface Connection {
 
-    void write(ServerMessage message);
+    void write(I2ClientMessage message);
 
     void close();
 

@@ -9,6 +9,7 @@ import org.y1000.message.input.*;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
 import java.util.function.BiConsumer;
@@ -26,8 +27,10 @@ class GuildableRealm extends AbstractRealm {
                           CrossRealmEventSender crossRealmEventSender,
                           MapSdb mapSdb,
                           ChatManager chatManager,
-                          GuildManager guildManager) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+                          GuildManager guildManager,
+                          PlayerRepository playerRepository) {
+        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager,
+                playerRepository);
         addEntityManager(guildManager);
         this.guildManager = guildManager;
     }
@@ -87,6 +90,11 @@ class GuildableRealm extends AbstractRealm {
         } else {
             playerManager().onClientEvent(dataEvent, npcManager());
         }
+    }
+
+    @Override
+    protected void handleLogin(Login login) {
+        acceptLogin(login);
     }
 
     @Override

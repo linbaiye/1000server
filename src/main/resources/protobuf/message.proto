@@ -309,6 +309,7 @@ message ClientPacket {
     ClientManageGuildPacket manageGuild = 28;
     ClientSubmitQuestPacket submitQuest = 29;
     ClientClickInteractabilityPacket interact = 30;
+    DebugPacket debug = 31;
   }
 }
 
@@ -392,6 +393,7 @@ message TeleportPacket {
   string rof = 6;
   string bgm = 7;
   string realm = 8;
+  string resource = 9;
 }
 
 message LoginPacket {

@@ -6,7 +6,7 @@ import org.mockito.Mockito;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.ServerMessage;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.network.Connection;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.PlayerRealmEvent;
@@ -44,12 +44,12 @@ class EntranceDungeonRealmTest extends AbstractRealmUnitTextFixture {
         buildRealm();
         PlayerImpl player = playerBuilder().build();
         Connection connection = Mockito.mock(Connection.class);
-        AtomicReference<ServerMessage> messageAtomicReference = new AtomicReference<>();
+        AtomicReference<I2ClientMessage> messageAtomicReference = new AtomicReference<>();
         doAnswer(invocationOnMock -> {
-            ServerMessage argument = invocationOnMock.getArgument(0);
+            I2ClientMessage argument = invocationOnMock.getArgument(0);
             messageAtomicReference.set(argument);
             return null;
-        }).when(connection).write(any(ServerMessage.class));
+        }).when(connection).write(any(I2ClientMessage.class));
         RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection, 0);
 
         currentDateTime  = LocalDateTime.now().withMinute(6).withSecond(0);
@@ -96,12 +96,12 @@ class EntranceDungeonRealmTest extends AbstractRealmUnitTextFixture {
         buildRealm();
         PlayerImpl player = playerBuilder().build();
         Connection connection = Mockito.mock(Connection.class);
-        AtomicReference<ServerMessage> messageAtomicReference = new AtomicReference<>();
+        AtomicReference<I2ClientMessage> messageAtomicReference = new AtomicReference<>();
         doAnswer(invocationOnMock -> {
-            ServerMessage argument = invocationOnMock.getArgument(0);
+            I2ClientMessage argument = invocationOnMock.getArgument(0);
             messageAtomicReference.set(argument);
             return null;
-        }).when(connection).write(any(ServerMessage.class));
+        }).when(connection).write(any(I2ClientMessage.class));
         RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection, 0);
         currentDateTime  = LocalDateTime.now().withMinute(5).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);

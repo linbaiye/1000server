@@ -7,8 +7,8 @@ public record ConnectionEvent(ConnectionEventType type, Connection connection, O
         return new ConnectionEvent(ConnectionEventType.CLOSED, connection, null);
     }
 
-    public static ConnectionEvent Establish(Connection connection) {
-        return new ConnectionEvent(ConnectionEventType.ESTABLISHED, connection, null);
+    public static ConnectionEvent Data(Connection connection, Object data) {
+        return new ConnectionEvent(ConnectionEventType.DATA, connection, data);
     }
 
 }

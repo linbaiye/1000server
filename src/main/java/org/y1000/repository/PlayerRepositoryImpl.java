@@ -126,6 +126,17 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         }
     }
 
+    @Override
+    public Optional<Pair<Long, Integer>> findIdAndRealm(int accountId, int id) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            return entityManager.createQuery("select p from PlayerPo p where p.accountId = ?1 and p.id = ?2", PlayerPo.class)
+                    .setParameter(1, accountId).setParameter(2, id)
+                    .getResultStream()
+                    .findFirst()
+                    .map(playerPo -> new ImmutablePair<>(playerPo.getId(), playerPo.getRealmId()));
+        }
+    }
+
 
     @Override
     public void update(Player player) {

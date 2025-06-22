@@ -75,6 +75,7 @@ private static final long serialVersionUID = 0L;
     MANAGEGUILD(28),
     SUBMITQUEST(29),
     INTERACT(30),
+    DEBUG(31),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -122,6 +123,7 @@ private static final long serialVersionUID = 0L;
         case 28: return MANAGEGUILD;
         case 29: return SUBMITQUEST;
         case 30: return INTERACT;
+        case 31: return DEBUG;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -1067,6 +1069,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
   }
 
+  public static final int DEBUG_FIELD_NUMBER = 31;
+  /**
+   * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+   * @return Whether the debug field is set.
+   */
+  @java.lang.Override
+  public boolean hasDebug() {
+    return typeCase_ == 31;
+  }
+  /**
+   * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+   * @return The debug.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.DebugPacket getDebug() {
+    if (typeCase_ == 31) {
+       return (org.y1000.network.gen.DebugPacket) type_;
+    }
+    return org.y1000.network.gen.DebugPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.DebugPacketOrBuilder getDebugOrBuilder() {
+    if (typeCase_ == 31) {
+       return (org.y1000.network.gen.DebugPacket) type_;
+    }
+    return org.y1000.network.gen.DebugPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1170,6 +1203,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 30) {
       output.writeMessage(30, (org.y1000.network.gen.ClientClickInteractabilityPacket) type_);
+    }
+    if (typeCase_ == 31) {
+      output.writeMessage(31, (org.y1000.network.gen.DebugPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1299,6 +1335,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 30) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(30, (org.y1000.network.gen.ClientClickInteractabilityPacket) type_);
+    }
+    if (typeCase_ == 31) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(31, (org.y1000.network.gen.DebugPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1437,6 +1477,10 @@ private static final long serialVersionUID = 0L;
         if (!getInteract()
             .equals(other.getInteract())) return false;
         break;
+      case 31:
+        if (!getDebug()
+            .equals(other.getDebug())) return false;
+        break;
       case 0:
       default:
     }
@@ -1571,6 +1615,10 @@ private static final long serialVersionUID = 0L;
       case 30:
         hash = (37 * hash) + INTERACT_FIELD_NUMBER;
         hash = (53 * hash) + getInteract().hashCode();
+        break;
+      case 31:
+        hash = (37 * hash) + DEBUG_FIELD_NUMBER;
+        hash = (53 * hash) + getDebug().hashCode();
         break;
       case 0:
       default:
@@ -1796,6 +1844,9 @@ private static final long serialVersionUID = 0L;
       if (interactBuilder_ != null) {
         interactBuilder_.clear();
       }
+      if (debugBuilder_ != null) {
+        debugBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -1956,6 +2007,10 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 30 &&
           interactBuilder_ != null) {
         result.type_ = interactBuilder_.build();
+      }
+      if (typeCase_ == 31 &&
+          debugBuilder_ != null) {
+        result.type_ = debugBuilder_.build();
       }
     }
 
@@ -2122,6 +2177,10 @@ private static final long serialVersionUID = 0L;
         }
         case INTERACT: {
           mergeInteract(other.getInteract());
+          break;
+        }
+        case DEBUG: {
+          mergeDebug(other.getDebug());
           break;
         }
         case TYPE_NOT_SET: {
@@ -2364,6 +2423,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 30;
               break;
             } // case 242
+            case 250: {
+              input.readMessage(
+                  getDebugFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 31;
+              break;
+            } // case 250
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -6654,6 +6720,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 30;
       onChanged();
       return interactBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.DebugPacket, org.y1000.network.gen.DebugPacket.Builder, org.y1000.network.gen.DebugPacketOrBuilder> debugBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+     * @return Whether the debug field is set.
+     */
+    @java.lang.Override
+    public boolean hasDebug() {
+      return typeCase_ == 31;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+     * @return The debug.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.DebugPacket getDebug() {
+      if (debugBuilder_ == null) {
+        if (typeCase_ == 31) {
+          return (org.y1000.network.gen.DebugPacket) type_;
+        }
+        return org.y1000.network.gen.DebugPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 31) {
+          return debugBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.DebugPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+     */
+    public Builder setDebug(org.y1000.network.gen.DebugPacket value) {
+      if (debugBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        debugBuilder_.setMessage(value);
+      }
+      typeCase_ = 31;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+     */
+    public Builder setDebug(
+        org.y1000.network.gen.DebugPacket.Builder builderForValue) {
+      if (debugBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        debugBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 31;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+     */
+    public Builder mergeDebug(org.y1000.network.gen.DebugPacket value) {
+      if (debugBuilder_ == null) {
+        if (typeCase_ == 31 &&
+            type_ != org.y1000.network.gen.DebugPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.DebugPacket.newBuilder((org.y1000.network.gen.DebugPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 31) {
+          debugBuilder_.mergeFrom(value);
+        } else {
+          debugBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 31;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+     */
+    public Builder clearDebug() {
+      if (debugBuilder_ == null) {
+        if (typeCase_ == 31) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 31) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        debugBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+     */
+    public org.y1000.network.gen.DebugPacket.Builder getDebugBuilder() {
+      return getDebugFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.DebugPacketOrBuilder getDebugOrBuilder() {
+      if ((typeCase_ == 31) && (debugBuilder_ != null)) {
+        return debugBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 31) {
+          return (org.y1000.network.gen.DebugPacket) type_;
+        }
+        return org.y1000.network.gen.DebugPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.DebugPacket, org.y1000.network.gen.DebugPacket.Builder, org.y1000.network.gen.DebugPacketOrBuilder> 
+        getDebugFieldBuilder() {
+      if (debugBuilder_ == null) {
+        if (!(typeCase_ == 31)) {
+          type_ = org.y1000.network.gen.DebugPacket.getDefaultInstance();
+        }
+        debugBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.DebugPacket, org.y1000.network.gen.DebugPacket.Builder, org.y1000.network.gen.DebugPacketOrBuilder>(
+                (org.y1000.network.gen.DebugPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 31;
+      onChanged();
+      return debugBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

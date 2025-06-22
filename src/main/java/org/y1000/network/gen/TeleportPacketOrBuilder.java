@@ -91,4 +91,16 @@ public interface TeleportPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getRealmBytes();
+
+  /**
+   * <code>string resource = 9;</code>
+   * @return The resource.
+   */
+  java.lang.String getResource();
+  /**
+   * <code>string resource = 9;</code>
+   * @return The bytes for resource.
+   */
+  com.google.protobuf.ByteString
+      getResourceBytes();
 }

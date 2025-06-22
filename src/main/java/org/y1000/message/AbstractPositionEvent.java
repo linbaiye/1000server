@@ -9,7 +9,7 @@ import org.y1000.entities.Direction;
 import org.y1000.event.EntityEvent;
 import org.y1000.util.Coordinate;
 
-public abstract class AbstractPositionEvent implements EntityEvent, ServerMessage {
+public abstract class AbstractPositionEvent implements EntityEvent, I2ClientMessage {
 
     private final long id;
 
