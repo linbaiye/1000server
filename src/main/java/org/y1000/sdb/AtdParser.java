@@ -1,0 +1,140 @@
+package org.y1000.sdb;
+
+import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.monster.AnimationDescriptor;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+
+@Slf4j
+public final class AtdParser {
+
+    private static final Map<String, PlayerStateEnum> STATE_MAP = new HashMap<>()
+    {{
+        put("MOVE", PlayerStateEnum.Move);
+        put("TURNNING", PlayerStateEnum.IDLE);
+        put("STRUCTED", PlayerStateEnum.HURT);
+        put("HIT1", PlayerStateEnum.ATTACK);
+        put("DIE", PlayerStateEnum.DIE);
+        put("TURN", PlayerStateEnum.Turn);
+    }};
+
+    private static final Map<String, Direction> DIRECTION_MAP = new HashMap<>()
+    {{
+        put("DR_0", Direction.UP);
+        put("DR_1", Direction.UP_RIGHT);
+        put("DR_2", Direction.RIGHT);
+        put("DR_3", Direction.DOWN_RIGHT);
+        put("DR_4", Direction.DOWN);
+        put("DR_5", Direction.DOWN_LEFT);
+        put("DR_6", Direction.LEFT);
+        put("DR_7", Direction.UP_LEFT);
+    }};
+
+    private static String DecodeToString(byte[] bytes)
+    {
+        for (int i = 0; i < bytes.length; i++)
+        {
+            var b = bytes[i];
+            var l = 0x0f & b;
+            var h = 0xf0 & b;
+            bytes[i] = (byte)((h >> 4) + (l << 4));
+        }
+        int len = bytes[0] & 0xff;
+        if (len == 0) {
+            return null;
+        }
+        return new String(bytes, 1, len);
+    }
+
+    private static List<String> readStrings(InputStream inputStream) throws IOException {
+        List<String> list = new ArrayList<>();
+        int cnt = inputStream.available() / 255;
+        for (int i = 0; i < cnt; i++)
+        {
+            var buffer = new byte[255];
+            int n = inputStream.read(buffer);
+            if (n <= 0)
+            {
+                break;
+            }
+            var convert = DecodeToString(buffer);
+            if (convert != null)
+            {
+                list.add(convert);
+            }
+        }
+        return list;
+    }
+
+    /*
+
+     */
+    private List<AnimationDescriptor> parseTo(List<String> lines) {
+
+        List<AnimationDescriptor> result = new ArrayList<>();
+        for (var str : lines)
+        {
+            log.debug(str);
+            var tokens = str.replace("\\s+", "").split(",");
+            if (tokens[0] == null || "Name".equals(tokens[0]))
+            {
+                continue;
+            }
+            String action = tokens[1];
+            String direction = tokens[2];
+            int frameNumber = Integer.parseInt(tokens[3]);
+            int frameTime = Integer.parseInt(tokens[4]);
+            int startFrame = Integer.parseInt(tokens[5]);
+            result.add(new AnimationDescriptor(STATE_MAP.get(action), DIRECTION_MAP.get(direction), startFrame, frameNumber, frameTime));
+        }
+        return result;
+
+    }
+
+
+    public Map<String, List<AnimationDescriptor>> parse(Set<String> animateIds) {
+        Map<String, List<AnimationDescriptor>> result = new HashMap<>();
+        try {
+            if (animateIds == null || animateIds.isEmpty())
+                return Collections.emptyMap();
+            for (String animateId : animateIds) {
+                try (var input = getClass().getResourceAsStream("/atd/" + animateId + ".atd")) {
+                    if (input == null) {
+                        throw new RuntimeException("Not found atd " + animateId);
+                    }
+                    List<String> strings = readStrings(input);
+                    result.put(animateId, parseTo(strings));
+                }
+            }
+            return result;
+        } catch (RuntimeException e) {
+            log.error("Failed to read atd files.", e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Failed to read atd files.", e);
+            throw new RuntimeException("Failed load atd.");
+        }
+    }
+
+//    private static class AtdSdb extends AbstractCSVSdbReader {
+//           try (var inputstream = getClass().getResourceAsStream("/sdb/" + name)) {
+//            if (inputstream == null) {
+//                throw new NoSuchElementException("Sdb does not exist, " + name);
+//            }
+//            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream, Charset.forName(charset)))) {
+//                read(bufferedReader);
+//            }
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+    public static void main(String[] args) {
+        Map<String, List<AnimationDescriptor>> parse = new AtdParser().parse(Set.of("0"));
+        parse.values().forEach(l -> l.forEach(System.out::println));
+    }
+}

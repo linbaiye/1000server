@@ -26,7 +26,7 @@ public final class UpdateBuffEvent extends AbstractPlayerEvent {
                     .setUpdateBuff(UpdateBuffPacket.newBuilder().setType(GAIN)
                             .setSeconds(pill.getLastingSeconds())
                             .setDescription(pill.description())
-                            .setIcon(pill.getIconId())
+                            .setIcon(pill.icon())
                             .setColor(pill.color())
                     ).build();
         }

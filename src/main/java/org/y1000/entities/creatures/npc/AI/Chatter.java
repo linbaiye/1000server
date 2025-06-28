@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc.AI;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.npc.HumanNpc;
 import org.y1000.entities.creatures.npc.Npc;
 
@@ -20,7 +20,7 @@ public final class Chatter {
     }
 
     public void onActionDone(Npc npc) {
-        if (!(npc instanceof HumanNpc humanNpc) || npc.stateEnum() == State.DIE)
+        if (!(npc instanceof HumanNpc humanNpc) || npc.stateEnum() == PlayerStateEnum.DIE)
             return;
         ++counter;
         if (counter % 10 != 0)

@@ -2,11 +2,9 @@ package org.y1000.entities.players;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.message.BreakRopeEvent;
 import org.y1000.message.PlayerDraggedEvent;
 import org.y1000.message.PositionType;
@@ -15,10 +13,7 @@ import org.y1000.network.gen.PositionPacket;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
-import java.awt.*;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 class RopeTest extends AbstractPlayerUnitTestFixture {
 
@@ -44,7 +39,7 @@ class RopeTest extends AbstractPlayerUnitTestFixture {
         dragged = playerBuilder().build();
         dragged.joinRealm(realm);
         killer = playerBuilder().coordinate(dragged.coordinate().moveBy(Direction.RIGHT)).build();
-        while (dragged.stateEnum() != State.DIE) {
+        while (dragged.stateEnum() != PlayerStateEnum.DIE) {
             dragged.attackedBy(killer);
         }
         draggedListener = new TestingEventListener();

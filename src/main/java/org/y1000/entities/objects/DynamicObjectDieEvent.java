@@ -1,10 +1,10 @@
 package org.y1000.entities.objects;
 
 import org.y1000.entities.Entity;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventVisitor;
 
-public final class DynamicObjectDieEvent implements EntityEvent  {
+public final class DynamicObjectDieEvent implements IEntityEvent {
 
     private final DynamicObject source;
 

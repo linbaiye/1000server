@@ -5,6 +5,7 @@ import org.y1000.entities.creatures.event.*;
 import org.y1000.message.*;
 import org.y1000.message.serverevent.ShowItemEvent;
 
+@Deprecated
 public interface EntityEventVisitor {
     default void visit(EntityEvent event) {
 
@@ -15,11 +16,9 @@ public interface EntityEventVisitor {
     }
 
     default void visit(CreatureAttackEvent event) {
-        visit((EntityEvent)event);
     }
 
     default void visit(CreatureHurtEvent hurtEvent) {
-        visit((EntityEvent)hurtEvent);
     }
 
     default void visit(SetPositionEvent setPositionEvent) {
@@ -27,32 +26,24 @@ public interface EntityEventVisitor {
     }
 
     default void visit(NpcChangeStateEvent event) {
-        visit((EntityEvent) event);
     }
 
     default void visit(CreatureDieEvent event) {
-        visit((EntityEvent) event);
     }
     default void visit(EntitySoundEvent event) {
-        visit((EntityEvent) event);
     }
 
     default void visit(RemoveEntityEvent event) {
-        visit((EntityEvent) event);
     }
     default void visit(MonsterShootEvent event) {
-        visit((EntityEvent) event);
     }
 
     default void visit(NpcMoveEvent event) {
-        visit((EntityEvent) event);
     }
 
     default void visit(ShowItemEvent event) {
-        visit((EntityEvent) event);
     }
 
     default void visit(NpcJoinedEvent event) {
-        visit((EntityEvent) event);
     }
 }

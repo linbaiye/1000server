@@ -1,18 +1,19 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.AbstractCreatureState;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.IAbstractCreatureState;
+import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.entities.players.event.PlayerReviveEvent;
 
-public final class PlayerDeadState extends AbstractCreatureState<PlayerImpl> implements PlayerState {
+public final class PlayerDeadState extends IAbstractCreatureState<PlayerImpl> implements IPlayerState {
 
     public PlayerDeadState(int totalMillis) {
         super(totalMillis);
     }
 
     @Override
-    public State stateEnum() {
-        return State.DIE;
+    public PlayerStateEnum stateEnum() {
+        return PlayerStateEnum.DIE;
     }
 
     @Override
@@ -28,8 +29,13 @@ public final class PlayerDeadState extends AbstractCreatureState<PlayerImpl> imp
         return false;
     }
 
+    @Override
+    public NpcStateEnum state() {
+        return NpcStateEnum.Die;
+    }
+
     public static PlayerDeadState die(PlayerImpl player) {
-        return new PlayerDeadState(player.getStateMillis(State.DIE) + 30000);
+        return new PlayerDeadState(player.getStateMillis(PlayerStateEnum.DIE) + 30000);
     }
 
 }

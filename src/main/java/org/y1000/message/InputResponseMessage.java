@@ -4,11 +4,11 @@ import org.y1000.network.gen.InputResponsePacket;
 import org.y1000.network.gen.Packet;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.players.Player;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventVisitor;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 
-public record InputResponseMessage(long sequence, AbstractPositionEvent positionMessage) implements EntityEvent,
+public record InputResponseMessage(long sequence, AbstractPositionEvent positionMessage) implements IEntityEvent,
         I2ClientMessage {
 
     @Override

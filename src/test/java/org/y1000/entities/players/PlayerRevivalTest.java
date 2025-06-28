@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,17 +28,17 @@ class PlayerRevivalTest {
 
     @Test
     void regenerateHalLife() {
-        assertEquals(303, revival.regenerateHalLife(State.DIE));
-        assertEquals(151, revival.regenerateHalLife(State.SIT));
-        assertEquals(80, revival.regenerateHalLife(State.IDLE));
-        assertEquals(50, revival.regenerateHalLife(State.RUN));
+        assertEquals(303, revival.regenerateHalLife(PlayerStateEnum.DIE));
+        assertEquals(151, revival.regenerateHalLife(PlayerStateEnum.SIT));
+        assertEquals(80, revival.regenerateHalLife(PlayerStateEnum.IDLE));
+        assertEquals(50, revival.regenerateHalLife(PlayerStateEnum.RUN));
     }
 
     @Test
     void regenerateResources() {
-        assertEquals(101, revival.regenerateResources(State.DIE));
-        assertEquals(70, revival.regenerateResources(State.SIT));
-        assertEquals(50, revival.regenerateResources(State.IDLE));
-        assertEquals(10, revival.regenerateResources(State.RUN));
+        assertEquals(101, revival.regenerateResources(PlayerStateEnum.DIE));
+        assertEquals(70, revival.regenerateResources(PlayerStateEnum.SIT));
+        assertEquals(50, revival.regenerateResources(PlayerStateEnum.IDLE));
+        assertEquals(10, revival.regenerateResources(PlayerStateEnum.RUN));
     }
 }

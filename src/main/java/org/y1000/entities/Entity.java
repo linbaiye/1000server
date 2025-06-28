@@ -1,6 +1,6 @@
 package org.y1000.entities;
 
-import org.y1000.message.AbstractEntityInterpolation;
+import org.y1000.message.AbstractEntitySnapshot;
 import org.y1000.util.Coordinate;
 
 /**
@@ -21,5 +21,5 @@ public interface Entity {
                 another.y() <= coordinate().y() + VISIBLE_Y_RANGE;
     }
 
-    AbstractEntityInterpolation captureInterpolation();
+    AbstractEntitySnapshot captureInterpolation();
 }

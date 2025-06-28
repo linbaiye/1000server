@@ -129,7 +129,7 @@ class KungFuBookRepositoryImplTest {
         AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.
                 builder()
                 .name("test")
-                .type(AttackKungFuType.QUANFA)
+                .type(AttackKungFuType.FistWeapon)
                 .attackSpeed(1)
                 .avoid(2)
                 .build();
@@ -139,7 +139,7 @@ class KungFuBookRepositoryImplTest {
         assertEquals("test", saved.getName());
         assertEquals(2, saved.getAvoid());
         assertEquals(1, saved.getAttackSpeed());
-        assertEquals(AttackKungFuType.QUANFA, saved.getType());
+        assertEquals(AttackKungFuType.FistWeapon, saved.getType());
     }
 
     @Test
@@ -147,7 +147,7 @@ class KungFuBookRepositoryImplTest {
         AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.
                 builder()
                 .name("test")
-                .type(AttackKungFuType.QUANFA)
+                .type(AttackKungFuType.FistWeapon)
                 .build();
         kungFuBookRepository.saveGuildKungFuParameter(provider, 1);
         assertEquals(1, kungFuBookRepository.countGuildKungFu(1));
@@ -159,7 +159,7 @@ class KungFuBookRepositoryImplTest {
         AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.
                 builder()
                 .name("test")
-                .type(AttackKungFuType.QUANFA)
+                .type(AttackKungFuType.FistWeapon)
                 .build();
         kungFuBookRepository.saveGuildKungFuParameter(provider, 1);
         assertTrue(kungFuBookRepository.findGuildKungfu(1).isPresent());

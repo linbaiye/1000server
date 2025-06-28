@@ -15,7 +15,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.AbstractPlayerEvent;
 import org.y1000.entities.players.event.PlayerLearnKungFuEvent;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.item.ItemFactory;
@@ -157,7 +157,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
 
     @Test
     void createGuildKungFuWhenNotFounder() {
-        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.QUANFA)
+        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.FistWeapon)
                         .build();
         var founder = Mockito.mock(Player.class);
         when(founder.guildMembership()).thenReturn(Optional.empty());
@@ -166,7 +166,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
     }
     @Test
     void createGuildKungFuWhenNotCorrect() {
-        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.QUANFA)
+        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.FistWeapon)
                 .speed(10)
                 .bodyDamage(70)
                 .avoid(50)
@@ -193,7 +193,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
 
     @Test
     void createGuildKungFuWhenCorrect() {
-        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.QUANFA)
+        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.FistWeapon)
                 .speed(30)
                 .bodyDamage(70)
                 .avoid(50)
@@ -231,7 +231,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
         TestingEventListener founderEvents = new TestingEventListener();
         TestingEventListener inviteeEvents = new TestingEventListener();
         doAnswer(invocationOnMock -> {
-            EntityEvent argument = invocationOnMock.getArgument(0);
+            IEntityEvent argument = invocationOnMock.getArgument(0);
             if (argument.source() == founder)
                 founderEvents.onEvent(argument);
             else
@@ -273,7 +273,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
         TestingEventListener founderEvents = new TestingEventListener();
         TestingEventListener inviteeEvents = new TestingEventListener();
         doAnswer(invocationOnMock -> {
-            EntityEvent argument = invocationOnMock.getArgument(0);
+            IEntityEvent argument = invocationOnMock.getArgument(0);
             if (argument.source() == founder)
                 founderEvents.onEvent(argument);
             else

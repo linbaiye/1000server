@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.npc.AI.ViolentNpcRangedFightAI;
 import org.y1000.util.Coordinate;
@@ -36,7 +36,7 @@ class ViolentNpcRangedFightAITest extends AbstractMonsterUnitTestFixture  {
         Coordinate coordinate = monster.coordinate().move(4, 0);
         when(enemy.coordinate()).thenReturn(coordinate);
         monster.changeAndStartAI(ai);
-        assertEquals(State.ATTACK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
     }
 
     @Test
@@ -47,16 +47,16 @@ class ViolentNpcRangedFightAITest extends AbstractMonsterUnitTestFixture  {
         when(enemy.coordinate()).thenReturn(coordinate);
         monster.changeAndStartAI(ai);
         assertEquals(Direction.LEFT, monster.direction());
-        assertEquals(State.IDLE, monster.stateEnum());
-        monster.update(monster.getStateMillis(State.IDLE));
+        assertEquals(PlayerStateEnum.IDLE, monster.stateEnum());
+        monster.update(monster.getStateMillis(PlayerStateEnum.IDLE));
         assertEquals(Direction.LEFT, monster.direction());
-        assertEquals(State.WALK, monster.stateEnum());
-        monster.update(monster.getStateMillis(State.WALK));
+        assertEquals(PlayerStateEnum.Move, monster.stateEnum());
+        monster.update(monster.getStateMillis(PlayerStateEnum.Move));
         assertEquals(Direction.LEFT, monster.direction());
-        assertEquals(State.WALK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.Move, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.WALK));
+        monster.update(monster.getStateMillis(PlayerStateEnum.Move));
         assertEquals(Direction.RIGHT, monster.direction());
-        assertEquals(State.ATTACK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
     }
 }

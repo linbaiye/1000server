@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.npc.spell;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.npc.Npc;
 
 
@@ -17,7 +17,7 @@ class CloneSpellTest {
         var npc = Mockito.mock(Npc.class);
         when(npc.currentLife()).thenReturn(1);
         when(npc.maxLife()).thenReturn(3);
-        when(npc.stateEnum()).thenReturn(State.IDLE);
+        when(npc.stateEnum()).thenReturn(PlayerStateEnum.IDLE);
         assertTrue(spell.canCast(npc));
         when(npc.currentLife()).thenReturn(2);
         assertFalse(spell.canCast(npc));

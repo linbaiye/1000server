@@ -5,6 +5,7 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.*;
@@ -23,7 +24,8 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     private final AOIManager scopeManager;
 
-    private final Map<Player, Connection> playerConnectionMap = new HashMap<>(100);
+    private final Map<Player, Connection> playerConnectionMap = new HashMap<>(500);
+    private final Map<Connection, Player> connectionPlayerMap = new HashMap<>(500);
 
     public RealmEntityEventSender(AOIManager scopeManager) {
         Validate.notNull(scopeManager);
@@ -144,16 +146,12 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
-        entityEvent.accept(this);
+        if (entityEvent instanceof IEntityEvent iEntityEvent)
+            iEntityEvent.accept(this);
     }
 
     @Override
     public void visit(PlayerUnequipEvent event) {
-        notifyVisiblePlayersAndSelf(event.player(), event);
-    }
-
-    @Override
-    public void visit(PlayerEquipEvent event) {
         notifyVisiblePlayersAndSelf(event.player(), event);
     }
 
@@ -236,7 +234,19 @@ final class RealmEntityEventSender implements EntityEventListener,
         Validate.notNull(player);
         Validate.notNull(connection);
         playerConnectionMap.put(player, connection);
+        connectionPlayerMap.put(connection, player);
         add(player);
+    }
+
+    public Optional<Player> removeConnection(Connection connection) {
+        if (connection == null)
+            return Optional.empty();
+        Player removed = connectionPlayerMap.remove(connection);
+        if (removed != null) {
+            playerConnectionMap.remove(removed);
+            scopeManager.remove(removed);
+        }
+        return Optional.ofNullable(removed);
     }
 
 
@@ -255,7 +265,7 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
     @Override
-    public void sendEvent(EntityEvent entityEvent) {
+    public void sendEvent(IEntityEvent entityEvent) {
         Validate.notNull(entityEvent);
         entityEvent.accept(this);
     }
@@ -267,9 +277,23 @@ final class RealmEntityEventSender implements EntityEventListener,
         sendMessage(playerEvent.player(), playerEvent);
     }
 
-    public Connection remove(Player player) {
+    public Optional<Player> findPlayer(Connection connection) {
+        return connection == null ? Optional.empty() :
+                Optional.ofNullable(connectionPlayerMap.get(connection));
+    }
+
+    public Optional<Connection> remove(Player player) {
+        if (player == null)
+            return Optional.empty();
         scopeManager.remove(player);
-        return playerConnectionMap.remove(player);
+        Connection connection = playerConnectionMap.remove(player);
+        if (connection != null)
+            connectionPlayerMap.remove(connection);
+        return Optional.ofNullable(connection);
+    }
+
+    public Optional<Connection> findConnection(Player player) {
+        return player == null ? Optional.empty() : Optional.ofNullable(playerConnectionMap.get(player));
     }
 
 }

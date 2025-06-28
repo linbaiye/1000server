@@ -15,9 +15,9 @@ public interface MovableState {
 
     Logger logger();
 
-    PlayerState rewindState(PlayerImpl player);
+    IPlayerState rewindState(PlayerImpl player);
 
-    PlayerState moveState(PlayerImpl player, Direction direction);
+    IPlayerState moveState(PlayerImpl player, Direction direction);
 
 
     private void handleRightClick(PlayerImpl player, AbstractRightClick rightClick) {
@@ -27,17 +27,17 @@ public interface MovableState {
             player.changeDirection(rightClick.direction());
             rewind(player, rightClick.sequence());
         } else {
-            PlayerState playerState = player.footKungFu().map(footKungFu ->
-                    (PlayerState)PlayerMoveState.moveBy(player, rightClick.direction()))
+            IPlayerState playerState = player.footKungFu().map(footKungFu ->
+                    (IPlayerState) IPlayerMoveState.moveBy(player, rightClick.direction()))
                     .orElse(moveState(player, rightClick.direction()));
             player.changeState(playerState);
-            player.emitEvent(new InputResponseMessage(rightClick.sequence(), PlayerMoveEvent.movingTo(player, rightClick.direction())));
+            player.emitEvent(new InputResponseMessage(rightClick.sequence(), PlayerMoveEvent.movingBy(player, rightClick.direction())));
         }
     }
 
     private void rewind(PlayerImpl player, long seq) {
-        PlayerState newState = player.footKungFu().map(footKungFu ->
-                (PlayerState)PlayerStillState.idle(player)).orElse(rewindState(player));
+        IPlayerState newState = player.footKungFu().map(footKungFu ->
+                (IPlayerState) PlayerStillState.idle(player)).orElse(rewindState(player));
         player.changeState(newState);
         player.emitEvent(new InputResponseMessage(seq, RewindEvent.of(player)));
     }

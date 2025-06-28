@@ -2,9 +2,10 @@ package org.y1000.entities.players;
 
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.npc.AI.AiPathUtil;
-import org.y1000.entities.creatures.State;
 import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.message.BreakRopeEvent;
 import org.y1000.message.PlayerDraggedEvent;
@@ -108,7 +109,7 @@ end;
 
     private void follow() {
         var dist = distance();
-        if (isBroken() || dist < 1 || dragged.stateEnum() != State.DIE) {
+        if (isBroken() || dist < 1 || dragged.stateEnum() != PlayerStateEnum.DIE) {
             return;
         }
         var dir = dragged.coordinate().computeDirection(moving.coordinate());
@@ -141,8 +142,8 @@ end;
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
-        if (entityEvent instanceof PlayerLeftEvent || moving.stateEnum() == State.DIE ||
-                dragged.stateEnum() != State.DIE) {
+        if (entityEvent instanceof PlayerLeftEvent || moving.stateEnum() == PlayerStateEnum.DIE ||
+                dragged.stateEnum() != PlayerStateEnum.DIE) {
             breakRope();
         }
     }

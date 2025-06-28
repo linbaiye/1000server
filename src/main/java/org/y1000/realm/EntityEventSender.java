@@ -3,7 +3,7 @@ package org.y1000.realm;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.AbstractPlayerEvent;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.message.I2ClientMessage;
 
 public interface EntityEventSender {
@@ -15,7 +15,7 @@ public interface EntityEventSender {
 
     void remove(Entity entity);
 
-    void sendEvent(EntityEvent entityEvent);
+    void sendEvent(IEntityEvent entityEvent);
 
     void notifyVisiblePlayers(Entity source, I2ClientMessage serverMessage);
 

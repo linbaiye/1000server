@@ -3,19 +3,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.*;
 
 @Slf4j
-public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl> implements PlayerState {
+public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl> implements IPlayerState {
 
-    private final PlayerState returnState;
+    private final IPlayerState returnState;
 
     /**
      * For client to interpolate, perhaps no useless.
      */
-    private final State afterHurtState;
+    private final PlayerStateEnum afterHurtPlayerStateEnum;
 
-    private PlayerHurtState(int totalMillis, PlayerState afterHurt, State returnState) {
+    private PlayerHurtState(int totalMillis, IPlayerState afterHurt, PlayerStateEnum returnPlayerStateEnum) {
         super(totalMillis);
         this.returnState = afterHurt;
-        this.afterHurtState = returnState;
+        this.afterHurtPlayerStateEnum = returnPlayerStateEnum;
     }
 
     @Override
@@ -23,17 +23,17 @@ public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl>
         returnState.afterHurt(player);
     }
 
-    public static PlayerHurtState hurt(PlayerImpl player, State afterHurt) {
-        if (player.state() instanceof PlayerHurtState hurtState) {
-            return new PlayerHurtState(player.getStateMillis(State.HURT), hurtState.returnState, afterHurt);
+    public static PlayerHurtState hurt(PlayerImpl player, PlayerStateEnum afterHurt) {
+        if (player.creatureState() instanceof PlayerHurtState hurtState) {
+            return new PlayerHurtState(player.getStateMillis(PlayerStateEnum.HURT), hurtState.returnState, afterHurt);
         } else {
-            return new PlayerHurtState(player.getStateMillis(State.HURT), player.state(), afterHurt);
+            return new PlayerHurtState(player.getStateMillis(PlayerStateEnum.HURT), player.creatureState(), afterHurt);
         }
     }
 
     @Override
-    public State decideAfterHurtState() {
-        return this.afterHurtState;
+    public PlayerStateEnum decideAfterHurtState() {
+        return this.afterHurtPlayerStateEnum;
     }
 
     @Override

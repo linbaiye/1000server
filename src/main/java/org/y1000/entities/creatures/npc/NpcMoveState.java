@@ -2,14 +2,15 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.util.Coordinate;
 
 public final class NpcMoveState extends AbstractCreatureMoveState<Npc> implements NpcState {
     private NpcMoveState(Coordinate start,
                              Direction towards,
                              int millisPerUnit) {
-        super(State.WALK, start, towards, millisPerUnit);
+        super(PlayerStateEnum.Move, start, towards, millisPerUnit);
     }
 
     @Override
@@ -31,6 +32,11 @@ public final class NpcMoveState extends AbstractCreatureMoveState<Npc> implement
     @Override
     public void moveToHurtCoordinate(Npc creature) {
         tryChangeCoordinate(creature, creature.realmMap());
+    }
+
+    @Override
+    public NpcStateEnum state() {
+        return NpcStateEnum.Move;
     }
 
     public static NpcMoveState move(Npc npc, int millis) {

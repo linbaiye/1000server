@@ -1,11 +1,11 @@
 package org.y1000.message.serverevent;
 
 import org.y1000.entities.Entity;
-import org.y1000.event.EntityEvent;
-import org.y1000.message.AbstractServerMessage;
+import org.y1000.event.IEntityEvent;
+import org.y1000.message.AbstractClientMessage;
 
-public abstract class Abstract2ClientEntityEvent extends AbstractServerMessage
-        implements EntityEvent {
+public abstract class Abstract2ClientEntityEvent extends AbstractClientMessage
+        implements IEntityEvent {
 
     private final Entity source;
 

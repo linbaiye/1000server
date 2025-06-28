@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
 import org.y1000.entities.creatures.npc.AI.ViolentNpcMeleeFightAI;
@@ -46,11 +46,11 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         player.joinRealm(realm);
         ai = new ViolentNpcMeleeFightAI(player, monster);
         monster.changeAndStartAI(ai);
-        assertEquals(State.ATTACK, monster.stateEnum());
-        monster.update(monster.getStateMillis(State.ATTACK) - 10);
+        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
+        monster.update(monster.getStateMillis(PlayerStateEnum.ATTACK) - 10);
         player.leaveRealm();
         monster.update( 10 + monster.cooldown());
-        assertNotEquals(State.ATTACK, monster.stateEnum());
+        assertNotEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
     }
 
     @Test
@@ -62,31 +62,31 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         when(enemy.coordinate()).thenReturn(Coordinate.xy(3, 5));
         monster.changeAndStartAI(ai);
         assertEquals(Direction.RIGHT, monster.direction());
-        assertEquals(State.IDLE, monster.stateEnum());
+        assertEquals(PlayerStateEnum.IDLE, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.IDLE));
+        monster.update(monster.getStateMillis(PlayerStateEnum.IDLE));
         assertEquals(Direction.RIGHT, monster.direction());
-        assertEquals(State.WALK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.Move, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.WALK));
+        monster.update(monster.getStateMillis(PlayerStateEnum.Move));
         assertEquals(Direction.DOWN_RIGHT, monster.direction());
-        assertEquals(State.IDLE, monster.stateEnum());
+        assertEquals(PlayerStateEnum.IDLE, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.IDLE));
+        monster.update(monster.getStateMillis(PlayerStateEnum.IDLE));
         assertEquals(Direction.DOWN_RIGHT, monster.direction());
-        assertEquals(State.WALK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.Move, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.WALK));
+        monster.update(monster.getStateMillis(PlayerStateEnum.Move));
         assertEquals(Direction.DOWN_LEFT, monster.direction());
-        assertEquals(State.IDLE, monster.stateEnum());
+        assertEquals(PlayerStateEnum.IDLE, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.IDLE));
+        monster.update(monster.getStateMillis(PlayerStateEnum.IDLE));
         assertEquals(Direction.DOWN_LEFT, monster.direction());
-        assertEquals(State.WALK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.Move, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.WALK));
+        monster.update(monster.getStateMillis(PlayerStateEnum.Move));
         assertEquals(Direction.LEFT, monster.direction());
-        assertEquals(State.ATTACK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
     }
 
     @Test
@@ -99,27 +99,27 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         when(enemy.coordinate()).thenReturn(Coordinate.xy(4, 5));
         monster.changeAndStartAI(ai);
         assertEquals(Direction.RIGHT, monster.direction());
-        assertEquals(State.IDLE, monster.stateEnum());
+        assertEquals(PlayerStateEnum.IDLE, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.IDLE));
+        monster.update(monster.getStateMillis(PlayerStateEnum.IDLE));
         assertEquals(Direction.RIGHT, monster.direction());
-        assertEquals(State.WALK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.Move, monster.stateEnum());
 
         monster.update(monster.walkSpeed());
         assertEquals(Direction.RIGHT, monster.direction());
-        assertEquals(State.WALK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.Move, monster.stateEnum());
 
         monster.update(monster.walkSpeed());
         assertEquals(Direction.UP_LEFT, monster.direction());
-        assertEquals(State.IDLE, monster.stateEnum());
+        assertEquals(PlayerStateEnum.IDLE, monster.stateEnum());
 
-        monster.update(monster.getStateMillis(State.IDLE));
+        monster.update(monster.getStateMillis(PlayerStateEnum.IDLE));
         assertEquals(Direction.UP_LEFT, monster.direction());
-        assertEquals(State.WALK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.Move, monster.stateEnum());
 
         monster.update(monster.walkSpeed());
         assertEquals(Direction.DOWN_LEFT, monster.direction());
-        assertEquals(State.IDLE, monster.stateEnum());
+        assertEquals(PlayerStateEnum.IDLE, monster.stateEnum());
     }
 
     @Test
@@ -128,12 +128,12 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         monster.changeDirection(Direction.UP);
         when(enemy.coordinate()).thenReturn(Coordinate.xy(3, 4));
         monster.changeAndStartAI(ai);
-        assertEquals(State.ATTACK, monster.stateEnum());
-        monster.update(monster.getStateMillis(State.ATTACK) - 10);
+        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
+        monster.update(monster.getStateMillis(PlayerStateEnum.ATTACK) - 10);
         reset(enemy);
         when(enemy.canBeAttackedNow()).thenReturn(false);
         monster.update( 10 + monster.cooldown());
-        assertNotEquals(State.ATTACK, monster.stateEnum());
+        assertNotEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
     }
 
     @Test
@@ -142,11 +142,11 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         monster.changeDirection(Direction.UP);
         when(enemy.coordinate()).thenReturn(Coordinate.xy(3, 4));
         monster.changeAndStartAI(ai);
-        assertEquals(State.ATTACK, monster.stateEnum());
-        monster.update(monster.getStateMillis(State.ATTACK) - 10);
+        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
+        monster.update(monster.getStateMillis(PlayerStateEnum.ATTACK) - 10);
         monster.changeState(NpcCommonState.die(10000));
         monster.update( 20);
-        assertNotEquals(State.ATTACK, monster.stateEnum());
+        assertNotEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
     }
 
     @Test
@@ -156,13 +156,13 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         monster.changeAndStartAI(new MonsterWanderingAI(monster.coordinate()));
         monster.attackedBy(player);
         monster.update(monster.cooldown());
-        assertEquals(State.ATTACK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
         player.changeCoordinate(player.coordinate().move(2, 2));
 
         var another = playerBuilder().coordinate(monster.coordinate().move(0, 1)).build();
         another.joinRealm(realm);
         monster.attackedBy(another);
-        assertEquals(State.HURT, monster.stateEnum());
+        assertEquals(PlayerStateEnum.HURT, monster.stateEnum());
         monster.update(monster.cooldown());
         assertEquals(Direction.DOWN, monster.direction());
     }

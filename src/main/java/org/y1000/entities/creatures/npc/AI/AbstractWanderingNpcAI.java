@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc.AI;
 
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.util.Coordinate;
 
@@ -24,7 +24,7 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
     }
 
     private void stayIdle(Npc npc) {
-        int stateMillis = npc.getStateMillis(State.IDLE);
+        int stateMillis = npc.getStateMillis(PlayerStateEnum.IDLE);
         int walkSpeed = npc.walkSpeed();
         int millis = Math.max(walkSpeed, stateMillis) * 2;
         npc.stay(millis);
@@ -32,12 +32,13 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
 
     protected void defaultActionDone(Npc npc) {
         switch (npc.stateEnum()) {
-            case WALK -> onMoveDone(npc);
+            case Move -> onMoveDone(npc);
             case IDLE -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc),
-                    npc.getStateMillis(State.WALK), npc.getStateMillis(State.IDLE));
+                    npc.getStateMillis(PlayerStateEnum.Move));
+            case Turn -> stayIdle(npc);
             case HURT -> onHurtDone(npc);
             default -> {
-                if (npc.stateEnum() != State.DIE)
+                if (npc.stateEnum() != PlayerStateEnum.DIE)
                     nextRound(npc);
             }
         }
@@ -56,7 +57,7 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
 
     @Override
     public void start(Npc npc) {
-        if (npc.stateEnum() == State.DIE) {
+        if (npc.stateEnum() == PlayerStateEnum.DIE) {
             return;
         }
         if (destination == null) {

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -21,23 +21,23 @@ class MoverTest {
 
     private Direction direction;
     private Coordinate coordinate;
-    private State state;
+    private PlayerStateEnum playerStateEnum;
     private Npc npc;
 
     @BeforeEach
     void setUp() {
         npc = Mockito.mock(Npc.class);
-        state = State.IDLE;
+        playerStateEnum = PlayerStateEnum.IDLE;
         when(npc.direction()).thenAnswer(invocationOnMock -> direction);
         when(npc.coordinate()).thenAnswer(invocationOnMock -> coordinate);
-        when(npc.stateEnum()).thenAnswer(invocationOnMock -> state);
+        when(npc.stateEnum()).thenAnswer(invocationOnMock -> playerStateEnum);
         doAnswer(invocationOnMock -> {
-            state = State.WALK;
+            playerStateEnum = PlayerStateEnum.Move;
             coordinate = coordinate.moveBy(direction);
             return null;
         }).when(npc).move(anyInt());
         doAnswer(invocationOnMock -> {
-            state = State.IDLE;
+            playerStateEnum = PlayerStateEnum.IDLE;
             return null;
         }).when(npc).stay(anyInt());
         doAnswer(invocationOnMock -> {
@@ -75,8 +75,8 @@ class MoverTest {
         RealmMap map = buildMap(mapmask);
         coordinate = Coordinate.xy(2, 3);
         direction = Direction.UP;
-        when(npc.getStateMillis(State.IDLE)).thenReturn(0);
-        when(npc.getStateMillis(State.WALK)).thenReturn(200);
+        when(npc.getStateMillis(PlayerStateEnum.IDLE)).thenReturn(0);
+        when(npc.getStateMillis(PlayerStateEnum.Move)).thenReturn(200);
         when(npc.walkSpeed()).thenReturn(200);
         when(npc.realmMap()).thenReturn(map);
         Mover<Npc> mover = Mover.ofWalk(npc, Coordinate.xy(2, 1));
@@ -97,16 +97,16 @@ class MoverTest {
         when(npc.realmMap()).thenReturn(map);
         coordinate = Coordinate.xy(2, 3);
         direction = Direction.DOWN;
-        when(npc.getStateMillis(State.IDLE)).thenReturn(200);
-        when(npc.getStateMillis(State.WALK)).thenReturn(240);
+        when(npc.getStateMillis(PlayerStateEnum.IDLE)).thenReturn(200);
+        when(npc.getStateMillis(PlayerStateEnum.Move)).thenReturn(240);
         when(npc.walkSpeed()).thenReturn(500);
         Mover<Npc> mover = Mover.ofWalk(npc, Coordinate.xy(2, 10));
         mover.nextMove(this::cantbe);
         verify(npc, times(1)).move(240);;
         mover.nextMove(this::cantbe);
         verify(npc, times(1)).stay(260);;
-        when(npc.getStateMillis(State.IDLE)).thenReturn(100);
-        when(npc.getStateMillis(State.WALK)).thenReturn(100);
+        when(npc.getStateMillis(PlayerStateEnum.IDLE)).thenReturn(100);
+        when(npc.getStateMillis(PlayerStateEnum.Move)).thenReturn(100);
         when(npc.walkSpeed()).thenReturn(100);
         mover = Mover.ofWalk(npc, Coordinate.xy(2, 10));
         mover.nextMove(this::cantbe);
@@ -122,8 +122,8 @@ class MoverTest {
         when(npc.realmMap()).thenReturn(map);
         coordinate = Coordinate.xy(2, 3);
         direction = Direction.DOWN;
-        when(npc.getStateMillis(State.IDLE)).thenReturn(200);
-        when(npc.getStateMillis(State.WALK)).thenReturn(210);
+        when(npc.getStateMillis(PlayerStateEnum.IDLE)).thenReturn(200);
+        when(npc.getStateMillis(PlayerStateEnum.Move)).thenReturn(210);
         when(npc.walkSpeed()).thenReturn(1000);
         Mover<Npc> mover = Mover.ofRun(npc, Coordinate.xy(2, 10));
         mover.run(this::cantbe);

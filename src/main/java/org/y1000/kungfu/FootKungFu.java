@@ -8,8 +8,8 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
 import org.y1000.entities.players.event.PlayerKungFuFullEvent;
-import org.y1000.exp.ExperienceUtil;
 import org.y1000.event.EntityEvent;
+import org.y1000.exp.ExperienceUtil;
 import org.y1000.util.UnaryAction;
 
 @Getter
@@ -26,8 +26,8 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
     public FootKungFu(String name, int exp,
                       FiveSecondsParameters fiveSecondsParameters,
                       KeepParameters keepParameters, String sound,
-                      EventResourceParameters eventResourceParameters) {
-        super(name, exp, keepParameters, fiveSecondsParameters);
+                      EventResourceParameters eventResourceParameters, int icon) {
+        super(name, exp, keepParameters, fiveSecondsParameters, icon);
         this.sound = Integer.parseInt(sound);
         this.eventResourceParameters = eventResourceParameters;
         this.counter = 0;
@@ -77,12 +77,12 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
     }
 
     @Override
-    public String description() {
+    public String detailText() {
         return getDescriptionBuilder().toString();
     }
 
     @Override
     public KungFu duplicate() {
-        return new FootKungFu(name(), 0, getConsumingParameters(), getKeepParameters(), String.valueOf(sound), getEventResourceParameters());
+        return new FootKungFu(name(), 0, getConsumingParameters(), getKeepParameters(), String.valueOf(sound), getEventResourceParameters(), icon());
     }
 }

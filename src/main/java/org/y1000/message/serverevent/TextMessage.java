@@ -1,12 +1,12 @@
 package org.y1000.message.serverevent;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.message.AbstractServerMessage;
+import org.y1000.message.AbstractClientMessage;
 import org.y1000.message.ValueEnum;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.TextMessagePacket;
 
-public class TextMessage extends AbstractServerMessage {
+public class TextMessage extends AbstractClientMessage {
     private final String text;
     private final TextType type;
     private final Location location;

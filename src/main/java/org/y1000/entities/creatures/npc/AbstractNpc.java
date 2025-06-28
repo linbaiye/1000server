@@ -15,14 +15,13 @@ import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.realm.RealmMap;
-import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
 import org.y1000.util.UnaryAction;
 
 import java.util.*;
 
-public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implements Npc {
+public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> implements Npc {
 
     private final AttributeProvider attributeProvider;
 
@@ -36,7 +35,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
 
     private Rectangle wanderingArea;
 
-    private static final Set<State> ACCEPTABLE_STATES = Set.of(State.IDLE, State.WALK, State.FROZEN, State.DIE);
+    private static final Set<PlayerStateEnum> ACCEPTABLE_PLAYER_STATE_ENUMS = Set.of(PlayerStateEnum.IDLE, PlayerStateEnum.Move, PlayerStateEnum.Turn, PlayerStateEnum.DIE);
 
     private final List<NpcSpell> spells;
 
@@ -45,7 +44,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
                        Coordinate coordinate,
                        Direction direction,
                        String name,
-                       Map<State, Integer> stateMillis,
+                       Map<PlayerStateEnum, Integer> stateMillis,
                        AttributeProvider attributeProvider,
                        RealmMap realmMap,
                        List<NpcSpell> spells,
@@ -60,7 +59,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
         this.spwanCoordinate = coordinate;
         this.wanderingArea = new Rectangle(coordinate.move(-range, -range), coordinate.move(range, range));
         this.currentLife = attributeProvider.life();
-        this.changeState(NpcCommonState.idle(getStateMillis(State.IDLE)));
+        this.changeState(NpcCommonState.idle(getStateMillis(PlayerStateEnum.IDLE)));
         changeCoordinate(coordinate);
     }
 
@@ -111,12 +110,12 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     }
 
     @Override
-    public void startAction(State state) {
-        Validate.isTrue(ACCEPTABLE_STATES.contains(state), "Invalid state : " + state);
-        switch (state) {
+    public void startAction(PlayerStateEnum playerStateEnum) {
+        Validate.isTrue(ACCEPTABLE_PLAYER_STATE_ENUMS.contains(playerStateEnum), "Invalid state : " + playerStateEnum);
+        switch (playerStateEnum) {
             case IDLE -> idle();
             case DIE -> die();
-            case WALK -> move(getStateMillis(State.WALK));
+            case Move -> move(getStateMillis(PlayerStateEnum.Move));
         }
     }
 
@@ -133,16 +132,16 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
 
 
     void doHurtAction(ViolentCreature attacker, int millis) {
-        state().moveToHurtCoordinate(this);
-        State afterHurt = state().decideAfterHurtState();
-        changeState(new NpcHurtState(millis, state(), attacker));
+        creatureState().moveToHurtCoordinate(this);
+        PlayerStateEnum afterHurt = creatureState().decideAfterHurtState();
+        changeState(new NpcHurtState(millis, creatureState(), attacker));
         emitEvent(new CreatureHurtEvent(this, afterHurt));
         hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
 
     private void idle() {
-        changeState(NpcCommonState.idle(getStateMillis(State.IDLE) * 2));
+        changeState(NpcCommonState.idle(getStateMillis(PlayerStateEnum.IDLE)));
         emitEvent(new NpcChangeStateEvent(this, stateEnum()));
     }
 
@@ -154,6 +153,12 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     }
 
     @Override
+    public void turn() {
+        changeState(NpcCommonState.turn(getStateMillis(PlayerStateEnum.Turn)));
+        emitEvent(new NpcChangeStateEvent(this, stateEnum()));
+    }
+
+    @Override
     public void move(int millis) {
         Validate.isTrue(millis >= 0);
         changeState(NpcMoveState.move(this, millis));
@@ -161,10 +166,10 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
     }
 
     public void die() {
-        if (stateEnum() == State.DIE) {
+        if (stateEnum() == PlayerStateEnum.DIE) {
             return;
         }
-        changeState(NpcCommonState.die(getStateMillis(State.DIE) + (findShiftSpell().isPresent() ? 2000 : 8000)));
+        changeState(NpcCommonState.die(getStateMillis(PlayerStateEnum.DIE) + (findShiftSpell().isPresent() ? 2000 : 8000)));
         emitEvent(new CreatureDieEvent(this));
         dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         ai.onDead(this);
@@ -196,7 +201,7 @@ public abstract class AbstractNpc extends AbstractCreature<Npc, NpcState> implem
 
     @Override
     public void onActionDone() {
-        if (stateEnum() == State.DIE) {
+        if (stateEnum() == PlayerStateEnum.DIE) {
             realmMap.free(this);
             emitEvent(new RemoveEntityEvent(this));
         }

@@ -60,7 +60,7 @@ public final class JoinedRealmEvent extends AbstractPlayerEvent {
                 .setAttribute(PlayerAttributeEvent.makeAttributePacket(player))
                 .setTeleport(teleportPacket)
                 ;
-        player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuName(footKungFu.name()));
+        player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuName(footKungFu.name()).setFootKungFuCanFly(footKungFu.canFly()));
         player.protectKungFu().ifPresent(protectKungFu -> builder.setProtectionKungFu(protectKungFu.name()));
         player.assistantKungFu().ifPresent(assistantKungFu -> builder.setAssistantKungFu(assistantKungFu.name()));
         playerInventory.foreach((index, item) -> builder.addInventoryItems(toPacket(index, item)));

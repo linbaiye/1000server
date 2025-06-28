@@ -9,6 +9,7 @@ import org.y1000.entities.objects.*;
 import org.y1000.entities.players.Player;
 import org.y1000.event.CrossRealmEvent;
 import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.sdb.CreateDynamicObjectSdb;
 import org.y1000.util.Coordinate;
 

@@ -38,8 +38,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
-public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> implements Player,
-        EntityEventListener {
+public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState> implements Player,
+        EntityEventListener, PlayerInputHandler {
 
     public static final int DEFAULT_REGENERATE_SECONDS = 9;
     private Realm realm;
@@ -97,28 +97,30 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     private final BuffPillSlot buffPillSlot;
 
-    private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
-        put(State.IDLE, 1800);
-        put(State.WALK, 840);
-        put(State.RUN, 420);
-        put(State.FLY, 360);
-        put(State.COOLDOWN, 1400);
-        put(State.FIST, AttackKungFuType.QUANFA.below50Millis());
-        put(State.KICK, AttackKungFuType.QUANFA.above50Millis());
-        put(State.HURT, 280);
-        put(State.ENFIGHT_WALK, 840);
-        put(State.BOW, AttackKungFuType.BOW.above50Millis());
-        put(State.THROW, AttackKungFuType.THROW.above50Millis());
-        put(State.SWORD2H, AttackKungFuType.SWORD.above50Millis());
-        put(State.SWORD, AttackKungFuType.SWORD.below50Millis());
-        put(State.BLADE2H, AttackKungFuType.BLADE.above50Millis());
-        put(State.BLADE, AttackKungFuType.BLADE.below50Millis());
-        put(State.AXE, AttackKungFuType.AXE.below50Millis());
-        put(State.SPEAR, AttackKungFuType.SPEAR.below50Millis());
-        put(State.SIT, 750);
-        put(State.STANDUP, 750);
-        put(State.DIE, 1500);
-        put(State.HELLO, 750);
+    private PlayerState state;
+
+    private static final Map<PlayerStateEnum, Integer> STATE_MILLIS = new HashMap<>() {{
+        put(PlayerStateEnum.IDLE, 1800);
+        put(PlayerStateEnum.Move, 840);
+        put(PlayerStateEnum.RUN, 420);
+        put(PlayerStateEnum.FLY, 360);
+        put(PlayerStateEnum.ENFIGHT_WALK, 840);
+        put(PlayerStateEnum.FightStand, 1400);
+        put(PlayerStateEnum.FIST, AttackKungFuType.FistWeapon.below50Millis());
+        put(PlayerStateEnum.KICK, AttackKungFuType.FistWeapon.above50Millis());
+        put(PlayerStateEnum.HURT, 280);
+        put(PlayerStateEnum.BOW, AttackKungFuType.BOW.above50Millis());
+        put(PlayerStateEnum.THROW, AttackKungFuType.THROW.above50Millis());
+        put(PlayerStateEnum.SWORD2H, AttackKungFuType.SWORD.above50Millis());
+        put(PlayerStateEnum.SWORD, AttackKungFuType.SWORD.below50Millis());
+        put(PlayerStateEnum.BLADE2H, AttackKungFuType.BLADE.above50Millis());
+        put(PlayerStateEnum.BLADE, AttackKungFuType.BLADE.below50Millis());
+        put(PlayerStateEnum.AXE, AttackKungFuType.AXE.below50Millis());
+        put(PlayerStateEnum.SPEAR, AttackKungFuType.SPEAR.below50Millis());
+        put(PlayerStateEnum.SIT, 750);
+        put(PlayerStateEnum.STANDUP, 750);
+        put(PlayerStateEnum.DIE, 1500);
+        put(PlayerStateEnum.HELLO, 750);
     }};
 
     @Builder
@@ -183,11 +185,12 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         this.legLife = leg;
         this.headLife = head;
         this.pillSlots = pillSlots;
-        this.changeState(new PlayerStillState(getStateMillis(State.IDLE)));
+        this.changeState(new PlayerStillState(getStateMillis(PlayerStateEnum.IDLE)));
         setRegenerateTimer();
         team = 0;
         this.guildMembership = guildMembership;
         this.buffPillSlot = new BuffPillSlot();
+        this.changeState(PlayerStandState.idle(this));
     }
 
     private void setRegenerateTimer() {
@@ -264,8 +267,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         if (equipped == null) {
             return;
         }
-        if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.QUANFA) {
-            changeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA));
+        if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.FistWeapon) {
+            changeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.FistWeapon));
         }
         emitEvent(new PlayerUnequipEvent(this, equipped.equipmentType()));
         int slot = inventory.put(equipped);
@@ -294,37 +297,53 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
 
+    private void handleInventoryEquipmentDoubleClick(Equipment equipment, int slotId) {
+        if (equipment instanceof Weapon)
+            equipWeaponFromSlot(slotId);
+        else if (equipment instanceof SexualEquipment sexualEquipment && sexualEquipment.isMale() == isMale()) {
+            equipArmorFromSlot(slotId);
+        } else {
+            return;
+        }
+        emitEvent(PlayerEquipEvent.create(this, equipment));
+        emitEvent(InventoryMessage.quiet(this));
+    }
+
+
     private void handleInventorySlotDoubleClick(int slotId) {
         Item item = inventory.getItem(slotId);
         if (item == null) {
             return;
         }
-        if (item instanceof Equipment equipment) {
-            equip(slotId, equipment);
-        } else if (item instanceof StackItem stackItem) {
-            if (stackItem.item() instanceof Pill pill) {
-                if (pillSlots.canTakePill() && inventory.decrease(slotId)) {
-                    emitEvent(new UpdateInventorySlotEvent(this, slotId, inventory.getItem(slotId)));
-                    pillSlots.usePill(this, pill);
-                } else {
-                    emitEvent(PlayerTextEvent.noMorePill(this));
-                }
-            } else if (stackItem.item() instanceof KungFuItem kungFuItem) {
-                learnKungFu(slotId, kungFuItem);
-            } else if (stackItem.item() instanceof BuffPill p) {
-                if (!buffPillSlot.canTake()) {
-                    emitEvent(PlayerTextEvent.noMorePill(this));
-                    return;
-                }
-                if (inventory.decrease(slotId)) {
-                    buffPillSlot.take(p);
-                    emitEvent(new UpdateInventorySlotEvent(this, slotId));
-                    emitEvent(PlayerTextEvent.havePill(this, p.name()));
-                    p.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-                    emitEvent(UpdateBuffEvent.gain(this, p));
-                }
-            }
-        }
+        if (item instanceof Equipment equipment)
+            handleInventoryEquipmentDoubleClick(equipment, slotId);
+
+//        if (item instanceof Equipment equipment) {
+//            equip(slotId, equipment);
+//        } else if (item instanceof StackItem stackItem) {
+//            if (stackItem.item() instanceof Pill pill) {
+//                if (pillSlots.canTakePill() && inventory.decrease(slotId)) {
+//                    emitEvent(new UpdateInventorySlotEvent(this, slotId, inventory.getItem(slotId)));
+//                    pillSlots.usePill(this, pill);
+//                } else {
+//                    emitEvent(PlayerTextEvent.noMorePill(this));
+//                }
+//            } else if (stackItem.item() instanceof KungFuItem kungFuItem) {
+//                learnKungFu(slotId, kungFuItem);
+//            } else if (stackItem.item() instanceof BuffPill p) {
+//                if (!buffPillSlot.canTake()) {
+//                    emitEvent(PlayerTextEvent.noMorePill(this));
+//                    return;
+//                }
+//                if (inventory.decrease(slotId)) {
+//                    buffPillSlot.take(p);
+//                    emitEvent(new UpdateInventorySlotEvent(this, slotId));
+//                    emitEvent(PlayerTextEvent.havePill(this, p.name()));
+//                    p.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+//                    emitEvent(UpdateBuffEvent.gain(this, p));
+//                }
+//            }
+//        }
     }
 
     private void handleClickAttackKungFu(AttackKungFu newAttack) {
@@ -341,7 +360,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         int slot = inventory.findWeaponSlot(newAttack.getType());
         if (slot == 0) {
-            if (newAttack.getType() == AttackKungFuType.QUANFA) {
+            if (newAttack.getType() == AttackKungFuType.FistWeapon) {
                 unequip(EquipmentType.WEAPON);
                 changeAttackKungFu(newAttack);
             } else {
@@ -349,7 +368,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             }
             return;
         }
-        equipWeaponFromSlot(slot, (Weapon) inventory.getItem(slot));
+//        equipWeaponFromSlot(slot, (Weapon) inventory.getItem(slot));
         changeAttackKungFu(newAttack);
     }
 
@@ -379,10 +398,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             }
             return;
         }
-        if (state().canSitDown()) {
+        if (creatureState().canSitDown()) {
             sitDown(true);
         }
-        if (stateEnum() == State.SIT) {
+        if (stateEnum() == PlayerStateEnum.SIT) {
             if (this.protectKungFu != null) {
                 emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
                 emitEvent(new EntitySoundEvent(this, this.protectKungFu.disableSound()));
@@ -394,7 +413,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     private void toggleFootKungFu(FootKungFu newKungFu) {
-        if (!state().canUseFootKungFu()) {
+        if (!creatureState().canUseFootKungFu()) {
             return;
         }
         clearFightingEntity();
@@ -408,10 +427,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             }
             return;
         }
-        if (stateEnum() == State.SIT) {
+        if (stateEnum() == PlayerStateEnum.SIT) {
             this.changeState(new PlayerStandUpState(this));
             emitEvent(new PlayerStandUpEvent(this, true));
-        } else if (stateEnum() != State.WALK && stateEnum() != State.ENFIGHT_WALK) {
+        } else if (stateEnum() != PlayerStateEnum.Move && stateEnum() != PlayerStateEnum.ENFIGHT_WALK) {
             this.changeState(PlayerStillState.idle(this));
             emitEvent(new SetPositionEvent(this, direction(), coordinate()));
         }
@@ -451,8 +470,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
 
     private void sitDown(boolean includeSelf) {
-        if (!state().canSitDown()) {
-            log.debug("Cant sit down in state {}.", state().stateEnum());
+        if (!creatureState().canSitDown()) {
+            log.debug("Cant sit down in state {}.", creatureState().stateEnum());
             return;
         }
         if (footKungfu != null) {
@@ -465,7 +484,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     private void standUp(boolean includeSelf) {
-        if (state().canStandUp()) {
+        if (creatureState().canStandUp()) {
             disableBreathKungNoTip();
             this.changeState(new PlayerStandUpState(this));
             emitEvent(new PlayerStandUpEvent(this, includeSelf));
@@ -479,9 +498,9 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     private void move(ClientMovementEvent event) {
-        if (state() instanceof MovableState movableState) {
+        if (creatureState() instanceof MovableState movableState) {
             movableState.move(this, event);
-        } else if (state() instanceof AbstractPlayerMoveState moveState) {
+        } else if (creatureState() instanceof AbstractPlayerMoveState moveState) {
             moveState.onMoveEvent(event);
         }
     }
@@ -494,7 +513,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             }
         } else if (event.type() == RightClickType.KUNGFU) {
             Optional<KungFu> kungFu = kungFuBook.getKungFu(event.page(), event.slotId());
-            kungFu.ifPresent(k -> emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), k.description(), event.type())));
+            kungFu.ifPresent(k -> emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), k.detailText(), event.type())));
         } else if (event.type() == RightClickType.CHARACTER) {
             emitEvent(new PlayerRightClickAttributeEvent(this));
         }
@@ -510,11 +529,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public void handleClientEvent(ClientEvent clientEvent) {
-        if (stateEnum() == State.DIE) {
+        if (stateEnum() == PlayerStateEnum.DIE) {
             return;
         }
         if (clientEvent instanceof ClientDoubleClickSlotEvent doubleClickSlotEvent) {
-            handleInventorySlotDoubleClick(doubleClickSlotEvent.sourceSlot());
+//            handleInventorySlotDoubleClick(doubleClickSlotEvent.sourceSlot());
         } else if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
             inventory.handleClientEvent(this, inventoryEvent, this::emitEvent);
         } else if (clientEvent instanceof ClientUnequipEvent unequipEvent) {
@@ -534,6 +553,58 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         } else if (clientEvent instanceof ClientChangeTeamEvent teamEvent) {
             team = teamEvent.team();
             emitEvent(new PlayerNameColorEvent(this));
+        }
+    }
+
+    @Override
+    public void handleInput(SelfHandleInput input) {
+        if (stateEnum() == PlayerStateEnum.DIE || input == null)
+            return;
+        input.accept(this);
+    }
+
+    @Override
+    public void move(MoveInput moveInput) {
+        state.move(moveInput);
+    }
+
+    @Override
+    public void turn(TurnInput turnInput) {
+        state.turn(turnInput);
+    }
+
+    @Override
+    public void handleSimpleInput(SimpleInput.Type type) {
+        if (type == SimpleInput.Type.KungFuBook) {
+            emitEvent(KungFuBookMessage.forPlayer(this));
+        } else if (type == SimpleInput.Type.Inventory) {
+            emitEvent(InventoryMessage.forceful(this));
+        }
+    }
+
+    @Override
+    public void onKungFuClicked(int page, int slot, ClickKungFuInput.ClickType type) {
+        kungFuBook().getKungFu(page, slot).ifPresent(kungFu -> {
+            if (type == ClickKungFuInput.ClickType.LeftDoubleClick) {
+
+            } else if (type == ClickKungFuInput.ClickType.LeftClick) {
+                emitEvent(PlayerTextMessage.of(this, kungFu.detailText()));
+            }
+        });
+    }
+
+    @Override
+    public void swapItem(int slot1, int slot2) {
+        if (inventory.swap(slot1, slot2)) {
+            emitEvent(InventoryMessage.forceful(this));
+        }
+    }
+
+
+    @Override
+    public void onInventorySlotClicked(int slot, ClickInventorySlotInput.ClickType type) {
+        if (type == AbstractClickContainerSlotInput.ClickType.LeftDoubleClick && !isDead()) {
+            handleInventorySlotDoubleClick(slot);
         }
     }
 
@@ -579,7 +650,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public void changeState(PlayerState newState) {
+    public void changeState(IPlayerState newState) {
         //log().debug("Change state from {} to {}.", state(), newState);
         super.changeState(newState);
     }
@@ -628,10 +699,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     private void afterTakingDamage(int damagedLife) {
         if (currentLife() > 0) {
             cooldownRecovery();
-            state().moveToHurtCoordinate(this);
-            State afterHurtState = state().decideAfterHurtState();
-            this.changeState(PlayerHurtState.hurt(this, afterHurtState));
-            emitEvent(new CreatureHurtEvent(this, afterHurtState));
+            creatureState().moveToHurtCoordinate(this);
+            PlayerStateEnum afterHurtPlayerStateEnum = creatureState().decideAfterHurtState();
+            this.changeState(PlayerHurtState.hurt(this, afterHurtPlayerStateEnum));
+            emitEvent(new CreatureHurtEvent(this, afterHurtPlayerStateEnum));
             hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
             gainProtectionExp(damagedLife);
         } else {
@@ -702,6 +773,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         emitEvent(new PlayerLeftEvent(this));
     }
 
+    @Override
+    public boolean isLeftGame() {
+        return realm == null;
+    }
+
     private void changeAttackKungFu(AttackKungFu newKungFu) {
         if (newKungFu.level() < 9999) {
             disableAssistantKungFuNoTip();
@@ -709,25 +785,28 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         boolean needCooldownState = newKungFu.getType() != this.attackKungFu.getType();
         this.attackKungFu = newKungFu;
         cooldownAttack();
-        if (needCooldownState && state() instanceof PlayerAttackState) {
+        if (needCooldownState && creatureState() instanceof PlayerAttackState) {
             this.changeState(new PlayerCooldownState(cooldown()));
             emitEvent(new PlayerCooldownEvent(this));
         }
         emitEvent(PlayerToggleKungFuEvent.enable(this, attackKungFu));
     }
 
-    private void equipWeaponFromSlot(int slot, Weapon weaponToEquip) {
-        inventory.remove(slot);
-        emitEvent(UpdateInventorySlotEvent.remove(this, slot));
+    private void equipWeaponFromSlot(int slot) {
+        Weapon weaponToEquip = (Weapon) inventory.remove(slot);
         weapon().ifPresent(equippedWeapon -> {
             inventory.put(slot, equippedWeapon);
-            emitEvent(new UpdateInventorySlotEvent(this, slot, equippedWeapon));
             log.debug("Put equipped weapon {} back to inventory.", equippedWeapon.name());
         });
         equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
-        emitEvent(new PlayerEquipEvent(this, weaponToEquip));
-        weaponToEquip.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         log.debug("Equipped weapon {}.", weaponToEquip.name());
+    }
+
+    private void equipArmorFromSlot(int slot) {
+        SexualEquipment equipment = (SexualEquipment) inventory.remove(slot);
+        getEquipment(equipment.equipmentType(), SexualEquipment.class)
+                .ifPresent(equipped -> inventory.put(slot, equipped));
+        equippedEquipments.put(equipment.equipmentType(), equipment);
     }
 
     @Override
@@ -738,7 +817,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     private void equip(int slotId, Equipment equipmentInSlot) {
         if (equipmentInSlot.equipmentType() == EquipmentType.WEAPON) {
             Weapon weaponInSlot = (Weapon) equipmentInSlot;
-            equipWeaponFromSlot(slotId, weaponInSlot);
+//            equipWeaponFromSlot(slotId, weaponInSlot);
             if (attackKungFu.getType() != weaponInSlot.kungFuType()) {
                 changeAttackKungFu(kungFuBook.findUnnamedAttack(weaponInSlot.kungFuType()));
             }
@@ -749,12 +828,21 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             }
             inventory.remove(slotId);
             Equipment currentEquipped = equippedEquipments.put(equipmentInSlot.equipmentType(), equipmentInSlot);
-            emitEvent(new PlayerEquipEvent(this, equipmentInSlot));
             if (currentEquipped != null) {
                 inventory.put(slotId, currentEquipped);
             }
             emitEvent(new UpdateInventorySlotEvent(this, slotId, currentEquipped));
             equipmentInSlot.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+        }
+    }
+
+    private void handleDoubleClickInventorySlot(int slot) {
+        var item = inventory.getItem(slot);
+        if (item == null) {
+            return;
+        }
+        if (item instanceof Weapon weapon) {
+
         }
     }
 
@@ -772,8 +860,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public PlayerInterpolation captureInterpolation() {
-        return PlayerInterpolation.FromPlayer(this, state().elapsedMillis());
+    public PlayerSnapshot captureInterpolation() {
+        return PlayerSnapshot.FromPlayer(this, creatureState().elapsedMillis());
     }
 
 
@@ -894,7 +982,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         updateKungFu(delta);
         pillSlots.update(this, delta);
         updateBuff(delta);
-        state().update(this, delta);
+        creatureState().update(this, delta);
+        this.state.update(delta);
     }
 
     public int recovery() {
@@ -1152,6 +1241,16 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
+    public void changeState(PlayerState playerState) {
+        this.state = playerState;
+    }
+
+    @Override
+    public PlayerState state() {
+        return this.state;
+    }
+
+    @Override
     public Inventory inventory() {
         return inventory;
     }
@@ -1206,7 +1305,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         if (!canChaseOrAttack(entityEvent.source())) {
             clearFightingEntity();
         }
-        if (state() instanceof PlayerWaitDistanceState waitDistanceState) {
+        if (creatureState() instanceof PlayerWaitDistanceState waitDistanceState) {
             waitDistanceState.onTargetEvent(this);
         }
     }

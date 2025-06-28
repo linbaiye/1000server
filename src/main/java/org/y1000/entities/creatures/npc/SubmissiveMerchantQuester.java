@@ -7,9 +7,9 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.State;
-import org.y1000.message.AbstractCreatureInterpolation;
-import org.y1000.message.NpcInterpolation;
+import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.message.AbstractCreatureSnapshot;
+import org.y1000.message.NpcSnapshot;
 import org.y1000.quest.Quest;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -27,7 +27,7 @@ public final class SubmissiveMerchantQuester extends AbstractSubmissiveMerchant 
     @Builder
     public SubmissiveMerchantQuester(long id,
                                      Coordinate coordinate, String name,
-                                     Map<State, Integer> stateMillis,
+                                     Map<PlayerStateEnum, Integer> stateMillis,
                                      AttributeProvider attributeProvider,
                                      RealmMap realmMap,
                                      Merchantable merchantable,
@@ -44,8 +44,8 @@ public final class SubmissiveMerchantQuester extends AbstractSubmissiveMerchant 
     }
 
     @Override
-    public AbstractCreatureInterpolation captureInterpolation() {
-        return new NpcInterpolation(id(), coordinate(), state().stateEnum(), direction(), state().elapsedMillis(), viewName(),
+    public AbstractCreatureSnapshot captureInterpolation() {
+        return new NpcSnapshot(id(), coordinate(), creatureState().stateEnum(), direction(), creatureState().elapsedMillis(), viewName(),
                 NpcType.MERCHANT_QUESTER, attributeProvider().animate(), attributeProvider().shape(), getMerchantFile(), Collections.singletonList(quest.getQuestName()));
     }
 
@@ -62,4 +62,8 @@ public final class SubmissiveMerchantQuester extends AbstractSubmissiveMerchant 
         return obj == this || ((SubmissiveMerchantQuester) obj).id() == id();
     }
 
+    @Override
+    public NpcState creatureState() {
+        return null;
+    }
 }

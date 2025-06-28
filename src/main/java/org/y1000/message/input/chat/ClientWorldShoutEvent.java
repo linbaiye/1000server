@@ -1,7 +1,7 @@
 package org.y1000.message.input.chat;
 
 import org.apache.commons.lang3.StringUtils;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.TextMessage;
 import org.y1000.realm.event.BroadcastTextEvent;
@@ -44,7 +44,7 @@ public record ClientWorldShoutEvent(String content) implements ClientRealmChatEv
 
     @Override
     public boolean canSend(Player player) {
-        return player != null && player.stateEnum() != State.DIE
+        return player != null && player.stateEnum() != PlayerStateEnum.DIE
                 && player.currentLife() >= 5000;
     }
 

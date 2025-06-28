@@ -7,7 +7,7 @@ import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.item.Item;
-import org.y1000.message.AbstractEntityInterpolation;
+import org.y1000.message.AbstractEntitySnapshot;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
@@ -76,8 +76,8 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
     }
 
     @Override
-    public AbstractEntityInterpolation captureInterpolation() {
-        return new DynamicObjectInterpolation(this, animationElapsedDuration(), requiredItem);
+    public AbstractEntitySnapshot captureInterpolation() {
+        return new DynamicObjectSnapshot(this, animationElapsedDuration(), requiredItem);
     }
 
 

@@ -1,21 +1,21 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.AbstractCreatureState;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.IAbstractCreatureState;
+import org.y1000.entities.creatures.PlayerStateEnum;
 
-public final class PlayerStandUpState extends AbstractCreatureState<PlayerImpl> implements PlayerState {
+public final class PlayerStandUpState extends IAbstractCreatureState<PlayerImpl> implements IPlayerState {
 
     public PlayerStandUpState(int totalMillis) {
         super(totalMillis);
     }
 
     public PlayerStandUpState(PlayerImpl player) {
-        this(player.getStateMillis(State.STANDUP));
+        this(player.getStateMillis(PlayerStateEnum.STANDUP));
     }
 
     @Override
-    public State stateEnum() {
-        return State.STANDUP;
+    public PlayerStateEnum stateEnum() {
+        return PlayerStateEnum.STANDUP;
     }
 
     @Override

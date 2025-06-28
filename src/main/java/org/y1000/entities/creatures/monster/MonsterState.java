@@ -1,8 +1,8 @@
 package org.y1000.entities.creatures.monster;
 
-import org.y1000.entities.creatures.CreatureState;
+import org.y1000.entities.creatures.ICreatureState;
 
-public interface MonsterState<C extends AbstractMonster> extends CreatureState<C> {
+public interface MonsterState<C extends AbstractMonster> extends ICreatureState<C> {
 
     /**
      * What to do after hurt.

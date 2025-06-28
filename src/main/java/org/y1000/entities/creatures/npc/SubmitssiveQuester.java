@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.quest.Quest;
 import org.y1000.realm.RealmMap;
@@ -25,7 +25,7 @@ public class SubmitssiveQuester extends AbstractSubmissiveNpc implements Quester
     public SubmitssiveQuester(long id, Coordinate coordinate,
                               Direction direction,
                               String name,
-                              Map<State, Integer> stateMillis,
+                              Map<PlayerStateEnum, Integer> stateMillis,
                               AttributeProvider attributeProvider,
                               RealmMap realmMap,
                               Quest quest) {

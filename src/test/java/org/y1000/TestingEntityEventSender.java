@@ -3,7 +3,7 @@ package org.y1000;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.network.Connection;
 import org.y1000.realm.EntityEventSender;
@@ -51,7 +51,7 @@ public final class TestingEntityEventSender implements EntityEventSender {
     }
 
 
-    public <T extends EntityEvent> T dequeue(Class<T> clazz) {
+    public <T extends IEntityEvent> T dequeue(Class<T> clazz) {
         return eventListener.dequeue(clazz);
     }
 
@@ -59,7 +59,7 @@ public final class TestingEntityEventSender implements EntityEventSender {
         return eventListener.eventSize();
     }
 
-    public <T extends EntityEvent> T removeFirst(Class<T> clazz) {
+    public <T extends IEntityEvent> T removeFirst(Class<T> clazz) {
         return eventListener.removeFirst(clazz);
     }
 
@@ -77,7 +77,7 @@ public final class TestingEntityEventSender implements EntityEventSender {
 
 
     @Override
-    public void sendEvent(EntityEvent entityEvent) {
+    public void sendEvent(IEntityEvent entityEvent) {
         eventListener.onEvent(entityEvent);
     }
 

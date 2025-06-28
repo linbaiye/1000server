@@ -7,7 +7,7 @@ import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
@@ -85,7 +85,7 @@ class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
         npc.registerEventListener(eventListener);
         PlayerImpl player = playerBuilder().coordinate(npc.coordinate().moveBy(Direction.RIGHT)).build();
         npc.attackedBy(player);
-        npc.update(npc.getStateMillis(State.DIE) + 8000);
+        npc.update(npc.getStateMillis(PlayerStateEnum.DIE) + 8000);
         RemoveEntityEvent removeEntityEvent = eventListener.removeFirst(RemoveEntityEvent.class);
         assertEquals(npc.id(), removeEntityEvent.toPacket().getRemoveEntity().getId());
         Mockito.verify(mockedMap, Mockito.times(1)).free(npc);
@@ -99,8 +99,8 @@ class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
         npc.registerEventListener(eventListener);
         Player player = mockEnemyPlayer(npc.coordinate());
         while (!npc.attackedBy(player)) ;
-        assertEquals(State.HURT, npc.stateEnum());
-        npc.update(npc.getStateMillis(State.HURT));
-        assertEquals(State.IDLE, npc.stateEnum());
+        assertEquals(PlayerStateEnum.HURT, npc.stateEnum());
+        npc.update(npc.getStateMillis(PlayerStateEnum.HURT));
+        assertEquals(PlayerStateEnum.IDLE, npc.stateEnum());
     }
 }

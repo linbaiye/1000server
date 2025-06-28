@@ -3,7 +3,7 @@ package org.y1000.entities.creatures;
 import lombok.Getter;
 
 @Getter
-public abstract class AbstractCreatureHurtState<C extends Creature> extends AbstractCreatureState<C> {
+public abstract class AbstractCreatureHurtState<C extends Creature> extends IAbstractCreatureState<C> {
 
 
     protected AbstractCreatureHurtState(int totalMillis) {
@@ -20,7 +20,7 @@ public abstract class AbstractCreatureHurtState<C extends Creature> extends Abst
     }
 
     @Override
-    public State stateEnum() {
-        return State.HURT;
+    public PlayerStateEnum stateEnum() {
+        return PlayerStateEnum.HURT;
     }
 }

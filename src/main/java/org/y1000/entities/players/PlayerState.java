@@ -1,23 +1,17 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.CreatureState;
+import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.message.input.MoveInput;
+import org.y1000.message.input.TurnInput;
 
-public interface PlayerState extends CreatureState<PlayerImpl> {
+public interface PlayerState extends CreatureState {
+    PlayerStateEnum stateEnum();
 
-    default void afterHurt(PlayerImpl player) {
+    void move(MoveInput input);
 
-    }
+    default void turn(TurnInput input) {
 
-    default boolean canUseFootKungFu() {
-        return true;
-    }
-
-    default boolean canSitDown() {
-        return false;
-    }
-
-    default boolean canStandUp() {
-        return false;
     }
 
 }

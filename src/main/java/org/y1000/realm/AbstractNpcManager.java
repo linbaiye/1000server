@@ -9,6 +9,7 @@ import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.realm.event.RealmEvent;

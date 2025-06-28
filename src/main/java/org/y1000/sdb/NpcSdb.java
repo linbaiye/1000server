@@ -1,5 +1,7 @@
 package org.y1000.sdb;
 
+import java.util.Set;
+
 public interface NpcSdb {
     int getRecovery(String name);
 
@@ -54,5 +56,7 @@ public interface NpcSdb {
     boolean isQuester(String name);
 
     int getImage(String name);
+
+    Set<String> getAllAnimateIds();
 }
 

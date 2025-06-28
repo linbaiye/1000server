@@ -1,8 +1,6 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.players.event.*;
-import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventVisitor;
 import org.y1000.message.*;
 
@@ -38,9 +36,6 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
 
     default void visit(PlayerUnequipEvent event) {
 
-    }
-
-    default void visit(PlayerEquipEvent event) {
     }
 
 
@@ -82,7 +77,6 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
     }
 
     default void visit(RewindEvent event) {
-        visit((EntityEvent) event);
     }
 
     default void visit(ItemOrKungFuAttributeEvent event) {

@@ -1,13 +1,14 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.creatures.AbstractCreatureState;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.IAbstractCreatureState;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.event.MonsterShootEvent;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.entities.projectile.NpcProjectile;
 
-public final class NpcRangedAttackState extends AbstractCreatureState<Npc> implements NpcState {
+public final class NpcRangedAttackState extends IAbstractCreatureState<Npc> implements NpcState {
 
     private final String sound;
 
@@ -47,7 +48,12 @@ public final class NpcRangedAttackState extends AbstractCreatureState<Npc> imple
     }
 
     @Override
-    public State stateEnum() {
-        return State.ATTACK;
+    public NpcStateEnum state() {
+        return NpcStateEnum.Attack;
+    }
+
+    @Override
+    public PlayerStateEnum stateEnum() {
+        return PlayerStateEnum.ATTACK;
     }
 }

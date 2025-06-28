@@ -2,7 +2,7 @@ package org.y1000.entities.players.fight;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.players.PlayerImpl;
 
 @Slf4j
@@ -13,8 +13,8 @@ public final class PlayerCooldownState extends AbstractFightingState {
     }
 
     @Override
-    public State stateEnum() {
-        return State.COOLDOWN;
+    public PlayerStateEnum stateEnum() {
+        return PlayerStateEnum.FightStand;
     }
 
     @Override

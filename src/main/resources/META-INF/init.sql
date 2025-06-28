@@ -23,7 +23,7 @@ create table player (
                         power_exp integer not null,
                         realm_id integer not null,
                         revival_exp integer not null,
-                        state integer not null,
+                        playerStateEnum integer not null,
                         x integer not null,
                         y integer not null,
                         yang integer not null,
@@ -93,7 +93,8 @@ create table attack_kungfu(
                               swing_outer_power integer not null,
                               strike_sound integer not null,
                               swing_sound integer not null,
-                              effect_color integer not null
+                              effect_color integer not null,
+                              icon integer not null default 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

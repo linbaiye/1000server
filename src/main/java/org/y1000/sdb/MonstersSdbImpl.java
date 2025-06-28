@@ -5,7 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.kungfu.KungFuType;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class MonstersSdbImpl extends AbstractCSVSdbReader implements MonstersSdb {
 
@@ -145,6 +148,9 @@ public final class MonstersSdbImpl extends AbstractCSVSdbReader implements Monst
         return getIntOrZero(name, "RegenInterval");
     }
 
+    public Set<String> getAllAnimateIds() {
+        return names().stream().map(this::getAnimate).collect(Collectors.toSet());
+    }
 
     private static void check() {
 
@@ -185,26 +191,27 @@ public final class MonstersSdbImpl extends AbstractCSVSdbReader implements Monst
 
     private static void dump( ) {
         MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;
+        System.out.println(monstersSdb.getAllAnimateIds().stream().sorted().collect(Collectors.toList()));
 //        Set<String> names = itemSdb.names();
-        Set<String> names = monstersSdb.columnNames();
-        Set<String> items = monstersSdb.names();
-        for (String i: items) {
-            if (!NAMES.contains(i)) {
-                continue;
-            }
-        /*if (monstersSdb.getRecovery(i) > 10 || i.contains("NK")) {
-                continue;
-            }
-             */
-            System.out.println("----------------------------");
-            System.out.println("Name: " + i);
-            for (String name : names) {
-                if (!StringUtils.isEmpty(monstersSdb.get(i, name)) &&
-                ATTRS.contains(name))
-                    System.out.println(name + ": " + monstersSdb.get(i, name));
-            }
-        }
-
+//        Set<String> names = monstersSdb.columnNames();
+//        Set<String> items = monstersSdb.names();
+//        for (String i: items) {
+//            if (!NAMES.contains(i)) {
+//                continue;
+//            }
+//        /*if (monstersSdb.getRecovery(i) > 10 || i.contains("NK")) {
+//                continue;
+//            }
+//             */
+//            System.out.println("----------------------------");
+//            System.out.println("Name: " + i);
+//            for (String name : names) {
+//                if (!StringUtils.isEmpty(monstersSdb.get(i, name)) &&
+//                ATTRS.contains(name))
+//                    System.out.println(name + ": " + monstersSdb.get(i, name));
+//            }
+//        }
+//
     }
 
     public static void main(String[] args) {

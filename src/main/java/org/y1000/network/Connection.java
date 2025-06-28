@@ -6,7 +6,7 @@ public interface Connection {
 
     void write(I2ClientMessage message);
 
-    void close();
+    void tryClose();
 
     default void flush() {};
 

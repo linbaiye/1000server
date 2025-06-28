@@ -149,7 +149,7 @@ class ProtectKungFuTest {
 
     @Test
     void description() {
-        String description = protectKungFu.description();
+        String description = protectKungFu.detailText();
         assertTrue(description.contains("修炼等级: 1.00"));
         assertTrue(description.contains("防御力: 1 / 2 / 3 / 10"));
     }

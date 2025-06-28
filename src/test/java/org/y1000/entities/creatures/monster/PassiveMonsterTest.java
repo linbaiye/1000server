@@ -5,10 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
 import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.entities.players.Damage;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.Realm;
@@ -34,12 +33,12 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
     @Test
     void getHurt() {
         monster.attackedBy(player);
-        assertSame(monster.stateEnum(), State.HURT);
+        assertSame(monster.stateEnum(), PlayerStateEnum.HURT);
         assertEquals(attributeProvider.recovery() * Realm.STEP_MILLIS, monster.cooldown());
         assertNotNull(eventListener.dequeue(CreatureHurtEvent.class));
         assertNotNull(eventListener.dequeue(EntitySoundEvent.class));
         monster.update(attributeProvider.recovery() * Realm.STEP_MILLIS);
-        assertEquals(State.ATTACK, monster.stateEnum());
+        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
     }
 
     @Test

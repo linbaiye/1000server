@@ -41,6 +41,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
                 .name(name)
                 .exp(exp)
                 .sound(kungFuSdb.getSoundEvent(name))
+                .icon(kungFuSdb.icon(name))
                 .keepParameters(new DefaultKeepParameters(name, kungFuSdb))
                 .fiveSecondsParameters(new DefaultFiveSecondParameters(name, kungFuSdb))
                 .eventResourceParameters(new DefaultEventResourceParameters(name, kungFuSdb))
@@ -139,6 +140,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return BreathKungFu.builder().name(name).exp(exp)
                 .parameters(new RevertedEventResourceParameters(name, kungFuSdb))
                 .sound(kungFuSdb.getSoundEvent(name))
+                .icon(kungFuSdb.icon(name))
                 .build();
     }
 
@@ -146,6 +148,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return ProtectKungFu.builder()
                 .name(name)
                 .exp(exp)
+                .icon(kungFuSdb.icon(name))
                 .parameters(new ProtectionParametersImpl(name, kungFuSdb,
                         new DefaultKeepParameters(name, kungFuSdb),
                         new DefaultArmorParameters(name, kungFuSdb),

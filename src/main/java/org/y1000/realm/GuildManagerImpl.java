@@ -271,7 +271,7 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         String template;
         switch (request.getType()) {
             case AXE -> template = "无名槌法";
-            case QUANFA -> template = "无名拳法";
+            case FistWeapon -> template = "无名拳法";
             case SWORD -> template = "无名剑法";
             case BLADE -> template = "无名刀法";
             case SPEAR -> template = "无名枪术";

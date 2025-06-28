@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.projectile.Projectile;
@@ -15,6 +15,7 @@ import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.message.input.ClientAttackEvent;
 import org.y1000.message.input.ClientEvent;
+import org.y1000.message.input.SelfHandleInput;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
@@ -34,6 +35,8 @@ public interface Player extends ViolentCreature {
 
     void leaveRealm();
 
+    boolean isLeftGame();
+
     default Optional<FootKungFu> footKungFu() {
         return Optional.empty();
     }
@@ -51,6 +54,8 @@ public interface Player extends ViolentCreature {
     Inventory inventory();
 
     void handleClientEvent(ClientEvent clientEvent);
+
+    void handleInput(SelfHandleInput input);
 
     void attack(ClientAttackEvent event, AttackableActiveEntity target);
 
@@ -133,11 +138,11 @@ public interface Player extends ViolentCreature {
     boolean consumeItem(int slotId);
 
     default boolean canDrag(Player target, int ropeSlot) {
-        if (stateEnum() == State.DIE || stateEnum() == State.FROZEN ||
+        if (stateEnum() == PlayerStateEnum.DIE || stateEnum() == PlayerStateEnum.Turn ||
                 target.equals(this)) {
             return false;
         }
-        if (target.stateEnum() != State.DIE) {
+        if (target.stateEnum() != PlayerStateEnum.DIE) {
             return false;
         }
         if (target.coordinate().directDistance(coordinate()) > 4) {
@@ -186,5 +191,9 @@ public interface Player extends ViolentCreature {
         wrist().ifPresent(ret::add);
         return ret;
     }
+
+    void changeState(PlayerState playerState);
+
+    PlayerState state();
 }
 

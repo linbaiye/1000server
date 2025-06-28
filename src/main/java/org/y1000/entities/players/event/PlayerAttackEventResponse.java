@@ -1,7 +1,7 @@
 package org.y1000.entities.players.event;
 
 import lombok.Getter;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.message.input.ClientAttackEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
@@ -17,7 +17,7 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
     @Getter
     private final boolean accepted;
 
-    private final State backToState;
+    private final PlayerStateEnum backToPlayerStateEnum;
 
     private final Integer effectId;
 
@@ -25,7 +25,7 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
         super(source);
         clientAttackEvent = clientEvent;
         this.accepted = ok;
-        backToState = source.stateEnum();
+        backToPlayerStateEnum = source.stateEnum();
         this.effectId = effectId;
     }
 
@@ -39,7 +39,7 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
                 .setAccepted(accepted)
                 .setSequence(clientAttackEvent.sequence());
         if (!accepted) {
-            builder.setBackToState(backToState.value());
+            builder.setBackToState(backToPlayerStateEnum.value());
         }
         return Packet.newBuilder()
                 .setAttackEventResponsePacket(builder)
@@ -48,7 +48,7 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
 
 
     public Optional<PlayerAttackEvent> toPlayerAttackEvent() {
-        return accepted ? Optional.of(new PlayerAttackEvent(player(), clientAttackEvent.attackState(), effectId)) : Optional.empty();
+        return accepted ? Optional.of(new PlayerAttackEvent(player(), clientAttackEvent.attackPlayerStateEnum(), effectId)) : Optional.empty();
     }
 
 

@@ -35,8 +35,8 @@ public final class ProtectKungFu extends AbstractPeriodicalConsumingKungFu {
 
 
     @Builder
-    public ProtectKungFu(String name, int exp, ProtectionParameters parameters) {
-        super(name, exp, parameters, parameters);
+    public ProtectKungFu(String name, int exp, ProtectionParameters parameters, int icon) {
+        super(name, exp, parameters, parameters, icon);
         this.parameters = parameters;
         resetTimer();
     }
@@ -87,7 +87,7 @@ public final class ProtectKungFu extends AbstractPeriodicalConsumingKungFu {
     }
 
     @Override
-    public String description() {
+    public String detailText() {
         StringBuilder descritionBuilder = getDescriptionBuilder();
         var am = armor();
         var str = String.format("防御力: %d / %d / %d / %d", am.body(), am.head(), am.arm(), am.leg());
@@ -96,7 +96,7 @@ public final class ProtectKungFu extends AbstractPeriodicalConsumingKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new ProtectKungFu(name(), 0, parameters);
+        return new ProtectKungFu(name(), 0, parameters, icon());
     }
 
 

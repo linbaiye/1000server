@@ -11,11 +11,13 @@ import org.y1000.entities.players.Rope;
 import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.input.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
+import org.y1000.network.Connection;
 import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.repository.PlayerRepository;
@@ -24,14 +26,13 @@ import org.y1000.util.UnaryAction;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.Set;
 
 
 @Slf4j
 final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implements PlayerEventVisitor, PlayerManager {
 
-    private final EntityEventSender eventSender;
+    private final RealmEntityEventSender eventSender;
 
     private final GroundItemManager itemManager;
 
@@ -54,8 +55,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     private final CrossRealmEventSender crossRealmEventSender;
 
 
-
-    public PlayerManagerImpl(EntityEventSender eventSender,
+    public PlayerManagerImpl(RealmEntityEventSender eventSender,
                              GroundItemManager itemManager,
                              ItemFactory itemFactory,
                              DynamicObjectManager dynamicObjectManager,
@@ -67,7 +67,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                 deadPlayerTeleportManager, crossRealmEventSender);
     }
 
-    public PlayerManagerImpl(EntityEventSender eventSender,
+    public PlayerManagerImpl(RealmEntityEventSender eventSender,
                              GroundItemManager itemManager,
                              ItemFactory itemFactory,
                              TradeManager tradeManager,
@@ -99,6 +99,40 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         player.joinRealm(realm);
         eventSender.notifySelf(new JoinedRealmEvent(player));
         eventSender.notifyPlayerOfEntities(player);
+        log.debug("Player {} logged in.", player);
+    }
+
+    private void doLogout(Player player) {
+        if (player == null) {
+            return;
+        }
+        player.leaveRealm();
+        eventSender.notifyVisiblePlayersAndSelf(player, new RemoveEntityMessage(player.id()));
+        remove(player);
+        player.clearListeners();
+        eventSender.remove(player).ifPresent(Connection::tryClose);
+        playerRepository.update(player);
+    }
+
+    @Override
+    public void onPlayerLogin(Player player, Login login, Realm realm) {
+        if (player == null || login == null) {
+            return;
+        }
+        find(login.playerId()).ifPresent(this::doLogout);
+        eventSender.add(player, login.connection());
+        add(player);
+        player.registerEventListener(this);
+        player.joinRealm(realm);
+        eventSender.notifySelf(new JoinedRealmEvent(player));
+        eventSender.notifyPlayerOfEntities(player);
+    }
+
+    @Override
+    public void onPlayerLogout(Connection connection) {
+        if (connection == null)
+            return;
+        eventSender.removeConnection(connection).ifPresent(this::doLogout);
     }
 
     @Override
@@ -213,6 +247,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         find(playerId).ifPresent( player -> {
             playerRepository.update(player);
             clearPlayer(player);
+            log.debug("Player {} disconnected.", player);
         });
     }
 
@@ -222,6 +257,12 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
             deadPlayerTeleportManager.setTeleportHandler(teleportHandler);
         }
     }
+
+    @Override
+    public void handleInput(Connection connection, SelfHandleInput input) {
+        eventSender.findPlayer(connection).ifPresent(p -> p.handleInput(input));
+    }
+
 
     @Override
     public void shutdown() {
@@ -254,6 +295,9 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                 } else if (playerEvent.visibleToPlayers()) {
                     eventSender.notifyVisiblePlayersAndSelf(playerEvent.player(), playerEvent);
                 }
+            } else if (entityEvent instanceof I2ClientMessage message) {
+                eventSender.findConnection((Player) entityEvent.source())
+                        .ifPresent(connection -> connection.write(message));
             }
         } catch (Exception e) {
             log.error("Failed to handle event.", e);

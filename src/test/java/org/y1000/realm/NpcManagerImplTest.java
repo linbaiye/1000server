@@ -6,8 +6,8 @@ import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.RemoveEntityEvent;
-import org.y1000.entities.creatures.CreatureState;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.ICreatureState;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.NpcJoinedEvent;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
@@ -111,14 +111,14 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         Npc monster = npcManager.find(1L).get();
         Weapon weapon = Mockito.mock(Weapon.class);
         when(weapon.damage()).thenReturn(new Damage(10000000, 1, 1,1));
-        when(weapon.kungFuType()).thenReturn(AttackKungFuType.QUANFA);
+        when(weapon.kungFuType()).thenReturn(AttackKungFuType.FistWeapon);
         when(weapon.equipmentType()).thenReturn(EquipmentType.WEAPON);
-        while (monster.stateEnum() != State.DIE) {
+        while (monster.stateEnum() != PlayerStateEnum.DIE) {
             var player = playerBuilder().weapon(weapon).build();
             player.handleClientEvent(new ClientToggleKungFuEvent(1, 1));
             monster.attackedBy(player);
         }
-        CreatureState<?> state = monster.state();
+        ICreatureState<?> state = monster.creatureState();
         npcManager.update(state.totalMillis());
         Npc recreatedNpc = npcManager.find(2L).get();
         assertEquals("牛", recreatedNpc.idName());

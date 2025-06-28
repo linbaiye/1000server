@@ -2,7 +2,7 @@ package org.y1000.message.input.chat;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.realm.event.BroadcastTextEvent;
@@ -49,9 +49,9 @@ class ClientWorldShoutEventTest {
     void canSend() {
         ClientWorldShoutEvent event = ClientWorldShoutEvent.parse("!test");
         Player player = Mockito.mock(Player.class);
-        when(player.stateEnum()).thenReturn(State.DIE);
+        when(player.stateEnum()).thenReturn(PlayerStateEnum.DIE);
         assertFalse(event.canSend(player));
-        when(player.stateEnum()).thenReturn(State.IDLE);
+        when(player.stateEnum()).thenReturn(PlayerStateEnum.IDLE);
         when(player.currentLife()).thenReturn(4999);
         assertFalse(event.canSend(player));
         when(player.currentLife()).thenReturn(5000);

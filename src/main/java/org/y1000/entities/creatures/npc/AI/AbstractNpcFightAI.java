@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.monster.Monster;
 import org.y1000.entities.creatures.npc.Npc;
@@ -12,6 +12,7 @@ import org.y1000.entities.creatures.npc.NpcHurtState;
 import org.y1000.entities.creatures.npc.ViolentNpc;
 import org.y1000.entities.creatures.npc.spell.CloneSpell;
 import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
@@ -62,7 +63,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
 
     int computeWalkMillis() {
         int walkSpeed = npc.walkSpeed() / speedRate;
-        var stateMillis = npc.getStateMillis(State.WALK);
+        var stateMillis = npc.getStateMillis(PlayerStateEnum.Move);
         if (walkSpeed > stateMillis) {
             return stateMillis;
         }
@@ -77,7 +78,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
 
 
     private void tryChangeEnemy() {
-        if (npc.state() instanceof NpcHurtState hurtState) {
+        if (npc.creatureState() instanceof NpcHurtState hurtState) {
             if (!hurtState.attacker().equals(enemy) &&
                     shouldChangeEnemy(hurtState.attacker())) {
                 this.enemy = hurtState.attacker();
@@ -98,14 +99,14 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
 
     @Override
     public void onActionDone(Npc npc) {
-        if (npc.stateEnum() == State.DIE) {
+        if (npc.stateEnum() == PlayerStateEnum.DIE) {
             return;
         }
-        if (npc.stateEnum() == State.WALK) {
+        if (npc.stateEnum() == PlayerStateEnum.Move) {
             previous = npc.coordinate().moveBy(npc.direction().opposite());
             npc.stay(computeStayMillis());
             return;
-        } else if (npc.stateEnum() == State.HURT) {
+        } else if (npc.stateEnum() == PlayerStateEnum.HURT) {
             npc.findSpell(CloneSpell.class).ifPresent(s -> s.castIfAvailable(npc, getEnemy()));
             tryChangeEnemy();
             if (npc instanceof Monster monster && getEnemy() instanceof ViolentCreature violentCreature) {

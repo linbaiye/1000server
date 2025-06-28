@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
@@ -20,6 +20,7 @@ public interface Npc extends Creature {
     void move(int millis);
 
     void stay(int millis);
+    void turn();
 
     void die();
 
@@ -29,11 +30,11 @@ public interface Npc extends Creature {
 
     <S extends NpcSpell> Optional<S> findSpell(Class<S> type);
 
-    void startAction(State state);
+    void startAction(PlayerStateEnum playerStateEnum);
 
     void changeState(NpcState state);
 
-    NpcState state();
+    NpcState creatureState();
 
     void start();
 

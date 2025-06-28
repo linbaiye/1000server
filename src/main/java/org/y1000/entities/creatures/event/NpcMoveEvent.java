@@ -1,8 +1,6 @@
 package org.y1000.entities.creatures.event;
 
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.monster.AbstractMonster;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.MonsterMoveEventPacket;

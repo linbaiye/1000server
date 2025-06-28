@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
@@ -45,7 +45,7 @@ class NpcFactoryImplTest extends AbstractUnitTestFixture  {
         assertInstanceOf(Scarecrow.class, npc);
         assertEquals(1, npc.id());
         assertEquals(Coordinate.xy(2, 2), npc.coordinate());
-        assertEquals(State.IDLE, npc.stateEnum());
+        assertEquals(PlayerStateEnum.IDLE, npc.stateEnum());
     }
 
     @Test
@@ -54,7 +54,7 @@ class NpcFactoryImplTest extends AbstractUnitTestFixture  {
         assertInstanceOf(Guardian.class, npc);
         assertEquals(3, npc.id());
         assertEquals(Coordinate.xy(2, 2), npc.coordinate());
-        assertEquals(State.IDLE, npc.stateEnum());
+        assertEquals(PlayerStateEnum.IDLE, npc.stateEnum());
     }
 
     @Test

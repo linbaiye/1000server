@@ -8,10 +8,18 @@ public abstract class AbstractKungFu implements KungFu {
     private final String name;
 
     private Experience experience;
+    private final int icon;
 
     protected AbstractKungFu(String name, int exp) {
         this.name = name;
         experience = new Experience(exp);
+        icon = 0;
+    }
+
+    protected AbstractKungFu(String name, int exp, int icon) {
+        this.name = name;
+        experience = new Experience(exp);
+        this.icon = icon;
     }
 
     public int level() {
@@ -51,6 +59,11 @@ end;
 
     public String name() {
         return name;
+    }
+
+    @Override
+    public int icon() {
+        return icon;
     }
 
     protected StringBuilder getDescriptionBuilder() {

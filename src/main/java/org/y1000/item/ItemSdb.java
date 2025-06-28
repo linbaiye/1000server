@@ -58,4 +58,10 @@ public interface ItemSdb {
     int getShape(String name);
 
     boolean isUpgrade(String name);
+
+    int getIcon(String name);
+
+    String getWearShape(String name);
+
+
 }

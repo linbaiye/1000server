@@ -1,5 +1,7 @@
 package org.y1000.sdb;
 
+import java.util.Set;
+
 public interface MonstersSdb {
     int getRecovery(String name);
 
@@ -52,4 +54,6 @@ public interface MonstersSdb {
     int getEscapeLife(String name);
 
     int getRegenInterval(String name);
+
+    Set<String> getAllAnimateIds();
 }

@@ -2,21 +2,21 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.players.event.RewindEvent;
 import org.y1000.message.input.ClientMovementEvent;
 import org.y1000.util.Coordinate;
 
-public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements PlayerState {
+public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<PlayerImpl> implements IPlayerState {
 
     private ClientMovementEvent event;
 
-    protected AbstractPlayerMoveState(State state, Coordinate start,
-                                   Direction towards, int millisPerUnit) {
-        super(state, start, towards, millisPerUnit);
+    protected AbstractPlayerMoveState(PlayerStateEnum playerStateEnum, Coordinate start,
+                                      Direction towards, int millisPerUnit) {
+        super(playerStateEnum, start, towards, millisPerUnit);
     }
 
-    protected abstract PlayerState rewindState(PlayerImpl player);
+    protected abstract IPlayerState rewindState(PlayerImpl player);
 
     protected abstract void onMoved(PlayerImpl player);
 
@@ -30,7 +30,7 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
         }
         if (tryChangeCoordinate(player, player.realmMap())) {
             onMoved(player);
-            if (event != null && player.state() instanceof MovableState movableState) {
+            if (event != null && player.creatureState() instanceof MovableState movableState) {
                 movableState.move(player, event);
             }
         } else {

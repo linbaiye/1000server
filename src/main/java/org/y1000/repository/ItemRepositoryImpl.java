@@ -56,7 +56,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         return switch (equipmentType) {
             case WEAPON -> new WeaponImpl(name, itemSdb, abilities);
             case TROUSER, CLOTHING, HAIR -> new SexualEquipmentImpl(name, itemSdb, equipmentType, abilities);
-            case HAT, CHEST, BOOT, WRIST, WRIST_CHESTED -> new ArmorImpl(name, itemSdb, abilities);
+            case HAT, CHEST, BOOT, WRIST -> new ArmorImpl(name, itemSdb, abilities);
         };
     }
 
@@ -112,6 +112,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                 .name(name)
                 .kungFu(kungFuFactory.create(name))
                 .desc(itemSdb.getDesc(name))
+                .icon(itemSdb.getIcon(name))
                 .build();
     }
 

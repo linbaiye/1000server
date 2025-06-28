@@ -16,4 +16,6 @@ public interface Equipment extends Item {
     default <T> Optional<T> findAbility(Class<T> type) {
         return Optional.empty();
     }
+
+    String wearShape();
 }

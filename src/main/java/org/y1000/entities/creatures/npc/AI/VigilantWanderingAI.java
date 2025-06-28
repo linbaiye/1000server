@@ -23,7 +23,7 @@ public final class VigilantWanderingAI extends AbstractMonsterWanderingAI {
 
     @Override
     protected void onMonsterActionDone(Monster npc) {
-        if (npc.state() instanceof NpcHurtState hurtState) {
+        if (npc.creatureState() instanceof NpcHurtState hurtState) {
             escape(npc, hurtState.attacker());
             return;
         }

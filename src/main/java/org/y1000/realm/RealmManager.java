@@ -3,18 +3,11 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.account.AccountManager;
-import org.y1000.entities.players.Player;
-import org.y1000.message.input.ClientEvent;
-import org.y1000.message.input.DebugInput;
-import org.y1000.message.input.Login;
-import org.y1000.message.input.LoginEvent;
+import org.y1000.message.input.*;
 import org.y1000.network.ConnectionEvent;
 import org.y1000.realm.event.*;
 import org.y1000.network.Connection;
 import org.y1000.network.ConnectionEventType;
-import org.y1000.network.event.ConnectionDataEvent;
-import org.y1000.network.event.ConnectionEstablishedEvent;
-import org.y1000.network.event.IConnectionEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
@@ -39,14 +32,11 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
 
     private final PlayerRepository playerRepository;
 
-    private final Map<Connection, Long> connectionPlayerIdMap;
-
     private RealmManager(AccountManager accountManager,
                          PlayerRepository playerRepository) {
         eventQueue = new ArrayDeque<>(100);
         shutdown = false;
         playerNameRealmIdMap = new HashMap<>();
-        connectionPlayerIdMap = new HashMap<>(500);
         this.playerRepository = playerRepository;
         this.accountManager = accountManager;
     }
@@ -111,15 +101,14 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
 
     private void handleLogin(Integer accountId, String charName, Connection connection) {
         playerRepository
-                .findIdAndRealm(accountId, 99999951)
+                .findIdAndRealm(accountId, 100000051)
                 .ifPresent(pair -> {
-                    connectionPlayerIdMap.put(connection, pair.getLeft());
                     realmIdGroupMap.values().forEach(r -> r.broadcast(new Login(connection, pair.getLeft())));
                 });
     }
 
     private void handleLogout(Connection co) {
-
+        realmIdGroupMap.values().forEach(r -> r.broadcast(new Logout(co)));
     }
 
 
@@ -127,6 +116,8 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         if (data instanceof DebugInput) {
             log.debug("Received debug.");
             handleLogin(1,"测试", connection);
+        } else if (data instanceof SelfHandleInput input) {
+            realmIdGroupMap.values().forEach(r -> r.broadcast(new ConnectionInput(connection, input)));
         }
     }
 

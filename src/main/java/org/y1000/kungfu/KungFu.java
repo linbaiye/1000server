@@ -21,9 +21,11 @@ public interface KungFu {
     KungFuType kungFuType();
 
 
-    String description();
+    String detailText();
 
 
     KungFu duplicate();
+
+    int icon();
 
 }

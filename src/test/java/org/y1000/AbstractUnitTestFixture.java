@@ -3,11 +3,10 @@ package org.y1000;
 import jakarta.persistence.EntityManagerFactory;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
-import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
@@ -103,14 +102,14 @@ public abstract class AbstractUnitTestFixture {
     }
 
 
-    protected static final Map<State, Integer> MONSTER_STATE_MILLIS = new HashMap<>() {
+    protected static final Map<PlayerStateEnum, Integer> MONSTER_STATE_MILLIS = new HashMap<>() {
         {
-            put(State.IDLE, 1000);
-            put(State.WALK, 770);
-            put(State.HURT, 540);
-            put(State.ATTACK, 700);
-            put(State.DIE, 700);
-            put(State.FROZEN, 900);
+            put(PlayerStateEnum.IDLE, 1000);
+            put(PlayerStateEnum.Move, 770);
+            put(PlayerStateEnum.HURT, 540);
+            put(PlayerStateEnum.ATTACK, 700);
+            put(PlayerStateEnum.DIE, 700);
+            put(PlayerStateEnum.Turn, 900);
         }
     };
 
@@ -136,7 +135,7 @@ public abstract class AbstractUnitTestFixture {
                 .coordinate(new Coordinate(1, 1))
                 .name("test")
                 .kungFuBook(kungFuBook)
-                .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA))
+                .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.FistWeapon))
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
                 .yinYang(new YinYang())
                 .life(PlayerLife.create())

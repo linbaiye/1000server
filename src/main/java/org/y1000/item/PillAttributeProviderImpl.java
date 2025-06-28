@@ -103,4 +103,9 @@ public final class PillAttributeProviderImpl implements PillAttributeProvider {
     public String description() {
         return itemSdb.getDesc(name);
     }
+
+    @Override
+    public int icon() {
+        return itemSdb.getIcon(name);
+    }
 }

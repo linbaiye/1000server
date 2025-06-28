@@ -4,11 +4,10 @@ import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.EntityLifebarEvent;
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
-import org.y1000.message.AbstractEntityInterpolation;
+import org.y1000.message.AbstractEntitySnapshot;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
@@ -88,7 +87,7 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
 
 
     @Override
-    public AbstractEntityInterpolation captureInterpolation() {
-        return new DynamicObjectInterpolation(this, animationElapsedDuration());
+    public AbstractEntitySnapshot captureInterpolation() {
+        return new DynamicObjectSnapshot(this, animationElapsedDuration());
     }
 }

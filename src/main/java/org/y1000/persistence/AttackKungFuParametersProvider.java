@@ -40,6 +40,8 @@ public class AttackKungFuParametersProvider {
     private int swingSound;
     private int strikeSound;
     private int effectColor;
+    private int icon;
+
    /*
     @Override
     public int powerToSwing() {

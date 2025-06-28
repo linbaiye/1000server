@@ -61,7 +61,7 @@ public final class AssistantKungFu extends AbstractKungFu {
     }
 
     @Override
-    public String description() {
+    public String detailText() {
         return getDescriptionBuilder().toString();
     }
 

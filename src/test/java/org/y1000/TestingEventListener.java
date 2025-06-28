@@ -1,6 +1,7 @@
 package org.y1000;
 
 import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventListener;
 
 import java.util.ArrayList;
@@ -12,11 +13,11 @@ public class TestingEventListener implements EntityEventListener {
     private final List<EntityEvent> entityEvents = new ArrayList<>();
 
     @Override
-    public void onEvent(EntityEvent entityEvent) {
+    public void onEvent(IEntityEvent entityEvent) {
         this.entityEvents.add(entityEvent);
     }
 
-    public <T extends EntityEvent> T dequeue(Class<T> clazz) {
+    public <T extends IEntityEvent> T dequeue(Class<T> clazz) {
         return !entityEvents.isEmpty() ? clazz.cast(entityEvents.remove(0)) : null;
     }
 
@@ -28,7 +29,7 @@ public class TestingEventListener implements EntityEventListener {
         return entityEvents.isEmpty();
     }
 
-    public <T extends EntityEvent> T removeFirst(Class<T> clazz) {
+    public <T extends IEntityEvent> T removeFirst(Class<T> clazz) {
         Iterator<EntityEvent> iterator = entityEvents.iterator();
         while (iterator.hasNext()) {
             EntityEvent next = iterator.next();
@@ -42,5 +43,10 @@ public class TestingEventListener implements EntityEventListener {
 
     public void clearEvents() {
         entityEvents.clear();
+    }
+
+    @Override
+    public void onEvent(EntityEvent entityEvent) {
+
     }
 }

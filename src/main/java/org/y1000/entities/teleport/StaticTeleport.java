@@ -2,7 +2,7 @@ package org.y1000.entities.teleport;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Entity;
-import org.y1000.message.AbstractEntityInterpolation;
+import org.y1000.message.AbstractEntitySnapshot;
 import org.y1000.realm.event.PlayerRealmEvent;
 import org.y1000.sdb.CreateGateSdb;
 import org.y1000.util.UnaryAction;
@@ -32,8 +32,8 @@ public final class StaticTeleport extends AbstractTeleport implements Entity  {
     }
 
     @Override
-    public AbstractEntityInterpolation captureInterpolation() {
-        return new TeleportInterpolation(this);
+    public AbstractEntitySnapshot captureInterpolation() {
+        return new TeleportSnapshot(this);
     }
 
     public int shape() {

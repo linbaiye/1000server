@@ -3,11 +3,11 @@ package org.y1000.entities.creatures.npc;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.players.Damage;
-import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.CreatureAttackEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.event.NpcChangeStateEvent;
@@ -30,7 +30,7 @@ public abstract class AbstractViolentNpc
     private final NpcRangedSkill skill;
 
     public AbstractViolentNpc(long id, Coordinate coordinate, Direction direction, String name,
-                              Map<State, Integer> stateMillis, AttributeProvider attributeProvider,
+                              Map<PlayerStateEnum, Integer> stateMillis, AttributeProvider attributeProvider,
                               RealmMap realmMap, NpcAI ai, NpcRangedSkill skill, List<NpcSpell> spellList) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, spellList, ai);
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
@@ -78,7 +78,7 @@ public abstract class AbstractViolentNpc
 
     @Override
     public void startAttackAction(boolean withSound) {
-        doAttackAction(NpcCommonState.attack(getStateMillis(State.ATTACK)));
+        doAttackAction(NpcCommonState.attack(getStateMillis(PlayerStateEnum.ATTACK)));
         if (withSound) {
             attackSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         }
@@ -103,18 +103,18 @@ public abstract class AbstractViolentNpc
         if (target == null || !skill.isAvailable()) {
             return;
         }
-        doAttackAction(new NpcRangedAttackState(getStateMillis(State.ATTACK), skill.getSwingSound(), skill.getProjectileSpriteId(), target, this));
+        doAttackAction(new NpcRangedAttackState(getStateMillis(PlayerStateEnum.ATTACK), skill.getSwingSound(), skill.getProjectileSpriteId(), target, this));
     }
 
     @Override
-    public void startAction(State state) {
-        if (state == State.ATTACK) {
+    public void startAction(PlayerStateEnum playerStateEnum) {
+        if (playerStateEnum == PlayerStateEnum.ATTACK) {
             startAttackAction(true);
-        } else if (state == State.COOLDOWN) {
+        } else if (playerStateEnum == PlayerStateEnum.FightStand) {
             changeState(NpcCommonState.idle(cooldown()));
             emitEvent(NpcChangeStateEvent.of(this));
         } else {
-            super.startAction(state);
+            super.startAction(playerStateEnum);
         }
     }
 
@@ -122,7 +122,7 @@ public abstract class AbstractViolentNpc
     public void update(int delta) {
         cooldown(delta);
         skill().ifPresent(s -> s.cooldown(delta));
-        state().update(this, delta);
+        creatureState().update(this, delta);
     }
 
     @Override

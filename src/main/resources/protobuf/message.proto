@@ -7,6 +7,7 @@ message PositionPacket {
   int64 id = 4;
   int32 type = 5;
   int32 state = 6;
+  int32 moveAction = 7;
 }
 
 message MonsterMoveEventPacket {
@@ -86,6 +87,7 @@ message CreatureHurtEventPacket {
 message ChangeStatePacket {
   int64 id = 1;
   int32 state = 2;
+  int32 direction = 3;
 }
 
 
@@ -310,10 +312,16 @@ message ClientPacket {
     ClientSubmitQuestPacket submitQuest = 29;
     ClientClickInteractabilityPacket interact = 30;
     DebugPacket debug = 31;
+    MoveInputPacket moveInput = 32;
+    TurnInputPacket turnInput = 33;
+    SimpleInputPacket simpleInput = 34;
+    ClickKungFuInputPacket clickKungFuInput = 35;
+    ClickInventorySlotInputPacket clickInventorySlotInput = 36;
   }
 }
 
 message InterpolationPacket {
+  int32 moveAction = 1;
   int32 state = 2;
   int32 elapsedMillis = 5;
   int32 direction = 7;
@@ -330,6 +338,7 @@ message InventoryItemPacket {
   int32 slotId = 2;
   optional int64 number = 3;
   int32 color = 4;
+  int32 icon = 5;
 }
 
 message NpcItemPacket {
@@ -343,6 +352,11 @@ message NpcItemPacket {
 message OpenTradeWindowPacket {
   int64 anotherPlayerId = 1;
   optional int32 slot = 2;
+}
+
+message InventoryPacket {
+  repeated InventoryItemPacket items = 1;
+  bool forceful = 2;
 }
 
 message UpdateTradeWindowPacket {
@@ -360,6 +374,7 @@ message KungFuPacket {
   int32 level = 2;
   int32 slot = 3;
   int32 type = 4;
+  int32 icon = 5;
 }
 
 message TextMessagePacket {
@@ -408,6 +423,12 @@ message LoginPacket {
   optional string assistantKungFu = 14;
   optional string breathKungFu = 15;
   AttributePacket attribute = 17;
+  bool footKungFuCanFly = 18;
+}
+
+message KungFuBookPacket {
+  repeated KungFuPacket unnamedKungFuList = 1;
+  repeated KungFuPacket basicKungFuList = 2;
 }
 
 message AttributePacket {
@@ -453,8 +474,11 @@ message PlayerUnequipPacket {
 
 message PlayerEquipPacket {
   int64 id = 1;
-  string equipmentName = 2;
+  int32 equipmentType = 2;
   int32 color = 3;
+  string spritePrefix = 4;
+  optional string pairedSpritePrefix = 5;
+  int32 weaponType = 6;
 }
 
 message PlayerSitDownPacket {
@@ -648,6 +672,8 @@ message Packet {
     UpdateBuffPacket updateBuff = 53;
     NpcInteractionMenuPacket interactionMenu = 54;
     MerchantMenuPacket merchantMenu = 55;
+    KungFuBookPacket kungFuBook = 56;
+    InventoryPacket inventory = 57;
   }
 }
 
@@ -704,4 +730,23 @@ message MoveInputPacket {
 
 message DebugPacket {
   int32 padding = 1;
+}
+
+message TurnInputPacket {
+  int32 direction = 3;
+}
+
+message ClickKungFuInputPacket {
+  int32 page = 1;
+  int32 slot = 2;
+  int32 clickType = 3;
+}
+
+message ClickInventorySlotInputPacket {
+  int32 slot = 1;
+  int32 clickType = 3;
+}
+
+message SimpleInputPacket {
+  int32 type = 1;
 }

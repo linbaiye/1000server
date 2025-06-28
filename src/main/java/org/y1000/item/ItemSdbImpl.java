@@ -292,6 +292,16 @@ MaxCount,        最多持有数量；
         return "TRUE".equals(get(name, "boUpgrade"));
     }
 
+    @Override
+    public int getIcon(String name) {
+        return getInt(name, "Shape");
+    }
+
+    @Override
+    public String getWearShape(String name) {
+        return get(name, "WearShape");
+    }
+
     public static final ItemSdbImpl INSTANCE = read();
 
     private static ItemSdbImpl read() {

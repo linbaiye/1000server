@@ -14,8 +14,8 @@ public abstract class AbstractPeriodicalConsumingKungFu extends AbstractKungFu i
 
     protected AbstractPeriodicalConsumingKungFu(String name, int exp,
                                                 KeepParameters keepParameters,
-                                                FiveSecondsParameters consumingParameters) {
-        super(name, exp);
+                                                FiveSecondsParameters consumingParameters, int icon) {
+        super(name, exp, icon);
         this.keepParameters = keepParameters;
         this.consumingParameters = consumingParameters;
         resetTimer();

@@ -22,4 +22,6 @@ public interface Item {
         return 0;
     }
 
+    int icon();
+
 }

@@ -8,7 +8,7 @@ import org.y1000.TestingEventListener;
 import org.y1000.entities.creatures.npc.Quester;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.serverevent.EntityChatEvent;
 import org.y1000.quest.Quest;
@@ -37,7 +37,7 @@ class ClientSubmitQuestEventTest extends AbstractUnitTestFixture {
         doAnswer(invocationOnMock -> {
             eventListener.onEvent(invocationOnMock.getArgument(0));
             return null;
-        }).when(player).emitEvent(any(EntityEvent.class));
+        }).when(player).emitEvent(any(IEntityEvent.class));
         when(player.inventory()).thenReturn(inventory);
         questSdb = Mockito.mock(QuestSdb.class);
         when(questSdb.getRequiredItems(anyString())).thenReturn("生药:1|丸药:1");

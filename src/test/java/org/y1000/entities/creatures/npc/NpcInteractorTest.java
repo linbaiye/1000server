@@ -7,7 +7,7 @@ import org.y1000.TestingEventListener;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractor;
 import org.y1000.entities.players.Player;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.message.serverevent.InteractionMenuEvent;
 import org.y1000.network.gen.NpcInteractionMenuPacket;
 import org.y1000.util.Coordinate;
@@ -52,7 +52,7 @@ class NpcInteractorTest {
         doAnswer(invocationOnMock -> {
             eventListener.onEvent(invocationOnMock.getArgument(0));
             return null;
-        }).when(player).emitEvent(any(EntityEvent.class));
+        }).when(player).emitEvent(any(IEntityEvent.class));
         when(npc.id()).thenReturn(1L);
         when(npc.viewName()).thenReturn("name");
         when(npc.shape()).thenReturn("shape");
@@ -64,7 +64,7 @@ class NpcInteractorTest {
     void onNpcClickedNoVisible() {
         when(npc.canBeSeenAt(any(Coordinate.class))).thenReturn(false);
         npcInteractor.onNpcClicked(player, npc);
-        verify(player, times(0)).emitEvent(any(EntityEvent.class));
+        verify(player, times(0)).emitEvent(any(IEntityEvent.class));
     }
 
     @Test

@@ -3,6 +3,7 @@ package org.y1000.sdb;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class NpcSdbImpl extends AbstractCSVSdbReader implements NpcSdb {
     public static final NpcSdbImpl Instance = new NpcSdbImpl();
@@ -144,6 +145,9 @@ public final class NpcSdbImpl extends AbstractCSVSdbReader implements NpcSdb {
         return getInt(name, "Image");
     }
 
+    public Set<String> getAllAnimateIds() {
+        return names().stream().map(this::getAnimate).collect(Collectors.toSet());
+    }
     public static void main(String[] args) {
         NpcSdbImpl sdb= NpcSdbImpl.Instance;
 //        Set<String> names = itemSdb.names();

@@ -5,12 +5,12 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 
 import java.util.Collections;
 import java.util.Set;
 
-public class SeekPlayerEvent implements EntityEvent {
+public class SeekPlayerEvent implements IEntityEvent {
     private final ActiveEntity entity;
 
     @Getter

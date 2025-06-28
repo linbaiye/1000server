@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerExperiencedAgedAttribute;
 import org.y1000.entities.players.PlayerLife;
@@ -92,8 +92,8 @@ public class PlayerPo {
         return Coordinate.xy(x, y);
     }
 
-    public State state() {
-        return State.valueOf(state);
+    public PlayerStateEnum state() {
+        return PlayerStateEnum.valueOf(state);
     }
 
     public PlayerLife life(int innate) {

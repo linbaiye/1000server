@@ -93,7 +93,7 @@ public abstract class AbstractInventory {
     }
 
     public boolean swap(int from, int to) {
-        if (!items.containsKey(from) && !items.containsKey(to)) {
+        if ((!items.containsKey(from) && !items.containsKey(to)) || from == to) {
             return false;
         }
         Item fromItem = items.remove(from);

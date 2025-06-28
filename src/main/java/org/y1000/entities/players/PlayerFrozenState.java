@@ -1,14 +1,15 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 
-final class PlayerFrozenState implements PlayerState {
+final class PlayerFrozenState implements IPlayerState {
     public static final PlayerFrozenState Instance = new PlayerFrozenState();
 
     private PlayerFrozenState() {}
     @Override
-    public State stateEnum() {
-        return State.IDLE;
+    public PlayerStateEnum stateEnum() {
+        return PlayerStateEnum.IDLE;
     }
 
     @Override
@@ -27,12 +28,17 @@ final class PlayerFrozenState implements PlayerState {
     }
 
     @Override
+    public NpcStateEnum state() {
+        return null;
+    }
+
+    @Override
     public void update(PlayerImpl player, int delta) {
 
     }
 
     @Override
-    public State decideAfterHurtState() {
-        return State.FROZEN;
+    public PlayerStateEnum decideAfterHurtState() {
+        return PlayerStateEnum.Turn;
     }
 }

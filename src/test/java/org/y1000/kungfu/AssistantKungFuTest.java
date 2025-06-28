@@ -62,7 +62,7 @@ class AssistantKungFuTest extends AbstractUnitTestFixture  {
 
     @Test
     void description() {
-        assertTrue(assistantKungFu.description().contains("修炼等级: 1.00"));
+        assertTrue(assistantKungFu.detailText().contains("修炼等级: 1.00"));
     }
 
     @Test

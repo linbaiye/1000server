@@ -147,10 +147,12 @@ abstract class AbstractRealm implements Realm {
             return;
         }
         playerManager.clearPlayer(event.player());
-        var connection = eventSender.remove(event.player());
-        realmTeleportEvent.setConnection(connection);
-        crossRealmEventSender.send(event);
-        log().debug("Removed player {}.", event.player().id());
+        eventSender.remove(event.player())
+                .ifPresent(connection -> {
+                    realmTeleportEvent.setConnection(connection);
+                    crossRealmEventSender.send(event);
+                    log().debug("Removed player {}.", event.player().id());
+                });
     }
 
     CrossRealmEventSender getCrossRealmEventHandler() {
@@ -224,13 +226,15 @@ abstract class AbstractRealm implements Realm {
 
     protected abstract void handleLogin(Login login);
 
+
     protected void acceptLogin(Login login) {
-        playerManager().onPlayerDisconnected(login.playerId());
-        playerRepository.load(login.playerId())
-                .ifPresent(p -> {
-                    getEventSender().add(p, login.connection());
-                    playerManager().onPlayerConnected(p, this);
-                });
+        playerRepository.load(login.playerId()).ifPresent(p -> getPlayerManager().onPlayerLogin(p, login, this));
+    }
+
+    private void handleInput(ConnectionInput connectionInput) {
+        if (connectionInput.input() instanceof SelfHandleInput selfHandleInput) {
+            playerManager().handleInput(connectionInput.connection(), selfHandleInput);
+        }
     }
 
     @Override
@@ -238,6 +242,10 @@ abstract class AbstractRealm implements Realm {
         try {
             if (event instanceof Login login) {
                 handleLogin(login);
+            } else if (event instanceof Logout logout) {
+                playerManager.onPlayerLogout(logout.connection());
+            } else if (event instanceof ConnectionInput connectionInput) {
+                handleInput(connectionInput);
             }
         } catch (Exception e) {
             log().error("Failed to handle event.", e);

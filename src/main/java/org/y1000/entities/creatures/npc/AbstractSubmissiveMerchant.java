@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.npc;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.entities.players.Player;
@@ -27,7 +27,7 @@ public abstract class AbstractSubmissiveMerchant extends AbstractNpc implements 
     public AbstractSubmissiveMerchant(long id,
                                       Coordinate coordinate,
                                       String name,
-                                      Map<State, Integer> stateMillis,
+                                      Map<PlayerStateEnum, Integer> stateMillis,
                                       AttributeProvider attributeProvider,
                                       RealmMap realmMap,
                                       Merchantable merchantable,
@@ -45,7 +45,7 @@ public abstract class AbstractSubmissiveMerchant extends AbstractNpc implements 
 
     @Override
     public void update(int delta) {
-        state().update(this, delta);
+        creatureState().update(this, delta);
     }
 
     @Override
@@ -66,6 +66,6 @@ public abstract class AbstractSubmissiveMerchant extends AbstractNpc implements 
 
     @Override
     void hurt(ViolentCreature attacker) {
-        doHurtAction(attacker, getStateMillis(State.HURT));
+        doHurtAction(attacker, getStateMillis(PlayerStateEnum.HURT));
     }
 }

@@ -3,10 +3,10 @@ package org.y1000.entities.creatures.event;
 import org.y1000.entities.Entity;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventVisitor;
 
-public final class NpcShiftEvent implements EntityEvent {
+public final class NpcShiftEvent implements IEntityEvent {
 
     private final String idName;
     private final Npc source;

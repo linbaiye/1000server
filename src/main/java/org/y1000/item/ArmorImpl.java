@@ -43,9 +43,9 @@ public final class ArmorImpl extends AbstractSexualEquipment implements ArmorEqu
 
     @Override
     public EquipmentType equipmentType() {
-        var type = itemSdb.getEquipmentType(name());
-        return type != EquipmentType.WRIST_CHESTED ? type : EquipmentType.WRIST;
+        return itemSdb.getEquipmentType(name());
     }
+
     @Override
     public String description() {
         StringBuilder descriptionBuilder = getDescriptionBuilder();

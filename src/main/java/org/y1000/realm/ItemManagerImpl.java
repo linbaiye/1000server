@@ -9,6 +9,7 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.event.item.ItemEventVisitor;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
@@ -150,7 +151,8 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
     @Override
     public void onEvent(EntityEvent entityEvent) {
         try {
-            entityEvent.accept(this);
+            if (entityEvent instanceof IEntityEvent iEntityEvent)
+                iEntityEvent.accept(this);
         } catch (Exception e) {
             log.error("Failed to handle event, ", e);
         }

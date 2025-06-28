@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 class PlayerManagerImplTest extends AbstractUnitTestFixture {
     private PlayerManagerImpl playerManager;
 
-    private EntityEventSender eventSender;
+    private RealmEntityEventSender eventSender;
 
     private GroundItemManager itemManager;
 
@@ -34,7 +34,7 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
     @BeforeEach
     void setUp() {
         tradeManager = Mockito.mock(TradeManager.class);
-        eventSender = Mockito.mock(EntityEventSender.class);
+        eventSender = Mockito.mock(RealmEntityEventSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
         itemFactory = Mockito.mock(ItemFactory.class);
         dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);

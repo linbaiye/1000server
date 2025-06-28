@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.PlayerImpl;
@@ -135,7 +135,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PlayerAttackEventResponse entityEvent = playerEventListener.removeFirst(PlayerAttackEventResponse.class);
         assertEquals(player.direction(), clientAttackEvent.direction());
         assertTrue(entityEvent.isAccepted());
-        assertInstanceOf(PlayerAttackState.class, player.state());
+        assertInstanceOf(PlayerAttackState.class, player.creatureState());
         assertEquals(actual, player.cooldown());
     }
 
@@ -147,7 +147,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         assertNull(player.getFightingEntity());
         var entityEvent = playerEventListener.dequeue(PlayerAttackEventResponse.class);
         assertFalse(entityEvent.isAccepted());
-        assertEquals(State.IDLE, player.stateEnum());
+        assertEquals(PlayerStateEnum.IDLE, player.stateEnum());
     }
 
 
@@ -160,7 +160,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PassiveMonster another = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, another);
         assertEquals(player.getFightingEntity(), another);
-        assertTrue(player.state() instanceof PlayerCooldownState);
+        assertTrue(player.creatureState() instanceof PlayerCooldownState);
     }
 
     @Test
@@ -173,7 +173,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PlayerAttackEvent event = playerEventListener.removeFirst(PlayerAttackEvent.class);
         assertNotNull(event);
         assertEquals(expectedCooldown, player.cooldown());
-        assertTrue(player.state() instanceof PlayerAttackState);
+        assertTrue(player.creatureState() instanceof PlayerAttackState);
         assertEquals(player.direction(), Direction.UP);
     }
 
@@ -186,7 +186,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PlayerAttackEvent event = playerEventListener.removeFirst(PlayerAttackEvent.class);
         assertNotNull(event);
         assertEquals(actual, player.cooldown());
-        assertTrue(player.state() instanceof PlayerAttackState);
+        assertTrue(player.creatureState() instanceof PlayerAttackState);
         assertEquals(player.direction(), Direction.UP);
     }
 
@@ -195,8 +195,8 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PassiveMonster monster = createMonster( player.coordinate().move(Entity.VISIBLE_X_RANGE + 1, 0));
         player.setFightingEntity(monster);
         kungFu.attackAgain(player);
-        assertSame(player.stateEnum(), State.COOLDOWN);
-        assertTrue(player.state() instanceof PlayerStillState);
+        assertSame(player.stateEnum(), PlayerStateEnum.FightStand);
+        assertTrue(player.creatureState() instanceof PlayerStillState);
     }
 
     @Test
@@ -206,7 +206,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         player.cooldownAttack();
         kungFu.attackAgain(player);
         assertEquals(player.cooldown(), (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS);
-        assertTrue(player.state() instanceof PlayerCooldownState);
+        assertTrue(player.creatureState() instanceof PlayerCooldownState);
     }
 
     @Test
@@ -221,7 +221,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         kungFu.startAttack(player, clientAttackEvent, monster);
         PlayerTextEvent event = playerEventListener.dequeue(PlayerTextEvent.class);
         assertEquals(TextMessage.TextType.NO_POWER.value(), event.toPacket().getText().getType());
-        assertEquals(State.IDLE, player.stateEnum());
+        assertEquals(PlayerStateEnum.IDLE, player.stateEnum());
     }
 
     @Test

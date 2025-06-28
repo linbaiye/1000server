@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc.spell;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
 import org.y1000.entities.creatures.npc.Npc;
 
@@ -16,7 +16,7 @@ public final class ShiftSpell implements NpcSpell {
 
     @Override
     public boolean canCast(Npc npc) {
-        return npc.stateEnum() == State.DIE;
+        return npc.stateEnum() == PlayerStateEnum.DIE;
     }
 
     public void cast(Npc npc) {

@@ -4,8 +4,8 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.players.*;
-import org.y1000.entities.creatures.State;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.fight.*;
@@ -21,7 +21,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
 
     protected AbstractAttackKungFu(String name, int exp, AttackKungFuParameters parameters) {
-        super(name, exp);
+        super(name, exp, parameters.icon());
         this.parameters = parameters;
     }
 
@@ -126,7 +126,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         }
         var ok = checkResourcesAndSendError(player);
         if (!ok) {
-            player.changeState(new PlayerCooldownState(player.getStateMillis(State.COOLDOWN)));
+            player.changeState(new PlayerCooldownState(player.getStateMillis(PlayerStateEnum.FightStand)));
             return;
         }
         player.changeDirection(direction);
@@ -274,7 +274,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     private int effectIdPrefix() {
         return switch (getType()) {
-            case QUANFA -> 110;
+            case FistWeapon -> 110;
             case SWORD -> 120;
             case BLADE -> 130;
             case AXE -> 140;
@@ -290,7 +290,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
     @Override
-    public String description() {
+    public String detailText() {
         StringBuilder descriptionBuilder = getDescriptionBuilder();
         descriptionBuilder.append("攻击速度: ").append(attackSpeed()).append("\n")
                 .append("恢复: ").append(recovery()).append("\n")

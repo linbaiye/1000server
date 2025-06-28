@@ -15,10 +15,14 @@ public abstract class AbstractEquipment extends AbstractItem implements Equipmen
 
     private final int originColor;
 
+    private final String wearShape;
+
+
     public AbstractEquipment(String name, ItemSdb itemSdb, Set<Object> abilities) {
         super(name, ItemType.EQUIPMENT, itemSdb);
         this.abilities = abilities != null ? abilities : new HashSet<>();
         this.originColor = itemSdb.getColor(name);
+        this.wearShape = itemSdb.getWearShape(name);
     }
 
     protected StringBuilder getDescriptionBuilder() {
@@ -53,5 +57,10 @@ public abstract class AbstractEquipment extends AbstractItem implements Equipmen
         return abilities.stream().filter(a -> type.isAssignableFrom(a.getClass()))
                 .map(type::cast)
                 .findFirst();
+    }
+
+    @Override
+    public String wearShape() {
+        return wearShape;
     }
 }

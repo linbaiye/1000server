@@ -4,26 +4,26 @@ import org.y1000.entities.Direction;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
-public abstract class AbstractCreatureMoveState<C extends Creature> extends AbstractCreatureState<C> {
+public abstract class AbstractCreatureMoveState<C extends Creature> extends IAbstractCreatureState<C> {
 
-    private final State state;
+    private final PlayerStateEnum playerStateEnum;
 
     private final Direction towards;
 
     private final Coordinate start;
 
-    public AbstractCreatureMoveState(State state,
+    public AbstractCreatureMoveState(PlayerStateEnum playerStateEnum,
                                      Coordinate start,
                                      Direction towards, int millisPerUnit) {
         super(millisPerUnit);
-        this.state = state;
+        this.playerStateEnum = playerStateEnum;
         this.towards = towards;
         this.start = start;
     }
 
     @Override
-    public State stateEnum() {
-        return state;
+    public PlayerStateEnum stateEnum() {
+        return playerStateEnum;
     }
 
     protected Coordinate getStart() {

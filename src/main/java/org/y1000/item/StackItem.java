@@ -95,5 +95,10 @@ public record StackItem(Item item, long number) implements Item {
     public String toString() {
         return item.name() + ":" + number;
     }
+
+    @Override
+    public int icon() {
+        return item.icon();
+    }
 }
 

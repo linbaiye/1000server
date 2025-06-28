@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures.event;
 
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.ChangeStatePacket;
@@ -8,18 +9,22 @@ import org.y1000.network.gen.Packet;
 
 public final class NpcChangeStateEvent extends AbstractCreatureEvent {
 
-    private final State state;
+    private final int stateValue;
 
-    public NpcChangeStateEvent(Npc source, State state) {
+    private final Direction direction;
+
+    public NpcChangeStateEvent(Npc source, PlayerStateEnum playerStateEnum) {
         super(source);
-        this.state = state;
+        stateValue = source.creatureState().state().value();
+        this.direction = source.direction();
     }
 
     @Override
     protected Packet buildPacket() {
         return Packet.newBuilder()
                 .setChangeStatePacket(ChangeStatePacket.newBuilder()
-                        .setState(state.value())
+                        .setState(stateValue)
+                        .setDirection(direction.value())
                         .setId(source().id()))
                 .build();
     }

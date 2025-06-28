@@ -5,7 +5,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.monster.*;
 import org.y1000.entities.creatures.npc.AI.*;
 import org.y1000.entities.creatures.npc.interactability.BuyInteractability;
@@ -25,6 +25,7 @@ import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,6 +39,8 @@ public final class NpcFactoryImpl implements NpcFactory {
     private final MerchantItemSdbRepository merchantItemSdbRepository;
 
     private final RealmSpecificSdbRepository realmSpecificSdbRepository;
+
+    private final Map<String, List<AnimationDescriptor>> animationDescriptors;
 
     public NpcFactoryImpl(ActionSdb actionSdb,
                           MonstersSdb monsterSdb,
@@ -54,6 +57,20 @@ public final class NpcFactoryImpl implements NpcFactory {
         this.magicParamSdb = magicParamSdb;
         this.merchantItemSdbRepository = merchantItemSdbRepository;
         this.realmSpecificSdbRepository = realmSpecificSdbRepository;
+        animationDescriptors = buildAnimationDescriptors(monsterSdb.getAllAnimateIds(), npcSdb.getAllAnimateIds());
+    }
+
+
+    private Map<String, List<AnimationDescriptor>> buildAnimationDescriptors(Set<String> monsterAnimateIds, Set<String> npcAnimateIds) {
+        return Collections.emptyMap();
+//        monsterAnimateIds.forEach();
+    }
+
+
+    private Direction randomDirection() {
+        var v = ThreadLocalRandom.current().nextInt(Direction.UP.value(), Direction.UP_LEFT.value() + 1);
+        log.debug("Random direction {}", Direction.fromValue(v));
+        return Direction.fromValue(v);
     }
 
 
@@ -86,27 +103,29 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private Map<State, Integer> createDevirtueActionLengthMap(String animate) {
-        Map<State, Integer> result = new HashMap<>();
-        int move = actionSdb.getActionLength(animate, State.WALK);
-        int idle = actionSdb.getActionLength(animate, State.IDLE);
-        int hurt = actionSdb.getActionLength(animate, State.HURT);
-        int die = actionSdb.getActionLength(animate, State.DIE);
-        result.put(State.IDLE, idle);
-        result.put(State.WALK, move);
-        result.put(State.HURT, hurt);
-        result.put(State.DIE, die);
+    private Map<PlayerStateEnum, Integer> createDevirtueActionLengthMap(String animate) {
+        Map<PlayerStateEnum, Integer> result = new HashMap<>();
+        int move = actionSdb.getActionLength(animate, PlayerStateEnum.Move);
+        int idle = actionSdb.getActionLength(animate, PlayerStateEnum.IDLE);
+        int hurt = actionSdb.getActionLength(animate, PlayerStateEnum.HURT);
+        int die = actionSdb.getActionLength(animate, PlayerStateEnum.DIE);
+        int turn = actionSdb.getActionLength(animate, PlayerStateEnum.Turn);
+        result.put(PlayerStateEnum.IDLE, idle);
+        result.put(PlayerStateEnum.Move, move);
+        result.put(PlayerStateEnum.HURT, hurt);
+        result.put(PlayerStateEnum.DIE, die);
+        result.put(PlayerStateEnum.Turn, turn);
         return result;
     }
 
-    private Map<State, Integer> createSubmissiveNpcActionLengthMap(String idName) {
+    private Map<PlayerStateEnum, Integer> createSubmissiveNpcActionLengthMap(String idName) {
         return createDevirtueActionLengthMap(npcSdb.getAnimate(idName));
     }
 
-    private Map<State, Integer> createActionLengthMap(String animate) {
-        Map<State, Integer> result = createDevirtueActionLengthMap(animate);
-        int attack = actionSdb.getActionLength(animate, State.ATTACK);
-        result.put(State.ATTACK, attack);
+    private Map<PlayerStateEnum, Integer> createActionLengthMap(String animate) {
+        Map<PlayerStateEnum, Integer> result = createDevirtueActionLengthMap(animate);
+        int attack = actionSdb.getActionLength(animate, PlayerStateEnum.ATTACK);
+        result.put(PlayerStateEnum.ATTACK, attack);
         return result;
     }
 
@@ -127,7 +146,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         return AggressiveMonster.builder()
                 .id(id)
                 .coordinate(coordinate)
-                .direction(Direction.DOWN)
+                .direction(randomDirection())
                 .name(monsterSdb.getViewName(name))
                 .realmMap(map)
                 .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
@@ -170,7 +189,7 @@ public final class NpcFactoryImpl implements NpcFactory {
             return NineTailFoxHuman.builder()
                     .id(id)
                     .coordinate(coordinate)
-                    .direction(Direction.DOWN)
+                    .direction(randomDirection())
                     .name(npcSdb.getViewName(name))
                     .realmMap(map)
                     .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
@@ -198,7 +217,7 @@ public final class NpcFactoryImpl implements NpcFactory {
             return PassiveMonster.builder()
                     .id(id)
                     .coordinate(coordinate)
-                    .direction(Direction.DOWN)
+                    .direction(randomDirection())
                     .name(monsterSdb.getViewName(name))
                     .realmMap(map)
                     .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
@@ -268,7 +287,7 @@ public final class NpcFactoryImpl implements NpcFactory {
             return Banker.builder()
                     .id(id)
                     .coordinate(coordinate)
-                    .direction(Direction.DOWN)
+                    .direction(randomDirection())
                     .name(npcSdb.getViewName(name))
                     .realmMap(realmMap)
                     .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
@@ -301,7 +320,7 @@ public final class NpcFactoryImpl implements NpcFactory {
             return Guardian.builder()
                     .id(id)
                     .coordinate(coordinate)
-                    .direction(Direction.DOWN)
+                    .direction(randomDirection())
                     .name(npcSdb.getViewName(name))
                     .width(npcSdb.getActionWidth(name))
                     .realmMap(realmMap)

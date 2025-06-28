@@ -1,10 +1,10 @@
 package org.y1000.event.monster;
 
 import org.y1000.entities.creatures.monster.Monster;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventVisitor;
 
-public interface MonsterEvent extends EntityEvent {
+public interface MonsterEvent extends IEntityEvent {
     Monster monster();
 
     void accept(MonsterEventVisitor visitor);

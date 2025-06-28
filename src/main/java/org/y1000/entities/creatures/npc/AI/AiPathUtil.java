@@ -55,8 +55,26 @@ public final class AiPathUtil {
             return;
         } else if (direction != npc.direction()) {
             npc.changeDirection(direction);
-            npc.emitEvent(SetPositionEvent.of(npc));
             npc.stay(turnMillis);
+            return;
+        }
+        if (npc.realmMap().movable(npc.coordinate().moveBy(direction))) {
+            npc.move(walkMillis);
+        } else {
+            noPathAction.invoke();
+        }
+    }
+
+    public static void moveProcess(Npc npc, Coordinate dest,
+                                   Coordinate previous,
+                                   Action noPathAction, int walkMillis) {
+        Direction direction = AiPathUtil.computeNextMoveDirection(npc, dest, previous);
+        if (direction == null) {
+            noPathAction.invoke();
+            return;
+        } else if (direction != npc.direction()) {
+            npc.changeDirection(direction);
+            npc.turn();
             return;
         }
         if (npc.realmMap().movable(npc.coordinate().moveBy(direction))) {

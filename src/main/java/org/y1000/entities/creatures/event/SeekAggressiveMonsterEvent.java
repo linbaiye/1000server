@@ -1,19 +1,18 @@
 package org.y1000.entities.creatures.event;
 
 import lombok.Getter;
-import org.hibernate.engine.internal.AbstractEntityEntry;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.creatures.monster.AggressiveMonster;
 import org.y1000.entities.creatures.npc.Guardian;
 import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.IEntityEvent;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class SeekAggressiveMonsterEvent implements EntityEvent {
+public class SeekAggressiveMonsterEvent implements IEntityEvent {
 
     private final Guardian guardian;
     private final int width;
@@ -31,7 +30,7 @@ public class SeekAggressiveMonsterEvent implements EntityEvent {
 
     public void handle(Stream<Npc> entityStream) {
         entityStream.filter(npc -> npc instanceof AggressiveMonster &&
-                        npc.stateEnum() != State.DIE &&
+                        npc.stateEnum() != PlayerStateEnum.DIE &&
                         npc.coordinate().directDistance(guardian.coordinate()) <= width)
                 .map(AggressiveMonster.class::cast)
                 .forEach(monsters::add);

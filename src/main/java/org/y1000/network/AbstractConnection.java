@@ -4,11 +4,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.ServerContext;
+import org.y1000.entities.Direction;
 import org.y1000.message.input.chat.ClientInputTextEvent;
 import org.y1000.item.EquipmentType;
 import org.y1000.message.input.*;
-import org.y1000.network.event.ConnectionClosedEvent;
-import org.y1000.network.event.ConnectionDataEvent;
+import org.y1000.message.input.MoveInput;
+import org.y1000.message.input.TurnInput;
 import org.y1000.network.gen.ClientPacket;
 import org.y1000.network.gen.ClientSimpleCommandPacket;
 import org.y1000.realm.RealmManager;
@@ -47,7 +48,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case MOVEEVENTPACKET -> ClientMovementEvent.fromPacket(clientPacket);
             case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
             case ATTACKEVENTPACKET -> ClientAttackEvent.fromPacket(clientPacket.getAttackEventPacket());
-            case SWAPINVENTORYSLOTPACKET -> ClientSwapInventoryEvent.fromPacket(clientPacket.getSwapInventorySlotPacket());
+            case SWAPINVENTORYSLOTPACKET -> SwapInventoryItemInput.fromPacket(clientPacket.getSwapInventorySlotPacket());
             case DOUBLECLICKINVENTORYSLOTPACKET -> new ClientDoubleClickSlotEvent(clientPacket.getDoubleClickInventorySlotPacket().getSlot());
             case DROPITEM -> new ClientDropItemEvent(clientPacket.getDropItem().getNumber(), clientPacket.getDropItem().getSlot(),
                     clientPacket.getDropItem().getX(), clientPacket.getDropItem().getY(),
@@ -77,10 +78,13 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case SUBMITQUEST -> new ClientSubmitQuestEvent(clientPacket.getSubmitQuest().getId(), clientPacket.getSubmitQuest().getQuestName(), serverContext.getItemFactory());
             case INTERACT -> new ClientClickInteractabilityEvent(clientPacket.getInteract().getId(), clientPacket.getInteract().getName());
             case DEBUG -> new DebugInput(1);
-            default -> throw new IllegalArgumentException();
+            case MOVEINPUT -> new MoveInput(Coordinate.xy(clientPacket.getMoveInput().getX(), clientPacket.getMoveInput().getY()), Direction.fromValue(clientPacket.getMoveInput().getDirection()));
+            case TURNINPUT -> new TurnInput(Direction.fromValue(clientPacket.getTurnInput().getDirection()));
+            case SIMPLEINPUT -> SimpleInput.fromValue(clientPacket.getSimpleInput().getType());
+            case CLICKKUNGFUINPUT -> ClickKungFuInput.fromPacket(clientPacket.getClickKungFuInput());
+            default -> null;
         };
     }
-
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -118,9 +122,10 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
     }
 
     @Override
-    public void close() {
+    public void tryClose() {
         try {
-            context.get().close();
+            if (context.get().channel().isActive())
+                context.get().channel().close();
         } catch (Exception e) {
             //ignored.
         }
