@@ -6,6 +6,11 @@ import org.y1000.network.gen.Packet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+/**
+ * A message that sent to players who can see this player (including player self).
+ */
+
 public abstract class AbstractInsightPlayerMessage extends AbstractPlayerMessage implements SelectablePlayerMessage {
 
     public AbstractInsightPlayerMessage(Player player, Packet packet) {

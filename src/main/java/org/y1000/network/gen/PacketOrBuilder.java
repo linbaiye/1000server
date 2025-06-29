@@ -863,5 +863,35 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.NpcSnapshotPacketOrBuilder getNpcSnapshotOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+   * @return Whether the say field is set.
+   */
+  boolean hasSay();
+  /**
+   * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+   * @return The say.
+   */
+  org.y1000.network.gen.CreatureSayPacket getSay();
+  /**
+   * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+   */
+  org.y1000.network.gen.CreatureSayPacketOrBuilder getSayOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+   * @return Whether the activeKungFuList field is set.
+   */
+  boolean hasActiveKungFuList();
+  /**
+   * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+   * @return The activeKungFuList.
+   */
+  org.y1000.network.gen.SyncActiveKungFuPacket getActiveKungFuList();
+  /**
+   * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+   */
+  org.y1000.network.gen.SyncActiveKungFuPacketOrBuilder getActiveKungFuListOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

@@ -414,6 +414,10 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         }
     }
 
+    private void syncActiveKungFuList() {
+        sendMessage(SyncActiveKungFuMessage.of(this));
+    }
+
     private void toggleFootKungFu(FootKungFu newKungFu) {
         if (!creatureState().canUseFootKungFu()) {
             return;
@@ -421,11 +425,11 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         clearFightingEntity();
         if (this.footKungfu != null ){
             if (newKungFu.name().equals(this.footKungfu.name())) {
-                emitEvent(PlayerToggleKungFuEvent.disable(this, this.footKungfu));
+                sendMessage(PlayerSayMessage.say(this, this.footKungfu.name()));
                 this.footKungfu = null;
             } else {
                 this.footKungfu = newKungFu;
-                emitEvent(PlayerToggleKungFuEvent.enable(this, this.footKungfu));
+                sendMessage(PlayerSayMessage.say(this, this.footKungfu.name()));
             }
             return;
         }
@@ -438,7 +442,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         }
         disableBreathKungNoTip();
         this.footKungfu = newKungFu;
-        emitEvent(new PlayerToggleKungFuEvent(this, this.footKungfu));
+        sendMessage(PlayerSayMessage.say(this, this.footKungfu.name()));
     }
 
     private void toggleAssistantKungFu(AssistantKungFu newAssistant) {
@@ -468,6 +472,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         } else if (kungFu instanceof AttackKungFu newAttack) {
             handleClickAttackKungFu(newAttack);
         }
+        syncActiveKungFuList();
     }
 
 
@@ -588,7 +593,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
     public void onKungFuClicked(int page, int slot, ClickKungFuInput.ClickType type) {
         kungFuBook().getKungFu(page, slot).ifPresent(kungFu -> {
             if (type == ClickKungFuInput.ClickType.LeftDoubleClick) {
-
+                useKungFu(kungFu);
             } else if (type == ClickKungFuInput.ClickType.LeftClick) {
                 sendMessage(PlayerTextMessage.of(this, kungFu.detailText()));
             }

@@ -102,6 +102,8 @@ private static final long serialVersionUID = 0L;
     JOINREALM(58),
     PLAYERSNAPSHOT(59),
     NPCSNAPSHOT(60),
+    SAY(61),
+    ACTIVEKUNGFULIST(62),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -176,6 +178,8 @@ private static final long serialVersionUID = 0L;
         case 58: return JOINREALM;
         case 59: return PLAYERSNAPSHOT;
         case 60: return NPCSNAPSHOT;
+        case 61: return SAY;
+        case 62: return ACTIVEKUNGFULIST;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -1958,6 +1962,68 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.NpcSnapshotPacket.getDefaultInstance();
   }
 
+  public static final int SAY_FIELD_NUMBER = 61;
+  /**
+   * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+   * @return Whether the say field is set.
+   */
+  @java.lang.Override
+  public boolean hasSay() {
+    return typedPacketCase_ == 61;
+  }
+  /**
+   * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+   * @return The say.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.CreatureSayPacket getSay() {
+    if (typedPacketCase_ == 61) {
+       return (org.y1000.network.gen.CreatureSayPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.CreatureSayPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.CreatureSayPacketOrBuilder getSayOrBuilder() {
+    if (typedPacketCase_ == 61) {
+       return (org.y1000.network.gen.CreatureSayPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.CreatureSayPacket.getDefaultInstance();
+  }
+
+  public static final int ACTIVEKUNGFULIST_FIELD_NUMBER = 62;
+  /**
+   * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+   * @return Whether the activeKungFuList field is set.
+   */
+  @java.lang.Override
+  public boolean hasActiveKungFuList() {
+    return typedPacketCase_ == 62;
+  }
+  /**
+   * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+   * @return The activeKungFuList.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.SyncActiveKungFuPacket getActiveKungFuList() {
+    if (typedPacketCase_ == 62) {
+       return (org.y1000.network.gen.SyncActiveKungFuPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.SyncActiveKungFuPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.SyncActiveKungFuPacketOrBuilder getActiveKungFuListOrBuilder() {
+    if (typedPacketCase_ == 62) {
+       return (org.y1000.network.gen.SyncActiveKungFuPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.SyncActiveKungFuPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -2142,6 +2208,12 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 60) {
       output.writeMessage(60, (org.y1000.network.gen.NpcSnapshotPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 61) {
+      output.writeMessage(61, (org.y1000.network.gen.CreatureSayPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 62) {
+      output.writeMessage(62, (org.y1000.network.gen.SyncActiveKungFuPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -2379,6 +2451,14 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 60) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(60, (org.y1000.network.gen.NpcSnapshotPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 61) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(61, (org.y1000.network.gen.CreatureSayPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 62) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(62, (org.y1000.network.gen.SyncActiveKungFuPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2625,6 +2705,14 @@ private static final long serialVersionUID = 0L;
         if (!getNpcSnapshot()
             .equals(other.getNpcSnapshot())) return false;
         break;
+      case 61:
+        if (!getSay()
+            .equals(other.getSay())) return false;
+        break;
+      case 62:
+        if (!getActiveKungFuList()
+            .equals(other.getActiveKungFuList())) return false;
+        break;
       case 0:
       default:
     }
@@ -2867,6 +2955,14 @@ private static final long serialVersionUID = 0L;
       case 60:
         hash = (37 * hash) + NPCSNAPSHOT_FIELD_NUMBER;
         hash = (53 * hash) + getNpcSnapshot().hashCode();
+        break;
+      case 61:
+        hash = (37 * hash) + SAY_FIELD_NUMBER;
+        hash = (53 * hash) + getSay().hashCode();
+        break;
+      case 62:
+        hash = (37 * hash) + ACTIVEKUNGFULIST_FIELD_NUMBER;
+        hash = (53 * hash) + getActiveKungFuList().hashCode();
         break;
       case 0:
       default:
@@ -3174,6 +3270,12 @@ private static final long serialVersionUID = 0L;
       if (npcSnapshotBuilder_ != null) {
         npcSnapshotBuilder_.clear();
       }
+      if (sayBuilder_ != null) {
+        sayBuilder_.clear();
+      }
+      if (activeKungFuListBuilder_ != null) {
+        activeKungFuListBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -3448,6 +3550,14 @@ private static final long serialVersionUID = 0L;
           npcSnapshotBuilder_ != null) {
         result.typedPacket_ = npcSnapshotBuilder_.build();
       }
+      if (typedPacketCase_ == 61 &&
+          sayBuilder_ != null) {
+        result.typedPacket_ = sayBuilder_.build();
+      }
+      if (typedPacketCase_ == 62 &&
+          activeKungFuListBuilder_ != null) {
+        result.typedPacket_ = activeKungFuListBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -3721,6 +3831,14 @@ private static final long serialVersionUID = 0L;
         }
         case NPCSNAPSHOT: {
           mergeNpcSnapshot(other.getNpcSnapshot());
+          break;
+        }
+        case SAY: {
+          mergeSay(other.getSay());
+          break;
+        }
+        case ACTIVEKUNGFULIST: {
+          mergeActiveKungFuList(other.getActiveKungFuList());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -4152,6 +4270,20 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 60;
               break;
             } // case 482
+            case 490: {
+              input.readMessage(
+                  getSayFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 61;
+              break;
+            } // case 490
+            case 498: {
+              input.readMessage(
+                  getActiveKungFuListFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 62;
+              break;
+            } // case 498
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -12277,6 +12409,290 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 60;
       onChanged();
       return npcSnapshotBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.CreatureSayPacket, org.y1000.network.gen.CreatureSayPacket.Builder, org.y1000.network.gen.CreatureSayPacketOrBuilder> sayBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+     * @return Whether the say field is set.
+     */
+    @java.lang.Override
+    public boolean hasSay() {
+      return typedPacketCase_ == 61;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+     * @return The say.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.CreatureSayPacket getSay() {
+      if (sayBuilder_ == null) {
+        if (typedPacketCase_ == 61) {
+          return (org.y1000.network.gen.CreatureSayPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.CreatureSayPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 61) {
+          return sayBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.CreatureSayPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+     */
+    public Builder setSay(org.y1000.network.gen.CreatureSayPacket value) {
+      if (sayBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        sayBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 61;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+     */
+    public Builder setSay(
+        org.y1000.network.gen.CreatureSayPacket.Builder builderForValue) {
+      if (sayBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        sayBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 61;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+     */
+    public Builder mergeSay(org.y1000.network.gen.CreatureSayPacket value) {
+      if (sayBuilder_ == null) {
+        if (typedPacketCase_ == 61 &&
+            typedPacket_ != org.y1000.network.gen.CreatureSayPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.CreatureSayPacket.newBuilder((org.y1000.network.gen.CreatureSayPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 61) {
+          sayBuilder_.mergeFrom(value);
+        } else {
+          sayBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 61;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+     */
+    public Builder clearSay() {
+      if (sayBuilder_ == null) {
+        if (typedPacketCase_ == 61) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 61) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        sayBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+     */
+    public org.y1000.network.gen.CreatureSayPacket.Builder getSayBuilder() {
+      return getSayFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.CreatureSayPacketOrBuilder getSayOrBuilder() {
+      if ((typedPacketCase_ == 61) && (sayBuilder_ != null)) {
+        return sayBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 61) {
+          return (org.y1000.network.gen.CreatureSayPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.CreatureSayPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.CreatureSayPacket, org.y1000.network.gen.CreatureSayPacket.Builder, org.y1000.network.gen.CreatureSayPacketOrBuilder> 
+        getSayFieldBuilder() {
+      if (sayBuilder_ == null) {
+        if (!(typedPacketCase_ == 61)) {
+          typedPacket_ = org.y1000.network.gen.CreatureSayPacket.getDefaultInstance();
+        }
+        sayBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.CreatureSayPacket, org.y1000.network.gen.CreatureSayPacket.Builder, org.y1000.network.gen.CreatureSayPacketOrBuilder>(
+                (org.y1000.network.gen.CreatureSayPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 61;
+      onChanged();
+      return sayBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.SyncActiveKungFuPacket, org.y1000.network.gen.SyncActiveKungFuPacket.Builder, org.y1000.network.gen.SyncActiveKungFuPacketOrBuilder> activeKungFuListBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+     * @return Whether the activeKungFuList field is set.
+     */
+    @java.lang.Override
+    public boolean hasActiveKungFuList() {
+      return typedPacketCase_ == 62;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+     * @return The activeKungFuList.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.SyncActiveKungFuPacket getActiveKungFuList() {
+      if (activeKungFuListBuilder_ == null) {
+        if (typedPacketCase_ == 62) {
+          return (org.y1000.network.gen.SyncActiveKungFuPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.SyncActiveKungFuPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 62) {
+          return activeKungFuListBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.SyncActiveKungFuPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+     */
+    public Builder setActiveKungFuList(org.y1000.network.gen.SyncActiveKungFuPacket value) {
+      if (activeKungFuListBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        activeKungFuListBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 62;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+     */
+    public Builder setActiveKungFuList(
+        org.y1000.network.gen.SyncActiveKungFuPacket.Builder builderForValue) {
+      if (activeKungFuListBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        activeKungFuListBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 62;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+     */
+    public Builder mergeActiveKungFuList(org.y1000.network.gen.SyncActiveKungFuPacket value) {
+      if (activeKungFuListBuilder_ == null) {
+        if (typedPacketCase_ == 62 &&
+            typedPacket_ != org.y1000.network.gen.SyncActiveKungFuPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.SyncActiveKungFuPacket.newBuilder((org.y1000.network.gen.SyncActiveKungFuPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 62) {
+          activeKungFuListBuilder_.mergeFrom(value);
+        } else {
+          activeKungFuListBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 62;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+     */
+    public Builder clearActiveKungFuList() {
+      if (activeKungFuListBuilder_ == null) {
+        if (typedPacketCase_ == 62) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 62) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        activeKungFuListBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+     */
+    public org.y1000.network.gen.SyncActiveKungFuPacket.Builder getActiveKungFuListBuilder() {
+      return getActiveKungFuListFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.SyncActiveKungFuPacketOrBuilder getActiveKungFuListOrBuilder() {
+      if ((typedPacketCase_ == 62) && (activeKungFuListBuilder_ != null)) {
+        return activeKungFuListBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 62) {
+          return (org.y1000.network.gen.SyncActiveKungFuPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.SyncActiveKungFuPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.SyncActiveKungFuPacket, org.y1000.network.gen.SyncActiveKungFuPacket.Builder, org.y1000.network.gen.SyncActiveKungFuPacketOrBuilder> 
+        getActiveKungFuListFieldBuilder() {
+      if (activeKungFuListBuilder_ == null) {
+        if (!(typedPacketCase_ == 62)) {
+          typedPacket_ = org.y1000.network.gen.SyncActiveKungFuPacket.getDefaultInstance();
+        }
+        activeKungFuListBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.SyncActiveKungFuPacket, org.y1000.network.gen.SyncActiveKungFuPacket.Builder, org.y1000.network.gen.SyncActiveKungFuPacketOrBuilder>(
+                (org.y1000.network.gen.SyncActiveKungFuPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 62;
+      onChanged();
+      return activeKungFuListBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

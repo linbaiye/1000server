@@ -677,6 +677,8 @@ message Packet {
     JoinRealmPacket joinRealm = 58;
     PlayerSnapshotPacket playerSnapshot = 59;
     NpcSnapshotPacket npcSnapshot = 60;
+    CreatureSayPacket say = 61;
+    SyncActiveKungFuPacket activeKungFuList = 62;
   }
 }
 
@@ -794,4 +796,19 @@ message NpcSnapshotPacket {
   string shape = 2;
   string animate = 3;
   int32 state = 4;
+}
+
+message CreatureSayPacket {
+  int64 id = 1;
+  string text = 2;
+}
+
+message SyncActiveKungFuPacket {
+  string attackKungFu = 1;
+  optional string protectionKungFu = 2;
+  optional string breathKungFu = 3;
+  optional string assistantKungFu = 4;
+  optional string footKungFu = 5;
+  bool footKungFuCanFly = 6;
+  int64 id = 7;
 }
