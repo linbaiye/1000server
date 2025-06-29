@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc.AI;
 
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.monster.Monster;
 
@@ -28,7 +28,7 @@ public abstract class AbstractMonsterWanderingAI extends AbstractWanderingAI<Mon
     @Override
     protected void onActionDoneNotDead(Monster monster) {
         if (soundCounter-- <= 0 &&
-                (monster.stateEnum() == PlayerStateEnum.IDLE || monster.stateEnum() == PlayerStateEnum.Move)) {
+                (monster.oldStateEnum() == OldPlayerStateEnum.IDLE || monster.oldStateEnum() == OldPlayerStateEnum.Move)) {
             monster.normalSound().ifPresent(s -> monster.emitEvent(new EntitySoundEvent(monster, s)));
             setSoundCounter();
         }

@@ -142,7 +142,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
 
     private void dropNewItem(GroundedItem item) {
         eventSender.add(item);
-        eventSender.notifyVisiblePlayers(item, item.captureInterpolation());
+        eventSender.notifyVisiblePlayers(item, item.captureSnapshot());
         item.registerEventListener(this);
         add(item);
         item.dropSound().ifPresent(s -> eventSender.sendEvent(new EntitySoundEvent(item, s)));

@@ -1,75 +1,31 @@
 package org.y1000.message;
 
-import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.PlayerStateEnum;
-import org.y1000.network.gen.CreatureInterpolationPacket;
+import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.network.gen.CreatureBaseInfoPacket;
+import org.y1000.network.gen.NpcSnapshotPacket;
 import org.y1000.network.gen.Packet;
-import org.y1000.entities.Direction;
-import org.y1000.util.Coordinate;
 
-import java.util.Collections;
-import java.util.List;
-
-public final class NpcSnapshot extends AbstractNamedCreatureSnapshot {
-    private final NpcType type;
-    private final String merchantFileName;
-    private final String shape;
-    private final String animate;
-
-    private final List<String> menus;
-
-    public NpcSnapshot(long id, Coordinate coordinate, PlayerStateEnum playerStateEnum,
-                       Direction direction, int elapsedMillis, String name, NpcType type,
-                       String animate, String shape) {
-        this(id, coordinate, playerStateEnum, direction, elapsedMillis, name, type, animate, shape, null, null);
-    }
-
-    public NpcSnapshot(long id, Coordinate coordinate, int stateValue,
-                       Direction direction, int elapsedMillis, String name, NpcType type,
-                       String animate, String shape) {
-        super(id, coordinate, stateValue, direction, elapsedMillis, name);
-        this.type = type;
-        this.animate = animate;
-        this.shape = shape;
-        menus = Collections.emptyList();
-        merchantFileName = "";
-    }
-
-    public NpcSnapshot(long id, Coordinate coordinate, PlayerStateEnum playerStateEnum,
-                       Direction direction, int elapsedMillis, String name, NpcType type,
-                       String animate, String shape, String textFileName) {
-        this(id, coordinate, playerStateEnum, direction, elapsedMillis, name, type, animate, shape, textFileName, null);
-    }
-
-    public NpcSnapshot(long id, Coordinate coordinate, PlayerStateEnum playerStateEnum,
-                       Direction direction, int elapsedMillis, String name, NpcType type,
-                       String animate, String shape, String textFileName,
-                       List<String> menus) {
-        super(id, coordinate, playerStateEnum, direction, elapsedMillis, name);
-        Validate.notNull(shape);
-        Validate.notNull(animate);
-        this.type = type;
-        this.merchantFileName = textFileName;
-        this.animate = animate;
-        this.shape = shape;
-        this.menus = menus != null ? menus : Collections.emptyList();
-    }
-
+public record NpcSnapshot(Packet packet) implements I2ClientMessage {
     @Override
     public Packet toPacket() {
-        CreatureInterpolationPacket.Builder builder = CreatureInterpolationPacket.newBuilder()
-                .setInterpolation(interpolationPacket())
-                .setId(getId())
-                .setName(getName())
-                .setShape(shape)
-                .setAnimate(animate)
-                .setType(type.value())
-                .addAllMenus(menus)
-                ;
-        if (merchantFileName != null) {
-            builder.setMerchantFile(merchantFileName);
-        }
-        return Packet.newBuilder().setCreatureInterpolation(builder).build();
+        return packet;
+    }
+
+    public static NpcSnapshot ofNpc(Npc npc, int elapsed) {
+        var coordinate = npc.coordinate();
+        CreatureBaseInfoPacket baseInfoSnapshot = CreatureBaseInfoPacket.newBuilder()
+                .setY(coordinate.y())
+                .setX(coordinate.x())
+                .setElapsedMillis(elapsed)
+                .setId(npc.id())
+                .setViewName(npc.viewName())
+                .setDirection(npc.direction().value())
+                .build();
+        NpcSnapshotPacket.Builder builder = NpcSnapshotPacket.newBuilder()
+                .setBaseInfo(baseInfoSnapshot)
+                .setAnimate(npc.animation())
+                .setState(npc.npcStateEnum().value())
+                .setShape(npc.shape());
+        return new NpcSnapshot(Packet.newBuilder().setNpcSnapshot(builder).build());
     }
 }

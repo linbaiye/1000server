@@ -7,7 +7,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.network.gen.ChatPacket;
 import org.y1000.network.gen.Packet;
 
-public final class EntityChatEvent extends Abstract2ClientEntityEvent implements Npc2ClientEvent {
+public final class EntityChatEvent extends Abstract2ClientEvent implements Npc2ClientEvent {
 
     private final Packet packet;
 

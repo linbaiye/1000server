@@ -476,8 +476,8 @@ message PlayerEquipPacket {
   int64 id = 1;
   int32 equipmentType = 2;
   int32 color = 3;
-  string spritePrefix = 4;
-  optional string pairedSpritePrefix = 5;
+  string prefix = 4;
+  optional string pairedPrefix = 5;
   int32 weaponType = 6;
 }
 
@@ -674,6 +674,9 @@ message Packet {
     MerchantMenuPacket merchantMenu = 55;
     KungFuBookPacket kungFuBook = 56;
     InventoryPacket inventory = 57;
+    JoinRealmPacket joinRealm = 58;
+    PlayerSnapshotPacket playerSnapshot = 59;
+    NpcSnapshotPacket npcSnapshot = 60;
   }
 }
 
@@ -749,4 +752,46 @@ message ClickInventorySlotInputPacket {
 
 message SimpleInputPacket {
   int32 type = 1;
+}
+
+message JoinRealmPacket {
+  AttributePacket attribute = 1;
+  repeated PlayerEquipPacket equipments = 2;
+  TeleportPacket teleport = 3;
+  bool male = 4;
+  string name = 5;
+  int64 id = 6;
+  string attackKungFu = 7;
+}
+
+message PlayerToggleKungFuPacket {
+  string attackKungFu = 1;
+  optional string footKungFu = 2;
+  bool canFly = 3;
+  optional string protectionKungFu = 4;
+  optional string assistantKungFu = 5;
+}
+
+message CreatureBaseInfoPacket {
+  int32 elapsedMillis = 2;
+  int32 direction = 3;
+  int32 x = 4;
+  int32 y = 5;
+  string viewName = 6;
+  int64 id = 7;
+}
+
+message PlayerSnapshotPacket {
+  CreatureBaseInfoPacket baseInfo = 1;
+  int32 moveAction = 2;
+  repeated PlayerEquipPacket equipments = 3;
+  bool male = 4;
+  int32 state = 5;
+}
+
+message NpcSnapshotPacket {
+  CreatureBaseInfoPacket baseInfo = 1;
+  string shape = 2;
+  string animate = 3;
+  int32 state = 4;
 }

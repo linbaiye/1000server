@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.event.*;
@@ -60,17 +60,17 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
         when(map.movable(any(Coordinate.class))).thenReturn(true);
         var previousDire = merchant.direction();
         merchant.changeAndStartAI(ai);
-        merchant.changeState(NpcCommonState.idle(merchant.getStateMillis(PlayerStateEnum.IDLE)));
-        merchant.update(merchant.getStateMillis(PlayerStateEnum.IDLE));
-        assertTrue(previousDire != merchant.direction() || PlayerStateEnum.Move == merchant.stateEnum());
+        merchant.changeState(NpcCommonState.idle(merchant.getStateMillis(OldPlayerStateEnum.IDLE)));
+        merchant.update(merchant.getStateMillis(OldPlayerStateEnum.IDLE));
+        assertTrue(previousDire != merchant.direction() || OldPlayerStateEnum.Move == merchant.oldStateEnum());
     }
 
     @Test
     void afterMove() {
         when(map.movable(any(Coordinate.class))).thenReturn(true);
-        merchant.changeState(NpcMoveState.move(merchant, merchant.getStateMillis(PlayerStateEnum.Move)));
-        merchant.update(merchant.getStateMillis(PlayerStateEnum.Move));
-        assertEquals(PlayerStateEnum.IDLE, merchant.stateEnum());
+        merchant.changeState(NpcMoveState.move(merchant, merchant.getStateMillis(OldPlayerStateEnum.Move)));
+        merchant.update(merchant.getStateMillis(OldPlayerStateEnum.Move));
+        assertEquals(OldPlayerStateEnum.IDLE, merchant.oldStateEnum());
         assertNotNull(testingEventListener.removeFirst(NpcChangeStateEvent.class));
     }
 
@@ -78,11 +78,11 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
     void afterHurt() {
         PlayerImpl player = playerBuilder().coordinate(merchant.coordinate().move(1, 0)).build();
         merchant.attackedBy(player);
-        merchant.update(merchant.getStateMillis(PlayerStateEnum.HURT));
-        if (merchant.getStateMillis(PlayerStateEnum.HURT) > merchant.getStateMillis(PlayerStateEnum.IDLE)) {
-            assertEquals(PlayerStateEnum.Turn, merchant.stateEnum());
+        merchant.update(merchant.getStateMillis(OldPlayerStateEnum.HURT));
+        if (merchant.getStateMillis(OldPlayerStateEnum.HURT) > merchant.getStateMillis(OldPlayerStateEnum.IDLE)) {
+            assertEquals(OldPlayerStateEnum.Turn, merchant.oldStateEnum());
         } else {
-            assertEquals(PlayerStateEnum.IDLE, merchant.stateEnum());
+            assertEquals(OldPlayerStateEnum.IDLE, merchant.oldStateEnum());
         }
     }
 
@@ -90,12 +90,12 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
     void attacked() {
         PlayerImpl player = playerBuilder().coordinate(merchant.coordinate().move(1, 0)).build();
         merchant.attackedBy(player);
-        assertEquals(PlayerStateEnum.HURT, merchant.stateEnum());
+        assertEquals(OldPlayerStateEnum.HURT, merchant.oldStateEnum());
         assertNotNull(testingEventListener.removeFirst(CreatureHurtEvent.class));
         assertNotNull(testingEventListener.removeFirst(EntitySoundEvent.class));
         testingEventListener.clearEvents();
-        merchant.update(merchant.getStateMillis(PlayerStateEnum.HURT));
-        assertEquals(PlayerStateEnum.IDLE, merchant.stateEnum());
+        merchant.update(merchant.getStateMillis(OldPlayerStateEnum.HURT));
+        assertEquals(OldPlayerStateEnum.IDLE, merchant.oldStateEnum());
     }
 
     @Test
@@ -104,7 +104,7 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
         when(player.hit()).thenReturn(100);
         when(player.damage()).thenReturn(new Damage(merchant.maxLife() + 1, 0, 0, 0));
         merchant.attackedBy(player);
-        assertEquals(PlayerStateEnum.DIE, merchant.stateEnum());
+        assertEquals(OldPlayerStateEnum.DIE, merchant.oldStateEnum());
         assertNotNull(testingEventListener.removeFirst(CreatureDieEvent.class));
     }
 }

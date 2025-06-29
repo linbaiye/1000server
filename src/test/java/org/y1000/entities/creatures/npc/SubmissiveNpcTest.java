@@ -7,7 +7,7 @@ import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
@@ -54,7 +54,7 @@ class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
 
     @Test
     void interpolation() {
-        CreatureInterpolationPacket creatureInterpolation = npc.captureInterpolation().toPacket().getCreatureInterpolation();
+        CreatureInterpolationPacket creatureInterpolation = npc.captureSnapshot().toPacket().getCreatureInterpolation();
         assertEquals(NpcType.MONSTER.value(), creatureInterpolation.getType());
         assertEquals(1, creatureInterpolation.getId());
         assertEquals(2, creatureInterpolation.getInterpolation().getX());
@@ -85,7 +85,7 @@ class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
         npc.registerEventListener(eventListener);
         PlayerImpl player = playerBuilder().coordinate(npc.coordinate().moveBy(Direction.RIGHT)).build();
         npc.attackedBy(player);
-        npc.update(npc.getStateMillis(PlayerStateEnum.DIE) + 8000);
+        npc.update(npc.getStateMillis(OldPlayerStateEnum.DIE) + 8000);
         RemoveEntityEvent removeEntityEvent = eventListener.removeFirst(RemoveEntityEvent.class);
         assertEquals(npc.id(), removeEntityEvent.toPacket().getRemoveEntity().getId());
         Mockito.verify(mockedMap, Mockito.times(1)).free(npc);
@@ -99,8 +99,8 @@ class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
         npc.registerEventListener(eventListener);
         Player player = mockEnemyPlayer(npc.coordinate());
         while (!npc.attackedBy(player)) ;
-        assertEquals(PlayerStateEnum.HURT, npc.stateEnum());
-        npc.update(npc.getStateMillis(PlayerStateEnum.HURT));
-        assertEquals(PlayerStateEnum.IDLE, npc.stateEnum());
+        assertEquals(OldPlayerStateEnum.HURT, npc.oldStateEnum());
+        npc.update(npc.getStateMillis(OldPlayerStateEnum.HURT));
+        assertEquals(OldPlayerStateEnum.IDLE, npc.oldStateEnum());
     }
 }

@@ -1,16 +1,16 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.IAbstractCreatureState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.event.NpcChangeStateEvent;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
 
 public final class NpcCommonState extends IAbstractCreatureState<Npc> implements NpcState {
 
-    private final PlayerStateEnum stat;
+    private final OldPlayerStateEnum stat;
 
     @Override
-    public PlayerStateEnum stateEnum() {
+    public OldPlayerStateEnum stateEnum() {
         return stat;
     }
 
@@ -21,48 +21,48 @@ public final class NpcCommonState extends IAbstractCreatureState<Npc> implements
         }
     }
 
-    public NpcCommonState(int totalMillis, PlayerStateEnum stat) {
+    public NpcCommonState(int totalMillis, OldPlayerStateEnum stat) {
         super(totalMillis);
         this.stat = stat;
     }
 
     @Override
     public boolean attackable() {
-        return stateEnum() != PlayerStateEnum.DIE;
+        return stateEnum() != OldPlayerStateEnum.DIE;
     }
 
     @Override
     public NpcStateEnum state() {
-        if (stateEnum() == PlayerStateEnum.IDLE)
+        if (stateEnum() == OldPlayerStateEnum.IDLE)
             return NpcStateEnum.Idle;
-        if (stateEnum() == PlayerStateEnum.ATTACK)
+        if (stateEnum() == OldPlayerStateEnum.ATTACK)
             return NpcStateEnum.Attack;
-        if (stateEnum() == PlayerStateEnum.DIE)
+        if (stateEnum() == OldPlayerStateEnum.DIE)
             return NpcStateEnum.Die;
-        if (stateEnum() == PlayerStateEnum.Turn)
+        if (stateEnum() == OldPlayerStateEnum.Turn)
             return NpcStateEnum.Turn;
         return NpcStateEnum.Idle;
     }
 
     public static NpcCommonState idle(int total) {
-        return new NpcCommonState(total, PlayerStateEnum.IDLE);
+        return new NpcCommonState(total, OldPlayerStateEnum.IDLE);
     }
 
     public static NpcCommonState attack(int total) {
-        return new NpcCommonState(total, PlayerStateEnum.ATTACK);
+        return new NpcCommonState(total, OldPlayerStateEnum.ATTACK);
     }
 
     public static NpcCommonState die(int total) {
-        return new NpcCommonState(total, PlayerStateEnum.DIE);
+        return new NpcCommonState(total, OldPlayerStateEnum.DIE);
     }
 
     public static NpcCommonState turn(int total) {
-        return new NpcCommonState(total, PlayerStateEnum.Turn);
+        return new NpcCommonState(total, OldPlayerStateEnum.Turn);
     }
 
     @Override
     public void afterHurt(Npc npc) {
-        if (stateEnum() == PlayerStateEnum.ATTACK || elapse(npc.getStateMillis(PlayerStateEnum.HURT))) {
+        if (stateEnum() == OldPlayerStateEnum.ATTACK || elapse(npc.getStateMillis(OldPlayerStateEnum.HURT))) {
             npc.onActionDone();
         } else {
             npc.changeState(this);

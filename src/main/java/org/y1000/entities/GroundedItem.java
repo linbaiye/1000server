@@ -3,8 +3,8 @@ package org.y1000.entities;
 import lombok.Builder;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.y1000.message.AbstractEntitySnapshot;
 import org.y1000.message.GroundedItemSnapshot;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.util.Coordinate;
 
 import java.util.Objects;
@@ -77,7 +77,7 @@ public final class GroundedItem extends AbstractActiveEntity {
     }
 
     @Override
-    public AbstractEntitySnapshot captureInterpolation() {
+    public I2ClientMessage captureSnapshot() {
         return GroundedItemSnapshot.builder()
                 .name(name)
                 .number(number)

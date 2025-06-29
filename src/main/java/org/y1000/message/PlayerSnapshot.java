@@ -1,50 +1,45 @@
 package org.y1000.message;
 
-import lombok.AccessLevel;
-import lombok.Setter;
-import org.y1000.entities.creatures.PlayerStateEnum;
 import org.y1000.entities.players.MoveAction;
+import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerMoveState;
-import org.y1000.network.gen.Packet;
-import org.y1000.network.gen.PlayerInfoPacket;
-import org.y1000.network.gen.PlayerInterpolationPacket;
-import org.y1000.entities.Direction;
-import org.y1000.util.Coordinate;
+import org.y1000.entities.players.event.PlayerEquipMessage;
+import org.y1000.network.gen.*;
 
-public final class PlayerSnapshot extends AbstractCreatureSnapshot {
+import java.util.List;
+import java.util.stream.Collectors;
 
-    @Setter(AccessLevel.PRIVATE)
-    private PlayerInfoPacket infoPacket;
+public final class PlayerSnapshot extends AbstractInsightPlayerMessage {
 
-    private Packet packet;
-
-    private PlayerSnapshot(long id, Coordinate coordinate, int stateValue, Direction direction, int elapsedMillis, int action) {
-        super(id, coordinate, stateValue, direction, elapsedMillis, action);
+    private PlayerSnapshot(Player player, Packet packet) {
+        super(player, packet);
     }
 
-    @Override
-    public Packet toPacket() {
-        if (packet != null) {
-            return packet;
-        }
-        packet = Packet.newBuilder()
-                .setPlayerInterpolation(PlayerInterpolationPacket.newBuilder()
-                        .setInterpolation(interpolationPacket())
-                        .setInfo(infoPacket).build())
-                .build();
-        return packet;
-    }
-
-    public static PlayerSnapshot FromPlayer(PlayerImpl player, int elapsedMillis) {
+    private static PlayerSnapshotPacket buildSnapshot(Player player) {
         MoveAction moveAction = null;
         if (player.state() instanceof PlayerMoveState moveState) {
             moveAction = moveState.getMoveAction();
         }
-        PlayerSnapshot playerInterpolation = new PlayerSnapshot(player.id(), player.coordinate(),
-                player.state().stateEnum().value(), player.direction(),
-                elapsedMillis, moveAction != null ? moveAction.value() : -1);
-        playerInterpolation.setInfoPacket(PlayerInfo.toPacket(player));
-        return playerInterpolation;
+        var coordinate = player.coordinate();
+        CreatureBaseInfoPacket baseInfoSnapshot = CreatureBaseInfoPacket.newBuilder()
+                .setY(coordinate.y())
+                .setX(coordinate.x())
+                .setElapsedMillis(player.state().elapsedMillis())
+                .setDirection(player.direction().value())
+                .build();
+        List<PlayerEquipPacket> equipments = player.getEquipments().stream().map(e -> PlayerEquipMessage.toEquipPacket(player, e))
+                .collect(Collectors.toList());
+        return PlayerSnapshotPacket.newBuilder()
+                .setMoveAction(moveAction != null ? moveAction.value() : -1)
+                .setBaseInfo(baseInfoSnapshot)
+                .setState(player.state().stateEnum().value())
+                .addAllEquipments(equipments)
+                .build();
+    }
+
+    public static PlayerSnapshot FromPlayer(PlayerImpl player) {
+        return new PlayerSnapshot(player, Packet.newBuilder()
+                .setPlayerSnapshot(buildSnapshot(player)).build());
     }
 }

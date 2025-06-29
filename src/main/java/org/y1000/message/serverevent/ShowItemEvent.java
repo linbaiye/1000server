@@ -5,7 +5,7 @@ import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ShowItemPacket;
 
-public class ShowItemEvent extends Abstract2ClientEntityEvent {
+public class ShowItemEvent extends Abstract2ClientEvent {
     public ShowItemEvent(GroundedItem item) {
         super(item);
     }

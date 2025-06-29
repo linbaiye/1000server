@@ -1,13 +1,13 @@
 package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.message.input.MoveInput;
 import org.y1000.message.input.TurnInput;
 
 public final class PlayerStandState extends AbstractPlayerState {
-    private PlayerStandState(Player player, PlayerStateEnum stateEnum, int millis) {
+    private PlayerStandState(Player player, OldPlayerStateEnum stateEnum, int millis) {
         super(player, stateEnum, millis);
     }
 
@@ -19,7 +19,7 @@ public final class PlayerStandState extends AbstractPlayerState {
     }
 
     public void move(MoveInput moveInput) {
-        if (stateEnum() == PlayerStateEnum.IDLE) {
+        if (stateEnum() == OldPlayerStateEnum.IDLE) {
             player().changeState(PlayerMoveState.noneFightWalk(player(), moveInput));
         } else {
             player().changeState(PlayerMoveState.fightWalk(player(), moveInput));
@@ -33,11 +33,11 @@ public final class PlayerStandState extends AbstractPlayerState {
 
     public static PlayerStandState idle(Player player) {
         Validate.notNull(player);
-        return new PlayerStandState(player, PlayerStateEnum.IDLE, player.getStateMillis(PlayerStateEnum.IDLE));
+        return new PlayerStandState(player, OldPlayerStateEnum.IDLE, player.getStateMillis(OldPlayerStateEnum.IDLE));
     }
 
     public static PlayerStandState fightStand(Player player) {
         Validate.notNull(player);
-        return new PlayerStandState(player, PlayerStateEnum.FightStand, player.getStateMillis(PlayerStateEnum.FightStand));
+        return new PlayerStandState(player, OldPlayerStateEnum.FightStand, player.getStateMillis(OldPlayerStateEnum.FightStand));
     }
 }

@@ -39,15 +39,15 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
     private void notifyInterpolation(Player joined, Entity entity) {
-        sendMessage(joined, entity.captureInterpolation());
+        sendMessage(joined, entity.captureSnapshot());
         if (entity instanceof Player another) {
-            sendMessage(another, joined.captureInterpolation());
+            sendMessage(another, joined.captureSnapshot());
         }
     }
 
     private void sendMessage(Player player, I2ClientMessage serverMessage) {
         if (playerConnectionMap.containsKey(player))
-            playerConnectionMap.get(player).write(serverMessage);
+            playerConnectionMap.get(player).writeAndFlush(serverMessage);
     }
 
     private void notifyOutsightOrInsight(Entity moved,
@@ -62,10 +62,10 @@ final class RealmEntityEventSender implements EntityEventListener,
             }
         } else {
             if (moved instanceof Player movedPlayer) {
-                sendMessage(movedPlayer, affected.captureInterpolation());
+                sendMessage(movedPlayer, affected.captureSnapshot());
             }
             if (affected instanceof Player affectedPlayer) {
-                sendMessage(affectedPlayer, moved.captureInterpolation());
+                sendMessage(affectedPlayer, moved.captureSnapshot());
             }
         }
     }
@@ -295,5 +295,7 @@ final class RealmEntityEventSender implements EntityEventListener,
     public Optional<Connection> findConnection(Player player) {
         return player == null ? Optional.empty() : Optional.ofNullable(playerConnectionMap.get(player));
     }
+
+
 
 }

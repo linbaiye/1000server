@@ -82,6 +82,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case TURNINPUT -> new TurnInput(Direction.fromValue(clientPacket.getTurnInput().getDirection()));
             case SIMPLEINPUT -> SimpleInput.fromValue(clientPacket.getSimpleInput().getType());
             case CLICKKUNGFUINPUT -> ClickKungFuInput.fromPacket(clientPacket.getClickKungFuInput());
+            case CLICKINVENTORYSLOTINPUT -> ClickInventorySlotInput.fromPacket(clientPacket.getClickInventorySlotInput());
             default -> null;
         };
     }

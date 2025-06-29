@@ -1,6 +1,6 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
 
 final class PlayerFrozenState implements IPlayerState {
@@ -8,8 +8,8 @@ final class PlayerFrozenState implements IPlayerState {
 
     private PlayerFrozenState() {}
     @Override
-    public PlayerStateEnum stateEnum() {
-        return PlayerStateEnum.IDLE;
+    public OldPlayerStateEnum stateEnum() {
+        return OldPlayerStateEnum.IDLE;
     }
 
     @Override
@@ -38,7 +38,7 @@ final class PlayerFrozenState implements IPlayerState {
     }
 
     @Override
-    public PlayerStateEnum decideAfterHurtState() {
-        return PlayerStateEnum.Turn;
+    public OldPlayerStateEnum decideAfterHurtState() {
+        return OldPlayerStateEnum.Turn;
     }
 }

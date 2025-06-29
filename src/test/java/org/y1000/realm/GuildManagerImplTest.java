@@ -157,7 +157,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
 
     @Test
     void createGuildKungFuWhenNotFounder() {
-        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.FistWeapon)
+        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.Fist)
                         .build();
         var founder = Mockito.mock(Player.class);
         when(founder.guildMembership()).thenReturn(Optional.empty());
@@ -166,7 +166,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
     }
     @Test
     void createGuildKungFuWhenNotCorrect() {
-        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.FistWeapon)
+        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.Fist)
                 .speed(10)
                 .bodyDamage(70)
                 .avoid(50)
@@ -193,7 +193,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
 
     @Test
     void createGuildKungFuWhenCorrect() {
-        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.FistWeapon)
+        ClientCreateGuildKungFuEvent event = ClientCreateGuildKungFuEvent.builder().name("test").type(AttackKungFuType.Fist)
                 .speed(30)
                 .bodyDamage(70)
                 .avoid(50)

@@ -6,13 +6,13 @@ import org.y1000.util.Coordinate;
 
 public abstract class AbstractCreatureMoveState<C extends Creature> extends IAbstractCreatureState<C> {
 
-    private final PlayerStateEnum playerStateEnum;
+    private final OldPlayerStateEnum playerStateEnum;
 
     private final Direction towards;
 
     private final Coordinate start;
 
-    public AbstractCreatureMoveState(PlayerStateEnum playerStateEnum,
+    public AbstractCreatureMoveState(OldPlayerStateEnum playerStateEnum,
                                      Coordinate start,
                                      Direction towards, int millisPerUnit) {
         super(millisPerUnit);
@@ -22,7 +22,7 @@ public abstract class AbstractCreatureMoveState<C extends Creature> extends IAbs
     }
 
     @Override
-    public PlayerStateEnum stateEnum() {
+    public OldPlayerStateEnum stateEnum() {
         return playerStateEnum;
     }
 

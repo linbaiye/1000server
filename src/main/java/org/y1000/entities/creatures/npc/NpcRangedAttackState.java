@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.IAbstractCreatureState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.event.MonsterShootEvent;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
@@ -53,7 +53,7 @@ public final class NpcRangedAttackState extends IAbstractCreatureState<Npc> impl
     }
 
     @Override
-    public PlayerStateEnum stateEnum() {
-        return PlayerStateEnum.ATTACK;
+    public OldPlayerStateEnum stateEnum() {
+        return OldPlayerStateEnum.ATTACK;
     }
 }

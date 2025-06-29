@@ -2,7 +2,7 @@ package org.y1000.message;
 
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.MoveAction;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PositionPacket;
@@ -20,18 +20,18 @@ public abstract class AbstractPositionEvent implements IEntityEvent, I2ClientMes
 
     private final Creature source;
 
-    private final PlayerStateEnum playerStateEnum;
+    private final OldPlayerStateEnum playerStateEnum;
 
     private final MoveAction moveAction;
 
     private Packet packet;
 
 
-    public AbstractPositionEvent(Creature source, Direction direction, Coordinate coordinate, PlayerStateEnum playerStateEnum) {
+    public AbstractPositionEvent(Creature source, Direction direction, Coordinate coordinate, OldPlayerStateEnum playerStateEnum) {
         this(source, direction, coordinate, playerStateEnum, null);
     }
 
-    public AbstractPositionEvent(Creature source, Direction direction, Coordinate coordinate, PlayerStateEnum playerStateEnum, MoveAction moveAction) {
+    public AbstractPositionEvent(Creature source, Direction direction, Coordinate coordinate, OldPlayerStateEnum playerStateEnum, MoveAction moveAction) {
         this.id = source.id();
         this.direction = direction;
         this.coordinate = coordinate;

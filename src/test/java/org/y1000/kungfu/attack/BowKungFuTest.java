@@ -3,7 +3,7 @@ package org.y1000.kungfu.attack;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
@@ -43,7 +43,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
     @Test
     void startBowAttack() {
         PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).realmMap(mockedRealm.map()).build();
-        ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), PlayerStateEnum.BOW, Direction.RIGHT);
+        ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), OldPlayerStateEnum.BOW, Direction.RIGHT);
         bowKungFu.startAttack(player, clientAttackEvent, monster);
         // no ammo.
         PlayerTextEvent event = eventListener.removeFirst(PlayerTextEvent.class);
@@ -66,7 +66,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
     void attackAgainNoPower() {
         PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).realmMap(mockedRealm.map()).build();
         player.inventory().put(itemFactory.createItem("箭", 3));
-        ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), PlayerStateEnum.BOW, Direction.RIGHT);
+        ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), OldPlayerStateEnum.BOW, Direction.RIGHT);
         // trigger attack counter.
         bowKungFu.startAttack(player, clientAttackEvent, monster);
         assertNotNull(player.getFightingEntity());
@@ -89,7 +89,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
     void attackAgain() {
         PassiveMonster monster = monsterBuilder().coordinate(player.coordinate().move(2, 0)).realmMap(mockedRealm.map()).build();
         player.inventory().put(itemFactory.createItem("箭", 3));
-        ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), PlayerStateEnum.BOW, Direction.RIGHT);
+        ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), OldPlayerStateEnum.BOW, Direction.RIGHT);
         // trigger attack counter.
         bowKungFu.startAttack(player, clientAttackEvent, monster);
         assertNotNull(player.getFightingEntity());

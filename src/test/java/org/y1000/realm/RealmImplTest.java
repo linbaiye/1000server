@@ -38,7 +38,7 @@ class RealmImplTest extends AbstractRealmUnitTextFixture {
     void handleNpcPositionEvent() {
         when(npcManager.findMerchants()).thenReturn(Collections.emptySet());
         realm.handle(new PlayerDataEvent(1, player, new ClientSimpleCommandEvent(SimpleCommand.NPC_POSITION)));
-        verify(connection, times(0)).write(any(NpcPositionEvent.class));
+        verify(connection, times(0)).writeAndFlush(any(NpcPositionEvent.class));
         InteractableNpc m1 = Mockito.mock(InteractableNpc.class);
         when(m1.coordinate()).thenReturn(Coordinate.xy(1, 1));
         when(m1.viewName()).thenReturn("m1");
@@ -47,6 +47,6 @@ class RealmImplTest extends AbstractRealmUnitTextFixture {
         when(m2.viewName()).thenReturn("m2");
         when(npcManager.findMerchants()).thenReturn(Set.of(m1, m2));
         realm.handle(new PlayerDataEvent(1, player, new ClientSimpleCommandEvent(SimpleCommand.NPC_POSITION)));
-        verify(connection, times(1)).write(any(NpcPositionEvent.class));
+        verify(connection, times(1)).writeAndFlush(any(NpcPositionEvent.class));
     }
 }

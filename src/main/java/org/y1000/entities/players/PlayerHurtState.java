@@ -10,9 +10,9 @@ public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl>
     /**
      * For client to interpolate, perhaps no useless.
      */
-    private final PlayerStateEnum afterHurtPlayerStateEnum;
+    private final OldPlayerStateEnum afterHurtPlayerStateEnum;
 
-    private PlayerHurtState(int totalMillis, IPlayerState afterHurt, PlayerStateEnum returnPlayerStateEnum) {
+    private PlayerHurtState(int totalMillis, IPlayerState afterHurt, OldPlayerStateEnum returnPlayerStateEnum) {
         super(totalMillis);
         this.returnState = afterHurt;
         this.afterHurtPlayerStateEnum = returnPlayerStateEnum;
@@ -23,16 +23,16 @@ public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl>
         returnState.afterHurt(player);
     }
 
-    public static PlayerHurtState hurt(PlayerImpl player, PlayerStateEnum afterHurt) {
+    public static PlayerHurtState hurt(PlayerImpl player, OldPlayerStateEnum afterHurt) {
         if (player.creatureState() instanceof PlayerHurtState hurtState) {
-            return new PlayerHurtState(player.getStateMillis(PlayerStateEnum.HURT), hurtState.returnState, afterHurt);
+            return new PlayerHurtState(player.getStateMillis(OldPlayerStateEnum.HURT), hurtState.returnState, afterHurt);
         } else {
-            return new PlayerHurtState(player.getStateMillis(PlayerStateEnum.HURT), player.creatureState(), afterHurt);
+            return new PlayerHurtState(player.getStateMillis(OldPlayerStateEnum.HURT), player.creatureState(), afterHurt);
         }
     }
 
     @Override
-    public PlayerStateEnum decideAfterHurtState() {
+    public OldPlayerStateEnum decideAfterHurtState() {
         return this.afterHurtPlayerStateEnum;
     }
 

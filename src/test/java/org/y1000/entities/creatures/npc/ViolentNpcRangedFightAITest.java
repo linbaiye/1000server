@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.npc.AI.ViolentNpcRangedFightAI;
 import org.y1000.util.Coordinate;
@@ -36,7 +36,7 @@ class ViolentNpcRangedFightAITest extends AbstractMonsterUnitTestFixture  {
         Coordinate coordinate = monster.coordinate().move(4, 0);
         when(enemy.coordinate()).thenReturn(coordinate);
         monster.changeAndStartAI(ai);
-        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
+        assertEquals(OldPlayerStateEnum.ATTACK, monster.oldStateEnum());
     }
 
     @Test
@@ -47,16 +47,16 @@ class ViolentNpcRangedFightAITest extends AbstractMonsterUnitTestFixture  {
         when(enemy.coordinate()).thenReturn(coordinate);
         monster.changeAndStartAI(ai);
         assertEquals(Direction.LEFT, monster.direction());
-        assertEquals(PlayerStateEnum.IDLE, monster.stateEnum());
-        monster.update(monster.getStateMillis(PlayerStateEnum.IDLE));
+        assertEquals(OldPlayerStateEnum.IDLE, monster.oldStateEnum());
+        monster.update(monster.getStateMillis(OldPlayerStateEnum.IDLE));
         assertEquals(Direction.LEFT, monster.direction());
-        assertEquals(PlayerStateEnum.Move, monster.stateEnum());
-        monster.update(monster.getStateMillis(PlayerStateEnum.Move));
+        assertEquals(OldPlayerStateEnum.Move, monster.oldStateEnum());
+        monster.update(monster.getStateMillis(OldPlayerStateEnum.Move));
         assertEquals(Direction.LEFT, monster.direction());
-        assertEquals(PlayerStateEnum.Move, monster.stateEnum());
+        assertEquals(OldPlayerStateEnum.Move, monster.oldStateEnum());
 
-        monster.update(monster.getStateMillis(PlayerStateEnum.Move));
+        monster.update(monster.getStateMillis(OldPlayerStateEnum.Move));
         assertEquals(Direction.RIGHT, monster.direction());
-        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
+        assertEquals(OldPlayerStateEnum.ATTACK, monster.oldStateEnum());
     }
 }

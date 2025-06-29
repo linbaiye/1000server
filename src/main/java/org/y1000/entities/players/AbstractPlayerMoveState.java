@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.event.RewindEvent;
 import org.y1000.message.input.ClientMovementEvent;
 import org.y1000.util.Coordinate;
@@ -11,7 +11,7 @@ public abstract class AbstractPlayerMoveState extends AbstractCreatureMoveState<
 
     private ClientMovementEvent event;
 
-    protected AbstractPlayerMoveState(PlayerStateEnum playerStateEnum, Coordinate start,
+    protected AbstractPlayerMoveState(OldPlayerStateEnum playerStateEnum, Coordinate start,
                                       Direction towards, int millisPerUnit) {
         super(playerStateEnum, start, towards, millisPerUnit);
     }

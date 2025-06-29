@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -20,7 +20,7 @@ public final class Scarecrow extends AbstractSubmissiveNpc {
     public Scarecrow(long id,
                      Coordinate coordinate,
                      String name,
-                     Map<PlayerStateEnum, Integer> stateMillis,
+                     Map<OldPlayerStateEnum, Integer> stateMillis,
                      AttributeProvider attributeProvider,
                      RealmMap realmMap) {
         super(id, coordinate, Direction.DOWN, name, stateMillis, attributeProvider, realmMap, null, NpcFrozenAI.INSTANCE);

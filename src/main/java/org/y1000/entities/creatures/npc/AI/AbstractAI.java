@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc.AI;
 
 import org.slf4j.Logger;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFrozenAI;
 
@@ -18,7 +18,7 @@ public abstract class AbstractAI<N extends Npc> implements NpcAI {
     protected abstract void onMoveFailedNotDead(N n);
 
     private void invokeIfNoDead(Npc npc, Consumer<N> consumer) {
-        if (npc == null || npc.stateEnum() == PlayerStateEnum.DIE) {
+        if (npc == null || npc.oldStateEnum() == OldPlayerStateEnum.DIE) {
             if (npc != null)
                 npc.changeAndStartAI(NpcFrozenAI.INSTANCE);
             return;

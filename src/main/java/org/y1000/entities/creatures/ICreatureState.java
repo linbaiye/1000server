@@ -4,7 +4,7 @@ package org.y1000.entities.creatures;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
 
 public interface ICreatureState<C extends Creature> {
-    PlayerStateEnum stateEnum();
+    OldPlayerStateEnum stateEnum();
 
     int elapsedMillis();
 
@@ -22,7 +22,7 @@ public interface ICreatureState<C extends Creature> {
 
     NpcStateEnum state();
 
-    default PlayerStateEnum decideAfterHurtState() {
-        return PlayerStateEnum.IDLE;
+    default OldPlayerStateEnum decideAfterHurtState() {
+        return OldPlayerStateEnum.IDLE;
     }
 }

@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.IAbstractCreatureState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 
 public final class PlayerStandUpState extends IAbstractCreatureState<PlayerImpl> implements IPlayerState {
 
@@ -10,12 +10,12 @@ public final class PlayerStandUpState extends IAbstractCreatureState<PlayerImpl>
     }
 
     public PlayerStandUpState(PlayerImpl player) {
-        this(player.getStateMillis(PlayerStateEnum.STANDUP));
+        this(player.getStateMillis(OldPlayerStateEnum.STANDUP));
     }
 
     @Override
-    public PlayerStateEnum stateEnum() {
-        return PlayerStateEnum.STANDUP;
+    public OldPlayerStateEnum stateEnum() {
+        return OldPlayerStateEnum.STANDUP;
     }
 
     @Override

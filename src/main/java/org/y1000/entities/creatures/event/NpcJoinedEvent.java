@@ -2,10 +2,10 @@ package org.y1000.entities.creatures.event;
 
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.event.EntityEventVisitor;
-import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
+import org.y1000.message.serverevent.Abstract2ClientEvent;
 import org.y1000.network.gen.Packet;
 
-public final class NpcJoinedEvent extends Abstract2ClientEntityEvent  {
+public final class NpcJoinedEvent extends Abstract2ClientEvent {
     public NpcJoinedEvent(Npc source) {
         super(source);
     }
@@ -17,6 +17,6 @@ public final class NpcJoinedEvent extends Abstract2ClientEntityEvent  {
 
     @Override
     protected Packet buildPacket() {
-        return source().captureInterpolation().toPacket();
+        return source().captureSnapshot().toPacket();
     }
 }

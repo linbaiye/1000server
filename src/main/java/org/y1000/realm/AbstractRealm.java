@@ -162,13 +162,13 @@ abstract class AbstractRealm implements Realm {
     void acceptIfAffordableElseReject(RealmTeleportEvent teleportEvent) {
         var unaffordableCost = teleportEvent.checkCost();
         if (unaffordableCost != null) {
-            teleportEvent.getConnection().write(PlayerTextEvent.systemTip(teleportEvent.player(), unaffordableCost));
+            teleportEvent.getConnection().writeAndFlush(PlayerTextEvent.systemTip(teleportEvent.player(), unaffordableCost));
             teleportEvent.rejectEvent().ifPresentOrElse(getCrossRealmEventHandler()::send, () ->
                     log().error("Bad teleport config at {} in realm {}.", teleportEvent.toCoordinate(), teleportEvent.toRealmId()));
             return;
         }
         // order matters, so AOI can be computed correctly.
-        teleportEvent.player().joinRealm(this, teleportEvent.toCoordinate());
+        teleportEvent.player().joinRealm(this, teleportEvent.toCoordinate(), null);
         eventSender.add(teleportEvent.player(), teleportEvent.getConnection());
         playerManager.teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate());
         teleportEvent.getCosts().forEach(teleportCost -> teleportCost.charge(teleportEvent.player()));
@@ -228,7 +228,7 @@ abstract class AbstractRealm implements Realm {
 
 
     protected void acceptLogin(Login login) {
-        playerRepository.load(login.playerId()).ifPresent(p -> getPlayerManager().onPlayerLogin(p, login, this));
+        playerRepository.load(login.playerId()).ifPresent(p -> getPlayerManager().loginPlayer(p, login, this));
     }
 
     private void handleInput(ConnectionInput connectionInput) {
@@ -243,7 +243,7 @@ abstract class AbstractRealm implements Realm {
             if (event instanceof Login login) {
                 handleLogin(login);
             } else if (event instanceof Logout logout) {
-                playerManager.onPlayerLogout(logout.connection());
+                playerManager.logoutPlayer(logout.connection());
             } else if (event instanceof ConnectionInput connectionInput) {
                 handleInput(connectionInput);
             }

@@ -1,12 +1,12 @@
 package org.y1000.entities.creatures.event;
 
 import org.y1000.entities.ActiveEntity;
-import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
+import org.y1000.message.serverevent.Abstract2ClientEvent;
 import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.CreatureSoundEventPacket;
 import org.y1000.network.gen.Packet;
 
-public final class EntitySoundEvent extends Abstract2ClientEntityEvent {
+public final class EntitySoundEvent extends Abstract2ClientEvent {
 
     private final String sound;
     private final long id;

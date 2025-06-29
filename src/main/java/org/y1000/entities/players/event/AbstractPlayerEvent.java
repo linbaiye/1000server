@@ -1,11 +1,10 @@
 package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
-import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
+import org.y1000.message.serverevent.Abstract2ClientEvent;
 import org.y1000.message.serverevent.Visibility;
 
-public abstract class AbstractPlayerEvent extends Abstract2ClientEntityEvent implements PlayerEvent {
-
+public abstract class AbstractPlayerEvent extends Abstract2ClientEvent implements PlayerEvent {
 
     private final Visibility visibility;
 

@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.IAbstractCreatureState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 
 @Slf4j
 public final class PlayerSitDownState extends IAbstractCreatureState<PlayerImpl> implements IPlayerState {
@@ -12,8 +12,8 @@ public final class PlayerSitDownState extends IAbstractCreatureState<PlayerImpl>
     }
 
     @Override
-    public PlayerStateEnum stateEnum() {
-        return PlayerStateEnum.SIT;
+    public OldPlayerStateEnum stateEnum() {
+        return OldPlayerStateEnum.SIT;
     }
 
     @Override
@@ -42,11 +42,11 @@ public final class PlayerSitDownState extends IAbstractCreatureState<PlayerImpl>
     }
 
     public static PlayerSitDownState sit(PlayerImpl player) {
-        return new PlayerSitDownState(player.getStateMillis(PlayerStateEnum.SIT));
+        return new PlayerSitDownState(player.getStateMillis(OldPlayerStateEnum.SIT));
     }
 
     @Override
-    public PlayerStateEnum decideAfterHurtState() {
-        return PlayerStateEnum.SIT;
+    public OldPlayerStateEnum decideAfterHurtState() {
+        return OldPlayerStateEnum.SIT;
     }
 }

@@ -20,11 +20,11 @@ class PlayerMovePlayerStateTestEnum extends AbstractPlayerUnitTestFixture {
     @Test
     void move() {
         player.leaveRealm();
-        player.joinRealm(mockAllFlatRealm());
+        player.joinRealm(mockAllFlatRealm(), );
         clickBasicFootKungFu();
         for (int i = 0; i < 10; i++) {
             player.handleClientEvent(new ClientMovementEvent(new RightMouseClick(1, Direction.RIGHT), player.coordinate()));
-            player.update(player.getStateMillis(player.stateEnum()));
+            player.update(player.getStateMillis(player.oldStateEnum()));
         }
         assertTrue(player.footKungFu().isPresent());
         player.footKungFu().ifPresent(k -> assertNotEquals(100, k.level()));

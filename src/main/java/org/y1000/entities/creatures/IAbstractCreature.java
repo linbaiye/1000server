@@ -23,13 +23,13 @@ public abstract class IAbstractCreature<C extends Creature, S extends ICreatureS
 
     private S state;
 
-    private final Map<PlayerStateEnum, Integer> stateMillis;
+    private final Map<OldPlayerStateEnum, Integer> stateMillis;
 
     public IAbstractCreature(long id,
                              Coordinate coordinate,
                              Direction direction,
                              String name,
-                             Map<PlayerStateEnum, Integer> stateMillis) {
+                             Map<OldPlayerStateEnum, Integer> stateMillis) {
         super(id);
         Objects.requireNonNull(coordinate, "coordinate can't be null.");
         Objects.requireNonNull(direction, "direction can't be null.");
@@ -50,7 +50,7 @@ public abstract class IAbstractCreature<C extends Creature, S extends ICreatureS
         realmMap().occupy(this);
     }
 
-    public int getStateMillis(PlayerStateEnum playerStateEnum) {
+    public int getStateMillis(OldPlayerStateEnum playerStateEnum) {
         return stateMillis.get(playerStateEnum);
     }
 
@@ -79,7 +79,7 @@ public abstract class IAbstractCreature<C extends Creature, S extends ICreatureS
     }
 
     @Override
-    public PlayerStateEnum stateEnum() {
+    public OldPlayerStateEnum oldStateEnum() {
         return creatureState().stateEnum();
     }
 

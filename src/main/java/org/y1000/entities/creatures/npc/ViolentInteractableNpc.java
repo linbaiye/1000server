@@ -5,15 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.AI.ViolentNpcWanderingAI;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractor;
 import org.y1000.entities.players.Player;
-import org.y1000.message.AbstractEntitySnapshot;
-import org.y1000.message.NpcSnapshot;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -28,7 +25,7 @@ public final class ViolentInteractableNpc extends AbstractViolentNpc implements 
     public ViolentInteractableNpc(long id,
                                      Coordinate coordinate,
                                      String name,
-                                     Map<PlayerStateEnum, Integer> stateMillis,
+                                     Map<OldPlayerStateEnum, Integer> stateMillis,
                                      NonMonsterNpcAttributeProvider attributeProvider,
                                      RealmMap realmMap,
                                      NpcInteractor interactor,
@@ -38,11 +35,6 @@ public final class ViolentInteractableNpc extends AbstractViolentNpc implements 
         this.interactor = interactor;
     }
 
-    @Override
-    public AbstractEntitySnapshot captureInterpolation() {
-        return new NpcSnapshot(id(), coordinate(), creatureState().stateEnum(), direction(), creatureState().elapsedMillis(), viewName(),
-                NpcType.INTERACTABLE, attributeProvider().animate(), attributeProvider().shape());
-    }
 
     @Override
     protected Logger log() {
@@ -59,10 +51,6 @@ public final class ViolentInteractableNpc extends AbstractViolentNpc implements 
         interactor.onInteractabilityClicked(player, this, name);
     }
 
-    @Override
-    public String shape() {
-        return attributeProvider().shape();
-    }
 
     @Override
     public int avatarImageId() {

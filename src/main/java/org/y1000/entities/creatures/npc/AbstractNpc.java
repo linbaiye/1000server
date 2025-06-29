@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.AttributeProvider;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.creatures.npc.spell.ShiftSpell;
@@ -14,6 +15,8 @@ import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
+import org.y1000.message.I2ClientMessage;
+import org.y1000.message.NpcSnapshot;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
@@ -35,7 +38,7 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
 
     private Rectangle wanderingArea;
 
-    private static final Set<PlayerStateEnum> ACCEPTABLE_PLAYER_STATE_ENUMS = Set.of(PlayerStateEnum.IDLE, PlayerStateEnum.Move, PlayerStateEnum.Turn, PlayerStateEnum.DIE);
+    private static final Set<OldPlayerStateEnum> ACCEPTABLE_PLAYER_STATE_ENUMS = Set.of(OldPlayerStateEnum.IDLE, OldPlayerStateEnum.Move, OldPlayerStateEnum.Turn, OldPlayerStateEnum.DIE);
 
     private final List<NpcSpell> spells;
 
@@ -44,7 +47,7 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
                        Coordinate coordinate,
                        Direction direction,
                        String name,
-                       Map<PlayerStateEnum, Integer> stateMillis,
+                       Map<OldPlayerStateEnum, Integer> stateMillis,
                        AttributeProvider attributeProvider,
                        RealmMap realmMap,
                        List<NpcSpell> spells,
@@ -59,7 +62,7 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
         this.spwanCoordinate = coordinate;
         this.wanderingArea = new Rectangle(coordinate.move(-range, -range), coordinate.move(range, range));
         this.currentLife = attributeProvider.life();
-        this.changeState(NpcCommonState.idle(getStateMillis(PlayerStateEnum.IDLE)));
+        this.changeState(NpcCommonState.idle(getStateMillis(OldPlayerStateEnum.IDLE)));
         changeCoordinate(coordinate);
     }
 
@@ -110,12 +113,12 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
     }
 
     @Override
-    public void startAction(PlayerStateEnum playerStateEnum) {
+    public void startAction(OldPlayerStateEnum playerStateEnum) {
         Validate.isTrue(ACCEPTABLE_PLAYER_STATE_ENUMS.contains(playerStateEnum), "Invalid state : " + playerStateEnum);
         switch (playerStateEnum) {
             case IDLE -> idle();
             case DIE -> die();
-            case Move -> move(getStateMillis(PlayerStateEnum.Move));
+            case Move -> move(getStateMillis(OldPlayerStateEnum.Move));
         }
     }
 
@@ -133,7 +136,7 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
 
     void doHurtAction(ViolentCreature attacker, int millis) {
         creatureState().moveToHurtCoordinate(this);
-        PlayerStateEnum afterHurt = creatureState().decideAfterHurtState();
+        OldPlayerStateEnum afterHurt = creatureState().decideAfterHurtState();
         changeState(new NpcHurtState(millis, creatureState(), attacker));
         emitEvent(new CreatureHurtEvent(this, afterHurt));
         hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
@@ -141,21 +144,21 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
 
 
     private void idle() {
-        changeState(NpcCommonState.idle(getStateMillis(PlayerStateEnum.IDLE)));
-        emitEvent(new NpcChangeStateEvent(this, stateEnum()));
+        changeState(NpcCommonState.idle(getStateMillis(OldPlayerStateEnum.IDLE)));
+        emitEvent(new NpcChangeStateEvent(this, oldStateEnum()));
     }
 
 
     @Override
     public void stay(int millis) {
         changeState(NpcCommonState.idle(millis));
-        emitEvent(new NpcChangeStateEvent(this, stateEnum()));
+        emitEvent(new NpcChangeStateEvent(this, oldStateEnum()));
     }
 
     @Override
     public void turn() {
-        changeState(NpcCommonState.turn(getStateMillis(PlayerStateEnum.Turn)));
-        emitEvent(new NpcChangeStateEvent(this, stateEnum()));
+        changeState(NpcCommonState.turn(getStateMillis(OldPlayerStateEnum.Turn)));
+        emitEvent(new NpcChangeStateEvent(this, oldStateEnum()));
     }
 
     @Override
@@ -166,10 +169,10 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
     }
 
     public void die() {
-        if (stateEnum() == PlayerStateEnum.DIE) {
+        if (oldStateEnum() == OldPlayerStateEnum.DIE) {
             return;
         }
-        changeState(NpcCommonState.die(getStateMillis(PlayerStateEnum.DIE) + (findShiftSpell().isPresent() ? 2000 : 8000)));
+        changeState(NpcCommonState.die(getStateMillis(OldPlayerStateEnum.DIE) + (findShiftSpell().isPresent() ? 2000 : 8000)));
         emitEvent(new CreatureDieEvent(this));
         dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         ai.onDead(this);
@@ -201,7 +204,7 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
 
     @Override
     public void onActionDone() {
-        if (stateEnum() == PlayerStateEnum.DIE) {
+        if (oldStateEnum() == OldPlayerStateEnum.DIE) {
             realmMap.free(this);
             emitEvent(new RemoveEntityEvent(this));
         }
@@ -307,4 +310,31 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
     }
 
 
+    @Override
+    public String animation() {
+        return attributeProvider.animate();
+    }
+
+    @Override
+    public String shape() {
+        return attributeProvider.shape();
+    }
+
+    @Override
+    public NpcStateEnum npcStateEnum() {
+        return switch (oldStateEnum()) {
+            case DIE -> NpcStateEnum.Die;
+            case ATTACK -> NpcStateEnum.Attack;
+            case Move -> NpcStateEnum.Move;
+            case IDLE -> NpcStateEnum.Idle;
+            case HURT -> NpcStateEnum.Hurt;
+            case Turn -> NpcStateEnum.Turn;
+            default -> null;
+        };
+    }
+
+    @Override
+    public I2ClientMessage captureSnapshot() {
+        return NpcSnapshot.ofNpc(this, creatureState().elapsedMillis());
+    }
 }

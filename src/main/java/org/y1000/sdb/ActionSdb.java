@@ -1,7 +1,7 @@
 package org.y1000.sdb;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,16 +12,16 @@ public final class ActionSdb extends AbstractCSVSdbReader {
         read("Action.sdb");
     }
 
-    private static final Map<PlayerStateEnum, String>  ACTION_NAME_MAP = new HashMap<>() {{
-        put(PlayerStateEnum.IDLE, "Idle");
-        put(PlayerStateEnum.ATTACK, "Attack");
-        put(PlayerStateEnum.Move, "Move");
-        put(PlayerStateEnum.DIE, "Die");
-        put(PlayerStateEnum.HURT, "Hurt");
-        put(PlayerStateEnum.Turn, "Freeze");
+    private static final Map<OldPlayerStateEnum, String>  ACTION_NAME_MAP = new HashMap<>() {{
+        put(OldPlayerStateEnum.IDLE, "Idle");
+        put(OldPlayerStateEnum.ATTACK, "Attack");
+        put(OldPlayerStateEnum.Move, "Move");
+        put(OldPlayerStateEnum.DIE, "Die");
+        put(OldPlayerStateEnum.HURT, "Hurt");
+        put(OldPlayerStateEnum.Turn, "Freeze");
     }};
 
-    public int getActionLength(String name, PlayerStateEnum playerStateEnum) {
+    public int getActionLength(String name, OldPlayerStateEnum playerStateEnum) {
         if (!ACTION_NAME_MAP.containsKey(playerStateEnum)) {
             throw new NotImplementedException();
         }

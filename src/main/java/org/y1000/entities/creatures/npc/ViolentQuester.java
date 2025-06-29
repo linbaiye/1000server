@@ -7,11 +7,8 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.npc.AI.ViolentNpcWanderingAI;
-import org.y1000.message.AbstractEntitySnapshot;
-import org.y1000.message.NpcSnapshot;
 import org.y1000.quest.Quest;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -30,7 +27,7 @@ public final class ViolentQuester extends AbstractViolentNpc implements Quester 
     public ViolentQuester(long id, Coordinate coordinate,
                               Direction direction,
                               String name,
-                              Map<PlayerStateEnum, Integer> stateMillis,
+                              Map<OldPlayerStateEnum, Integer> stateMillis,
                               AttributeProvider attributeProvider,
                               RealmMap realmMap,
                               Quest quest) {
@@ -42,12 +39,6 @@ public final class ViolentQuester extends AbstractViolentNpc implements Quester 
     @Override
     protected Logger log() {
         return log;
-    }
-
-    @Override
-    public AbstractEntitySnapshot captureInterpolation() {
-        return new NpcSnapshot(id(), coordinate(), creatureState().stateEnum(), direction(), creatureState().elapsedMillis(), viewName(), NpcType.QUESTER,
-                attributeProvider().animate(), attributeProvider().shape());
     }
 
 

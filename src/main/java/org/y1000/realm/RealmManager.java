@@ -101,7 +101,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
 
     private void handleLogin(Integer accountId, String charName, Connection connection) {
         playerRepository
-                .findIdAndRealm(accountId, 100000051)
+                .findIdAndRealm(4, 100000301)
                 .ifPresent(pair -> {
                     realmIdGroupMap.values().forEach(r -> r.broadcast(new Login(connection, pair.getLeft())));
                 });

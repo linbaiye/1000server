@@ -1,12 +1,12 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.CreatureState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.message.input.MoveInput;
 import org.y1000.message.input.TurnInput;
 
 public interface PlayerState extends CreatureState {
-    PlayerStateEnum stateEnum();
+    OldPlayerStateEnum stateEnum();
 
     void move(MoveInput input);
 

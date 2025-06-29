@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
@@ -14,13 +14,13 @@ import org.y1000.realm.Realm;
 @Slf4j
 public final class PlayerAttackState extends AbstractFightingState {
 
-    private final PlayerStateEnum attackingPlayerStateEnum;
+    private final OldPlayerStateEnum attackingPlayerStateEnum;
     private final AttackableActiveEntity rangedTarget;
     private final Damage damage;
     private final int rangedHit;
     private final int spriteId;
 
-    private PlayerAttackState(int totalMillis, PlayerStateEnum attackingPlayerStateEnum,
+    private PlayerAttackState(int totalMillis, OldPlayerStateEnum attackingPlayerStateEnum,
                               AttackableActiveEntity target,
                               Damage damage,
                               int rangedHit,
@@ -34,7 +34,7 @@ public final class PlayerAttackState extends AbstractFightingState {
     }
 
     @Override
-    public PlayerStateEnum stateEnum() {
+    public OldPlayerStateEnum stateEnum() {
         return attackingPlayerStateEnum;
     }
 
@@ -58,13 +58,13 @@ public final class PlayerAttackState extends AbstractFightingState {
     public static PlayerAttackState ranged(PlayerImpl player, int spriteId) {
         Validate.isTrue(player.attackKungFu().isRanged());
         Validate.notNull(player.getFightingEntity());
-        PlayerStateEnum playerStateEnum = player.attackKungFu().randomAttackState();
+        OldPlayerStateEnum playerStateEnum = player.attackKungFu().randomAttackState();
         int stateMillis = Math.min(player.getStateMillis(playerStateEnum), player.attackSpeed() * Realm.STEP_MILLIS);
         return new PlayerAttackState(stateMillis, playerStateEnum, player.getFightingEntity(), player.damage(), player.hit(), spriteId);
     }
 
     public static PlayerAttackState melee(PlayerImpl player) {
-        PlayerStateEnum playerStateEnum = player.attackKungFu().randomAttackState();
+        OldPlayerStateEnum playerStateEnum = player.attackKungFu().randomAttackState();
         int stateMillis = Math.min(player.getStateMillis(playerStateEnum), player.attackSpeed() * Realm.STEP_MILLIS);
         return new PlayerAttackState(stateMillis, playerStateEnum, null, null, 0, 0);
     }

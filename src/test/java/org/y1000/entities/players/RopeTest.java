@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.message.BreakRopeEvent;
 import org.y1000.message.PlayerDraggedEvent;
 import org.y1000.message.PositionType;
@@ -32,14 +32,14 @@ class RopeTest extends AbstractPlayerUnitTestFixture {
     void setUp() {
         realm = mockAllFlatRealm();
         dragger = playerBuilder().build();
-        dragger.joinRealm(realm);
+        dragger.joinRealm(realm, );
         draggerListener = new TestingEventListener();
         dragger.registerEventListener(draggerListener);
 
         dragged = playerBuilder().build();
-        dragged.joinRealm(realm);
+        dragged.joinRealm(realm, );
         killer = playerBuilder().coordinate(dragged.coordinate().moveBy(Direction.RIGHT)).build();
-        while (dragged.stateEnum() != PlayerStateEnum.DIE) {
+        while (dragged.oldStateEnum() != OldPlayerStateEnum.DIE) {
             dragged.attackedBy(killer);
         }
         draggedListener = new TestingEventListener();

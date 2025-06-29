@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.*;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.*;
@@ -126,7 +126,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         }
         var ok = checkResourcesAndSendError(player);
         if (!ok) {
-            player.changeState(new PlayerCooldownState(player.getStateMillis(PlayerStateEnum.FightStand)));
+            player.changeState(new PlayerCooldownState(player.getStateMillis(OldPlayerStateEnum.FightStand)));
             return;
         }
         player.changeDirection(direction);
@@ -274,7 +274,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     private int effectIdPrefix() {
         return switch (getType()) {
-            case FistWeapon -> 110;
+            case Fist -> 110;
             case SWORD -> 120;
             case BLADE -> 130;
             case AXE -> 140;

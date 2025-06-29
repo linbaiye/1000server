@@ -13,7 +13,7 @@ public final class ConnectionImpl extends AbstractConnection {
     }
 
     @Override
-    public void write(I2ClientMessage message) {
+    public void writeAndFlush(I2ClientMessage message) {
         var context = getContext();
         if (context == null) {
             return;

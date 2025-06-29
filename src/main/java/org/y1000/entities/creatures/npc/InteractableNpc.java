@@ -13,8 +13,6 @@ public interface InteractableNpc extends Npc {
 
     void interact(Player player, String name);
 
-    String shape();
-
     int avatarImageId();
 
     String mainMenuDialog();

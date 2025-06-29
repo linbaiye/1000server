@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.event;
 
 import lombok.Getter;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.AggressiveMonster;
 import org.y1000.entities.creatures.npc.Guardian;
 import org.y1000.entities.creatures.npc.Npc;
@@ -30,7 +30,7 @@ public class SeekAggressiveMonsterEvent implements IEntityEvent {
 
     public void handle(Stream<Npc> entityStream) {
         entityStream.filter(npc -> npc instanceof AggressiveMonster &&
-                        npc.stateEnum() != PlayerStateEnum.DIE &&
+                        npc.oldStateEnum() != OldPlayerStateEnum.DIE &&
                         npc.coordinate().directDistance(guardian.coordinate()) <= width)
                 .map(AggressiveMonster.class::cast)
                 .forEach(monsters::add);

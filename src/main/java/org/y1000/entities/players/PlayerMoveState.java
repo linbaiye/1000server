@@ -2,11 +2,10 @@ package org.y1000.entities.players;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.message.input.MoveInput;
-import org.y1000.message.input.SimpleInput;
 import org.y1000.message.input.TurnInput;
 
 import java.util.Map;
@@ -31,7 +30,7 @@ public final class PlayerMoveState extends AbstractPlayerState {
     private PlayerMoveState(Player player,
             MoveInput input,
             MoveAction moveAction) {
-        super(player, PlayerStateEnum.Move, MoveStateMillis.get(moveAction));
+        super(player, OldPlayerStateEnum.Move, MoveStateMillis.get(moveAction));
         this.moveAction = moveAction;
         currentInput = input;
     }

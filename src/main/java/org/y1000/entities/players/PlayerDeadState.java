@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.IAbstractCreatureState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.entities.players.event.PlayerReviveEvent;
 
@@ -12,8 +12,8 @@ public final class PlayerDeadState extends IAbstractCreatureState<PlayerImpl> im
     }
 
     @Override
-    public PlayerStateEnum stateEnum() {
-        return PlayerStateEnum.DIE;
+    public OldPlayerStateEnum stateEnum() {
+        return OldPlayerStateEnum.DIE;
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class PlayerDeadState extends IAbstractCreatureState<PlayerImpl> im
     }
 
     public static PlayerDeadState die(PlayerImpl player) {
-        return new PlayerDeadState(player.getStateMillis(PlayerStateEnum.DIE) + 30000);
+        return new PlayerDeadState(player.getStateMillis(OldPlayerStateEnum.DIE) + 30000);
     }
 
 }

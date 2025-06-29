@@ -4,23 +4,17 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.kungfu.KungFu;
-import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
+import org.y1000.message.AbstractPlayerMessage;
+import org.y1000.message.serverevent.Abstract2ClientEvent;
 import org.y1000.network.gen.KungFuBookPacket;
 import org.y1000.network.gen.KungFuPacket;
 import org.y1000.network.gen.Packet;
 
-public final class KungFuBookMessage extends Abstract2ClientEntityEvent implements EntityEvent {
-
-    private final Packet packet;
+public final class KungFuBookMessage extends AbstractPlayerMessage  {
     private KungFuBookMessage(Player player, Packet packet) {
-        super(player);
-        this.packet = packet;
+        super(player, packet);
     }
 
-    @Override
-    protected Packet buildPacket() {
-        return packet;
-    }
 
     private static KungFuPacket toPacket(int slot, KungFu kungFu) {
         return KungFuPacket.newBuilder()

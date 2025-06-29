@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
@@ -73,10 +73,10 @@ class Mover<N extends Npc> {
     public void nextMove(Consumer<? super N> noPathAction) {
         if (isArrived())
             return;
-        if (npc.stateEnum() == PlayerStateEnum.Move) {
+        if (npc.oldStateEnum() == OldPlayerStateEnum.Move) {
             previous = npc.coordinate().moveBy(npc.direction().opposite());
         }
-        if (npc.stateEnum() == PlayerStateEnum.IDLE) {
+        if (npc.oldStateEnum() == OldPlayerStateEnum.IDLE) {
             doMove(noPathAction);
             return;
         }
@@ -118,14 +118,14 @@ class Mover<N extends Npc> {
 
     private void computeMillis(int speedRate, int maxIdleMillis) {
         int walkSpeed = npc.walkSpeed() / speedRate;
-        var stateMillis = npc.getStateMillis(PlayerStateEnum.Move);
+        var stateMillis = npc.getStateMillis(OldPlayerStateEnum.Move);
         int walkMillis = Math.min(stateMillis, walkSpeed);
         moveMillis = Math.max(walkMillis, 200);
         idleMillis = Math.max(walkSpeed - walkMillis, maxIdleMillis);
     }
 
     private void computeWalkMillis() {
-        computeMillis(1, npc.getStateMillis(PlayerStateEnum.IDLE));
+        computeMillis(1, npc.getStateMillis(OldPlayerStateEnum.IDLE));
     }
 
     private void computeRunMillis() {

@@ -99,28 +99,30 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
 
     private PlayerState state;
 
-    private static final Map<PlayerStateEnum, Integer> STATE_MILLIS = new HashMap<>() {{
-        put(PlayerStateEnum.IDLE, 1800);
-        put(PlayerStateEnum.Move, 840);
-        put(PlayerStateEnum.RUN, 420);
-        put(PlayerStateEnum.FLY, 360);
-        put(PlayerStateEnum.ENFIGHT_WALK, 840);
-        put(PlayerStateEnum.FightStand, 1400);
-        put(PlayerStateEnum.FIST, AttackKungFuType.FistWeapon.below50Millis());
-        put(PlayerStateEnum.KICK, AttackKungFuType.FistWeapon.above50Millis());
-        put(PlayerStateEnum.HURT, 280);
-        put(PlayerStateEnum.BOW, AttackKungFuType.BOW.above50Millis());
-        put(PlayerStateEnum.THROW, AttackKungFuType.THROW.above50Millis());
-        put(PlayerStateEnum.SWORD2H, AttackKungFuType.SWORD.above50Millis());
-        put(PlayerStateEnum.SWORD, AttackKungFuType.SWORD.below50Millis());
-        put(PlayerStateEnum.BLADE2H, AttackKungFuType.BLADE.above50Millis());
-        put(PlayerStateEnum.BLADE, AttackKungFuType.BLADE.below50Millis());
-        put(PlayerStateEnum.AXE, AttackKungFuType.AXE.below50Millis());
-        put(PlayerStateEnum.SPEAR, AttackKungFuType.SPEAR.below50Millis());
-        put(PlayerStateEnum.SIT, 750);
-        put(PlayerStateEnum.STANDUP, 750);
-        put(PlayerStateEnum.DIE, 1500);
-        put(PlayerStateEnum.HELLO, 750);
+    private PlayerMessageListener messageListener;
+
+    private static final Map<OldPlayerStateEnum, Integer> STATE_MILLIS = new HashMap<>() {{
+        put(OldPlayerStateEnum.IDLE, 1800);
+        put(OldPlayerStateEnum.Move, 840);
+        put(OldPlayerStateEnum.RUN, 420);
+        put(OldPlayerStateEnum.FLY, 360);
+        put(OldPlayerStateEnum.ENFIGHT_WALK, 840);
+        put(OldPlayerStateEnum.FightStand, 1400);
+        put(OldPlayerStateEnum.FIST, AttackKungFuType.Fist.below50Millis());
+        put(OldPlayerStateEnum.KICK, AttackKungFuType.Fist.above50Millis());
+        put(OldPlayerStateEnum.HURT, 280);
+        put(OldPlayerStateEnum.BOW, AttackKungFuType.BOW.above50Millis());
+        put(OldPlayerStateEnum.THROW, AttackKungFuType.THROW.above50Millis());
+        put(OldPlayerStateEnum.SWORD2H, AttackKungFuType.SWORD.above50Millis());
+        put(OldPlayerStateEnum.SWORD, AttackKungFuType.SWORD.below50Millis());
+        put(OldPlayerStateEnum.BLADE2H, AttackKungFuType.BLADE.above50Millis());
+        put(OldPlayerStateEnum.BLADE, AttackKungFuType.BLADE.below50Millis());
+        put(OldPlayerStateEnum.AXE, AttackKungFuType.AXE.below50Millis());
+        put(OldPlayerStateEnum.SPEAR, AttackKungFuType.SPEAR.below50Millis());
+        put(OldPlayerStateEnum.SIT, 750);
+        put(OldPlayerStateEnum.STANDUP, 750);
+        put(OldPlayerStateEnum.DIE, 1500);
+        put(OldPlayerStateEnum.HELLO, 750);
     }};
 
     @Builder
@@ -185,7 +187,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         this.legLife = leg;
         this.headLife = head;
         this.pillSlots = pillSlots;
-        this.changeState(new PlayerStillState(getStateMillis(PlayerStateEnum.IDLE)));
+        this.changeState(new PlayerStillState(getStateMillis(OldPlayerStateEnum.IDLE)));
         setRegenerateTimer();
         team = 0;
         this.guildMembership = guildMembership;
@@ -267,8 +269,8 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         if (equipped == null) {
             return;
         }
-        if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.FistWeapon) {
-            changeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.FistWeapon));
+        if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.Fist) {
+            changeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.Fist));
         }
         emitEvent(new PlayerUnequipEvent(this, equipped.equipmentType()));
         int slot = inventory.put(equipped);
@@ -305,8 +307,8 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         } else {
             return;
         }
-        emitEvent(PlayerEquipEvent.create(this, equipment));
-        emitEvent(InventoryMessage.quiet(this));
+        sendMessage(PlayerEquipMessage.create(this, equipment));
+        sendMessage(InventoryMessage.quiet(this));
     }
 
 
@@ -360,7 +362,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         }
         int slot = inventory.findWeaponSlot(newAttack.getType());
         if (slot == 0) {
-            if (newAttack.getType() == AttackKungFuType.FistWeapon) {
+            if (newAttack.getType() == AttackKungFuType.Fist) {
                 unequip(EquipmentType.WEAPON);
                 changeAttackKungFu(newAttack);
             } else {
@@ -401,7 +403,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         if (creatureState().canSitDown()) {
             sitDown(true);
         }
-        if (stateEnum() == PlayerStateEnum.SIT) {
+        if (oldStateEnum() == OldPlayerStateEnum.SIT) {
             if (this.protectKungFu != null) {
                 emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
                 emitEvent(new EntitySoundEvent(this, this.protectKungFu.disableSound()));
@@ -427,10 +429,10 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
             }
             return;
         }
-        if (stateEnum() == PlayerStateEnum.SIT) {
+        if (oldStateEnum() == OldPlayerStateEnum.SIT) {
             this.changeState(new PlayerStandUpState(this));
             emitEvent(new PlayerStandUpEvent(this, true));
-        } else if (stateEnum() != PlayerStateEnum.Move && stateEnum() != PlayerStateEnum.ENFIGHT_WALK) {
+        } else if (oldStateEnum() != OldPlayerStateEnum.Move && oldStateEnum() != OldPlayerStateEnum.ENFIGHT_WALK) {
             this.changeState(PlayerStillState.idle(this));
             emitEvent(new SetPositionEvent(this, direction(), coordinate()));
         }
@@ -529,7 +531,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
 
     @Override
     public void handleClientEvent(ClientEvent clientEvent) {
-        if (stateEnum() == PlayerStateEnum.DIE) {
+        if (oldStateEnum() == OldPlayerStateEnum.DIE) {
             return;
         }
         if (clientEvent instanceof ClientDoubleClickSlotEvent doubleClickSlotEvent) {
@@ -558,7 +560,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
 
     @Override
     public void handleInput(SelfHandleInput input) {
-        if (stateEnum() == PlayerStateEnum.DIE || input == null)
+        if (oldStateEnum() == OldPlayerStateEnum.DIE || input == null)
             return;
         input.accept(this);
     }
@@ -576,9 +578,9 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
     @Override
     public void handleSimpleInput(SimpleInput.Type type) {
         if (type == SimpleInput.Type.KungFuBook) {
-            emitEvent(KungFuBookMessage.forPlayer(this));
+            sendMessage(KungFuBookMessage.forPlayer(this));
         } else if (type == SimpleInput.Type.Inventory) {
-            emitEvent(InventoryMessage.forceful(this));
+            sendMessage(InventoryMessage.forceful(this));
         }
     }
 
@@ -588,7 +590,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
             if (type == ClickKungFuInput.ClickType.LeftDoubleClick) {
 
             } else if (type == ClickKungFuInput.ClickType.LeftClick) {
-                emitEvent(PlayerTextMessage.of(this, kungFu.detailText()));
+                sendMessage(PlayerTextMessage.of(this, kungFu.detailText()));
             }
         });
     }
@@ -596,7 +598,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
     @Override
     public void swapItem(int slot1, int slot2) {
         if (inventory.swap(slot1, slot2)) {
-            emitEvent(InventoryMessage.forceful(this));
+            sendMessage(InventoryMessage.forceful(this));
         }
     }
 
@@ -656,18 +658,24 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
     }
 
     @Override
-    public void joinRealm(Realm realm) {
-        joinRealm(realm, coordinate());
+    public void joinRealm(Realm realm, PlayerMessageListener messageListener) {
+        joinRealm(realm, coordinate(), messageListener);
+    }
+
+    private void sendMessage(PlayerMessage playerMessage) {
+        if (messageListener != null)
+            messageListener.onMessage(playerMessage);
     }
 
 
     @Override
-    public void joinRealm(Realm realm, Coordinate coordinate) {
+    public void joinRealm(Realm realm, Coordinate coordinate, PlayerMessageListener messageListener) {
         Validate.notNull(realm);
         Validate.notNull(coordinate);
         Validate.isTrue(this.realm == null);
         this.realm = realm;
         changeCoordinate(coordinate);
+        this.messageListener = messageListener;
     }
 
     private void onKilled() {
@@ -700,7 +708,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         if (currentLife() > 0) {
             cooldownRecovery();
             creatureState().moveToHurtCoordinate(this);
-            PlayerStateEnum afterHurtPlayerStateEnum = creatureState().decideAfterHurtState();
+            OldPlayerStateEnum afterHurtPlayerStateEnum = creatureState().decideAfterHurtState();
             this.changeState(PlayerHurtState.hurt(this, afterHurtPlayerStateEnum));
             emitEvent(new CreatureHurtEvent(this, afterHurtPlayerStateEnum));
             hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
@@ -860,8 +868,8 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
     }
 
     @Override
-    public PlayerSnapshot captureInterpolation() {
-        return PlayerSnapshot.FromPlayer(this, creatureState().elapsedMillis());
+    public I2ClientMessage captureSnapshot() {
+        return PlayerSnapshot.FromPlayer(this);
     }
 
 
@@ -886,11 +894,11 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
             legLife.onAgeIncreased(newAge);
         }
         yinYang = newYY;
-        int halLife =revival.regenerateHalLife(stateEnum());
+        int halLife =revival.regenerateHalLife(oldStateEnum());
         armLife.gain(halLife);
         headLife.gain(halLife);
         legLife.gain(halLife);
-        var resource = revival.regenerateResources(stateEnum());
+        var resource = revival.regenerateResources(oldStateEnum());
         life.gain(resource);
         gainOuterPower(resource);
         gainInnerPower(resource);
@@ -1278,7 +1286,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
                 "id=" + id() +
                 ", coordinate=" + coordinate() +
                 ", direction=" + direction() +
-                ", state=" + stateEnum() +
+                ", state=" + oldStateEnum() +
                 '}';
     }
 

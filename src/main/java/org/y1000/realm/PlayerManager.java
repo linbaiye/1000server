@@ -10,16 +10,15 @@ import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
 
-import java.util.Optional;
 import java.util.Set;
 
 interface PlayerManager extends ActiveEntityManager<Player> {
     void onPlayerConnected(Player player, Realm realm);
 
 
-    void onPlayerLogin(Player player, Login login, Realm realm);
+    void loginPlayer(Player player, Login login, Realm realm);
 
-    void onPlayerLogout(Connection connection);
+    void logoutPlayer(Connection connection);
 
     void teleportIn(Player player,
                     Realm realm, Coordinate coordinate);

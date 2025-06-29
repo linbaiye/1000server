@@ -106,7 +106,7 @@ class TriggerDynamicObjectTest {
 
     @Test
     void interpolation() {
-        ShowDynamicObjectPacket showDynamicObject = object.captureInterpolation().toPacket().getShowDynamicObject();
+        ShowDynamicObjectPacket showDynamicObject = object.captureSnapshot().toPacket().getShowDynamicObject();
         assertEquals(object.id(), showDynamicObject.getId());
         assertEquals(DynamicObjectType.TRIGGER.value(), showDynamicObject.getType());
         assertEquals(object.coordinate().x(), showDynamicObject.getX());
@@ -119,11 +119,11 @@ class TriggerDynamicObjectTest {
         assertEquals(object.coordinate().y(), showDynamicObject.getGuardY(0));
         when(player.coordinate()).thenReturn(object.coordinate().move(1, 1));
         object.trigger(player, 1);
-        showDynamicObject = object.captureInterpolation().toPacket().getShowDynamicObject();
+        showDynamicObject = object.captureSnapshot().toPacket().getShowDynamicObject();
         assertEquals(1, showDynamicObject.getStart());
         assertEquals(4, showDynamicObject.getEnd());
         object.update(120);
-        showDynamicObject = object.captureInterpolation().toPacket().getShowDynamicObject();
+        showDynamicObject = object.captureSnapshot().toPacket().getShowDynamicObject();
         assertEquals(120, showDynamicObject.getElapsed());
     }
 
@@ -152,7 +152,7 @@ class TriggerDynamicObjectTest {
         assertTrue(object.occupyingCoordinates().contains(Coordinate.xy(1, 2)));
         assertTrue(object.occupyingCoordinates().contains(Coordinate.xy(1, 2).move(1, 1)));
         assertTrue(object.occupyingCoordinates().contains(Coordinate.xy(1, 2).move(1, 0)));
-        ShowDynamicObjectPacket showDynamicObject = object.captureInterpolation().toPacket().getShowDynamicObject();
+        ShowDynamicObjectPacket showDynamicObject = object.captureSnapshot().toPacket().getShowDynamicObject();
         for (int i = 0; i< 3; i++) {
             int x = showDynamicObject.getGuardX(i);
             int y = showDynamicObject.getGuardY(i);

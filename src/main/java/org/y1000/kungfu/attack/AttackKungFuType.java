@@ -6,7 +6,7 @@ import org.y1000.message.ValueEnum;
 
 public enum AttackKungFuType implements ValueEnum {
 
-    FistWeapon(0, 400, 560, true),
+    Fist(0, 400, 560, true),
 
     SWORD(1, 720, 1100, true),
 
@@ -29,6 +29,7 @@ public enum AttackKungFuType implements ValueEnum {
 
     @Getter
     private final boolean melee;
+
 
 
     AttackKungFuType(int v, int below50, int above50, boolean melee) {

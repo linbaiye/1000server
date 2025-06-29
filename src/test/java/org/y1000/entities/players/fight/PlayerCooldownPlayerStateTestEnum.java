@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.PlayerImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +25,7 @@ class PlayerCooldownPlayerStateTestEnum extends AbstractUnitTestFixture {
 
     @Test
     void doables() {
-        var state = new PlayerCooldownState(player.getStateMillis(PlayerStateEnum.FightStand));
+        var state = new PlayerCooldownState(player.getStateMillis(OldPlayerStateEnum.FightStand));
         assertTrue(state.canSitDown());
         assertFalse(state.canStandUp());
         assertTrue(state.canUseFootKungFu());
@@ -34,12 +34,12 @@ class PlayerCooldownPlayerStateTestEnum extends AbstractUnitTestFixture {
 
     @Test
     void hurtRelated() {
-        var state = new PlayerCooldownState(player.getStateMillis(PlayerStateEnum.FightStand));
-        assertSame(PlayerStateEnum.FightStand, state.decideAfterHurtState());
+        var state = new PlayerCooldownState(player.getStateMillis(OldPlayerStateEnum.FightStand));
+        assertSame(OldPlayerStateEnum.FightStand, state.decideAfterHurtState());
         var before = player.coordinate();
         state.moveToHurtCoordinate(player);
         assertEquals(before, player.coordinate());
         state.afterHurt(player);
-        assertEquals(PlayerStateEnum.FightStand, player.stateEnum());
+        assertEquals(OldPlayerStateEnum.FightStand, player.oldStateEnum());
     }
 }

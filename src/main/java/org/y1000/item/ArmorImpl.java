@@ -14,8 +14,8 @@ public final class ArmorImpl extends AbstractSexualEquipment implements ArmorEqu
                      ItemSdb itemSdb,
                      Set<Object> abilities) {
         super(name, itemSdb, abilities);
-        this.itemSdb = itemSdb;
         this.originArmor =  new Armor(itemSdb.getArmorBody(name), itemSdb.getArmorHead(name), itemSdb.getArmorArm(name), itemSdb.getArmorLeg(name));
+        this.itemSdb = itemSdb;
     }
 
     @Override
@@ -55,4 +55,5 @@ public final class ArmorImpl extends AbstractSexualEquipment implements ArmorEqu
         descriptionBuilder.append(String.format("防御力: %d / %d / %d / %d", armor.body(), armor.head(), armor.arm(), armor.leg()));
         return descriptionBuilder.toString();
     }
+
 }

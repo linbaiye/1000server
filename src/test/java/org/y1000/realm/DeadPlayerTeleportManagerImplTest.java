@@ -3,7 +3,7 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
@@ -31,7 +31,7 @@ class DeadPlayerTeleportManagerImplTest {
     @Test
     void update() {
         var player = Mockito.mock(Player.class);
-        when(player.stateEnum()).thenReturn(PlayerStateEnum.DIE);
+        when(player.oldStateEnum()).thenReturn(OldPlayerStateEnum.DIE);
         deadPlayerTeleportManager.onPlayerDead(player);
         deadPlayerTeleportManager.update(10000);
         assertNotNull(event);

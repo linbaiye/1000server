@@ -3,7 +3,7 @@ package org.y1000.kungfu.attack;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.kungfu.KungFu;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,9 +17,9 @@ public final class SwordKungFu extends AbstractMeleeKungFu {
     }
 
     @Override
-    public PlayerStateEnum randomAttackState() {
+    public OldPlayerStateEnum randomAttackState() {
         //return level() < 50 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.SWORD : State.SWORD2H;
-        return level() < 5000 || ThreadLocalRandom.current().nextInt(0, 2) == 1 ? PlayerStateEnum.SWORD : PlayerStateEnum.SWORD2H;
+        return level() < 5000 || ThreadLocalRandom.current().nextInt(0, 2) == 1 ? OldPlayerStateEnum.SWORD : OldPlayerStateEnum.SWORD2H;
     }
 
 

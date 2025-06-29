@@ -48,7 +48,7 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         groundItem.registerEventListener(itemEvenListener);
         manager.add(groundItem);
         var picker = playerBuilder().coordinate(Coordinate.xy(5, 2)).build();
-        picker.joinRealm(mockAllFlatRealm());
+        picker.joinRealm(mockAllFlatRealm(), );
         TestingEventListener playerEventListener = new TestingEventListener();
         picker.registerEventListener(playerEventListener);
         manager.pickItem(picker, 3);

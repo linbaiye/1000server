@@ -5,7 +5,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.*;
 import org.y1000.entities.creatures.npc.AI.*;
 import org.y1000.entities.creatures.npc.interactability.BuyInteractability;
@@ -103,29 +103,29 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private Map<PlayerStateEnum, Integer> createDevirtueActionLengthMap(String animate) {
-        Map<PlayerStateEnum, Integer> result = new HashMap<>();
-        int move = actionSdb.getActionLength(animate, PlayerStateEnum.Move);
-        int idle = actionSdb.getActionLength(animate, PlayerStateEnum.IDLE);
-        int hurt = actionSdb.getActionLength(animate, PlayerStateEnum.HURT);
-        int die = actionSdb.getActionLength(animate, PlayerStateEnum.DIE);
-        int turn = actionSdb.getActionLength(animate, PlayerStateEnum.Turn);
-        result.put(PlayerStateEnum.IDLE, idle);
-        result.put(PlayerStateEnum.Move, move);
-        result.put(PlayerStateEnum.HURT, hurt);
-        result.put(PlayerStateEnum.DIE, die);
-        result.put(PlayerStateEnum.Turn, turn);
+    private Map<OldPlayerStateEnum, Integer> createDevirtueActionLengthMap(String animate) {
+        Map<OldPlayerStateEnum, Integer> result = new HashMap<>();
+        int move = actionSdb.getActionLength(animate, OldPlayerStateEnum.Move);
+        int idle = actionSdb.getActionLength(animate, OldPlayerStateEnum.IDLE);
+        int hurt = actionSdb.getActionLength(animate, OldPlayerStateEnum.HURT);
+        int die = actionSdb.getActionLength(animate, OldPlayerStateEnum.DIE);
+        int turn = actionSdb.getActionLength(animate, OldPlayerStateEnum.Turn);
+        result.put(OldPlayerStateEnum.IDLE, idle);
+        result.put(OldPlayerStateEnum.Move, move);
+        result.put(OldPlayerStateEnum.HURT, hurt);
+        result.put(OldPlayerStateEnum.DIE, die);
+        result.put(OldPlayerStateEnum.Turn, turn);
         return result;
     }
 
-    private Map<PlayerStateEnum, Integer> createSubmissiveNpcActionLengthMap(String idName) {
+    private Map<OldPlayerStateEnum, Integer> createSubmissiveNpcActionLengthMap(String idName) {
         return createDevirtueActionLengthMap(npcSdb.getAnimate(idName));
     }
 
-    private Map<PlayerStateEnum, Integer> createActionLengthMap(String animate) {
-        Map<PlayerStateEnum, Integer> result = createDevirtueActionLengthMap(animate);
-        int attack = actionSdb.getActionLength(animate, PlayerStateEnum.ATTACK);
-        result.put(PlayerStateEnum.ATTACK, attack);
+    private Map<OldPlayerStateEnum, Integer> createActionLengthMap(String animate) {
+        Map<OldPlayerStateEnum, Integer> result = createDevirtueActionLengthMap(animate);
+        int attack = actionSdb.getActionLength(animate, OldPlayerStateEnum.ATTACK);
+        result.put(OldPlayerStateEnum.ATTACK, attack);
         return result;
     }
 

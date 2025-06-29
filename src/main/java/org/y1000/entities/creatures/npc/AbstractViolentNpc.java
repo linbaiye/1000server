@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.npc;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
@@ -30,7 +30,7 @@ public abstract class AbstractViolentNpc
     private final NpcRangedSkill skill;
 
     public AbstractViolentNpc(long id, Coordinate coordinate, Direction direction, String name,
-                              Map<PlayerStateEnum, Integer> stateMillis, AttributeProvider attributeProvider,
+                              Map<OldPlayerStateEnum, Integer> stateMillis, AttributeProvider attributeProvider,
                               RealmMap realmMap, NpcAI ai, NpcRangedSkill skill, List<NpcSpell> spellList) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, spellList, ai);
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
@@ -78,7 +78,7 @@ public abstract class AbstractViolentNpc
 
     @Override
     public void startAttackAction(boolean withSound) {
-        doAttackAction(NpcCommonState.attack(getStateMillis(PlayerStateEnum.ATTACK)));
+        doAttackAction(NpcCommonState.attack(getStateMillis(OldPlayerStateEnum.ATTACK)));
         if (withSound) {
             attackSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         }
@@ -103,14 +103,14 @@ public abstract class AbstractViolentNpc
         if (target == null || !skill.isAvailable()) {
             return;
         }
-        doAttackAction(new NpcRangedAttackState(getStateMillis(PlayerStateEnum.ATTACK), skill.getSwingSound(), skill.getProjectileSpriteId(), target, this));
+        doAttackAction(new NpcRangedAttackState(getStateMillis(OldPlayerStateEnum.ATTACK), skill.getSwingSound(), skill.getProjectileSpriteId(), target, this));
     }
 
     @Override
-    public void startAction(PlayerStateEnum playerStateEnum) {
-        if (playerStateEnum == PlayerStateEnum.ATTACK) {
+    public void startAction(OldPlayerStateEnum playerStateEnum) {
+        if (playerStateEnum == OldPlayerStateEnum.ATTACK) {
             startAttackAction(true);
-        } else if (playerStateEnum == PlayerStateEnum.FightStand) {
+        } else if (playerStateEnum == OldPlayerStateEnum.FightStand) {
             changeState(NpcCommonState.idle(cooldown()));
             emitEvent(NpcChangeStateEvent.of(this));
         } else {

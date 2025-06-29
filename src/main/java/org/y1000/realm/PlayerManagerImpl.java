@@ -11,9 +11,7 @@ import org.y1000.entities.players.Rope;
 import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
-import org.y1000.message.I2ClientMessage;
-import org.y1000.message.PlayerDropItemEvent;
-import org.y1000.message.RemoveEntityMessage;
+import org.y1000.message.*;
 import org.y1000.message.input.*;
 import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
@@ -30,7 +28,8 @@ import java.util.Set;
 
 
 @Slf4j
-final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implements PlayerEventVisitor, PlayerManager {
+final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implements PlayerEventVisitor,
+        PlayerManager, PlayerMessageListener {
 
     private final RealmEntityEventSender eventSender;
 
@@ -96,7 +95,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         }
         player.registerEventListener(this);
         add(player);
-        player.joinRealm(realm);
+        player.joinRealm(realm, this);
         eventSender.notifySelf(new JoinedRealmEvent(player));
         eventSender.notifyPlayerOfEntities(player);
         log.debug("Player {} logged in.", player);
@@ -115,21 +114,21 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     }
 
     @Override
-    public void onPlayerLogin(Player player, Login login, Realm realm) {
+    public void loginPlayer(Player player, Login login, Realm realm) {
         if (player == null || login == null) {
             return;
         }
         find(login.playerId()).ifPresent(this::doLogout);
+        player.joinRealm(realm, this);
+        player.registerEventListener(this);
         eventSender.add(player, login.connection());
         add(player);
-        player.registerEventListener(this);
-        player.joinRealm(realm);
-        eventSender.notifySelf(new JoinedRealmEvent(player));
         eventSender.notifyPlayerOfEntities(player);
+        onMessage(PlayerJoinRealmMessage.of(player));
     }
 
     @Override
-    public void onPlayerLogout(Connection connection) {
+    public void logoutPlayer(Connection connection) {
         if (connection == null)
             return;
         eventSender.removeConnection(connection).ifPresent(this::doLogout);
@@ -297,11 +296,28 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                 }
             } else if (entityEvent instanceof I2ClientMessage message) {
                 eventSender.findConnection((Player) entityEvent.source())
-                        .ifPresent(connection -> connection.write(message));
+                        .ifPresent(connection -> connection.writeAndFlush(message));
             }
         } catch (Exception e) {
             log.error("Failed to handle event.", e);
         }
 
+    }
+
+
+    private void sendMessageTo(Player player, I2ClientMessage message) {
+        eventSender.findConnection(player)
+                .ifPresent(connection -> connection.writeAndFlush(message));
+    }
+
+    @Override
+    public void onMessage(PlayerMessage message) {
+        if (message instanceof SelectablePlayerMessage selectablePlayerMessage) {
+            selectablePlayerMessage
+                    .select(allPlayers())
+                    .forEach(p -> sendMessageTo(p, message));
+        } else {
+            sendMessageTo(message.source(), message);
+        }
     }
 }

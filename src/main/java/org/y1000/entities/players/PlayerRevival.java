@@ -1,6 +1,6 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.exp.Experience;
 
 public final class PlayerRevival {
@@ -34,7 +34,7 @@ public final class PlayerRevival {
         return value + value * experience.level() / 10000;
     }
 
-    public int regenerateHalLife(PlayerStateEnum playerStateEnum) {
+    public int regenerateHalLife(OldPlayerStateEnum playerStateEnum) {
         return switch (playerStateEnum) {
             case DIE -> applyLevel(300);
             case SIT -> applyLevel(150);
@@ -52,7 +52,7 @@ public final class PlayerRevival {
          else n :=50;
       end;
      */
-    public int regenerateResources(PlayerStateEnum playerStateEnum) {
+    public int regenerateResources(OldPlayerStateEnum playerStateEnum) {
         return switch (playerStateEnum) {
             case DIE -> applyLevel(100);
             case SIT -> applyLevel(70);

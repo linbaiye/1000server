@@ -9,7 +9,6 @@ import org.y1000.entities.objects.*;
 import org.y1000.entities.players.Player;
 import org.y1000.event.CrossRealmEvent;
 import org.y1000.event.EntityEvent;
-import org.y1000.event.IEntityEvent;
 import org.y1000.sdb.CreateDynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
@@ -85,7 +84,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
     private void addObject(DynamicObject entity) {
         eventSender.add(entity);
         entity.registerEventListener(this);
-        eventSender.notifyVisiblePlayers(entity, entity.captureInterpolation());
+        eventSender.notifyVisiblePlayers(entity, entity.captureSnapshot());
         add(entity);
     }
 

@@ -2,16 +2,16 @@ package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.AbstractCreatureState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 
 public abstract class AbstractPlayerState extends AbstractCreatureState implements PlayerState {
 
     private final Player player;
 
-    private final PlayerStateEnum stateEnum;
+    private final OldPlayerStateEnum stateEnum;
 
     public AbstractPlayerState(Player player,
-                               PlayerStateEnum stateEnum,
+                               OldPlayerStateEnum stateEnum,
                                int stateMillis) {
         super(stateMillis);
         Validate.notNull(player);
@@ -24,7 +24,7 @@ public abstract class AbstractPlayerState extends AbstractCreatureState implemen
         return player;
     }
 
-    public PlayerStateEnum stateEnum() {
+    public OldPlayerStateEnum stateEnum() {
         return stateEnum;
     }
 }

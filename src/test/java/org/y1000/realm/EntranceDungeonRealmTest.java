@@ -49,12 +49,12 @@ class EntranceDungeonRealmTest extends AbstractRealmUnitTextFixture {
             I2ClientMessage argument = invocationOnMock.getArgument(0);
             messageAtomicReference.set(argument);
             return null;
-        }).when(connection).write(any(I2ClientMessage.class));
+        }).when(connection).writeAndFlush(any(I2ClientMessage.class));
         RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection, 0);
 
         currentDateTime  = LocalDateTime.now().withMinute(6).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);
-        verify(connection, times(1)).write(any(PlayerTextEvent.class));
+        verify(connection, times(1)).writeAndFlush(any(PlayerTextEvent.class));
         assertTrue(messageAtomicReference.get().toPacket().getText().getText().contains("24分后"));
 
         currentDateTime = LocalDateTime.now().withMinute(29).withSecond(29);
@@ -101,11 +101,11 @@ class EntranceDungeonRealmTest extends AbstractRealmUnitTextFixture {
             I2ClientMessage argument = invocationOnMock.getArgument(0);
             messageAtomicReference.set(argument);
             return null;
-        }).when(connection).write(any(I2ClientMessage.class));
+        }).when(connection).writeAndFlush(any(I2ClientMessage.class));
         RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection, 0);
         currentDateTime  = LocalDateTime.now().withMinute(5).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);
-        verify(connection, times(1)).write(any(PlayerTextEvent.class));
+        verify(connection, times(1)).writeAndFlush(any(PlayerTextEvent.class));
         assertTrue(messageAtomicReference.get().toPacket().getText().getText().contains("55分后"));
     }
 

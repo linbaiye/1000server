@@ -57,7 +57,7 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
         var player = mockPlayer();
         when(player.id()).thenReturn(1L);
         playerManager.onPlayerConnected(player, realm);
-        verify(player).joinRealm(realm);
+        verify(player).joinRealm(realm, );
         assertTrue(playerManager.find(1L).isPresent());
     }
 

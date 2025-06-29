@@ -10,7 +10,8 @@ public interface Creature extends AttackableActiveEntity {
 
     Direction direction();
 
-    PlayerStateEnum stateEnum();
+    @Deprecated
+    OldPlayerStateEnum oldStateEnum();
 
     void changeDirection(Direction newDirection);
 
@@ -30,10 +31,10 @@ public interface Creature extends AttackableActiveEntity {
 
     Optional<String> dieSound();
 
-    int getStateMillis(PlayerStateEnum playerStateEnum);
+    int getStateMillis(OldPlayerStateEnum playerStateEnum);
 
     default boolean isDead() {
-        return stateEnum() == PlayerStateEnum.DIE;
+        return oldStateEnum() == OldPlayerStateEnum.DIE;
     }
 
 }

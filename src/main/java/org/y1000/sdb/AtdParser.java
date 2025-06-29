@@ -2,7 +2,7 @@ package org.y1000.sdb;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.AnimationDescriptor;
 
 import java.io.IOException;
@@ -12,14 +12,14 @@ import java.util.*;
 @Slf4j
 public final class AtdParser {
 
-    private static final Map<String, PlayerStateEnum> STATE_MAP = new HashMap<>()
+    private static final Map<String, OldPlayerStateEnum> STATE_MAP = new HashMap<>()
     {{
-        put("MOVE", PlayerStateEnum.Move);
-        put("TURNNING", PlayerStateEnum.IDLE);
-        put("STRUCTED", PlayerStateEnum.HURT);
-        put("HIT1", PlayerStateEnum.ATTACK);
-        put("DIE", PlayerStateEnum.DIE);
-        put("TURN", PlayerStateEnum.Turn);
+        put("MOVE", OldPlayerStateEnum.Move);
+        put("TURNNING", OldPlayerStateEnum.IDLE);
+        put("STRUCTED", OldPlayerStateEnum.HURT);
+        put("HIT1", OldPlayerStateEnum.ATTACK);
+        put("DIE", OldPlayerStateEnum.DIE);
+        put("TURN", OldPlayerStateEnum.Turn);
     }};
 
     private static final Map<String, Direction> DIRECTION_MAP = new HashMap<>()

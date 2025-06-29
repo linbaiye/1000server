@@ -4,7 +4,7 @@ package org.y1000.kungfu.attack;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.players.Armor;
 import org.y1000.entities.players.Damage;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.kungfu.KungFu;
 import org.y1000.message.input.ClientAttackEvent;
@@ -29,7 +29,7 @@ public interface AttackKungFu extends KungFu {
 
     int avoidance();
 
-    PlayerStateEnum randomAttackState();
+    OldPlayerStateEnum randomAttackState();
 
     AttackKungFuType getType();
 

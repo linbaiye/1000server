@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.projectile.PlayerProjectile;
 import org.y1000.entities.players.Damage;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.Realm;
@@ -27,18 +27,18 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
         setup();
         player = playerBuilder().build();
         var realm = mockRealm(monster.realmMap());
-        player.joinRealm(realm);
+        player.joinRealm(realm, );
     }
 
     @Test
     void getHurt() {
         monster.attackedBy(player);
-        assertSame(monster.stateEnum(), PlayerStateEnum.HURT);
+        assertSame(monster.oldStateEnum(), OldPlayerStateEnum.HURT);
         assertEquals(attributeProvider.recovery() * Realm.STEP_MILLIS, monster.cooldown());
         assertNotNull(eventListener.dequeue(CreatureHurtEvent.class));
         assertNotNull(eventListener.dequeue(EntitySoundEvent.class));
         monster.update(attributeProvider.recovery() * Realm.STEP_MILLIS);
-        assertEquals(PlayerStateEnum.ATTACK, monster.stateEnum());
+        assertEquals(OldPlayerStateEnum.ATTACK, monster.oldStateEnum());
     }
 
     @Test

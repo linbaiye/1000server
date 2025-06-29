@@ -63,7 +63,7 @@ public abstract class AbstractPlayerUnitTestFixture extends AbstractUnitTestFixt
         player = playerBuilder().build();
         eventListener = new TestingEventListener();
         mockedRealm = mockAllFlatRealm();
-        player.joinRealm(mockedRealm);
+        player.joinRealm(mockedRealm, );
         player.registerEventListener(eventListener);
     }
 }

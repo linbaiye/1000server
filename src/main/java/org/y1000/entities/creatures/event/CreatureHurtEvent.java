@@ -2,20 +2,20 @@ package org.y1000.entities.creatures.event;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.CreatureHurtEventPacket;
 import org.y1000.network.gen.Packet;
 import org.y1000.util.Coordinate;
 
 public final class CreatureHurtEvent extends AbstractCreatureEvent {
-    private final PlayerStateEnum afterHurtPlayerStateEnum;
+    private final OldPlayerStateEnum afterHurtPlayerStateEnum;
     private final Direction direction;
     private final Coordinate coordinate;
     private final int currentLife;
     private final int maxLife;
 
-    public CreatureHurtEvent(Creature source, PlayerStateEnum afterHurtPlayerStateEnum) {
+    public CreatureHurtEvent(Creature source, OldPlayerStateEnum afterHurtPlayerStateEnum) {
         super(source);
         this.afterHurtPlayerStateEnum = afterHurtPlayerStateEnum;
         this.direction = source.direction();

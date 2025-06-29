@@ -97,7 +97,7 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
     @Override
     void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
         if (isClosing()) {
-            teleportEvent.getConnection().write(PlayerTextEvent.systemTip(teleportEvent.player(), "当前无法进入，请稍后重试。"));
+            teleportEvent.getConnection().writeAndFlush(PlayerTextEvent.systemTip(teleportEvent.player(), "当前无法进入，请稍后重试。"));
             getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection(), id()));
         }
         if (whitelistedIds.contains(teleportEvent.fromRealmId())) {
@@ -107,7 +107,7 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
         if (isOpening()) {
             acceptIfAffordableElseReject(teleportEvent);
         } else {
-            teleportEvent.getConnection().write(PlayerTextEvent.systemTip(teleportEvent.player(), buildTip()));
+            teleportEvent.getConnection().writeAndFlush(PlayerTextEvent.systemTip(teleportEvent.player(), buildTip()));
             getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(),
                     teleportEvent.rejectCoordinate().orElse(exitCoordinate()), teleportEvent.getConnection(), id()));
         }

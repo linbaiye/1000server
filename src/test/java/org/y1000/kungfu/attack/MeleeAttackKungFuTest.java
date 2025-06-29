@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.PlayerImpl;
@@ -115,7 +115,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         clientAttackEvent = new ClientAttackEvent(1L, 1L, kungFu.randomAttackState(), Direction.UP);
         playerEventListener = new TestingEventListener();
         player.registerEventListener(playerEventListener);
-        player.joinRealm(realm);
+        player.joinRealm(realm, );
     }
 
 
@@ -147,7 +147,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         assertNull(player.getFightingEntity());
         var entityEvent = playerEventListener.dequeue(PlayerAttackEventResponse.class);
         assertFalse(entityEvent.isAccepted());
-        assertEquals(PlayerStateEnum.IDLE, player.stateEnum());
+        assertEquals(OldPlayerStateEnum.IDLE, player.oldStateEnum());
     }
 
 
@@ -195,7 +195,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PassiveMonster monster = createMonster( player.coordinate().move(Entity.VISIBLE_X_RANGE + 1, 0));
         player.setFightingEntity(monster);
         kungFu.attackAgain(player);
-        assertSame(player.stateEnum(), PlayerStateEnum.FightStand);
+        assertSame(player.oldStateEnum(), OldPlayerStateEnum.FightStand);
         assertTrue(player.creatureState() instanceof PlayerStillState);
     }
 
@@ -215,13 +215,13 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
                 .life(new PlayerLife(10, 0)).innerPower(PlayerTestingAttribute.of(5))
                 .outerPower(PlayerTestingAttribute.of(3)).build();
         player.registerEventListener(playerEventListener);
-        player.joinRealm(realm);
+        player.joinRealm(realm, );
         kungFu = createKungFu(new TwoCostParameters());
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, monster);
         PlayerTextEvent event = playerEventListener.dequeue(PlayerTextEvent.class);
         assertEquals(TextMessage.TextType.NO_POWER.value(), event.toPacket().getText().getType());
-        assertEquals(PlayerStateEnum.IDLE, player.stateEnum());
+        assertEquals(OldPlayerStateEnum.IDLE, player.oldStateEnum());
     }
 
     @Test
@@ -229,7 +229,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         player = playerBuilder().power(PlayerTestingAttribute.of(3)).life(new PlayerLife(1, 0))
                 .innerPower(PlayerTestingAttribute.of(3)).outerPower(PlayerTestingAttribute.of(3)).build();
         player.registerEventListener(playerEventListener);
-        player.joinRealm(realm);
+        player.joinRealm(realm, );
         var param = new TestingAttackKungFuParameters();
         kungFu = createKungFu(param.setLifeToString(103));
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
@@ -242,7 +242,7 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     void usePower() {
         player = playerBuilder().power(PlayerTestingAttribute.of(3)).life(new PlayerLife(3, 0))
                 .innerPower(PlayerTestingAttribute.of(3)).outerPower(PlayerTestingAttribute.of(3)).build();
-        player.joinRealm(realm);
+        player.joinRealm(realm, );
         player.registerEventListener(playerEventListener);
         kungFu = createKungFu(new TwoCostParameters());
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));

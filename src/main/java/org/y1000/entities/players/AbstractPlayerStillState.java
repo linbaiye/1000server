@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.IAbstractCreatureState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 ;
 
 /**
@@ -9,15 +9,15 @@ import org.y1000.entities.creatures.PlayerStateEnum;
  */
 public abstract class AbstractPlayerStillState extends IAbstractCreatureState<PlayerImpl> implements
         MovableState, IPlayerState {
-    private final PlayerStateEnum playerStateEnum;
+    private final OldPlayerStateEnum playerStateEnum;
 
-    public AbstractPlayerStillState(int totalMillis, PlayerStateEnum playerStateEnum) {
+    public AbstractPlayerStillState(int totalMillis, OldPlayerStateEnum playerStateEnum) {
         super(totalMillis);
         this.playerStateEnum = playerStateEnum;
     }
 
     @Override
-    public PlayerStateEnum stateEnum() {
+    public OldPlayerStateEnum stateEnum() {
         return playerStateEnum;
     }
 

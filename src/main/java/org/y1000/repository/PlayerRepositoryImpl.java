@@ -85,7 +85,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
                 .orElseGet(kungFuBookFactory::create);
         builder.kungFuBook(kungFuBook);
         weapon.ifPresentOrElse(w -> builder.weapon(w).attackKungFu(kungFuBook.findUnnamedAttack(w.kungFuType())),
-                () -> builder.attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.FistWeapon)));
+                () -> builder.attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.Fist)));
         return builder;
     }
 
@@ -228,7 +228,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
                 .name(name)
                 .coordinate(DEFAULT_COORDINATE)
                 .kungFuBook(kungfuBook)
-                .attackKungFu(kungfuBook.findUnnamedAttack(AttackKungFuType.FistWeapon))
+                .attackKungFu(kungfuBook.findUnnamedAttack(AttackKungFuType.Fist))
                 .inventory(new Inventory())
                 .male(male)
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)

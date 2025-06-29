@@ -1,6 +1,6 @@
 package org.y1000.realm;
 
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
@@ -33,7 +33,7 @@ final class DeadPlayerTeleportManagerImpl implements DeadPlayerTeleportManager {
     @Override
     public void onPlayerDead(Player player) {
         if (teleportHandler == null || player == null
-                || player.stateEnum() != PlayerStateEnum.DIE) {
+                || player.oldStateEnum() != OldPlayerStateEnum.DIE) {
             return;
         }
         timerManager.add(player, 10000);

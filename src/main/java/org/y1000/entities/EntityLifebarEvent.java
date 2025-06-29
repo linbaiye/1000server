@@ -2,11 +2,11 @@ package org.y1000.entities;
 
 import lombok.Getter;
 import org.y1000.event.EntityEventVisitor;
-import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
+import org.y1000.message.serverevent.Abstract2ClientEvent;
 import org.y1000.network.gen.LifeBarPacket;
 import org.y1000.network.gen.Packet;
 
-public final class EntityLifebarEvent extends Abstract2ClientEntityEvent {
+public final class EntityLifebarEvent extends Abstract2ClientEvent {
 
     private final LifeBarPacket lifeBarPacket;
 

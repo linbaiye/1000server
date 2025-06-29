@@ -1,7 +1,7 @@
 package org.y1000.entities.players.event;
 
 import lombok.Getter;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.message.input.ClientAttackEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
@@ -17,7 +17,7 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
     @Getter
     private final boolean accepted;
 
-    private final PlayerStateEnum backToPlayerStateEnum;
+    private final OldPlayerStateEnum backToPlayerStateEnum;
 
     private final Integer effectId;
 
@@ -25,7 +25,7 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
         super(source);
         clientAttackEvent = clientEvent;
         this.accepted = ok;
-        backToPlayerStateEnum = source.stateEnum();
+        backToPlayerStateEnum = source.oldStateEnum();
         this.effectId = effectId;
     }
 

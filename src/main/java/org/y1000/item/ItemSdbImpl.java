@@ -335,17 +335,23 @@ MaxCount,        最多持有数量；
         ItemSdbImpl itemSdb = ItemSdbImpl.INSTANCE;
         Set<String> names = itemSdb.columnNames();
         Set<String> items = itemSdb.names();
+        Set<String> shapes = new HashSet<>();
         for (String i: items) {
             if (itemSdb.getTypeValue(i) != ItemType.EQUIPMENT.value()) {
                 continue;
             }
-            System.out.println("----------------------------");
-            System.out.println(i);
-            for (String name : names) {
+            //System.out.println("----------------------------");
+            shapes.add(itemSdb.getWearShape(i));
+            if (itemSdb.getEquipmentType(i) == EquipmentType.WRIST)  {
+
+            }
+            System.out.println(i + ":" + itemSdb.getWearShape(i));
+            /*for (String name : names) {
                 if (!StringUtils.isEmpty(itemSdb.get(i, name)))
                     System.out.println(name + ": " + itemSdb.get(i, name));
-            }
+            }*/
         }
+        System.out.println(shapes);
     }
     public static void main(String[] args) {
         dump();

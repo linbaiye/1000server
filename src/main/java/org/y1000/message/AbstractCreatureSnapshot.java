@@ -1,6 +1,6 @@
 package org.y1000.message;
 
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.network.gen.InterpolationPacket;
 import org.y1000.entities.Direction;
 import org.y1000.util.Coordinate;
@@ -14,7 +14,7 @@ public abstract class AbstractCreatureSnapshot extends AbstractEntitySnapshot {
 
     private final int moveAction;
 
-    public AbstractCreatureSnapshot(long id, Coordinate coordinate, PlayerStateEnum playerStateEnum, Direction direction, int elapsedMillis) {
+    public AbstractCreatureSnapshot(long id, Coordinate coordinate, OldPlayerStateEnum playerStateEnum, Direction direction, int elapsedMillis) {
         super(id, coordinate);
         this.stateValue = playerStateEnum.value();
         this.direction = direction;

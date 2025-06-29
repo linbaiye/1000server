@@ -3,7 +3,7 @@ package org.y1000;
 import jakarta.persistence.EntityManagerFactory;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
@@ -102,14 +102,14 @@ public abstract class AbstractUnitTestFixture {
     }
 
 
-    protected static final Map<PlayerStateEnum, Integer> MONSTER_STATE_MILLIS = new HashMap<>() {
+    protected static final Map<OldPlayerStateEnum, Integer> MONSTER_STATE_MILLIS = new HashMap<>() {
         {
-            put(PlayerStateEnum.IDLE, 1000);
-            put(PlayerStateEnum.Move, 770);
-            put(PlayerStateEnum.HURT, 540);
-            put(PlayerStateEnum.ATTACK, 700);
-            put(PlayerStateEnum.DIE, 700);
-            put(PlayerStateEnum.Turn, 900);
+            put(OldPlayerStateEnum.IDLE, 1000);
+            put(OldPlayerStateEnum.Move, 770);
+            put(OldPlayerStateEnum.HURT, 540);
+            put(OldPlayerStateEnum.ATTACK, 700);
+            put(OldPlayerStateEnum.DIE, 700);
+            put(OldPlayerStateEnum.Turn, 900);
         }
     };
 
@@ -135,7 +135,7 @@ public abstract class AbstractUnitTestFixture {
                 .coordinate(new Coordinate(1, 1))
                 .name("test")
                 .kungFuBook(kungFuBook)
-                .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.FistWeapon))
+                .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.Fist))
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
                 .yinYang(new YinYang())
                 .life(PlayerLife.create())

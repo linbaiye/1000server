@@ -7,7 +7,7 @@ import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
-import org.y1000.message.AbstractEntitySnapshot;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
@@ -87,7 +87,7 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
 
 
     @Override
-    public AbstractEntitySnapshot captureInterpolation() {
+    public I2ClientMessage captureSnapshot() {
         return new DynamicObjectSnapshot(this, animationElapsedDuration());
     }
 }

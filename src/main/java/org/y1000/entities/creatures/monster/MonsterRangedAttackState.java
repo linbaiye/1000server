@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.monster;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.IAbstractCreatureState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 
 @Slf4j
 public final class MonsterRangedAttackState extends IAbstractCreatureState<AbstractMonster> implements MonsterState<AbstractMonster> {
@@ -23,8 +23,8 @@ public final class MonsterRangedAttackState extends IAbstractCreatureState<Abstr
     }
 
     @Override
-    public PlayerStateEnum stateEnum() {
-        return PlayerStateEnum.ATTACK;
+    public OldPlayerStateEnum stateEnum() {
+        return OldPlayerStateEnum.ATTACK;
     }
 
     @Override
@@ -53,6 +53,6 @@ public final class MonsterRangedAttackState extends IAbstractCreatureState<Abstr
     }
 
     public static MonsterRangedAttackState attack(AbstractMonster monster, String sound, int projectId) {
-        return new MonsterRangedAttackState(monster.getStateMillis(PlayerStateEnum.ATTACK), sound, projectId);
+        return new MonsterRangedAttackState(monster.getStateMillis(OldPlayerStateEnum.ATTACK), sound, projectId);
     }
 }

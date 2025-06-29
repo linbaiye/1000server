@@ -6,7 +6,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractor;
@@ -27,7 +27,7 @@ public final class SubmissiveInteractableNpc extends AbstractSubmissiveNpc imple
     public SubmissiveInteractableNpc(long id,
                                      Coordinate coordinate,
                                      String name,
-                                     Map<PlayerStateEnum, Integer> stateMillis,
+                                     Map<OldPlayerStateEnum, Integer> stateMillis,
                                      NonMonsterNpcAttributeProvider attributeProvider,
                                      RealmMap realmMap,
                                      NpcInteractor interactor,
@@ -57,10 +57,6 @@ public final class SubmissiveInteractableNpc extends AbstractSubmissiveNpc imple
         interactor.onInteractabilityClicked(player, this, name);
     }
 
-    @Override
-    public String shape() {
-        return attributeProvider().shape();
-    }
 
     @Override
     public int avatarImageId() {

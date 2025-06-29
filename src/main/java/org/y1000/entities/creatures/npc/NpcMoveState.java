@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.util.Coordinate;
 
@@ -10,7 +10,7 @@ public final class NpcMoveState extends AbstractCreatureMoveState<Npc> implement
     private NpcMoveState(Coordinate start,
                              Direction towards,
                              int millisPerUnit) {
-        super(PlayerStateEnum.Move, start, towards, millisPerUnit);
+        super(OldPlayerStateEnum.Move, start, towards, millisPerUnit);
     }
 
     @Override

@@ -1,11 +1,11 @@
 package org.y1000.entities.objects;
 
 import org.y1000.event.EntityEventVisitor;
-import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
+import org.y1000.message.serverevent.Abstract2ClientEvent;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateDynamicObjectPacket;
 
-public final class UpdateDynamicObjectEvent extends Abstract2ClientEntityEvent {
+public final class UpdateDynamicObjectEvent extends Abstract2ClientEvent {
 
     private final Packet packet;
 

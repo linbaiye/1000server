@@ -2,19 +2,16 @@ package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.event.EntityEvent;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
-import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
+import org.y1000.message.AbstractPlayerMessage;
 import org.y1000.network.gen.InventoryItemPacket;
 import org.y1000.network.gen.InventoryPacket;
 import org.y1000.network.gen.Packet;
 
-public class InventoryMessage extends Abstract2ClientEntityEvent implements EntityEvent {
-    private final Packet packet;
+public class InventoryMessage extends AbstractPlayerMessage {
     private InventoryMessage(Player player, Packet packet) {
-        super(player);
-        this.packet = packet;
+        super(player, packet);
     }
 
 
@@ -26,11 +23,6 @@ public class InventoryMessage extends Abstract2ClientEntityEvent implements Enti
                 .setNumber((item instanceof StackItem stackItem) ? stackItem.number() : -1)
                 .setColor(item.color())
                 .build();
-    }
-
-    @Override
-    protected Packet buildPacket() {
-        return packet;
     }
 
     /**

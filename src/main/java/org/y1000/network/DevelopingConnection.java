@@ -29,7 +29,7 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
 
 
     @Override
-    public void write(I2ClientMessage message) {
+    public void writeAndFlush(I2ClientMessage message) {
         synchronized (messages) {
             messages.add(message);
         }

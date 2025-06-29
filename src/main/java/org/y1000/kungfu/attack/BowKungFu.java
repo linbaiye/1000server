@@ -3,7 +3,7 @@ package org.y1000.kungfu.attack;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.item.ItemType;
 import org.y1000.kungfu.KungFu;
 
@@ -21,8 +21,8 @@ public final class BowKungFu extends AbstractRangedKungFu {
     }
 
     @Override
-    public PlayerStateEnum randomAttackState() {
-        return PlayerStateEnum.BOW;
+    public OldPlayerStateEnum randomAttackState() {
+        return OldPlayerStateEnum.BOW;
     }
 
 

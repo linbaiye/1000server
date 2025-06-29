@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.npc.NpcCommonState;
@@ -74,9 +74,9 @@ class PlayerAttackPlayerStateTestEnum extends AbstractPlayerUnitTestFixture  {
     @Test
     void hurtRelated() {
         var attackState = PlayerAttackState.melee(player);
-        assertEquals(PlayerStateEnum.FightStand, attackState.decideAfterHurtState());
+        assertEquals(OldPlayerStateEnum.FightStand, attackState.decideAfterHurtState());
         attackState.afterHurt(player);
-        assertEquals(PlayerStateEnum.FightStand, player.stateEnum());
+        assertEquals(OldPlayerStateEnum.FightStand, player.oldStateEnum());
         var before = player.coordinate();
         attackState.moveToHurtCoordinate(player);
         assertEquals(before, player.coordinate());
@@ -140,7 +140,7 @@ class PlayerAttackPlayerStateTestEnum extends AbstractPlayerUnitTestFixture  {
         monster.changeState(NpcCommonState.die(1000));
         player.onEvent(new CreatureDieEvent(monster));
         assertNull(player.getFightingEntity());
-        player.update(player.getStateMillis(PlayerStateEnum.BOW));
+        player.update(player.getStateMillis(OldPlayerStateEnum.BOW));
 
         // shoot anyway as state changed before creature died.
         PlayerShootEvent playerShootEvent = eventListener.removeFirst(PlayerShootEvent.class);

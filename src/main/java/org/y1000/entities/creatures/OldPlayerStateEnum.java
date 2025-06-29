@@ -2,7 +2,7 @@ package org.y1000.entities.creatures;
 
 import org.y1000.message.ValueEnum;
 
-public enum PlayerStateEnum implements ValueEnum {
+public enum OldPlayerStateEnum implements ValueEnum {
     IDLE(1),
 
     Move(2),
@@ -53,7 +53,7 @@ public enum PlayerStateEnum implements ValueEnum {
 
     private final int v;
 
-    PlayerStateEnum(int v) {
+    OldPlayerStateEnum(int v) {
         this.v = v;
     }
 
@@ -62,7 +62,7 @@ public enum PlayerStateEnum implements ValueEnum {
         return v;
     }
 
-    public static PlayerStateEnum valueOf(int v) {
-        return ValueEnum.fromValueOrThrow(PlayerStateEnum.values(), v);
+    public static OldPlayerStateEnum valueOf(int v) {
+        return ValueEnum.fromValueOrThrow(OldPlayerStateEnum.values(), v);
     }
 }

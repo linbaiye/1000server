@@ -5,16 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.AI.ViolentNpcWanderingAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
-import org.y1000.message.AbstractCreatureSnapshot;
-import org.y1000.message.NpcSnapshot;
 import org.y1000.realm.RealmMap;
 import org.y1000.trade.TradeItem;
 import org.y1000.util.Coordinate;
@@ -34,7 +31,7 @@ public final class ViolentMerchant extends AbstractViolentNpc implements Merchan
     @Builder
     public ViolentMerchant(long id, Coordinate coordinate,
                            Direction direction, String name,
-                           Map<PlayerStateEnum, Integer> stateMillis,
+                           Map<OldPlayerStateEnum, Integer> stateMillis,
                            AttributeProvider attributeProvider,
                            RealmMap realmMap,
                            NpcAI ai,
@@ -47,11 +44,6 @@ public final class ViolentMerchant extends AbstractViolentNpc implements Merchan
         this.fileName = fileName;
     }
 
-    @Override
-    public AbstractCreatureSnapshot captureInterpolation() {
-        return new NpcSnapshot(id(), coordinate(), creatureState().stateEnum(), direction(), creatureState().elapsedMillis(), viewName(),
-                NpcType.MERCHANT, attributeProvider().animate(), attributeProvider().shape(), fileName);
-    }
 
 
     @Override

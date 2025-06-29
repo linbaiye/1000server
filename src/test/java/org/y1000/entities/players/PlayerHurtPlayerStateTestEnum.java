@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.y1000.entities.creatures.PlayerStateEnum;
+import org.y1000.entities.creatures.OldPlayerStateEnum;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,13 +19,13 @@ class PlayerHurtPlayerStateTestEnum extends AbstractPlayerUnitTestFixture{
     void nestedHurt() {
         Player attacker = playerBuilder().build();
         while (!player.attackedBy(attacker));
-        assertEquals(PlayerStateEnum.HURT, player.stateEnum());
-        player.update(player.getStateMillis(PlayerStateEnum.HURT) - 10);
-        assertEquals(PlayerStateEnum.HURT, player.stateEnum());
+        assertEquals(OldPlayerStateEnum.HURT, player.oldStateEnum());
+        player.update(player.getStateMillis(OldPlayerStateEnum.HURT) - 10);
+        assertEquals(OldPlayerStateEnum.HURT, player.oldStateEnum());
         // hurt again.
         while (!player.attackedBy(attacker));
-        assertEquals(PlayerStateEnum.HURT, player.stateEnum());
-        player.update(player.getStateMillis(PlayerStateEnum.HURT) );
-        assertEquals(PlayerStateEnum.IDLE, player.stateEnum());
+        assertEquals(OldPlayerStateEnum.HURT, player.oldStateEnum());
+        player.update(player.getStateMillis(OldPlayerStateEnum.HURT) );
+        assertEquals(OldPlayerStateEnum.IDLE, player.oldStateEnum());
     }
 }

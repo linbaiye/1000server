@@ -20,7 +20,7 @@ public abstract class AbstractCreatureHurtState<C extends Creature> extends IAbs
     }
 
     @Override
-    public PlayerStateEnum stateEnum() {
-        return PlayerStateEnum.HURT;
+    public OldPlayerStateEnum stateEnum() {
+        return OldPlayerStateEnum.HURT;
     }
 }
