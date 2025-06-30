@@ -27,6 +27,8 @@ public final class RealmGroup implements Runnable {
 
     private LocalDateTime nextResetTime;
 
+    private final Set<Integer> ids;
+
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
                       CrossRealmEventSender crossRealmEventSender,
@@ -44,6 +46,7 @@ public final class RealmGroup implements Runnable {
         LocalDateTime now = dateTimeSupplier.get();
         this.nextResetTime = now.getMinute() < 30 ? now.withMinute(29).withSecond(58).withNano(0) :
                 now.withMinute(48).withSecond(58).withNano(0);
+        ids = realms.stream().map(Realm::id).collect(Collectors.toSet());
         log.debug("Set next reset time to {}.", this.nextResetTime);
     }
 
@@ -151,7 +154,7 @@ public final class RealmGroup implements Runnable {
 
 
     public void handle(int realmId, Object event) {
-        if (!realmIds().contains(realmId) || event == null)
+        if (!ids.contains(realmId) || event == null)
             return;
         synchronized (pendingEvents) {
             pendingEvents.add(new Envelop(realmId, event));
@@ -180,7 +183,6 @@ public final class RealmGroup implements Runnable {
     }
 
     public Set<Integer> realmIds() {
-        return Stream.of(realms).map(Realm::id)
-                .collect(Collectors.toSet());
+        return ids;
     }
 }

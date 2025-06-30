@@ -8,6 +8,8 @@ import org.y1000.message.input.TurnInput;
 public interface PlayerState extends CreatureState {
     OldPlayerStateEnum stateEnum();
 
+    PlayerStateEnum playerStateEnum();
+
     void move(MoveInput input);
 
     default void turn(TurnInput input) {

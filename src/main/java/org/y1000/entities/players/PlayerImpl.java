@@ -667,7 +667,7 @@ public final class PlayerImpl extends IAbstractCreature<PlayerImpl, IPlayerState
         joinRealm(realm, coordinate(), messageListener);
     }
 
-    private void sendMessage(PlayerMessage playerMessage) {
+    public void sendMessage(PlayerMessage playerMessage) {
         if (messageListener != null)
             messageListener.onMessage(playerMessage);
     }

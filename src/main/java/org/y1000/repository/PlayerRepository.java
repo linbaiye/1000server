@@ -10,6 +10,8 @@ public interface PlayerRepository {
 
     Optional<Pair<Player, Integer>> find(int accountId, String charName);
 
+    Optional<Integer> findRealm(long id);
+
     Optional<Pair<Long, Integer>> findIdAndRealm(int accountId, int id);
 
     void update(Player player);

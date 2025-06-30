@@ -679,6 +679,7 @@ message Packet {
     NpcSnapshotPacket npcSnapshot = 60;
     CreatureSayPacket say = 61;
     SyncActiveKungFuPacket activeKungFuList = 62;
+    PlayerChangeStatePacket playerChangeState = 63;
   }
 }
 
@@ -811,4 +812,10 @@ message SyncActiveKungFuPacket {
   optional string footKungFu = 5;
   bool footKungFuCanFly = 6;
   int64 id = 7;
+}
+
+message PlayerChangeStatePacket {
+  int64 id = 1;
+  int32 state = 2;
+  int32 direction = 3;
 }

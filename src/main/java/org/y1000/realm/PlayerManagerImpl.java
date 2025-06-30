@@ -105,12 +105,13 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         if (player == null) {
             return;
         }
+        // Need to update first least losing realm id.
+        playerRepository.update(player);
         player.leaveRealm();
-        eventSender.notifyVisiblePlayersAndSelf(player, new RemoveEntityMessage(player.id()));
+        eventSender.notifyVisiblePlayers(player, new RemoveEntityMessage(player.id()));
         remove(player);
         player.clearListeners();
         eventSender.remove(player).ifPresent(Connection::tryClose);
-        playerRepository.update(player);
     }
 
     @Override
@@ -131,7 +132,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     public void logoutPlayer(Connection connection) {
         if (connection == null)
             return;
-        eventSender.removeConnection(connection).ifPresent(this::doLogout);
+        eventSender.findPlayer(connection).ifPresent(this::doLogout);
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.y1000.entities.players;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.message.PlayerChangeStateMessage;
 import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.message.input.MoveInput;
@@ -41,6 +42,7 @@ public final class PlayerMoveState extends AbstractPlayerState {
         } else {
             player().changeState(PlayerStandState.idle(player()));
         }
+        player().sendMessage(PlayerChangeStateMessage.of(player(), false));
     }
 
     @Override
@@ -66,7 +68,7 @@ public final class PlayerMoveState extends AbstractPlayerState {
         player().changeCoordinate(currentInput.target());
         log.debug("Player {} moved to {}.", player(), player().coordinate());
         if (newInput != null) {
-            player().changeState(new PlayerMoveState(player(), newInput, computeMoveAction(player(), moveAction)));
+            player().changeState(new PlayerMoveState(player(), newInput, computeNonFightMoveAction(player(), moveAction)));
         } else {
             changeToStand();
         }
@@ -76,7 +78,6 @@ public final class PlayerMoveState extends AbstractPlayerState {
     @Override
     public void move(MoveInput moveInput) {
         newInput = moveInput;
-        log.debug("Received input.");
     }
 
     @Override
@@ -84,18 +85,18 @@ public final class PlayerMoveState extends AbstractPlayerState {
 
     }
 
-    private static MoveAction computeMoveAction(Player player, MoveAction current) {
+    private static MoveAction computeNonFightMoveAction(Player player, MoveAction current) {
         return player.footKungFu().map(k -> k.canFly() ? MoveAction.Fly : MoveAction.Run)
                 .orElse(current);
     }
 
-    private static MoveAction computeMoveAction(Player player) {
+    private static MoveAction computeNonFightMoveAction(Player player) {
         return player.footKungFu().map(k -> k.canFly() ? MoveAction.Fly : MoveAction.Run)
                 .orElse(MoveAction.Walk);
     }
 
-    public static PlayerMoveState noneFightWalk(Player player, MoveInput input) {
-        return new PlayerMoveState(player, input, computeMoveAction(player));
+    public static PlayerMoveState noneFightMove(Player player, MoveInput input) {
+        return new PlayerMoveState(player, input, computeNonFightMoveAction(player));
     }
 
     public static PlayerMoveState fightWalk(Player player, MoveInput moveInput) {

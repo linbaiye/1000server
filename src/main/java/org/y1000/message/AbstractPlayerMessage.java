@@ -3,7 +3,7 @@ package org.y1000.message;
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.Packet;
 
-public class AbstractPlayerMessage implements PlayerMessage {
+public abstract class AbstractPlayerMessage implements PlayerMessage {
     private final Player player;
 
     private final Packet packet;

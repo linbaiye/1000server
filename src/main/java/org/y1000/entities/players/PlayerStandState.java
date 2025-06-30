@@ -20,7 +20,7 @@ public final class PlayerStandState extends AbstractPlayerState {
 
     public void move(MoveInput moveInput) {
         if (stateEnum() == OldPlayerStateEnum.IDLE) {
-            player().changeState(PlayerMoveState.noneFightWalk(player(), moveInput));
+            player().changeState(PlayerMoveState.noneFightMove(player(), moveInput));
         } else {
             player().changeState(PlayerMoveState.fightWalk(player(), moveInput));
         }

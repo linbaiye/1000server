@@ -13,6 +13,8 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
+import org.y1000.message.I2ClientMessage;
+import org.y1000.message.PlayerMessage;
 import org.y1000.message.PlayerMessageListener;
 import org.y1000.message.input.ClientAttackEvent;
 import org.y1000.message.input.ClientEvent;
@@ -194,6 +196,8 @@ public interface Player extends ViolentCreature {
     }
 
     void changeState(PlayerState playerState);
+
+    void sendMessage(PlayerMessage message);
 
     PlayerState state();
 }

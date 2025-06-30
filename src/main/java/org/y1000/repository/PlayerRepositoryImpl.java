@@ -126,6 +126,19 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         }
     }
 
+
+
+    @Override
+    public Optional<Integer> findRealm(long id) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            return entityManager.createQuery("select p from PlayerPo p where p.id = ?1", PlayerPo.class)
+                    .setParameter(1, id)
+                    .getResultStream()
+                    .findFirst()
+                    .map(PlayerPo::getRealmId);
+        }
+    }
+
     @Override
     public Optional<Pair<Long, Integer>> findIdAndRealm(int accountId, int id) {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {

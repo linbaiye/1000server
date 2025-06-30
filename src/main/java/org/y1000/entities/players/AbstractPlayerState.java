@@ -27,4 +27,20 @@ public abstract class AbstractPlayerState extends AbstractCreatureState implemen
     public OldPlayerStateEnum stateEnum() {
         return stateEnum;
     }
+
+    @Override
+    public PlayerStateEnum playerStateEnum() {
+        return switch (stateEnum()) {
+            case Move, ENFIGHT_WALK, FLY, RUN -> PlayerStateEnum.Move;
+            case IDLE -> PlayerStateEnum.Idle;
+            case STANDUP -> PlayerStateEnum.StandUp;
+            case FightStand -> PlayerStateEnum.FightStand;
+            case HURT -> PlayerStateEnum.Hurt;
+            case DIE -> PlayerStateEnum.Die;
+            case SIT -> PlayerStateEnum.Sit;
+            case HELLO -> PlayerStateEnum.Hello;
+            case Turn -> PlayerStateEnum.Turn;
+            default -> PlayerStateEnum.Attack;
+        };
+    }
 }

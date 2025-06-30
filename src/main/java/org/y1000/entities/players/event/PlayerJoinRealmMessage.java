@@ -23,6 +23,7 @@ public class PlayerJoinRealmMessage extends AbstractPlayerMessage  {
                 .setAttackKungFu(player.attackKungFu().name())
                 .setId(player.id())
                 .setName(player.viewName())
+                .setMale(player.isMale())
                 .addAllEquipments(equipments)
                 .build();
         return new PlayerJoinRealmMessage(player, Packet.newBuilder().setJoinRealm(joinRealmPacket).build());

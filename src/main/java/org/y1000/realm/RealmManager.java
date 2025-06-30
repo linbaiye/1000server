@@ -32,6 +32,11 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
 
     private final PlayerRepository playerRepository;
 
+
+    private final Map<Connection, Long> connectedDebugPlayers;
+
+    private final List<Long> availableDebugPlayers = List.of(100000051L, 99999951L, 100000101L);
+
     private RealmManager(AccountManager accountManager,
                          PlayerRepository playerRepository) {
         eventQueue = new ArrayDeque<>(100);
@@ -39,65 +44,13 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         playerNameRealmIdMap = new HashMap<>();
         this.playerRepository = playerRepository;
         this.accountManager = accountManager;
+        connectedDebugPlayers = new HashMap<>();
     }
 
     public void startRealms() {
         realmIdGroupMap.values().forEach(executorService::submit);
     }
 
-    /*private void loginToRealm(Player player, int realmId, Connection connection) {
-        if (playerRealmMap.containsKey(player)) {
-            // need to close current connection.
-            log.error("Duplicate connection for {}.", player);
-            connection.close();
-            return;
-        }
-        RealmGroup group = realmIdGroupMap.get(realmId);
-        if (group == null) {
-            log.error("Realm {} does not exist.", realmId);
-            connection.close();
-            return;
-        }
-        connectionPlayerIdMap.put(connection, )
-        connectionPlayerMap.put(connection, player);
-        playerRealmMap.put(player, realmId);
-        playerNameRealmIdMap.put(player.viewName(), realmId);
-        group.handle(new ConnectionEstablishedEvent(realmId, player, connection));
-    }*/
-
-    /*private void sendDataToRealm(ConnectionDataEvent dataEvent) {
-        Player player = connectionPlayerMap.get(dataEvent.connection());
-        if (player == null) {
-            log.warn("Close stray connection.");
-            dataEvent.connection().close();
-            return;
-        }
-        int realmId = playerRealmMap.get(player);
-        ClientEvent data = dataEvent.data();
-        data.setPlayerId(player.id());
-        realmIdGroupMap.get(realmId).handle(new PlayerDataEvent(realmId, player, data));
-    }
-
-    private void handleDisconnection(Connection connection) {
-        Player removed = connectionPlayerMap.remove(connection);
-        if (removed == null) {
-            return;
-        }
-        Integer realmId = playerRealmMap.remove(removed);
-        realmIdGroupMap.get(realmId).handle(new PlayerDisconnectedEvent(realmId, removed));
-        playerNameRealmIdMap.remove(removed.viewName());
-        Integer found = null;
-        for (var accountId : accountPlayerMap.keySet()) {
-            if (accountPlayerMap.get(accountId).equals(removed)) {
-                found = accountId;
-                break;
-            }
-        }
-        if (found != null) {
-            accountPlayerMap.remove(found);
-        }
-        connection.close();
-    }*/
 
     private void handleLogin(Integer accountId, String charName, Connection connection) {
         playerRepository
@@ -107,15 +60,30 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
                 });
     }
 
+    private Optional<Long> findAvailableDebugPlayer() {
+        return availableDebugPlayers.stream().filter(playerId  -> !connectedDebugPlayers.containsValue(playerId)).findFirst();
+    }
+
+
+    private void handleDebug(Connection connection) {
+        findAvailableDebugPlayer().ifPresentOrElse( playerId -> {
+                    playerRepository.findRealm(playerId)
+                        .ifPresent(realmId ->  {
+                            realmIdGroupMap.values().forEach(r -> r.handle(realmId, new Login(connection, playerId)));
+                            connectedDebugPlayers.put(connection, playerId);
+                        });
+                }, connection::tryClose);
+    }
+
     private void handleLogout(Connection co) {
+        connectedDebugPlayers.remove(co);
         realmIdGroupMap.values().forEach(r -> r.broadcast(new Logout(co)));
     }
 
 
     private void handleDataEvent(Connection connection, Object data) {
         if (data instanceof DebugInput) {
-            log.debug("Received debug.");
-            handleLogin(1,"测试", connection);
+            handleDebug(connection);
         } else if (data instanceof SelfHandleInput input) {
             realmIdGroupMap.values().forEach(r -> r.broadcast(new ConnectionInput(connection, input)));
         }
@@ -135,29 +103,29 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         }
     }*/
 
-    private void handle(RealmEvent realmEvent) {
-        if (realmEvent instanceof RealmTeleportEvent teleportEvent) {
-            handleTeleport(teleportEvent);
-        } else if (realmEvent instanceof BroadcastEvent) {
-            realmIdGroupMap.values().forEach(realmGroup -> realmGroup.handle(realmEvent));
-        } else if (realmEvent instanceof RealmTriggerEvent realmTriggerEvent) {
-            RealmGroup group = realmIdGroupMap.get(realmTriggerEvent.toRealmId());
-            if (group != null) {
-                group.handle(realmTriggerEvent);
-            }
-        } else if (realmEvent instanceof PlayerWhisperEvent privateChat) {
-            Integer realm = playerNameRealmIdMap.get(privateChat.receiverName());
-            if (realm == null) {
-                if (playerNameRealmIdMap.containsKey(privateChat.senderName()))
-                    handle(privateChat.noRecipient());
-            } else {
-                RealmGroup group = realmIdGroupMap.get(realm);
-                if (group != null) {
-                    group.handle(privateChat);
-                }
-            }
-        }
-    }
+//    private void handle(RealmEvent realmEvent) {
+//        if (realmEvent instanceof RealmTeleportEvent teleportEvent) {
+//            handleTeleport(teleportEvent);
+//        } else if (realmEvent instanceof BroadcastEvent) {
+//            realmIdGroupMap.values().forEach(realmGroup -> realmGroup.handle(realmEvent));
+//        } else if (realmEvent instanceof RealmTriggerEvent realmTriggerEvent) {
+//            RealmGroup group = realmIdGroupMap.get(realmTriggerEvent.toRealmId());
+//            if (group != null) {
+//                group.handle(realmTriggerEvent);
+//            }
+//        } else if (realmEvent instanceof PlayerWhisperEvent privateChat) {
+//            Integer realm = playerNameRealmIdMap.get(privateChat.receiverName());
+//            if (realm == null) {
+//                if (playerNameRealmIdMap.containsKey(privateChat.senderName()))
+//                    handle(privateChat.noRecipient());
+//            } else {
+//                RealmGroup group = realmIdGroupMap.get(realm);
+//                if (group != null) {
+//                    group.handle(privateChat);
+//                }
+//            }
+//        }
+//    }
 
     public void sendNotification(String text) {
         if (StringUtils.isEmpty(text))

@@ -27,6 +27,7 @@ public final class PlayerSnapshot extends AbstractInsightPlayerMessage {
                 .setX(coordinate.x())
                 .setElapsedMillis(player.state().elapsedMillis())
                 .setDirection(player.direction().value())
+                .setId(player.id())
                 .build();
         List<PlayerEquipPacket> equipments = player.getEquipments().stream().map(e -> PlayerEquipMessage.toEquipPacket(player, e))
                 .collect(Collectors.toList());
@@ -34,6 +35,7 @@ public final class PlayerSnapshot extends AbstractInsightPlayerMessage {
                 .setMoveAction(moveAction != null ? moveAction.value() : -1)
                 .setBaseInfo(baseInfoSnapshot)
                 .setState(player.state().stateEnum().value())
+                .setMale(player.isMale())
                 .addAllEquipments(equipments)
                 .build();
     }
