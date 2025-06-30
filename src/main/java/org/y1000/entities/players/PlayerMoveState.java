@@ -78,6 +78,7 @@ public final class PlayerMoveState extends AbstractPlayerState {
     @Override
     public void move(MoveInput moveInput) {
         newInput = moveInput;
+
     }
 
     @Override
