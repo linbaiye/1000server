@@ -325,7 +325,8 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     private boolean unequipAndPutToInventory(EquipmentType type) {
         Equipment removed = equippedEquipments.remove(type);
         if (removed != null) {
-            inventory.put(removed);
+            int slot = inventory.put(removed);
+            log.debug("Unequiped {} id {} and put to slot {}.", type, removed.id(), slot);
         }
         return removed != null;
     }
@@ -851,10 +852,10 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         Weapon weaponToEquip = (Weapon) inventory.remove(slot);
         weapon().ifPresent(equippedWeapon -> {
             inventory.put(slot, equippedWeapon);
-            log.debug("Put equipped weapon {} back to inventory.", equippedWeapon.name());
+            log.debug("Put equipped weapon {} id {} back to inventory.", equippedWeapon.name(), equippedWeapon.id());
         });
         equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
-        log.debug("Equipped weapon {}.", weaponToEquip.name());
+        log.debug("Equipped weapon {}, id {}.", weaponToEquip.name(), weaponToEquip.id());
     }
 
     private void equipArmorFromSlot(int slot) {

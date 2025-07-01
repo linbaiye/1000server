@@ -80,7 +80,7 @@ public class PlayerPo {
             joinColumns = @JoinColumn(name = "player_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id")
     )
-    private List<EquipmentPo> equipments = new ArrayList<>();
+    private Set<EquipmentPo> equipments = new HashSet<>();
 
     public YinYang yinYang() {
         if (yinYang == null)
