@@ -267,7 +267,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.Fist) {
             changeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.Fist));
         }
-        emitEvent(new PlayerUnequipEvent(this, equipped.equipmentType()));
+        //emitEvent(new PlayerUnequipMessage(this, equipped.equipmentType()));
         int slot = inventory.put(equipped);
         emitEvent(new UpdateInventorySlotEvent(this, slot, equipped));
         equipped.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
@@ -293,18 +293,73 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         kungFuItem.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
+    private void syncInventoryQuietly() {
+        sendMessage(InventoryMessage.quiet(this));
+    }
+
+
+    private void changeAndSayAttackKungFu(AttackKungFu attackKungFu) {
+        this.attackKungFu = attackKungFu;
+        cooldownAttack();
+        sendMessage(PlayerSayMessage.say(this, attackKungFu.name()));
+    }
 
     void tryEquipFromSlot(int slotId, Equipment equipment) {
-        if (equipment instanceof Weapon)
+        if (equipment instanceof Weapon newWeapon) {
             equipWeaponFromSlot(slotId);
+            if (newWeapon.kungFuType() != attackKungFu.getType()) {
+                changeAndSayAttackKungFu(kungFuBook.findUnnamedAttack(newWeapon.kungFuType()));
+                syncActiveKungFuList();
+            }
+        }
         else if (equipment instanceof SexualEquipment sexualEquipment && sexualEquipment.isMale() == isMale()) {
             equipArmorFromSlot(slotId);
         } else {
-            sendMessage(PlayerTextMessage.of(this, "你无法使用该装备。"));
+            sendMessage(PlayerTextMessage.of(this, "你无法使用该物品。"));
             return;
         }
         sendMessage(PlayerEquipMessage.create(this, equipment));
-        sendMessage(InventoryMessage.quiet(this));
+        syncInventoryQuietly();
+    }
+
+    private boolean unequipAndPutToInventory(EquipmentType type) {
+        Equipment removed = equippedEquipments.remove(type);
+        if (removed != null) {
+            inventory.put(removed);
+        }
+        return removed != null;
+    }
+
+    void tryUseAttackKungFu(AttackKungFu newKungFu) {
+        if (headPercent() < 50) {
+            sendMessage(PlayerTextMessage.of(this, "头部活力不足。"));
+            return;
+        }
+        if (newKungFu.nameEquals(attackKungFu)) {
+            return;
+        }
+        if (newKungFu.getType() == attackKungFu.getType()) {
+            changeAndSayAttackKungFu(newKungFu);
+            return;
+        }
+        int weaponSlot = inventory.findWeaponSlot(newKungFu.getType());
+        if (weaponSlot == 0) {
+            if (newKungFu.getType() != AttackKungFuType.Fist) {
+                sendMessage(PlayerTextMessage.of(this, "没有对应的武器。"));
+                return;
+            }
+            if (unequipAndPutToInventory(EquipmentType.WEAPON)) {
+                sendMessage(PlayerUnequipMessage.of(this, EquipmentType.WEAPON));
+                syncInventoryQuietly();
+            }
+            changeAndSayAttackKungFu(newKungFu);
+            return;
+        }
+        Weapon weapon = (Weapon) inventory.getItem(weaponSlot);
+        equipWeaponFromSlot(weaponSlot);
+        sendMessage(PlayerEquipMessage.create(this, weapon));
+        changeAndSayAttackKungFu(newKungFu);
+        syncInventoryQuietly();
     }
 
 
@@ -370,7 +425,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         changeAttackKungFu(newAttack);
     }
 
-    void disableFootKungFu() {
+    void disableFootKungFuAndSync() {
         if (footKungfu != null) {
             footKungfu = null;
             syncActiveKungFuList();
@@ -378,7 +433,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     void toggleBreathKungFu(BreathKungFu newBreath) {
-        if (newBreath.isNameSame(breathKungFu)) {
+        if (newBreath.nameEquals(breathKungFu)) {
             breathKungFu = null;
         } else {
             breathKungFu = newBreath;
@@ -389,7 +444,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     private void toggleProtectionKungFu(ProtectKungFu newProtection) {
-        if (newProtection.isNameSame(protectKungFu)) {
+        if (newProtection.nameEquals(protectKungFu)) {
             protectKungFu = null;
         } else {
             breathKungFu = null;
@@ -429,7 +484,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     void toggleFootKungFu(FootKungFu newKungFu) {
-        if (newKungFu.isNameSame(footKungfu)) {
+        if (newKungFu.nameEquals(footKungfu)) {
             this.footKungfu = null;
         } else {
             breathKungFu = null;
@@ -465,7 +520,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         } else if (kungFu instanceof AssistantKungFu newAssistant) {
             toggleAssistantKungFu(newAssistant);
         } else if (kungFu instanceof AttackKungFu newAttack) {
-            trySwitchKungFu(newAttack);
+            state.doubleClickAttackKungFu(newAttack);
         }
         syncActiveKungFuList();
     }
@@ -842,7 +897,6 @@ public final class PlayerImpl extends AbstractCreature implements Player,
             return;
         }
         if (item instanceof Weapon weapon) {
-
         }
     }
 
@@ -982,7 +1036,6 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         updateKungFu(delta);
         pillSlots.update(this, delta);
         updateBuff(delta);
-        //creatureState().update(this, delta);
         this.state.update(delta);
     }
 

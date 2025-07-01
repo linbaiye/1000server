@@ -3,6 +3,7 @@ package org.y1000.entities.players;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.item.Equipment;
+import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.message.PlayerChangeStateMessage;
 import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.SetPositionEvent;
@@ -100,5 +101,10 @@ public final class PlayerMoveState extends AbstractPlayerState {
 
     public static PlayerMoveState fightWalk(PlayerImpl player, MoveInput moveInput) {
         return new PlayerMoveState(player, moveInput, MoveAction.FightWalk);
+    }
+
+    @Override
+    public void doubleClickAttackKungFu(AttackKungFu attackKungFu) {
+        player().tryUseAttackKungFu(attackKungFu);
     }
 }

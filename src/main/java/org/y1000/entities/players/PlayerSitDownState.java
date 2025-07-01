@@ -3,6 +3,7 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
+import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.message.PlayerChangeStateMessage;
 
@@ -55,5 +56,10 @@ final class PlayerSitDownState extends AbstractPlayerState implements PlayerEqui
     @Override
     public void equip(int slot, Equipment equipment) {
         player().tryEquipFromSlot(slot, equipment);
+    }
+
+    @Override
+    public void doubleClickAttackKungFu(AttackKungFu attackKungFu) {
+        player().tryUseAttackKungFu(attackKungFu);
     }
 }

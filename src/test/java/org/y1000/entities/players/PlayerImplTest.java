@@ -227,7 +227,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(inventorySlotEvent.toPacket().getUpdateSlot().getName(), "fist");
         assertTrue(player.weapon().isEmpty());
         assertTrue(inventory.findWeaponSlot(AttackKungFuType.Fist) != 0);
-        PlayerUnequipEvent unequipEvent = eventListener.removeFirst(PlayerUnequipEvent.class);
+        PlayerUnequipMessage unequipEvent = eventListener.removeFirst(PlayerUnequipMessage.class);
         assertEquals(unequipEvent.toPacket().getUnequip().getEquipmentType(), EquipmentType.WEAPON.value());
     }
 

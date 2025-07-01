@@ -146,12 +146,6 @@ final class RealmEntityEventSender implements EntityEventListener,
     }
 
     @Override
-    public void visit(PlayerUnequipEvent event) {
-        notifyVisiblePlayersAndSelf(event.player(), event);
-    }
-
-
-    @Override
     public void visit(PlayerToggleKungFuEvent event) {
         notifyVisiblePlayersAndSelf(event.player(), event);
     }

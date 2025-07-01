@@ -28,7 +28,7 @@ public interface KungFu {
 
     int icon();
 
-    default boolean isNameSame(KungFu kungFu) {
+    default boolean nameEquals(KungFu kungFu) {
         return kungFu != null && name().equals(kungFu.name());
     }
 
