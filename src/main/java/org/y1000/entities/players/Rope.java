@@ -108,7 +108,7 @@ end;
 
     private void follow() {
         var dist = distance();
-        if (isBroken() || dist < 1 || dragged.oldStateEnum() != OldPlayerStateEnum.DIE) {
+        if (isBroken() || dist < 1 || !dragged.isDead()) {
             return;
         }
         var dir = dragged.coordinate().computeDirection(moving.coordinate());
@@ -141,8 +141,7 @@ end;
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
-        if (entityEvent instanceof PlayerLeftEvent || moving.oldStateEnum() == OldPlayerStateEnum.DIE ||
-                dragged.oldStateEnum() != OldPlayerStateEnum.DIE) {
+        if (entityEvent instanceof PlayerLeftEvent || moving.isDead()|| !dragged.isDead()) {
             breakRope();
         }
     }

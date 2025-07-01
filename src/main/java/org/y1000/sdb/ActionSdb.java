@@ -1,7 +1,7 @@
 package org.y1000.sdb;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,19 +12,19 @@ public final class ActionSdb extends AbstractCSVSdbReader {
         read("Action.sdb");
     }
 
-    private static final Map<OldPlayerStateEnum, String>  ACTION_NAME_MAP = new HashMap<>() {{
-        put(OldPlayerStateEnum.IDLE, "Idle");
-        put(OldPlayerStateEnum.ATTACK, "Attack");
-        put(OldPlayerStateEnum.Move, "Move");
-        put(OldPlayerStateEnum.DIE, "Die");
-        put(OldPlayerStateEnum.HURT, "Hurt");
-        put(OldPlayerStateEnum.Turn, "Freeze");
+    private static final Map<NpcStateEnum, String>  ACTION_NAME_MAP = new HashMap<>() {{
+        put(NpcStateEnum.Idle, "Idle");
+        put(NpcStateEnum.Attack, "Attack");
+        put(NpcStateEnum.Move, "Move");
+        put(NpcStateEnum.Die, "Die");
+        put(NpcStateEnum.Hurt, "Hurt");
+        put(NpcStateEnum.Turn, "Freeze");
     }};
 
-    public int getActionLength(String name, OldPlayerStateEnum playerStateEnum) {
-        if (!ACTION_NAME_MAP.containsKey(playerStateEnum)) {
+    public int getActionLength(String name, NpcStateEnum npcStateEnum) {
+        if (!ACTION_NAME_MAP.containsKey(npcStateEnum)) {
             throw new NotImplementedException();
         }
-        return getInt(name, ACTION_NAME_MAP.get(playerStateEnum));
+        return getInt(name, ACTION_NAME_MAP.get(npcStateEnum));
     }
 }

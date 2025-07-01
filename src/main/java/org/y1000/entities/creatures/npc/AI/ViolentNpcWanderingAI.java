@@ -14,8 +14,8 @@ public final class ViolentNpcWanderingAI extends AbstractWanderingNpcAI {
     @Override
     protected void onHurtDone(Npc npc) {
         ViolentNpc violentNpc = (ViolentNpc) npc;
-        if (npc.creatureState() instanceof NpcHurtState hurtState) {
-            violentNpc.changeAndStartAI(new ViolentNpcMeleeFightAI(hurtState.attacker(), violentNpc));
+        if (npc.npcState() instanceof NpcHurtState hurtState) {
+//            violentNpc.changeAndStartAI(new ViolentNpcMeleeFightAI(hurtState.attacker(), violentNpc));
         } else {
             throw new IllegalStateException();
         }

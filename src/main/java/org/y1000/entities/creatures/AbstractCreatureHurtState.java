@@ -18,9 +18,4 @@ public abstract class AbstractCreatureHurtState<C extends Creature> extends IAbs
             recovery(c);
         }
     }
-
-    @Override
-    public OldPlayerStateEnum stateEnum() {
-        return OldPlayerStateEnum.HURT;
-    }
 }

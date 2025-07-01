@@ -1,15 +1,13 @@
 package org.y1000.entities.players;
 
-
 import org.y1000.item.Equipment;
 import org.y1000.message.PlayerChangeStateMessage;
 
-final class PlayerStandUpState extends AbstractPlayerState {
+class PlayerHelloState extends AbstractPlayerState {
 
-    public PlayerStandUpState(PlayerImpl player) {
-        super(player, PlayerStateEnum.StandUp, 750);
+    public PlayerHelloState(PlayerImpl player) {
+        super(player, PlayerStateEnum.Hello, 750);
     }
-
     @Override
     public void update(int delta) {
         if (elapse(delta)) {

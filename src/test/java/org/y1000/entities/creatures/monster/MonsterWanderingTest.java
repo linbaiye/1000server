@@ -20,6 +20,6 @@ class MonsterWanderingTest extends AbstractMonsterUnitTestFixture {
         monster.start();
         assertNotNull(eventListener.removeFirst(NpcChangeStateEvent.class));
         assertEquals(OldPlayerStateEnum.IDLE, monster.oldStateEnum());
-        assertInstanceOf(NpcCommonState.class, monster.creatureState());
+        assertInstanceOf(NpcCommonState.class, monster.npcState());
     }
 }

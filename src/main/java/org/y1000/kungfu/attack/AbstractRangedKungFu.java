@@ -4,8 +4,6 @@ package org.y1000.kungfu.attack;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
-import org.y1000.entities.players.fight.PlayerAttackState;
-import org.y1000.item.Ammo;
 import org.y1000.item.ItemType;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.ClientAttackEvent;
@@ -36,14 +34,14 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
         }
         return count > 0;
     }
-
-    protected PlayerAttackState useResourcesAndCreateState(PlayerImpl player) {
-        useAttributeResources(player);
-        count --;
-        var ammo = player.inventory()
-                .consumeStackItem(player, getAmmoType(), player::emitEvent);
-        return PlayerAttackState.ranged(player, ((Ammo)ammo).spriteId());
-    }
+//
+//    protected PlayerAttackState useResourcesAndCreateState(PlayerImpl player) {
+//        useAttributeResources(player);
+//        count --;
+//        var ammo = player.inventory()
+//                .consumeStackItem(player, getAmmoType(), player::emitEvent);
+//        return PlayerAttackState.ranged(player, ((Ammo)ammo).spriteId());
+//    }
 
     @Override
     protected int computeAbove5000SoundOffset(int level) {

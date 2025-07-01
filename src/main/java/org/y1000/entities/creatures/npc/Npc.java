@@ -1,7 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
@@ -21,6 +20,7 @@ public interface Npc extends Creature {
     void move(int millis);
 
     void stay(int millis);
+
     void turn();
 
     void die();
@@ -31,11 +31,11 @@ public interface Npc extends Creature {
 
     <S extends NpcSpell> Optional<S> findSpell(Class<S> type);
 
-    void startAction(OldPlayerStateEnum playerStateEnum);
+    void startAction(NpcStateEnum stateEnum);
 
     void changeState(NpcState state);
 
-    NpcState creatureState();
+    NpcState npcState();
 
     void start();
 
@@ -71,4 +71,14 @@ public interface Npc extends Creature {
     String shape();
 
     NpcStateEnum npcStateEnum();
+
+    int getStateMillis(NpcStateEnum stateEnum);
+
+    default boolean isDead() {
+        return npcStateEnum() == NpcStateEnum.Die;
+    }
+
+    default boolean isMoving() {
+        return npcStateEnum() == NpcStateEnum.Move;
+    }
 }

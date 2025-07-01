@@ -1,25 +1,16 @@
 package org.y1000.entities.creatures;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Damage;
-import org.y1000.exp.ExperienceUtil;
 import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
-public abstract class IAbstractCreature<C extends Creature, S extends ICreatureState<C>> extends AbstractActiveEntity implements Creature {
-
-    private Coordinate coordinate;
-
-    private Direction direction;
-
-    private final String name;
+public abstract class IAbstractCreature<C extends Creature, S extends ICreatureState<C>> extends AbstractCreature {
 
     private S state;
 
@@ -30,25 +21,14 @@ public abstract class IAbstractCreature<C extends Creature, S extends ICreatureS
                              Direction direction,
                              String name,
                              Map<OldPlayerStateEnum, Integer> stateMillis) {
-        super(id);
+        super(id, coordinate, direction, name);
         Objects.requireNonNull(coordinate, "coordinate can't be null.");
         Objects.requireNonNull(direction, "direction can't be null.");
         Objects.requireNonNull(name, "viewName can't be null.");
         Objects.requireNonNull(stateMillis, "stateMillis can't be null.");
-        this.coordinate = coordinate;
-        this.direction = direction;
-        this.name = name;
         this.stateMillis = stateMillis;
     }
 
-    public void changeDirection(Direction newdir) {
-        direction = newdir;
-    }
-
-    public void changeCoordinate(Coordinate newCoor) {
-        coordinate = newCoor;
-        realmMap().occupy(this);
-    }
 
     public int getStateMillis(OldPlayerStateEnum playerStateEnum) {
         return stateMillis.get(playerStateEnum);
@@ -58,37 +38,8 @@ public abstract class IAbstractCreature<C extends Creature, S extends ICreatureS
         return state;
     }
 
-    protected boolean randomAvoidance(int attackerHit) {
-        var rand = ThreadLocalRandom.current().nextInt(0, attackerHit + 75 + avoidance());
-        return rand < avoidance();
-    }
-
-    @Override
-    public Coordinate coordinate() {
-        return coordinate;
-    }
-
-    @Override
-    public Direction direction() {
-        return direction;
-    }
-
-    @Override
-    public String viewName() {
-        return name;
-    }
-
-    @Override
-    public OldPlayerStateEnum oldStateEnum() {
-        return creatureState().stateEnum();
-    }
-
-    public void changeState(S newState) {
-        state = newState;
-    }
-
-    protected int doAttackedAndGiveExp(Damage damage, int hit, UnaryAction<Damage> damageAction, UnaryAction<Integer> gainExp) {
-        if (!creatureState().attackable() || randomAvoidance(hit)) {
+    protected int getHurtAndGiveExp(Damage damage, int hit, UnaryAction<Damage> damageAction, UnaryAction<Integer> gainExp) {
+        if (!creatureState().attackable() || isDodged(hit)) {
             return 0;
         }
         var before = currentLife();
@@ -102,13 +53,18 @@ public abstract class IAbstractCreature<C extends Creature, S extends ICreatureS
     }
 
 
+    public void changeState(S newState) {
+        state = newState;
+    }
+
+
     @Override
     public boolean canBeAttackedNow() {
         return creatureState().attackable();
     }
 
-    protected int damagedLifeToExp(int damagedLife) {
-        var n = maxLife() / damagedLife;
-        return n > 15 ? ExperienceUtil.DEFAULT_EXP : ExperienceUtil.DEFAULT_EXP * n * n / (15 * 15);
+    public OldPlayerStateEnum oldStateEnum() {
+        return creatureState().stateEnum();
     }
+
 }

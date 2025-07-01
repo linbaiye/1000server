@@ -27,8 +27,7 @@ public abstract class AbstractMonsterWanderingAI extends AbstractWanderingAI<Mon
 
     @Override
     protected void onActionDoneNotDead(Monster monster) {
-        if (soundCounter-- <= 0 &&
-                (monster.oldStateEnum() == OldPlayerStateEnum.IDLE || monster.oldStateEnum() == OldPlayerStateEnum.Move)) {
+        if (soundCounter-- <= 0) {
             monster.normalSound().ifPresent(s -> monster.emitEvent(new EntitySoundEvent(monster, s)));
             setSoundCounter();
         }

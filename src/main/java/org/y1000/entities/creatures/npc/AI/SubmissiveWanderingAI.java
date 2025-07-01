@@ -11,9 +11,9 @@ public final class SubmissiveWanderingAI extends AbstractWanderingNpcAI {
 
     @Override
     protected void onHurtDone(Npc npc) {
-        if (npc.creatureState() instanceof NpcHurtState hurtState) {
-            npc.changeState(hurtState.previousState());
-            npc.creatureState().afterHurt(npc);
+        if (npc.npcState() instanceof NpcHurtState hurtState) {
+//            npc.changeState(hurtState.previousState());
+            npc.npcState().afterHurt(npc);
         } else {
             throw new IllegalStateException();
         }

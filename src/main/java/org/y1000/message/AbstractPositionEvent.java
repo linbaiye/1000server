@@ -20,23 +20,23 @@ public abstract class AbstractPositionEvent implements IEntityEvent, I2ClientMes
 
     private final Creature source;
 
-    private final OldPlayerStateEnum playerStateEnum;
+    private final int stateValue;
 
     private final MoveAction moveAction;
 
     private Packet packet;
 
 
-    public AbstractPositionEvent(Creature source, Direction direction, Coordinate coordinate, OldPlayerStateEnum playerStateEnum) {
-        this(source, direction, coordinate, playerStateEnum, null);
+    public AbstractPositionEvent(Creature source, Direction direction, Coordinate coordinate, int stateValue) {
+        this(source, direction, coordinate, stateValue, null);
     }
 
-    public AbstractPositionEvent(Creature source, Direction direction, Coordinate coordinate, OldPlayerStateEnum playerStateEnum, MoveAction moveAction) {
+    public AbstractPositionEvent(Creature source, Direction direction, Coordinate coordinate, int stateValue, MoveAction moveAction) {
         this.id = source.id();
         this.direction = direction;
         this.coordinate = coordinate;
         this.source = source;
-        this.playerStateEnum = playerStateEnum;
+        this.stateValue = stateValue;
         this.moveAction = moveAction;
     }
 
@@ -61,7 +61,7 @@ public abstract class AbstractPositionEvent implements IEntityEvent, I2ClientMes
     public Packet toPacket() {
         if (packet == null) {
             PositionPacket.Builder builder = PositionPacket.newBuilder()
-                    .setState(playerStateEnum.value())
+                    .setState(stateValue)
                     .setType(getType().value())
                     .setY(coordinate.y())
                     .setX(coordinate.x())
@@ -84,7 +84,6 @@ public abstract class AbstractPositionEvent implements IEntityEvent, I2ClientMes
                 ", direction=" + direction +
                 ", coordinate=" + coordinate +
                 ", type=" + getType().name() +
-                ", state=" + playerStateEnum +
                 '}';
     }
 }

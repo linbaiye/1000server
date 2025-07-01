@@ -100,11 +100,6 @@ final class RealmEntityEventSender implements EntityEventListener,
         doNotifyVisiblePlayers(event.source(), event);
     }
 
-    @Override
-    public void visit(RewindEvent event) {
-        sendMessage(event.player(), event);
-        doNotifyVisiblePlayers(event.source(), event.toSetPosition());
-    }
 
     @Override
     public void visit(PlayerAttackEventResponse event) {

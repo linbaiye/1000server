@@ -4,33 +4,26 @@ import org.y1000.entities.Direction;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
-public abstract class AbstractCreatureMoveState<C extends Creature> extends IAbstractCreatureState<C> {
-
-    private final OldPlayerStateEnum playerStateEnum;
+public abstract class AbstractCreatureMoveState extends AbstractCreatureState {
 
     private final Direction towards;
 
     private final Coordinate start;
 
-    public AbstractCreatureMoveState(OldPlayerStateEnum playerStateEnum,
-                                     Coordinate start,
-                                     Direction towards, int millisPerUnit) {
+    public AbstractCreatureMoveState(Coordinate start,
+                                     Direction towards,
+                                     int millisPerUnit) {
         super(millisPerUnit);
-        this.playerStateEnum = playerStateEnum;
         this.towards = towards;
         this.start = start;
     }
 
-    @Override
-    public OldPlayerStateEnum stateEnum() {
-        return playerStateEnum;
-    }
 
     protected Coordinate getStart() {
         return start;
     }
 
-    protected boolean tryChangeCoordinate(C c, RealmMap realmMap) {
+    protected boolean tryChangeCoordinate(Creature c, RealmMap realmMap) {
         Coordinate next = c.coordinate().moveBy(towards);
         boolean movable = realmMap.movable(next);
         if (movable)
@@ -40,8 +33,7 @@ public abstract class AbstractCreatureMoveState<C extends Creature> extends IAbs
         return movable;
     }
 
-
-    protected boolean walkMillis(C c, int delta) {
+    protected boolean walkMillis(Creature c, int delta) {
         if (elapsedMillis() == 0) {
             c.changeDirection(towards);
         }

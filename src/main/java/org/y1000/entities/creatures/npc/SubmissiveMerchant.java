@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -17,7 +18,7 @@ public final class SubmissiveMerchant extends AbstractSubmissiveMerchant {
     public SubmissiveMerchant(long id,
                               Coordinate coordinate,
                               String name,
-                              Map<OldPlayerStateEnum, Integer> stateMillis,
+                              Map<NpcStateEnum, Integer> stateMillis,
                               AttributeProvider attributeProvider,
                               Merchantable merchantable,
                               String fileName,

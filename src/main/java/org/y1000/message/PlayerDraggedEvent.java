@@ -8,8 +8,7 @@ import org.y1000.event.EntityEventVisitor;
 public final class PlayerDraggedEvent extends AbstractPositionEvent {
 
     public PlayerDraggedEvent(Player source) {
-        super(source, source.direction(), source.coordinate(), source.oldStateEnum());
-        Validate.isTrue(source.oldStateEnum() == OldPlayerStateEnum.DIE);
+        super(source, source.direction(), source.coordinate(), source.state().playerStateEnum().value());
     }
 
     @Override

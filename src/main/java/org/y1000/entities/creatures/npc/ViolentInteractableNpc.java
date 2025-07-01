@@ -6,6 +6,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.AI.ViolentNpcWanderingAI;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
@@ -25,7 +26,7 @@ public final class ViolentInteractableNpc extends AbstractViolentNpc implements 
     public ViolentInteractableNpc(long id,
                                      Coordinate coordinate,
                                      String name,
-                                     Map<OldPlayerStateEnum, Integer> stateMillis,
+                                     Map<NpcStateEnum, Integer> stateMillis,
                                      NonMonsterNpcAttributeProvider attributeProvider,
                                      RealmMap realmMap,
                                      NpcInteractor interactor,

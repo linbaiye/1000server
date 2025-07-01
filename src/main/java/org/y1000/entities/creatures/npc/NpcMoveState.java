@@ -2,19 +2,14 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.util.Coordinate;
 
-public final class NpcMoveState extends AbstractCreatureMoveState<Npc> implements NpcState {
-    private NpcMoveState(Coordinate start,
-                             Direction towards,
-                             int millisPerUnit) {
-        super(OldPlayerStateEnum.Move, start, towards, millisPerUnit);
-    }
+public final class NpcMoveState extends AbstractCreatureMoveState implements NpcState {
 
+    private final Npc npc;
     @Override
-    public void update(Npc npc, int delta) {
+    public void update(int delta) {
         if (elapsedMillis() == 0) {
             npc.realmMap().free(npc);
         }
@@ -28,18 +23,27 @@ public final class NpcMoveState extends AbstractCreatureMoveState<Npc> implement
         }
     }
 
-
     @Override
-    public void moveToHurtCoordinate(Npc creature) {
-        tryChangeCoordinate(creature, creature.realmMap());
-    }
-
-    @Override
-    public NpcStateEnum state() {
+    public NpcStateEnum stateEnum() {
         return NpcStateEnum.Move;
     }
+    private NpcMoveState(Coordinate start,
+                         Direction towards,
+                         int millisPerUnit,
+                         Npc npc) {
+        super(start, towards, millisPerUnit);
+        this.npc = npc;
+    }
 
+//
+//
+//    @Override
+//    public void moveToHurtCoordinate(Npc creature) {
+//        tryChangeCoordinate(creature, creature.realmMap());
+//    }
+
+//
     public static NpcMoveState move(Npc npc, int millis) {
-        return new NpcMoveState(npc.coordinate(), npc.direction(), millis);
+        return new NpcMoveState(npc.coordinate(), npc.direction(), millis, npc);
     }
 }

@@ -13,6 +13,9 @@ public record SimpleInput(SimpleInput.Type type) implements SelfHandleInput {
     public enum Type implements ValueEnum {
         KungFuBook(1),
         Inventory(2),
+        KeyF2(3),
+        KeyF3(4),
+        KeyF4(5),
         ;
         private final int v;
 

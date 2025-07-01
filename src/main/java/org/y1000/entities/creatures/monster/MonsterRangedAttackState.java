@@ -53,6 +53,6 @@ public final class MonsterRangedAttackState extends IAbstractCreatureState<Abstr
     }
 
     public static MonsterRangedAttackState attack(AbstractMonster monster, String sound, int projectId) {
-        return new MonsterRangedAttackState(monster.getStateMillis(OldPlayerStateEnum.ATTACK), sound, projectId);
+        return new MonsterRangedAttackState(monster.getStateMillis(NpcStateEnum.Attack), sound, projectId);
     }
 }

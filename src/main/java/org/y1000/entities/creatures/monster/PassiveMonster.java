@@ -23,15 +23,10 @@ public final class PassiveMonster extends AbstractMonster {
 
     @Builder
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
-                          RealmMap realmMap, Map<OldPlayerStateEnum, Integer> stateMillis,
+                          RealmMap realmMap, Map<NpcStateEnum, Integer> stateMillis,
                           AttributeProvider attributeProvider,
                           NpcRangedSkill skill, NpcAI ai, List<NpcSpell> spells) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai, skill, spells);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id());
     }
 
     @Override

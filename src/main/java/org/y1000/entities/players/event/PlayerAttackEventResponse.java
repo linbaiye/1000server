@@ -17,7 +17,7 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
     @Getter
     private final boolean accepted;
 
-    private final OldPlayerStateEnum backToPlayerStateEnum;
+    private final OldPlayerStateEnum backToPlayerStateEnum = OldPlayerStateEnum.ATTACK;
 
     private final Integer effectId;
 
@@ -25,7 +25,7 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
         super(source);
         clientAttackEvent = clientEvent;
         this.accepted = ok;
-        backToPlayerStateEnum = source.oldStateEnum();
+//        backToPlayerStateEnum = source.oldStateEnum();
         this.effectId = effectId;
     }
 

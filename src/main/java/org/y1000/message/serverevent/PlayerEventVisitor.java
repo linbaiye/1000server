@@ -76,8 +76,8 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
         visit((AbstractPositionEvent) moveEvent);
     }
 
-    default void visit(RewindEvent event) {
-    }
+//    default void visit(RewindEvent event) {
+//    }
 
     default void visit(ItemOrKungFuAttributeEvent event) {
 

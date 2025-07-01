@@ -30,7 +30,7 @@ public class SeekAggressiveMonsterEvent implements IEntityEvent {
 
     public void handle(Stream<Npc> entityStream) {
         entityStream.filter(npc -> npc instanceof AggressiveMonster &&
-                        npc.oldStateEnum() != OldPlayerStateEnum.DIE &&
+                        !npc.isDead() &&
                         npc.coordinate().directDistance(guardian.coordinate()) <= width)
                 .map(AggressiveMonster.class::cast)
                 .forEach(monsters::add);

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.quest.Quest;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -23,7 +24,7 @@ public final class SubmissiveMerchantQuester extends AbstractSubmissiveMerchant 
     @Builder
     public SubmissiveMerchantQuester(long id,
                                      Coordinate coordinate, String name,
-                                     Map<OldPlayerStateEnum, Integer> stateMillis,
+                                     Map<NpcStateEnum, Integer> stateMillis,
                                      AttributeProvider attributeProvider,
                                      RealmMap realmMap,
                                      Merchantable merchantable,
@@ -41,11 +42,6 @@ public final class SubmissiveMerchantQuester extends AbstractSubmissiveMerchant 
 
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(id());
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
@@ -53,8 +49,4 @@ public final class SubmissiveMerchantQuester extends AbstractSubmissiveMerchant 
         return obj == this || ((SubmissiveMerchantQuester) obj).id() == id();
     }
 
-    @Override
-    public NpcState creatureState() {
-        return null;
-    }
 }

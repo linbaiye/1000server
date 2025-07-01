@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.entities.creatures.npc.AI.GuardWanderingAI;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.realm.RealmMap;
@@ -22,7 +23,7 @@ public final class Guardian extends AbstractViolentNpc implements HumanNpc {
     private final int width;
 
     @Builder
-    public Guardian(long id, Coordinate coordinate, Direction direction, String name, Map<OldPlayerStateEnum, Integer> stateMillis, AttributeProvider attributeProvider, RealmMap realmMap, NpcAI ai, int width) {
+    public Guardian(long id, Coordinate coordinate, Direction direction, String name, Map<NpcStateEnum, Integer> stateMillis, AttributeProvider attributeProvider, RealmMap realmMap, NpcAI ai, int width) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai, null, null);
         this.width = width;
     }
@@ -47,7 +48,6 @@ public final class Guardian extends AbstractViolentNpc implements HumanNpc {
     public int hashCode() {
         return Objects.hashCode(id());
     }
-
 
 
     @Override

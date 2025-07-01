@@ -33,7 +33,7 @@ final class DeadPlayerTeleportManagerImpl implements DeadPlayerTeleportManager {
     @Override
     public void onPlayerDead(Player player) {
         if (teleportHandler == null || player == null
-                || player.oldStateEnum() != OldPlayerStateEnum.DIE) {
+                || !player.isDead()) {
             return;
         }
         timerManager.add(player, 10000);

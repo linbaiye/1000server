@@ -4,11 +4,9 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.*;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.*;
-import org.y1000.entities.players.fight.*;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.KungFuType;
 import org.y1000.message.PlayerTextEvent;
@@ -90,7 +88,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         player.emitEvent(new PlayerAttributeEvent(player));
     }
 
-    protected abstract PlayerAttackState useResourcesAndCreateState(PlayerImpl player);
+//    protected abstract PlayerAttackState useResourcesAndCreateState(PlayerImpl player);
 
     protected abstract int computeAbove5000SoundOffset(int level);
 
@@ -115,39 +113,39 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
     private void doAttack(PlayerImpl player, Direction direction, boolean sendAttackEvent) {
-        int cooldown = player.cooldown();
-        if (cooldown > 0) {
-            player.changeState(new PlayerCooldownState(cooldown));
-            return;
-        }
-        if (!isRanged() && !player.getFightingEntity().canBeMeleeAt(player.coordinate())) {
-            player.changeState(new PlayerWaitDistanceState(30));
-            return;
-        }
-        var ok = checkResourcesAndSendError(player);
-        if (!ok) {
-            player.changeState(new PlayerCooldownState(player.getStateMillis(OldPlayerStateEnum.FightStand)));
-            return;
-        }
-        player.changeDirection(direction);
-        player.cooldownAttack();
-        var state = useResourcesAndCreateState(player);
-        player.changeState(state);
-        if (sendAttackEvent)
-            player.emitEvent(PlayerAttackEvent.of(player, computeEffectId()));
-        if (!isRanged()) {
-            player.assistantKungFu().ifPresentOrElse(
-                    assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, player.getFightingEntity(), assistantKungFu)),
-                    () -> doSingleAttack(player));
-        } else {
-            player.emitEvent(new EntitySoundEvent(player, swingSound()));
-        }
+//        int cooldown = player.cooldown();
+//        if (cooldown > 0) {
+//            player.changeState(new PlayerCooldownState(cooldown));
+//            return;
+//        }
+//        if (!isRanged() && !player.getFightingEntity().canBeMeleeAt(player.coordinate())) {
+//            player.changeState(new PlayerWaitDistanceState(30));
+//            return;
+//        }
+//        var ok = checkResourcesAndSendError(player);
+//        if (!ok) {
+//            player.changeState(new PlayerCooldownState(player.getStateMillis(OldPlayerStateEnum.FightStand)));
+//            return;
+//        }
+//        player.changeDirection(direction);
+//        player.cooldownAttack();
+//        var state = useResourcesAndCreateState(player);
+//        player.changeState(state);
+//        if (sendAttackEvent)
+//            player.emitEvent(PlayerAttackEvent.of(player, computeEffectId()));
+//        if (!isRanged()) {
+//            player.assistantKungFu().ifPresentOrElse(
+//                    assistantKungFu -> player.emitEvent(PlayerAttackAoeEvent.melee(player, player.getFightingEntity(), assistantKungFu)),
+//                    () -> doSingleAttack(player));
+//        } else {
+//            player.emitEvent(new EntitySoundEvent(player, swingSound()));
+//        }
     }
 
     @Override
     public void attackAgain(PlayerImpl player) {
         if (player.getFightingEntity() == null || !player.canChaseOrAttack(player.getFightingEntity())) {
-            player.changeState(PlayerStillState.chillOut(player));
+//            player.changeState(PlayerStillState.chillOut(player));
             return;
         }
         Direction direction = player.coordinate().computeDirection(player.getFightingEntity().coordinate());

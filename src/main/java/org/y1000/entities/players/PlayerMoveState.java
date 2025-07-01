@@ -2,12 +2,11 @@ package org.y1000.entities.players;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.item.Equipment;
 import org.y1000.message.PlayerChangeStateMessage;
 import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.message.input.MoveInput;
-import org.y1000.message.input.TurnInput;
 
 import java.util.Map;
 
@@ -28,10 +27,10 @@ public final class PlayerMoveState extends AbstractPlayerState {
             MoveAction.FightWalk, 840
     );
 
-    private PlayerMoveState(Player player,
+    private PlayerMoveState(PlayerImpl player,
             MoveInput input,
             MoveAction moveAction) {
-        super(player, OldPlayerStateEnum.Move, MoveStateMillis.get(moveAction));
+        super(player, PlayerStateEnum.Move, MoveStateMillis.get(moveAction));
         this.moveAction = moveAction;
         currentInput = input;
     }
@@ -42,15 +41,15 @@ public final class PlayerMoveState extends AbstractPlayerState {
         } else {
             player().changeState(PlayerStandState.idle(player()));
         }
-        player().sendMessage(PlayerChangeStateMessage.of(player(), false));
+        player().sendMessage(PlayerChangeStateMessage.noSelf(player()));
     }
 
     @Override
     public void update(int delta) {
         if (elapsedMillis() == 0) {
-            if (!player().coordinate().equals(currentInput.from()) || !player().realmMap().movable(currentInput.target())) {
+            if (!player().coordinate().equals(currentInput.from()) || !player().realmMap().movable(currentInput.destination())) {
                 log.debug("Reset position current {}, input {}, target moveable? {}.", player().coordinate(), currentInput.from(),
-                        player().realmMap().movable(currentInput.target()));
+                        player().realmMap().movable(currentInput.destination()));
                 player().emitEvent(SetPositionEvent.of(player()));
                 changeToStand();
                 return;
@@ -60,12 +59,12 @@ public final class PlayerMoveState extends AbstractPlayerState {
         }
         if (!elapse(delta))
             return;
-        if (!player().realmMap().movable(currentInput.target())) {
+        if (!player().realmMap().movable(currentInput.destination())) {
             player().emitEvent(SetPositionEvent.of(player()));
             changeToStand();
             return;
         }
-        player().changeCoordinate(currentInput.target());
+        player().changeCoordinate(currentInput.destination());
         log.debug("Player {} moved to {}.", player(), player().coordinate());
         if (newInput != null) {
             player().changeState(new PlayerMoveState(player(), newInput, computeNonFightMoveAction(player(), moveAction)));
@@ -78,29 +77,28 @@ public final class PlayerMoveState extends AbstractPlayerState {
     @Override
     public void move(MoveInput moveInput) {
         newInput = moveInput;
-
     }
 
     @Override
-    public void turn(TurnInput turnInput) {
-
+    public void equip(int slot, Equipment equipment) {
+        player().tryEquipFromSlot(slot, equipment);
     }
 
-    private static MoveAction computeNonFightMoveAction(Player player, MoveAction current) {
+    private static MoveAction computeNonFightMoveAction(PlayerImpl player, MoveAction current) {
         return player.footKungFu().map(k -> k.canFly() ? MoveAction.Fly : MoveAction.Run)
                 .orElse(current);
     }
 
-    private static MoveAction computeNonFightMoveAction(Player player) {
+    private static MoveAction computeNonFightMoveAction(PlayerImpl player) {
         return player.footKungFu().map(k -> k.canFly() ? MoveAction.Fly : MoveAction.Run)
                 .orElse(MoveAction.Walk);
     }
 
-    public static PlayerMoveState noneFightMove(Player player, MoveInput input) {
+    public static PlayerMoveState noneFightMove(PlayerImpl player, MoveInput input) {
         return new PlayerMoveState(player, input, computeNonFightMoveAction(player));
     }
 
-    public static PlayerMoveState fightWalk(Player player, MoveInput moveInput) {
+    public static PlayerMoveState fightWalk(PlayerImpl player, MoveInput moveInput) {
         return new PlayerMoveState(player, moveInput, MoveAction.FightWalk);
     }
 }

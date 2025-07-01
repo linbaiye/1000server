@@ -29,7 +29,6 @@ public interface Player extends ViolentCreature {
     default boolean isMale() {
         return true;
     }
-
     void joinRealm(Realm realm, PlayerMessageListener messageListener);
 
     void joinRealm(Realm realm, Coordinate coordinate, PlayerMessageListener messageListener);
@@ -141,18 +140,19 @@ public interface Player extends ViolentCreature {
     boolean consumeItem(int slotId);
 
     default boolean canDrag(Player target, int ropeSlot) {
-        if (oldStateEnum() == OldPlayerStateEnum.DIE || oldStateEnum() == OldPlayerStateEnum.Turn ||
-                target.equals(this)) {
-            return false;
-        }
-        if (target.oldStateEnum() != OldPlayerStateEnum.DIE) {
-            return false;
-        }
-        if (target.coordinate().directDistance(coordinate()) > 4) {
-            return false;
-        }
-        Item item = inventory().getItem(ropeSlot);
-        return item != null && item.name().equals("追魂索");
+        return false;
+//        if (oldStateEnum() == OldPlayerStateEnum.DIE || oldStateEnum() == OldPlayerStateEnum.Turn ||
+//                target.equals(this)) {
+//            return false;
+//        }
+//        if (target.oldStateEnum() != OldPlayerStateEnum.DIE) {
+//            return false;
+//        }
+//        if (target.coordinate().directDistance(coordinate()) > 4) {
+//            return false;
+//        }
+//        Item item = inventory().getItem(ropeSlot);
+//        return item != null && item.name().equals("追魂索");
     }
 
     void onProjectileReachTarget(Projectile projectile);
@@ -195,10 +195,13 @@ public interface Player extends ViolentCreature {
         return ret;
     }
 
-    void changeState(PlayerState playerState);
-
     void sendMessage(PlayerMessage message);
 
     PlayerState state();
+
+    default boolean isDead() {
+        return state().playerStateEnum() == PlayerStateEnum.Die;
+    }
+
 }
 

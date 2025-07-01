@@ -2,6 +2,7 @@ package org.y1000.entities.creatures;
 
 import org.y1000.message.ValueEnum;
 
+@Deprecated
 public enum OldPlayerStateEnum implements ValueEnum {
     IDLE(1),
 

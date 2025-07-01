@@ -124,8 +124,8 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         player.registerEventListener(this);
         eventSender.add(player, login.connection());
         add(player);
-        eventSender.notifyPlayerOfEntities(player);
         onMessage(PlayerJoinRealmMessage.of(player));
+        eventSender.notifyPlayerOfEntities(player);
     }
 
     @Override

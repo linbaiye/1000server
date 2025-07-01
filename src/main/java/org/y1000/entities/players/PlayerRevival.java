@@ -34,11 +34,11 @@ public final class PlayerRevival {
         return value + value * experience.level() / 10000;
     }
 
-    public int regenerateHalLife(OldPlayerStateEnum playerStateEnum) {
+    public int regenerateHalLife(PlayerStateEnum playerStateEnum) {
         return switch (playerStateEnum) {
-            case DIE -> applyLevel(300);
-            case SIT -> applyLevel(150);
-            case IDLE -> applyLevel(80);
+            case Die -> applyLevel(300);
+            case Sit -> applyLevel(150);
+            case Idle -> applyLevel(80);
             default -> applyLevel(50);
         };
     }
@@ -52,11 +52,11 @@ public final class PlayerRevival {
          else n :=50;
       end;
      */
-    public int regenerateResources(OldPlayerStateEnum playerStateEnum) {
+    public int regenerateResources(PlayerStateEnum playerStateEnum) {
         return switch (playerStateEnum) {
-            case DIE -> applyLevel(100);
-            case SIT -> applyLevel(70);
-            case IDLE -> applyLevel(50);
+            case Die -> applyLevel(100);
+            case Sit -> applyLevel(70);
+            case Idle -> applyLevel(50);
             default -> applyLevel(10);
         };
     }

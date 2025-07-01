@@ -33,8 +33,8 @@ public final class GuardWanderingAI extends AbstractWanderingNpcAI {
         if (!(npc instanceof Guardian guardian)) {
             return;
         }
-        if (npc.creatureState() instanceof NpcHurtState hurtState) {
-            changeToFight(guardian, hurtState.attacker());
+        if (npc.npcState() instanceof NpcHurtState hurtState) {
+//            changeToFight(guardian, hurtState.attacker());
         }
     }
 

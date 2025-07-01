@@ -3,40 +3,36 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.*;
 
 @Slf4j
-public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl> implements IPlayerState {
+public final class PlayerHurtState extends AbstractPlayerState implements PlayerState {
 
-    private final IPlayerState returnState;
+    private final PlayerState returnState;
 
-    /**
-     * For client to interpolate, perhaps no useless.
-     */
-    private final OldPlayerStateEnum afterHurtPlayerStateEnum;
 
-    private PlayerHurtState(int totalMillis, IPlayerState afterHurt, OldPlayerStateEnum returnPlayerStateEnum) {
-        super(totalMillis);
+    private PlayerHurtState(PlayerImpl player, int totalMillis, PlayerState afterHurt) {
+        super(player, PlayerStateEnum.Hurt, totalMillis);
         this.returnState = afterHurt;
-        this.afterHurtPlayerStateEnum = returnPlayerStateEnum;
     }
 
-    @Override
-    protected void recovery(PlayerImpl player) {
-        returnState.afterHurt(player);
-    }
+//    @Override
+//    protected void recovery(PlayerImpl player) {
+//        returnState.afterHurt(player);
+//    }
 
     public static PlayerHurtState hurt(PlayerImpl player, OldPlayerStateEnum afterHurt) {
-        if (player.creatureState() instanceof PlayerHurtState hurtState) {
-            return new PlayerHurtState(player.getStateMillis(OldPlayerStateEnum.HURT), hurtState.returnState, afterHurt);
-        } else {
-            return new PlayerHurtState(player.getStateMillis(OldPlayerStateEnum.HURT), player.creatureState(), afterHurt);
-        }
+//        if (player.creatureState() instanceof PlayerHurtState hurtState) {
+//            return new PlayerHurtState(player.getStateMillis(OldPlayerStateEnum.HURT), hurtState.returnState, afterHurt);
+//        } else {
+//            return new PlayerHurtState(player.getStateMillis(OldPlayerStateEnum.HURT), player.creatureState(), afterHurt);
+//        }
+        return null;
     }
+//
+//    @Override
+//    public OldPlayerStateEnum decideAfterHurtState() {
+//        return this.afterHurtPlayerStateEnum;
+//    }
 
-    @Override
-    public OldPlayerStateEnum decideAfterHurtState() {
-        return this.afterHurtPlayerStateEnum;
-    }
-
-    @Override
+//    @Override
     public void afterHurt(PlayerImpl player) {
         reset();
         player.changeState(this);
@@ -44,6 +40,12 @@ public final class PlayerHurtState extends AbstractCreatureHurtState<PlayerImpl>
 
     @Override
     public String toString() {
-        return stateEnum().name();
+        return playerStateEnum().name();
     }
+
+    @Override
+    public void update(int delta) {
+
+    }
+
 }

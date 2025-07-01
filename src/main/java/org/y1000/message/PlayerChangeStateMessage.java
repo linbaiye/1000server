@@ -26,7 +26,7 @@ public final class PlayerChangeStateMessage extends AbstractPlayerMessage implem
         }
     }
 
-    public static PlayerChangeStateMessage of(Player player, boolean includeSelf) {
+    private static PlayerChangeStateMessage of(Player player, boolean includeSelf) {
         PlayerStateEnum playerStateEnum = player.state().playerStateEnum();
         PlayerChangeStatePacket changeStatePacket = PlayerChangeStatePacket.newBuilder().setState(playerStateEnum.value())
                 .setId(player.id()).setDirection(player.direction().value()).build();
@@ -34,7 +34,11 @@ public final class PlayerChangeStateMessage extends AbstractPlayerMessage implem
         return new PlayerChangeStateMessage(player, packet, includeSelf);
     }
 
-    public static PlayerChangeStateMessage of(Player player) {
+    public static PlayerChangeStateMessage noSelf(Player player) {
+        return of(player, false);
+    }
+
+    public static PlayerChangeStateMessage allVisible(Player player) {
         return of(player, true);
     }
 }

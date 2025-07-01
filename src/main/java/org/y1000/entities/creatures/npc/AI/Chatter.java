@@ -20,7 +20,7 @@ public final class Chatter {
     }
 
     public void onActionDone(Npc npc) {
-        if (!(npc instanceof HumanNpc humanNpc) || npc.oldStateEnum() == OldPlayerStateEnum.DIE)
+        if (!(npc instanceof HumanNpc humanNpc) || npc.isDead())
             return;
         ++counter;
         if (counter % 10 != 0)

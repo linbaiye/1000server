@@ -44,7 +44,7 @@ public record ClientWorldShoutEvent(String content) implements ClientRealmChatEv
 
     @Override
     public boolean canSend(Player player) {
-        return player != null && player.oldStateEnum() != OldPlayerStateEnum.DIE
+        return player != null && !player.isDead()
                 && player.currentLife() >= 5000;
     }
 

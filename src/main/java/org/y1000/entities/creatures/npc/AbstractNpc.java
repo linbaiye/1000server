@@ -20,11 +20,11 @@ import org.y1000.message.NpcSnapshot;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
-import org.y1000.util.UnaryAction;
 
 import java.util.*;
+import java.util.function.Consumer;
 
-public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> implements Npc {
+public abstract class AbstractNpc extends AbstractCreature implements Npc {
 
     private final AttributeProvider attributeProvider;
 
@@ -38,21 +38,23 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
 
     private Rectangle wanderingArea;
 
-    private static final Set<OldPlayerStateEnum> ACCEPTABLE_PLAYER_STATE_ENUMS = Set.of(OldPlayerStateEnum.IDLE, OldPlayerStateEnum.Move, OldPlayerStateEnum.Turn, OldPlayerStateEnum.DIE);
-
     private final List<NpcSpell> spells;
+
+    private final Map<NpcStateEnum, Integer> stateMillis;
+
+    private NpcState npcState;
 
 
     public AbstractNpc(long id,
                        Coordinate coordinate,
                        Direction direction,
                        String name,
-                       Map<OldPlayerStateEnum, Integer> stateMillis,
+                       Map<NpcStateEnum, Integer> stateMillis,
                        AttributeProvider attributeProvider,
                        RealmMap realmMap,
                        List<NpcSpell> spells,
                        NpcAI ai) {
-        super(id, coordinate, direction, name, stateMillis);
+        super(id, coordinate, direction, name);
         Validate.notNull(ai);
         this.attributeProvider = attributeProvider;
         this.realmMap = realmMap;
@@ -62,8 +64,19 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
         this.spwanCoordinate = coordinate;
         this.wanderingArea = new Rectangle(coordinate.move(-range, -range), coordinate.move(range, range));
         this.currentLife = attributeProvider.life();
-        this.changeState(NpcCommonState.idle(getStateMillis(OldPlayerStateEnum.IDLE)));
         changeCoordinate(coordinate);
+        this.stateMillis = stateMillis;
+        this.changeState(NpcCommonState.idle(this));
+    }
+
+    @Override
+    public void changeState(NpcState state) {
+        npcState = state;
+    }
+
+    @Override
+    public NpcStateEnum npcStateEnum() {
+        return npcState().stateEnum();
     }
 
     protected AttributeProvider attributeProvider() {
@@ -113,12 +126,11 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
     }
 
     @Override
-    public void startAction(OldPlayerStateEnum playerStateEnum) {
-        Validate.isTrue(ACCEPTABLE_PLAYER_STATE_ENUMS.contains(playerStateEnum), "Invalid state : " + playerStateEnum);
-        switch (playerStateEnum) {
-            case IDLE -> idle();
-            case DIE -> die();
-            case Move -> move(getStateMillis(OldPlayerStateEnum.Move));
+    public void startAction(NpcStateEnum stateEnum) {
+        switch (stateEnum) {
+            case Idle -> idle();
+            case Die -> die();
+            case Move -> move(getStateMillis(NpcStateEnum.Move));
         }
     }
 
@@ -135,30 +147,30 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
 
 
     void doHurtAction(ViolentCreature attacker, int millis) {
-        creatureState().moveToHurtCoordinate(this);
-        OldPlayerStateEnum afterHurt = creatureState().decideAfterHurtState();
-        changeState(new NpcHurtState(millis, creatureState(), attacker));
-        emitEvent(new CreatureHurtEvent(this, afterHurt));
-        hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+//        creatureState().moveToHurtCoordinate(this);
+//        OldPlayerStateEnum afterHurt = creatureState().decideAfterHurtState();
+//        changeState(new NpcHurtState(millis, creatureState(), attacker));
+//        emitEvent(new CreatureHurtEvent(this, afterHurt));
+//        hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
 
     private void idle() {
-        changeState(NpcCommonState.idle(getStateMillis(OldPlayerStateEnum.IDLE)));
-        emitEvent(new NpcChangeStateEvent(this, oldStateEnum()));
+        changeState(NpcCommonState.idle(this));
+        emitEvent(NpcChangeStateEvent.of(this));
     }
 
 
     @Override
     public void stay(int millis) {
-        changeState(NpcCommonState.idle(millis));
-        emitEvent(new NpcChangeStateEvent(this, oldStateEnum()));
+        changeState(NpcCommonState.idle(this, millis));
+        emitEvent(NpcChangeStateEvent.of(this));
     }
 
     @Override
     public void turn() {
-        changeState(NpcCommonState.turn(getStateMillis(OldPlayerStateEnum.Turn)));
-        emitEvent(new NpcChangeStateEvent(this, oldStateEnum()));
+        changeState(NpcCommonState.turn(this));
+        emitEvent(NpcChangeStateEvent.of(this));
     }
 
     @Override
@@ -169,10 +181,9 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
     }
 
     public void die() {
-        if (oldStateEnum() == OldPlayerStateEnum.DIE) {
+        if (isDead())
             return;
-        }
-        changeState(NpcCommonState.die(getStateMillis(OldPlayerStateEnum.DIE) + (findShiftSpell().isPresent() ? 2000 : 8000)));
+        changeState(NpcCommonState.die(this, getStateMillis(NpcStateEnum.Die) + (findShiftSpell().isPresent() ? 2000 : 8000)));
         emitEvent(new CreatureDieEvent(this));
         dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
         ai.onDead(this);
@@ -204,7 +215,7 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
 
     @Override
     public void onActionDone() {
-        if (oldStateEnum() == OldPlayerStateEnum.DIE) {
+        if (npcStateEnum() == NpcStateEnum.Die) {
             realmMap.free(this);
             emitEvent(new RemoveEntityEvent(this));
         }
@@ -218,9 +229,12 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
 
 
     protected boolean doAttacked(Damage damage, int attackerHit,
-                                 UnaryAction<Integer> gainAttackExp,
+                                 Consumer<Integer> gainAttackExp,
                                  ViolentCreature attacker) {
-        if (doAttackedAndGiveExp(damage, attackerHit, this::takeDamage, gainAttackExp) == 0) {
+        if (isDead() || isDodged(attackerHit)) {
+            return false;
+        }
+        if (getHurtAndGiveExp(damage, this::takeDamage, gainAttackExp) == 0) {
             return false;
         }
         if (currentLife() > 0) {
@@ -276,13 +290,6 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
         return Objects.hashCode(id());
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        return obj == this || (this.getClass().cast(obj)).id() == id();
-    }
 
     @Override
     public Optional<String> dieSound() {
@@ -320,21 +327,24 @@ public abstract class AbstractNpc extends IAbstractCreature<Npc, NpcState> imple
         return attributeProvider.shape();
     }
 
-    @Override
-    public NpcStateEnum npcStateEnum() {
-        return switch (oldStateEnum()) {
-            case DIE -> NpcStateEnum.Die;
-            case ATTACK -> NpcStateEnum.Attack;
-            case Move -> NpcStateEnum.Move;
-            case IDLE -> NpcStateEnum.Idle;
-            case HURT -> NpcStateEnum.Hurt;
-            case Turn -> NpcStateEnum.Turn;
-            default -> null;
-        };
-    }
 
     @Override
     public I2ClientMessage captureSnapshot() {
-        return NpcSnapshot.ofNpc(this, creatureState().elapsedMillis());
+        return NpcSnapshot.ofNpc(this, npcState().elapsedMillis());
+    }
+
+    @Override
+    public int getStateMillis(NpcStateEnum stateEnum) {
+        return stateMillis.get(stateEnum);
+    }
+
+    @Override
+    public NpcState npcState() {
+        return npcState;
+    }
+
+    @Override
+    public boolean canBeAttackedNow() {
+        return !isDead();
     }
 }

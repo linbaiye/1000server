@@ -18,7 +18,7 @@ public abstract class AbstractAI<N extends Npc> implements NpcAI {
     protected abstract void onMoveFailedNotDead(N n);
 
     private void invokeIfNoDead(Npc npc, Consumer<N> consumer) {
-        if (npc == null || npc.oldStateEnum() == OldPlayerStateEnum.DIE) {
+        if (npc == null || npc.isDead()) {
             if (npc != null)
                 npc.changeAndStartAI(NpcFrozenAI.INSTANCE);
             return;

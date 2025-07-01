@@ -118,7 +118,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
             player.handleClientEvent(new ClientToggleKungFuEvent(1, 1));
             monster.attackedBy(player);
         }
-        ICreatureState<?> state = monster.creatureState();
+        ICreatureState<?> state = monster.npcState();
         npcManager.update(state.totalMillis());
         Npc recreatedNpc = npcManager.find(2L).get();
         assertEquals("牛", recreatedNpc.idName());

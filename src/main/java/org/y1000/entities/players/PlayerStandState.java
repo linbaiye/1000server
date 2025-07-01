@@ -1,14 +1,18 @@
 package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.item.Equipment;
+import org.y1000.kungfu.FootKungFu;
+import org.y1000.kungfu.breath.BreathKungFu;
+import org.y1000.message.PlayerChangeStateMessage;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.message.input.MoveInput;
 import org.y1000.message.input.TurnInput;
 
-public final class PlayerStandState extends AbstractPlayerState {
-    private PlayerStandState(Player player, OldPlayerStateEnum stateEnum, int millis) {
-        super(player, stateEnum, millis);
+final class PlayerStandState extends AbstractPlayerState implements PlayerEquipableState {
+
+    private PlayerStandState(PlayerImpl player, PlayerStateEnum stateEnum) {
+        super(player, stateEnum, 1800);
     }
 
     @Override
@@ -19,7 +23,7 @@ public final class PlayerStandState extends AbstractPlayerState {
     }
 
     public void move(MoveInput moveInput) {
-        if (stateEnum() == OldPlayerStateEnum.IDLE) {
+        if (playerStateEnum() == PlayerStateEnum.Idle) {
             player().changeState(PlayerMoveState.noneFightMove(player(), moveInput));
         } else {
             player().changeState(PlayerMoveState.fightWalk(player(), moveInput));
@@ -31,13 +35,65 @@ public final class PlayerStandState extends AbstractPlayerState {
         player().emitEvent(SetPositionEvent.of(player()));
     }
 
-    public static PlayerStandState idle(Player player) {
-        Validate.notNull(player);
-        return new PlayerStandState(player, OldPlayerStateEnum.IDLE, player.getStateMillis(OldPlayerStateEnum.IDLE));
+    @Override
+    public void sitOrStandUp() {
+        if (playerStateEnum() == PlayerStateEnum.Idle ||
+                PlayerStateEnum.FightStand == playerStateEnum()) {
+            player().disableFootKungFu();
+            player().changeState(PlayerSitDownState.sit(player()));
+            player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
+        }
     }
 
-    public static PlayerStandState fightStand(Player player) {
+    @Override
+    public void switchStand() {
+        player().disableFootKungFu();
+        if (playerStateEnum() == PlayerStateEnum.Idle) {
+            player().changeState(PlayerStandState.fightStand(player()));
+        } else if (playerStateEnum() == PlayerStateEnum.FightStand) {
+            player().changeState(PlayerStandState.idle(player()));
+        } else {
+            return;
+        }
+        player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
+    }
+
+
+    @Override
+    public void doubleClickFootKungFu(FootKungFu footKungFu) {
+        if (playerStateEnum() == PlayerStateEnum.FightStand) {
+            switchStand();
+        }
+        player().toggleFootKungFu(footKungFu);
+    }
+
+    @Override
+    public void sayHello() {
+        if (playerStateEnum() == PlayerStateEnum.Idle) {
+            player().changeState(new PlayerHelloState(player()));
+            player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
+        }
+    }
+
+    @Override
+    public void doubleClickBreathKungFu(BreathKungFu breathKungFu) {
+        player().toggleBreathKungFu(breathKungFu);
+        player().changeState(PlayerSitDownState.sit(player()));
+        player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
+    }
+
+    public static PlayerStandState idle(PlayerImpl player) {
         Validate.notNull(player);
-        return new PlayerStandState(player, OldPlayerStateEnum.FightStand, player.getStateMillis(OldPlayerStateEnum.FightStand));
+        return new PlayerStandState(player, PlayerStateEnum.Idle);
+    }
+
+    public static PlayerStandState fightStand(PlayerImpl player) {
+        Validate.notNull(player);
+        return new PlayerStandState(player, PlayerStateEnum.FightStand);
+    }
+
+    @Override
+    public void equip(int slot, Equipment equipment) {
+        player().tryEquipFromSlot(slot, equipment);
     }
 }

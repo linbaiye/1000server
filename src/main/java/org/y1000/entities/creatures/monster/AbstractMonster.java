@@ -19,7 +19,7 @@ import java.util.Optional;
 public abstract class AbstractMonster extends AbstractViolentNpc implements Monster {
 
     private final NpcAI initAi;
-    public AbstractMonster(long id, Coordinate coordinate, Direction direction, String name, Map<OldPlayerStateEnum, Integer> stateMillis,
+    public AbstractMonster(long id, Coordinate coordinate, Direction direction, String name, Map<NpcStateEnum, Integer> stateMillis,
                            AttributeProvider attributeProvider,
                            RealmMap realmMap,
                            NpcAI ai, NpcRangedSkill sk, List<NpcSpell> spellList) {

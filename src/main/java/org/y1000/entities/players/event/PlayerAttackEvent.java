@@ -24,7 +24,8 @@ public final class PlayerAttackEvent extends AbstractCreatureAttackEvent
     }
 
     public static PlayerAttackEvent of(Player player, Integer effectId) {
-        return new PlayerAttackEvent(player, player.oldStateEnum(), effectId);
+        return null;
+//        return new PlayerAttackEvent(player, player.oldStateEnum(), effectId);
     }
 
      @Override

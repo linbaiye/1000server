@@ -34,7 +34,7 @@ public final class PlayerSnapshot extends AbstractInsightPlayerMessage {
         return PlayerSnapshotPacket.newBuilder()
                 .setMoveAction(moveAction != null ? moveAction.value() : -1)
                 .setBaseInfo(baseInfoSnapshot)
-                .setState(player.state().stateEnum().value())
+                .setState(player.state().playerStateEnum().value())
                 .setMale(player.isMale())
                 .addAllEquipments(equipments)
                 .build();

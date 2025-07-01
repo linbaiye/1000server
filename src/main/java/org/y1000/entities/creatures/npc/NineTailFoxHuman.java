@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
+import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -20,20 +20,20 @@ public final class NineTailFoxHuman extends AbstractNpc {
 
     @Builder
     public NineTailFoxHuman(long id, Coordinate coordinate, Direction direction, String name,
-                            Map<OldPlayerStateEnum, Integer> stateMillis, AttributeProvider attributeProvider,
+                            Map<NpcStateEnum, Integer> stateMillis, AttributeProvider attributeProvider,
                             RealmMap realmMap, SubmissiveWanderingAI ai) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, Collections.emptyList(), ai);
     }
 
     @Override
     public void update(int delta) {
-        creatureState().update(this, delta);
+        npcState().update(delta);
     }
 
 
     @Override
     void hurt(ViolentCreature attacker) {
-        doHurtAction(attacker, getStateMillis(OldPlayerStateEnum.HURT));
+        doHurtAction(attacker, getStateMillis(NpcStateEnum.Hurt));
     }
 
     @Override

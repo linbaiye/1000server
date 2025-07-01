@@ -20,9 +20,10 @@ import java.util.Map;
 
 @Slf4j
 public final class AggressiveMonster extends AbstractMonster implements AggressiveNpc  {
+
     @Builder
     public AggressiveMonster(long id, Coordinate coordinate, Direction direction,
-                             String name, Map<OldPlayerStateEnum, Integer> stateMillis,
+                             String name, Map<NpcStateEnum, Integer> stateMillis,
                              AttributeProvider attributeProvider,
                              RealmMap realmMap, NpcRangedSkill skill, NpcAI ai, List<NpcSpell> spells) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider,

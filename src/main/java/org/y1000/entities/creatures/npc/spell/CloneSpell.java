@@ -20,7 +20,7 @@ public final class CloneSpell implements NpcSpell {
 
     @Override
     public boolean canCast(Npc npc) {
-        return !casted && npc.oldStateEnum() != OldPlayerStateEnum.DIE &&
+        return !casted && !npc.isDead() &&
                 ((float)npc.currentLife() / npc.maxLife()) * 100 <= lifePercent;
     }
 

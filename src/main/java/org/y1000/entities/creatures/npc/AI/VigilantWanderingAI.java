@@ -23,8 +23,8 @@ public final class VigilantWanderingAI extends AbstractMonsterWanderingAI {
 
     @Override
     protected void onMonsterActionDone(Monster npc) {
-        if (npc.creatureState() instanceof NpcHurtState hurtState) {
-            escape(npc, hurtState.attacker());
+        if (npc.npcState() instanceof NpcHurtState hurtState) {
+//            escape(npc, hurtState.attacker());
             return;
         }
         SeekPlayerEvent event = new SeekPlayerEvent(npc);

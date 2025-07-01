@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.y1000.entities.AttackableActiveEntity;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
-import org.y1000.entities.players.fight.PlayerAttackState;
 import org.y1000.message.input.ClientAttackEvent;
 
 public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {
@@ -15,10 +14,10 @@ public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {
 
     protected abstract Logger logger();
 
-    protected PlayerAttackState useResourcesAndCreateState(PlayerImpl player) {
-        useAttributeResources(player);
-        return PlayerAttackState.melee(player);
-    }
+//    protected PlayerAttackState useResourcesAndCreateState(PlayerImpl player) {
+//        useAttributeResources(player);
+//        return PlayerAttackState.melee(player);
+//    }
 
     protected boolean checkResourcesAndSendError(Player player) {
         var text = checkAttributeResources(player);

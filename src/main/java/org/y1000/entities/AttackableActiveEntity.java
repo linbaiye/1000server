@@ -22,7 +22,6 @@ public interface AttackableActiveEntity extends ActiveEntity {
     RealmMap realmMap();
 
 
-
     default boolean canBeMeleeAt(Coordinate coordinate) {
         return coordinate != null && coordinate().directDistance(coordinate) < 2;
     }

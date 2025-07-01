@@ -10,7 +10,7 @@ public record MoveInput(Coordinate from, Direction direction) implements SelfHan
         handler.move(this);
     }
 
-    public Coordinate target() {
+    public Coordinate destination() {
         return from.moveBy(direction);
     }
 }
