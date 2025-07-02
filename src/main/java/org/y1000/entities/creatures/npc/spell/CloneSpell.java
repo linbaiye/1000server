@@ -1,8 +1,7 @@
 package org.y1000.entities.creatures.npc.spell;
 
 import lombok.Getter;
-import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.event.NpcCastCloneEvent;
 import org.y1000.entities.creatures.npc.Npc;
 
@@ -24,7 +23,7 @@ public final class CloneSpell implements NpcSpell {
                 ((float)npc.currentLife() / npc.maxLife()) * 100 <= lifePercent;
     }
 
-    public void castIfAvailable(Npc npc, AttackableActiveEntity entity) {
+    public void castIfAvailable(Npc npc, AttackableEntity entity) {
         if (canCast(npc)) {
             casted = true;
             npc.emitEvent(new NpcCastCloneEvent(npc, number, entity));

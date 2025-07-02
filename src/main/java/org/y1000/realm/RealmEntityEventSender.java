@@ -175,7 +175,7 @@ final class RealmEntityEventSender implements EntityEventListener,
 
     @Override
     public void visit(PlayerAttackAoeEvent event) {
-        Set<AttackableActiveEntity> entities = scopeManager.filterVisibleEntities(event.source(), AttackableActiveEntity.class);
+        Set<AttackableEntity> entities = scopeManager.filterVisibleEntities(event.source(), AttackableEntity.class);
         event.affect(entities);
     }
 

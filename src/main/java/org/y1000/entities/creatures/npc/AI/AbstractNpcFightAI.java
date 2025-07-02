@@ -2,9 +2,8 @@ package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.monster.Monster;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
@@ -20,7 +19,7 @@ import org.y1000.util.Coordinate;
 @Slf4j
 @Deprecated
 public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
-    private AttackableActiveEntity enemy;
+    private AttackableEntity enemy;
 
     protected final ViolentNpc npc;
 
@@ -28,7 +27,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
 
     private final int speedRate;
 
-    public AbstractNpcFightAI(AttackableActiveEntity enemy,
+    public AbstractNpcFightAI(AttackableEntity enemy,
                               ViolentNpc npc, int speedRate) {
         Validate.isTrue(speedRate > 0);
         Validate.notNull(enemy);
@@ -54,11 +53,11 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
         return previous;
     }
 
-    protected AttackableActiveEntity getEnemy() {
+    protected AttackableEntity getEnemy() {
         return enemy;
     }
 
-    protected abstract boolean shouldChangeEnemy(AttackableActiveEntity newEnemy);
+    protected abstract boolean shouldChangeEnemy(AttackableEntity newEnemy);
 
 
     int computeWalkMillis() {

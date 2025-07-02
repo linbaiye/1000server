@@ -2,7 +2,7 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
 import org.y1000.entities.creatures.npc.Npc;
@@ -24,6 +24,7 @@ import org.y1000.util.UnaryAction;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -215,9 +216,9 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         if (dataEvent.data() instanceof ClientPickItemEvent event) {
             itemManager.pickItem(dataEvent.player(), event.id());
         } else if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
-            npcManager.find(attackEvent.entityId(), AttackableActiveEntity.class)
-                    .or(() -> find(attackEvent.entityId(), AttackableActiveEntity.class))
-                    .or(() -> dynamicObjectManager.find(attackEvent.entityId(), AttackableActiveEntity.class))
+            npcManager.find(attackEvent.entityId(), AttackableEntity.class)
+                    .or(() -> find(attackEvent.entityId(), AttackableEntity.class))
+                    .or(() -> dynamicObjectManager.find(attackEvent.entityId(), AttackableEntity.class))
                     .ifPresent(attackableEntity -> dataEvent.player().attack(attackEvent, attackableEntity));
         } else if (dataEvent.data() instanceof ClientTradePlayerEvent tradePlayerEvent) {
             find(tradePlayerEvent.targetId(), Player.class).ifPresent(tradee -> tradeManager.start(dataEvent.player(), tradee, tradePlayerEvent.slot()));
@@ -261,6 +262,11 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     @Override
     public void handleInput(Connection connection, SelfHandleInput input) {
         eventSender.findPlayer(connection).ifPresent(p -> p.handleInput(input));
+    }
+
+    @Override
+    public Optional<Player> find(Connection connection) {
+        return eventSender.findPlayer(connection);
     }
 
 

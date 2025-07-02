@@ -162,7 +162,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
                 tx.rollback();
                 return;
             }
-            itemRepository.saveEquipments(entityManager, player.getEquipments());
+//            itemRepository.saveEquipments(entityManager, player.getEquipments());
             playerPo.merge(player);
             kungFuRepository.save(entityManager, playerPo.getId(), player.kungFuBook());
             itemRepository.saveInventory(entityManager, player.id(), player.inventory());

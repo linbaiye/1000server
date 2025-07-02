@@ -1,12 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.creatures.IAbstractCreatureState;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.creatures.event.MonsterShootEvent;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.projectile.NpcProjectile;
 
 public final class NpcRangedAttackState implements NpcState {
 

@@ -1,8 +1,7 @@
 package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.ViolentNpc;
@@ -12,17 +11,17 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
 
     private final Chatter chatter;
 
-    public ViolentNpcMeleeFightAI(AttackableActiveEntity enemy,
+    public ViolentNpcMeleeFightAI(AttackableEntity enemy,
                                   ViolentNpc npc) {
         this(enemy, npc, npc.skill().isPresent() ? 2 : 1);
     }
 
-    public ViolentNpcMeleeFightAI(AttackableActiveEntity enemy,
+    public ViolentNpcMeleeFightAI(AttackableEntity enemy,
                                   ViolentNpc npc, int speedRate) {
         this(enemy, npc, speedRate, null);
     }
 
-    public ViolentNpcMeleeFightAI(AttackableActiveEntity enemy,
+    public ViolentNpcMeleeFightAI(AttackableEntity enemy,
                                   ViolentNpc npc, int speedRate,
                                   Chatter chatter) {
         super(enemy, npc, speedRate);
@@ -42,7 +41,7 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
             return;
         }
         turnIfNotFaced();
-        if (npc.cooldown() > 0) {
+        if (npc.maxCooldown() > 0) {
             npc.startAction(NpcStateEnum.Turn);
         } else {
             //log.debug("Creature attack at {}, direction {}.", npc.coordinate(), npc.direction());
@@ -52,7 +51,7 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
     }
 
     @Override
-    protected boolean shouldChangeEnemy(AttackableActiveEntity newEnemy) {
+    protected boolean shouldChangeEnemy(AttackableEntity newEnemy) {
         return getEnemy().coordinate().directDistance(npc.coordinate()) > 1;
     }
 

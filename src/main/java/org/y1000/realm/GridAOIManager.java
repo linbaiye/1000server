@@ -25,12 +25,12 @@ final class GridAOIManager implements AOIManager {
 
 
     private Set<Entity> filterVisible(Entity entity, Coordinate coordinate) {
-        int yStart = Math.max(0, coordinate.y() - entity.VISIBLE_Y_RANGE);
-        int yEnd = Math.min(height - 1, coordinate.y() + entity.VISIBLE_Y_RANGE);
+        int yStart = Math.max(0, coordinate.y() - Coordinate.VISIBLE_Y_RANGE);
+        int yEnd = Math.min(height - 1, coordinate.y() + Coordinate.VISIBLE_Y_RANGE);
         Set<Entity> result = new HashSet<>();
         for (int y = yStart; y <= yEnd; y++) {
-            int start = Math.max(0, coordinate.x() - entity.VISIBLE_X_RANGE);
-            int end = Math.min(width - 1, coordinate.x() + entity.VISIBLE_X_RANGE);
+            int start = Math.max(0, coordinate.x() - Coordinate.VISIBLE_X_RANGE);
+            int end = Math.min(width - 1, coordinate.x() + Coordinate.VISIBLE_X_RANGE);
             for (int x = start; x <= end; x++) {
                 List<Entity> entities = mapGrids[y][x];
                 if (entities != null && !entities.isEmpty()) {

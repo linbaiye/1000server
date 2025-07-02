@@ -1,6 +1,6 @@
 package org.y1000.entities.players.event;
 
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 
@@ -17,7 +17,7 @@ public record PlayerStartTradeEvent(Player starter, int slot, long targetPlayerI
     }
 
     @Override
-    public AttackableActiveEntity source() {
+    public AttackableEntity source() {
         return starter;
     }
 }

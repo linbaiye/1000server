@@ -81,6 +81,7 @@ private static final long serialVersionUID = 0L;
     SIMPLEINPUT(34),
     CLICKKUNGFUINPUT(35),
     CLICKINVENTORYSLOTINPUT(36),
+    ATTACKINPUT(37),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -134,6 +135,7 @@ private static final long serialVersionUID = 0L;
         case 34: return SIMPLEINPUT;
         case 35: return CLICKKUNGFUINPUT;
         case 36: return CLICKINVENTORYSLOTINPUT;
+        case 37: return ATTACKINPUT;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -1265,6 +1267,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClickInventorySlotInputPacket.getDefaultInstance();
   }
 
+  public static final int ATTACKINPUT_FIELD_NUMBER = 37;
+  /**
+   * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+   * @return Whether the attackInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasAttackInput() {
+    return typeCase_ == 37;
+  }
+  /**
+   * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+   * @return The attackInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AttackInputPacket getAttackInput() {
+    if (typeCase_ == 37) {
+       return (org.y1000.network.gen.AttackInputPacket) type_;
+    }
+    return org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AttackInputPacketOrBuilder getAttackInputOrBuilder() {
+    if (typeCase_ == 37) {
+       return (org.y1000.network.gen.AttackInputPacket) type_;
+    }
+    return org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1386,6 +1419,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 36) {
       output.writeMessage(36, (org.y1000.network.gen.ClickInventorySlotInputPacket) type_);
+    }
+    if (typeCase_ == 37) {
+      output.writeMessage(37, (org.y1000.network.gen.AttackInputPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1539,6 +1575,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 36) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(36, (org.y1000.network.gen.ClickInventorySlotInputPacket) type_);
+    }
+    if (typeCase_ == 37) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(37, (org.y1000.network.gen.AttackInputPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1701,6 +1741,10 @@ private static final long serialVersionUID = 0L;
         if (!getClickInventorySlotInput()
             .equals(other.getClickInventorySlotInput())) return false;
         break;
+      case 37:
+        if (!getAttackInput()
+            .equals(other.getAttackInput())) return false;
+        break;
       case 0:
       default:
     }
@@ -1859,6 +1903,10 @@ private static final long serialVersionUID = 0L;
       case 36:
         hash = (37 * hash) + CLICKINVENTORYSLOTINPUT_FIELD_NUMBER;
         hash = (53 * hash) + getClickInventorySlotInput().hashCode();
+        break;
+      case 37:
+        hash = (37 * hash) + ATTACKINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getAttackInput().hashCode();
         break;
       case 0:
       default:
@@ -2103,6 +2151,9 @@ private static final long serialVersionUID = 0L;
       if (clickInventorySlotInputBuilder_ != null) {
         clickInventorySlotInputBuilder_.clear();
       }
+      if (attackInputBuilder_ != null) {
+        attackInputBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -2293,6 +2344,10 @@ private static final long serialVersionUID = 0L;
           clickInventorySlotInputBuilder_ != null) {
         result.type_ = clickInventorySlotInputBuilder_.build();
       }
+      if (typeCase_ == 37 &&
+          attackInputBuilder_ != null) {
+        result.type_ = attackInputBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -2482,6 +2537,10 @@ private static final long serialVersionUID = 0L;
         }
         case CLICKINVENTORYSLOTINPUT: {
           mergeClickInventorySlotInput(other.getClickInventorySlotInput());
+          break;
+        }
+        case ATTACKINPUT: {
+          mergeAttackInput(other.getAttackInput());
           break;
         }
         case TYPE_NOT_SET: {
@@ -2766,6 +2825,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 36;
               break;
             } // case 290
+            case 298: {
+              input.readMessage(
+                  getAttackInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 37;
+              break;
+            } // case 298
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -7909,6 +7975,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 36;
       onChanged();
       return clickInventorySlotInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AttackInputPacket, org.y1000.network.gen.AttackInputPacket.Builder, org.y1000.network.gen.AttackInputPacketOrBuilder> attackInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     * @return Whether the attackInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasAttackInput() {
+      return typeCase_ == 37;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     * @return The attackInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.AttackInputPacket getAttackInput() {
+      if (attackInputBuilder_ == null) {
+        if (typeCase_ == 37) {
+          return (org.y1000.network.gen.AttackInputPacket) type_;
+        }
+        return org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 37) {
+          return attackInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    public Builder setAttackInput(org.y1000.network.gen.AttackInputPacket value) {
+      if (attackInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        attackInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 37;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    public Builder setAttackInput(
+        org.y1000.network.gen.AttackInputPacket.Builder builderForValue) {
+      if (attackInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        attackInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 37;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    public Builder mergeAttackInput(org.y1000.network.gen.AttackInputPacket value) {
+      if (attackInputBuilder_ == null) {
+        if (typeCase_ == 37 &&
+            type_ != org.y1000.network.gen.AttackInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.AttackInputPacket.newBuilder((org.y1000.network.gen.AttackInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 37) {
+          attackInputBuilder_.mergeFrom(value);
+        } else {
+          attackInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 37;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    public Builder clearAttackInput() {
+      if (attackInputBuilder_ == null) {
+        if (typeCase_ == 37) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 37) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        attackInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    public org.y1000.network.gen.AttackInputPacket.Builder getAttackInputBuilder() {
+      return getAttackInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.AttackInputPacketOrBuilder getAttackInputOrBuilder() {
+      if ((typeCase_ == 37) && (attackInputBuilder_ != null)) {
+        return attackInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 37) {
+          return (org.y1000.network.gen.AttackInputPacket) type_;
+        }
+        return org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AttackInputPacket, org.y1000.network.gen.AttackInputPacket.Builder, org.y1000.network.gen.AttackInputPacketOrBuilder> 
+        getAttackInputFieldBuilder() {
+      if (attackInputBuilder_ == null) {
+        if (!(typeCase_ == 37)) {
+          type_ = org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+        }
+        attackInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.AttackInputPacket, org.y1000.network.gen.AttackInputPacket.Builder, org.y1000.network.gen.AttackInputPacketOrBuilder>(
+                (org.y1000.network.gen.AttackInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 37;
+      onChanged();
+      return attackInputBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

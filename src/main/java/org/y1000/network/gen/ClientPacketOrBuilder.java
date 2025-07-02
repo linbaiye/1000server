@@ -548,5 +548,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClickInventorySlotInputPacketOrBuilder getClickInventorySlotInputOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+   * @return Whether the attackInput field is set.
+   */
+  boolean hasAttackInput();
+  /**
+   * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+   * @return The attackInput.
+   */
+  org.y1000.network.gen.AttackInputPacket getAttackInput();
+  /**
+   * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+   */
+  org.y1000.network.gen.AttackInputPacketOrBuilder getAttackInputOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

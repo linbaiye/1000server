@@ -1,5 +1,6 @@
 package org.y1000.realm;
 
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.message.input.Login;
@@ -10,6 +11,7 @@ import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
 
+import java.util.Optional;
 import java.util.Set;
 
 interface PlayerManager extends ActiveEntityManager<Player> {
@@ -36,6 +38,8 @@ interface PlayerManager extends ActiveEntityManager<Player> {
 
 
     void handleInput(Connection connection, SelfHandleInput input);
+
+    Optional<Player> find(Connection connection);
 
     default void shutdown() {
 

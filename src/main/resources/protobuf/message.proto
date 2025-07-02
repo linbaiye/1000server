@@ -317,6 +317,7 @@ message ClientPacket {
     SimpleInputPacket simpleInput = 34;
     ClickKungFuInputPacket clickKungFuInput = 35;
     ClickInventorySlotInputPacket clickInventorySlotInput = 36;
+    AttackInputPacket attackInput = 37;
   }
 }
 
@@ -509,7 +510,6 @@ message ProjectilePacket {
   int32 flyingTimeMillis = 3;
   int32 sprite = 4;
 }
-
 message ItemAttributePacket {
   int32 type = 1;
   int32 slotId = 2;
@@ -680,6 +680,7 @@ message Packet {
     CreatureSayPacket say = 61;
     SyncActiveKungFuPacket activeKungFuList = 62;
     PlayerChangeStatePacket playerChangeState = 63;
+    PlayerAttackPacket attack = 64;
   }
 }
 
@@ -818,4 +819,16 @@ message PlayerChangeStatePacket {
   int64 id = 1;
   int32 state = 2;
   int32 direction = 3;
+}
+
+
+message PlayerAttackPacket {
+  int64 id = 1;
+  int32 action = 2;
+  int32 direction = 3;
+  int32 effectSprite = 5;
+}
+
+message AttackInputPacket {
+  int64 id = 64;
 }

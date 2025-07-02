@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.event;
 
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.message.AbstractClientMessage;
 import org.y1000.event.IEntityEvent;
@@ -18,7 +18,7 @@ public abstract class AbstractCreatureEvent extends AbstractClientMessage implem
     }
 
     @Override
-    public AttackableActiveEntity source() {
+    public AttackableEntity source() {
         return source;
     }
 }

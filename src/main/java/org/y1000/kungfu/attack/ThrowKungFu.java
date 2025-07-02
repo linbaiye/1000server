@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.players.AttackAction;
 import org.y1000.item.ItemType;
 import org.y1000.kungfu.KungFu;
 
@@ -29,6 +30,11 @@ public final class ThrowKungFu extends AbstractRangedKungFu {
     @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.THROW;
+    }
+
+    @Override
+    public AttackAction computeAttackAction() {
+        return AttackAction.Throw;
     }
 
 

@@ -96,7 +96,7 @@ class PlayerAttackPlayerStateTestEnum extends AbstractPlayerUnitTestFixture  {
     void emitProjectileEvent() {
         TestingEventListener eventListener = new TestingEventListener();
         player = playerBuilder().attackKungFu(kungFuBookFactory.create().findUnnamedAttack(AttackKungFuType.BOW)).build();
-        player.setFightingEntity(monsterBuilder().coordinate(Coordinate.xy(2, 2)).build());
+        player.setEnemy(monsterBuilder().coordinate(Coordinate.xy(2, 2)).build());
         player.registerEventListener(eventListener);
         var state = PlayerAttackState.ranged(player, 2);
         state.update(player, state.totalMillis());
@@ -135,11 +135,11 @@ class PlayerAttackPlayerStateTestEnum extends AbstractPlayerUnitTestFixture  {
         enableBowKungFu();
 
         var monster = monsterBuilder().coordinate(player.coordinate().move(3, 0)).build();
-        player.setFightingEntity(monster);
+        player.setEnemy(monster);
         player.changeState(PlayerAttackState.ranged(player, 2));
         monster.changeState(NpcCommonState.die(1000));
         player.onEvent(new CreatureDieEvent(monster));
-        assertNull(player.getFightingEntity());
+        assertNull(player.getEnemy());
         player.update(player.getStateMillis(OldPlayerStateEnum.BOW));
 
         // shoot anyway as state changed before creature died.

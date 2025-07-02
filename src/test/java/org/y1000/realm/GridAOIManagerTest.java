@@ -4,11 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.util.Coordinate;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,14 +61,14 @@ class GridAOIManagerTest {
         assertTrue(added.contains(e3));
 
 
-        build(Entity.VISIBLE_X_RANGE * 2, Entity.VISIBLE_Y_RANGE * 2);
+        build(Coordinate.VISIBLE_X_RANGE * 2, Coordinate.VISIBLE_Y_RANGE * 2);
         e1 = mockEntity(0, 0);
         manager.add(e1);
-        e2 = mockEntity(0, Entity.VISIBLE_Y_RANGE);
+        e2 = mockEntity(0, Coordinate.VISIBLE_Y_RANGE);
         assertTrue(manager.add(e2).contains(e1));
-        when(e2.coordinate()).thenReturn(Coordinate.xy(0, Entity.VISIBLE_Y_RANGE+ 1));
+        when(e2.coordinate()).thenReturn(Coordinate.xy(0, Coordinate.VISIBLE_Y_RANGE+ 1));
         assertTrue(manager.add(e2).isEmpty());
-        when(e2.coordinate()).thenReturn(Coordinate.xy(Entity.VISIBLE_X_RANGE, Entity.VISIBLE_Y_RANGE));
+        when(e2.coordinate()).thenReturn(Coordinate.xy(Coordinate.VISIBLE_X_RANGE, Coordinate.VISIBLE_Y_RANGE));
     }
 
     @Test
@@ -92,13 +90,13 @@ class GridAOIManagerTest {
         manager.add(e1);
         var e2 = mockEntity(10, 11);
         manager.add(e2);
-        var e3 = mockEntity(10, 11 + Entity.VISIBLE_Y_RANGE + 2);
+        var e3 = mockEntity(10, 11 + Coordinate.VISIBLE_Y_RANGE + 2);
         manager.add(e3);
-        var e4 = mockEntity(10, Entity.VISIBLE_Y_RANGE);
+        var e4 = mockEntity(10, Coordinate.VISIBLE_Y_RANGE);
         manager.add(e4);
         Set<Entity> affected = manager.update(e1);
         assertTrue(affected.isEmpty());
-        when(e1.coordinate()).thenReturn(Coordinate.xy(10, 11 + Entity.VISIBLE_Y_RANGE + 1));
+        when(e1.coordinate()).thenReturn(Coordinate.xy(10, 11 + Coordinate.VISIBLE_Y_RANGE + 1));
         affected = manager.update(e1);
         assertTrue(affected.contains(e2));
         assertTrue(affected.contains(e3));
@@ -111,8 +109,8 @@ class GridAOIManagerTest {
             entities[h] = entity;
             manager.add(entity);
         }
-        e4 = mockEntity(Entity.VISIBLE_X_RANGE, 0);
-        var e5 = mockEntity(Entity.VISIBLE_X_RANGE * 2 + 1, 0);
+        e4 = mockEntity(Coordinate.VISIBLE_X_RANGE, 0);
+        var e5 = mockEntity(Coordinate.VISIBLE_X_RANGE * 2 + 1, 0);
         manager.add(e4);
         manager.add(e5);
         var visible = manager.filterVisibleEntities(e4, Entity.class);
@@ -123,7 +121,7 @@ class GridAOIManagerTest {
             assertTrue(manager.filterVisibleEntities(entities[h], Entity.class).contains(e4));
         }
 
-        when(e4.coordinate()).thenReturn(Coordinate.xy(Entity.VISIBLE_X_RANGE + 1, 0));
+        when(e4.coordinate()).thenReturn(Coordinate.xy(Coordinate.VISIBLE_X_RANGE + 1, 0));
         affected = manager.update(e4);
         assertEquals(4, affected.size());
         assertTrue(affected.contains(e5));
@@ -136,7 +134,7 @@ class GridAOIManagerTest {
 
     @Test
     void remove() {
-        build(Entity.VISIBLE_X_RANGE * 2, Entity.VISIBLE_Y_RANGE * 2);
+        build(Coordinate.VISIBLE_X_RANGE * 2, Coordinate.VISIBLE_Y_RANGE * 2);
         Entity e1 = mockEntity(1, 1);
         assertFalse(manager.contains(e1));
     }

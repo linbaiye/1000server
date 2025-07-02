@@ -1,25 +1,14 @@
 package org.y1000.entities.players.event;
 
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.message.serverevent.PlayerEventVisitor;
+import org.y1000.message.AbstractPlayerMessage;
 import org.y1000.network.gen.AttributePacket;
 import org.y1000.network.gen.Packet;
 
-public final class PlayerAttributeEvent extends AbstractPlayerEvent{
-    public PlayerAttributeEvent(Player source) {
-        super(source, true);
-    }
-
-    @Override
-    public void accept(PlayerEventVisitor playerEventHandler) {
-        playerEventHandler.visit(this);
-    }
-
-    @Override
-    protected Packet buildPacket() {
-        return Packet.newBuilder()
-                .setAttribute(makeAttributePacket(player()))
-                .build();
+public final class PlayerAttributeMessage extends AbstractPlayerMessage {
+    public PlayerAttributeMessage(Player source, Packet packet) {
+        super(source, packet);
     }
 
     public static AttributePacket makeAttributePacket(Player player) {
@@ -38,5 +27,12 @@ public final class PlayerAttributeEvent extends AbstractPlayerEvent{
                 .setHeadPercent(player.headPercent())
                 .setLegPercent(player.legPercent())
                 .build();
+    }
+
+    public static PlayerAttributeMessage of(Player player) {
+        Validate.notNull(player);
+        return new PlayerAttributeMessage(player, Packet.newBuilder()
+                .setAttribute(makeAttributePacket(player))
+                .build());
     }
 }

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.monster.PassiveMonster;
@@ -131,20 +130,20 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         int actual = (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS;
         kungFu.startAttack(player, clientAttackEvent, monster);
-        assertEquals(player.getFightingEntity(), monster);
+        assertEquals(player.getEnemy(), monster);
         PlayerAttackEventResponse entityEvent = playerEventListener.removeFirst(PlayerAttackEventResponse.class);
         assertEquals(player.direction(), clientAttackEvent.direction());
         assertTrue(entityEvent.isAccepted());
         assertInstanceOf(PlayerAttackState.class, player.creatureState());
-        assertEquals(actual, player.cooldown());
+        assertEquals(actual, player.maxCooldown());
     }
 
 
     @Test
     void startAttack_noEffectWhenOutOfView() {
-        var monster = createMonster(player.coordinate().move(0, Entity.VISIBLE_Y_RANGE + 1));
+        var monster = createMonster(player.coordinate().move(0, Coordinate.VISIBLE_Y_RANGE + 1));
         kungFu.startAttack(player, clientAttackEvent, monster);
-        assertNull(player.getFightingEntity());
+        assertNull(player.getEnemy());
         var entityEvent = playerEventListener.dequeue(PlayerAttackEventResponse.class);
         assertFalse(entityEvent.isAccepted());
         assertEquals(OldPlayerStateEnum.IDLE, player.oldStateEnum());
@@ -154,12 +153,12 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     @Test
     void startAttack_changeTarget() {
         PassiveMonster monster = createMonster( player.coordinate().moveBy(clientAttackEvent.direction()));
-        player.setFightingEntity(monster);
+        player.setEnemy(monster);
         player.cooldownAttack();
 
         PassiveMonster another = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
         kungFu.startAttack(player, clientAttackEvent, another);
-        assertEquals(player.getFightingEntity(), another);
+        assertEquals(player.getEnemy(), another);
         assertTrue(player.creatureState() instanceof PlayerCooldownState);
     }
 
@@ -167,12 +166,12 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     void attackAgain() {
         System.out.println(kungFu.attackSpeed());
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
-        player.setFightingEntity(monster);
+        player.setEnemy(monster);
         var expectedCooldown = (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS;
         kungFu.attackAgain(player);
         PlayerAttackEvent event = playerEventListener.removeFirst(PlayerAttackEvent.class);
         assertNotNull(event);
-        assertEquals(expectedCooldown, player.cooldown());
+        assertEquals(expectedCooldown, player.maxCooldown());
         assertTrue(player.creatureState() instanceof PlayerAttackState);
         assertEquals(player.direction(), Direction.UP);
     }
@@ -180,20 +179,20 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     @Test
     void attackAgainWhenNoEnoughPower() {
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
-        player.setFightingEntity(monster);
+        player.setEnemy(monster);
         int actual = (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS;
         kungFu.attackAgain(player);
         PlayerAttackEvent event = playerEventListener.removeFirst(PlayerAttackEvent.class);
         assertNotNull(event);
-        assertEquals(actual, player.cooldown());
+        assertEquals(actual, player.maxCooldown());
         assertTrue(player.creatureState() instanceof PlayerAttackState);
         assertEquals(player.direction(), Direction.UP);
     }
 
     @Test
     void attackAgain_whenTargetOutOfView() {
-        PassiveMonster monster = createMonster( player.coordinate().move(Entity.VISIBLE_X_RANGE + 1, 0));
-        player.setFightingEntity(monster);
+        PassiveMonster monster = createMonster( player.coordinate().move(Coordinate.VISIBLE_X_RANGE + 1, 0));
+        player.setEnemy(monster);
         kungFu.attackAgain(player);
         assertSame(player.oldStateEnum(), OldPlayerStateEnum.FightStand);
         assertTrue(player.creatureState() instanceof PlayerStillState);
@@ -202,10 +201,10 @@ class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
     @Test
     void attackAgain_whenStillCooldown() {
         PassiveMonster monster = createMonster(player.coordinate().moveBy(clientAttackEvent.direction()));
-        player.setFightingEntity(monster);
+        player.setEnemy(monster);
         player.cooldownAttack();
         kungFu.attackAgain(player);
-        assertEquals(player.cooldown(), (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS);
+        assertEquals(player.maxCooldown(), (70 + kungFu.attackSpeed()) * Realm.STEP_MILLIS);
         assertTrue(player.creatureState() instanceof PlayerCooldownState);
     }
 

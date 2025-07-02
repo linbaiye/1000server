@@ -2,11 +2,9 @@ package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.item.Pill;
 import org.y1000.message.PlayerTextEvent;
-
-import java.util.stream.Stream;
 
 public final class PillSlots {
 
@@ -98,6 +96,6 @@ public final class PillSlots {
             }
         }
         if (needSync)
-            player.emitEvent(new PlayerAttributeEvent(player));
+            player.sendMessage(PlayerAttributeMessage.of(player));
     }
 }

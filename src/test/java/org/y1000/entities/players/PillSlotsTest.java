@@ -5,16 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.item.ItemFactory;
-import org.y1000.item.ItemSdbImpl;
 import org.y1000.item.Pill;
 import org.y1000.item.StackItem;
-import org.y1000.kungfu.KungFuSdb;
 import org.y1000.message.PlayerTextEvent;
-import org.y1000.repository.ItemRepositoryImpl;
-import org.y1000.repository.KungFuBookRepositoryImpl;
-import org.y1000.sdb.ItemDrugSdbImpl;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -59,11 +54,11 @@ class PillSlotsTest extends AbstractUnitTestFixture {
         var pill = (Pill) stackItem.item();
         slots.usePill(player,  pill);
         slots.update(player, pill.useInterval());
-        Mockito.verify(player, Mockito.times(1)).emitEvent(any(PlayerAttributeEvent.class));
+        Mockito.verify(player, Mockito.times(1)).emitEvent(any(PlayerAttributeMessage.class));
         for (int i = 0; i < pill.useCount(); i++) {
             slots.update(player, pill.useInterval());
         }
-        Mockito.verify(player, Mockito.times(pill.useCount())).emitEvent(any(PlayerAttributeEvent.class));
+        Mockito.verify(player, Mockito.times(pill.useCount())).emitEvent(any(PlayerAttributeMessage.class));
 
         // make sure ropeSlot is emptied.
         Mockito.reset(player);

@@ -41,6 +41,7 @@ final class PlayerStandState extends AbstractPlayerState {
         if (playerStateEnum() == PlayerStateEnum.Idle ||
                 PlayerStateEnum.FightStand == playerStateEnum()) {
             player().disableFootKungFuAndSync();
+            player().stopFight();
             player().changeState(PlayerSitDownState.sit(player()));
             player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
         }
@@ -52,6 +53,7 @@ final class PlayerStandState extends AbstractPlayerState {
         if (playerStateEnum() == PlayerStateEnum.Idle) {
             player().changeState(PlayerStandState.fightStand(player()));
         } else if (playerStateEnum() == PlayerStateEnum.FightStand) {
+            player().stopFight();
             player().changeState(PlayerStandState.idle(player()));
         } else {
             return;

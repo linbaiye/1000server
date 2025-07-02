@@ -908,5 +908,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.PlayerChangeStatePacketOrBuilder getPlayerChangeStateOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+   * @return Whether the attack field is set.
+   */
+  boolean hasAttack();
+  /**
+   * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+   * @return The attack.
+   */
+  org.y1000.network.gen.PlayerAttackPacket getAttack();
+  /**
+   * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+   */
+  org.y1000.network.gen.PlayerAttackPacketOrBuilder getAttackOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

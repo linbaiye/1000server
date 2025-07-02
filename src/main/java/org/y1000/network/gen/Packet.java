@@ -105,6 +105,7 @@ private static final long serialVersionUID = 0L;
     SAY(61),
     ACTIVEKUNGFULIST(62),
     PLAYERCHANGESTATE(63),
+    ATTACK(64),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -182,6 +183,7 @@ private static final long serialVersionUID = 0L;
         case 61: return SAY;
         case 62: return ACTIVEKUNGFULIST;
         case 63: return PLAYERCHANGESTATE;
+        case 64: return ATTACK;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -2057,6 +2059,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.PlayerChangeStatePacket.getDefaultInstance();
   }
 
+  public static final int ATTACK_FIELD_NUMBER = 64;
+  /**
+   * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+   * @return Whether the attack field is set.
+   */
+  @java.lang.Override
+  public boolean hasAttack() {
+    return typedPacketCase_ == 64;
+  }
+  /**
+   * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+   * @return The attack.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.PlayerAttackPacket getAttack() {
+    if (typedPacketCase_ == 64) {
+       return (org.y1000.network.gen.PlayerAttackPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.PlayerAttackPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.PlayerAttackPacketOrBuilder getAttackOrBuilder() {
+    if (typedPacketCase_ == 64) {
+       return (org.y1000.network.gen.PlayerAttackPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.PlayerAttackPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -2250,6 +2283,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 63) {
       output.writeMessage(63, (org.y1000.network.gen.PlayerChangeStatePacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 64) {
+      output.writeMessage(64, (org.y1000.network.gen.PlayerAttackPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -2499,6 +2535,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 63) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(63, (org.y1000.network.gen.PlayerChangeStatePacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 64) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(64, (org.y1000.network.gen.PlayerAttackPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2757,6 +2797,10 @@ private static final long serialVersionUID = 0L;
         if (!getPlayerChangeState()
             .equals(other.getPlayerChangeState())) return false;
         break;
+      case 64:
+        if (!getAttack()
+            .equals(other.getAttack())) return false;
+        break;
       case 0:
       default:
     }
@@ -3011,6 +3055,10 @@ private static final long serialVersionUID = 0L;
       case 63:
         hash = (37 * hash) + PLAYERCHANGESTATE_FIELD_NUMBER;
         hash = (53 * hash) + getPlayerChangeState().hashCode();
+        break;
+      case 64:
+        hash = (37 * hash) + ATTACK_FIELD_NUMBER;
+        hash = (53 * hash) + getAttack().hashCode();
         break;
       case 0:
       default:
@@ -3327,6 +3375,9 @@ private static final long serialVersionUID = 0L;
       if (playerChangeStateBuilder_ != null) {
         playerChangeStateBuilder_.clear();
       }
+      if (attackBuilder_ != null) {
+        attackBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -3613,6 +3664,10 @@ private static final long serialVersionUID = 0L;
           playerChangeStateBuilder_ != null) {
         result.typedPacket_ = playerChangeStateBuilder_.build();
       }
+      if (typedPacketCase_ == 64 &&
+          attackBuilder_ != null) {
+        result.typedPacket_ = attackBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -3898,6 +3953,10 @@ private static final long serialVersionUID = 0L;
         }
         case PLAYERCHANGESTATE: {
           mergePlayerChangeState(other.getPlayerChangeState());
+          break;
+        }
+        case ATTACK: {
+          mergeAttack(other.getAttack());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -4350,6 +4409,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 63;
               break;
             } // case 506
+            case 514: {
+              input.readMessage(
+                  getAttackFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 64;
+              break;
+            } // case 514
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -12901,6 +12967,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 63;
       onChanged();
       return playerChangeStateBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.PlayerAttackPacket, org.y1000.network.gen.PlayerAttackPacket.Builder, org.y1000.network.gen.PlayerAttackPacketOrBuilder> attackBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+     * @return Whether the attack field is set.
+     */
+    @java.lang.Override
+    public boolean hasAttack() {
+      return typedPacketCase_ == 64;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+     * @return The attack.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.PlayerAttackPacket getAttack() {
+      if (attackBuilder_ == null) {
+        if (typedPacketCase_ == 64) {
+          return (org.y1000.network.gen.PlayerAttackPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.PlayerAttackPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 64) {
+          return attackBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.PlayerAttackPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+     */
+    public Builder setAttack(org.y1000.network.gen.PlayerAttackPacket value) {
+      if (attackBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        attackBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 64;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+     */
+    public Builder setAttack(
+        org.y1000.network.gen.PlayerAttackPacket.Builder builderForValue) {
+      if (attackBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        attackBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 64;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+     */
+    public Builder mergeAttack(org.y1000.network.gen.PlayerAttackPacket value) {
+      if (attackBuilder_ == null) {
+        if (typedPacketCase_ == 64 &&
+            typedPacket_ != org.y1000.network.gen.PlayerAttackPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.PlayerAttackPacket.newBuilder((org.y1000.network.gen.PlayerAttackPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 64) {
+          attackBuilder_.mergeFrom(value);
+        } else {
+          attackBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 64;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+     */
+    public Builder clearAttack() {
+      if (attackBuilder_ == null) {
+        if (typedPacketCase_ == 64) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 64) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        attackBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+     */
+    public org.y1000.network.gen.PlayerAttackPacket.Builder getAttackBuilder() {
+      return getAttackFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.PlayerAttackPacketOrBuilder getAttackOrBuilder() {
+      if ((typedPacketCase_ == 64) && (attackBuilder_ != null)) {
+        return attackBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 64) {
+          return (org.y1000.network.gen.PlayerAttackPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.PlayerAttackPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.PlayerAttackPacket, org.y1000.network.gen.PlayerAttackPacket.Builder, org.y1000.network.gen.PlayerAttackPacketOrBuilder> 
+        getAttackFieldBuilder() {
+      if (attackBuilder_ == null) {
+        if (!(typedPacketCase_ == 64)) {
+          typedPacket_ = org.y1000.network.gen.PlayerAttackPacket.getDefaultInstance();
+        }
+        attackBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.PlayerAttackPacket, org.y1000.network.gen.PlayerAttackPacket.Builder, org.y1000.network.gen.PlayerAttackPacketOrBuilder>(
+                (org.y1000.network.gen.PlayerAttackPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 64;
+      onChanged();
+      return attackBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

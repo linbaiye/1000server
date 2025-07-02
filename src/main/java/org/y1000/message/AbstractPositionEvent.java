@@ -1,8 +1,7 @@
 package org.y1000.message;
 
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.MoveAction;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PositionPacket;
@@ -42,7 +41,7 @@ public abstract class AbstractPositionEvent implements IEntityEvent, I2ClientMes
 
 
     @Override
-    public AttackableActiveEntity source() {
+    public AttackableEntity source() {
         return this.source;
     }
 

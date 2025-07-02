@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.kungfu.EventResourceParameters;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +31,7 @@ class BreathKungFuTest extends AbstractPlayerUnitTestFixture {
         player.consumePower(1);
         breathKungFu.update(player, BreathKungFu.DEFAULT_TIMER_MILLIS, eventListener::onEvent);
         assertNotEquals(100, breathKungFu.level());
-        assertNotNull(eventListener.removeFirst(PlayerAttributeEvent.class));
+        assertNotNull(eventListener.removeFirst(PlayerAttributeMessage.class));
         assertNotNull(eventListener.removeFirst(EntitySoundEvent.class));
     }
 

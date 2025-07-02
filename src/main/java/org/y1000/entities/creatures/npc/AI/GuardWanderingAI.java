@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.event.SeekAggressiveMonsterEvent;
 import org.y1000.entities.creatures.monster.AggressiveMonster;
 import org.y1000.entities.creatures.npc.Guardian;
@@ -24,7 +24,7 @@ public final class GuardWanderingAI extends AbstractWanderingNpcAI {
         this.chatter = chatter;
     }
 
-    private void changeToFight(Guardian guardian, AttackableActiveEntity enemy) {
+    private void changeToFight(Guardian guardian, AttackableEntity enemy) {
         guardian.changeAndStartAI(new ViolentNpcMeleeFightAI(enemy, guardian, 1, chatter));
     }
 

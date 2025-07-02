@@ -37,7 +37,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         player.kungFuBook().addToBasic(bowKungFu);
         player.inventory().put(itemFactory.createItem("木弓"));
         enableBasicKungFu(1);
-        player.update(player.cooldown());
+        player.update(player.maxCooldown());
     }
 
     @Test
@@ -69,7 +69,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), OldPlayerStateEnum.BOW, Direction.RIGHT);
         // trigger attack counter.
         bowKungFu.startAttack(player, clientAttackEvent, monster);
-        assertNotNull(player.getFightingEntity());
+        assertNotNull(player.getEnemy());
 
         // use all power.
         player.consumePower(player.power());
@@ -77,7 +77,7 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         eventListener.clearEvents();
 
         // trigger attack again.
-        player.update(player.cooldown());
+        player.update(player.maxCooldown());
         assertTrue(player.creatureState() instanceof PlayerCooldownState);
         PlayerTextEvent textEvent = eventListener.removeFirst(PlayerTextEvent.class);
         assertEquals(TextMessage.TextType.NO_POWER.value(), textEvent.toPacket().getText().getType());
@@ -92,9 +92,9 @@ class BowKungFuTest extends AbstractPlayerUnitTestFixture {
         ClientAttackEvent clientAttackEvent = new ClientAttackEvent(1, monster.id(), OldPlayerStateEnum.BOW, Direction.RIGHT);
         // trigger attack counter.
         bowKungFu.startAttack(player, clientAttackEvent, monster);
-        assertNotNull(player.getFightingEntity());
+        assertNotNull(player.getEnemy());
         // trigger attack again.
-        player.update(player.cooldown());
+        player.update(player.maxCooldown());
         assertTrue(player.creatureState() instanceof PlayerAttackState);
         assertNotNull(eventListener.removeFirst(PlayerAttackEvent.class));
     }

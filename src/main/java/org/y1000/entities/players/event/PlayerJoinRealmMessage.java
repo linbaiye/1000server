@@ -18,7 +18,7 @@ public class PlayerJoinRealmMessage extends AbstractPlayerMessage  {
     public static PlayerJoinRealmMessage of(Player player) {
         List<PlayerEquipPacket> equipments = player.getEquipments().stream().map(e -> PlayerEquipMessage.toEquipPacket(player, e)).collect(Collectors.toList());
         JoinRealmPacket joinRealmPacket = JoinRealmPacket.newBuilder()
-                .setAttribute(PlayerAttributeEvent.makeAttributePacket(player))
+                .setAttribute(PlayerAttributeMessage.makeAttributePacket(player))
                 .setTeleport(PlayerTeleportEvent.teleportPacket(player.getRealm(), player.coordinate()))
                 .setAttackKungFu(player.attackKungFu().name())
                 .setId(player.id())

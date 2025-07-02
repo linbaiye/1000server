@@ -231,9 +231,18 @@ abstract class AbstractRealm implements Realm {
         playerRepository.load(login.playerId()).ifPresent(p -> getPlayerManager().loginPlayer(p, login, this));
     }
 
+    private void handleEntityInteraction(Player player, EntityInteractionInput interactionInput) {
+        for (ActiveEntityManager<?> entityManager : entityManagers) {
+            entityManager.find(interactionInput.id())
+                    .ifPresent(e -> interactionInput.onEntityFound(player, e));
+        }
+    }
+
     private void handleInput(ConnectionInput connectionInput) {
         if (connectionInput.input() instanceof SelfHandleInput selfHandleInput) {
             playerManager().handleInput(connectionInput.connection(), selfHandleInput);
+        } else if (connectionInput.input() instanceof EntityInteractionInput interactionInput) {
+            playerManager().find(connectionInput.connection()).ifPresent(p -> handleEntityInteraction(p, interactionInput));
         }
     }
 

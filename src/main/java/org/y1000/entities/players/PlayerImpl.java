@@ -85,7 +85,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     private int attackCooldown;
 
     @Getter
-    private AttackableActiveEntity fightingEntity;
+    private AttackableEntity enemy;
 
     private final PillSlots pillSlots;
 
@@ -97,29 +97,31 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
     private PlayerMessageListener messageListener;
 
-    private static final Map<OldPlayerStateEnum, Integer> STATE_MILLIS = new HashMap<>() {{
-        put(OldPlayerStateEnum.IDLE, 1800);
-        put(OldPlayerStateEnum.Move, 840);
-        put(OldPlayerStateEnum.RUN, 420);
-        put(OldPlayerStateEnum.FLY, 360);
-        put(OldPlayerStateEnum.ENFIGHT_WALK, 840);
-        put(OldPlayerStateEnum.FightStand, 1400);
-        put(OldPlayerStateEnum.FIST, AttackKungFuType.Fist.below50Millis());
-        put(OldPlayerStateEnum.KICK, AttackKungFuType.Fist.above50Millis());
-        put(OldPlayerStateEnum.HURT, 280);
-        put(OldPlayerStateEnum.BOW, AttackKungFuType.BOW.above50Millis());
-        put(OldPlayerStateEnum.THROW, AttackKungFuType.THROW.above50Millis());
-        put(OldPlayerStateEnum.SWORD2H, AttackKungFuType.SWORD.above50Millis());
-        put(OldPlayerStateEnum.SWORD, AttackKungFuType.SWORD.below50Millis());
-        put(OldPlayerStateEnum.BLADE2H, AttackKungFuType.BLADE.above50Millis());
-        put(OldPlayerStateEnum.BLADE, AttackKungFuType.BLADE.below50Millis());
-        put(OldPlayerStateEnum.AXE, AttackKungFuType.AXE.below50Millis());
-        put(OldPlayerStateEnum.SPEAR, AttackKungFuType.SPEAR.below50Millis());
-        put(OldPlayerStateEnum.SIT, 750);
-        put(OldPlayerStateEnum.STANDUP, 750);
-        put(OldPlayerStateEnum.DIE, 1500);
-        put(OldPlayerStateEnum.HELLO, 750);
-    }};
+    private CombatController combatController;
+
+//    private static final Map<OldPlayerStateEnum, Integer> STATE_MILLIS = new HashMap<>() {{
+//        put(OldPlayerStateEnum.IDLE, 1800);
+//        put(OldPlayerStateEnum.Move, 840);
+//        put(OldPlayerStateEnum.RUN, 420);
+//        put(OldPlayerStateEnum.FLY, 360);
+//        put(OldPlayerStateEnum.ENFIGHT_WALK, 840);
+//        put(OldPlayerStateEnum.FightStand, 1400);
+//        put(OldPlayerStateEnum.FIST, AttackKungFuType.Fist.below50Millis());
+//        put(OldPlayerStateEnum.KICK, AttackKungFuType.Fist.above50Millis());
+//        put(OldPlayerStateEnum.HURT, 280);
+//        put(OldPlayerStateEnum.BOW, AttackKungFuType.BOW.above50Millis());
+//        put(OldPlayerStateEnum.THROW, AttackKungFuType.THROW.above50Millis());
+//        put(OldPlayerStateEnum.SWORD2H, AttackKungFuType.SWORD.above50Millis());
+//        put(OldPlayerStateEnum.SWORD, AttackKungFuType.SWORD.below50Millis());
+//        put(OldPlayerStateEnum.BLADE2H, AttackKungFuType.BLADE.above50Millis());
+//        put(OldPlayerStateEnum.BLADE, AttackKungFuType.BLADE.below50Millis());
+//        put(OldPlayerStateEnum.AXE, AttackKungFuType.AXE.below50Millis());
+//        put(OldPlayerStateEnum.SPEAR, AttackKungFuType.SPEAR.below50Millis());
+//        put(OldPlayerStateEnum.SIT, 750);
+//        put(OldPlayerStateEnum.STANDUP, 750);
+//        put(OldPlayerStateEnum.DIE, 1500);
+//        put(OldPlayerStateEnum.HELLO, 750);
+//    }};
 
     @Builder
     public PlayerImpl(long id,
@@ -225,18 +227,12 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         return attackKungFu;
     }
 
-    public void disableFootKungFuNoTip() {
-        if (footKungfu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, footKungfu));
-        }
-        footKungfu = null;
-    }
 
     public void disableBreathKungNoTip() {
-        if (breathKungFu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, breathKungFu));
-        }
-        breathKungFu = null;
+//        if (breathKungFu != null) {
+//            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, breathKungFu));
+//        }
+//        breathKungFu = null;
     }
 
     private void disableAssistantKungFuNoTip() {
@@ -248,10 +244,14 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
     private void disableProtectionNoTip() {
         if (protectKungFu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
-            emitEvent(new EntitySoundEvent(this, protectKungFu.disableSound()));
+//            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
+//            emitEvent(new EntitySoundEvent(this, protectKungFu.disableSound()));
             this.protectKungFu = null;
         }
+    }
+
+    void disableBreathKungFu() {
+        breathKungFu = null;
     }
 
 
@@ -331,6 +331,8 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         return removed != null;
     }
 
+
+
     void tryUseAttackKungFu(AttackKungFu newKungFu) {
         if (headPercent() < 50) {
             sendMessage(PlayerTextMessage.of(this, "头部活力不足。"));
@@ -362,6 +364,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         changeAndSayAttackKungFu(newKungFu);
         syncInventoryQuietly();
     }
+
 
 
     private void handleInventorySlotDoubleClick(int slotId) {
@@ -400,37 +403,14 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 //        }
     }
 
-    void trySwitchKungFu(AttackKungFu newAttack) {
-        if (headPercent() < 50) {
-            sendMessage(PlayerTextMessage.of(this, "头部活力不足。"));
-            return;
-        }
-        if (this.attackKungFu.name().equals(newAttack.name())) {
-            return;
-        }
-        if (this.attackKungFu.getType() == newAttack.getType()) {
-            return;
-        }
-        changeAttackKungFu(newAttack);
-        int slot = inventory.findWeaponSlot(newAttack.getType());
-        if (slot == 0) {
-            if (newAttack.getType() == AttackKungFuType.Fist) {
-                unequip(EquipmentType.WEAPON);
-                changeAttackKungFu(newAttack);
-            } else {
-                emitEvent(PlayerTextEvent.noWeapon(this));
-            }
-            return;
-        }
-//        equipWeaponFromSlot(slot, (Weapon) inventory.getItem(slot));
-        changeAttackKungFu(newAttack);
-    }
 
     void disableFootKungFuAndSync() {
-        if (footKungfu != null) {
-            footKungfu = null;
-            syncActiveKungFuList();
-        }
+        footKungfu = null;
+        syncActiveKungFuList();
+    }
+
+    void stopFight() {
+        combatController = null;
     }
 
     void toggleBreathKungFu(BreathKungFu newBreath) {
@@ -440,6 +420,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
             breathKungFu = newBreath;
             footKungfu = null;
             protectKungFu = null;
+            stopFight();
         }
         sendMessage(PlayerSayMessage.say(this, newBreath.name()));
     }
@@ -455,17 +436,6 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         sendMessage(PlayerSayMessage.say(this, newProtection.name()));
     }
 
-    private void toggleBreathingKungFu(BreathKungFu newBreath) {
-        if (breathKungFu != null) {
-            if (breathKungFu.name().equals(newBreath.name())) {
-                this.breathKungFu = null;
-                emitEvent(PlayerToggleKungFuEvent.disable(this, newBreath));
-            } else {
-                this.breathKungFu = newBreath;
-                emitEvent(PlayerToggleKungFuEvent.enable(this, newBreath));
-            }
-            return;
-        }
 //        if (creatureState().canSitDown()) {
 //            sitDown(true);
 //        }
@@ -478,7 +448,6 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 //            this.breathKungFu = newBreath;
 //            emitEvent(PlayerToggleKungFuEvent.enable(this, newBreath));
 //        }
-    }
 
     private void syncActiveKungFuList() {
         sendMessage(SyncActiveKungFuMessage.of(this));
@@ -491,23 +460,27 @@ public final class PlayerImpl extends AbstractCreature implements Player,
             breathKungFu = null;
             this.footKungfu = newKungFu;
         }
+        combatController = null;
         sendMessage(PlayerSayMessage.say(this, newKungFu.name()));
     }
 
+
     private void toggleAssistantKungFu(AssistantKungFu newAssistant) {
+        if (isDead())
+            return;
         if (attackKungFu.level() < 9999) {
-            emitEvent(PlayerTextEvent.kungFuLevelLow(this));
+            sendMessage(PlayerTextMessage.of(this, "满级武功方可使用" + newAssistant.name() + "。"));
             return;
         }
-        if (this.assistantKungFu != null &&
-                this.assistantKungFu.name().equals(newAssistant.name())) {
-            emitEvent(PlayerToggleKungFuEvent.disable(this, this.assistantKungFu));
-            this.assistantKungFu = null;
+        if (this.assistantKungFu.nameEquals(newAssistant)) {
+            assistantKungFu = assistantKungFu != null ? null : newAssistant;
         } else {
-            this.assistantKungFu = newAssistant;
-            emitEvent(PlayerToggleKungFuEvent.enable(this, this.assistantKungFu));
+            assistantKungFu = newAssistant;
         }
+        sendMessage(PlayerSayMessage.say(this, newAssistant.name()));
+        syncActiveKungFuList();
     }
+
 
     private void handleDoubleClickKungFu(KungFu kungFu) {
         if (isDead())
@@ -549,10 +522,16 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 //        }
     }
 
-    public void attack(ClientAttackEvent event, AttackableActiveEntity target) {
+    public void attack(ClientAttackEvent event, AttackableEntity target) {
         Validate.notNull(event, "event can't be null.");
         Validate.notNull(target, "target can't be null.");
         attackKungFu.startAttack(this, event, target);
+    }
+
+    @Override
+    public void attack(AttackableEntity target) {
+        Validate.notNull(target);
+        combatController = CombatController.createAndStart(this, target);
     }
 
     private void move(ClientMovementEvent event) {
@@ -733,7 +712,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     private void onKilled() {
-        disableFootKungFuNoTip();
+//        disableFootKungFuNoTip();
         disableBreathKungNoTip();
         var oldLevel = revival.level();
         revival = revival.gainExp();
@@ -770,7 +749,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         } else {
             onKilled();
         }
-        emitEvent(new PlayerAttributeEvent(this));
+        //emitEvent(new PlayerAttributeMessage(this));
     }
 
 
@@ -950,7 +929,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         gainOuterPower(resource);
         gainInnerPower(resource);
         gainPower(resource / 2);
-        emitEvent(new PlayerAttributeEvent(this));
+        sendMessage(PlayerAttributeMessage.of(this));
     }
 
     private void doGainExperiencedResource(PlayerAgedAttribute attribute, String name, int v) {
@@ -1007,15 +986,14 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
     private void updateKungFu(int delta) {
         var resourceUpdated = updateKungFuAndCheck(protectKungFu, delta, this::disableProtectionNoTip);
-        resourceUpdated = resourceUpdated || updateKungFuAndCheck(footKungfu, delta, this::disableFootKungFuNoTip);
+        resourceUpdated = resourceUpdated || updateKungFuAndCheck(footKungfu, delta, this::disableFootKungFuAndSync);
         if (resourceUpdated) {
-            emitEvent(new PlayerAttributeEvent(this));
+            sendMessage(PlayerAttributeMessage.of(this));
             return;
         }
-        if (breathKungFu == null) {
-            return;
+        if (breathKungFu != null) {
+            breathKungFu.update(this, delta);
         }
-        breathKungFu.update(this, delta, this::emitEvent);
         /*if (!breathKungFu.canRegenerateResources(this)) {
             standUp(true);
         }*/
@@ -1038,6 +1016,8 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         pillSlots.update(this, delta);
         updateBuff(delta);
         this.state.update(delta);
+        if (combatController != null)
+            combatController.update(delta);
     }
 
     public int recovery() {
@@ -1143,7 +1123,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         if (life.currentValue() == 0) {
             onKilled();
         } else {
-            emitEvent(new PlayerAttributeEvent(this));
+            sendMessage(PlayerAttributeMessage.of(this));
         }
     }
 
@@ -1422,7 +1402,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
     @Override
     public boolean canChaseOrAttack(Entity target) {
-        var ret = target instanceof AttackableActiveEntity attackableEntity &&
+        var ret = target instanceof AttackableEntity attackableEntity &&
                 attackableEntity.realmMap() == realmMap() &&
                 target.canBeSeenAt(coordinate()) &&
                 attackableEntity.canBeAttackedNow();
@@ -1467,20 +1447,20 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
 
-    public void setFightingEntity(AttackableActiveEntity entity){
+    public void setEnemy(AttackableEntity entity){
         Objects.requireNonNull(entity, "entity can't be null");
-        if (this.fightingEntity != null) {
-            this.fightingEntity.deregisterEventListener(this);
+        if (this.enemy != null) {
+            this.enemy.deregisterEventListener(this);
         }
-        this.fightingEntity = entity;
-        this.fightingEntity.registerEventListener(this);
+        this.enemy = entity;
+        this.enemy.registerEventListener(this);
     }
 
 
     private void clearFightingEntity() {
-        if (this.fightingEntity != null) {
-            this.fightingEntity.deregisterEventListener(this);
-            this.fightingEntity = null;
+        if (this.enemy != null) {
+            this.enemy.deregisterEventListener(this);
+            this.enemy = null;
         }
     }
 }

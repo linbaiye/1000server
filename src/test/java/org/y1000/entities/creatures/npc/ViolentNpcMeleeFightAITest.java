@@ -49,7 +49,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         assertEquals(OldPlayerStateEnum.ATTACK, monster.oldStateEnum());
         monster.update(monster.getStateMillis(OldPlayerStateEnum.ATTACK) - 10);
         player.leaveRealm();
-        monster.update( 10 + monster.cooldown());
+        monster.update( 10 + monster.maxCooldown());
         assertNotEquals(OldPlayerStateEnum.ATTACK, monster.oldStateEnum());
     }
 
@@ -132,7 +132,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         monster.update(monster.getStateMillis(OldPlayerStateEnum.ATTACK) - 10);
         reset(enemy);
         when(enemy.canBeAttackedNow()).thenReturn(false);
-        monster.update( 10 + monster.cooldown());
+        monster.update( 10 + monster.maxCooldown());
         assertNotEquals(OldPlayerStateEnum.ATTACK, monster.oldStateEnum());
     }
 
@@ -155,7 +155,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         player.joinRealm(realm, );
         monster.changeAndStartAI(new MonsterWanderingAI(monster.coordinate()));
         monster.attackedBy(player);
-        monster.update(monster.cooldown());
+        monster.update(monster.maxCooldown());
         assertEquals(OldPlayerStateEnum.ATTACK, monster.oldStateEnum());
         player.changeCoordinate(player.coordinate().move(2, 2));
 
@@ -163,7 +163,7 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         another.joinRealm(realm, );
         monster.attackedBy(another);
         assertEquals(OldPlayerStateEnum.HURT, monster.oldStateEnum());
-        monster.update(monster.cooldown());
+        monster.update(monster.maxCooldown());
         assertEquals(Direction.DOWN, monster.direction());
     }
 }

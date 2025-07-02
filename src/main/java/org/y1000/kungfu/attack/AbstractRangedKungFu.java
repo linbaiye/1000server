@@ -1,12 +1,13 @@
 package org.y1000.kungfu.attack;
 
 
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.item.ItemType;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.ClientAttackEvent;
+import org.y1000.util.Coordinate;
 
 public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
     private int count;
@@ -34,7 +35,20 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
         }
         return count > 0;
     }
-//
+
+    @Override
+    public String checkResourceToAttack(Player player) {
+        var ret = checkHasEnoughAttributes(player);
+        if (ret != null) {
+            return ret;
+        }
+        if (!player.inventory().contains(getAmmoType())) {
+            return "弹药不足。";
+        }
+        return null;
+    }
+
+    //
 //    protected PlayerAttackState useResourcesAndCreateState(PlayerImpl player) {
 //        useAttributeResources(player);
 //        count --;
@@ -49,8 +63,13 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
     }
 
     @Override
-    public void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableActiveEntity target) {
+    public void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target) {
         count = level() / 2000 + 2;
         doStartAttack(player, event, target);
+    }
+
+    @Override
+    public boolean isWithinAttackRange(Coordinate coordinate1, Coordinate coordinate2) {
+        return coordinate1 != null && coordinate1.isWithinVisibleRange(coordinate2);
     }
 }

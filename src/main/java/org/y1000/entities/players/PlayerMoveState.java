@@ -60,6 +60,7 @@ public final class PlayerMoveState extends AbstractPlayerState {
         }
         if (!elapse(delta))
             return;
+        player().footKungFu().ifPresent(footKungFu -> footKungFu.tryGainExpAndUseResources(player()));
         if (!player().realmMap().movable(currentInput.destination())) {
             player().emitEvent(SetPositionEvent.of(player()));
             changeToStand();

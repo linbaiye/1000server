@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.players.AttackAction;
 import org.y1000.kungfu.KungFu;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -26,6 +27,11 @@ public final class SwordKungFu extends AbstractMeleeKungFu {
     @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.SWORD;
+    }
+
+    @Override
+    public AttackAction computeAttackAction() {
+        return level() < 5000 || ThreadLocalRandom.current().nextInt(0, 2) == 1 ? AttackAction.Sword1H: AttackAction.Sword2H;
     }
 
 

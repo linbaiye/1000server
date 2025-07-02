@@ -2,7 +2,7 @@ package org.y1000.kungfu.attack;
 
 import lombok.Getter;
 import org.slf4j.Logger;
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.*;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
@@ -74,21 +74,29 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         return null;
     }
 
-    protected abstract boolean checkResourcesAndSendError(Player player);
-
-    protected void useAttributeResources(Player player) {
-        var ret = checkAttributeResources(player);
-        if (ret != null) {
-            return;
+    protected String checkHasEnoughAttributes(Player player) {
+        if (player.power() < parameters.powerToSwing()) {
+            return "武功不足。";
         }
+        if (player.innerPower() < parameters.innerPowerToSwing()) {
+            return "内功不足。";
+        }
+        if (player.outerPower() < parameters.outerPowerToSwing()) {
+            return "外功不足。";
+        }
+        int lifeToSwing = parameters.lifeToSwing();
+        if (player.currentLife() <= lifeToSwing) {
+            return "活力不足够。";
+        }
+        return null;
+    }
+
+    public void consumeAttributes(Player player) {
         player.consumeLife(parameters.lifeToSwing());
         player.consumeOuterPower(parameters.outerPowerToSwing());
         player.consumeInnerPower(parameters.innerPowerToSwing());
         player.consumePower(parameters.powerToSwing());
-        player.emitEvent(new PlayerAttributeEvent(player));
     }
-
-//    protected abstract PlayerAttackState useResourcesAndCreateState(PlayerImpl player);
 
     protected abstract int computeAbove5000SoundOffset(int level);
 
@@ -108,7 +116,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
     private void doSingleAttack(PlayerImpl player) {
-        var hit = player.getFightingEntity().attackedBy(player);
+        var hit = player.getEnemy().attackedBy(player);
         player.emitEvent(new EntitySoundEvent(player, hit ? strikeSound() : swingSound()));
     }
 
@@ -144,31 +152,31 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     @Override
     public void attackAgain(PlayerImpl player) {
-        if (player.getFightingEntity() == null || !player.canChaseOrAttack(player.getFightingEntity())) {
+        if (player.getEnemy() == null || !player.canChaseOrAttack(player.getEnemy())) {
 //            player.changeState(PlayerStillState.chillOut(player));
             return;
         }
-        Direction direction = player.coordinate().computeDirection(player.getFightingEntity().coordinate());
+        Direction direction = player.coordinate().computeDirection(player.getEnemy().coordinate());
         doAttack(player, direction, true);
     }
 
-    protected void doStartAttack(PlayerImpl player, ClientAttackEvent event, AttackableActiveEntity target) {
-        if (!player.canChaseOrAttack(target)) {
-            player.emitEvent(new PlayerAttackEventResponse(player, event, false, computeEffectId()));
-            return;
-        }
-        var ok = checkResourcesAndSendError(player);
-        if (!ok) {
-            player.emitEvent(new PlayerAttackEventResponse(player, event, false, computeEffectId()));
-            return;
-        }
-        Direction direction = event.direction();
-        player.setFightingEntity(target);
-        player.disableFootKungFuNoTip();
-        player.disableBreathKungNoTip();
-        doAttack(player, direction, false);
-        player.changeDirection(direction);
-        player.emitEvent(new PlayerAttackEventResponse(player, event, true, computeEffectId()));
+    protected void doStartAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target) {
+//        if (!player.canChaseOrAttack(target)) {
+//            player.emitEvent(new PlayerAttackEventResponse(player, event, false, computeEffectId()));
+//            return;
+//        }
+//        var ok = checkResourcesAndSendError(player);
+//        if (!ok) {
+//            player.emitEvent(new PlayerAttackEventResponse(player, event, false, computeEffectId()));
+//            return;
+//        }
+//        Direction direction = event.direction();
+//        player.setEnemy(target);
+//        player.disableFootKungFuNoTip();
+//        player.disableBreathKungNoTip();
+//        doAttack(player, direction, false);
+//        player.changeDirection(direction);
+//        player.emitEvent(new PlayerAttackEventResponse(player, event, true, computeEffectId()));
     }
 
 
@@ -283,8 +291,8 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
     @Override
-    public Integer computeEffectId() {
-        return level() == 9999 ? effectIdPrefix() +  parameters.effectId() : null;
+    public int computeEffectId() {
+        return level() == 9999 ? effectIdPrefix() +  parameters.effectId() : -1;
     }
 
     @Override

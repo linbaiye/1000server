@@ -1,10 +1,11 @@
 package org.y1000.kungfu.attack;
 
 import org.slf4j.Logger;
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.message.input.ClientAttackEvent;
+import org.y1000.util.Coordinate;
 
 public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {
 
@@ -14,22 +15,15 @@ public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {
 
     protected abstract Logger logger();
 
-//    protected PlayerAttackState useResourcesAndCreateState(PlayerImpl player) {
-//        useAttributeResources(player);
-//        return PlayerAttackState.melee(player);
-//    }
 
-    protected boolean checkResourcesAndSendError(Player player) {
-        var text = checkAttributeResources(player);
-        if (text != null) {
-            player.emitEvent(text);
-        }
-        return text == null;
+    @Override
+    public void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target) {
+        doStartAttack(player, event, target);
     }
 
     @Override
-    public void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableActiveEntity target) {
-        doStartAttack(player, event, target);
+    public String checkResourceToAttack(Player player) {
+        return checkHasEnoughAttributes(player);
     }
 
     @Override
@@ -40,5 +34,11 @@ public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {
     @Override
     public boolean isRanged() {
         return false;
+    }
+
+    @Override
+    public boolean isWithinAttackRange(Coordinate coordinate1, Coordinate coordinate2) {
+        return coordinate1 != null && coordinate2 != null &&
+                coordinate1.directDistance(coordinate2) < 2;
     }
 }

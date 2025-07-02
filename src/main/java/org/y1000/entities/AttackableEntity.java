@@ -6,7 +6,7 @@ import org.y1000.entities.projectile.Projectile;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
-public interface AttackableActiveEntity extends ActiveEntity {
+public interface AttackableEntity extends ActiveEntity {
     /**
      * Return true if we can be hit.
      * @return true/false.
@@ -22,7 +22,7 @@ public interface AttackableActiveEntity extends ActiveEntity {
     RealmMap realmMap();
 
 
-    default boolean canBeMeleeAt(Coordinate coordinate) {
+    default boolean isWithinMeleeRange(Coordinate coordinate) {
         return coordinate != null && coordinate().directDistance(coordinate) < 2;
     }
 }

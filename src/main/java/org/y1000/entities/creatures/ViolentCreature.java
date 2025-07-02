@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures;
 
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Damage;
 
@@ -16,22 +16,36 @@ public interface ViolentCreature extends Creature {
 
     Damage damage();
 
+    /**
+     * How long will attack cooldown take in milliseconds
+     * @return
+     */
     int attackCooldown();
 
+    /**
+     * How long will recovery cooldown take in milliseconds
+     * @return
+     */
     int recoveryCooldown();
 
+    /**
+     * Start Cooldown recovery.
+     */
     void cooldownRecovery();
 
+    /**
+     * Start Cooldown attack.
+     */
     void cooldownAttack();
 
     default boolean canChaseOrAttack(Entity target) {
-        return target instanceof AttackableActiveEntity attackableEntity &&
+        return target instanceof AttackableEntity attackableEntity &&
                 attackableEntity.realmMap() == realmMap() &&
                 target.canBeSeenAt(coordinate()) &&
                 attackableEntity.canBeAttackedNow();
     }
 
-    default int cooldown() {
+    default int maxCooldown() {
         return Math.max(attackCooldown(), recoveryCooldown());
     }
 }

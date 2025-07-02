@@ -3,7 +3,7 @@ package org.y1000.kungfu.breath;
 import lombok.Builder;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
 import org.y1000.entities.players.event.PlayerKungFuFullEvent;
 import org.y1000.event.EntityEvent;
@@ -69,7 +69,7 @@ public final class BreathKungFu extends AbstractKungFu {
         return 5 * max * inParameter / 100 ;
     }
 
-    public void update(Player player, int delta, UnaryAction<? super EntityEvent> eventSender) {
+    public void update(Player player, int delta) {
         timer -= delta;
         if (timer > 0) {
             return;
@@ -78,16 +78,17 @@ public final class BreathKungFu extends AbstractKungFu {
         /*if (!canRegenerateResources(player)) {
             return;
         }*/
-        eventSender.invoke(new EntitySoundEvent(player, computeSound(player.isMale())));
+//        eventSender.invoke(new EntitySoundEvent(player, computeSound(player.isMale())));
         player.gainLife(computeResource(player.maxLife(), parameters.life()));
         player.gainPower(computeResource(player.maxPower(), parameters.power()));
         player.gainInnerPower(computeResource(player.maxInnerPower(), parameters.innerPower()));
         player.gainOuterPower(computeResource(player.maxOuterPower(), parameters.outerPower()));
-        eventSender.invoke(new PlayerAttributeEvent(player));
+        player.sendMessage(PlayerAttributeMessage.of(player));
+//        eventSender.invoke(new PlayerAttributeMessage(player));
         if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
-            eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
-            if (isLevelFull())
-                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
+//            eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
+//            if (isLevelFull())
+//                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
         }
     }
 

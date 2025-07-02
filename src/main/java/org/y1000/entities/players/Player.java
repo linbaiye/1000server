@@ -1,7 +1,6 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.projectile.Projectile;
@@ -13,7 +12,6 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
-import org.y1000.message.I2ClientMessage;
 import org.y1000.message.PlayerMessage;
 import org.y1000.message.PlayerMessageListener;
 import org.y1000.message.input.ClientAttackEvent;
@@ -59,7 +57,9 @@ public interface Player extends ViolentCreature {
 
     void handleInput(SelfHandleInput input);
 
-    void attack(ClientAttackEvent event, AttackableActiveEntity target);
+    void attack(ClientAttackEvent event, AttackableEntity target);
+
+    void attack(AttackableEntity target);
 
     Optional<ArmorEquipment> hat();
 

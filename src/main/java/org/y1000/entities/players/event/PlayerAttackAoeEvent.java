@@ -2,14 +2,12 @@ package org.y1000.entities.players.event;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.objects.AbstractKillableDynamicObject;
 import org.y1000.entities.objects.DynamicObject;
-import org.y1000.entities.objects.KillableDynamicObject;
-import org.y1000.entities.objects.RespawnKillableDynamicObject;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.kungfu.AssistantKungFu;
@@ -21,7 +19,7 @@ import java.util.Set;
 public class PlayerAttackAoeEvent implements PlayerEvent {
 
     private final Player player;
-    private final AttackableActiveEntity mainTarget;
+    private final AttackableEntity mainTarget;
 
     private final Damage aoeDamage;
 
@@ -30,7 +28,7 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
     private final boolean withSound;
 
     private PlayerAttackAoeEvent(Player source,
-                                 AttackableActiveEntity target,
+                                 AttackableEntity target,
                                  Damage aoeDamage,
                                  Set<Coordinate> effectedCoordinates, boolean withSound) {
         this.player = source;
@@ -45,7 +43,7 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
         playerEventHandler.visit(this);
     }
 
-    private int handleAttack(AttackableActiveEntity entity, Damage damage) {
+    private int handleAttack(AttackableEntity entity, Damage damage) {
         int exp = 0;
         if (entity instanceof Npc npc) {
             exp = npc.attackedByAoe(player(), player().hit(), damage);
@@ -58,7 +56,7 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
     }
 
 
-    private boolean affected(AttackableActiveEntity entity) {
+    private boolean affected(AttackableEntity entity) {
         if (entity.equals(mainTarget)) {
             return false;
         }
@@ -69,7 +67,7 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
     }
 
 
-    public void affect(Set<AttackableActiveEntity> visibleCreatures)  {
+    public void affect(Set<AttackableEntity> visibleCreatures)  {
         int targetExp = handleAttack(mainTarget, player.damage());
         long count = visibleCreatures.stream()
                 .filter(this::affected)
@@ -88,12 +86,12 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
         return player;
     }
 
-    public static PlayerAttackAoeEvent melee(Player player, AttackableActiveEntity target, AssistantKungFu assistantKungFu) {
-        Validate.isTrue(target.canBeMeleeAt(player.coordinate()));
+    public static PlayerAttackAoeEvent melee(Player player, AttackableEntity target, AssistantKungFu assistantKungFu) {
+        Validate.isTrue(target.isWithinMeleeRange(player.coordinate()));
         return new PlayerAttackAoeEvent(player, target, assistantKungFu.computeDamage(player.damage()), assistantKungFu.affectedCoordinates(player), true);
     }
 
-    public static PlayerAttackAoeEvent ranged(Player player, AttackableActiveEntity target,
+    public static PlayerAttackAoeEvent ranged(Player player, AttackableEntity target,
                                               Direction direction, Damage damage, AssistantKungFu assistantKungFu) {
         return new PlayerAttackAoeEvent(player, target, assistantKungFu.computeDamage(damage),
                 assistantKungFu.affectedCoordinates(target.coordinate(), direction), false);

@@ -34,7 +34,7 @@ class RelevantScopeManagerTest extends AbstractUnitTestFixture  {
         Set<Entity> affected2 = relevantScopeManager.add(entity2);
         assertTrue(affected2.contains(entity1));
         assertTrue(affected2.contains(entity));
-        Entity entity3 = createMonster(new Coordinate(entity.coordinate().x(), entity.coordinate().y() + Entity.VISIBLE_Y_RANGE + 1));
+        Entity entity3 = createMonster(new Coordinate(entity.coordinate().x(), entity.coordinate().y() + Coordinate.VISIBLE_Y_RANGE + 1));
         Set<Entity> affected3 = relevantScopeManager.add(entity3);
         assertFalse(affected3.contains(entity));
         assertTrue(affected3.contains(entity1));
@@ -46,11 +46,11 @@ class RelevantScopeManagerTest extends AbstractUnitTestFixture  {
         relevantScopeManager.add(entity1);
         Entity entity2 = createMonster(new Coordinate(10, 11));
         relevantScopeManager.add(entity2);
-        Entity entity3 = createMonster(new Coordinate(10, 11 + Entity.VISIBLE_Y_RANGE + 2));
+        Entity entity3 = createMonster(new Coordinate(10, 11 + Coordinate.VISIBLE_Y_RANGE + 2));
         relevantScopeManager.add(entity3);
         Set<Entity> affected = relevantScopeManager.update(entity1);
         assertTrue(affected.isEmpty());
-        entity1.changeCoordinate(Coordinate.xy(10, 11 + Entity.VISIBLE_Y_RANGE + 1));
+        entity1.changeCoordinate(Coordinate.xy(10, 11 + Coordinate.VISIBLE_Y_RANGE + 1));
         affected = relevantScopeManager.update(entity1);
         assertTrue(affected.contains(entity2));
         assertTrue(affected.contains(entity3));

@@ -34,7 +34,7 @@ class PassiveMonsterTest extends AbstractMonsterUnitTestFixture {
     void getHurt() {
         monster.attackedBy(player);
         assertSame(monster.oldStateEnum(), OldPlayerStateEnum.HURT);
-        assertEquals(attributeProvider.recovery() * Realm.STEP_MILLIS, monster.cooldown());
+        assertEquals(attributeProvider.recovery() * Realm.STEP_MILLIS, monster.maxCooldown());
         assertNotNull(eventListener.dequeue(CreatureHurtEvent.class));
         assertNotNull(eventListener.dequeue(EntitySoundEvent.class));
         monster.update(attributeProvider.recovery() * Realm.STEP_MILLIS);

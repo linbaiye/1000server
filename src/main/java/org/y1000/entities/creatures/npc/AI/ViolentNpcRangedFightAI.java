@@ -2,10 +2,9 @@ package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.NpcStateEnum;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcRangedSkill;
@@ -17,12 +16,12 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
 
     private static final int SPEEDRATE = 2;
 
-    public ViolentNpcRangedFightAI(AttackableActiveEntity enemy, ViolentNpc npc) {
+    public ViolentNpcRangedFightAI(AttackableEntity enemy, ViolentNpc npc) {
         super(enemy, npc, SPEEDRATE);
     }
 
     private void cooldownOrShoot(NpcRangedSkill rangedSkill) {
-        if (npc.cooldown() > 0) {
+        if (npc.maxCooldown() > 0) {
             npc.startAction(NpcStateEnum.Idle);
             return;
         }
@@ -72,7 +71,7 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
     }
 
     @Override
-    protected boolean shouldChangeEnemy(AttackableActiveEntity newEnemy) {
+    protected boolean shouldChangeEnemy(AttackableEntity newEnemy) {
         return true;
     }
 

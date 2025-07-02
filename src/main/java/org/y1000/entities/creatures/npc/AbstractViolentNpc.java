@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.ViolentCreature;
@@ -43,11 +43,6 @@ public abstract class AbstractViolentNpc
     }
 
     @Override
-    public int recoveryCooldown() {
-        return recoveryCooldown;
-    }
-
-    @Override
     public Damage damage() {
         return damage;
     }
@@ -58,10 +53,6 @@ public abstract class AbstractViolentNpc
     }
 
 
-    @Override
-    public int attackCooldown() {
-        return attackCooldown;
-    }
 
     protected void cooldown(int delta) {
         recoveryCooldown = recoveryCooldown > delta ? recoveryCooldown - delta : 0;
@@ -96,7 +87,7 @@ public abstract class AbstractViolentNpc
         emitEvent(new CreatureAttackEvent(this));
     }
 
-    public void startRangedAttack(AttackableActiveEntity target) {
+    public void startRangedAttack(AttackableEntity target) {
         if (skill == null) {
             throw new IllegalStateException("ranged attack is not supported.");
         }
@@ -111,11 +102,21 @@ public abstract class AbstractViolentNpc
         if (npcStateEnum == NpcStateEnum.Attack) {
             startAttackAction(true);
         } else if (npcStateEnum == NpcStateEnum.Idle) {
-            changeState(NpcCommonState.idle(this, cooldown()));
+            changeState(NpcCommonState.idle(this, maxCooldown()));
             emitEvent(NpcChangeStateEvent.of(this));
         } else {
             super.startAction(npcStateEnum);
         }
+    }
+
+    @Override
+    public int recoveryCooldown() {
+        return recoveryCooldown;
+    }
+
+    @Override
+    public int attackCooldown() {
+        return attackCooldown;
     }
 
     @Override

@@ -44,7 +44,7 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
     @Override
     public boolean attackedBy(Player attacker) {
         Validate.notNull(attacker);
-        if (!canBeAttackedNow() || !canBeMeleeAt(attacker.coordinate()))
+        if (!canBeAttackedNow() || !isWithinMeleeRange(attacker.coordinate()))
             return false;
         handleDamaged(attacker.damage());
         return true;
@@ -53,7 +53,7 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
     @Override
     public void attackedBy(ViolentCreature attacker) {
         Validate.notNull(attacker);
-        if (canBeAttackedNow() && canBeMeleeAt(attacker.coordinate()))
+        if (canBeAttackedNow() && isWithinMeleeRange(attacker.coordinate()))
             handleDamaged(attacker.damage());
     }
 
@@ -75,7 +75,7 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
 
 
     @Override
-    public boolean canBeMeleeAt(Coordinate coordinate) {
+    public boolean isWithinMeleeRange(Coordinate coordinate) {
         return coordinate != null &&
                 occupyingCoordinates().stream().anyMatch(coor -> coor.directDistance(coordinate) < 2);
     }

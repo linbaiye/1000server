@@ -10,6 +10,8 @@ import java.util.Set;
 public record Coordinate(int x, int y) {
 
     public static final Coordinate Empty = new Coordinate(0, 0);
+    public static final int VISIBLE_X_RANGE = 15;
+    public static final int VISIBLE_Y_RANGE = 13;
 
     /*public Coordinate {
         Validate.isTrue(x >= 0);
@@ -62,6 +64,14 @@ public record Coordinate(int x, int y) {
 
     public int yDistance(int y) {
         return Math.abs(y() - y);
+    }
+
+    public boolean isWithinVisibleRange(Coordinate another) {
+        return another != null &&
+                another.x() >= x() - Coordinate.VISIBLE_X_RANGE &&
+                another.x() <= x() + Coordinate.VISIBLE_X_RANGE &&
+                another.y() >= y() - Coordinate.VISIBLE_Y_RANGE &&
+                another.y() <= y() + Coordinate.VISIBLE_Y_RANGE;
     }
 
 

@@ -3,14 +3,9 @@ package org.y1000.kungfu;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
-import org.y1000.entities.players.event.PlayerGainExpEvent;
-import org.y1000.entities.players.event.PlayerKungFuFullEvent;
-import org.y1000.event.EntityEvent;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.exp.ExperienceUtil;
-import org.y1000.util.UnaryAction;
 
 @Getter
 public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
@@ -45,7 +40,7 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
     }
 
 
-    public void tryGainExpAndUseResources(Player player, UnaryAction<EntityEvent> eventSender) {
+    public void tryGainExpAndUseResources(Player player) {
         if (++counter < 10) {
             return;
         }
@@ -56,11 +51,11 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
         } else if (level() >= 5000) {
             snd = sound + 1;
         }
-        eventSender.invoke(new EntitySoundEvent(player, String.valueOf(snd)));
+//        eventSender.invoke(new EntitySoundEvent(player, String.valueOf(snd)));
         if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
-            eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
-            if (isLevelFull())
-                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
+//            eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
+//            if (isLevelFull())
+//                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
         }
         int life = applyLevelToValue(eventResourceParameters.life());
         int useLife =  player.currentLife() > life ? life : player.currentLife() - 1;
@@ -68,7 +63,8 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
         player.consumeOuterPower(applyLevelToValue(eventResourceParameters.outerPower()));
         player.consumeInnerPower(applyLevelToValue(eventResourceParameters.innerPower()));
         player.consumePower(applyLevelToValue(eventResourceParameters.power()));
-        eventSender.invoke(new PlayerAttributeEvent(player));
+        player.sendMessage(PlayerAttributeMessage.of(player));
+//        eventSender.invoke(new PlayerAttributeMessage(player));
     }
 
     @Override

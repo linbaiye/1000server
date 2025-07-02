@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.event.CreatureHurtEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
@@ -127,7 +127,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot));
         assertTrue(player.weapon().isPresent());
         assertSame(player.attackKungFu().getType(), AttackKungFuType.SWORD);
-        assertTrue(player.cooldown() != 0);
+        assertTrue(player.maxCooldown() != 0);
         var removeInventorySlotEvent = eventListener.dequeue(UpdateInventorySlotEvent.class);
         assertEquals(removeInventorySlotEvent.toPacket().getUpdateSlot().getSlotId(), slot);
         PlayerToggleKungFuEvent kungFuEvent = eventListener.dequeue(PlayerToggleKungFuEvent.class);
@@ -168,14 +168,14 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         Weapon sword = createWeapon("sword", AttackKungFuType.SWORD);
         int slot1 = inventory.put(sword);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot1));
-        player.setFightingEntity(createMonster(new Coordinate(1, 1)));
+        player.setEnemy(createMonster(new Coordinate(1, 1)));
         player.changeState(PlayerAttackState.melee(player));
         eventListener.clearEvents();
         var axe = createWeapon("axe", AttackKungFuType.AXE);
         int slot2 = inventory.put(axe);
         player.handleClientEvent(new ClientDoubleClickSlotEvent(slot2));
 
-        assertEquals(player.cooldown(), (PlayerImpl.INNATE_ATTACKSPEED + player.kungFuBook().findUnnamedAttack(AttackKungFuType.AXE).attackSpeed()) * Realm.STEP_MILLIS);
+        assertEquals(player.maxCooldown(), (PlayerImpl.INNATE_ATTACKSPEED + player.kungFuBook().findUnnamedAttack(AttackKungFuType.AXE).attackSpeed()) * Realm.STEP_MILLIS);
         assertTrue(player.creatureState() instanceof PlayerCooldownState);
     }
 
@@ -200,7 +200,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
                 .weapon(createWeapon("fist", AttackKungFuType.Fist)).inventory(inventory);
         attachListener(builder);
         player.joinRealm(mockedRealm, );
-        player.setFightingEntity(createMonster(new Coordinate(1, 2)));
+        player.setEnemy(createMonster(new Coordinate(1, 2)));
         player.changeState(PlayerAttackState.melee(player));
 
         int slot = inventory.put(createWeapon("sword", AttackKungFuType.SWORD));
@@ -237,7 +237,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
                 .weapon(createWeapon("sword", AttackKungFuType.SWORD)).inventory(inventory);
         attachListener(builder);
         player.joinRealm(mockedRealm, );
-        player.setFightingEntity(createMonster(new Coordinate(2, 2)));
+        player.setEnemy(createMonster(new Coordinate(2, 2)));
         player.changeState(PlayerAttackState.melee(player));
         player.handleClientEvent(new ClientUnequipEvent(EquipmentType.WEAPON));
         var kungFuEvent = eventListener.removeFirst(PlayerToggleKungFuEvent.class);
@@ -245,7 +245,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         var cooldownEvent = eventListener.removeFirst(PlayerCooldownEvent.class);
         assertNotNull(cooldownEvent);
         assertSame(player.oldStateEnum(), OldPlayerStateEnum.FightStand);
-        assertEquals((PlayerImpl.INNATE_ATTACKSPEED + player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist).attackSpeed()) *  Realm.STEP_MILLIS, player.cooldown());
+        assertEquals((PlayerImpl.INNATE_ATTACKSPEED + player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist).attackSpeed()) *  Realm.STEP_MILLIS, player.maxCooldown());
     }
 
     @Test
@@ -393,8 +393,8 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void monitorFightingTarget() {
-        AttackableActiveEntity mock = Mockito.mock(AttackableActiveEntity.class);
-        player.setFightingEntity(mock);
+        AttackableEntity mock = Mockito.mock(AttackableEntity.class);
+        player.setEnemy(mock);
         Mockito.verify(mock, Mockito.times(1)).registerEventListener(player);
         player.leaveRealm();
         Mockito.verify(mock, Mockito.times(1)).deregisterEventListener(player);
@@ -622,7 +622,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertNotEquals(100, player.headPercent());
         assertNotEquals(100, player.armPercent());
         verify(attacker, times(1)).gainAttackExp(anyInt());
-        AttributePacket attribute = eventListener.removeFirst(PlayerAttributeEvent.class).toPacket().getAttribute();
+        AttributePacket attribute = eventListener.removeFirst(PlayerAttributeMessage.class).toPacket().getAttribute();
         assertEquals(player.armPercent(), attribute.getArmPercent());
         assertEquals(player.legPercent(), attribute.getLegPercent());
         assertEquals(player.headPercent(), attribute.getHeadPercent());

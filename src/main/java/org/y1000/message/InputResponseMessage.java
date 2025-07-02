@@ -2,7 +2,7 @@ package org.y1000.message;
 
 import org.y1000.network.gen.InputResponsePacket;
 import org.y1000.network.gen.Packet;
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.players.Player;
 import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventVisitor;
@@ -25,7 +25,7 @@ public record InputResponseMessage(long sequence, AbstractPositionEvent position
     }
 
     @Override
-    public AttackableActiveEntity source() {
+    public AttackableEntity source() {
         return positionMessage().source();
     }
 

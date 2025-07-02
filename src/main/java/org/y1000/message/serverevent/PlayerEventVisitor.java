@@ -60,7 +60,7 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
 
     }
 
-    default void visit(PlayerAttributeEvent event) {
+    default void visit(PlayerAttributeMessage event) {
 
     }
 

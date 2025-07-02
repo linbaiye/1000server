@@ -72,6 +72,10 @@ public interface Npc extends Creature {
 
     NpcStateEnum npcStateEnum();
 
+    default <A> Optional<A> findAbility(Class<A> type) {
+        return Optional.empty();
+    }
+
     int getStateMillis(NpcStateEnum stateEnum);
 
     default boolean isDead() {

@@ -3,10 +3,9 @@ package org.y1000.entities.creatures.monster;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.npc.AggressiveNpc;
 import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.NpcRangedSkill;
@@ -36,8 +35,9 @@ public final class AggressiveMonster extends AbstractMonster implements Aggressi
     }
 
     @Override
-    public void actAggressively(AttackableActiveEntity enemy) {
+    public void actAggressively(AttackableEntity enemy) {
         if (canChaseOrAttack(enemy))
             changeAndStartAI(new ViolentNpcMeleeFightAI(enemy, this));
     }
+
 }

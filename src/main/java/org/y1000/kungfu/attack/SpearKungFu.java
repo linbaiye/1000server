@@ -4,7 +4,10 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
+import org.y1000.entities.players.AttackAction;
 import org.y1000.kungfu.KungFu;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 public final class SpearKungFu extends AbstractMeleeKungFu {
@@ -23,6 +26,11 @@ public final class SpearKungFu extends AbstractMeleeKungFu {
     @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.SPEAR;
+    }
+
+    @Override
+    public AttackAction computeAttackAction() {
+        return AttackAction.Spear;
     }
 
     @Override

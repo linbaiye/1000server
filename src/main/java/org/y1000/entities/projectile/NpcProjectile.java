@@ -1,13 +1,13 @@
 package org.y1000.entities.projectile;
 
-import org.y1000.entities.AttackableActiveEntity;
+import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.npc.ViolentNpc;
 import org.y1000.entities.players.Damage;
 
 public final class NpcProjectile extends AbstractProjectile {
 
     public NpcProjectile(ViolentNpc shooter,
-                         AttackableActiveEntity target, int id) {
+                         AttackableEntity target, int id) {
         super(shooter, target, id);
     }
 

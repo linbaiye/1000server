@@ -12,7 +12,6 @@ import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.util.Coordinate;
 
 import java.util.Collections;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -31,7 +30,7 @@ class PlayerAttackAoeEventTest extends AbstractUnitTestFixture  {
         when(player.attackKungFu()).thenReturn(kungFuFactory.createAttackKungFu("无名剑法"));
 
         Npc mainTarget = Mockito.mock(Npc.class);
-        when(mainTarget.canBeMeleeAt(any(Coordinate.class))).thenReturn(true);
+        when(mainTarget.isWithinMeleeRange(any(Coordinate.class))).thenReturn(true);
         when(mainTarget.attackedByAoe(any(ViolentCreature.class), anyInt(), any(Damage.class))).thenReturn(1);
         when(mainTarget.coordinate()).thenReturn(Coordinate.xy(2, 3));
 
