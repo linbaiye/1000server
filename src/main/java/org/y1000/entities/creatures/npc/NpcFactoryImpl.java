@@ -5,7 +5,6 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.*;
 import org.y1000.entities.creatures.npc.AI.*;
 import org.y1000.entities.creatures.npc.interactability.BuyInteractability;
@@ -103,29 +102,29 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private Map<NpcStateEnum, Integer> createDevirtueActionLengthMap(String animate) {
-        Map<NpcStateEnum, Integer> result = new HashMap<>();
-        int move = actionSdb.getActionLength(animate, NpcStateEnum.Move);
-        int idle = actionSdb.getActionLength(animate, NpcStateEnum.Idle);
-        int hurt = actionSdb.getActionLength(animate, NpcStateEnum.Hurt);
-        int die = actionSdb.getActionLength(animate, NpcStateEnum.Die);
-        int turn = actionSdb.getActionLength(animate, NpcStateEnum.Turn);
-        result.put(NpcStateEnum.Idle, idle);
-        result.put(NpcStateEnum.Move, move);
-        result.put(NpcStateEnum.Hurt, hurt);
-        result.put(NpcStateEnum.Die, die);
-        result.put(NpcStateEnum.Turn, turn);
+    private Map<NpcActionEnum, Integer> createDevirtueActionLengthMap(String animate) {
+        Map<NpcActionEnum, Integer> result = new HashMap<>();
+        int move = actionSdb.getActionLength(animate, NpcActionEnum.Move);
+        int idle = actionSdb.getActionLength(animate, NpcActionEnum.Idle);
+        int hurt = actionSdb.getActionLength(animate, NpcActionEnum.Hurt);
+        int die = actionSdb.getActionLength(animate, NpcActionEnum.Die);
+        int turn = actionSdb.getActionLength(animate, NpcActionEnum.Turn);
+        result.put(NpcActionEnum.Idle, idle);
+        result.put(NpcActionEnum.Move, move);
+        result.put(NpcActionEnum.Hurt, hurt);
+        result.put(NpcActionEnum.Die, die);
+        result.put(NpcActionEnum.Turn, turn);
         return result;
     }
 
-    private Map<NpcStateEnum, Integer> createSubmissiveNpcActionLengthMap(String idName) {
+    private Map<NpcActionEnum, Integer> createSubmissiveNpcActionLengthMap(String idName) {
         return createDevirtueActionLengthMap(npcSdb.getAnimate(idName));
     }
 
-    private Map<NpcStateEnum, Integer> createActionLengthMap(String animate) {
-        Map<NpcStateEnum, Integer> result = createDevirtueActionLengthMap(animate);
-        int attack = actionSdb.getActionLength(animate, NpcStateEnum.Attack);
-        result.put(NpcStateEnum.Attack, attack);
+    private Map<NpcActionEnum, Integer> createActionLengthMap(String animate) {
+        Map<NpcActionEnum, Integer> result = createDevirtueActionLengthMap(animate);
+        int attack = actionSdb.getActionLength(animate, NpcActionEnum.Attack);
+        result.put(NpcActionEnum.Attack, attack);
         return result;
     }
 
@@ -142,7 +141,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         return new NpcRangedSkill(Integer.parseInt(bowImage), kungFuSdb.getSoundSwing(magicName));
     }
 
-    private AggressiveMonster createAggressiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells, NpcAI ai) {
+    private AggressiveMonster createAggressiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells, INpcAI ai) {
         return AggressiveMonster.builder()
                 .id(id)
                 .coordinate(coordinate)
@@ -157,7 +156,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .build();
     }
 
-    private Npc createSubmissiveMonster(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
+    private INpc createSubmissiveMonster(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
 
         if (name.equals("稻草人")) {
             return Scarecrow.builder()
@@ -170,7 +169,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .build();
         }
         int actionWidth = monsterSdb.getActionWidth(name);
-        var npcAI = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
+        INpcAI npcAI = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
         return SubmissiveNpc.builder()
                 .id(id)
                 .coordinate(coordinate)
@@ -183,7 +182,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .build();
     }
 
-    private Npc createSubmissiveNpc(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
+    private INpc createSubmissiveNpc(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells) {
         int actionWidth = npcSdb.getActionWidth(name);
         if (name.equals("九尾狐酒母")) {
             return NineTailFoxHuman.builder()
@@ -194,7 +193,6 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .realmMap(map)
                     .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
                     .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                    .ai(new SubmissiveWanderingAI())
                     .build();
         }
         var npcAI = actionWidth == 0 ? NpcFrozenAI.INSTANCE : new SubmissiveWanderingAI();
@@ -211,7 +209,7 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private Npc createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells, NpcAI ai) {
+    private INpc createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells, INpcAI ai) {
         boolean attack = monsterSdb.attack(name);
         if (attack) {
             return PassiveMonster.builder()
@@ -233,7 +231,7 @@ public final class NpcFactoryImpl implements NpcFactory {
 
 
 
-    private Npc createMonster(String name, long id, RealmMap realmMap, Coordinate coordinate, List<NpcSpell> spells, NpcAI ai) {
+    private INpc createMonster(String name, long id, RealmMap realmMap, Coordinate coordinate, List<NpcSpell> spells, INpcAI ai) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(realmMap);
         Objects.requireNonNull(coordinate);
@@ -279,10 +277,10 @@ public final class NpcFactoryImpl implements NpcFactory {
         return Optional.of(new Chatter(dialogs));
     }
 
-    private Npc createSubmissiveNpc(String name, long id, RealmMap realmMap,
-                                    Coordinate coordinate,
-                                    String merchantSdbFile,
-                                    String dialogSdb) {
+    private INpc createSubmissiveNpc(String name, long id, RealmMap realmMap,
+                                     Coordinate coordinate,
+                                     String merchantSdbFile,
+                                     String dialogSdb) {
         if ("仓库管理员".equals(name)) {
             return Banker.builder()
                     .id(id)
@@ -311,9 +309,9 @@ public final class NpcFactoryImpl implements NpcFactory {
                 .build();
     }
 
-    private Npc createViolentNpc(String name, long id, RealmMap realmMap,
-                                    Coordinate coordinate,
-                                    String merchantSdbFile) {
+    private INpc createViolentNpc(String name, long id, RealmMap realmMap,
+                                  Coordinate coordinate,
+                                  String merchantSdbFile) {
         NpcInteractor npcInteractor = createNpcInteractor(name, merchantSdbFile);
         String animate = npcSdb.getAnimate(name);
         if (npcInteractor == null) {
@@ -343,7 +341,7 @@ public final class NpcFactoryImpl implements NpcFactory {
 
 
     @Override
-    public Npc createNpc(String name, long id, RealmMap realmMap, Coordinate coordinate) {
+    public INpc createNpc(String name, long id, RealmMap realmMap, Coordinate coordinate) {
         Validate.notNull(name);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
@@ -355,7 +353,7 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
     @Override
-    public Npc createClonedNpc(Npc npc, long id, Coordinate coordinate) {
+    public INpc createClonedNpc(INpc npc, long id, Coordinate coordinate) {
         Validate.notNull(npc);
         Validate.notNull(coordinate);
         if (monsterSdb.contains(npc.idName())) {
@@ -367,7 +365,7 @@ public final class NpcFactoryImpl implements NpcFactory {
 
 
     @Override
-    public Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate, CreateNonMonsterSdb createNpcSdb) {
+    public INpc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate, CreateNonMonsterSdb createNpcSdb) {
         Validate.notNull(name);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);

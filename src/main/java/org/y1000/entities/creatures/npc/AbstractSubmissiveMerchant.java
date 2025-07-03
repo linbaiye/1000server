@@ -3,10 +3,8 @@ package org.y1000.entities.creatures.npc;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
@@ -28,7 +26,7 @@ public abstract class AbstractSubmissiveMerchant extends AbstractNpc implements 
     public AbstractSubmissiveMerchant(long id,
                                       Coordinate coordinate,
                                       String name,
-                                      Map<NpcStateEnum, Integer> stateMillis,
+                                      Map<NpcActionEnum, Integer> stateMillis,
                                       AttributeProvider attributeProvider,
                                       RealmMap realmMap,
                                       Merchantable merchantable,
@@ -67,6 +65,6 @@ public abstract class AbstractSubmissiveMerchant extends AbstractNpc implements 
 
     @Override
     void hurt(ViolentCreature attacker) {
-        doHurtAction(attacker, getStateMillis(NpcStateEnum.Hurt));
+        doHurtAction(attacker, getStateMillis(NpcActionEnum.Hurt));
     }
 }

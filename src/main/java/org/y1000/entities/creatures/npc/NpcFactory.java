@@ -6,10 +6,10 @@ import org.y1000.util.Coordinate;
 
 public interface NpcFactory {
 
-    Npc createNpc(String name, long id, RealmMap realmMap, Coordinate coordinate);
+    INpc createNpc(String name, long id, RealmMap realmMap, Coordinate coordinate);
 
-    Npc createClonedNpc(Npc npc, long id, Coordinate coordinate);
+    INpc createClonedNpc(INpc npc, long id, Coordinate coordinate);
 
-    Npc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate, CreateNonMonsterSdb createNonMonsterSdb);
+    INpc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate, CreateNonMonsterSdb createNonMonsterSdb);
 
 }

@@ -1,10 +1,5 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.IAbstractCreatureState;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.players.event.PlayerReviveEvent;
-
 //public final class PlayerDeadState extends IAbstractCreatureState<PlayerImpl> implements IPlayerState {
 //
 //    public PlayerDeadState(int totalMillis) {

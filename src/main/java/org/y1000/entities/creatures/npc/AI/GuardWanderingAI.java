@@ -5,7 +5,7 @@ import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.event.SeekAggressiveMonsterEvent;
 import org.y1000.entities.creatures.monster.AggressiveMonster;
 import org.y1000.entities.creatures.npc.Guardian;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcHurtState;
 import org.y1000.util.Coordinate;
 
@@ -29,7 +29,7 @@ public final class GuardWanderingAI extends AbstractWanderingNpcAI {
     }
 
     @Override
-    protected void onHurtDone(Npc npc) {
+    protected void onHurtDone(INpc npc) {
         if (!(npc instanceof Guardian guardian)) {
             return;
         }
@@ -39,7 +39,7 @@ public final class GuardWanderingAI extends AbstractWanderingNpcAI {
     }
 
     @Override
-    public void onActionDone(Npc npc) {
+    public void onActionDone(INpc npc) {
         if ((npc instanceof Guardian guardian)) {
             SeekAggressiveMonsterEvent event = new SeekAggressiveMonsterEvent(guardian, guardian.getWidth());
             guardian.emitEvent(event);

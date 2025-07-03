@@ -3,13 +3,9 @@ package org.y1000.realm;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.event.*;
-import org.y1000.entities.creatures.npc.AggressiveNpc;
-import org.y1000.entities.creatures.npc.NineTailFoxHuman;
-import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.creatures.npc.*;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
-import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.message.RemoveEntityMessage;
 import org.y1000.realm.event.RealmEvent;
@@ -21,7 +17,9 @@ import org.y1000.util.Rectangle;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> implements EntityEventListener, NpcManager {
+abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> implements EntityEventListener,
+        NpcManager,
+        NpcMessageListener {
 
     private final EntityEventSender sender;
 
@@ -35,7 +33,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     private final MonstersSdb monstersSdb;
 
-    private final Map<Npc, Set<Npc>> linked;
+    private final Map<INpc, Set<INpc>> linked;
 
     private final Set<Long> cloned;
 
@@ -84,7 +82,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
     }
 
 
-    protected Npc createNpc(String name, Coordinate coordinate) {
+    protected INpc createNpc(String name, Coordinate coordinate) {
         return createNpcSdb != null && createNpcSdb.containsNpc(name)?
                 npcFactory.createNonMonsterNpc(name, idGenerator.next(), realmMap, coordinate, createNpcSdb) :
                 npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate);
@@ -126,14 +124,14 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         projectileManager.update(delta);
     }
 
-    protected void removeNpc(Npc npc) {
+    protected void removeNpc(INpc npc) {
         sender.notifyVisiblePlayers(npc, new RemoveEntityMessage(npc.id()));
         sender.remove(npc);
         npc.deregisterEventListener(this);
         remove(npc);
     }
 
-    protected void addNpc(Npc npc) {
+    protected void addNpc(INpc npc) {
         sender.add(npc);
         sender.notifyVisiblePlayers(npc, new NpcJoinedEvent(npc));
         npc.registerEventListener(this);
@@ -143,7 +141,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
 
     private void handleDieEvent(CreatureDieEvent event) {
-        if (!(event.source() instanceof Npc npc)) {
+        if (!(event.source() instanceof INpc npc)) {
             return;
         }
         String dropItems;
@@ -156,7 +154,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
             itemManager.dropItem(dropItems, event.source().coordinate());
         }
         if (linked.containsKey(npc)) {
-            linked.get(npc).forEach(Npc::die);
+            linked.get(npc).forEach(INpc::die);
         }
     }
 
@@ -176,24 +174,24 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
 
     abstract void onUnhandledEvent(EntityEvent entityEvent) ;
 
-    Npc replaceNpc(NpcShiftEvent shiftEvent) {
-        Npc npc = shiftEvent.npc();
+    INpc replaceNpc(NpcShiftEvent shiftEvent) {
+        INpc npc = shiftEvent.npc();
         removeNpc(npc);
-        Npc newNpc = createNpc(shiftEvent.shiftToName(), npc.coordinate());
+        INpc newNpc = createNpc(shiftEvent.shiftToName(), npc.coordinate());
         addNpc(newNpc);
         return newNpc;
     }
 
-    boolean isCloned(Npc npc) {
+    boolean isCloned(INpc npc) {
         return cloned.contains(npc.id());
     }
 
-    void removeFromCloned(Npc npc) {
+    void removeFromCloned(INpc npc) {
         cloned.remove(npc.id());
     }
 
     private void handleCloneEvent(NpcCastCloneEvent event) {
-        var set =  new HashSet<Npc>();
+        var set =  new HashSet<INpc>();
         var random = ThreadLocalRandom.current();
         for (int i = 0; i < event.number(); i++) {
             Coordinate coordinate = event.npc().coordinate();
@@ -238,5 +236,10 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc> imple
         } else {
             onUnhandledEvent(entityEvent);
         }
+    }
+
+    @Override
+    public void onMessage(NpcMessage message) {
+        sender.notifyVisiblePlayers(message.source(), message);
     }
 }

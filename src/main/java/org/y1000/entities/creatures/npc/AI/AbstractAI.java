@@ -1,13 +1,12 @@
 package org.y1000.entities.creatures.npc.AI;
 
 import org.slf4j.Logger;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcFrozenAI;
 
 import java.util.function.Consumer;
 
-public abstract class AbstractAI<N extends Npc> implements NpcAI {
+public abstract class AbstractAI<N extends INpc> implements INpcAI {
 
     protected abstract void onStartNotDead(N n);
 
@@ -17,7 +16,7 @@ public abstract class AbstractAI<N extends Npc> implements NpcAI {
 
     protected abstract void onMoveFailedNotDead(N n);
 
-    private void invokeIfNoDead(Npc npc, Consumer<N> consumer) {
+    private void invokeIfNoDead(INpc npc, Consumer<N> consumer) {
         if (npc == null || npc.isDead()) {
             if (npc != null)
                 npc.changeAndStartAI(NpcFrozenAI.INSTANCE);
@@ -32,17 +31,17 @@ public abstract class AbstractAI<N extends Npc> implements NpcAI {
     protected abstract Logger log();
 
     @Override
-    public void onActionDone(Npc npc) {
+    public void onActionDone(INpc npc) {
         invokeIfNoDead(npc, this::onActionDoneNotDead);
     }
 
     @Override
-    public void onMoveFailed(Npc npc) {
+    public void onMoveFailed(INpc npc) {
         invokeIfNoDead(npc, this::onMoveFailedNotDead);
     }
 
     @Override
-    public void start(Npc npc) {
+    public void start(INpc npc) {
         invokeIfNoDead(npc, this::onStartNotDead);
     }
 }

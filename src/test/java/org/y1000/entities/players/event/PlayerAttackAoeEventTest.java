@@ -5,7 +5,7 @@ import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.kungfu.AssistantKungFu;
@@ -29,12 +29,12 @@ class PlayerAttackAoeEventTest extends AbstractUnitTestFixture  {
         when(player.damage()).thenReturn(Damage.DEFAULT);
         when(player.attackKungFu()).thenReturn(kungFuFactory.createAttackKungFu("无名剑法"));
 
-        Npc mainTarget = Mockito.mock(Npc.class);
+        INpc mainTarget = Mockito.mock(INpc.class);
         when(mainTarget.isWithinMeleeRange(any(Coordinate.class))).thenReturn(true);
         when(mainTarget.attackedByAoe(any(ViolentCreature.class), anyInt(), any(Damage.class))).thenReturn(1);
         when(mainTarget.coordinate()).thenReturn(Coordinate.xy(2, 3));
 
-        Npc affectedTaget = Mockito.mock(Npc.class);
+        INpc affectedTaget = Mockito.mock(INpc.class);
         when(affectedTaget.attackedByAoe(any(ViolentCreature.class), anyInt(), any(Damage.class))).thenReturn(1);
         when(affectedTaget.coordinate()).thenReturn(Coordinate.xy(1, 3));
 

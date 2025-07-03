@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
-import org.y1000.entities.creatures.npc.AI.AiPathUtil;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -51,7 +50,7 @@ class AiPathUtilTest extends AbstractMonsterUnitTestFixture {
          //x:0,1,2,3
         };
         RealmMap map = buildMap(mapmask);
-        Npc npc = Mockito.mock(Npc.class);
+        INpc npc = Mockito.mock(INpc.class);
         previous.set(Coordinate.xy(0, 0));
         npcCoordinate.set(Coordinate.xy(0, 3));
         npcDirection.set(Direction.RIGHT);
@@ -91,7 +90,7 @@ class AiPathUtilTest extends AbstractMonsterUnitTestFixture {
                 System.out.println(Coordinate.xy(i, j) + ": " + map.movable(Coordinate.xy(i, j)));
             }
         }
-        Npc npc = Mockito.mock(Npc.class);
+        INpc npc = Mockito.mock(INpc.class);
         when(npc.realmMap()).thenReturn(map);
         when(npc.direction()).thenReturn(Direction.UP);
         when(npc.coordinate()).thenReturn(Coordinate.xy(3,3));

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;

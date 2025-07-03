@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc.AI;
 
 
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcHurtState;
 import org.y1000.util.Coordinate;
 
@@ -10,7 +10,7 @@ public final class SubmissiveWanderingAI extends AbstractWanderingNpcAI {
     private final Chatter chatter;
 
     @Override
-    protected void onHurtDone(Npc npc) {
+    protected void onHurtDone(INpc npc) {
         if (npc.npcState() instanceof NpcHurtState hurtState) {
 //            npc.changeState(hurtState.previousState());
             npc.npcState().afterHurt(npc);
@@ -33,7 +33,7 @@ public final class SubmissiveWanderingAI extends AbstractWanderingNpcAI {
     }
 
     @Override
-    public void onActionDone(Npc npc) {
+    public void onActionDone(INpc npc) {
         if (chatter != null)
             chatter.onActionDone(npc);
         defaultActionDone(npc);

@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.event.SeekPlayerEvent;
 import org.y1000.entities.creatures.monster.Monster;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcHurtState;
 import org.y1000.entities.creatures.npc.ViolentNpc;
 import org.y1000.entities.players.Player;
@@ -36,7 +36,7 @@ public final class VigilantWanderingAI extends AbstractMonsterWanderingAI {
     }
 
     @Override
-    protected Coordinate random(Npc npc) {
+    protected Coordinate random(INpc npc) {
         return npc.wanderingArea().randomOutSpawnScope(npc.coordinate());
     }
 

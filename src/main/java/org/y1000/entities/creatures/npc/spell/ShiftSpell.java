@@ -1,10 +1,9 @@
 package org.y1000.entities.creatures.npc.spell;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.INpc;
 
 public final class ShiftSpell implements NpcSpell {
 
@@ -16,11 +15,11 @@ public final class ShiftSpell implements NpcSpell {
     }
 
     @Override
-    public boolean canCast(Npc npc) {
-        return npc.npcStateEnum() == NpcStateEnum.Die;
+    public boolean canCast(INpc npc) {
+        return npc.npcStateEnum() == NpcActionEnum.Die;
     }
 
-    public void cast(Npc npc) {
+    public void cast(INpc npc) {
         if (canCast(npc))
             npc.emitEvent(new NpcShiftEvent(newNpcName, npc));
     }

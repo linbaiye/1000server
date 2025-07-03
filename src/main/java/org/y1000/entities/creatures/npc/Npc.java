@@ -1,88 +1,83 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.AI.NpcAI;
-import org.y1000.entities.creatures.npc.spell.NpcSpell;
-import org.y1000.entities.players.Damage;
+import lombok.Getter;
+import org.y1000.entities.AbstractActiveEntity;
+import org.y1000.entities.Direction;
+import org.y1000.message.I2ClientMessage;
+import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
-import org.y1000.util.Rectangle;
 
-import java.util.Optional;
+import java.util.*;
 
-public interface Npc extends Creature {
+public class Npc extends AbstractActiveEntity {
 
-    void onActionDone();
+    private final List<NpcAction> abilities;
+    private final NpcMessageListener listener;
+    private Coordinate coordinate;
 
-    void onMoveFailed();
+    @Getter
+    private final RealmMap realmMap;
 
-    void move(int millis);
+    private NpcAI ai;
 
-    void stay(int millis);
+    private final String viewName;
 
-    void turn();
+    @Getter
+    private final Coordinate spawnCoordinate;
 
-    void die();
 
-    Rectangle wanderingArea();
-
-    Coordinate spawnCoordinate();
-
-    <S extends NpcSpell> Optional<S> findSpell(Class<S> type);
-
-    void startAction(NpcStateEnum stateEnum);
-
-    void changeState(NpcState state);
-
-    NpcState npcState();
-
-    void start();
-
-    /**
-     * An viewName is used identify a npc uniquely as different NPCs can have the same viewName.
-     * @return the unique viewName.
-     */
-    String idName();
-
-    /**
-     * Gets attacked by aoe skills.
-     * @param caster the attacker.
-     * @param hit attacker's hit.
-     * @param damage attacker's damage.
-     * @return exp the attacker can get.
-     */
-    int attackedByAoe(ViolentCreature caster, int hit, Damage damage);
-
-    int walkSpeed();
-
-    int viewWidth();
-
-    NpcAI getAI();
-
-    void changeAndStartAI(NpcAI newAI);
-
-    void changeAI(NpcAI newAI);
-
-    void startIdleAI();
-
-    String animation();
-
-    String shape();
-
-    NpcStateEnum npcStateEnum();
-
-    default <A> Optional<A> findAbility(Class<A> type) {
-        return Optional.empty();
+    public Npc(long id,
+               String viewName,
+               Coordinate coordinate,
+               List<NpcAction> actions,
+               NpcMessageListener listener,
+               RealmMap realmMap) {
+        super(id);
+        this.abilities = actions;
+        this.listener = listener;
+        this.realmMap = realmMap;
+        this.viewName = viewName;
+        this.spawnCoordinate = coordinate;
+        this.coordinate = coordinate;
+        realmMap.occupy(this);
     }
 
-    int getStateMillis(NpcStateEnum stateEnum);
-
-    default boolean isDead() {
-        return npcStateEnum() == NpcStateEnum.Die;
+    public void sendMessage(NpcMessage message) {
+        listener.onMessage(message);
     }
 
-    default boolean isMoving() {
-        return npcStateEnum() == NpcStateEnum.Move;
+    public <A extends NpcAction> Optional<A> findAbility(Class<A> type) {
+        return abilities.stream()
+                .filter(a -> type.isAssignableFrom(a.getClass()))
+                .findFirst().map(type::cast);
+    }
+
+
+    public void changeAI(NpcAI newAi) {
+        ai = newAi;
+    }
+
+    @Override
+    public void update(int delta) {
+        ai.update(delta);
+    }
+
+    @Override
+    public Coordinate coordinate() {
+        return coordinate;
+    }
+
+    public Direction direction() {
+        return Direction.DOWN;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+        realmMap.occupy(this);
+    }
+
+    @Override
+    public I2ClientMessage captureSnapshot() {
+        return null;
     }
 }

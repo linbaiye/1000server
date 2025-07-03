@@ -1,6 +1,6 @@
 package org.y1000.message;
 
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.network.gen.CreatureBaseInfoPacket;
 import org.y1000.network.gen.NpcSnapshotPacket;
 import org.y1000.network.gen.Packet;
@@ -11,7 +11,7 @@ public record NpcSnapshot(Packet packet) implements I2ClientMessage {
         return packet;
     }
 
-    public static NpcSnapshot ofNpc(Npc npc, int elapsed) {
+    public static NpcSnapshot ofNpc(INpc npc, int elapsed) {
         var coordinate = npc.coordinate();
         CreatureBaseInfoPacket baseInfoSnapshot = CreatureBaseInfoPacket.newBuilder()
                 .setY(coordinate.y())

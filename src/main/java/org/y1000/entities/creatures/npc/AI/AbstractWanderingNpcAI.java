@@ -1,19 +1,18 @@
 package org.y1000.entities.creatures.npc.AI;
 
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.util.Coordinate;
 
 @Deprecated
-public abstract class AbstractWanderingNpcAI implements NpcAI {
+public abstract class AbstractWanderingNpcAI implements INpcAI {
 
     private Coordinate destination;
 
     private Coordinate previousCoordinate;
 
 
-    protected abstract void onHurtDone(Npc npc);
+    protected abstract void onHurtDone(INpc npc);
 
     public AbstractWanderingNpcAI(Coordinate destination, Coordinate previousCoordinate) {
         this.destination = destination ;
@@ -24,18 +23,18 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
 
     }
 
-    private void stayIdle(Npc npc) {
-        int stateMillis = npc.getStateMillis(NpcStateEnum.Idle);
+    private void stayIdle(INpc npc) {
+        int stateMillis = npc.getStateMillis(NpcActionEnum.Idle);
         int walkSpeed = npc.walkSpeed();
         int millis = Math.max(walkSpeed, stateMillis) * 2;
         npc.stay(millis);
     }
 
-    protected void defaultActionDone(Npc npc) {
+    protected void defaultActionDone(INpc npc) {
         switch (npc.npcStateEnum()) {
             case Move -> onMoveDone(npc);
             case Idle -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc),
-                    npc.getStateMillis(NpcStateEnum.Move));
+                    npc.getStateMillis(NpcActionEnum.Move));
             case Turn -> stayIdle(npc);
             case Hurt -> onHurtDone(npc);
             default -> {
@@ -46,18 +45,18 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
     }
 
     @Override
-    public void onMoveFailed(Npc npc) {
+    public void onMoveFailed(INpc npc) {
         nextRound(npc);
     }
 
-    private void nextRound(Npc npc) {
+    private void nextRound(INpc npc) {
         previousCoordinate = null;
         destination = null;
         start(npc);
     }
 
     @Override
-    public void start(Npc npc) {
+    public void start(INpc npc) {
         if (npc.isDead()) {
             return;
         }
@@ -68,7 +67,7 @@ public abstract class AbstractWanderingNpcAI implements NpcAI {
         stayIdle(npc);
     }
 
-    private void onMoveDone(Npc npc) {
+    private void onMoveDone(INpc npc) {
         previousCoordinate = npc.coordinate().moveBy(npc.direction().opposite());
         if (npc.coordinate().equals(destination)) {
             nextRound(npc);

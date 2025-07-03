@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 
-public interface InteractableNpc extends Npc {
+public interface InteractableNpc extends INpc {
 
     void onClicked(Player player);
 

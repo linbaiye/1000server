@@ -5,7 +5,7 @@ import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.creatures.event.SeekPlayerEvent;
 import org.y1000.entities.creatures.monster.Monster;
 import org.y1000.entities.creatures.npc.AggressiveNpc;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 
-public final class MonsterWanderingAI implements NpcAI {
+public final class MonsterWanderingAI implements INpcAI {
 
     private final ViolentNpcWanderingAI wrappedAi;
 
@@ -33,7 +33,7 @@ public final class MonsterWanderingAI implements NpcAI {
     }
 
     @Override
-    public void onActionDone(Npc npc) {
+    public void onActionDone(INpc npc) {
         Validate.notNull(npc);
         if (npc instanceof AggressiveNpc aggressiveNpc) {
             SeekPlayerEvent event = new SeekPlayerEvent(aggressiveNpc);
@@ -53,12 +53,12 @@ public final class MonsterWanderingAI implements NpcAI {
     }
 
     @Override
-    public void onMoveFailed(Npc npc) {
+    public void onMoveFailed(INpc npc) {
         wrappedAi.onMoveFailed(npc);
     }
 
     @Override
-    public void start(Npc npc) {
+    public void start(INpc npc) {
         wrappedAi.start(npc);
     }
 

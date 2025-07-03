@@ -3,24 +3,17 @@ package org.y1000.entities.creatures.npc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.TestingEventListener;
-import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
-import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.ItemFactory;
-import org.y1000.item.ItemType;
 import org.y1000.realm.RealmMap;
 import org.y1000.trade.TradeItem;
 import org.y1000.util.Coordinate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

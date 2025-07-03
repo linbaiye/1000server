@@ -7,9 +7,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.AI.ViolentNpcWanderingAI;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.quest.Quest;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -28,7 +26,7 @@ public final class ViolentQuester extends AbstractViolentNpc implements Quester 
     public ViolentQuester(long id, Coordinate coordinate,
                               Direction direction,
                               String name,
-                              Map<NpcStateEnum, Integer> stateMillis,
+                              Map<NpcActionEnum, Integer> stateMillis,
                               AttributeProvider attributeProvider,
                               RealmMap realmMap,
                               Quest quest) {

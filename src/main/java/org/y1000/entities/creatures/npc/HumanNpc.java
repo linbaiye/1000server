@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.npc;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.message.serverevent.EntityChatEvent;
 
-public interface HumanNpc extends Npc {
+public interface HumanNpc extends INpc {
 
     default void say(String text) {
         if (StringUtils.isNotEmpty(text))

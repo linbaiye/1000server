@@ -6,8 +6,8 @@ import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.monster.Monster;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcHurtState;
 import org.y1000.entities.creatures.npc.ViolentNpc;
 import org.y1000.entities.creatures.npc.spell.CloneSpell;
@@ -18,7 +18,7 @@ import org.y1000.util.Coordinate;
 
 @Slf4j
 @Deprecated
-public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
+public abstract class AbstractNpcFightAI implements INpcAI, EntityEventListener {
     private AttackableEntity enemy;
 
     protected final ViolentNpc npc;
@@ -62,7 +62,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
 
     int computeWalkMillis() {
         int walkSpeed = npc.walkSpeed() / speedRate;
-        var stateMillis = npc.getStateMillis(NpcStateEnum.Move);
+        var stateMillis = npc.getStateMillis(NpcActionEnum.Move);
         if (walkSpeed > stateMillis) {
             return stateMillis;
         }
@@ -85,7 +85,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
         }
     }
 
-    protected abstract void onFightDone(Npc npc);
+    protected abstract void onFightDone(INpc npc);
 
     private void wanderOrFight() {
         if (npc.canChaseOrAttack(enemy)) {
@@ -97,7 +97,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
 
 
     @Override
-    public void onActionDone(Npc npc) {
+    public void onActionDone(INpc npc) {
         if (npc.isDead()) {
             return;
         }
@@ -105,7 +105,7 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
             previous = npc.coordinate().moveBy(npc.direction().opposite());
             npc.stay(computeStayMillis());
             return;
-        } else if (npc.npcStateEnum() == NpcStateEnum.Hurt) {
+        } else if (npc.npcStateEnum() == NpcActionEnum.Hurt) {
             npc.findSpell(CloneSpell.class).ifPresent(s -> s.castIfAvailable(npc, getEnemy()));
             tryChangeEnemy();
             if (npc instanceof Monster monster && getEnemy() instanceof ViolentCreature violentCreature) {
@@ -119,12 +119,12 @@ public abstract class AbstractNpcFightAI implements NpcAI, EntityEventListener {
     }
 
     @Override
-    public void onMoveFailed(Npc npc) {
+    public void onMoveFailed(INpc npc) {
         wanderOrFight();
     }
 
     @Override
-    public void start(Npc npc) {
+    public void start(INpc npc) {
         npc.findSpell(CloneSpell.class).ifPresent(s -> s.castIfAvailable(npc, getEnemy()));
         wanderOrFight();
     }

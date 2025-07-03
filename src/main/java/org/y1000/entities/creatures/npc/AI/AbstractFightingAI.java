@@ -1,8 +1,8 @@
 package org.y1000.entities.creatures.npc.AI;
 
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 
-public abstract class AbstractFightingAI<N extends Npc> extends AbstractAI<N> {
+public abstract class AbstractFightingAI<N extends INpc> extends AbstractAI<N> {
 
     private Mover<N> mover;
 

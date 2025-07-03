@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -22,11 +22,11 @@ class MoverTest {
     private Direction direction;
     private Coordinate coordinate;
     private OldPlayerStateEnum playerStateEnum;
-    private Npc npc;
+    private INpc npc;
 
     @BeforeEach
     void setUp() {
-        npc = Mockito.mock(Npc.class);
+        npc = Mockito.mock(INpc.class);
         playerStateEnum = OldPlayerStateEnum.IDLE;
         when(npc.direction()).thenAnswer(invocationOnMock -> direction);
         when(npc.coordinate()).thenAnswer(invocationOnMock -> coordinate);
@@ -59,7 +59,7 @@ class MoverTest {
     }
 
 
-    private void cantbe(Npc npc) {
+    private void cantbe(INpc npc) {
         throw new RuntimeException();
     }
 
@@ -79,7 +79,7 @@ class MoverTest {
         when(npc.getStateMillis(OldPlayerStateEnum.Move)).thenReturn(200);
         when(npc.walkSpeed()).thenReturn(200);
         when(npc.realmMap()).thenReturn(map);
-        Mover<Npc> mover = Mover.ofWalk(npc, Coordinate.xy(2, 1));
+        Mover<INpc> mover = Mover.ofWalk(npc, Coordinate.xy(2, 1));
         mover.nextMove(this::cantbe);
         verify(npc, times(1)).move(200);;
         assertEquals(Direction.RIGHT, direction);
@@ -100,7 +100,7 @@ class MoverTest {
         when(npc.getStateMillis(OldPlayerStateEnum.IDLE)).thenReturn(200);
         when(npc.getStateMillis(OldPlayerStateEnum.Move)).thenReturn(240);
         when(npc.walkSpeed()).thenReturn(500);
-        Mover<Npc> mover = Mover.ofWalk(npc, Coordinate.xy(2, 10));
+        Mover<INpc> mover = Mover.ofWalk(npc, Coordinate.xy(2, 10));
         mover.nextMove(this::cantbe);
         verify(npc, times(1)).move(240);;
         mover.nextMove(this::cantbe);
@@ -125,7 +125,7 @@ class MoverTest {
         when(npc.getStateMillis(OldPlayerStateEnum.IDLE)).thenReturn(200);
         when(npc.getStateMillis(OldPlayerStateEnum.Move)).thenReturn(210);
         when(npc.walkSpeed()).thenReturn(1000);
-        Mover<Npc> mover = Mover.ofRun(npc, Coordinate.xy(2, 10));
+        Mover<INpc> mover = Mover.ofRun(npc, Coordinate.xy(2, 10));
         mover.run(this::cantbe);
         verify(npc, times(1)).move(210);
         mover.run(this::cantbe);

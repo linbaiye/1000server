@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public interface Merchant extends Npc, Merchantable {
+public interface Merchant extends INpc, Merchantable {
 
     void buy(Player player, Collection<TradeItem> items, Function<Long, StackItem> moneyCreator);
 

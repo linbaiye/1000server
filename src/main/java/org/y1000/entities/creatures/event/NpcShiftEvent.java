@@ -2,22 +2,22 @@ package org.y1000.entities.creatures.event;
 
 import org.y1000.entities.Entity;
 import org.y1000.entities.RemoveEntityEvent;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventVisitor;
 
 public final class NpcShiftEvent implements IEntityEvent {
 
     private final String idName;
-    private final Npc source;
+    private final INpc source;
 
     public NpcShiftEvent(String idName,
-                         Npc source) {
+                         INpc source) {
         this.idName = idName;
         this.source = source;
     }
 
-    public Npc npc() {
+    public INpc npc() {
         return source;
     }
 

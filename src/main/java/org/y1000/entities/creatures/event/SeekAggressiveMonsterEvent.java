@@ -2,10 +2,9 @@ package org.y1000.entities.creatures.event;
 
 import lombok.Getter;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.AggressiveMonster;
 import org.y1000.entities.creatures.npc.Guardian;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.event.IEntityEvent;
 
 import java.util.HashSet;
@@ -28,7 +27,7 @@ public class SeekAggressiveMonsterEvent implements IEntityEvent {
         return guardian;
     }
 
-    public void handle(Stream<Npc> entityStream) {
+    public void handle(Stream<INpc> entityStream) {
         entityStream.filter(npc -> npc instanceof AggressiveMonster &&
                         !npc.isDead() &&
                         npc.coordinate().directDistance(guardian.coordinate()) <= width)

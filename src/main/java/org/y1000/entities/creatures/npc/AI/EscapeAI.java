@@ -3,23 +3,23 @@ package org.y1000.entities.creatures.npc.AI;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.util.Coordinate;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
-public final class EscapeAI extends AbstractAI<Npc> {
+public final class EscapeAI extends AbstractAI<INpc> {
 
     private final ViolentCreature enemy;
 
-    private Mover<Npc> mover;
+    private Mover<INpc> mover;
 
     public EscapeAI(ViolentCreature enemy) {
         this.enemy = enemy;
     }
 
-    private Coordinate computeEscapePoint(Npc npc) {
+    private Coordinate computeEscapePoint(INpc npc) {
         int len = 0;
         Coordinate coordinate = npc.coordinate();
         Coordinate target = Coordinate.Empty;
@@ -42,19 +42,19 @@ public final class EscapeAI extends AbstractAI<Npc> {
     }
 
     @Override
-    protected void onStartNotDead(Npc violentNpc) {
+    protected void onStartNotDead(INpc violentNpc) {
         if (mover == null)
             mover = Mover.ofRun(violentNpc, computeEscapePoint(violentNpc));
         mover.nextMove(this::onNoPath);
     }
 
     @Override
-    protected Class<Npc> npcType() {
-        return Npc.class;
+    protected Class<INpc> npcType() {
+        return INpc.class;
     }
 
     @Override
-    protected void onActionDoneNotDead(Npc violentNpc) {
+    protected void onActionDoneNotDead(INpc violentNpc) {
         if (mover.isArrived()) {
             violentNpc.changeAndStartAI(new VigilantWanderingAI());
         } else {
@@ -67,7 +67,7 @@ public final class EscapeAI extends AbstractAI<Npc> {
     }
 
     @Override
-    protected void onMoveFailedNotDead(Npc violentNpc) {
+    protected void onMoveFailedNotDead(INpc violentNpc) {
         mover.nextMove(this::onNoPath);
     }
 
@@ -76,7 +76,7 @@ public final class EscapeAI extends AbstractAI<Npc> {
         return log;
     }
 
-    private void onNoPath(Npc npc) {
+    private void onNoPath(INpc npc) {
         log().debug("No path, changing to wandering");
         npc.changeAndStartAI(new VigilantWanderingAI());
     }

@@ -7,7 +7,7 @@ import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -20,7 +20,7 @@ public final class NineTailFoxHuman extends AbstractNpc {
 
     @Builder
     public NineTailFoxHuman(long id, Coordinate coordinate, Direction direction, String name,
-                            Map<NpcStateEnum, Integer> stateMillis, AttributeProvider attributeProvider,
+                            Map<NpcActionEnum, Integer> stateMillis, AttributeProvider attributeProvider,
                             RealmMap realmMap, SubmissiveWanderingAI ai) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, Collections.emptyList(), ai);
     }
@@ -33,7 +33,7 @@ public final class NineTailFoxHuman extends AbstractNpc {
 
     @Override
     void hurt(ViolentCreature attacker) {
-        doHurtAction(attacker, getStateMillis(NpcStateEnum.Hurt));
+        doHurtAction(attacker, getStateMillis(NpcActionEnum.Hurt));
     }
 
     @Override

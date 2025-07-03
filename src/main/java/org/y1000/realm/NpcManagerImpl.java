@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.creatures.npc.NpcMessage;
+import org.y1000.entities.creatures.npc.NpcMessageListener;
 import org.y1000.event.EntityEvent;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
@@ -19,11 +21,11 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
 
     private final Map<String, List<NpcSpawnSetting>> npcSpawnSettings;
 
-    private final EntityTimerManager<Npc> respawningEntityManager;
+    private final EntityTimerManager<INpc> respawningEntityManager;
 
     private boolean initialized = false;
 
-    private final Map<Npc, Npc> shiftedNpcs;
+    private final Map<INpc, INpc> shiftedNpcs;
     private static final int RESPAWN_MILLIS = 8000;
 
     @Builder
@@ -43,7 +45,7 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
         this.shiftedNpcs = new HashMap<>();
     }
 
-    private void respawn(Npc npc) {
+    private void respawn(INpc npc) {
         List<NpcSpawnSetting> settings = npcSpawnSettings.getOrDefault(npc.idName(), Collections.emptyList());
         for (NpcSpawnSetting setting : settings) {
             Rectangle range = setting.range();
@@ -67,7 +69,7 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
     }
 
     private void updateRespawning(long delta) {
-        Set<Npc> respawningNpcs = respawningEntityManager.update(delta);
+        Set<INpc> respawningNpcs = respawningEntityManager.update(delta);
         respawningNpcs.forEach(this::respawn);
     }
 
@@ -87,13 +89,13 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
 
 
     private void handleRemoveEvent(RemoveEntityEvent removeEntityEvent) {
-        if (removeEntityEvent.source() instanceof Npc npc) {
+        if (removeEntityEvent.source() instanceof INpc npc) {
             removeNpc(npc);
             if (isCloned(npc)) {
                 removeFromCloned(npc);
                 return;
             }
-            Npc target = Objects.requireNonNullElse(shiftedNpcs.remove(npc), npc);
+            INpc target = Objects.requireNonNullElse(shiftedNpcs.remove(npc), npc);
             int millis = getRespawnMillis(npc.idName());
             respawningEntityManager.add(target, millis > 0 ? millis : RESPAWN_MILLIS);
         }
@@ -102,7 +104,7 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
     private void handleShiftEvent(NpcShiftEvent shiftEvent) {
         if (shiftedNpcs.containsKey(shiftEvent.npc()))
             return;
-        Npc newNpc = replaceNpc(shiftEvent);
+        INpc newNpc = replaceNpc(shiftEvent);
         shiftedNpcs.put(newNpc, shiftEvent.npc());
     }
 

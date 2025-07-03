@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.npc.AI.NpcAI;
 import org.y1000.entities.creatures.npc.NpcRangedSkill;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.realm.RealmMap;
@@ -15,7 +13,6 @@ import org.y1000.util.Coordinate;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 @Slf4j
@@ -23,9 +20,9 @@ public final class PassiveMonster extends AbstractMonster {
 
     @Builder
     public PassiveMonster(long id, Coordinate coordinate, Direction direction, String name,
-                          RealmMap realmMap, Map<NpcStateEnum, Integer> stateMillis,
+                          RealmMap realmMap, Map<NpcActionEnum, Integer> stateMillis,
                           AttributeProvider attributeProvider,
-                          NpcRangedSkill skill, NpcAI ai, List<NpcSpell> spells) {
+                          NpcRangedSkill skill, INpcAI ai, List<NpcSpell> spells) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, ai, skill, spells);
     }
 

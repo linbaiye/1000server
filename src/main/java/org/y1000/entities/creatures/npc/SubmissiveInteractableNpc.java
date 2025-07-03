@@ -6,9 +6,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractor;
 import org.y1000.entities.players.Player;
@@ -28,7 +26,7 @@ public final class SubmissiveInteractableNpc extends AbstractSubmissiveNpc imple
     public SubmissiveInteractableNpc(long id,
                                      Coordinate coordinate,
                                      String name,
-                                     Map<NpcStateEnum, Integer> stateMillis,
+                                     Map<NpcActionEnum, Integer> stateMillis,
                                      NonMonsterNpcAttributeProvider attributeProvider,
                                      RealmMap realmMap,
                                      NpcInteractor interactor,

@@ -1,10 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.AbstractCreatureHurtState;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
 
 @Slf4j
 public final class NpcHurtState implements NpcState {
@@ -78,7 +75,7 @@ public final class NpcHurtState implements NpcState {
     }
 
     @Override
-    public NpcStateEnum stateEnum() {
-        return NpcStateEnum.Hurt;
+    public NpcActionEnum stateEnum() {
+        return NpcActionEnum.Hurt;
     }
 }

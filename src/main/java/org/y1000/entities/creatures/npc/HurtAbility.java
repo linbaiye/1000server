@@ -1,13 +1,14 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.AttackableEntity;
+import lombok.Getter;
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.entities.players.Damage;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 
-public class HurtAbility {
-
-    private final Npc npc;
+public class HurtAbility implements NpcAction {
 
     private final int armor;
 
@@ -15,40 +16,66 @@ public class HurtAbility {
 
     private final int hurtSound;
 
-    private final int millis;
+    private final int animationMillis;
 
-    private int life;
+    @Getter
+    private int currentLife;
+
+    @Getter
+    private final int maxLife;
+
+    private Consumer<? super HurtAbility> onTriggered;
 
 
-    public HurtAbility(Npc npc,
-                       int armor,
+    @Getter
+    private ActiveEntity trigger;
+
+    private int millisLeft;
+
+    public HurtAbility(int armor,
                        int avoidance,
                        int hurtSound,
                        int life,
                        int millis) {
-        this.npc = npc;
         this.armor = armor;
         this.avoidance = avoidance;
         this.hurtSound = hurtSound;
-        this.millis = millis;
-        this.life = life;
+        this.animationMillis = millis;
+        this.maxLife = life;
     }
+
     protected boolean isDodged(int attackerHit) {
         var rand = ThreadLocalRandom.current().nextInt(0, attackerHit + 75 + avoidance);
         return rand < avoidance;
     }
 
-    public void attackedBy(AttackableEntity attacker, Damage damage, int hit) {
-        if (isDodged(hit))
-            return;
-        var before = life;
-        damageAction.accept(damage);
-        var damagedLife = before - currentLife();
-        if (damagedLife > 0) {
-            var exp = damagedLifeToExp(damagedLife);
-            gainExp.accept(exp);
+    public boolean update(int delta) {
+        millisLeft -= delta;
+    }
+
+    @Override
+    public int elapsedMillis() {
+        return 0;
+    }
+
+    @Override
+    public NpcActionEnum actionEnum() {
+        return 0;
+    }
+
+
+    public int attackedBy(ActiveEntity attacker, Damage damage, int hit) {
+        if (currentLife <= 0) {
+            return -1;
         }
-        npc.changeState();
-        npc.findAbility(AttackAbility.class).ifPresent(attackAbility -> attackAbility.setEnemy(attacker));
+        int damageTaken = -1;
+        if (!isDodged(hit)) {
+            var before = currentLife;
+            currentLife = damage.bodyDamage() - armor;
+            damageTaken = before - currentLife;
+        }
+        trigger = attacker;
+        onTriggered.accept(this);
+        return damageTaken;
     }
 }

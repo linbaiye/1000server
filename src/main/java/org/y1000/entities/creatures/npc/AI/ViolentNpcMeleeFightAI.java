@@ -2,8 +2,8 @@ package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.AttackableEntity;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.ViolentNpc;
 
 @Slf4j
@@ -42,10 +42,10 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
         }
         turnIfNotFaced();
         if (npc.maxCooldown() > 0) {
-            npc.startAction(NpcStateEnum.Turn);
+            npc.startAction(NpcActionEnum.Turn);
         } else {
             //log.debug("Creature attack at {}, direction {}.", npc.coordinate(), npc.direction());
-            npc.startAction(NpcStateEnum.Attack);
+            npc.startAction(NpcActionEnum.Attack);
             enemy.attackedBy(npc);
         }
     }
@@ -56,7 +56,7 @@ public final class ViolentNpcMeleeFightAI extends AbstractNpcFightAI {
     }
 
     @Override
-    protected void onFightDone(Npc npc) {
+    protected void onFightDone(INpc npc) {
         if (chatter != null)
             npc.changeAI(new GuardWanderingAI(npc.coordinate(), chatter));
         else

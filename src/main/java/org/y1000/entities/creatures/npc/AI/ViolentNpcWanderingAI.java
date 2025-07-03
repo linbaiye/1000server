@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc.AI;
 
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcHurtState;
 import org.y1000.entities.creatures.npc.ViolentNpc;
 import org.y1000.util.Coordinate;
@@ -12,7 +12,7 @@ public final class ViolentNpcWanderingAI extends AbstractWanderingNpcAI {
     }
 
     @Override
-    protected void onHurtDone(Npc npc) {
+    protected void onHurtDone(INpc npc) {
         ViolentNpc violentNpc = (ViolentNpc) npc;
         if (npc.npcState() instanceof NpcHurtState hurtState) {
 //            violentNpc.changeAndStartAI(new ViolentNpcMeleeFightAI(hurtState.attacker(), violentNpc));
@@ -22,7 +22,7 @@ public final class ViolentNpcWanderingAI extends AbstractWanderingNpcAI {
     }
 
     @Override
-    public void onActionDone(Npc npc) {
+    public void onActionDone(INpc npc) {
         defaultActionDone(npc);
     }
 }

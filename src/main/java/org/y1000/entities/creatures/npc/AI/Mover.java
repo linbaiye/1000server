@@ -2,16 +2,15 @@ package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
 
 import java.util.function.Consumer;
 
 @Slf4j
-class Mover<N extends Npc> {
+class Mover<N extends INpc> {
     private Coordinate destination;
 
     private Coordinate previous;
@@ -77,7 +76,7 @@ class Mover<N extends Npc> {
         if (npc.isMoving()) {
             previous = npc.coordinate().moveBy(npc.direction().opposite());
         }
-        if (npc.npcStateEnum() == NpcStateEnum.Idle) {
+        if (npc.npcStateEnum() == NpcActionEnum.Idle) {
             doMove(noPathAction);
             return;
         }
@@ -119,25 +118,25 @@ class Mover<N extends Npc> {
 
     private void computeMillis(int speedRate, int maxIdleMillis) {
         int walkSpeed = npc.walkSpeed() / speedRate;
-        var stateMillis = npc.getStateMillis(NpcStateEnum.Move);
+        var stateMillis = npc.getStateMillis(NpcActionEnum.Move);
         int walkMillis = Math.min(stateMillis, walkSpeed);
         moveMillis = Math.max(walkMillis, 200);
         idleMillis = Math.max(walkSpeed - walkMillis, maxIdleMillis);
     }
 
     private void computeWalkMillis() {
-        computeMillis(1, npc.getStateMillis(NpcStateEnum.Idle));
+        computeMillis(1, npc.getStateMillis(NpcActionEnum.Idle));
     }
 
     private void computeRunMillis() {
         computeMillis(2, 0);
     }
 
-    public static <N extends Npc> Mover<N> ofWalk(N npc, Coordinate destination) {
+    public static <N extends INpc> Mover<N> ofWalk(N npc, Coordinate destination) {
         return new Mover<>(npc, destination, true);
     }
 
-    public static <N extends Npc> Mover<N> ofRun(N npc, Coordinate destination) {
+    public static <N extends INpc> Mover<N> ofRun(N npc, Coordinate destination) {
         return new Mover<>(npc, destination, false);
     }
 }

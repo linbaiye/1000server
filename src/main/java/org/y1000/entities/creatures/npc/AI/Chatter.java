@@ -1,9 +1,8 @@
 package org.y1000.entities.creatures.npc.AI;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.npc.HumanNpc;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public final class Chatter {
         counter = 0;
     }
 
-    public void onActionDone(Npc npc) {
+    public void onActionDone(INpc npc) {
         if (!(npc instanceof HumanNpc humanNpc) || npc.isDead())
             return;
         ++counter;

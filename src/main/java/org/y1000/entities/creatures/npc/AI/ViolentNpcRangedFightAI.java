@@ -5,8 +5,8 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcRangedSkill;
 import org.y1000.entities.creatures.npc.ViolentNpc;
 import org.y1000.util.Coordinate;
@@ -22,7 +22,7 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
 
     private void cooldownOrShoot(NpcRangedSkill rangedSkill) {
         if (npc.maxCooldown() > 0) {
-            npc.startAction(NpcStateEnum.Idle);
+            npc.startAction(NpcActionEnum.Idle);
             return;
         }
         turnIfNotFaced();
@@ -31,7 +31,7 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
     }
 
 
-    private Coordinate computeEscapePoint(Npc escaping, Entity from) {
+    private Coordinate computeEscapePoint(INpc escaping, Entity from) {
         Validate.notNull(escaping);
         Validate.notNull(from);
         Direction direction = from.coordinate().computeDirection(escaping.coordinate());
@@ -76,7 +76,7 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
     }
 
     @Override
-    protected void onFightDone(Npc npc) {
+    protected void onFightDone(INpc npc) {
         npc.startIdleAI();
     }
 

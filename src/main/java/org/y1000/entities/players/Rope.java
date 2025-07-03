@@ -2,8 +2,6 @@ package org.y1000.entities.players;
 
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.npc.AI.AiPathUtil;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.message.BreakRopeEvent;

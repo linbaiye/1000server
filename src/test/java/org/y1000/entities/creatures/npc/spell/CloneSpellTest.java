@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.npc.spell;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,7 +14,7 @@ class CloneSpellTest {
     @Test
     void canCast() {
         CloneSpell spell = new CloneSpell(50, 1);
-        var npc = Mockito.mock(Npc.class);
+        var npc = Mockito.mock(INpc.class);
         when(npc.currentLife()).thenReturn(1);
         when(npc.maxLife()).thenReturn(3);
         when(npc.oldStateEnum()).thenReturn(OldPlayerStateEnum.IDLE);

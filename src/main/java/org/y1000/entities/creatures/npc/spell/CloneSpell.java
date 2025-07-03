@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.npc.spell;
 import lombok.Getter;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.event.NpcCastCloneEvent;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 
 public final class CloneSpell implements NpcSpell {
     private boolean casted = false;
@@ -18,12 +18,12 @@ public final class CloneSpell implements NpcSpell {
     }
 
     @Override
-    public boolean canCast(Npc npc) {
+    public boolean canCast(INpc npc) {
         return !casted && !npc.isDead() &&
                 ((float)npc.currentLife() / npc.maxLife()) * 100 <= lifePercent;
     }
 
-    public void castIfAvailable(Npc npc, AttackableEntity entity) {
+    public void castIfAvailable(INpc npc, AttackableEntity entity) {
         if (canCast(npc)) {
             casted = true;
             npc.emitEvent(new NpcCastCloneEvent(npc, number, entity));

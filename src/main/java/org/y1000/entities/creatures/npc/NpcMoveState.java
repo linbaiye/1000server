@@ -2,12 +2,12 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.util.Coordinate;
 
 public final class NpcMoveState extends AbstractCreatureMoveState implements NpcState {
 
-    private final Npc npc;
+    private final INpc npc;
     @Override
     public void update(int delta) {
         if (elapsedMillis() == 0) {
@@ -24,13 +24,13 @@ public final class NpcMoveState extends AbstractCreatureMoveState implements Npc
     }
 
     @Override
-    public NpcStateEnum stateEnum() {
-        return NpcStateEnum.Move;
+    public NpcActionEnum stateEnum() {
+        return NpcActionEnum.Move;
     }
     private NpcMoveState(Coordinate start,
                          Direction towards,
                          int millisPerUnit,
-                         Npc npc) {
+                         INpc npc) {
         super(start, towards, millisPerUnit);
         this.npc = npc;
     }
@@ -43,7 +43,7 @@ public final class NpcMoveState extends AbstractCreatureMoveState implements Npc
 //    }
 
 //
-    public static NpcMoveState move(Npc npc, int millis) {
+    public static NpcMoveState move(INpc npc, int millis) {
         return new NpcMoveState(npc.coordinate(), npc.direction(), millis, npc);
     }
 }

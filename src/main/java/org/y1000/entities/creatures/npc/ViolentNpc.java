@@ -5,7 +5,7 @@ import org.y1000.entities.creatures.ViolentCreature;
 
 import java.util.Optional;
 
-public interface ViolentNpc extends ViolentCreature, Npc {
+public interface ViolentNpc extends ViolentCreature, INpc {
 
     Optional<NpcRangedSkill> skill();
 

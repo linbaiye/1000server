@@ -48,11 +48,11 @@ public final class MonsterRangedAttackState extends IAbstractCreatureState<Abstr
     }
 
     @Override
-    public NpcStateEnum state() {
-        return NpcStateEnum.Attack;
+    public NpcActionEnum state() {
+        return NpcActionEnum.Attack;
     }
 
     public static MonsterRangedAttackState attack(AbstractMonster monster, String sound, int projectId) {
-        return new MonsterRangedAttackState(monster.getStateMillis(NpcStateEnum.Attack), sound, projectId);
+        return new MonsterRangedAttackState(monster.getStateMillis(NpcActionEnum.Attack), sound, projectId);
     }
 }

@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.NpcStateEnum;
-import org.y1000.entities.creatures.npc.AI.NpcAI;
-import org.y1000.entities.creatures.npc.AI.ViolentNpcWanderingAI;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractor;
 import org.y1000.entities.players.Player;
@@ -26,11 +23,11 @@ public final class ViolentInteractableNpc extends AbstractViolentNpc implements 
     public ViolentInteractableNpc(long id,
                                      Coordinate coordinate,
                                      String name,
-                                     Map<NpcStateEnum, Integer> stateMillis,
+                                     Map<NpcActionEnum, Integer> stateMillis,
                                      NonMonsterNpcAttributeProvider attributeProvider,
                                      RealmMap realmMap,
                                      NpcInteractor interactor,
-                                     NpcAI ai) {
+                                     INpcAI ai) {
         super(id, coordinate, Direction.DOWN, name, stateMillis, attributeProvider, realmMap, ai, null, null);
         Validate.notNull(interactor);
         this.interactor = interactor;

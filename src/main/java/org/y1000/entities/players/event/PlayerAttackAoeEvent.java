@@ -5,7 +5,7 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.objects.AbstractKillableDynamicObject;
 import org.y1000.entities.objects.DynamicObject;
 import org.y1000.entities.players.Damage;
@@ -45,7 +45,7 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
 
     private int handleAttack(AttackableEntity entity, Damage damage) {
         int exp = 0;
-        if (entity instanceof Npc npc) {
+        if (entity instanceof INpc npc) {
             exp = npc.attackedByAoe(player(), player().hit(), damage);
         } else if (entity instanceof Player targetPlayer) {
             exp = targetPlayer.attackedByAoe(damage, player().hit());

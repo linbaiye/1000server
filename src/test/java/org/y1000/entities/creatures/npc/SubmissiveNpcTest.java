@@ -9,8 +9,6 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
-import org.y1000.entities.creatures.npc.AI.NpcAI;
-import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.network.gen.CreatureInterpolationPacket;
@@ -39,7 +37,7 @@ class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
         npc = createNpc(NpcFrozenAI.INSTANCE);
     }
 
-    private SubmissiveNpc createNpc(NpcAI ai) {
+    private SubmissiveNpc createNpc(INpcAI ai) {
         return SubmissiveNpc.builder()
                 .id(1L)
                 .name("test")

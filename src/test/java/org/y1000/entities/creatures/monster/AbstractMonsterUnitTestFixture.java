@@ -2,7 +2,6 @@ package org.y1000.entities.creatures.monster;
 
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 

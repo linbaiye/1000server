@@ -14,7 +14,7 @@ import org.y1000.entities.creatures.event.NpcShiftEvent;
 import org.y1000.entities.creatures.monster.Monster;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.players.Damage;
 import org.y1000.item.EquipmentType;
@@ -92,7 +92,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         monsterSettings.add(new NpcSpawnSetting(range, 2, "牛"));
         when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
         npcManager.init();
-        Npc npc = npcManager.find(1).get();
+        INpc npc = npcManager.find(1).get();
         assertEquals("牛", npc.viewName());
         assertTrue(range.contains(npc.spawnCoordinate()));
         npc = npcManager.find(2).get();
@@ -108,7 +108,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
         npcManager.init();
         verify(eventSender, times(1)).notifyVisiblePlayers(any(ActiveEntity.class), any(NpcJoinedEvent.class));
-        Npc monster = npcManager.find(1L).get();
+        INpc monster = npcManager.find(1L).get();
         Weapon weapon = Mockito.mock(Weapon.class);
         when(weapon.damage()).thenReturn(new Damage(10000000, 1, 1,1));
         when(weapon.kungFuType()).thenReturn(AttackKungFuType.Fist);
@@ -120,7 +120,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         }
         ICreatureState<?> state = monster.npcState();
         npcManager.update(state.totalMillis());
-        Npc recreatedNpc = npcManager.find(2L).get();
+        INpc recreatedNpc = npcManager.find(2L).get();
         assertEquals("牛", recreatedNpc.idName());
         verify(eventSender, times(2)).notifyVisiblePlayers(any(ActiveEntity.class), any(NpcJoinedEvent.class));
     }
@@ -142,7 +142,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         monsterSettings.add(new NpcSpawnSetting(range, 2, "白狐狸"));
         when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
         npcManager.init();
-        Npc npc = npcManager.find(1L).orElseThrow(IllegalAccessError::new);
+        INpc npc = npcManager.find(1L).orElseThrow(IllegalAccessError::new);
         npcManager.onEvent(new NpcShiftEvent("白狐狸变身", npc));
         assertTrue(npcManager.find(1L).isEmpty());
         npc = npcManager.find(3L).orElseThrow(IllegalAccessError::new);
@@ -150,7 +150,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         npcManager.onEvent(new RemoveEntityEvent(npc));
         npcManager.update(1000000);
         // original npc should be back.
-        Npc npc1 = npcManager.find(4L).get();
+        INpc npc1 = npcManager.find(4L).get();
         assertEquals("白狐狸", npc1.idName());
     }
 
@@ -160,7 +160,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         monsterSettings.add(new NpcSpawnSetting(range, 2, "分身忍者"));
         when(npcSdbRepository.monsterSdbExists(49)).thenReturn(true);
         npcManager.init();
-        Npc npc = npcManager.find(1L).orElseThrow(IllegalAccessError::new);
+        INpc npc = npcManager.find(1L).orElseThrow(IllegalAccessError::new);
     }
 
     @Test

@@ -1,10 +1,10 @@
 package org.y1000.entities.creatures.npc.spell;
 
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 
 public interface NpcSpell {
 
-    boolean canCast(Npc npc);
+    boolean canCast(INpc npc);
 
     default void reset() {
 

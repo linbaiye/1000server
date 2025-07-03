@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.PlayerShootEvent;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.Rope;
 import org.y1000.entities.players.event.*;
@@ -209,7 +209,7 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     @Override
     public void onClientEvent(PlayerDataEvent dataEvent,
-                              ActiveEntityManager<Npc> npcManager) {
+                              ActiveEntityManager<INpc> npcManager) {
         if (!contains(dataEvent.player())){
             return;
         }
