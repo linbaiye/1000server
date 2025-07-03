@@ -46,7 +46,7 @@ public class Npc extends AbstractActiveEntity {
         listener.onMessage(message);
     }
 
-    public <A extends NpcAction> Optional<A> findAbility(Class<A> type) {
+    public <A extends NpcAction> Optional<A> findAction(Class<A> type) {
         return abilities.stream()
                 .filter(a -> type.isAssignableFrom(a.getClass()))
                 .findFirst().map(type::cast);

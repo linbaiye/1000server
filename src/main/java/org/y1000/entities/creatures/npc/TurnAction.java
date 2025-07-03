@@ -1,18 +1,13 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.monster.NpcActionEnum;
 
-public class IdleAction implements NpcAction {
-
+public class TurnAction implements NpcAction {
     private final int animationMillis;
 
     private int elapsedMillis;
 
-    private int stateMillis;
-
-
-    public IdleAction(int animationMillis) {
+    public TurnAction(int animationMillis) {
         this.animationMillis = animationMillis;
     }
 
@@ -21,24 +16,17 @@ public class IdleAction implements NpcAction {
         return false;
     }
 
+    public void turn(Npc npc) {
+
+    }
+
     @Override
     public int elapsedMillis() {
-        return 0;
+        return elapsedMillis;
     }
 
     @Override
     public NpcActionEnum actionEnum() {
-        return NpcActionEnum.Idle;
+        return NpcActionEnum.Turn;
     }
-
-    public void stay(Npc npc, Direction direction) {
-
-
-    }
-
-    public void stay(Npc npc, Direction direction, int stateMillis) {
-
-    }
-
-
 }

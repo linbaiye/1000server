@@ -30,7 +30,7 @@ public class HurtAbility implements NpcAction {
     @Getter
     private ActiveEntity trigger;
 
-    private int millisLeft;
+    private int elapsed;
 
     public HurtAbility(int armor,
                        int avoidance,
@@ -50,17 +50,20 @@ public class HurtAbility implements NpcAction {
     }
 
     public boolean update(int delta) {
-        millisLeft -= delta;
+        elapsed += delta;
+        if (elapsed >= animationMillis) {
+            return true;
+        }
     }
 
     @Override
     public int elapsedMillis() {
-        return 0;
+        return elapsed;
     }
 
     @Override
     public NpcActionEnum actionEnum() {
-        return 0;
+        return NpcActionEnum.Hurt;
     }
 
 
@@ -68,6 +71,7 @@ public class HurtAbility implements NpcAction {
         if (currentLife <= 0) {
             return -1;
         }
+        elapsed = 0;
         int damageTaken = -1;
         if (!isDodged(hit)) {
             var before = currentLife;

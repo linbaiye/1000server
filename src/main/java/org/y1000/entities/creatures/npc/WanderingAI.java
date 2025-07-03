@@ -1,6 +1,5 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.MoveAction;
 import org.y1000.entities.creatures.npc.AI.AiPathUtil;
 import org.y1000.util.Coordinate;
@@ -24,18 +23,42 @@ public class WanderingAI implements NpcAI {
 
 
     private void setup() {
-        this.currentAction = npc.findAbility(IdleAction.class).ifPresentOrElse( idleAction -> idleAction.stay(),
-                () -> new RuntimeException("No idle state."));
+        npc.findAction(IdleAction.class).ifPresentOrElse(idleAction -> {
+            currentAction = idleAction;
+            idleAction.stay(npc.direction());
+        }, () -> new RuntimeException("No idle state."));
         this.target = wanderArea.random(npc.getSpawnCoordinate());
-        this.previous = npc.coordinate();
+        this.previous = npc.coordinate().moveBy(npc.direction().opposite());
     }
 
 
-    private void onIdleDone() {
+    private void nextMove() {
         var dir = AiPathUtil.computeNextMoveDirection(npc, target, previous);
         if (dir == null) {
             setup();
+            return;
         }
+        if (dir == npc.direction()) {
+            npc.findAction(MoveAction.class).ifPresent(moveAction -> {
+                if (moveAction.tryNormalMove(npc, dir)) {
+                    currentAction = moveAction;
+                } else {
+                    setup();
+                }
+            });
+        } else {
+            npc.findAction(TurnAction.class).ifPresent(turnAction -> {
+                currentAction = turnAction;
+                turnAction.turn(npc);
+            });
+        }
+    }
+
+    private void onMoveDone() {
+        npc.findAction(IdleAction.class).ifPresent(idleAction -> {
+            currentAction = idleAction;
+            idleAction.stay(npc.direction());
+        });
     }
 
 
@@ -44,9 +67,9 @@ public class WanderingAI implements NpcAI {
             moveAction.hurt(npc);
         }
         if (action.getCurrentLife() == 0) {
-            npc.findAbility(DieAbility.class).ifPresent(dieAbility -> dieAbility.die(npc));
+            npc.findAction(DieAbility.class).ifPresent(dieAbility -> dieAbility.die(npc));
         } else {
-            npc.findAbility(AttackAction.class).ifPresent(a -> npc.changeAI(new FightAI(npc)));
+            npc.findAction(AttackAction.class).ifPresent(a -> npc.changeAI(new FightAI(npc)));
         }
     }
 
@@ -56,7 +79,8 @@ public class WanderingAI implements NpcAI {
             return;
         }
         switch (currentAction.actionEnum()) {
-            case Idle -> onIdleDone();
+            case Idle, Turn -> nextMove();
+            case Move -> onMoveDone();
         }
     }
 
