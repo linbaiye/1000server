@@ -1,18 +1,13 @@
 package org.y1000.kungfu.breath;
 
 import lombok.Builder;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerAttributeMessage;
-import org.y1000.entities.players.event.PlayerGainExpEvent;
-import org.y1000.entities.players.event.PlayerKungFuFullEvent;
-import org.y1000.event.EntityEvent;
+import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;
 import org.y1000.kungfu.KungFu;
 import org.y1000.kungfu.KungFuType;
-import org.y1000.util.UnaryAction;
 
 public final class BreathKungFu extends AbstractKungFu {
     private final EventResourceParameters parameters;
@@ -83,7 +78,7 @@ public final class BreathKungFu extends AbstractKungFu {
         player.gainPower(computeResource(player.maxPower(), parameters.power()));
         player.gainInnerPower(computeResource(player.maxInnerPower(), parameters.innerPower()));
         player.gainOuterPower(computeResource(player.maxOuterPower(), parameters.outerPower()));
-        player.sendMessage(PlayerAttributeMessage.of(player));
+        player.sendEvent(PlayerAttributeEvent.of(player));
 //        eventSender.invoke(new PlayerAttributeMessage(player));
         if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
 //            eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));

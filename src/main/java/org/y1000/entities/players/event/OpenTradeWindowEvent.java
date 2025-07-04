@@ -5,7 +5,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.OpenTradeWindowPacket;
 import org.y1000.network.gen.Packet;
 
-public final class OpenTradeWindowEvent extends AbstractPlayerEvent {
+public final class OpenTradeWindowEvent extends IAbstractPlayerEvent {
 
     private final Integer slot;
 

@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 class PlayerManagerImplTest extends AbstractUnitTestFixture {
     private PlayerManagerImpl playerManager;
 
-    private RealmEntityEventSender eventSender;
+    private RealmPlayerConnectionManager eventSender;
 
     private GroundItemManager itemManager;
 
@@ -34,12 +34,12 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
     @BeforeEach
     void setUp() {
         tradeManager = Mockito.mock(TradeManager.class);
-        eventSender = Mockito.mock(RealmEntityEventSender.class);
+        eventSender = Mockito.mock(RealmPlayerConnectionManager.class);
         itemManager = Mockito.mock(GroundItemManager.class);
         itemFactory = Mockito.mock(ItemFactory.class);
         dynamicObjectManager = Mockito.mock(DynamicObjectManager.class);
         playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, tradeManager, dynamicObjectManager, Mockito.mock(BankManager.class),
-                Mockito.mock(PlayerRepository.class), null, Mockito.mock(CrossRealmEventSender.class));
+                Mockito.mock(PlayerRepository.class), null, Mockito.mock(CrossRealmEventSender.class), Mockito.mock(AOIManager.class));
         realmMap = mockRealmMap();
         realm = mockRealm(realmMap);
     }

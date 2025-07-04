@@ -1,6 +1,7 @@
 package org.y1000.realm;
 
 import org.y1000.entities.creatures.npc.INpc;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.message.input.Login;
 import org.y1000.message.input.SelfHandleInput;
@@ -27,7 +28,7 @@ interface PlayerManager extends ActiveEntityManager<Player> {
     void clearPlayer(Player player);
 
     void onClientEvent(PlayerDataEvent dataEvent,
-                       ActiveEntityManager<INpc> npcManager);
+                       ActiveEntityManager<?> npcManager);
 
     Set<Player> allPlayers();
 

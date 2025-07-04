@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractor;
 import org.y1000.entities.players.Player;

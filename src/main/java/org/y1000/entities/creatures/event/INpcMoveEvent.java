@@ -6,7 +6,7 @@ import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.MonsterMoveEventPacket;
 import org.y1000.network.gen.Packet;
 
-public final class NpcMoveEvent extends AbstractCreatureEvent {
+public final class INpcMoveEvent extends AbstractCreatureEvent {
 
     private final Direction direction;
 
@@ -15,7 +15,7 @@ public final class NpcMoveEvent extends AbstractCreatureEvent {
     private final int x;
     private final int y;
 
-    private NpcMoveEvent(INpc source, Direction direction, int speed) {
+    private INpcMoveEvent(INpc source, Direction direction, int speed) {
         super(source);
         this.speed = speed;
         this.direction = direction;
@@ -41,7 +41,7 @@ public final class NpcMoveEvent extends AbstractCreatureEvent {
         visitor.visit(this);
     }
 
-    public static NpcMoveEvent move(INpc monster, Direction direction, int speed) {
-        return new NpcMoveEvent(monster, direction, speed);
+    public static INpcMoveEvent move(INpc monster, Direction direction, int speed) {
+        return new INpcMoveEvent(monster, direction, speed);
     }
 }

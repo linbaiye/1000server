@@ -7,7 +7,7 @@ import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.realm.event.BroadcastEvent;
 
-public final class PlayerKungFuFullEvent implements BroadcastEvent, PlayerEvent {
+public final class PlayerKungFuFullEvent implements BroadcastEvent, IPlayerEvent {
     private final String text;
     private final Player player;
 
@@ -27,7 +27,7 @@ public final class PlayerKungFuFullEvent implements BroadcastEvent, PlayerEvent 
     }
 
     @Override
-    public Entity source() {
+    public Player source() {
         return player;
     }
 }

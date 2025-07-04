@@ -2,17 +2,15 @@ package org.y1000.message.serverevent;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.npc.InteractableNpc;
-import org.y1000.entities.creatures.npc.Merchant;
-import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.entities.teleport.StaticTeleport;
 import org.y1000.network.gen.NpcPositionPacket;
 import org.y1000.network.gen.Packet;
 
 import java.util.Collection;
 
-public final class NpcPositionEvent extends AbstractPlayerEvent {
+public final class NpcPositionEvent extends IAbstractPlayerEvent {
 
     private final Collection<InteractableNpc> merchants;
 

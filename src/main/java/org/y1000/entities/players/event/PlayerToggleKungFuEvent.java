@@ -7,7 +7,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ToggleKungFuPacket;
 
-public final class PlayerToggleKungFuEvent extends AbstractPlayerEvent {
+public final class PlayerToggleKungFuEvent extends IAbstractPlayerEvent {
     private final Integer level;
     private final String name;
     private final boolean quietly;

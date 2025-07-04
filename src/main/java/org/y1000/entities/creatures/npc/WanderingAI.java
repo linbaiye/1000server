@@ -1,33 +1,46 @@
 package org.y1000.entities.creatures.npc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.MoveAction;
 import org.y1000.entities.creatures.npc.AI.AiPathUtil;
 import org.y1000.util.Coordinate;
-import org.y1000.util.Rectangle;
 
-public class WanderingAI implements NpcAI {
+import java.util.concurrent.ThreadLocalRandom;
+
+@Slf4j
+public final class WanderingAI implements NpcAI {
     private final Npc npc;
 
     private NpcAction currentAction;
 
     private Coordinate target;
 
-    private final Rectangle wanderArea;
+    private final int wanderRange;
 
     private Coordinate previous;
 
-    public WanderingAI(Npc npc, Rectangle wanderArea) {
+    public WanderingAI(Npc npc, int wanderRange) {
         this.npc = npc;
-        this.wanderArea = wanderArea;
+        this.wanderRange = wanderRange;
+        initialize();
     }
 
+    private Coordinate chooseTarget(Coordinate origin) {
+        int minX = Math.max(0, origin.x() - wanderRange);
+        int maxX = origin.x() + wanderRange;
+        var x = ThreadLocalRandom.current().nextInt(minX, maxX + 1);
+        int minY = Math.max(0, origin.y() - wanderRange);
+        int maxY = origin.y() + wanderRange;
+        var y = ThreadLocalRandom.current().nextInt(minY, maxY + 1);
+        return new Coordinate(x, y);
+    }
 
-    private void setup() {
+    private void initialize() {
         npc.findAction(IdleAction.class).ifPresentOrElse(idleAction -> {
             currentAction = idleAction;
-            idleAction.stay(npc.direction());
+            idleAction.stayLoopAnimationMillis(npc);
         }, () -> new RuntimeException("No idle state."));
-        this.target = wanderArea.random(npc.getSpawnCoordinate());
+        this.target = chooseTarget(npc.getSpawnCoordinate());
         this.previous = npc.coordinate().moveBy(npc.direction().opposite());
     }
 
@@ -35,41 +48,51 @@ public class WanderingAI implements NpcAI {
     private void nextMove() {
         var dir = AiPathUtil.computeNextMoveDirection(npc, target, previous);
         if (dir == null) {
-            setup();
+            initialize();
             return;
         }
         if (dir == npc.direction()) {
             npc.findAction(MoveAction.class).ifPresent(moveAction -> {
-                if (moveAction.tryNormalMove(npc, dir)) {
-                    currentAction = moveAction;
-                } else {
-                    setup();
+                currentAction = moveAction;
+                if (!moveAction.tryNormalMove(npc, dir)) {
+                    initialize();
                 }
             });
         } else {
             npc.findAction(TurnAction.class).ifPresent(turnAction -> {
                 currentAction = turnAction;
-                turnAction.turn(npc);
+                turnAction.turn(npc, dir);
             });
         }
     }
 
     private void onMoveDone() {
+        previous = npc.coordinate().moveBy(npc.direction().opposite());
         npc.findAction(IdleAction.class).ifPresent(idleAction -> {
             currentAction = idleAction;
-            idleAction.stay(npc.direction());
+            idleAction.stayLoopAnimationMillis(npc);
+        });
+    }
+
+    private void onTurnDone() {
+        npc.findAction(IdleAction.class).ifPresent(idleAction -> {
+            currentAction = idleAction;
+            idleAction.stayLoopAnimationMillis(npc);
         });
     }
 
 
     public void onAttacked(HurtAbility action) {
         if (currentAction instanceof MoveAction moveAction) {
-            moveAction.hurt(npc);
+            moveAction.interrupt(npc);
         }
         if (action.getCurrentLife() == 0) {
             npc.findAction(DieAbility.class).ifPresent(dieAbility -> dieAbility.die(npc));
         } else {
-            npc.findAction(AttackAction.class).ifPresent(a -> npc.changeAI(new FightAI(npc)));
+            npc.findAction(AttackAction.class).ifPresentOrElse(a -> npc.changeAI(new FightAI(npc)), () -> {
+                currentAction = action;
+                action.hurt(npc);
+            });
         }
     }
 
@@ -79,8 +102,9 @@ public class WanderingAI implements NpcAI {
             return;
         }
         switch (currentAction.actionEnum()) {
-            case Idle, Turn -> nextMove();
+            case Idle, Hurt -> nextMove();
             case Move -> onMoveDone();
+            case Turn -> onTurnDone();
         }
     }
 

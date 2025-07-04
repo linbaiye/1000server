@@ -18,7 +18,7 @@ import java.util.function.BiConsumer;
 class GuildableRealm extends AbstractRealm {
     private final GuildManager guildManager;
     public GuildableRealm(int id, RealmMap realmMap,
-                          RealmEntityEventSender eventSender,
+                          RealmPlayerConnectionManager eventSender,
                           GroundItemManager itemManager,
                           NpcManager npcManager,
                           PlayerManager playerManager,
@@ -57,7 +57,7 @@ class GuildableRealm extends AbstractRealm {
     }
 
     private void attackGuildStone(GuildStone guildStone, long playerId, ClientAttackEvent attackEvent) {
-        playerManager().find(playerId).ifPresent(player -> player.attack(attackEvent, guildStone));
+//        playerManager().find(playerId).ifPresent(player -> player.attack(attackEvent, guildStone));
     }
 
 

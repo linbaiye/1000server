@@ -2,10 +2,10 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.AttackableEntity;
-import org.y1000.entities.creatures.event.CreatureDieEvent;
-import org.y1000.entities.creatures.event.PlayerShootEvent;
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.npc.INpc;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.Rope;
 import org.y1000.entities.players.event.*;
@@ -13,7 +13,6 @@ import org.y1000.event.EntityEvent;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.*;
 import org.y1000.message.input.*;
-import org.y1000.message.serverevent.JoinedRealmEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.Connection;
 import org.y1000.realm.event.PlayerDataEvent;
@@ -26,13 +25,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 
 @Slf4j
 final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implements PlayerEventVisitor,
-        PlayerManager, PlayerMessageListener {
+        PlayerManager, PlayerEventListener, PlayerEventHandler {
 
-    private final RealmEntityEventSender eventSender;
+    private final RealmPlayerConnectionManager connectionManager;
 
     private final GroundItemManager itemManager;
 
@@ -55,19 +55,20 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
     private final CrossRealmEventSender crossRealmEventSender;
 
 
-    public PlayerManagerImpl(RealmEntityEventSender eventSender,
+    public PlayerManagerImpl(RealmPlayerConnectionManager eventSender,
                              GroundItemManager itemManager,
                              ItemFactory itemFactory,
                              DynamicObjectManager dynamicObjectManager,
                              BankManager bankManager,
                              PlayerRepository playerRepository,
                              DeadPlayerTeleportManager deadPlayerTeleportManager,
-                             CrossRealmEventSender crossRealmEventSender) {
+                             CrossRealmEventSender crossRealmEventSender,
+                             AOIManager aoiManager) {
         this(eventSender, itemManager, itemFactory, new TradeManagerImpl(eventSender), dynamicObjectManager, bankManager, playerRepository,
-                deadPlayerTeleportManager, crossRealmEventSender);
+                deadPlayerTeleportManager, crossRealmEventSender, aoiManager);
     }
 
-    public PlayerManagerImpl(RealmEntityEventSender eventSender,
+    public PlayerManagerImpl(RealmPlayerConnectionManager eventSender,
                              GroundItemManager itemManager,
                              ItemFactory itemFactory,
                              TradeManager tradeManager,
@@ -75,8 +76,10 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
                              BankManager bankManager,
                              PlayerRepository playerRepository,
                              DeadPlayerTeleportManager deadPlayerTeleportManager,
-                             CrossRealmEventSender crossRealmEventSender) {
-        this.eventSender = eventSender;
+                             CrossRealmEventSender crossRealmEventSender,
+                             AOIManager aoiManager) {
+        super(aoiManager, eventSender);
+        this.connectionManager = eventSender;
         this.itemManager = itemManager;
         this.itemFactory = itemFactory;
         this.playerRepository = playerRepository;
@@ -91,15 +94,20 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     @Override
     public void onPlayerConnected(Player player, Realm realm) {
-        if (player == null || realm == null) {
-            return;
-        }
-        player.registerEventListener(this);
-        add(player);
-        player.joinRealm(realm, this);
-        eventSender.notifySelf(new JoinedRealmEvent(player));
-        eventSender.notifyPlayerOfEntities(player);
-        log.debug("Player {} logged in.", player);
+//        if (player == null || realm == null) {
+//            return;
+//        }
+//        player.registerEventListener(this);
+//        add(player);
+//        player.joinRealm(realm, this);
+//        connectionManager.notifySelf(new JoinedRealmEvent(player));
+//        connectionManager.notifyPlayerOfEntities(player);
+//        log.debug("Player {} logged in.", player);
+    }
+
+    private void sendToNoSelfVisiblePlayers(Entity source, I2ClientMessage message) {
+        getAoiManager().filterNoSelfVisibleEntities(source, Player.class)
+                .forEach(p -> sendTo(p, message));
     }
 
     private void doLogout(Player player) {
@@ -109,10 +117,9 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         // Need to update first least losing realm id.
         playerRepository.update(player);
         player.leaveRealm();
-        eventSender.notifyVisiblePlayers(player, new RemoveEntityMessage(player.id()));
         remove(player);
-        player.clearListeners();
-        eventSender.remove(player).ifPresent(Connection::tryClose);
+        sendToNoSelfVisiblePlayers(player, new RemoveEntityMessage(player.id()));
+        connectionManager.remove(player).ifPresent(Connection::tryClose);
     }
 
     @Override
@@ -121,19 +128,20 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
             return;
         }
         find(login.playerId()).ifPresent(this::doLogout);
-        player.joinRealm(realm, this);
-        player.registerEventListener(this);
-        eventSender.add(player, login.connection());
+        connectionManager.add(player, login.connection());
         add(player);
-        onMessage(PlayerJoinRealmMessage.of(player));
-        eventSender.notifyPlayerOfEntities(player);
+        player.joinRealm(realm, this);
+        sendTo(player, PlayerJoinRealmMessage.of(player));
+        sendToNoSelfVisiblePlayers(player, player.captureSnapshot());
+        getAoiManager().filterNoSelfVisibleEntities(player, ActiveEntity.class)
+                .forEach(e -> sendTo(player, e.captureSnapshot()));
     }
 
     @Override
     public void logoutPlayer(Connection connection) {
         if (connection == null)
             return;
-        eventSender.findPlayer(connection).ifPresent(this::doLogout);
+        connectionManager.findPlayer(connection).ifPresent(this::doLogout);
     }
 
     @Override
@@ -144,8 +152,8 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         }
         player.registerEventListener(this);
         add(player);
-        eventSender.notifySelf(new PlayerTeleportEvent(player, realm, coordinate));
-        eventSender.notifyPlayerOfEntities(player);
+//        connectionManager.notifySelf(new PlayerTeleportEvent(player, realm, coordinate));
+//        connectionManager.notifyPlayerOfEntities(player);
     }
 
     @Override
@@ -154,9 +162,14 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
             return;
         }
         player.leaveRealm();
-        eventSender.notifyVisiblePlayersAndSelf(player, new RemoveEntityMessage(player.id()));
+//        connectionManager.notifyVisiblePlayersAndSelf(player, new RemoveEntityMessage(player.id()));
         remove(player);
         player.clearListeners();
+    }
+
+    @Override
+    public void onClientEvent(PlayerDataEvent dataEvent, ActiveEntityManager<?> npcManager) {
+
     }
 
     @Override
@@ -207,35 +220,35 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         }
     }
 
-    @Override
-    public void onClientEvent(PlayerDataEvent dataEvent,
-                              ActiveEntityManager<INpc> npcManager) {
-        if (!contains(dataEvent.player())){
-            return;
-        }
-        if (dataEvent.data() instanceof ClientPickItemEvent event) {
-            itemManager.pickItem(dataEvent.player(), event.id());
-        } else if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
-            npcManager.find(attackEvent.entityId(), AttackableEntity.class)
-                    .or(() -> find(attackEvent.entityId(), AttackableEntity.class))
-                    .or(() -> dynamicObjectManager.find(attackEvent.entityId(), AttackableEntity.class))
-                    .ifPresent(attackableEntity -> dataEvent.player().attack(attackEvent, attackableEntity));
-        } else if (dataEvent.data() instanceof ClientTradePlayerEvent tradePlayerEvent) {
-            find(tradePlayerEvent.targetId(), Player.class).ifPresent(tradee -> tradeManager.start(dataEvent.player(), tradee, tradePlayerEvent.slot()));
-        } else if (dataEvent.data() instanceof ClientUpdateTradeEvent updateTradeEvent) {
-            handleUpdateTradeEvent(dataEvent.player(), updateTradeEvent);
-        } else if (dataEvent.data() instanceof ClientTriggerDynamicObjectEvent triggerDynamicObjectEvent) {
-            dynamicObjectManager.triggerDynamicObject(triggerDynamicObjectEvent.id(), dataEvent.player(), triggerDynamicObjectEvent.useSlot());
-        } else if (dataEvent.data() instanceof ClientDragPlayerEvent dragPlayerEvent) {
-            find(dragPlayerEvent.target()).ifPresent(dragged -> handleDragPlayerEvent(dataEvent.player(), dragged, dragPlayerEvent.ropeSlot()));
-        } else if (dataEvent.data() instanceof ClientOperateBankEvent bankEvent) {
-            find(dataEvent.playerId()).ifPresent(player -> bankManager.handle(player, bankEvent));
-        } else if (dataEvent.data() instanceof ClientSelfInteractEvent selfInteractEvent) {
-            find(selfInteractEvent.getPlayerId()).ifPresent(selfInteractEvent::handle);
-        } else {
-            find(dataEvent.playerId()).ifPresent(player -> player.handleClientEvent(dataEvent.data()));
-        }
-    }
+//    @Override
+//    public void onClientEvent(PlayerDataEvent dataEvent,
+//                              ActiveEntityManager<INpc> npcManager) {
+//        if (!contains(dataEvent.player())){
+//            return;
+//        }
+//        if (dataEvent.data() instanceof ClientPickItemEvent event) {
+//            itemManager.pickItem(dataEvent.player(), event.id());
+//        } else if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
+//            npcManager.find(attackEvent.entityId(), AttackableEntity.class)
+//                    .or(() -> find(attackEvent.entityId(), AttackableEntity.class))
+//                    .or(() -> dynamicObjectManager.find(attackEvent.entityId(), AttackableEntity.class))
+//                    .ifPresent(attackableEntity -> dataEvent.player().attack(attackEvent, attackableEntity));
+//        } else if (dataEvent.data() instanceof ClientTradePlayerEvent tradePlayerEvent) {
+//            find(tradePlayerEvent.targetId(), Player.class).ifPresent(tradee -> tradeManager.start(dataEvent.player(), tradee, tradePlayerEvent.slot()));
+//        } else if (dataEvent.data() instanceof ClientUpdateTradeEvent updateTradeEvent) {
+//            handleUpdateTradeEvent(dataEvent.player(), updateTradeEvent);
+//        } else if (dataEvent.data() instanceof ClientTriggerDynamicObjectEvent triggerDynamicObjectEvent) {
+//            dynamicObjectManager.triggerDynamicObject(triggerDynamicObjectEvent.id(), dataEvent.player(), triggerDynamicObjectEvent.useSlot());
+//        } else if (dataEvent.data() instanceof ClientDragPlayerEvent dragPlayerEvent) {
+//            find(dragPlayerEvent.target()).ifPresent(dragged -> handleDragPlayerEvent(dataEvent.player(), dragged, dragPlayerEvent.ropeSlot()));
+//        } else if (dataEvent.data() instanceof ClientOperateBankEvent bankEvent) {
+//            find(dataEvent.playerId()).ifPresent(player -> bankManager.handle(player, bankEvent));
+//        } else if (dataEvent.data() instanceof ClientSelfInteractEvent selfInteractEvent) {
+//            find(selfInteractEvent.getPlayerId()).ifPresent(selfInteractEvent::handle);
+//        } else {
+//            find(dataEvent.playerId()).ifPresent(player -> player.handleClientEvent(dataEvent.data()));
+//        }
+//    }
 
     @Override
     public Set<Player> allPlayers() {
@@ -245,11 +258,11 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     @Override
     public void onPlayerDisconnected(long playerId) {
-        find(playerId).ifPresent( player -> {
-            playerRepository.update(player);
-            clearPlayer(player);
-            log.debug("Player {} disconnected.", player);
-        });
+//        find(playerId).ifPresent( player -> {
+//            playerRepository.update(player);
+//            clearPlayer(player);
+//            log.debug("Player {} disconnected.", player);
+//        });
     }
 
     @Override
@@ -261,12 +274,12 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     @Override
     public void handleInput(Connection connection, SelfHandleInput input) {
-        eventSender.findPlayer(connection).ifPresent(p -> p.handleInput(input));
+        connectionManager.findPlayer(connection).ifPresent(p -> p.handleInput(input));
     }
 
     @Override
     public Optional<Player> find(Connection connection) {
-        return eventSender.findPlayer(connection);
+        return connectionManager.findPlayer(connection);
     }
 
 
@@ -278,53 +291,52 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
-        try {
-            if (entityEvent.source() instanceof Player player) {
-                tradeManager.onPlayerEvent(player, entityEvent);
-            }
-            if (entityEvent instanceof PlayerShootEvent shootEvent) {
-                projectileManager.add(shootEvent.projectile());
-                eventSender.notifyVisiblePlayersAndSelf(shootEvent.source(), shootEvent);
-            } else if (entityEvent instanceof PlayerAttackEvent attackEvent) {
-                eventSender.notifyVisiblePlayersAndSelf(attackEvent.source(), attackEvent);
-            } else if (entityEvent instanceof PlayerDropItemEvent dropItemEvent) {
-                itemManager.dropItem(dropItemEvent);
-            } else if (entityEvent instanceof CreatureDieEvent dieEvent &&
-                    dieEvent.source() instanceof Player player &&
-                    deadPlayerTeleportManager != null) {
-                deadPlayerTeleportManager.onPlayerDead(player);
-            } else if (entityEvent instanceof PlayerKungFuFullEvent event) {
-                crossRealmEventSender.send(event);
-            } else if (entityEvent instanceof AbstractPlayerEvent playerEvent) {
-                if (playerEvent.visibleToSelf()) {
-                    eventSender.notifySelf(playerEvent);
-                } else if (playerEvent.visibleToPlayers()) {
-                    eventSender.notifyVisiblePlayersAndSelf(playerEvent.player(), playerEvent);
-                }
-            } else if (entityEvent instanceof I2ClientMessage message) {
-                eventSender.findConnection((Player) entityEvent.source())
-                        .ifPresent(connection -> connection.writeAndFlush(message));
-            }
-        } catch (Exception e) {
-            log.error("Failed to handle event.", e);
-        }
+//        try {
+//            if (entityEvent.source() instanceof Player player) {
+//                tradeManager.onPlayerEvent(player, entityEvent);
+//            }
+//            if (entityEvent instanceof PlayerShootEvent shootEvent) {
+//                projectileManager.add(shootEvent.projectile());
+//                eventSender.notifyVisiblePlayersAndSelf(shootEvent.source(), shootEvent);
+//            } else if (entityEvent instanceof PlayerAttackEvent attackEvent) {
+//                eventSender.notifyVisiblePlayersAndSelf(attackEvent.source(), attackEvent);
+//            } else if (entityEvent instanceof PlayerDropItemEvent dropItemEvent) {
+//                itemManager.dropItem(dropItemEvent);
+//            } else if (entityEvent instanceof CreatureDieEvent dieEvent &&
+//                    dieEvent.source() instanceof Player player &&
+//                    deadPlayerTeleportManager != null) {
+//                deadPlayerTeleportManager.onPlayerDead(player);
+//            } else if (entityEvent instanceof PlayerKungFuFullEvent event) {
+//                crossRealmEventSender.send(event);
+//            } else if (entityEvent instanceof AbstractPlayerEvent playerEvent) {
+//                if (playerEvent.visibleToSelf()) {
+//                    eventSender.notifySelf(playerEvent);
+//                } else if (playerEvent.visibleToPlayers()) {
+//                    eventSender.notifyVisiblePlayersAndSelf(playerEvent.player(), playerEvent);
+//                }
+//            } else if (entityEvent instanceof I2ClientMessage message) {
+//                eventSender.findConnection((Player) entityEvent.source())
+//                        .ifPresent(connection -> connection.writeAndFlush(message));
+//            }
+//        } catch (Exception e) {
+//            log.error("Failed to handle event.", e);
+//        }
 
     }
 
 
-    private void sendMessageTo(Player player, I2ClientMessage message) {
-        eventSender.findConnection(player)
-                .ifPresent(connection -> connection.writeAndFlush(message));
+    public void sendTo(Player player, I2ClientMessage message) {
+        connectionManager.sendTo(player, message);
     }
 
     @Override
-    public void onMessage(PlayerMessage message) {
-        if (message instanceof SelectablePlayerMessage selectablePlayerMessage) {
-            selectablePlayerMessage
-                    .select(allPlayers())
-                    .forEach(p -> sendMessageTo(p, message));
-        } else {
-            sendMessageTo(message.source(), message);
-        }
+    public void sendToPlayers(Predicate<? super Player> filter, I2ClientMessage message) {
+        allPlayers().stream().filter(filter)
+                .forEach(player -> sendTo(player, message));
+    }
+
+    @Override
+    public void onEvent(PlayerEvent event) {
+        event.accept(this);
     }
 }

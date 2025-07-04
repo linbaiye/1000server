@@ -6,7 +6,7 @@ import org.y1000.message.serverevent.Visibility;
 import org.y1000.network.gen.NameColorPacket;
 import org.y1000.network.gen.Packet;
 
-public final class PlayerNameColorEvent extends AbstractPlayerEvent {
+public final class PlayerNameColorEvent extends IAbstractPlayerEvent {
 
     private final Packet packet;
 

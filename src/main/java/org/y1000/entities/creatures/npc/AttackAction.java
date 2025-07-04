@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
+import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.message.I2ClientMessage;
 
 public class AttackAction implements NpcAction {
@@ -28,7 +29,17 @@ public class AttackAction implements NpcAction {
 
     @Override
     public boolean update(int delta) {
+        return false;
+    }
 
+    @Override
+    public int elapsedMillis() {
+        return 0;
+    }
+
+    @Override
+    public NpcActionEnum actionEnum() {
+        return null;
     }
 
 }

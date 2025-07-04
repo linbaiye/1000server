@@ -1,6 +1,8 @@
 package org.y1000.message;
 
 import org.y1000.entities.creatures.npc.INpc;
+import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.NpcAction;
 import org.y1000.network.gen.CreatureBaseInfoPacket;
 import org.y1000.network.gen.NpcSnapshotPacket;
 import org.y1000.network.gen.Packet;
@@ -9,6 +11,25 @@ public record NpcSnapshot(Packet packet) implements I2ClientMessage {
     @Override
     public Packet toPacket() {
         return packet;
+    }
+
+
+    public static NpcSnapshot of(Npc npc, NpcAction npcAction) {
+        var coordinate = npc.coordinate();
+        CreatureBaseInfoPacket baseInfoSnapshot = CreatureBaseInfoPacket.newBuilder()
+                .setY(coordinate.y())
+                .setX(coordinate.x())
+                .setElapsedMillis(npcAction.elapsedMillis())
+                .setId(npc.id())
+                .setViewName(npc.getViewName())
+                .setDirection(npc.direction().value())
+                .build();
+        NpcSnapshotPacket.Builder builder = NpcSnapshotPacket.newBuilder()
+                .setBaseInfo(baseInfoSnapshot)
+                .setAnimate(npc.getAnimate())
+                .setState(npcAction.actionEnum().value())
+                .setShape(npc.getShape());
+        return new NpcSnapshot(Packet.newBuilder().setNpcSnapshot(builder).build());
     }
 
     public static NpcSnapshot ofNpc(INpc npc, int elapsed) {

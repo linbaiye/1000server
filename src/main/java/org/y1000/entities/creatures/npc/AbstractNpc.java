@@ -8,6 +8,7 @@ import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.entities.creatures.npc.AI.INpcAI;
+import org.y1000.entities.creatures.event.INpcMoveEvent;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.creatures.npc.spell.ShiftSpell;
 import org.y1000.entities.players.Damage;
@@ -178,7 +179,7 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
     public void move(int millis) {
         Validate.isTrue(millis >= 0);
         changeState(NpcMoveState.move(this, millis));
-        emitEvent(NpcMoveEvent.move(this, this.direction(), millis));
+        emitEvent(INpcMoveEvent.move(this, this.direction(), millis));
     }
 
     public void die() {

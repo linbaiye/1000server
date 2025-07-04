@@ -6,6 +6,8 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcAction;
+import org.y1000.entities.creatures.npc.event.NpcMoveEvent;
+import org.y1000.entities.creatures.npc.event.NpcMovedEvent;
 import org.y1000.util.Coordinate;
 
 
@@ -32,7 +34,7 @@ public class MoveAction implements NpcAction {
         this.walkSpeed = walkSpeed;
     }
 
-    public void hurt(Npc npc) {
+    public void interrupt(Npc npc) {
         var end = start.moveBy(direction);
         if (elapsedMillis >= animationMillis / 2 && npc.getRealmMap().movable(end))
             npc.setCoordinate(end);
@@ -42,12 +44,12 @@ public class MoveAction implements NpcAction {
 
     @Override
     public boolean update(int delta) {
+        if (elapsedMillis >= thresholdMillis) {
+            return true;
+        }
         elapsedMillis += delta;
         if (elapsedMillis < thresholdMillis) {
             return false;
-        }
-        if (elapsedMillis > thresholdMillis) {
-            return true;
         }
         if (!npc.getRealmMap().movable(start.moveBy(direction))) {
             npc.setCoordinate(start);
@@ -56,6 +58,7 @@ public class MoveAction implements NpcAction {
             npc.setCoordinate(start.moveBy(direction));
             moved = true;
         }
+        npc.sendEvent(NpcMovedEvent.of(npc));
         return true;
     }
 
@@ -86,6 +89,8 @@ public class MoveAction implements NpcAction {
         this.elapsedMillis = 0;
         this.thresholdMillis = millis;
         this.npc = npc;
+        npc.setDirection(direction);
+        npc.sendEvent(NpcMoveEvent.of(npc));
         return true;
     }
 }

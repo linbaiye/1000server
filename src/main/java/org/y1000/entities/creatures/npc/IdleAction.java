@@ -1,29 +1,14 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.event.NpcStartActionEvent;
 
-public class IdleAction implements NpcAction {
+public class IdleAction extends AbstractNpcAction {
 
     private final int animationMillis;
 
-    private int elapsedMillis;
-
-    private int stateMillis;
-
-
     public IdleAction(int animationMillis) {
         this.animationMillis = animationMillis;
-    }
-
-    @Override
-    public boolean update(int delta) {
-        return false;
-    }
-
-    @Override
-    public int elapsedMillis() {
-        return 0;
     }
 
     @Override
@@ -31,14 +16,12 @@ public class IdleAction implements NpcAction {
         return NpcActionEnum.Idle;
     }
 
-    public void stay(Npc npc, Direction direction) {
-
-
+    public void stayLoopAnimationMillis(Npc npc) {
+        stay(npc, animationMillis * 2);
     }
 
-    public void stay(Npc npc, Direction direction, int stateMillis) {
-
+    public void stay(Npc npc, int stateMillis) {
+        setTimer(stateMillis);
+        npc.sendEvent(NpcStartActionEvent.of(npc, actionEnum()));
     }
-
-
 }

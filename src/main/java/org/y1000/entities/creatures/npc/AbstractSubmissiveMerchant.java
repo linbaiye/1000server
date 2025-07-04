@@ -5,6 +5,7 @@ import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.AI.SubmissiveWanderingAI;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;

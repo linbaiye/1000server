@@ -2,17 +2,19 @@ package org.y1000.message;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.AbstractClientMessageEvent;
+import org.y1000.entities.players.event.PlayerEventHandler;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.SyncActiveKungFuPacket;
 
-public final class SyncActiveKungFuMessage extends AbstractPlayerMessage {
+public final class SyncActiveKungEvent extends AbstractClientMessageEvent {
 
-    private SyncActiveKungFuMessage(Player player, Packet packet) {
+    private SyncActiveKungEvent(Player player, Packet packet) {
         super(player, packet);
     }
 
 
-    public static SyncActiveKungFuMessage of(Player player) {
+    public static SyncActiveKungEvent of(Player player) {
         Validate.notNull(player);
         SyncActiveKungFuPacket.Builder builder = SyncActiveKungFuPacket.newBuilder();
         builder.setAttackKungFu(player.attackKungFu().name()).setId(player.id());
@@ -20,6 +22,11 @@ public final class SyncActiveKungFuMessage extends AbstractPlayerMessage {
         player.protectKungFu().ifPresent(protectKungFu -> builder.setProtectionKungFu(protectKungFu.name()));
         player.assistantKungFu().ifPresent(assistantKungFu -> builder.setAssistantKungFu(assistantKungFu.name()));
         player.breathKungFu().ifPresent(kungFu -> builder.setBreathKungFu(kungFu.name()));
-        return new SyncActiveKungFuMessage(player, Packet.newBuilder().setActiveKungFuList(builder).build());
+        return new SyncActiveKungEvent(player, Packet.newBuilder().setActiveKungFuList(builder).build());
+    }
+
+    @Override
+    public void accept(PlayerEventHandler handler) {
+        handler.sendTo(source(), this);
     }
 }

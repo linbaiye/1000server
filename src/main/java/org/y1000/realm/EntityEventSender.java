@@ -2,11 +2,11 @@ package org.y1000.realm;
 
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.event.IEntityEvent;
 import org.y1000.message.I2ClientMessage;
 
-public interface EntityEventSender {
+public interface EntityEventSender extends MessageSender {
     /**
      * Add an entity so that events happened to this entity can be sent to visible players & entities.
      * @param entity entity to add,
@@ -21,7 +21,7 @@ public interface EntityEventSender {
 
     void notifyVisiblePlayersAndSelf(Entity source, I2ClientMessage serverMessage);
 
-    default void notifySelf(AbstractPlayerEvent playerEvent) {
+    default void notifySelf(IAbstractPlayerEvent playerEvent) {
 
     }
 
@@ -32,5 +32,7 @@ public interface EntityEventSender {
     default void notifyPlayerOfEntities(Player player) {
 
     }
+
+
 
 }

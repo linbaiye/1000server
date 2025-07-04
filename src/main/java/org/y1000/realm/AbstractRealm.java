@@ -23,7 +23,7 @@ import java.util.Set;
 abstract class AbstractRealm implements Realm {
     public static final int STEP_MILLIS = 10;
     private final RealmMap realmMap;
-    private final RealmEntityEventSender eventSender;
+    private final RealmPlayerConnectionManager eventSender;
     private final NpcManager npcManager;
     private final PlayerManager playerManager;
     private final DynamicObjectManager dynamicObjectManager;
@@ -41,7 +41,7 @@ abstract class AbstractRealm implements Realm {
 
     public AbstractRealm(int id,
                          RealmMap realmMap,
-                         RealmEntityEventSender eventSender,
+                         RealmPlayerConnectionManager eventSender,
                          GroundItemManager itemManager,
                          NpcManager npcManager,
                          PlayerManager playerManager,
@@ -95,7 +95,7 @@ abstract class AbstractRealm implements Realm {
 
     abstract Logger log();
 
-    RealmEntityEventSender getEventSender() {
+    RealmPlayerConnectionManager getEventSender() {
         return eventSender;
     }
 
@@ -201,27 +201,27 @@ abstract class AbstractRealm implements Realm {
     }
 
     private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
-        if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent) {
-            if (commandEvent.isAskingPosition()) {
-                Set<InteractableNpc> merchants = npcManager.findMerchants();
-                Set<StaticTeleport> staticTeleports = teleportManager.findStaticTeleports();
-                if (!merchants.isEmpty() || !staticTeleports.isEmpty())
-                    eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
-            } else if (commandEvent.isQuit()) {
-                playerManager.onPlayerDisconnected(dataEvent.playerId());
-            } else {
-                handleClientEvent(dataEvent);
-            }
-        } else if (dataEvent.data() instanceof ClientFoundGuildEvent guildEvent) {
-            playerManager().find(dataEvent.playerId()).ifPresent(player -> handleGuildCreation(player, guildEvent));
-        } else if (dataEvent.data() instanceof ClientInputTextEvent clientInputTextEvent) {
-            chatManager.handleClientChat(dataEvent.playerId(), clientInputTextEvent);
-        } else if (dataEvent.data() instanceof ClientSingleInteractEvent singleInteractEvent) {
-            playerManager.find(singleInteractEvent.getPlayerId())
-                    .ifPresent(player -> findEntityAndHandle(player, singleInteractEvent));
-        } else {
-            handleClientEvent(dataEvent);
-        }
+//        if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent) {
+//            if (commandEvent.isAskingPosition()) {
+//                Set<InteractableNpc> merchants = npcManager.findMerchants();
+//                Set<StaticTeleport> staticTeleports = teleportManager.findStaticTeleports();
+//                if (!merchants.isEmpty() || !staticTeleports.isEmpty())
+//                    eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
+//            } else if (commandEvent.isQuit()) {
+//                playerManager.onPlayerDisconnected(dataEvent.playerId());
+//            } else {
+//                handleClientEvent(dataEvent);
+//            }
+//        } else if (dataEvent.data() instanceof ClientFoundGuildEvent guildEvent) {
+//            playerManager().find(dataEvent.playerId()).ifPresent(player -> handleGuildCreation(player, guildEvent));
+//        } else if (dataEvent.data() instanceof ClientInputTextEvent clientInputTextEvent) {
+//            chatManager.handleClientChat(dataEvent.playerId(), clientInputTextEvent);
+//        } else if (dataEvent.data() instanceof ClientSingleInteractEvent singleInteractEvent) {
+//            playerManager.find(singleInteractEvent.getPlayerId())
+//                    .ifPresent(player -> findEntityAndHandle(player, singleInteractEvent));
+//        } else {
+//            handleClientEvent(dataEvent);
+//        }
     }
 
     protected abstract void handleLogin(Login login);
@@ -263,22 +263,22 @@ abstract class AbstractRealm implements Realm {
 
     public void handle(RealmEvent event) {
         try {
-            if (event instanceof ConnectionEstablishedEvent connectedEvent) {
-                handleConnectionEvent(connectedEvent);
-            } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
-                playerManager.onPlayerDisconnected(disconnectedEvent.player().id());
-                eventSender.remove(disconnectedEvent.player());
-            } else if (event instanceof PlayerDataEvent dataEvent) {
-                handlePlayerDataEvent(dataEvent);
-            } else if (event instanceof RealmTeleportEvent teleportEvent) {
-                handleTeleportEvent(teleportEvent);
-            } else if (event instanceof BroadcastEvent broadcastEvent) {
-                playerManager().allPlayers().forEach(broadcastEvent::send);
-            } else if (event instanceof RealmTriggerEvent letterEvent) {
-                npcManager.handleCrossRealmEvent(letterEvent);
-            } else if (event instanceof PlayerWhisperEvent privateMessageEvent) {
-                chatManager.handleCrossRealmChat(privateMessageEvent);
-            }
+//            if (event instanceof ConnectionEstablishedEvent connectedEvent) {
+//                handleConnectionEvent(connectedEvent);
+//            } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
+//                playerManager.onPlayerDisconnected(disconnectedEvent.player().id());
+//                eventSender.remove(disconnectedEvent.player());
+//            } else if (event instanceof PlayerDataEvent dataEvent) {
+//                handlePlayerDataEvent(dataEvent);
+//            } else if (event instanceof RealmTeleportEvent teleportEvent) {
+//                handleTeleportEvent(teleportEvent);
+//            } else if (event instanceof BroadcastEvent broadcastEvent) {
+//                playerManager().allPlayers().forEach(broadcastEvent::send);
+//            } else if (event instanceof RealmTriggerEvent letterEvent) {
+//                npcManager.handleCrossRealmEvent(letterEvent);
+//            } else if (event instanceof PlayerWhisperEvent privateMessageEvent) {
+//                chatManager.handleCrossRealmChat(privateMessageEvent);
+//            }
         } catch (Exception e) {
             log().error("Exception when handling event .", e);
         }

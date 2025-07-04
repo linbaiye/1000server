@@ -6,7 +6,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 
 import java.util.Objects;
 
-public record PlayerStartTradeEvent(Player starter, int slot, long targetPlayerId) implements PlayerEvent {
+public record PlayerStartTradeEvent(Player starter, int slot, long targetPlayerId) implements IPlayerEvent {
 
     public PlayerStartTradeEvent {
         Objects.requireNonNull(starter, "starter can't be null");
@@ -17,7 +17,7 @@ public record PlayerStartTradeEvent(Player starter, int slot, long targetPlayerI
     }
 
     @Override
-    public AttackableEntity source() {
+    public Player source() {
         return starter;
     }
 }

@@ -93,7 +93,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                                                 AOIManager aoiManager,
                                                 EntityIdGenerator idGenerator,
                                                 GroundItemManager itemManager,
-                                                EntityEventSender entityEventSender,
+                                                MessageSender entityEventSender,
                                                 RealmMap realmMap) {
         if (!realmSpecificSdbRepository.monsterSdbExists(id) && !realmSpecificSdbRepository.npcSdbExists(id)) {
             return NpcManager.EMPTY;
@@ -126,14 +126,14 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .orElseThrow(() -> new IllegalArgumentException("No map for " + id));
             var entityIdGenerator = new EntityIdGenerator();
             AOIManager aoiManager = new RelevantScopeManager();
-            var eventSender = new RealmEntityEventSender(aoiManager);
-            var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
+            var eventSender = new RealmPlayerConnectionManager(aoiManager);
+            var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory, aoiManager);
             var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
             var dynamicObjectManager = !realmSpecificSdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
-                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, realmSpecificSdbRepository.loadCreateObject(id), crossRealmEventSender, realmMap);
+                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, realmSpecificSdbRepository.loadCreateObject(id), crossRealmEventSender, realmMap, aoiManager);
             var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager,
                     new BankManagerImpl(eventSender, npcManager, bankRepository), playerRepository, deadPlayerTeleportManager(id),
-                    crossRealmEventSender);
+                    crossRealmEventSender, aoiManager);
             var teleportManager = new TeleportManager(id, realmMap, createGateSdb, entityIdGenerator, aoiManager);
             var builder = RealmBuilder.builder()
                     .id(id)
@@ -153,7 +153,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                     ;
             if (allowGuildCreation(id)) {
                 GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, crossRealmEventSender, realmMap, guildRepository, itemRepository,
-                        entityManagerFactory, id, KungFuSdb.INSTANCE, kungFuBookRepository);
+                        entityManagerFactory, id, KungFuSdb.INSTANCE, kungFuBookRepository, aoiManager);
                 builder.guildManager(guildManager);
             }
             return mapSdb.getRegenInterval(id)
@@ -168,7 +168,7 @@ public final class RealmFactoryImpl implements RealmFactory {
     @Slf4j
     private static final class RealmBuilder {
         private RealmMap realmMap;
-        private RealmEntityEventSender eventSender;
+        private RealmPlayerConnectionManager eventSender;
         private ItemManagerImpl itemManager;
         private NpcManager npcManager;
         private PlayerManagerImpl playerManager;
@@ -210,7 +210,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder eventSender(RealmEntityEventSender eventSender) {
+        public RealmBuilder eventSender(RealmPlayerConnectionManager eventSender) {
             this.eventSender = eventSender;
             return this;
         }

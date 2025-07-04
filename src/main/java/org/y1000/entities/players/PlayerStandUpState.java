@@ -3,7 +3,7 @@ package org.y1000.entities.players;
 
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.message.PlayerChangeStateMessage;
+import org.y1000.message.PlayerChangeStateEvent;
 
 final class PlayerStandUpState extends AbstractPlayerState {
 
@@ -15,7 +15,7 @@ final class PlayerStandUpState extends AbstractPlayerState {
     public void update(int delta) {
         if (elapse(delta)) {
             player().changeState(PlayerStandState.idle(player()));
-            player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
+            player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
         }
     }
 

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.MoveAction;
 import org.y1000.entities.creatures.monster.*;
 import org.y1000.entities.creatures.npc.AI.*;
 import org.y1000.entities.creatures.npc.interactability.BuyInteractability;
@@ -22,6 +23,7 @@ import org.y1000.realm.RealmMap;
 import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
+import org.y1000.util.Rectangle;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -212,18 +214,19 @@ public final class NpcFactoryImpl implements NpcFactory {
     private INpc createPassiveCreature(String name, long id, RealmMap map, Coordinate coordinate, List<NpcSpell> spells, INpcAI ai) {
         boolean attack = monsterSdb.attack(name);
         if (attack) {
-            return PassiveMonster.builder()
-                    .id(id)
-                    .coordinate(coordinate)
-                    .direction(randomDirection())
-                    .name(monsterSdb.getViewName(name))
-                    .realmMap(map)
-                    .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
-                    .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
-                    .ai(ai)
-                    .skill(createSkill(name))
-                    .spells(spells)
-                    .build();
+            return null;
+//            return PassiveMonster.builder()
+//                    .id(id)
+//                    .coordinate(coordinate)
+//                    .direction(randomDirection())
+//                    .name(monsterSdb.getViewName(name))
+//                    .realmMap(map)
+//                    .stateMillis(createActionLengthMap(monsterSdb.getAnimate(name)))
+//                    .attributeProvider(new MonsterAttributeProvider(name, monsterSdb))
+//                    .ai(ai)
+//                    .skill(createSkill(name))
+//                    .spells(spells)
+//                    .build();
         } else {
             return createSubmissiveMonster(name, id, map, coordinate, spells);
         }
@@ -282,31 +285,33 @@ public final class NpcFactoryImpl implements NpcFactory {
                                      String merchantSdbFile,
                                      String dialogSdb) {
         if ("仓库管理员".equals(name)) {
-            return Banker.builder()
-                    .id(id)
-                    .coordinate(coordinate)
-                    .direction(randomDirection())
-                    .name(npcSdb.getViewName(name))
-                    .realmMap(realmMap)
-                    .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
-                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                    .ai(new SubmissiveWanderingAI())
-                    .build();
+            return null;
+//            return Banker.builder()
+//                    .id(id)
+//                    .coordinate(coordinate)
+//                    .direction(randomDirection())
+//                    .name(npcSdb.getViewName(name))
+//                    .realmMap(realmMap)
+//                    .stateMillis(createActionLengthMap(npcSdb.getAnimate(name)))
+//                    .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+//                    .ai(new SubmissiveWanderingAI())
+//                    .build();
         }
         NpcInteractor npcInteractor = createNpcInteractor(name, merchantSdbFile);
         if (npcInteractor == null) {
             return createSubmissiveNpc(name, id, realmMap, coordinate, null);
         }
-        return SubmissiveInteractableNpc.builder()
-                .id(id)
-                .realmMap(realmMap)
-                .interactor(npcInteractor)
-                .name(npcSdb.getViewName(name))
-                .coordinate(coordinate)
-                .stateMillis(createSubmissiveNpcActionLengthMap(name))
-                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .ai(new SubmissiveWanderingAI(loadChatter(dialogSdb).orElse(null)))
-                .build();
+        return null;
+//        return SubmissiveInteractableNpc.builder()
+//                .id(id)
+//                .realmMap(realmMap)
+//                .interactor(npcInteractor)
+//                .name(npcSdb.getViewName(name))
+//                .coordinate(coordinate)
+//                .stateMillis(createSubmissiveNpcActionLengthMap(name))
+//                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+//                .ai(new SubmissiveWanderingAI(loadChatter(dialogSdb).orElse(null)))
+//                .build();
     }
 
     private INpc createViolentNpc(String name, long id, RealmMap realmMap,
@@ -327,16 +332,17 @@ public final class NpcFactoryImpl implements NpcFactory {
                     .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
                     .build();
         }
-        return ViolentInteractableNpc.builder()
-                .id(id)
-                .realmMap(realmMap)
-                .interactor(npcInteractor)
-                .name(npcSdb.getViewName(name))
-                .coordinate(coordinate)
-                .stateMillis(createActionLengthMap(animate))
-                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
-                .ai(new ViolentNpcWanderingAI(coordinate))
-                .build();
+        return null;
+//        return ViolentInteractableNpc.builder()
+//                .id(id)
+//                .realmMap(realmMap)
+//                .interactor(npcInteractor)
+//                .name(npcSdb.getViewName(name))
+//                .coordinate(coordinate)
+//                .stateMillis(createActionLengthMap(animate))
+//                .attributeProvider(new NonMonsterNpcAttributeProvider(name, npcSdb))
+//                .ai(new ViolentNpcWanderingAI(coordinate))
+//                .build();
     }
 
 
@@ -364,6 +370,7 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
+
     @Override
     public INpc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate, CreateNonMonsterSdb createNpcSdb) {
         Validate.notNull(name);
@@ -374,5 +381,40 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (!npcSdb.isProtector(name))
             return createSubmissiveNpc(name, id, realmMap, coordinate, merchantFile, createNpcSdb.getDialog(name).orElse(null));
         return createViolentNpc(name, id, realmMap, coordinate, merchantFile);
+    }
+
+
+    private Set<NpcAction> buildActions(String name) {
+        Set<NpcAction> actions = new HashSet<>();
+        var animate = monsterSdb.getAnimate(name);
+        int idleLength = actionSdb.getActionLength(animate, NpcActionEnum.Idle);
+        int moveLength = actionSdb.getActionLength(animate, NpcActionEnum.Move);
+        int turnLength = actionSdb.getActionLength(animate, NpcActionEnum.Turn);
+        int hurtLength = actionSdb.getActionLength(animate, NpcActionEnum.Hurt);
+        actions.add(new IdleAction(idleLength));
+        actions.add(new MoveAction(moveLength, monsterSdb.getWalkSpeed(name)));
+        actions.add(new TurnAction(turnLength));
+        actions.add(new HurtAbility(turnLength, monsterSdb.getArmor(name), 0, monsterSdb.getLife(name), hurtLength));
+        return actions;
+    }
+
+    @Override
+    public Npc create(long id,
+                      String idName,
+                      RealmMap realmMap,
+                      Coordinate coordinate,
+                      NpcEventListener listener) {
+        Npc npc = new Npc(id,
+                monsterSdb.getViewName(idName),
+                coordinate,
+                buildActions(idName),
+                listener, realmMap,
+                monsterSdb.getAnimate(idName),
+                monsterSdb.getShape(idName),
+                idName);
+        WanderingAI wanderingAI = new WanderingAI(npc, monsterSdb.getActionWidth(idName));
+        npc.findAction(HurtAbility.class).ifPresent(hurtAbility -> hurtAbility.setTrigger(wanderingAI::onAttacked));
+        npc.changeAI(wanderingAI);
+        return npc;
     }
 }

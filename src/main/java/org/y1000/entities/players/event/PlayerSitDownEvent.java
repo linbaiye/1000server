@@ -7,7 +7,7 @@ import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerSitDownPacket;
 
 @Getter
-public final class PlayerSitDownEvent extends AbstractPlayerEvent {
+public final class PlayerSitDownEvent extends IAbstractPlayerEvent {
 
     private final boolean includeSelf;
 

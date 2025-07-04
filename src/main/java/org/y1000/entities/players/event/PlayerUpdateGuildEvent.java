@@ -6,7 +6,7 @@ import org.y1000.message.serverevent.Visibility;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateGuildPacket;
 
-public class PlayerUpdateGuildEvent extends AbstractPlayerEvent {
+public class PlayerUpdateGuildEvent extends IAbstractPlayerEvent {
 
     private final Packet packet;
 
@@ -14,11 +14,11 @@ public class PlayerUpdateGuildEvent extends AbstractPlayerEvent {
         super(source, Visibility.VISIBLE_PLAYERS);
         if (source.guildMembership().isPresent()) {
             packet = Packet.newBuilder()
-                    .setUpdateGuild(UpdateGuildPacket.newBuilder().setId(player().id()).setName(source.guildMembership().get().guildName()))
+                    .setUpdateGuild(UpdateGuildPacket.newBuilder().setId(source().id()).setName(source.guildMembership().get().guildName()))
                     .build();
         } else {
             packet = Packet.newBuilder()
-                    .setUpdateGuild(UpdateGuildPacket.newBuilder().setId(player().id()).setName(""))
+                    .setUpdateGuild(UpdateGuildPacket.newBuilder().setId(source().id()).setName(""))
                     .build();
         }
     }

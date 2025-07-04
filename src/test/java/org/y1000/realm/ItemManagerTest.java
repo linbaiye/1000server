@@ -38,7 +38,7 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         eventSender = new TestingEntityEventSender();
         itemSdb = Mockito.mock(ItemSdb.class);
         itemFactory = createItemFactory();
-        manager = new ItemManagerImpl(eventSender, itemSdb, new EntityIdGenerator(), itemFactory);
+        manager = new ItemManagerImpl(eventSender, itemSdb, new EntityIdGenerator(), itemFactory, null);
     }
 
     @Test

@@ -5,7 +5,7 @@ import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
-import org.y1000.message.PlayerChangeStateMessage;
+import org.y1000.message.PlayerChangeStateEvent;
 
 @Slf4j
 final class PlayerSitDownState extends AbstractPlayerState implements PlayerEquipableState {
@@ -28,7 +28,7 @@ final class PlayerSitDownState extends AbstractPlayerState implements PlayerEqui
 
     private void stand() {
         player().changeState(new PlayerStandUpState(player()));
-        player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
 
     @Override

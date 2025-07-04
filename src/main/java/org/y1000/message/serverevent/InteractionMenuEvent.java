@@ -4,7 +4,7 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.npc.InteractableNpc;
 import org.y1000.entities.creatures.npc.MerchantItem;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.network.gen.MerchantMenuPacket;
 import org.y1000.network.gen.NpcInteractionMenuPacket;
 import org.y1000.network.gen.NpcItemPacket;
@@ -13,7 +13,7 @@ import org.y1000.network.gen.Packet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class InteractionMenuEvent extends AbstractPlayerEvent {
+public final class InteractionMenuEvent extends IAbstractPlayerEvent {
 
     private final Packet packet;
 

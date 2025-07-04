@@ -21,7 +21,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
     private final EntityIdGenerator entityIdGenerator;
 
-    private final EntityEventSender eventSender;
+    private final MessageSender eventSender;
 
     private final GroundItemManager itemManager;
 
@@ -35,11 +35,13 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
     public DynamicObjectManagerImpl(DynamicObjectFactory factory,
                                     EntityIdGenerator entityIdGenerator,
-                                    EntityEventSender eventSender,
+                                    MessageSender eventSender,
                                     GroundItemManager itemManager,
                                     CreateDynamicObjectSdb dynamicObjectSdb,
                                     CrossRealmEventSender crossRealmEventSender,
-                                    RealmMap realmMap) {
+                                    RealmMap realmMap,
+                                    AOIManager aoiManager) {
+        super(aoiManager, eventSender);
         this.factory = factory;
         this.entityIdGenerator = entityIdGenerator;
         this.eventSender = eventSender;
@@ -56,16 +58,16 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
             return;
         }
         if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
-            eventSender.notifyVisiblePlayers(object, removeEntityEvent);
-            eventSender.remove(object);
+//            eventSender.notifyVisiblePlayers(object, removeEntityEvent);
+//            eventSender.remove(object);
             if (object instanceof RespawnDynamicObject respawnDynamicObject) {
                 respawningEntityManager.add(respawnDynamicObject, respawnDynamicObject.respawnTime());
             }
             remove(object);
         } else if (entityEvent instanceof UpdateDynamicObjectEvent updateDynamicObjectEvent) {
-            eventSender.notifyVisiblePlayers(entityEvent.source(), updateDynamicObjectEvent);
+//            eventSender.notifyVisiblePlayers(entityEvent.source(), updateDynamicObjectEvent);
         } else if (entityEvent instanceof EntityLifebarEvent entityLifebarEvent) {
-            eventSender.notifyVisiblePlayers(entityEvent.source(), entityLifebarEvent);
+//            eventSender.notifyVisiblePlayers(entityEvent.source(), entityLifebarEvent);
         } else if (entityEvent instanceof CrossRealmEvent crossRealmEvent) {
             crossRealmEventSender.send(crossRealmEvent.realmEvent());
         } else if (entityEvent instanceof DynamicObjectDieEvent dieEvent) {
@@ -82,9 +84,9 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
 
     private void addObject(DynamicObject entity) {
-        eventSender.add(entity);
+//        eventSender.add(entity);
         entity.registerEventListener(this);
-        eventSender.notifyVisiblePlayers(entity, entity.captureSnapshot());
+//        eventSender.notifyVisiblePlayers(entity, entity.captureSnapshot());
         add(entity);
     }
 

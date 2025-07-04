@@ -16,12 +16,12 @@ final class ChatManagerImpl implements ChatManager {
 
     private final PlayerManager playerManager;
 
-    private final EntityEventSender eventSender;
+    private final MessageSender eventSender;
 
     private final CrossRealmEventSender crossRealmEventSender;
 
     public ChatManagerImpl(PlayerManager playerManager,
-                           EntityEventSender eventSender,
+                           MessageSender eventSender,
                            CrossRealmEventSender crossRealmEventSender) {
         Validate.notNull(playerManager);
         Validate.notNull(eventSender);
@@ -40,7 +40,7 @@ final class ChatManagerImpl implements ChatManager {
                 player.consumeLife(1000);
             crossRealmEventSender.send(realmChatEvent.toRealmEvent(player));
         } else if (event instanceof ClientChatEvent speakEvent) {
-            eventSender.notifyVisiblePlayersAndSelf(player, speakEvent.toPlayerEvent(player));
+//            eventSender.notifyVisiblePlayersAndSelf(player, speakEvent.toPlayerEvent(player));
         }
     }
 

@@ -7,7 +7,7 @@ import org.y1000.network.gen.TeleportPacket;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
-public class PlayerTeleportEvent extends AbstractPlayerEvent {
+public class PlayerTeleportEvent extends IAbstractPlayerEvent {
 
     private final Packet packet;
 

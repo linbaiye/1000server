@@ -6,7 +6,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.KungFuPacket;
 import org.y1000.network.gen.Packet;
 
-public final class PlayerLearnKungFuEvent extends AbstractPlayerEvent {
+public final class PlayerLearnKungFuEvent extends IAbstractPlayerEvent {
     private final int slot;
 
     private final String kungFuName;

@@ -7,7 +7,7 @@ import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.entities.players.event.OpenTradeWindowEvent;
 import org.y1000.entities.players.event.UpdateTradeWindowEvent;
 import org.y1000.entities.players.inventory.Inventory;
@@ -55,14 +55,14 @@ class TradeManagerImplTest extends AbstractUnitTestFixture {
         tradeeEventListener = new TestingEventListener();
         traderEventListener = new TestingEventListener();
         doAnswer(invocationOnMock -> {
-            AbstractPlayerEvent event = invocationOnMock.getArgument(0);
+            IAbstractPlayerEvent event = invocationOnMock.getArgument(0);
             if (event.source() == trader) {
                 traderEventListener.onEvent(event);
             } else if (event.source() == tradee) {
                 tradeeEventListener.onEvent(event);
             }
             return null;
-        }).when(eventSender).notifySelf(any(AbstractPlayerEvent.class));
+        }).when(eventSender).notifySelf(any(IAbstractPlayerEvent.class));
     }
 
     @Test

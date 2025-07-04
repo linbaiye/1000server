@@ -5,7 +5,7 @@ import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
-import org.y1000.message.PlayerChangeStateMessage;
+import org.y1000.message.PlayerChangeStateEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.message.input.MoveInput;
 import org.y1000.message.input.TurnInput;
@@ -43,7 +43,7 @@ final class PlayerStandState extends AbstractPlayerState {
             player().disableFootKungFuAndSync();
             player().stopFight();
             player().changeState(PlayerSitDownState.sit(player()));
-            player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
+            player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
         }
     }
 
@@ -58,7 +58,7 @@ final class PlayerStandState extends AbstractPlayerState {
         } else {
             return;
         }
-        player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
 
 
@@ -74,7 +74,7 @@ final class PlayerStandState extends AbstractPlayerState {
     public void sayHello() {
         if (playerStateEnum() == PlayerStateEnum.Idle) {
             player().changeState(new PlayerHelloState(player()));
-            player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
+            player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
         }
     }
 
@@ -82,7 +82,7 @@ final class PlayerStandState extends AbstractPlayerState {
     public void doubleClickBreathKungFu(BreathKungFu breathKungFu) {
         player().toggleBreathKungFu(breathKungFu);
         player().changeState(PlayerSitDownState.sit(player()));
-        player().sendMessage(PlayerChangeStateMessage.allVisible(player()));
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
 
     public static PlayerStandState idle(PlayerImpl player) {

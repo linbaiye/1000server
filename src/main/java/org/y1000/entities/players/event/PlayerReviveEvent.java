@@ -5,7 +5,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerRevivePacket;
 
-public class PlayerReviveEvent extends AbstractPlayerEvent {
+public class PlayerReviveEvent extends IAbstractPlayerEvent {
     public PlayerReviveEvent(Player source) {
         super(source);
     }

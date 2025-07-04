@@ -227,7 +227,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(inventorySlotEvent.toPacket().getUpdateSlot().getName(), "fist");
         assertTrue(player.weapon().isEmpty());
         assertTrue(inventory.findWeaponSlot(AttackKungFuType.Fist) != 0);
-        PlayerUnequipMessage unequipEvent = eventListener.removeFirst(PlayerUnequipMessage.class);
+        PlayerUnequipEvent unequipEvent = eventListener.removeFirst(PlayerUnequipEvent.class);
         assertEquals(unequipEvent.toPacket().getUnequip().getEquipmentType(), EquipmentType.WEAPON.value());
     }
 
@@ -622,7 +622,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertNotEquals(100, player.headPercent());
         assertNotEquals(100, player.armPercent());
         verify(attacker, times(1)).gainAttackExp(anyInt());
-        AttributePacket attribute = eventListener.removeFirst(PlayerAttributeMessage.class).toPacket().getAttribute();
+        AttributePacket attribute = eventListener.removeFirst(PlayerAttributeEvent.class).toPacket().getAttribute();
         assertEquals(player.armPercent(), attribute.getArmPercent());
         assertEquals(player.legPercent(), attribute.getLegPercent());
         assertEquals(player.headPercent(), attribute.getHeadPercent());

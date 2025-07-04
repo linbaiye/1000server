@@ -1,14 +1,13 @@
 package org.y1000.message.serverevent;
 
-import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
 import org.y1000.network.gen.InventoryItemPacket;
 import org.y1000.network.gen.Packet;
 
-public class UpdateInventorySlotEvent extends AbstractPlayerEvent {
+public class UpdateInventorySlotEvent extends IAbstractPlayerEvent {
     private final int slot;
     private final Item item;
 

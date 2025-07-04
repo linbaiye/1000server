@@ -1,6 +1,7 @@
 package org.y1000.realm;
 
 import org.y1000.entities.creatures.npc.INpc;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.event.EntityEvent;
 import org.y1000.realm.event.RealmEvent;
 
@@ -21,14 +22,15 @@ public final class EmptyNpcManager implements NpcManager {
     }
 
     @Override
-    public Optional<INpc> find(long id) {
+    public Optional<Npc> find(long id) {
         return Optional.empty();
     }
 
     @Override
-    public boolean contains(INpc entity) {
+    public boolean contains(Npc entity) {
         return false;
     }
+
 
     @Override
     public void init() {

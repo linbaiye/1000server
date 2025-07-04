@@ -12,7 +12,7 @@ final class ConjunctionDungeonRealm extends AbstractDungeonRealm {
 
     public ConjunctionDungeonRealm(int id,
                                    RealmMap realmMap,
-                                   RealmEntityEventSender eventSender,
+                                   RealmPlayerConnectionManager eventSender,
                                    GroundItemManager itemManager,
                                    NpcManager npcManager,
                                    PlayerManager playerManager,

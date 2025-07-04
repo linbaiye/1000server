@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.players.event.PlayerEvent;
+import org.y1000.entities.players.event.IPlayerEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.*;
 import org.y1000.entities.players.Player;
@@ -272,7 +272,7 @@ public final class Inventory extends AbstractInventory {
     }
 
 
-    private Item doConsumeStackItem(int targetSlot, Player player, UnaryAction<? super PlayerEvent> eventSender) {
+    private Item doConsumeStackItem(int targetSlot, Player player, UnaryAction<? super IPlayerEvent> eventSender) {
         if (targetSlot == 0) {
             return null;
         }
@@ -291,7 +291,7 @@ public final class Inventory extends AbstractInventory {
 
     public Item consumeStackItem(Player player,
                                     ItemType type,
-                                    UnaryAction<? super PlayerEvent> eventSender) {
+                                    UnaryAction<? super IPlayerEvent> eventSender) {
         int slot = findFirstSlot(item -> item.itemType() == type);
         return doConsumeStackItem(slot, player, eventSender);
     }
@@ -299,7 +299,7 @@ public final class Inventory extends AbstractInventory {
 
     public boolean consumeStackItem(Player player,
                                     String name,
-                                    UnaryAction<? super PlayerEvent> eventSender) {
+                                    UnaryAction<? super IPlayerEvent> eventSender) {
         var targetSlot = findFirstSlot(i -> i.name().equals(name) && i instanceof StackItem);
         return doConsumeStackItem(targetSlot, player, eventSender) != null;
     }

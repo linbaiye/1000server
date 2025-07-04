@@ -3,13 +3,13 @@ package org.y1000.message;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.npc.Quester;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.message.serverevent.Visibility;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateQuestWindowPacket;
 
-public final class UpdateQuestWindowEvent extends AbstractPlayerEvent  {
+public final class UpdateQuestWindowEvent extends IAbstractPlayerEvent {
 
     private final Packet packet;
 

@@ -2,12 +2,11 @@ package org.y1000.entities.players.event;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.message.AbstractPlayerMessage;
 import org.y1000.network.gen.AttributePacket;
 import org.y1000.network.gen.Packet;
 
-public final class PlayerAttributeMessage extends AbstractPlayerMessage {
-    public PlayerAttributeMessage(Player source, Packet packet) {
+public final class PlayerAttributeEvent extends AbstractClientMessageEvent {
+    public PlayerAttributeEvent(Player source, Packet packet) {
         super(source, packet);
     }
 
@@ -29,10 +28,15 @@ public final class PlayerAttributeMessage extends AbstractPlayerMessage {
                 .build();
     }
 
-    public static PlayerAttributeMessage of(Player player) {
+    public static PlayerAttributeEvent of(Player player) {
         Validate.notNull(player);
-        return new PlayerAttributeMessage(player, Packet.newBuilder()
+        return new PlayerAttributeEvent(player, Packet.newBuilder()
                 .setAttribute(makeAttributePacket(player))
                 .build());
+    }
+
+    @Override
+    public void accept(PlayerEventHandler handler) {
+        handler.sendTo(source(), this);
     }
 }

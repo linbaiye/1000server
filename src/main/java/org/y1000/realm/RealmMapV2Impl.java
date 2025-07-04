@@ -164,6 +164,7 @@ final class RealmMapV2Impl implements RealmMap {
         return roof;
     }
 
+
     @Override
     public String objectFile() {
         return object;

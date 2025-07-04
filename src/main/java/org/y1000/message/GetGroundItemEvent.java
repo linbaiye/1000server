@@ -5,11 +5,11 @@ import lombok.Getter;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerEvent;
+import org.y1000.entities.players.event.IPlayerEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 
 @Getter
-public final class GetGroundItemEvent implements PlayerEvent {
+public final class GetGroundItemEvent implements IPlayerEvent {
 
 
     private final GroundedItem pickingItem;
@@ -26,7 +26,7 @@ public final class GetGroundItemEvent implements PlayerEvent {
     }
 
     @Override
-    public AttackableEntity source() {
+    public Player source() {
         return player;
     }
 

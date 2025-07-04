@@ -8,6 +8,8 @@ import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
+import org.y1000.entities.creatures.npc.HurtAbility;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.event.EntityEvent;
@@ -95,7 +97,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
     private PlayerState state;
 
-    private PlayerMessageListener messageListener;
+    private PlayerEventListener eventListener;
 
     private CombatController combatController;
 
@@ -294,14 +296,14 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     private void syncInventoryQuietly() {
-        sendMessage(InventoryMessage.quiet(this));
+        sendEvent(InventoryEvent.quiet(this));
     }
 
 
     private void changeAndSayAttackKungFu(AttackKungFu attackKungFu) {
         this.attackKungFu = attackKungFu;
         cooldownAttack();
-        sendMessage(PlayerSayMessage.say(this, attackKungFu.name()));
+        sendEvent(PlayerSayEvent.say(this, attackKungFu.name()));
     }
 
     void tryEquipFromSlot(int slotId, Equipment equipment) {
@@ -315,10 +317,10 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         else if (equipment instanceof SexualEquipment sexualEquipment && sexualEquipment.isMale() == isMale()) {
             equipArmorFromSlot(slotId);
         } else {
-            sendMessage(PlayerTextMessage.of(this, "你无法使用该物品。"));
+            sendEvent(PlayerTextMessage.of(this, "你无法使用该物品。"));
             return;
         }
-        sendMessage(PlayerEquipMessage.create(this, equipment));
+        sendEvent(PlayerEquipEvent.create(this, equipment));
         syncInventoryQuietly();
     }
 
@@ -335,7 +337,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
     void tryUseAttackKungFu(AttackKungFu newKungFu) {
         if (headPercent() < 50) {
-            sendMessage(PlayerTextMessage.of(this, "头部活力不足。"));
+            sendEvent(PlayerTextMessage.of(this, "头部活力不足。"));
             return;
         }
         if (newKungFu.nameEquals(attackKungFu)) {
@@ -348,11 +350,11 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         int weaponSlot = inventory.findWeaponSlot(newKungFu.getType());
         if (weaponSlot == 0) {
             if (newKungFu.getType() != AttackKungFuType.Fist) {
-                sendMessage(PlayerTextMessage.of(this, "没有对应的武器。"));
+                sendEvent(PlayerTextMessage.of(this, "没有对应的武器。"));
                 return;
             }
             if (unequipAndPutToInventory(EquipmentType.WEAPON)) {
-                sendMessage(PlayerUnequipMessage.of(this, EquipmentType.WEAPON));
+                sendEvent(PlayerUnequipEvent.of(this, EquipmentType.WEAPON));
                 syncInventoryQuietly();
             }
             changeAndSayAttackKungFu(newKungFu);
@@ -360,7 +362,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         }
         Weapon weapon = (Weapon) inventory.getItem(weaponSlot);
         equipWeaponFromSlot(weaponSlot);
-        sendMessage(PlayerEquipMessage.create(this, weapon));
+        sendEvent(PlayerEquipEvent.create(this, weapon));
         changeAndSayAttackKungFu(newKungFu);
         syncInventoryQuietly();
     }
@@ -422,7 +424,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
             protectKungFu = null;
             stopFight();
         }
-        sendMessage(PlayerSayMessage.say(this, newBreath.name()));
+        sendEvent(PlayerSayEvent.say(this, newBreath.name()));
     }
 
     private void toggleProtectionKungFu(ProtectKungFu newProtection) {
@@ -433,7 +435,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
             protectKungFu = newProtection;
             protectKungFu.resetTimer();
         }
-        sendMessage(PlayerSayMessage.say(this, newProtection.name()));
+        sendEvent(PlayerSayEvent.say(this, newProtection.name()));
     }
 
 //        if (creatureState().canSitDown()) {
@@ -450,7 +452,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 //        }
 
     private void syncActiveKungFuList() {
-        sendMessage(SyncActiveKungFuMessage.of(this));
+        sendEvent(SyncActiveKungEvent.of(this));
     }
 
     void toggleFootKungFu(FootKungFu newKungFu) {
@@ -461,7 +463,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
             this.footKungfu = newKungFu;
         }
         combatController = null;
-        sendMessage(PlayerSayMessage.say(this, newKungFu.name()));
+        sendEvent(PlayerSayEvent.say(this, newKungFu.name()));
     }
 
 
@@ -469,7 +471,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         if (isDead())
             return;
         if (attackKungFu.level() < 9999) {
-            sendMessage(PlayerTextMessage.of(this, "满级武功方可使用" + newAssistant.name() + "。"));
+            sendEvent(PlayerTextMessage.of(this, "满级武功方可使用" + newAssistant.name() + "。"));
             return;
         }
         if (this.assistantKungFu.nameEquals(newAssistant)) {
@@ -477,7 +479,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         } else {
             assistantKungFu = newAssistant;
         }
-        sendMessage(PlayerSayMessage.say(this, newAssistant.name()));
+        sendEvent(PlayerSayEvent.say(this, newAssistant.name()));
         syncActiveKungFuList();
     }
 
@@ -529,9 +531,10 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
     @Override
-    public void attack(AttackableEntity target) {
+    public void attack(Npc target) {
         Validate.notNull(target);
-        combatController = CombatController.createAndStart(this, target);
+        target.findAction(HurtAbility.class)
+                .ifPresent(a -> combatController = CombatController.createAndStart(this, target));
     }
 
     private void move(ClientMovementEvent event) {
@@ -564,7 +567,6 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
 
-    @Override
     public void handleClientEvent(ClientEvent clientEvent) {
         if (isDead()) {
             return;
@@ -614,8 +616,8 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     @Override
     public void handleSimpleInput(SimpleInput.Type type) {
         switch (type) {
-            case KungFuBook -> sendMessage(KungFuBookMessage.forPlayer(this));
-            case Inventory -> sendMessage(InventoryMessage.forceful(this));
+            case KungFuBook -> sendEvent(KungFuBookEvent.forPlayer(this));
+            case Inventory -> sendEvent(InventoryEvent.forceful(this));
             case KeyF4 -> state().sayHello();
             case KeyF3 -> state().sitOrStandUp();
             case KeyF2 -> state().switchStand();
@@ -628,7 +630,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
             if (type == ClickKungFuInput.ClickType.LeftDoubleClick) {
                 handleDoubleClickKungFu(kungFu);
             } else if (type == ClickKungFuInput.ClickType.LeftClick) {
-                sendMessage(PlayerTextMessage.of(this, kungFu.detailText()));
+                sendEvent(PlayerTextMessage.of(this, kungFu.detailText()));
             }
         });
     }
@@ -636,7 +638,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     @Override
     public void swapItem(int slot1, int slot2) {
         if (inventory.swap(slot1, slot2)) {
-            sendMessage(InventoryMessage.forceful(this));
+            sendEvent(InventoryEvent.forceful(this));
         }
     }
 
@@ -691,24 +693,24 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
 
     @Override
-    public void joinRealm(Realm realm, PlayerMessageListener messageListener) {
+    public void joinRealm(Realm realm, PlayerEventListener messageListener) {
         joinRealm(realm, coordinate(), messageListener);
     }
 
-    public void sendMessage(PlayerMessage playerMessage) {
-        if (messageListener != null)
-            messageListener.onMessage(playerMessage);
+    @Override
+    public void sendEvent(PlayerEvent event) {
+        if (eventListener != null)
+            eventListener.onEvent(event);
     }
 
-
     @Override
-    public void joinRealm(Realm realm, Coordinate coordinate, PlayerMessageListener messageListener) {
+    public void joinRealm(Realm realm, Coordinate coordinate, PlayerEventListener eventListener) {
         Validate.notNull(realm);
         Validate.notNull(coordinate);
         Validate.isTrue(this.realm == null);
         this.realm = realm;
         changeCoordinate(coordinate);
-        this.messageListener = messageListener;
+        this.eventListener = eventListener;
     }
 
     private void onKilled() {
@@ -929,7 +931,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         gainOuterPower(resource);
         gainInnerPower(resource);
         gainPower(resource / 2);
-        sendMessage(PlayerAttributeMessage.of(this));
+        sendEvent(PlayerAttributeEvent.of(this));
     }
 
     private void doGainExperiencedResource(PlayerAgedAttribute attribute, String name, int v) {
@@ -988,7 +990,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         var resourceUpdated = updateKungFuAndCheck(protectKungFu, delta, this::disableProtectionNoTip);
         resourceUpdated = resourceUpdated || updateKungFuAndCheck(footKungfu, delta, this::disableFootKungFuAndSync);
         if (resourceUpdated) {
-            sendMessage(PlayerAttributeMessage.of(this));
+            sendEvent(PlayerAttributeEvent.of(this));
             return;
         }
         if (breathKungFu != null) {
@@ -1123,7 +1125,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         if (life.currentValue() == 0) {
             onKilled();
         } else {
-            sendMessage(PlayerAttributeMessage.of(this));
+            sendEvent(PlayerAttributeEvent.of(this));
         }
     }
 

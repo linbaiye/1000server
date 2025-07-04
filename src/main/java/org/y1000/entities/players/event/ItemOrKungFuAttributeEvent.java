@@ -6,7 +6,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.ItemAttributePacket;
 import org.y1000.network.gen.Packet;
 
-public class ItemOrKungFuAttributeEvent extends AbstractPlayerEvent {
+public class ItemOrKungFuAttributeEvent extends IAbstractPlayerEvent {
     private final int page;
     private final int slotId;
     private final String description;

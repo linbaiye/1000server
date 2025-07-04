@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.message.PlayerChangeStateMessage;
+import org.y1000.message.PlayerChangeStateEvent;
 import org.y1000.message.PlayerMoveEvent;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.message.input.MoveInput;
@@ -42,7 +42,7 @@ public final class PlayerMoveState extends AbstractPlayerState {
         } else {
             player().changeState(PlayerStandState.idle(player()));
         }
-        player().sendMessage(PlayerChangeStateMessage.noSelf(player()));
+        player().sendEvent(PlayerChangeStateEvent.noSelf(player()));
     }
 
     @Override

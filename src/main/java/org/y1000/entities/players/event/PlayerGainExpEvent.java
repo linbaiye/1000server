@@ -5,7 +5,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerGainExpPacket;
 
-public final class PlayerGainExpEvent extends AbstractPlayerEvent {
+public final class PlayerGainExpEvent extends IAbstractPlayerEvent {
 
     private final String name;
 

@@ -4,16 +4,18 @@ import org.y1000.entities.players.MoveAction;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.PlayerMoveState;
-import org.y1000.entities.players.event.PlayerEquipMessage;
+import org.y1000.entities.players.event.PlayerEquipEvent;
 import org.y1000.network.gen.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class PlayerSnapshot extends AbstractInsightPlayerMessage {
+public final class PlayerSnapshot implements I2ClientMessage {
 
-    private PlayerSnapshot(Player player, Packet packet) {
-        super(player, packet);
+    private final Packet packet;
+
+    private PlayerSnapshot(Packet packet) {
+        this.packet = packet;
     }
 
     private static PlayerSnapshotPacket buildSnapshot(Player player) {
@@ -29,7 +31,7 @@ public final class PlayerSnapshot extends AbstractInsightPlayerMessage {
                 .setDirection(player.direction().value())
                 .setId(player.id())
                 .build();
-        List<PlayerEquipPacket> equipments = player.getEquipments().stream().map(e -> PlayerEquipMessage.toEquipPacket(player, e))
+        List<PlayerEquipPacket> equipments = player.getEquipments().stream().map(e -> PlayerEquipEvent.toEquipPacket(player, e))
                 .collect(Collectors.toList());
         return PlayerSnapshotPacket.newBuilder()
                 .setMoveAction(moveAction != null ? moveAction.value() : -1)
@@ -41,7 +43,12 @@ public final class PlayerSnapshot extends AbstractInsightPlayerMessage {
     }
 
     public static PlayerSnapshot FromPlayer(PlayerImpl player) {
-        return new PlayerSnapshot(player, Packet.newBuilder()
+        return new PlayerSnapshot(Packet.newBuilder()
                 .setPlayerSnapshot(buildSnapshot(player)).build());
+    }
+
+    @Override
+    public Packet toPacket() {
+        return packet;
     }
 }

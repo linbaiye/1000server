@@ -7,6 +7,7 @@ import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;

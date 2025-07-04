@@ -8,7 +8,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.OpenBankPacket;
 import org.y1000.network.gen.Packet;
 
-public final class PlayerOpenBankEvent extends AbstractPlayerEvent {
+public final class PlayerOpenBankEvent extends IAbstractPlayerEvent {
 
     private final Packet packet;
 

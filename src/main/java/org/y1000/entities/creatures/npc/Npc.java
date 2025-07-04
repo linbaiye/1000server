@@ -1,9 +1,13 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.npc.event.NpcEvent;
+import org.y1000.entities.players.PlayerImpl;
 import org.y1000.message.I2ClientMessage;
+import org.y1000.message.NpcSnapshot;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -11,8 +15,8 @@ import java.util.*;
 
 public class Npc extends AbstractActiveEntity {
 
-    private final List<NpcAction> abilities;
-    private final NpcMessageListener listener;
+    private final Set<NpcAction> abilities;
+    private final NpcEventListener listener;
     private Coordinate coordinate;
 
     @Getter
@@ -20,30 +24,49 @@ public class Npc extends AbstractActiveEntity {
 
     private NpcAI ai;
 
+    @Getter
     private final String viewName;
+
+    @Getter
+    private final String animate;
+
+    @Getter
+    private final String shape;
 
     @Getter
     private final Coordinate spawnCoordinate;
 
+    @Setter
+    private Direction direction;
+
+    @Getter
+    private final String idName;
 
     public Npc(long id,
                String viewName,
                Coordinate coordinate,
-               List<NpcAction> actions,
-               NpcMessageListener listener,
-               RealmMap realmMap) {
+               Set<NpcAction> actions,
+               NpcEventListener listener,
+               RealmMap realmMap,
+               String animate,
+               String shape,
+               String idName) {
         super(id);
         this.abilities = actions;
         this.listener = listener;
         this.realmMap = realmMap;
-        this.viewName = viewName;
+        this.viewName = viewName != null ? viewName : "";
         this.spawnCoordinate = coordinate;
         this.coordinate = coordinate;
+        this.animate = animate;
+        this.shape = shape;
+        this.idName = idName;
+        this.direction = Direction.DOWN;
         realmMap.occupy(this);
     }
 
-    public void sendMessage(NpcMessage message) {
-        listener.onMessage(message);
+    public void sendEvent(NpcEvent event) {
+        listener.onEvent(event);
     }
 
     public <A extends NpcAction> Optional<A> findAction(Class<A> type) {
@@ -51,7 +74,6 @@ public class Npc extends AbstractActiveEntity {
                 .filter(a -> type.isAssignableFrom(a.getClass()))
                 .findFirst().map(type::cast);
     }
-
 
     public void changeAI(NpcAI newAi) {
         ai = newAi;
@@ -62,13 +84,14 @@ public class Npc extends AbstractActiveEntity {
         ai.update(delta);
     }
 
+
     @Override
     public Coordinate coordinate() {
         return coordinate;
     }
 
     public Direction direction() {
-        return Direction.DOWN;
+        return direction;
     }
 
     public void setCoordinate(Coordinate coordinate) {
@@ -76,8 +99,23 @@ public class Npc extends AbstractActiveEntity {
         realmMap.occupy(this);
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Npc npc = (Npc) o;
+        return id() == npc.id();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id());
+    }
+
+
     @Override
     public I2ClientMessage captureSnapshot() {
-        return null;
+        return NpcSnapshot.of(this, ai.currentAction());
     }
 }

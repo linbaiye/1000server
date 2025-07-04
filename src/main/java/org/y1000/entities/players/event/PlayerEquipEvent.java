@@ -4,7 +4,6 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.item.*;
 import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.message.AbstractInsightPlayerMessage;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerEquipPacket;
 
@@ -13,9 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PlayerEquipMessage extends AbstractInsightPlayerMessage  {
+public class PlayerEquipEvent extends AbstractClientMessageEvent {
 
-    public PlayerEquipMessage(Player player, Packet packet) {
+    public PlayerEquipEvent(Player player, Packet packet) {
         super(player, packet);
     }
 
@@ -57,10 +56,10 @@ public class PlayerEquipMessage extends AbstractInsightPlayerMessage  {
         return builder.build();
     }
 
-    public static PlayerEquipMessage create(Player player, Equipment equipment) {
+    public static PlayerEquipEvent create(Player player, Equipment equipment) {
         Validate.notNull(player);
 
-        return new PlayerEquipMessage(player, Packet.newBuilder().setEquip(toEquipPacket(player, equipment)).build());
+        return new PlayerEquipEvent(player, Packet.newBuilder().setEquip(toEquipPacket(player, equipment)).build());
     }
 
 
@@ -126,5 +125,10 @@ public class PlayerEquipMessage extends AbstractInsightPlayerMessage  {
     public static void main(String[] args) {
         dump();
         //checkDuplicateNames();
+    }
+
+    @Override
+    public void accept(PlayerEventHandler handler) {
+        handler.sendToVisiblePlayers(source(), this);
     }
 }

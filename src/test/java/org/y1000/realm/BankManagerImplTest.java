@@ -9,7 +9,7 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.Banker;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.entities.players.event.PlayerOpenBankEvent;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
@@ -64,7 +64,7 @@ class BankManagerImplTest extends AbstractUnitTestFixture  {
         doAnswer(invocationOnMock -> {
             testingEventListener.onEvent(invocationOnMock.getArgument(0));
             return null;
-        }).when(eventSender).notifySelf(any(AbstractPlayerEvent.class));
+        }).when(eventSender).notifySelf(any(IAbstractPlayerEvent.class));
     }
 
     @Test
@@ -98,7 +98,7 @@ class BankManagerImplTest extends AbstractUnitTestFixture  {
         }).when(bankRepository).save(anyLong(), any(Bank.class));
         bankManager.handle(player, ClientOperateBankEvent.unlock(add));
         assertEquals(10, savedBank.get().getUnlocked());
-        verify(eventSender, times(1)).notifySelf(any(AbstractPlayerEvent.class));
+        verify(eventSender, times(1)).notifySelf(any(IAbstractPlayerEvent.class));
         assertEquals(3, inventory.getStackItem(add, Item.class).get().number());
     }
 

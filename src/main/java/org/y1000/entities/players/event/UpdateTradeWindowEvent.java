@@ -8,7 +8,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateTradeWindowPacket;
 
-public final class UpdateTradeWindowEvent extends AbstractPlayerEvent {
+public final class UpdateTradeWindowEvent extends IAbstractPlayerEvent {
     public enum Type implements ValueEnum  {
         CLOSE_WINDOW(1),
         ADD_ITEM(2),

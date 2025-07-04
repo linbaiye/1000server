@@ -12,7 +12,7 @@ import org.y1000.entities.Entity;
 import org.y1000.entities.objects.DynamicObjectDieEvent;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.AbstractPlayerEvent;
+import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.entities.players.event.PlayerLearnKungFuEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.event.IEntityEvent;
@@ -236,7 +236,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
                 founderEvents.onEvent(argument);
             else
                 inviteeEvents.onEvent(argument);
-            return null; }).when(entityEventSender).notifySelf(any(AbstractPlayerEvent.class));
+            return null; }).when(entityEventSender).notifySelf(any(IAbstractPlayerEvent.class));
         guildManager.inviteMember(founder, invitee);
         var text = founderEvents.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
         assertTrue(text.contains("没有门派"));
@@ -278,7 +278,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
                 founderEvents.onEvent(argument);
             else
                 inviteeEvents.onEvent(argument);
-            return null; }).when(entityEventSender).notifySelf(any(AbstractPlayerEvent.class));
+            return null; }).when(entityEventSender).notifySelf(any(IAbstractPlayerEvent.class));
         guildManager.teachGuildKungFu(founder, invitee);
         var text = founderEvents.removeFirst(PlayerTextEvent.class).toPacket().getText().getText();
         assertTrue(text.contains("没有门派"));

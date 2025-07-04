@@ -15,7 +15,7 @@ import org.y1000.sdb.MonstersSdb;
 @Slf4j
 final class DungeonNpcManager extends AbstractNpcManager {
 
-    public DungeonNpcManager(EntityEventSender sender,
+    public DungeonNpcManager(MessageSender sender,
                              EntityIdGenerator idGenerator,
                              NpcFactory npcFactory,
                              GroundItemManager itemManager,
@@ -37,7 +37,7 @@ final class DungeonNpcManager extends AbstractNpcManager {
     private void handleRemoveEvent(RemoveEntityEvent removeEntityEvent) {
         if (removeEntityEvent.source() instanceof INpc npc) {
             removeNpc(npc);
-            removeFromCloned(npc);
+//            removeFromCloned(npc);
             log.debug("Removed npc {}.", npc.id());
         }
     }

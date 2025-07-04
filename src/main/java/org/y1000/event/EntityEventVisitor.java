@@ -2,6 +2,7 @@ package org.y1000.event;
 
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.*;
+import org.y1000.entities.creatures.event.INpcMoveEvent;
 import org.y1000.message.*;
 import org.y1000.message.serverevent.ShowItemEvent;
 
@@ -38,7 +39,7 @@ public interface EntityEventVisitor {
     default void visit(MonsterShootEvent event) {
     }
 
-    default void visit(NpcMoveEvent event) {
+    default void visit(INpcMoveEvent event) {
     }
 
     default void visit(ShowItemEvent event) {

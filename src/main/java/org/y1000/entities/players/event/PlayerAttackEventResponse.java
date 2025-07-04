@@ -10,7 +10,7 @@ import org.y1000.network.gen.Packet;
 
 import java.util.Optional;
 
-public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
+public final class PlayerAttackEventResponse extends IAbstractPlayerEvent {
 
     private final ClientAttackEvent clientAttackEvent;
 
@@ -48,7 +48,7 @@ public final class PlayerAttackEventResponse extends AbstractPlayerEvent {
 
 
     public Optional<PlayerAttackEvent> toPlayerAttackEvent() {
-        return accepted ? Optional.of(new PlayerAttackEvent(player(), clientAttackEvent.attackPlayerStateEnum(), effectId)) : Optional.empty();
+        return accepted ? Optional.of(new PlayerAttackEvent(source(), clientAttackEvent.attackPlayerStateEnum(), effectId)) : Optional.empty();
     }
 
 

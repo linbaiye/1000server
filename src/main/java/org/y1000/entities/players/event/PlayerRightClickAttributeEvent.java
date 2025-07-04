@@ -5,7 +5,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerRightClickAttributePacket;
 
-public class PlayerRightClickAttributeEvent extends AbstractPlayerEvent {
+public class PlayerRightClickAttributeEvent extends IAbstractPlayerEvent {
     private final PlayerRightClickAttributePacket pkt;
     public PlayerRightClickAttributeEvent(Player source) {
         super(source, true);

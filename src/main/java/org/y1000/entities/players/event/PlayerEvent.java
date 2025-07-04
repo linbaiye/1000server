@@ -2,14 +2,8 @@ package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
-import org.y1000.message.serverevent.PlayerEventVisitor;
 
-public interface PlayerEvent extends EntityEvent {
+public interface PlayerEvent extends EntityEvent<Player> {
 
-    default Player player() {
-        return (Player) source();
-    }
-
-    default void accept(PlayerEventVisitor playerEventHandler) {
-    }
+    void accept(PlayerEventHandler handler);
 }

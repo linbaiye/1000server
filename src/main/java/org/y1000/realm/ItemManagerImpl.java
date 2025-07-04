@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> implements ItemEventVisitor, GroundItemManager {
-    private final EntityEventSender eventSender;
+    private final MessageSender eventSender;
     private final ItemSdb itemSdb;
     private final EntityIdGenerator idGenerator;
 
@@ -36,10 +36,12 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         }
     }
 
-    public ItemManagerImpl(EntityEventSender eventSender,
+    public ItemManagerImpl(MessageSender eventSender,
                            ItemSdb itemSdb,
                            EntityIdGenerator idGenerator,
-                           ItemFactory itemFactory) {
+                           ItemFactory itemFactory,
+                           AOIManager aoiManager) {
+        super(aoiManager, eventSender);
         this.eventSender = eventSender;
         this.itemSdb = itemSdb;
         this.itemFactory = itemFactory;
@@ -134,18 +136,18 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
     @Override
     public void visit(RemoveEntityEvent event) {
         if (event.source() instanceof GroundedItem item) {
-            eventSender.notifyVisiblePlayers(event.source(), event);
-            eventSender.remove(event.source());
+//            eventSender.notifyVisiblePlayers(event.source(), event);
+//            eventSender.remove(event.source());
             remove(item);
         }
     }
 
     private void dropNewItem(GroundedItem item) {
-        eventSender.add(item);
-        eventSender.notifyVisiblePlayers(item, item.captureSnapshot());
+//        eventSender.add(item);
+//        eventSender.notifyVisiblePlayers(item, item.captureSnapshot());
         item.registerEventListener(this);
         add(item);
-        item.dropSound().ifPresent(s -> eventSender.sendEvent(new EntitySoundEvent(item, s)));
+//        item.dropSound().ifPresent(s -> eventSender.sendEvent(new EntitySoundEvent(item, s)));
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.npc.INpc;
@@ -41,8 +42,38 @@ public final class AiPathUtil {
         return towards;
     }
 
+    public static Direction computeNextMoveDirection(Creature npc,
+                                                     Coordinate dest, Coordinate previous) {
+        Validate.notNull(npc);
+        Validate.notNull(dest);
+        Validate.notNull(previous);
+        if (dest.equals(Coordinate.Empty)) {
+            return null;
+        }
+        var dir = npc.coordinate().computeDirection(dest);
+        Coordinate next = npc.coordinate().moveBy(dir);
+        if (next.equals(dest) && !npc.realmMap().movable(next)) {
+            // copied, but why?
+            return dir != npc.direction() ? dir : null;
+        }
+        int minDist = Integer.MAX_VALUE;
+        Direction towards = null;
+        for (Direction direction : Direction.values()) {
+            Coordinate coordinate = npc.coordinate().moveBy(direction);
+            if (!npc.realmMap().movable(coordinate) || previous.equals(coordinate)) {
+                continue;
+            }
+            int distance = coordinate.distance(dest);
+            if (minDist > distance) {
+                minDist = distance;
+                towards = direction;
+            }
+        }
+        return towards;
+    }
 
-    public static void moveProcess(INpc npc, Coordinate dest,
+
+    public static void moveProcess(Creature npc, Coordinate dest,
                                    Coordinate previous,
                                    Action noPathAction, int walkMillis, int turnMillis) {
         Direction direction = AiPathUtil.computeNextMoveDirection(npc, dest, previous);
@@ -51,17 +82,17 @@ public final class AiPathUtil {
             return;
         } else if (direction != npc.direction()) {
             npc.changeDirection(direction);
-            npc.stay(turnMillis);
+//            npc.stay(turnMillis);
             return;
         }
         if (npc.realmMap().movable(npc.coordinate().moveBy(direction))) {
-            npc.move(walkMillis);
+//            npc.move(walkMillis);
         } else {
             noPathAction.invoke();
         }
     }
 
-    public static void moveProcess(INpc npc, Coordinate dest,
+    public static void moveProcess(Creature npc, Coordinate dest,
                                    Coordinate previous,
                                    Action noPathAction, int walkMillis) {
         Direction direction = AiPathUtil.computeNextMoveDirection(npc, dest, previous);
@@ -70,11 +101,11 @@ public final class AiPathUtil {
             return;
         } else if (direction != npc.direction()) {
             npc.changeDirection(direction);
-            npc.turn();
+//            npc.turn();
             return;
         }
         if (npc.realmMap().movable(npc.coordinate().moveBy(direction))) {
-            npc.move(walkMillis);
+//            npc.move(walkMillis);
         } else {
             noPathAction.invoke();
         }

@@ -113,12 +113,12 @@ class GridAOIManagerTest {
         var e5 = mockEntity(Coordinate.VISIBLE_X_RANGE * 2 + 1, 0);
         manager.add(e4);
         manager.add(e5);
-        var visible = manager.filterVisibleEntities(e4, Entity.class);
+        var visible = manager.filterNoSelfVisibleEntities(e4, Entity.class);
         assertEquals(3, visible.size());
         assertFalse(visible.contains(e4));
         assertFalse(visible.contains(e5));
         for (int h = 0; h < 3; h++) {
-            assertTrue(manager.filterVisibleEntities(entities[h], Entity.class).contains(e4));
+            assertTrue(manager.filterNoSelfVisibleEntities(entities[h], Entity.class).contains(e4));
         }
 
         when(e4.coordinate()).thenReturn(Coordinate.xy(Coordinate.VISIBLE_X_RANGE + 1, 0));
@@ -127,9 +127,9 @@ class GridAOIManagerTest {
         assertTrue(affected.contains(e5));
         assertTrue(affected.containsAll(Arrays.stream(entities).toList()));
         for (int h = 0; h < 3; h++) {
-            assertFalse(manager.filterVisibleEntities(entities[h], Entity.class).contains(e4));
+            assertFalse(manager.filterNoSelfVisibleEntities(entities[h], Entity.class).contains(e4));
         }
-        assertTrue(manager.filterVisibleEntities(e5, Entity.class).contains(e4));
+        assertTrue(manager.filterNoSelfVisibleEntities(e5, Entity.class).contains(e4));
     }
 
     @Test

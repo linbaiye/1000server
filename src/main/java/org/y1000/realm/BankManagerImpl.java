@@ -30,13 +30,13 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
 
     private final Map<Player, BankTransaction> playerTransactionMap;
 
-    private final EntityEventSender eventSender;
+    private final MessageSender eventSender;
 
     private final NpcManager npcManager;
 
     private final BankRepository bankRepository;
 
-    public BankManagerImpl(EntityEventSender eventSender,
+    public BankManagerImpl(MessageSender eventSender,
                            NpcManager npcManager, BankRepository bankRepository) {
         this.bankRepository = bankRepository;
         this.playerTransactionMap = new HashMap<>();
@@ -63,7 +63,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
         if (transaction != null) {
             transaction.banker().deregisterEventListener(this);
             bankRepository.save(player.id(), transaction.bank());
-            eventSender.notifySelf(UpdateBankEvent.close(player));
+//            eventSender.notifySelf(UpdateBankEvent.close(player));
         }
         player.deregisterEventListener(this);
     }
@@ -73,7 +73,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
         playerTransactionMap.put(player, new BankTransaction(bank, player, banker));
         banker.registerEventListener(this);
         player.registerEventListener(this);
-        eventSender.notifySelf(new PlayerOpenBankEvent(player, bank));
+//        eventSender.notifySelf(new PlayerOpenBankEvent(player, bank));
     }
 
     private void start(long bankerId, Player player) {
@@ -81,7 +81,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
             BankTransaction bankTransaction = playerTransactionMap.get(player);
             bankTransaction.banker().registerEventListener(this);
             player.registerEventListener(this);
-            eventSender.notifySelf(new PlayerOpenBankEvent(player, bankTransaction.bank()));
+//            eventSender.notifySelf(new PlayerOpenBankEvent(player, bankTransaction.bank()));
         } else {
             npcManager.find(bankerId, Banker.class)
                     .filter(banker -> banker.allowOperation(player))
@@ -104,7 +104,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
         }
         bank.unlock();
         player.inventory().decrease(slot);
-        eventSender.notifySelf(UpdateInventorySlotEvent.update(player, slot));
+//        eventSender.notifySelf(UpdateInventorySlotEvent.update(player, slot));
         bankRepository.save(player.id(), bank);
     }
 
@@ -153,8 +153,8 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
         if (!swapper.apply(bank, inventory)) {
             return;
         }
-        eventSender.notifySelf(UpdateInventorySlotEvent.update(player, inventorySlot));
-        eventSender.notifySelf(UpdateBankEvent.update(player, bank, bankSlot));
+//        eventSender.notifySelf(UpdateInventorySlotEvent.update(player, inventorySlot));
+//        eventSender.notifySelf(UpdateBankEvent.update(player, bank, bankSlot));
     }
 
     private void inventoryToBank(Player player, int inventorySlot, int bankSlot, long number) {

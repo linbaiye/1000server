@@ -4,13 +4,12 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
-import org.y1000.message.AbstractPlayerMessage;
 import org.y1000.network.gen.InventoryItemPacket;
 import org.y1000.network.gen.InventoryPacket;
 import org.y1000.network.gen.Packet;
 
-public class InventoryMessage extends AbstractPlayerMessage {
-    private InventoryMessage(Player player, Packet packet) {
+public class InventoryEvent extends Abstract2PlayerMessageEvent {
+    private InventoryEvent(Player player, Packet packet) {
         super(player, packet);
     }
 
@@ -30,16 +29,16 @@ public class InventoryMessage extends AbstractPlayerMessage {
      * @param player player
      * @return
      */
-    public static InventoryMessage forceful(Player player) {
+    public static InventoryEvent forceful(Player player) {
         return createInventoryMessage(player, true);
     }
 
-    private static InventoryMessage createInventoryMessage(Player player, boolean force) {
+    private static InventoryEvent createInventoryMessage(Player player, boolean force) {
         Inventory inventory = player.inventory();
         InventoryPacket.Builder builder = InventoryPacket.newBuilder().setForceful(force);
         inventory.foreach((slot, item) -> builder.addItems(toItem(slot, item)));
         Packet packet = Packet.newBuilder().setInventory(builder.build()).build();
-        return new InventoryMessage(player, packet);
+        return new InventoryEvent(player, packet);
     }
 
     /**
@@ -47,7 +46,7 @@ public class InventoryMessage extends AbstractPlayerMessage {
      * @param player player
      * @return
      */
-    public static InventoryMessage quiet(Player player) {
+    public static InventoryEvent quiet(Player player) {
         return createInventoryMessage(player, false);
     }
 }

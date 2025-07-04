@@ -1,7 +1,7 @@
 package org.y1000.message.serverevent;
 
-import org.y1000.entities.players.event.AbstractPlayerEvent;
-import org.y1000.entities.players.event.PlayerAttributeMessage;
+import org.y1000.entities.players.event.IAbstractPlayerEvent;
+import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerTeleportEvent;
 import org.y1000.item.StackItem;
 import org.y1000.kungfu.KungFu;
@@ -13,7 +13,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
-public final class JoinedRealmEvent extends AbstractPlayerEvent {
+public final class JoinedRealmEvent extends IAbstractPlayerEvent {
 
     private final Inventory playerInventory;
 
@@ -53,11 +53,11 @@ public final class JoinedRealmEvent extends AbstractPlayerEvent {
 
     @Override
     protected Packet buildPacket() {
-        var player = player();
+        var player = source();
         LoginPacket.Builder builder = LoginPacket.newBuilder()
                 .setAttackKungFuName(player.attackKungFu().name())
                 .setInfo(PlayerInfo.toPacket(player))
-                .setAttribute(PlayerAttributeMessage.makeAttributePacket(player))
+                .setAttribute(PlayerAttributeEvent.makeAttributePacket(player))
                 .setTeleport(teleportPacket)
                 ;
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuName(footKungFu.name()).setFootKungFuCanFly(footKungFu.canFly()));

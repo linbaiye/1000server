@@ -2,6 +2,9 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.npc.HurtAbility;
+import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.guild.GuildMembership;
@@ -13,7 +16,7 @@ import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.message.PlayerMessage;
-import org.y1000.message.PlayerMessageListener;
+import org.y1000.message.PlayerEventListener;
 import org.y1000.message.input.ClientAttackEvent;
 import org.y1000.message.input.ClientEvent;
 import org.y1000.message.input.SelfHandleInput;
@@ -27,9 +30,9 @@ public interface Player extends ViolentCreature {
     default boolean isMale() {
         return true;
     }
-    void joinRealm(Realm realm, PlayerMessageListener messageListener);
+    void joinRealm(Realm realm, PlayerEventListener messageListener);
 
-    void joinRealm(Realm realm, Coordinate coordinate, PlayerMessageListener messageListener);
+    void joinRealm(Realm realm, Coordinate coordinate, PlayerEventListener messageListener);
 
     Realm getRealm();
 
@@ -53,13 +56,9 @@ public interface Player extends ViolentCreature {
 
     Inventory inventory();
 
-    void handleClientEvent(ClientEvent clientEvent);
-
     void handleInput(SelfHandleInput input);
 
-    void attack(ClientAttackEvent event, AttackableEntity target);
-
-    void attack(AttackableEntity target);
+    void attack(Npc npc);
 
     Optional<ArmorEquipment> hat();
 
@@ -195,7 +194,7 @@ public interface Player extends ViolentCreature {
         return ret;
     }
 
-    void sendMessage(PlayerMessage message);
+    void sendEvent(PlayerEvent event);
 
     PlayerState state();
 

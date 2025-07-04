@@ -3,12 +3,13 @@ package org.y1000.entities.creatures.npc;
 import lombok.Getter;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.npc.event.NpcStartActionEvent;
 import org.y1000.entities.players.Damage;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
-public class HurtAbility implements NpcAction {
+public class HurtAbility extends AbstractNpcAction {
 
     private final int armor;
 
@@ -42,6 +43,7 @@ public class HurtAbility implements NpcAction {
         this.hurtSound = hurtSound;
         this.animationMillis = millis;
         this.maxLife = life;
+        this.currentLife = life;
     }
 
     protected boolean isDodged(int attackerHit) {
@@ -49,16 +51,8 @@ public class HurtAbility implements NpcAction {
         return rand < avoidance;
     }
 
-    public boolean update(int delta) {
-        elapsed += delta;
-        if (elapsed >= animationMillis) {
-            return true;
-        }
-    }
-
-    @Override
-    public int elapsedMillis() {
-        return elapsed;
+    public void setTrigger(Consumer<? super HurtAbility> t) {
+        this.onTriggered = t;
     }
 
     @Override
@@ -66,20 +60,30 @@ public class HurtAbility implements NpcAction {
         return NpcActionEnum.Hurt;
     }
 
+    public boolean canBeAttackedNow() {
+        return true;
+    }
+
+
+    public void hurt(Npc npc) {
+        setTimer(animationMillis);
+        npc.sendEvent(NpcStartActionEvent.of(npc, actionEnum()));
+    }
 
     public int attackedBy(ActiveEntity attacker, Damage damage, int hit) {
-        if (currentLife <= 0) {
-            return -1;
-        }
-        elapsed = 0;
-        int damageTaken = -1;
-        if (!isDodged(hit)) {
-            var before = currentLife;
-            currentLife = damage.bodyDamage() - armor;
-            damageTaken = before - currentLife;
-        }
-        trigger = attacker;
+//        if (currentLife <= 0) {
+//            return -1;
+//        }
+//        elapsed = 0;
+//        int damageTaken = -1;
+//        if (!isDodged(hit)) {
+//            var before = currentLife;
+//            currentLife = damage.bodyDamage() - armor;
+//            damageTaken = before - currentLife;
+//        }
+//        trigger = attacker;
         onTriggered.accept(this);
-        return damageTaken;
+//        return damageTaken;
+        return 0;
     }
 }

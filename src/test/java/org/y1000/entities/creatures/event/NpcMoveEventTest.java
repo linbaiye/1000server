@@ -16,7 +16,7 @@ class NpcMoveEventTest extends AbstractMonsterUnitTestFixture  {
 
     @Test
     void toPacket() {
-        var event = NpcMoveEvent.move(monster, Direction.RIGHT, 2);
+        var event = INpcMoveEvent.move(monster, Direction.RIGHT, 2);
         assertEquals(2, event.toPacket().getMonsterMove().getSpeed());
         assertEquals(Direction.RIGHT.value(), event.toPacket().getMonsterMove().getDirection());
         assertEquals(monster.id(), event.toPacket().getMonsterMove().getId());

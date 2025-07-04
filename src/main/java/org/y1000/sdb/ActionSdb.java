@@ -21,10 +21,10 @@ public final class ActionSdb extends AbstractCSVSdbReader {
         put(NpcActionEnum.Turn, "Freeze");
     }};
 
-    public int getActionLength(String name, NpcActionEnum npcStateEnum) {
+    public int getActionLength(String animate, NpcActionEnum npcStateEnum) {
         if (!ACTION_NAME_MAP.containsKey(npcStateEnum)) {
             throw new NotImplementedException();
         }
-        return getInt(name, ACTION_NAME_MAP.get(npcStateEnum));
+        return getInt(animate, ACTION_NAME_MAP.get(npcStateEnum));
     }
 }

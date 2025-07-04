@@ -1,11 +1,10 @@
 package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
-import org.y1000.message.AbstractPlayerMessage;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.TextMessagePacket;
 
-public class PlayerTextMessage extends AbstractPlayerMessage  {
+public class PlayerTextMessage extends Abstract2PlayerMessageEvent {
 
     private PlayerTextMessage(Player player, Packet packet) {
         super(player, packet);

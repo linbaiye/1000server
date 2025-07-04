@@ -5,7 +5,7 @@ import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerCooldownPacket;
 
-public final class PlayerCooldownEvent extends AbstractPlayerEvent {
+public final class PlayerCooldownEvent extends IAbstractPlayerEvent {
 
     public PlayerCooldownEvent(Player source) {
         super(source);

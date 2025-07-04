@@ -7,7 +7,7 @@ import org.y1000.message.serverevent.Visibility;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateBuffPacket;
 
-public final class UpdateBuffEvent extends AbstractPlayerEvent {
+public final class UpdateBuffEvent extends IAbstractPlayerEvent {
 
     private static final int GAIN = 1;
 

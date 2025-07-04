@@ -4,10 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.npc.*;
+import org.y1000.entities.creatures.npc.event.NpcEvent;
+import org.y1000.entities.creatures.npc.event.NpcEventHandler;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
-import org.y1000.event.EntityEventListener;
-import org.y1000.message.RemoveEntityMessage;
 import org.y1000.realm.event.RealmEvent;
 import org.y1000.realm.event.RealmTriggerEvent;
 import org.y1000.sdb.*;
@@ -17,11 +17,10 @@ import org.y1000.util.Rectangle;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> implements EntityEventListener,
-        NpcManager,
-        NpcMessageListener {
+abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc>
+        implements NpcManager, NpcEventListener, NpcEventHandler {
 
-    private final EntityEventSender sender;
+    private final MessageSender sender;
 
     private final EntityIdGenerator idGenerator;
 
@@ -33,7 +32,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> impl
 
     private final MonstersSdb monstersSdb;
 
-    private final Map<INpc, Set<INpc>> linked;
+//    private final Map<INpc, Set<INpc>> linked;
 
     private final Set<Long> cloned;
 
@@ -47,7 +46,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> impl
 
     private final HaveItemSdb haveItemSdb;
 
-    public AbstractNpcManager(EntityEventSender sender,
+    public AbstractNpcManager(MessageSender sender,
                               EntityIdGenerator idGenerator,
                               NpcFactory npcFactory,
                               GroundItemManager itemManager,
@@ -57,6 +56,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> impl
                               CreateNonMonsterSdb createNpcSdb,
                               RealmMap realmMap,
                               HaveItemSdb haveItemSdb) {
+        super(aoiManager, sender);
         Validate.notNull(sender);
         Validate.notNull(idGenerator);
         Validate.notNull(itemManager);
@@ -77,15 +77,16 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> impl
         this.haveItemSdb = haveItemSdb;
         this.realmMap = realmMap;
         projectileManager = new ProjectileManager();
-        linked = new HashMap<>();
+//        linked = new HashMap<>();
         cloned = new HashSet<>();
     }
 
 
-    protected INpc createNpc(String name, Coordinate coordinate) {
-        return createNpcSdb != null && createNpcSdb.containsNpc(name)?
-                npcFactory.createNonMonsterNpc(name, idGenerator.next(), realmMap, coordinate, createNpcSdb) :
-                npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate);
+    protected Npc createNpc(String name, Coordinate coordinate) {
+        return npcFactory.create(idGenerator.next(), name, realmMap, coordinate, this);
+//        return createNpcSdb != null && createNpcSdb.containsNpc(name)?
+//                npcFactory.createNonMonsterNpc(name, idGenerator.next(), realmMap, coordinate, createNpcSdb) :
+//                npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate);
     }
 
     void spawnNPCs(CreateNpcSdb createNpcSdb) {
@@ -110,6 +111,8 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> impl
         log().debug("Created {} npc in total.", total);
     }
 
+
+
     Optional<CreateNpcSdb> createMonsterSdb() {
         return Optional.ofNullable(createMonsterSdb);
     }
@@ -121,22 +124,24 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> impl
 
     void doUpdateEntities(long delta) {
         updateManagedEntities(delta);
-        projectileManager.update(delta);
+//        projectileManager.update(delta);
     }
 
     protected void removeNpc(INpc npc) {
-        sender.notifyVisiblePlayers(npc, new RemoveEntityMessage(npc.id()));
-        sender.remove(npc);
-        npc.deregisterEventListener(this);
-        remove(npc);
+//        sender.notifyVisiblePlayers(npc, new RemoveEntityMessage(npc.id()));
+//        sender.remove(npc);
+//        npc.deregisterEventListener(this);
+//        remove(npc);
     }
 
-    protected void addNpc(INpc npc) {
-        sender.add(npc);
-        sender.notifyVisiblePlayers(npc, new NpcJoinedEvent(npc));
-        npc.registerEventListener(this);
-        npc.start();
+    protected void addNpc(Npc npc) {
         add(npc);
+        sendToVisiblePlayers(npc, npc.captureSnapshot());
+//        sender.add(npc);
+//        sender.notifyVisiblePlayers(npc, new NpcJoinedEvent(npc));
+//        npc.registerEventListener(this);
+//        npc.start();
+//        add(npc);
     }
 
 
@@ -153,9 +158,9 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> impl
         if (!StringUtils.isEmpty(dropItems)) {
             itemManager.dropItem(dropItems, event.source().coordinate());
         }
-        if (linked.containsKey(npc)) {
-            linked.get(npc).forEach(INpc::die);
-        }
+//        if (linked.containsKey(npc)) {
+//            linked.get(npc).forEach(INpc::die);
+//        }
     }
 
     protected int getRespawnMillis(String idName) {
@@ -167,26 +172,27 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> impl
         if (!(crossRealmEvent instanceof RealmTriggerEvent letterEvent)) {
             return;
         }
-        find(npc -> npc.idName().equals(letterEvent.toName()) && NineTailFoxHuman.class.isAssignableFrom(npc.getClass()))
-                .stream().map(NineTailFoxHuman.class::cast)
-                .forEach(NineTailFoxHuman::shift);
+//        find(npc -> npc.idName().equals(letterEvent.toName()) && NineTailFoxHuman.class.isAssignableFrom(npc.getClass()))
+//                .stream().map(NineTailFoxHuman.class::cast)
+//                .forEach(NineTailFoxHuman::shift);
     }
 
     abstract void onUnhandledEvent(EntityEvent entityEvent) ;
 
-    INpc replaceNpc(NpcShiftEvent shiftEvent) {
-        INpc npc = shiftEvent.npc();
-        removeNpc(npc);
-        INpc newNpc = createNpc(shiftEvent.shiftToName(), npc.coordinate());
-        addNpc(newNpc);
-        return newNpc;
+    Npc replaceNpc(NpcShiftEvent shiftEvent) {
+//        Npc npc = shiftEvent.npc();
+//        removeNpc(npc);
+//        Npc newNpc = createNpc(shiftEvent.shiftToName(), npc.coordinate());
+//        addNpc(newNpc);
+//        return newNpc;
+        return null;
     }
 
-    boolean isCloned(INpc npc) {
+    boolean isCloned(Npc npc) {
         return cloned.contains(npc.id());
     }
 
-    void removeFromCloned(INpc npc) {
+    void removeFromCloned(Npc npc) {
         cloned.remove(npc.id());
     }
 
@@ -205,41 +211,41 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<INpc> impl
                 if (newNpc instanceof AggressiveNpc aggressiveNpc) {
                     aggressiveNpc.actAggressively(event.enemy());
                 }
-                addNpc(newNpc);
+//                addNpc(newNpc);
                 set.add(newNpc);
                 cloned.add(newNpc.id());
             }
         }
-        linked.put(event.npc(), set);
+//        linked.put(event.npc(), set);
     }
 
     private void handleSeekPlayerEvent(SeekPlayerEvent event) {
-        Set<Player> players = aoiManager.filterVisibleEntities(event.source(), Player.class);
+        Set<Player> players = aoiManager.filterNoSelfVisibleEntities(event.source(), Player.class);
         event.setPlayers(players);
     }
 
     @Override
-    public void onEvent(EntityEvent entityEvent) {
-        if (entityEvent instanceof MonsterShootEvent shootEvent) {
-            projectileManager.add(shootEvent.projectile());
-            sender.notifyVisiblePlayers(shootEvent.source(), shootEvent);
-        } else if (entityEvent instanceof CreatureDieEvent dieEvent) {
-            handleDieEvent(dieEvent);
-        } else if (entityEvent instanceof NpcCastCloneEvent cloneEvent) {
-            handleCloneEvent(cloneEvent);
-        } else if (entityEvent instanceof SeekPlayerEvent seekPlayerEvent) {
-            handleSeekPlayerEvent(seekPlayerEvent);
-        } else if (entityEvent instanceof SeekAggressiveMonsterEvent seekAggressiveMonsterEvent) {
-            seekAggressiveMonsterEvent.handle(getEntities().stream());
-        } else if (entityEvent instanceof Npc2ClientEvent clientEvent) {
-            sender.notifyVisiblePlayers(clientEvent.source(), clientEvent);
-        } else {
-            onUnhandledEvent(entityEvent);
-        }
+    public void onEvent(NpcEvent npcEvent) {
+        npcEvent.accept(this);
     }
 
     @Override
-    public void onMessage(NpcMessage message) {
-        sender.notifyVisiblePlayers(message.source(), message);
+    public void onEvent(EntityEvent entityEvent) {
+//        if (entityEvent instanceof MonsterShootEvent shootEvent) {
+//            projectileManager.add(shootEvent.projectile());
+//            sender.notifyVisiblePlayers(shootEvent.source(), shootEvent);
+//        } else if (entityEvent instanceof CreatureDieEvent dieEvent) {
+//            handleDieEvent(dieEvent);
+//        } else if (entityEvent instanceof NpcCastCloneEvent cloneEvent) {
+//            handleCloneEvent(cloneEvent);
+//        } else if (entityEvent instanceof SeekPlayerEvent seekPlayerEvent) {
+//            handleSeekPlayerEvent(seekPlayerEvent);
+//        } else if (entityEvent instanceof SeekAggressiveMonsterEvent seekAggressiveMonsterEvent) {
+//            seekAggressiveMonsterEvent.handle(getEntities().stream());
+//        } else if (entityEvent instanceof Npc2ClientEvent clientEvent) {
+//            sender.notifyVisiblePlayers(clientEvent.source(), clientEvent);
+//        } else {
+//            onUnhandledEvent(entityEvent);
+//        }
     }
 }

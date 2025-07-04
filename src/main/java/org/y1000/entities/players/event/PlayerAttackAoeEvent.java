@@ -16,7 +16,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.Set;
 
-public class PlayerAttackAoeEvent implements PlayerEvent {
+public class PlayerAttackAoeEvent implements IPlayerEvent {
 
     private final Player player;
     private final AttackableEntity mainTarget;
@@ -46,9 +46,9 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
     private int handleAttack(AttackableEntity entity, Damage damage) {
         int exp = 0;
         if (entity instanceof INpc npc) {
-            exp = npc.attackedByAoe(player(), player().hit(), damage);
+            exp = npc.attackedByAoe(player, player.hit(), damage);
         } else if (entity instanceof Player targetPlayer) {
-            exp = targetPlayer.attackedByAoe(damage, player().hit());
+            exp = targetPlayer.attackedByAoe(damage, player.hit());
         } else if (entity instanceof AbstractKillableDynamicObject dynamicObject) {
             dynamicObject.attackedByAoe(damage);
         }
@@ -75,14 +75,14 @@ public class PlayerAttackAoeEvent implements PlayerEvent {
                 .filter(exp -> exp > 0)
                 .count();
         if (count > 0 && targetExp > 0) {
-            player().gainAssistantExp(targetExp);
+            player.gainAssistantExp(targetExp);
         }
         if (withSound)
-            player.emitEvent(new EntitySoundEvent(player, targetExp > 0 || count > 0? player().attackKungFu().strikeSound() : player().attackKungFu().swingSound()));
+            player.emitEvent(new EntitySoundEvent(player, targetExp > 0 || count > 0? player.attackKungFu().strikeSound() : player.attackKungFu().swingSound()));
     }
 
     @Override
-    public ActiveEntity source() {
+    public Player source() {
         return player;
     }
 
