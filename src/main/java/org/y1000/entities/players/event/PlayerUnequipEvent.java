@@ -5,14 +5,13 @@ import org.y1000.item.EquipmentType;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerUnequipPacket;
 
-public final class PlayerUnequipEvent extends AbstractClientMessageEvent {
+public final class PlayerUnequipEvent extends Abstract2VisibleAndSelfMessageEvent {
 
 
     public PlayerUnequipEvent(Player source,
                               Packet packet) {
         super(source, packet);
     }
-
 
     public static PlayerUnequipEvent of(Player player, EquipmentType type) {
         PlayerUnequipPacket.Builder builder = PlayerUnequipPacket.newBuilder()
@@ -22,10 +21,5 @@ public final class PlayerUnequipEvent extends AbstractClientMessageEvent {
                 .setUnequip(builder)
                 .build();
         return new PlayerUnequipEvent(player, packet);
-    }
-
-    @Override
-    public void accept(PlayerEventHandler handler) {
-        handler.sendToVisiblePlayers(source(), this);
     }
 }

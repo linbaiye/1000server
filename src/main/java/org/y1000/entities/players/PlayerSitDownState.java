@@ -1,6 +1,7 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
@@ -10,19 +11,16 @@ import org.y1000.message.PlayerChangeStateEvent;
 @Slf4j
 final class PlayerSitDownState extends AbstractPlayerState implements PlayerEquipableState {
 
-    public PlayerSitDownState(PlayerImpl player) {
+    public PlayerSitDownState(PlayerInternal player) {
         super(player, PlayerStateEnum.Sit, 750);
     }
 
-    public static PlayerSitDownState sit(PlayerImpl player) {
+    public static PlayerSitDownState sit(PlayerInternal player) {
         return new PlayerSitDownState(player);
     }
 
     @Override
     public void update(int delta) {
-        if (elapsedMillis() >= totalMillis()) {
-            return;
-        }
         elapse(delta);
     }
 
@@ -39,7 +37,7 @@ final class PlayerSitDownState extends AbstractPlayerState implements PlayerEqui
     }
 
     @Override
-    public void doubleClickFootKungFu(FootKungFu footKungFu) {
+    public void tryToggleFootKungFu(FootKungFu footKungFu) {
         if (elapsedMillis() >= totalMillis()) {
             player().toggleFootKungFu(footKungFu);
             stand();
@@ -47,10 +45,15 @@ final class PlayerSitDownState extends AbstractPlayerState implements PlayerEqui
     }
 
     @Override
-    public void doubleClickBreathKungFu(BreathKungFu breathKungFu) {
+    public void tryToggleBreathKungFu(BreathKungFu breathKungFu) {
         if (elapsedMillis() >= totalMillis()) {
             player().toggleBreathKungFu(breathKungFu);
         }
+    }
+
+    @Override
+    public void attack(Npc target) {
+        player().acceptAttack(target);
     }
 
     @Override
@@ -59,7 +62,7 @@ final class PlayerSitDownState extends AbstractPlayerState implements PlayerEqui
     }
 
     @Override
-    public void doubleClickAttackKungFu(AttackKungFu attackKungFu) {
+    public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
         player().tryUseAttackKungFu(attackKungFu);
     }
 }

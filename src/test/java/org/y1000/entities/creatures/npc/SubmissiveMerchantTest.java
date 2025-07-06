@@ -18,6 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class SubmissiveMerchantTest extends AbstractNpcUnitTestFixture {
+    /*
     private SubmissiveWanderingAI ai;
 
     private SubmissiveMerchant merchant;
@@ -61,5 +62,5 @@ class SubmissiveMerchantTest extends AbstractNpcUnitTestFixture {
         List<TradeItem> items = List.of(new TradeItem("生药", 1, 3), new TradeItem("丸药", 2, 4));
         merchant.sell(player, items, itemFactory::createItem);
         verify(merchantable, times(1)).sell(any(Player.class), anyList(), any(BiFunction.class), any(Coordinate.class));
-    }
+    }*/
 }

@@ -105,4 +105,9 @@ public final class TestingEntityEventSender implements EntityEventSender {
     public void notifyVisiblePlayersAndSelf(Entity source, I2ClientMessage serverMessage) {
 
     }
+
+    @Override
+    public void sendTo(Player player, I2ClientMessage message) {
+
+    }
 }

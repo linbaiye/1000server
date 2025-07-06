@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.players.event.PlayerAttributeEvent;
-import org.y1000.message.PlayerAttackEvent;
+import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.message.PlayerChangeStateEvent;
 
 class PlayerAttackState extends AbstractPlayerState {
@@ -12,15 +12,17 @@ class PlayerAttackState extends AbstractPlayerState {
 
     @Override
     public void update(int delta) {
+        if (player().updateCombat(delta)) {
+            return;
+        }
         if (elapse(delta)) {
             player().changeState(PlayerStandState.fightStand(player()));
             player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
         }
     }
 
-    public static void attack(PlayerImpl player) {
-        AttackAction action = player.attackKungFu().computeAttackAction();
-        PlayerAttributeEvent attack = PlayerAttackEvent.attack(player, action, player.attackKungFu().computeEffectId());
-        player.sendEvent(attack);
+    @Override
+    public void attack(Npc target) {
+        player().acceptAttack(target);
     }
 }

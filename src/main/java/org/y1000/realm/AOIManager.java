@@ -16,11 +16,8 @@ public interface AOIManager {
 
     boolean contains(Entity entity);
 
-    <E extends Entity> Set<E> filterNoSelfVisibleEntities(Entity entity, Class<E> type);
+    <E extends Entity> Set<E> filterVisibleEntities(Entity entity, Class<E> type);
 
-    default <E extends Entity> Set<E> filterVisibleEntities(Entity entity, Class<E> type) {
-        return Collections.emptySet();
-    }
 
     boolean outOfScope(Entity source, Entity target);
 

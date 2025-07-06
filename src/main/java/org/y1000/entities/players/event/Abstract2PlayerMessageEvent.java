@@ -2,6 +2,7 @@ package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.Packet;
+import org.y1000.realm.PlayerEventHandler;
 
 /**
  * A message event that will be sent to the source() player.

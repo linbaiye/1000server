@@ -2,6 +2,7 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.MoveAction;
+import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.entities.creatures.npc.AI.AiPathUtil;
 import org.y1000.util.Coordinate;
 
@@ -48,6 +49,7 @@ public final class WanderingAI implements NpcAI {
     private void nextMove() {
         var dir = AiPathUtil.computeNextMoveDirection(npc, target, previous);
         if (dir == null) {
+            log.debug("No direction, set next target to {}.", target);
             initialize();
             return;
         }
@@ -55,6 +57,7 @@ public final class WanderingAI implements NpcAI {
             npc.findAction(MoveAction.class).ifPresent(moveAction -> {
                 currentAction = moveAction;
                 if (!moveAction.tryNormalMove(npc, dir)) {
+                    log.debug("{} no movable, reset destination .", target);
                     initialize();
                 }
             });
@@ -67,6 +70,10 @@ public final class WanderingAI implements NpcAI {
     }
 
     private void onMoveDone() {
+        if (npc.coordinate().equals(target)) {
+            log.debug("Arrived, set target to {}.", target);
+            target = chooseTarget(npc.getSpawnCoordinate());
+        }
         previous = npc.coordinate().moveBy(npc.direction().opposite());
         npc.findAction(IdleAction.class).ifPresent(idleAction -> {
             currentAction = idleAction;
@@ -87,24 +94,40 @@ public final class WanderingAI implements NpcAI {
             moveAction.interrupt(npc);
         }
         if (action.getCurrentLife() == 0) {
-            npc.findAction(DieAbility.class).ifPresent(dieAbility -> dieAbility.die(npc));
-        } else {
-            npc.findAction(AttackAction.class).ifPresentOrElse(a -> npc.changeAI(new FightAI(npc)), () -> {
-                currentAction = action;
-                action.hurt(npc);
-            });
+            npc.findAction(DieAction.class).ifPresent(dieAbility -> dieAbility.die(npc));
+            return;
         }
+        npc.findAction(HurtAbility.class).ifPresent(hurtAbility -> {
+            if (currentAction instanceof HurtAbility hurtAbility1) {
+                hurtAbility.hurt(npc, hurtAbility1.getPreviousAction());
+            } else {
+                action.hurt(npc, currentAction.actionEnum());
+            }
+            currentAction = action;
+        });
+        npc.findAction(AttackAction.class).ifPresent(a -> npc.changeAI(new FightAI(npc)));
     }
+
+
+    private void onActionDone(NpcActionEnum actionEnum) {
+        switch (actionEnum) {
+            case Idle -> nextMove();
+            case Move -> onMoveDone();
+            case Turn -> onTurnDone();
+        }
+
+    }
+
 
     @Override
     public void update(int delta) {
         if (!currentAction.update(delta)) {
             return;
         }
-        switch (currentAction.actionEnum()) {
-            case Idle, Hurt -> nextMove();
-            case Move -> onMoveDone();
-            case Turn -> onTurnDone();
+        if (currentAction instanceof HurtAbility hurtAbility) {
+            onActionDone(hurtAbility.getPreviousAction());
+        } else {
+            onActionDone(currentAction.actionEnum());
         }
     }
 

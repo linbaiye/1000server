@@ -5,7 +5,6 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.message.I2ClientMessage;
-import org.y1000.message.RemoveEntityMessage;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -13,7 +12,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implements ActiveEntityManager<T> {
+public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implements ActiveEntityManager<T>, EntityEventHandler {
     private boolean iterating;
     private final Set<T> entities;
 
@@ -72,7 +71,6 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
     private void doAdd(T entity) {
         try {
             entities.add(entity);
-            aoiManager.add(entity);
         } catch (Exception e) {
             log().error("Exception after adding {}.", entity, e);
         }
@@ -85,19 +83,23 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
     private void doDelete(T entity) {
         try {
             entities.remove(entity);
-            aoiManager.remove(entity);
         } catch (Exception e) {
             log().error("Exception after deleting {}.", entity, e);
         }
     }
 
+
+
     void add(T entity) {
+        if (entities.contains(entity))
+            return;
         if (iterating) {
             deleting.remove(entity);
             adding.add(entity);
         } else {
             doAdd(entity);
         }
+        aoiManager.add(entity);
     }
 
     public boolean contains(T entity) {
@@ -118,24 +120,8 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
     }
 
 
-    private void notifyVisibilityOrInvisibility(Entity moved,
-                                                Entity affected) {
-        boolean outOfView = aoiManager.outOfScope(moved, affected);
-        if (outOfView) {
-            if (moved instanceof Player movedPlayer) {
-                messageSender.sendTo(movedPlayer, new RemoveEntityMessage(affected.id()));
-            }
-            if (affected instanceof Player affectedPlayer) {
-                messageSender.sendTo(affectedPlayer, new RemoveEntityMessage(moved.id()));
-            }
-        } else {
-            if (moved instanceof Player movedPlayer) {
-                messageSender.sendTo(movedPlayer, affected.captureSnapshot());
-            }
-            if (affected instanceof Player affectedPlayer) {
-                messageSender.sendTo(affectedPlayer, moved.captureSnapshot());
-            }
-        }
+    protected MessageSender getMessageSender() {
+        return messageSender;
     }
 
     public void sendToVisiblePlayers(Entity source, I2ClientMessage message) {
@@ -144,18 +130,15 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
     }
 
 
-
-    public void updateAOIAndNotifyPlayers(Entity entity) {
-        Set<Entity> inOrOutViewEntities = aoiManager.update(entity);
-        inOrOutViewEntities.forEach(e -> notifyVisibilityOrInvisibility(e , entity));
-    }
-
     void remove(T entity) {
+        if (!entities.contains(entity))
+            return;
         if (iterating) {
             adding.remove(entity);
             deleting.add(entity);
         } else {
             doDelete(entity);
         }
+        aoiManager.remove(entity);
     }
 }

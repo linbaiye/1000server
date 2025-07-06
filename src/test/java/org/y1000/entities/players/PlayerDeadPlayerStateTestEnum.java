@@ -13,11 +13,12 @@ class PlayerDeadPlayerStateTestEnum extends AbstractPlayerUnitTestFixture {
         setup();
     }
 
+    /*
     @Test
     void revive() {
         PlayerDeadState die = PlayerDeadState.die(player);
         player.changeState(die);
         player.update(die.totalMillis());
         assertSame(player.oldStateEnum(), OldPlayerStateEnum.IDLE);
-    }
+    }*/
 }

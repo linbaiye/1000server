@@ -1,39 +1,60 @@
 package org.y1000.entities.players;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.players.event.PlayerSetPositionEvent;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.message.PlayerChangeStateEvent;
-import org.y1000.message.SetPositionEvent;
+import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.message.input.MoveInput;
 import org.y1000.message.input.TurnInput;
 
+@Slf4j
 final class PlayerStandState extends AbstractPlayerState {
 
-    private PlayerStandState(PlayerImpl player, PlayerStateEnum stateEnum) {
+    private PlayerStandState(PlayerInternal player, PlayerStateEnum stateEnum) {
         super(player, stateEnum, 1800);
     }
 
     @Override
     public void update(int delta) {
+        if (player().updateCombat(delta)) {
+            return;
+        }
         if (elapse(delta)) {
             reset();
         }
     }
 
-    public void move(MoveInput moveInput) {
-        if (playerStateEnum() == PlayerStateEnum.Idle) {
-            player().changeState(PlayerMoveState.noneFightMove(player(), moveInput));
-        } else {
-            player().changeState(PlayerMoveState.fightWalk(player(), moveInput));
+    public void tryMove(MoveInput moveInput) {
+        if (!player().coordinate().equals(moveInput.from())) {
+            log.debug("Current {}, input {}, rewind {}.", player().coordinate(), moveInput.from(), player().id());
+            player().sendEvent(PlayerSetPositionEvent.of(player()));
+            reset();
+            return;
         }
+        player().changeDirection(moveInput.direction());
+        if (!player().realmMap().movable(moveInput.destination())) {
+            log.debug("Destination occupied {}, set position of {}.", player().coordinate(), player().id());
+            player().sendEvent(PlayerSetPositionEvent.of(player()));
+            reset();
+            return;
+        }
+        PlayerMoveState moveState = playerStateEnum() == PlayerStateEnum.Idle ?
+             PlayerMoveState.noneFightMove(player(), moveInput) :
+            PlayerMoveState.fightWalk(player(), moveInput);
+        player().changeState(moveState);
+        player().sendEvent(PlayerMoveEvent.moveBy(player(), moveState.moveAction()));
     }
 
     public void turn(TurnInput turnInput) {
+        reset();
         player().changeDirection(turnInput.direction());
-        player().emitEvent(SetPositionEvent.of(player()));
+        player().sendEvent(PlayerChangeStateEvent.noSelf(player()));
     }
 
     @Override
@@ -63,7 +84,7 @@ final class PlayerStandState extends AbstractPlayerState {
 
 
     @Override
-    public void doubleClickFootKungFu(FootKungFu footKungFu) {
+    public void tryToggleFootKungFu(FootKungFu footKungFu) {
         if (playerStateEnum() == PlayerStateEnum.FightStand) {
             switchStand();
         }
@@ -79,18 +100,23 @@ final class PlayerStandState extends AbstractPlayerState {
     }
 
     @Override
-    public void doubleClickBreathKungFu(BreathKungFu breathKungFu) {
+    public void attack(Npc target) {
+        player().acceptAttack(target);
+    }
+
+    @Override
+    public void tryToggleBreathKungFu(BreathKungFu breathKungFu) {
         player().toggleBreathKungFu(breathKungFu);
         player().changeState(PlayerSitDownState.sit(player()));
         player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
 
-    public static PlayerStandState idle(PlayerImpl player) {
+    public static PlayerStandState idle(PlayerInternal player) {
         Validate.notNull(player);
         return new PlayerStandState(player, PlayerStateEnum.Idle);
     }
 
-    public static PlayerStandState fightStand(PlayerImpl player) {
+    public static PlayerStandState fightStand(PlayerInternal player) {
         Validate.notNull(player);
         return new PlayerStandState(player, PlayerStateEnum.FightStand);
     }
@@ -101,7 +127,7 @@ final class PlayerStandState extends AbstractPlayerState {
     }
 
     @Override
-    public void doubleClickAttackKungFu(AttackKungFu attackKungFu) {
+    public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
         player().tryUseAttackKungFu(attackKungFu);
     }
 }

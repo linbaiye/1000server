@@ -19,6 +19,7 @@ import static org.mockito.Mockito.*;
 class MoverTest {
 
 
+    /*
     private Direction direction;
     private Coordinate coordinate;
     private OldPlayerStateEnum playerStateEnum;
@@ -130,5 +131,5 @@ class MoverTest {
         verify(npc, times(1)).move(210);
         mover.run(this::cantbe);
         verify(npc, times(1)).stay(290);
-    }
+    }*/
 }

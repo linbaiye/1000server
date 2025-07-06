@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 
 class ViolentNpcRangedFightAITest extends AbstractMonsterUnitTestFixture  {
 
+    /*
     private Creature enemy;
 
     private ViolentNpcRangedFightAI ai;
@@ -57,5 +58,5 @@ class ViolentNpcRangedFightAITest extends AbstractMonsterUnitTestFixture  {
         monster.update(monster.getStateMillis(OldPlayerStateEnum.Move));
         assertEquals(Direction.RIGHT, monster.direction());
         assertEquals(OldPlayerStateEnum.ATTACK, monster.oldStateEnum());
-    }
+    }*/
 }

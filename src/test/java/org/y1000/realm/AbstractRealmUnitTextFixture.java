@@ -1,5 +1,6 @@
 package org.y1000.realm;
 
+import com.google.protobuf.Message;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.repository.PlayerRepository;
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixture {
     RealmMap realmMap;
-    RealmPlayerConnectionManager eventSender;
+    MessageSender eventSender;
     GroundItemManager itemManager;
     NpcManager npcManager;
     PlayerManager playerManager;
@@ -32,7 +33,8 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
     PlayerRepository playerRepository;
 
     void setup() {
-        eventSender = new RealmPlayerConnectionManager(Mockito.mock(AOIManager.class));
+        //eventSender = new RealmPlayerConnectionManager(Mockito.mock(AOIManager.class));
+        eventSender = Mockito.mock(MessageSender.class);
         realmMap = mockRealmMap();
         itemManager = Mockito.mock(GroundItemManager.class);
         npcManager = Mockito.mock(NpcManager.class);

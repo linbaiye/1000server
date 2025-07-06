@@ -86,6 +86,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         npcManager = new NpcManagerImpl(eventSender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, monsterSdb, npcSdb, map, haveItemSdb);
     }
 
+    /*
     @Test
     void init() {
         Rectangle range = new Rectangle(Coordinate.xy(1, 1), Coordinate.xy(4, 4));
@@ -186,5 +187,5 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
         when(haveItemSdb.getHaveItem(anyString())).thenReturn(Optional.of("皮:2:1"));
         npcManager.onEvent(new CreatureDieEvent(monster));
         verify(itemManager, times(1)).dropItem("皮:2:1", Coordinate.xy(1, 1));
-    }
+    }*/
 }

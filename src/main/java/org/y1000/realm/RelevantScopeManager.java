@@ -40,7 +40,7 @@ final class RelevantScopeManager implements AOIManager {
     }
 
     @Override
-    public <E extends Entity> Set<E> filterNoSelfVisibleEntities(Entity entity, Class<E> type) {
+    public <E extends Entity> Set<E> filterVisibleEntities(Entity entity, Class<E> type) {
         RelevantScope relevantScope = relevantScopeMap.get(entity);
         if (relevantScope == null) {
             return Collections.emptySet();
@@ -48,14 +48,6 @@ final class RelevantScopeManager implements AOIManager {
         return relevantScope.filter(type);
     }
 
-    @Override
-    public <E extends Entity> Set<E> filterVisibleEntities(Entity entity, Class<E> type) {
-        Set<E> es = filterNoSelfVisibleEntities(entity, type);
-        if (type.isAssignableFrom(entity.getClass())) {
-            es.add(type.cast(entity));
-        }
-        return es;
-    }
 
     @Override
     public boolean outOfScope(Entity source, Entity target) {

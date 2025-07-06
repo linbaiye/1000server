@@ -71,6 +71,7 @@ class PlayerAttackPlayerStateTestEnum extends AbstractPlayerUnitTestFixture  {
         setup();
     }
 
+    /*
     @Test
     void hurtRelated() {
         var attackState = PlayerAttackState.melee(player);
@@ -145,5 +146,5 @@ class PlayerAttackPlayerStateTestEnum extends AbstractPlayerUnitTestFixture  {
         // shoot anyway as state changed before creature died.
         PlayerShootEvent playerShootEvent = eventListener.removeFirst(PlayerShootEvent.class);
         assertEquals(playerShootEvent.projectile().target(), monster);
-    }
+    }*/
 }

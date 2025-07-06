@@ -23,7 +23,7 @@ import java.util.Set;
 abstract class AbstractRealm implements Realm {
     public static final int STEP_MILLIS = 10;
     private final RealmMap realmMap;
-    private final RealmPlayerConnectionManager eventSender;
+    private final MessageSender eventSender;
     private final NpcManager npcManager;
     private final PlayerManager playerManager;
     private final DynamicObjectManager dynamicObjectManager;
@@ -41,7 +41,7 @@ abstract class AbstractRealm implements Realm {
 
     public AbstractRealm(int id,
                          RealmMap realmMap,
-                         RealmPlayerConnectionManager eventSender,
+                         MessageSender eventSender,
                          GroundItemManager itemManager,
                          NpcManager npcManager,
                          PlayerManager playerManager,
@@ -95,7 +95,7 @@ abstract class AbstractRealm implements Realm {
 
     abstract Logger log();
 
-    RealmPlayerConnectionManager getEventSender() {
+    MessageSender getEventSender() {
         return eventSender;
     }
 
@@ -147,12 +147,12 @@ abstract class AbstractRealm implements Realm {
             return;
         }
         playerManager.clearPlayer(event.player());
-        eventSender.remove(event.player())
+        /*eventSender.remove(event.player())
                 .ifPresent(connection -> {
                     realmTeleportEvent.setConnection(connection);
                     crossRealmEventSender.send(event);
                     log().debug("Removed player {}.", event.player().id());
-                });
+                });*/
     }
 
     CrossRealmEventSender getCrossRealmEventHandler() {
@@ -169,7 +169,7 @@ abstract class AbstractRealm implements Realm {
         }
         // order matters, so AOI can be computed correctly.
         teleportEvent.player().joinRealm(this, teleportEvent.toCoordinate(), null);
-        eventSender.add(teleportEvent.player(), teleportEvent.getConnection());
+        //eventSender.add(teleportEvent.player(), teleportEvent.getConnection());
         playerManager.teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate());
         teleportEvent.getCosts().forEach(teleportCost -> teleportCost.charge(teleportEvent.player()));
     }

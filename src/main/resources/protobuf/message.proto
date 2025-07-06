@@ -5,9 +5,13 @@ message PositionPacket {
   int32 y = 2;
   int32 direction = 3;
   int64 id = 4;
-  int32 type = 5;
-  int32 state = 6;
-  int32 moveAction = 7;
+}
+
+message NpcMovePacket {
+  int64 id = 1;
+  int32 direction = 2;
+  int32 x = 3;
+  int32 y = 4;
 }
 
 message MonsterMoveEventPacket {
@@ -649,7 +653,6 @@ message Packet {
     PlayerRevivePacket playerRevive = 30;
     PlayerGainExpPacket gainExp = 31;
     ProjectilePacket projectile = 32;
-    MonsterMoveEventPacket monsterMove = 33;
     KungFuPacket learnKungFu = 34;
     ItemAttributePacket itemAttribute = 35;
     PlayerRightClickAttributePacket rightClickAttribute = 36;
@@ -681,7 +684,16 @@ message Packet {
     SyncActiveKungFuPacket activeKungFuList = 62;
     PlayerChangeStatePacket playerChangeState = 63;
     PlayerAttackPacket attack = 64;
+    PlayerSetPositionPacket playerSetPosition = 66;
+    NpcMovePacket npcMove = 67;
+    PlayerMovePacket playerMove = 68;
+    EntitySoundPacket entitySound = 69;
   }
+}
+
+message EntitySoundPacket {
+  string sound = 1;
+  string entityName = 2;
 }
 
 message CreatureInterpolationPacket {
@@ -821,14 +833,24 @@ message PlayerChangeStatePacket {
   int32 direction = 3;
 }
 
+message PlayerSetPositionPacket {
+  PositionPacket position = 1;
+  int32 state = 2;
+}
+
 
 message PlayerAttackPacket {
   int64 id = 1;
   int32 action = 2;
   int32 direction = 3;
-  int32 effectSprite = 5;
+  string effectSprite = 4;
 }
 
 message AttackInputPacket {
   int64 id = 64;
+}
+
+message PlayerMovePacket {
+  NpcMovePacket movePacket = 1;
+  int32 moveAction = 2;
 }

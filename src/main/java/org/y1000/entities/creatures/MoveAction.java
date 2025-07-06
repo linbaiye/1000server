@@ -36,10 +36,8 @@ public class MoveAction implements NpcAction {
 
     public void interrupt(Npc npc) {
         var end = start.moveBy(direction);
-        if (elapsedMillis >= animationMillis / 2 && npc.getRealmMap().movable(end))
-            npc.setCoordinate(end);
-        else
-            npc.setCoordinate(start);
+        npc.setCoordinate(end);
+        npc.sendEvent(NpcMovedEvent.of(npc));
     }
 
     @Override

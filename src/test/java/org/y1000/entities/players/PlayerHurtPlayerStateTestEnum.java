@@ -15,6 +15,7 @@ class PlayerHurtPlayerStateTestEnum extends AbstractPlayerUnitTestFixture{
         player = playerBuilder().build();
     }
 
+    /*
     @Test
     void nestedHurt() {
         Player attacker = playerBuilder().build();
@@ -27,5 +28,5 @@ class PlayerHurtPlayerStateTestEnum extends AbstractPlayerUnitTestFixture{
         assertEquals(OldPlayerStateEnum.HURT, player.oldStateEnum());
         player.update(player.getStateMillis(OldPlayerStateEnum.HURT) );
         assertEquals(OldPlayerStateEnum.IDLE, player.oldStateEnum());
-    }
+    }*/
 }

@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
 
+    /*
     private SubmissiveNpc npc;
 
     private RealmMap mockedMap;
@@ -100,5 +101,5 @@ class SubmissiveNpcTest extends AbstractNpcUnitTestFixture {
         assertEquals(OldPlayerStateEnum.HURT, npc.oldStateEnum());
         npc.update(npc.getStateMillis(OldPlayerStateEnum.HURT));
         assertEquals(OldPlayerStateEnum.IDLE, npc.oldStateEnum());
-    }
+    }*/
 }

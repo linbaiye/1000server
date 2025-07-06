@@ -2,11 +2,11 @@ package org.y1000.entities.players;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.players.event.PlayerMovedEvent;
+import org.y1000.entities.players.event.PlayerSetPositionEvent;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.message.PlayerChangeStateEvent;
-import org.y1000.message.PlayerMoveEvent;
-import org.y1000.message.SetPositionEvent;
+import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.message.input.MoveInput;
 
 import java.util.Map;
@@ -28,7 +28,7 @@ public final class PlayerMoveState extends AbstractPlayerState {
             MoveAction.FightWalk, 840
     );
 
-    private PlayerMoveState(PlayerImpl player,
+    private PlayerMoveState(PlayerInternal player,
             MoveInput input,
             MoveAction moveAction) {
         super(player, PlayerStateEnum.Move, MoveStateMillis.get(moveAction));
@@ -42,42 +42,48 @@ public final class PlayerMoveState extends AbstractPlayerState {
         } else {
             player().changeState(PlayerStandState.idle(player()));
         }
-        player().sendEvent(PlayerChangeStateEvent.noSelf(player()));
+    }
+
+    public MoveAction moveAction() {
+        return moveAction;
     }
 
     @Override
     public void update(int delta) {
-        if (elapsedMillis() == 0) {
-            if (!player().coordinate().equals(currentInput.from()) || !player().realmMap().movable(currentInput.destination())) {
-                log.debug("Reset position current {}, input {}, target moveable? {}.", player().coordinate(), currentInput.from(),
-                        player().realmMap().movable(currentInput.destination()));
-                player().emitEvent(SetPositionEvent.of(player()));
-                changeToStand();
-                return;
-            }
-            player().changeDirection(currentInput.direction());
-            player().emitEvent(PlayerMoveEvent.movingBy(player(), currentInput.direction(), moveAction));
-        }
         if (!elapse(delta))
             return;
         player().footKungFu().ifPresent(footKungFu -> footKungFu.tryGainExpAndUseResources(player()));
         if (!player().realmMap().movable(currentInput.destination())) {
-            player().emitEvent(SetPositionEvent.of(player()));
             changeToStand();
+            player().sendEvent(PlayerSetPositionEvent.of(player()));
             return;
         }
         player().changeCoordinate(currentInput.destination());
+        player().sendEvent(new PlayerMovedEvent(player()));
         log.debug("Player {} moved to {}.", player(), player().coordinate());
-        if (newInput != null) {
-            player().changeState(new PlayerMoveState(player(), newInput, computeNonFightMoveAction(player(), moveAction)));
-        } else {
+        if (newInput == null) {
             changeToStand();
+            return;
+        }
+        if (!player().coordinate().equals(newInput.from())) {
+            changeToStand();
+            player().sendEvent(PlayerSetPositionEvent.of(player()));
+            return;
+        }
+        player().changeDirection(newInput.direction());
+        if (!player().realmMap().movable(newInput.destination())) {
+            changeToStand();
+            player().sendEvent(PlayerSetPositionEvent.of(player()));
+        } else {
+            MoveAction newAction = computeMoveAction(player(), moveAction);
+            player().changeState(new PlayerMoveState(player(), newInput, newAction));
+            player().sendEvent(PlayerMoveEvent.moveBy(player(), moveAction));
         }
     }
 
 
     @Override
-    public void move(MoveInput moveInput) {
+    public void tryMove(MoveInput moveInput) {
         newInput = moveInput;
     }
 
@@ -86,26 +92,26 @@ public final class PlayerMoveState extends AbstractPlayerState {
         player().tryEquipFromSlot(slot, equipment);
     }
 
-    private static MoveAction computeNonFightMoveAction(PlayerImpl player, MoveAction current) {
+    private static MoveAction computeMoveAction(PlayerInternal player, MoveAction current) {
         return player.footKungFu().map(k -> k.canFly() ? MoveAction.Fly : MoveAction.Run)
                 .orElse(current);
     }
 
-    private static MoveAction computeNonFightMoveAction(PlayerImpl player) {
+    private static MoveAction computeNonFightMoveAction(PlayerInternal player) {
         return player.footKungFu().map(k -> k.canFly() ? MoveAction.Fly : MoveAction.Run)
                 .orElse(MoveAction.Walk);
     }
 
-    public static PlayerMoveState noneFightMove(PlayerImpl player, MoveInput input) {
+    static PlayerMoveState noneFightMove(PlayerInternal player, MoveInput input) {
         return new PlayerMoveState(player, input, computeNonFightMoveAction(player));
     }
 
-    public static PlayerMoveState fightWalk(PlayerImpl player, MoveInput moveInput) {
+    static PlayerMoveState fightWalk(PlayerInternal player, MoveInput moveInput) {
         return new PlayerMoveState(player, moveInput, MoveAction.FightWalk);
     }
 
     @Override
-    public void doubleClickAttackKungFu(AttackKungFu attackKungFu) {
+    public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
         player().tryUseAttackKungFu(attackKungFu);
     }
 }

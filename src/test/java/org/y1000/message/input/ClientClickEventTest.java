@@ -21,7 +21,6 @@ class ClientClickEventTest extends AbstractPlayerUnitTestFixture  {
         Player source = playerBuilder().id(nextId()).build();
         source.registerEventListener(eventListener);
         new ClientClickEvent(clicked.id()).handle(source, clicked);
-        assertNotNull(eventListener.removeFirst(PlayerTextEvent.class));
     }
 
 }

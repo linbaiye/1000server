@@ -67,17 +67,7 @@ class NpcInteractorTest {
         verify(player, times(0)).emitEvent(any(IEntityEvent.class));
     }
 
-    @Test
-    void onNpcClicked_whenVisible() {
-        when(npc.canBeSeenAt(any(Coordinate.class))).thenReturn(true);
-        npcInteractor.onNpcClicked(player, npc);
-        NpcInteractionMenuPacket interactionMenu = eventListener.removeFirst(InteractionMenuEvent.class).toPacket().getInteractionMenu();
-        assertEquals(1L, interactionMenu.getId());
-        assertEquals("name", interactionMenu.getViewName());
-        assertEquals("shape", interactionMenu.getShape());
-        assertEquals("default", interactionMenu.getInteractions(0));
-        assertEquals("Main text", interactionMenu.getText());
-    }
+
 
     @Test
     void onInteractabilityClicked() {

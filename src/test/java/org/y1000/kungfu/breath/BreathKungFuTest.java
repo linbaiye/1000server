@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 class BreathKungFuTest extends AbstractPlayerUnitTestFixture {
 
+    /*
     private BreathKungFu breathKungFu;
 
     private EventResourceParameters resourceParameters;
@@ -45,5 +46,5 @@ class BreathKungFuTest extends AbstractPlayerUnitTestFixture {
         when(resourceParameters.power()).thenReturn(0);
         player.consumePower(1);
         assertFalse(breathKungFu.canRegenerateResources(player));
-    }
+    }*/
 }

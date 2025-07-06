@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PlayerEquipEvent extends AbstractClientMessageEvent {
+public class PlayerEquipEvent extends Abstract2VisibleAndSelfMessageEvent {
 
     public PlayerEquipEvent(Player player, Packet packet) {
         super(player, packet);
@@ -125,10 +125,5 @@ public class PlayerEquipEvent extends AbstractClientMessageEvent {
     public static void main(String[] args) {
         dump();
         //checkDuplicateNames();
-    }
-
-    @Override
-    public void accept(PlayerEventHandler handler) {
-        handler.sendToVisiblePlayers(source(), this);
     }
 }

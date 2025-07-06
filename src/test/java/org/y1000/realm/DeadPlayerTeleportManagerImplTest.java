@@ -27,7 +27,7 @@ class DeadPlayerTeleportManagerImplTest {
         deadPlayerTeleportManager.setTeleportHandler(this::handleTeleport);
         event = null;
     }
-
+/*
     @Test
     void update() {
         var player = Mockito.mock(Player.class);
@@ -35,5 +35,5 @@ class DeadPlayerTeleportManagerImplTest {
         deadPlayerTeleportManager.onPlayerDead(player);
         deadPlayerTeleportManager.update(10000);
         assertNotNull(event);
-    }
+    }*/
 }

@@ -67,7 +67,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
                 .hair(itemFactory.createHair("女子长发"))
                 .revival(17)
                 .build();
-        player.joinRealm(mockedRealm, Coordinate.xy(1, 2), );
+        player.joinRealm(mockedRealm, Coordinate.xy(1, 2), TestingPlayerEventListener.Instance);
         var em = jpaFixture.beginTx();
         playerRepository.save(em, 1, player);
         jpaFixture.submitTx();
@@ -121,7 +121,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
                 .chest(itemFactory.createChest("男子黄龙弓服"))
                 .weapon(w2)
                 .build();
-        player.joinRealm(mockAllFlatRealm(), Coordinate.xy(1, 3), );
+        player.joinRealm(mockAllFlatRealm(), Coordinate.xy(1, 3), TestingPlayerEventListener.Instance);
         playerRepository.update(player);
         KungFuBook kungFuBook = createKungFuBookFactory().create();
         when(kungFuBookRepository.find(any(EntityManager.class), anyLong())).thenReturn(Optional.of(kungFuBook));
@@ -182,7 +182,7 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
                 .clothing(itemFactory.createClothing("女子上衣"))
                 .weapon((Weapon) itemFactory.createEquipment("长剑"))
                 .build();
-        player.joinRealm(mockedRealm, Coordinate.xy(1, 2), );
+        player.joinRealm(mockedRealm, Coordinate.xy(1, 2), TestingPlayerEventListener.Instance);
         playerRepository.save(em, 1, player);
         jpaFixture.submitTx();
         KungFuBook kungFuBook = createKungFuBookFactory().create();

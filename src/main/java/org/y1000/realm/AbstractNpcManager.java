@@ -2,12 +2,14 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.npc.*;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
-import org.y1000.entities.creatures.npc.event.NpcEventHandler;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
+import org.y1000.message.I2ClientMessage;
+import org.y1000.message.RemoveEntityMessage;
 import org.y1000.realm.event.RealmEvent;
 import org.y1000.realm.event.RealmTriggerEvent;
 import org.y1000.sdb.*;
@@ -17,10 +19,8 @@ import org.y1000.util.Rectangle;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc>
+abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
         implements NpcManager, NpcEventListener, NpcEventHandler {
-
-    private final MessageSender sender;
 
     private final EntityIdGenerator idGenerator;
 
@@ -29,7 +29,6 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc>
     private final ProjectileManager projectileManager;
 
     private final GroundItemManager itemManager;
-
     private final MonstersSdb monstersSdb;
 
 //    private final Map<INpc, Set<INpc>> linked;
@@ -68,7 +67,6 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc>
         Validate.notNull(haveItemSdb);
         this.createMonsterSdb = createMonsterSdb;
         this.createNpcSdb = createNpcSdb;
-        this.sender = sender;
         this.idGenerator = idGenerator;
         this.npcFactory = npcFactory;
         this.itemManager = itemManager;
@@ -77,7 +75,6 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc>
         this.haveItemSdb = haveItemSdb;
         this.realmMap = realmMap;
         projectileManager = new ProjectileManager();
-//        linked = new HashMap<>();
         cloned = new HashSet<>();
     }
 
@@ -144,6 +141,20 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc>
 //        add(npc);
     }
 
+
+    public void onMoved(Npc npc, I2ClientMessage message) {
+        Set<Entity> visibleOrInvisible = getAoiManager().update(npc);
+        visibleOrInvisible.forEach(entity -> {
+            if (entity instanceof Player player) {
+                if (npc.canBeSeenAt(player.coordinate())) {
+                    getMessageSender().sendTo(player, npc.captureSnapshot());
+                } else {
+                    getMessageSender().sendTo(player, new RemoveEntityMessage(npc.id()));
+                }
+            }
+        });
+        sendToVisiblePlayers(npc, message);
+    }
 
     private void handleDieEvent(CreatureDieEvent event) {
         if (!(event.source() instanceof INpc npc)) {
@@ -220,7 +231,7 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc>
     }
 
     private void handleSeekPlayerEvent(SeekPlayerEvent event) {
-        Set<Player> players = aoiManager.filterNoSelfVisibleEntities(event.source(), Player.class);
+        Set<Player> players = aoiManager.filterVisibleEntities(event.source(), Player.class);
         event.setPlayers(players);
     }
 

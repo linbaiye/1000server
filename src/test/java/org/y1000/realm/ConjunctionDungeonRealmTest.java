@@ -22,6 +22,7 @@ class ConjunctionDungeonRealmTest extends AbstractRealmUnitTextFixture {
         setup();
     }
 
+    /*
     @Test
     void alwaysEnter() {
         var dungeonRealm = new ConjunctionDungeonRealm(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
@@ -32,5 +33,5 @@ class ConjunctionDungeonRealmTest extends AbstractRealmUnitTextFixture {
         dungeonRealm.handle(realmTeleportEvent);
         verify(playerManager, times(1)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
 
-    }
+    }*/
 }

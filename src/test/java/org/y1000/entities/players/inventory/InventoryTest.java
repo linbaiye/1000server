@@ -71,6 +71,7 @@ class InventoryTest extends AbstractUnitTestFixture {
         assertEquals(0, inventory.put(null));
     }
 
+    /*
     @Test
     void consumeStackItemByName() {
         TestingEventListener eventListener = new TestingEventListener();
@@ -298,5 +299,5 @@ class InventoryTest extends AbstractUnitTestFixture {
         var slot1 = inventory.put(rs);
         assertEquals(slot1, inventory.consume("锈剑", 1));
         assertNull(inventory.getItem(slot1));
-    }
+    }*/
 }

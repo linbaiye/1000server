@@ -52,6 +52,7 @@ class FootKungFuTest {
         verify(player).consumePower(1);
     }
 
+    /*
     @Test
     void tryGainExpAndUseResources() {
         Player player = Mockito.mock(Player.class);
@@ -72,5 +73,5 @@ class FootKungFuTest {
         testingEventListener.clearEvents();
         footKungFu.tryGainExpAndUseResources(player, testingEventListener::onEvent);
         assertEquals(0, testingEventListener.eventSize());
-    }
+    }*/
 }

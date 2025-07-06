@@ -60,14 +60,10 @@ public abstract class AbstractPositionEvent implements IEntityEvent, I2ClientMes
     public Packet toPacket() {
         if (packet == null) {
             PositionPacket.Builder builder = PositionPacket.newBuilder()
-                    .setState(stateValue)
-                    .setType(getType().value())
                     .setY(coordinate.y())
                     .setX(coordinate.x())
                     .setDirection(direction.value())
                     .setId(id);
-            if (moveAction != null)
-                builder.setMoveAction(moveAction.value());
             packet = Packet.newBuilder()
                     .setPositionPacket(builder.build())
                     .build();

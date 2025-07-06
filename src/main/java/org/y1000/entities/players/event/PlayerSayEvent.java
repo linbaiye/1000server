@@ -5,7 +5,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.network.gen.CreatureSayPacket;
 import org.y1000.network.gen.Packet;
 
-public final class PlayerSayEvent extends Abstract2VisiblePlayersMessageEvent {
+public final class PlayerSayEvent extends Abstract2VisibleAndSelfMessageEvent {
 
     private PlayerSayEvent(Player player, Packet packet) {
         super(player, packet);

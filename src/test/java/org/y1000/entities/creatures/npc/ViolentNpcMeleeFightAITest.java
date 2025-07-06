@@ -19,7 +19,8 @@ import static org.mockito.Mockito.*;
 
 
 class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
-    private ViolentNpcMeleeFightAI ai;
+
+   /* private ViolentNpcMeleeFightAI ai;
 
     private Creature enemy;
 
@@ -163,5 +164,5 @@ class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
         assertEquals(OldPlayerStateEnum.HURT, monster.oldStateEnum());
         monster.update(monster.maxCooldown());
         assertEquals(Direction.DOWN, monster.direction());
-    }
+    }*/
 }

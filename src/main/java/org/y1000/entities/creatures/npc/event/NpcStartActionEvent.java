@@ -5,6 +5,7 @@ import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.network.gen.ChangeStatePacket;
 import org.y1000.network.gen.Packet;
+import org.y1000.realm.NpcEventHandler;
 
 public class NpcStartActionEvent extends AbstractNpcEvent implements I2ClientMessage {
 

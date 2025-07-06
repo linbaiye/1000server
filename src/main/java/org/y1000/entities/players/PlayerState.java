@@ -1,6 +1,7 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.CreatureState;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
@@ -12,7 +13,7 @@ public interface PlayerState extends CreatureState {
 
     PlayerStateEnum playerStateEnum();
 
-    default void move(MoveInput input) {
+    default void tryMove(MoveInput input) {
 
     }
 
@@ -28,16 +29,16 @@ public interface PlayerState extends CreatureState {
 
     }
 
-    default void doubleClickFootKungFu(FootKungFu footKungFu) {
+    default void tryToggleFootKungFu(FootKungFu footKungFu) {
 
     }
 
-    default void doubleClickBreathKungFu(BreathKungFu breathKungFu) {
+    default void tryToggleBreathKungFu(BreathKungFu breathKungFu) {
 
     }
 
-    default void doubleClickAttackKungFu(AttackKungFu attackKungFu) {
-        
+    default void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
+
     }
 
 
@@ -46,6 +47,10 @@ public interface PlayerState extends CreatureState {
     }
 
     default void equip(int slot, Equipment equipment) {
+
+    }
+
+    default void attack(Npc target) {
 
     }
 

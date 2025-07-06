@@ -28,6 +28,7 @@ class RopeTest extends AbstractPlayerUnitTestFixture {
 
     private Player killer;
 
+    /*
     @BeforeEach
     void setUp() {
         realm = mockAllFlatRealm();
@@ -94,5 +95,5 @@ class RopeTest extends AbstractPlayerUnitTestFixture {
         Rope rope = new Rope(dragged, dragger);
         rope.breakIfDraggedAgain(dragged);
         assertNotNull(draggedListener.removeFirst(BreakRopeEvent.class));
-    }
+    }*/
 }

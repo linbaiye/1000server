@@ -47,7 +47,7 @@ class GuildableRealm extends AbstractRealm {
 
     @Override
     void handleConnectionEvent(ConnectionEstablishedEvent connectedEvent) {
-        getEventSender().add(connectedEvent.player(), connectedEvent.connection());
+        //getEventSender().add(connectedEvent.player(), connectedEvent.connection());
         getPlayerManager().onPlayerConnected(connectedEvent.player(), this);
     }
 

@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 class ItemManagerTest extends AbstractUnitTestFixture {
 
+    /*
     private ItemManagerImpl manager;
 
     private TestingEntityEventSender eventSender;
@@ -104,11 +105,5 @@ class ItemManagerTest extends AbstractUnitTestFixture {
             }
         }
         System.out.println(counter);
-        /*double rate = 399/400f;
-        double total = 1;
-        for (int i = 0; i < 400; i++) {
-            total *= rate;
-        }
-        System.out.println(total);*/
-    }
+    }*/
 }

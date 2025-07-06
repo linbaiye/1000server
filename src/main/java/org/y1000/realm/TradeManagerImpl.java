@@ -9,7 +9,7 @@ import org.y1000.event.EntityEvent;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
 import org.y1000.message.InputResponseMessage;
-import org.y1000.message.PlayerMoveEvent;
+import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.message.serverevent.PlayerLeftEvent;
 
 import java.util.HashMap;

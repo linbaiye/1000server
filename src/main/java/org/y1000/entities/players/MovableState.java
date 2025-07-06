@@ -4,7 +4,7 @@
 //import org.y1000.entities.Direction;
 //import org.y1000.entities.players.event.RewindEvent;
 //import org.y1000.message.InputResponseMessage;
-//import org.y1000.message.PlayerMoveEvent;
+//import org.y1000.entities.players.event.PlayerMoveEvent;
 //import org.y1000.message.SetPositionEvent;
 //import org.y1000.message.input.ClientMovementEvent;
 //import org.y1000.message.input.input.AbstractRightClick;

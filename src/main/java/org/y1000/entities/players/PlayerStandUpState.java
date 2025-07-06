@@ -7,7 +7,7 @@ import org.y1000.message.PlayerChangeStateEvent;
 
 final class PlayerStandUpState extends AbstractPlayerState {
 
-    public PlayerStandUpState(PlayerImpl player) {
+    public PlayerStandUpState(PlayerInternal player) {
         super(player, PlayerStateEnum.StandUp, 750);
     }
 
@@ -25,7 +25,7 @@ final class PlayerStandUpState extends AbstractPlayerState {
     }
 
     @Override
-    public void doubleClickAttackKungFu(AttackKungFu attackKungFu) {
+    public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
         player().tryUseAttackKungFu(attackKungFu);
     }
 }

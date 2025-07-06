@@ -4,6 +4,7 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.AttributePacket;
 import org.y1000.network.gen.Packet;
+import org.y1000.realm.PlayerEventHandler;
 
 public final class PlayerAttributeEvent extends AbstractClientMessageEvent {
     public PlayerAttributeEvent(Player source, Packet packet) {

@@ -22,7 +22,7 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
 
     public EntranceDungeonRealm(int id,
                                 RealmMap realmMap,
-                                RealmPlayerConnectionManager eventSender,
+                                MessageSender eventSender,
                                 GroundItemManager itemManager,
                                 NpcManager npcManager,
                                 PlayerManager playerManager,
@@ -39,7 +39,7 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
 
     public EntranceDungeonRealm(int id,
                                 RealmMap realmMap,
-                                RealmPlayerConnectionManager eventSender,
+                                MessageSender eventSender,
                                 GroundItemManager itemManager,
                                 NpcManager npcManager,
                                 PlayerManager playerManager,

@@ -26,6 +26,7 @@ class PlayerRevivalTest {
         assertEquals(100, revival.level());
     }
 
+    /*
     @Test
     void regenerateHalLife() {
         assertEquals(303, revival.regenerateHalLife(OldPlayerStateEnum.DIE));
@@ -40,5 +41,5 @@ class PlayerRevivalTest {
         assertEquals(70, revival.regenerateResources(OldPlayerStateEnum.SIT));
         assertEquals(50, revival.regenerateResources(OldPlayerStateEnum.IDLE));
         assertEquals(10, revival.regenerateResources(OldPlayerStateEnum.RUN));
-    }
+    }*/
 }

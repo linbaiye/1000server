@@ -5,14 +5,14 @@ import org.y1000.message.PlayerChangeStateEvent;
 
 class PlayerHelloState extends AbstractPlayerState {
 
-    public PlayerHelloState(PlayerImpl player) {
+    public PlayerHelloState(PlayerInternal player) {
         super(player, PlayerStateEnum.Hello, 750);
     }
     @Override
     public void update(int delta) {
         if (elapse(delta)) {
             player().changeState(PlayerStandState.idle(player()));
-            player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+            player().emitEvent(PlayerChangeStateEvent.allVisible(player()));
         }
     }
 

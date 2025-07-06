@@ -1,12 +1,12 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.PlayerSoundEvent;
 import org.y1000.entities.creatures.npc.HurtAbility;
 import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.message.PlayerAttackEvent;
+import org.y1000.entities.players.event.PlayerAttackEvent;
 import org.y1000.message.PlayerChangeStateEvent;
 
 @Slf4j
@@ -34,11 +34,12 @@ final class CombatController {
         AttackAction action = kungFu.computeAttackAction();
         player.changeDirection(player.coordinate().computeDirection(enemy.coordinate()));
         player.changeState(new PlayerAttackState(player, action));
+        var message = PlayerAttackEvent.attack(player, action, player.attackKungFu().computeEffectId());
+        player.sendEvent(message);
         kungFu.consumeAttributes(player);
         player.cooldownAttack();
-        hurtAbility.attackedBy(player, player.damage(), player.hit());
-        PlayerAttributeEvent message = PlayerAttackEvent.attack(player, action, player.attackKungFu().computeEffectId());
-        player.sendEvent(message);
+        int hit = hurtAbility.attackedBy(player, player.damage(), player.hit());
+        player.sendEvent(PlayerSoundEvent.sound(player, hit == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
     }
 
     private void start() {
@@ -70,9 +71,9 @@ final class CombatController {
     }
 
 
-    void update(int delta) {
+    boolean update(int delta) {
         if (player.maxCooldown() > 0)
-            return;
+            return false;
         AttackKungFu kungFu = player.attackKungFu();
         String ret = kungFu.checkResourceToAttack(player);
         if (ret != null) {
@@ -81,14 +82,16 @@ final class CombatController {
                 player.sendEvent(PlayerTextMessage.of(player, ret));
                 resourceNoticeTimer = 2000;
             }
-            return;
+            return false;
         }
         if (!hurtAbility.canBeAttackedNow()) {
-            return;
+            return false;
         }
         if (player.attackKungFu().isWithinAttackRange(player.coordinate(), enemy.coordinate())) {
             attack();
+            return true;
         }
+        return false;
     }
 
     public static CombatController createAndStart(PlayerImpl player, Npc target) {

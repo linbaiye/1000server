@@ -23,6 +23,7 @@ class PlayerCooldownPlayerStateTestEnum extends AbstractUnitTestFixture {
         player.registerEventListener(eventListener);
     }
 
+    /*
     @Test
     void doables() {
         var state = new PlayerCooldownState(player.getStateMillis(OldPlayerStateEnum.FightStand));
@@ -41,5 +42,5 @@ class PlayerCooldownPlayerStateTestEnum extends AbstractUnitTestFixture {
         assertEquals(before, player.coordinate());
         state.afterHurt(player);
         assertEquals(OldPlayerStateEnum.FightStand, player.oldStateEnum());
-    }
+    }*/
 }

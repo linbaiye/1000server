@@ -12,10 +12,7 @@ public class TestingEventListener implements EntityEventListener {
 
     private final List<EntityEvent> entityEvents = new ArrayList<>();
 
-    @Override
-    public void onEvent(IEntityEvent entityEvent) {
-        this.entityEvents.add(entityEvent);
-    }
+
 
     public <T extends IEntityEvent> T dequeue(Class<T> clazz) {
         return !entityEvents.isEmpty() ? clazz.cast(entityEvents.remove(0)) : null;

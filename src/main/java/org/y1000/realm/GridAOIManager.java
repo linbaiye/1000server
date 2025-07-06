@@ -76,7 +76,7 @@ final class GridAOIManager implements AOIManager {
     }
 
     @Override
-    public <E extends Entity> Set<E> filterNoSelfVisibleEntities(Entity entity, Class<E> type) {
+    public <E extends Entity> Set<E> filterVisibleEntities(Entity entity, Class<E> type) {
         Validate.notNull(entity);
         Validate.notNull(type);
         if (!contains(entity)) {

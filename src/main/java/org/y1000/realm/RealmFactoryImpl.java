@@ -126,7 +126,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .orElseThrow(() -> new IllegalArgumentException("No map for " + id));
             var entityIdGenerator = new EntityIdGenerator();
             AOIManager aoiManager = new RelevantScopeManager();
-            var eventSender = new RealmPlayerConnectionManager(aoiManager);
+            var eventSender = new RealmPlayerConnectionManager();
             var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory, aoiManager);
             var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
             var dynamicObjectManager = !realmSpecificSdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:

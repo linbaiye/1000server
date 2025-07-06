@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 
 class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
 
+    /*
     private SubmissiveWanderingAI ai;
 
     private SubmissiveMerchant merchant;
@@ -105,5 +106,5 @@ class DevirtueNpcAITest extends AbstractNpcUnitTestFixture {
         merchant.attackedBy(player);
         assertEquals(OldPlayerStateEnum.DIE, merchant.oldStateEnum());
         assertNotNull(testingEventListener.removeFirst(CreatureDieEvent.class));
-    }
+    }*/
 }

@@ -49,7 +49,7 @@ class DynamicObjectManagerImplTest {
         createDynamicObjectSdb = Mockito.mock(CreateDynamicObjectSdb.class);
         eventHandler = Mockito.mock(CrossRealmEventSender.class);
         realmMap = Mockito.mock(RealmMap.class);
-        manager = new DynamicObjectManagerImpl(factory, entityIdGenerator, entityEventSender, itemManager, createDynamicObjectSdb, eventHandler, realmMap);
+        // manager = new DynamicObjectManagerImpl(factory, entityIdGenerator, entityEventSender, itemManager, createDynamicObjectSdb, eventHandler, realmMap);
     }
 
     @Test

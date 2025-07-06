@@ -1,9 +1,12 @@
 package org.y1000.entities.creatures.npc.event;
 
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.message.I2ClientMessage;
-import org.y1000.network.gen.MonsterMoveEventPacket;
+import org.y1000.network.gen.NpcMovePacket;
 import org.y1000.network.gen.Packet;
+import org.y1000.realm.NpcEventHandler;
 
 public class NpcMoveEvent extends AbstractNpcEvent implements I2ClientMessage  {
     private final Packet packet;
@@ -18,15 +21,18 @@ public class NpcMoveEvent extends AbstractNpcEvent implements I2ClientMessage  {
         return packet;
     }
 
-    public static NpcMoveEvent of(Npc npc) {
-        Packet packet = Packet.newBuilder()
-                .setMonsterMove(MonsterMoveEventPacket.newBuilder()
-                        .setId(npc.id())
-                        .setDirection(npc.direction().value())
-                        .setX(npc.coordinate().x())
-                        .setY(npc.coordinate().y())
-                        .build())
+    public static NpcMovePacket movePacket(ActiveEntity entity, Direction direction) {
+        return  NpcMovePacket.newBuilder()
+                .setId(entity.id())
+                .setX(entity.coordinate().x())
+                .setY(entity.coordinate().y())
+                .setDirection(direction.value())
                 .build();
+    }
+
+    public static NpcMoveEvent of(Npc npc) {
+        NpcMovePacket movePacket = movePacket(npc, npc.direction());
+        Packet packet = Packet.newBuilder().setNpcMove(movePacket).build();
         return new NpcMoveEvent(npc, packet);
     }
 

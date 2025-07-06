@@ -3,11 +3,9 @@ package org.y1000.message;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerStateEnum;
 import org.y1000.entities.players.event.AbstractClientMessageEvent;
-import org.y1000.entities.players.event.PlayerEventHandler;
+import org.y1000.realm.PlayerEventHandler;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerChangeStatePacket;
-
-import java.util.function.Predicate;
 
 public final class PlayerChangeStateEvent extends AbstractClientMessageEvent {
 
@@ -36,9 +34,9 @@ public final class PlayerChangeStateEvent extends AbstractClientMessageEvent {
 
     @Override
     public void accept(PlayerEventHandler handler) {
-        Predicate<? super Player> predicate = includeSelf ?
-                p -> p.canBeSeenAt(source().coordinate()) :
-                p -> p.canBeSeenAt(source().coordinate()) && !p.equals(source());
-        handler.sendToPlayers(predicate, this);
+        if (includeSelf)
+            handler.sendToVisiblePlayersAndSelf(source(), this);
+        else
+            handler.sendToVisiblePlayers(source(), this);
     }
 }

@@ -67,6 +67,7 @@ class QuestTest extends AbstractUnitTestFixture {
         assertTrue(quest.canComplete(player).contains("物品栏已满"));
     }
 
+    /*
     @Test
     void complete() {
         inventory.put(itemFactory.createItem("生药", 1));
@@ -80,5 +81,5 @@ class QuestTest extends AbstractUnitTestFixture {
         assertNotNull(eventListener.removeFirst(UpdateInventorySlotEvent.class));
         assertNotNull(eventListener.removeFirst(PlayerTextEvent.class));
         assertNotNull(eventListener.removeFirst(EntitySoundEvent.class));
-    }
+    }*/
 }

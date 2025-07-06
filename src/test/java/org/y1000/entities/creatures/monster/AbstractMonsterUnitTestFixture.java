@@ -19,7 +19,8 @@ public abstract class AbstractMonsterUnitTestFixture extends AbstractUnitTestFix
         attributeProvider = new TestingMonsterAttributeProvider();
         attributeProvider.life = 4000;
         attributeProvider.recovery = 100;
-        monster = monsterBuilder().realmMap(realmMap).ai(new MonsterWanderingAI(Coordinate.Empty)).attributeProvider(attributeProvider).build();
+        monster = monsterBuilder().realmMap(realmMap).attributeProvider(attributeProvider).build();
+        //monster = monsterBuilder().realmMap(realmMap).ai(new MonsterWanderingAI(Coordinate.Empty)).attributeProvider(attributeProvider).build();
         eventListener = new TestingEventListener();
         monster.registerEventListener(eventListener);
     }

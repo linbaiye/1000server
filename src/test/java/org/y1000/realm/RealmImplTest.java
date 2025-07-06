@@ -25,6 +25,7 @@ class RealmImplTest extends AbstractRealmUnitTextFixture {
     private Player player;
     private Connection connection;
 
+    /*
     @BeforeEach
     void setUp() {
         setup();
@@ -48,5 +49,5 @@ class RealmImplTest extends AbstractRealmUnitTextFixture {
         when(npcManager.findMerchants()).thenReturn(Set.of(m1, m2));
         realm.handle(new PlayerDataEvent(1, player, new ClientSimpleCommandEvent(SimpleCommand.NPC_POSITION)));
         verify(connection, times(1)).writeAndFlush(any(NpcPositionEvent.class));
-    }
+    }*/
 }

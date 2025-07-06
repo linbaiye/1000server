@@ -122,8 +122,6 @@ public abstract class AbstractUnitTestFixture {
                 .realmMap(Mockito.mock(RealmMap.class))
                 .skill(null)
                 .attributeProvider(new TestingMonsterAttributeProvider())
-                .ai(new MonsterWanderingAI(Coordinate.xy(1, 1)))
-                .stateMillis(MONSTER_STATE_MILLIS)
                 ;
     }
 

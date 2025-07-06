@@ -33,6 +33,9 @@ public class HurtAbility extends AbstractNpcAction {
 
     private int elapsed;
 
+    @Getter
+    private NpcActionEnum previousAction;
+
     public HurtAbility(int armor,
                        int avoidance,
                        int hurtSound,
@@ -64,13 +67,16 @@ public class HurtAbility extends AbstractNpcAction {
         return true;
     }
 
-
-    public void hurt(Npc npc) {
+    public void hurt(Npc npc, NpcActionEnum previousAction) {
         setTimer(animationMillis);
+        this.previousAction = previousAction;
         npc.sendEvent(NpcStartActionEvent.of(npc, actionEnum()));
     }
 
     public int attackedBy(ActiveEntity attacker, Damage damage, int hit) {
+        if (isDodged(hit)) {
+            return -1;
+        }
 //        if (currentLife <= 0) {
 //            return -1;
 //        }

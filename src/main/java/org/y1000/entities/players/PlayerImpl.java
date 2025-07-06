@@ -36,7 +36,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 @Slf4j
-public final class PlayerImpl extends AbstractCreature implements Player,
+public final class PlayerImpl extends AbstractCreature implements PlayerInternal,
         EntityEventListener, PlayerInputHandler {
 
     public static final int DEFAULT_REGENERATE_SECONDS = 9;
@@ -306,7 +306,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         sendEvent(PlayerSayEvent.say(this, attackKungFu.name()));
     }
 
-    void tryEquipFromSlot(int slotId, Equipment equipment) {
+    public void tryEquipFromSlot(int slotId, Equipment equipment) {
         if (equipment instanceof Weapon newWeapon) {
             equipWeaponFromSlot(slotId);
             if (newWeapon.kungFuType() != attackKungFu.getType()) {
@@ -334,8 +334,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
 
-
-    void tryUseAttackKungFu(AttackKungFu newKungFu) {
+    public void tryUseAttackKungFu(AttackKungFu newKungFu) {
         if (headPercent() < 50) {
             sendEvent(PlayerTextMessage.of(this, "头部活力不足。"));
             return;
@@ -406,16 +405,16 @@ public final class PlayerImpl extends AbstractCreature implements Player,
     }
 
 
-    void disableFootKungFuAndSync() {
+    public void disableFootKungFuAndSync() {
         footKungfu = null;
         syncActiveKungFuList();
     }
 
-    void stopFight() {
+    public void stopFight() {
         combatController = null;
     }
 
-    void toggleBreathKungFu(BreathKungFu newBreath) {
+    public void toggleBreathKungFu(BreathKungFu newBreath) {
         if (newBreath.nameEquals(breathKungFu)) {
             breathKungFu = null;
         } else {
@@ -455,7 +454,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         sendEvent(SyncActiveKungEvent.of(this));
     }
 
-    void toggleFootKungFu(FootKungFu newKungFu) {
+    public void toggleFootKungFu(FootKungFu newKungFu) {
         if (newKungFu.nameEquals(footKungfu)) {
             this.footKungfu = null;
         } else {
@@ -488,15 +487,15 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         if (isDead())
             return;
         if (kungFu instanceof FootKungFu newKungFu) {
-            state.doubleClickFootKungFu(newKungFu);
+            state.tryToggleFootKungFu(newKungFu);
         } else if (kungFu instanceof ProtectKungFu newProtectKungFu) {
             toggleProtectionKungFu(newProtectKungFu);
         } else if (kungFu instanceof BreathKungFu newBreath) {
-            state.doubleClickBreathKungFu(newBreath);
+            state.tryToggleBreathKungFu(newBreath);
         } else if (kungFu instanceof AssistantKungFu newAssistant) {
             toggleAssistantKungFu(newAssistant);
         } else if (kungFu instanceof AttackKungFu newAttack) {
-            state.doubleClickAttackKungFu(newAttack);
+            state.tryToggleAttackKungFu(newAttack);
         }
         syncActiveKungFuList();
     }
@@ -530,11 +529,18 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         attackKungFu.startAttack(this, event, target);
     }
 
+
+    public void acceptAttack(Npc target) {
+        combatController = null;
+        target.findAction(HurtAbility.class)
+                .ifPresent(a -> combatController = CombatController.createAndStart(this, target));
+    }
+
+
     @Override
     public void attack(Npc target) {
         Validate.notNull(target);
-        target.findAction(HurtAbility.class)
-                .ifPresent(a -> combatController = CombatController.createAndStart(this, target));
+        state.attack(target);
     }
 
     private void move(ClientMovementEvent event) {
@@ -604,7 +610,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
     @Override
     public void move(MoveInput moveInput) {
-        state.move(moveInput);
+        state.tryMove(moveInput);
     }
 
     @Override
@@ -699,8 +705,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
 
     @Override
     public void sendEvent(PlayerEvent event) {
-        if (eventListener != null)
-            eventListener.onEvent(event);
+        eventListener.onEvent(event);
     }
 
     @Override
@@ -813,7 +818,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         }
         realm = null;
         clearFightingEntity();
-        emitEvent(new PlayerLeftEvent(this));
+        //emitEvent(new PlayerLeftEvent(this));
     }
 
     @Override
@@ -909,7 +914,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         setRegenerateTimer();
         var newYY = yinYang.accumulate(DEFAULT_REGENERATE_SECONDS);
         if (newYY.hasHigherLevel(yinYang)) {
-            emitEvent(PlayerGainExpEvent.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
+            // emitEvent(PlayerGainExpEvent.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
         }
         int newAge = newYY.age();
         if (newAge != yinYang.age()) {
@@ -1010,6 +1015,15 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         }
     }
 
+    /**
+     * Return true if we change to attack state.
+     * @param delta
+     * @return
+     */
+    public boolean updateCombat(int delta) {
+        return combatController != null && combatController.update(delta);
+    }
+
     @Override
     public void update(int delta) {
         cooldown(delta);
@@ -1018,8 +1032,6 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         pillSlots.update(this, delta);
         updateBuff(delta);
         this.state.update(delta);
-        if (combatController != null)
-            combatController.update(delta);
     }
 
     public int recovery() {
@@ -1276,7 +1288,7 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         }
     }
 
-    void changeState(PlayerState playerState) {
+    public void changeState(PlayerState playerState) {
         this.state = playerState;
     }
 
@@ -1458,6 +1470,10 @@ public final class PlayerImpl extends AbstractCreature implements Player,
         this.enemy.registerEventListener(this);
     }
 
+    @Override
+    public void emitEvent(EntityEvent event) {
+        throw new IllegalArgumentException();
+    }
 
     private void clearFightingEntity() {
         if (this.enemy != null) {

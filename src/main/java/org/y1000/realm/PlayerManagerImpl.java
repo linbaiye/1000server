@@ -2,10 +2,7 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.npc.INpc;
-import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.Rope;
 import org.y1000.entities.players.event.*;
@@ -25,11 +22,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 
 
 @Slf4j
-final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implements PlayerEventVisitor,
+final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> implements PlayerEventVisitor,
         PlayerManager, PlayerEventListener, PlayerEventHandler {
 
     private final RealmPlayerConnectionManager connectionManager;
@@ -105,10 +101,12 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 //        log.debug("Player {} logged in.", player);
     }
 
-    private void sendToNoSelfVisiblePlayers(Entity source, I2ClientMessage message) {
-        getAoiManager().filterNoSelfVisibleEntities(source, Player.class)
-                .forEach(p -> sendTo(p, message));
+    public void sendToVisiblePlayersAndSelf(Player source, I2ClientMessage message) {
+        sendToVisiblePlayers(source, message);
+        sendTo(source, message);
     }
+
+
 
     private void doLogout(Player player) {
         if (player == null) {
@@ -117,9 +115,9 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         // Need to update first least losing realm id.
         playerRepository.update(player);
         player.leaveRealm();
-        remove(player);
-        sendToNoSelfVisiblePlayers(player, new RemoveEntityMessage(player.id()));
+        sendToVisiblePlayers(player, new RemoveEntityMessage(player.id()));
         connectionManager.remove(player).ifPresent(Connection::tryClose);
+        remove(player);
     }
 
     @Override
@@ -129,12 +127,16 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         }
         find(login.playerId()).ifPresent(this::doLogout);
         connectionManager.add(player, login.connection());
-        add(player);
         player.joinRealm(realm, this);
         sendTo(player, PlayerJoinRealmMessage.of(player));
-        sendToNoSelfVisiblePlayers(player, player.captureSnapshot());
-        getAoiManager().filterNoSelfVisibleEntities(player, ActiveEntity.class)
-                .forEach(e -> sendTo(player, e.captureSnapshot()));
+        add(player);
+        I2ClientMessage snapshot = player.captureSnapshot();
+        getAoiManager().filterVisibleEntities(player, Entity.class).forEach(entity -> {
+            sendTo(player, entity.captureSnapshot());
+            if (entity instanceof Player another) {
+                sendTo(another, snapshot);
+            }
+        });
     }
 
     @Override
@@ -321,7 +323,6 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
 //        } catch (Exception e) {
 //            log.error("Failed to handle event.", e);
 //        }
-
     }
 
 
@@ -329,11 +330,24 @@ final class PlayerManagerImpl extends AbstractActiveEntityManager<Player> implem
         connectionManager.sendTo(player, message);
     }
 
-    @Override
-    public void sendToPlayers(Predicate<? super Player> filter, I2ClientMessage message) {
-        allPlayers().stream().filter(filter)
-                .forEach(player -> sendTo(player, message));
+
+    public void onMoved(Player player) {
+        Set<Entity> affected = getAoiManager().update(player);
+        affected.forEach(entity -> {
+            if (!entity.canBeSeenAt(player.coordinate())) {
+                sendTo(player, new RemoveEntityMessage(entity.id()));
+                if (entity instanceof Player another) {
+                    sendTo(another, new RemoveEntityMessage(player.id()));
+                }
+            } else {
+                getMessageSender().sendTo(player, entity.captureSnapshot());
+                if (entity instanceof Player another) {
+                    getMessageSender().sendTo(another, player.captureSnapshot());
+                }
+            }
+        });
     }
+
 
     @Override
     public void onEvent(PlayerEvent event) {

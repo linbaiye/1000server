@@ -291,8 +291,8 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     }
 
     @Override
-    public int computeEffectId() {
-        return level() == 9999 ? effectIdPrefix() +  parameters.effectId() : -1;
+    public String computeEffectId() {
+        return level() == 9999 ? "_" + (effectIdPrefix() +  parameters.effectId()) : "";
     }
 
     @Override

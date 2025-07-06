@@ -25,15 +25,7 @@ public final class INpcMoveEvent extends AbstractCreatureEvent {
 
     @Override
     protected Packet buildPacket() {
-        return Packet.newBuilder()
-                .setMonsterMove(MonsterMoveEventPacket.newBuilder()
-                        .setId(source().id())
-                        .setDirection(direction.value())
-                        .setSpeed(speed)
-                        .setX(x)
-                        .setY(y)
-                        .build())
-                .build();
+        return null;
     }
 
     @Override

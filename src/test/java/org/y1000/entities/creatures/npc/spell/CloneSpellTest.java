@@ -17,7 +17,6 @@ class CloneSpellTest {
         var npc = Mockito.mock(INpc.class);
         when(npc.currentLife()).thenReturn(1);
         when(npc.maxLife()).thenReturn(3);
-        when(npc.oldStateEnum()).thenReturn(OldPlayerStateEnum.IDLE);
         assertTrue(spell.canCast(npc));
         when(npc.currentLife()).thenReturn(2);
         assertFalse(spell.canCast(npc));

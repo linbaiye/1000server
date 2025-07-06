@@ -50,7 +50,7 @@ public interface AttackKungFu extends KungFu {
 
     String swingSound();
 
-    int computeEffectId();
+    String computeEffectId();
 
     AttackAction computeAttackAction();
 
