@@ -44,7 +44,7 @@ public abstract class AbstractCreature extends AbstractActiveEntity implements C
 
 
     protected boolean isDodged(int attackerHit) {
-        var rand = ThreadLocalRandom.current().nextInt(0, attackerHit + 75 + avoidance());
+        var rand = ThreadLocalRandom.current().nextInt(0, attackerHit + avoidance());
         return rand < avoidance();
     }
 

@@ -20,4 +20,10 @@ class PlayerHelloState extends AbstractPlayerState {
     public void equip(int slot, Equipment equipment) {
         player().tryEquipFromSlot(slot, equipment);
     }
+
+    @Override
+    public void handleAfterHurt() {
+        player().changeState(PlayerStandState.idle(player()));
+        player().emitEvent(PlayerChangeStateEvent.allVisible(player()));
+    }
 }

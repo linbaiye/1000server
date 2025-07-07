@@ -98,6 +98,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     private PlayerEventListener eventListener;
 
+    private static final int Accuracy = 75;
+
     private CombatController combatController;
 
 //    private static final Map<OldPlayerStateEnum, Integer> STATE_MILLIS = new HashMap<>() {{
@@ -1323,6 +1325,30 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     @Override
     public PlayerStateEnum stateEnum() {
         return state.playerStateEnum();
+    }
+
+    @Override
+    public int accuracy() {
+        return innateAttributesProvider.hit();
+    }
+
+    @Override
+    public int attacked(Damage damage, int accuracy) {
+        if (isDodged(accuracy))
+            return -1;
+        if (life.currentValue() <= 0)
+            return -1;
+        int old = life.currentValue();
+        takeDamage(damage);
+        cooldownRecovery();
+        hurtSound().ifPresent(this::sendSound);
+        changeState(PlayerHurtState.create(this, state));
+        sendEvent(PlayerChangeStateEvent.allVisible(this));
+        return Math.max(1, old - life.currentValue());
+    }
+
+    void sendSound(String s) {
+        sendEvent(PlayerSoundEvent.sound(this, s));
     }
 
     @Override

@@ -14,6 +14,7 @@ public interface ViolentCreature extends Creature {
 
     int hit();
 
+
     Damage damage();
 
     /**

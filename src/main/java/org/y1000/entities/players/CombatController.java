@@ -2,8 +2,8 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.PlayerSoundEvent;
-import org.y1000.entities.creatures.npc.HurtAction;
 import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.NpcHurtAbility;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerAttackEvent;
@@ -14,13 +14,13 @@ final class CombatController {
     private final Npc enemy;
     private final PlayerImpl player;
     private int resourceNoticeTimer;
-    private final HurtAction hurtAbility;
+    private final NpcHurtAbility hurtAbility;
 
     CombatController(PlayerImpl player, Npc target) {
         this.enemy = target;
         this.player = player;
         resourceNoticeTimer = 0;
-        hurtAbility = target.findAction(HurtAction.class).orElseThrow(RuntimeException::new);
+        hurtAbility = target.findAbility(NpcHurtAbility.class).orElseThrow(RuntimeException::new);
     }
 
     private void readyToFight() {
@@ -38,7 +38,7 @@ final class CombatController {
         player.sendEvent(message);
         kungFu.consumeAttributes(player);
         player.cooldownAttack();
-        int hit = hurtAbility.attackedBy(player, player.damage(), player.hit());
+        int hit = hurtAbility.attacked(player, player.damage(), player.hit());
         player.sendEvent(PlayerSoundEvent.sound(player, hit == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
     }
 
@@ -50,7 +50,7 @@ final class CombatController {
             readyToFight();
             return;
         }
-        if (!hurtAbility.canBeAttackedNow()) {
+        if (!hurtAbility.canBeAttacked()) {
             log.debug("Enemy can't be attacked now.");
             readyToFight();
             return;
@@ -84,7 +84,7 @@ final class CombatController {
             }
             return false;
         }
-        if (!hurtAbility.canBeAttackedNow()) {
+        if (!hurtAbility.canBeAttacked()) {
             return false;
         }
         if (player.attackKungFu().isWithinAttackRange(player.coordinate(), enemy.coordinate())) {

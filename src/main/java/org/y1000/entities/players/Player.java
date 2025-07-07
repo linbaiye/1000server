@@ -196,5 +196,9 @@ public interface Player extends ViolentCreature {
     default boolean isDead() {
         return stateEnum() == PlayerStateEnum.Die;
     }
+
+    int accuracy();
+
+    int attacked(Damage damage, int accuracy);
 }
 

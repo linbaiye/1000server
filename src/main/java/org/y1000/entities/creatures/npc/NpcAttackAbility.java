@@ -1,8 +1,10 @@
 package org.y1000.entities.creatures.npc;
 
+import org.y1000.entities.players.Damage;
+
 import java.util.Optional;
 
-public final class AttackAbility {
+public final class NpcAttackAbility implements NpcAbility {
 
     private final int attackSpeedMillis;
 
@@ -12,17 +14,21 @@ public final class AttackAbility {
 
     private int recoveryCooldownMillis;
 
-    private final int damage;
+    private final Damage damage;
+
+    private final int accuracy;
 
     private final Optional<String> sound;
 
-    public AttackAbility(int attackSpeedMillis,
-                         int recoveryMillis,
-                         int damage,
-                         String sound) {
-        this.attackSpeedMillis = attackSpeedMillis;
-        this.recoveryMillis = recoveryMillis;
-        this.damage = damage;
+    public NpcAttackAbility(int attackSpeedMillis,
+                            int recoveryMillis,
+                            int bodyDamage,
+                            int hit,
+                            String sound) {
+        this.attackSpeedMillis = attackSpeedMillis + 1500;
+        this.recoveryMillis = recoveryMillis + 700;
+        this.damage = new Damage(bodyDamage, 0, 0, 0);
+        this.accuracy = hit + 75;
         this.sound = Optional.ofNullable(sound);
     }
 
@@ -33,7 +39,7 @@ public final class AttackAbility {
             recoveryCooldownMillis -= delta;
     }
 
-    public boolean isCooldown() {
+    public boolean ableToAttack() {
         return attackCooldownMillis <= 0 && recoveryCooldownMillis <= 0;
     }
 
@@ -41,7 +47,7 @@ public final class AttackAbility {
         recoveryCooldownMillis = recoveryMillis;
     }
 
-    public void cooldownAttackSpeed() {
+    public void cooldownAttack() {
         attackCooldownMillis = attackSpeedMillis;
     }
 
@@ -50,7 +56,25 @@ public final class AttackAbility {
         attackCooldownMillis = 0;
     }
 
+    public Damage damage() {
+        return damage;
+    }
+
     public Optional<String> sound() {
         return sound;
+    }
+
+    public int accuracy() {
+        return accuracy;
+    }
+
+    @Override
+    public boolean update(int delta) {
+        return false;
+    }
+
+    @Override
+    public int apply(Npc npc) {
+        return 0;
     }
 }

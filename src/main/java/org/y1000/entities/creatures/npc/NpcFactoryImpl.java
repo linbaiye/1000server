@@ -5,7 +5,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.MoveAction;
+import org.y1000.entities.creatures.NpcMoveAbility;
 import org.y1000.entities.creatures.monster.*;
 import org.y1000.entities.creatures.npc.AI.*;
 import org.y1000.entities.creatures.npc.interactability.BuyInteractability;
@@ -392,21 +392,24 @@ public final class NpcFactoryImpl implements NpcFactory {
         int turnLength = actionSdb.getActionLength(animate, NpcActionEnum.Turn);
         int hurtLength = actionSdb.getActionLength(animate, NpcActionEnum.Hurt);
         actions.add(new IdleAction(idleLength));
-        actions.add(new MoveAction(moveLength, monsterSdb.getWalkSpeed(name)));
+        actions.add(new NpcMoveAbility(moveLength, monsterSdb.getWalkSpeed(name)));
         actions.add(new TurnAction(turnLength));
-        actions.add(new HurtAction(turnLength, monsterSdb.getArmor(name), 0, monsterSdb.getLife(name), hurtLength));
+        actions.add(new HurtAction(hurtLength));
         return actions;
     }
 
     private Set<Object> abilities(String name) {
         Set<Object> abilities = new HashSet<>();
         if (monsterSdb.attack(name)) {
-            AttackAbility ability = new AttackAbility(monsterSdb.getAttackSpeed(name) * Realm.STEP_MILLIS,
+            NpcAttackAbility ability = new NpcAttackAbility(monsterSdb.getAttackSpeed(name) * Realm.STEP_MILLIS,
                     monsterSdb.getRecovery(name) * Realm.STEP_MILLIS, monsterSdb.getDamage(name),
+                    monsterSdb.getAccuracy(name),
                     monsterSdb.getSoundAttack(name));
             abilities.add(ability);
         }
-        if (monsterSdb.)
+        NpcHurtAbility hurtAbility = new NpcHurtAbility(monsterSdb.getArmor(name), monsterSdb.getAvoid(name), monsterSdb.getSoundStructed(name),
+                monsterSdb.getLife(name));
+        abilities.add(hurtAbility);
         return abilities;
     }
 
@@ -418,7 +421,8 @@ public final class NpcFactoryImpl implements NpcFactory {
                       Coordinate coordinate,
                       NpcEventListener listener) {
         Npc npc = new Npc(id,
-                new HashSet<>(), monsterSdb.getViewName(idName),
+                abilities(idName),
+                monsterSdb.getViewName(idName),
                 coordinate,
                 buildActions(idName),
                 listener, realmMap,
@@ -426,7 +430,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 monsterSdb.getShape(idName),
                 idName);
         WanderingAI wanderingAI = new WanderingAI(npc, monsterSdb.getActionWidth(idName));
-        npc.findAction(HurtAction.class).ifPresent(hurtAbility -> hurtAbility.setTrigger(wanderingAI::onAttacked));
+        npc.findAbility(NpcHurtAbility.class).ifPresent(a -> a.setHurtTrigger(wanderingAI::onAttacked));
         npc.changeAI(wanderingAI);
         return npc;
     }

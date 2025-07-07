@@ -28,6 +28,12 @@ class PlayerAttackState extends AbstractPlayerState {
     }
 
     @Override
+    public void handleAfterHurt() {
+        player().changeState(PlayerStandState.fightStand(player()));
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+    }
+
+    @Override
     public void equip(int slot, Equipment equipment) {
         var attack = player().attackKungFu();
         player().tryEquipFromSlot(slot, equipment);

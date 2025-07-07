@@ -1,7 +1,6 @@
 package org.y1000.entities.players.event;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.event.EntitySoundEvent;

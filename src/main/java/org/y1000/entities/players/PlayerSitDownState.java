@@ -27,7 +27,7 @@ final class PlayerSitDownState extends AbstractPlayerState implements PlayerEqui
 
     @Override
     public void handleAfterHurt() {
-        elapse(StateMillis);
+        reset();
         player().changeState(this);
         player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }

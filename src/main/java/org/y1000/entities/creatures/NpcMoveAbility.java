@@ -1,7 +1,6 @@
 package org.y1000.entities.creatures;
 
 
-import lombok.Getter;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.entities.creatures.npc.Npc;
@@ -11,9 +10,10 @@ import org.y1000.entities.creatures.npc.event.NpcMovedEvent;
 import org.y1000.util.Coordinate;
 
 
-public class MoveAction implements NpcAction {
+public class NpcMoveAbility implements NpcAction {
 
     private final int animationMillis;
+
     private final int walkSpeed;
 
     private int thresholdMillis;
@@ -24,12 +24,9 @@ public class MoveAction implements NpcAction {
 
     private Direction direction;
 
-    @Getter
-    private boolean moved;
-
     private Npc npc;
 
-    public MoveAction(int animationMillis, int walkSpeed) {
+    public NpcMoveAbility(int animationMillis, int walkSpeed) {
         this.animationMillis = animationMillis;
         this.walkSpeed = walkSpeed;
     }
@@ -51,10 +48,8 @@ public class MoveAction implements NpcAction {
         }
         if (!npc.getRealmMap().movable(start.moveBy(direction))) {
             npc.setCoordinate(start);
-            moved = false;
         } else {
             npc.setCoordinate(start.moveBy(direction));
-            moved = true;
         }
         npc.sendEvent(NpcMovedEvent.of(npc));
         return true;

@@ -1,9 +1,11 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.MoveAction;
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.creatures.NpcMoveAbility;
 import org.y1000.entities.creatures.monster.NpcActionEnum;
 import org.y1000.entities.creatures.npc.AI.AiPathUtil;
+import org.y1000.entities.players.MoveAction;
 import org.y1000.util.Coordinate;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -54,7 +56,7 @@ public final class WanderingAI implements NpcAI {
             return;
         }
         if (dir == npc.direction()) {
-            npc.findAction(MoveAction.class).ifPresent(moveAction -> {
+            npc.findAction(NpcMoveAbility.class).ifPresent(moveAction -> {
                 currentAction = moveAction;
                 if (!moveAction.tryNormalMove(npc, dir)) {
                     log.debug("{} no movable, reset destination .", target);
@@ -89,31 +91,25 @@ public final class WanderingAI implements NpcAI {
     }
 
 
-
-    public void onAttacked(HurtAction action) {
-        if (currentAction instanceof MoveAction moveAction) {
+    public void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
+        if (currentAction instanceof NpcMoveAbility moveAction) {
             moveAction.interrupt(npc);
         }
-        if (action.getCurrentLife() == 0) {
+        if (ability.getCurrentLife() == 0) {
             npc.findAction(DieAction.class).ifPresent(dieAbility -> dieAbility.die(npc));
             return;
         }
-        npc.findAction(AttackAction.class)
-                .ifPresentOrElse(a -> npc.changeAI(new FightAI(npc, currentAction, action)), () -> swallowAttacked(action));
+        npc.findAbility(NpcAttackAbility.class)
+                .ifPresentOrElse(a -> npc.changeAI(new CombatAI(npc, currentAction, attacker)), this::swallowAttacked);
     }
 
-    private void swallowAttacked(HurtAction action)  {
-        currentAction = action;
-        action.hurt(npc, currentAction);
+
+    private void swallowAttacked()  {
     }
 
 
     private void onActionDone(NpcActionEnum actionEnum) {
-        switch (actionEnum) {
-            case Idle -> nextMove();
-            case Move -> onMoveDone();
-            case Turn -> onTurnDone();
-        }
+
     }
 
 
