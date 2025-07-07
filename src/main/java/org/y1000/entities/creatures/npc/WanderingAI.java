@@ -89,7 +89,8 @@ public final class WanderingAI implements NpcAI {
     }
 
 
-    public void onAttacked(HurtAbility action) {
+
+    public void onAttacked(HurtAction action) {
         if (currentAction instanceof MoveAction moveAction) {
             moveAction.interrupt(npc);
         }
@@ -97,15 +98,13 @@ public final class WanderingAI implements NpcAI {
             npc.findAction(DieAction.class).ifPresent(dieAbility -> dieAbility.die(npc));
             return;
         }
-        npc.findAction(HurtAbility.class).ifPresent(hurtAbility -> {
-            if (currentAction instanceof HurtAbility hurtAbility1) {
-                hurtAbility.hurt(npc, hurtAbility1.getPreviousAction());
-            } else {
-                action.hurt(npc, currentAction.actionEnum());
-            }
-            currentAction = action;
-        });
-        npc.findAction(AttackAction.class).ifPresent(a -> npc.changeAI(new FightAI(npc)));
+        npc.findAction(AttackAction.class)
+                .ifPresentOrElse(a -> npc.changeAI(new FightAI(npc, currentAction, action)), () -> swallowAttacked(action));
+    }
+
+    private void swallowAttacked(HurtAction action)  {
+        currentAction = action;
+        action.hurt(npc, currentAction);
     }
 
 
@@ -115,7 +114,6 @@ public final class WanderingAI implements NpcAI {
             case Move -> onMoveDone();
             case Turn -> onTurnDone();
         }
-
     }
 
 
@@ -124,7 +122,7 @@ public final class WanderingAI implements NpcAI {
         if (!currentAction.update(delta)) {
             return;
         }
-        if (currentAction instanceof HurtAbility hurtAbility) {
+        if (currentAction instanceof HurtAction hurtAbility) {
             onActionDone(hurtAbility.getPreviousAction());
         } else {
             onActionDone(currentAction.actionEnum());

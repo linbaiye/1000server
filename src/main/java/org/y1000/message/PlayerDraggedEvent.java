@@ -8,7 +8,7 @@ import org.y1000.event.EntityEventVisitor;
 public final class PlayerDraggedEvent extends AbstractPositionEvent {
 
     public PlayerDraggedEvent(Player source) {
-        super(source, source.direction(), source.coordinate(), source.state().playerStateEnum().value());
+        super(source, source.direction(), source.coordinate(), source.stateEnum().value());
     }
 
     @Override

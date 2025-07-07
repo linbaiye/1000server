@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.PlayerSoundEvent;
-import org.y1000.entities.creatures.npc.HurtAbility;
+import org.y1000.entities.creatures.npc.HurtAction;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.kungfu.attack.AttackKungFu;
@@ -14,13 +14,13 @@ final class CombatController {
     private final Npc enemy;
     private final PlayerImpl player;
     private int resourceNoticeTimer;
-    private final HurtAbility hurtAbility;
+    private final HurtAction hurtAbility;
 
     CombatController(PlayerImpl player, Npc target) {
         this.enemy = target;
         this.player = player;
         resourceNoticeTimer = 0;
-        hurtAbility = target.findAction(HurtAbility.class).orElseThrow(RuntimeException::new);
+        hurtAbility = target.findAction(HurtAction.class).orElseThrow(RuntimeException::new);
     }
 
     private void readyToFight() {
@@ -43,7 +43,7 @@ final class CombatController {
     }
 
     private void start() {
-        player.disableBreathKungNoTip();
+        player.disableBreathAndSync();
         player.disableFootKungFuAndSync();
         if (player.maxCooldown() > 0) {
             log.debug("Cooling down.");

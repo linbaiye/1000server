@@ -331,7 +331,7 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
     }
 
 
-    public void onMoved(Player player) {
+    public void updateAOI(Player player) {
         Set<Entity> affected = getAoiManager().update(player);
         affected.forEach(entity -> {
             if (!entity.canBeSeenAt(player.coordinate())) {

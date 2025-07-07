@@ -9,6 +9,6 @@ public interface PlayerEventHandler extends EntityEventHandler {
 
     void sendToVisiblePlayersAndSelf(Player player, I2ClientMessage message);
 
-    void onMoved(Player player);
+    void updateAOI(Player player);
 
 }

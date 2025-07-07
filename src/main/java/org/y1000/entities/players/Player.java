@@ -1,8 +1,6 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.npc.HurtAbility;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.inventory.Inventory;
@@ -15,10 +13,7 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
-import org.y1000.message.PlayerMessage;
 import org.y1000.message.PlayerEventListener;
-import org.y1000.message.input.ClientAttackEvent;
-import org.y1000.message.input.ClientEvent;
 import org.y1000.message.input.SelfHandleInput;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
@@ -196,11 +191,10 @@ public interface Player extends ViolentCreature {
 
     void sendEvent(PlayerEvent event);
 
-    PlayerState state();
+    PlayerStateEnum stateEnum();
 
     default boolean isDead() {
-        return state().playerStateEnum() == PlayerStateEnum.Die;
+        return stateEnum() == PlayerStateEnum.Die;
     }
-
 }
 

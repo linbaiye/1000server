@@ -19,11 +19,11 @@ import org.y1000.entities.creatures.npc.spell.ShiftSpell;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.kungfu.KungFuType;
 import org.y1000.quest.Quest;
+import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
-import org.y1000.util.Rectangle;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -394,9 +394,22 @@ public final class NpcFactoryImpl implements NpcFactory {
         actions.add(new IdleAction(idleLength));
         actions.add(new MoveAction(moveLength, monsterSdb.getWalkSpeed(name)));
         actions.add(new TurnAction(turnLength));
-        actions.add(new HurtAbility(turnLength, monsterSdb.getArmor(name), 0, monsterSdb.getLife(name), hurtLength));
+        actions.add(new HurtAction(turnLength, monsterSdb.getArmor(name), 0, monsterSdb.getLife(name), hurtLength));
         return actions;
     }
+
+    private Set<Object> abilities(String name) {
+        Set<Object> abilities = new HashSet<>();
+        if (monsterSdb.attack(name)) {
+            AttackAbility ability = new AttackAbility(monsterSdb.getAttackSpeed(name) * Realm.STEP_MILLIS,
+                    monsterSdb.getRecovery(name) * Realm.STEP_MILLIS, monsterSdb.getDamage(name),
+                    monsterSdb.getSoundAttack(name));
+            abilities.add(ability);
+        }
+        if (monsterSdb.)
+        return abilities;
+    }
+
 
     @Override
     public Npc create(long id,
@@ -405,7 +418,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                       Coordinate coordinate,
                       NpcEventListener listener) {
         Npc npc = new Npc(id,
-                monsterSdb.getViewName(idName),
+                new HashSet<>(), monsterSdb.getViewName(idName),
                 coordinate,
                 buildActions(idName),
                 listener, realmMap,
@@ -413,7 +426,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 monsterSdb.getShape(idName),
                 idName);
         WanderingAI wanderingAI = new WanderingAI(npc, monsterSdb.getActionWidth(idName));
-        npc.findAction(HurtAbility.class).ifPresent(hurtAbility -> hurtAbility.setTrigger(wanderingAI::onAttacked));
+        npc.findAction(HurtAction.class).ifPresent(hurtAbility -> hurtAbility.setTrigger(wanderingAI::onAttacked));
         npc.changeAI(wanderingAI);
         return npc;
     }

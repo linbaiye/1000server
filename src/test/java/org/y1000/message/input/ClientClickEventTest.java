@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
 import org.y1000.entities.players.Player;
-import org.y1000.message.PlayerTextEvent;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -19,7 +18,7 @@ class ClientClickEventTest extends AbstractPlayerUnitTestFixture  {
     void handleClickPlayerEvent() {
         Player clicked = playerBuilder().id(nextId()).build();
         Player source = playerBuilder().id(nextId()).build();
-        source.registerEventListener(eventListener);
+        source.registerEventListener(testingEventListener);
         new ClientClickEvent(clicked.id()).handle(source, clicked);
     }
 

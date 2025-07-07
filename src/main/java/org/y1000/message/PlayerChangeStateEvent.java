@@ -1,5 +1,6 @@
 package org.y1000.message;
 
+import lombok.Getter;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerStateEnum;
 import org.y1000.entities.players.event.AbstractClientMessageEvent;
@@ -9,6 +10,7 @@ import org.y1000.network.gen.PlayerChangeStatePacket;
 
 public final class PlayerChangeStateEvent extends AbstractClientMessageEvent {
 
+    @Getter
     private final boolean includeSelf;
 
     public PlayerChangeStateEvent(Player player, Packet packet, boolean includeSelf) {
@@ -17,7 +19,7 @@ public final class PlayerChangeStateEvent extends AbstractClientMessageEvent {
     }
 
     private static PlayerChangeStateEvent of(Player player, boolean includeSelf) {
-        PlayerStateEnum playerStateEnum = player.state().playerStateEnum();
+        PlayerStateEnum playerStateEnum = player.stateEnum();
         PlayerChangeStatePacket changeStatePacket = PlayerChangeStatePacket.newBuilder().setState(playerStateEnum.value())
                 .setId(player.id()).setDirection(player.direction().value()).build();
         var packet = Packet.newBuilder().setPlayerChangeState(changeStatePacket).build();

@@ -5,7 +5,7 @@ import org.y1000.message.PlayerChangeStateEvent;
 
 class PlayerHelloState extends AbstractPlayerState {
 
-    public PlayerHelloState(PlayerInternal player) {
+    public PlayerHelloState(PlayerImpl player) {
         super(player, PlayerStateEnum.Hello, 750);
     }
     @Override

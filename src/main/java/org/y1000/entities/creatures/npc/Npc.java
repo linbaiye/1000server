@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
-import org.y1000.entities.players.PlayerImpl;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.message.NpcSnapshot;
 import org.y1000.realm.RealmMap;
@@ -15,7 +14,8 @@ import java.util.*;
 
 public class Npc extends AbstractActiveEntity {
 
-    private final Set<NpcAction> abilities;
+    private final Set<NpcAction> actions;
+    private final Set<Object> abilities;
     private final NpcEventListener listener;
     private Coordinate coordinate;
 
@@ -43,6 +43,7 @@ public class Npc extends AbstractActiveEntity {
     private final String idName;
 
     public Npc(long id,
+               Set<Object> abilities,
                String viewName,
                Coordinate coordinate,
                Set<NpcAction> actions,
@@ -52,7 +53,8 @@ public class Npc extends AbstractActiveEntity {
                String shape,
                String idName) {
         super(id);
-        this.abilities = actions;
+        this.abilities = abilities;
+        this.actions = actions;
         this.listener = listener;
         this.realmMap = realmMap;
         this.viewName = viewName != null ? viewName : "";
@@ -70,7 +72,7 @@ public class Npc extends AbstractActiveEntity {
     }
 
     public <A extends NpcAction> Optional<A> findAction(Class<A> type) {
-        return abilities.stream()
+        return actions.stream()
                 .filter(a -> type.isAssignableFrom(a.getClass()))
                 .findFirst().map(type::cast);
     }
@@ -84,10 +86,15 @@ public class Npc extends AbstractActiveEntity {
         ai.update(delta);
     }
 
-
     @Override
     public Coordinate coordinate() {
         return coordinate;
+    }
+
+    public <AB> Optional<AB> findAbility(Class<AB> type) {
+        return abilities.stream()
+                .filter(a -> type.isAssignableFrom(a.getClass()))
+                .findFirst().map(type::cast);
     }
 
     public Direction direction() {
@@ -98,7 +105,6 @@ public class Npc extends AbstractActiveEntity {
         this.coordinate = coordinate;
         realmMap.occupy(this);
     }
-
 
     @Override
     public boolean equals(Object o) {

@@ -7,7 +7,7 @@ import org.y1000.message.PlayerChangeStateEvent;
 
 final class PlayerStandUpState extends AbstractPlayerState {
 
-    public PlayerStandUpState(PlayerInternal player) {
+    public PlayerStandUpState(PlayerImpl player) {
         super(player, PlayerStateEnum.StandUp, 750);
     }
 
@@ -25,7 +25,13 @@ final class PlayerStandUpState extends AbstractPlayerState {
     }
 
     @Override
+    public void handleAfterHurt() {
+        player().changeState(PlayerStandState.idle(player()));
+        player().emitEvent(PlayerChangeStateEvent.allVisible(player()));
+    }
+
+    @Override
     public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
-        player().tryUseAttackKungFu(attackKungFu);
+        player().tryChangeAttackKung(attackKungFu);
     }
 }

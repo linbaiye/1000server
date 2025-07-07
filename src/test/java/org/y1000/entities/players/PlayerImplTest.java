@@ -4,37 +4,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.entities.AttackableEntity;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.event.CreatureHurtEvent;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.creatures.monster.Monster;
 import org.y1000.entities.players.event.*;
-import org.y1000.exp.ExperienceUtil;
 import org.y1000.item.*;
 import org.y1000.kungfu.*;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.inventory.Inventory;
+import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.kungfu.attack.QuanfaKungFu;
-import org.y1000.kungfu.attack.SwordKungFu;
-import org.y1000.kungfu.breath.BreathKungFu;
-import org.y1000.kungfu.protect.ProtectKungFu;
-import org.y1000.kungfu.protect.ProtectionParameters;
-import org.y1000.message.InputResponseMessage;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.PositionType;
-import org.y1000.message.RightClickType;
+import org.y1000.message.SyncActiveKungEvent;
 import org.y1000.message.input.*;
-import org.y1000.message.input.input.RightMouseClick;
-import org.y1000.message.serverevent.OldPlayerEquipEvent;
-import org.y1000.message.serverevent.TextMessage;
-import org.y1000.message.serverevent.UpdateInventorySlotEvent;
-import org.y1000.network.gen.*;
-import org.y1000.realm.Realm;
-import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 
@@ -55,6 +34,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     public void setUp() {
         setup();
         inventory = player.inventory();
+        TestingPlayerEventListener.Instance.clear();
     }
 
 
@@ -67,40 +47,108 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
 
     private void attachListener(PlayerImpl.PlayerImplBuilder builder) {
-        eventListener = new TestingEventListener();
+        testingEventListener = new TestingEventListener();
         player = builder.build();
-        player.registerEventListener(eventListener);
+        player.registerEventListener(testingEventListener);
     }
 
     private PassiveMonster createMonster(Coordinate coordinate) {
         return monsterBuilder().coordinate(coordinate).realmMap(player.realmMap()).build();
     }
 
+
     @Test
-    void hat() {
-        player = playerBuilder().male(true).hat(itemFactory.createHat("男子斗笠")).build();
-        assertEquals("男子斗笠", player.hat().get().name());
-        player.handleClientEvent(new ClientUnequipEvent(EquipmentType.HAT));
-        assertTrue(player.hat().isEmpty());
+    void tryChangeAttackKung_whenNoWeapon() {
+        assertFalse(player.tryChangeAttackKung(player.kungFuBook().findUnnamedAttack(AttackKungFuType.SWORD)));
+        var playerEvent = eventListener.removeFirst(PlayerTextMessage.class);
+        assertEquals("没有对应的武器。", playerEvent.toPacket().getText().getText());
+        assertFalse(player.tryChangeAttackKung(player.attackKungFu()));
+
     }
 
     @Test
-    void chest() {
-        player = playerBuilder().chest(itemFactory.createChest("男子黄龙弓服")).build();
-        assertEquals("男子黄龙弓服", player.chest().get().name());
-        player.handleClientEvent(new ClientUnequipEvent(EquipmentType.CHEST));
-        assertTrue(player.chest().isEmpty());
+    void tryChangeAttackKung_whenInventoryFull() {
+        for (int i = 0; i < player.inventory().capacity(); i++)
+            player.inventory().put(itemFactory.createItem("长枪"));
+        player.tryChangeAttackKung(player.kungFuBook().findUnnamedAttack(AttackKungFuType.SPEAR));
+        // make inventory full.
+        player.inventory().put(itemFactory.createItem("长枪"));
+        eventListener.clear();
+        assertFalse(player.tryChangeAttackKung(player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist)));
+        PlayerTextMessage message = eventListener.removeFirst(PlayerTextMessage.class);
+        assertEquals("物品栏已满，无法卸下武器。", message.toPacket().getText().getText());
     }
 
     @Test
-    void boot() {
-        var boot = itemFactory.createBoot("男子木屐");
-        player = playerBuilder().boot(boot).build();
-        assertEquals("男子木屐", player.boot().get().name());
-        player.handleClientEvent(new ClientUnequipEvent(EquipmentType.BOOT));
-        assertTrue(player.boot().isEmpty());
+    void tryChangeAttackKung_whenNeedToUnequipWeapon() {
+        player.inventory().put(itemFactory.createItem("长剑"));
+        assertTrue(player.tryChangeAttackKung(player.kungFuBook().findUnnamedAttack(AttackKungFuType.SWORD)));
+        assertTrue(player.weapon().isPresent());
+        assertTrue(player.inventory().findWeapon(AttackKungFuType.SWORD).isEmpty());
+        eventListener.clear();
+        assertTrue(player.tryChangeAttackKung(player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist)));
+        assertTrue(player.inventory().findWeapon(AttackKungFuType.SWORD).isPresent());
+        assertTrue(player.weapon().isEmpty());
+        assertTrue(eventListener.findFirst(PlayerUnequipEvent.class).isPresent());
     }
 
+    @Test
+    void tryChangeAttackKung_whenOk() {
+        KungFu kungFu = kungFuFactory.create("无影脚");
+        player.kungFuBook().addToBasic(kungFu);
+        assertTrue(player.tryChangeAttackKung((AttackKungFu) kungFu));
+        assertTrue(eventListener.findFirst(PlayerSayEvent.class).isPresent());
+
+        eventListener.clear();
+        player.inventory().put(itemFactory.createItem("长剑"));
+        assertTrue(player.tryChangeAttackKung(player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist)));
+        assertTrue(eventListener.findFirst(PlayerSayEvent.class).isPresent());
+    }
+
+    @Test
+    void tryEquipWeaponFromSlot_whenSexMismatch() {
+        recreatePlayer(playerBuilder().male(true));
+        var equip = itemFactory.createEquipment("女子长发");
+        int slot = player.inventory().put(equip);
+        assertFalse(player.tryEquipFromSlot(slot, equip));
+        var message = eventListener.removeFirst(PlayerTextMessage.class);
+        assertEquals("你无法使用该装备。", message.toPacket().getText().getText());
+    }
+
+    @Test
+    void tryEquipWeaponFromSlot_whenSwitchNoneWeapon() {
+        recreatePlayer(playerBuilder().male(true).hair((SexualEquipment) itemFactory.createEquipment("男子短发")));
+        var equip = itemFactory.createEquipment("男子长发");
+        int slot = player.inventory().put(equip);
+        assertTrue(player.tryEquipFromSlot(slot, equip));
+        assertEquals("男子短发", player.inventory().getItem(slot).name());
+        assertEquals("男子长发", player.hair().get().name());
+        assertTrue(eventListener.findFirst(PlayerEquipEvent.class).isPresent());
+        assertTrue(eventListener.findFirst(InventoryUpdatedEvent.class).isPresent());
+    }
+
+    @Test
+    void tryEquipWeaponFromSlot_whenCompatibleWithKungFu() {
+        player.tryChangeAttackKung(player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist));
+        var equip = itemFactory.createEquipment("黄金手套");
+        int slot = player.inventory().put(equip);
+        assertTrue(player.tryEquipFromSlot(slot, equip));
+        assertTrue(eventListener.findFirst(PlayerEquipEvent.class).isPresent());
+        assertTrue(eventListener.findFirst(InventoryUpdatedEvent.class).isPresent());
+    }
+
+    @Test
+    void tryEquipWeaponFromSlot_whenIncompatibleWithKungFu() {
+        player.tryChangeAttackKung(player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist));
+        var equip = itemFactory.createEquipment("长剑");
+        int slot = player.inventory().put(equip);
+        assertTrue(player.tryEquipFromSlot(slot, equip));
+        assertTrue(eventListener.findFirst(PlayerEquipEvent.class).isPresent());
+        assertTrue(eventListener.findFirst(InventoryUpdatedEvent.class).isPresent());
+        assertTrue(eventListener.findFirst(SyncActiveKungEvent.class).isPresent());
+        assertTrue(eventListener.findFirst(PlayerSayEvent.class).isPresent());
+        assertEquals(player.attackKungFu(), player.kungFuBook().findUnnamedAttack(AttackKungFuType.SWORD));
+    }
 
     /*
     @Test

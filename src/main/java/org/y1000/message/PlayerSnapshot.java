@@ -3,7 +3,6 @@ package org.y1000.message;
 import org.y1000.entities.players.MoveAction;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
-import org.y1000.entities.players.PlayerMoveState;
 import org.y1000.entities.players.event.PlayerEquipEvent;
 import org.y1000.network.gen.*;
 
@@ -18,16 +17,12 @@ public final class PlayerSnapshot implements I2ClientMessage {
         this.packet = packet;
     }
 
-    private static PlayerSnapshotPacket buildSnapshot(Player player) {
-        MoveAction moveAction = null;
-        if (player.state() instanceof PlayerMoveState moveState) {
-            moveAction = moveState.getMoveAction();
-        }
+    private static PlayerSnapshotPacket buildSnapshot(Player player, int elapsed, MoveAction moveAction) {
         var coordinate = player.coordinate();
         CreatureBaseInfoPacket baseInfoSnapshot = CreatureBaseInfoPacket.newBuilder()
                 .setY(coordinate.y())
                 .setX(coordinate.x())
-                .setElapsedMillis(player.state().elapsedMillis())
+                .setElapsedMillis(elapsed)
                 .setDirection(player.direction().value())
                 .setId(player.id())
                 .build();
@@ -36,15 +31,15 @@ public final class PlayerSnapshot implements I2ClientMessage {
         return PlayerSnapshotPacket.newBuilder()
                 .setMoveAction(moveAction != null ? moveAction.value() : -1)
                 .setBaseInfo(baseInfoSnapshot)
-                .setState(player.state().playerStateEnum().value())
+                .setState(player.stateEnum().value())
                 .setMale(player.isMale())
                 .addAllEquipments(equipments)
                 .build();
     }
 
-    public static PlayerSnapshot FromPlayer(PlayerImpl player) {
+    public static PlayerSnapshot build(PlayerImpl player, int elapsed, MoveAction moveAction) {
         return new PlayerSnapshot(Packet.newBuilder()
-                .setPlayerSnapshot(buildSnapshot(player)).build());
+                .setPlayerSnapshot(buildSnapshot(player, elapsed, moveAction)).build());
     }
 
     @Override

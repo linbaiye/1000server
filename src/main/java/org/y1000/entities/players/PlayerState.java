@@ -9,7 +9,7 @@ import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.message.input.MoveInput;
 import org.y1000.message.input.TurnInput;
 
-public interface PlayerState extends CreatureState {
+interface PlayerState extends CreatureState {
 
     PlayerStateEnum playerStateEnum();
 
@@ -53,5 +53,7 @@ public interface PlayerState extends CreatureState {
     default void attack(Npc target) {
 
     }
+
+    void handleAfterHurt();
 
 }

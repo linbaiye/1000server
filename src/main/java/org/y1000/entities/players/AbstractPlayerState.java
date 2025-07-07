@@ -5,11 +5,11 @@ import org.y1000.entities.creatures.AbstractCreatureState;
 
 abstract class AbstractPlayerState extends AbstractCreatureState implements PlayerState {
 
-    private final PlayerInternal player;
+    private final PlayerImpl player;
 
     private final PlayerStateEnum stateEnum;
 
-    public AbstractPlayerState(PlayerInternal player,
+    public AbstractPlayerState(PlayerImpl player,
                                PlayerStateEnum stateEnum,
                                int stateMillis) {
         super(stateMillis);
@@ -19,7 +19,7 @@ abstract class AbstractPlayerState extends AbstractCreatureState implements Play
         this.stateEnum = stateEnum;
     }
 
-    protected PlayerInternal player() {
+    protected PlayerImpl player() {
         return player;
     }
 

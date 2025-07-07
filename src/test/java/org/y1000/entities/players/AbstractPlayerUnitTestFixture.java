@@ -12,11 +12,13 @@ import org.y1000.realm.RealmMap;
 public abstract class AbstractPlayerUnitTestFixture extends AbstractUnitTestFixture  {
     protected PlayerImpl player;
 
-    protected TestingEventListener eventListener;
+    protected TestingEventListener testingEventListener;
 
     protected RealmMap mockedMap;
 
     protected Realm mockedRealm;
+
+    protected final TestingPlayerEventListener eventListener = TestingPlayerEventListener.Instance;
 
 
     protected void clickBasicFootKungFu() {
@@ -60,11 +62,21 @@ public abstract class AbstractPlayerUnitTestFixture extends AbstractUnitTestFixt
         player.handleClientEvent(new ClientToggleKungFuEvent(2, slot));
     }
 
+    protected void recreatePlayer(PlayerImpl.PlayerImplBuilder builder) {
+        player = builder.build();
+        testingEventListener = new TestingEventListener();
+        mockedRealm = mockAllFlatRealm();
+        eventListener.clear();
+        player.joinRealm(mockedRealm, eventListener);
+        player.registerEventListener(testingEventListener);
+    }
+
     protected void setup() {
         player = playerBuilder().build();
-        eventListener = new TestingEventListener();
+        testingEventListener = new TestingEventListener();
         mockedRealm = mockAllFlatRealm();
-        player.joinRealm(mockedRealm, TestingPlayerEventListener.Instance);
-        player.registerEventListener(eventListener);
+        eventListener.clear();
+        player.joinRealm(mockedRealm, eventListener);
+        player.registerEventListener(testingEventListener);
     }
 }

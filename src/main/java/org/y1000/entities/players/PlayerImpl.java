@@ -8,7 +8,7 @@ import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.creatures.npc.HurtAbility;
+import org.y1000.entities.creatures.npc.HurtAction;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.projectile.Projectile;
@@ -36,8 +36,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 @Slf4j
-public final class PlayerImpl extends AbstractCreature implements PlayerInternal,
-        EntityEventListener, PlayerInputHandler {
+public class PlayerImpl extends AbstractCreature implements Player, EntityEventListener, PlayerInputHandler {
 
     public static final int DEFAULT_REGENERATE_SECONDS = 9;
     private Realm realm;
@@ -230,11 +229,11 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
     }
 
 
-    public void disableBreathKungNoTip() {
-//        if (breathKungFu != null) {
-//            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, breathKungFu));
-//        }
-//        breathKungFu = null;
+    void disableBreathAndSync() {
+        if (breathKungFu != null) {
+            breathKungFu = null;
+            syncActiveKungFuList();
+        }
     }
 
     private void disableAssistantKungFuNoTip() {
@@ -296,32 +295,39 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
     }
 
     private void syncInventoryQuietly() {
-        sendEvent(InventoryEvent.quiet(this));
+        sendEvent(InventoryUpdatedEvent.quiet(this));
     }
 
 
-    private void changeAndSayAttackKungFu(AttackKungFu attackKungFu) {
+    private void changeAndSayAndCooldown(AttackKungFu attackKungFu) {
         this.attackKungFu = attackKungFu;
-        cooldownAttack();
         sendEvent(PlayerSayEvent.say(this, attackKungFu.name()));
+        cooldownAttack();
     }
 
-    public void tryEquipFromSlot(int slotId, Equipment equipment) {
+    /**
+     * Used internally, make sure {@code equipment} is at {@code slot}.
+     * @param slotId
+     * @param equipment
+     * @return
+     */
+    boolean tryEquipFromSlot(int slotId, Equipment equipment) {
         if (equipment instanceof Weapon newWeapon) {
             equipWeaponFromSlot(slotId);
             if (newWeapon.kungFuType() != attackKungFu.getType()) {
-                changeAndSayAttackKungFu(kungFuBook.findUnnamedAttack(newWeapon.kungFuType()));
+                changeAndSayAndCooldown(kungFuBook.findUnnamedAttack(newWeapon.kungFuType()));
                 syncActiveKungFuList();
             }
         }
         else if (equipment instanceof SexualEquipment sexualEquipment && sexualEquipment.isMale() == isMale()) {
             equipArmorFromSlot(slotId);
         } else {
-            sendEvent(PlayerTextMessage.of(this, "你无法使用该物品。"));
-            return;
+            sendText("你无法使用该装备。");
+            return false;
         }
         sendEvent(PlayerEquipEvent.create(this, equipment));
         syncInventoryQuietly();
+        return true;
     }
 
     private boolean unequipAndPutToInventory(EquipmentType type) {
@@ -334,36 +340,50 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
     }
 
 
-    public void tryUseAttackKungFu(AttackKungFu newKungFu) {
-        if (headPercent() < 50) {
-            sendEvent(PlayerTextMessage.of(this, "头部活力不足。"));
-            return;
-        }
+
+    private void sendText(String t) {
+        sendEvent(PlayerTextMessage.of(this,t));
+    }
+
+    /**
+     * Return true if attack kung fu is changed.
+     * @param newKungFu newKungFu to use.
+     * @return
+     */
+    boolean tryChangeAttackKung(AttackKungFu newKungFu) {
         if (newKungFu.nameEquals(attackKungFu)) {
-            return;
+            return false;
+        }
+        if (headPercent() < 50) {
+            sendText("头部活力不足。");
+            return false;
         }
         if (newKungFu.getType() == attackKungFu.getType()) {
-            changeAndSayAttackKungFu(newKungFu);
-            return;
+            changeAndSayAndCooldown(newKungFu);
+            return true;
         }
         int weaponSlot = inventory.findWeaponSlot(newKungFu.getType());
         if (weaponSlot == 0) {
             if (newKungFu.getType() != AttackKungFuType.Fist) {
-                sendEvent(PlayerTextMessage.of(this, "没有对应的武器。"));
-                return;
+                sendText("没有对应的武器。");
+                return false;
+            }
+            if (weapon().isPresent() && inventory.isFull()) {
+                sendText("物品栏已满，无法卸下武器。");
+                return false;
             }
             if (unequipAndPutToInventory(EquipmentType.WEAPON)) {
                 sendEvent(PlayerUnequipEvent.of(this, EquipmentType.WEAPON));
                 syncInventoryQuietly();
             }
-            changeAndSayAttackKungFu(newKungFu);
-            return;
+        } else {
+            Weapon weapon = (Weapon) inventory.getItem(weaponSlot);
+            equipWeaponFromSlot(weaponSlot);
+            sendEvent(PlayerEquipEvent.create(this, weapon));
+            syncInventoryQuietly();
         }
-        Weapon weapon = (Weapon) inventory.getItem(weaponSlot);
-        equipWeaponFromSlot(weaponSlot);
-        sendEvent(PlayerEquipEvent.create(this, weapon));
-        changeAndSayAttackKungFu(newKungFu);
-        syncInventoryQuietly();
+        changeAndSayAndCooldown(newKungFu);
+        return true;
     }
 
 
@@ -405,16 +425,18 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
     }
 
 
-    public void disableFootKungFuAndSync() {
-        footKungfu = null;
-        syncActiveKungFuList();
+    void disableFootKungFuAndSync() {
+        if (footKungfu != null) {
+            footKungfu = null;
+            syncActiveKungFuList();
+        }
     }
 
-    public void stopFight() {
+    void stopFight() {
         combatController = null;
     }
 
-    public void toggleBreathKungFu(BreathKungFu newBreath) {
+    void toggleBreathKungFu(BreathKungFu newBreath) {
         if (newBreath.nameEquals(breathKungFu)) {
             breathKungFu = null;
         } else {
@@ -424,6 +446,7 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
             stopFight();
         }
         sendEvent(PlayerSayEvent.say(this, newBreath.name()));
+        syncActiveKungFuList();
     }
 
     private void toggleProtectionKungFu(ProtectKungFu newProtection) {
@@ -454,17 +477,21 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
         sendEvent(SyncActiveKungEvent.of(this));
     }
 
-    public void toggleFootKungFu(FootKungFu newKungFu) {
+    void toggleFootKungFu(FootKungFu newKungFu) {
         if (newKungFu.nameEquals(footKungfu)) {
             this.footKungfu = null;
         } else {
-            breathKungFu = null;
             this.footKungfu = newKungFu;
         }
-        combatController = null;
+        breathKungFu = null;
+        stopFight();
+        syncActiveKungFuList();
         sendEvent(PlayerSayEvent.say(this, newKungFu.name()));
     }
 
+    boolean movable(Coordinate coordinate) {
+        return realmMap() != null && realmMap().movable(coordinate);
+    }
 
     private void toggleAssistantKungFu(AssistantKungFu newAssistant) {
         if (isDead())
@@ -497,7 +524,6 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
         } else if (kungFu instanceof AttackKungFu newAttack) {
             state.tryToggleAttackKungFu(newAttack);
         }
-        syncActiveKungFuList();
     }
 
 
@@ -532,7 +558,7 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
 
     public void acceptAttack(Npc target) {
         combatController = null;
-        target.findAction(HurtAbility.class)
+        target.findAction(HurtAction.class)
                 .ifPresent(a -> combatController = CombatController.createAndStart(this, target));
     }
 
@@ -623,10 +649,10 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
     public void handleSimpleInput(SimpleInput.Type type) {
         switch (type) {
             case KungFuBook -> sendEvent(KungFuBookEvent.forPlayer(this));
-            case Inventory -> sendEvent(InventoryEvent.forceful(this));
-            case KeyF4 -> state().sayHello();
-            case KeyF3 -> state().sitOrStandUp();
-            case KeyF2 -> state().switchStand();
+            case Inventory -> sendEvent(InventoryUpdatedEvent.forceful(this));
+            case KeyF4 -> state.sayHello();
+            case KeyF3 -> state.sitOrStandUp();
+            case KeyF2 -> state.switchStand();
         }
     }
 
@@ -644,7 +670,7 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
     @Override
     public void swapItem(int slot1, int slot2) {
         if (inventory.swap(slot1, slot2)) {
-            sendEvent(InventoryEvent.forceful(this));
+            sendEvent(InventoryUpdatedEvent.forceful(this));
         }
     }
 
@@ -720,7 +746,7 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
 
     private void onKilled() {
 //        disableFootKungFuNoTip();
-        disableBreathKungNoTip();
+        disableBreathAndSync();
         var oldLevel = revival.level();
         revival = revival.gainExp();
         if (oldLevel != revival.level()) {
@@ -902,7 +928,8 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
 
     @Override
     public I2ClientMessage captureSnapshot() {
-        return PlayerSnapshot.FromPlayer(this);
+        MoveAction action = state instanceof PlayerMoveState moveState ?  moveState.moveAction() : null;
+        return PlayerSnapshot.build(this, state.elapsedMillis(), action);
     }
 
 
@@ -927,11 +954,11 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
             legLife.onAgeIncreased(newAge);
         }
         yinYang = newYY;
-        int halLife =revival.regenerateHalLife(state().playerStateEnum());
+        int halLife =revival.regenerateHalLife(stateEnum());
         armLife.gain(halLife);
         headLife.gain(halLife);
         legLife.gain(halLife);
-        var resource = revival.regenerateResources(state().playerStateEnum());
+        var resource = revival.regenerateResources(stateEnum());
         life.gain(resource);
         gainOuterPower(resource);
         gainInnerPower(resource);
@@ -1288,13 +1315,14 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
         }
     }
 
-    public void changeState(PlayerState playerState) {
+    void changeState(PlayerState playerState) {
         this.state = playerState;
     }
 
+
     @Override
-    public PlayerState state() {
-        return this.state;
+    public PlayerStateEnum stateEnum() {
+        return state.playerStateEnum();
     }
 
     @Override
@@ -1325,7 +1353,7 @@ public final class PlayerImpl extends AbstractCreature implements PlayerInternal
                 "id=" + id() +
                 ", coordinate=" + coordinate() +
                 ", direction=" + direction() +
-                ", state=" + state().playerStateEnum() +
+                ", state=" + stateEnum() +
                 '}';
     }
 

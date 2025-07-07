@@ -9,7 +9,7 @@ import org.y1000.util.Coordinate;
 public final class SetPositionEvent extends AbstractPositionEvent {
 
     public SetPositionEvent(Player entity, Direction direction, Coordinate coordinate) {
-        super(entity, direction, coordinate, entity.state().playerStateEnum().value());
+        super(entity, direction, coordinate, entity.stateEnum().value());
     }
 
     public SetPositionEvent(INpc entity, Direction direction, Coordinate coordinate) {

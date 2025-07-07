@@ -11,17 +11,25 @@ import org.y1000.message.PlayerChangeStateEvent;
 @Slf4j
 final class PlayerSitDownState extends AbstractPlayerState implements PlayerEquipableState {
 
-    public PlayerSitDownState(PlayerInternal player) {
-        super(player, PlayerStateEnum.Sit, 750);
+    private static final int StateMillis = 750;
+    public PlayerSitDownState(PlayerImpl player) {
+        super(player, PlayerStateEnum.Sit, StateMillis);
     }
 
-    public static PlayerSitDownState sit(PlayerInternal player) {
+    public static PlayerSitDownState sit(PlayerImpl player) {
         return new PlayerSitDownState(player);
     }
 
     @Override
     public void update(int delta) {
         elapse(delta);
+    }
+
+    @Override
+    public void handleAfterHurt() {
+        elapse(StateMillis);
+        player().changeState(this);
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
 
     private void stand() {
@@ -53,7 +61,9 @@ final class PlayerSitDownState extends AbstractPlayerState implements PlayerEqui
 
     @Override
     public void attack(Npc target) {
-        player().acceptAttack(target);
+        if (elapsedMillis() >= totalMillis()) {
+            player().acceptAttack(target);
+        }
     }
 
     @Override
@@ -63,6 +73,6 @@ final class PlayerSitDownState extends AbstractPlayerState implements PlayerEqui
 
     @Override
     public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
-        player().tryUseAttackKungFu(attackKungFu);
+        player().tryChangeAttackKung(attackKungFu);
     }
 }

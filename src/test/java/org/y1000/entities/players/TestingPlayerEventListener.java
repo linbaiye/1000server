@@ -19,13 +19,17 @@ public class TestingPlayerEventListener implements PlayerEventListener  {
         eventList.clear();
     }
 
-    public Optional<PlayerEvent> removeFirst() {
-        return eventList.isEmpty()? Optional.empty() : Optional.of(eventList.remove(0));
+    public <T extends PlayerEvent> T removeFirst(Class<T> type) {
+        return type.cast(eventList.remove(0));
     }
-
 
     @Override
     public void onEvent(PlayerEvent event) {
         eventList.add(event);
+    }
+
+    public <T extends PlayerEvent> Optional<T> findFirst(Class<T> type) {
+        return eventList.stream().filter(e -> type.isAssignableFrom(e.getClass()))
+                .findFirst().map(type::cast);
     }
 }

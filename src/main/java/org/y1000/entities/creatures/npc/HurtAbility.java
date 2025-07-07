@@ -2,14 +2,11 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.Getter;
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
-import org.y1000.entities.creatures.npc.event.NpcStartActionEvent;
 import org.y1000.entities.players.Damage;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
-public class HurtAbility extends AbstractNpcAction {
+public final class HurtAbility {
 
     private final int armor;
 
@@ -17,79 +14,38 @@ public class HurtAbility extends AbstractNpcAction {
 
     private final int hurtSound;
 
-    private final int animationMillis;
-
     @Getter
     private int currentLife;
 
     @Getter
     private final int maxLife;
 
-    private Consumer<? super HurtAbility> onTriggered;
+    private HurtTrigger hurtTrigger;
 
+    public interface HurtTrigger {
+        void onHurt(ActiveEntity activeEntity, Damage damage, int hit);
+    }
 
-    @Getter
-    private ActiveEntity trigger;
-
-    private int elapsed;
-
-    @Getter
-    private NpcActionEnum previousAction;
 
     public HurtAbility(int armor,
                        int avoidance,
                        int hurtSound,
-                       int life,
-                       int millis) {
+                       int currentLife,
+                       int maxLife) {
         this.armor = armor;
         this.avoidance = avoidance;
         this.hurtSound = hurtSound;
-        this.animationMillis = millis;
-        this.maxLife = life;
-        this.currentLife = life;
+        this.currentLife = currentLife;
+        this.maxLife = maxLife;
     }
 
-    protected boolean isDodged(int attackerHit) {
-        var rand = ThreadLocalRandom.current().nextInt(0, attackerHit + 75 + avoidance);
-        return rand < avoidance;
+    public void setHurtTrigger(HurtTrigger trigger) {
+        this.hurtTrigger = trigger;
     }
 
-    public void setTrigger(Consumer<? super HurtAbility> t) {
-        this.onTriggered = t;
-    }
-
-    @Override
-    public NpcActionEnum actionEnum() {
-        return NpcActionEnum.Hurt;
-    }
-
-    public boolean canBeAttackedNow() {
-        return true;
-    }
-
-    public void hurt(Npc npc, NpcActionEnum previousAction) {
-        setTimer(animationMillis);
-        this.previousAction = previousAction;
-        npc.sendEvent(NpcStartActionEvent.of(npc, actionEnum()));
-    }
-
-    public int attackedBy(ActiveEntity attacker, Damage damage, int hit) {
-        if (isDodged(hit)) {
-            return -1;
+    public void attacked(ActiveEntity activeEntity, Damage damage, int hit) {
+        if (this.hurtTrigger != null) {
+            hurtTrigger.onHurt(activeEntity, damage, hit);
         }
-//        if (currentLife <= 0) {
-//            return -1;
-//        }
-//        elapsed = 0;
-//        int damageTaken = -1;
-//        if (!isDodged(hit)) {
-//            var before = currentLife;
-//            currentLife = damage.bodyDamage() - armor;
-//            damageTaken = before - currentLife;
-//        }
-//        trigger = attacker;
-        onTriggered.accept(this);
-//        return damageTaken;
-        return 0;
     }
 }
