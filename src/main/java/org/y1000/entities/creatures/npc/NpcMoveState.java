@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.AbstractCreatureMoveState;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.util.Coordinate;
 
 public final class NpcMoveState extends AbstractCreatureMoveState implements NpcState {
@@ -24,8 +24,8 @@ public final class NpcMoveState extends AbstractCreatureMoveState implements Npc
     }
 
     @Override
-    public NpcActionEnum stateEnum() {
-        return NpcActionEnum.Move;
+    public NpcAnimationEnum stateEnum() {
+        return NpcAnimationEnum.Move;
     }
     private NpcMoveState(Coordinate start,
                          Direction towards,

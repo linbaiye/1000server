@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc.AI;
 
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.util.Coordinate;
 
@@ -24,7 +24,7 @@ public abstract class AbstractWanderingNpcAI implements INpcAI {
     }
 
     private void stayIdle(INpc npc) {
-        int stateMillis = npc.getStateMillis(NpcActionEnum.Idle);
+        int stateMillis = npc.getStateMillis(NpcAnimationEnum.Idle);
         int walkSpeed = npc.walkSpeed();
         int millis = Math.max(walkSpeed, stateMillis) * 2;
         npc.stay(millis);
@@ -34,7 +34,7 @@ public abstract class AbstractWanderingNpcAI implements INpcAI {
         switch (npc.npcStateEnum()) {
             case Move -> onMoveDone(npc);
             case Idle -> AiPathUtil.moveProcess(npc, destination, previousCoordinate, () -> nextRound(npc),
-                    npc.getStateMillis(NpcActionEnum.Move));
+                    npc.getStateMillis(NpcAnimationEnum.Move));
             case Turn -> stayIdle(npc);
             case Hurt -> onHurtDone(npc);
             default -> {

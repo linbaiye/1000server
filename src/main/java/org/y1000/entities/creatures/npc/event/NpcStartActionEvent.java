@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc.event;
 
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.network.gen.ChangeStatePacket;
@@ -26,7 +26,7 @@ public class NpcStartActionEvent extends AbstractNpcEvent implements I2ClientMes
         return packet;
     }
 
-    public static NpcStartActionEvent of(Npc npc, NpcActionEnum actionEnum) {
+    public static NpcStartActionEvent of(Npc npc, NpcAnimationEnum actionEnum) {
         var packet = Packet.newBuilder()
                 .setChangeStatePacket(ChangeStatePacket.newBuilder()
                         .setState(actionEnum.value())

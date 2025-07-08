@@ -57,6 +57,11 @@ public final class GroundedItem extends AbstractActiveEntity {
         }
     }
 
+    @Override
+    public <AB> Optional<AB> findAbility(Class<AB> type) {
+        return Optional.empty();
+    }
+
 
     public boolean canPickAt(Coordinate from) {
         return coordinate().xDistance(from.x()) <= 2 && coordinate().yDistance(from.y()) <= 3;

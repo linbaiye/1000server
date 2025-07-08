@@ -1,9 +1,9 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.HurtAbility;
 import org.y1000.entities.PlayerSoundEvent;
-import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.creatures.npc.NpcHurtAbility;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerAttackEvent;
@@ -11,16 +11,16 @@ import org.y1000.message.PlayerChangeStateEvent;
 
 @Slf4j
 final class CombatController {
-    private final Npc enemy;
+    private final ActiveEntity enemy;
     private final PlayerImpl player;
     private int resourceNoticeTimer;
-    private final NpcHurtAbility hurtAbility;
+    private final HurtAbility hurtAbility;
 
-    CombatController(PlayerImpl player, Npc target) {
-        this.enemy = target;
+    CombatController(PlayerImpl player, ActiveEntity entity) {
         this.player = player;
+        enemy = entity;
+        hurtAbility = entity.findAbility(HurtAbility.class).orElseThrow();
         resourceNoticeTimer = 0;
-        hurtAbility = target.findAbility(NpcHurtAbility.class).orElseThrow(RuntimeException::new);
     }
 
     private void readyToFight() {
@@ -94,7 +94,7 @@ final class CombatController {
         return false;
     }
 
-    public static CombatController createAndStart(PlayerImpl player, Npc target) {
+    static CombatController createAndStart(PlayerImpl player, ActiveEntity target) {
         CombatController combatController = new CombatController(player, target);
         combatController.start();;
         return combatController;

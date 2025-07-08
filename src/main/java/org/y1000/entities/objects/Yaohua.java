@@ -15,6 +15,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 public final class Yaohua extends AbstractKillableDynamicObject
@@ -91,5 +92,10 @@ public final class Yaohua extends AbstractKillableDynamicObject
     public void update(int delta) {
         if (getAnimationIndex() != 0)
             updateAnimation(delta);
+    }
+
+    @Override
+    public <AB> Optional<AB> findAbility(Class<AB> type) {
+        return Optional.empty();
     }
 }

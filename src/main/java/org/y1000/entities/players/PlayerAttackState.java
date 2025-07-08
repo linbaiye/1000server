@@ -1,5 +1,6 @@
 package org.y1000.entities.players;
 
+import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.attack.AttackKungFu;
@@ -23,7 +24,7 @@ class PlayerAttackState extends AbstractPlayerState {
     }
 
     @Override
-    public void attack(Npc target) {
+    public void attack(Entity target) {
         player().acceptAttack(target);
     }
 

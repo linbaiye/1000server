@@ -1,7 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.creatures.monster.NpcActionEnum;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 
 public class AttackAction implements NpcAction {
     private final int attackSpeed;
@@ -38,7 +37,7 @@ public class AttackAction implements NpcAction {
     }
 
     @Override
-    public NpcActionEnum actionEnum() {
+    public NpcAnimationEnum actionEnum() {
         return null;
     }
 

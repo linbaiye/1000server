@@ -1,8 +1,11 @@
 package org.y1000.entities.creatures.npc;
 
+import org.y1000.message.NpcSnapshot;
+
 public interface NpcAbility {
+
     boolean update(int delta);
 
-    int apply(Npc npc);
+    NpcSnapshot captureSnapshot(Npc npc);
 
 }

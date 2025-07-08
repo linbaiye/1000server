@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.entities.creatures.npc.AI.ViolentNpcWanderingAI;
 import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
@@ -25,7 +25,7 @@ public final class ViolentInteractableNpc extends AbstractViolentNpc implements 
     public ViolentInteractableNpc(long id,
                                      Coordinate coordinate,
                                      String name,
-                                     Map<NpcActionEnum, Integer> stateMillis,
+                                     Map<NpcAnimationEnum, Integer> stateMillis,
                                      NonMonsterNpcAttributeProvider attributeProvider,
                                      RealmMap realmMap,
                                      NpcInteractor interactor,

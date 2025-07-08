@@ -86,7 +86,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         }
         int lifeToSwing = parameters.lifeToSwing();
         if (player.currentLife() <= lifeToSwing) {
-            return "活力不足够。";
+            return "活力不足。";
         }
         return null;
     }

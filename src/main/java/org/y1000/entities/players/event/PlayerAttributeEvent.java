@@ -6,7 +6,7 @@ import org.y1000.network.gen.AttributePacket;
 import org.y1000.network.gen.Packet;
 import org.y1000.realm.PlayerEventHandler;
 
-public final class PlayerAttributeEvent extends AbstractClientMessageEvent {
+public final class PlayerAttributeEvent extends AbstractMessagePlayerEvent {
     public PlayerAttributeEvent(Player source, Packet packet) {
         super(source, packet);
     }

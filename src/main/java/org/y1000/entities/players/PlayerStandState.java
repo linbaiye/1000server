@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.Entity;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
@@ -102,7 +102,7 @@ final class PlayerStandState extends AbstractPlayerState {
     }
 
     @Override
-    public void attack(Npc target) {
+    public void attack(Entity target) {
         player().acceptAttack(target);
     }
 

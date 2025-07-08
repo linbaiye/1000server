@@ -611,6 +611,11 @@ message NpcInteractionMenuPacket {
   repeated string interactions = 6;
 }
 
+message EntityDamagedPacket {
+  int64 id = 1;
+  int32 percent = 2;
+}
+
 message MerchantMenuPacket {
   int64 id = 1;
   string viewName = 2;
@@ -688,6 +693,8 @@ message Packet {
     NpcMovePacket npcMove = 67;
     PlayerMovePacket playerMove = 68;
     EntitySoundPacket entitySound = 69;
+    PlayerDamagedPacket playerDamaged = 70;
+    EntityDamagedPacket entityDamaged = 71;
   }
 }
 
@@ -853,4 +860,13 @@ message AttackInputPacket {
 message PlayerMovePacket {
   NpcMovePacket movePacket = 1;
   int32 moveAction = 2;
+}
+
+message PlayerDamagedPacket {
+  int32 curLife = 1;
+  int32 maxLife = 2;
+  int64 id = 3;
+  int32 headPercent = 4;
+  int32 armPercent = 5;
+  int32 legPercent = 6;
 }

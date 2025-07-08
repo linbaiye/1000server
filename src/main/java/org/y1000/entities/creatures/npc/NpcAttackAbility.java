@@ -4,7 +4,7 @@ import org.y1000.entities.players.Damage;
 
 import java.util.Optional;
 
-public final class NpcAttackAbility implements NpcAbility {
+public final class NpcAttackAbility extends AbstractNpcAbility {
 
     private final int attackSpeedMillis;
 
@@ -24,7 +24,9 @@ public final class NpcAttackAbility implements NpcAbility {
                             int recoveryMillis,
                             int bodyDamage,
                             int hit,
-                            String sound) {
+                            String sound,
+                            NpcAnimation animationTimer) {
+        super(animationTimer);
         this.attackSpeedMillis = attackSpeedMillis + 1500;
         this.recoveryMillis = recoveryMillis + 700;
         this.damage = new Damage(bodyDamage, 0, 0, 0);
@@ -70,11 +72,6 @@ public final class NpcAttackAbility implements NpcAbility {
 
     @Override
     public boolean update(int delta) {
-        return false;
-    }
-
-    @Override
-    public int apply(Npc npc) {
-        return 0;
+        return updateAnimation(delta);
     }
 }

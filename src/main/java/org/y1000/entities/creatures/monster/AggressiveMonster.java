@@ -22,7 +22,7 @@ public final class AggressiveMonster extends AbstractMonster implements Aggressi
 
     @Builder
     public AggressiveMonster(long id, Coordinate coordinate, Direction direction,
-                             String name, Map<NpcActionEnum, Integer> stateMillis,
+                             String name, Map<NpcAnimationEnum, Integer> stateMillis,
                              AttributeProvider attributeProvider,
                              RealmMap realmMap, NpcRangedSkill skill, INpcAI ai, List<NpcSpell> spells) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider,

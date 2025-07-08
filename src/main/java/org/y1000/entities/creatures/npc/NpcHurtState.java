@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 
 @Slf4j
 public final class NpcHurtState implements NpcState {
@@ -75,7 +75,7 @@ public final class NpcHurtState implements NpcState {
     }
 
     @Override
-    public NpcActionEnum stateEnum() {
-        return NpcActionEnum.Hurt;
+    public NpcAnimationEnum stateEnum() {
+        return NpcAnimationEnum.Hurt;
     }
 }

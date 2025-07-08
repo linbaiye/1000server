@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc.AI;
 
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.util.Coordinate;
 
@@ -26,7 +26,7 @@ public abstract class AbstractWanderingAI<N extends INpc> extends AbstractAI<N> 
     private void moveToNextRandom(N npc) {
         log().debug("Next random.");
         mover.changeDestination(random(npc));
-        npc.stay(npc.getStateMillis(NpcActionEnum.Idle));
+        npc.stay(npc.getStateMillis(NpcAnimationEnum.Idle));
     }
 
     protected abstract Coordinate random(INpc npc);

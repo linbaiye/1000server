@@ -4,7 +4,7 @@ import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.players.Damage;
@@ -30,7 +30,7 @@ public abstract class AbstractViolentNpc
     private final NpcRangedSkill skill;
 
     public AbstractViolentNpc(long id, Coordinate coordinate, Direction direction, String name,
-                              Map<NpcActionEnum, Integer> stateMillis, AttributeProvider attributeProvider,
+                              Map<NpcAnimationEnum, Integer> stateMillis, AttributeProvider attributeProvider,
                               RealmMap realmMap, INpcAI ai, NpcRangedSkill skill, List<NpcSpell> spellList) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, spellList, ai);
         this.damage = new Damage(attributeProvider.damage(), 0, 0, 0);
@@ -98,10 +98,10 @@ public abstract class AbstractViolentNpc
     }
 
     @Override
-    public void startAction(NpcActionEnum npcStateEnum) {
-        if (npcStateEnum == NpcActionEnum.Attack) {
+    public void startAction(NpcAnimationEnum npcStateEnum) {
+        if (npcStateEnum == NpcAnimationEnum.Attack) {
             startAttackAction(true);
-        } else if (npcStateEnum == NpcActionEnum.Idle) {
+        } else if (npcStateEnum == NpcAnimationEnum.Idle) {
             changeState(NpcCommonState.idle(this, maxCooldown()));
             emitEvent(NpcChangeStateEvent.of(this));
         } else {

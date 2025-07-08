@@ -1,7 +1,8 @@
 package org.y1000.entities.players;
 
+import org.y1000.entities.Entity;
+import org.y1000.entities.HurtAbility;
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.projectile.Projectile;
@@ -20,7 +21,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.*;
 
-public interface Player extends ViolentCreature {
+public interface Player extends ViolentCreature, HurtAbility {
 
     default boolean isMale() {
         return true;
@@ -53,7 +54,7 @@ public interface Player extends ViolentCreature {
 
     void handleInput(SelfHandleInput input);
 
-    void attack(Npc npc);
+    void attack(Entity entity);
 
     Optional<ArmorEquipment> hat();
 
@@ -198,7 +199,5 @@ public interface Player extends ViolentCreature {
     }
 
     int accuracy();
-
-    int attacked(Damage damage, int accuracy);
 }
 

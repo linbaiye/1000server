@@ -1,5 +1,7 @@
 package org.y1000.entities.players;
 
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.CreatureState;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.item.Equipment;
@@ -50,7 +52,7 @@ interface PlayerState extends CreatureState {
 
     }
 
-    default void attack(Npc target) {
+    default void attack(Entity entity) {
 
     }
 

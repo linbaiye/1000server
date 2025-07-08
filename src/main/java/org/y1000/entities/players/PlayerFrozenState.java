@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 
 final class PlayerFrozenState implements IPlayerState {
     public static final PlayerFrozenState Instance = new PlayerFrozenState();
@@ -28,7 +28,7 @@ final class PlayerFrozenState implements IPlayerState {
     }
 
     @Override
-    public NpcActionEnum state() {
+    public NpcAnimationEnum state() {
         return null;
     }
 

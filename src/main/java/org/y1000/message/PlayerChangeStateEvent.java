@@ -3,12 +3,12 @@ package org.y1000.message;
 import lombok.Getter;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerStateEnum;
-import org.y1000.entities.players.event.AbstractClientMessageEvent;
+import org.y1000.entities.players.event.AbstractMessagePlayerEvent;
 import org.y1000.realm.PlayerEventHandler;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerChangeStatePacket;
 
-public final class PlayerChangeStateEvent extends AbstractClientMessageEvent {
+public final class PlayerChangeStateEvent extends AbstractMessagePlayerEvent {
 
     @Getter
     private final boolean includeSelf;

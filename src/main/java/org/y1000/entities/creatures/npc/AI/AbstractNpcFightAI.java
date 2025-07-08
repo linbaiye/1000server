@@ -6,7 +6,7 @@ import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.creatures.monster.Monster;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcHurtState;
 import org.y1000.entities.creatures.npc.ViolentNpc;
@@ -62,7 +62,7 @@ public abstract class AbstractNpcFightAI implements INpcAI, EntityEventListener 
 
     int computeWalkMillis() {
         int walkSpeed = npc.walkSpeed() / speedRate;
-        var stateMillis = npc.getStateMillis(NpcActionEnum.Move);
+        var stateMillis = npc.getStateMillis(NpcAnimationEnum.Move);
         if (walkSpeed > stateMillis) {
             return stateMillis;
         }
@@ -105,7 +105,7 @@ public abstract class AbstractNpcFightAI implements INpcAI, EntityEventListener 
             previous = npc.coordinate().moveBy(npc.direction().opposite());
             npc.stay(computeStayMillis());
             return;
-        } else if (npc.npcStateEnum() == NpcActionEnum.Hurt) {
+        } else if (npc.npcStateEnum() == NpcAnimationEnum.Hurt) {
             npc.findSpell(CloneSpell.class).ifPresent(s -> s.castIfAvailable(npc, getEnemy()));
             tryChangeEnemy();
             if (npc instanceof Monster monster && getEnemy() instanceof ViolentCreature violentCreature) {

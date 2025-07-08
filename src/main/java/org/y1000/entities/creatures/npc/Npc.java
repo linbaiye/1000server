@@ -14,8 +14,7 @@ import java.util.*;
 
 public class Npc extends AbstractActiveEntity {
 
-    private final Set<NpcAction> actions;
-    private final Set<Object> abilities;
+    private final List<NpcAbility> abilities;
     private final NpcEventListener listener;
     private Coordinate coordinate;
 
@@ -36,17 +35,15 @@ public class Npc extends AbstractActiveEntity {
     @Getter
     private final Coordinate spawnCoordinate;
 
-    @Setter
     private Direction direction;
 
     @Getter
     private final String idName;
 
     public Npc(long id,
-               Set<Object> abilities,
+               List<NpcAbility> abilities,
                String viewName,
                Coordinate coordinate,
-               Set<NpcAction> actions,
                NpcEventListener listener,
                RealmMap realmMap,
                String animate,
@@ -54,7 +51,6 @@ public class Npc extends AbstractActiveEntity {
                String idName) {
         super(id);
         this.abilities = abilities;
-        this.actions = actions;
         this.listener = listener;
         this.realmMap = realmMap;
         this.viewName = viewName != null ? viewName : "";
@@ -71,11 +67,6 @@ public class Npc extends AbstractActiveEntity {
         listener.onEvent(event);
     }
 
-    public <A extends NpcAction> Optional<A> findAction(Class<A> type) {
-        return actions.stream()
-                .filter(a -> type.isAssignableFrom(a.getClass()))
-                .findFirst().map(type::cast);
-    }
 
     public void changeAI(NpcAI newAi) {
         ai = newAi;
@@ -106,6 +97,10 @@ public class Npc extends AbstractActiveEntity {
         realmMap.occupy(this);
     }
 
+    public void changeDirection(Direction direction) {
+        this.direction = direction;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,6 +117,6 @@ public class Npc extends AbstractActiveEntity {
 
     @Override
     public I2ClientMessage captureSnapshot() {
-        return NpcSnapshot.of(this, ai.currentAction());
+        return ai.captureSnapshot();
     }
 }

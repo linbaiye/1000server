@@ -11,6 +11,7 @@ import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Getter
 public final class GuildStone extends AbstractKillableDynamicObject  {
@@ -77,5 +78,10 @@ public final class GuildStone extends AbstractKillableDynamicObject  {
     public void update(int delta) {
         if (nextHealthTime > 0)
             nextHealthTime -= delta;
+    }
+
+    @Override
+    public <AB> Optional<AB> findAbility(Class<AB> type) {
+        return Optional.empty();
     }
 }

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.quest.Quest;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -22,7 +22,7 @@ public final class SubmissiveMerchantQuester extends AbstractSubmissiveMerchant 
     @Builder
     public SubmissiveMerchantQuester(long id,
                                      Coordinate coordinate, String name,
-                                     Map<NpcActionEnum, Integer> stateMillis,
+                                     Map<NpcAnimationEnum, Integer> stateMillis,
                                      AttributeProvider attributeProvider,
                                      RealmMap realmMap,
                                      Merchantable merchantable,

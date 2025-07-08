@@ -5,7 +5,6 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.NpcMoveAbility;
 import org.y1000.entities.creatures.monster.*;
 import org.y1000.entities.creatures.npc.AI.*;
 import org.y1000.entities.creatures.npc.interactability.BuyInteractability;
@@ -104,29 +103,29 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private Map<NpcActionEnum, Integer> createDevirtueActionLengthMap(String animate) {
-        Map<NpcActionEnum, Integer> result = new HashMap<>();
-        int move = actionSdb.getActionLength(animate, NpcActionEnum.Move);
-        int idle = actionSdb.getActionLength(animate, NpcActionEnum.Idle);
-        int hurt = actionSdb.getActionLength(animate, NpcActionEnum.Hurt);
-        int die = actionSdb.getActionLength(animate, NpcActionEnum.Die);
-        int turn = actionSdb.getActionLength(animate, NpcActionEnum.Turn);
-        result.put(NpcActionEnum.Idle, idle);
-        result.put(NpcActionEnum.Move, move);
-        result.put(NpcActionEnum.Hurt, hurt);
-        result.put(NpcActionEnum.Die, die);
-        result.put(NpcActionEnum.Turn, turn);
+    private Map<NpcAnimationEnum, Integer> createDevirtueActionLengthMap(String animate) {
+        Map<NpcAnimationEnum, Integer> result = new HashMap<>();
+        int move = actionSdb.getActionLength(animate, NpcAnimationEnum.Move);
+        int idle = actionSdb.getActionLength(animate, NpcAnimationEnum.Idle);
+        int hurt = actionSdb.getActionLength(animate, NpcAnimationEnum.Hurt);
+        int die = actionSdb.getActionLength(animate, NpcAnimationEnum.Die);
+        int turn = actionSdb.getActionLength(animate, NpcAnimationEnum.Turn);
+        result.put(NpcAnimationEnum.Idle, idle);
+        result.put(NpcAnimationEnum.Move, move);
+        result.put(NpcAnimationEnum.Hurt, hurt);
+        result.put(NpcAnimationEnum.Die, die);
+        result.put(NpcAnimationEnum.Turn, turn);
         return result;
     }
 
-    private Map<NpcActionEnum, Integer> createSubmissiveNpcActionLengthMap(String idName) {
+    private Map<NpcAnimationEnum, Integer> createSubmissiveNpcActionLengthMap(String idName) {
         return createDevirtueActionLengthMap(npcSdb.getAnimate(idName));
     }
 
-    private Map<NpcActionEnum, Integer> createActionLengthMap(String animate) {
-        Map<NpcActionEnum, Integer> result = createDevirtueActionLengthMap(animate);
-        int attack = actionSdb.getActionLength(animate, NpcActionEnum.Attack);
-        result.put(NpcActionEnum.Attack, attack);
+    private Map<NpcAnimationEnum, Integer> createActionLengthMap(String animate) {
+        Map<NpcAnimationEnum, Integer> result = createDevirtueActionLengthMap(animate);
+        int attack = actionSdb.getActionLength(animate, NpcAnimationEnum.Attack);
+        result.put(NpcAnimationEnum.Attack, attack);
         return result;
     }
 
@@ -384,32 +383,50 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private Set<NpcAction> buildActions(String name) {
-        Set<NpcAction> actions = new HashSet<>();
+    private NpcAnimation createAnimationTimer(String name, NpcAnimationEnum type) {
         var animate = monsterSdb.getAnimate(name);
-        int idleLength = actionSdb.getActionLength(animate, NpcActionEnum.Idle);
-        int moveLength = actionSdb.getActionLength(animate, NpcActionEnum.Move);
-        int turnLength = actionSdb.getActionLength(animate, NpcActionEnum.Turn);
-        int hurtLength = actionSdb.getActionLength(animate, NpcActionEnum.Hurt);
-        actions.add(new IdleAction(idleLength));
-        actions.add(new NpcMoveAbility(moveLength, monsterSdb.getWalkSpeed(name)));
-        actions.add(new TurnAction(turnLength));
-        actions.add(new HurtAction(hurtLength));
-        return actions;
+        int length = actionSdb.getActionLength(animate, type);
+        if (type == NpcAnimationEnum.Idle) {
+            length *= 2;
+        }
+        return new NpcAnimation(length, type);
     }
 
-    private Set<Object> abilities(String name) {
-        Set<Object> abilities = new HashSet<>();
+
+    private NpcAttackAbility createAttackAbility(String name) {
+        return new NpcAttackAbility(monsterSdb.getAttackSpeed(name) * Realm.STEP_MILLIS,
+                monsterSdb.getRecovery(name) * Realm.STEP_MILLIS, monsterSdb.getDamage(name),
+                monsterSdb.getAccuracy(name),
+                monsterSdb.getSoundAttack(name), createAnimationTimer(name, NpcAnimationEnum.Attack));
+    }
+
+    private NpcTurnAbility createTurnAbility(String name) {
+        return new NpcTurnAbility(createAnimationTimer(name, NpcAnimationEnum.Turn));
+    }
+
+    private NpcHurtAbility createHurtAbility(String name) {
+        return new NpcHurtAbility(monsterSdb.getArmor(name), monsterSdb.getAvoid(name), monsterSdb.getSoundStructed(name),
+                monsterSdb.getLife(name), createAnimationTimer(name, NpcAnimationEnum.Hurt));
+    }
+
+    private NpcIdleAbility createIdleAbility(String name) {
+        return new NpcIdleAbility(createAnimationTimer(name, NpcAnimationEnum.Idle));
+    }
+
+    private NpcMoveAbility createMoveAbility(String name) {
+        return new NpcMoveAbility(monsterSdb.getWalkSpeed(name) * Realm.STEP_MILLIS,
+                createAnimationTimer(name, NpcAnimationEnum.Move));
+    }
+
+    private List<NpcAbility> abilities(String name) {
+        List<NpcAbility> abilities = new ArrayList<>();
         if (monsterSdb.attack(name)) {
-            NpcAttackAbility ability = new NpcAttackAbility(monsterSdb.getAttackSpeed(name) * Realm.STEP_MILLIS,
-                    monsterSdb.getRecovery(name) * Realm.STEP_MILLIS, monsterSdb.getDamage(name),
-                    monsterSdb.getAccuracy(name),
-                    monsterSdb.getSoundAttack(name));
-            abilities.add(ability);
+            abilities.add(createAttackAbility(name));
         }
-        NpcHurtAbility hurtAbility = new NpcHurtAbility(monsterSdb.getArmor(name), monsterSdb.getAvoid(name), monsterSdb.getSoundStructed(name),
-                monsterSdb.getLife(name));
-        abilities.add(hurtAbility);
+        abilities.add(createHurtAbility(name));
+        abilities.add(createTurnAbility(name));
+        abilities.add(createIdleAbility(name));
+        abilities.add(createMoveAbility(name));
         return abilities;
     }
 
@@ -424,7 +441,6 @@ public final class NpcFactoryImpl implements NpcFactory {
                 abilities(idName),
                 monsterSdb.getViewName(idName),
                 coordinate,
-                buildActions(idName),
                 listener, realmMap,
                 monsterSdb.getAnimate(idName),
                 monsterSdb.getShape(idName),

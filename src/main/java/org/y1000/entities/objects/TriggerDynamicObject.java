@@ -13,6 +13,7 @@ import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
 import java.util.Objects;
+import java.util.Optional;
 
 
 public final class TriggerDynamicObject extends AbstractMutableDynamicObject implements RespawnDynamicObject {
@@ -40,6 +41,11 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
             return;
         }
         updateAnimation(delta);
+    }
+
+    @Override
+    public <AB> Optional<AB> findAbility(Class<AB> type) {
+        return Optional.empty();
     }
 
     private int getIndex() {

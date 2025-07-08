@@ -5,7 +5,7 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.NpcRangedSkill;
 import org.y1000.entities.creatures.npc.ViolentNpc;
@@ -22,7 +22,7 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
 
     private void cooldownOrShoot(NpcRangedSkill rangedSkill) {
         if (npc.maxCooldown() > 0) {
-            npc.startAction(NpcActionEnum.Idle);
+            npc.startAction(NpcAnimationEnum.Idle);
             return;
         }
         turnIfNotFaced();

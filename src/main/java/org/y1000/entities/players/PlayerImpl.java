@@ -8,8 +8,6 @@ import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.creatures.npc.HurtAction;
-import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.event.EntityEvent;
@@ -551,22 +549,17 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 //        }
     }
 
-    public void attack(ClientAttackEvent event, AttackableEntity target) {
-        Validate.notNull(event, "event can't be null.");
-        Validate.notNull(target, "target can't be null.");
-        attackKungFu.startAttack(this, event, target);
-    }
 
-
-    public void acceptAttack(Npc target) {
+    void acceptAttack(Entity entity) {
         combatController = null;
-        target.findAction(HurtAction.class)
-                .ifPresent(a -> combatController = CombatController.createAndStart(this, target));
+        if (entity instanceof ActiveEntity activeEntity &&
+                activeEntity.findAbility(HurtAbility.class).isPresent())
+            combatController = CombatController.createAndStart(this, activeEntity);
     }
 
 
     @Override
-    public void attack(Npc target) {
+    public void attack(Entity target) {
         Validate.notNull(target);
         state.attack(target);
     }
@@ -779,8 +772,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 //            OldPlayerStateEnum afterHurtPlayerStateEnum = creatureState().decideAfterHurtState();
 //            this.changeState(PlayerHurtState.hurt(this, afterHurtPlayerStateEnum));
 //            emitEvent(new CreatureHurtEvent(this, afterHurtPlayerStateEnum));
-            hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-            gainProtectionExp(damagedLife);
+//            hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+//            gainProtectionExp(damagedLife);
         } else {
             onKilled();
         }
@@ -1332,21 +1325,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         return innateAttributesProvider.hit();
     }
 
-    @Override
-    public int attacked(Damage damage, int accuracy) {
-        if (isDodged(accuracy))
-            return -1;
-        if (life.currentValue() <= 0)
-            return -1;
-        int old = life.currentValue();
-        takeDamage(damage);
-        cooldownRecovery();
-        hurtSound().ifPresent(this::sendSound);
-        changeState(PlayerHurtState.create(this, state));
-        sendEvent(PlayerChangeStateEvent.allVisible(this));
-        return Math.max(1, old - life.currentValue());
-    }
-
     void sendSound(String s) {
         sendEvent(PlayerSoundEvent.sound(this, s));
     }
@@ -1529,10 +1507,40 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         throw new IllegalArgumentException();
     }
 
+    @Override
+    public <AB> Optional<AB> findAbility(Class<AB> type) {
+        return  type.isAssignableFrom(this.getClass()) ?
+            Optional.of(type.cast(this)) : Optional.empty();
+    }
+
     private void clearFightingEntity() {
         if (this.enemy != null) {
             this.enemy.deregisterEventListener(this);
             this.enemy = null;
         }
+    }
+
+    @Override
+    public boolean canBeAttacked() {
+        return false;
+    }
+
+    @Override
+    public int attacked(ActiveEntity attacker, Damage damage, int accuracy) {
+        if (isDodged(accuracy))
+            return -1;
+        if (life.currentValue() <= 0)
+            return -1;
+        int old = life.currentValue();
+        takeDamage(damage);
+        cooldownRecovery();
+        hurtSound().ifPresent(this::sendSound);
+        changeState(PlayerHurtState.create(this, state));
+        sendEvent(PlayerChangeStateEvent.allVisible(this));
+        sendEvent(PlayerDamagedEvent.create(this));
+        sendEvent(PlayerLifeBarEvent.of(this));
+//        if (isDead())
+//            sendText("你被杀死了");
+        return Math.max(1, old - life.currentValue());
     }
 }

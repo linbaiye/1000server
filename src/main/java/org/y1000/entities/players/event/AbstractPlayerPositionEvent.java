@@ -5,7 +5,7 @@ import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerSetPositionPacket;
 import org.y1000.network.gen.PositionPacket;
 
-public abstract class AbstractPlayerPositionEvent extends AbstractClientMessageEvent{
+public abstract class AbstractPlayerPositionEvent extends AbstractMessagePlayerEvent {
 
     public AbstractPlayerPositionEvent(Player player) {
         super(player, buildPacket(player));

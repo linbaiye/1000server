@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 
 public final class NpcRangedAttackState implements NpcState {
 
@@ -67,7 +67,7 @@ public final class NpcRangedAttackState implements NpcState {
     }
 
     @Override
-    public NpcActionEnum stateEnum() {
+    public NpcAnimationEnum stateEnum() {
         return null;
     }
 }

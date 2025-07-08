@@ -7,7 +7,7 @@ import org.y1000.realm.PlayerEventHandler;
 /**
  * A message event that will be sent to the source() player.
  */
-public abstract class Abstract2PlayerMessageEvent extends AbstractClientMessageEvent {
+public abstract class Abstract2PlayerMessageEvent extends AbstractMessagePlayerEvent {
 
     public Abstract2PlayerMessageEvent(Player player, Packet packet) {
         super(player, packet);

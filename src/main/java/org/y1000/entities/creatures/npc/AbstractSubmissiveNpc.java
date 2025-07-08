@@ -5,7 +5,7 @@ import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
 import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.realm.RealmMap;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 public abstract class AbstractSubmissiveNpc extends AbstractNpc {
 
-    public AbstractSubmissiveNpc(long id, Coordinate coordinate, Direction direction, String name, Map<NpcActionEnum, Integer> stateMillis,
+    public AbstractSubmissiveNpc(long id, Coordinate coordinate, Direction direction, String name, Map<NpcAnimationEnum, Integer> stateMillis,
                                  AttributeProvider attributeProvider, RealmMap realmMap,
                                  List<NpcSpell> spells, INpcAI ai) {
         super(id, coordinate, direction, name, stateMillis, attributeProvider, realmMap, spells, ai);
@@ -33,7 +33,7 @@ public abstract class AbstractSubmissiveNpc extends AbstractNpc {
 
     @Override
     void hurt(ViolentCreature attacker) {
-        doHurtAction(attacker, getStateMillis(NpcActionEnum.Hurt));
+        doHurtAction(attacker, getStateMillis(NpcAnimationEnum.Hurt));
     }
 
     @Override

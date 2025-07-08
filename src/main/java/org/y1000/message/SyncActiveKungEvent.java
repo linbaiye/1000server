@@ -2,12 +2,12 @@ package org.y1000.message;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.AbstractClientMessageEvent;
+import org.y1000.entities.players.event.AbstractMessagePlayerEvent;
 import org.y1000.realm.PlayerEventHandler;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.SyncActiveKungFuPacket;
 
-public final class SyncActiveKungEvent extends AbstractClientMessageEvent {
+public final class SyncActiveKungEvent extends AbstractMessagePlayerEvent {
 
     private SyncActiveKungEvent(Player player, Packet packet) {
         super(player, packet);

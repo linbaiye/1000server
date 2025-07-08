@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.NpcType;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.realm.RealmMap;
@@ -19,7 +19,7 @@ import java.util.Map;
 public final class SubmissiveNpc extends AbstractSubmissiveNpc {
 
     @Builder
-    public SubmissiveNpc(long id, Coordinate coordinate, String name, Map<NpcActionEnum, Integer> stateMillis,
+    public SubmissiveNpc(long id, Coordinate coordinate, String name, Map<NpcAnimationEnum, Integer> stateMillis,
                          AttributeProvider attributeProvider,
                          RealmMap realmMap, INpcAI ai, List<NpcSpell> spells) {
         super(id, coordinate, Direction.DOWN, name, stateMillis, attributeProvider, realmMap, spells, ai);

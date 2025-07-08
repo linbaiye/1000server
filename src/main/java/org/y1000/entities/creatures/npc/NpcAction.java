@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 
 public interface NpcAction {
 
@@ -9,6 +9,6 @@ public interface NpcAction {
 
     int elapsedMillis();
 
-    NpcActionEnum actionEnum();
+    NpcAnimationEnum actionEnum();
 
 }

@@ -6,6 +6,7 @@ import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public final class KillableDynamicObject extends AbstractSimpleKillableDynamicObject{
     @Builder
@@ -29,5 +30,10 @@ public final class KillableDynamicObject extends AbstractSimpleKillableDynamicOb
     @Override
     public int hashCode() {
         return Objects.hash(id());
+    }
+
+    @Override
+    public <AB> Optional<AB> findAbility(Class<AB> type) {
+        return Optional.empty();
     }
 }

@@ -1,16 +1,16 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.AbstractCreatureState;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 
 public final class NpcCommonState extends AbstractCreatureState implements NpcState {
 
-    private final NpcActionEnum stat;
+    private final NpcAnimationEnum stat;
 
     private final INpc npc;
 
     @Override
-    public NpcActionEnum stateEnum() {
+    public NpcAnimationEnum stateEnum() {
         return stat;
     }
 
@@ -21,13 +21,13 @@ public final class NpcCommonState extends AbstractCreatureState implements NpcSt
         }
     }
 
-    private NpcCommonState(INpc npc, int totalMillis, NpcActionEnum stat) {
+    private NpcCommonState(INpc npc, int totalMillis, NpcAnimationEnum stat) {
         super(totalMillis);
         this.stat = stat;
         this.npc = npc;
     }
 
-    private NpcCommonState(INpc npc, NpcActionEnum stat) {
+    private NpcCommonState(INpc npc, NpcAnimationEnum stat) {
         super(npc.getStateMillis(stat));
         this.stat = stat;
         this.npc = npc;
@@ -35,23 +35,23 @@ public final class NpcCommonState extends AbstractCreatureState implements NpcSt
 
 
     public static NpcCommonState idle(INpc npc, int total) {
-        return new NpcCommonState(npc, total, NpcActionEnum.Idle);
+        return new NpcCommonState(npc, total, NpcAnimationEnum.Idle);
     }
 
     public static NpcCommonState idle(INpc npc) {
-        return new NpcCommonState(npc, NpcActionEnum.Idle);
+        return new NpcCommonState(npc, NpcAnimationEnum.Idle);
     }
 
     public static NpcCommonState attack(INpc npc) {
-        return new NpcCommonState(npc,  NpcActionEnum.Attack);
+        return new NpcCommonState(npc,  NpcAnimationEnum.Attack);
     }
 
     public static NpcCommonState die(INpc npc, int total) {
-        return new NpcCommonState(npc, total, NpcActionEnum.Die);
+        return new NpcCommonState(npc, total, NpcAnimationEnum.Die);
     }
 
     public static NpcCommonState turn(INpc npc) {
-        return new NpcCommonState(npc,  NpcActionEnum.Turn);
+        return new NpcCommonState(npc,  NpcAnimationEnum.Turn);
     }
 
     @Override

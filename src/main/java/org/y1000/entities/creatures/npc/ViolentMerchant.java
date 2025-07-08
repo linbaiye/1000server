@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.monster.NpcActionEnum;
+import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.entities.creatures.npc.AI.ViolentNpcWanderingAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
@@ -31,7 +31,7 @@ public final class ViolentMerchant extends AbstractViolentNpc implements Merchan
     @Builder
     public ViolentMerchant(long id, Coordinate coordinate,
                            Direction direction, String name,
-                           Map<NpcActionEnum, Integer> stateMillis,
+                           Map<NpcAnimationEnum, Integer> stateMillis,
                            AttributeProvider attributeProvider,
                            RealmMap realmMap,
                            INpcAI ai,
