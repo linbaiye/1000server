@@ -24,6 +24,7 @@ public final class PlayerSnapshot implements I2ClientMessage {
                 .setX(coordinate.x())
                 .setElapsedMillis(elapsed)
                 .setDirection(player.direction().value())
+                .setViewName(player.viewName())
                 .setId(player.id())
                 .build();
         List<PlayerEquipPacket> equipments = player.getEquipments().stream().map(e -> PlayerEquipEvent.toEquipPacket(player, e))

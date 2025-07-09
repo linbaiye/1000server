@@ -322,6 +322,7 @@ message ClientPacket {
     ClickKungFuInputPacket clickKungFuInput = 35;
     ClickInventorySlotInputPacket clickInventorySlotInput = 36;
     AttackInputPacket attackInput = 37;
+    UnequipInputPacket unequipInput = 38;
   }
 }
 
@@ -484,6 +485,7 @@ message PlayerEquipPacket {
   string prefix = 4;
   optional string pairedPrefix = 5;
   int32 weaponType = 6;
+  string name = 7;
 }
 
 message PlayerSitDownPacket {
@@ -752,6 +754,10 @@ message MoveInputPacket {
   int32 x = 1;
   int32 y = 2;
   int32 direction = 3;
+}
+
+message UnequipInputPacket {
+  int32 type = 1;
 }
 
 message DebugPacket {

@@ -243,11 +243,11 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         assistantKungFu = null;
     }
 
-    private void disableProtectionNoTip() {
+    private void disableProtectionAndSync() {
         if (protectKungFu != null) {
             sendSound(protectKungFu.disableSound());
-            syncActiveKungFuList();
             protectKungFu = null;
+            syncActiveKungFuList();
         }
     }
 
@@ -256,22 +256,24 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
 
-    private void unequip(EquipmentType type) {
+    public void unequip(EquipmentType type) {
+        if (isDead() || isLeftGame() || type == null || !equippedEquipments.containsKey(type)) {
+            return;
+        }
         if (inventory.isFull()) {
-            emitEvent(PlayerTextEvent.inventoryFull(this));
+            sendText("物品栏已满。");
             return;
         }
-        Equipment equipped = equippedEquipments.remove(type);
-        if (equipped == null) {
-            return;
-        }
+        Equipment equipped = equippedEquipments.get(type);
         if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.Fist) {
-            changeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.Fist));
+            tryChangeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.Fist));
+        } else {
+            equipped = equippedEquipments.remove(type);
+            inventory.put(equipped);
+            equipped.eventSound().ifPresent(this::sendSound);
+            sendEvent(PlayerUnequipEvent.of(this, equipped.equipmentType()));
+            syncInventoryQuietly();
         }
-        //emitEvent(new PlayerUnequipMessage(this, equipped.equipmentType()));
-        int slot = inventory.put(equipped);
-        emitEvent(new UpdateInventorySlotEvent(this, slot, equipped));
-        equipped.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
 
@@ -301,6 +303,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     private void changeAndSayAndCooldown(AttackKungFu attackKungFu) {
         this.attackKungFu = attackKungFu;
+        if (!this.attackKungFu.isLevelFull())
+            assistantKungFu = null;
         sendEvent(PlayerSayEvent.say(this, attackKungFu.name()));
         cooldownAttack();
     }
@@ -325,18 +329,20 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             sendText("你无法使用该装备。");
             return false;
         }
+        equipment.eventSound().ifPresent(this::sendSound);
         sendEvent(PlayerEquipEvent.create(this, equipment));
         syncInventoryQuietly();
         return true;
     }
 
-    private boolean unequipAndPutToInventory(EquipmentType type) {
+    private int unequipAndPutToInventory(EquipmentType type) {
         Equipment removed = equippedEquipments.remove(type);
+        int slot = 0;
         if (removed != null) {
-            int slot = inventory.put(removed);
+            slot = inventory.put(removed);
             log.debug("Unequiped {} id {} and put to slot {}.", type, removed.id(), slot);
         }
-        return removed != null;
+        return slot;
     }
 
 
@@ -350,7 +356,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
      * @param newKungFu newKungFu to use.
      * @return
      */
-    boolean tryChangeAttackKung(AttackKungFu newKungFu) {
+    boolean tryChangeAttackKungFu(AttackKungFu newKungFu) {
         if (newKungFu.nameEquals(attackKungFu)) {
             return false;
         }
@@ -372,17 +378,21 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
                 sendText("物品栏已满，无法卸下武器。");
                 return false;
             }
-            if (unequipAndPutToInventory(EquipmentType.WEAPON)) {
+            int slot = unequipAndPutToInventory(EquipmentType.WEAPON);
+            if (slot > 0) {
+                inventory.getItem(slot, Weapon.class).flatMap(Item::eventSound).ifPresent(this::sendSound);
                 sendEvent(PlayerUnequipEvent.of(this, EquipmentType.WEAPON));
                 syncInventoryQuietly();
             }
         } else {
             Weapon weapon = (Weapon) inventory.getItem(weaponSlot);
             equipWeaponFromSlot(weaponSlot);
+            weapon.eventSound().ifPresent(this::sendSound);
             sendEvent(PlayerEquipEvent.create(this, weapon));
             syncInventoryQuietly();
         }
         changeAndSayAndCooldown(newKungFu);
+        syncActiveKungFuList();
         return true;
     }
 
@@ -442,6 +452,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         } else {
             breathKungFu = newBreath;
             footKungfu = null;
+            protectKungFu().ifPresent(k -> sendSound(k.disableSound()));
             protectKungFu = null;
             stopFight();
         }
@@ -1013,7 +1024,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     private void updateKungFu(int delta) {
-        boolean consumed = consumeAndDisable(protectKungFu, delta, this::disableProtectionNoTip);
+        boolean consumed = consumeAndDisable(protectKungFu, delta, this::disableProtectionAndSync);
         consumed = consumed|| consumeAndDisable(footKungfu, delta, this::disableFootKungFuAndSync);
         if (consumed) {
             sendEvent(PlayerAttributeEvent.of(this));

@@ -35,8 +35,8 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
 
     private final Map<Connection, Long> connectedDebugPlayers;
 
-//    private final List<Long> availableDebugPlayers = List.of(100000251L, 100000301L);
-    private final List<Long> availableDebugPlayers = List.of(100000051L, 99999951L);
+    private final List<Long> availableDebugPlayers = List.of(100000251L, 100000301L);
+//    private final List<Long> availableDebugPlayers = List.of(100000051L, 99999951L);
 
     private RealmManager(AccountManager accountManager,
                          PlayerRepository playerRepository) {
@@ -53,13 +53,6 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
     }
 
 
-    private void handleLogin(Integer accountId, String charName, Connection connection) {
-        playerRepository
-                .findIdAndRealm(4, 100000301)
-                .ifPresent(pair -> {
-                    realmIdGroupMap.values().forEach(r -> r.broadcast(new Login(connection, pair.getLeft())));
-                });
-    }
 
     private Optional<Long> findAvailableDebugPlayer() {
         return availableDebugPlayers.stream().filter(playerId  -> !connectedDebugPlayers.containsValue(playerId)).findFirst();

@@ -5,60 +5,49 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.ClientTriggerDynamicObjectPacket}
+ * Protobuf type {@code org.y1000.network.gen.UnequipInputPacket}
  */
-public final class ClientTriggerDynamicObjectPacket extends
+public final class UnequipInputPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ClientTriggerDynamicObjectPacket)
-    ClientTriggerDynamicObjectPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.UnequipInputPacket)
+    UnequipInputPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ClientTriggerDynamicObjectPacket.newBuilder() to construct.
-  private ClientTriggerDynamicObjectPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use UnequipInputPacket.newBuilder() to construct.
+  private UnequipInputPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ClientTriggerDynamicObjectPacket() {
+  private UnequipInputPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new ClientTriggerDynamicObjectPacket();
+    return new UnequipInputPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientTriggerDynamicObjectPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UnequipInputPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientTriggerDynamicObjectPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UnequipInputPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.ClientTriggerDynamicObjectPacket.class, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder.class);
+            org.y1000.network.gen.UnequipInputPacket.class, org.y1000.network.gen.UnequipInputPacket.Builder.class);
   }
 
-  public static final int ID_FIELD_NUMBER = 1;
-  private long id_ = 0L;
+  public static final int TYPE_FIELD_NUMBER = 1;
+  private int type_ = 0;
   /**
-   * <code>int64 id = 1;</code>
-   * @return The id.
+   * <code>int32 type = 1;</code>
+   * @return The type.
    */
   @java.lang.Override
-  public long getId() {
-    return id_;
-  }
-
-  public static final int USESLOT_FIELD_NUMBER = 2;
-  private int useSlot_ = 0;
-  /**
-   * <code>int32 useSlot = 2;</code>
-   * @return The useSlot.
-   */
-  @java.lang.Override
-  public int getUseSlot() {
-    return useSlot_;
+  public int getType() {
+    return type_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -75,11 +64,8 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (id_ != 0L) {
-      output.writeInt64(1, id_);
-    }
-    if (useSlot_ != 0) {
-      output.writeInt32(2, useSlot_);
+    if (type_ != 0) {
+      output.writeInt32(1, type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -90,13 +76,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (id_ != 0L) {
+    if (type_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, id_);
-    }
-    if (useSlot_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, useSlot_);
+        .computeInt32Size(1, type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -108,15 +90,13 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.ClientTriggerDynamicObjectPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.UnequipInputPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.ClientTriggerDynamicObjectPacket other = (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) obj;
+    org.y1000.network.gen.UnequipInputPacket other = (org.y1000.network.gen.UnequipInputPacket) obj;
 
-    if (getId()
-        != other.getId()) return false;
-    if (getUseSlot()
-        != other.getUseSlot()) return false;
+    if (getType()
+        != other.getType()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -128,54 +108,51 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + ID_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getId());
-    hash = (37 * hash) + USESLOT_FIELD_NUMBER;
-    hash = (53 * hash) + getUseSlot();
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseFrom(
+  public static org.y1000.network.gen.UnequipInputPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseFrom(
+  public static org.y1000.network.gen.UnequipInputPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseFrom(
+  public static org.y1000.network.gen.UnequipInputPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseFrom(
+  public static org.y1000.network.gen.UnequipInputPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.UnequipInputPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseFrom(
+  public static org.y1000.network.gen.UnequipInputPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.UnequipInputPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseFrom(
+  public static org.y1000.network.gen.UnequipInputPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -183,26 +160,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.UnequipInputPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.UnequipInputPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseFrom(
+  public static org.y1000.network.gen.UnequipInputPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket parseFrom(
+  public static org.y1000.network.gen.UnequipInputPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -215,7 +192,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.ClientTriggerDynamicObjectPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.UnequipInputPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -231,26 +208,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.ClientTriggerDynamicObjectPacket}
+   * Protobuf type {@code org.y1000.network.gen.UnequipInputPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ClientTriggerDynamicObjectPacket)
-      org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.UnequipInputPacket)
+      org.y1000.network.gen.UnequipInputPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientTriggerDynamicObjectPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UnequipInputPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientTriggerDynamicObjectPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UnequipInputPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.ClientTriggerDynamicObjectPacket.class, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder.class);
+              org.y1000.network.gen.UnequipInputPacket.class, org.y1000.network.gen.UnequipInputPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.ClientTriggerDynamicObjectPacket.newBuilder()
+    // Construct using org.y1000.network.gen.UnequipInputPacket.newBuilder()
     private Builder() {
 
     }
@@ -264,25 +241,24 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      id_ = 0L;
-      useSlot_ = 0;
+      type_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClientTriggerDynamicObjectPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UnequipInputPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClientTriggerDynamicObjectPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
+    public org.y1000.network.gen.UnequipInputPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.UnequipInputPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClientTriggerDynamicObjectPacket build() {
-      org.y1000.network.gen.ClientTriggerDynamicObjectPacket result = buildPartial();
+    public org.y1000.network.gen.UnequipInputPacket build() {
+      org.y1000.network.gen.UnequipInputPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -290,20 +266,17 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClientTriggerDynamicObjectPacket buildPartial() {
-      org.y1000.network.gen.ClientTriggerDynamicObjectPacket result = new org.y1000.network.gen.ClientTriggerDynamicObjectPacket(this);
+    public org.y1000.network.gen.UnequipInputPacket buildPartial() {
+      org.y1000.network.gen.UnequipInputPacket result = new org.y1000.network.gen.UnequipInputPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.ClientTriggerDynamicObjectPacket result) {
+    private void buildPartial0(org.y1000.network.gen.UnequipInputPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.id_ = id_;
-      }
-      if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.useSlot_ = useSlot_;
+        result.type_ = type_;
       }
     }
 
@@ -341,21 +314,18 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.ClientTriggerDynamicObjectPacket) {
-        return mergeFrom((org.y1000.network.gen.ClientTriggerDynamicObjectPacket)other);
+      if (other instanceof org.y1000.network.gen.UnequipInputPacket) {
+        return mergeFrom((org.y1000.network.gen.UnequipInputPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.ClientTriggerDynamicObjectPacket other) {
-      if (other == org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance()) return this;
-      if (other.getId() != 0L) {
-        setId(other.getId());
-      }
-      if (other.getUseSlot() != 0) {
-        setUseSlot(other.getUseSlot());
+    public Builder mergeFrom(org.y1000.network.gen.UnequipInputPacket other) {
+      if (other == org.y1000.network.gen.UnequipInputPacket.getDefaultInstance()) return this;
+      if (other.getType() != 0) {
+        setType(other.getType());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -384,15 +354,10 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              id_ = input.readInt64();
+              type_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
-            case 16: {
-              useSlot_ = input.readInt32();
-              bitField0_ |= 0x00000002;
-              break;
-            } // case 16
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -410,66 +375,34 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private long id_ ;
+    private int type_ ;
     /**
-     * <code>int64 id = 1;</code>
-     * @return The id.
+     * <code>int32 type = 1;</code>
+     * @return The type.
      */
     @java.lang.Override
-    public long getId() {
-      return id_;
+    public int getType() {
+      return type_;
     }
     /**
-     * <code>int64 id = 1;</code>
-     * @param value The id to set.
+     * <code>int32 type = 1;</code>
+     * @param value The type to set.
      * @return This builder for chaining.
      */
-    public Builder setId(long value) {
+    public Builder setType(int value) {
 
-      id_ = value;
+      type_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>int64 id = 1;</code>
+     * <code>int32 type = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder clearId() {
+    public Builder clearType() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      id_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private int useSlot_ ;
-    /**
-     * <code>int32 useSlot = 2;</code>
-     * @return The useSlot.
-     */
-    @java.lang.Override
-    public int getUseSlot() {
-      return useSlot_;
-    }
-    /**
-     * <code>int32 useSlot = 2;</code>
-     * @param value The useSlot to set.
-     * @return This builder for chaining.
-     */
-    public Builder setUseSlot(int value) {
-
-      useSlot_ = value;
-      bitField0_ |= 0x00000002;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 useSlot = 2;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearUseSlot() {
-      bitField0_ = (bitField0_ & ~0x00000002);
-      useSlot_ = 0;
+      type_ = 0;
       onChanged();
       return this;
     }
@@ -486,23 +419,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClientTriggerDynamicObjectPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.UnequipInputPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ClientTriggerDynamicObjectPacket)
-  private static final org.y1000.network.gen.ClientTriggerDynamicObjectPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.UnequipInputPacket)
+  private static final org.y1000.network.gen.UnequipInputPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.ClientTriggerDynamicObjectPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.UnequipInputPacket();
   }
 
-  public static org.y1000.network.gen.ClientTriggerDynamicObjectPacket getDefaultInstance() {
+  public static org.y1000.network.gen.UnequipInputPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ClientTriggerDynamicObjectPacket>
-      PARSER = new com.google.protobuf.AbstractParser<ClientTriggerDynamicObjectPacket>() {
+  private static final com.google.protobuf.Parser<UnequipInputPacket>
+      PARSER = new com.google.protobuf.AbstractParser<UnequipInputPacket>() {
     @java.lang.Override
-    public ClientTriggerDynamicObjectPacket parsePartialFrom(
+    public UnequipInputPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -521,17 +454,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<ClientTriggerDynamicObjectPacket> parser() {
+  public static com.google.protobuf.Parser<UnequipInputPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ClientTriggerDynamicObjectPacket> getParserForType() {
+  public com.google.protobuf.Parser<UnequipInputPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.ClientTriggerDynamicObjectPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.UnequipInputPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

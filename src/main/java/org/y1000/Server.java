@@ -8,8 +8,9 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.metamodel.Metamodel;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.account.AccountManager;
 import org.y1000.entities.creatures.npc.NpcFactory;
@@ -25,6 +26,8 @@ import org.y1000.network.*;
 import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
 
+import java.util.Map;
+
 @Slf4j
 public final class Server implements ServerContext {
 
@@ -35,7 +38,7 @@ public final class Server implements ServerContext {
 
     private EventLoopGroup bossGroup;
 
-    private PlayerRepositoryImpl playerRepository;
+    private PlayerRepository playerRepository;
 
     private RealmManager realmManager;
 
@@ -80,12 +83,14 @@ public final class Server implements ServerContext {
                 NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE), RealmSpecificSdbRepositoryImpl.INSTANCE);
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
+        PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
+        //playerRepository = new PlayerDevRepository(factory, itemRepository);
         playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, RealmSpecificSdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
                 entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE, guildRepository, itemRepository, kungFuRepositoryImpl);
         accountRepository = new AccountRepositoryImpl();
-        accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, playerRepository);
+        accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, factory);
         realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory, accountManager, playerRepository);
         shutdown = false;
     }

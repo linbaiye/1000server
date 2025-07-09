@@ -12,8 +12,6 @@ public interface PlayerRepository {
 
     Optional<Integer> findRealm(long id);
 
-    Optional<Pair<Long, Integer>> findIdAndRealm(int accountId, int id);
-
     void update(Player player);
 
     Optional<Player> load(long id);

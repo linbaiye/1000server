@@ -1,7 +1,6 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.message.PlayerChangeStateEvent;
@@ -46,7 +45,7 @@ class PlayerAttackState extends AbstractPlayerState {
 
     @Override
     public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
-        if (player().tryChangeAttackKung(attackKungFu)) {
+        if (player().tryChangeAttackKungFu(attackKungFu)) {
             player().changeState(PlayerStandState.fightStand(player()));
             player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
         }

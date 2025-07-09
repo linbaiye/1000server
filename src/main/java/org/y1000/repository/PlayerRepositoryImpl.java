@@ -26,7 +26,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
     private final KungFuBookRepository kungFuRepository;
 
     private static final int DEFAULT_REALM_ID = 6;
-    private static final Coordinate DEFAULT_COORDINATE = Coordinate.xy(191, 238);
+    private static final Coordinate DEFAULT_COORDINATE = Coordinate.xy(201, 244);
 
     private final EntityManagerFactory entityManagerFactory;
 
@@ -139,7 +139,6 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         }
     }
 
-    @Override
     public Optional<Pair<Long, Integer>> findIdAndRealm(int accountId, int id) {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             return entityManager.createQuery("select p from PlayerPo p where p.accountId = ?1 and p.id = ?2", PlayerPo.class)
@@ -238,6 +237,32 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         var kungfuBook = kungFuBookFactory.create();
         return PlayerImpl.builder()
                 .id(0)
+                .name(name)
+                .coordinate(DEFAULT_COORDINATE)
+                .kungFuBook(kungfuBook)
+                .attackKungFu(kungfuBook.findUnnamedAttack(AttackKungFuType.Fist))
+                .inventory(new Inventory())
+                .male(male)
+                .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
+                .yinYang(yinyang)
+                .revival(0)
+                .life(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .head(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .arm(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .leg(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .power(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.power(), yinyang.age()))
+                .innerPower(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.innerPower(), yinyang.age()))
+                .outerPower(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.outerPower(), yinyang.age()))
+                .pillSlots(new PillSlots())
+                .build();
+    }
+
+    public Player create(String name, boolean male, long id) {
+        Validate.notNull(name);
+        var yinyang = new YinYang();
+        var kungfuBook = kungFuBookFactory.create();
+        return PlayerImpl.builder()
+                .id(id)
                 .name(name)
                 .coordinate(DEFAULT_COORDINATE)
                 .kungFuBook(kungfuBook)

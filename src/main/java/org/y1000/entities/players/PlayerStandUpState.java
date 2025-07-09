@@ -32,6 +32,6 @@ final class PlayerStandUpState extends AbstractPlayerState {
 
     @Override
     public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
-        player().tryChangeAttackKung(attackKungFu);
+        player().tryChangeAttackKungFu(attackKungFu);
     }
 }

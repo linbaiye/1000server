@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.1
 package org.y1000.network.gen;
 
-public interface SimpleInputPacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.SimpleInputPacket)
+public interface UnequipInputPacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.UnequipInputPacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**

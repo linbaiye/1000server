@@ -38,6 +38,7 @@ public class PlayerEquipEvent extends Abstract2VisibleAndSelfMessageEvent {
         Validate.notNull(equipment);
         PlayerEquipPacket.Builder builder = PlayerEquipPacket.newBuilder()
                 .setId(player.id())
+                .setName(equipment.name())
                 .setColor(equipment.color())
                 .setEquipmentType(equipment.equipmentType().value());
         if (equipment.equipmentType() == EquipmentType.WEAPON) {
@@ -58,7 +59,6 @@ public class PlayerEquipEvent extends Abstract2VisibleAndSelfMessageEvent {
 
     public static PlayerEquipEvent create(Player player, Equipment equipment) {
         Validate.notNull(player);
-
         return new PlayerEquipEvent(player, Packet.newBuilder().setEquip(toEquipPacket(player, equipment)).build());
     }
 

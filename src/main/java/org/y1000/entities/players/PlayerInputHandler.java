@@ -1,5 +1,6 @@
 package org.y1000.entities.players;
 
+import org.y1000.item.EquipmentType;
 import org.y1000.message.input.*;
 
 public interface PlayerInputHandler {
@@ -14,5 +15,7 @@ public interface PlayerInputHandler {
     void swapItem(int slot1, int slot2);
 
     void onInventorySlotClicked(int slot, ClickInventorySlotInput.ClickType type);
+
+    void unequip(EquipmentType type);
 
 }
