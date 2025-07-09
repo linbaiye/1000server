@@ -65,4 +65,5 @@ public interface AttackKungFu extends KungFu {
 
     boolean isWithinAttackRange(Coordinate coordinate1, Coordinate coordinate2);
 
+
 }

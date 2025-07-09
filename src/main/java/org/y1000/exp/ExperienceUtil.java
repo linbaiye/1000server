@@ -102,6 +102,14 @@ type
     }
 
 
+    public static int damageToExp(int max, int damaged) {
+        if (damaged <= 0)
+            return 0;
+        var n = max / damaged;
+        return n > 15 ? ExperienceUtil.DEFAULT_EXP : ExperienceUtil.DEFAULT_EXP * n * n / (15 * 15);
+    }
+
+
     /*
 function GetLevel (aexp: integer): integer;
 var

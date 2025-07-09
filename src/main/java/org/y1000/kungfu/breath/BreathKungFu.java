@@ -1,8 +1,10 @@
 package org.y1000.kungfu.breath;
 
 import lombok.Builder;
+import org.y1000.entities.PlayerSoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerGainExpEvent;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;
@@ -73,18 +75,13 @@ public final class BreathKungFu extends AbstractKungFu {
         /*if (!canRegenerateResources(player)) {
             return;
         }*/
-//        eventSender.invoke(new EntitySoundEvent(player, computeSound(player.isMale())));
+        player.sendEvent(PlayerSoundEvent.sound(player, computeSound(player.isMale())));
         player.gainLife(computeResource(player.maxLife(), parameters.life()));
         player.gainPower(computeResource(player.maxPower(), parameters.power()));
         player.gainInnerPower(computeResource(player.maxInnerPower(), parameters.innerPower()));
         player.gainOuterPower(computeResource(player.maxOuterPower(), parameters.outerPower()));
         player.sendEvent(PlayerAttributeEvent.of(player));
-//        eventSender.invoke(new PlayerAttributeMessage(player));
-        if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
-//            eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
-//            if (isLevelFull())
-//                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
-        }
+        gainExp(player, ExperienceUtil.DEFAULT_EXP);
     }
 
     public boolean canRegenerateResources(Player player) {

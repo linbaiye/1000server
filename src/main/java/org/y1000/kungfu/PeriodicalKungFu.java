@@ -4,7 +4,7 @@ import org.y1000.entities.players.Player;
 
 public interface PeriodicalKungFu {
 
-    boolean updateResources(Player player, int delta);
+    boolean consumeResources(Player player, int delta);
 
     boolean canKeep(Player player);
 

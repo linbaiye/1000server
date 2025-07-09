@@ -48,7 +48,8 @@ public class Npc extends AbstractActiveEntity {
                RealmMap realmMap,
                String animate,
                String shape,
-               String idName) {
+               String idName,
+               Direction direction) {
         super(id);
         this.abilities = abilities;
         this.listener = listener;
@@ -59,7 +60,7 @@ public class Npc extends AbstractActiveEntity {
         this.animate = animate;
         this.shape = shape;
         this.idName = idName;
-        this.direction = Direction.DOWN;
+        this.direction = direction;
         realmMap.occupy(this);
     }
 

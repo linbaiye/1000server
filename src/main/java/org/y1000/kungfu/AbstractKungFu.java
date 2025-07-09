@@ -1,5 +1,7 @@
 package org.y1000.kungfu;
 
+import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerGainExpEvent;
 import org.y1000.exp.Experience;
 import org.y1000.exp.ExperienceUtil;
 
@@ -71,4 +73,15 @@ end;
         return new StringBuilder(str).append("\n");
     }
 
+    @Override
+    public void gainExp(Player player, int exp) {
+        if (exp <= 0 || isLevelFull())
+            return;
+        if (!gainPermittedExp(exp)) {
+            return;
+        }
+        player.sendEvent(PlayerGainExpEvent.of(player, this));
+//        if (isLevelFull())
+//            player.sendEvent();
+    }
 }

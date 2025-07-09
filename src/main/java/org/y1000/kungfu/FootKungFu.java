@@ -3,6 +3,7 @@ package org.y1000.kungfu;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.y1000.entities.PlayerSoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.exp.ExperienceUtil;
@@ -51,12 +52,8 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
         } else if (level() >= 5000) {
             snd = sound + 1;
         }
-//        eventSender.invoke(new EntitySoundEvent(player, String.valueOf(snd)));
-        if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
-//            eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
-//            if (isLevelFull())
-//                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
-        }
+        player.sendEvent(PlayerSoundEvent.sound(player, String.valueOf(snd)));
+        gainExp(player, ExperienceUtil.DEFAULT_EXP);
         int life = applyLevelToValue(eventResourceParameters.life());
         int useLife =  player.currentLife() > life ? life : player.currentLife() - 1;
         player.consumeLife(useLife);
@@ -64,7 +61,6 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
         player.consumeInnerPower(applyLevelToValue(eventResourceParameters.innerPower()));
         player.consumePower(applyLevelToValue(eventResourceParameters.power()));
         player.sendEvent(PlayerAttributeEvent.of(player));
-//        eventSender.invoke(new PlayerAttributeMessage(player));
     }
 
     @Override

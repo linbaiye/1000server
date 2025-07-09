@@ -51,7 +51,11 @@ public final class PlayerMoveState extends AbstractPlayerState {
             player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
             return;
         }
-        player().footKungFu().ifPresent(footKungFu -> footKungFu.tryGainExpAndUseResources(player()));
+        player().footKungFu().ifPresent(footKungFu -> {
+            footKungFu.tryGainExpAndUseResources(player());
+            if (!footKungFu.canKeep(player()))
+                player().disableFootKungFuAndSync();
+        });
         player().changeCoordinate(currentInput.destination());
         player().sendEvent(new PlayerMovedEvent(player()));
         log.debug("Player {} moved to {}.", player(), player().coordinate());

@@ -1,6 +1,8 @@
 package org.y1000.kungfu;
 
 
+import org.y1000.entities.players.Player;
+
 public interface KungFu {
     String name();
 
@@ -31,5 +33,7 @@ public interface KungFu {
     default boolean nameEquals(KungFu kungFu) {
         return kungFu != null && name().equals(kungFu.name());
     }
+
+    void gainExp(Player player, int exp);
 
 }

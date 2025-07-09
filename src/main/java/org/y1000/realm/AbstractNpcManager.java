@@ -6,6 +6,7 @@ import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.npc.*;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
+import org.y1000.entities.creatures.npc.event.NpcRemoveEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.message.I2ClientMessage;
@@ -141,6 +142,11 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 //        add(npc);
     }
 
+    public void onRemove(Npc source, I2ClientMessage message) {
+        sendToVisiblePlayers(source, message);
+        getAoiManager().remove(source);
+        remove(source);
+    }
 
     public void onMoved(Npc npc, I2ClientMessage message) {
         Set<Entity> visibleOrInvisible = getAoiManager().update(npc);

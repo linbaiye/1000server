@@ -2,6 +2,8 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.HurtAbility;
+import org.y1000.entities.creatures.npc.event.NpcRemoveEvent;
 import org.y1000.util.Coordinate;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,7 +18,9 @@ public final class WanderingAI extends AbstractMovableNpcAI {
     public WanderingAI(Npc npc,
                        int wanderRange) {
         super(npc);
+        npc.findAbility(NpcMoveAbility.class).ifPresent(NpcMoveAbility::disableFastMove);
         this.wanderRange = wanderRange;
+        npc.findAbility(NpcHurtAbility.class).ifPresent(h -> h.setHurtTrigger(this::onAttacked));
         initialize();
     }
 
@@ -51,64 +55,40 @@ public final class WanderingAI extends AbstractMovableNpcAI {
         changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
     }
 
-    public void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
-        if (currentAbility() instanceof NpcMoveAbility moveAbility) {
-            moveAbility.interrupt(npc());
+
+    @Override
+    void onAfterHurtStart(ActiveEntity attacker, NpcHurtAbility ability) {
+        if (attacker.findAbility(HurtAbility.class).map(HurtAbility::canBeAttacked).orElse(false) &&
+                npc().findAbility(NpcAttackAbility.class).isPresent()) {
+            npc().changeAI(CombatAI.hurtAbilityTriggered(npc(), attacker, ability));
         }
-        ability.apply(npc(), currentAbility());
-        npc().findAbility(NpcAttackAbility.class).ifPresentOrElse(a -> npc().changeAI(new CombatAI(npc(), attacker, ability)),
-                () -> changeAbilityOrThrow(NpcHurtAbility.class));
     }
 
-    private void onAbilityDone(NpcAbility doneAbility) {
+    void onAbilityDone(NpcAbility doneAbility) {
         if (doneAbility instanceof NpcMoveAbility) {
             onMoveDone();
         } else if (doneAbility instanceof NpcIdleAbility) {
             onIdleDone();
         } else if (doneAbility instanceof NpcTurnAbility) {
             onTurnDone();
+            log.debug("Turn done for {}.", npc().id());
+        } else if (doneAbility instanceof NpcDieAbility) {
+            npc().sendEvent(NpcRemoveEvent.of(npc()));
         }
     }
 
 
     private void onIdleDone() {
         moveCloser(destination);
-        /*var dir = AiPathUtil.computeNextMoveDirection(npc(), destination, previous);
-        if (dir == null) {
-            log.debug("No direction, set next target to {}.", destination);
-            initialize();
-            return;
-        }
-        if (dir == npc().direction()) {
-            if (!changeAbilityOrThrow(NpcMoveAbility.class)
-                    .tryNormalMove(npc(), dir)) {
-                initialize();
-            }
-        } else {
-            changeAbilityOrThrow(NpcTurnAbility.class).turn(npc(), dir);
-        }*/
     }
-
 
     @Override
     public void update(int delta) {
-        if (!currentAbility().update(delta)) {
-            return;
-        }
-        if (currentAbility() instanceof NpcHurtAbility hurtAbility) {
-            onAbilityDone(hurtAbility.getInterruptedAbility());
-        } else {
-            onAbilityDone(currentAbility());
-        }
+        updateAbility(delta);
     }
 
     @Override
-    void noDirection() {
-        initialize();
-    }
-
-    @Override
-    void directionNotMovable() {
+    void onMoveFailed() {
         initialize();
     }
 }

@@ -40,7 +40,6 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private final RealmSpecificSdbRepository realmSpecificSdbRepository;
 
-    private final Map<String, List<AnimationDescriptor>> animationDescriptors;
 
     public NpcFactoryImpl(ActionSdb actionSdb,
                           MonstersSdb monsterSdb,
@@ -57,22 +56,13 @@ public final class NpcFactoryImpl implements NpcFactory {
         this.magicParamSdb = magicParamSdb;
         this.merchantItemSdbRepository = merchantItemSdbRepository;
         this.realmSpecificSdbRepository = realmSpecificSdbRepository;
-        animationDescriptors = buildAnimationDescriptors(monsterSdb.getAllAnimateIds(), npcSdb.getAllAnimateIds());
     }
-
-
-    private Map<String, List<AnimationDescriptor>> buildAnimationDescriptors(Set<String> monsterAnimateIds, Set<String> npcAnimateIds) {
-        return Collections.emptyMap();
-//        monsterAnimateIds.forEach();
-    }
-
 
     private Direction randomDirection() {
         var v = ThreadLocalRandom.current().nextInt(Direction.UP.value(), Direction.UP_LEFT.value() + 1);
         log.debug("Random direction {}", Direction.fromValue(v));
         return Direction.fromValue(v);
     }
-
 
     private NpcSpell createSpell(String npcName, String magicName) {
         KungFuType magicType = kungFuSdb.getMagicType(magicName);
@@ -418,6 +408,10 @@ public final class NpcFactoryImpl implements NpcFactory {
                 createAnimationTimer(name, NpcAnimationEnum.Move));
     }
 
+    private NpcDieAbility createDieAbility(String name) {
+        return new NpcDieAbility(createAnimationTimer(name, NpcAnimationEnum.Die), monsterSdb.getSoundDie(name));
+    }
+
     private List<NpcAbility> abilities(String name) {
         List<NpcAbility> abilities = new ArrayList<>();
         if (monsterSdb.attack(name)) {
@@ -427,6 +421,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         abilities.add(createTurnAbility(name));
         abilities.add(createIdleAbility(name));
         abilities.add(createMoveAbility(name));
+        abilities.add(createDieAbility(name));
         return abilities;
     }
 
@@ -444,10 +439,9 @@ public final class NpcFactoryImpl implements NpcFactory {
                 listener, realmMap,
                 monsterSdb.getAnimate(idName),
                 monsterSdb.getShape(idName),
-                idName);
-        WanderingAI wanderingAI = new WanderingAI(npc, monsterSdb.getActionWidth(idName));
-        npc.findAbility(NpcHurtAbility.class).ifPresent(a -> a.setHurtTrigger(wanderingAI::onAttacked));
-        npc.changeAI(wanderingAI);
+                idName,
+                randomDirection());
+        npc.changeAI(new WanderingAI(npc, monsterSdb.getActionWidth(idName)));
         return npc;
     }
 }

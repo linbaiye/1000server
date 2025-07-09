@@ -1,5 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
+import org.y1000.entities.creatures.npc.event.NpcStartActionEvent;
+
 public final class NpcIdleAbility extends AbstractNonMoveAbility {
 
     public NpcIdleAbility(NpcAnimation animation) {
@@ -8,5 +10,10 @@ public final class NpcIdleAbility extends AbstractNonMoveAbility {
 
     public void apply(Npc npc) {
         sendActionAndStartAnimation(npc);
+    }
+
+    public void apply(Npc npc, int millis) {
+        npc.sendEvent(NpcStartActionEvent.of(npc, type()));
+        startAnimation(millis);
     }
 }

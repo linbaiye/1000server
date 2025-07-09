@@ -26,7 +26,7 @@ public abstract class AbstractPeriodicalConsumingKungFu extends AbstractKungFu i
         consumingTimer = 5000;
     }
 
-    public boolean updateResources(Player player, int delta) {
+    public boolean consumeResources(Player player, int delta) {
         consumingTimer -= delta;
         if (consumingTimer > 0) {
             return false;

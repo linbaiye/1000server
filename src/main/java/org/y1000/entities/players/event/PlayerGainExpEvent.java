@@ -1,46 +1,34 @@
 package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
+import org.y1000.kungfu.KungFu;
+import org.y1000.message.AbstractPlayerEvent;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerGainExpPacket;
 
-public final class PlayerGainExpEvent extends IAbstractPlayerEvent {
+public final class PlayerGainExpEvent extends Abstract2PlayerMessageEvent {
 
-    private final String name;
 
-    private final int newLevel;
-
-    private final boolean kungFu;
-
-    public PlayerGainExpEvent(Player source, String name, int newLevel) {
-        this(source, name, newLevel, true);
+    public PlayerGainExpEvent(Player player, Packet packet) {
+        super(player, packet);
     }
 
-    public PlayerGainExpEvent(Player source, String name, int newLevel, boolean kungFu) {
-        super(source, true);
-        this.name = name;
-        this.newLevel = newLevel;
-        this.kungFu = kungFu;
-    }
-
-    @Override
-    public void accept(PlayerEventVisitor playerEventHandler) {
-        playerEventHandler.visit(this);
-    }
-
-    @Override
-    protected Packet buildPacket() {
+    private static Packet buildPacket(boolean kungFu, String name, int level) {
         return Packet.newBuilder()
                 .setGainExp(PlayerGainExpPacket.newBuilder()
                         .setKungFu(kungFu)
                         .setName(name)
-                        .setLevel(newLevel)
+                        .setLevel(level)
                         .build())
                 .build();
     }
 
+    public static PlayerGainExpEvent of(Player player, KungFu kungFu) {
+        return new PlayerGainExpEvent(player, buildPacket(true, kungFu.name(), kungFu.level()));
+    }
+
     public static PlayerGainExpEvent nonKungFu(Player player, String name) {
-        return new PlayerGainExpEvent(player, name, 0, false);
+        return new PlayerGainExpEvent(player, buildPacket(false, name, 0));
     }
 }

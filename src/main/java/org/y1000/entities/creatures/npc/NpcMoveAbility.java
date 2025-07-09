@@ -17,9 +17,17 @@ public class NpcMoveAbility extends AbstractNpcAbility {
 
     private Npc npc;
 
+    private boolean fastMove;
+
+    /*
+     * If negative, the npc will finish moving even before the animation is done.
+     */
+    private final int diffMillis;
+
     public NpcMoveAbility(int walkSpeedMillis, NpcAnimation timer) {
         super(timer);
         this.walkSpeedMillis = walkSpeedMillis;
+        diffMillis = walkSpeedMillis - timer.getActualMillis();
     }
 
     public void interrupt(Npc npc) {
@@ -41,26 +49,33 @@ public class NpcMoveAbility extends AbstractNpcAbility {
         return true;
     }
 
-    public boolean tryNormalMove(Npc npc, Direction direction) {
-        var ret = tryMove(npc, direction);
-        startAnimation();
-        return ret;
+    public int idleTime() {
+        return diffMillis;
     }
 
-    public boolean tryFastMove(Npc npc, Direction direction) {
-        var ret = tryMove(npc, direction);
-        startAnimation(walkSpeedMillis);
-        return ret;
+    public void disableFastMove() {
+        fastMove = false;
+    }
+
+    /**
+     * The time to move one unit could be shorter than animation time.
+     */
+    public void enableFastMove() {
+        this.fastMove = true;
     }
 
 
-    private boolean tryMove(Npc npc, Direction direction) {
+    public boolean tryMove(Npc npc, Direction direction) {
         if (!npc.getRealmMap().movable(npc.coordinate().moveBy(direction))) {
             return false;
         }
         this.direction = direction;
         this.start = npc.coordinate();
         this.npc = npc;
+        if (fastMove && diffMillis < 0)
+            startAnimation(walkSpeedMillis);
+        else
+            startAnimation();
         npc.changeDirection(direction);
         npc.sendEvent(NpcMoveEvent.of(npc));
         return true;

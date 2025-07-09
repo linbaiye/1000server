@@ -1,8 +1,10 @@
 package org.y1000.entities.creatures.npc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.npc.AI.AiPathUtil;
 import org.y1000.util.Coordinate;
 
+@Slf4j
 public abstract class AbstractMovableNpcAI extends AbstractNpcAI {
 
     private Coordinate previous;
@@ -12,25 +14,25 @@ public abstract class AbstractMovableNpcAI extends AbstractNpcAI {
         previous = npc.coordinate().moveBy(npc.direction().opposite());
     }
 
-    abstract void noDirection();
-
-    abstract void directionNotMovable();
+    abstract void onMoveFailed();
 
     void computePrevious() {
         previous = npc().coordinate().moveBy(npc().direction().opposite());
     }
 
+
     void moveCloser(Coordinate destination) {
-        var dir = AiPathUtil.computeNextMoveDirection(npc(), destination, previous);
+        var dir = AiPathUtil.computeNextDirection(npc(), destination, previous);
         if (dir == null) {
-            noDirection();
+            onMoveFailed();
             return;
         }
         if (dir == npc().direction()) {
-            if (!changeAbilityOrThrow(NpcMoveAbility.class).tryNormalMove(npc(), dir)) {
-                directionNotMovable();
+            if (!changeAbilityOrThrow(NpcMoveAbility.class).tryMove(npc(), dir)) {
+                onMoveFailed();
             }
         } else {
+            log.debug("Turn start for {}.", npc().id());
             changeAbilityOrThrow(NpcTurnAbility.class).turn(npc(), dir);
         }
     }

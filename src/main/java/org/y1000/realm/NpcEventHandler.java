@@ -8,4 +8,6 @@ public interface NpcEventHandler extends EntityEventHandler {
 
     void onMoved(Npc npc, I2ClientMessage message);
 
+    void onRemove(Npc npc, I2ClientMessage message);
+
 }

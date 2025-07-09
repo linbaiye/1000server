@@ -30,6 +30,10 @@ public class NpcLifeBarEvent extends AbstractNpcEvent implements I2ClientMessage
         return Packet.newBuilder().setEntityDamaged(build).build();
     }
 
+    public static NpcLifeBarEvent die(Npc npc) {
+        return new NpcLifeBarEvent(npc, damagedPacket(npc.id(), 0, 1));
+    }
+
     public static NpcLifeBarEvent of(Npc npc, int cur, int max) {
         return new NpcLifeBarEvent(npc, damagedPacket(npc.id(), cur, max));
     }

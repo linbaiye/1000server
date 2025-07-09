@@ -1,10 +1,14 @@
 package org.y1000.entities.creatures.npc;
 
+import org.apache.commons.lang3.StringUtils;
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.HurtAbility;
+import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
 import org.y1000.entities.players.Damage;
 
 import java.util.Optional;
 
-public final class NpcAttackAbility extends AbstractNpcAbility {
+public final class NpcAttackAbility extends AbstractNonMoveAbility {
 
     private final int attackSpeedMillis;
 
@@ -18,7 +22,7 @@ public final class NpcAttackAbility extends AbstractNpcAbility {
 
     private final int accuracy;
 
-    private final Optional<String> sound;
+    private final String sound;
 
     public NpcAttackAbility(int attackSpeedMillis,
                             int recoveryMillis,
@@ -31,7 +35,7 @@ public final class NpcAttackAbility extends AbstractNpcAbility {
         this.recoveryMillis = recoveryMillis + 700;
         this.damage = new Damage(bodyDamage, 0, 0, 0);
         this.accuracy = hit + 75;
-        this.sound = Optional.ofNullable(sound);
+        this.sound = StringUtils.isEmpty(sound) ? null : sound;
     }
 
     public void cooldown(int delta) {
@@ -49,29 +53,26 @@ public final class NpcAttackAbility extends AbstractNpcAbility {
         recoveryCooldownMillis = recoveryMillis;
     }
 
-    public void cooldownAttack() {
+    private void cooldownAttack() {
         attackCooldownMillis = attackSpeedMillis;
     }
 
-    public void clearCooldown() {
-        recoveryCooldownMillis = 0;
-        attackCooldownMillis = 0;
+    public int cooldown() {
+        return Math.max(attackCooldownMillis, recoveryCooldownMillis);
     }
 
-    public Damage damage() {
-        return damage;
-    }
-
-    public Optional<String> sound() {
-        return sound;
+    public void apply(Npc npc, ActiveEntity target) {
+        target.findAbility(HurtAbility.class).ifPresent(hurtAbility ->  {
+            hurtAbility.attacked(npc, damage, accuracy);
+            if (sound != null)
+                npc.sendEvent(NpcSoundEvent.of(npc, sound));
+            sendActionAndStartAnimation(npc);
+            cooldownAttack();
+        });
     }
 
     public int accuracy() {
         return accuracy;
     }
 
-    @Override
-    public boolean update(int delta) {
-        return updateAnimation(delta);
-    }
 }

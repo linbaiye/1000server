@@ -38,8 +38,10 @@ final class CombatController {
         player.sendEvent(message);
         kungFu.consumeAttributes(player);
         player.cooldownAttack();
-        int hit = hurtAbility.attacked(player, player.damage(), player.hit());
-        player.sendEvent(PlayerSoundEvent.sound(player, hit == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
+        int exp = hurtAbility.attacked(player, player.damage(), player.hit());
+        if (exp > 0)
+            kungFu.gainExp(player, exp);
+        player.sendEvent(PlayerSoundEvent.sound(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
     }
 
     private void start() {

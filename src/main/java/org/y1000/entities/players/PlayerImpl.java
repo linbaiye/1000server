@@ -245,9 +245,9 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     private void disableProtectionNoTip() {
         if (protectKungFu != null) {
-//            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
-//            emitEvent(new EntitySoundEvent(this, protectKungFu.disableSound()));
-            this.protectKungFu = null;
+            sendSound(protectKungFu.disableSound());
+            syncActiveKungFuList();
+            protectKungFu = null;
         }
     }
 
@@ -451,13 +451,16 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     private void toggleProtectionKungFu(ProtectKungFu newProtection) {
         if (newProtection.nameEquals(protectKungFu)) {
+            sendSound(protectKungFu.disableSound());
             protectKungFu = null;
         } else {
             breathKungFu = null;
             protectKungFu = newProtection;
+            sendSound(protectKungFu.enableSound());
             protectKungFu.resetTimer();
         }
         sendEvent(PlayerSayEvent.say(this, newProtection.name()));
+        syncActiveKungFuList();
     }
 
 //        if (creatureState().canSitDown()) {
@@ -757,11 +760,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             return;
         }
         var exp = ExperienceUtil.DEFAULT_EXP - damagedLifeToExp(bodyDamage);
-        if (protectKungFu.gainPermittedExp(exp)) {
-            emitEvent(new PlayerGainExpEvent(this, protectKungFu.name(), protectKungFu.level()));
-            if (protectKungFu.isLevelFull())
-                emitEvent(new PlayerKungFuFullEvent(this, protectKungFu));
-        }
+        protectKungFu.gainExp(this, exp);
     }
 
 
@@ -936,7 +935,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         setRegenerateTimer();
         var newYY = yinYang.accumulate(DEFAULT_REGENERATE_SECONDS);
         if (newYY.hasHigherLevel(yinYang)) {
-            // emitEvent(PlayerGainExpEvent.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
+             sendEvent(PlayerGainExpEvent.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
         }
         int newAge = newYY.age();
         if (newAge != yinYang.age()) {
@@ -965,7 +964,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         int old = attribute.maxValue();
         attribute.gain(v);
         if (attribute.maxValue() != old) {
-            emitEvent(PlayerGainExpEvent.nonKungFu(this, name));
+//            emitEvent(PlayerGainExpEvent.nonKungFu(this, name));
         }
     }
 
@@ -1000,13 +999,13 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         legLife.gain(v);
     }
 
-    private boolean updateKungFuAndCheck(PeriodicalKungFu kungFu,
-                                         int delta,
-                                         Action disableAction) {
+    private boolean consumeAndDisable(PeriodicalKungFu kungFu,
+                                      int delta,
+                                      Action disableAction) {
         if (kungFu == null) {
             return false;
         }
-        var ret = kungFu.updateResources(this, delta);
+        var ret = kungFu.consumeResources(this, delta);
         if (ret && !kungFu.canKeep(this)) {
             disableAction.invoke();
         }
@@ -1014,9 +1013,9 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     private void updateKungFu(int delta) {
-        var resourceUpdated = updateKungFuAndCheck(protectKungFu, delta, this::disableProtectionNoTip);
-        resourceUpdated = resourceUpdated || updateKungFuAndCheck(footKungfu, delta, this::disableFootKungFuAndSync);
-        if (resourceUpdated) {
+        boolean consumed = consumeAndDisable(protectKungFu, delta, this::disableProtectionNoTip);
+        consumed = consumed|| consumeAndDisable(footKungfu, delta, this::disableFootKungFuAndSync);
+        if (consumed) {
             sendEvent(PlayerAttributeEvent.of(this));
             return;
         }
@@ -1173,9 +1172,9 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             return;
         }
         if (kungFu.gainPermittedExp(amount)) {
-            emitEvent(new PlayerGainExpEvent(this, kungFu.name(), kungFu.level()));
-            if (kungFu.isLevelFull())
-                emitEvent(new PlayerKungFuFullEvent(this, kungFu));
+            emitEvent(PlayerGainExpEvent.of(this, kungFu));
+//            if (kungFu.isLevelFull())
+//                emitEvent(new PlayerKungFuFullEvent(this, kungFu));
         }
     }
 
@@ -1522,7 +1521,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public boolean canBeAttacked() {
-        return false;
+//        return false;
+        return life.currentValue() > 0 && realm != null;
     }
 
     @Override
@@ -1533,14 +1533,15 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             return -1;
         int old = life.currentValue();
         takeDamage(damage);
-        cooldownRecovery();
-        hurtSound().ifPresent(this::sendSound);
-        changeState(PlayerHurtState.create(this, state));
-        sendEvent(PlayerChangeStateEvent.allVisible(this));
-        sendEvent(PlayerDamagedEvent.create(this));
-        sendEvent(PlayerLifeBarEvent.of(this));
-//        if (isDead())
-//            sendText("你被杀死了");
-        return Math.max(1, old - life.currentValue());
+//        if (life.currentValue() > 0) {
+            cooldownRecovery();
+            hurtSound().ifPresent(this::sendSound);
+            changeState(PlayerHurtState.create(this, state));
+            sendEvent(PlayerChangeStateEvent.allVisible(this));
+            sendEvent(PlayerDamagedEvent.create(this));
+            sendEvent(PlayerLifeBarEvent.of(this));
+            gainProtectionExp(old - currentLife());
+//        }
+        return ExperienceUtil.damageToExp(maxLife(), old - life.currentValue());
     }
 }

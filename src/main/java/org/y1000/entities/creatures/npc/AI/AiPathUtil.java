@@ -2,18 +2,16 @@ package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 
 @Slf4j
 public final class AiPathUtil {
-    public static Direction computeNextMoveDirection(Npc npc,
-                                                     Coordinate dest, Coordinate previous) {
+    public static Direction computeNextDirection(Npc npc,
+                                                 Coordinate dest, Coordinate previous) {
         Validate.notNull(npc);
         Validate.notNull(dest);
         Validate.notNull(previous);

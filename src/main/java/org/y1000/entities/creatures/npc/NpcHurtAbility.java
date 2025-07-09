@@ -2,10 +2,13 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.creatures.npc.event.NpcLifeBarEvent;
+import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
 import org.y1000.entities.players.Damage;
+import org.y1000.exp.ExperienceUtil;
 
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,7 +21,7 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
 
     private final int avoidance;
 
-    private final Optional<String> hurtSound;
+    private final String hurtSound;
 
     @Getter
     private int currentLife;
@@ -42,7 +45,7 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
         super(animationTimer);
         this.armor = armor;
         this.avoidance = avoidance + 20;
-        this.hurtSound = Optional.ofNullable(hurtSound);
+        this.hurtSound = StringUtils.isEmpty(hurtSound) ? null : hurtSound;
         this.maxLife = maxLife;
         this.currentLife = maxLife;
     }
@@ -59,6 +62,9 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
     public void apply(Npc npc, NpcAbility interruptedAbility) {
         sendActionAndStartAnimation(npc);
         npc.sendEvent(NpcLifeBarEvent.of(npc, currentLife, maxLife));
+        if (hurtSound != null) {
+            npc.sendEvent(NpcSoundEvent.of(npc, hurtSound));
+        }
         if (interruptedAbility instanceof NpcHurtAbility hurtAbility) {
             this.interruptedAbility = hurtAbility.interruptedAbility;
         } else {
@@ -75,14 +81,10 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
         int bodyDamage = damage.bodyDamage() - armor;
         bodyDamage = bodyDamage > 0 ? bodyDamage : 1;
         currentLife = currentLife > bodyDamage ? currentLife - bodyDamage : 0;
-        int damageTaken = Math.max(before - currentLife, 1);
+        int damageTaken = before - currentLife;
         if (this.hurtTrigger != null) {
             hurtTrigger.accept(activeEntity, this);
         }
-        return damageTaken;
-    }
-
-    public Optional<String> hurtSound() {
-        return hurtSound;
+        return ExperienceUtil.damageToExp(maxLife, damageTaken);
     }
 }
