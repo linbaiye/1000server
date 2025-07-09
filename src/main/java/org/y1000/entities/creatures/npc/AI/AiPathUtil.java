@@ -17,12 +17,9 @@ public final class AiPathUtil {
         Validate.notNull(npc);
         Validate.notNull(dest);
         Validate.notNull(previous);
-        if (dest.equals(Coordinate.Empty)) {
-            return null;
-        }
         var dir = npc.coordinate().computeDirection(dest);
         Coordinate next = npc.coordinate().moveBy(dir);
-        if (next.equals(dest) && !npc.getRealmMap().movable(next)) {
+        if (next.equals(dest)) {
             // copied, but why?
             return dir != npc.direction() ? dir : null;
         }

@@ -26,7 +26,7 @@ public class NpcLifeBarEvent extends AbstractNpcEvent implements I2ClientMessage
     }
 
     public static Packet damagedPacket(long id, int cur, int max) {
-        EntityDamagedPacket build = EntityDamagedPacket.newBuilder().setId(id).setPercent(cur / max).build();
+        EntityDamagedPacket build = EntityDamagedPacket.newBuilder().setId(id).setPercent((int)(((float)cur / max) * 100)).build();
         return Packet.newBuilder().setEntityDamaged(build).build();
     }
 

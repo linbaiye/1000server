@@ -53,9 +53,6 @@ public class NpcMoveAbility extends AbstractNpcAbility {
         return ret;
     }
 
-    public void toggleCombat() {
-
-    }
 
     private boolean tryMove(Npc npc, Direction direction) {
         if (!npc.getRealmMap().movable(npc.coordinate().moveBy(direction))) {

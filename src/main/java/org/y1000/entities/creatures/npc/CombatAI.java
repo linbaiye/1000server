@@ -6,25 +6,56 @@ import org.y1000.message.NpcSnapshot;
 public class CombatAI implements NpcAI {
     private final Npc npc;
 
-    private NpcAction currentAction;
-
     private ActiveEntity enemy;
 
     private final NpcAttackAbility attackAbility;
 
-    public CombatAI(Npc npc) {
+    private NpcAbility currentAbility;
+
+    public CombatAI(Npc npc, ActiveEntity entity, NpcHurtAbility hurtAbility) {
         this.npc = npc;
-        attackAbility = npc.findAbility(NpcAttackAbility.class).orElseThrow();
+        this.attackAbility = npc.findAbility(NpcAttackAbility.class).orElseThrow();
+        this.enemy = entity;
+        hurtAbility.setHurtTrigger(this::onAttacked);
+        this.currentAbility = hurtAbility;
     }
 
     @Override
     public void update(int delta) {
+        attackAbility.cooldown(delta);
+        if (!currentAbility.update(delta)) {
+            return;
+        }
+    }
+
+
+    private void moveCloser() {
 
     }
 
+
+    private void onMoveDone() {
+        if (npc.coordinate().directDistance(enemy.coordinate()) >= 2) {
+            moveCloser();
+            return;
+        }
+        if (attackAbility.ableToAttack()) {
+
+        }
+    }
+
+    private void onAbilityDone(NpcAbility doneAbility) {
+        if (doneAbility instanceof NpcMoveAbility) {
+            onMoveDone();
+        } else if (doneAbility instanceof NpcIdleAbility) {
+        } else if (doneAbility instanceof NpcTurnAbility) {
+        }
+    }
+
+
     @Override
     public NpcSnapshot captureSnapshot() {
-        return null;
+        return currentAbility.captureSnapshot(npc);
     }
 
 
@@ -70,7 +101,7 @@ public class CombatAI implements NpcAI {
 //
 //
 //
-//    public void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
-//
-//    }
+    public void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
+
+    }
 }

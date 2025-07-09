@@ -2,28 +2,20 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.creatures.npc.AI.AiPathUtil;
-import org.y1000.message.NpcSnapshot;
 import org.y1000.util.Coordinate;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
-public final class WanderingAI implements NpcAI {
+public final class WanderingAI extends AbstractMovableNpcAI {
 
-    private final Npc npc;
-
-    private Coordinate target;
+    private Coordinate destination;
 
     private final int wanderRange;
 
-    private Coordinate previous;
-
-    private NpcAbility currentAbility;
-
     public WanderingAI(Npc npc,
                        int wanderRange) {
-        this.npc = npc;
+        super(npc);
         this.wanderRange = wanderRange;
         initialize();
     }
@@ -39,45 +31,33 @@ public final class WanderingAI implements NpcAI {
     }
 
     private void initialize() {
-        this.target = chooseTarget(npc.getSpawnCoordinate());
-        this.previous = npc.coordinate().moveBy(npc.direction().opposite());
+        computePrevious();
+        this.destination = chooseTarget(npc().getSpawnCoordinate());
         changeAbilityOrThrow(NpcIdleAbility.class)
-                .apply(npc);
-    }
-
-
-    private <T extends NpcAbility> T changeAbilityOrThrow(Class<T> type) {
-        var a = npc.findAbility(type).orElseThrow();
-        currentAbility = a;
-        return a;
+                .apply(npc());
     }
 
 
     private void onMoveDone() {
-        if (npc.coordinate().equals(target)) {
-            log.debug("Arrived, set target to {}.", target);
-            target = chooseTarget(npc.getSpawnCoordinate());
+        computePrevious();
+        if (npc().coordinate().equals(destination)) {
+            log.debug("Arrived, set target to {}.", destination);
+            destination = chooseTarget(npc().getSpawnCoordinate());
         }
-        previous = npc.coordinate().moveBy(npc.direction().opposite());
-        changeAbilityOrThrow(NpcIdleAbility.class).apply(npc);
+        changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
     }
 
     private void onTurnDone() {
-        changeAbilityOrThrow(NpcIdleAbility.class).apply(npc);
+        changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
     }
 
     public void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
-        if (currentAbility instanceof NpcMoveAbility moveAbility) {
-            moveAbility.interrupt(npc);
+        if (currentAbility() instanceof NpcMoveAbility moveAbility) {
+            moveAbility.interrupt(npc());
         }
-//        if (ability.getCurrentLife() == 0) {
-//            npc.findAction(DieAction.class).ifPresent(dieAbility -> dieAbility.die(npc));
-//            return;
-//        }
-        ability.apply(npc, currentAbility);
-        currentAbility = ability;
-//        npc.findAbility(NpcAttackAbility.class)
-//                .ifPresentOrElse(a -> npc.changeAI(new CombatAI(npc, currentAction, attacker)), this::swallowAttacked);
+        ability.apply(npc(), currentAbility());
+        npc().findAbility(NpcAttackAbility.class).ifPresentOrElse(a -> npc().changeAI(new CombatAI(npc(), attacker, ability)),
+                () -> changeAbilityOrThrow(NpcHurtAbility.class));
     }
 
     private void onAbilityDone(NpcAbility doneAbility) {
@@ -92,45 +72,43 @@ public final class WanderingAI implements NpcAI {
 
 
     private void onIdleDone() {
-        var dir = AiPathUtil.computeNextMoveDirection(npc, target, previous);
+        moveCloser(destination);
+        /*var dir = AiPathUtil.computeNextMoveDirection(npc(), destination, previous);
         if (dir == null) {
-            log.debug("No direction, set next target to {}.", target);
+            log.debug("No direction, set next target to {}.", destination);
             initialize();
             return;
         }
-        if (dir == npc.direction()) {
+        if (dir == npc().direction()) {
             if (!changeAbilityOrThrow(NpcMoveAbility.class)
-                    .tryNormalMove(npc, dir)) {
+                    .tryNormalMove(npc(), dir)) {
                 initialize();
             }
         } else {
-            changeAbilityOrThrow(NpcTurnAbility.class).turn(npc, dir);
-        }
+            changeAbilityOrThrow(NpcTurnAbility.class).turn(npc(), dir);
+        }*/
     }
 
-    /*
-        private void onActionDone(NpcActionEnum actionEnum) {
-        switch (actionEnum) {
-            case Idle -> nextMove();
-            case Move -> onMoveDone();
-            case Turn -> onTurnDone();
-        }
-     */
 
     @Override
     public void update(int delta) {
-        if (!currentAbility.update(delta)) {
+        if (!currentAbility().update(delta)) {
             return;
         }
-        if (currentAbility instanceof NpcHurtAbility hurtAbility) {
+        if (currentAbility() instanceof NpcHurtAbility hurtAbility) {
             onAbilityDone(hurtAbility.getInterruptedAbility());
         } else {
-            onAbilityDone(currentAbility);
+            onAbilityDone(currentAbility());
         }
     }
 
     @Override
-    public NpcSnapshot captureSnapshot() {
-        return currentAbility.captureSnapshot(npc);
+    void noDirection() {
+        initialize();
+    }
+
+    @Override
+    void directionNotMovable() {
+        initialize();
     }
 }
