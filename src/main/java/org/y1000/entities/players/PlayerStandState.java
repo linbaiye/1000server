@@ -60,7 +60,7 @@ final class PlayerStandState extends AbstractPlayerState {
     @Override
     public void sitOrStandUp() {
         player().disableFootKungFuAndSync();
-        player().stopFight();
+        player().stopCombat();
         player().changeState(PlayerSitDownState.sit(player()));
         player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
@@ -71,7 +71,7 @@ final class PlayerStandState extends AbstractPlayerState {
         if (playerStateEnum() == PlayerStateEnum.Idle) {
             player().changeState(PlayerStandState.fightStand(player()));
         } else {
-            player().stopFight();
+            player().stopCombat();
             player().changeState(PlayerStandState.idle(player()));
         }
         player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
@@ -83,6 +83,7 @@ final class PlayerStandState extends AbstractPlayerState {
         if (playerStateEnum() == PlayerStateEnum.FightStand) {
             player().changeState(PlayerStandState.idle(player()));
             player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+            player().stopCombat();
         }
         player().toggleFootKungFu(footKungFu);
     }
@@ -108,6 +109,7 @@ final class PlayerStandState extends AbstractPlayerState {
 
     @Override
     public void tryToggleBreathKungFu(BreathKungFu breathKungFu) {
+        player().stopCombat();
         player().toggleBreathKungFu(breathKungFu);
         player().changeState(PlayerSitDownState.sit(player()));
         player().sendEvent(PlayerChangeStateEvent.allVisible(player()));

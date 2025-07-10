@@ -6,6 +6,8 @@ public interface HurtAbility {
 
     boolean canBeAttacked();
 
+    boolean canBeSwung();
+
     /**
      *
      * @param attacker

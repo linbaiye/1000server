@@ -4,15 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.TestingEventListener;
 import org.y1000.entities.players.Player;
 import org.y1000.item.*;
 import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.message.serverevent.UpdateInventorySlotEvent;
-import org.y1000.trade.TradeItem;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +38,7 @@ class InventoryTest extends AbstractUnitTestFixture {
 
     @Test
     void findByType() {
-        inventory.put(new WeaponImpl("test", itemSdb));
+        inventory.add(new WeaponImpl("test", itemSdb));
         Optional<Weapon> weapon = inventory.findWeapon(AttackKungFuType.SWORD);
         assertTrue(weapon.isPresent());
         weapon.ifPresent(w -> assertEquals(w.kungFuType(), AttackKungFuType.SWORD));
@@ -51,7 +46,7 @@ class InventoryTest extends AbstractUnitTestFixture {
 
     @Test
     void findSlot() {
-        inventory.put(new WeaponImpl("test", itemSdb));
+        inventory.add(new WeaponImpl("test", itemSdb));
         int weaponSlot = inventory.findWeaponSlot(AttackKungFuType.SWORD);
         assertEquals(1, weaponSlot);
         assertEquals(0, inventory.findWeaponSlot(AttackKungFuType.AXE));
@@ -59,16 +54,16 @@ class InventoryTest extends AbstractUnitTestFixture {
 
     @Test
     void add() {
-        assertEquals(0, inventory.put(null));
-        assertEquals(1, inventory.put(createHair()));
-        assertEquals(2, inventory.put(createHair()));
-        assertEquals(3, inventory.put(itemFactory.createMoney(100)));
-        assertEquals(3, inventory.put(itemFactory.createMoney(100)));
+        assertEquals(0, inventory.add(null));
+        assertEquals(1, inventory.add(createHair()));
+        assertEquals(2, inventory.add(createHair()));
+        assertEquals(3, inventory.add(itemFactory.createMoney(100)));
+        assertEquals(3, inventory.add(itemFactory.createMoney(100)));
         for (int i = 0; i < inventory.capacity() - 3; i++) {
-            assertNotEquals(0, inventory.put(createHair()));
+            assertNotEquals(0, inventory.add(createHair()));
         }
-        assertEquals(0, inventory.put(createHair()));
-        assertEquals(0, inventory.put(null));
+        assertEquals(0, inventory.add(createHair()));
+        assertEquals(0, inventory.add(null));
     }
 
     /*

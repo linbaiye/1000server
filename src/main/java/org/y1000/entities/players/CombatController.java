@@ -16,10 +16,10 @@ final class CombatController {
     private int resourceNoticeTimer;
     private final HurtAbility hurtAbility;
 
-    CombatController(PlayerImpl player, ActiveEntity entity) {
+    CombatController(PlayerImpl player, ActiveEntity entity, HurtAbility hurtAbility) {
         this.player = player;
         enemy = entity;
-        hurtAbility = entity.findAbility(HurtAbility.class).orElseThrow();
+        this.hurtAbility = hurtAbility;
         resourceNoticeTimer = 0;
     }
 
@@ -52,11 +52,6 @@ final class CombatController {
             readyToFight();
             return;
         }
-        if (!hurtAbility.canBeAttacked()) {
-            log.debug("Enemy can't be attacked now.");
-            readyToFight();
-            return;
-        }
         String ret = player.attackKungFu().checkResourceToAttack(player);
         if (ret != null) {
             player.sendEvent(PlayerTextMessage.of(player, ret));
@@ -74,6 +69,10 @@ final class CombatController {
 
 
     boolean update(int delta) {
+        if (!hurtAbility.canBeSwung()) {
+            player.stopCombat();
+            return false;
+        }
         if (player.maxCooldown() > 0)
             return false;
         AttackKungFu kungFu = player.attackKungFu();
@@ -86,9 +85,6 @@ final class CombatController {
             }
             return false;
         }
-        if (!hurtAbility.canBeAttacked()) {
-            return false;
-        }
         if (player.attackKungFu().isWithinAttackRange(player.coordinate(), enemy.coordinate())) {
             attack();
             return true;
@@ -96,7 +92,10 @@ final class CombatController {
         return false;
     }
 
-    static CombatController createAndStart(PlayerImpl player, ActiveEntity target) {
+    static CombatController startIfAllowed(PlayerImpl player, ActiveEntity target) {
+        HurtAbility ability = target.findAbility(HurtAbility.class).orElse(null);
+        if (ability == null || !ability.canBeSwung() || player.attackKungFu().isRanged())
+            return null;
         CombatController combatController = new CombatController(player, target);
         combatController.start();;
         return combatController;

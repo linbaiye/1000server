@@ -53,7 +53,6 @@ public final class NpcAttackAbility extends AbstractNonMoveAbility {
             if (sound != null)
                 npc.sendEvent(NpcSoundEvent.of(npc, sound));
             sendActionAndStartShortAnimation(npc, attackSpeedMillis);
-            log.debug("Animation {}, attackSpeed {}.", animationLength(), attackSpeedMillis);
             attackCooldownMillis = attackSpeedMillis;
         });
     }

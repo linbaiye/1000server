@@ -77,7 +77,7 @@ public final class Quest implements NpcInteractability  {
             player.emitEvent(new UpdateInventorySlotEvent(player, slot));
         }
         Item item = itemCreator.apply(rewardItem.itemName(), rewardItem.number());
-        int slot = player.inventory().put(item);
+        int slot = player.inventory().add(item);
         player.emitEvent(new UpdateInventorySlotEvent(player, slot));
         item.eventSound().ifPresent(s -> player.emitEvent(new EntitySoundEvent(player, s)));
         player.emitEvent(PlayerTextEvent.pickedItem(player, item.name(), rewardItem.number()));

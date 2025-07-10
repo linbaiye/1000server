@@ -77,6 +77,11 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
         return currentLife > 0;
     }
 
+    @Override
+    public boolean canBeSwung() {
+        return canBeAttacked();
+    }
+
     public void apply(Npc npc, NpcAbility interruptedAbility) {
         sendActionAndStartShortAnimation(npc, recoveryMillis);
         npc.sendEvent(NpcLifeBarEvent.of(npc, currentLife, maxLife));

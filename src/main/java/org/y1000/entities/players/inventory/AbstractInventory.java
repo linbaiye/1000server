@@ -42,7 +42,7 @@ public abstract class AbstractInventory {
         return capacity() - itemCount();
     }
 
-    public int put(Item item) {
+    public int add(Item item) {
         if (item == null) {
             return 0;
         }
@@ -135,7 +135,7 @@ public abstract class AbstractInventory {
         return true;
     }
 
-    public void put(int slot, Item item) {
+    public void add(int slot, Item item) {
         Validate.notNull(item, "item must not be null.");
         var items = items();
         Item current = items.get(slot);

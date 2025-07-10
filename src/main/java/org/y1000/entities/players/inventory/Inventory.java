@@ -243,7 +243,7 @@ public final class Inventory extends AbstractInventory {
             }
             player.emitEvent(new UpdateInventorySlotEvent(player, sellingItem.slotId(), getItem(sellingItem.slotId())));
         }
-        put(profit);
+        add(profit);
         int n = findFirstSlot(ItemType.MONEY_NAME);
         player.emitEvent(new UpdateInventorySlotEvent(player, n, getItem(n)));
     }

@@ -5,13 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.event.IEntityEvent;
 import org.y1000.item.ItemFactory;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.sdb.QuestSdb;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,13 +53,13 @@ class QuestTest extends AbstractUnitTestFixture {
 
     @Test
     void canComplete() {
-        inventory.put(itemFactory.createItem("生药", 1));
+        inventory.add(itemFactory.createItem("生药", 1));
         Quest quest = Quest.parse("test", questSdb);
         assertTrue(quest.canComplete(player).contains("需要1个丸药"));
-        inventory.put(itemFactory.createItem("丸药", 1));
+        inventory.add(itemFactory.createItem("丸药", 1));
         assertNull(quest.canComplete(player));
         while(!inventory.isFull()) {
-            inventory.put(itemFactory.createItem("长剑"));
+            inventory.add(itemFactory.createItem("长剑"));
         }
         assertTrue(quest.canComplete(player).contains("物品栏已满"));
     }

@@ -3,19 +3,15 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.npc.Banker;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerOpenBankEvent;
 import org.y1000.entities.players.inventory.AbstractInventory;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.event.EntityEvent;
-import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.item.Item;
 import org.y1000.item.ItemType;
 import org.y1000.item.StackItem;
 import org.y1000.message.input.ClientOperateBankEvent;
-import org.y1000.message.serverevent.UpdateBankEvent;
-import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.repository.BankRepository;
 
 import java.util.HashMap;
@@ -139,7 +135,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
             return false;
         }
         Item removed = from.remove(fromSlot, number);
-        to.put(toSlot, removed);
+        to.add(toSlot, removed);
         return true;
     }
 

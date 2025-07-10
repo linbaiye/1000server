@@ -35,8 +35,8 @@ class BuyInteractabilityTest extends AbstractUnitTestFixture {
         var player = Mockito.mock(Player.class);
         BuyInteractability buyInteractability = new BuyInteractability(buyItems);
         Inventory inventory = new Inventory();
-        inventory.put(itemFactory.createItem("肉", 2));
-        inventory.put(itemFactory.createItem("皮", 1));
+        inventory.add(itemFactory.createItem("肉", 2));
+        inventory.add(itemFactory.createItem("皮", 1));
         when(player.inventory()).thenReturn(inventory);
         List<TradeItem> items = List.of(new TradeItem("肉", 1, 1), new TradeItem("皮", 1, 2));
         buyInteractability.buy(player, items, itemFactory::createMoney);

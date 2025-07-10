@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
-import org.y1000.entities.creatures.event.CreatureDieEvent;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.projectile.Projectile;
@@ -267,7 +266,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             tryChangeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.Fist));
         } else {
             equipped = equippedEquipments.remove(type);
-            inventory.put(equipped);
+            inventory.add(equipped);
             equipped.eventSound().ifPresent(this::sendSound);
             sendEvent(PlayerUnequipEvent.of(this, equipped.equipmentType()));
             syncInventoryQuietly();
@@ -337,7 +336,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         Equipment removed = equippedEquipments.remove(type);
         int slot = 0;
         if (removed != null) {
-            slot = inventory.put(removed);
+            slot = inventory.add(removed);
             log.debug("Unequiped {} id {} and put to slot {}.", type, removed.id(), slot);
         }
         return slot;
@@ -440,7 +439,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
     }
 
-    void stopFight() {
+    void stopCombat() {
         combatController = null;
     }
 
@@ -452,7 +451,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             footKungfu = null;
             protectKungFu().ifPresent(k -> sendSound(k.disableSound()));
             protectKungFu = null;
-            stopFight();
         }
         sendEvent(PlayerSayEvent.say(this, newBreath.name()));
         syncActiveKungFuList();
@@ -483,7 +481,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             this.footKungfu = newKungFu;
         }
         breathKungFu = null;
-        stopFight();
         syncActiveKungFuList();
         sendEvent(PlayerSayEvent.say(this, newKungFu.name()));
     }
@@ -550,10 +547,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
 
     void acceptAttack(Entity entity) {
-        combatController = null;
-        if (entity instanceof ActiveEntity activeEntity &&
-                activeEntity.findAbility(HurtAbility.class).isPresent())
-            combatController = CombatController.createAndStart(this, activeEntity);
+        combatController = CombatController.startIfAllowed(this, entity);
     }
 
 
@@ -854,7 +848,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     private void equipWeaponFromSlot(int slot) {
         Weapon weaponToEquip = (Weapon) inventory.remove(slot);
         weapon().ifPresent(equippedWeapon -> {
-            inventory.put(slot, equippedWeapon);
+            inventory.add(slot, equippedWeapon);
             log.debug("Put equipped weapon {} id {} back to inventory.", equippedWeapon.name(), equippedWeapon.id());
         });
         equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
@@ -864,7 +858,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     private void equipArmorFromSlot(int slot) {
         SexualEquipment equipment = (SexualEquipment) inventory.remove(slot);
         getEquipment(equipment.equipmentType(), SexualEquipment.class)
-                .ifPresent(equipped -> inventory.put(slot, equipped));
+                .ifPresent(equipped -> inventory.add(slot, equipped));
         equippedEquipments.put(equipment.equipmentType(), equipment);
     }
 

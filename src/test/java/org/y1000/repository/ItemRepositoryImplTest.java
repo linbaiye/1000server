@@ -58,9 +58,9 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
     void saveInventory() {
         PlayerImpl player = playerBuilder().id(11).build();
         Inventory inventory = player.inventory();
-        int slot0 = inventory.put(itemFactory.createItem("生药", 1));
-        int slot1 = inventory.put(itemFactory.createItem("丸药", 2));
-        int slot2 = inventory.put(itemFactory.createItem("长剑", 1));
+        int slot0 = inventory.add(itemFactory.createItem("生药", 1));
+        int slot1 = inventory.add(itemFactory.createItem("丸药", 2));
+        int slot2 = inventory.add(itemFactory.createItem("长剑", 1));
         EntityManager entityManager = jpaFixture.beginTx();
         itemRepository.saveInventory(entityManager, player.id(), inventory);
         jpaFixture.submitTx();
@@ -79,10 +79,10 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
     void findInventory() {
         PlayerImpl player = playerBuilder().id(11).build();
         Inventory inventory = player.inventory();
-        int slot1 = inventory.put(itemFactory.createItem("生药", 2));
+        int slot1 = inventory.add(itemFactory.createItem("生药", 2));
         Equipment equipment = itemFactory.createEquipment("女子黄龙弓服", 4);
         equipment.findAbility(Upgradable.class).get().upgrade();
-        int slot2 = inventory.put(equipment);
+        int slot2 = inventory.add(equipment);
         EntityManager entityManager = jpaFixture.beginTx();
         itemRepository.saveInventory(entityManager, player.id(), inventory);
         jpaFixture.submitTx();

@@ -8,12 +8,10 @@ import org.y1000.entities.PlayerSoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.item.*;
 import org.y1000.kungfu.*;
-import org.y1000.TestingEventListener;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.SyncActiveKungEvent;
-import org.y1000.util.Coordinate;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,10 +54,10 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void tryChangeAttackKung_whenInventoryFull() {
         for (int i = 0; i < player.inventory().capacity(); i++)
-            player.inventory().put(itemFactory.createItem("长枪"));
+            player.inventory().add(itemFactory.createItem("长枪"));
         player.tryChangeAttackKungFu(player.kungFuBook().findUnnamedAttack(AttackKungFuType.SPEAR));
         // make inventory full.
-        player.inventory().put(itemFactory.createItem("长枪"));
+        player.inventory().add(itemFactory.createItem("长枪"));
         eventListener.clear();
         assertFalse(player.tryChangeAttackKungFu(player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist)));
         PlayerTextMessage message = eventListener.removeFirst(PlayerTextMessage.class);
@@ -68,7 +66,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void tryChangeAttackKung_whenNeedToUnequipWeapon() {
-        player.inventory().put(itemFactory.createItem("长剑"));
+        player.inventory().add(itemFactory.createItem("长剑"));
         assertTrue(player.tryChangeAttackKungFu(player.kungFuBook().findUnnamedAttack(AttackKungFuType.SWORD)));
         assertTrue(player.weapon().isPresent());
         assertTrue(player.inventory().findWeapon(AttackKungFuType.SWORD).isEmpty());
@@ -87,7 +85,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertTrue(eventListener.findFirst(PlayerSayEvent.class).isPresent());
 
         eventListener.clear();
-        player.inventory().put(itemFactory.createItem("长剑"));
+        player.inventory().add(itemFactory.createItem("长剑"));
         assertTrue(player.tryChangeAttackKungFu(player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist)));
         assertTrue(eventListener.findFirst(PlayerSayEvent.class).isPresent());
     }
@@ -96,7 +94,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     void tryEquipWeaponFromSlot_whenSexMismatch() {
         recreatePlayer(playerBuilder().male(true));
         var equip = itemFactory.createEquipment("女子长发");
-        int slot = player.inventory().put(equip);
+        int slot = player.inventory().add(equip);
         assertFalse(player.tryEquipFromSlot(slot, equip));
         var message = eventListener.removeFirst(PlayerTextMessage.class);
         assertEquals("你无法使用该装备。", message.toPacket().getText().getText());
@@ -106,7 +104,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     void tryEquipWeaponFromSlot_whenSwitchNoneWeapon() {
         recreatePlayer(playerBuilder().male(true).hair((SexualEquipment) itemFactory.createEquipment("男子短发")));
         var equip = itemFactory.createEquipment("男子长发");
-        int slot = player.inventory().put(equip);
+        int slot = player.inventory().add(equip);
         assertTrue(player.tryEquipFromSlot(slot, equip));
         assertEquals("男子短发", player.inventory().getItem(slot).name());
         assertEquals("男子长发", player.hair().get().name());
@@ -118,7 +116,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     void tryEquipWeaponFromSlot_whenCompatibleWithKungFu() {
         player.tryChangeAttackKungFu(player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist));
         var equip = itemFactory.createEquipment("黄金手套");
-        int slot = player.inventory().put(equip);
+        int slot = player.inventory().add(equip);
         assertTrue(player.tryEquipFromSlot(slot, equip));
         assertTrue(eventListener.findFirst(PlayerEquipEvent.class).isPresent());
         assertTrue(eventListener.findFirst(InventoryUpdatedEvent.class).isPresent());
@@ -129,7 +127,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     void tryEquipWeaponFromSlot_whenIncompatibleWithKungFu() {
         player.tryChangeAttackKungFu(player.kungFuBook().findUnnamedAttack(AttackKungFuType.Fist));
         var equip = itemFactory.createEquipment("长剑");
-        int slot = player.inventory().put(equip);
+        int slot = player.inventory().add(equip);
         assertTrue(player.tryEquipFromSlot(slot, equip));
         assertTrue(eventListener.findFirst(PlayerEquipEvent.class).isPresent());
         assertTrue(eventListener.findFirst(InventoryUpdatedEvent.class).isPresent());

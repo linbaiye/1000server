@@ -38,8 +38,8 @@ class MerchantableImplTest extends AbstractNpcUnitTestFixture {
         Inventory inventory = new Inventory();
         buyItems.add(new MerchantItem("皮", 7));
         buyItems.add(new MerchantItem("肉", 5));
-        inventory.put(itemFactory.createItem("肉", 2));
-        inventory.put(itemFactory.createItem("皮", 1));
+        inventory.add(itemFactory.createItem("肉", 2));
+        inventory.add(itemFactory.createItem("皮", 1));
         when(player.inventory()).thenReturn(inventory);
         List<TradeItem> items = List.of(new TradeItem("肉", 1, 1), new TradeItem("皮", 1, 2));
         merchantable.buy(player, items, itemFactory::createMoney);
@@ -55,7 +55,7 @@ class MerchantableImplTest extends AbstractNpcUnitTestFixture {
         var player = Mockito.mock(Player.class);
         Inventory inventory = new Inventory();
         when(player.inventory()).thenReturn(inventory);
-        inventory.put(itemFactory.createMoney(41));
+        inventory.add(itemFactory.createMoney(41));
         sellItems.add(new MerchantItem("生药", 20));
         sellItems.add(new MerchantItem("丸药", 10));
         List<TradeItem> items = List.of(new TradeItem("生药", 1, 3), new TradeItem("丸药", 2, 4));

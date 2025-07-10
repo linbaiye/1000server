@@ -5,6 +5,7 @@ import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.message.PlayerEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,22 @@ public class TestingPlayerEventListener implements PlayerEventListener  {
 
     public <T extends PlayerEvent> T removeFirst(Class<T> type) {
         return type.cast(eventList.remove(0));
+    }
+
+    public <T extends PlayerEvent> T remove(Class<T> type) {
+        Iterator<PlayerEvent> iterator = eventList.iterator();
+        while (iterator.hasNext()) {
+            PlayerEvent next = iterator.next();
+            if (type.isAssignableFrom(next.getClass())) {
+                iterator.remove();
+                return type.cast(next);
+            }
+        }
+        return null;
+    }
+
+    public boolean isEmpty() {
+        return eventList.isEmpty();
     }
 
     @Override

@@ -112,7 +112,7 @@ public final class TradeManagerImpl implements TradeManager {
 
 
     private void addToInventory(Player player, Item item) {
-        int slot = player.inventory().put(item);
+        int slot = player.inventory().add(item);
         if (slot != 0) {
 //            eventSender.notifySelf(new UpdateInventorySlotEvent(player, slot, player.inventory().getItem(slot)));
             return;

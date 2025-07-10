@@ -3,7 +3,6 @@ package org.y1000.repository;
 import jakarta.persistence.EntityManager;
 import org.apache.commons.lang3.tuple.Pair;
 import org.y1000.entities.players.Player;
-import org.y1000.factory.PlayerFactory;
 import org.y1000.item.ItemFactory;
 
 import java.util.HashMap;
@@ -28,10 +27,10 @@ public class PlayerDevRepository implements PlayerRepository {
         Player male = playerFactory.create("测试男", true, 100000251L);
         playerMap.put(male.id(), male);
         playerRealmMap.put(male.id(), 6);
-        male.inventory().put(itemFactory.createItem("生药", 100));
-        male.inventory().put(itemFactory.createEquipment("三叉戟"));
-        male.inventory().put(itemFactory.createEquipment("龙光剑"));
-        male.inventory().put(itemFactory.createEquipment("男子黄金铠甲"));
+        male.inventory().add(itemFactory.createItem("生药", 100));
+        male.inventory().add(itemFactory.createEquipment("三叉戟"));
+        male.inventory().add(itemFactory.createEquipment("龙光剑"));
+        male.inventory().add(itemFactory.createEquipment("男子黄金铠甲"));
     }
 
     @Override

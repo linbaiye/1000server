@@ -182,9 +182,9 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         }
         for (SlotItem slotItem : inventoryPo.getSlots()) {
             if (slotItem.isEquipment()) {
-                inventory.put(slotItem.getSlot(), equipments.get(slotItem.getEquipmentId()));
+                inventory.add(slotItem.getSlot(), equipments.get(slotItem.getEquipmentId()));
             } else {
-                inventory.put(slotItem.getSlot(), createItem(slotItem.getName(), slotItem.getNumber()));
+                inventory.add(slotItem.getSlot(), createItem(slotItem.getName(), slotItem.getNumber()));
             }
         }
     }

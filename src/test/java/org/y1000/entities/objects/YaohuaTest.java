@@ -56,7 +56,7 @@ class YaohuaTest extends AbstractUnitTestFixture {
     void canBeAttacked() {
         assertFalse(yaohua.canBeAttackedNow());
         PlayerImpl player = playerBuilder().coordinate(Coordinate.xy(2, 6)).build();
-        int slot = player.inventory().put(itemFactory.createItem("火石", 4));
+        int slot = player.inventory().add(itemFactory.createItem("火石", 4));
         foxfires.forEach(dynamicObject -> ((TriggerDynamicObject)dynamicObject).trigger(player, slot));
         assertTrue(yaohua.canBeAttackedNow());
     }
@@ -64,7 +64,7 @@ class YaohuaTest extends AbstractUnitTestFixture {
     @Test
     void attackedByPlayer() {
         Player player = playerBuilder().coordinate(Coordinate.xy(2, 6)).build();
-        int slot = player.inventory().put(itemFactory.createItem("火石", 4));
+        int slot = player.inventory().add(itemFactory.createItem("火石", 4));
         foxfires.forEach(dynamicObject -> ((TriggerDynamicObject)dynamicObject).trigger(player, slot));
         var attacker = playerBuilder().coordinate(yaohua.coordinate().moveBy(Direction.RIGHT)).build();
         while (yaohua.currentLife() > 0)
