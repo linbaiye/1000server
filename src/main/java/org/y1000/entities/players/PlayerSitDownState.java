@@ -33,6 +33,7 @@ final class PlayerSitDownState extends AbstractPlayerState implements PlayerEqui
     }
 
     private void stand() {
+        player().disableBreathAndSync();
         player().changeState(new PlayerStandUpState(player()));
         player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }

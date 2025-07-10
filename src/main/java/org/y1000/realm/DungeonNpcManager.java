@@ -50,7 +50,7 @@ final class DungeonNpcManager extends AbstractNpcManager {
         if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
             handleRemoveEvent(removeEntityEvent);
         } else if (entityEvent instanceof NpcShiftEvent shiftEvent) {
-            replaceNpc(shiftEvent);
+//            replaceNpc(shiftEvent);
         }
     }
 

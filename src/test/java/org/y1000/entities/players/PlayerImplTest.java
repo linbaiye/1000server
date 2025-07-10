@@ -4,11 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.entities.PlayerSoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.item.*;
 import org.y1000.kungfu.*;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.creatures.monster.PassiveMonster;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
@@ -43,17 +43,6 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         return new WeaponImpl(name, mock);
     }
 
-
-
-    private void attachListener(PlayerImpl.PlayerImplBuilder builder) {
-        testingEventListener = new TestingEventListener();
-        player = builder.build();
-        player.registerEventListener(testingEventListener);
-    }
-
-    private PassiveMonster createMonster(Coordinate coordinate) {
-        return monsterBuilder().coordinate(coordinate).realmMap(player.realmMap()).build();
-    }
 
 
     @Test
@@ -133,6 +122,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertTrue(player.tryEquipFromSlot(slot, equip));
         assertTrue(eventListener.findFirst(PlayerEquipEvent.class).isPresent());
         assertTrue(eventListener.findFirst(InventoryUpdatedEvent.class).isPresent());
+        assertTrue(eventListener.findFirst(PlayerSoundEvent.class).isPresent());
     }
 
     @Test
@@ -148,10 +138,10 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(player.attackKungFu(), player.kungFuBook().findUnnamedAttack(AttackKungFuType.SWORD));
     }
 
-    @Test
-    void tryBreathKungFu() {
-        player.toggleBreathKungFu();
-    }
+//    @Test
+//    void tryBreathKungFu() {
+//        player.toggleBreathKungFu();
+//    }
 
     /*
     @Test

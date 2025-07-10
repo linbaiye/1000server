@@ -17,11 +17,6 @@ public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {
 
 
     @Override
-    public void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target) {
-        doStartAttack(player, event, target);
-    }
-
-    @Override
     public String checkResourceToAttack(Player player) {
         return checkHasEnoughAttributes(player);
     }

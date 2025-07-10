@@ -22,12 +22,6 @@ public final class BowKungFu extends AbstractRangedKungFu {
     }
 
     @Override
-    public OldPlayerStateEnum randomAttackState() {
-        return OldPlayerStateEnum.BOW;
-    }
-
-
-    @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.BOW;
     }

@@ -3,10 +3,14 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
+import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.monster.PassiveMonster;
+import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.creatures.npc.NpcEventListener;
+import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.util.Coordinate;
 
+import java.util.Collections;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,23 +22,24 @@ class RelevantScopeManagerTest extends AbstractUnitTestFixture  {
         relevantScopeManager = new RelevantScopeManager();
     }
 
-    private PassiveMonster createMonster(Coordinate coordinate) {
-        return monsterBuilder().coordinate(coordinate).build();
+    private Npc createNpc(Coordinate coordinate) {
+        return new Npc(1L, Collections.emptyList(), "test", coordinate, npcEvent -> {}, mockRealmMap(),
+                "test", "test", "test", Direction.DOWN);
     }
 
 
     @Test
     void add() {
-        Entity entity = createMonster(new Coordinate(10, 10));
+        Entity entity = createNpc(new Coordinate(10, 10));
         relevantScopeManager.add(entity);
-        Entity entity1 = createMonster(new Coordinate(10, 11));
+        Entity entity1 = createNpc(new Coordinate(10, 11));
         Set<Entity> affected = relevantScopeManager.add(entity1);
         assertTrue(affected.contains(entity));
-        Entity entity2 = createMonster(new Coordinate(10, 12));
+        Entity entity2 = createNpc(new Coordinate(10, 12));
         Set<Entity> affected2 = relevantScopeManager.add(entity2);
         assertTrue(affected2.contains(entity1));
         assertTrue(affected2.contains(entity));
-        Entity entity3 = createMonster(new Coordinate(entity.coordinate().x(), entity.coordinate().y() + Coordinate.VISIBLE_Y_RANGE + 1));
+        Entity entity3 = createNpc(new Coordinate(entity.coordinate().x(), entity.coordinate().y() + Coordinate.VISIBLE_Y_RANGE + 1));
         Set<Entity> affected3 = relevantScopeManager.add(entity3);
         assertFalse(affected3.contains(entity));
         assertTrue(affected3.contains(entity1));
@@ -42,11 +47,11 @@ class RelevantScopeManagerTest extends AbstractUnitTestFixture  {
 
     @Test
     void update() {
-        PassiveMonster entity1 = createMonster(new Coordinate(10, 10));
+        Npc entity1 = createNpc(new Coordinate(10, 10));
         relevantScopeManager.add(entity1);
-        Entity entity2 = createMonster(new Coordinate(10, 11));
+        Entity entity2 = createNpc(new Coordinate(10, 11));
         relevantScopeManager.add(entity2);
-        Entity entity3 = createMonster(new Coordinate(10, 11 + Coordinate.VISIBLE_Y_RANGE + 2));
+        Entity entity3 = createNpc(new Coordinate(10, 11 + Coordinate.VISIBLE_Y_RANGE + 2));
         relevantScopeManager.add(entity3);
         Set<Entity> affected = relevantScopeManager.update(entity1);
         assertTrue(affected.isEmpty());

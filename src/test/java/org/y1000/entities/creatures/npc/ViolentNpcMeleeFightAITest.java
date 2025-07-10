@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
@@ -18,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
-class ViolentNpcMeleeFightAITest extends AbstractMonsterUnitTestFixture {
+class ViolentNpcMeleeFightAITest {
 
    /* private ViolentNpcMeleeFightAI ai;
 

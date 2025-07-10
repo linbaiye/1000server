@@ -27,7 +27,7 @@ final class PlayerStandUpState extends AbstractPlayerState {
     @Override
     public void handleAfterHurt() {
         player().changeState(PlayerStandState.idle(player()));
-        player().emitEvent(PlayerChangeStateEvent.allVisible(player()));
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
 
     @Override

@@ -8,4 +8,6 @@ public interface NpcAI {
 
     NpcSnapshot captureSnapshot();
 
+    void start();
+
 }

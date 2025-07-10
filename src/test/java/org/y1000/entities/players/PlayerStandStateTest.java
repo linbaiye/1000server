@@ -38,14 +38,14 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
     }
 
     @Test
-    void idleMove_whenCoordinateMismatch() {
+    void tryMove_idle_WhenCoordinateMismatch() {
         MoveInput moveInput = new MoveInput(player.coordinate().move(1, 1), Direction.DOWN);
         state.tryMove(moveInput);
         assertNotNull(eventListener.removeFirst(PlayerSetPositionAndStateEvent.class));
     }
 
     @Test
-    void idleMove_whenCoordinateNotMovable() {
+    void tryMove_idle_whenCoordinateNotMovable() {
         MoveInput moveInput = new MoveInput(player.coordinate(), player.direction().opposite());
         when(mockedRealm.map().movable(any(Coordinate.class))).thenReturn(false);
         state.tryMove(moveInput);
@@ -54,7 +54,7 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
     }
 
     @Test
-    void idleMove_whenOk() {
+    void tryMove_idle_whenOk() {
         MoveInput moveInput = new MoveInput(player.coordinate(), Direction.DOWN);
         when(mockedRealm.map().movable(any(Coordinate.class))).thenReturn(true);
         state.tryMove(moveInput);
@@ -69,7 +69,7 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
     }
 
     @Test
-    void fightWalkMove() {
+    void tryMove_fightStand_whenOk() {
         changeToFightStand();
         MoveInput moveInput = new MoveInput(player.coordinate(), Direction.DOWN);
         when(mockedRealm.map().movable(any(Coordinate.class))).thenReturn(true);
@@ -79,7 +79,7 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
     }
 
     @Test
-    void sayHello_whenIdle() {
+    void sayHello_idle() {
         state.sayHello();
         assertEquals(player.stateEnum(), PlayerStateEnum.Hello);
         PlayerChangeStateEvent event = eventListener.removeFirst(PlayerChangeStateEvent.class);
@@ -87,7 +87,7 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
     }
 
     @Test
-    void sayHello_whenFightStand() {
+    void sayHello_fightStand() {
         changeToFightStand();
         state.sayHello();
         assertEquals(player.stateEnum(), PlayerStateEnum.FightStand);

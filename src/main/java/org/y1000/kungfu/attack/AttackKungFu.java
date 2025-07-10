@@ -1,11 +1,8 @@
 package org.y1000.kungfu.attack;
 
 
-import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.players.*;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.kungfu.KungFu;
-import org.y1000.message.input.ClientAttackEvent;
 import org.y1000.util.Coordinate;
 
 public interface AttackKungFu extends KungFu {
@@ -28,13 +25,7 @@ public interface AttackKungFu extends KungFu {
 
     int avoidance();
 
-    OldPlayerStateEnum randomAttackState();
-
     AttackKungFuType getType();
-
-    void attackAgain(PlayerImpl player);
-
-    void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target);
 
     boolean isRanged();
 

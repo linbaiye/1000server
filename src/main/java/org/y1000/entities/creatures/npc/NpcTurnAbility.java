@@ -11,4 +11,9 @@ public final class NpcTurnAbility extends AbstractNonMoveAbility {
         npc.changeDirection(direction);
         sendActionAndStartAnimation(npc);
     }
+
+    @Override
+    public boolean update(int delta) {
+        return updateAnimation(delta);
+    }
 }

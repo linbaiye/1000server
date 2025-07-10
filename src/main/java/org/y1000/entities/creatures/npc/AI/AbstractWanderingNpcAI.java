@@ -4,6 +4,7 @@ import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.util.Coordinate;
 
+/*
 @Deprecated
 public abstract class AbstractWanderingNpcAI implements INpcAI {
 
@@ -75,4 +76,4 @@ public abstract class AbstractWanderingNpcAI implements INpcAI {
             stayIdle(npc);
         }
     }
-}
+}*/

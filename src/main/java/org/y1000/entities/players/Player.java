@@ -136,18 +136,6 @@ public interface Player extends ViolentCreature, HurtAbility {
 
     default boolean canDrag(Player target, int ropeSlot) {
         return false;
-//        if (oldStateEnum() == OldPlayerStateEnum.DIE || oldStateEnum() == OldPlayerStateEnum.Turn ||
-//                target.equals(this)) {
-//            return false;
-//        }
-//        if (target.oldStateEnum() != OldPlayerStateEnum.DIE) {
-//            return false;
-//        }
-//        if (target.coordinate().directDistance(coordinate()) > 4) {
-//            return false;
-//        }
-//        Item item = inventory().getItem(ropeSlot);
-//        return item != null && item.name().equals("追魂索");
     }
 
     void onProjectileReachTarget(Projectile projectile);

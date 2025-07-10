@@ -1,12 +1,10 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.message.I2ClientMessage;
-import org.y1000.message.NpcSnapshot;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -73,6 +71,10 @@ public class Npc extends AbstractActiveEntity {
         ai = newAi;
     }
 
+    public void startAI() {
+        ai.start();
+    }
+
     @Override
     public void update(int delta) {
         ai.update(delta);
@@ -93,13 +95,17 @@ public class Npc extends AbstractActiveEntity {
         return direction;
     }
 
-    public void setCoordinate(Coordinate coordinate) {
+    public void changeCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
         realmMap.occupy(this);
     }
 
     public void changeDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public void free() {
+        realmMap.free(this);
     }
 
     @Override

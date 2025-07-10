@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.y1000.entities.AttributeProvider;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.monster.NpcAnimationEnum;
-import org.y1000.entities.creatures.npc.AI.GuardWanderingAI;
 import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -51,6 +50,5 @@ public final class Guardian extends AbstractViolentNpc implements HumanNpc {
 
     @Override
     public void startIdleAI() {
-        changeAndStartAI(new GuardWanderingAI(this.wanderingArea().random(coordinate())));
     }
 }

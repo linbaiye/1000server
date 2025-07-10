@@ -17,11 +17,6 @@ public final class QuanfaKungFu extends AbstractMeleeKungFu {
         super(name, exp, parameters);
     }
 
-    @Override
-    public OldPlayerStateEnum randomAttackState() {
-        return level() < 5000 || ThreadLocalRandom.current().nextInt(0, 2) == 1 ? OldPlayerStateEnum.FIST: OldPlayerStateEnum.KICK;
-    }
-
 
     @Override
     public AttackKungFuType getType() {

@@ -16,11 +16,6 @@ public final class AxeKungFu extends AbstractMeleeKungFu {
     }
 
     @Override
-    public OldPlayerStateEnum randomAttackState() {
-        return OldPlayerStateEnum.AXE;
-    }
-
-    @Override
     public AttackAction computeAttackAction() {
         return AttackAction.Axe;
     }

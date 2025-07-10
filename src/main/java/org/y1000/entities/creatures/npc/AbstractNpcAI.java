@@ -1,6 +1,5 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.ActiveEntity;
 import org.y1000.message.NpcSnapshot;
 
 public abstract class AbstractNpcAI implements NpcAI {
@@ -19,8 +18,9 @@ public abstract class AbstractNpcAI implements NpcAI {
         return a;
     }
 
-    void changeAbility(NpcAbility ability) {
+    <A extends NpcAbility> A changeAbility(A ability) {
         currentAbility = ability;
+        return ability;
     }
 
 
@@ -47,9 +47,8 @@ public abstract class AbstractNpcAI implements NpcAI {
         return currentAbility;
     }
 
-    abstract void onAfterHurtStart(ActiveEntity attacker, NpcHurtAbility ability);
 
-    void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
+    void applyHurtAbility(NpcHurtAbility ability) {
         if (currentAbility() instanceof NpcMoveAbility moveAbility) {
             moveAbility.interrupt(npc());
         }
@@ -60,7 +59,6 @@ public abstract class AbstractNpcAI implements NpcAI {
         }
         ability.apply(npc(), currentAbility());
         changeAbility(ability);
-        onAfterHurtStart(attacker, ability);
     }
 
     @Override

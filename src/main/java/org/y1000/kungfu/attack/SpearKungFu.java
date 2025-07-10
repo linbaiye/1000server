@@ -17,11 +17,6 @@ public final class SpearKungFu extends AbstractMeleeKungFu {
         super(name, exp, parameters);
     }
 
-    @Override
-    public OldPlayerStateEnum randomAttackState() {
-        return OldPlayerStateEnum.SPEAR;
-    }
-
 
     @Override
     public AttackKungFuType getType() {

@@ -1,22 +1,18 @@
 package org.y1000.entities.creatures.npc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
 import org.y1000.entities.players.Damage;
 
-import java.util.Optional;
-
+@Slf4j
 public final class NpcAttackAbility extends AbstractNonMoveAbility {
 
     private final int attackSpeedMillis;
 
-    private final int recoveryMillis;
-
     private int attackCooldownMillis;
-
-    private int recoveryCooldownMillis;
 
     private final Damage damage;
 
@@ -25,40 +21,30 @@ public final class NpcAttackAbility extends AbstractNonMoveAbility {
     private final String sound;
 
     public NpcAttackAbility(int attackSpeedMillis,
-                            int recoveryMillis,
                             int bodyDamage,
                             int hit,
                             String sound,
                             NpcAnimation animationTimer) {
         super(animationTimer);
-        this.attackSpeedMillis = attackSpeedMillis + 1500;
-        this.recoveryMillis = recoveryMillis + 700;
+        this.attackSpeedMillis = attackSpeedMillis;
         this.damage = new Damage(bodyDamage, 0, 0, 0);
-        this.accuracy = hit + 75;
+        this.accuracy = hit;
         this.sound = StringUtils.isEmpty(sound) ? null : sound;
+        attackCooldownMillis = 0;
     }
 
-    public void cooldown(int delta) {
+    public boolean cooldown(int delta) {
         if (attackCooldownMillis > 0)
             attackCooldownMillis -= delta;
-        if (recoveryCooldownMillis >= 0)
-            recoveryCooldownMillis -= delta;
+        return attackReady();
     }
 
-    public boolean ableToAttack() {
-        return attackCooldownMillis <= 0 && recoveryCooldownMillis <= 0;
+    public boolean attackReady() {
+        return attackCooldownMillis <= 0;
     }
 
-    public void cooldownRecovery() {
-        recoveryCooldownMillis = recoveryMillis;
-    }
-
-    private void cooldownAttack() {
-        attackCooldownMillis = attackSpeedMillis;
-    }
-
-    public int cooldown() {
-        return Math.max(attackCooldownMillis, recoveryCooldownMillis);
+    public int cooldownLeft() {
+        return attackCooldownMillis;
     }
 
     public void apply(Npc npc, ActiveEntity target) {
@@ -66,8 +52,9 @@ public final class NpcAttackAbility extends AbstractNonMoveAbility {
             hurtAbility.attacked(npc, damage, accuracy);
             if (sound != null)
                 npc.sendEvent(NpcSoundEvent.of(npc, sound));
-            sendActionAndStartAnimation(npc);
-            cooldownAttack();
+            sendActionAndStartShortAnimation(npc, attackSpeedMillis);
+            log.debug("Animation {}, attackSpeed {}.", animationLength(), attackSpeedMillis);
+            attackCooldownMillis = attackSpeedMillis;
         });
     }
 
@@ -75,4 +62,8 @@ public final class NpcAttackAbility extends AbstractNonMoveAbility {
         return accuracy;
     }
 
+    @Override
+    public boolean update(int delta) {
+        return updateAnimation(delta);
+    }
 }

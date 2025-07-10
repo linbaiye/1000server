@@ -7,12 +7,6 @@ import org.y1000.util.Rectangle;
 
 public interface NpcFactory {
 
-    INpc createNpc(String name, long id, RealmMap realmMap, Coordinate coordinate);
-
-    INpc createClonedNpc(INpc npc, long id, Coordinate coordinate);
-
-    INpc createNonMonsterNpc(String name, long id, RealmMap realmMap, Coordinate coordinate, CreateNonMonsterSdb createNonMonsterSdb);
-
     Npc create(long id, String idName, RealmMap realmMap, Coordinate coordinate, NpcEventListener listener);
 
 }

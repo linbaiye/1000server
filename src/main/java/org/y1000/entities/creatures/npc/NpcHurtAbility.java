@@ -10,7 +10,6 @@ import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
 import org.y1000.entities.players.Damage;
 import org.y1000.exp.ExperienceUtil;
 
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 
@@ -29,25 +28,30 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
     @Getter
     private final int maxLife;
 
-
     @Setter
     private BiConsumer<? super ActiveEntity, NpcHurtAbility> hurtTrigger;
 
     @Getter
     private NpcAbility interruptedAbility;
 
+    private final int recoveryMillis;
+
+    private int recoveryLeft;
+
 
     public NpcHurtAbility(int armor,
                           int avoidance,
                           String hurtSound,
                           int maxLife,
-                          NpcAnimation animationTimer) {
+                          NpcAnimation animationTimer, int recoveryMillis) {
         super(animationTimer);
         this.armor = armor;
-        this.avoidance = avoidance + 20;
+        this.avoidance = avoidance;
         this.hurtSound = StringUtils.isEmpty(hurtSound) ? null : hurtSound;
         this.maxLife = maxLife;
         this.currentLife = maxLife;
+        this.recoveryMillis = recoveryMillis;
+        recoveryLeft = 0;
     }
 
     private boolean isDodged(int accuracy) {
@@ -55,12 +59,26 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
         return rand < avoidance;
     }
 
+    public boolean cooldown(int delta) {
+        if (recoveryLeft > 0)
+            recoveryLeft -= delta;
+        return cooldownReady();
+    }
+
+    public int cooldownLeft() {
+        return recoveryLeft;
+    }
+
+    public boolean cooldownReady() {
+        return recoveryLeft <= 0;
+    }
+
     public boolean canBeAttacked() {
         return currentLife > 0;
     }
 
     public void apply(Npc npc, NpcAbility interruptedAbility) {
-        sendActionAndStartAnimation(npc);
+        sendActionAndStartShortAnimation(npc, recoveryMillis);
         npc.sendEvent(NpcLifeBarEvent.of(npc, currentLife, maxLife));
         if (hurtSound != null) {
             npc.sendEvent(NpcSoundEvent.of(npc, hurtSound));
@@ -85,6 +103,14 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
         if (this.hurtTrigger != null) {
             hurtTrigger.accept(activeEntity, this);
         }
+        recoveryLeft = recoveryMillis;
         return ExperienceUtil.damageToExp(maxLife, damageTaken);
     }
+
+
+    @Override
+    public boolean update(int delta) {
+        return updateAnimation(delta);
+    }
+
 }

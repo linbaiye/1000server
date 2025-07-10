@@ -13,8 +13,8 @@ abstract class AbstractNonMoveAbility extends AbstractNpcAbility {
         startAnimation();
     }
 
-    @Override
-    public boolean update(int delta) {
-        return updateAnimation(delta);
+    void sendActionAndStartShortAnimation(Npc npc, int millis) {
+        npc.sendEvent(NpcStartActionEvent.of(npc, type()));
+        startShorter(millis);
     }
 }

@@ -250,7 +250,8 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
     @Override
     public boolean attackedBy(Player attacker) {
         Validate.notNull(attacker);
-        return doAttacked(attacker.damage(), attacker.hit(), attacker::gainAttackExp, attacker);
+        return false;
+//        return doAttacked(attacker.damage(), attacker.hit(), attacker::gainAttackExp, attacker);
     }
 
     @Override

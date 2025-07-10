@@ -40,7 +40,7 @@ final class CombatController {
         player.cooldownAttack();
         int exp = hurtAbility.attacked(player, player.damage(), player.hit());
         if (exp > 0)
-            kungFu.gainExp(player, exp);
+            player.doGainExp(exp, kungFu);
         player.sendEvent(PlayerSoundEvent.sound(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
     }
 

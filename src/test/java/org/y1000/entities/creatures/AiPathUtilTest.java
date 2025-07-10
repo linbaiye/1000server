@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.entities.creatures.npc.AI.AiPathUtil;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.realm.RealmMap;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 
 @Slf4j
-class AiPathUtilTest extends AbstractMonsterUnitTestFixture {
+class AiPathUtilTest {
 
     private AtomicReference<Coordinate> previous = new AtomicReference<>();
 

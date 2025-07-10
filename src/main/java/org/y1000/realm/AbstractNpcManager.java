@@ -99,7 +99,9 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
                     Coordinate coordinate = range.random(realmMap::movable)
                             .or(() -> range.findFirst(realmMap::movable))
                             .orElse(range.start());
-                    addNpc(createNpc(name, coordinate));
+                    Npc npc = createNpc(name, coordinate);
+                    npc.startAI();
+                    addNpc(npc);
                 } catch (Exception e) {
                     log().error("Failed to create npc {}.", name, e);
                     throw new RuntimeException(e);
@@ -196,14 +198,14 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 
     abstract void onUnhandledEvent(EntityEvent entityEvent) ;
 
-    Npc replaceNpc(NpcShiftEvent shiftEvent) {
+//    Npc replaceNpc(NpcShiftEvent shiftEvent) {
 //        Npc npc = shiftEvent.npc();
 //        removeNpc(npc);
 //        Npc newNpc = createNpc(shiftEvent.shiftToName(), npc.coordinate());
 //        addNpc(newNpc);
 //        return newNpc;
-        return null;
-    }
+//        return null;
+//    }
 
     boolean isCloned(Npc npc) {
         return cloned.contains(npc.id());
@@ -213,28 +215,28 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
         cloned.remove(npc.id());
     }
 
-    private void handleCloneEvent(NpcCastCloneEvent event) {
-        var set =  new HashSet<INpc>();
-        var random = ThreadLocalRandom.current();
-        for (int i = 0; i < event.number(); i++) {
-            Coordinate coordinate = event.npc().coordinate();
-            int x = coordinate.x() - 2;
-            x += random.nextInt(0, 4);
-            int y = coordinate.y() - 2;
-            y += random.nextInt(0, 4);
-            Coordinate coordinate1 = Coordinate.xy(x, y);
-            if (event.npc().realmMap().movable(coordinate1)) {
-                var newNpc = npcFactory.createClonedNpc(event.npc(), idGenerator.next(), coordinate1);
-                if (newNpc instanceof AggressiveNpc aggressiveNpc) {
-                    aggressiveNpc.actAggressively(event.enemy());
-                }
+//    private void handleCloneEvent(NpcCastCloneEvent event) {
+//        var set =  new HashSet<INpc>();
+//        var random = ThreadLocalRandom.current();
+//        for (int i = 0; i < event.number(); i++) {
+//            Coordinate coordinate = event.npc().coordinate();
+//            int x = coordinate.x() - 2;
+//            x += random.nextInt(0, 4);
+//            int y = coordinate.y() - 2;
+//            y += random.nextInt(0, 4);
+//            Coordinate coordinate1 = Coordinate.xy(x, y);
+//            if (event.npc().realmMap().movable(coordinate1)) {
+//                var newNpc = npcFactory.createClonedNpc(event.npc(), idGenerator.next(), coordinate1);
+//                if (newNpc instanceof AggressiveNpc aggressiveNpc) {
+//                    aggressiveNpc.actAggressively(event.enemy());
+//                }
 //                addNpc(newNpc);
-                set.add(newNpc);
-                cloned.add(newNpc.id());
-            }
-        }
+//                set.add(newNpc);
+//                cloned.add(newNpc.id());
+//            }
+//        }
 //        linked.put(event.npc(), set);
-    }
+//    }
 
     private void handleSeekPlayerEvent(SeekPlayerEvent event) {
         Set<Player> players = aoiManager.filterVisibleEntities(event.source(), Player.class);

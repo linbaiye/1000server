@@ -1,27 +1,7 @@
 package org.y1000.kungfu.attack;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.y1000.TestingEventListener;
-import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
-import org.y1000.entities.creatures.monster.PassiveMonster;
-import org.y1000.entities.players.PlayerImpl;
-import org.y1000.entities.players.PlayerLife;
-import org.y1000.entities.players.PlayerTestingAttribute;
-import org.y1000.entities.players.event.OldPlayerAttackEvent;
-import org.y1000.entities.players.event.PlayerAttackEventResponse;
-import org.y1000.kungfu.TestingAttackKungFuParameters;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.input.ClientAttackEvent;
-import org.y1000.message.serverevent.TextMessage;
-import org.y1000.realm.Realm;
-import org.y1000.util.Coordinate;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class MeleeAttackKungFuTest extends AbstractMonsterUnitTestFixture {
+class MeleeAttackKungFuTest {
 
     /*
     private QuanfaKungFu kungFu;

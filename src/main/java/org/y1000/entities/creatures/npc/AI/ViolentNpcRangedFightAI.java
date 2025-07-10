@@ -11,6 +11,7 @@ import org.y1000.entities.creatures.npc.NpcRangedSkill;
 import org.y1000.entities.creatures.npc.ViolentNpc;
 import org.y1000.util.Coordinate;
 
+    /*
 @Slf4j
 public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
 
@@ -79,5 +80,5 @@ public final class ViolentNpcRangedFightAI extends AbstractNpcFightAI {
     protected void onFightDone(INpc npc) {
         npc.startIdleAI();
     }
-
 }
+*/

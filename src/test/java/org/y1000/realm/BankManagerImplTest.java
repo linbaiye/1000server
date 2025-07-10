@@ -48,23 +48,23 @@ class BankManagerImplTest extends AbstractUnitTestFixture  {
 
     @BeforeEach
     void setUp() {
-        eventSender = Mockito.mock(EntityEventSender.class);
-        npcManager = Mockito.mock(NpcManager.class);
-        bankRepository = Mockito.mock(BankRepository.class);
-        bankManager = new BankManagerImpl(eventSender, npcManager, bankRepository);
-        player = Mockito.mock(Player.class);
-        when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
-        inventory = new Inventory();
-        when(player.inventory()).thenReturn(inventory);
-        CreateNonMonsterSdb sdb = Mockito.mock(CreateNonMonsterSdb.class);
-        when(sdb.getMerchant(anyString())).thenReturn(Optional.empty());
-        banker = (Banker) npcFactory.createNonMonsterNpc("仓库管理员", 2L, Mockito.mock(RealmMap.class), Coordinate.xy(2, 2), sdb);
-        testingEventListener = new TestingEventListener();
-        when(npcManager.find(2L, Banker.class)).thenReturn(Optional.of(banker));
-        doAnswer(invocationOnMock -> {
-            testingEventListener.onEvent(invocationOnMock.getArgument(0));
-            return null;
-        }).when(eventSender).notifySelf(any(IAbstractPlayerEvent.class));
+//        eventSender = Mockito.mock(EntityEventSender.class);
+//        npcManager = Mockito.mock(NpcManager.class);
+//        bankRepository = Mockito.mock(BankRepository.class);
+//        bankManager = new BankManagerImpl(eventSender, npcManager, bankRepository);
+//        player = Mockito.mock(Player.class);
+//        when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
+//        inventory = new Inventory();
+//        when(player.inventory()).thenReturn(inventory);
+//        CreateNonMonsterSdb sdb = Mockito.mock(CreateNonMonsterSdb.class);
+//        when(sdb.getMerchant(anyString())).thenReturn(Optional.empty());
+//        banker = (Banker) npcFactory.createNonMonsterNpc("仓库管理员", 2L, Mockito.mock(RealmMap.class), Coordinate.xy(2, 2), sdb);
+//        testingEventListener = new TestingEventListener();
+//        when(npcManager.find(2L, Banker.class)).thenReturn(Optional.of(banker));
+//        doAnswer(invocationOnMock -> {
+//            testingEventListener.onEvent(invocationOnMock.getArgument(0));
+//            return null;
+//        }).when(eventSender).notifySelf(any(IAbstractPlayerEvent.class));
     }
 
     /*

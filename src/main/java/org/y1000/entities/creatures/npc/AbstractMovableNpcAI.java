@@ -32,7 +32,6 @@ public abstract class AbstractMovableNpcAI extends AbstractNpcAI {
                 onMoveFailed();
             }
         } else {
-            log.debug("Turn start for {}.", npc().id());
             changeAbilityOrThrow(NpcTurnAbility.class).turn(npc(), dir);
         }
     }

@@ -21,11 +21,6 @@ public final class ThrowKungFu extends AbstractRangedKungFu {
         return ItemType.KNIFE;
     }
 
-    @Override
-    public OldPlayerStateEnum randomAttackState() {
-        return OldPlayerStateEnum.THROW;
-    }
-
 
     @Override
     public AttackKungFuType getType() {

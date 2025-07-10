@@ -96,8 +96,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     private PlayerEventListener eventListener;
 
-    private static final int Accuracy = 75;
-
     private CombatController combatController;
 
 //    private static final Map<OldPlayerStateEnum, Integer> STATE_MILLIS = new HashMap<>() {{
@@ -474,19 +472,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         syncActiveKungFuList();
     }
 
-//        if (creatureState().canSitDown()) {
-//            sitDown(true);
-//        }
-//        if (oldStateEnum() == OldPlayerStateEnum.SIT) {
-//            if (this.protectKungFu != null) {
-//                emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
-//                emitEvent(new EntitySoundEvent(this, this.protectKungFu.disableSound()));
-//                this.protectKungFu = null;
-//            }
-//            this.breathKungFu = newBreath;
-//            emitEvent(PlayerToggleKungFuEvent.enable(this, newBreath));
-//        }
-
     private void syncActiveKungFuList() {
         sendEvent(SyncActiveKungEvent.of(this));
     }
@@ -759,11 +744,11 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         var oldLevel = revival.level();
         revival = revival.gainExp();
         if (oldLevel != revival.level()) {
-            emitEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
+            sendEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
         }
 //        this.changeState(PlayerDeadState.die(this));
-        emitEvent(new CreatureDieEvent(this));
-        dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+//        emitEvent(new CreatureDieEvent(this));
+        dieSound().ifPresent(this::sendSound);
     }
 
     private void gainProtectionExp(int bodyDamage) {
@@ -820,7 +805,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public boolean attackedBy(Player attacker) {
-        return doAttacked(attacker.damage(), attacker.hit(), attacker::gainAttackExp);
+        return false;
+//        return doAttacked(attacker.damage(), attacker.hit(), attacker::gainAttackExp);
     }
 
     @Override
@@ -887,38 +873,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         return realm != null && !isDead();
     }
 
-    private void equip(int slotId, Equipment equipmentInSlot) {
-        if (equipmentInSlot.equipmentType() == EquipmentType.WEAPON) {
-            Weapon weaponInSlot = (Weapon) equipmentInSlot;
-//            equipWeaponFromSlot(slotId, weaponInSlot);
-            if (attackKungFu.getType() != weaponInSlot.kungFuType()) {
-                changeAttackKungFu(kungFuBook.findUnnamedAttack(weaponInSlot.kungFuType()));
-            }
-        } else {
-            if (equipmentInSlot instanceof SexualEquipment sexualEquipment &&
-                    sexualEquipment.isMale() != isMale()) {
-                return;
-            }
-            inventory.remove(slotId);
-            Equipment currentEquipped = equippedEquipments.put(equipmentInSlot.equipmentType(), equipmentInSlot);
-            if (currentEquipped != null) {
-                inventory.put(slotId, currentEquipped);
-            }
-            emitEvent(new UpdateInventorySlotEvent(this, slotId, currentEquipped));
-            equipmentInSlot.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-        }
-    }
-
-    private void handleDoubleClickInventorySlot(int slot) {
-        var item = inventory.getItem(slot);
-        if (item == null) {
-            return;
-        }
-        if (item instanceof Weapon weapon) {
-        }
-    }
-
-
     @Override
     public int attackSpeed() {
         var spd = weapon().map(Weapon::attackSpeed).orElse(0) * -1 +
@@ -975,7 +929,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         int old = attribute.maxValue();
         attribute.gain(v);
         if (attribute.maxValue() != old) {
-//            emitEvent(PlayerGainExpEvent.nonKungFu(this, name));
+            sendEvent(PlayerGainExpEvent.nonKungFu(this, name));
         }
     }
 
@@ -1043,7 +997,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         buffPillSlot.update(delta);
         if (previousEffective && !buffPillSlot.isEffective()) {
             buffPillSlot.cancel();
-            emitEvent(UpdateBuffEvent.fade(this));
+//            emitEvent(UpdateBuffEvent.fade(this));
         }
     }
 
@@ -1174,25 +1128,21 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
 
-    private void doGainExp(int amount, KungFu kungFu) {
+    void doGainExp(int amount, KungFu kungFu) {
         if (amount <= 0) {
             return;
         }
         if (armLife.percent() < 50) {
-            emitEvent(PlayerTextEvent.armLifeTooLowToExp(this));
+            sendText("手部活力不足，无法获取经验。");
             return;
         }
-        if (kungFu.gainPermittedExp(amount)) {
-            emitEvent(PlayerGainExpEvent.of(this, kungFu));
-//            if (kungFu.isLevelFull())
-//                emitEvent(new PlayerKungFuFullEvent(this, kungFu));
-        }
+        kungFu.gainExp(this, amount);
     }
 
 
     @Override
     public void gainAttackExp(int amount) {
-        doGainExp(amount, attackKungFu);
+//        doGainExp(amount, attackKungFu);
     }
 
     @Override

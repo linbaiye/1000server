@@ -8,21 +8,18 @@ import org.y1000.entities.creatures.npc.event.NpcRemoveEvent;
 
 @Slf4j
 public class CombatAI extends AbstractMovableNpcAI {
-
     private final ActiveEntity enemy;
-
     private final NpcAttackAbility attackAbility;
-
+    private final NpcHurtAbility hurtAbility;
     private final HurtAbility enemyHurtAbility;
 
-
     private CombatAI(Npc npc, ActiveEntity entity,
-                     NpcHurtAbility hurtAbility,
-                     NpcAttackAbility attackAbility) {
+                     NpcHurtAbility hurtAbility) {
         super(npc);
         this.enemy = entity;
-        changeAbilityOrThrow(NpcHurtAbility.class);
-        this.attackAbility = attackAbility;
+        changeAbility(hurtAbility);
+        this.hurtAbility = hurtAbility;
+        this.attackAbility = npc.findAbility(NpcAttackAbility.class).orElseThrow();
         hurtAbility.setHurtTrigger(this::onAttacked);
         this.enemyHurtAbility = enemy.findAbility(HurtAbility.class).orElseThrow();
     }
@@ -30,18 +27,23 @@ public class CombatAI extends AbstractMovableNpcAI {
     @Override
     public void update(int delta) {
         attackAbility.cooldown(delta);
+        hurtAbility.cooldown(delta);
         updateAbility(delta);
+    }
+
+    @Override
+    public void start() {
+        npc().findAbility(NpcMoveAbility.class).ifPresent(NpcMoveAbility::enableFastMove);
     }
 
     private void tryAttack() {
         if (!enemy.canBeSeenAt(npc().coordinate()) || !enemyHurtAbility.canBeAttacked()) {
-            log.debug("End combat.");
             npc().changeAI(new WanderingAI(npc(), 10));
+            npc().startAI();
             return;
         }
         if (npc().coordinate().directDistance(enemy.coordinate()) >= 2) {
             moveCloser(enemy.coordinate());
-            log.debug("Far away, keep moving");
             return;
         }
         Direction direction = npc().coordinate().computeDirection(enemy.coordinate());
@@ -50,11 +52,10 @@ public class CombatAI extends AbstractMovableNpcAI {
                     .turn(npc(), direction);
             return;
         }
-        if (attackAbility.ableToAttack()) {
-            changeAbility(attackAbility);
-            attackAbility.apply(npc(), enemy);
+        if (attackAbility.attackReady() && hurtAbility.cooldownReady()) {
+            changeAbility(attackAbility).apply(npc(), enemy);
         } else {
-            stay(attackAbility.cooldown());
+            stay(Math.max(attackAbility.cooldownLeft(), hurtAbility.cooldownLeft()));
         }
     }
 
@@ -64,8 +65,11 @@ public class CombatAI extends AbstractMovableNpcAI {
 
     private void onMoved(NpcMoveAbility ability) {
         computePrevious();
+        stayOrAttack(ability);
+    }
+
+    private void stayOrAttack(NpcMoveAbility ability) {
         if (ability.idleTime() > 0) {
-            log.debug("Need to stay idle for {}.", ability.idleTime());
             stay(ability.idleTime());
         } else {
             tryAttack();
@@ -78,41 +82,22 @@ public class CombatAI extends AbstractMovableNpcAI {
         } else if (doneAbility instanceof NpcDieAbility) {
             npc().sendEvent(NpcRemoveEvent.of(npc()));
         } else if (doneAbility instanceof NpcTurnAbility) {
-            npc().findAbility(NpcMoveAbility.class).map(NpcMoveAbility::idleTime)
-                    .ifPresent(integer -> {
-                        if (integer > 0)
-                            stay(integer);
-                        else
-                            tryAttack();
-                    });
-
+            npc().findAbility(NpcMoveAbility.class).ifPresent(this::stayOrAttack);
         } else {
             tryAttack();
         }
     }
 
-
-    @Override
-    void onAfterHurtStart(ActiveEntity attacker, NpcHurtAbility ability) {
-        attackAbility.cooldownRecovery();
-    }
-
     @Override
     void onMoveFailed() {
-        log.debug("Move failed.");
-        npc().findAbility(NpcMoveAbility.class).ifPresentOrElse( moveAbility -> {
-            if (moveAbility.idleTime() > 0) {
-                changeAbilityOrThrow(NpcIdleAbility.class).apply(npc(), moveAbility.idleTime());
-            } else {
-                tryAttack();
-            }
-        }, this::tryAttack);
+        stay(100);
+    }
+
+    private void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
+        applyHurtAbility(ability);
     }
 
     public static CombatAI hurtAbilityTriggered(Npc npc, ActiveEntity entity, NpcHurtAbility hurtAbility) {
-        var attackAbility = npc.findAbility(NpcAttackAbility.class).orElseThrow();
-        attackAbility.cooldownRecovery();
-        npc.findAbility(NpcMoveAbility.class).ifPresent(NpcMoveAbility::enableFastMove);
-        return new CombatAI(npc, entity, hurtAbility, attackAbility);
+        return new CombatAI(npc, entity, hurtAbility);
     }
 }

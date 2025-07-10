@@ -32,7 +32,7 @@ public class NpcMoveAbility extends AbstractNpcAbility {
 
     public void interrupt(Npc npc) {
         var end = start.moveBy(direction);
-        npc.setCoordinate(end);
+        npc.changeCoordinate(end);
         npc.sendEvent(NpcMovedEvent.of(npc));
     }
 
@@ -41,9 +41,9 @@ public class NpcMoveAbility extends AbstractNpcAbility {
         if (!updateAnimation(delta))
             return false;
         if (!npc.getRealmMap().movable(start.moveBy(direction))) {
-            npc.setCoordinate(start);
+            npc.changeCoordinate(start);
         } else {
-            npc.setCoordinate(start.moveBy(direction));
+            npc.changeCoordinate(start.moveBy(direction));
         }
         npc.sendEvent(NpcMovedEvent.of(npc));
         return true;

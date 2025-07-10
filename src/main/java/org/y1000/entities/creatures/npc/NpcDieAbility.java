@@ -25,4 +25,9 @@ public final class NpcDieAbility extends AbstractNonMoveAbility {
         npc.sendEvent(NpcLifeBarEvent.die(npc));
     }
 
+
+    @Override
+    public boolean update(int delta) {
+        return updateAnimation(delta);
+    }
 }

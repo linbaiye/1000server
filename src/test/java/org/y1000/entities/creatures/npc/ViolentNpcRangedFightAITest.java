@@ -6,14 +6,13 @@ import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.AbstractMonsterUnitTestFixture;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-class ViolentNpcRangedFightAITest extends AbstractMonsterUnitTestFixture  {
+class ViolentNpcRangedFightAITest {
 
     /*
     private Creature enemy;

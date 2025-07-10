@@ -7,7 +7,6 @@ import org.y1000.TestingEventListener;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.creatures.event.*;
-import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.realm.RealmMap;

@@ -18,13 +18,6 @@ public final class SwordKungFu extends AbstractMeleeKungFu {
     }
 
     @Override
-    public OldPlayerStateEnum randomAttackState() {
-        //return level() < 50 || ThreadLocalRandom.current().nextInt() % 2 == 1 ? State.SWORD : State.SWORD2H;
-        return level() < 5000 || ThreadLocalRandom.current().nextInt(0, 2) == 1 ? OldPlayerStateEnum.SWORD : OldPlayerStateEnum.SWORD2H;
-    }
-
-
-    @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.SWORD;
     }

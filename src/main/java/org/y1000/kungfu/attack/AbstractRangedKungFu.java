@@ -1,12 +1,8 @@
 package org.y1000.kungfu.attack;
 
 
-import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.PlayerImpl;
 import org.y1000.item.ItemType;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.input.ClientAttackEvent;
 import org.y1000.util.Coordinate;
 
 public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
@@ -22,19 +18,6 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
     }
 
     protected abstract ItemType getAmmoType();
-
-    protected boolean checkResourcesAndSendError(Player player) {
-        var ret = checkAttributeResources(player);
-        if (ret != null) {
-            player.emitEvent(ret);
-            return false;
-        }
-        if (!player.inventory().contains(getAmmoType())) {
-            player.emitEvent(PlayerTextEvent.outOfAmmo(player));
-            return false;
-        }
-        return count > 0;
-    }
 
     @Override
     public String checkResourceToAttack(Player player) {
@@ -62,11 +45,11 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
         return level > 8999 ? 2 : 1;
     }
 
-    @Override
-    public void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target) {
-        count = level() / 2000 + 2;
-        doStartAttack(player, event, target);
-    }
+//    @Override
+//    public void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableEntity target) {
+//        count = level() / 2000 + 2;
+//        doStartAttack(player, event, target);
+//    }
 
     @Override
     public boolean isWithinAttackRange(Coordinate coordinate1, Coordinate coordinate2) {

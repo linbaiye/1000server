@@ -16,4 +16,9 @@ public final class NpcIdleAbility extends AbstractNonMoveAbility {
         npc.sendEvent(NpcStartActionEvent.of(npc, type()));
         startAnimation(millis);
     }
+
+    @Override
+    public boolean update(int delta) {
+        return updateAnimation(delta);
+    }
 }

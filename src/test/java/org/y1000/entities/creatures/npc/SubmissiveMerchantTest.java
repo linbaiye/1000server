@@ -3,7 +3,6 @@ package org.y1000.entities.creatures.npc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
 import org.y1000.realm.RealmMap;

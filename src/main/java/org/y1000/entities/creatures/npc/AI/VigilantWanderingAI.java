@@ -14,6 +14,7 @@ import org.y1000.util.Coordinate;
 import java.util.Comparator;
 import java.util.function.Function;
 
+/*
 @Slf4j
 public final class VigilantWanderingAI extends AbstractMonsterWanderingAI {
 
@@ -44,4 +45,4 @@ public final class VigilantWanderingAI extends AbstractMonsterWanderingAI {
     protected Logger log() {
         return log;
     }
-}
+}*/

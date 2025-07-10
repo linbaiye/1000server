@@ -4,8 +4,6 @@ import jakarta.persistence.EntityManagerFactory;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.PassiveMonster;
-import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
@@ -101,29 +99,7 @@ public abstract class AbstractUnitTestFixture {
     }
 
 
-    protected static final Map<OldPlayerStateEnum, Integer> MONSTER_STATE_MILLIS = new HashMap<>() {
-        {
-            put(OldPlayerStateEnum.IDLE, 1000);
-            put(OldPlayerStateEnum.Move, 770);
-            put(OldPlayerStateEnum.HURT, 540);
-            put(OldPlayerStateEnum.ATTACK, 700);
-            put(OldPlayerStateEnum.DIE, 700);
-            put(OldPlayerStateEnum.Turn, 900);
-        }
-    };
 
-
-    protected PassiveMonster.PassiveMonsterBuilder monsterBuilder() {
-        return PassiveMonster.builder()
-                .id(nextId())
-                .coordinate(Coordinate.xy(1, 1))
-                .direction(Direction.UP)
-                .name("test")
-                .realmMap(Mockito.mock(RealmMap.class))
-                .skill(null)
-                .attributeProvider(new TestingMonsterAttributeProvider())
-                ;
-    }
 
     protected PlayerImpl.PlayerImplBuilder playerBuilder() {
         KungFuBook kungFuBook = kungFuBookFactory.create();
