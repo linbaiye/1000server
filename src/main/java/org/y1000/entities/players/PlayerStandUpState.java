@@ -7,15 +7,25 @@ import org.y1000.message.PlayerChangeStateEvent;
 
 final class PlayerStandUpState extends AbstractPlayerState {
 
-    public PlayerStandUpState(PlayerImpl player) {
+
+    private final boolean toFight;
+
+    private PlayerStandUpState(PlayerImpl player, boolean toFight) {
         super(player, PlayerStateEnum.StandUp, 750);
+        this.toFight = toFight;
+    }
+
+    public PlayerStandUpState(PlayerImpl player) {
+        this(player, false);
+    }
+    public static PlayerStandUpState toCombat(PlayerImpl player) {
+        return new PlayerStandUpState(player, true);
     }
 
     @Override
     public void update(int delta) {
         if (elapse(delta)) {
-            player().changeState(PlayerStandState.idle(player()));
-            player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+            changeToNext();
         }
     }
 
@@ -24,14 +34,26 @@ final class PlayerStandUpState extends AbstractPlayerState {
         player().tryEquipFromSlot(slot, equipment);
     }
 
+    private void changeToNext() {
+        if (toFight)
+            player().changeState(PlayerStandState.fightStand(player()));
+        else
+            player().changeState(PlayerStandState.idle(player()));
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+    }
+
     @Override
     public void handleAfterHurt() {
-        player().changeState(PlayerStandState.idle(player()));
-        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+        changeToNext();
     }
 
     @Override
     public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
         player().tryChangeAttackKungFu(attackKungFu);
+    }
+
+    @Override
+    protected PlayerImpl player() {
+        return super.player();
     }
 }

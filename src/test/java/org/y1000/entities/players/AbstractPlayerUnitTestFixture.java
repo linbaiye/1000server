@@ -6,6 +6,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
+import org.y1000.entities.Direction;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.kungfu.KungFu;
 import org.y1000.kungfu.TestingAttackKungFuParameters;
@@ -13,6 +14,7 @@ import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.message.input.ClientToggleKungFuEvent;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.util.Coordinate;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -77,6 +79,8 @@ public abstract class AbstractPlayerUnitTestFixture extends AbstractUnitTestFixt
             eventListener.onEvent(invocationOnMock.getArgument(0));
             return null;
         }).when(player).sendEvent(any(PlayerEvent.class));
+        when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
+        when(player.direction()).thenReturn(Direction.UP);
     }
 
     protected void recreatePlayer(PlayerImpl.PlayerImplBuilder builder) {

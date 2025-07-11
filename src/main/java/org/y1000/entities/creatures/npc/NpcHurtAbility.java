@@ -78,7 +78,7 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
     }
 
     @Override
-    public boolean canBeSwung() {
+    public boolean swingAllowed() {
         return canBeAttacked();
     }
 

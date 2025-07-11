@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.HurtAbility;
 import org.y1000.entities.PlayerSoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.item.*;
@@ -11,8 +13,12 @@ import org.y1000.kungfu.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
+import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.message.SyncActiveKungEvent;
+import org.y1000.message.input.AbstractClickContainerSlotInput;
 
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -91,7 +97,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     }
 
     @Test
-    void tryEquipWeaponFromSlot_whenSexMismatch() {
+    void tryEquipFromSlot_whenSexMismatch() {
         recreatePlayer(playerBuilder().male(true));
         var equip = itemFactory.createEquipment("女子长发");
         int slot = player.inventory().add(equip);
@@ -136,7 +142,85 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(player.attackKungFu(), player.kungFuBook().findUnnamedAttack(AttackKungFuType.SWORD));
     }
 
-//    @Test
+    @Test
+    void toggleBreathKungFu() {
+        BreathKungFu unnamedBreath = player.kungFuBook().getUnnamedBreath();
+        player.toggleBreathKungFu(unnamedBreath);
+        assertNotNull(eventListener.remove(PlayerSayEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertTrue(eventListener.isEmpty());
+        assertTrue(player.breathKungFu().isPresent());
+
+        BreathKungFu kf = (BreathKungFu) kungFuFactory.create("爆发呼吸");
+        player.toggleBreathKungFu(kf);
+        assertNotNull(eventListener.remove(PlayerSayEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertEquals(kf.name(), player.breathKungFu().get().name());
+
+        player.toggleBreathKungFu(kf);
+        assertNotNull(eventListener.remove(PlayerSayEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertTrue(player.breathKungFu().isEmpty());
+    }
+
+    @Test
+    void toggleFootKungFu() {
+        var unnamedFoot = player.kungFuBook().getUnnamedFoot();
+        player.toggleFootKungFu(unnamedFoot);
+        assertNotNull(eventListener.remove(PlayerSayEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertTrue(player.footKungFu().isPresent());
+
+        var kf = (FootKungFu) kungFuFactory.create("归归步法");
+        player.toggleFootKungFu(kf);
+        assertNotNull(eventListener.remove(PlayerSayEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertEquals(kf.name(), player.footKungFu().get().name());
+
+        player.toggleFootKungFu(kf);
+        assertNotNull(eventListener.remove(PlayerSayEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertTrue(player.footKungFu().isEmpty());
+
+    }
+
+    @Test
+    void onWeaponDoubleClicked() {
+        Equipment item = itemFactory.createEquipment("长剑");
+        var slot = player.inventory().add(item);
+        PlayerState mock = mock(PlayerState.class);
+        player.changeState(mock);
+        player.onInventorySlotClicked(slot, AbstractClickContainerSlotInput.ClickType.LeftDoubleClick);
+        verify(mock, times(1)).equip(slot, item);
+    }
+
+    @Test
+    void onKungFuItemDoubleClicked() {
+        var item = itemFactory.createItem("雷剑式");
+        var slot = player.inventory().add(item);
+        player.onInventorySlotClicked(slot, AbstractClickContainerSlotInput.ClickType.LeftDoubleClick);
+        assertNotNull(eventListener.remove(InventoryUpdatedEvent.class));
+        assertNotNull(eventListener.remove(KungFuBookEvent.class));
+        assertNotNull(eventListener.remove(PlayerSoundEvent.class));
+    }
+
+    @Test
+    void tryAcceptAttack() {
+        var entity = Mockito.mock(ActiveEntity.class);
+        assertEquals(-1, player.tryAcceptAttack(entity));
+        HurtAbility hurtAbility = Mockito.mock(HurtAbility.class);
+        when(hurtAbility.swingAllowed()).thenReturn(false);
+        when(entity.findAbility(HurtAbility.class)).thenReturn(Optional.of(hurtAbility));
+        assertEquals(-1, player.tryAcceptAttack(entity));
+
+        when(hurtAbility.swingAllowed()).thenReturn(true);
+        when(entity.coordinate()).thenReturn(player.coordinate().move(2, 0));
+        player.toggleFootKungFu(player.kungFuBook().getUnnamedFoot());
+        assertEquals(0, player.tryAcceptAttack(entity));
+        assertTrue(player.footKungFu().isEmpty());
+    }
+
+    //    @Test
 //    void tryBreathKungFu() {
 //        player.toggleBreathKungFu();
 //    }

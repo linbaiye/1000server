@@ -2,16 +2,9 @@ package org.y1000.kungfu.attack;
 
 import lombok.Getter;
 import org.slf4j.Logger;
-import org.y1000.entities.AttackableEntity;
-import org.y1000.entities.Direction;
 import org.y1000.entities.players.*;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.players.event.*;
-import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.KungFuType;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.input.ClientAttackEvent;
 
 import java.util.List;
 
@@ -57,23 +50,6 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
     private final AttackKungFuParameters parameters;
 
     protected abstract Logger logger();
-
-    protected PlayerTextEvent checkAttributeResources(Player player) {
-        if (player.power() < parameters.powerToSwing()) {
-            return PlayerTextEvent.noPower(player);
-        }
-        if (player.innerPower() < parameters.innerPowerToSwing()) {
-            return PlayerTextEvent.noInnerPower(player);
-        }
-        if (player.outerPower() < parameters.outerPowerToSwing()) {
-            return PlayerTextEvent.noOuterPower(player);
-        }
-        int lifeToSwing = parameters.lifeToSwing();
-        if (player.currentLife() <= lifeToSwing) {
-            return PlayerTextEvent.insufficientLife(player);
-        }
-        return null;
-    }
 
     protected String checkHasEnoughAttributes(Player player) {
         if (player.power() < parameters.powerToSwing()) {

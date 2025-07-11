@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.event.EntityEvent;
@@ -21,7 +20,6 @@ import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.message.input.*;
-import org.y1000.message.serverevent.*;
 import org.y1000.message.*;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
@@ -274,27 +272,32 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
 
-    private void learnKungFu(int inventorySlotId, KungFuItem kungFuItem) {
+    private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
         if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {
             String ret = kf.checkPreconditions(this);
             if (ret != null) {
-                emitEvent(PlayerTextEvent.systemTip(this, ret));
+                sendText(ret);
                 return;
             }
         }
         KungFu kungFu = kungFuItem.kungFu().duplicate();
         var slot = kungFuBook().addToBasic(kungFu);
         if (slot == 0) {
+            sendText("修炼失败。");
             return;
         }
-        emitEvent(new PlayerLearnKungFuEvent(this, slot, kungFu));
         inventory().decrease(inventorySlotId);
-        emitEvent(new UpdateInventorySlotEvent(this, inventorySlotId, inventory().getItem(inventorySlotId)));
-        kungFuItem.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+        kungFuItem.eventSound().ifPresent(this::sendSound);
+        syncKungFuBookQuietly();
+        syncInventoryQuietly();
     }
 
     private void syncInventoryQuietly() {
         sendEvent(InventoryUpdatedEvent.quiet(this));
+    }
+
+    private void syncKungFuBookQuietly() {
+        sendEvent(KungFuBookEvent.quietly(this));
     }
 
 
@@ -396,12 +399,28 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
 
     private void handleInventorySlotDoubleClick(int slotId) {
+        if (isDead())
+            return;
         Item item = inventory.getItem(slotId);
         if (item == null) {
             return;
         }
         if (item instanceof Equipment equipment) {
             state.equip(slotId, equipment);
+        } else if (item instanceof StackItem stackItem) {
+            if (stackItem.item() instanceof KungFuItem kungFuItem) {
+                learnAndUpdateInventory(slotId, kungFuItem);
+            } else if (stackItem.item() instanceof Pill pill) {
+                if (pillSlots.canTakePill() && inventory.decrease(slotId)) {
+                    if (pillSlots.tryUsePill(pill)) {
+                        sendText("服用了" + pill.name() + "。");
+                        sendEvent(InventorySlotEvent.update(this, slotId, inventory.getItem(slotId)));
+                        pill.eventSound().ifPresent(this::sendSound);
+                    }
+                } else {
+                    sendText("无法再服用。");
+                }
+            }
         }
 //        if (item instanceof Equipment equipment) {
 //            equip(slotId, equipment);
@@ -546,15 +565,29 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
 
-    void acceptAttack(Entity entity) {
-        combatController = CombatController.startIfAllowed(this, entity);
+    /**
+     * Try to accept a combat, and PlayerState should change state accordingly if no strike happened.
+     * @param entity the target to combat.
+     * @return -1 if not acceptable, 1 if a strike is carried, 0 if accepted but no strike happened.
+     */
+    int tryAcceptAttack(ActiveEntity entity) {
+        combatController = CombatController.acceptIfAllowed(this, entity);
+        if (combatController == null)
+            return -1;
+        footKungfu = null;
+        breathKungFu = null;
+        syncActiveKungFuList();
+        int ret =  combatController.update(0);
+        if (ret == -1)
+            combatController = null;
+        return ret;
     }
 
 
     @Override
-    public void attack(Entity target) {
-        Validate.notNull(target);
-        state.attack(target);
+    public void attack(ActiveEntity target) {
+        if (target != null)
+            state.attack(target);
     }
 
     private void move(ClientMovementEvent event) {
@@ -588,31 +621,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
 
     public void handleClientEvent(ClientEvent clientEvent) {
-        if (isDead()) {
-            return;
-        }
-        if (clientEvent instanceof ClientDoubleClickSlotEvent doubleClickSlotEvent) {
-//            handleInventorySlotDoubleClick(doubleClickSlotEvent.sourceSlot());
-        } else if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
-            inventory.handleClientEvent(this, inventoryEvent, this::emitEvent);
-        } else if (clientEvent instanceof ClientUnequipEvent unequipEvent) {
-            unequip(unequipEvent.type());
-        } else if (clientEvent instanceof ClientToggleKungFuEvent useKungFuEvent) {
-            kungFuBook().getKungFu(useKungFuEvent.tab(), useKungFuEvent.slot()).ifPresent(this::handleDoubleClickKungFu);
-        } else if (clientEvent instanceof ClientSitDownEvent) {
-//            sitDown(false);
-        } else if (clientEvent instanceof ClientStandUpEvent) {
-            standUp(false);
-        } else if (clientEvent instanceof ClientMovementEvent movementEvent) {
-            move(movementEvent);
-        } else if (clientEvent instanceof ClientRightClickEvent event) {
-            handleRightClick(event);
-        } else if (clientEvent instanceof ClientSwapKungFuSlotEvent swapKungfuSlotEvent) {
-            handleSwapKungFuSlot(swapKungfuSlotEvent);
-        } else if (clientEvent instanceof ClientChangeTeamEvent teamEvent) {
-            team = teamEvent.team();
-            emitEvent(new PlayerNameColorEvent(this));
-        }
     }
 
     @Override
@@ -636,7 +644,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     @Override
     public void handleSimpleInput(SimpleInput.Type type) {
         switch (type) {
-            case KungFuBook -> sendEvent(KungFuBookEvent.forPlayer(this));
+            case KungFuBook -> sendEvent(KungFuBookEvent.forceful(this));
             case Inventory -> sendEvent(InventoryUpdatedEvent.forceful(this));
             case KeyF4 -> state.sayHello();
             case KeyF3 -> state.sitOrStandUp();
@@ -996,12 +1004,17 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     /**
-     * Return true if we change to attack state.
+     * Update combat if there is any.
      * @param delta
-     * @return
+     * @return Return true if changed to attack state.
      */
-    public boolean updateCombat(int delta) {
-        return combatController != null && combatController.update(delta);
+    boolean tryCombatStrike(int delta) {
+        if (combatController == null)
+            return false;
+        int ret = combatController.update(delta);
+        if (ret == -1)
+            combatController = null;
+        return ret == 1;
     }
 
     @Override
@@ -1177,7 +1190,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     public boolean consumeItem(int slotId) {
         var ret = inventory.decrease(slotId);
         if (ret)
-            emitEvent(new UpdateInventorySlotEvent(this, slotId, inventory.getItem(slotId)));
+            sendEvent(InventorySlotEvent.update(this, slotId, inventory.getItem(slotId)));
         return ret;
     }
 
@@ -1447,14 +1460,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
 
-    public void setEnemy(AttackableEntity entity){
-        Objects.requireNonNull(entity, "entity can't be null");
-        if (this.enemy != null) {
-            this.enemy.deregisterEventListener(this);
-        }
-        this.enemy = entity;
-        this.enemy.registerEventListener(this);
-    }
 
     @Override
     public void emitEvent(EntityEvent event) {
@@ -1481,7 +1486,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     @Override
-    public boolean canBeSwung() {
+    public boolean swingAllowed() {
         return !isLeftGame();
     }
 

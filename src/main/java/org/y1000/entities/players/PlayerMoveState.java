@@ -9,10 +9,11 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.message.PlayerChangeStateEvent;
 import org.y1000.message.input.MoveInput;
+import org.y1000.util.Coordinate;
 
 
 @Slf4j
-public final class PlayerMoveState extends AbstractPlayerState {
+final class PlayerMoveState extends AbstractPlayerState {
 
     @Getter
     private final MoveAction moveAction;
@@ -42,13 +43,20 @@ public final class PlayerMoveState extends AbstractPlayerState {
         return moveAction;
     }
 
+    private boolean resetIfNotMovable(Coordinate coordinate) {
+        if (!player().movable(coordinate)) {
+            changeToStand();
+            player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void update(int delta) {
         if (!elapse(delta))
             return;
-        if (!player().movable(currentInput.destination())) {
-            changeToStand();
-            player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
+        if (resetIfNotMovable(currentInput.destination())) {
             return;
         }
         player().footKungFu().ifPresent(footKungFu -> {
@@ -70,10 +78,7 @@ public final class PlayerMoveState extends AbstractPlayerState {
             return;
         }
         player().changeDirection(newInput.direction());
-        if (!player().movable(newInput.destination())) {
-            changeToStand();
-            player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
-        } else {
+        if (!resetIfNotMovable(newInput.destination())) {
             MoveAction newAction = computeMoveAction(player(), moveAction);
             player().changeState(new PlayerMoveState(player(), newInput, newAction));
             player().sendEvent(PlayerMoveEvent.moveBy(player(), newAction));

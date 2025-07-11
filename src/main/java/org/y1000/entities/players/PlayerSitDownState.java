@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.Entity;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
@@ -9,9 +9,9 @@ import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.message.PlayerChangeStateEvent;
 
 @Slf4j
-final class PlayerSitDownState extends AbstractPlayerState implements PlayerEquipableState {
+final class PlayerSitDownState extends AbstractPlayerState {
 
-    private static final int StateMillis = 750;
+    static final int StateMillis = 750;
     public PlayerSitDownState(PlayerImpl player) {
         super(player, PlayerStateEnum.Sit, StateMillis);
     }
@@ -61,9 +61,13 @@ final class PlayerSitDownState extends AbstractPlayerState implements PlayerEqui
     }
 
     @Override
-    public void attack(Entity target) {
-        if (elapsedMillis() >= totalMillis()) {
-            player().acceptAttack(target);
+    public void attack(ActiveEntity target) {
+        if (elapsedMillis() < totalMillis()) {
+            return;
+        }
+        if (player().tryAcceptAttack(target) == 0) {
+            player().changeState(PlayerStandUpState.toCombat(player()));
+            player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
         }
     }
 

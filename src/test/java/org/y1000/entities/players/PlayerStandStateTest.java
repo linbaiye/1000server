@@ -3,7 +3,11 @@ package org.y1000.entities.players;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
+import org.y1000.entities.Entity;
 import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
 import org.y1000.item.Equipment;
@@ -49,16 +53,13 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
         mockPlayer();
         state = PlayerStandState.idle(player);
         when(player.stateEnum()).thenReturn(PlayerStateEnum.FightStand);
-        when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
-        when(player.direction()).thenReturn(Direction.UP);
     }
 
     private void mockWithFightStand() {
         mockPlayer();
         state = PlayerStandState.fightStand(player);
         when(player.stateEnum()).thenReturn(PlayerStateEnum.FightStand);
-        when(player.coordinate()).thenReturn(Coordinate.xy(1, 1));
-        when(player.direction()).thenReturn(Direction.UP);
+
     }
 
     @Test
@@ -243,5 +244,57 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
         var equip = Mockito.mock(Equipment.class);
         state.equip(1, equip);
         verify(player, times(1)).tryEquipFromSlot(1, equip);
+    }
+
+    @Test
+    void handleAfterHurt_Idle() {
+        state.handleAfterHurt();
+        assertEquals(PlayerStateEnum.Idle, player.stateEnum());
+        assertNotNull(eventListener.remove(PlayerChangeStateEvent.class));
+    }
+
+    @Test
+    void handleAfterHurt_FightStand() {
+        changeToFightStand();
+        state.handleAfterHurt();
+        assertEquals(PlayerStateEnum.FightStand, player.stateEnum());
+        assertNotNull(eventListener.remove(PlayerChangeStateEvent.class));
+    }
+
+    @Test
+    void toggleFootKungFu() {
+        mockPlayer();
+        state = PlayerStandState.idle(player);
+        FootKungFu mock = mock(FootKungFu.class);
+        state.tryToggleFootKungFu(mock);
+        verify(player, times(1)).toggleFootKungFu(mock);
+    }
+
+    @Test
+    void toggleAttackKungFu() {
+        mockPlayer();
+        state = PlayerStandState.idle(player);
+        var mock = mock(AttackKungFu.class);
+        state.tryToggleAttackKungFu(mock);
+        verify(player, times(1)).tryChangeAttackKungFu(mock);
+    }
+
+    @Test
+    void acceptAttack_idle() {
+        mockWithIdle();
+        state = PlayerStandState.idle(player);
+        var entity = Mockito.mock(ActiveEntity.class);
+        when(player.tryAcceptAttack(entity)).thenReturn(-1);
+        state.attack(entity);
+        verify(player, times(0)).changeState(any());
+
+        when(player.tryAcceptAttack(entity)).thenReturn(0);
+        state.attack(entity);
+        doAnswer(i -> {
+            assertEquals(PlayerStateEnum.FightStand, ((PlayerStandState)i.getArgument(0)).playerStateEnum());
+            return null;
+        }).when(player).changeState(any(PlayerStandState.class));
+        verify(player, times(1)).changeState(any(PlayerStandState.class));
+        assertNotNull(eventListener.removeFirst(PlayerChangeStateEvent.class));
     }
 }

@@ -435,6 +435,7 @@ message LoginPacket {
 message KungFuBookPacket {
   repeated KungFuPacket unnamedKungFuList = 1;
   repeated KungFuPacket basicKungFuList = 2;
+  bool forceful = 3;
 }
 
 message AttributePacket {

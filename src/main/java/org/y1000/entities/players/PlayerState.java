@@ -1,9 +1,7 @@
 package org.y1000.entities.players;
 
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.CreatureState;
-import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
@@ -52,7 +50,7 @@ interface PlayerState extends CreatureState {
 
     }
 
-    default void attack(Entity entity) {
+    default void attack(ActiveEntity entity) {
 
     }
 

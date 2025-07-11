@@ -22,11 +22,20 @@ public final class KungFuBookEvent extends Abstract2PlayerMessageEvent {
                 .build();
     }
 
-    public static KungFuBookEvent forPlayer(Player player) {
+    private static KungFuBookEvent forPlayer(Player player, boolean forceful) {
         Validate.notNull(player);
         KungFuBookPacket.Builder builder = KungFuBookPacket.newBuilder();
         player.kungFuBook().foreachUnnamed((slot, k) -> builder.addUnnamedKungFuList(toPacket(slot, k)));
         player.kungFuBook().foreachBasic((slot, k) -> builder.addBasicKungFuList(toPacket(slot, k)));
+        builder.setForceful(forceful);
         return new KungFuBookEvent(player, Packet.newBuilder().setKungFuBook(builder.build()).build());
+    }
+
+    public static KungFuBookEvent forceful(Player player) {
+        return forPlayer(player, true);
+    }
+
+    public static KungFuBookEvent quietly(Player player) {
+        return forPlayer(player, false);
     }
 }

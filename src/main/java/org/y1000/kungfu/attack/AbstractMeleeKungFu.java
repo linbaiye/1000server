@@ -1,10 +1,7 @@
 package org.y1000.kungfu.attack;
 
 import org.slf4j.Logger;
-import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.PlayerImpl;
-import org.y1000.message.input.ClientAttackEvent;
 import org.y1000.util.Coordinate;
 
 public abstract class AbstractMeleeKungFu extends AbstractAttackKungFu {

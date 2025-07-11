@@ -34,16 +34,16 @@ class PillSlotsTest extends AbstractUnitTestFixture {
     void usePill() {
         StackItem stackItem= (StackItem) itemFactory.createItem("生药", 100);
         var pill = (Pill) stackItem.item();
-        slots.usePill(player, pill);
+        slots.tryUsePill(player, pill);
         Mockito.verify(player, Mockito.times(1)).emitEvent(any(EntitySoundEvent.class));
         Mockito.verify(player, Mockito.times(1)).emitEvent(any(PlayerTextEvent.class));
-        slots.usePill(player, pill);
+        slots.tryUsePill(player, pill);
         Mockito.verify(player, Mockito.times(2)).emitEvent(any(EntitySoundEvent.class));
         Mockito.verify(player, Mockito.times(2)).emitEvent(any(PlayerTextEvent.class));
-        slots.usePill(player, pill);
+        slots.tryUsePill(player, pill);
         Mockito.verify(player, Mockito.times(3)).emitEvent(any(EntitySoundEvent.class));
         Mockito.verify(player, Mockito.times(3)).emitEvent(any(PlayerTextEvent.class));
-        slots.usePill(player, pill);
+        slots.tryUsePill(player, pill);
         Mockito.verify(player, Mockito.times(3)).emitEvent(any(EntitySoundEvent.class));
         Mockito.verify(player, Mockito.times(3)).emitEvent(any(PlayerTextEvent.class));
     }
@@ -52,7 +52,7 @@ class PillSlotsTest extends AbstractUnitTestFixture {
     void update() {
         StackItem stackItem= (StackItem) itemFactory.createItem("生药", 100);
         var pill = (Pill) stackItem.item();
-        slots.usePill(player,  pill);
+        slots.tryUsePill(player,  pill);
         slots.update(player, pill.useInterval());
         Mockito.verify(player, Mockito.times(1)).emitEvent(any(PlayerAttributeEvent.class));
         for (int i = 0; i < pill.useCount(); i++) {
@@ -62,9 +62,9 @@ class PillSlotsTest extends AbstractUnitTestFixture {
 
         // make sure ropeSlot is emptied.
         Mockito.reset(player);
-        slots.usePill(player, pill);
-        slots.usePill(player, pill);
-        slots.usePill(player, pill);
+        slots.tryUsePill(player, pill);
+        slots.tryUsePill(player, pill);
+        slots.tryUsePill(player, pill);
         Mockito.verify(player, Mockito.times(3)).emitEvent(any(EntitySoundEvent.class));
         Mockito.verify(player, Mockito.times(3)).emitEvent(any(PlayerTextEvent.class));
     }
@@ -73,10 +73,10 @@ class PillSlotsTest extends AbstractUnitTestFixture {
     void canTake() {
         StackItem stackItem= (StackItem) itemFactory.createItem("生药", 100);
         var pill = (Pill) stackItem.item();
-        slots.usePill(player, pill);
-        slots.usePill(player, pill);
+        slots.tryUsePill(player, pill);
+        slots.tryUsePill(player, pill);
         assertTrue(slots.canTakePill());
-        slots.usePill(player, pill);
+        slots.tryUsePill(player, pill);
         assertFalse(slots.canTakePill());
     }
 }

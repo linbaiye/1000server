@@ -22,7 +22,7 @@ public final class AttackInput implements EntityInteractionInput {
 
     @Override
     public void onEntityFound(Player player, Entity entity) {
-        if (player != null && entity != null)
-            player.attack(entity);
+        if (player != null && entity instanceof ActiveEntity activeEntity)
+            player.attack(activeEntity);
     }
 }

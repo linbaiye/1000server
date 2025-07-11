@@ -1,29 +1,26 @@
 package org.y1000.entities.players;
 
-import org.y1000.item.Equipment;
 import org.y1000.message.PlayerChangeStateEvent;
 
-class PlayerHelloState extends AbstractPlayerState {
+final class PlayerHelloState extends AbstractPlayerState {
+
+    static final int StateMillis = 750;
 
     public PlayerHelloState(PlayerImpl player) {
-        super(player, PlayerStateEnum.Hello, 750);
+        super(player, PlayerStateEnum.Hello, StateMillis);
     }
+
     @Override
     public void update(int delta) {
         if (elapse(delta)) {
             player().changeState(PlayerStandState.idle(player()));
-            player().emitEvent(PlayerChangeStateEvent.allVisible(player()));
+            player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
         }
-    }
-
-    @Override
-    public void equip(int slot, Equipment equipment) {
-        player().tryEquipFromSlot(slot, equipment);
     }
 
     @Override
     public void handleAfterHurt() {
         player().changeState(PlayerStandState.idle(player()));
-        player().emitEvent(PlayerChangeStateEvent.allVisible(player()));
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
 }

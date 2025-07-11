@@ -2,13 +2,11 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.Entity;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.PlayerSoundEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerAttackEvent;
-import org.y1000.message.PlayerChangeStateEvent;
 
 @Slf4j
 final class CombatController {
@@ -24,12 +22,6 @@ final class CombatController {
         resourceNoticeTimer = 0;
     }
 
-    private void readyToFight() {
-        player.changeDirection(player.coordinate().computeDirection(enemy.coordinate()));
-        player.changeState(PlayerStandState.fightStand(player));
-        player.sendEvent(PlayerChangeStateEvent.allVisible(player));
-    }
-
     private void attack() {
         AttackKungFu kungFu = player.attackKungFu();
         AttackAction action = kungFu.computeAttackAction();
@@ -37,6 +29,7 @@ final class CombatController {
         player.changeState(new PlayerAttackState(player, action));
         var message = PlayerAttackEvent.attack(player, action, player.attackKungFu().computeEffectId());
         player.sendEvent(message);
+        // should consume resources.
         kungFu.consumeAttributes(player);
         player.cooldownAttack();
         int exp = hurtAbility.attacked(player, player.damage(), player.hit());
@@ -45,37 +38,18 @@ final class CombatController {
         player.sendEvent(PlayerSoundEvent.sound(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
     }
 
-    private void start() {
-        player.disableBreathAndSync();
-        player.disableFootKungFuAndSync();
+    /**
+     * Update combat progress, change to attack state if able.
+     * @param delta
+     * @return -1 if this combat is over, 1 if a strike is carried, 0 when combat should carry on.
+     */
+    int update(int delta) {
+        if (!hurtAbility.swingAllowed()) {
+            return -1;
+        }
         if (player.maxCooldown() > 0) {
-            log.debug("Cooling down.");
-            readyToFight();
-            return;
+            return 0;
         }
-        String ret = player.attackKungFu().checkResourceToAttack(player);
-        if (ret != null) {
-            player.sendEvent(PlayerTextMessage.of(player, ret));
-            resourceNoticeTimer = 2000;
-            readyToFight();
-            log.debug("No resource to attack.");
-            return;
-        }
-        if (player.attackKungFu().isWithinAttackRange(player.coordinate(), enemy.coordinate())) {
-            attack();
-        } else {
-            readyToFight();
-        }
-    }
-
-
-    boolean update(int delta) {
-        if (!hurtAbility.canBeSwung()) {
-            player.stopCombat();
-            return false;
-        }
-        if (player.maxCooldown() > 0)
-            return false;
         AttackKungFu kungFu = player.attackKungFu();
         String ret = kungFu.checkResourceToAttack(player);
         if (ret != null) {
@@ -84,24 +58,21 @@ final class CombatController {
                 player.sendEvent(PlayerTextMessage.of(player, ret));
                 resourceNoticeTimer = 2000;
             }
-            return false;
+            return 0;
         }
         if (player.attackKungFu().isWithinAttackRange(player.coordinate(), enemy.coordinate())) {
             attack();
-            return true;
+            return 1;
         }
-        return false;
+        return 0;
     }
 
-    static CombatController startIfAllowed(PlayerImpl player, Entity entity ) {
-        if (entity instanceof ActiveEntity target) {
-            HurtAbility ability = target.findAbility(HurtAbility.class).orElse(null);
-            if (ability == null || !ability.canBeSwung() || player.attackKungFu().isRanged())
+    static CombatController acceptIfAllowed(PlayerImpl player, ActiveEntity target) {
+        HurtAbility ability = target.findAbility(HurtAbility.class).orElse(null);
+        if (ability == null || !ability.swingAllowed())
                 return null;
-            CombatController combatController = new CombatController(player, target, ability);
-            combatController.start();
-            return combatController;
-        }
-        return null;
+        if (!ability.canBeAttacked() && player.attackKungFu().isRanged())
+            return null;
+        return new CombatController(player, target, ability);
     }
 }

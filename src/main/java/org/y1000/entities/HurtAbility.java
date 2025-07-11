@@ -6,7 +6,11 @@ public interface HurtAbility {
 
     boolean canBeAttacked();
 
-    boolean canBeSwung();
+    /**
+     * Allow a player to swing a strike?
+     * @return true if allowed.
+     */
+    boolean swingAllowed();
 
     /**
      *

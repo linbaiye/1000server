@@ -2,7 +2,6 @@ package org.y1000.message;
 
 import org.y1000.entities.players.MoveAction;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.event.PlayerEquipEvent;
 import org.y1000.network.gen.*;
 
@@ -38,7 +37,7 @@ public final class PlayerSnapshot implements I2ClientMessage {
                 .build();
     }
 
-    public static PlayerSnapshot build(PlayerImpl player, int elapsed, MoveAction moveAction) {
+    public static PlayerSnapshot build(Player player, int elapsed, MoveAction moveAction) {
         return new PlayerSnapshot(Packet.newBuilder()
                 .setPlayerSnapshot(buildSnapshot(player, elapsed, moveAction)).build());
     }

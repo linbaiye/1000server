@@ -1,6 +1,6 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.Entity;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.creatures.ViolentCreature;
 import org.y1000.entities.players.event.PlayerEvent;
@@ -54,7 +54,7 @@ public interface Player extends ViolentCreature, HurtAbility {
 
     void handleInput(SelfHandleInput input);
 
-    void attack(Entity entity);
+    void attack(ActiveEntity entity);
 
     Optional<ArmorEquipment> hat();
 

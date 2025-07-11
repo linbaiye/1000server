@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.Entity;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
@@ -22,7 +22,7 @@ final class PlayerStandState extends AbstractPlayerState {
 
     @Override
     public void update(int delta) {
-        if (player().updateCombat(delta)) {
+        if (player().tryCombatStrike(delta)) {
             return;
         }
         if (elapse(delta)) {
@@ -33,15 +33,15 @@ final class PlayerStandState extends AbstractPlayerState {
     public void tryMove(MoveInput moveInput) {
         if (!player().coordinate().equals(moveInput.from())) {
             log.debug("Current {}, input {}, rewind {}.", player().coordinate(), moveInput.from(), player().id());
-            player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
             reset();
+            player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
             return;
         }
         player().changeDirection(moveInput.direction());
         if (!player().movable(moveInput.destination())) {
             log.debug("Destination occupied {}, set position of {}.", player().coordinate(), player().id());
-            player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
             reset();
+            player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
             return;
         }
         PlayerMoveState moveState = playerStateEnum() == PlayerStateEnum.Idle ?
@@ -103,8 +103,15 @@ final class PlayerStandState extends AbstractPlayerState {
     }
 
     @Override
-    public void attack(Entity target) {
-        player().acceptAttack(target);
+    public void attack(ActiveEntity target) {
+        int ret = player().tryAcceptAttack(target);
+        if (ret != 0) {
+            return;
+        }
+        if (playerStateEnum() != PlayerStateEnum.FightStand) {
+            player().changeState(PlayerStandState.fightStand(player()));
+            player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+        }
     }
 
     @Override

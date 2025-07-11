@@ -14,15 +14,6 @@ public enum MoveAction implements ValueEnum  {
     @Getter
     private final int millis;
 
-    /*
-        private static final Map<MoveAction, Integer> MoveStateMillis = Map.of(
-            MoveAction.Walk, 840,
-            MoveAction.Run, 420,
-            MoveAction.Fly, 360,
-            MoveAction.FightWalk, 840
-    );
-     */
-
     MoveAction(int v, int millis) {
         this.v = v;
         this.millis = millis;

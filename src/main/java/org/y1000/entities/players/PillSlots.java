@@ -1,10 +1,10 @@
 package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
+import org.y1000.entities.PlayerSoundEvent;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.item.Pill;
-import org.y1000.message.PlayerTextEvent;
 
 public final class PillSlots {
 
@@ -48,12 +48,23 @@ public final class PillSlots {
 
     private final PillSlot[] pillSlots = new PillSlot[PillSlotSize];
 
-    public void usePill(Player player, Pill pill) {
-        Validate.notNull(player);
+
+    public boolean tryUsePill(Pill pill) {
         for (int i = 0; i < pillSlots.length; i++) {
             if (pillSlots[i] == null) {
-                player.emitEvent(PlayerTextEvent.havePill(player, pill.name()));
-                pill.eventSound().ifPresent(s -> player.emitEvent(new EntitySoundEvent(player, s)));
+                pillSlots[i] = new PillSlot(pill);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public void tryUsePill(Player player, Pill pill) {
+        for (int i = 0; i < pillSlots.length; i++) {
+            if (pillSlots[i] == null) {
+                player.sendEvent(PlayerTextMessage.of(player, "服用了" + pill.name() + "。"));
+                pill.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.sound(player, s)));
                 pillSlots[i] = new PillSlot(pill);
                 return;
             }
