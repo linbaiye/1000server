@@ -1481,6 +1481,11 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     @Override
+    public boolean canBeSwung() {
+        return !isLeftGame();
+    }
+
+    @Override
     public int attacked(ActiveEntity attacker, Damage damage, int accuracy) {
         if (isDodged(accuracy))
             return -1;

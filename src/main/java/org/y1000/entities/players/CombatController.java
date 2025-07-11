@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.Entity;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.PlayerSoundEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
@@ -92,12 +93,15 @@ final class CombatController {
         return false;
     }
 
-    static CombatController startIfAllowed(PlayerImpl player, ActiveEntity target) {
-        HurtAbility ability = target.findAbility(HurtAbility.class).orElse(null);
-        if (ability == null || !ability.canBeSwung() || player.attackKungFu().isRanged())
-            return null;
-        CombatController combatController = new CombatController(player, target);
-        combatController.start();;
-        return combatController;
+    static CombatController startIfAllowed(PlayerImpl player, Entity entity ) {
+        if (entity instanceof ActiveEntity target) {
+            HurtAbility ability = target.findAbility(HurtAbility.class).orElse(null);
+            if (ability == null || !ability.canBeSwung() || player.attackKungFu().isRanged())
+                return null;
+            CombatController combatController = new CombatController(player, target, ability);
+            combatController.start();
+            return combatController;
+        }
+        return null;
     }
 }
