@@ -3,28 +3,26 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.creatures.npc.NpcEventListener;
-import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.util.Coordinate;
 
-import java.util.Collections;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RelevantScopeManagerTest extends AbstractUnitTestFixture  {
     private AOIManager relevantScopeManager;
+
+
+
     @BeforeEach
     void setUp() {
         relevantScopeManager = new RelevantScopeManager();
     }
 
     private Npc createNpc(Coordinate coordinate) {
-        return new Npc(1L, Collections.emptyList(), "test", coordinate, npcEvent -> {}, mockRealmMap(),
-                "test", "test", "test", Direction.DOWN);
+        return npcFactory.create(mockRealmMap(), coordinate);
     }
 
 

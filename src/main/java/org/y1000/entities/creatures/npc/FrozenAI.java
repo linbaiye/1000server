@@ -1,7 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.creatures.npc.event.NpcRemoveEvent;
 
 public class FrozenAI extends AbstractNpcAI {
 
@@ -9,16 +8,11 @@ public class FrozenAI extends AbstractNpcAI {
         super(npc);
         npc.findAbility(NpcHurtAbility.class)
                 .ifPresent(e -> e.setHurtTrigger(this::onAttacked));
-
     }
 
     @Override
-    void onAbilityDone(NpcAbility ability) {
-        if (ability instanceof NpcDieAbility) {
-            npc().sendEvent(NpcRemoveEvent.of(npc()));
-        } else if (ability instanceof NpcIdleAbility) {
-            changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
-        }
+    void onNonDieAbilityDone(NpcAbility ability) {
+        changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
     }
 
     private void onAttacked(ActiveEntity attacker, NpcHurtAbility hurtAbility) {

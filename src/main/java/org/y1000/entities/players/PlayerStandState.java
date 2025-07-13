@@ -85,7 +85,7 @@ final class PlayerStandState extends AbstractPlayerState {
             player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
             player().stopCombat();
         }
-        player().toggleFootKungFu(footKungFu);
+        player().toggleFootAndSync(footKungFu);
     }
 
     @Override
@@ -117,7 +117,7 @@ final class PlayerStandState extends AbstractPlayerState {
     @Override
     public void tryToggleBreathKungFu(BreathKungFu breathKungFu) {
         player().stopCombat();
-        player().toggleBreathKungFu(breathKungFu);
+        player().toggleBreathAndSync(breathKungFu);
         player().changeState(PlayerSitDownState.sit(player()));
         player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }

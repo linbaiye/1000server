@@ -1,7 +1,5 @@
 package org.y1000.sdb;
 
-import java.util.Set;
-
 public interface NpcSdb {
     int getRecovery(String name);
 
@@ -13,11 +11,9 @@ public interface NpcSdb {
 
     String getSoundAttack(String name);
 
+    boolean attack(String name);
+
     String getSoundStructed(String name);
-
-    String getSoundStart(String name);
-
-    String getSoundNormal(String name);
 
     String getSoundDie(String name);
 
@@ -31,32 +27,15 @@ public interface NpcSdb {
 
     int getActionWidth(String name);
 
-    String getAttackMagic(String name);
-
     int getWalkSpeed(String name);
 
     String getHaveItem(String name);
 
-    boolean contains(String name);
-
-    boolean isProtector(String name);
-
-    String getNpcText(String name);
-
-    boolean isSeller(String name);
-
-    boolean isBanker(String name);
+    boolean containsName(String name);
 
     String getViewName(String name);
 
     String getShape(String name);
 
-    int getViewWidth(String name);
-
-    boolean isQuester(String name);
-
-    int getImage(String name);
-
-    Set<String> getAllAnimateIds();
+    int getRegenInterval(String name);
 }
-

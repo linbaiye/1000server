@@ -18,7 +18,6 @@ public final class AiPathUtil {
         var dir = npc.coordinate().computeDirection(dest);
         Coordinate next = npc.coordinate().moveBy(dir);
         if (next.equals(dest)) {
-            // copied, but why?
             return dir != npc.direction() ? dir : null;
         }
         int minDist = Integer.MAX_VALUE;

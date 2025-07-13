@@ -1,6 +1,5 @@
 package org.y1000.entities.creatures.npc;
 
-import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.message.NpcSnapshot;
 
@@ -25,10 +24,6 @@ public abstract class AbstractNpcAbility implements NpcAbility {
 
     void startShorter(int millis) {
         animation.start(Math.min(millis, animation.getActualMillis()));
-    }
-
-    int animationLength()  {
-        return animation.length();
     }
 
     boolean updateAnimation(int delta) {

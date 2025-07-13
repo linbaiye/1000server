@@ -93,7 +93,7 @@ class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture {
         when(player.stateEnum()).thenReturn(PlayerStateEnum.Sit);
         state.tryToggleBreathKungFu(mock);
         verify(player, times(1)).stopCombat();
-        verify(player, times(1)).toggleBreathKungFu(mock);
+        verify(player, times(1)).toggleBreathAndSync(mock);
         verify(player, times(1)).changeState(any(PlayerSitDownState.class));
     }
 }

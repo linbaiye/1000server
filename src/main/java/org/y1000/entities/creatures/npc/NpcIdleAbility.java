@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.npc.event.NpcStartActionEvent;
 
-public final class NpcIdleAbility extends AbstractNonMoveAbility {
+public final class NpcIdleAbility extends AbstractNpcNonMoveAbility {
 
     public NpcIdleAbility(NpcAnimation animation) {
         super(animation);

@@ -35,10 +35,6 @@ public class NpcAnimation {
         return animationEnum;
     }
 
-    int length() {
-        return actionMillis;
-    }
-
     public void start(int actionMillis) {
         this.actionMillis = actionMillis;
         elapsedMillis = 0;

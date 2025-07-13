@@ -366,6 +366,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
         if (newKungFu.getType() == attackKungFu.getType()) {
             changeAndSayAndCooldown(newKungFu);
+            syncActiveKungFuList();
             return true;
         }
         int weaponSlot = inventory.findWeaponSlot(newKungFu.getType());
@@ -462,7 +463,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         combatController = null;
     }
 
-    void toggleBreathKungFu(BreathKungFu newBreath) {
+    void toggleBreathAndSync(BreathKungFu newBreath) {
         if (newBreath.nameEquals(breathKungFu)) {
             breathKungFu = null;
         } else {
@@ -493,7 +494,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         sendEvent(SyncActiveKungEvent.of(this));
     }
 
-    void toggleFootKungFu(FootKungFu newKungFu) {
+    void toggleFootAndSync(FootKungFu newKungFu) {
         if (newKungFu.nameEquals(footKungfu)) {
             this.footKungfu = null;
         } else {
@@ -542,28 +543,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
 
-//    private void sitDown(boolean includeSelf) {
-//        if (!creatureState().canSitDown()) {
-//            log.debug("Cant sit down in state {}.", creatureState().stateEnum());
-//            return;
-//        }
-//        if (footKungfu != null) {
-//            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, footKungfu));
-//            footKungfu = null;
-//        }
-//        clearFightingEntity();
-//        this.changeState(PlayerSitDownState.sit(this));
-//        emitEvent(new PlayerSitDownEvent(this, includeSelf));
-//    }
-
-    private void standUp(boolean includeSelf) {
-//        if (creatureState().canStandUp()) {
-//            disableBreathKungNoTip();
-//            this.changeState(new PlayerStandUpState(this));
-//            emitEvent(new PlayerStandUpEvent(this, includeSelf));
-//        }
-    }
-
 
     /**
      * Try to accept a combat, and PlayerState should change state accordingly if no strike happened.
@@ -590,14 +569,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             state.attack(target);
     }
 
-    private void move(ClientMovementEvent event) {
-//        if (creatureState() instanceof MovableState movableState) {
-//            movableState.move(this, event);
-//        } else if (creatureState() instanceof AbstractPlayerMoveState moveState) {
-//            moveState.onMoveEvent(event);
-//        }
-    }
-
     private void handleRightClick(ClientRightClickEvent event) {
         if (event.type() == RightClickType.INVENTORY) {
             Item item = inventory.getItem(event.slotId());
@@ -619,9 +590,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
     }
 
-
-    public void handleClientEvent(ClientEvent clientEvent) {
-    }
 
     @Override
     public void handleInput(SelfHandleInput input) {
@@ -757,7 +725,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         if (protectKungFu == null) {
             return;
         }
-        var exp = ExperienceUtil.DEFAULT_EXP - damagedLifeToExp(bodyDamage);
+        var exp = ExperienceUtil.DEFAULT_EXP - ExperienceUtil.damageToExp(life.maxValue(), bodyDamage);
         protectKungFu.gainExp(this, exp);
     }
 
@@ -1140,7 +1108,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             return;
         }
         if (armLife.percent() < 50) {
-            sendText("手部活力不足，无法获取经验。");
+            sendText("手部活力不足，无法获得经验。");
             return;
         }
         kungFu.gainExp(this, amount);
@@ -1148,14 +1116,9 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
 
     @Override
-    public void gainAttackExp(int amount) {
-//        doGainExp(amount, attackKungFu);
-    }
-
-    @Override
     public void gainRangedAttackExp(int amount) {
         if (attackKungFu.isRanged()) {
-            gainAttackExp(amount);
+            doGainExp(amount, attackKungFu);
         }
     }
 
@@ -1413,20 +1376,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
                 (isMale() ? "2004" : "2204") );
     }
 
-    @Override
-    public boolean canChaseOrAttack(Entity target) {
-        var ret = target instanceof AttackableEntity attackableEntity &&
-                attackableEntity.realmMap() == realmMap() &&
-                target.canBeSeenAt(coordinate()) &&
-                attackableEntity.canBeAttackedNow();
-        if (!ret) {
-            return false;
-        }
-        if (target instanceof Player another) {
-            return another.team() == 0 || this.team() == 0 || (another.team() != this.team());
-        }
-        return true;
-    }
 
     @Override
     public Optional<String> dieSound() {
@@ -1434,7 +1383,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
                 (isMale() ? "2003" : "2203") :
                 (isMale() ? "2005" : "2205") );
     }
-
 
 
     @Override

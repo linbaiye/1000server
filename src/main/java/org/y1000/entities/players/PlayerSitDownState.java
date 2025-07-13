@@ -25,6 +25,10 @@ final class PlayerSitDownState extends AbstractPlayerState {
         elapse(delta);
     }
 
+    private boolean pastHalfTime() {
+        return elapsedMillis() >=  totalMillis() / 2;
+    }
+
     @Override
     public void handleAfterHurt() {
         reset();
@@ -32,43 +36,52 @@ final class PlayerSitDownState extends AbstractPlayerState {
         player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
 
-    private void stand() {
-        player().disableBreathAndSync();
+    private void standUp() {
         player().changeState(new PlayerStandUpState(player()));
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+    }
+
+    private void standIdle() {
+        player().changeState(PlayerStandState.idle(player()));
         player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
 
     @Override
     public void sitOrStandUp() {
-        if (elapsedMillis() >= totalMillis()) {
-            stand();
+        standUpOrStandIdle();
+    }
+
+    private void standUpOrStandIdle() {
+        if (pastHalfTime()) {
+            standUp();
+        } else {
+            standIdle();
         }
+        player().disableBreathAndSync();
     }
 
     @Override
     public void tryToggleFootKungFu(FootKungFu footKungFu) {
-        if (elapsedMillis() >= totalMillis()) {
-            player().toggleFootKungFu(footKungFu);
-            stand();
-        }
+        player().toggleFootAndSync(footKungFu);
+        standUpOrStandIdle();
     }
 
     @Override
     public void tryToggleBreathKungFu(BreathKungFu breathKungFu) {
-        if (elapsedMillis() >= totalMillis()) {
-            player().toggleBreathKungFu(breathKungFu);
-        }
+        player().toggleBreathAndSync(breathKungFu);
     }
 
     @Override
     public void attack(ActiveEntity target) {
-        if (elapsedMillis() < totalMillis()) {
+        if (player().tryAcceptAttack(target) != 0)
             return;
-        }
-        if (player().tryAcceptAttack(target) == 0) {
+        player().disableBreathAndSync();
+        if (pastHalfTime()) {
             player().changeState(PlayerStandUpState.toCombat(player()));
-            player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+        } else {
+            player().changeState(PlayerStandState.fightStand(player()));
         }
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }
 
     @Override

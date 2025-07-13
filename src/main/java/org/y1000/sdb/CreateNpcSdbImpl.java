@@ -3,6 +3,7 @@ package org.y1000.sdb;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.creatures.NpcType;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,12 +18,37 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
     }
 
     @Override
-    protected String getViewName(String id) {
+    protected String getIdName(String id) {
         return get(id, "NpcName");
     }
 
     public static void main(String[] args) {
-        CreateNpcSdbImpl sdb = new CreateNpcSdbImpl(49);
+
+        CreateNpcSdbImpl sdb = new CreateNpcSdbImpl(6);
+//        Set<String> names = itemSdb.names();
+        Set<String> names = sdb.columnNames();
+        Set<String> items = sdb.names();
+        NpcSdb monstersSdb = NonMonsterNpcSdbImpl.Instance;
+        Set<String> id = new HashSet<>();
+        for (String i: items) {
+//            if (!i.startsWith("狐狸") || !"2".equals(sdb.get(i, "Kind")))
+//            if (!"2".equals(sdb.get(i, "Kind")))
+//                continue;
+            System.out.println("----------------------------");
+            System.out.println(sdb.get(i, "NpcName"));
+            for (String name : names) {
+                id.add(monstersSdb.getShape(sdb.get(i, "NpcName")));
+                /*if (name.contains("_")) {
+                    continue;
+                }
+                if (!StringUtils.isEmpty(sdb.get(i, name)))
+                    System.out.println(name + ": " + sdb.get(i, name));*/
+            }
+        }
+        id.forEach( i -> {
+            System.out.println("cp /d/work/godot/y1000/Sprites/" + i+".zip /d/godot_qn/qn_client/sprites");
+        });
+        /*CreateNpcSdbImpl sdb = new CreateNpcSdbImpl(49);
 //        Set<String> names = itemSdb.names();
         Set<String> names = sdb.columnNames();
         Set<String> items = sdb.names();
@@ -36,7 +62,7 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
                 if (!StringUtils.isEmpty(sdb.get(i, name)))
                     System.out.println(name + ": " + sdb.get(i, name));
             }
-        }
+        }*/
     }
 
 
@@ -86,7 +112,7 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
 
     private String idNameToId(String npcName) {
         for (String id: names()) {
-            String viewName = getViewName(id);
+            String viewName = getIdName(id);
             if (viewName.equals(npcName)) {
                 return id;
             }

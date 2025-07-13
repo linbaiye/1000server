@@ -21,4 +21,6 @@ public interface HurtAbility {
      */
     int attacked(ActiveEntity attacker, Damage damage, int accuracy);
 
+    int currentLife();
+
 }

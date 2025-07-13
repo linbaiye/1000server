@@ -3,6 +3,7 @@ package org.y1000.entities.creatures.npc;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.creatures.npc.event.NpcLifeBarEvent;
@@ -14,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 
 
-public final class NpcHurtAbility extends AbstractNonMoveAbility implements HurtAbility {
+public final class NpcHurtAbility extends AbstractNpcNonMoveAbility implements HurtAbility, CooldownAbility {
 
     private final int armor;
 
@@ -22,7 +23,6 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
 
     private final String hurtSound;
 
-    @Getter
     private int currentLife;
 
     @Getter
@@ -43,8 +43,10 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
                           int avoidance,
                           String hurtSound,
                           int maxLife,
-                          NpcAnimation animationTimer, int recoveryMillis) {
+                          NpcAnimation animationTimer,
+                          int recoveryMillis) {
         super(animationTimer);
+        Validate.isTrue(maxLife > 0);
         this.armor = armor;
         this.avoidance = avoidance;
         this.hurtSound = StringUtils.isEmpty(hurtSound) ? null : hurtSound;
@@ -62,14 +64,14 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
     public boolean cooldown(int delta) {
         if (recoveryLeft > 0)
             recoveryLeft -= delta;
-        return cooldownReady();
+        return isCooldownOff();
     }
 
     public int cooldownLeft() {
         return recoveryLeft;
     }
 
-    public boolean cooldownReady() {
+    public boolean isCooldownOff() {
         return recoveryLeft <= 0;
     }
 
@@ -110,6 +112,15 @@ public final class NpcHurtAbility extends AbstractNonMoveAbility implements Hurt
         }
         recoveryLeft = recoveryMillis;
         return ExperienceUtil.damageToExp(maxLife, damageTaken);
+    }
+
+    @Override
+    public int currentLife() {
+        return currentLife;
+    }
+
+    public boolean isDead() {
+        return currentLife <= 0;
     }
 
 

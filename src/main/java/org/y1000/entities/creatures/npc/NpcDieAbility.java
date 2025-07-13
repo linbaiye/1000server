@@ -6,7 +6,7 @@ import org.y1000.entities.creatures.npc.event.NpcLifeBarEvent;
 import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
 import org.y1000.entities.creatures.npc.event.NpcStartActionEvent;
 
-public final class NpcDieAbility extends AbstractNonMoveAbility {
+public final class NpcDieAbility extends AbstractNpcNonMoveAbility {
     private final String sound;
 
     private final int timeMillis;

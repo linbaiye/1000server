@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.Direction;
 
-public final class NpcTurnAbility extends AbstractNonMoveAbility {
+public final class NpcTurnAbility extends AbstractNpcNonMoveAbility {
     public NpcTurnAbility(NpcAnimation animation) {
         super(animation);
     }

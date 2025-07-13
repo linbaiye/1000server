@@ -2,11 +2,12 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.npc.*;
+import org.y1000.entities.creatures.npc.event.FilterVisibleEntityEvent;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
-import org.y1000.entities.creatures.npc.event.NpcRemoveEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.message.I2ClientMessage;
@@ -18,7 +19,6 @@ import org.y1000.util.Coordinate;
 import org.y1000.util.Rectangle;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
         implements NpcManager, NpcEventListener, NpcEventHandler {
@@ -32,8 +32,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
     private final GroundItemManager itemManager;
     private final MonstersSdb monstersSdb;
 
-//    private final Map<INpc, Set<INpc>> linked;
-
     private final Set<Long> cloned;
 
     private final AOIManager aoiManager;
@@ -45,6 +43,7 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
     private final RealmMap realmMap;
 
     private final HaveItemSdb haveItemSdb;
+
 
     public AbstractNpcManager(MessageSender sender,
                               EntityIdGenerator idGenerator,
@@ -82,36 +81,32 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 
     protected Npc createNpc(String name, Coordinate coordinate) {
         return npcFactory.create(idGenerator.next(), name, realmMap, coordinate, this);
-//        return createNpcSdb != null && createNpcSdb.containsNpc(name)?
-//                npcFactory.createNonMonsterNpc(name, idGenerator.next(), realmMap, coordinate, createNpcSdb) :
-//                npcFactory.createNpc(name, idGenerator.next(), realmMap, coordinate);
     }
 
-    void spawnNPCs(CreateNpcSdb createNpcSdb) {
-        List<NpcSpawnSetting> allSettings = createNpcSdb.getAllSettings();
-        int total = 0;
-        for (NpcSpawnSetting setting : allSettings) {
-            var name = setting.viewName();
-            for (int i = 0; i < setting.number(); i++) {
-                try {
-                    total += setting.number();
-                    Rectangle range = setting.range();
-                    Coordinate coordinate = range.random(realmMap::movable)
-                            .or(() -> range.findFirst(realmMap::movable))
-                            .orElse(range.start());
-                    Npc npc = createNpc(name, coordinate);
-                    npc.startAI();
-                    addNpc(npc);
-                } catch (Exception e) {
-                    log().error("Failed to create npc {}.", name, e);
-                    throw new RuntimeException(e);
-                }
+    Set<Long> spawnNPCs(NpcSpawnSetting setting) {
+        var name = setting.idName();
+        Set<Long> ids = new HashSet<>();
+        for (int i = 0; i < setting.number(); i++) {
+            try {
+                var npc = spawnNpc(name, setting.range());
+                ids.add(npc.id());
+            } catch (Exception e) {
+                log().error("Failed to create npc {}.", name, e);
+                throw new RuntimeException(e);
             }
         }
-        log().debug("Created {} npc in total.", total);
+        return ids;
     }
 
-
+    Npc spawnNpc(String idName, Rectangle range) {
+        Coordinate coordinate = range.random(realmMap::movable)
+                .or(() -> range.findFirst(realmMap::movable))
+                .orElse(range.start());
+        Npc npc = createNpc(idName, coordinate);
+        npc.startAI();
+        addNpc(npc);
+        return npc;
+    }
 
     Optional<CreateNpcSdb> createMonsterSdb() {
         return Optional.ofNullable(createMonsterSdb);
@@ -127,28 +122,20 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 //        projectileManager.update(delta);
     }
 
-    protected void removeNpc(INpc npc) {
-//        sender.notifyVisiblePlayers(npc, new RemoveEntityMessage(npc.id()));
-//        sender.remove(npc);
-//        npc.deregisterEventListener(this);
-//        remove(npc);
-    }
 
     protected void addNpc(Npc npc) {
         add(npc);
         sendToVisiblePlayers(npc, npc.captureSnapshot());
-//        sender.add(npc);
-//        sender.notifyVisiblePlayers(npc, new NpcJoinedEvent(npc));
-//        npc.registerEventListener(this);
-//        npc.start();
-//        add(npc);
     }
 
-    public void onRemove(Npc source, I2ClientMessage message) {
+
+    void removeAndSync(Npc source, I2ClientMessage message) {
         sendToVisiblePlayers(source, message);
         getAoiManager().remove(source);
         remove(source);
+        source.free();
     }
+
 
     public void onMoved(Npc npc, I2ClientMessage message) {
         Set<Entity> visibleOrInvisible = getAoiManager().update(npc);
@@ -194,6 +181,11 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 //        find(npc -> npc.idName().equals(letterEvent.toName()) && NineTailFoxHuman.class.isAssignableFrom(npc.getClass()))
 //                .stream().map(NineTailFoxHuman.class::cast)
 //                .forEach(NineTailFoxHuman::shift);
+    }
+
+    @Override
+    public void filter(FilterVisibleEntityEvent event) {
+        event.filter(getAoiManager().filterVisibleEntities(event.source(), Entity.class));
     }
 
     abstract void onUnhandledEvent(EntityEvent entityEvent) ;

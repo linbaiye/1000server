@@ -8,7 +8,7 @@ import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
 import org.y1000.entities.players.Damage;
 
 @Slf4j
-public final class NpcAttackAbility extends AbstractNonMoveAbility {
+public final class NpcAttackAbility extends AbstractNpcNonMoveAbility implements CooldownAbility {
 
     private final int attackSpeedMillis;
 
@@ -36,10 +36,10 @@ public final class NpcAttackAbility extends AbstractNonMoveAbility {
     public boolean cooldown(int delta) {
         if (attackCooldownMillis > 0)
             attackCooldownMillis -= delta;
-        return attackReady();
+        return isCooldownOff();
     }
 
-    public boolean attackReady() {
+    public boolean isCooldownOff() {
         return attackCooldownMillis <= 0;
     }
 

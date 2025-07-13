@@ -9,8 +9,6 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.metamodel.Metamodel;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.account.AccountManager;
 import org.y1000.entities.creatures.npc.NpcFactory;
@@ -25,8 +23,6 @@ import org.y1000.repository.*;
 import org.y1000.network.*;
 import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
-
-import java.util.Map;
 
 @Slf4j
 public final class Server implements ServerContext {
@@ -80,7 +76,7 @@ public final class Server implements ServerContext {
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl, entityManagerFactory);
         itemRepository = repository;
         npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE,
-                NpcSdbImpl.Instance, MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE), RealmSpecificSdbRepositoryImpl.INSTANCE);
+                NonMonsterNpcSdbImpl.Instance, MagicParamSdb.INSTANCE);
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
         PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);

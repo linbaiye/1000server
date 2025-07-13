@@ -1,6 +1,5 @@
 package org.y1000.realm;
 
-import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.event.EntityEvent;
 import org.y1000.realm.event.RealmEvent;

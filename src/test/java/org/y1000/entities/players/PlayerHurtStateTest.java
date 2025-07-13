@@ -9,6 +9,8 @@ import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.message.PlayerChangeStateEvent;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -69,10 +71,15 @@ class PlayerHurtStateTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void toggleFootKungFu() {
+        FootKungFu unnamedFoot = player.kungFuBook().getUnnamedFoot();
         withMockPlayer();
+        when(player.stateEnum()).thenReturn(PlayerStateEnum.Idle);
         var mock = mock(FootKungFu.class);
+        when(player.footKungFu()).thenReturn(Optional.of(unnamedFoot));
         state.tryToggleFootKungFu(mock);
-        verify(player, times(1)).toggleFootKungFu(mock);
+        verify(player, times(1)).toggleFootAndSync(mock);
+        verify(player, times(1)).stopCombat();
+        verify(player, times(1)).changeState(any(PlayerStandState.class));
     }
 
     @Test

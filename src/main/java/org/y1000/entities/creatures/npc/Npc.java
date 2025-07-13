@@ -1,129 +1,50 @@
 package org.y1000.entities.creatures.npc;
 
-import lombok.Getter;
-import org.y1000.entities.AbstractActiveEntity;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
-import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
-import java.util.*;
+import java.util.Optional;
 
-public class Npc extends AbstractActiveEntity {
+public interface Npc extends ActiveEntity {
+    void changeAI(NpcAI newAi);
 
-    private final List<NpcAbility> abilities;
-    private final NpcEventListener listener;
-    private Coordinate coordinate;
+    void startAI();
 
-    @Getter
-    private final RealmMap realmMap;
-
-    private NpcAI ai;
-
-    @Getter
-    private final String viewName;
-
-    @Getter
-    private final String animate;
-
-    @Getter
-    private final String shape;
-
-    @Getter
-    private final Coordinate spawnCoordinate;
-
-    private Direction direction;
-
-    @Getter
-    private final String idName;
-
-    public Npc(long id,
-               List<NpcAbility> abilities,
-               String viewName,
-               Coordinate coordinate,
-               NpcEventListener listener,
-               RealmMap realmMap,
-               String animate,
-               String shape,
-               String idName,
-               Direction direction) {
-        super(id);
-        this.abilities = abilities;
-        this.listener = listener;
-        this.realmMap = realmMap;
-        this.viewName = viewName != null ? viewName : "";
-        this.spawnCoordinate = coordinate;
-        this.coordinate = coordinate;
-        this.animate = animate;
-        this.shape = shape;
-        this.idName = idName;
-        this.direction = direction;
-        realmMap.occupy(this);
+    default void startAI(NpcAI npcAI) {
+        changeAI(npcAI);
+        startAI();
     }
 
-    public void sendEvent(NpcEvent event) {
-        listener.onEvent(event);
-    }
+    Direction direction();
 
+    void changeCoordinate(Coordinate coordinate);
 
-    public void changeAI(NpcAI newAi) {
-        ai = newAi;
-    }
+    void changeDirection(Direction direction);
 
-    public void startAI() {
-        ai.start();
-    }
+    void free();
 
-    @Override
-    public void update(int delta) {
-        ai.update(delta);
-    }
+    RealmMap getRealmMap();
 
-    @Override
-    public Coordinate coordinate() {
-        return coordinate;
-    }
+    String getViewName();
 
-    public <AB> Optional<AB> findAbility(Class<AB> type) {
-        return abilities.stream()
-                .filter(a -> type.isAssignableFrom(a.getClass()))
-                .findFirst().map(type::cast);
-    }
+    String getAnimate();
 
-    public Direction direction() {
-        return direction;
-    }
+    String getShape();
 
-    public void changeCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
-        realmMap.occupy(this);
-    }
+    Coordinate getSpawnCoordinate();
 
-    public void changeDirection(Direction direction) {
-        this.direction = direction;
-    }
+    String getIdName();
 
-    public void free() {
-        realmMap.free(this);
-    }
+    int getWanderRage();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Npc npc = (Npc) o;
-        return id() == npc.id();
-    }
+    boolean needToEscape();
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id());
-    }
+    void sendEvent(NpcEvent event);
 
+    Optional<String> sound();
 
-    @Override
-    public I2ClientMessage captureSnapshot() {
-        return ai.captureSnapshot();
-    }
+    int viewRange();
 }

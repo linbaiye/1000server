@@ -118,8 +118,6 @@ public interface Player extends ViolentCreature, HurtAbility {
 
     void gainLife(int v);
 
-    void gainAttackExp(int amount);
-
     void gainRangedAttackExp(int amount);
 
     void gainAssistantExp(int amount);

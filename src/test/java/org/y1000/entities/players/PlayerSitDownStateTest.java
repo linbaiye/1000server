@@ -38,12 +38,25 @@ class PlayerSitDownStateTest extends AbstractPlayerUnitTestFixture {
     }
 
     @Test
-    void standOrSit() {
+    void standOrSit_notPastHalf() {
+        withMockPlayer();
+        doAnswer(a -> {
+            assertEquals(PlayerStateEnum.Idle, a.getArgument(0, PlayerStandState.class).playerStateEnum());
+            return null;
+        }).when(player).changeState(any(PlayerStandState.class));
+        state.sitOrStandUp();
+        assertNotNull(eventListener.removeFirst(PlayerChangeStateEvent.class));
+        verify(player, times(1)).changeState(any(PlayerStandState.class));
+    }
+
+    @Test
+    void standOrSit_whenSat() {
         withMockPlayer();
         state.update(PlayerSitDownState.StateMillis);
         state.sitOrStandUp();
         assertNotNull(eventListener.removeFirst(PlayerChangeStateEvent.class));
         verify(player, times(1)).changeState(any(PlayerStandUpState.class));
+        verify(player, times(1)).disableBreathAndSync();
     }
 
     @Test
@@ -63,45 +76,52 @@ class PlayerSitDownStateTest extends AbstractPlayerUnitTestFixture {
     }
 
     @Test
-    void toggleFootKungFu() {
+    void toggleFootKungFu_whenSat() {
         withMockPlayer();
         var mock = mock(FootKungFu.class);
         state.update(PlayerSitDownState.StateMillis);
         state.tryToggleFootKungFu(mock);
-        verify(player, times(1)).toggleFootKungFu(mock);
+        verify(player, times(1)).toggleFootAndSync(mock);
         assertNotNull(eventListener.removeFirst(PlayerChangeStateEvent.class));
         verify(player, times(1)).changeState(any(PlayerStandUpState.class));
     }
 
     @Test
-    void toggleBreathKungFu() {
+    void toggleBreathKungFu_whenSat() {
         withMockPlayer();
         var mock = mock(BreathKungFu.class);
         state.update(PlayerSitDownState.StateMillis);
         state.tryToggleBreathKungFu(mock);
-        verify(player, times(1)).toggleBreathKungFu(mock);
+        verify(player, times(1)).toggleBreathAndSync(mock);
         assertTrue(eventListener.isEmpty());
     }
 
     @Test
-    void acceptAttack() {
+    void acceptAttack_notHalfTimePast() {
         withMockPlayer();
         var entity = Mockito.mock(ActiveEntity.class);
-        state.attack(entity);
-        verify(player, times(0)).tryAcceptAttack(entity);
-
-        state.update(PlayerSitDownState.StateMillis);
-        when(player.tryAcceptAttack(entity)).thenReturn(-1);
-        state.attack(entity);
-        verify(player, times(0)).changeState(any(PlayerState.class));
-
-
-        doAnswer(i -> {
-            assertTrue(i.getArgument(0) instanceof PlayerStandUpState);
-            return null;
-        }).when(player).changeState(any(PlayerStandState.class));
         when(player.tryAcceptAttack(entity)).thenReturn(0);
         state.attack(entity);
+        verify(player, times(1)).tryAcceptAttack(entity);
+        doAnswer(a -> {
+            assertEquals(PlayerStateEnum.FightStand, a.getArgument(0, PlayerStandState.class).playerStateEnum());
+            return null;
+        }).when(player).changeState(any(PlayerStandState.class));
+        verify(player, times(1)).changeState(any(PlayerStandState.class));
+    }
+
+    @Test
+    void acceptAttack_pastHalfTime() {
+        withMockPlayer();
+        var entity = Mockito.mock(ActiveEntity.class);
+        state.update(PlayerSitDownState.StateMillis);
+        when(player.tryAcceptAttack(entity)).thenReturn(0);
+        doAnswer(i -> {
+            assertInstanceOf(PlayerStandUpState.class, i.getArgument(0));
+            return null;
+        }).when(player).changeState(any(PlayerStandState.class));
+        state.attack(entity);
         verify(player, times(1)).changeState(any(PlayerState.class));
+        verify(player, times(1)).disableBreathAndSync();
     }
 }

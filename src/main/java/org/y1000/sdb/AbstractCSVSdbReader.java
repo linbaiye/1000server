@@ -11,19 +11,25 @@ import java.util.function.Function;
 
 public abstract class AbstractCSVSdbReader {
 
-    private final Map<String, String[]> values;
+    /*
+     * First column to the row map, for example "Cat, 1" will result: {"Cat": ["Cat", "1"]}.
+     */
+    private final Map<String, String[]> firstColumnAndValuesIndices;
 
-    private final Map<String, Integer> headerIndex;
+    /*
+     * Header to column index, for example "Name, Life" will result: {Name: 0}, {Life:  1}.
+     */
+    private final Map<String, Integer> headerColumnIndices;
 
     public static final String SDB_PATH = "/sdb";
 
     protected AbstractCSVSdbReader() {
-        values = new HashMap<>();
-        headerIndex = new HashMap<>();
+        firstColumnAndValuesIndices = new HashMap<>();
+        headerColumnIndices = new HashMap<>();
     }
 
     public boolean contains(String name) {
-        return values.containsKey(name);
+        return firstColumnAndValuesIndices.containsKey(name);
     }
 
     protected <E extends Enum<E>> E getEnum(String itemName, String key, Function<Integer, E> creator) {
@@ -52,11 +58,11 @@ public abstract class AbstractCSVSdbReader {
     }
 
     protected String get(String itemName, String key) {
-        String[] strings = values.get(itemName);
+        String[] strings = firstColumnAndValuesIndices.get(itemName);
         if (strings == null) {
             return null;
         }
-        Integer index = headerIndex.get(key);
+        Integer index = headerColumnIndices.get(key);
         if (index == null || index >= strings.length) {
             return null;
         }
@@ -74,11 +80,11 @@ public abstract class AbstractCSVSdbReader {
     }
 
     public Set<String> names() {
-        return values.keySet();
+        return firstColumnAndValuesIndices.keySet();
     }
 
     public Set<String> columnNames() {
-        return headerIndex.keySet();
+        return headerColumnIndices.keySet();
     }
 
 
@@ -93,7 +99,7 @@ public abstract class AbstractCSVSdbReader {
             throw new NoSuchElementException("Bad sdb");
         }
         for (int i = 0; i < header.length; i++) {
-            headerIndex.put(header[i], i);
+            headerColumnIndices.put(header[i], i);
         }
         for (int i = 1; i < lines.size(); i++) {
             String item = lines.get(i).trim();
@@ -101,7 +107,7 @@ public abstract class AbstractCSVSdbReader {
             if (values.length == 0 || StringUtils.isBlank(values[0])) {
                 continue;
             }
-            this.values.put(values[0], values);
+            this.firstColumnAndValuesIndices.put(values[0], values);
         }
     }
 

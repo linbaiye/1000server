@@ -2,8 +2,6 @@ package org.y1000;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.mockito.Mockito;
-import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
@@ -25,9 +23,6 @@ import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +30,8 @@ public abstract class AbstractUnitTestFixture {
 
     protected final KungFuBookFactory kungFuBookFactory = createKungFuBookFactory();
     protected final KungFuFactory kungFuFactory = createKungFuFactory();
+
+    protected final TestNpcFactory npcFactory = TestNpcFactory.Instance;
 
     private int id;
 
@@ -71,8 +68,8 @@ public abstract class AbstractUnitTestFixture {
         return new KungFuBookRepositoryImpl(Mockito.mock(EntityManagerFactory.class));
     }
     protected NpcFactoryImpl createNpcFactory() {
-        return new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance,
-                MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE), RealmSpecificSdbRepositoryImpl.INSTANCE);
+        return new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NonMonsterNpcSdbImpl.Instance,
+                MagicParamSdb.INSTANCE);
     }
 
     protected KungFuBookFactory createKungFuBookFactory() {

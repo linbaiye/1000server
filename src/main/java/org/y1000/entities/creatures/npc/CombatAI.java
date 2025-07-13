@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.HurtAbility;
-import org.y1000.entities.creatures.npc.event.NpcRemoveEvent;
 
 @Slf4j
 public class CombatAI extends AbstractMovableNpcAI {
@@ -26,20 +25,18 @@ public class CombatAI extends AbstractMovableNpcAI {
 
     @Override
     public void update(int delta) {
-        attackAbility.cooldown(delta);
-        hurtAbility.cooldown(delta);
         updateAbility(delta);
     }
 
     @Override
     public void start() {
         npc().findAbility(NpcMoveAbility.class).ifPresent(NpcMoveAbility::enableFastMove);
+        tryAttack();
     }
 
     private void tryAttack() {
         if (!enemy.canBeSeenAt(npc().coordinate()) || !enemyHurtAbility.canBeAttacked()) {
-            npc().changeAI(new WanderingAI(npc(), 10));
-            npc().startAI();
+            npc().startAI(new WanderingAI(npc()));
             return;
         }
         if (npc().coordinate().directDistance(enemy.coordinate()) >= 2) {
@@ -52,7 +49,7 @@ public class CombatAI extends AbstractMovableNpcAI {
                     .turn(npc(), direction);
             return;
         }
-        if (attackAbility.attackReady() && hurtAbility.cooldownReady()) {
+        if (attackAbility.isCooldownOff() && hurtAbility.isCooldownOff()) {
             changeAbility(attackAbility).apply(npc(), enemy);
         } else {
             stay(Math.max(attackAbility.cooldownLeft(), hurtAbility.cooldownLeft()));
@@ -76,11 +73,9 @@ public class CombatAI extends AbstractMovableNpcAI {
         }
     }
 
-    void onAbilityDone(NpcAbility doneAbility) {
+    void onNonDieAbilityDone(NpcAbility doneAbility) {
         if (doneAbility instanceof NpcMoveAbility moveAbility) {
             onMoved(moveAbility);
-        } else if (doneAbility instanceof NpcDieAbility) {
-            npc().sendEvent(NpcRemoveEvent.of(npc()));
         } else if (doneAbility instanceof NpcTurnAbility) {
             npc().findAbility(NpcMoveAbility.class).ifPresent(this::stayOrAttack);
         } else {

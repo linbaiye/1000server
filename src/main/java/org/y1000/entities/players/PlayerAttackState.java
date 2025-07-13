@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.ActiveEntity;
 import org.y1000.item.Equipment;
+import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.message.PlayerChangeStateEvent;
@@ -53,9 +54,19 @@ final class PlayerAttackState extends AbstractPlayerState {
     }
 
     @Override
-    public void tryToggleBreathKungFu(BreathKungFu breathKungFu) {
-        player().toggleBreathKungFu(breathKungFu);
+    public void tryToggleFootKungFu(FootKungFu footKungFu) {
+        if (elapsedMillis() <= 300)
+            return;
         player().stopCombat();
+        player().toggleFootAndSync(footKungFu);
+        player().changeState(PlayerStandState.idle(player()));
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+    }
+
+    @Override
+    public void tryToggleBreathKungFu(BreathKungFu breathKungFu) {
+        player().stopCombat();
+        player().toggleBreathAndSync(breathKungFu);
         player().changeState(PlayerSitDownState.sit(player()));
         player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
     }

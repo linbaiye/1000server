@@ -24,6 +24,7 @@ public class NpcMoveAbility extends AbstractNpcAbility {
      */
     private final int diffMillis;
 
+
     public NpcMoveAbility(int walkSpeedMillis, NpcAnimation timer) {
         super(timer);
         this.walkSpeedMillis = walkSpeedMillis;

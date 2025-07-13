@@ -39,12 +39,6 @@ public interface ViolentCreature extends Creature {
      */
     void cooldownAttack();
 
-    default boolean canChaseOrAttack(Entity target) {
-        return target instanceof AttackableEntity attackableEntity &&
-                attackableEntity.realmMap() == realmMap() &&
-                target.canBeSeenAt(coordinate()) &&
-                attackableEntity.canBeAttackedNow();
-    }
 
     default int maxCooldown() {
         return Math.max(attackCooldown(), recoveryCooldown());

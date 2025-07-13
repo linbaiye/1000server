@@ -3,11 +3,8 @@ package org.y1000.entities.players;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.Entity;
 import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
 import org.y1000.item.Equipment;
@@ -141,7 +138,7 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void sitOrStand_idle_withFootKungFu() {
-        player.toggleFootKungFu(player.kungFuBook().getUnnamedFoot());
+        player.toggleFootAndSync(player.kungFuBook().getUnnamedFoot());
         eventListener.clear();
         state.sitOrStandUp();
         assertNotNull(eventListener.remove(PlayerChangeStateEvent.class));
@@ -183,7 +180,7 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void switchStand_idle_footEnabled() {
-        player.toggleFootKungFu(player.kungFuBook().getUnnamedFoot());
+        player.toggleFootAndSync(player.kungFuBook().getUnnamedFoot());
         state.switchStand();
         assertEquals(player.stateEnum(), PlayerStateEnum.FightStand);
         PlayerChangeStateEvent stateEvent = eventListener.remove(PlayerChangeStateEvent.class);
@@ -220,7 +217,7 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
         mockWithIdle();
         FootKungFu unnamedFoot = mock(FootKungFu.class);
         state.tryToggleFootKungFu(unnamedFoot);
-        verify(player, times(1)).toggleFootKungFu(unnamedFoot);
+        verify(player, times(1)).toggleFootAndSync(unnamedFoot);
     }
 
     @Test
@@ -232,7 +229,7 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
             return null;
         }).when(player).changeState(any(PlayerStandState.class));
         state.tryToggleFootKungFu(unnamedFoot);
-        verify(player, times(1)).toggleFootKungFu(unnamedFoot);
+        verify(player, times(1)).toggleFootAndSync(unnamedFoot);
         verify(player, times(1)).changeState(any(PlayerStandState.class));
         verify(player, times(1)).stopCombat();
         assertNotNull(eventListener.remove(PlayerChangeStateEvent.class));
@@ -267,7 +264,7 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
         state = PlayerStandState.idle(player);
         FootKungFu mock = mock(FootKungFu.class);
         state.tryToggleFootKungFu(mock);
-        verify(player, times(1)).toggleFootKungFu(mock);
+        verify(player, times(1)).toggleFootAndSync(mock);
     }
 
     @Test

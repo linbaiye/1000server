@@ -2,9 +2,6 @@ package org.y1000.message.input;
 
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
-import org.y1000.entities.HurtAbility;
-import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.creatures.npc.NpcHurtAbility;
 import org.y1000.entities.players.Player;
 
 

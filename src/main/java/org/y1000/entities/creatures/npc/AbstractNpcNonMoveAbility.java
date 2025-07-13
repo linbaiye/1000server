@@ -2,9 +2,9 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.npc.event.NpcStartActionEvent;
 
-abstract class AbstractNonMoveAbility extends AbstractNpcAbility {
+abstract class AbstractNpcNonMoveAbility extends AbstractNpcAbility {
 
-    public AbstractNonMoveAbility(NpcAnimation animation) {
+    public AbstractNpcNonMoveAbility(NpcAnimation animation) {
         super(animation);
     }
 

@@ -2,10 +2,9 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.Entity;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
-import org.y1000.entities.creatures.npc.INpc;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.event.EntityEvent;
 import org.y1000.message.I2ClientMessage;
@@ -36,28 +35,28 @@ final class DungeonNpcManager extends AbstractNpcManager {
     }
 
 
-    private void handleRemoveEvent(RemoveEntityEvent removeEntityEvent) {
-        if (removeEntityEvent.source() instanceof INpc npc) {
-            removeNpc(npc);
-//            removeFromCloned(npc);
-            log.debug("Removed npc {}.", npc.id());
-        }
-    }
-
-
     @Override
     void onUnhandledEvent(EntityEvent entityEvent) {
         if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
-            handleRemoveEvent(removeEntityEvent);
+            //handleRemoveEvent(removeEntityEvent);
         } else if (entityEvent instanceof NpcShiftEvent shiftEvent) {
 //            replaceNpc(shiftEvent);
         }
     }
 
     @Override
+    public void onRemove(Npc npc, I2ClientMessage message) {
+        removeAndSync(npc ,message);
+    }
+
+    private void initializeNPCs(CreateNpcSdb sdb) {
+        sdb.getAllSettings().forEach(this::spawnNPCs);
+    }
+
+    @Override
     public void init() {
-        createMonsterSdb().ifPresent(this::spawnNPCs);
-        createNpcSdb().ifPresent(this::spawnNPCs);
+        createMonsterSdb().ifPresent(this::initializeNPCs);
+        createNpcSdb().ifPresent(this::initializeNPCs);
     }
 
     @Override

@@ -2,16 +2,16 @@ package org.y1000.entities.creatures.npc;
 
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.AttributeProvider;
-import org.y1000.sdb.NpcSdb;
+import org.y1000.sdb.NonMonsterNpcSdb;
 
 import java.util.Optional;
 
 public final class NonMonsterNpcAttributeProvider implements AttributeProvider {
 
     private final String name;
-    private final NpcSdb npcSdb;
+    private final NonMonsterNpcSdb npcSdb;
 
-    public NonMonsterNpcAttributeProvider(String name, NpcSdb npcSdb) {
+    public NonMonsterNpcAttributeProvider(String name, NonMonsterNpcSdb npcSdb) {
         this.name = name;
         this.npcSdb = npcSdb;
     }

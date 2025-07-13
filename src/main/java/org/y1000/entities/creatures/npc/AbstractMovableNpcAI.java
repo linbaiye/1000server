@@ -9,7 +9,7 @@ public abstract class AbstractMovableNpcAI extends AbstractNpcAI {
 
     private Coordinate previous;
 
-    protected AbstractMovableNpcAI(Npc npc ) {
+    protected AbstractMovableNpcAI(Npc npc) {
         super(npc);
         previous = npc.coordinate().moveBy(npc.direction().opposite());
     }

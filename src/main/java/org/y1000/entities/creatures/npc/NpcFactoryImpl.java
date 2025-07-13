@@ -26,28 +26,21 @@ public final class NpcFactoryImpl implements NpcFactory {
     private final ActionSdb actionSdb;
     private final MonstersSdb monsterSdb;
     private final KungFuSdb kungFuSdb;
-    private final NpcSdb npcSdb;
+    private final NonMonsterNpcSdb nonMonsterNpcSdb;
     private final MagicParamSdb magicParamSdb;
-    private final MerchantItemSdbRepository merchantItemSdbRepository;
-
-    private final RealmSpecificSdbRepository realmSpecificSdbRepository;
 
 
     public NpcFactoryImpl(ActionSdb actionSdb,
                           MonstersSdb monsterSdb,
                           KungFuSdb kungFuSdb,
-                          NpcSdb npcSdb,
-                          MagicParamSdb magicParamSdb,
-                          MerchantItemSdbRepository merchantItemSdbRepository,
-                          RealmSpecificSdbRepository realmSpecificSdbRepository
+                          NonMonsterNpcSdb nonMonsterNpcSdb,
+                          MagicParamSdb magicParamSdb
                           ) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
         this.kungFuSdb = kungFuSdb;
-        this.npcSdb = npcSdb;
+        this.nonMonsterNpcSdb = nonMonsterNpcSdb;
         this.magicParamSdb = magicParamSdb;
-        this.merchantItemSdbRepository = merchantItemSdbRepository;
-        this.realmSpecificSdbRepository = realmSpecificSdbRepository;
     }
 
     private Direction randomDirection() {
@@ -97,8 +90,7 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private NpcAnimation createAnimation(String name, NpcAnimationEnum type) {
-        var animate = monsterSdb.getAnimate(name);
+    private NpcAnimation createAnimation(String animate, NpcAnimationEnum type) {
         int length = actionSdb.getActionLength(animate, type);
         if (type == NpcAnimationEnum.Idle) {
             length *= 2;
@@ -107,73 +99,87 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private NpcAttackAbility createAttackAbility(String name) {
-        return new NpcAttackAbility(monsterSdb.getAttackSpeed(name) * Realm.STEP_MILLIS + 1500,
-                monsterSdb.getDamage(name),
-                monsterSdb.getAccuracy(name) + 75,
-                monsterSdb.getSoundAttack(name), createAnimation(name, NpcAnimationEnum.Attack));
+    private NpcAttackAbility createAttackAbility(String name, NpcSdb npcSdb) {
+        return new NpcAttackAbility(npcSdb.getAttackSpeed(name) * Realm.STEP_MILLIS + 1500,
+                npcSdb.getDamage(name),
+                npcSdb.getAccuracy(name) + 75,
+                npcSdb.getSoundAttack(name), createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Attack));
     }
 
-    private NpcTurnAbility createTurnAbility(String name) {
-        return new NpcTurnAbility(createAnimation(name, NpcAnimationEnum.Turn));
+    private NpcTurnAbility createTurnAbility(String name, NpcSdb npcSdb) {
+        return new NpcTurnAbility(createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Turn));
     }
 
-    private NpcHurtAbility createHurtAbility(String name) {
-        return new NpcHurtAbility(monsterSdb.getArmor(name), monsterSdb.getAvoid(name) + 20, monsterSdb.getSoundStructed(name),
-                monsterSdb.getLife(name), createAnimation(name, NpcAnimationEnum.Hurt),
-                monsterSdb.getRecovery(name) * Realm.STEP_MILLIS + 700);
+    private NpcHurtAbility createHurtAbility(String name, NpcSdb npcSdb) {
+        return new NpcHurtAbility(npcSdb.getArmor(name), npcSdb.getAvoid(name) + 20, npcSdb.getSoundStructed(name),
+                npcSdb.getLife(name), createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Hurt),
+                npcSdb.getRecovery(name) * Realm.STEP_MILLIS + 700);
     }
 
-    private NpcIdleAbility createIdleAbility(String name) {
-        return new NpcIdleAbility(createAnimation(name, NpcAnimationEnum.Idle));
+    private NpcIdleAbility createIdleAbility(String name, NpcSdb npcSdb) {
+        return new NpcIdleAbility(createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Idle));
     }
 
-    private NpcMoveAbility createMoveAbility(String name) {
-        return new NpcMoveAbility(monsterSdb.getWalkSpeed(name) * Realm.STEP_MILLIS,
-                createAnimation(name, NpcAnimationEnum.Move));
+    private NpcMoveAbility createMoveAbility(String name, NpcSdb npcSdb) {
+        return new NpcMoveAbility(npcSdb.getWalkSpeed(name) * Realm.STEP_MILLIS,
+                createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Move));
     }
 
-    private NpcDieAbility createDieAbility(String name) {
-        return new NpcDieAbility(createAnimation(name, NpcAnimationEnum.Die), monsterSdb.getSoundDie(name));
+    private NpcDieAbility createDieAbility(String name, NpcSdb npcSdb) {
+        return new NpcDieAbility(createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Die), npcSdb.getSoundDie(name));
     }
 
-    private List<NpcAbility> abilities(String name) {
+    private int getWalkSpeed(String name) {
+        if (monsterSdb.containsName(name))
+            return monsterSdb.getWalkSpeed(name);
+        String animate = nonMonsterNpcSdb.getAnimate(name);
+        return actionSdb.getActionLength(animate, NpcAnimationEnum.Move);
+    }
+
+    private List<NpcAbility> abilities(String name, NpcSdb npcSdb) {
         List<NpcAbility> abilities = new ArrayList<>();
-        if (monsterSdb.attack(name)) {
-            abilities.add(createAttackAbility(name));
+        if (npcSdb.attack(name)) {
+            abilities.add(createAttackAbility(name, npcSdb));
         }
-        abilities.add(createHurtAbility(name));
-        abilities.add(createIdleAbility(name));
-        if (monsterSdb.getWalkSpeed(name) > 0) {
-            abilities.add(createMoveAbility(name));
-            abilities.add(createTurnAbility(name));
+        abilities.add(createHurtAbility(name, npcSdb));
+        abilities.add(createIdleAbility(name, npcSdb));
+        if (getWalkSpeed(name) > 0) {
+            abilities.add(createMoveAbility(name, npcSdb));
+            abilities.add(createTurnAbility(name, npcSdb));
         }
-        abilities.add(createDieAbility(name));
+        abilities.add(createDieAbility(name, npcSdb));
         return abilities;
     }
 
 
-    private NpcAI createAI(Npc npc) {
+    private NpcAI createAI(NpcImpl npc) {
         return npc.findAbility(NpcMoveAbility.class).isPresent() ?
-                new WanderingAI(npc, monsterSdb.getActionWidth(npc.getIdName())) :
+                new WanderingAI(npc) :
                 new FrozenAI(npc);
     }
 
     @Override
-    public Npc create(long id,
-                      String idName,
-                      RealmMap realmMap,
-                      Coordinate coordinate,
-                      NpcEventListener listener) {
-        Npc npc = new Npc(id,
-                abilities(idName),
-                monsterSdb.getViewName(idName),
+    public NpcImpl create(long id,
+                          String idName,
+                          RealmMap realmMap,
+                          Coordinate coordinate,
+                          NpcEventListener listener) {
+        var npcSdb = monsterSdb.containsName(idName) ? monsterSdb : nonMonsterNpcSdb;
+        int escapeLife = monsterSdb.containsName(idName) ? monsterSdb.getEscapeLife(idName) : Integer.MIN_VALUE;
+        var sound = monsterSdb.containsName(idName) ? monsterSdb.getSoundNormal(idName) : null;
+        var viewRange = monsterSdb.containsName(idName) ? monsterSdb.getViewWidth(idName) : 0;
+        NpcImpl npc = new NpcImpl(id,
+                abilities(idName, npcSdb),
+                npcSdb.getViewName(idName),
                 coordinate,
                 listener, realmMap,
-                monsterSdb.getAnimate(idName),
-                monsterSdb.getShape(idName),
+                npcSdb.getAnimate(idName),
+                npcSdb.getShape(idName),
                 idName,
-                randomDirection());
+                randomDirection(),
+                escapeLife,
+                npcSdb.getActionWidth(idName),
+                sound, viewRange);
         npc.changeAI(createAI(npc));
         return npc;
     }

@@ -1,7 +1,5 @@
 package org.y1000.realm;
 
-import org.y1000.entities.creatures.npc.INpc;
-import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.message.input.Login;
 import org.y1000.message.input.SelfHandleInput;

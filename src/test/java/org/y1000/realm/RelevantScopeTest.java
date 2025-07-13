@@ -3,12 +3,10 @@ package org.y1000.realm;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.util.Coordinate;
 
-import java.util.Collections;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,8 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RelevantScopeTest extends AbstractUnitTestFixture {
 
     private Npc createNpc(Coordinate coordinate) {
-        return new Npc(1L, Collections.emptyList(), "test", coordinate, npcEvent -> {}, mockRealmMap(),
-                "test", "test", "test", Direction.DOWN);
+        return npcFactory.create(mockRealmMap(), coordinate);
     }
 
     private Npc createNpc(int x, int y) {

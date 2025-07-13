@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
+import org.y1000.entities.creatures.npc.event.NpcRemoveEvent;
 import org.y1000.message.NpcSnapshot;
 
 public abstract class AbstractNpcAI implements NpcAI {
@@ -24,20 +25,18 @@ public abstract class AbstractNpcAI implements NpcAI {
     }
 
 
-    abstract void onAbilityDone(NpcAbility ability);
+    abstract void onNonDieAbilityDone(NpcAbility ability);
 
     void updateAbility(int delta) {
         if (!currentAbility().update(delta)) {
             return;
         }
-        if (currentAbility() instanceof NpcHurtAbility hurtAbility) {
-            onAbilityDone(hurtAbility.getInterruptedAbility());
+        if (currentAbility() instanceof NpcDieAbility) {
+            npc.sendEvent(NpcRemoveEvent.of(npc));
         } else {
-            onAbilityDone(currentAbility());
+            onNonDieAbilityDone(currentAbility());
         }
     }
-
-
 
     Npc npc() {
         return npc;
@@ -52,13 +51,13 @@ public abstract class AbstractNpcAI implements NpcAI {
         if (currentAbility() instanceof NpcMoveAbility moveAbility) {
             moveAbility.interrupt(npc());
         }
-        if (ability.getCurrentLife() <= 0) {
+        if (ability.currentLife() <= 0) {
             changeAbilityOrThrow(NpcDieAbility.class)
                     .apply(npc());
-            return;
+        } else {
+            ability.apply(npc(), currentAbility());
+            changeAbility(ability);
         }
-        ability.apply(npc(), currentAbility());
-        changeAbility(ability);
     }
 
     @Override
