@@ -49,6 +49,19 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
     }
 
     /*public Direction computeDirection() {
+        public static int Wrap(int value, int min, int max)
+    {
+      int num = max - min;
+      return num == 0 ? min : min + ((value - min) % num + num) % num;
+    }
+
+        public static float Snapped(float s, float step)
+    {
+      return (double) step != 0.0 ? MathF.Floor((float) ((double) s / (double) step + 0.5)) * step : s;
+    }
+
+
+
         Math.atan2(y, x)
         var angle = Mathf.Snapped(vector.Angle(), Math.PI / 4) / (Math.PI / 4);
         int dir = Mathf.Wrap((int)angle, 0, 8);
