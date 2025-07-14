@@ -6,6 +6,7 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.IPlayerEvent;
+import org.y1000.entities.players.event.InventorySlotEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.*;
 import org.y1000.entities.players.Player;
@@ -289,12 +290,32 @@ public final class Inventory extends AbstractInventory {
         return stackItem.item();
     }
 
-    public Item consumeStackItem(Player player,
-                                    ItemType type,
-                                    UnaryAction<? super IPlayerEvent> eventSender) {
-        int slot = findFirstSlot(item -> item.itemType() == type);
-        return doConsumeStackItem(slot, player, eventSender);
+    private Item doConsumeStackItem(int targetSlot) {
+        if (targetSlot == 0) {
+            return null;
+        }
+        var items = items();
+        var stackItem = ((StackItem)items.get(targetSlot));
+        var decreased = stackItem.decrease(1);
+        if (decreased.number() == 0) {
+            items.remove(targetSlot);
+        } else {
+            items.put(targetSlot, decreased);
+        }
+        return stackItem.item();
     }
+
+
+    public Item consumeStackItem(Player player,
+                                 ItemType type) {
+        int slot = findFirstSlot(item -> item.itemType() == type);
+        if (slot == 0)
+            return null;
+        Item item = doConsumeStackItem(slot);
+        player.sendEvent(InventorySlotEvent.update(player, slot));
+        return item;
+    }
+
 
 
     public boolean consumeStackItem(Player player,

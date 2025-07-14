@@ -3,7 +3,7 @@ package org.y1000.entities.objects;
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.EntityLifebarEvent;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
@@ -51,7 +51,7 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
     }
 
     @Override
-    public void attackedBy(ViolentCreature attacker) {
+    public void attackedBy(IActiveEntity attacker) {
         Validate.notNull(attacker);
         if (canBeAttackedNow() && isWithinMeleeRange(attacker.coordinate()))
             handleDamaged(attacker.damage());

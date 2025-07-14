@@ -17,7 +17,7 @@ public final class BowKungFu extends AbstractRangedKungFu {
     }
 
     @Override
-    protected ItemType getAmmoType() {
+    public ItemType getAmmoType() {
         return ItemType.ARROW;
     }
 

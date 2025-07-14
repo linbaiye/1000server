@@ -337,7 +337,7 @@ MaxCount,        最多持有数量；
         Set<String> items = itemSdb.names();
         Set<String> shapes = new HashSet<>();
         for (String i: items) {
-            if (itemSdb.getTypeValue(i) != ItemType.ARROW.value()) {
+            if (itemSdb.getTypeValue(i) != ItemType.KNIFE.value()) {
                 continue;
             }
             //System.out.println("----------------------------");

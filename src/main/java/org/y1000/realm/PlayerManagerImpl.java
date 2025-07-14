@@ -348,6 +348,12 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
         });
     }
 
+    @Override
+    public void onPlayerFireProjectile(PlayerLetFlyProjectileEvent event) {
+        projectileManager.add(event.getProjectile());
+        sendToVisiblePlayersAndSelf(event.source(), event);
+    }
+
 
     @Override
     public void onEvent(PlayerEvent event) {

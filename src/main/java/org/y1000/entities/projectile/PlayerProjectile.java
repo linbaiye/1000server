@@ -1,9 +1,11 @@
 package org.y1000.entities.projectile;
 
 import lombok.Builder;
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
+import org.y1000.kungfu.attack.AbstractRangedKungFu;
 
 public final class PlayerProjectile extends AbstractProjectile {
 
@@ -11,14 +13,17 @@ public final class PlayerProjectile extends AbstractProjectile {
 
     private final int hit;
 
+    private final AbstractRangedKungFu kungFu;
+
     @Builder
     public PlayerProjectile(Player shooter,
-                            AttackableEntity target,
-                            Damage damage,
-                            int hit, int spriteId) {
-        super(shooter, target, spriteId);
-        this.damage = damage;
-        this.hit = hit;
+                            ActiveEntity target,
+                            AbstractRangedKungFu kungFu,
+                            String sprite) {
+        super(shooter, target, sprite);
+        this.damage = kungFu.damage();
+        this.hit = shooter.hit();
+        this.kungFu = kungFu;
     }
 
     @Override
@@ -32,6 +37,10 @@ public final class PlayerProjectile extends AbstractProjectile {
 
     @Override
     protected void onReachTarget() {
-        ((Player)shooter()).onProjectileReachTarget(this);
+        target().findAbility(HurtAbility.class)
+                .ifPresent(hurtAbility -> {
+                    int exp = hurtAbility.attacked(shooter(), damage, hit);
+                    kungFu.gainExp((Player) shooter(), exp);
+                });
     }
 }

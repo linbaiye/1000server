@@ -1,19 +1,18 @@
 package org.y1000.entities.projectile;
 
-import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Damage;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.ActiveEntity;
 
 public interface Projectile {
 
-    ViolentCreature shooter();
+    ActiveEntity shooter();
 
-    AttackableEntity target();
+    ActiveEntity target();
 
     int flyingMillis();
 
-    int projectileSpriteId();
+    String sprite();
 
     Damage damage();
 

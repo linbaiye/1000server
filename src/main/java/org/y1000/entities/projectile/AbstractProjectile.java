@@ -1,30 +1,28 @@
 package org.y1000.entities.projectile;
 
-import lombok.Getter;
-import org.y1000.entities.AttackableEntity;
+import org.apache.commons.lang3.Validate;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.HurtAbility;
 
 public abstract class AbstractProjectile implements Projectile {
+    private final ActiveEntity shooter;
 
-    @Getter
-    private final ViolentCreature shooter;
-
-    private final AttackableEntity target;
-
+    private final ActiveEntity target;
     private final int flyingMillis;
 
     private int elapsed;
 
-    private final int spriteId;
+    private final String sprite;
 
     private final Direction direction;
 
 
-    public AbstractProjectile(ViolentCreature shooter,
-                              AttackableEntity target,
-                              int spriteId) {
-        this.spriteId = spriteId;
+    public AbstractProjectile(ActiveEntity shooter,
+                              ActiveEntity target,
+                              String sprite) {
+        Validate.isTrue(target.findAbility(HurtAbility.class).isPresent());
+        this.sprite = sprite;
         int dist = shooter.coordinate().directDistance(target.coordinate());
         this.shooter = shooter;
         this.target = target;
@@ -48,7 +46,7 @@ public abstract class AbstractProjectile implements Projectile {
         return true;
     }
 
-    public AttackableEntity target() {
+    public ActiveEntity target() {
         return target;
     }
 
@@ -57,12 +55,12 @@ public abstract class AbstractProjectile implements Projectile {
     }
 
     @Override
-    public int projectileSpriteId() {
-        return spriteId;
+    public String sprite() {
+        return sprite;
     }
 
     @Override
-    public ViolentCreature shooter() {
+    public ActiveEntity shooter() {
         return shooter;
     }
 }

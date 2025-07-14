@@ -36,9 +36,6 @@ public interface EntityEventVisitor {
 
     default void visit(RemoveEntityEvent event) {
     }
-    default void visit(MonsterShootEvent event) {
-    }
-
     default void visit(INpcMoveEvent event) {
     }
 

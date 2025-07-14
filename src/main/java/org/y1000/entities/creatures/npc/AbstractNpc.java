@@ -145,10 +145,10 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
      * Invoked when the npc gets hurt.
      * @param attacker the attacker.
      */
-    abstract void hurt(ViolentCreature attacker) ;
+    abstract void hurt(IActiveEntity attacker) ;
 
 
-    void doHurtAction(ViolentCreature attacker, int millis) {
+    void doHurtAction(IActiveEntity attacker, int millis) {
 //        creatureState().moveToHurtCoordinate(this);
 //        OldPlayerStateEnum afterHurt = creatureState().decideAfterHurtState();
 //        changeState(new NpcHurtState(millis, creatureState(), attacker));
@@ -232,7 +232,7 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
 
     protected boolean doAttacked(Damage damage, int attackerHit,
                                  Consumer<Integer> gainAttackExp,
-                                 ViolentCreature attacker) {
+                                 IActiveEntity attacker) {
         if (isDead() || isDodged(attackerHit)) {
             return false;
         }
@@ -256,16 +256,16 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
 
     @Override
     public void attackedBy(Projectile projectile) {
-        Validate.notNull(projectile);
-        if (projectile.shooter() instanceof Player player) {
-            doAttacked(projectile.damage(), projectile.hit(), player::gainRangedAttackExp, player);
-        } else {
-            attackedBy(projectile.shooter());
-        }
+//        Validate.notNull(projectile);
+//        if (projectile.shooter() instanceof Player player) {
+//            doAttacked(projectile.damage(), projectile.hit(), player::gainRangedAttackExp, player);
+//        } else {
+//            attackedBy(projectile.shooter());
+//        }
     }
 
     @Override
-    public void attackedBy(ViolentCreature attacker) {
+    public void attackedBy(IActiveEntity attacker) {
         Validate.notNull(attacker);
         doAttacked(attacker.damage(), attacker.hit(), e -> {}, attacker);
     }
@@ -294,7 +294,7 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
     }
 
     @Override
-    public int attackedByAoe(ViolentCreature caster, int hit, Damage damage) {
+    public int attackedByAoe(IActiveEntity caster, int hit, Damage damage) {
         Validate.notNull(caster);
         Validate.notNull(damage);
         Validate.isTrue(hit >= 0);

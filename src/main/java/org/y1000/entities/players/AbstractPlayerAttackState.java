@@ -7,21 +7,10 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.message.PlayerChangeStateEvent;
 
-final class PlayerAttackState extends AbstractPlayerState {
+public abstract class AbstractPlayerAttackState extends AbstractPlayerState {
 
-    public PlayerAttackState(PlayerImpl player, AttackAction action) {
-        super(player, PlayerStateEnum.Attack, action.getMillis());
-    }
-
-    @Override
-    public void update(int delta) {
-        if (player().tryCombatStrike(delta)) {
-            return;
-        }
-        if (elapse(delta)) {
-            player().changeState(PlayerStandState.fightStand(player()));
-            player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
-        }
+    public AbstractPlayerAttackState(PlayerImpl player, PlayerStateEnum stateEnum, int stateMillis) {
+        super(player, stateEnum, stateMillis);
     }
 
     @Override

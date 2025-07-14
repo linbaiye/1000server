@@ -17,17 +17,17 @@ import static org.mockito.Mockito.*;
 class PlayerAttackStateTest extends AbstractPlayerUnitTestFixture {
 
 
-    private PlayerAttackState state;
+    private PlayerMeleeState state;
 
     @BeforeEach
     void setUp() {
         super.setup();
-        state = new PlayerAttackState(player, AttackAction.Punch);
+        state = new PlayerMeleeState(player, AttackAction.Punch);
     }
 
     private void withMockPlayer() {
         mockPlayer();
-        state = new PlayerAttackState(player, AttackAction.Punch);
+        state = new PlayerMeleeState(player, AttackAction.Punch);
     }
 
     @Test

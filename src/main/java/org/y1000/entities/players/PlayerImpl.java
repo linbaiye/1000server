@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
+import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.projectile.Projectile;
 import org.y1000.event.EntityEvent;
@@ -544,7 +545,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
      * @param entity the target to combat.
      * @return -1 if not acceptable, 1 if a strike is carried, 0 if accepted but no strike happened.
      */
-    int tryAcceptAttack(ActiveEntity entity) {
+    int tryAcceptAttack(org.y1000.entities.ActiveEntity entity) {
         combatController = CombatController.acceptIfAllowed(this, entity);
         if (combatController == null)
             return -1;
@@ -559,7 +560,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
 
     @Override
-    public void attack(ActiveEntity target) {
+    public void attack(org.y1000.entities.ActiveEntity target) {
         if (target != null)
             state.attack(target);
     }
@@ -742,7 +743,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
 
     @Override
-    public void attackedBy(ViolentCreature attacker) {
+    public void attackedBy(IActiveEntity attacker) {
         Validate.notNull(attacker);
         doAttacked(attacker.damage(), attacker.hit(), e -> {});
     }
@@ -776,11 +777,11 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void attackedBy(Projectile projectile) {
-        if (projectile.shooter() instanceof Player player) {
+        /*if (projectile.shooter() instanceof Player player) {
             doAttacked(projectile.damage(), projectile.hit(), player::gainRangedAttackExp);
         } else {
             attackedBy(projectile.shooter());
-        }
+        }*/
     }
 
     @Override
@@ -1154,13 +1155,13 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void onProjectileReachTarget(Projectile projectile) {
-        Validate.notNull(projectile, "projectile can't nbe null");
+        /*Validate.notNull(projectile, "projectile can't nbe null");
         if (!projectile.target().canBeAttackedNow()) {
             return;
         }
         assistantKungFu().ifPresentOrElse(
                 kf -> emitEvent(PlayerAttackAoeEvent.ranged(this, projectile.target(), projectile.direction(), projectile.damage(), kf)),
-                () -> projectile.target().attackedBy(projectile));
+                () -> projectile.target().attackedBy(projectile));*/
     }
 
     @Override
@@ -1434,7 +1435,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     @Override
-    public int attacked(ActiveEntity attacker, Damage damage, int accuracy) {
+    public int attacked(org.y1000.entities.ActiveEntity attacker, Damage damage, int accuracy) {
         if (isDodged(accuracy))
             return -1;
         if (life.currentValue() <= 0)

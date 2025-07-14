@@ -1,14 +1,16 @@
 package org.y1000.item;
 
 
+import lombok.Getter;
+
 public final class Ammo extends AbstractItem {
-    private final int spriteId;
+
+    @Getter
+    private final String flySprite;
+
     public Ammo(String name, ItemType type, ItemSdb itemSdb) {
         super(name, type, itemSdb);
-        spriteId = itemSdb.getActionImage(name);
+        flySprite = "y" + itemSdb.getActionImage(name);
     }
 
-    public int spriteId() {
-        return spriteId;
-    }
 }

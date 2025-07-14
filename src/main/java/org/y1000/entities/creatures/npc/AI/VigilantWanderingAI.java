@@ -1,19 +1,5 @@
 package org.y1000.entities.creatures.npc.AI;
 
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.y1000.entities.creatures.ViolentCreature;
-import org.y1000.entities.creatures.event.SeekPlayerEvent;
-import org.y1000.entities.creatures.monster.Monster;
-import org.y1000.entities.creatures.npc.INpc;
-import org.y1000.entities.creatures.npc.NpcHurtState;
-import org.y1000.entities.creatures.npc.ViolentNpc;
-import org.y1000.entities.players.Player;
-import org.y1000.util.Coordinate;
-
-import java.util.Comparator;
-import java.util.function.Function;
-
 /*
 @Slf4j
 public final class VigilantWanderingAI extends AbstractMonsterWanderingAI {

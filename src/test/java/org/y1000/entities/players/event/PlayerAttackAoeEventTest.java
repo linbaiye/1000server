@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
@@ -31,16 +31,16 @@ class PlayerAttackAoeEventTest extends AbstractUnitTestFixture  {
 
         INpc mainTarget = Mockito.mock(INpc.class);
         when(mainTarget.isWithinMeleeRange(any(Coordinate.class))).thenReturn(true);
-        when(mainTarget.attackedByAoe(any(ViolentCreature.class), anyInt(), any(Damage.class))).thenReturn(1);
+        when(mainTarget.attackedByAoe(any(IActiveEntity.class), anyInt(), any(Damage.class))).thenReturn(1);
         when(mainTarget.coordinate()).thenReturn(Coordinate.xy(2, 3));
 
         INpc affectedTaget = Mockito.mock(INpc.class);
-        when(affectedTaget.attackedByAoe(any(ViolentCreature.class), anyInt(), any(Damage.class))).thenReturn(1);
+        when(affectedTaget.attackedByAoe(any(IActiveEntity.class), anyInt(), any(Damage.class))).thenReturn(1);
         when(affectedTaget.coordinate()).thenReturn(Coordinate.xy(1, 3));
 
         PlayerAttackAoeEvent event = PlayerAttackAoeEvent.melee(player, mainTarget, (AssistantKungFu) kungfu);
         event.affect(Collections.singleton(affectedTaget));
-        Mockito.verify(mainTarget, times(1)).attackedByAoe(any(ViolentCreature.class), anyInt(), any(Damage.class));
-        Mockito.verify(affectedTaget, times(1)).attackedByAoe(any(ViolentCreature.class), anyInt(), any(Damage.class));
+        Mockito.verify(mainTarget, times(1)).attackedByAoe(any(IActiveEntity.class), anyInt(), any(Damage.class));
+        Mockito.verify(affectedTaget, times(1)).attackedByAoe(any(IActiveEntity.class), anyInt(), any(Damage.class));
     }
 }

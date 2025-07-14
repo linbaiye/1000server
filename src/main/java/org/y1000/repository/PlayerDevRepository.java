@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import org.apache.commons.lang3.tuple.Pair;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
+import org.y1000.util.Coordinate;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,9 @@ public class PlayerDevRepository implements PlayerRepository {
         male.inventory().add(itemFactory.createItem("黑沙刚体", 1));
         male.inventory().add(itemFactory.createItem("闪光剑破解", 1));
         male.inventory().add(itemFactory.createEquipment("驱魔烈火弓"));
+        male.inventory().add(itemFactory.createEquipment("斗甲"));
         male.inventory().add(itemFactory.createItem("箭", 10000));
+        male.inventory().add(itemFactory.createItem("飞刀", 10000));
 
         Player female = playerFactory.create("测试女", false, 100000301L);
         playerMap.put(female.id(), female);
@@ -51,6 +54,10 @@ public class PlayerDevRepository implements PlayerRepository {
         female.inventory().add(itemFactory.createEquipment("女子长发"));
         female.inventory().add(itemFactory.createItem("黑沙刚体", 1));
         female.inventory().add(itemFactory.createItem("应龙大天神", 1));
+        female.inventory().add(itemFactory.createEquipment("驱魔烈火弓"));
+        female.inventory().add(itemFactory.createEquipment("斗甲"));
+        female.inventory().add(itemFactory.createItem("箭", 10000));
+        female.inventory().add(itemFactory.createItem("飞刀", 10000));
     }
 
     @Override

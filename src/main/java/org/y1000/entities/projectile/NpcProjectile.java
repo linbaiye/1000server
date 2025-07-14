@@ -1,28 +1,26 @@
 package org.y1000.entities.projectile;
 
-import org.y1000.entities.AttackableEntity;
-import org.y1000.entities.creatures.npc.ViolentNpc;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.players.Damage;
 
 public final class NpcProjectile extends AbstractProjectile {
 
-    public NpcProjectile(ViolentNpc shooter,
-                         AttackableEntity target, int id) {
+    public NpcProjectile(ActiveEntity shooter,
+                         ActiveEntity target, String id) {
         super(shooter, target, id);
     }
 
     @Override
     public Damage damage() {
-        return shooter().damage();
+        return Damage.DEFAULT;
     }
 
     @Override
     public int hit() {
-        return shooter().hit();
+        return 0;
     }
 
     @Override
     protected void onReachTarget() {
-        target().attackedBy(shooter());
     }
 }

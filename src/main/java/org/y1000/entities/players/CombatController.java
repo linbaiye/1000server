@@ -5,6 +5,8 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.PlayerSoundEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
+import org.y1000.item.Ammo;
+import org.y1000.kungfu.attack.AbstractRangedKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerAttackEvent;
 
@@ -25,19 +27,22 @@ final class CombatController {
     private void attack() {
         AttackKungFu kungFu = player.attackKungFu();
         AttackAction action = kungFu.computeAttackAction();
+        player.cooldownAttack();
         player.changeDirection(player.coordinate().computeDirection(enemy.coordinate()));
-        player.changeState(new PlayerAttackState(player, action));
         var message = PlayerAttackEvent.attack(player, action, player.attackKungFu().computeEffectId());
         player.sendEvent(message);
-        // should consume resources.
-        kungFu.consumeAttributes(player);
-        player.cooldownAttack();
-        if (kungFu.isRanged())
-            return;
-        int exp = hurtAbility.attacked(player, player.damage(), player.hit());
-        if (exp > 0)
-            player.doGainExp(exp, kungFu);
-        player.sendEvent(PlayerSoundEvent.sound(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
+        if (kungFu instanceof AbstractRangedKungFu rangedKungFu) {
+            Ammo ammo = rangedKungFu.consumeResources(player);
+            player.changeState(PlayerShootState.aimTarget(player, rangedKungFu, enemy, ammo.getFlySprite()));
+            player.sendEvent(PlayerSoundEvent.sound(player, kungFu.swingSound()));
+        } else {
+            kungFu.consumeAttributes(player);
+            player.changeState(new PlayerMeleeState(player, action));
+            int exp = hurtAbility.attacked(player, player.damage(), player.hit());
+            if (exp > 0)
+                player.doGainExp(exp, kungFu);
+            player.sendEvent(PlayerSoundEvent.sound(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
+        }
     }
 
     /**

@@ -7,8 +7,6 @@ import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.creatures.event.CreatureDieEvent;
-import org.y1000.entities.creatures.event.PlayerShootEvent;
-import org.y1000.entities.creatures.npc.NpcCommonState;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
 import org.y1000.item.ItemSdb;
 import org.y1000.item.WeaponImpl;

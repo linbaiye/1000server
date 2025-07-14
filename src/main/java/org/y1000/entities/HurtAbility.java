@@ -17,7 +17,7 @@ public interface HurtAbility {
      * @param attacker
      * @param damage
      * @param accuracy
-     * @return -1 if it's a miss, the exp otherwise.
+     * @return -1 if it's a miss or not attackable, the exp otherwise.
      */
     int attacked(ActiveEntity attacker, Damage damage, int accuracy);
 

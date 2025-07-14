@@ -1,8 +1,7 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.projectile.Projectile;
@@ -21,7 +20,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.*;
 
-public interface Player extends ViolentCreature, HurtAbility {
+public interface Player extends IActiveEntity, HurtAbility {
 
     default boolean isMale() {
         return true;
@@ -54,7 +53,7 @@ public interface Player extends ViolentCreature, HurtAbility {
 
     void handleInput(SelfHandleInput input);
 
-    void attack(ActiveEntity entity);
+    void attack(org.y1000.entities.ActiveEntity entity);
 
     Optional<ArmorEquipment> hat();
 

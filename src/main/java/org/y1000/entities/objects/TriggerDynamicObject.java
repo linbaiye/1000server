@@ -2,7 +2,7 @@ package org.y1000.entities.objects;
 
 import lombok.Builder;
 import org.y1000.entities.RemoveEntityEvent;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.projectile.Projectile;
@@ -98,7 +98,7 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
     }
 
     @Override
-    public void attackedBy(ViolentCreature attacker) {
+    public void attackedBy(IActiveEntity attacker) {
         // bad,.
     }
 

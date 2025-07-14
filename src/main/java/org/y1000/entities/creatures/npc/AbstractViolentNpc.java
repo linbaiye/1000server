@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.npc;
 import org.y1000.entities.AttackableEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.AttributeProvider;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
@@ -76,7 +76,7 @@ public abstract class AbstractViolentNpc
     }
 
     @Override
-    void hurt(ViolentCreature attacker) {
+    void hurt(IActiveEntity attacker) {
         cooldownRecovery();
         doHurtAction(attacker, recoveryCooldown());
     }

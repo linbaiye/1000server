@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.Creature;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
@@ -52,7 +52,7 @@ public interface INpc extends Creature {
      * @param damage attacker's damage.
      * @return exp the attacker can get.
      */
-    int attackedByAoe(ViolentCreature caster, int hit, Damage damage);
+    int attackedByAoe(IActiveEntity caster, int hit, Damage damage);
 
     int walkSpeed();
 
