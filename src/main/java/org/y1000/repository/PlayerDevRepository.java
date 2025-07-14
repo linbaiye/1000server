@@ -27,10 +27,26 @@ public class PlayerDevRepository implements PlayerRepository {
         Player male = playerFactory.create("测试男", true, 100000251L);
         playerMap.put(male.id(), male);
         playerRealmMap.put(male.id(), 6);
-        male.inventory().add(itemFactory.createItem("生药", 100));
+        male.inventory().add(itemFactory.createItem("生药", 10000));
         male.inventory().add(itemFactory.createEquipment("三叉戟"));
         male.inventory().add(itemFactory.createEquipment("龙光剑"));
         male.inventory().add(itemFactory.createEquipment("男子黄金铠甲"));
+        male.inventory().add(itemFactory.createEquipment("男子黄龙鞋"));
+        male.inventory().add(itemFactory.createItem("黑沙刚体", 1));
+        male.inventory().add(itemFactory.createItem("闪光剑破解", 1));
+
+        Player female = playerFactory.create("测试女", false, 100000301L);
+        playerMap.put(female.id(), female);
+        playerRealmMap.put(female.id(), 6);
+        female.inventory().add(itemFactory.createItem("生药", 10000));
+        female.inventory().add(itemFactory.createEquipment("三叉戟"));
+        female.inventory().add(itemFactory.createEquipment("龙光剑"));
+        female.inventory().add(itemFactory.createEquipment("女子黄金铠甲"));
+        female.inventory().add(itemFactory.createEquipment("女子黄龙鞋"));
+        female.inventory().add(itemFactory.createEquipment("女子黄龙手套"));
+        female.inventory().add(itemFactory.createEquipment("女子长发"));
+        female.inventory().add(itemFactory.createItem("黑沙刚体", 1));
+        female.inventory().add(itemFactory.createItem("应龙大天神", 1));
     }
 
     @Override
@@ -39,13 +55,13 @@ public class PlayerDevRepository implements PlayerRepository {
     }
 
     @Override
-    public Optional<Integer> findRealm(long id) {
+    public synchronized Optional<Integer> findRealm(long id) {
         return Optional.ofNullable(playerRealmMap.get(id));
     }
 
 
     @Override
-    public void update(Player player) {
+    public synchronized void update(Player player) {
         playerMap.put(player.id(), player);
         playerRealmMap.put(player.id(), player.getRealm().id());
     }

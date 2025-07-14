@@ -9,6 +9,8 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.metamodel.Metamodel;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.account.AccountManager;
 import org.y1000.entities.creatures.npc.NpcFactory;
@@ -23,6 +25,8 @@ import org.y1000.repository.*;
 import org.y1000.network.*;
 import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
+
+import java.util.Map;
 
 @Slf4j
 public final class Server implements ServerContext {
@@ -64,6 +68,81 @@ public final class Server implements ServerContext {
 
     private boolean shutdown;
 
+    private static class TestEntityManager implements EntityManagerFactory {
+
+        @Override
+        public EntityManager createEntityManager() {
+            return null;
+        }
+
+        @Override
+        public EntityManager createEntityManager(Map map) {
+            return null;
+        }
+
+        @Override
+        public EntityManager createEntityManager(SynchronizationType synchronizationType) {
+            return null;
+        }
+
+        @Override
+        public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
+            return null;
+        }
+
+        @Override
+        public CriteriaBuilder getCriteriaBuilder() {
+            return null;
+        }
+
+        @Override
+        public Metamodel getMetamodel() {
+            return null;
+        }
+
+        @Override
+        public boolean isOpen() {
+            return false;
+        }
+
+        @Override
+        public void close() {
+
+        }
+
+        @Override
+        public Map<String, Object> getProperties() {
+            return null;
+        }
+
+        @Override
+        public Cache getCache() {
+            return null;
+        }
+
+        @Override
+        public PersistenceUnitUtil getPersistenceUnitUtil() {
+            return null;
+        }
+
+        @Override
+        public void addNamedQuery(String name, Query query) {
+
+        }
+
+        @Override
+        public <T> T unwrap(Class<T> cls) {
+            return null;
+        }
+
+        @Override
+        public <T> void addNamedEntityGraph(String graphName, EntityGraph<T> entityGraph) {
+
+        }
+    }
+
+    private static boolean Dev = true;
+
 
     public Server() {
         workerGroup = new NioEventLoopGroup();
@@ -71,7 +150,7 @@ public final class Server implements ServerContext {
         gameServer = new ServerBootstrap();
         accountServer = new ServerBootstrap();
         managementServer = new ServerBootstrap();
-        entityManagerFactory = Persistence.createEntityManagerFactory("org.y1000");
+        entityManagerFactory = Dev ? new TestEntityManager() : Persistence.createEntityManagerFactory("org.y1000");
         KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl(entityManagerFactory);
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl, entityManagerFactory);
         itemRepository = repository;
@@ -80,8 +159,8 @@ public final class Server implements ServerContext {
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
         PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
-        //playerRepository = new PlayerDevRepository(factory, itemRepository);
-        playerRepository = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
+        playerRepository = Dev ? new PlayerDevRepository(factory, itemRepository) :
+        new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, RealmSpecificSdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
                 entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE, guildRepository, itemRepository, kungFuRepositoryImpl);
