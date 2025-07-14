@@ -246,11 +246,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
     }
 
-    void disableBreathKungFu() {
-        breathKungFu = null;
-    }
-
-
     public void unequip(EquipmentType type) {
         if (isDead() || isLeftGame() || type == null || !equippedEquipments.containsKey(type)) {
             return;
@@ -804,7 +799,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             realm.map().free(this);
         }
         realm = null;
-        clearFightingEntity();
+        combatController = null;
         //emitEvent(new PlayerLeftEvent(this));
     }
 

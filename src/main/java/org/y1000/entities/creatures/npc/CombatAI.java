@@ -8,7 +8,7 @@ import org.y1000.entities.HurtAbility;
 @Slf4j
 public class CombatAI extends AbstractMovableNpcAI {
     private final ActiveEntity enemy;
-    private final NpcAttackAbility attackAbility;
+    private final NpcMeleeAbility attackAbility;
     private final NpcHurtAbility hurtAbility;
     private final HurtAbility enemyHurtAbility;
 
@@ -18,7 +18,7 @@ public class CombatAI extends AbstractMovableNpcAI {
         this.enemy = entity;
         changeAbility(hurtAbility);
         this.hurtAbility = hurtAbility;
-        this.attackAbility = npc.findAbility(NpcAttackAbility.class).orElseThrow();
+        this.attackAbility = npc.findAbility(NpcMeleeAbility.class).orElseThrow();
         hurtAbility.setHurtTrigger(this::onAttacked);
         this.enemyHurtAbility = enemy.findAbility(HurtAbility.class).orElseThrow();
     }

@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 
 
-public final class NpcHurtAbility extends AbstractNpcNonMoveAbility implements HurtAbility, CooldownAbility {
+public final class NpcHurtAbility extends AbstractNpcNonMoveAbility implements HurtAbility, Cooldown {
 
     private final int armor;
 
@@ -67,6 +67,11 @@ public final class NpcHurtAbility extends AbstractNpcNonMoveAbility implements H
         return isCooldownOff();
     }
 
+    @Override
+    public void startCooldown() {
+        recoveryLeft = recoveryMillis;
+    }
+
     public int cooldownLeft() {
         return recoveryLeft;
     }
@@ -110,7 +115,7 @@ public final class NpcHurtAbility extends AbstractNpcNonMoveAbility implements H
         if (this.hurtTrigger != null) {
             hurtTrigger.accept(activeEntity, this);
         }
-        recoveryLeft = recoveryMillis;
+        startCooldown();
         return ExperienceUtil.damageToExp(maxLife, damageTaken);
     }
 

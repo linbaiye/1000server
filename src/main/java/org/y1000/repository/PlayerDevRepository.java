@@ -28,12 +28,16 @@ public class PlayerDevRepository implements PlayerRepository {
         playerMap.put(male.id(), male);
         playerRealmMap.put(male.id(), 6);
         male.inventory().add(itemFactory.createItem("生药", 10000));
+        male.inventory().add(itemFactory.createItem("丹药", 10000));
+        male.inventory().add(itemFactory.createItem("丸药", 10000));
         male.inventory().add(itemFactory.createEquipment("三叉戟"));
         male.inventory().add(itemFactory.createEquipment("龙光剑"));
         male.inventory().add(itemFactory.createEquipment("男子黄金铠甲"));
         male.inventory().add(itemFactory.createEquipment("男子黄龙鞋"));
         male.inventory().add(itemFactory.createItem("黑沙刚体", 1));
         male.inventory().add(itemFactory.createItem("闪光剑破解", 1));
+        male.inventory().add(itemFactory.createEquipment("驱魔烈火弓"));
+        male.inventory().add(itemFactory.createItem("箭", 10000));
 
         Player female = playerFactory.create("测试女", false, 100000301L);
         playerMap.put(female.id(), female);
@@ -73,6 +77,7 @@ public class PlayerDevRepository implements PlayerRepository {
 
     @Override
     public long save(EntityManager entityManager, int accountId, Player player) {
+        player.leaveRealm();
         playerMap.put(player.id(), player);
         playerRealmMap.put(player.id(), player.getRealm().id());
         return 0;

@@ -18,6 +18,14 @@ public final class Experience {
     }
 
 
+    public int computePermitExp(int exp) {
+        if (exp <= 0) {
+            return this.exp;
+        }
+        return exp + Math.min(exp, ExperienceUtil.GetLevelMaxExp(level()) * 3);
+    }
+
+
     public Experience gainPermitExp(int expValue) {
     /*
 

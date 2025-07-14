@@ -43,8 +43,8 @@ final class PlayerMoveState extends AbstractPlayerState {
         return moveAction;
     }
 
-    private boolean resetIfNotMovable(Coordinate coordinate) {
-        if (!player().movable(coordinate)) {
+    private boolean resetIfNotMovable(Coordinate destination) {
+        if (!player().movable(destination)) {
             changeToStand();
             player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
             return true;
@@ -54,16 +54,17 @@ final class PlayerMoveState extends AbstractPlayerState {
 
     @Override
     public void update(int delta) {
+        if (elapsedMillis() == 0) {
+            // Not able to keep after this move, disable it in advance.
+            if (player().footKungFu().map(k -> !k.canKeep(player())).orElse(false))
+                player().disableFootKungFuAndSync();
+        }
         if (!elapse(delta))
             return;
         if (resetIfNotMovable(currentInput.destination())) {
             return;
         }
-        player().footKungFu().ifPresent(footKungFu -> {
-            footKungFu.tryGainExpAndUseResources(player());
-            if (!footKungFu.canKeep(player()))
-                player().disableFootKungFuAndSync();
-        });
+        player().footKungFu().ifPresent(footKungFu -> footKungFu.tryGainExpAndUseResources(player()));
         player().changeCoordinate(currentInput.destination());
         player().sendEvent(new PlayerMovedEvent(player()));
         log.debug("Player {} moved to {}.", player(), player().coordinate());
@@ -78,11 +79,12 @@ final class PlayerMoveState extends AbstractPlayerState {
             return;
         }
         player().changeDirection(newInput.direction());
-        if (!resetIfNotMovable(newInput.destination())) {
-            MoveAction newAction = computeMoveAction(player(), moveAction);
-            player().changeState(new PlayerMoveState(player(), newInput, newAction));
-            player().sendEvent(PlayerMoveEvent.moveBy(player(), newAction));
+        if (resetIfNotMovable(newInput.destination())) {
+            return;
         }
+        MoveAction newAction = computeMoveAction(player(), moveAction);
+        player().changeState(new PlayerMoveState(player(), newInput, newAction));
+        player().sendEvent(PlayerMoveEvent.moveBy(player(), newAction));
     }
 
     @Override

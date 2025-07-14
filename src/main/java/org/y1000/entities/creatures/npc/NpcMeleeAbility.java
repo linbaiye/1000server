@@ -8,11 +8,9 @@ import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
 import org.y1000.entities.players.Damage;
 
 @Slf4j
-public final class NpcAttackAbility extends AbstractNpcNonMoveAbility implements CooldownAbility {
+public final class NpcMeleeAbility extends AbstractNpcNonMoveAbility implements Cooldown {
 
-    private final int attackSpeedMillis;
-
-    private int attackCooldownMillis;
+    private final NpcAttackSpeed npcAttackSpeed;
 
     private final Damage damage;
 
@@ -20,31 +18,33 @@ public final class NpcAttackAbility extends AbstractNpcNonMoveAbility implements
 
     private final String sound;
 
-    public NpcAttackAbility(int attackSpeedMillis,
-                            int bodyDamage,
-                            int hit,
-                            String sound,
-                            NpcAnimation animationTimer) {
+    public NpcMeleeAbility(int bodyDamage,
+                           int hit,
+                           String sound,
+                           NpcAnimation animationTimer,
+                           NpcAttackSpeed npcAttackSpeed) {
         super(animationTimer);
-        this.attackSpeedMillis = attackSpeedMillis;
+        this.npcAttackSpeed = npcAttackSpeed;
         this.damage = new Damage(bodyDamage, 0, 0, 0);
         this.accuracy = hit;
         this.sound = StringUtils.isEmpty(sound) ? null : sound;
-        attackCooldownMillis = 0;
     }
 
     public boolean cooldown(int delta) {
-        if (attackCooldownMillis > 0)
-            attackCooldownMillis -= delta;
-        return isCooldownOff();
+        return npcAttackSpeed.cooldown(delta);
+    }
+
+    @Override
+    public void startCooldown() {
+        npcAttackSpeed.startCooldown();
     }
 
     public boolean isCooldownOff() {
-        return attackCooldownMillis <= 0;
+        return npcAttackSpeed.isCooldownOff();
     }
 
     public int cooldownLeft() {
-        return attackCooldownMillis;
+        return npcAttackSpeed.cooldownLeft();
     }
 
     public void apply(Npc npc, ActiveEntity target) {
@@ -52,8 +52,8 @@ public final class NpcAttackAbility extends AbstractNpcNonMoveAbility implements
             hurtAbility.attacked(npc, damage, accuracy);
             if (sound != null)
                 npc.sendEvent(NpcSoundEvent.of(npc, sound));
-            sendActionAndStartShortAnimation(npc, attackSpeedMillis);
-            attackCooldownMillis = attackSpeedMillis;
+            sendActionAndStartShortAnimation(npc, npcAttackSpeed.getAttackSpeedMillis());
+            startCooldown();
         });
     }
 

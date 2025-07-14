@@ -1,7 +1,7 @@
 package org.y1000;
 
 import org.mockito.Mockito;
-import org.y1000.entities.creatures.npc.NpcAttackAbility;
+import org.y1000.entities.creatures.npc.NpcMeleeAbility;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.creatures.npc.NpcImpl;
@@ -26,7 +26,7 @@ public class TestNpcFactory {
 
     public static void main(String[] args) {
         NpcImpl npc = npcFactory.create(0, "向导", Mockito.mock(RealmMap.class), Coordinate.xy(1, 1), null);
-        npc.findAbility(NpcAttackAbility.class)
+        npc.findAbility(NpcMeleeAbility.class)
                 .ifPresent(System.out::println);
     }
 

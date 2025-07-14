@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
-public interface CooldownAbility {
+public interface Cooldown {
 
     /**
      * How long will this ability to be off cooldown in millis.
@@ -20,4 +20,6 @@ public interface CooldownAbility {
      * @return true if off.
      */
     boolean cooldown(int delta);
+
+    void startCooldown();
 }

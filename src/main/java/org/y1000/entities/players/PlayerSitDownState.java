@@ -75,7 +75,6 @@ final class PlayerSitDownState extends AbstractPlayerState {
     public void attack(ActiveEntity target) {
         if (player().tryAcceptAttack(target) != 0)
             return;
-        player().disableBreathAndSync();
         if (pastHalfTime()) {
             player().changeState(PlayerStandUpState.toCombat(player()));
         } else {

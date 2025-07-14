@@ -63,8 +63,7 @@ public final class EscapeAI extends AbstractMovableNpcAI {
             return;
         }
         if (npc().coordinate().directDistance(enemy.coordinate()) >= npc().viewRange()) {
-            WanderingAI newAi = new WanderingAI(npc());
-            npc().startAI(newAi);
+            npc().startAI(new WaryWanderAI(npc(), currentAbility()));
             log.debug("Wandering again.");
             return;
         }

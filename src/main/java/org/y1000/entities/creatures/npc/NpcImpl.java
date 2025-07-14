@@ -48,7 +48,7 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
 
     private final int viewRange;
 
-    private final List<CooldownAbility> cooldownAbilities;
+    private final List<Cooldown> cooldownAbilities;
 
     public NpcImpl(long id,
                    List<NpcAbility> abilities,
@@ -80,8 +80,8 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
         this.sound = sound;
         this.viewRange = viewRange;
         cooldownAbilities = abilities.stream()
-                .filter(a -> CooldownAbility.class.isAssignableFrom(a.getClass()))
-                .map(CooldownAbility.class::cast)
+                .filter(a -> Cooldown.class.isAssignableFrom(a.getClass()))
+                .map(Cooldown.class::cast)
                 .toList();
         realmMap.occupy(this);
     }

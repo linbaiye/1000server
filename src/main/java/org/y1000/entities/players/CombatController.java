@@ -32,6 +32,8 @@ final class CombatController {
         // should consume resources.
         kungFu.consumeAttributes(player);
         player.cooldownAttack();
+        if (kungFu.isRanged())
+            return;
         int exp = hurtAbility.attacked(player, player.damage(), player.hit());
         if (exp > 0)
             player.doGainExp(exp, kungFu);

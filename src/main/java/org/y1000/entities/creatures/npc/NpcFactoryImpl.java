@@ -99,11 +99,12 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private NpcAttackAbility createAttackAbility(String name, NpcSdb npcSdb) {
-        return new NpcAttackAbility(npcSdb.getAttackSpeed(name) * Realm.STEP_MILLIS + 1500,
-                npcSdb.getDamage(name),
+    private NpcMeleeAbility createAttackAbility(String name, NpcSdb npcSdb) {
+        return new NpcMeleeAbility(npcSdb.getDamage(name),
                 npcSdb.getAccuracy(name) + 75,
-                npcSdb.getSoundAttack(name), createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Attack));
+                npcSdb.getSoundAttack(name),
+                createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Attack),
+                new NpcAttackSpeed(npcSdb.getAttackSpeed(name) * Realm.STEP_MILLIS + 1500));
     }
 
     private NpcTurnAbility createTurnAbility(String name, NpcSdb npcSdb) {

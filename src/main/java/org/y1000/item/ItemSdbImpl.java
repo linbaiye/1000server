@@ -337,15 +337,11 @@ MaxCount,        最多持有数量；
         Set<String> items = itemSdb.names();
         Set<String> shapes = new HashSet<>();
         for (String i: items) {
-            if (itemSdb.getTypeValue(i) != ItemType.EQUIPMENT.value()) {
+            if (itemSdb.getTypeValue(i) != ItemType.ARROW.value()) {
                 continue;
             }
             //System.out.println("----------------------------");
-            shapes.add(itemSdb.getWearShape(i));
-            if (itemSdb.getEquipmentType(i) == EquipmentType.WRIST)  {
-
-            }
-            System.out.println(i + ":" + itemSdb.getWearShape(i));
+            System.out.println(i + ":" + itemSdb.getActionImage(i));
             /*for (String name : names) {
                 if (!StringUtils.isEmpty(itemSdb.get(i, name)))
                     System.out.println(name + ": " + itemSdb.get(i, name));

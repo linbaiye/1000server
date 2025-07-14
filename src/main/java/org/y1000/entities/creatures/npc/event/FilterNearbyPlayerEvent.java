@@ -37,7 +37,7 @@ public class FilterNearbyPlayerEvent extends AbstractNpcEvent implements FilterV
         return players != null ? players : Collections.emptySet();
     }
 
-    public static FilterVisibleEntityEvent withinDistance(Npc npc, int d) {
+    public static FilterNearbyPlayerEvent withinDistance(Npc npc, int d) {
         return new FilterNearbyPlayerEvent(npc, d);
     }
 

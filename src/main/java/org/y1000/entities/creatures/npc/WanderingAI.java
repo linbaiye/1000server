@@ -26,7 +26,7 @@ public final class WanderingAI extends AbstractWanderingAI {
             EscapeAI newAi = new EscapeAI(npc(), attacker, hurtAbility);
             npc().startAI(newAi);
         } else if (attacker.findAbility(HurtAbility.class).map(HurtAbility::canBeAttacked).orElse(false) &&
-                npc().findAbility(NpcAttackAbility.class).isPresent()) {
+                npc().findAbility(NpcMeleeAbility.class).isPresent()) {
                 npc().startAI(CombatAI.hurtAbilityTriggered(npc(), attacker, hurtAbility));
         } else {
             continueWander(hurtAbility.getInterruptedAbility());
