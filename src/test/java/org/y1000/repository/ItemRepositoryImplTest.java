@@ -34,7 +34,7 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
     void createAmmo() {
         Item item = itemFactory.createItem("箭", 2);
         assertEquals(ItemType.ARROW, item.itemType());
-        assertTrue(((Ammo)((StackItem)item).item()).spriteId() != 0);
+        assertNotNull(((Ammo) ((StackItem) item).item()).getFlySprite());
         item = itemFactory.createItem("飞刀", 2);
         assertEquals(ItemType.KNIFE, item.itemType());
     }

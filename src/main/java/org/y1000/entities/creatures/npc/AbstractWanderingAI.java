@@ -60,12 +60,10 @@ public abstract class AbstractWanderingAI extends AbstractMovableNpcAI {
     void continueWander(NpcAbility doneAbility) {
         if (doneAbility instanceof NpcMoveAbility) {
             onMoveDone();
-        } else if (doneAbility instanceof NpcIdleAbility) {
-            onIdleDone();
         } else if (doneAbility instanceof NpcTurnAbility) {
             onTurnDone();
         } else {
-            throw new IllegalStateException("Wrong ability " +  doneAbility.getClass().getSimpleName());
+            onIdleDone();
         }
     }
 

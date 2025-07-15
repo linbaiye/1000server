@@ -2,7 +2,6 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.Direction;
 import org.y1000.util.Coordinate;
 
 @Slf4j
@@ -11,12 +10,14 @@ public final class EscapeAI extends AbstractMovableNpcAI {
 
     private Coordinate destination;
 
-    public EscapeAI(Npc npc, ActiveEntity entity, NpcAbility ability) {
+    private final EscapeAbility escapeAbility;
+
+    public EscapeAI(Npc npc, ActiveEntity entity, NpcAbility ability, EscapeAbility escapeAbility) {
         super(npc);
         changeAbility(ability);
         npc.findAbility(NpcHurtAbility.class).ifPresent(hurtAbility -> hurtAbility.setHurtTrigger(this::onAttacked));
         this.enemy = entity;
-        computeEscapePoint();
+        this.escapeAbility = escapeAbility;
     }
 
     private void onAttacked(ActiveEntity entity, NpcHurtAbility hurtAbility) {
@@ -25,26 +26,9 @@ public final class EscapeAI extends AbstractMovableNpcAI {
         computeEscapePoint();
     }
 
-    private Coordinate computeByDirection(Direction direction) {
-        Coordinate coordinate = npc().coordinate();
-        Coordinate dest = coordinate.move(direction.xVector() * npc().viewRange(), direction.yVector() * npc().viewRange());
-        return npc().getRealmMap().movable(dest) ? dest : null;
-    }
 
     private void computeEscapePoint() {
-        Direction bestDirection = enemy.coordinate().computeDirection(npc().coordinate());
-        Coordinate target = computeByDirection(bestDirection);
-        if (target != null) {
-            destination = target;
-            return;
-        }
-        for (Direction direction: Direction.values()) {
-            var tmp = computeByDirection(direction);
-            if (tmp != null) {
-                destination = tmp;
-                return;
-            }
-        }
+        destination = escapeAbility.computeSafeSpot(npc(), enemy).orElse(null);
     }
 
     @Override
@@ -53,8 +37,26 @@ public final class EscapeAI extends AbstractMovableNpcAI {
         changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
     }
 
+    private void returnToWander() {
+        if (escapeAbility instanceof LifeLowEscapeAbility)
+            npc().startAI(new WaryWanderAI(npc(), currentAbility(), escapeAbility));
+        else
+            npc().startAI(new WanderingAI(npc()));
+    }
+
+    private void returnToWanderOrCombat() {
+        if (escapeAbility instanceof LifeLowEscapeAbility)
+            npc().startAI(new WaryWanderAI(npc(), currentAbility(), escapeAbility));
+        else
+            npc().startAI(CombatAI.returnFromEscape(npc(), enemy, ));
+    }
+
     @Override
     void onNonDieAbilityDone(NpcAbility ability) {
+        if (!enemy.canBeSeenAt(npc().coordinate())) {
+            returnToWander();
+            return;
+        }
         computePrevious();
         if (destination == null) {
             computeEscapePoint();
@@ -62,8 +64,8 @@ public final class EscapeAI extends AbstractMovableNpcAI {
             changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
             return;
         }
-        if (npc().coordinate().directDistance(enemy.coordinate()) >= npc().viewRange()) {
-            npc().startAI(new WaryWanderAI(npc(), currentAbility()));
+        if (npc().coordinate().equals(destination)) {
+            returnToWanderOrCombat();
             log.debug("Wandering again.");
             return;
         }
@@ -80,9 +82,9 @@ public final class EscapeAI extends AbstractMovableNpcAI {
         updateAbility(delta);
     }
 
-
     @Override
     public void start() {
         npc().findAbility(NpcMoveAbility.class).ifPresent(NpcMoveAbility::enableFastMove);
+        computeEscapePoint();
     }
 }

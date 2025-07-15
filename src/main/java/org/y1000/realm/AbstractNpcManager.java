@@ -8,6 +8,7 @@ import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.npc.*;
 import org.y1000.entities.creatures.npc.event.FilterVisibleEntityEvent;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
+import org.y1000.entities.creatures.npc.event.NpcShootEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.message.I2ClientMessage;
@@ -181,6 +182,12 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 //        find(npc -> npc.idName().equals(letterEvent.toName()) && NineTailFoxHuman.class.isAssignableFrom(npc.getClass()))
 //                .stream().map(NineTailFoxHuman.class::cast)
 //                .forEach(NineTailFoxHuman::shift);
+    }
+
+    @Override
+    public void shoot(NpcShootEvent event) {
+        projectileManager.add(event.getNpcProjectile());
+        sendToVisiblePlayers(event.source(), event);
     }
 
     @Override

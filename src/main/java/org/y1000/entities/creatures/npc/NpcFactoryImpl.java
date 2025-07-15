@@ -99,12 +99,12 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private NpcMeleeAbility createAttackAbility(String name, NpcSdb npcSdb) {
+    private NpcMeleeAbility createMeleeAbility(String name, NpcSdb npcSdb) {
         return new NpcMeleeAbility(npcSdb.getDamage(name),
                 npcSdb.getAccuracy(name) + 75,
                 npcSdb.getSoundAttack(name),
                 createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Attack),
-                new NpcAttackSpeed(npcSdb.getAttackSpeed(name) * Realm.STEP_MILLIS + 1500));
+                npcSdb.getAttackSpeed(name) * Realm.STEP_MILLIS + 1500);
     }
 
     private NpcTurnAbility createTurnAbility(String name, NpcSdb npcSdb) {
@@ -121,9 +121,8 @@ public final class NpcFactoryImpl implements NpcFactory {
         return new NpcIdleAbility(createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Idle));
     }
 
-    private NpcMoveAbility createMoveAbility(String name, NpcSdb npcSdb) {
-        return new NpcMoveAbility(npcSdb.getWalkSpeed(name) * Realm.STEP_MILLIS,
-                createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Move));
+    private NpcMoveAbility createMoveAbility(String name, NpcSdb npcSdb, int walkSpeed) {
+        return new NpcMoveAbility(walkSpeed, createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Move));
     }
 
     private NpcDieAbility createDieAbility(String name, NpcSdb npcSdb) {
@@ -132,31 +131,51 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private int getWalkSpeed(String name) {
         if (monsterSdb.containsName(name))
-            return monsterSdb.getWalkSpeed(name);
+            return monsterSdb.getWalkSpeed(name) * Realm.STEP_MILLIS;
         String animate = nonMonsterNpcSdb.getAnimate(name);
         return actionSdb.getActionLength(animate, NpcAnimationEnum.Move);
     }
 
-    private List<NpcAbility> abilities(String name, NpcSdb npcSdb) {
-        List<NpcAbility> abilities = new ArrayList<>();
-        if (npcSdb.attack(name)) {
-            abilities.add(createAttackAbility(name, npcSdb));
+    private static final int INIT_SKILL_DIV_DAMAGE = 5000;
+
+    private NpcShootAbility createShootAbility(String attackMagic, String animate) {
+        String[] split = attackMagic.split(":");
+        String name = split[0];
+        int level = Integer.parseInt(split[1]);
+        kungFuSdb.getAttackSpeed(name);
+        int damageBody = kungFuSdb.getDamageBody(name);
+        damageBody = damageBody + (damageBody * level) / INIT_SKILL_DIV_DAMAGE;
+        return new NpcShootAbility(kungFuSdb.getBowImage(name), kungFuSdb.getSoundSwing(name),
+                kungFuSdb.getAttackSpeed(name), createAnimation(animate, NpcAnimationEnum.Attack),
+                damageBody, kungFuSdb.getAccuracy(name));
+    }
+
+    private List<Object> abilities(String idName, NpcSdb npcSdb) {
+        List<Object> abilities = new ArrayList<>();
+        if (npcSdb.attack(idName)) {
+            abilities.add(createMeleeAbility(idName, npcSdb));
         }
-        abilities.add(createHurtAbility(name, npcSdb));
-        abilities.add(createIdleAbility(name, npcSdb));
-        if (getWalkSpeed(name) > 0) {
-            abilities.add(createMoveAbility(name, npcSdb));
-            abilities.add(createTurnAbility(name, npcSdb));
+        NpcHurtAbility hurtAbility = createHurtAbility(idName, npcSdb);
+        abilities.add(hurtAbility);
+        abilities.add(createIdleAbility(idName, npcSdb));
+        int walkSpeed = getWalkSpeed(idName);
+        if (walkSpeed > 0) {
+            abilities.add(createMoveAbility(idName, npcSdb, walkSpeed));
+            abilities.add(createTurnAbility(idName, npcSdb));
         }
-        abilities.add(createDieAbility(name, npcSdb));
+        abilities.add(createDieAbility(idName, npcSdb));
+        int escapeLife = npcSdb.getEscapeLife(idName);
+        if (escapeLife > 0)
+            abilities.add(new LifeLowEscapeAbility(escapeLife));
+
+        if (npcSdb.getAttackMagic(idName) != null)
+            abilities.add(createShootAbility(npcSdb.getAttackMagic(idName), npcSdb.getAnimate(idName)));
         return abilities;
     }
 
-
     private NpcAI createAI(NpcImpl npc) {
         return npc.findAbility(NpcMoveAbility.class).isPresent() ?
-                new WanderingAI(npc) :
-                new FrozenAI(npc);
+                new WanderingAI(npc) : new FrozenAI(npc);
     }
 
     @Override
@@ -166,7 +185,6 @@ public final class NpcFactoryImpl implements NpcFactory {
                           Coordinate coordinate,
                           NpcEventListener listener) {
         var npcSdb = monsterSdb.containsName(idName) ? monsterSdb : nonMonsterNpcSdb;
-        int escapeLife = monsterSdb.containsName(idName) ? monsterSdb.getEscapeLife(idName) : Integer.MIN_VALUE;
         var sound = monsterSdb.containsName(idName) ? monsterSdb.getSoundNormal(idName) : null;
         var viewRange = monsterSdb.containsName(idName) ? monsterSdb.getViewWidth(idName) : 0;
         NpcImpl npc = new NpcImpl(id,
@@ -178,7 +196,6 @@ public final class NpcFactoryImpl implements NpcFactory {
                 npcSdb.getShape(idName),
                 idName,
                 randomDirection(),
-                escapeLife,
                 npcSdb.getActionWidth(idName),
                 sound, viewRange);
         npc.changeAI(createAI(npc));

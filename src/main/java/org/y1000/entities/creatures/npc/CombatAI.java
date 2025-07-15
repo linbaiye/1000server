@@ -34,26 +34,46 @@ public class CombatAI extends AbstractMovableNpcAI {
         tryAttack();
     }
 
-    private void tryAttack() {
-        if (!enemy.canBeSeenAt(npc().coordinate()) || !enemyHurtAbility.canBeAttacked()) {
-            npc().startAI(new WanderingAI(npc()));
-            return;
+    private void doRangedAttack(NpcShootAbility shootAbility) {
+        if (shootAbility.shouldEscape(npc(), enemy)) {
+            new EscapeAI(npc(), enemy, currentAbility(), shootAbility);
+            npc().startAI();
+        } else {
+            changeAbility(shootAbility);
+            shootAbility.shoot(npc(), enemy);
         }
+    }
+
+    private void doMeleeAttack() {
         if (npc().coordinate().directDistance(enemy.coordinate()) >= 2) {
             moveCloser(enemy.coordinate());
             return;
         }
-        Direction direction = npc().coordinate().computeDirection(enemy.coordinate());
+        Direction direction = npc().coordinate().directionTo(enemy.coordinate());
         if (direction != npc().direction()) {
             changeAbilityOrThrow(NpcTurnAbility.class)
                     .turn(npc(), direction);
             return;
         }
-        if (attackAbility.isCooldownOff() && hurtAbility.isCooldownOff()) {
+        if (attackAbility.canAttack() && hurtAbility.isRecovered()) {
             changeAbility(attackAbility).apply(npc(), enemy);
         } else {
-            stay(Math.max(attackAbility.cooldownLeft(), hurtAbility.cooldownLeft()));
+            stay(Math.max(attackAbility.attackCooldownLeft(), hurtAbility.recoveryLeft()));
         }
+    }
+
+    private void tryAttack() {
+        if (!enemy.canBeSeenAt(npc().coordinate()) || !enemyHurtAbility.canBeAttacked()) {
+            npc().startAI(new WanderingAI(npc()));
+            return;
+        }
+        npc().findAbility(NpcShootAbility.class).ifPresentOrElse(s -> {
+            if (s.canAttack()) {
+                doRangedAttack(s);
+            } else {
+                doMeleeAttack();
+            }
+        }, this::doMeleeAttack);
     }
 
     private void stay(int millis) {
@@ -94,5 +114,9 @@ public class CombatAI extends AbstractMovableNpcAI {
 
     public static CombatAI hurtAbilityTriggered(Npc npc, ActiveEntity entity, NpcHurtAbility hurtAbility) {
         return new CombatAI(npc, entity, hurtAbility);
+    }
+
+    public static CombatAI returnFromEscape(Npc npc, ActiveEntity entity, NpcAbility npcAbility) {
+        return new CombatAI(npc, entity, npcAbility);
     }
 }

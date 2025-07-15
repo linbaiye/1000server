@@ -8,9 +8,6 @@ public interface MonstersSdb extends NpcSdb {
 
     String getSoundNormal(String name);
 
-
-    String getAttackMagic(String name);
-
     boolean isPassive(String name);
 
 

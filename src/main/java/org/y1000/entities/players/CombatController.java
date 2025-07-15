@@ -28,7 +28,7 @@ final class CombatController {
         AttackKungFu kungFu = player.attackKungFu();
         AttackAction action = kungFu.computeAttackAction();
         player.cooldownAttack();
-        player.changeDirection(player.coordinate().computeDirection(enemy.coordinate()));
+        player.changeDirection(player.coordinate().directionByAngle(enemy.coordinate()));
         var message = PlayerAttackEvent.attack(player, action, player.attackKungFu().computeEffectId());
         player.sendEvent(message);
         if (kungFu instanceof AbstractRangedKungFu rangedKungFu) {
