@@ -64,7 +64,13 @@ final class PlayerMoveState extends AbstractPlayerState {
         if (resetIfNotMovable(currentInput.destination())) {
             return;
         }
-        player().footKungFu().ifPresent(footKungFu -> footKungFu.tryGainExpAndUseResources(player()));
+        player().footKungFu().ifPresent(footKungFu -> {
+            boolean canFlyBefore = footKungFu.canFly();
+            footKungFu.tryGainExpAndUseResources(player());
+            if (!canFlyBefore && footKungFu.canFly()) {
+                player().syncActiveKungFuList();
+            }
+        });
         player().changeCoordinate(currentInput.destination());
         player().sendEvent(new PlayerMovedEvent(player()));
         log.debug("Player {} moved to {}.", player(), player().coordinate());

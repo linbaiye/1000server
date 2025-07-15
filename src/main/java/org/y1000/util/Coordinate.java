@@ -36,7 +36,7 @@ public record Coordinate(int x, int y) {
     }
 
 
-    public Direction computeDirection(Coordinate to) {
+    public Direction directionTo(Coordinate to) {
         var ydiff = to.y() - this.y();
         var xdiff = to.x() - this.x();
         if (ydiff < 0) {
@@ -74,6 +74,33 @@ public record Coordinate(int x, int y) {
                 another.y() <= y() + Coordinate.VISIBLE_Y_RANGE;
     }
 
+    public Direction directionByAngle(Coordinate end) {
+        var angle = (float) Math.atan2(end.y() - y, end.x() - x);
+        var tmp = snapped(angle,  (float) (Math.PI / 4)) / (Math.PI / 4);
+        int dir = wrap((int) tmp , 0, 8);
+        return switch(dir) {
+            case 0 -> Direction.RIGHT;
+            case 1 -> Direction.DOWN_RIGHT;
+            case 2 -> Direction.DOWN;
+            case 3 ->Direction.DOWN_LEFT;
+            case 4 ->Direction.LEFT;
+            case 5 ->Direction.UP_LEFT;
+            case 6 ->Direction.UP;
+            default-> Direction.UP_RIGHT;
+        } ;
+    }
+
+
+    private int wrap(int value, int min, int max)
+    {
+        int num = max - min;
+        return num == 0 ? min : min + ((value - min) % num + num) % num;
+    }
+
+    private float snapped(float s, float step)
+    {
+        return step != 0.0 ? (float) (Math.floor((float) ((double) s / (double) step + 0.5)) * step) : s;
+    }
 
     @Override
     public boolean equals(Object o) {

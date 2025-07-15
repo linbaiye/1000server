@@ -5,9 +5,19 @@ import org.y1000.entities.players.Damage;
 
 public final class NpcProjectile extends AbstractProjectile {
 
+
+    private final int accuracy;
+
+    private final Damage damage;
+
     public NpcProjectile(ActiveEntity shooter,
-                         ActiveEntity target, String id) {
+                         ActiveEntity target,
+                         String id,
+                         int accuracy,
+                         Damage damage) {
         super(shooter, target, id);
+        this.accuracy = accuracy;
+        this.damage = damage;
     }
 
     @Override
@@ -17,7 +27,7 @@ public final class NpcProjectile extends AbstractProjectile {
 
     @Override
     public int hit() {
-        return 0;
+        return accuracy;
     }
 
     @Override

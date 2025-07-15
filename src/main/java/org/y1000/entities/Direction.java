@@ -74,12 +74,12 @@ public enum Direction {
         return value;
     }
 
-    public int xVector() {
-        return h;
+    public int x() {
+        return offset.x();
     }
 
-    public int yVector() {
-        return v;
+    public int y() {
+        return offset.y();
     }
 
     public Direction opposite() {

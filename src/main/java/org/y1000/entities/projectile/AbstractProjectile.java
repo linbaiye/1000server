@@ -27,7 +27,7 @@ public abstract class AbstractProjectile implements Projectile {
         this.shooter = shooter;
         this.target = target;
         this.flyingMillis = dist * 30;
-        this.direction = shooter.coordinate().computeDirection(target.coordinate());
+        this.direction = shooter.coordinate().directionTo(target.coordinate());
     }
 
     @Override

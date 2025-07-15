@@ -288,6 +288,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         syncInventoryQuietly();
     }
 
+
     private void syncInventoryQuietly() {
         sendEvent(InventoryUpdatedEvent.quiet(this));
     }
@@ -486,7 +487,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         syncActiveKungFuList();
     }
 
-    private void syncActiveKungFuList() {
+    void syncActiveKungFuList() {
         sendEvent(SyncActiveKungEvent.of(this));
     }
 

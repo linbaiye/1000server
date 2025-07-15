@@ -11,8 +11,11 @@ import java.util.Set;
 
 public class WaryWanderAI extends AbstractWanderingAI {
 
-    public WaryWanderAI(Npc npc, NpcAbility from) {
+    private final EscapeAbility escapeAbility;
+
+    public WaryWanderAI(Npc npc, NpcAbility from, EscapeAbility escapeAbility) {
         super(npc);
+        this.escapeAbility = escapeAbility;
         changeAbility(from);
         npc.findAbility(NpcHurtAbility.class).ifPresent(a -> a.setHurtTrigger(this::onAttacked));
     }
@@ -26,7 +29,8 @@ public class WaryWanderAI extends AbstractWanderingAI {
 
     @Override
     void onNonDieAbilityDone(NpcAbility ability) {
-        findNearestViewRangePlayer().ifPresentOrElse(p -> npc().startAI(new EscapeAI(npc(), p, currentAbility())),
+        findNearestViewRangePlayer().ifPresentOrElse(
+                p -> npc().startAI(new EscapeAI(npc(), p, currentAbility(), escapeAbility)),
                 () -> continueWander(ability));
     }
 
@@ -37,6 +41,7 @@ public class WaryWanderAI extends AbstractWanderingAI {
 
     private void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
         applyHurtAbility(ability);
+        npc().startAI(new EscapeAI(npc(), attacker, currentAbility(), escapeAbility));
     }
 
     @Override

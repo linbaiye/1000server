@@ -21,16 +21,31 @@ public final class WanderingAI extends AbstractWanderingAI {
         return npc().getSpawnCoordinate();
     }
 
+    private boolean tryEscape(NpcHurtAbility hurtAbility) {
+        LifeLowEscapeAbility lifeLowEscapeAbility = npc().findAbility(LifeLowEscapeAbility.class).orElse(null);
+        if (lifeLowEscapeAbility == null || !lifeLowEscapeAbility.shouldEscape(npc()))
+            return false;
+        EscapeAI newAi = new EscapeAI(npc(), attacker, hurtAbility, lifeLowEscapeAbility);
+        npc().startAI(newAi);
+        return true;
+    }
+
+    private boolean tryCombat(NpcHurtAbility ability) {
+        HurtAbility hurtAbility = attacker.findAbility(HurtAbility.class).orElse(null);
+        if (hurtAbility == null || !hurtAbility.canBeAttacked())
+            return false;
+        if (npc().findAbility(AbstractNpcAttackAbility.class).isEmpty())
+            return false;
+        npc().startAI(CombatAI.hurtAbilityTriggered(npc(), attacker, ability));
+        return true;
+    }
+
     private void afterHurtDone(NpcHurtAbility hurtAbility) {
-        if (npc().needToEscape()) {
-            EscapeAI newAi = new EscapeAI(npc(), attacker, hurtAbility);
-            npc().startAI(newAi);
-        } else if (attacker.findAbility(HurtAbility.class).map(HurtAbility::canBeAttacked).orElse(false) &&
-                npc().findAbility(NpcMeleeAbility.class).isPresent()) {
-                npc().startAI(CombatAI.hurtAbilityTriggered(npc(), attacker, hurtAbility));
-        } else {
-            continueWander(hurtAbility.getInterruptedAbility());
-        }
+        if (tryEscape(hurtAbility))
+            return;
+        if (tryCombat(hurtAbility))
+            return;
+        continueWander(hurtAbility.getInterruptedAbility());
     }
 
     private void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {

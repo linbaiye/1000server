@@ -15,7 +15,7 @@ public final class AiPathUtil {
         Validate.notNull(npc);
         Validate.notNull(dest);
         Validate.notNull(previous);
-        var dir = npc.coordinate().computeDirection(dest);
+        var dir = npc.coordinate().directionTo(dest);
         Coordinate next = npc.coordinate().moveBy(dir);
         if (next.equals(dest)) {
             return dir != npc.direction() ? dir : null;
@@ -44,7 +44,7 @@ public final class AiPathUtil {
         if (dest.equals(Coordinate.Empty)) {
             return null;
         }
-        var dir = npc.coordinate().computeDirection(dest);
+        var dir = npc.coordinate().directionTo(dest);
         Coordinate next = npc.coordinate().moveBy(dir);
         if (next.equals(dest) && !npc.realmMap().movable(next)) {
             // copied, but why?

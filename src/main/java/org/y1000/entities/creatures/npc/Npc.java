@@ -40,8 +40,6 @@ public interface Npc extends ActiveEntity {
 
     int getWanderRage();
 
-    boolean needToEscape();
-
     void sendEvent(NpcEvent event);
 
     Optional<String> sound();

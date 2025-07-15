@@ -110,7 +110,7 @@ end;
         if (isBroken() || dist < 1 || !dragged.isDead()) {
             return;
         }
-        var dir = dragged.coordinate().computeDirection(moving.coordinate());
+        var dir = dragged.coordinate().directionTo(moving.coordinate());
         var nextPos = dragged.coordinate().moveBy(dir);
         if (nextPos.equals(moving.coordinate())) {
             if (dragged.direction() != dir) {

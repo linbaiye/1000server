@@ -10,10 +10,11 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class NpcImpl extends AbstractActiveEntity implements Npc {
 
-    private final List<NpcAbility> abilities;
+    private final List<Object> abilities;
     private final NpcEventListener listener;
     private Coordinate coordinate;
 
@@ -39,8 +40,6 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     @Getter
     private final String idName;
 
-    private final int escapeLife;
-
     @Getter
     private final int wanderRage;
 
@@ -48,10 +47,10 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
 
     private final int viewRange;
 
-    private final List<Cooldown> cooldownAbilities;
+    private final List<CooldownAbility> cooldownList;
 
     public NpcImpl(long id,
-                   List<NpcAbility> abilities,
+                   List<Object> abilities,
                    String viewName,
                    Coordinate coordinate,
                    NpcEventListener listener,
@@ -60,7 +59,6 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
                    String shape,
                    String idName,
                    Direction direction,
-                   int escapeLife,
                    int wanderRage,
                    String sound,
                    int viewRange) {
@@ -75,14 +73,11 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
         this.shape = shape;
         this.idName = idName;
         this.direction = direction;
-        this.escapeLife = escapeLife;
         this.wanderRage = wanderRage;
         this.sound = sound;
         this.viewRange = viewRange;
-        cooldownAbilities = abilities.stream()
-                .filter(a -> Cooldown.class.isAssignableFrom(a.getClass()))
-                .map(Cooldown.class::cast)
-                .toList();
+        this.cooldownList = abilities.stream().filter(a -> CooldownAbility.class.isAssignableFrom(a.getClass()))
+                        .map(CooldownAbility.class::cast).collect(Collectors.toList());
         realmMap.occupy(this);
     }
 
@@ -113,7 +108,7 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
 
     @Override
     public void update(int delta) {
-        cooldownAbilities.forEach(a -> a.cooldown(delta));
+        cooldownList.forEach(a -> a.cooldown(delta));
         ai.update(delta);
     }
 
@@ -163,10 +158,6 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
         return Objects.hash(id());
     }
 
-    public boolean needToEscape() {
-        return findAbility(HurtAbility.class).map(hurtAbility -> hurtAbility.currentLife() <= escapeLife)
-                .orElse(false);
-    }
 
     @Override
     public I2ClientMessage captureSnapshot() {

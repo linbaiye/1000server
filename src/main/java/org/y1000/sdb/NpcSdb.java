@@ -38,4 +38,12 @@ public interface NpcSdb {
     String getShape(String name);
 
     int getRegenInterval(String name);
+
+    default int getEscapeLife(String name) {
+        return Integer.MIN_VALUE;
+    }
+
+    default String getAttackMagic(String name) {
+        return null;
+    }
 }
