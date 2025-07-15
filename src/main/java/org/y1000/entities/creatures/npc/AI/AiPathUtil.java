@@ -10,15 +10,17 @@ import org.y1000.util.Coordinate;
 
 @Slf4j
 public final class AiPathUtil {
-    public static Direction computeNextDirection(Npc npc,
-                                                 Coordinate dest, Coordinate previous) {
+    public static Direction computeDirectionTO(Npc npc,
+                                               Coordinate dest, Coordinate previous) {
         Validate.notNull(npc);
         Validate.notNull(dest);
         Validate.notNull(previous);
+        if (dest.equals(npc.coordinate()))
+            return null;
         var dir = npc.coordinate().directionTo(dest);
         Coordinate next = npc.coordinate().moveBy(dir);
         if (next.equals(dest)) {
-            return dir != npc.direction() ? dir : null;
+            return dir;
         }
         int minDist = Integer.MAX_VALUE;
         Direction towards = null;

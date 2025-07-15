@@ -11,7 +11,7 @@ public abstract class AbstractMovableNpcAI extends AbstractNpcAI {
 
     protected AbstractMovableNpcAI(Npc npc) {
         super(npc);
-        previous = npc.coordinate().moveBy(npc.direction().opposite());
+        previous = npc.coordinate();
     }
 
     abstract void onMoveFailed();
@@ -20,9 +20,8 @@ public abstract class AbstractMovableNpcAI extends AbstractNpcAI {
         previous = npc().coordinate().moveBy(npc().direction().opposite());
     }
 
-
     void moveCloser(Coordinate destination) {
-        var dir = AiPathUtil.computeNextDirection(npc(), destination, previous);
+        var dir = AiPathUtil.computeDirectionTO(npc(), destination, previous);
         if (dir == null) {
             onMoveFailed();
             return;

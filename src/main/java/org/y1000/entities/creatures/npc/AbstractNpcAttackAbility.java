@@ -59,7 +59,7 @@ public abstract class AbstractNpcAttackAbility extends AbstractNpcNonMoveAbility
     public abstract boolean canAttack();
 
     boolean isCooldownOff() {
-        return cooldownLeft == 0;
+        return cooldownLeft <= 0;
     }
 
 }

@@ -138,7 +138,7 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private static final int INIT_SKILL_DIV_DAMAGE = 5000;
 
-    private NpcShootAbility createShootAbility(String attackMagic, String animate) {
+    private NpcShootAbility createShootAbility(String attackMagic, String animate, int hit) {
         String[] split = attackMagic.split(":");
         String name = split[0];
         int level = Integer.parseInt(split[1]);
@@ -146,8 +146,8 @@ public final class NpcFactoryImpl implements NpcFactory {
         int damageBody = kungFuSdb.getDamageBody(name);
         damageBody = damageBody + (damageBody * level) / INIT_SKILL_DIV_DAMAGE;
         return new NpcShootAbility(kungFuSdb.getBowImage(name), kungFuSdb.getSoundSwing(name),
-                kungFuSdb.getAttackSpeed(name), createAnimation(animate, NpcAnimationEnum.Attack),
-                damageBody, kungFuSdb.getAccuracy(name));
+                kungFuSdb.getAttackSpeed(name) * Realm.STEP_MILLIS + 1500, createAnimation(animate, NpcAnimationEnum.Attack),
+                damageBody, hit);
     }
 
     private List<Object> abilities(String idName, NpcSdb npcSdb) {
@@ -167,9 +167,9 @@ public final class NpcFactoryImpl implements NpcFactory {
         int escapeLife = npcSdb.getEscapeLife(idName);
         if (escapeLife > 0)
             abilities.add(new LifeLowEscapeAbility(escapeLife));
-
-        if (npcSdb.getAttackMagic(idName) != null)
-            abilities.add(createShootAbility(npcSdb.getAttackMagic(idName), npcSdb.getAnimate(idName)));
+        String attackMagic = npcSdb.getAttackMagic(idName);
+        if (StringUtils.isNotEmpty(attackMagic))
+            abilities.add(createShootAbility(attackMagic, npcSdb.getAnimate(idName), npcSdb.getAccuracy(idName) + 70));
         return abilities;
     }
 

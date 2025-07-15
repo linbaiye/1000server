@@ -13,11 +13,11 @@ public class CombatAI extends AbstractMovableNpcAI {
     private final HurtAbility enemyHurtAbility;
 
     private CombatAI(Npc npc, ActiveEntity entity,
-                     NpcHurtAbility hurtAbility) {
+                     NpcAbility ability) {
         super(npc);
         this.enemy = entity;
-        changeAbility(hurtAbility);
-        this.hurtAbility = hurtAbility;
+        changeAbility(ability);
+        this.hurtAbility = npc.findAbility(NpcHurtAbility.class).orElseThrow();
         this.attackAbility = npc.findAbility(NpcMeleeAbility.class).orElseThrow();
         hurtAbility.setHurtTrigger(this::onAttacked);
         this.enemyHurtAbility = enemy.findAbility(HurtAbility.class).orElseThrow();
@@ -36,9 +36,17 @@ public class CombatAI extends AbstractMovableNpcAI {
 
     private void doRangedAttack(NpcShootAbility shootAbility) {
         if (shootAbility.shouldEscape(npc(), enemy)) {
-            new EscapeAI(npc(), enemy, currentAbility(), shootAbility);
-            npc().startAI();
-        } else {
+            EscapeAI escapeAI = new EscapeAI(npc(), enemy, currentAbility(), shootAbility);
+            npc().startAI(escapeAI);
+            log.debug("change to escape.");
+            return;
+        }
+        if (!shootAbility.canAttack()) {
+            log.debug("Wait cooldown.");
+            stay(shootAbility.cooldownLeft());
+        }
+        else {
+            log.debug("Shoot");
             changeAbility(shootAbility);
             shootAbility.shoot(npc(), enemy);
         }
@@ -53,24 +61,30 @@ public class CombatAI extends AbstractMovableNpcAI {
         if (direction != npc().direction()) {
             changeAbilityOrThrow(NpcTurnAbility.class)
                     .turn(npc(), direction);
+            log.debug("Turn");
             return;
         }
         if (attackAbility.canAttack() && hurtAbility.isRecovered()) {
+            log.debug("melee attack");
             changeAbility(attackAbility).apply(npc(), enemy);
         } else {
+            log.debug("stay.");
             stay(Math.max(attackAbility.attackCooldownLeft(), hurtAbility.recoveryLeft()));
         }
     }
 
     private void tryAttack() {
         if (!enemy.canBeSeenAt(npc().coordinate()) || !enemyHurtAbility.canBeAttacked()) {
+            log.debug("Back to wander.");
             npc().startAI(new WanderingAI(npc()));
             return;
         }
         npc().findAbility(NpcShootAbility.class).ifPresentOrElse(s -> {
-            if (s.canAttack()) {
+            if (s.hasProjectile()) {
+                log.debug("try ranged");
                 doRangedAttack(s);
             } else {
+                log.debug("try melee");
                 doMeleeAttack();
             }
         }, this::doMeleeAttack);

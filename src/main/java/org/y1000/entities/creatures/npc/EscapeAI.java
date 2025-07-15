@@ -6,7 +6,7 @@ import org.y1000.util.Coordinate;
 
 @Slf4j
 public final class EscapeAI extends AbstractMovableNpcAI {
-    private ActiveEntity enemy;
+    private final ActiveEntity enemy;
 
     private Coordinate destination;
 
@@ -22,13 +22,12 @@ public final class EscapeAI extends AbstractMovableNpcAI {
 
     private void onAttacked(ActiveEntity entity, NpcHurtAbility hurtAbility) {
         applyHurtAbility(hurtAbility);
-        enemy = entity;
-        computeEscapePoint();
     }
 
 
     private void computeEscapePoint() {
         destination = escapeAbility.computeSafeSpot(npc(), enemy).orElse(null);
+        log.debug("Selected destination {}.", destination);
     }
 
     @Override
@@ -48,12 +47,13 @@ public final class EscapeAI extends AbstractMovableNpcAI {
         if (escapeAbility instanceof LifeLowEscapeAbility)
             npc().startAI(new WaryWanderAI(npc(), currentAbility(), escapeAbility));
         else
-            npc().startAI(CombatAI.returnFromEscape(npc(), enemy, ));
+            npc().startAI(CombatAI.returnFromEscape(npc(), enemy, currentAbility()));
     }
 
     @Override
     void onNonDieAbilityDone(NpcAbility ability) {
         if (!enemy.canBeSeenAt(npc().coordinate())) {
+            log.debug("No thing to escape, return now.");
             returnToWander();
             return;
         }
@@ -66,14 +66,14 @@ public final class EscapeAI extends AbstractMovableNpcAI {
         }
         if (npc().coordinate().equals(destination)) {
             returnToWanderOrCombat();
-            log.debug("Wandering again.");
+            log.debug("Return now.");
             return;
         }
         if (ability instanceof NpcMoveAbility moveAbility && moveAbility.idleTime() > 0) {
             changeAbilityOrThrow(NpcIdleAbility.class).apply(npc(), moveAbility.idleTime());
         } else {
+            log.debug("keep moving at {}.", npc().coordinate());
             moveCloser(destination);
-            log.debug("keep moving");
         }
     }
 

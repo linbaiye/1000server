@@ -25,7 +25,7 @@ public class TestNpcFactory {
     }
 
     public static void main(String[] args) {
-        NpcImpl npc = npcFactory.create(0, "向导", Mockito.mock(RealmMap.class), Coordinate.xy(1, 1), null);
+        NpcImpl npc = npcFactory.create(0, "马", Mockito.mock(RealmMap.class), Coordinate.xy(1, 1), null);
         npc.findAbility(NpcMeleeAbility.class)
                 .ifPresent(System.out::println);
     }

@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.npc.event.NpcShootEvent;
 import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
@@ -9,6 +10,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.Optional;
 
+@Slf4j
 public class NpcShootAbility extends AbstractNpcAttackAbility implements EscapeAbility {
 
     private final String projectileSprite;
@@ -31,7 +33,7 @@ public class NpcShootAbility extends AbstractNpcAttackAbility implements EscapeA
                            int accuracy) {
         super(npcAnimation, new Damage(damage, 0, 0, 0), accuracy, swingSound, attackSpeed);
         this.projectileSprite = projectileSprite;
-        chargingCooldown = 0;
+        chargingCooldown = COOLDOWN;
         resetProjectile();
     }
 
@@ -40,29 +42,46 @@ public class NpcShootAbility extends AbstractNpcAttackAbility implements EscapeA
     }
 
 
+    public boolean hasProjectile() {
+        return number > 0;
+    }
+
     @Override
     public boolean canAttack() {
-        return number > 0 && isCooldownOff();
+        return hasProjectile() && isCooldownOff();
     }
 
     public void cooldown(int delta) {
+        cooldownAttack(delta);
         if (number > 0)
             return;
         chargingCooldown -= delta;
-        if (chargingCooldown == 0) {
+        if (chargingCooldown <= 0) {
             resetProjectile();
+            chargingCooldown = COOLDOWN;
         }
+    }
+
+    public int cooldownLeft() {
+        return getCooldownLeft();
     }
 
     public boolean shouldEscape(Npc npc, ActiveEntity enemy) {
         return npc.coordinate().directDistance(enemy.coordinate()) < 3 && canAttack();
     }
 
+    public Optional<Coordinate> computeSafeSpotToShoot(Npc npc, ActiveEntity entity) {
+        if ()
+    }
+
+
     public void shoot(Npc npc, ActiveEntity target) {
         if (!canAttack())
             return;
         if (number-- <= 0)
             chargingCooldown = COOLDOWN;
+        log.debug("Projectile left {}.", number);
+        npc.changeDirection(npc.coordinate().directionByAngle(target.coordinate()));
         sendActionAndStartShortAnimation(npc, getAttackSpeedMillis());
         if (getSound() != null)
             npc.sendEvent(NpcSoundEvent.of(npc, getSound()));
