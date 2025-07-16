@@ -3,7 +3,7 @@ package org.y1000.kungfu;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.y1000.entities.PlayerSoundEvent;
+import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.exp.ExperienceUtil;

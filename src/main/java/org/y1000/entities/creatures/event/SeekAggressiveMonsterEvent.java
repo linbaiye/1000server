@@ -1,14 +1,7 @@
 package org.y1000.entities.creatures.event;
 
-import lombok.Getter;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.npc.Guardian;
-import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.event.IEntityEvent;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Stream;
 
 public class SeekAggressiveMonsterEvent implements IEntityEvent {
     @Override

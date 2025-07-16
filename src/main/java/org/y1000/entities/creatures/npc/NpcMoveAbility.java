@@ -20,15 +20,16 @@ public class NpcMoveAbility extends AbstractNpcAbility {
     private boolean fastMove;
 
     /*
-     * If negative, the npc will finish moving even before the animation is done.
+     * For some NPC, its walkSpeedMillis is longer than the actual walk animation length,
+     * hence some idle animation interpolated.
      */
-    private final int diffMillis;
+    private final int interpolateIdleMillis;
 
 
-    public NpcMoveAbility(int walkSpeedMillis, NpcAnimation timer) {
-        super(timer);
+    public NpcMoveAbility(int walkSpeedMillis, NpcAnimation animation) {
+        super(animation);
         this.walkSpeedMillis = walkSpeedMillis;
-        diffMillis = walkSpeedMillis - timer.getActualMillis();
+        interpolateIdleMillis = walkSpeedMillis - animation.getActualMillis();
     }
 
     public void interrupt(Npc npc) {
@@ -51,7 +52,7 @@ public class NpcMoveAbility extends AbstractNpcAbility {
     }
 
     public int idleTime() {
-        return diffMillis;
+        return interpolateIdleMillis;
     }
 
     public void disableFastMove() {
@@ -73,7 +74,7 @@ public class NpcMoveAbility extends AbstractNpcAbility {
         this.direction = direction;
         this.start = npc.coordinate();
         this.npc = npc;
-        if (fastMove && diffMillis < 0)
+        if (fastMove && interpolateIdleMillis < 0)
             startAnimation(walkSpeedMillis);
         else
             startAnimation();

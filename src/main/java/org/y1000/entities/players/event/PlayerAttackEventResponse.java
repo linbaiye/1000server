@@ -47,10 +47,6 @@ public final class PlayerAttackEventResponse extends IAbstractPlayerEvent {
     }
 
 
-    public Optional<OldPlayerAttackEvent> toPlayerAttackEvent() {
-        return accepted ? Optional.of(new OldPlayerAttackEvent(source(), clientAttackEvent.attackPlayerStateEnum(), effectId)) : Optional.empty();
-    }
-
 
     @Override
     public void accept(PlayerEventVisitor playerEventHandler) {

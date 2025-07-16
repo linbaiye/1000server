@@ -1,7 +1,6 @@
 package org.y1000.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.creatures.npc.WanderArea;
 
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;

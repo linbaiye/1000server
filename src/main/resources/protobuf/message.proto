@@ -139,6 +139,12 @@ message SwapInventorySlotPacket {
   int32 slot2 = 2;
 }
 
+message SwapKungFuSlotPacket {
+  int32 slot1 = 1;
+  int32 slot2 = 2;
+  int32 page = 3;
+}
+
 message DoubleClickInventorySlotPacket {
   int32 slot = 1;
 }
@@ -160,6 +166,7 @@ message DropItemConfirmPacket {
 
 message ShowItemPacket {
   int64 id = 1;
+  int32 icon = 2;
   optional int32 number = 4;
   int32 coordinateX = 5;
   int32 coordinateY = 6;
@@ -323,6 +330,7 @@ message ClientPacket {
     ClickInventorySlotInputPacket clickInventorySlotInput = 36;
     AttackInputPacket attackInput = 37;
     UnequipInputPacket unequipInput = 38;
+    SwapKungFuSlotPacket swapKungFuSlotPacket = 39;
   }
 }
 

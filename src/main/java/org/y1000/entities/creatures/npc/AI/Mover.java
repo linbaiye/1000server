@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.npc.AI;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
+import org.y1000.entities.creatures.npc.NpcAction;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.message.SetPositionEvent;
 import org.y1000.util.Coordinate;
@@ -76,7 +76,7 @@ class Mover<N extends INpc> {
         if (npc.isMoving()) {
             previous = npc.coordinate().moveBy(npc.direction().opposite());
         }
-        if (npc.npcStateEnum() == NpcAnimationEnum.Idle) {
+        if (npc.npcStateEnum() == NpcAction.Idle) {
             doMove(noPathAction);
             return;
         }
@@ -118,14 +118,14 @@ class Mover<N extends INpc> {
 
     private void computeMillis(int speedRate, int maxIdleMillis) {
         int walkSpeed = npc.walkSpeed() / speedRate;
-        var stateMillis = npc.getStateMillis(NpcAnimationEnum.Move);
+        var stateMillis = npc.getStateMillis(NpcAction.Move);
         int walkMillis = Math.min(stateMillis, walkSpeed);
         moveMillis = Math.max(walkMillis, 200);
         idleMillis = Math.max(walkSpeed - walkMillis, maxIdleMillis);
     }
 
     private void computeWalkMillis() {
-        computeMillis(1, npc.getStateMillis(NpcAnimationEnum.Idle));
+        computeMillis(1, npc.getStateMillis(NpcAction.Idle));
     }
 
     private void computeRunMillis() {

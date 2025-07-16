@@ -2,6 +2,7 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.event.NpcShootEvent;
 import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
 import org.y1000.entities.players.Damage;
@@ -11,7 +12,7 @@ import org.y1000.util.Coordinate;
 import java.util.Optional;
 
 @Slf4j
-public class NpcShootAbility extends AbstractNpcAttackAbility implements EscapeAbility {
+public class NpcShootAbility extends AbstractNpcAttackAbility {
 
     private final String projectileSprite;
 
@@ -32,7 +33,7 @@ public class NpcShootAbility extends AbstractNpcAttackAbility implements EscapeA
                            int damage,
                            int accuracy) {
         super(npcAnimation, new Damage(damage, 0, 0, 0), accuracy, swingSound, attackSpeed);
-        this.projectileSprite = projectileSprite;
+        this.projectileSprite = "y" + projectileSprite;
         chargingCooldown = COOLDOWN;
         resetProjectile();
     }
@@ -70,8 +71,20 @@ public class NpcShootAbility extends AbstractNpcAttackAbility implements EscapeA
         return npc.coordinate().directDistance(enemy.coordinate()) < 3 && canAttack();
     }
 
-    public Optional<Coordinate> computeSafeSpotToShoot(Npc npc, ActiveEntity entity) {
-        if ()
+    public Optional<Direction> computeDirectionToSafeSpot(Npc npc, ActiveEntity entity) {
+        if (npc.coordinate().directDistance(entity.coordinate()) >= 3) {
+            return Optional.empty();
+        }
+        Direction direction = entity.coordinate().directionTo(npc.coordinate());
+        Coordinate coordinate = npc.coordinate().moveBy(direction);
+        if (npc.getRealmMap().movable(coordinate))
+            return Optional.of(direction);
+        for (Direction neighbour : direction.neighbours()) {
+            coordinate = npc.coordinate().moveBy(neighbour);
+            if (npc.getRealmMap().movable(coordinate))
+                return Optional.of(neighbour);
+        }
+        return Optional.empty();
     }
 
 
@@ -80,7 +93,6 @@ public class NpcShootAbility extends AbstractNpcAttackAbility implements EscapeA
             return;
         if (number-- <= 0)
             chargingCooldown = COOLDOWN;
-        log.debug("Projectile left {}.", number);
         npc.changeDirection(npc.coordinate().directionByAngle(target.coordinate()));
         sendActionAndStartShortAnimation(npc, getAttackSpeedMillis());
         if (getSound() != null)
@@ -101,10 +113,5 @@ public class NpcShootAbility extends AbstractNpcAttackAbility implements EscapeA
             }
         }
         return updateAnimation(delta);
-    }
-
-    @Override
-    public Optional<Coordinate> computeSafeSpot(Npc npc, ActiveEntity enemy) {
-        return Optional.ofNullable(EscapeAbility.doCompute(npc, enemy, 5));
     }
 }

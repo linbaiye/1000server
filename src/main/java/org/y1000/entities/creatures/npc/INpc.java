@@ -2,8 +2,6 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.IActiveEntity;
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
-import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.players.Damage;
 import org.y1000.util.Coordinate;
@@ -31,7 +29,7 @@ public interface INpc extends Creature {
 
     <S extends NpcSpell> Optional<S> findSpell(Class<S> type);
 
-    void startAction(NpcAnimationEnum stateEnum);
+    void startAction(NpcAction stateEnum);
 
     void changeState(NpcState state);
 
@@ -56,33 +54,23 @@ public interface INpc extends Creature {
 
     int walkSpeed();
 
-    int viewWidth();
-
-    INpcAI getAI();
-
-    void changeAndStartAI(INpcAI newAI);
-
-    void changeAI(INpcAI newAI);
-
-    void startIdleAI();
-
     String animation();
 
     String shape();
 
-    NpcAnimationEnum npcStateEnum();
+    NpcAction npcStateEnum();
 
     default <A> Optional<A> findAbility(Class<A> type) {
         return Optional.empty();
     }
 
-    int getStateMillis(NpcAnimationEnum stateEnum);
+    int getStateMillis(NpcAction stateEnum);
 
     default boolean isDead() {
-        return npcStateEnum() == NpcAnimationEnum.Die;
+        return npcStateEnum() == NpcAction.Die;
     }
 
     default boolean isMoving() {
-        return npcStateEnum() == NpcAnimationEnum.Move;
+        return npcStateEnum() == NpcAction.Move;
     }
 }

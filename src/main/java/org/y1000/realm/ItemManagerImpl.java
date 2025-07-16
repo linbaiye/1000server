@@ -4,8 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-import org.y1000.entities.GroundedItem;
-import org.y1000.entities.RemoveEntityEvent;
+import org.y1000.entities.*;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
@@ -23,12 +22,16 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
-final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> implements ItemEventVisitor, GroundItemManager {
-    private final MessageSender eventSender;
+final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> implements ItemEventVisitor, GroundItemManager,
+    GroundItemEventListener {
     private final ItemSdb itemSdb;
     private final EntityIdGenerator idGenerator;
-
     private final ItemFactory itemFactory;
+
+    @Override
+    public void sendEvent(GroundItemEvent event) {
+
+    }
 
     private record DropItem(String name, int number, int rate) {
         public boolean canDrop() {
@@ -42,7 +45,6 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
                            ItemFactory itemFactory,
                            AOIManager aoiManager) {
         super(aoiManager, eventSender);
-        this.eventSender = eventSender;
         this.itemSdb = itemSdb;
         this.itemFactory = itemFactory;
         this.idGenerator = idGenerator;
@@ -51,61 +53,61 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
 
     @Override
     public void pickItem(Player picker, long id) {
-        Validate.notNull(picker);
-        GroundedItem groundedItem = find(id).orElse(null);
-        if (groundedItem == null) {
-            return;
-        }
-        if (!groundedItem.canPickAt(picker.coordinate())) {
-            picker.emitEvent(PlayerTextEvent.tooFarAway(picker));
-            return;
-        }
-        if (!picker.inventory().canPick(groundedItem)) {
-            picker.emitEvent(PlayerTextEvent.inventoryFull(picker));
-            return;
-        }
-        Item slotItem = itemFactory.createItem(groundedItem);
-        int slot = picker.inventory().add(slotItem);
-        if (slot > 0) {
-            picker.emitEvent(new UpdateInventorySlotEvent(picker, slot, picker.inventory().getItem(slot)));
-            picker.emitEvent(PlayerTextEvent.pickedItem(picker, groundedItem.getName(), groundedItem.getNumber()));
-            visit(new RemoveEntityEvent(groundedItem));
-            slotItem.eventSound().ifPresent(s -> picker.emitEvent(new EntitySoundEvent(picker, s)));
-        }
+//        Validate.notNull(picker);
+//        GroundedItem groundedItem = find(id).orElse(null);
+//        if (groundedItem == null) {
+//            return;
+//        }
+//        if (!groundedItem.canPickAt(picker.coordinate())) {
+//            picker.emitEvent(PlayerTextEvent.tooFarAway(picker));
+//            return;
+//        }
+//        if (!picker.inventory().canPick(groundedItem)) {
+//            picker.emitEvent(PlayerTextEvent.inventoryFull(picker));
+//            return;
+//        }
+//        Item slotItem = itemFactory.createItem(groundedItem);
+//        int slot = picker.inventory().add(slotItem);
+//        if (slot > 0) {
+//            picker.emitEvent(new UpdateInventorySlotEvent(picker, slot, picker.inventory().getItem(slot)));
+//            picker.emitEvent(PlayerTextEvent.pickedItem(picker, groundedItem.getName(), groundedItem.getNumber()));
+//            visit(new RemoveEntityEvent(groundedItem));
+//            slotItem.eventSound().ifPresent(s -> picker.emitEvent(new EntitySoundEvent(picker, s)));
+//        }
     }
 
     @Override
     public void dropItem(String itemNumberRateArray, Coordinate at) {
-        if (StringUtils.isEmpty(itemNumberRateArray)) {
-            return;
-        }
-        Validate.notNull(at);
-        String[] tokens = itemNumberRateArray.split(":");
-        List<DropItem> dropItems = new ArrayList<>();
-        for (int i = 0; i < tokens.length / 3; i++) {
-            dropItems.add(new DropItem(tokens[i * 3], Integer.parseInt(tokens[i * 3 + 1]), Integer.parseInt(tokens[i * 3 + 2])));
-        }
-        for (DropItem dropItem : dropItems) {
-            if (dropItem.canDrop()) {
-                GroundedItem groundItem = createGroundItem(dropItem.name(), at, dropItem.number());
-                dropNewItem(groundItem);
-            }
-        }
+//        if (StringUtils.isEmpty(itemNumberRateArray)) {
+//            return;
+//        }
+//        Validate.notNull(at);
+//        String[] tokens = itemNumberRateArray.split(":");
+//        List<DropItem> dropItems = new ArrayList<>();
+//        for (int i = 0; i < tokens.length / 3; i++) {
+//            dropItems.add(new DropItem(tokens[i * 3], Integer.parseInt(tokens[i * 3 + 1]), Integer.parseInt(tokens[i * 3 + 2])));
+//        }
+//        for (DropItem dropItem : dropItems) {
+//            if (dropItem.canDrop()) {
+//                GroundedItem groundItem = createGroundItem(dropItem.name(), at, dropItem.number());
+//                dropNewItem(groundItem);
+//            }
+//        }
     }
 
     @Override
     public void dropItem(String name, int number, Coordinate at) {
         Validate.notNull(name);
         Validate.notNull(at);
-        dropNewItem(createGroundItem(name, at, number));
+//        dropNewItem(createGroundItem(name, at, number));
     }
 
     @Override
     public void dropItem(PlayerDropItemEvent dropItemEvent) {
         if (dropItemEvent == null)
             return;
-        GroundedItem groundedItem = dropItemEvent.createGroundedItem(idGenerator.next());
-        dropNewItem(groundedItem);
+//        GroundedItem groundedItem = dropItemEvent.createGroundedItem(idGenerator.next());
+//        dropNewItem(groundedItem);
     }
 
 
@@ -133,20 +135,12 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundedItem> im
         updateManagedEntities(delta);
     }
 
-    @Override
-    public void visit(RemoveEntityEvent event) {
-        if (event.source() instanceof GroundedItem item) {
-//            eventSender.notifyVisiblePlayers(event.source(), event);
-//            eventSender.remove(event.source());
-            remove(item);
-        }
-    }
 
-    private void dropNewItem(GroundedItem item) {
+    private void dropNewItem(GroundItem item) {
+        add(item);
+        sendToVisiblePlayers(item, item.captureSnapshot());
 //        eventSender.add(item);
 //        eventSender.notifyVisiblePlayers(item, item.captureSnapshot());
-        item.registerEventListener(this);
-        add(item);
 //        item.dropSound().ifPresent(s -> eventSender.sendEvent(new EntitySoundEvent(item, s)));
     }
 

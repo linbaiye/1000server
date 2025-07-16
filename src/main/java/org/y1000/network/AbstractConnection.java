@@ -33,6 +33,10 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         context = new AtomicReference<>();
     }
 
+    RealmManager getRealmManager() {
+        return realmManager;
+    }
+
     private ClientEvent parseSimpleCommand(ClientSimpleCommandPacket packet) {
         if (packet.getCommand() == SimpleCommand.CANCEL_BUFF.value()) {
             return new CancelBuffEvent();
@@ -43,9 +47,8 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         return ClientSimpleCommandEvent.parse(packet.getCommand());
     }
 
-    private Object createMessage(ClientPacket clientPacket) {
+    Object createMessage(ClientPacket clientPacket) {
         return switch (clientPacket.getTypeCase()) {
-            case MOVEEVENTPACKET -> ClientMovementEvent.fromPacket(clientPacket);
             case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
             case ATTACKEVENTPACKET -> ClientAttackEvent.fromPacket(clientPacket.getAttackEventPacket());
             case SWAPINVENTORYSLOTPACKET -> SwapInventoryItemInput.fromPacket(clientPacket.getSwapInventorySlotPacket());
@@ -85,23 +88,12 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case CLICKINVENTORYSLOTINPUT -> ClickInventorySlotInput.fromPacket(clientPacket.getClickInventorySlotInput());
             case ATTACKINPUT -> new AttackInput(clientPacket.getAttackInput().getId());
             case UNEQUIPINPUT -> new UnequipInput(EquipmentType.fromValue(clientPacket.getUnequipInput().getType()));
+            case SWAPKUNGFUSLOTPACKET -> SwapKungFuInput.fromPacket(clientPacket.getSwapKungFuSlotPacket());
             default -> null;
         };
     }
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        if (msg instanceof ClientPacket packet) {
-            try {
-                var message = createMessage(packet);
-                if (message != null) {
-                    realmManager.queueEvent(ConnectionEvent.Data(this, message));
-                }
-            } catch (Exception e) {
-                log.error("Exception ", e);
-            }
-        }
-    }
+
 
     ChannelHandlerContext getContext() {
         return context.get();
@@ -122,6 +114,15 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         context.set(ctx);
+    }
+
+    @Override
+    public void flush() {
+        var context = getContext();
+        if (context == null) {
+            return;
+        }
+        context.channel().flush();
     }
 
     @Override

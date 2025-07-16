@@ -47,9 +47,9 @@ public class PlayerAttackAoeEvent implements IPlayerEvent {
         if (entity instanceof INpc npc) {
             exp = npc.attackedByAoe(player, player.hit(), damage);
         } else if (entity instanceof Player targetPlayer) {
-            exp = targetPlayer.attackedByAoe(damage, player.hit());
+//            exp = targetPlayer.attackedByAoe(damage, player.hit());
         } else if (entity instanceof AbstractKillableDynamicObject dynamicObject) {
-            dynamicObject.attackedByAoe(damage);
+//            dynamicObject.attackedByAoe(damage);
         }
         return exp;
     }

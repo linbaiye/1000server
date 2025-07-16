@@ -2,7 +2,6 @@ package org.y1000.entities.creatures.npc;
 
 
 import org.y1000.entities.creatures.CreatureState;
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 
 public interface NpcState extends CreatureState {
     /**
@@ -13,5 +12,5 @@ public interface NpcState extends CreatureState {
         npc.onActionDone();
     }
 
-    NpcAnimationEnum stateEnum();
+    NpcAction stateEnum();
 }

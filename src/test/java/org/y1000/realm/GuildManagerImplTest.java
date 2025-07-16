@@ -13,7 +13,6 @@ import org.y1000.entities.objects.DynamicObjectDieEvent;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.IAbstractPlayerEvent;
-import org.y1000.entities.players.event.PlayerLearnKungFuEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.event.IEntityEvent;
 import org.y1000.guild.GuildMembership;

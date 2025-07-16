@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures;
 
 
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
+import org.y1000.entities.creatures.npc.NpcAction;
 
 public abstract class IAbstractCreatureState<C extends Creature> implements ICreatureState<C> {
     private int elapsedMillis;
@@ -34,8 +34,8 @@ public abstract class IAbstractCreatureState<C extends Creature> implements ICre
     }
 
     @Override
-    public NpcAnimationEnum state() {
-        return NpcAnimationEnum.Idle;
+    public NpcAction state() {
+        return NpcAction.Idle;
     }
 }
 

@@ -1,8 +1,5 @@
 package org.y1000.entities;
 
-import org.y1000.entities.creatures.IActiveEntity;
-import org.y1000.entities.players.Player;
-import org.y1000.entities.projectile.Projectile;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -13,14 +10,7 @@ public interface AttackableEntity extends org.y1000.entities.ActiveEntity {
      */
     boolean canBeAttackedNow();
 
-    boolean attackedBy(Player attacker);
-
-    void attackedBy(IActiveEntity attacker);
-
-    void attackedBy(Projectile projectile);
-
     RealmMap realmMap();
-
 
     default boolean isWithinMeleeRange(Coordinate coordinate) {
         return coordinate != null && coordinate().directDistance(coordinate) < 2;

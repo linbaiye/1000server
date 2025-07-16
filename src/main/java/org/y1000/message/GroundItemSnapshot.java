@@ -5,19 +5,22 @@ import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ShowItemPacket;
 import org.y1000.util.Coordinate;
 
-public final class GroundedItemSnapshot extends AbstractEntitySnapshot {
+public final class GroundItemSnapshot extends AbstractEntitySnapshot {
     private final String name;
     private final Integer number;
     private Packet packet;
 
     private final int color;
 
+    private final int icon;
+
     @Builder
-    public GroundedItemSnapshot(long id, Coordinate coordinate, String name, Integer number, int color) {
+    public GroundItemSnapshot(long id, Coordinate coordinate, String name, Integer number, int color, int icon) {
         super(id, coordinate);
         this.name = name;
         this.number = number;
         this.color = color;
+        this.icon = icon;
     }
 
     @Override
@@ -30,6 +33,7 @@ public final class GroundedItemSnapshot extends AbstractEntitySnapshot {
                 .setCoordinateY(coordinate().y())
                 .setName(name)
                 .setColor(color)
+                .setIcon(icon)
                 .setId(getId());
         if (number != null) {
             showItemBuidler.setNumber(number);

@@ -3,7 +3,6 @@ package org.y1000.entities.creatures.npc;
 import lombok.Getter;
 import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.HurtAbility;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.RealmMap;

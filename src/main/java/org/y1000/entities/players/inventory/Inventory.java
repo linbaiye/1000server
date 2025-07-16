@@ -6,17 +6,14 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.event.IPlayerEvent;
-import org.y1000.entities.players.event.InventorySlotEvent;
+import org.y1000.entities.players.event.UpdateInventorySlotMessage;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.*;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.InventorySlotSwappedEvent;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.ClientDropItemEvent;
-import org.y1000.message.input.ClientInventoryEvent;
-import org.y1000.message.input.ClientSwapInventoryEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.trade.TradeItem;
 import org.y1000.util.UnaryAction;
@@ -312,28 +309,11 @@ public final class Inventory extends AbstractInventory {
         if (slot == 0)
             return null;
         Item item = doConsumeStackItem(slot);
-        player.sendEvent(InventorySlotEvent.update(player, slot));
+        player.sendEvent(UpdateInventorySlotMessage.update(player, slot));
         return item;
     }
 
 
-
-    public boolean consumeStackItem(Player player,
-                                    String name,
-                                    UnaryAction<? super IPlayerEvent> eventSender) {
-        var targetSlot = findFirstSlot(i -> i.name().equals(name) && i instanceof StackItem);
-        return doConsumeStackItem(targetSlot, player, eventSender) != null;
-    }
-
-
-    public void handleClientEvent(Player player, ClientInventoryEvent inventoryEvent, UnaryAction<EntityEvent> eventSender) {
-        if (inventoryEvent instanceof ClientSwapInventoryEvent swapInventoryEvent &&
-                swap(swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot())) {
-            eventSender.invoke(new InventorySlotSwappedEvent(player, swapInventoryEvent.sourceSlot(), swapInventoryEvent.destinationSlot()));
-        } else if (inventoryEvent instanceof ClientDropItemEvent dropItemEvent) {
-            handleDropEvent(player, dropItemEvent, eventSender);
-        }
-    }
 
     @Override
     public boolean canPut(int slot, Item item) {

@@ -97,10 +97,8 @@ public final class NpcHurtAbility extends AbstractNpcNonMoveAbility implements H
     }
 
     public int attacked(ActiveEntity activeEntity, Damage damage, int accuracy) {
-        if (!canBeAttacked())
+        if (!canBeAttacked() || isDodged(accuracy))
             return -1;
-        if (isDodged(accuracy))
-            return  - 1;
         var before = currentLife;
         int bodyDamage = damage.bodyDamage() - armor;
         bodyDamage = bodyDamage > 0 ? bodyDamage : 1;

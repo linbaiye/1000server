@@ -1,6 +1,5 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 import org.y1000.message.NpcSnapshot;
 
 public abstract class AbstractNpcAbility implements NpcAbility {
@@ -18,7 +17,7 @@ public abstract class AbstractNpcAbility implements NpcAbility {
         animation.start(millis);
     }
 
-    NpcAnimationEnum type() {
+    NpcAction type() {
         return animation.type();
     }
 

@@ -5,6 +5,7 @@ import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.event.FilterVisibleEntityEvent;
 import org.y1000.entities.creatures.npc.event.NpcShootEvent;
 import org.y1000.message.I2ClientMessage;
+import org.y1000.util.Coordinate;
 
 public interface NpcEventHandler extends EntityEventHandler {
 
@@ -15,4 +16,6 @@ public interface NpcEventHandler extends EntityEventHandler {
     void filter(FilterVisibleEntityEvent event);
 
     void shoot(NpcShootEvent event);
+
+    void dropItem(String name, int number, Coordinate dropAt);
 }

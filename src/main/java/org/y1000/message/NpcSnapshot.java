@@ -1,6 +1,6 @@
 package org.y1000.message;
 
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
+import org.y1000.entities.creatures.npc.NpcAction;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.network.gen.CreatureBaseInfoPacket;
@@ -14,7 +14,7 @@ public record NpcSnapshot(Packet packet) implements I2ClientMessage {
     }
 
 
-    public static NpcSnapshot of(Npc npc, int elapsed, NpcAnimationEnum type) {
+    public static NpcSnapshot of(Npc npc, int elapsed, NpcAction type) {
         var coordinate = npc.coordinate();
         CreatureBaseInfoPacket baseInfoSnapshot = CreatureBaseInfoPacket.newBuilder()
                 .setY(coordinate.y())

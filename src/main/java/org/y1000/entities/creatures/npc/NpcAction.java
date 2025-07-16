@@ -1,6 +1,6 @@
-package org.y1000.entities.creatures.monster;
+package org.y1000.entities.creatures.npc;
 
-public enum NpcAnimationEnum {
+public enum NpcAction {
 
     Move(1),
     Idle(2),
@@ -13,7 +13,7 @@ public enum NpcAnimationEnum {
 
     private final int v;
 
-    NpcAnimationEnum(int v) {
+    NpcAction(int v) {
         this.v = v;
     }
 

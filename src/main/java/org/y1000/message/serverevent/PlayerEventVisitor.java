@@ -14,14 +14,6 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
 
     }
 
-    default void visit(PlayerAttackEventResponse event) {
-
-    }
-
-
-    default void visit(InventorySlotSwappedEvent event) {
-
-    }
 
     default void visit(PlayerTextEvent event) {
 
@@ -37,9 +29,6 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
 
 
 
-    default void visit(PlayerToggleKungFuEvent event) {
-
-    }
 
     default void visit(PlayerCooldownEvent event) {
 

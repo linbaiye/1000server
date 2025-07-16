@@ -8,8 +8,8 @@ import org.y1000.network.gen.InventoryItemPacket;
 import org.y1000.network.gen.InventoryPacket;
 import org.y1000.network.gen.Packet;
 
-public class InventoryUpdatedEvent extends Abstract2PlayerMessageEvent {
-    private InventoryUpdatedEvent(Player player, Packet packet) {
+public class UpdateInventoryMessage extends Abstract2PlayerMessageEvent {
+    private UpdateInventoryMessage(Player player, Packet packet) {
         super(player, packet);
     }
 
@@ -29,16 +29,16 @@ public class InventoryUpdatedEvent extends Abstract2PlayerMessageEvent {
      * @param player player
      * @return
      */
-    public static InventoryUpdatedEvent forceful(Player player) {
+    public static UpdateInventoryMessage forceful(Player player) {
         return createInventoryMessage(player, true);
     }
 
-    private static InventoryUpdatedEvent createInventoryMessage(Player player, boolean force) {
+    private static UpdateInventoryMessage createInventoryMessage(Player player, boolean force) {
         Inventory inventory = player.inventory();
         InventoryPacket.Builder builder = InventoryPacket.newBuilder().setForceful(force);
         inventory.foreach((slot, item) -> builder.addItems(toItem(slot, item)));
         Packet packet = Packet.newBuilder().setInventory(builder.build()).build();
-        return new InventoryUpdatedEvent(player, packet);
+        return new UpdateInventoryMessage(player, packet);
     }
 
     /**
@@ -46,7 +46,7 @@ public class InventoryUpdatedEvent extends Abstract2PlayerMessageEvent {
      * @param player player
      * @return
      */
-    public static InventoryUpdatedEvent quiet(Player player) {
+    public static UpdateInventoryMessage quiet(Player player) {
         return createInventoryMessage(player, false);
     }
 }

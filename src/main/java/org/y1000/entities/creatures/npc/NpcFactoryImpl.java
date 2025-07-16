@@ -3,7 +3,6 @@ package org.y1000.entities.creatures.npc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.monster.*;
 import org.y1000.entities.creatures.npc.spell.CloneSpell;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.creatures.npc.spell.NpcSpellType;
@@ -68,20 +67,6 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private NpcRangedSkill createSkill(String name) {
-        var magicNameAndLevel = monsterSdb.getAttackMagic(name);
-        if (StringUtils.isEmpty(magicNameAndLevel)) {
-            return null;
-        }
-        String magicName = magicNameAndLevel.split(":")[0];
-        String bowImage = kungFuSdb.getBowImage(magicName);
-        if (StringUtils.isEmpty(bowImage)) {
-            return null;
-        }
-        return new NpcRangedSkill(Integer.parseInt(bowImage), kungFuSdb.getSoundSwing(magicName));
-    }
-
-
 
     private Quest getQuest(String idName) {
         QuestSdb questSdb = QuestSdb.forNpc(idName);
@@ -90,9 +75,9 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
 
-    private NpcAnimation createAnimation(String animate, NpcAnimationEnum type) {
+    private NpcAnimation createAnimation(String animate, NpcAction type) {
         int length = actionSdb.getActionLength(animate, type);
-        if (type == NpcAnimationEnum.Idle) {
+        if (type == NpcAction.Idle) {
             length *= 2;
         }
         return new NpcAnimation(length, type);
@@ -103,37 +88,37 @@ public final class NpcFactoryImpl implements NpcFactory {
         return new NpcMeleeAbility(npcSdb.getDamage(name),
                 npcSdb.getAccuracy(name) + 75,
                 npcSdb.getSoundAttack(name),
-                createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Attack),
+                createAnimation(npcSdb.getAnimate(name), NpcAction.Attack),
                 npcSdb.getAttackSpeed(name) * Realm.STEP_MILLIS + 1500);
     }
 
     private NpcTurnAbility createTurnAbility(String name, NpcSdb npcSdb) {
-        return new NpcTurnAbility(createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Turn));
+        return new NpcTurnAbility(createAnimation(npcSdb.getAnimate(name), NpcAction.Turn));
     }
 
     private NpcHurtAbility createHurtAbility(String name, NpcSdb npcSdb) {
         return new NpcHurtAbility(npcSdb.getArmor(name), npcSdb.getAvoid(name) + 20, npcSdb.getSoundStructed(name),
-                npcSdb.getLife(name), createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Hurt),
+                npcSdb.getLife(name), createAnimation(npcSdb.getAnimate(name), NpcAction.Hurt),
                 npcSdb.getRecovery(name) * Realm.STEP_MILLIS + 700);
     }
 
     private NpcIdleAbility createIdleAbility(String name, NpcSdb npcSdb) {
-        return new NpcIdleAbility(createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Idle));
+        return new NpcIdleAbility(createAnimation(npcSdb.getAnimate(name), NpcAction.Idle));
     }
 
     private NpcMoveAbility createMoveAbility(String name, NpcSdb npcSdb, int walkSpeed) {
-        return new NpcMoveAbility(walkSpeed, createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Move));
+        return new NpcMoveAbility(walkSpeed, createAnimation(npcSdb.getAnimate(name), NpcAction.Move));
     }
 
     private NpcDieAbility createDieAbility(String name, NpcSdb npcSdb) {
-        return new NpcDieAbility(createAnimation(npcSdb.getAnimate(name), NpcAnimationEnum.Die), npcSdb.getSoundDie(name));
+        return new NpcDieAbility(createAnimation(npcSdb.getAnimate(name), NpcAction.Die), npcSdb.getSoundDie(name));
     }
 
     private int getWalkSpeed(String name) {
         if (monsterSdb.containsName(name))
             return monsterSdb.getWalkSpeed(name) * Realm.STEP_MILLIS;
         String animate = nonMonsterNpcSdb.getAnimate(name);
-        return actionSdb.getActionLength(animate, NpcAnimationEnum.Move);
+        return actionSdb.getActionLength(animate, NpcAction.Move);
     }
 
     private static final int INIT_SKILL_DIV_DAMAGE = 5000;
@@ -146,7 +131,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         int damageBody = kungFuSdb.getDamageBody(name);
         damageBody = damageBody + (damageBody * level) / INIT_SKILL_DIV_DAMAGE;
         return new NpcShootAbility(kungFuSdb.getBowImage(name), kungFuSdb.getSoundSwing(name),
-                kungFuSdb.getAttackSpeed(name) * Realm.STEP_MILLIS + 1500, createAnimation(animate, NpcAnimationEnum.Attack),
+                kungFuSdb.getAttackSpeed(name) * Realm.STEP_MILLIS + 1500, createAnimation(animate, NpcAction.Attack),
                 damageBody, hit);
     }
 
@@ -170,6 +155,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         String attackMagic = npcSdb.getAttackMagic(idName);
         if (StringUtils.isNotEmpty(attackMagic))
             abilities.add(createShootAbility(attackMagic, npcSdb.getAnimate(idName), npcSdb.getAccuracy(idName) + 70));
+        NpcDropItemAbility.parse(npcSdb.getHaveItem(idName)).ifPresent(abilities::add);
         return abilities;
     }
 

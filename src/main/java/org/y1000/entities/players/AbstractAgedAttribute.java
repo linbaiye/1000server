@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
 
-public abstract class AbstractPlayerAgedAttribute implements PlayerAgedAttribute {
+public abstract class AbstractAgedAttribute implements AgedAttribute {
     private final int innateValue;
 
     private int currentValue;
@@ -11,10 +11,10 @@ public abstract class AbstractPlayerAgedAttribute implements PlayerAgedAttribute
 
     private int age;
 
-    public AbstractPlayerAgedAttribute(int innateValue,
-                                       int maxValue,
-                                       Integer currentValue,
-                                       int age) {
+    public AbstractAgedAttribute(int innateValue,
+                                 int maxValue,
+                                 Integer currentValue,
+                                 int age) {
         Validate.isTrue(maxValue > 0);
         Validate.isTrue(innateValue >= 0);
         Validate.isTrue(age >= 0);

@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures;
 
 
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
+import org.y1000.entities.creatures.npc.NpcAction;
 
 public interface ICreatureState<C extends Creature> {
     OldPlayerStateEnum stateEnum();
@@ -20,7 +20,7 @@ public interface ICreatureState<C extends Creature> {
 
     }
 
-    NpcAnimationEnum state();
+    NpcAction state();
 
     default OldPlayerStateEnum decideAfterHurtState() {
         return OldPlayerStateEnum.IDLE;

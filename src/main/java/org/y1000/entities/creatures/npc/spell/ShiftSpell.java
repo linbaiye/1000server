@@ -2,7 +2,7 @@ package org.y1000.entities.creatures.npc.spell;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
+import org.y1000.entities.creatures.npc.NpcAction;
 import org.y1000.entities.creatures.npc.INpc;
 
 public final class ShiftSpell implements NpcSpell {
@@ -16,7 +16,7 @@ public final class ShiftSpell implements NpcSpell {
 
     @Override
     public boolean canCast(INpc npc) {
-        return npc.npcStateEnum() == NpcAnimationEnum.Die;
+        return npc.npcStateEnum() == NpcAction.Die;
     }
 
     public void cast(INpc npc) {

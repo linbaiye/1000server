@@ -1,12 +1,13 @@
 package org.y1000.realm;
 
+import org.y1000.entities.GroundItem;
 import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEventListener;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.util.Coordinate;
 
-public interface GroundItemManager extends ActiveEntityManager<GroundedItem>,
+public interface GroundItemManager extends ActiveEntityManager<GroundItem>,
         EntityEventListener {
 
     void pickItem(Player picker, long id);

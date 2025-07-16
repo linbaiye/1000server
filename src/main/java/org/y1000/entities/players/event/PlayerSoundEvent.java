@@ -1,7 +1,6 @@
-package org.y1000.entities;
+package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.Abstract2VisibleAndSelfMessageEvent;
 import org.y1000.network.gen.EntitySoundPacket;
 import org.y1000.network.gen.Packet;
 

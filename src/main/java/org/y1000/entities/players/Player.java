@@ -117,8 +117,6 @@ public interface Player extends IActiveEntity, HurtAbility {
 
     void gainLife(int v);
 
-    void gainRangedAttackExp(int amount);
-
     void gainAssistantExp(int amount);
 
     Armor armor();
@@ -127,15 +125,11 @@ public interface Player extends IActiveEntity, HurtAbility {
     int armPercent();
     int legPercent();
 
-    int attackedByAoe(Damage damage, int hit);
-
     boolean consumeItem(int slotId);
 
     default boolean canDrag(Player target, int ropeSlot) {
         return false;
     }
-
-    void onProjectileReachTarget(Projectile projectile);
 
     PlayerExperiencedAgedAttribute innerPowerAttribute();
 

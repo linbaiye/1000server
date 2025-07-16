@@ -7,9 +7,9 @@ import org.y1000.item.StackItem;
 import org.y1000.network.gen.InventoryItemPacket;
 import org.y1000.network.gen.Packet;
 
-public final class InventorySlotEvent extends Abstract2PlayerMessageEvent {
+public final class UpdateInventorySlotMessage extends Abstract2PlayerMessageEvent {
 
-    public InventorySlotEvent(Player source, Packet packet) {
+    public UpdateInventorySlotMessage(Player source, Packet packet) {
         super(source, packet);
     }
 
@@ -26,15 +26,15 @@ public final class InventorySlotEvent extends Abstract2PlayerMessageEvent {
         return Packet.newBuilder().setUpdateSlot(builder.build()).build();
     }
 
-    public static InventorySlotEvent remove(Player player, int slotId) {
-        return new InventorySlotEvent(player, toPacket(slotId, null));
+    public static UpdateInventorySlotMessage remove(Player player, int slotId) {
+        return new UpdateInventorySlotMessage(player, toPacket(slotId, null));
     }
 
-    public static InventorySlotEvent update(Player player, int slotId, Item item) {
-        return new InventorySlotEvent(player, toPacket(slotId, item));
+    public static UpdateInventorySlotMessage update(Player player, int slotId, Item item) {
+        return new UpdateInventorySlotMessage(player, toPacket(slotId, item));
     }
 
-    public static InventorySlotEvent update(Player player, int slotId) {
-        return new InventorySlotEvent(player, toPacket(slotId, player.inventory().getItem(slotId)));
+    public static UpdateInventorySlotMessage update(Player player, int slotId) {
+        return new UpdateInventorySlotMessage(player, toPacket(slotId, player.inventory().getItem(slotId)));
     }
 }

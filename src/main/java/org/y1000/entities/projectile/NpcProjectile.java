@@ -32,5 +32,6 @@ public final class NpcProjectile extends AbstractProjectile {
 
     @Override
     protected void onReachTarget() {
+
     }
 }

@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.PlayerSoundEvent;
+import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.item.Pill;
@@ -10,7 +10,7 @@ public final class PillSlots {
 
     private static class PillSlot {
         private int counter;
-        private int timeLeft;
+        private long timeLeft;
         private final Pill pill;
 
         private PillSlot(Pill pill) {

@@ -6,9 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
-import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.players.event.*;
-import org.y1000.entities.projectile.Projectile;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.exp.ExperienceUtil;
@@ -29,7 +27,6 @@ import org.y1000.util.Coordinate;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Consumer;
 
 @Slf4j
 public class PlayerImpl extends AbstractCreature implements Player, EntityEventListener, PlayerInputHandler {
@@ -234,7 +231,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     private void disableAssistantKungFuNoTip() {
         if (assistantKungFu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, assistantKungFu));
+//            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, assistantKungFu));
         }
         assistantKungFu = null;
     }
@@ -267,6 +264,12 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
     }
 
+    @Override
+    public void swapKungFu(int page, int slot1, int slot2) {
+        if (kungFuBook().swapSlot(page, slot1, slot2))
+            syncKungFuBookQuietly();
+    }
+
 
     private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
         if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {
@@ -290,7 +293,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
 
     private void syncInventoryQuietly() {
-        sendEvent(InventoryUpdatedEvent.quiet(this));
+        sendEvent(UpdateInventoryMessage.quiet(this));
     }
 
     private void syncKungFuBookQuietly() {
@@ -412,7 +415,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
                 if (pillSlots.canTakePill() && inventory.decrease(slotId)) {
                     if (pillSlots.tryUsePill(pill)) {
                         sendText("服用了" + pill.name() + "。");
-                        sendEvent(InventorySlotEvent.update(this, slotId, inventory.getItem(slotId)));
+                        sendEvent(UpdateInventorySlotMessage.update(this, slotId, inventory.getItem(slotId)));
                         pill.eventSound().ifPresent(this::sendSound);
                     }
                 } else {
@@ -610,7 +613,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     public void handleSimpleInput(SimpleInput.Type type) {
         switch (type) {
             case KungFuBook -> sendEvent(KungFuBookEvent.forceful(this));
-            case Inventory -> sendEvent(InventoryUpdatedEvent.forceful(this));
+            case Inventory -> sendEvent(UpdateInventoryMessage.forceful(this));
             case KeyF4 -> state.sayHello();
             case KeyF3 -> state.sitOrStandUp();
             case KeyF2 -> state.switchStand();
@@ -631,7 +634,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     @Override
     public void swapItem(int slot1, int slot2) {
         if (inventory.swap(slot1, slot2)) {
-            sendEvent(InventoryUpdatedEvent.forceful(this));
+            sendEvent(UpdateInventoryMessage.forceful(this));
         }
     }
 
@@ -713,8 +716,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         if (oldLevel != revival.level()) {
             sendEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
         }
-//        this.changeState(PlayerDeadState.die(this));
-//        emitEvent(new CreatureDieEvent(this));
         dieSound().ifPresent(this::sendSound);
     }
 
@@ -743,11 +744,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
 
-    @Override
-    public void attackedBy(IActiveEntity attacker) {
-        Validate.notNull(attacker);
-        doAttacked(attacker.damage(), attacker.hit(), e -> {});
-    }
 
     private void takeDamage(Damage damage) {
         var armor = aggregateArmor();
@@ -761,29 +757,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         legLife.consume(damagedLeg);
     }
 
-    private boolean doAttacked(Damage damage, int hit, Consumer<Integer> gainExp) {
-        int damagedLife = getHurtAndGiveExp(damage, this::takeDamage, gainExp);
-        if (damagedLife > 0) {
-            afterTakingDamage(damagedLife);
-        }
-        return damagedLife > 0;
-    }
-
-
-    @Override
-    public boolean attackedBy(Player attacker) {
-        return false;
-//        return doAttacked(attacker.damage(), attacker.hit(), attacker::gainAttackExp);
-    }
-
-    @Override
-    public void attackedBy(Projectile projectile) {
-        /*if (projectile.shooter() instanceof Player player) {
-            doAttacked(projectile.damage(), projectile.hit(), player::gainRangedAttackExp);
-        } else {
-            attackedBy(projectile.shooter());
-        }*/
-    }
 
     @Override
     public RealmMap realmMap() {
@@ -892,7 +865,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         sendEvent(PlayerAttributeEvent.of(this));
     }
 
-    private void doGainExperiencedResource(PlayerAgedAttribute attribute, String name, int v) {
+    private void doGainExperiencedResource(AgedAttribute attribute, String name, int v) {
         int old = attribute.maxValue();
         attribute.gain(v);
         if (attribute.maxValue() != old) {
@@ -1093,9 +1066,9 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
         life.consume(amount);
         if (life.currentValue() == 0) {
-            onKilled();
+//            onKilled();
         } else {
-            sendEvent(PlayerAttributeEvent.of(this));
+//            sendEvent(PlayerAttributeEvent.of(this));
         }
     }
 
@@ -1111,13 +1084,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         kungFu.gainExp(this, amount);
     }
 
-
-    @Override
-    public void gainRangedAttackExp(int amount) {
-        if (attackKungFu.isRanged()) {
-            doGainExp(amount, attackKungFu);
-        }
-    }
 
     @Override
     public void gainAssistantExp(int amount) {
@@ -1140,29 +1106,11 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     @Override
-    public int attackedByAoe(Damage damage, int hit) {
-        int[] exp = new int[1];
-        doAttacked(damage, hit, e -> exp[0] = e);
-        return exp[0];
-    }
-
-    @Override
     public boolean consumeItem(int slotId) {
         var ret = inventory.decrease(slotId);
         if (ret)
-            sendEvent(InventorySlotEvent.update(this, slotId, inventory.getItem(slotId)));
+            sendEvent(UpdateInventorySlotMessage.update(this, slotId, inventory.getItem(slotId)));
         return ret;
-    }
-
-    @Override
-    public void onProjectileReachTarget(Projectile projectile) {
-        /*Validate.notNull(projectile, "projectile can't nbe null");
-        if (!projectile.target().canBeAttackedNow()) {
-            return;
-        }
-        assistantKungFu().ifPresentOrElse(
-                kf -> emitEvent(PlayerAttackAoeEvent.ranged(this, projectile.target(), projectile.direction(), projectile.damage(), kf)),
-                () -> projectile.target().attackedBy(projectile));*/
     }
 
     @Override
@@ -1416,14 +1364,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         return  type.isAssignableFrom(this.getClass()) ?
             Optional.of(type.cast(this)) : Optional.empty();
     }
-
-    private void clearFightingEntity() {
-        if (this.enemy != null) {
-            this.enemy.deregisterEventListener(this);
-            this.enemy = null;
-        }
-    }
-
     @Override
     public boolean canBeAttacked() {
 //        return false;
@@ -1439,19 +1379,30 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     public int attacked(org.y1000.entities.ActiveEntity attacker, Damage damage, int accuracy) {
         if (isDodged(accuracy))
             return -1;
-        if (life.currentValue() <= 0)
+        if (isDead())
             return -1;
         int old = life.currentValue();
         takeDamage(damage);
-//        if (life.currentValue() > 0) {
+        sendEvent(PlayerLifeBarEvent.of(this));
+        sendEvent(PlayerDamagedEvent.create(this));
+        if (life.currentValue() > 0) {
             cooldownRecovery();
             hurtSound().ifPresent(this::sendSound);
             changeState(PlayerHurtState.create(this, state));
-            sendEvent(PlayerChangeStateEvent.allVisible(this));
-            sendEvent(PlayerDamagedEvent.create(this));
-            sendEvent(PlayerLifeBarEvent.of(this));
             gainProtectionExp(old - currentLife());
-//        }
+        } else {
+            footKungfu = null;
+            breathKungFu = null;
+            var oldLevel = revival.level();
+            revival = revival.gainExp();
+            if (oldLevel != revival.level()) {
+                sendEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
+            }
+            syncActiveKungFuList();
+            dieSound().ifPresent(this::sendSound);
+            changeState(PlayerDieState.of(this));
+        }
+        sendEvent(PlayerChangeStateEvent.allVisible(this));
         return ExperienceUtil.damageToExp(maxLife(), old - life.currentValue());
     }
 }

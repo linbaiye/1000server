@@ -92,20 +92,6 @@ public final class TriggerDynamicObject extends AbstractMutableDynamicObject imp
         return state == DynamicObjectState.INITIAL;
     }
 
-    @Override
-    public boolean attackedBy(Player attacker) {
-        return true;
-    }
-
-    @Override
-    public void attackedBy(IActiveEntity attacker) {
-        // bad,.
-    }
-
-    @Override
-    public void attackedBy(Projectile projectile) {
-        // bad.
-    }
 
     public DynamicObjectType type() {
         return DynamicObjectType.TRIGGER;

@@ -49,11 +49,11 @@ public abstract class AbstractKungFu implements KungFu {
     private int getPermitExp(int value) {
         /*
         function  GetPermitExp (aLevel, addvalue: integer): integer;
-var n : integer;
+var number : integer;
 begin
-   n := GetLevelMaxExp (aLevel);
-   if n > addvalue then n := addvalue;
-   Result := n;
+   number := GetLevelMaxExp (aLevel);
+   if number > addvalue then number := addvalue;
+   Result := number;
 end;
          */
         int n = ExperienceUtil.GetLevelMaxExp(level());

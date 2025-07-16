@@ -248,6 +248,11 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
     }
 
     @Override
+    public void dropItem(String name, int number, Coordinate dropAt) {
+        itemManager.dropItem(name, number, dropAt);
+    }
+
+    @Override
     public void onEvent(EntityEvent entityEvent) {
 //        if (entityEvent instanceof MonsterShootEvent shootEvent) {
 //            projectileManager.add(shootEvent.projectile());

@@ -1,7 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.Getter;
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
 
 public class NpcAnimation {
 
@@ -12,11 +11,11 @@ public class NpcAnimation {
     @Getter
     private final int actualMillis;
 
-    private final NpcAnimationEnum animationEnum;
+    private final NpcAction action;
 
     public NpcAnimation(int length,
-                        NpcAnimationEnum animationEnum) {
-        this.animationEnum = animationEnum;
+                        NpcAction animationEnum) {
+        this.action = animationEnum;
         this.actualMillis = length;
     }
 
@@ -31,8 +30,8 @@ public class NpcAnimation {
         return elapsedMillis;
     }
 
-    public NpcAnimationEnum type() {
-        return animationEnum;
+    public NpcAction type() {
+        return action;
     }
 
     public void start(int actionMillis) {

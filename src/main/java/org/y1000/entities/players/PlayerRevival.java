@@ -1,6 +1,5 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.exp.Experience;
 
 public final class PlayerRevival {
@@ -45,11 +44,11 @@ public final class PlayerRevival {
 
     /*
       case FFeatureState of
-         wfs_normal   : n := 50;
-         wfs_care     : n := 20;
-         wfs_sitdown  : n := 70;
-         wfs_die      : n := 100;
-         else n :=50;
+         wfs_normal   : number := 50;
+         wfs_care     : number := 20;
+         wfs_sitdown  : number := 70;
+         wfs_die      : number := 100;
+         else number :=50;
       end;
      */
     public int regenerateResources(PlayerStateEnum playerStateEnum) {

@@ -171,15 +171,15 @@ end;
 
 function GetLevelMaxExp (alevel: integer): integer;
 var
-   n : integer;
+   number : integer;
    p : PTLevelData;
 begin
    Result := 0;
    if alevel < 100 then exit;
    if alevel >= 9999 then exit;
-   n := alevel div 100;
+   number := alevel div 100;
    p := PTLevelData(@LevelsArr);
-   inc (p,n-1);
+   inc (p,number-1);
    Result := p^.rGetMaxExp;
 end;
         */
@@ -196,16 +196,16 @@ end;
         if (n > addingExp) {
             n = addingExp;
         }
-        //currentlevel = ComputeLevel(currentExp + n);
+        //currentlevel = ComputeLevel(currentExp + number);
         return n;
         /*
-        var n : integer;
+        var number : integer;
 begin
-   n := GetLevelMaxExp (aLevel) * 3;
-   if n > addvalue then n := addvalue;
-   inc (aExp, n);
+   number := GetLevelMaxExp (aLevel) * 3;
+   if number > addvalue then number := addvalue;
+   inc (aExp, number);
    aLevel := GetLevel (aExp);
-   Result := n;
+   Result := number;
          */
     }
 

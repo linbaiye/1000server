@@ -41,7 +41,6 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
 
     protected abstract void handleDamaged(Damage damage);
 
-    @Override
     public boolean attackedBy(Player attacker) {
         Validate.notNull(attacker);
         if (!canBeAttackedNow() || !isWithinMeleeRange(attacker.coordinate()))
@@ -50,23 +49,23 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
         return true;
     }
 
-    @Override
-    public void attackedBy(IActiveEntity attacker) {
-        Validate.notNull(attacker);
-        if (canBeAttackedNow() && isWithinMeleeRange(attacker.coordinate()))
-            handleDamaged(attacker.damage());
-    }
-
-    @Override
-    public void attackedBy(Projectile projectile) {
-        if (canBeAttackedNow())
-            handleDamaged(projectile.damage());
-    }
-
-    public void attackedByAoe(Damage damage) {
-        if (canBeAttackedNow())
-            handleDamaged(damage);
-    }
+//    @Override
+//    public void attackedBy(IActiveEntity attacker) {
+//        Validate.notNull(attacker);
+//        if (canBeAttackedNow() && isWithinMeleeRange(attacker.coordinate()))
+//            handleDamaged(attacker.damage());
+//    }
+//
+//    @Override
+//    public void attackedBy(Projectile projectile) {
+//        if (canBeAttackedNow())
+//            handleDamaged(projectile.damage());
+//    }
+//
+//    public void attackedByAoe(Damage damage) {
+//        if (canBeAttackedNow())
+//            handleDamaged(damage);
+//    }
 
 
     public int currentLife() {

@@ -181,7 +181,8 @@ public final class Server implements ServerContext {
                     protected void initChannel(NioSocketChannel channel) throws Exception {
                         channel.pipeline()
                                 .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                .addLast("packetHandler", new ConnectionImpl(realmManager, Server.this))
+                                .addLast("packetHandler", new DevelopingConnection(realmManager, Server.this))
+                                //.addLast("packetHandler", new ConnectionImpl(realmManager, Server.this))
                                 .addLast("packetLengthAppender", new LengthFieldPrepender(4))
                                 .addLast("packetEncoder", MessageEncoder.ENCODER);
                     }

@@ -3,7 +3,7 @@ package org.y1000.entities;
 import lombok.Builder;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.y1000.message.GroundedItemSnapshot;
+import org.y1000.message.GroundItemSnapshot;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.util.Coordinate;
 
@@ -24,6 +24,7 @@ public final class GroundedItem extends AbstractActiveEntity {
     private final String name;
 
     private final String dropSound;
+
     @Getter
     private final int color;
 
@@ -83,7 +84,7 @@ public final class GroundedItem extends AbstractActiveEntity {
 
     @Override
     public I2ClientMessage captureSnapshot() {
-        return GroundedItemSnapshot.builder()
+        return GroundItemSnapshot.builder()
                 .name(name)
                 .number(number)
                 .id(id())

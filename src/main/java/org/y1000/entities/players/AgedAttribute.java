@@ -1,6 +1,9 @@
 package org.y1000.entities.players;
 
-public interface PlayerAgedAttribute {
+/**
+ * An attribute related to player age.
+ */
+public interface AgedAttribute {
     int currentValue();
 
     int maxValue();

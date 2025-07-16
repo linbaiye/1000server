@@ -10,7 +10,7 @@ import org.y1000.util.Coordinate;
 
 @Slf4j
 public final class AiPathUtil {
-    public static Direction computeDirectionTO(Npc npc,
+    public static Direction computeDirectionTo(Npc npc,
                                                Coordinate dest, Coordinate previous) {
         Validate.notNull(npc);
         Validate.notNull(dest);

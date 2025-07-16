@@ -1,10 +1,9 @@
 package org.y1000.kungfu.breath;
 
 import lombok.Builder;
-import org.y1000.entities.PlayerSoundEvent;
+import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
-import org.y1000.entities.players.event.PlayerGainExpEvent;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;

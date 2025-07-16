@@ -18,4 +18,6 @@ public interface PlayerInputHandler {
 
     void unequip(EquipmentType type);
 
+    void swapKungFu(int page, int slot1, int slot2);
+
 }

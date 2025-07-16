@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.event;
 
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
+import org.y1000.entities.creatures.npc.NpcAction;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.ChangeStatePacket;
@@ -13,7 +13,7 @@ public final class NpcChangeStateEvent extends AbstractCreatureEvent {
 
     private final Direction direction;
 
-    public NpcChangeStateEvent(INpc source, NpcAnimationEnum playerStateEnum) {
+    public NpcChangeStateEvent(INpc source, NpcAction playerStateEnum) {
         super(source);
         stateValue = playerStateEnum.value();
         this.direction = source.direction();

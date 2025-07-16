@@ -54,6 +54,8 @@ interface PlayerState extends CreatureState {
 
     }
 
-    void handleAfterHurt();
+    default void handleAfterHurt() {
+
+    }
 
 }

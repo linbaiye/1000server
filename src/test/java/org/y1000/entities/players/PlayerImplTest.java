@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
-import org.y1000.entities.PlayerSoundEvent;
+import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.event.*;
 import org.y1000.item.*;
 import org.y1000.kungfu.*;
@@ -126,7 +126,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals("男子短发", player.inventory().getItem(slot).name());
         assertEquals("男子长发", player.hair().get().name());
         assertTrue(eventListener.findFirst(PlayerEquipEvent.class).isPresent());
-        assertTrue(eventListener.findFirst(InventoryUpdatedEvent.class).isPresent());
+        assertTrue(eventListener.findFirst(UpdateInventoryMessage.class).isPresent());
     }
 
     @Test
@@ -136,7 +136,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         int slot = player.inventory().add(equip);
         assertTrue(player.tryEquipFromSlot(slot, equip));
         assertTrue(eventListener.findFirst(PlayerEquipEvent.class).isPresent());
-        assertTrue(eventListener.findFirst(InventoryUpdatedEvent.class).isPresent());
+        assertTrue(eventListener.findFirst(UpdateInventoryMessage.class).isPresent());
         assertTrue(eventListener.findFirst(PlayerSoundEvent.class).isPresent());
     }
 
@@ -147,7 +147,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         int slot = player.inventory().add(equip);
         assertTrue(player.tryEquipFromSlot(slot, equip));
         assertTrue(eventListener.findFirst(PlayerEquipEvent.class).isPresent());
-        assertTrue(eventListener.findFirst(InventoryUpdatedEvent.class).isPresent());
+        assertTrue(eventListener.findFirst(UpdateInventoryMessage.class).isPresent());
         assertTrue(eventListener.findFirst(SyncActiveKungEvent.class).isPresent());
         assertTrue(eventListener.findFirst(PlayerSayEvent.class).isPresent());
         assertEquals(player.attackKungFu(), player.kungFuBook().findUnnamedAttack(AttackKungFuType.SWORD));
@@ -210,7 +210,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         var item = itemFactory.createItem("雷剑式");
         var slot = player.inventory().add(item);
         player.onInventorySlotClicked(slot, AbstractClickContainerSlotInput.ClickType.LeftDoubleClick);
-        assertNotNull(eventListener.remove(InventoryUpdatedEvent.class));
+        assertNotNull(eventListener.remove(UpdateInventoryMessage.class));
         assertNotNull(eventListener.remove(KungFuBookEvent.class));
         assertNotNull(eventListener.remove(PlayerSoundEvent.class));
     }

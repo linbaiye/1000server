@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.y1000.entities.Direction;
 import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.AttributeProvider;
-import org.y1000.entities.creatures.monster.NpcAnimationEnum;
-import org.y1000.entities.creatures.npc.AI.INpcAI;
 import org.y1000.entities.creatures.event.INpcMoveEvent;
 import org.y1000.entities.creatures.npc.spell.NpcSpell;
 import org.y1000.entities.creatures.npc.spell.ShiftSpell;
@@ -31,7 +29,7 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
 
     private final RealmMap realmMap;
 
-    private INpcAI ai;
+    private NpcAI ai;
 
     private int currentLife;
 
@@ -41,7 +39,7 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
 
     private final List<NpcSpell> spells;
 
-    private final Map<NpcAnimationEnum, Integer> stateMillis;
+    private final Map<NpcAction, Integer> stateMillis;
 
     private NpcState npcState;
 
@@ -51,17 +49,16 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
                        Coordinate coordinate,
                        Direction direction,
                        String name,
-                       Map<NpcAnimationEnum, Integer> stateMillis,
+                       Map<NpcAction, Integer> stateMillis,
                        AttributeProvider attributeProvider,
                        RealmMap realmMap,
                        List<NpcSpell> spells,
-                       INpcAI ai) {
+                       NpcAI ai) {
         super(id, coordinate, direction, name);
         Validate.notNull(ai);
         this.attributeProvider = attributeProvider;
         this.realmMap = realmMap;
         this.spells = spells == null ? Collections.emptyList() : spells;
-        this.ai = ai;
         int range = attributeProvider.wanderingRange();
         this.spwanCoordinate = coordinate;
         this.wanderingArea = new Rectangle(coordinate.move(-range, -range), coordinate.move(range, range));
@@ -77,7 +74,7 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
     }
 
     @Override
-    public NpcAnimationEnum npcStateEnum() {
+    public NpcAction npcStateEnum() {
         return npcState().stateEnum();
     }
 
@@ -128,17 +125,17 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
     }
 
     @Override
-    public void startAction(NpcAnimationEnum stateEnum) {
+    public void startAction(NpcAction stateEnum) {
         switch (stateEnum) {
             case Idle -> idle();
             case Die -> die();
-            case Move -> move(getStateMillis(NpcAnimationEnum.Move));
+            case Move -> move(getStateMillis(NpcAction.Move));
         }
     }
 
     @Override
     public void onMoveFailed() {
-        this.getAI().onMoveFailed(this);
+//        this.getAI().onMoveFailed(this);
     }
 
     /**
@@ -185,43 +182,28 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
     public void die() {
         if (isDead())
             return;
-        changeState(NpcCommonState.die(this, getStateMillis(NpcAnimationEnum.Die) + (findShiftSpell().isPresent() ? 2000 : 8000)));
+        changeState(NpcCommonState.die(this, getStateMillis(NpcAction.Die) + (findShiftSpell().isPresent() ? 2000 : 8000)));
         emitEvent(new CreatureDieEvent(this));
         dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-        ai.onDead(this);
     }
 
 
     protected abstract Logger log();
 
-    public void changeAndStartAI(INpcAI newAI) {
-        changeAI(newAI);
-        start();
-    }
 
-    public void changeAI(INpcAI newAI) {
-        Validate.notNull(newAI);
-        this.ai = newAI;
-    }
-
-
-    @Override
-    public INpcAI getAI() {
-        return ai;
-    }
 
     @Override
     public void start() {
-        this.ai.start(this);
+//        this.ai.start(this);
     }
 
     @Override
     public void onActionDone() {
-        if (npcStateEnum() == NpcAnimationEnum.Die) {
+        if (npcStateEnum() == NpcAction.Die) {
             realmMap.free(this);
             emitEvent(new RemoveEntityEvent(this));
         }
-        ai.onActionDone(this);
+//        ai.onActionDone(this);
     }
 
     @Override
@@ -247,28 +229,6 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
         return true;
     }
 
-    @Override
-    public boolean attackedBy(Player attacker) {
-        Validate.notNull(attacker);
-        return false;
-//        return doAttacked(attacker.damage(), attacker.hit(), attacker::gainAttackExp, attacker);
-    }
-
-    @Override
-    public void attackedBy(Projectile projectile) {
-//        Validate.notNull(projectile);
-//        if (projectile.shooter() instanceof Player player) {
-//            doAttacked(projectile.damage(), projectile.hit(), player::gainRangedAttackExp, player);
-//        } else {
-//            attackedBy(projectile.shooter());
-//        }
-    }
-
-    @Override
-    public void attackedBy(IActiveEntity attacker) {
-        Validate.notNull(attacker);
-        doAttacked(attacker.damage(), attacker.hit(), e -> {}, attacker);
-    }
 
     protected void takeDamage(Damage damage) {
         int bodyDamage = damage.bodyDamage() - bodyArmor();
@@ -308,10 +268,6 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
         return attributeProvider.walkSpeed();
     }
 
-    @Override
-    public int viewWidth() {
-        return attributeProvider.viewWidth();
-    }
 
 
     @Override
@@ -331,7 +287,7 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
     }
 
     @Override
-    public int getStateMillis(NpcAnimationEnum stateEnum) {
+    public int getStateMillis(NpcAction stateEnum) {
         return stateMillis.get(stateEnum);
     }
 

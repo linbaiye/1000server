@@ -27,7 +27,6 @@ public final class EscapeAI extends AbstractMovableNpcAI {
 
     private void computeEscapePoint() {
         destination = escapeAbility.computeSafeSpot(npc(), enemy).orElse(null);
-        log.debug("Selected destination {}.", destination);
     }
 
     @Override
@@ -37,42 +36,28 @@ public final class EscapeAI extends AbstractMovableNpcAI {
     }
 
     private void returnToWander() {
-        if (escapeAbility instanceof LifeLowEscapeAbility)
-            npc().startAI(new WaryWanderAI(npc(), currentAbility(), escapeAbility));
-        else
-            npc().startAI(new WanderingAI(npc()));
-    }
-
-    private void returnToWanderOrCombat() {
-        if (escapeAbility instanceof LifeLowEscapeAbility)
-            npc().startAI(new WaryWanderAI(npc(), currentAbility(), escapeAbility));
-        else
-            npc().startAI(CombatAI.returnFromEscape(npc(), enemy, currentAbility()));
+        npc().startAI(new WaryWanderAI(npc(), currentAbility(), escapeAbility));
     }
 
     @Override
     void onNonDieAbilityDone(NpcAbility ability) {
         if (!enemy.canBeSeenAt(npc().coordinate())) {
-            log.debug("No thing to escape, return now.");
             returnToWander();
             return;
         }
         computePrevious();
         if (destination == null) {
             computeEscapePoint();
-            log.debug("No point.");
             changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
             return;
         }
         if (npc().coordinate().equals(destination)) {
-            returnToWanderOrCombat();
-            log.debug("Return now.");
+            returnToWander();
             return;
         }
         if (ability instanceof NpcMoveAbility moveAbility && moveAbility.idleTime() > 0) {
             changeAbilityOrThrow(NpcIdleAbility.class).apply(npc(), moveAbility.idleTime());
         } else {
-            log.debug("keep moving at {}.", npc().coordinate());
             moveCloser(destination);
         }
     }

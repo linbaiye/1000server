@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import org.y1000.exp.Experience;
 
-public final class PlayerExperiencedAgedAttribute extends AbstractPlayerAgedAttribute {
+public final class PlayerExperiencedAgedAttribute extends AbstractAgedAttribute {
 
     private Experience experience;
 

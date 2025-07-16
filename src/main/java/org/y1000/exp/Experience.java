@@ -30,13 +30,13 @@ public final class Experience {
     /*
 
 function  AddPermitExp (var aLevel, aExp: integer; addvalue: integer): integer;
-var n : integer;
+var number : integer;
 begin
-   n := GetLevelMaxExp (aLevel) * 3;
-   if n > addvalue then n := addvalue;
-   inc (aExp, n);
+   number := GetLevelMaxExp (aLevel) * 3;
+   if number > addvalue then number := addvalue;
+   inc (aExp, number);
    aLevel := GetLevel (aExp);
-   Result := n;
+   Result := number;
 end;
      */
         if (expValue <= 0) {
