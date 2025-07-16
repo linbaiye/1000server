@@ -6,7 +6,7 @@ import org.y1000.entities.players.Player;
 
 
 
-public final class AttackInput implements EntityInteractionInput {
+public final class AttackInput implements EntityInteractInput {
     private final long id;
     public AttackInput(long id) {
         this.id = id;

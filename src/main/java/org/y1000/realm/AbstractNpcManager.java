@@ -132,7 +132,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 
     void removeAndSync(Npc source, I2ClientMessage message) {
         sendToVisiblePlayers(source, message);
-        getAoiManager().remove(source);
         remove(source);
         source.free();
     }

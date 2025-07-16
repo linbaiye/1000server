@@ -129,6 +129,17 @@ public final class Inventory extends AbstractInventory {
         return !isFull();
     }
 
+    public boolean canPick(Item item) {
+        var items = items();
+        for (Item value : items.values()) {
+            if (value instanceof StackItem stackItem
+                    && stackItem.name().equals(item.name())) {
+                return stackItem.hasMoreSpace(stackItem.number());
+            }
+        }
+        return !isFull();
+    }
+
     public boolean canBuy(Collection<TradeItem> buyingItems, long cost) {
         Validate.notNull(buyingItems);
         for (TradeItem buyingItem : buyingItems) {

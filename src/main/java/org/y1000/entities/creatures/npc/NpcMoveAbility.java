@@ -9,7 +9,7 @@ import org.y1000.util.Coordinate;
 
 public class NpcMoveAbility extends AbstractNpcAbility {
 
-    private final int walkSpeedMillis;
+    private int fastMoveMillis;
 
     private Coordinate start;
 
@@ -23,13 +23,14 @@ public class NpcMoveAbility extends AbstractNpcAbility {
      * For some NPC, its walkSpeedMillis is longer than the actual walk animation length,
      * hence some idle animation interpolated.
      */
-    private final int interpolateIdleMillis;
+    private int interpolateIdleMillis;
+
+    private final int walkMillis;
 
 
     public NpcMoveAbility(int walkSpeedMillis, NpcAnimation animation) {
         super(animation);
-        this.walkSpeedMillis = walkSpeedMillis;
-        interpolateIdleMillis = walkSpeedMillis - animation.getActualMillis();
+        this.walkMillis = walkSpeedMillis;
     }
 
     public void interrupt(Npc npc) {
@@ -59,13 +60,22 @@ public class NpcMoveAbility extends AbstractNpcAbility {
         fastMove = false;
     }
 
+    private void enableFastMove(float modifier) {
+        this.fastMove = true;
+        this.fastMoveMillis = (int)((float)walkMillis / modifier);
+        interpolateIdleMillis = fastMoveMillis - getAnimation().getActualMillis();
+    }
+
     /**
      * The time to move one unit could be shorter than animation time.
      */
-    public void enableFastMove() {
-        this.fastMove = true;
+    public void enableCombatMove() {
+        enableFastMove(3);
     }
 
+    public void enableEscapeMove() {
+        enableFastMove(1.5f);
+    }
 
     public boolean tryMove(Npc npc, Direction direction) {
         if (!npc.getRealmMap().movable(npc.coordinate().moveBy(direction))) {
@@ -74,8 +84,8 @@ public class NpcMoveAbility extends AbstractNpcAbility {
         this.direction = direction;
         this.start = npc.coordinate();
         this.npc = npc;
-        if (fastMove && interpolateIdleMillis < 0)
-            startAnimation(walkSpeedMillis);
+        if (fastMove)
+            startAnimation(fastMoveMillis);
         else
             startAnimation();
         npc.changeDirection(direction);

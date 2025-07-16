@@ -3,13 +3,9 @@ package org.y1000.realm;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.creatures.npc.InteractableNpc;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.teleport.StaticTeleport;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.*;
-import org.y1000.message.input.chat.ClientInputTextEvent;
-import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.event.ConnectionEstablishedEvent;
 import org.y1000.realm.event.*;
 import org.y1000.repository.PlayerRepository;
@@ -18,7 +14,6 @@ import org.y1000.sdb.MapSdb;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 abstract class AbstractRealm implements Realm {
     public static final int STEP_MILLIS = 10;
@@ -95,10 +90,6 @@ abstract class AbstractRealm implements Realm {
 
     abstract Logger log();
 
-    MessageSender getEventSender() {
-        return eventSender;
-    }
-
     PlayerManager getPlayerManager() {
         return playerManager;
     }
@@ -111,8 +102,6 @@ abstract class AbstractRealm implements Realm {
             accumulatedMillis += STEP_MILLIS;
         }
     }
-
-
 
     protected void doInit() {
         try {
@@ -231,7 +220,7 @@ abstract class AbstractRealm implements Realm {
         playerRepository.load(login.playerId()).ifPresent(p -> getPlayerManager().loginPlayer(p, login, this));
     }
 
-    private void handleEntityInteraction(Player player, EntityInteractionInput interactionInput) {
+    private void handleEntityInteraction(Player player, EntityInteractInput interactionInput) {
         for (ActiveEntityManager<?> entityManager : entityManagers) {
             entityManager.find(interactionInput.id())
                     .ifPresent(e -> interactionInput.onEntityFound(player, e));
@@ -241,7 +230,7 @@ abstract class AbstractRealm implements Realm {
     private void handleInput(ConnectionInput connectionInput) {
         if (connectionInput.input() instanceof SelfHandleInput selfHandleInput) {
             playerManager().handleInput(connectionInput.connection(), selfHandleInput);
-        } else if (connectionInput.input() instanceof EntityInteractionInput interactionInput) {
+        } else if (connectionInput.input() instanceof EntityInteractInput interactionInput) {
             playerManager().find(connectionInput.connection()).ifPresent(p -> handleEntityInteraction(p, interactionInput));
         }
     }

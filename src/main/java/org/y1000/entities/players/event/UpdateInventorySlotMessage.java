@@ -26,10 +26,6 @@ public final class UpdateInventorySlotMessage extends Abstract2PlayerMessageEven
         return Packet.newBuilder().setUpdateSlot(builder.build()).build();
     }
 
-    public static UpdateInventorySlotMessage remove(Player player, int slotId) {
-        return new UpdateInventorySlotMessage(player, toPacket(slotId, null));
-    }
-
     public static UpdateInventorySlotMessage update(Player player, int slotId, Item item) {
         return new UpdateInventorySlotMessage(player, toPacket(slotId, item));
     }

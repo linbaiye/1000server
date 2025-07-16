@@ -2,5 +2,5 @@ package org.y1000.entities;
 
 import org.y1000.event.EntityEvent;
 
-public interface GroundItemEvent extends EntityEvent<GroundedItem> {
+public interface GroundItemEvent extends EntityEvent<GroundItem> {
 }

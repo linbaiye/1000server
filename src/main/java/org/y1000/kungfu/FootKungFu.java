@@ -52,7 +52,7 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
         } else if (level() >= 5000) {
             snd = sound + 1;
         }
-        player.sendEvent(PlayerSoundEvent.sound(player, String.valueOf(snd)));
+        player.sendEvent(PlayerSoundEvent.toAll(player, String.valueOf(snd)));
         gainExp(player, ExperienceUtil.DEFAULT_EXP);
         int life = applyLevelToValue(eventResourceParameters.life());
         int useLife =  player.currentLife() > life ? life : player.currentLife() - 1;

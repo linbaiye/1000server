@@ -331,6 +331,7 @@ message ClientPacket {
     AttackInputPacket attackInput = 37;
     UnequipInputPacket unequipInput = 38;
     SwapKungFuSlotPacket swapKungFuSlotPacket = 39;
+    PickInputPacket pickInput = 40;
   }
 }
 
@@ -869,6 +870,10 @@ message PlayerAttackPacket {
 }
 
 message AttackInputPacket {
+  int64 id = 64;
+}
+
+message PickInputPacket {
   int64 id = 64;
 }
 

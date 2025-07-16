@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.IEntityEvent;
 import org.y1000.event.item.ItemEventVisitor;
@@ -15,6 +16,7 @@ import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
 import org.y1000.message.PlayerDropItemEvent;
 import org.y1000.message.PlayerTextEvent;
+import org.y1000.message.RemoveEntityMessage;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.util.Coordinate;
 
@@ -22,22 +24,11 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
-final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> implements ItemEventVisitor, GroundItemManager,
-    GroundItemEventListener {
+final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> implements ItemEventVisitor, GroundItemManager {
     private final ItemSdb itemSdb;
     private final EntityIdGenerator idGenerator;
     private final ItemFactory itemFactory;
 
-    @Override
-    public void sendEvent(GroundItemEvent event) {
-
-    }
-
-    private record DropItem(String name, int number, int rate) {
-        public boolean canDrop() {
-            return ThreadLocalRandom.current().nextInt(0, rate) == 0;
-        }
-    }
 
     public ItemManagerImpl(MessageSender eventSender,
                            ItemSdb itemSdb,
@@ -50,6 +41,11 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> impl
         this.idGenerator = idGenerator;
     }
 
+
+    private void removeItem(GroundItem item) {
+        sendToVisiblePlayers(item, GroundItemRemoveEvent.of(item));
+        remove(item);
+    }
 
     @Override
     public void pickItem(Player picker, long id) {
@@ -97,9 +93,10 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> impl
 
     @Override
     public void dropItem(String name, int number, Coordinate at) {
-        Validate.notNull(name);
-        Validate.notNull(at);
-//        dropNewItem(createGroundItem(name, at, number));
+        Item item = itemFactory.createItem(name, number);
+        GroundItem groundItem = new GroundItem(idGenerator.next(), item, at, this::removeItem);
+        add(groundItem);
+        sendToVisiblePlayers(groundItem, groundItem.captureSnapshot());
     }
 
     @Override

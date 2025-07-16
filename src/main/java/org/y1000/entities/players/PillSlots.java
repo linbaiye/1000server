@@ -64,7 +64,7 @@ public final class PillSlots {
         for (int i = 0; i < pillSlots.length; i++) {
             if (pillSlots[i] == null) {
                 player.sendEvent(PlayerTextMessage.of(player, "服用了" + pill.name() + "。"));
-                pill.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.sound(player, s)));
+                pill.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toAll(player, s)));
                 pillSlots[i] = new PillSlot(pill);
                 return;
             }

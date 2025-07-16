@@ -28,10 +28,10 @@ public class NpcDropItemAbility {
         String[] tokens = dropText.split(":");
         List<Item> dropItems = new ArrayList<>();
         for (int i = 0; i < tokens.length / 3; i++) {
-            int chance = Integer.parseInt(tokens[i * 3 + 1]);
+            int chance = Integer.parseInt(tokens[i * 3 + 2]);
             boolean drop = ThreadLocalRandom.current().nextInt(1, chance + 1) == chance;
             if (drop)
-                dropItems.add(new Item(tokens[i * 3], Integer.parseInt(tokens[i * 3 + 2])));
+                dropItems.add(new Item(tokens[i * 3], Integer.parseInt(tokens[i * 3 + 1])));
         }
         return dropItems.isEmpty() ? Optional.empty() : Optional.of(new NpcDropItemAbility(dropItems));
     }

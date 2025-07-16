@@ -34,14 +34,14 @@ final class CombatController {
         if (kungFu instanceof AbstractRangedKungFu rangedKungFu) {
             Ammo ammo = rangedKungFu.consumeResources(player);
             player.changeState(PlayerShootState.aimTarget(player, rangedKungFu, enemy, ammo.getFlySprite()));
-            player.sendEvent(PlayerSoundEvent.sound(player, kungFu.swingSound()));
+            player.sendEvent(PlayerSoundEvent.toAll(player, kungFu.swingSound()));
         } else {
             kungFu.consumeAttributes(player);
             player.changeState(new PlayerMeleeState(player, action));
             int exp = hurtAbility.attacked(player, player.damage(), player.hit());
             if (exp > 0)
                 player.doGainExp(exp, kungFu);
-            player.sendEvent(PlayerSoundEvent.sound(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
+            player.sendEvent(PlayerSoundEvent.toAll(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
         }
     }
 

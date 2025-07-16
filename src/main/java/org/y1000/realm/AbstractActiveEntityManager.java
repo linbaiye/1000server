@@ -111,12 +111,15 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
     public Optional<T> find(long id) {
         return entities.stream()
                 .filter(e -> e.id() == id)
+                .filter(e -> !deleting.contains(e))
                 .findFirst();
     }
 
     @Override
     public Set<T> find(Predicate<? super T> predicate) {
-        return entities.stream().filter(predicate).collect(Collectors.toSet());
+        return entities.stream()
+                .filter(e -> !deleting.contains(e))
+                .filter(predicate).collect(Collectors.toSet());
     }
 
 

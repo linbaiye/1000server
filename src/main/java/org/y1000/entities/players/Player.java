@@ -156,6 +156,8 @@ public interface Player extends IActiveEntity, HurtAbility {
 
     void cancelBuff();
 
+    boolean pickItem(Item item);
+
     default List<Equipment> getEquipments() {
         List<Equipment> ret = new ArrayList<>();
         weapon().ifPresent(ret::add);

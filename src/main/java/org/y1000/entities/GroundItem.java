@@ -1,33 +1,40 @@
 package org.y1000.entities;
 
+import lombok.Getter;
+import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerSoundEvent;
+import org.y1000.entities.players.event.PlayerTextMessage;
+import org.y1000.entities.players.event.UpdateInventorySlotMessage;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
 import org.y1000.message.GroundItemSnapshot;
 import org.y1000.message.I2ClientMessage;
-import org.y1000.realm.GroundItemEventListener;
 import org.y1000.util.Coordinate;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class GroundItem extends AbstractActiveEntity {
 
+    @Getter
     private final Item item;
 
     private final Coordinate coordinate;
 
-    private final GroundItemEventListener eventListener;
+
+    private final Consumer<? super GroundItem> remover;
 
     private long ttl = 3 * 60 * 1000;
 
     public GroundItem(long id,
                       Item item,
                       Coordinate coordinate,
-                      GroundItemEventListener eventListener) {
+                      Consumer<? super GroundItem> remover) {
         super(id);
         this.item = item;
         this.coordinate = coordinate;
-        this.eventListener = eventListener;
+        this.remover = remover;
     }
 
     @Override
@@ -37,7 +44,7 @@ public class GroundItem extends AbstractActiveEntity {
         }
         ttl -= delta;
         if (ttl <= 0) {
-//            eventListener.sendEvent();
+            remover.accept(this);
         }
     }
 
@@ -52,6 +59,21 @@ public class GroundItem extends AbstractActiveEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id());
+    }
+
+    private boolean canPickAt(Coordinate from) {
+        return coordinate().xDistance(from.x()) <= 2 && coordinate().yDistance(from.y()) <= 3;
+    }
+
+    public void pickedBy(Player player) {
+        if (player == null)
+            return;
+        if (!canPickAt(player.coordinate())) {
+            player.sendEvent(PlayerTextMessage.of(player, "距离过远。"));
+            return;
+        }
+        if (player.pickItem(item))
+            remover.accept(this);
     }
 
     @Override

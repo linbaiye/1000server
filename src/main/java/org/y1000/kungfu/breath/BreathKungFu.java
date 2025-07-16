@@ -74,7 +74,7 @@ public final class BreathKungFu extends AbstractKungFu {
         /*if (!canRegenerateResources(player)) {
             return;
         }*/
-        player.sendEvent(PlayerSoundEvent.sound(player, computeSound(player.isMale())));
+        player.sendEvent(PlayerSoundEvent.toAll(player, computeSound(player.isMale())));
         player.gainLife(computeResource(player.maxLife(), parameters.life()));
         player.gainPower(computeResource(player.maxPower(), parameters.power()));
         player.gainInnerPower(computeResource(player.maxInnerPower(), parameters.innerPower()));

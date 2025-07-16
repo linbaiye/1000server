@@ -1185,6 +1185,20 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
     }
 
+    @Override
+    public boolean pickItem(Item item) {
+        if (isLeftGame() || isDead())
+            return false;
+        if (!inventory().canPick(item)) {
+            sendText("物品栏已满。");
+            return false;
+        }
+        int slot = inventory().add(item);
+        sendEvent(UpdateInventorySlotMessage.update(this, slot));
+        item.eventSound().ifPresent(s -> sendEvent(PlayerSoundEvent.toSelf(this, s)));
+        return true;
+    }
+
     void changeState(PlayerState playerState) {
         this.state = playerState;
     }
@@ -1201,7 +1215,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     void sendSound(String s) {
-        sendEvent(PlayerSoundEvent.sound(this, s));
+        sendEvent(PlayerSoundEvent.toAll(this, s));
     }
 
     @Override
@@ -1393,6 +1407,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         } else {
             footKungfu = null;
             breathKungFu = null;
+            combatController = null;
             var oldLevel = revival.level();
             revival = revival.gainExp();
             if (oldLevel != revival.level()) {

@@ -30,7 +30,7 @@ public class CombatAI extends AbstractMovableNpcAI {
 
     @Override
     public void start() {
-        npc().findAbility(NpcMoveAbility.class).ifPresent(NpcMoveAbility::enableFastMove);
+        npc().findAbility(NpcMoveAbility.class).ifPresent(NpcMoveAbility::enableCombatMove);
         tryAttack();
     }
 

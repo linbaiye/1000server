@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
+import org.y1000.entities.objects.Animation;
 import org.y1000.message.NpcSnapshot;
 
 public abstract class AbstractNpcAbility implements NpcAbility {
@@ -15,6 +16,10 @@ public abstract class AbstractNpcAbility implements NpcAbility {
 
     void startAnimation(int millis) {
         animation.start(millis);
+    }
+
+    NpcAnimation getAnimation() {
+        return animation;
     }
 
     NpcAction type() {
