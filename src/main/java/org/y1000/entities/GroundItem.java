@@ -2,9 +2,7 @@ package org.y1000.entities;
 
 import lombok.Getter;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
-import org.y1000.entities.players.event.UpdateInventorySlotMessage;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
 import org.y1000.message.GroundItemSnapshot;

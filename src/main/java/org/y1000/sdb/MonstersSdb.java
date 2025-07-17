@@ -15,7 +15,6 @@ public interface MonstersSdb extends NpcSdb {
 
     int getEscapeLife(String name);
 
-    int getViewWidth(String name);
 
     Set<String> getAllAnimateIds();
 }

@@ -1,12 +1,12 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.creatures.npc.event.FilterNearbyPlayerEvent;
+import org.y1000.entities.FilterVisibleEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 
+import java.util.Comparator;
 import java.util.Optional;
-import java.util.Set;
 
 
 public class WaryWanderAI extends AbstractWanderingAI {
@@ -21,10 +21,10 @@ public class WaryWanderAI extends AbstractWanderingAI {
     }
 
     private Optional<Player> findNearestViewRangePlayer() {
-        FilterNearbyPlayerEvent event = FilterNearbyPlayerEvent.withinDistance(npc(), npc().getWanderRage());
+        var event = FilterVisibleEvent.nearbyAlive(npc(), npc().getWanderRage());
         npc().sendEvent(event);
-        Set<Player> players = event.players();
-        return players.stream().min((o1, o2) -> o1.coordinate().directDistance(npc().coordinate()) - o2.coordinate().directDistance(npc().coordinate()));
+        var c = npc().coordinate();
+        return event.resultStream(Player.class).min(Comparator.comparing(p -> p.coordinate().directDistance(c)));
     }
 
     @Override

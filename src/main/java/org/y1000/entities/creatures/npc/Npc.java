@@ -41,8 +41,4 @@ public interface Npc extends ActiveEntity {
     int getWanderRage();
 
     void sendEvent(NpcEvent event);
-
-    Optional<String> sound();
-
-    int viewRange();
 }

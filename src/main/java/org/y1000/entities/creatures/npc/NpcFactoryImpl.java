@@ -3,10 +3,7 @@ package org.y1000.entities.creatures.npc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.npc.spell.CloneSpell;
-import org.y1000.entities.creatures.npc.spell.NpcSpell;
-import org.y1000.entities.creatures.npc.spell.NpcSpellType;
-import org.y1000.entities.creatures.npc.spell.ShiftSpell;
+import org.y1000.entities.creatures.npc.spell.*;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.kungfu.KungFuType;
 import org.y1000.quest.Quest;
@@ -27,6 +24,8 @@ public final class NpcFactoryImpl implements NpcFactory {
     private final KungFuSdb kungFuSdb;
     private final NonMonsterNpcSdb nonMonsterNpcSdb;
     private final MagicParamSdb magicParamSdb;
+
+    private static final int DEFAULT_WALK_MILLIS = 2000;
 
 
     public NpcFactoryImpl(ActionSdb actionSdb,
@@ -117,8 +116,7 @@ public final class NpcFactoryImpl implements NpcFactory {
     private int getWalkSpeed(String name) {
         if (monsterSdb.containsName(name))
             return monsterSdb.getWalkSpeed(name) * Realm.STEP_MILLIS;
-        String animate = nonMonsterNpcSdb.getAnimate(name);
-        return actionSdb.getActionLength(animate, NpcAction.Move);
+        return DEFAULT_WALK_MILLIS;
     }
 
     private static final int INIT_SKILL_DIV_DAMAGE = 5000;
@@ -135,7 +133,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 damageBody, hit);
     }
 
-    private List<Object> abilities(String idName, NpcSdb npcSdb) {
+    private List<Object> buildCommonAbilities(String idName, NpcSdb npcSdb) {
         List<Object> abilities = new ArrayList<>();
         if (npcSdb.attack(idName)) {
             abilities.add(createMeleeAbility(idName, npcSdb));
@@ -149,13 +147,31 @@ public final class NpcFactoryImpl implements NpcFactory {
             abilities.add(createTurnAbility(idName, npcSdb));
         }
         abilities.add(createDieAbility(idName, npcSdb));
-        int escapeLife = npcSdb.getEscapeLife(idName);
-        if (escapeLife > 0)
-            abilities.add(new LifeLowEscapeAbility(escapeLife));
         String attackMagic = npcSdb.getAttackMagic(idName);
         if (StringUtils.isNotEmpty(attackMagic))
             abilities.add(createShootAbility(attackMagic, npcSdb.getAnimate(idName), npcSdb.getAccuracy(idName) + 70));
         NpcDropItemAbility.parse(npcSdb.getHaveItem(idName)).ifPresent(abilities::add);
+        return abilities;
+    }
+
+    private List<Object> buildNpcAbilities(String idName) {
+        List<Object> abilities = buildCommonAbilities(idName, nonMonsterNpcSdb);
+        if (nonMonsterNpcSdb.isProtector(idName)) {
+            abilities.add(new NpcProtectAbility(8));
+        }
+        return abilities;
+    }
+
+    private List<Object> buildMonsterAbilities(String idName) {
+        List<Object> abilities = buildCommonAbilities(idName, monsterSdb);
+        int escapeLife = monsterSdb.getEscapeLife(idName);
+        if (escapeLife > 0)
+            abilities.add(new LifeLowEscapeAbility(escapeLife, monsterSdb.getViewWidth(idName)));
+        String soundNormal = monsterSdb.getSoundNormal(idName);
+        if (StringUtils.isNotEmpty(soundNormal))
+            abilities.add(new NpcSoundAbility(soundNormal));
+        if (!monsterSdb.isPassive(idName))
+            abilities.add(new EngageAlivePlayerAbility(monsterSdb.getViewWidth(idName)));
         return abilities;
     }
 
@@ -164,17 +180,18 @@ public final class NpcFactoryImpl implements NpcFactory {
                 new WanderingAI(npc) : new FrozenAI(npc);
     }
 
+
     @Override
     public NpcImpl create(long id,
                           String idName,
                           RealmMap realmMap,
                           Coordinate coordinate,
                           NpcEventListener listener) {
+        List<Object> abilities = monsterSdb.containsName(idName) ?
+                buildMonsterAbilities(idName) : buildNpcAbilities(idName);
         var npcSdb = monsterSdb.containsName(idName) ? monsterSdb : nonMonsterNpcSdb;
-        var sound = monsterSdb.containsName(idName) ? monsterSdb.getSoundNormal(idName) : null;
-        var viewRange = monsterSdb.containsName(idName) ? monsterSdb.getViewWidth(idName) : 0;
         NpcImpl npc = new NpcImpl(id,
-                abilities(idName, npcSdb),
+                abilities,
                 npcSdb.getViewName(idName),
                 coordinate,
                 listener, realmMap,
@@ -182,8 +199,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                 npcSdb.getShape(idName),
                 idName,
                 randomDirection(),
-                npcSdb.getActionWidth(idName),
-                sound, viewRange);
+                npcSdb.getActionWidth(idName));
         npc.changeAI(createAI(npc));
         return npc;
     }

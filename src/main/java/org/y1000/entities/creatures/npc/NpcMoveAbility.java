@@ -9,7 +9,6 @@ import org.y1000.util.Coordinate;
 
 public class NpcMoveAbility extends AbstractNpcAbility {
 
-    private int fastMoveMillis;
 
     private Coordinate start;
 
@@ -17,20 +16,20 @@ public class NpcMoveAbility extends AbstractNpcAbility {
 
     private Npc npc;
 
-    private boolean fastMove;
-
     /*
      * For some NPC, its walkSpeedMillis is longer than the actual walk animation length,
      * hence some idle animation interpolated.
      */
     private int interpolateIdleMillis;
 
-    private final int walkMillis;
+    private final int walkSpeedMillis;
 
+    private int moveMillis;
 
     public NpcMoveAbility(int walkSpeedMillis, NpcAnimation animation) {
         super(animation);
-        this.walkMillis = walkSpeedMillis;
+        this.walkSpeedMillis = walkSpeedMillis;
+        disableFastMove();
     }
 
     public void interrupt(Npc npc) {
@@ -57,25 +56,25 @@ public class NpcMoveAbility extends AbstractNpcAbility {
     }
 
     public void disableFastMove() {
-        fastMove = false;
+        modifyMoveSpeed(2);
+        if (moveMillis < getAnimation().getActualMillis())
+            moveMillis = getAnimation().getActualMillis();
     }
 
-    private void enableFastMove(float modifier) {
-        this.fastMove = true;
-        this.fastMoveMillis = (int)((float)walkMillis / modifier);
-        interpolateIdleMillis = fastMoveMillis - getAnimation().getActualMillis();
+    private void modifyMoveSpeed(int modifier) {
+        moveMillis = this.walkSpeedMillis * modifier;
+        interpolateIdleMillis = moveMillis - getAnimation().getActualMillis();
+        if (moveMillis > getAnimation().getActualMillis())
+            moveMillis = getAnimation().getActualMillis();
     }
 
     /**
      * The time to move one unit could be shorter than animation time.
      */
-    public void enableCombatMove() {
-        enableFastMove(3);
+    public void enableFastMove() {
+        modifyMoveSpeed(1);
     }
 
-    public void enableEscapeMove() {
-        enableFastMove(1.5f);
-    }
 
     public boolean tryMove(Npc npc, Direction direction) {
         if (!npc.getRealmMap().movable(npc.coordinate().moveBy(direction))) {
@@ -84,10 +83,7 @@ public class NpcMoveAbility extends AbstractNpcAbility {
         this.direction = direction;
         this.start = npc.coordinate();
         this.npc = npc;
-        if (fastMove)
-            startAnimation(fastMoveMillis);
-        else
-            startAnimation();
+        startAnimation(moveMillis);
         npc.changeDirection(direction);
         npc.sendEvent(NpcMoveEvent.of(npc));
         return true;

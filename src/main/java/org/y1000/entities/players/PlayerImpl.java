@@ -516,8 +516,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             sendEvent(PlayerTextMessage.of(this, "满级武功方可使用" + newAssistant.name() + "。"));
             return;
         }
-        if (this.assistantKungFu.nameEquals(newAssistant)) {
-            assistantKungFu = assistantKungFu != null ? null : newAssistant;
+        if (newAssistant.nameEquals(this.assistantKungFu)) {
+            assistantKungFu = null;
         } else {
             assistantKungFu = newAssistant;
         }
@@ -1381,7 +1381,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     @Override
     public boolean canBeAttacked() {
 //        return false;
-        return life.currentValue() > 0 && realm != null;
+        return !isDead() && realm != null;
     }
 
     @Override

@@ -25,7 +25,7 @@ public class PlayerDevRepository implements PlayerRepository {
     public PlayerDevRepository(PlayerRepositoryImpl factory, ItemFactory itemFactory) {
         this.playerFactory = factory;
         this.itemFactory = itemFactory;
-        Player male = playerFactory.create("测试男", true, 100000251L);
+        Player male = playerFactory.create("测试男名字不能太长了", true, 100000251L);
         playerMap.put(male.id(), male);
         playerRealmMap.put(male.id(), 6);
         male.inventory().add(itemFactory.createItem("生药", 10000));
@@ -37,6 +37,8 @@ public class PlayerDevRepository implements PlayerRepository {
         male.inventory().add(itemFactory.createEquipment("男子黄龙鞋"));
         male.inventory().add(itemFactory.createItem("黑沙刚体", 1));
         male.inventory().add(itemFactory.createItem("闪光剑破解", 1));
+        male.inventory().add(itemFactory.createItem("风灵旋", 1));
+        male.inventory().add(itemFactory.createItem("灵动八方", 1));
         male.inventory().add(itemFactory.createEquipment("驱魔烈火弓"));
         male.inventory().add(itemFactory.createEquipment("斗甲"));
         male.inventory().add(itemFactory.createItem("箭", 10000));

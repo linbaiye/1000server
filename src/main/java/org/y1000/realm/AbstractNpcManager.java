@@ -2,11 +2,9 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.npc.*;
-import org.y1000.entities.creatures.npc.event.FilterVisibleEntityEvent;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.entities.creatures.npc.event.NpcShootEvent;
 import org.y1000.entities.players.Player;
@@ -79,11 +77,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
         cloned = new HashSet<>();
     }
 
-
-    protected Npc createNpc(String name, Coordinate coordinate) {
-        return npcFactory.create(idGenerator.next(), name, realmMap, coordinate, this);
-    }
-
     Set<Long> spawnNPCs(NpcSpawnSetting setting) {
         var name = setting.idName();
         Set<Long> ids = new HashSet<>();
@@ -103,7 +96,7 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
         Coordinate coordinate = range.random(realmMap::movable)
                 .or(() -> range.findFirst(realmMap::movable))
                 .orElse(range.start());
-        Npc npc = createNpc(idName, coordinate);
+        Npc npc = npcFactory.create(idGenerator.next(), idName, realmMap, coordinate, this);
         npc.startAI();
         addNpc(npc);
         return npc;
@@ -130,7 +123,7 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
     }
 
 
-    void removeAndSync(Npc source, I2ClientMessage message) {
+    void syncAndRemove(Npc source, I2ClientMessage message) {
         sendToVisiblePlayers(source, message);
         remove(source);
         source.free();
@@ -187,11 +180,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
     public void shoot(NpcShootEvent event) {
         projectileManager.add(event.getNpcProjectile());
         sendToVisiblePlayers(event.source(), event);
-    }
-
-    @Override
-    public void filter(FilterVisibleEntityEvent event) {
-        event.filter(getAoiManager().filterVisibleEntities(event.source(), Entity.class));
     }
 
     abstract void onUnhandledEvent(EntityEvent entityEvent) ;

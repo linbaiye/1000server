@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
 import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.event.EntityEvent;
 import org.y1000.message.I2ClientMessage;
@@ -43,10 +42,12 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
     }
 
     private void respawn(Npc npc) {
-        NpcSpawnSetting npcSpawnSetting = npcSpawnSettings.get(npc.id());
-        if (npcSpawnSetting == null)
+        NpcSpawnSetting npcSpawnSetting = npcSpawnSettings.remove(npc.id());
+        if (npcSpawnSetting == null) {
             return;
-        spawnNpc(npc.getIdName(), npcSpawnSetting.range());
+        }
+        Npc newNpc = spawnNpc(npc.getIdName(), npcSpawnSetting.range());
+        npcSpawnSettings.put(newNpc.id(), npcSpawnSetting);
     }
 
     @Override
@@ -75,7 +76,7 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
     }
 
     public void onRemove(Npc source, I2ClientMessage message) {
-        removeAndSync(source, message);
+        syncAndRemove(source, message);
         int respawnMillis = getRespawnMillis(source.getIdName());
         respawningEntityManager.add(source,respawnMillis > 0 ? respawnMillis : RESPAWN_MILLIS);
 //        if (removeEntityEvent.source() instanceof INpc npc) {

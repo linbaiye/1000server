@@ -97,6 +97,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> impl
         GroundItem groundItem = new GroundItem(idGenerator.next(), item, at, this::removeItem);
         add(groundItem);
         sendToVisiblePlayers(groundItem, groundItem.captureSnapshot());
+        item.dropSound().ifPresent(s -> sendToVisiblePlayers(groundItem, new EntitySoundEvent(groundItem, s)));
     }
 
     @Override
@@ -107,19 +108,6 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> impl
 //        dropNewItem(groundedItem);
     }
 
-
-    private GroundedItem createGroundItem(String name,
-                                          Coordinate coordinate,
-                                          int number) {
-        return GroundedItem.builder()
-                .id(idGenerator.next())
-                .name(name)
-                .number(number)
-                .coordinate(coordinate)
-                .color(itemSdb.getColor(name))
-                .dropSound(itemSdb.getSoundDrop(name))
-                .build();
-    }
 
     @Override
     protected Logger log() {
@@ -132,14 +120,6 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> impl
         updateManagedEntities(delta);
     }
 
-
-    private void dropNewItem(GroundItem item) {
-        add(item);
-        sendToVisiblePlayers(item, item.captureSnapshot());
-//        eventSender.add(item);
-//        eventSender.notifyVisiblePlayers(item, item.captureSnapshot());
-//        item.dropSound().ifPresent(s -> eventSender.sendEvent(new EntitySoundEvent(item, s)));
-    }
 
     @Override
     public void onEvent(EntityEvent entityEvent) {

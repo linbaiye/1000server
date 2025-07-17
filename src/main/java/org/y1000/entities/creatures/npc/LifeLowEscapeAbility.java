@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.HurtAbility;
@@ -11,8 +12,13 @@ public class LifeLowEscapeAbility implements EscapeAbility {
 
     private final int lifeToEscape;
 
-    public LifeLowEscapeAbility(int lifeToEscape) {
+    private final int viewRange;
+
+    public LifeLowEscapeAbility(int lifeToEscape, int viewRange) {
+        Validate.isTrue(viewRange > 0);
+        Validate.isTrue(lifeToEscape > 0);
         this.lifeToEscape = lifeToEscape;
+        this.viewRange = viewRange;
     }
 
     private static Coordinate computeByDirection(Npc npc, Direction direction, int range) {
@@ -43,7 +49,7 @@ public class LifeLowEscapeAbility implements EscapeAbility {
 
     @Override
     public Optional<Coordinate> computeSafeSpot(Npc npc, ActiveEntity enemy) {
-        return Optional.ofNullable(doCompute(npc, enemy, npc.viewRange()));
+        return Optional.ofNullable(doCompute(npc, enemy, viewRange));
     }
 
     public boolean shouldEscape(ActiveEntity entity) {

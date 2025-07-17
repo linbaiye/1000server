@@ -30,20 +30,21 @@ public final class WanderingAI extends AbstractWanderingAI {
         return true;
     }
 
-    private boolean tryCombat(NpcHurtAbility ability) {
-        HurtAbility hurtAbility = attacker.findAbility(HurtAbility.class).orElse(null);
+    private boolean tryCombat(ActiveEntity enemy) {
+        HurtAbility hurtAbility = enemy.findAbility(HurtAbility.class).orElse(null);
         if (hurtAbility == null || !hurtAbility.canBeAttacked())
             return false;
         if (npc().findAbility(AbstractNpcAttackAbility.class).isEmpty())
             return false;
-        npc().startAI(CombatAI.hurtAbilityTriggered(npc(), attacker, ability));
+        npc().startAI(new CombatAI(npc(), enemy, currentAbility()));
         return true;
     }
+
 
     private void afterHurtDone(NpcHurtAbility hurtAbility) {
         if (tryEscape(hurtAbility))
             return;
-        if (tryCombat(hurtAbility))
+        if (tryCombat(attacker))
             return;
         continueWander(hurtAbility.getInterruptedAbility());
     }
@@ -53,10 +54,29 @@ public final class WanderingAI extends AbstractWanderingAI {
         this.attacker = attacker;
     }
 
+    private boolean tryGuard() {
+        NpcProtectAbility guardAbility = npc().findAbility(NpcProtectAbility.class).orElse(null);
+        if (guardAbility == null)
+            return false;
+        return guardAbility.findEnemy(npc()).map(this::tryCombat).orElse(false);
+    }
+
+    private boolean tryFindPlayerToAttack() {
+        EngageAlivePlayerAbility ability = npc().findAbility(EngageAlivePlayerAbility.class).orElse(null);
+        if (ability == null)
+            return false;
+        return ability.find(npc()).map(this::tryCombat).orElse(false);
+    }
+
     void onNonDieAbilityDone(NpcAbility doneAbility) {
-        if (doneAbility instanceof NpcHurtAbility hurtAbility) {
-            afterHurtDone(hurtAbility);
-        } else {
+        if (doneAbility instanceof NpcHurtAbility npcHurtAbility) {
+            afterHurtDone(npcHurtAbility);
+            return;
+        }
+        if (tryFindPlayerToAttack()) {
+            return;
+        }
+        if (!tryGuard()) {
             continueWander(doneAbility);
         }
     }

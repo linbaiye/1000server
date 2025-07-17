@@ -26,8 +26,8 @@ public final class AssistantKungFu extends AbstractKungFu {
     private static final Set<Direction> STRAIGHT = Set.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
 
     @Builder
-    public AssistantKungFu(String name, int exp, boolean eightDirection) {
-        super(name, exp);
+    public AssistantKungFu(String name, int exp, boolean eightDirection, int icon) {
+        super(name, exp, icon);
         this.eightDirection = eightDirection;
     }
 
@@ -78,6 +78,6 @@ public final class AssistantKungFu extends AbstractKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new AssistantKungFu(name(), 0, eightDirection);
+        return new AssistantKungFu(name(), 0, eightDirection, icon());
     }
 }

@@ -42,10 +42,6 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     @Getter
     private final int wanderRage;
 
-    private final String sound;
-
-    private final int viewRange;
-
     private final List<CooldownAbility> cooldownList;
 
     public NpcImpl(long id,
@@ -58,9 +54,7 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
                    String shape,
                    String idName,
                    Direction direction,
-                   int wanderRage,
-                   String sound,
-                   int viewRange) {
+                   int wanderRage) {
         super(id);
         this.abilities = abilities;
         this.listener = listener;
@@ -73,8 +67,6 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
         this.idName = idName;
         this.direction = direction;
         this.wanderRage = wanderRage;
-        this.sound = sound;
-        this.viewRange = viewRange;
         this.cooldownList = abilities.stream().filter(a -> CooldownAbility.class.isAssignableFrom(a.getClass()))
                         .map(CooldownAbility.class::cast).collect(Collectors.toList());
         realmMap.occupy(this);
@@ -83,16 +75,6 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     public void sendEvent(NpcEvent event) {
         if (listener != null)
             listener.onEvent(event);
-    }
-
-    @Override
-    public Optional<String> sound() {
-        return Optional.ofNullable(sound);
-    }
-
-    @Override
-    public int viewRange() {
-        return viewRange;
     }
 
     @Override

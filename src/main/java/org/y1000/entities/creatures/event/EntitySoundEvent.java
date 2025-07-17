@@ -4,12 +4,13 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.message.serverevent.Abstract2ClientEvent;
 import org.y1000.event.EntityEventVisitor;
 import org.y1000.network.gen.CreatureSoundEventPacket;
+import org.y1000.network.gen.EntitySoundPacket;
 import org.y1000.network.gen.Packet;
 
 public final class EntitySoundEvent extends Abstract2ClientEvent {
 
     private final String sound;
-    private final long id;
+
     public EntitySoundEvent(ActiveEntity source, String sound) {
         this(source, sound, source.id());
     }
@@ -17,7 +18,6 @@ public final class EntitySoundEvent extends Abstract2ClientEvent {
     public EntitySoundEvent(ActiveEntity source, String sound, long id) {
         super(source);
         this.sound = sound;
-        this.id = id;
     }
 
     public static EntitySoundEvent broadcast(ActiveEntity source, String sound) {
@@ -27,8 +27,7 @@ public final class EntitySoundEvent extends Abstract2ClientEvent {
     @Override
     protected Packet buildPacket() {
         return Packet.newBuilder()
-                .setSound(CreatureSoundEventPacket.newBuilder()
-                        .setId(id)
+                .setEntitySound(EntitySoundPacket.newBuilder()
                         .setSound(sound)
                         .build())
                 .build();

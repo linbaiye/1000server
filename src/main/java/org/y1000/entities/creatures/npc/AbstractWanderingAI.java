@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
+import org.y1000.entities.creatures.npc.spell.NpcSoundAbility;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Counter;
 
@@ -41,7 +41,7 @@ public abstract class AbstractWanderingAI extends AbstractMovableNpcAI {
         computePrevious();
         if (counter.count(1)) {
             counter.reset();
-            npc().sound().ifPresent(s -> npc().sendEvent(NpcSoundEvent.of(npc(), s)));
+            npc().findAbility(NpcSoundAbility.class).ifPresent(a -> a.trySound(npc()));
         }
         if (npc().coordinate().equals(destination)) {
             destination = chooseTarget(getWanderOrigin());

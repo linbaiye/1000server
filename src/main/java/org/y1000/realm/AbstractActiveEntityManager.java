@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implements ActiveEntityManager<T>, EntityEventHandler {
     private boolean iterating;
@@ -115,6 +116,7 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
                 .findFirst();
     }
 
+
     @Override
     public Set<T> find(Predicate<? super T> predicate) {
         return entities.stream()
@@ -122,6 +124,13 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
                 .filter(predicate).collect(Collectors.toSet());
     }
 
+    @Override
+    public Set<Entity> filterVisible(Entity source, Predicate<Entity> filter) {
+        return aoiManager.filterVisibleEntities(source, Entity.class)
+                .stream()
+                .filter(filter)
+                .collect(Collectors.toSet());
+    }
 
     protected MessageSender getMessageSender() {
         return messageSender;

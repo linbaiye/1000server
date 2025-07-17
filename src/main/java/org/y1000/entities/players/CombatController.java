@@ -2,13 +2,20 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.FilterVisibleEvent;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.item.Ammo;
+import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.attack.AbstractRangedKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerAttackEvent;
+import org.y1000.util.Coordinate;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 final class CombatController {
@@ -22,6 +29,35 @@ final class CombatController {
         enemy = entity;
         this.hurtAbility = hurtAbility;
         resourceNoticeTimer = 0;
+    }
+
+    private void aoeMelee(AttackKungFu kungFu, AssistantKungFu assistantKungFu) {
+        // attack main target.
+        int exp = hurtAbility.attacked(player, player.damage(), player.hit());
+        var event = FilterVisibleEvent.filterAOE(player);
+        player.sendEvent(event);
+        Damage aoeDamage = assistantKungFu.computeDamage(player.damage());
+        Set<Coordinate> coordinates = assistantKungFu.affectedCoordinates(player);
+        List<ActiveEntity> entities = event.resultStream(ActiveEntity.class)
+                .filter(e -> coordinates.contains(e.coordinate())).toList();
+        for (ActiveEntity entity : entities) {
+            HurtAbility ability = entity.findAbility(HurtAbility.class).orElse(null);
+            if (ability == null || !ability.canBeAttacked())
+                continue;
+            int tmp = ability.attacked(player, aoeDamage, player.hit());
+            if (exp < tmp)
+                exp = tmp;
+        }
+        assistantKungFu.gainExp(player, exp);
+        player.sendEvent(PlayerSoundEvent.toAll(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
+
+    }
+
+    private void singleAttack(AttackKungFu kungFu) {
+        int exp = hurtAbility.attacked(player, player.damage(), player.hit());
+        if (exp > 0)
+            player.doGainExp(exp, kungFu);
+        player.sendEvent(PlayerSoundEvent.toAll(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
     }
 
     private void attack() {
@@ -38,10 +74,7 @@ final class CombatController {
         } else {
             kungFu.consumeAttributes(player);
             player.changeState(new PlayerMeleeState(player, action));
-            int exp = hurtAbility.attacked(player, player.damage(), player.hit());
-            if (exp > 0)
-                player.doGainExp(exp, kungFu);
-            player.sendEvent(PlayerSoundEvent.toAll(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
+            player.assistantKungFu().ifPresentOrElse(a -> aoeMelee(kungFu, a), () -> singleAttack(kungFu));
         }
     }
 

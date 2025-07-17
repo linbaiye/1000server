@@ -12,7 +12,7 @@ public class CombatAI extends AbstractMovableNpcAI {
     private final NpcHurtAbility hurtAbility;
     private final HurtAbility enemyHurtAbility;
 
-    private CombatAI(Npc npc, ActiveEntity entity,
+    public CombatAI(Npc npc, ActiveEntity entity,
                      NpcAbility ability) {
         super(npc);
         this.enemy = entity;
@@ -30,7 +30,7 @@ public class CombatAI extends AbstractMovableNpcAI {
 
     @Override
     public void start() {
-        npc().findAbility(NpcMoveAbility.class).ifPresent(NpcMoveAbility::enableCombatMove);
+        npc().findAbility(NpcMoveAbility.class).ifPresent(NpcMoveAbility::enableFastMove);
         tryAttack();
     }
 
@@ -38,11 +38,9 @@ public class CombatAI extends AbstractMovableNpcAI {
     private void shootOrCooldown(NpcShootAbility shootAbility) {
         resetPrevious();
         if (!shootAbility.canAttack()) {
-            log.debug("Wait cooldown.");
             stay(shootAbility.cooldownLeft());
         }
         else {
-            log.debug("Shoot");
             changeAbility(shootAbility);
             shootAbility.shoot(npc(), enemy);
         }
@@ -121,9 +119,5 @@ public class CombatAI extends AbstractMovableNpcAI {
 
     private void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
         applyHurtAbility(ability);
-    }
-
-    public static CombatAI hurtAbilityTriggered(Npc npc, ActiveEntity entity, NpcHurtAbility hurtAbility) {
-        return new CombatAI(npc, entity, hurtAbility);
     }
 }

@@ -39,11 +39,11 @@ public interface NpcSdb {
 
     int getRegenInterval(String name);
 
-    default int getEscapeLife(String name) {
-        return Integer.MIN_VALUE;
-    }
-
     default String getAttackMagic(String name) {
         return null;
+    }
+
+    default int getViewWidth(String name) {
+        return 0;
     }
 }

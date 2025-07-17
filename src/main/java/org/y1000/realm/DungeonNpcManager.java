@@ -46,7 +46,7 @@ final class DungeonNpcManager extends AbstractNpcManager {
 
     @Override
     public void onRemove(Npc npc, I2ClientMessage message) {
-        removeAndSync(npc ,message);
+        syncAndRemove(npc ,message);
     }
 
     private void initializeNPCs(CreateNpcSdb sdb) {
