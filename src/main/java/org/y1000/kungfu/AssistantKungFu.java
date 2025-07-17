@@ -71,9 +71,10 @@ public final class AssistantKungFu extends AbstractKungFu {
             return null;
         }
         String error = "需要风灵旋满方可修炼。";
-        return player.kungFuBook().findBasic("风灵旋")
-                .map(kf -> kf.isLevelFull() ? null : error)
-                .orElse(error);
+        KungFu kf = player.kungFuBook().findBasic("风灵旋").orElse(null);
+        if (kf == null || !kf.isLevelFull())
+            return error;
+        return null;
     }
 
     @Override
