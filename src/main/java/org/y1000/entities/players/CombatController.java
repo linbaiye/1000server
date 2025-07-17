@@ -11,11 +11,6 @@ import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.attack.AbstractRangedKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerAttackEvent;
-import org.y1000.util.Coordinate;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Slf4j
 final class CombatController {
@@ -33,30 +28,14 @@ final class CombatController {
 
     private void aoeMelee(AttackKungFu kungFu, AssistantKungFu assistantKungFu) {
         // attack main target.
-        int exp = hurtAbility.attacked(player, player.damage(), player.hit());
-        var event = FilterVisibleEvent.filterAOE(player);
-        player.sendEvent(event);
-        Damage aoeDamage = assistantKungFu.computeDamage(player.damage());
-        Set<Coordinate> coordinates = assistantKungFu.affectedCoordinates(player);
-        List<ActiveEntity> entities = event.resultStream(ActiveEntity.class)
-                .filter(e -> coordinates.contains(e.coordinate())).toList();
-        for (ActiveEntity entity : entities) {
-            HurtAbility ability = entity.findAbility(HurtAbility.class).orElse(null);
-            if (ability == null || !ability.canBeAttacked())
-                continue;
-            int tmp = ability.attacked(player, aoeDamage, player.hit());
-            if (exp < tmp)
-                exp = tmp;
-        }
-        assistantKungFu.gainExp(player, exp);
-        player.sendEvent(PlayerSoundEvent.toAll(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
-
+        boolean hit = assistantKungFu.apply(player, enemy, assistantKungFu.affectedCoordinates(player), player.damage());
+        player.sendEvent(PlayerSoundEvent.toAll(player, hit ? kungFu.strikeSound() : kungFu.swingSound()));
     }
 
     private void singleAttack(AttackKungFu kungFu) {
         int exp = hurtAbility.attacked(player, player.damage(), player.hit());
         if (exp > 0)
-            player.doGainExp(exp, kungFu);
+            kungFu.gainExp(player, exp);
         player.sendEvent(PlayerSoundEvent.toAll(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));
     }
 

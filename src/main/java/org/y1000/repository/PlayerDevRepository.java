@@ -39,6 +39,7 @@ public class PlayerDevRepository implements PlayerRepository {
         male.inventory().add(itemFactory.createItem("闪光剑破解", 1));
         male.inventory().add(itemFactory.createItem("风灵旋", 1));
         male.inventory().add(itemFactory.createItem("灵动八方", 1));
+        male.inventory().add(itemFactory.createItem("壁射剑法", 1));
         male.inventory().add(itemFactory.createEquipment("驱魔烈火弓"));
         male.inventory().add(itemFactory.createEquipment("斗甲"));
         male.inventory().add(itemFactory.createItem("箭", 10000));

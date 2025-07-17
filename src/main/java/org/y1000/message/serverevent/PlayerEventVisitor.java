@@ -34,10 +34,6 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
 
     }
 
-    default void visit(PlayerAttackAoeEvent event) {
-
-    }
-
     default void visit(PlayerAttributeEvent event) {
 
     }

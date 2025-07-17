@@ -27,6 +27,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class PlayerImpl extends AbstractCreature implements Player, EntityEventListener, PlayerInputHandler {
@@ -1072,24 +1073,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
     }
 
-
-    void doGainExp(int amount, KungFu kungFu) {
-        if (amount <= 0) {
-            return;
-        }
-        if (armLife.percent() < 50) {
-            sendText("手部活力不足，无法获得经验。");
-            return;
-        }
-        kungFu.gainExp(this, amount);
-    }
-
-
-    @Override
-    public void gainAssistantExp(int amount) {
-        assistantKungFu().ifPresent(kf -> doGainExp(amount, kf));
-    }
-
     @Override
     public int headPercent() {
         return headLife.percent();
@@ -1419,5 +1402,12 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
         sendEvent(PlayerChangeStateEvent.allVisible(this));
         return ExperienceUtil.damageToExp(maxLife(), old - life.currentValue());
+    }
+
+    @Override
+    public Set<Entity> getEntitiesAt(Set<Coordinate> coordinates) {
+        var event = FilterVisibleEvent.filterVisibleAt(this, coordinates);
+        sendEvent(event);
+        return event.resultStream(Entity.class).collect(Collectors.toSet());
     }
 }

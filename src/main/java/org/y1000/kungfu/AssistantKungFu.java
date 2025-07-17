@@ -2,7 +2,10 @@ package org.y1000.kungfu;
 
 import lombok.Builder;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
+import org.y1000.entities.Entity;
+import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
@@ -75,6 +78,28 @@ public final class AssistantKungFu extends AbstractKungFu {
         if (kf == null || !kf.isLevelFull())
             return error;
         return null;
+    }
+
+
+    public boolean apply(Player player, ActiveEntity mainTarget, Set<Coordinate> affected, Damage mainDamage) {
+        HurtAbility hurtAbility = mainTarget.findAbility(HurtAbility.class).orElse(null);
+        if (hurtAbility == null)
+            return false;
+        int exp = hurtAbility.attacked(player, mainDamage, player.hit());
+        Set<Entity> entities = mainTarget.getEntitiesAt(affected);
+        var aoeDamage = computeDamage(mainDamage);
+        for (var e : entities) {
+            if (e instanceof ActiveEntity entity) {
+                HurtAbility ability = entity.findAbility(HurtAbility.class).orElse(null);
+                if (ability == null || !ability.canBeAttacked())
+                    continue;
+                int tmp = ability.attacked(player, aoeDamage, player.hit());
+                if (exp < tmp)
+                    exp = tmp;
+            }
+        }
+        gainExp(player, exp);
+        return exp > -1;
     }
 
     @Override

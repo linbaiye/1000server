@@ -7,6 +7,7 @@ import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.realm.NpcEventHandler;
 import org.y1000.realm.PlayerEventHandler;
+import org.y1000.util.Coordinate;
 
 import java.util.Collections;
 import java.util.Set;
@@ -34,12 +35,6 @@ public abstract class FilterVisibleEvent<T extends Entity> implements EntityEven
     public <R extends Entity> Stream<R> resultStream(Class<R> type) {
         return result.stream().filter(e -> type.isAssignableFrom(e.getClass()))
                         .map(type::cast);
-    }
-
-    public <R extends Entity> Stream<R> hurtableStream(Class<R> type) {
-        return result.stream()
-                .filter(e -> type.isAssignableFrom(e.getClass()))
-                .map(type::cast);
     }
 
     public static class NpcFilterVisibleEntityEvent extends FilterVisibleEvent<Npc> implements NpcEvent {
@@ -72,10 +67,11 @@ public abstract class FilterVisibleEvent<T extends Entity> implements EntityEven
                 && e.coordinate().directDistance(npc.coordinate()) <= d);
     }
 
-    public static PlayerFilterVisibleEntityEvent filterAOE(Player player) {
-        return new PlayerFilterVisibleEntityEvent(player, e -> e.coordinate().directDistance(player.coordinate()) <= 1 &&
-                e instanceof ActiveEntity entity &&
-                entity.findAbility(HurtAbility.class).map(HurtAbility::canBeAttacked).orElse(false));
+    public static NpcFilterVisibleEntityEvent filterVisibleAt(Npc npc, Set<Coordinate> coordinates) {
+        return new NpcFilterVisibleEntityEvent(npc, e -> coordinates.contains(e.coordinate()));
     }
 
+    public static PlayerFilterVisibleEntityEvent filterVisibleAt(Player player, Set<Coordinate> coordinates) {
+        return new PlayerFilterVisibleEntityEvent(player, e -> coordinates.contains(e.coordinate()));
+    }
 }

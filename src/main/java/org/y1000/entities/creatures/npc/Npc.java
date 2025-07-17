@@ -6,8 +6,6 @@ import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
-import java.util.Optional;
-
 public interface Npc extends ActiveEntity {
     void changeAI(NpcAI newAi);
 

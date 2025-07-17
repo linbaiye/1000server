@@ -117,8 +117,6 @@ public interface Player extends IActiveEntity, HurtAbility {
 
     void gainLife(int v);
 
-    void gainAssistantExp(int amount);
-
     Armor armor();
 
     int headPercent();

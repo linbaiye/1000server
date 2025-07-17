@@ -3,6 +3,8 @@ package org.y1000.entities.creatures.npc;
 import lombok.Getter;
 import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.Direction;
+import org.y1000.entities.Entity;
+import org.y1000.entities.FilterVisibleEvent;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.RealmMap;
@@ -10,6 +12,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NpcImpl extends AbstractActiveEntity implements Npc {
 
@@ -143,5 +146,12 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     @Override
     public I2ClientMessage captureSnapshot() {
         return ai.captureSnapshot();
+    }
+
+    @Override
+    public Set<Entity> getEntitiesAt(Set<Coordinate> coordinates) {
+        var event = FilterVisibleEvent.filterVisibleAt(this, coordinates);
+        sendEvent(event);
+        return event.resultStream(Entity.class).collect(Collectors.toSet());
     }
 }
