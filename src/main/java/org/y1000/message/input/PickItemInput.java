@@ -7,7 +7,7 @@ import org.y1000.entities.players.Player;
 public record PickItemInput(long id) implements EntityInteractInput {
 
     @Override
-    public long id() {
+    public long interactId() {
         return id;
     }
 

@@ -6,13 +6,13 @@ import org.y1000.event.EntityEventVisitor;
 
 public final class DynamicObjectDieEvent implements IEntityEvent {
 
-    private final DynamicObject source;
+    private final IDynamicObject source;
 
-    public DynamicObject object() {
+    public IDynamicObject object() {
         return source;
     }
 
-    public DynamicObjectDieEvent(DynamicObject source) {
+    public DynamicObjectDieEvent(IDynamicObject source) {
         this.source = source;
     }
 

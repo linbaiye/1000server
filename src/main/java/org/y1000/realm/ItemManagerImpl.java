@@ -94,18 +94,17 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> impl
     @Override
     public void dropItem(String name, int number, Coordinate at) {
         Item item = itemFactory.createItem(name, number);
-        GroundItem groundItem = new GroundItem(idGenerator.next(), item, at, this::removeItem);
-        add(groundItem);
-        sendToVisiblePlayers(groundItem, groundItem.captureSnapshot());
-        item.dropSound().ifPresent(s -> sendToVisiblePlayers(groundItem, new EntitySoundEvent(groundItem, s)));
+        dropItem(item, at);
     }
 
     @Override
-    public void dropItem(PlayerDropItemEvent dropItemEvent) {
-        if (dropItemEvent == null)
+    public void dropItem(Item item, Coordinate droppedAt) {
+        if (item == null)
             return;
-//        GroundedItem groundedItem = dropItemEvent.createGroundedItem(idGenerator.next());
-//        dropNewItem(groundedItem);
+        GroundItem groundItem = new GroundItem(idGenerator.next(), item, droppedAt, this::removeItem);
+        add(groundItem);
+        sendToVisiblePlayers(groundItem, groundItem.captureSnapshot());
+        item.dropSound().ifPresent(s -> sendToVisiblePlayers(groundItem, new EntitySoundEvent(groundItem, s)));
     }
 
 

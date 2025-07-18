@@ -74,7 +74,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case SAY -> ClientInputTextEvent.create(clientPacket.getSay().getText());
             case BANKOPERATION -> ClientOperateBankEvent.fromPacket(clientPacket.getBankOperation());
             case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
-            case CLICKPACKET -> new ClientClickEvent(clientPacket.getClickPacket().getId());
+            case CLICKPACKET -> new ClickEntityInput(clientPacket.getClickPacket().getId());
             case FOUNDGUILD -> ClientFoundGuildEvent.parse(clientPacket.getFoundGuild());
             case CREATEGUILDKUNGFU -> ClientCreateGuildKungFuEvent.parse(clientPacket.getCreateGuildKungFu());
             case MANAGEGUILD -> new ClientManageGuildEvent(clientPacket.getManageGuild().getType(), clientPacket.getManageGuild().getTarget());
@@ -90,6 +90,8 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case UNEQUIPINPUT -> new UnequipInput(EquipmentType.fromValue(clientPacket.getUnequipInput().getType()));
             case SWAPKUNGFUSLOTPACKET -> SwapKungFuInput.fromPacket(clientPacket.getSwapKungFuSlotPacket());
             case PICKINPUT -> new PickItemInput(clientPacket.getPickInput().getId());
+            case DROPINPUT -> new DropItemInput(clientPacket.getDropInput().getSlot(), Coordinate.xy(clientPacket.getDropInput().getX(), clientPacket.getDropInput().getY()));
+            case CONFIRMDROPINPUT -> ConfirmDropItemInput.fromPacket(clientPacket.getConfirmDropInput());
             default -> null;
         };
     }

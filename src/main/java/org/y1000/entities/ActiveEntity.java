@@ -27,4 +27,8 @@ public interface ActiveEntity extends Entity {
         return Collections.emptySet();
     }
 
+    default Optional<String> clickText() {
+        return Optional.empty();
+    }
+
 }

@@ -10,7 +10,7 @@ public final class UpdateDynamicObjectEvent extends Abstract2ClientEvent {
     private final Packet packet;
 
 
-    public UpdateDynamicObjectEvent(DynamicObject object) {
+    public UpdateDynamicObjectEvent(IDynamicObject object) {
         super(object);
         packet = Packet.newBuilder()
                 .setUpdateDynamicObject(UpdateDynamicObjectPacket.newBuilder()

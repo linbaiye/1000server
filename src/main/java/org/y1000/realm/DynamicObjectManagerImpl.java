@@ -15,7 +15,7 @@ import org.y1000.util.Coordinate;
 import java.util.Set;
 
 @Slf4j
-public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<DynamicObject> implements DynamicObjectManager {
+public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<IDynamicObject> implements DynamicObjectManager {
 
     private final DynamicObjectFactory factory;
 
@@ -54,7 +54,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
-        if (!(entityEvent.source() instanceof DynamicObject object))  {
+        if (!(entityEvent.source() instanceof IDynamicObject object))  {
             return;
         }
         if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
@@ -83,7 +83,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
     }
 
 
-    private void addObject(DynamicObject entity) {
+    private void addObject(IDynamicObject entity) {
 //        eventSender.add(entity);
         entity.registerEventListener(this);
 //        eventSender.notifyVisiblePlayers(entity, entity.captureSnapshot());
@@ -118,8 +118,8 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
                 throw e;
             }
         }
-        Set<DynamicObject> entities = getEntities();
-        for (DynamicObject entity : entities) {
+        Set<IDynamicObject> entities = getEntities();
+        for (IDynamicObject entity : entities) {
             if (entity instanceof EventDrivenDynamicObject dynamicObject) {
                 dynamicObject.subscribe(entities);
             }

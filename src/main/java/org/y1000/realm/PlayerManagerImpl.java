@@ -7,6 +7,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.Rope;
 import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
+import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.message.*;
 import org.y1000.message.input.*;
@@ -354,6 +355,10 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
         sendToVisiblePlayersAndSelf(event.source(), event);
     }
 
+    @Override
+    public void dropItem(Item item, Coordinate droppedAt) {
+        itemManager.dropItem(item, droppedAt);
+    }
 
     @Override
     public void onEvent(PlayerEvent event) {

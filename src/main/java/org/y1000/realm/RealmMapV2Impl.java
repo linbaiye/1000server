@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.Server;
 import org.y1000.entities.Entity;
-import org.y1000.entities.objects.DynamicObject;
+import org.y1000.entities.objects.IDynamicObject;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.Teleport;
 import org.y1000.util.Coordinate;
@@ -134,7 +134,7 @@ final class RealmMapV2Impl implements RealmMap {
 
 
     @Override
-    public void occupy(DynamicObject dynamicObject) {
+    public void occupy(IDynamicObject dynamicObject) {
         Validate.notNull(dynamicObject);
         if (dynamicObject.occupyingCoordinates().stream().anyMatch(c -> !isInRange(c)))  {
             throw new IllegalArgumentException("Coordinate out of range.");
@@ -146,7 +146,7 @@ final class RealmMapV2Impl implements RealmMap {
     }
 
     @Override
-    public void free(DynamicObject dynamicObject) {
+    public void free(IDynamicObject dynamicObject) {
         Validate.notNull(dynamicObject);
         entityCoordinateMap.remove(dynamicObject);
         for (Coordinate coordinate : dynamicObject.occupyingCoordinates()) {

@@ -2,6 +2,7 @@ package org.y1000.entities.players;
 
 import org.y1000.item.EquipmentType;
 import org.y1000.message.input.*;
+import org.y1000.util.Coordinate;
 
 public interface PlayerInputHandler {
     void move(MoveInput moveInput);
@@ -19,5 +20,9 @@ public interface PlayerInputHandler {
     void unequip(EquipmentType type);
 
     void swapKungFu(int page, int slot1, int slot2);
+
+    void startDropItem(int slot, Coordinate at);
+
+    void confirmDropItem(int slot, int number, Coordinate at);
 
 }

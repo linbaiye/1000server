@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity implements DynamicObject {
+public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity implements IDynamicObject {
 
     private final Coordinate coordinate;
 

@@ -4,7 +4,7 @@ import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 
 public interface EntityInteractInput {
-    long id();
+    long interactId();
 
     void onEntityFound(Player player, Entity entity);
 }

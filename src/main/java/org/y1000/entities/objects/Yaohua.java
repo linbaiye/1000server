@@ -79,7 +79,7 @@ public final class Yaohua extends AbstractKillableDynamicObject
     }
 
     @Override
-    public void subscribe(Set<DynamicObject> dynamicObjects) {
+    public void subscribe(Set<IDynamicObject> dynamicObjects) {
         if (dynamicObjects == null) {
             return;
         }

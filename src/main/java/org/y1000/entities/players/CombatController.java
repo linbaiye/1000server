@@ -2,7 +2,6 @@ package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.FilterVisibleEvent;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
@@ -11,6 +10,7 @@ import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.attack.AbstractRangedKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerAttackEvent;
+
 
 @Slf4j
 final class CombatController {
@@ -63,7 +63,7 @@ final class CombatController {
      * @return -1 if this combat is over, 1 if a strike is carried, 0 when combat should carry on.
      */
     int update(int delta) {
-        if (!hurtAbility.swingAllowed()) {
+        if (!hurtAbility.swingAllowed() || player.attackKungFu().isRanged()) {
             return -1;
         }
         if (player.maxCooldown() > 0) {

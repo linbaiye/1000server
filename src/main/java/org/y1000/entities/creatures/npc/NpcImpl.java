@@ -154,4 +154,9 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
         sendEvent(event);
         return event.resultStream(Entity.class).collect(Collectors.toSet());
     }
+
+    @Override
+    public Optional<String> clickText() {
+        return Optional.of(viewName);
+    }
 }

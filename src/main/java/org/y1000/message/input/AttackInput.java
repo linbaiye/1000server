@@ -13,7 +13,7 @@ public final class AttackInput implements EntityInteractInput {
     }
 
     @Override
-    public long id() {
+    public long interactId() {
         return id;
     }
 

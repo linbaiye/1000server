@@ -154,6 +154,11 @@ public final class NpcFactoryImpl implements NpcFactory {
         return abilities;
     }
 
+    private List<Object> buildNpcInteractAbilities(String idName) {
+
+    }
+
+
     private List<Object> buildNpcAbilities(String idName) {
         List<Object> abilities = buildCommonAbilities(idName, nonMonsterNpcSdb);
         if (nonMonsterNpcSdb.isProtector(idName)) {

@@ -1,9 +1,8 @@
 package org.y1000.realm;
 
-import org.y1000.entities.objects.DynamicObject;
+import org.y1000.entities.objects.IDynamicObject;
 import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
-import org.y1000.event.IEntityEvent;
 
 import java.util.Optional;
 
@@ -22,12 +21,12 @@ public final class EmptyDynamicObjectmanager implements DynamicObjectManager {
     }
 
     @Override
-    public Optional<DynamicObject> find(long id) {
+    public Optional<IDynamicObject> find(long id) {
         return Optional.empty();
     }
 
     @Override
-    public boolean contains(DynamicObject entity) {
+    public boolean contains(IDynamicObject entity) {
         return false;
     }
 

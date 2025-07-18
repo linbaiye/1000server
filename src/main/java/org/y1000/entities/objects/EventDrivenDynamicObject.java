@@ -6,7 +6,7 @@ import java.util.Set;
 /**
  * A dynamic object that is driven by other objects.
  */
-public interface EventDrivenDynamicObject extends DynamicObject {
+public interface EventDrivenDynamicObject extends IDynamicObject {
 
-    void subscribe(Set<DynamicObject> dynamicObjects);
+    void subscribe(Set<IDynamicObject> dynamicObjects);
 }

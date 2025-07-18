@@ -332,6 +332,8 @@ message ClientPacket {
     UnequipInputPacket unequipInput = 38;
     SwapKungFuSlotPacket swapKungFuSlotPacket = 39;
     PickInputPacket pickInput = 40;
+    DropItemInputPacket dropInput = 41;
+    ConfirmDropItemInputPacket confirmDropInput = 42;
   }
 }
 
@@ -638,6 +640,15 @@ message MerchantMenuPacket {
   bool sell = 7;
 }
 
+message StartDopItemPacket {
+  int32 maxNumber = 1;
+  int32 x = 2;
+  int32 y = 3;
+  string name = 4;
+  int32 slot = 5;
+}
+
+
 
 message Packet {
   oneof TypedPacket {
@@ -707,6 +718,7 @@ message Packet {
     EntitySoundPacket entitySound = 69;
     PlayerDamagedPacket playerDamaged = 70;
     EntityDamagedPacket entityDamaged = 71;
+    StartDopItemPacket dropItemPacket = 72;
   }
 }
 
@@ -875,6 +887,19 @@ message AttackInputPacket {
 
 message PickInputPacket {
   int64 id = 64;
+}
+
+message DropItemInputPacket {
+  int32 slot = 1;
+  int32 x = 2;
+  int32 y = 3;
+}
+
+message ConfirmDropItemInputPacket {
+  int32 number = 1;
+  int32 slot = 2;
+  int32 x = 3;
+  int32 y = 4;
 }
 
 message PlayerMovePacket {

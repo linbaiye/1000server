@@ -7,11 +7,11 @@ import org.y1000.network.gen.ShowDynamicObjectPacket;
 public final class DynamicObjectSnapshot extends AbstractEntitySnapshot {
     private final Packet packet;
 
-    public DynamicObjectSnapshot(DynamicObject dynamicObject, int elapsed) {
+    public DynamicObjectSnapshot(IDynamicObject dynamicObject, int elapsed) {
         this(dynamicObject, elapsed, null);
     }
 
-    public DynamicObjectSnapshot(DynamicObject dynamicObject, int elapsed, String requiredItem) {
+    public DynamicObjectSnapshot(IDynamicObject dynamicObject, int elapsed, String requiredItem) {
         super(dynamicObject.id(), dynamicObject.coordinate());
         var builder = ShowDynamicObjectPacket.newBuilder()
                 .setId(dynamicObject.id())

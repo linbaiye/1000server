@@ -29,7 +29,7 @@ class YaohuaTest extends AbstractUnitTestFixture {
 
     private RealmMap realmMap;
 
-    private Set<DynamicObject> foxfires;
+    private Set<IDynamicObject> foxfires;
 
     private ItemFactory itemFactory;
 

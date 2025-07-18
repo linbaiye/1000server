@@ -20,10 +20,10 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
     }
 
     @Override
-    public DynamicObject createDynamicObject(String name,
-                                                    long id,
-                                                    RealmMap realmMap,
-                                                    Coordinate coordinate) {
+    public IDynamicObject createDynamicObject(String name,
+                                              long id,
+                                              RealmMap realmMap,
+                                              Coordinate coordinate) {
         Validate.notNull(name);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);

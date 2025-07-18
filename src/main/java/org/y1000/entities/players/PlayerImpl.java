@@ -7,6 +7,7 @@ import org.apache.commons.lang3.Validate;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.players.event.*;
+import org.y1000.entities.players.event.PlayerDropItemEvent;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.exp.ExperienceUtil;
@@ -271,6 +272,34 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             syncKungFuBookQuietly();
     }
 
+    private boolean validateDropItem(int slot, Coordinate at) {
+        if (inventory.getItem(slot) == null)
+            return false;
+        if (at.directDistance(coordinate()) > 2) {
+            sendText("距离过远。");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void startDropItem(int slot, Coordinate at) {
+        if (!validateDropItem(slot, at))
+            return;
+        sendEvent(StartDropItemMessage.of(this, slot, inventory.getItem(slot), at));
+    }
+
+    @Override
+    public void confirmDropItem(int slot, int number, Coordinate at) {
+        if (!validateDropItem(slot, at))
+            return;
+        Item removed = inventory.remove(slot, number);
+        if (removed == null) {
+            return;
+        }
+        sendEvent(new PlayerDropItemEvent(this, removed, at));
+        sendEvent(UpdateInventorySlotMessage.update(this, slot));
+    }
 
     private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
         if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {
@@ -550,7 +579,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
      * @param entity the target to combat.
      * @return -1 if not acceptable, 1 if a strike is carried, 0 if accepted but no strike happened.
      */
-    int tryAcceptAttack(org.y1000.entities.ActiveEntity entity) {
+    int tryAcceptAttack(ActiveEntity entity) {
         combatController = CombatController.acceptIfAllowed(this, entity);
         if (combatController == null)
             return -1;
@@ -1409,5 +1438,18 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         var event = FilterVisibleEvent.filterVisibleAt(this, coordinates);
         sendEvent(event);
         return event.resultStream(Entity.class).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Optional<String> clickText() {
+        StringBuilder stringBuilder = new StringBuilder("名称: ")
+                .append(viewName()).append("\r\n");
+        guildMembership().ifPresent(m -> m.append(stringBuilder));
+        stringBuilder.append("使用武功: ").append(attackKungFu().name());
+        protectKungFu().ifPresent(p -> stringBuilder.append(" ").append(p.name()));
+        footKungFu().ifPresent(f -> stringBuilder.append(" ").append(f.name()));
+        assistantKungFu().ifPresent(a -> stringBuilder.append(" ").append(a.name()));
+        breathKungFu().ifPresent(b -> stringBuilder.append(" ").append(b.name()));
+        return Optional.of(stringBuilder.toString());
     }
 }

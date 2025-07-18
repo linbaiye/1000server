@@ -222,7 +222,7 @@ abstract class AbstractRealm implements Realm {
 
     private void handleEntityInteraction(Player player, EntityInteractInput interactionInput) {
         for (ActiveEntityManager<?> entityManager : entityManagers) {
-            entityManager.find(interactionInput.id())
+            entityManager.find(interactionInput.interactId())
                     .ifPresent(e -> interactionInput.onEntityFound(player, e));
         }
     }
