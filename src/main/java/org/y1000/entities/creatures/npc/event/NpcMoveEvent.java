@@ -21,17 +21,22 @@ public class NpcMoveEvent extends AbstractNpcEvent implements I2ClientMessage  {
         return packet;
     }
 
-    public static NpcMovePacket movePacket(ActiveEntity entity, Direction direction) {
+    public static NpcMovePacket forPlayer(ActiveEntity entity, Direction direction) {
+        return movePacket(entity, direction, 0);
+    }
+
+    private static NpcMovePacket movePacket(ActiveEntity entity, Direction direction, int millis) {
         return  NpcMovePacket.newBuilder()
                 .setId(entity.id())
                 .setX(entity.coordinate().x())
                 .setY(entity.coordinate().y())
+                .setSpeedMillis(millis)
                 .setDirection(direction.value())
                 .build();
     }
 
-    public static NpcMoveEvent of(Npc npc) {
-        NpcMovePacket movePacket = movePacket(npc, npc.direction());
+    public static NpcMoveEvent of(Npc npc, int millis) {
+        NpcMovePacket movePacket = movePacket(npc, npc.direction(), millis);
         Packet packet = Packet.newBuilder().setNpcMove(movePacket).build();
         return new NpcMoveEvent(npc, packet);
     }

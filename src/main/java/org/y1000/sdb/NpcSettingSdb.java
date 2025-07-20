@@ -1,0 +1,84 @@
+package org.y1000.sdb;
+
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+@Getter
+@Slf4j
+public class NpcSettingSdb {
+
+    private String buyTitle;
+    private String sellTitle;
+    private String sellCaption;
+    private String buyCaption;
+
+    private int sellImage;
+    private int buyImage;
+    private final List<String> buyItems = new ArrayList<>();
+    private final List<String> sellItems = new ArrayList<>();
+
+    private static final Map<String, NpcSettingSdb> CACHE = new HashMap<>();
+
+    public int getAnyImage() {
+        return sellImage == 0 ? buyImage : sellImage;
+    }
+
+    public String getAnyTitle() {
+        return buyTitle != null ? buyTitle : sellTitle;
+    }
+
+    private NpcSettingSdb() {
+    }
+
+    private void validate() {
+        if (buyTitle == null && sellTitle == null)
+            throw new IllegalStateException("No title");
+        if (sellCaption == null && buyCaption== null)
+            throw new IllegalStateException("No caption");
+        if (buyImage == 0 && sellImage == 0)
+            throw new IllegalStateException("No image");
+        if (buyItems.isEmpty() && sellItems.isEmpty() )
+            throw new IllegalStateException("No items");
+    }
+
+
+    public static synchronized Optional<NpcSettingSdb> tryLoad(String npcIdName) {
+        if (CACHE.containsKey(npcIdName)) {
+            return Optional.of(CACHE.get(npcIdName));
+        }
+        var u = NpcSettingSdb.class.getResource("/sdb/NpcSetting/" + npcIdName + ".txt");
+        if (u == null) {
+            return Optional.empty();
+        }
+        NpcSettingSdb npcSettingsdb = new NpcSettingSdb();
+        try (var stream = u.openStream()){
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream))) {
+                List<String> lines = bufferedReader.lines().toList();
+                for (String line : lines) {
+                    String[] split = line.split(":");
+                    switch (split[0]) {
+                        case "SELLITEM" -> npcSettingsdb.sellItems.add(split[1]);
+                        case "BUYITEM" -> npcSettingsdb.buyItems.add(split[1]);
+                        case "SELLTITLE" -> npcSettingsdb.sellTitle = split[1];
+                        case "BUYTITLE" -> npcSettingsdb.buyTitle = split[1];
+                        case "BUYCAPTION" -> npcSettingsdb.buyCaption = split[1];
+                        case "SELLCAPTION" -> npcSettingsdb.sellCaption = split[1];
+                        case "BUYIMAGE" -> npcSettingsdb.buyImage = Integer.parseInt(split[1]);
+                        case "SELLIMAGE" -> npcSettingsdb.sellImage = Integer.parseInt(split[1]);
+                    }
+                }
+            }
+            npcSettingsdb.validate();
+            CACHE.put(npcIdName, npcSettingsdb);
+            return Optional.of(npcSettingsdb);
+        } catch (Exception e) {
+            log.error("Failed to parse file, ", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+}

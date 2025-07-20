@@ -64,35 +64,32 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         }
     };
 
-    private PlayerImpl.PlayerImplBuilder restoreEquipmentAndKungFu(PlayerImpl.PlayerImplBuilder builder,
-                                                                   EntityManager entityManager,
-                                                                   PlayerPo playerPo) {
-        Optional<Weapon> weapon = Optional.empty();
+
+    private Map<EquipmentType, Equipment> restoreEquipments(PlayerPo playerPo) {
+        Map<EquipmentType, Equipment> equipments = new HashMap<>();
         for (EquipmentPo e: playerPo.getEquipments()) {
             Equipment equipment = itemFactory.createEquipment(e);
-            switch (equipment.equipmentType()) {
-                case WEAPON -> weapon = Optional.of((Weapon)equipment);
-                case TROUSER -> builder.trouser((SexualEquipment) equipment);
-                case CLOTHING -> builder.clothing((SexualEquipment) equipment);
-                case HAIR -> builder.hair((SexualEquipment) equipment);
-                case CHEST -> builder.chest((ArmorEquipment)equipment);
-                case WRIST -> builder.wrist((ArmorEquipment)equipment);
-                case HAT -> builder.hat((ArmorEquipment)equipment);
-                case BOOT -> builder.boot((ArmorEquipment)equipment);
-            }
+            equipments.put(equipment.equipmentType(), equipment);
         }
-        var kungFuBook = kungFuRepository.find(entityManager, playerPo.getId())
+        return equipments;
+    }
+
+    private KungFuBook restoreKungFuBook(EntityManager entityManager, PlayerPo playerPo) {
+        return kungFuRepository.find(entityManager, playerPo.getId())
                 .orElseGet(kungFuBookFactory::create);
-        builder.kungFuBook(kungFuBook);
-        weapon.ifPresentOrElse(w -> builder.weapon(w).attackKungFu(kungFuBook.findUnnamedAttack(w.kungFuType())),
-                () -> builder.attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.Fist)));
-        return builder;
     }
 
 
     private Player restore(EntityManager entityManager, PlayerPo playerPo) {
         PlayerDefaultAttributes innate = PlayerDefaultAttributes.INSTANCE;
-        PlayerImpl.PlayerImplBuilder builder = PlayerImpl.builder()
+        Map<EquipmentType, Equipment> equipments = restoreEquipments(playerPo);
+        KungFuBook kungFuBook = restoreKungFuBook(entityManager, playerPo);
+        Equipment equipment = equipments.get(EquipmentType.WEAPON);
+        var attackKUngFu = kungFuBook.findUnnamedAttack(AttackKungFuType.Fist);
+        if (equipment instanceof Weapon) {
+            attackKUngFu = kungFuBook.findUnnamedAttack(attackKUngFu.getType());
+        }
+        return PlayerImpl.builder()
                 .id(playerPo.getId())
                 .coordinate(playerPo.coordinate())
                 .male(playerPo.isMale())
@@ -109,8 +106,10 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
                 .innateAttributesProvider(innate)
                 .pillSlots(new PillSlots())
                 .guildMembership(guildRepository.findGuildMembership(entityManager, playerPo.getId()).orElse(null))
-                .inventory(itemRepository.findInventory(entityManager, playerPo.getId()).orElseGet(Inventory::new));
-        return restoreEquipmentAndKungFu(builder, entityManager, playerPo)
+                .inventory(itemRepository.findInventory(entityManager, playerPo.getId()).orElseGet(Inventory::new))
+                .equipments(equipments)
+                .kungFuBook(kungFuBook)
+                .attackKungFu(attackKUngFu)
                 .build();
     }
 

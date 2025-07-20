@@ -11,7 +11,7 @@ public class FrozenAI extends AbstractNpcAI {
     }
 
     @Override
-    void onNonDieAbilityDone(NpcAbility ability) {
+    void onNonDieAbilityDone(NpcUpdatableAbility ability) {
         changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
     }
 

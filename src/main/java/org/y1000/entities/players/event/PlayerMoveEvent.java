@@ -17,7 +17,7 @@ public final class PlayerMoveEvent extends Abstract2VisibleMessageEvent  {
                                          MoveAction action) {
         PlayerMovePacket playerMovePacket = PlayerMovePacket.newBuilder()
                 .setMoveAction(action.value())
-                .setMovePacket(NpcMoveEvent.movePacket(player, player.direction()))
+                .setMovePacket(NpcMoveEvent.forPlayer(player, player.direction()))
                 .build();
         Packet packet = Packet.newBuilder().setPlayerMove(playerMovePacket).build();
         return new PlayerMoveEvent(player, packet);

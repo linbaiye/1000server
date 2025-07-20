@@ -5,6 +5,7 @@ import org.y1000.entities.creatures.npc.NpcMeleeAbility;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.creatures.npc.NpcImpl;
+import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.*;
@@ -18,7 +19,7 @@ public class TestNpcFactory {
 
     public static final TestNpcFactory Instance = new TestNpcFactory();
     private static final NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NonMonsterNpcSdbImpl.Instance,
-            MagicParamSdb.INSTANCE);
+            MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE);
 
     public NpcImpl create(RealmMap realmMap, Coordinate coordinate) {
         return npcFactory.create(id++, "牛", realmMap, coordinate, null);

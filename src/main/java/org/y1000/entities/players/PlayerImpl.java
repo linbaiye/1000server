@@ -80,8 +80,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     private int attackCooldown;
 
-    @Getter
-    private AttackableEntity enemy;
 
     private final PillSlots pillSlots;
 
@@ -124,17 +122,10 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
                       Coordinate coordinate,
                       String name,
                       Inventory inventory,
-                      Weapon weapon,
                       AttackKungFu attackKungFu,
                       KungFuBook kungFuBook,
                       boolean male,
-                      ArmorEquipment hat,
-                      ArmorEquipment chest,
-                      SexualEquipment hair,
-                      ArmorEquipment wrist,
-                      ArmorEquipment boot,
-                      SexualEquipment trouser,
-                      SexualEquipment clothing,
+                      Map<EquipmentType, Equipment> equipments,
                       FootKungFu footKungfu,
                       ProtectKungFu protectKungFu,
                       BreathKungFu breathKungFu,
@@ -165,15 +156,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         this.innerPower = innerPower;
         this.outerPower = outerPower;
         this.yinYang = yinYang != null ? yinYang : new YinYang();
-        this.equippedEquipments = new HashMap<>();
-        equippedEquipments.put(EquipmentType.HAT, hat);
-        equippedEquipments.put(EquipmentType.WEAPON, weapon);
-        equippedEquipments.put(EquipmentType.BOOT, boot);
-        equippedEquipments.put(EquipmentType.CHEST, chest);
-        equippedEquipments.put(EquipmentType.CLOTHING, clothing);
-        equippedEquipments.put(EquipmentType.WRIST, wrist);
-        equippedEquipments.put(EquipmentType.TROUSER, trouser);
-        equippedEquipments.put(EquipmentType.HAIR, hair);
+        this.equippedEquipments = equipments != null ? equipments : new HashMap<>();
         this.innateAttributesProvider = innateAttributesProvider;
         this.revival = new PlayerRevival(revival);
         this.life = life;

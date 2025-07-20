@@ -15,6 +15,11 @@ public record NpcSnapshot(Packet packet) implements I2ClientMessage {
 
 
     public static NpcSnapshot of(Npc npc, int elapsed, NpcAction type) {
+        return of(npc, elapsed, type, 0);
+    }
+
+
+    public static NpcSnapshot of(Npc npc, int elapsed, NpcAction type, int speed) {
         var coordinate = npc.coordinate();
         CreatureBaseInfoPacket baseInfoSnapshot = CreatureBaseInfoPacket.newBuilder()
                 .setY(coordinate.y())
@@ -28,10 +33,10 @@ public record NpcSnapshot(Packet packet) implements I2ClientMessage {
                 .setBaseInfo(baseInfoSnapshot)
                 .setAnimate(npc.getAnimate())
                 .setState(type.value())
+                .setSpeed(speed)
                 .setShape(npc.getShape());
         return new NpcSnapshot(Packet.newBuilder().setNpcSnapshot(builder).build());
     }
-
 
 
     public static NpcSnapshot ofNpc(INpc npc, int elapsed) {

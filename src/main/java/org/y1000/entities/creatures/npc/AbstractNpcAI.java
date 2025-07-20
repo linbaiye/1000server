@@ -7,25 +7,25 @@ public abstract class AbstractNpcAI implements NpcAI {
 
     private final Npc npc;
 
-    private NpcAbility currentAbility;
+    private NpcUpdatableAbility currentAbility;
 
     protected AbstractNpcAI(Npc npc) {
         this.npc = npc;
     }
 
-    <T extends NpcAbility> T changeAbilityOrThrow(Class<T> type) {
+    <T extends NpcUpdatableAbility> T changeAbilityOrThrow(Class<T> type) {
         var a = npc.findAbility(type).orElseThrow();
         currentAbility = a;
         return a;
     }
 
-    <A extends NpcAbility> A changeAbility(A ability) {
+    <A extends NpcUpdatableAbility> A changeAbility(A ability) {
         currentAbility = ability;
         return ability;
     }
 
 
-    abstract void onNonDieAbilityDone(NpcAbility ability);
+    abstract void onNonDieAbilityDone(NpcUpdatableAbility ability);
 
     void updateAbility(int delta) {
         if (!currentAbility().update(delta)) {
@@ -42,7 +42,7 @@ public abstract class AbstractNpcAI implements NpcAI {
         return npc;
     }
 
-    NpcAbility currentAbility() {
+    NpcUpdatableAbility currentAbility() {
         return currentAbility;
     }
 

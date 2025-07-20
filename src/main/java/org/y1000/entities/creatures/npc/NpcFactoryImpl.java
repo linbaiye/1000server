@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.spell.*;
+import org.y1000.item.ItemFactory;
+import org.y1000.item.ItemSdb;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.kungfu.KungFuType;
 import org.y1000.quest.Quest;
@@ -25,6 +27,8 @@ public final class NpcFactoryImpl implements NpcFactory {
     private final NonMonsterNpcSdb nonMonsterNpcSdb;
     private final MagicParamSdb magicParamSdb;
 
+    private final ItemSdb itemSdb;
+
     private static final int DEFAULT_WALK_MILLIS = 2000;
 
 
@@ -32,13 +36,13 @@ public final class NpcFactoryImpl implements NpcFactory {
                           MonstersSdb monsterSdb,
                           KungFuSdb kungFuSdb,
                           NonMonsterNpcSdb nonMonsterNpcSdb,
-                          MagicParamSdb magicParamSdb
-                          ) {
+                          MagicParamSdb magicParamSdb, ItemSdb itemSdb) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
         this.kungFuSdb = kungFuSdb;
         this.nonMonsterNpcSdb = nonMonsterNpcSdb;
         this.magicParamSdb = magicParamSdb;
+        this.itemSdb = itemSdb;
     }
 
     private Direction randomDirection() {
@@ -154,16 +158,21 @@ public final class NpcFactoryImpl implements NpcFactory {
         return abilities;
     }
 
-    private List<Object> buildNpcInteractAbilities(String idName) {
-
+    private List<Object> buildNpcInteractAbilities(NpcSettingSdb npcSettingSdb, String sprite, long id) {
+        List<Object> abilities = new ArrayList<>();
+        abilities.add(NpcInteractAbility.build(npcSettingSdb, sprite, id));
+        if (!npcSettingSdb.getSellItems().isEmpty())
+            abilities.add(NpcSellAbility.build(id, npcSettingSdb, itemSdb, sprite));
+        return abilities;
     }
 
 
-    private List<Object> buildNpcAbilities(String idName) {
+    private List<Object> buildNpcAbilities(long id, String idName) {
         List<Object> abilities = buildCommonAbilities(idName, nonMonsterNpcSdb);
         if (nonMonsterNpcSdb.isProtector(idName)) {
             abilities.add(new NpcProtectAbility(8));
         }
+        NpcSettingSdb.tryLoad(idName).ifPresent(sdb -> abilities.addAll(buildNpcInteractAbilities(sdb, nonMonsterNpcSdb.getShape(idName), id)));
         return abilities;
     }
 
@@ -193,7 +202,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                           Coordinate coordinate,
                           NpcEventListener listener) {
         List<Object> abilities = monsterSdb.containsName(idName) ?
-                buildMonsterAbilities(idName) : buildNpcAbilities(idName);
+                buildMonsterAbilities(idName) : buildNpcAbilities(id, idName);
         var npcSdb = monsterSdb.containsName(idName) ? monsterSdb : nonMonsterNpcSdb;
         NpcImpl npc = new NpcImpl(id,
                 abilities,

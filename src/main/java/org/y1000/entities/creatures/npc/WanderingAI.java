@@ -68,7 +68,7 @@ public final class WanderingAI extends AbstractWanderingAI {
         return ability.find(npc()).map(this::tryCombat).orElse(false);
     }
 
-    void onNonDieAbilityDone(NpcAbility doneAbility) {
+    void onNonDieAbilityDone(NpcUpdatableAbility doneAbility) {
         if (doneAbility instanceof NpcHurtAbility npcHurtAbility) {
             afterHurtDone(npcHurtAbility);
             return;

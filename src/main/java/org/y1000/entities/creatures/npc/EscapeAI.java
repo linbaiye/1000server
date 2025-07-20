@@ -12,7 +12,7 @@ public final class EscapeAI extends AbstractMovableNpcAI {
 
     private final EscapeAbility escapeAbility;
 
-    public EscapeAI(Npc npc, ActiveEntity entity, NpcAbility ability, EscapeAbility escapeAbility) {
+    public EscapeAI(Npc npc, ActiveEntity entity, NpcUpdatableAbility ability, EscapeAbility escapeAbility) {
         super(npc);
         changeAbility(ability);
         npc.findAbility(NpcHurtAbility.class).ifPresent(hurtAbility -> hurtAbility.setHurtTrigger(this::onAttacked));
@@ -40,7 +40,7 @@ public final class EscapeAI extends AbstractMovableNpcAI {
     }
 
     @Override
-    void onNonDieAbilityDone(NpcAbility ability) {
+    void onNonDieAbilityDone(NpcUpdatableAbility ability) {
         if (!enemy.canBeSeenAt(npc().coordinate())) {
             returnToWander();
             return;

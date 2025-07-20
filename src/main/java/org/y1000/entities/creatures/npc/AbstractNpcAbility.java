@@ -1,9 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.objects.Animation;
-import org.y1000.message.NpcSnapshot;
 
-public abstract class AbstractNpcAbility implements NpcAbility {
+public abstract class AbstractNpcAbility implements NpcUpdatableAbility {
     private final NpcAnimation animation;
 
     public AbstractNpcAbility(NpcAnimation animation) {
@@ -34,8 +32,4 @@ public abstract class AbstractNpcAbility implements NpcAbility {
         return animation.update(delta);
     }
 
-    @Override
-    public NpcSnapshot captureSnapshot(Npc npc) {
-        return NpcSnapshot.of(npc, animation.elapsedMillis(), animation.type());
-    }
 }

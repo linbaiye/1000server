@@ -13,7 +13,7 @@ public class WaryWanderAI extends AbstractWanderingAI {
 
     private final EscapeAbility escapeAbility;
 
-    public WaryWanderAI(Npc npc, NpcAbility from, EscapeAbility escapeAbility) {
+    public WaryWanderAI(Npc npc, NpcUpdatableAbility from, EscapeAbility escapeAbility) {
         super(npc);
         this.escapeAbility = escapeAbility;
         changeAbility(from);
@@ -28,7 +28,7 @@ public class WaryWanderAI extends AbstractWanderingAI {
     }
 
     @Override
-    void onNonDieAbilityDone(NpcAbility ability) {
+    void onNonDieAbilityDone(NpcUpdatableAbility ability) {
         findNearestViewRangePlayer().ifPresentOrElse(
                 p -> npc().startAI(new EscapeAI(npc(), p, currentAbility(), escapeAbility)),
                 () -> continueWander(ability));

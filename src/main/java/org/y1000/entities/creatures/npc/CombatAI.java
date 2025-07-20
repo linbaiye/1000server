@@ -13,7 +13,7 @@ public class CombatAI extends AbstractMovableNpcAI {
     private final HurtAbility enemyHurtAbility;
 
     public CombatAI(Npc npc, ActiveEntity entity,
-                     NpcAbility ability) {
+                     NpcUpdatableAbility ability) {
         super(npc);
         this.enemy = entity;
         changeAbility(ability);
@@ -101,7 +101,7 @@ public class CombatAI extends AbstractMovableNpcAI {
         }
     }
 
-    void onNonDieAbilityDone(NpcAbility doneAbility) {
+    void onNonDieAbilityDone(NpcUpdatableAbility doneAbility) {
         if (doneAbility instanceof NpcMoveAbility moveAbility) {
             computePrevious();
             stayOrAttack(moveAbility);

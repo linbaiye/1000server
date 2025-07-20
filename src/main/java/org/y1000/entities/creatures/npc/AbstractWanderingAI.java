@@ -57,7 +57,7 @@ public abstract class AbstractWanderingAI extends AbstractMovableNpcAI {
         moveCloser(destination);
     }
 
-    void continueWander(NpcAbility doneAbility) {
+    void continueWander(NpcUpdatableAbility doneAbility) {
         if (doneAbility instanceof NpcMoveAbility) {
             onMoveDone();
         } else if (doneAbility instanceof NpcTurnAbility) {

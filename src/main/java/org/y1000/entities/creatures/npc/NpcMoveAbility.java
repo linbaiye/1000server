@@ -4,6 +4,7 @@ package org.y1000.entities.creatures.npc;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.event.NpcMoveEvent;
 import org.y1000.entities.creatures.npc.event.NpcMovedEvent;
+import org.y1000.message.NpcSnapshot;
 import org.y1000.util.Coordinate;
 
 
@@ -51,6 +52,11 @@ public class NpcMoveAbility extends AbstractNpcAbility {
         return true;
     }
 
+    @Override
+    public NpcSnapshot captureSnapshot(Npc npc) {
+        return NpcSnapshot.of(npc, getAnimation().elapsedMillis(), getAnimation().type(), moveMillis);
+    }
+
     public int idleTime() {
         return interpolateIdleMillis;
     }
@@ -61,16 +67,14 @@ public class NpcMoveAbility extends AbstractNpcAbility {
             moveMillis = getAnimation().getActualMillis();
     }
 
-    private void modifyMoveSpeed(int modifier) {
-        moveMillis = this.walkSpeedMillis * modifier;
+    private void modifyMoveSpeed(int multiplier) {
+        moveMillis = this.walkSpeedMillis * multiplier;
         interpolateIdleMillis = moveMillis - getAnimation().getActualMillis();
         if (moveMillis > getAnimation().getActualMillis())
             moveMillis = getAnimation().getActualMillis();
     }
 
-    /**
-     * The time to move one unit could be shorter than animation time.
-     */
+
     public void enableFastMove() {
         modifyMoveSpeed(1);
     }
@@ -85,7 +89,7 @@ public class NpcMoveAbility extends AbstractNpcAbility {
         this.npc = npc;
         startAnimation(moveMillis);
         npc.changeDirection(direction);
-        npc.sendEvent(NpcMoveEvent.of(npc));
+        npc.sendEvent(NpcMoveEvent.of(npc, moveMillis));
         return true;
     }
 }
