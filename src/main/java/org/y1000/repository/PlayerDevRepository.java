@@ -44,6 +44,7 @@ public class PlayerDevRepository implements PlayerRepository {
         male.inventory().add(itemFactory.createEquipment("斗甲"));
         male.inventory().add(itemFactory.createItem("箭", 10000));
         male.inventory().add(itemFactory.createItem("飞刀", 10000));
+        male.inventory().add(itemFactory.createItem("钱币", 10000));
 
         Player female = playerFactory.create("测试女", false, 100000301L);
         playerMap.put(female.id(), female);

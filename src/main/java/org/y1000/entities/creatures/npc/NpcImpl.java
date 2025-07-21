@@ -11,6 +11,7 @@ import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,6 +79,14 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     public void sendEvent(NpcEvent event) {
         if (listener != null)
             listener.onEvent(event);
+    }
+
+    @Override
+    public <T> Optional<T> findAbility(Class<T> type, Predicate<? super T> filter) {
+        return abilities.stream().filter(a -> type.isAssignableFrom(a.getClass()))
+                .map(type::cast)
+                .filter(filter)
+                .findFirst();
     }
 
     @Override

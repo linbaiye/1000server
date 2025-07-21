@@ -5,7 +5,6 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
-import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.attack.AbstractRangedKungFu;
 
 public final class PlayerProjectile extends AbstractProjectile {

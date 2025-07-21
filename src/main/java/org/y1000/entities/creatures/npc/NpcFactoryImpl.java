@@ -36,7 +36,8 @@ public final class NpcFactoryImpl implements NpcFactory {
                           MonstersSdb monsterSdb,
                           KungFuSdb kungFuSdb,
                           NonMonsterNpcSdb nonMonsterNpcSdb,
-                          MagicParamSdb magicParamSdb, ItemSdb itemSdb) {
+                          MagicParamSdb magicParamSdb,
+                          ItemSdb itemSdb) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
         this.kungFuSdb = kungFuSdb;

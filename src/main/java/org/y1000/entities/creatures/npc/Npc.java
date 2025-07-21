@@ -6,6 +6,10 @@ import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+
 public interface Npc extends ActiveEntity {
     void changeAI(NpcAI newAi);
 
@@ -39,4 +43,7 @@ public interface Npc extends ActiveEntity {
     int getWanderRage();
 
     void sendEvent(NpcEvent event);
+
+    <T> Optional<T> findAbility(Class<T> type, Predicate<? super T> filter);
+
 }
