@@ -336,6 +336,7 @@ message ClientPacket {
     DropItemInputPacket dropInput = 41;
     ConfirmDropItemInputPacket confirmDropInput = 42;
     ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;
+    BuyItemInputPacket buyItem = 44;
   }
 }
 
@@ -927,6 +928,12 @@ message ConfirmDropItemInputPacket {
 message ClickNpcAbilityInputPacket {
   int64 id = 1;
   string abilityName = 2;
+}
+
+message BuyItemInputPacket {
+  int64 id = 1;
+  string name = 2;
+  int32 number = 3;
 }
 
 message PlayerMovePacket {

@@ -4,7 +4,10 @@ import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.NpcSellMenuMessage;
-import org.y1000.entities.players.event.UpdateInventoryMessage;
+import org.y1000.entities.players.event.PlayerSoundEvent;
+import org.y1000.entities.players.event.PlayerTextMessage;
+import org.y1000.entities.players.event.UpdateInventorySlotMessage;
+import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
 import org.y1000.sdb.NpcSettingSdb;
@@ -23,8 +26,6 @@ public class NpcSellAbility implements NpcNamedAbility {
 
     public static final String NAME = "购买物品";
 
-    private final List<NpcSellTrade> trades;
-
     private final ItemFactory itemFactory;
 
     private NpcSellAbility(long id, String name, String sprite,
@@ -38,15 +39,14 @@ public class NpcSellAbility implements NpcNamedAbility {
         this.image = image;
         this.greetings = greetings;
         this.itemFactory = itemFactory;
-        trades = new ArrayList<>();
     }
 
-    public static NpcSellAbility build(long id, NpcSettingSdb sdb, ItemSdb itemSdb, String sprite) {
+    public static NpcSellAbility build(long id, NpcSettingSdb sdb, ItemSdb itemSdb, String sprite, ItemFactory itemFactory) {
         Validate.isTrue(!sdb.getSellItems().isEmpty());
         List<MerchantItem> list = sdb.getSellItems().stream()
                 .map(n -> new MerchantItem(n, itemSdb.getPrice(n), itemSdb.getIcon(n), itemSdb.getColor(n), itemSdb.canStack(n)))
                 .toList();
-        return new NpcSellAbility(id, sdb.getSellTitle(), sprite, list, sdb.getSellImage(), sdb.getSellCaption(), null);
+        return new NpcSellAbility(id, sdb.getSellTitle(), sprite, list, sdb.getSellImage(), sdb.getSellCaption(), itemFactory);
     }
 
     @Override
@@ -55,26 +55,32 @@ public class NpcSellAbility implements NpcNamedAbility {
     }
 
     public void onPlayerBuy(Player player, Npc npc, String name, int number) {
-        MerchantItem item = items.stream().filter(i -> i.name().equals(name)).findFirst().orElse(null);
-        if (item == null)
+        if (!npc.canBeSeenAt(player.coordinate()) || number < 1)
             return;
-        for (NpcSellTrade trade : trades) {
-            if (trade.isTrading(player, npc)) {
-                trade.onPlayerBuyItem(player, npc, item, number);
-                return;
-            }
+        MerchantItem item = items.stream().filter(i -> i.name().equals(name)).findFirst().orElse(null);
+        if (item == null || (!item.canStack() && number > 1))
+            return;
+        if (!player.inventory().hasEnough("钱币", number * item.price())) {
+            player.sendEvent(PlayerTextMessage.of(player, "持有钱币不足。"));
+            return;
         }
-        NpcSellTrade t = new NpcSellTrade(npc, player);
-        trades.add(t);
-        t.onPlayerBuyItem(player, npc, item, number);
+        Item newItem = itemFactory.createItem(name, number);
+        if (!player.inventory().canPick(newItem)) {
+            player.sendEvent(PlayerTextMessage.of(player, "物品栏已满。"));
+            return;
+        }
+        int slot = player.inventory().add(newItem);
+        int moneySlot = player.inventory().findFirstSlot("钱币");
+        player.inventory().decrease(moneySlot, (long) number * item.price());
+        player.sendEvent(UpdateInventorySlotMessage.update(player, slot));
+        player.sendEvent(UpdateInventorySlotMessage.update(player, moneySlot));
+        newItem.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toSelf(player, s)));
     }
 
     @Override
-    public void startInteract(Player player) {
-        player.sendEvent(UpdateInventoryMessage.quiet(player));
+    public void startInteract(Player player, Npc npc) {
+        if (!npc.canBeSeenAt(player.coordinate()))
+            return;
         player.sendEvent(NpcSellMenuMessage.of(player, this));
-    }
-
-    public void cooldown(int delta) {
     }
 }

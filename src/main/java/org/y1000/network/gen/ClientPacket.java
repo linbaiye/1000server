@@ -88,6 +88,7 @@ private static final long serialVersionUID = 0L;
     DROPINPUT(41),
     CONFIRMDROPINPUT(42),
     CLICKNPCABILITYINPUT(43),
+    BUYITEM(44),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -148,6 +149,7 @@ private static final long serialVersionUID = 0L;
         case 41: return DROPINPUT;
         case 42: return CONFIRMDROPINPUT;
         case 43: return CLICKNPCABILITYINPUT;
+        case 44: return BUYITEM;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -1496,6 +1498,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClickNpcAbilityInputPacket.getDefaultInstance();
   }
 
+  public static final int BUYITEM_FIELD_NUMBER = 44;
+  /**
+   * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+   * @return Whether the buyItem field is set.
+   */
+  @java.lang.Override
+  public boolean hasBuyItem() {
+    return typeCase_ == 44;
+  }
+  /**
+   * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+   * @return The buyItem.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.BuyItemInputPacket getBuyItem() {
+    if (typeCase_ == 44) {
+       return (org.y1000.network.gen.BuyItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.BuyItemInputPacketOrBuilder getBuyItemOrBuilder() {
+    if (typeCase_ == 44) {
+       return (org.y1000.network.gen.BuyItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1638,6 +1671,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 43) {
       output.writeMessage(43, (org.y1000.network.gen.ClickNpcAbilityInputPacket) type_);
+    }
+    if (typeCase_ == 44) {
+      output.writeMessage(44, (org.y1000.network.gen.BuyItemInputPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1819,6 +1855,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 43) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(43, (org.y1000.network.gen.ClickNpcAbilityInputPacket) type_);
+    }
+    if (typeCase_ == 44) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(44, (org.y1000.network.gen.BuyItemInputPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2009,6 +2049,10 @@ private static final long serialVersionUID = 0L;
         if (!getClickNpcAbilityInput()
             .equals(other.getClickNpcAbilityInput())) return false;
         break;
+      case 44:
+        if (!getBuyItem()
+            .equals(other.getBuyItem())) return false;
+        break;
       case 0:
       default:
     }
@@ -2195,6 +2239,10 @@ private static final long serialVersionUID = 0L;
       case 43:
         hash = (37 * hash) + CLICKNPCABILITYINPUT_FIELD_NUMBER;
         hash = (53 * hash) + getClickNpcAbilityInput().hashCode();
+        break;
+      case 44:
+        hash = (37 * hash) + BUYITEM_FIELD_NUMBER;
+        hash = (53 * hash) + getBuyItem().hashCode();
         break;
       case 0:
       default:
@@ -2460,6 +2508,9 @@ private static final long serialVersionUID = 0L;
       if (clickNpcAbilityInputBuilder_ != null) {
         clickNpcAbilityInputBuilder_.clear();
       }
+      if (buyItemBuilder_ != null) {
+        buyItemBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -2678,6 +2729,10 @@ private static final long serialVersionUID = 0L;
           clickNpcAbilityInputBuilder_ != null) {
         result.type_ = clickNpcAbilityInputBuilder_.build();
       }
+      if (typeCase_ == 44 &&
+          buyItemBuilder_ != null) {
+        result.type_ = buyItemBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -2895,6 +2950,10 @@ private static final long serialVersionUID = 0L;
         }
         case CLICKNPCABILITYINPUT: {
           mergeClickNpcAbilityInput(other.getClickNpcAbilityInput());
+          break;
+        }
+        case BUYITEM: {
+          mergeBuyItem(other.getBuyItem());
           break;
         }
         case TYPE_NOT_SET: {
@@ -3228,6 +3287,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 43;
               break;
             } // case 346
+            case 354: {
+              input.readMessage(
+                  getBuyItemFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 44;
+              break;
+            } // case 354
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -9365,6 +9431,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 43;
       onChanged();
       return clickNpcAbilityInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.BuyItemInputPacket, org.y1000.network.gen.BuyItemInputPacket.Builder, org.y1000.network.gen.BuyItemInputPacketOrBuilder> buyItemBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     * @return Whether the buyItem field is set.
+     */
+    @java.lang.Override
+    public boolean hasBuyItem() {
+      return typeCase_ == 44;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     * @return The buyItem.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.BuyItemInputPacket getBuyItem() {
+      if (buyItemBuilder_ == null) {
+        if (typeCase_ == 44) {
+          return (org.y1000.network.gen.BuyItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 44) {
+          return buyItemBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    public Builder setBuyItem(org.y1000.network.gen.BuyItemInputPacket value) {
+      if (buyItemBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        buyItemBuilder_.setMessage(value);
+      }
+      typeCase_ = 44;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    public Builder setBuyItem(
+        org.y1000.network.gen.BuyItemInputPacket.Builder builderForValue) {
+      if (buyItemBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        buyItemBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 44;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    public Builder mergeBuyItem(org.y1000.network.gen.BuyItemInputPacket value) {
+      if (buyItemBuilder_ == null) {
+        if (typeCase_ == 44 &&
+            type_ != org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.BuyItemInputPacket.newBuilder((org.y1000.network.gen.BuyItemInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 44) {
+          buyItemBuilder_.mergeFrom(value);
+        } else {
+          buyItemBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 44;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    public Builder clearBuyItem() {
+      if (buyItemBuilder_ == null) {
+        if (typeCase_ == 44) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 44) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        buyItemBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    public org.y1000.network.gen.BuyItemInputPacket.Builder getBuyItemBuilder() {
+      return getBuyItemFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.BuyItemInputPacketOrBuilder getBuyItemOrBuilder() {
+      if ((typeCase_ == 44) && (buyItemBuilder_ != null)) {
+        return buyItemBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 44) {
+          return (org.y1000.network.gen.BuyItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.BuyItemInputPacket, org.y1000.network.gen.BuyItemInputPacket.Builder, org.y1000.network.gen.BuyItemInputPacketOrBuilder> 
+        getBuyItemFieldBuilder() {
+      if (buyItemBuilder_ == null) {
+        if (!(typeCase_ == 44)) {
+          type_ = org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+        }
+        buyItemBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.BuyItemInputPacket, org.y1000.network.gen.BuyItemInputPacket.Builder, org.y1000.network.gen.BuyItemInputPacketOrBuilder>(
+                (org.y1000.network.gen.BuyItemInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 44;
+      onChanged();
+      return buyItemBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

@@ -31,19 +31,23 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private static final int DEFAULT_WALK_MILLIS = 2000;
 
+    private final ItemFactory itemFactory;
+
 
     public NpcFactoryImpl(ActionSdb actionSdb,
                           MonstersSdb monsterSdb,
                           KungFuSdb kungFuSdb,
                           NonMonsterNpcSdb nonMonsterNpcSdb,
                           MagicParamSdb magicParamSdb,
-                          ItemSdb itemSdb) {
+                          ItemSdb itemSdb,
+                          ItemFactory itemFactory) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
         this.kungFuSdb = kungFuSdb;
         this.nonMonsterNpcSdb = nonMonsterNpcSdb;
         this.magicParamSdb = magicParamSdb;
         this.itemSdb = itemSdb;
+        this.itemFactory = itemFactory;
     }
 
     private Direction randomDirection() {
@@ -163,7 +167,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         List<Object> abilities = new ArrayList<>();
         abilities.add(NpcInteractAbility.build(npcSettingSdb, sprite, id));
         if (!npcSettingSdb.getSellItems().isEmpty())
-            abilities.add(NpcSellAbility.build(id, npcSettingSdb, itemSdb, sprite));
+            abilities.add(NpcSellAbility.build(id, npcSettingSdb, itemSdb, sprite, itemFactory));
         return abilities;
     }
 

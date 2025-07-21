@@ -1,14 +1,22 @@
 package org.y1000.entities.creatures.npc;
 
+import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 
+@Getter
 public class NpcTradeItem {
+
     private final MerchantItem item;
+
     private int cost;
+
     private int number;
 
-    public NpcTradeItem(MerchantItem item) {
+    private final int inventorySlot;
+
+    public NpcTradeItem(MerchantItem item, int inventorySlot) {
         this.item = item;
+        this.inventorySlot = inventorySlot;
         number = 0;
         cost = 0;
     }

@@ -93,6 +93,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case DROPINPUT -> new DropItemInput(clientPacket.getDropInput().getSlot(), Coordinate.xy(clientPacket.getDropInput().getX(), clientPacket.getDropInput().getY()));
             case CONFIRMDROPINPUT -> ConfirmDropItemInput.fromPacket(clientPacket.getConfirmDropInput());
             case CLICKNPCABILITYINPUT -> new ClickNpcAbilityInput(clientPacket.getClickNpcAbilityInput().getId(), clientPacket.getClickNpcAbilityInput().getAbilityName());
+            case BUYITEM -> new BuyItemInput(clientPacket.getBuyItem().getId(), clientPacket.getBuyItem().getName(), clientPacket.getBuyItem().getNumber());
             default -> null;
         };
     }

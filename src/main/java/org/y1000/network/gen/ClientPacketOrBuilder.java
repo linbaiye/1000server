@@ -653,5 +653,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.ClickNpcAbilityInputPacketOrBuilder getClickNpcAbilityInputOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+   * @return Whether the buyItem field is set.
+   */
+  boolean hasBuyItem();
+  /**
+   * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+   * @return The buyItem.
+   */
+  org.y1000.network.gen.BuyItemInputPacket getBuyItem();
+  /**
+   * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+   */
+  org.y1000.network.gen.BuyItemInputPacketOrBuilder getBuyItemOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }
