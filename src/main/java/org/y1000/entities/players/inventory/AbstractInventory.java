@@ -135,6 +135,21 @@ public abstract class AbstractInventory {
         return true;
     }
 
+    public boolean increase(int slot, long number) {
+        if (number <= 0)
+            return false;
+        Item item = items.get(slot);
+        if (item == null) {
+            return false;
+        }
+        if (item instanceof StackItem stackItem) {
+            StackItem increased = stackItem.increase(number);
+            items.put(slot, increased);
+            return true;
+        }
+        return false;
+    }
+
     public void add(int slot, Item item) {
         Validate.notNull(item, "item must not be null.");
         var items = items();

@@ -168,6 +168,8 @@ public final class NpcFactoryImpl implements NpcFactory {
         abilities.add(NpcInteractAbility.build(npcSettingSdb, sprite, id));
         if (!npcSettingSdb.getSellItems().isEmpty())
             abilities.add(NpcSellAbility.build(id, npcSettingSdb, itemSdb, sprite, itemFactory));
+        if (!npcSettingSdb.getBuyItems().isEmpty())
+            abilities.add(NpcBuyAbility.build(id, npcSettingSdb, itemSdb, sprite, itemFactory));
         return abilities;
     }
 

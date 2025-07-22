@@ -1,7 +1,6 @@
 package org.y1000.entities.players;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.*;
@@ -93,29 +92,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     private CombatController combatController;
 
-//    private static final Map<OldPlayerStateEnum, Integer> STATE_MILLIS = new HashMap<>() {{
-//        put(OldPlayerStateEnum.IDLE, 1800);
-//        put(OldPlayerStateEnum.Move, 840);
-//        put(OldPlayerStateEnum.RUN, 420);
-//        put(OldPlayerStateEnum.FLY, 360);
-//        put(OldPlayerStateEnum.ENFIGHT_WALK, 840);
-//        put(OldPlayerStateEnum.FightStand, 1400);
-//        put(OldPlayerStateEnum.FIST, AttackKungFuType.Fist.below50Millis());
-//        put(OldPlayerStateEnum.KICK, AttackKungFuType.Fist.above50Millis());
-//        put(OldPlayerStateEnum.HURT, 280);
-//        put(OldPlayerStateEnum.BOW, AttackKungFuType.BOW.above50Millis());
-//        put(OldPlayerStateEnum.THROW, AttackKungFuType.THROW.above50Millis());
-//        put(OldPlayerStateEnum.SWORD2H, AttackKungFuType.SWORD.above50Millis());
-//        put(OldPlayerStateEnum.SWORD, AttackKungFuType.SWORD.below50Millis());
-//        put(OldPlayerStateEnum.BLADE2H, AttackKungFuType.BLADE.above50Millis());
-//        put(OldPlayerStateEnum.BLADE, AttackKungFuType.BLADE.below50Millis());
-//        put(OldPlayerStateEnum.AXE, AttackKungFuType.AXE.below50Millis());
-//        put(OldPlayerStateEnum.SPEAR, AttackKungFuType.SPEAR.below50Millis());
-//        put(OldPlayerStateEnum.SIT, 750);
-//        put(OldPlayerStateEnum.STANDUP, 750);
-//        put(OldPlayerStateEnum.DIE, 1500);
-//        put(OldPlayerStateEnum.HELLO, 750);
-//    }};
+    private PlayerTrade playerTrade;
 
     @Builder
     public PlayerImpl(long id,
@@ -1208,6 +1185,39 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     public int accuracy() {
         return innateAttributesProvider.hit();
     }
+
+    @Override
+    public void startTradeWith(Player another, int slot) {
+        if (inventory().getItem(slot) == null)
+            return;
+        if (isDead() || isLeftGame()) {
+            sendText("你无法进行交易。");
+            return;
+        }
+        if (coordinate().directDistance(another.coordinate()) > 2) {
+            sendText("距离过远。");
+            return;
+        }
+        if (playerTrade != null) {
+            sendText("交易正在进行中。");
+            return;
+        }
+        PlayerTrade
+        if (!another.acceptTrade()) {
+            sendText("对方无法被交易。");
+            return;
+        }
+    }
+
+    @Override
+    public boolean acceptTrade(Player another) {
+        if (isDead() || isLeftGame() || playerTrade != null)
+            return false;
+        playerTrade = new PlayerTrade(another);
+        sendEvent();
+        return true;
+    }
+
 
     void sendSound(String s) {
         sendEvent(PlayerSoundEvent.toAll(this, s));

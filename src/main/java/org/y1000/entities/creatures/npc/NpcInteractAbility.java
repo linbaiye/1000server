@@ -46,7 +46,7 @@ public class NpcInteractAbility {
         if (!sdb.getSellItems().isEmpty())
             actions.add(NpcSellAbility.NAME);
         if (!sdb.getBuyItems().isEmpty())
-            actions.add("出售物品");
+            actions.add(NpcBuyAbility.NAME);
         return new NpcInteractAbility(id, sdb.getAnyTitle(), sprite, sdb.getAnyImage(), actions);
     }
 

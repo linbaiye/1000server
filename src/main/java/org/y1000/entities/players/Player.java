@@ -4,7 +4,6 @@ import org.y1000.entities.HurtAbility;
 import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.entities.projectile.Projectile;
 import org.y1000.guild.GuildMembership;
 import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.KungFuBook;
@@ -178,5 +177,9 @@ public interface Player extends IActiveEntity, HurtAbility {
     }
 
     int accuracy();
+
+    void startTradeWith(Player another, int slot);
+
+    boolean acceptTrade(PlayerTrade trade);
 }
 
