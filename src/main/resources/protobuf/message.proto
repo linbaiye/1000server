@@ -339,6 +339,8 @@ message ClientPacket {
     BuyItemInputPacket buyItem = 44;
     SellItemInputPacket sellItem = 45;
     DropItemOnEntityInputPacket dropOnEntityInput = 46;
+    PlayerTradeStateInputPacket tradeStateInput = 47;
+    AddTradeItemInputPacket addPlayerTradeInput = 48;
   }
 }
 
@@ -373,7 +375,16 @@ message NpcItemPacket {
 
 message OpenTradeWindowPacket {
   int64 anotherPlayerId = 1;
-  optional int32 slot = 2;
+  int32 slot = 2;
+  int64 maxNumber = 3;
+  bool passive = 4;
+  string itemName = 5;
+  string selfName = 6;
+  string anotherName = 7;
+}
+
+message CloseTradeWindowPacket {
+
 }
 
 message InventoryPacket {
@@ -672,6 +683,15 @@ message NpcTradeMenuPacket {
   bool sale = 7;
 }
 
+message PlayerTradeStateInputPacket {
+  int32 state = 1;
+}
+
+message AddTradeItemInputPacket {
+  int32 slot = 1;
+  int32 number = 2;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -744,6 +764,7 @@ message Packet {
     StartDopItemPacket dropItemPacket = 72;
     NpcMenuPacket npcMenuPacket = 73;
     NpcTradeMenuPacket tradeMenuPacket = 74;
+    CloseTradeWindowPacket closeTradePacket = 75;
   }
 }
 
@@ -963,3 +984,4 @@ message PlayerDamagedPacket {
   int32 armPercent = 5;
   int32 legPercent = 6;
 }
+

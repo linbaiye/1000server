@@ -261,6 +261,29 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         sendEvent(UpdateInventorySlotMessage.update(this, slot));
     }
 
+    @Override
+    public void changeTradeState(PlayerTradeStateInput.State state) {
+        if (playerTrade == null)
+            return;
+        switch (state) {
+            case Cancel:
+                playerTrade.getAnother(this).ifPresent(Player::tradeCancelled);
+                playerTrade.cancel(this);
+                playerTrade = null;
+                break;
+            case Confirm:
+                playerTrade.confirm(this);
+                break;
+        }
+
+    }
+
+    @Override
+    public void addTradeItem(int slot, int number) {
+        if (playerTrade != null)
+            playerTrade.addTradeItem(this, slot, number);
+    }
+
     private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
         if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {
             String ret = kf.checkPreconditions(this);
@@ -1188,7 +1211,10 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void startTradeWith(Player another, int slot) {
-        if (inventory().getItem(slot) == null)
+        if (this.equals(another))
+            return;
+        Item item = inventory().getItem(slot);
+        if (item == null)
             return;
         if (isDead() || isLeftGame()) {
             sendText("你无法进行交易。");
@@ -1202,22 +1228,34 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             sendText("交易正在进行中。");
             return;
         }
-        PlayerTrade
-        if (!another.acceptTrade()) {
+        var trade = new PlayerTrade(this, another);
+        if (!another.acceptTrade(trade)) {
             sendText("对方无法被交易。");
             return;
         }
+        playerTrade = trade;
+        sendEvent(OpenTradeWindowMessage.proactive(this, another.viewName(), slot, item instanceof StackItem stackItem ? stackItem.number() : 1, item.name()));
     }
 
     @Override
-    public boolean acceptTrade(Player another) {
+    public boolean acceptTrade(PlayerTrade trade) {
         if (isDead() || isLeftGame() || playerTrade != null)
             return false;
-        playerTrade = new PlayerTrade(another);
-        sendEvent();
+        Player another = trade.getAnother(this).orElse(null);
+        if (another == null)
+            return false;
+        this.playerTrade = trade;
+        sendEvent(OpenTradeWindowMessage.passive(this, another.viewName()));
         return true;
     }
 
+    @Override
+    public void tradeCancelled() {
+        if (playerTrade == null)
+            return;
+        playerTrade.cancel(this);
+        playerTrade = null;
+    }
 
     void sendSound(String s) {
         sendEvent(PlayerSoundEvent.toAll(this, s));

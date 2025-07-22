@@ -25,4 +25,8 @@ public interface PlayerInputHandler {
 
     void confirmDropItem(int slot, int number, Coordinate at);
 
+    void changeTradeState(PlayerTradeStateInput.State state);
+
+    void addTradeItem(int slot, int number);
+
 }

@@ -181,5 +181,7 @@ public interface Player extends IActiveEntity, HurtAbility {
     void startTradeWith(Player another, int slot);
 
     boolean acceptTrade(PlayerTrade trade);
+
+    void tradeCancelled();
 }
 
