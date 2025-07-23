@@ -13,7 +13,8 @@ public final class UpdateInventorySlotMessage extends Abstract2PlayerMessageEven
         super(source, packet);
     }
 
-    private static Packet toPacket(int slot, Item item) {
+
+    public static InventoryItemPacket toItemPacket(int slot, Item item) {
         InventoryItemPacket.Builder builder = InventoryItemPacket.newBuilder()
                 .setSlotId(slot)
                 .setColor(item != null ? item.color() : 0)
@@ -23,7 +24,11 @@ public final class UpdateInventorySlotMessage extends Abstract2PlayerMessageEven
         if (number != null) {
             builder.setNumber(number);
         }
-        return Packet.newBuilder().setUpdateSlot(builder.build()).build();
+        return builder.build();
+    }
+
+    private static Packet toPacket(int slot, Item item) {
+        return Packet.newBuilder().setUpdateSlot(toItemPacket(slot, item)).build();
     }
 
     public static UpdateInventorySlotMessage update(Player player, int slotId, Item item) {

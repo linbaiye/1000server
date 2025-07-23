@@ -266,16 +266,10 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         if (playerTrade == null)
             return;
         switch (state) {
-            case Cancel:
-                playerTrade.getAnother(this).ifPresent(Player::tradeCancelled);
-                playerTrade.cancel(this);
-                playerTrade = null;
-                break;
-            case Confirm:
-                playerTrade.confirm(this);
-                break;
+            case Cancel -> playerTrade.cancel(this);
+            case Confirm -> playerTrade.confirm(this);
+            case Unconfirmed -> playerTrade.unconfirm(this);
         }
-
     }
 
     @Override
@@ -1250,10 +1244,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     @Override
-    public void tradeCancelled() {
-        if (playerTrade == null)
-            return;
-        playerTrade.cancel(this);
+    public void closeTrade() {
         playerTrade = null;
     }
 

@@ -182,6 +182,6 @@ public interface Player extends IActiveEntity, HurtAbility {
 
     boolean acceptTrade(PlayerTrade trade);
 
-    void tradeCancelled();
+    void closeTrade();
 }
 

@@ -765,6 +765,7 @@ message Packet {
     NpcMenuPacket npcMenuPacket = 73;
     NpcTradeMenuPacket tradeMenuPacket = 74;
     CloseTradeWindowPacket closeTradePacket = 75;
+    UpdateTradeWindowSlotPacket updateTradeWindowSlot = 76;
   }
 }
 
@@ -983,5 +984,10 @@ message PlayerDamagedPacket {
   int32 headPercent = 4;
   int32 armPercent = 5;
   int32 legPercent = 6;
+}
+
+message UpdateTradeWindowSlotPacket {
+  bool self = 1;
+  InventoryItemPacket item = 2;
 }
 
