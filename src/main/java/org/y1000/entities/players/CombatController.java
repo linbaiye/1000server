@@ -63,7 +63,7 @@ final class CombatController {
      * @return -1 if this combat is over, 1 if a strike is carried, 0 when combat should carry on.
      */
     int update(int delta) {
-        if (!hurtAbility.swingAllowed() && player.attackKungFu().isRanged()) {
+        if (!hurtAbility.canBeAttacked()) {
             return -1;
         }
         if (player.maxCooldown() > 0) {

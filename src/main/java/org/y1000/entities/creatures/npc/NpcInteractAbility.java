@@ -12,6 +12,7 @@ import java.util.List;
 public class NpcInteractAbility {
 
     private final long id;
+
     private final String name;
 
     private static final String greetings = "有什么可以为侠士效劳的吗?";
@@ -38,6 +39,8 @@ public class NpcInteractAbility {
     }
 
     public void interactedBy(Player player) {
+        if (player.isDead() || player.isLeftGame())
+            return;
         player.sendEvent(NpcMenuMessage.populate(player, this));
     }
 

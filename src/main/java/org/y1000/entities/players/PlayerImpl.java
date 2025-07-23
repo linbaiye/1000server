@@ -232,26 +232,26 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             syncKungFuBookQuietly();
     }
 
-    private boolean validateDropItem(int slot, Coordinate at) {
+    private boolean dropActionInvalid(int slot, Coordinate at) {
         if (inventory.getItem(slot) == null)
-            return false;
+            return true;
         if (at.directDistance(coordinate()) > 2) {
             sendText("距离过远。");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
     public void startDropItem(int slot, Coordinate at) {
-        if (!validateDropItem(slot, at))
+        if (dropActionInvalid(slot, at))
             return;
         sendEvent(StartDropItemMessage.of(this, slot, inventory.getItem(slot), at));
     }
 
     @Override
     public void confirmDropItem(int slot, int number, Coordinate at) {
-        if (!validateDropItem(slot, at))
+        if (dropActionInvalid(slot, at))
             return;
         Item removed = inventory.remove(slot, number);
         if (removed == null) {
@@ -430,32 +430,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
                 }
             }
         }
-//        if (item instanceof Equipment equipment) {
-//            equip(slotId, equipment);
-//        } else if (item instanceof StackItem stackItem) {
-//            if (stackItem.item() instanceof Pill pill) {
-//                if (pillSlots.canTakePill() && inventory.decrease(slotId)) {
-//                    emitEvent(new UpdateInventorySlotEvent(this, slotId, inventory.getItem(slotId)));
-//                    pillSlots.usePill(this, pill);
-//                } else {
-//                    emitEvent(PlayerTextEvent.noMorePill(this));
-//                }
-//            } else if (stackItem.item() instanceof KungFuItem kungFuItem) {
-//                learnKungFu(slotId, kungFuItem);
-//            } else if (stackItem.item() instanceof BuffPill p) {
-//                if (!buffPillSlot.canTake()) {
-//                    emitEvent(PlayerTextEvent.noMorePill(this));
-//                    return;
-//                }
-//                if (inventory.decrease(slotId)) {
-//                    buffPillSlot.take(p);
-//                    emitEvent(new UpdateInventorySlotEvent(this, slotId));
-//                    emitEvent(PlayerTextEvent.havePill(this, p.name()));
-//                    p.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-//                    emitEvent(UpdateBuffEvent.gain(this, p));
-//                }
-//            }
-//        }
     }
 
 
@@ -590,12 +564,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
     }
 
-    private void handleSwapKungFuSlot(ClientSwapKungFuSlotEvent event) {
-        if (kungFuBook().swapSlot(event.page(), event.slot1(), event.slot2())) {
-            emitEvent(new UpdateKungFuSlotEvent(this, event.slot1(), kungFuBook().getKungFu(event.page(), event.slot1()).orElse(null)));
-            emitEvent(new UpdateKungFuSlotEvent(this, event.slot2(), kungFuBook().getKungFu(event.page(), event.slot2()).orElse(null)));
-        }
-    }
 
 
     @Override

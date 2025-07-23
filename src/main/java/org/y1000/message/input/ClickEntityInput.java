@@ -12,11 +12,14 @@ public record ClickEntityInput(long id) implements EntityInteractInput {
         return id;
     }
 
+
     @Override
     public void onEntityFound(Player player, Entity entity) {
         if (!(entity instanceof ActiveEntity activeEntity)) {
             return;
         }
+        if (activeEntity.isDead())
+            return;
         activeEntity.findAbility(NpcInteractAbility.class)
                 .ifPresentOrElse(a -> a.interactedBy(player),
                         () -> activeEntity.clickText().ifPresent(text ->

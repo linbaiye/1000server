@@ -1,5 +1,6 @@
 package org.y1000.entities;
 
+import org.y1000.entities.creatures.npc.NpcHurtAbility;
 import org.y1000.event.EntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.util.Coordinate;
@@ -7,7 +8,6 @@ import org.y1000.util.Coordinate;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 
 
 public interface ActiveEntity extends Entity {
@@ -31,6 +31,12 @@ public interface ActiveEntity extends Entity {
 
     default Optional<String> clickText() {
         return Optional.empty();
+    }
+
+    default boolean isDead() {
+        return findAbility(NpcHurtAbility.class)
+                .map(hurtAbility -> hurtAbility.currentLife() <= 0)
+                .orElse(false);
     }
 
 }

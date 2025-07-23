@@ -46,14 +46,34 @@ public class PlayerTrade {
 
     private void giveItemsToPlayer(Player player, TradeItem[] tradeItems) {
         boolean rolled = false;
-        for (TradeItem tradeItem : tradeItems) {
+        for (int i = 0; i < tradeItems.length; i++) {
+            var tradeItem = tradeItems[i];
             if (tradeItem == null)
                 continue;
-            rolled = true;
-            player.inventory().add(tradeItem.item);
+            if (player.inventory().canPick(tradeItem.item)) {
+                player.inventory().add(tradeItem.item);
+                rolled = true;
+                tradeItems[i] = null;
+            }
         }
         if (rolled)
             player.sendEvent(UpdateInventoryMessage.quiet(player));
+    }
+
+    private boolean isEmpty(TradeItem[] items) {
+        for (int i = 0; i < items.length; i++) {
+            if (items[i] != null)
+                return false;
+        }
+        return true;
+    }
+
+    private void closeOrNotify(Player p, TradeItem[] items) {
+        if (isEmpty(items)) {
+            p.closeTrade();
+        } else {
+            p.sendEvent(PlayerTextMessage.systip(p, "存在无法取回的交易窗物品，请腾出足够物品栏空间后使用指令取回。"));
+        }
     }
 
     public void cancel(Player player) {
@@ -63,8 +83,19 @@ public class PlayerTrade {
         giveItemsToPlayer(player2, p2Items);
         player1.sendEvent(CloseTradeWindowMessage.of(player1));
         player2.sendEvent(CloseTradeWindowMessage.of(player2));
-        player1.closeTrade();
-        player2.closeTrade();
+        closeOrNotify(player1, p1Items);
+        closeOrNotify(player2, p2Items);
+    }
+
+    private boolean canTakeAll(Player player, TradeItem[] tradeItems) {
+        for (int i = 0; i < tradeItems.length; i++) {
+            if (tradeItems[i] == null)
+                continue;
+            if (!player.inventory().canPick(tradeItems[i].item)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void confirm(Player player) {
@@ -72,14 +103,20 @@ public class PlayerTrade {
             p1Confirmed = true;
         else if (player2.equals(player))
             p2Confirmed = true;
-        if (p1Confirmed && p2Confirmed) {
-            giveItemsToPlayer(player1, p2Items);
-            giveItemsToPlayer(player2, p1Items);
-            player1.sendEvent(CloseTradeWindowMessage.of(player1));
-            player2.sendEvent(CloseTradeWindowMessage.of(player2));
-            player1.closeTrade();
-            player2.closeTrade();
+        if (!p1Confirmed || !p2Confirmed)
+            return;
+        if (!canTakeAll(player1, p2Items) || !canTakeAll(player2, p1Items)) {
+            player1.sendEvent(PlayerTextMessage.systip(player1, "物品栏已满，交易失败。"));
+            player2.sendEvent(PlayerTextMessage.systip(player2, "物品栏已满，交易失败。"));
+            cancel(player);
+            return;
         }
+        giveItemsToPlayer(player1, p2Items);
+        giveItemsToPlayer(player2, p1Items);
+        player1.sendEvent(CloseTradeWindowMessage.of(player1));
+        player2.sendEvent(CloseTradeWindowMessage.of(player2));
+        player1.closeTrade();
+        player2.closeTrade();
     }
 
     public void unconfirm(Player player) {
@@ -95,13 +132,15 @@ public class PlayerTrade {
             player2.sendEvent(UpdateTradeWindowSlotMessage.another(player2, tradeSlot, tradeItem.item));
         else
             player1.sendEvent(UpdateTradeWindowSlotMessage.another(player1, tradeSlot, tradeItem.item));
+        tradeItem.item.dropSound().ifPresent(s -> {
+            player1.sendEvent(PlayerSoundEvent.toSelf(player1, s));
+            player2.sendEvent(PlayerSoundEvent.toSelf(player2, s));
+        });
     }
 
 
     private void removeFromInventory(Player player, int inventorySlot, long number) {
-        Item item = player.inventory().getItem(inventorySlot);
         player.inventory().decrease(inventorySlot, number);
-        item.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toSelf(player, s)));
         player.sendEvent(UpdateInventorySlotMessage.update(player, inventorySlot));
     }
 
@@ -142,5 +181,4 @@ public class PlayerTrade {
         } else if (player2.equals(player))
             addItem(player, p2Items, slot, number);
     }
-
 }

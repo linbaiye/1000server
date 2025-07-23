@@ -166,6 +166,6 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
 
     @Override
     public Optional<String> clickText() {
-        return Optional.of(viewName);
+        return Optional.of(viewName + "。");
     }
 }
