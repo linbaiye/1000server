@@ -3,10 +3,8 @@ package org.y1000.entities.objects;
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.EntityLifebarEvent;
-import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.projectile.Projectile;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
@@ -18,11 +16,11 @@ public abstract class AbstractKillableDynamicObject extends AbstractMutableDynam
     private final int maxLife;
     private int life;
 
-    public AbstractKillableDynamicObject(long id, Coordinate coordinate, RealmMap realmMap, DynamicObjectSdb dynamicObjectSdb, String idName, Animation[] animations) {
+    public AbstractKillableDynamicObject(long id, Coordinate coordinate, RealmMap realmMap, DynamicObjectSdb dynamicObjectSdb, String idName, IAnimation[] animations) {
         this(id, coordinate, realmMap, dynamicObjectSdb, dynamicObjectSdb.getLife(idName), idName, animations);
     }
 
-    public AbstractKillableDynamicObject(long id, Coordinate coordinate, RealmMap realmMap, DynamicObjectSdb dynamicObjectSdb, int health, String idName, Animation[] animations) {
+    public AbstractKillableDynamicObject(long id, Coordinate coordinate, RealmMap realmMap, DynamicObjectSdb dynamicObjectSdb, int health, String idName, IAnimation[] animations) {
         super(id, coordinate, realmMap, dynamicObjectSdb, idName, animations);
         this.armor = dynamicObjectSdb.getArmor(idName);
         this.maxLife = dynamicObjectSdb.getLife(idName);

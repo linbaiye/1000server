@@ -19,7 +19,7 @@ public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity 
     private final DynamicObjectSdb dynamicObjectSdb;
     private final String idName;
 
-    private final Animation[] animations;
+    private final IAnimation[] animations;
     private final Set<Coordinate> occupyingCoordinates;
     private int animationIndex;
     private int animationTotalDuration;
@@ -28,7 +28,7 @@ public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity 
 
 
 
-    public AbstractMutableDynamicObject(long id, Coordinate coordinate, RealmMap realmMap, DynamicObjectSdb dynamicObjectSdb, String idName, Animation[] animations) {
+    public AbstractMutableDynamicObject(long id, Coordinate coordinate, RealmMap realmMap, DynamicObjectSdb dynamicObjectSdb, String idName, IAnimation[] animations) {
         super(id);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
@@ -65,7 +65,7 @@ public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity 
         return Set.of(guardCoordinates);
     }
 
-    static Animation[] parseAnimations(String idName, DynamicObjectSdb sdb, Function<Integer, Boolean> loopDecider) {
+    static IAnimation[] parseAnimations(String idName, DynamicObjectSdb sdb, Function<Integer, Boolean> loopDecider) {
         try {
             int s0 = Integer.parseInt(sdb.getSStep0(idName));
             int e0 = Integer.parseInt(sdb.getEStep0(idName));
@@ -75,13 +75,13 @@ public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity 
             int s2 = StringUtils.isNotEmpty(sStep2) ? Integer.parseInt(sStep2) : e1;
             String eStep2 = sdb.getEStep2(idName);
             int e2 = StringUtils.isNotEmpty(eStep2) ? Integer.parseInt(eStep2) : s2;
-            return new Animation[]{new Animation(s0, e0, loopDecider.apply(0)), new Animation(s1, e1, loopDecider.apply(1)), new Animation(s2, e2, loopDecider.apply(2))};
+            return new IAnimation[]{new IAnimation(s0, e0, loopDecider.apply(0)), new IAnimation(s1, e1, loopDecider.apply(1)), new IAnimation(s2, e2, loopDecider.apply(2))};
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid animation for " + idName, e);
         }
     }
 
-    static Animation[] parseAnimationFrames(String idName, DynamicObjectSdb sdb) {
+    static IAnimation[] parseAnimationFrames(String idName, DynamicObjectSdb sdb) {
         return parseAnimations(idName, sdb, integer -> integer != 0 && integer != 1);
     }
 
@@ -105,7 +105,7 @@ public abstract class AbstractMutableDynamicObject extends AbstractActiveEntity 
         changeAnimation(index, animations[index].total() * FRAME_DURATION);
     }
 
-    public Animation currentAnimation() {
+    public IAnimation currentAnimation() {
         return animations[animationIndex];
     }
 

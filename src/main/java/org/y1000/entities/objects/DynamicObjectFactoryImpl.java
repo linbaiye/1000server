@@ -10,6 +10,8 @@ import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
@@ -101,6 +103,41 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
             return "请输入正确门派名字";
         if (name.length() >= 8)
             return "门派名字最长8个字";
+        return null;
+    }
+
+
+    private List<Animation> buildAnimations(String name, DynamicObjectSdb sdb) {
+        List<Animation> animations = new ArrayList<>();
+        String sStep0 = sdb.getSStep0(name);
+        String eStep0 = sdb.getEStep0(name);
+        int life = sdb.getLife(name);
+        String trigger = sdb.getEventItem(name);
+        boolean active = StringUtils.isNotEmpty(trigger) || life != 0;
+        List<int[]> startEndList = new ArrayList<>();
+        if (StringUtils.isNotEmpty(sStep0) && StringUtils.isNotEmpty(eStep0)) {
+            startEndList.add(new int[]{Integer.parseInt(sStep0), Integer.parseInt(eStep0)});
+        }
+        String sStep1 = sdb.getSStep1(name);
+        String eStep1 = sdb.getEStep1(name);
+        if (StringUtils.isNotEmpty(sStep1) && StringUtils.isNotEmpty(eStep1)) {
+            startEndList.add(new int[]{Integer.parseInt(sStep1), Integer.parseInt(eStep1)});
+        }
+        String sStep2 = sdb.getSStep2(name);
+        String eStep2 = sdb.getEStep2(name);
+        if (StringUtils.isNotEmpty(sStep2) && StringUtils.isNotEmpty(eStep2)) {
+            startEndList.add(new int[]{Integer.parseInt(sStep2), Integer.parseInt(eStep2)});
+        }
+        for (int i = 0; i < startEndList.size(); i++) {
+            int start = startEndList.get(i)[0];
+            int end = startEndList.get(i)[1];
+            boolean loop = start == end;
+            animations.add(new Animation(start, end))
+        }
+    }
+
+    @Override
+    public DynamicObject create(long id, String name, RealmMap realmMap, Coordinate coordinate) {
         return null;
     }
 }

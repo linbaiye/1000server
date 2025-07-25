@@ -17,6 +17,6 @@ public interface IDynamicObject extends AttackableEntity {
     
     Set<Coordinate> occupyingCoordinates();
 
-    Animation currentAnimation();
+    IAnimation currentAnimation();
 
 }

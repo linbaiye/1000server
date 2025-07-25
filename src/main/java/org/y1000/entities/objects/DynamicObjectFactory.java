@@ -12,4 +12,7 @@ public interface DynamicObjectFactory {
 
     String checkCreateGuildStone(String name);
 
+    
+    DynamicObject create(long id, String name, RealmMap realmMap, Coordinate coordinate);
+
 }
