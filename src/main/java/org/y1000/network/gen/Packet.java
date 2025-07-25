@@ -116,6 +116,7 @@ private static final long serialVersionUID = 0L;
     TRADEMENUPACKET(74),
     CLOSETRADEPACKET(75),
     UPDATETRADEWINDOWSLOT(76),
+    DYNAMICOBJECTSNAPSHOT(77),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -204,6 +205,7 @@ private static final long serialVersionUID = 0L;
         case 74: return TRADEMENUPACKET;
         case 75: return CLOSETRADEPACKET;
         case 76: return UPDATETRADEWINDOWSLOT;
+        case 77: return DYNAMICOBJECTSNAPSHOT;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -2420,6 +2422,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.UpdateTradeWindowSlotPacket.getDefaultInstance();
   }
 
+  public static final int DYNAMICOBJECTSNAPSHOT_FIELD_NUMBER = 77;
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+   * @return Whether the dynamicObjectSnapshot field is set.
+   */
+  @java.lang.Override
+  public boolean hasDynamicObjectSnapshot() {
+    return typedPacketCase_ == 77;
+  }
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+   * @return The dynamicObjectSnapshot.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.DynamicObjectSnapshotPacket getDynamicObjectSnapshot() {
+    if (typedPacketCase_ == 77) {
+       return (org.y1000.network.gen.DynamicObjectSnapshotPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.DynamicObjectSnapshotPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.DynamicObjectSnapshotPacketOrBuilder getDynamicObjectSnapshotOrBuilder() {
+    if (typedPacketCase_ == 77) {
+       return (org.y1000.network.gen.DynamicObjectSnapshotPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.DynamicObjectSnapshotPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -2646,6 +2679,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 76) {
       output.writeMessage(76, (org.y1000.network.gen.UpdateTradeWindowSlotPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 77) {
+      output.writeMessage(77, (org.y1000.network.gen.DynamicObjectSnapshotPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -2939,6 +2975,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 76) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(76, (org.y1000.network.gen.UpdateTradeWindowSlotPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 77) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(77, (org.y1000.network.gen.DynamicObjectSnapshotPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -3241,6 +3281,10 @@ private static final long serialVersionUID = 0L;
         if (!getUpdateTradeWindowSlot()
             .equals(other.getUpdateTradeWindowSlot())) return false;
         break;
+      case 77:
+        if (!getDynamicObjectSnapshot()
+            .equals(other.getDynamicObjectSnapshot())) return false;
+        break;
       case 0:
       default:
     }
@@ -3539,6 +3583,10 @@ private static final long serialVersionUID = 0L;
       case 76:
         hash = (37 * hash) + UPDATETRADEWINDOWSLOT_FIELD_NUMBER;
         hash = (53 * hash) + getUpdateTradeWindowSlot().hashCode();
+        break;
+      case 77:
+        hash = (37 * hash) + DYNAMICOBJECTSNAPSHOT_FIELD_NUMBER;
+        hash = (53 * hash) + getDynamicObjectSnapshot().hashCode();
         break;
       case 0:
       default:
@@ -3889,6 +3937,9 @@ private static final long serialVersionUID = 0L;
       if (updateTradeWindowSlotBuilder_ != null) {
         updateTradeWindowSlotBuilder_.clear();
       }
+      if (dynamicObjectSnapshotBuilder_ != null) {
+        dynamicObjectSnapshotBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -4224,6 +4275,10 @@ private static final long serialVersionUID = 0L;
           updateTradeWindowSlotBuilder_ != null) {
         result.typedPacket_ = updateTradeWindowSlotBuilder_.build();
       }
+      if (typedPacketCase_ == 77 &&
+          dynamicObjectSnapshotBuilder_ != null) {
+        result.typedPacket_ = dynamicObjectSnapshotBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -4553,6 +4608,10 @@ private static final long serialVersionUID = 0L;
         }
         case UPDATETRADEWINDOWSLOT: {
           mergeUpdateTradeWindowSlot(other.getUpdateTradeWindowSlot());
+          break;
+        }
+        case DYNAMICOBJECTSNAPSHOT: {
+          mergeDynamicObjectSnapshot(other.getDynamicObjectSnapshot());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -5082,6 +5141,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 76;
               break;
             } // case 610
+            case 618: {
+              input.readMessage(
+                  getDynamicObjectSnapshotFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 77;
+              break;
+            } // case 618
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -15196,6 +15262,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 76;
       onChanged();
       return updateTradeWindowSlotBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.DynamicObjectSnapshotPacket, org.y1000.network.gen.DynamicObjectSnapshotPacket.Builder, org.y1000.network.gen.DynamicObjectSnapshotPacketOrBuilder> dynamicObjectSnapshotBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+     * @return Whether the dynamicObjectSnapshot field is set.
+     */
+    @java.lang.Override
+    public boolean hasDynamicObjectSnapshot() {
+      return typedPacketCase_ == 77;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+     * @return The dynamicObjectSnapshot.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.DynamicObjectSnapshotPacket getDynamicObjectSnapshot() {
+      if (dynamicObjectSnapshotBuilder_ == null) {
+        if (typedPacketCase_ == 77) {
+          return (org.y1000.network.gen.DynamicObjectSnapshotPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.DynamicObjectSnapshotPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 77) {
+          return dynamicObjectSnapshotBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.DynamicObjectSnapshotPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+     */
+    public Builder setDynamicObjectSnapshot(org.y1000.network.gen.DynamicObjectSnapshotPacket value) {
+      if (dynamicObjectSnapshotBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        dynamicObjectSnapshotBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 77;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+     */
+    public Builder setDynamicObjectSnapshot(
+        org.y1000.network.gen.DynamicObjectSnapshotPacket.Builder builderForValue) {
+      if (dynamicObjectSnapshotBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        dynamicObjectSnapshotBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 77;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+     */
+    public Builder mergeDynamicObjectSnapshot(org.y1000.network.gen.DynamicObjectSnapshotPacket value) {
+      if (dynamicObjectSnapshotBuilder_ == null) {
+        if (typedPacketCase_ == 77 &&
+            typedPacket_ != org.y1000.network.gen.DynamicObjectSnapshotPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.DynamicObjectSnapshotPacket.newBuilder((org.y1000.network.gen.DynamicObjectSnapshotPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 77) {
+          dynamicObjectSnapshotBuilder_.mergeFrom(value);
+        } else {
+          dynamicObjectSnapshotBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 77;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+     */
+    public Builder clearDynamicObjectSnapshot() {
+      if (dynamicObjectSnapshotBuilder_ == null) {
+        if (typedPacketCase_ == 77) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 77) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        dynamicObjectSnapshotBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+     */
+    public org.y1000.network.gen.DynamicObjectSnapshotPacket.Builder getDynamicObjectSnapshotBuilder() {
+      return getDynamicObjectSnapshotFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.DynamicObjectSnapshotPacketOrBuilder getDynamicObjectSnapshotOrBuilder() {
+      if ((typedPacketCase_ == 77) && (dynamicObjectSnapshotBuilder_ != null)) {
+        return dynamicObjectSnapshotBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 77) {
+          return (org.y1000.network.gen.DynamicObjectSnapshotPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.DynamicObjectSnapshotPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.DynamicObjectSnapshotPacket, org.y1000.network.gen.DynamicObjectSnapshotPacket.Builder, org.y1000.network.gen.DynamicObjectSnapshotPacketOrBuilder> 
+        getDynamicObjectSnapshotFieldBuilder() {
+      if (dynamicObjectSnapshotBuilder_ == null) {
+        if (!(typedPacketCase_ == 77)) {
+          typedPacket_ = org.y1000.network.gen.DynamicObjectSnapshotPacket.getDefaultInstance();
+        }
+        dynamicObjectSnapshotBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.DynamicObjectSnapshotPacket, org.y1000.network.gen.DynamicObjectSnapshotPacket.Builder, org.y1000.network.gen.DynamicObjectSnapshotPacketOrBuilder>(
+                (org.y1000.network.gen.DynamicObjectSnapshotPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 77;
+      onChanged();
+      return dynamicObjectSnapshotBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

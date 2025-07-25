@@ -2,6 +2,7 @@ package org.y1000.realm;
 
 
 import org.y1000.entities.Entity;
+import org.y1000.entities.objects.DynamicObject;
 import org.y1000.entities.objects.IDynamicObject;
 import org.y1000.entities.teleport.Teleport;
 import org.y1000.util.Coordinate;
@@ -20,6 +21,10 @@ public interface RealmMap {
     void occupy(IDynamicObject dynamicObject);
 
     void free(IDynamicObject dynamicObject);
+
+    void occupy(DynamicObject dynamicObject);
+
+    void free(DynamicObject dynamicObject);
 
     String mapFile();
 

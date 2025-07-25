@@ -1,6 +1,8 @@
 package org.y1000.message.input;
 
 import org.y1000.entities.Entity;
+import org.y1000.entities.objects.DynamicObject;
+import org.y1000.entities.objects.DynamicObjectTriggerAbility;
 import org.y1000.entities.players.Player;
 
 public record DropOnEntityInput(long id, int slot) implements EntityInteractInput {
@@ -13,6 +15,9 @@ public record DropOnEntityInput(long id, int slot) implements EntityInteractInpu
     public void onEntityFound(Player player, Entity entity) {
         if (entity instanceof Player another) {
             player.startTradeWith(another, slot);
+        } else if (entity instanceof DynamicObject object) {
+            object.findAbility(DynamicObjectTriggerAbility.class)
+                    .ifPresent(t -> t.onPlayerDropItem(object, player, slot));
         }
     }
 }

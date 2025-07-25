@@ -57,7 +57,7 @@ public final class DynamicObjectSdbImpl extends AbstractCSVSdbReader implements 
 
     @Override
     public int getOpenedInterval(String name) {
-        return getInt(name, "OpennedInterval");
+        return getIntOrZero(name, "OpennedInterval");
     }
 
     @Override

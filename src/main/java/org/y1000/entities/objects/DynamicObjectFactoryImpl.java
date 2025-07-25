@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.guild.GuildStone;
 import org.y1000.persistence.GuildStonePo;
+import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
@@ -12,6 +13,7 @@ import org.y1000.util.Coordinate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
@@ -106,34 +108,62 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
         return null;
     }
 
+    private List<Object> buildAbilities(String name, DynamicObjectSdb sdb) {
+        List<Object> abilities = new ArrayList<>();
+        int life = sdb.getLife(name);
+        if (life > 0) {
+            abilities.add(new DynamicObjectHurtAbility(life));
+        }
+        String eventItem = sdb.getEventItem(name);
+        if (StringUtils.isNotEmpty(eventItem)) {
+            String[] split = eventItem.split(":");
+            abilities.add(new DynamicObjectTriggerAbility(split[0], Integer.parseInt(split[1]), sound));
+        }
+        int openedMillis = sdb.getOpenedInterval(name) * Realm.STEP_MILLIS;
+        if (openedMillis > 0) {
+
+        }
+        return abilities;
+    }
+
+    private static Set<Coordinate> parseCoordinates(String idName, Coordinate coordinate, DynamicObjectSdb sdb) {
+        String guardPos = sdb.getGuardPos(idName);
+        if (StringUtils.isEmpty(guardPos)) {
+            return Set.of(coordinate);
+        }
+        String[] tokens = guardPos.split(":");
+        if (tokens.length % 2 != 0) {
+            throw new IllegalArgumentException("Invalid guardPos: " + guardPos + ", name:" + idName);
+        }
+        Coordinate[] guardCoordinates = new Coordinate[tokens.length / 2 + 1];
+        guardCoordinates[0] = coordinate;
+        for (int i = 0, j = 1; i < tokens.length / 2; i++, j++) {
+            int x = Integer.parseInt(tokens[i * 2]);
+            int y = Integer.parseInt(tokens[i * 2 + 1]);
+            guardCoordinates[j] = coordinate.move(x, y);
+        }
+        return Set.of(guardCoordinates);
+    }
+
 
     private List<Animation> buildAnimations(String name, DynamicObjectSdb sdb) {
         List<Animation> animations = new ArrayList<>();
         String sStep0 = sdb.getSStep0(name);
         String eStep0 = sdb.getEStep0(name);
-        int life = sdb.getLife(name);
-        String trigger = sdb.getEventItem(name);
-        boolean active = StringUtils.isNotEmpty(trigger) || life != 0;
-        List<int[]> startEndList = new ArrayList<>();
         if (StringUtils.isNotEmpty(sStep0) && StringUtils.isNotEmpty(eStep0)) {
-            startEndList.add(new int[]{Integer.parseInt(sStep0), Integer.parseInt(eStep0)});
+            animations.add(new Animation(Integer.parseInt(sStep0), Integer.parseInt(eStep0), true, 1));
         }
         String sStep1 = sdb.getSStep1(name);
         String eStep1 = sdb.getEStep1(name);
         if (StringUtils.isNotEmpty(sStep1) && StringUtils.isNotEmpty(eStep1)) {
-            startEndList.add(new int[]{Integer.parseInt(sStep1), Integer.parseInt(eStep1)});
+            animations.add(new Animation(Integer.parseInt(sStep1), Integer.parseInt(eStep1), false, 2));
         }
         String sStep2 = sdb.getSStep2(name);
         String eStep2 = sdb.getEStep2(name);
         if (StringUtils.isNotEmpty(sStep2) && StringUtils.isNotEmpty(eStep2)) {
-            startEndList.add(new int[]{Integer.parseInt(sStep2), Integer.parseInt(eStep2)});
+            animations.add(new Animation(Integer.parseInt(sStep2), Integer.parseInt(eStep2), true, 3));
         }
-        for (int i = 0; i < startEndList.size(); i++) {
-            int start = startEndList.get(i)[0];
-            int end = startEndList.get(i)[1];
-            boolean loop = start == end;
-            animations.add(new Animation(start, end))
-        }
+        return animations;
     }
 
     @Override

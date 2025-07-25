@@ -1073,5 +1073,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.UpdateTradeWindowSlotPacketOrBuilder getUpdateTradeWindowSlotOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+   * @return Whether the dynamicObjectSnapshot field is set.
+   */
+  boolean hasDynamicObjectSnapshot();
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+   * @return The dynamicObjectSnapshot.
+   */
+  org.y1000.network.gen.DynamicObjectSnapshotPacket getDynamicObjectSnapshot();
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+   */
+  org.y1000.network.gen.DynamicObjectSnapshotPacketOrBuilder getDynamicObjectSnapshotOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

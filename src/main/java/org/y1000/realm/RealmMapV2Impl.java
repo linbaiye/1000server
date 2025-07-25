@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.Server;
 import org.y1000.entities.Entity;
+import org.y1000.entities.objects.DynamicObject;
 import org.y1000.entities.objects.IDynamicObject;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.Teleport;
@@ -129,6 +130,28 @@ final class RealmMapV2Impl implements RealmMap {
         var c = entityCoordinateMap.remove(entity);
         if (c != null) {
             doRemoveCoordinate(entity, c);
+        }
+    }
+
+
+    @Override
+    public void occupy(DynamicObject dynamicObject) {
+        Validate.notNull(dynamicObject);
+        if (dynamicObject.occupiedCoordinates().stream().anyMatch(c -> !isInRange(c)))  {
+            throw new IllegalArgumentException("Coordinate out of range.");
+        }
+        entityCoordinateMap.put(dynamicObject, dynamicObject.coordinate());
+        for (Coordinate coordinate : dynamicObject.occupiedCoordinates()) {
+            coordinateEntityMap.computeIfAbsent(coordinate, c -> new HashSet<>()).add(dynamicObject);
+        }
+    }
+
+    @Override
+    public void free(DynamicObject dynamicObject) {
+        Validate.notNull(dynamicObject);
+        entityCoordinateMap.remove(dynamicObject);
+        for (Coordinate coordinate : dynamicObject.occupiedCoordinates()) {
+            doRemoveCoordinate(dynamicObject, coordinate);
         }
     }
 

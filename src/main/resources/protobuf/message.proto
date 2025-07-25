@@ -551,6 +551,22 @@ message ItemAttributePacket {
   string text = 4;
 }
 
+message DynamicObjectSnapshotPacket {
+  int64 id = 1;
+  int32 x = 2;
+  int32 y = 3;
+  repeated int32 aniStart = 4;
+  repeated int32 aniEnd = 5;
+  repeated bool aniLoop = 7;
+  repeated int32 aniId = 8;
+  string shape = 6;
+  optional string viewName = 9;
+  repeated int32 guardX = 10;
+  repeated int32 guardY = 11;
+  int32 currentAni = 12;
+  int32 currentElapsed = 13;
+}
+
 message ShowDynamicObjectPacket {
   int64 id = 1;
   int32 x = 2;
@@ -766,6 +782,7 @@ message Packet {
     NpcTradeMenuPacket tradeMenuPacket = 74;
     CloseTradeWindowPacket closeTradePacket = 75;
     UpdateTradeWindowSlotPacket updateTradeWindowSlot = 76;
+    DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;
   }
 }
 
