@@ -1,9 +1,8 @@
 package org.y1000.realm;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.event.*;
 import org.y1000.entities.creatures.npc.*;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.entities.creatures.npc.event.NpcShootEvent;
@@ -113,7 +112,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 
     void doUpdateEntities(long delta) {
         updateManagedEntities(delta);
-//        projectileManager.update(delta);
     }
 
 
@@ -144,23 +142,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
         sendToVisiblePlayers(npc, message);
     }
 
-    private void handleDieEvent(CreatureDieEvent event) {
-        if (!(event.source() instanceof INpc npc)) {
-            return;
-        }
-        String dropItems;
-        if (haveItemSdb.containsMonster(npc.idName())) {
-            dropItems = haveItemSdb.getHaveItem(npc.idName()).orElse(null);
-        } else {
-            dropItems = monstersSdb.getHaveItem(npc.idName());
-        }
-        if (!StringUtils.isEmpty(dropItems)) {
-            itemManager.dropItem(dropItems, event.source().coordinate());
-        }
-//        if (linked.containsKey(npc)) {
-//            linked.get(npc).forEach(INpc::die);
-//        }
-    }
 
     protected int getRespawnMillis(String idName) {
         return monstersSdb.getRegenInterval(idName) * 10;
@@ -224,10 +205,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 //        linked.put(event.npc(), set);
 //    }
 
-    private void handleSeekPlayerEvent(SeekPlayerEvent event) {
-        Set<Player> players = aoiManager.filterVisibleEntities(event.source(), Player.class);
-        event.setPlayers(players);
-    }
 
     @Override
     public void onEvent(NpcEvent npcEvent) {
@@ -237,6 +214,13 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
     @Override
     public void dropItem(String name, int number, Coordinate dropAt) {
         itemManager.dropItem(name, number, dropAt);
+    }
+
+    @Override
+    public void call(String name, ActiveEntity enemy, Coordinate callAt) {
+        var npc = npcFactory.createCalled(idGenerator.next(), name, realmMap, callAt, this);
+        npc.startAI(new CombatAI(npc, enemy));
+        addNpc(npc);
     }
 
     @Override

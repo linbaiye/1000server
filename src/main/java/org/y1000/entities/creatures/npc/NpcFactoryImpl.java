@@ -33,6 +33,9 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private final ItemFactory itemFactory;
 
+    private static final int DEFAULT_NPC_VIEW_WIDTH = 8;
+
+    private static final NpcRespawnAbility RESPAWN_ABILITY = new NpcRespawnAbility(8000);
 
     public NpcFactoryImpl(ActionSdb actionSdb,
                           MonstersSdb monsterSdb,
@@ -72,14 +75,6 @@ public final class NpcFactoryImpl implements NpcFactory {
             case HEAL -> null;
             case SHIFT -> new ShiftSpell(magicParamSdb.getNameParam1(npcName, magicName));
         };
-    }
-
-
-
-    private Quest getQuest(String idName) {
-        QuestSdb questSdb = QuestSdb.forNpc(idName);
-        List<String> names = questSdb.getNames();
-        return Quest.parse(names.get(0), questSdb);
     }
 
 
@@ -142,11 +137,8 @@ public final class NpcFactoryImpl implements NpcFactory {
                 damageBody, hit);
     }
 
-    private List<Object> buildCommonAbilities(String idName, NpcSdb npcSdb) {
+    private List<Object> buildCommonAbilities(String idName, NpcSdb npcSdb, boolean hasRespawn) {
         List<Object> abilities = new ArrayList<>();
-        if (npcSdb.attack(idName)) {
-            abilities.add(createMeleeAbility(idName, npcSdb));
-        }
         NpcHurtAbility hurtAbility = createHurtAbility(idName, npcSdb);
         abilities.add(hurtAbility);
         abilities.add(createIdleAbility(idName, npcSdb));
@@ -160,6 +152,10 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (StringUtils.isNotEmpty(attackMagic))
             abilities.add(createShootAbility(attackMagic, npcSdb.getAnimate(idName), npcSdb.getAccuracy(idName) + 70));
         NpcDropItemAbility.parse(npcSdb.getHaveItem(idName)).ifPresent(abilities::add);
+        if (hasRespawn) {
+            int regenInterval = npcSdb.getRegenInterval(idName) * Realm.STEP_MILLIS;
+            abilities.add(regenInterval > 0 ? new NpcRespawnAbility(regenInterval) : RESPAWN_ABILITY);
+        }
         return abilities;
     }
 
@@ -175,16 +171,29 @@ public final class NpcFactoryImpl implements NpcFactory {
 
 
     private List<Object> buildNpcAbilities(long id, String idName) {
-        List<Object> abilities = buildCommonAbilities(idName, nonMonsterNpcSdb);
+        List<Object> abilities = buildCommonAbilities(idName, nonMonsterNpcSdb, true);
         if (nonMonsterNpcSdb.isProtector(idName)) {
-            abilities.add(new NpcProtectAbility(8));
+            abilities.add(new NpcProtectAbility(DEFAULT_NPC_VIEW_WIDTH));
+            abilities.add(createMeleeAbility(idName, nonMonsterNpcSdb));
         }
         NpcSettingSdb.tryLoad(idName).ifPresent(sdb -> abilities.addAll(buildNpcInteractAbilities(sdb, nonMonsterNpcSdb.getShape(idName), id)));
         return abilities;
     }
 
+    private List<Object> buildCalledNpcAbilities(String idName) {
+        List<Object> abilities = buildCommonAbilities(idName, nonMonsterNpcSdb, false);
+        if (nonMonsterNpcSdb.isProtector(idName)) {
+            abilities.add(createMeleeAbility(idName, nonMonsterNpcSdb));
+        }
+        abilities.add(new EngageAlivePlayerAbility(DEFAULT_NPC_VIEW_WIDTH));
+        return abilities;
+    }
+
     private List<Object> buildMonsterAbilities(String idName) {
-        List<Object> abilities = buildCommonAbilities(idName, monsterSdb);
+        List<Object> abilities = buildCommonAbilities(idName, monsterSdb, true);
+        if (monsterSdb.attack(idName)) {
+            abilities.add(createMeleeAbility(idName, monsterSdb));
+        }
         int escapeLife = monsterSdb.getEscapeLife(idName);
         if (escapeLife > 0)
             abilities.add(new LifeLowEscapeAbility(escapeLife, monsterSdb.getViewWidth(idName)));
@@ -201,15 +210,12 @@ public final class NpcFactoryImpl implements NpcFactory {
                 new WanderingAI(npc) : new FrozenAI(npc);
     }
 
-
-    @Override
-    public NpcImpl create(long id,
+    private NpcImpl create(long id,
                           String idName,
                           RealmMap realmMap,
                           Coordinate coordinate,
-                          NpcEventListener listener) {
-        List<Object> abilities = monsterSdb.containsName(idName) ?
-                buildMonsterAbilities(idName) : buildNpcAbilities(id, idName);
+                          NpcEventListener listener,
+                          List<Object> abilities) {
         var npcSdb = monsterSdb.containsName(idName) ? monsterSdb : nonMonsterNpcSdb;
         NpcImpl npc = new NpcImpl(id,
                 abilities,
@@ -223,5 +229,22 @@ public final class NpcFactoryImpl implements NpcFactory {
                 npcSdb.getActionWidth(idName));
         npc.changeAI(createAI(npc));
         return npc;
+    }
+
+    @Override
+    public NpcImpl create(long id,
+                          String idName,
+                          RealmMap realmMap,
+                          Coordinate coordinate,
+                          NpcEventListener listener) {
+        List<Object> abilities = monsterSdb.containsName(idName) ?
+                buildMonsterAbilities(idName) : buildNpcAbilities(id, idName);
+        return create(id, idName, realmMap, coordinate, listener, abilities);
+    }
+
+    @Override
+    public NpcImpl createCalled(long id, String idName, RealmMap realmMap, Coordinate coordinate, NpcEventListener listener) {
+        List<Object> abilities = buildCalledNpcAbilities(idName);
+        return create(id, idName, realmMap, coordinate, listener, abilities);
     }
 }

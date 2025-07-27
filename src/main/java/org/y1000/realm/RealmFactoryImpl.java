@@ -130,7 +130,8 @@ public final class RealmFactoryImpl implements RealmFactory {
             var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory, aoiManager);
             var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
             var dynamicObjectManager = !realmSpecificSdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
-                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, realmSpecificSdbRepository.loadCreateObject(id), crossRealmEventSender, realmMap, aoiManager);
+                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager,
+                            realmSpecificSdbRepository.loadCreateObject(id), crossRealmEventSender, realmMap, aoiManager, npcManager);
             var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager,
                     new BankManagerImpl(eventSender, npcManager, bankRepository), playerRepository, deadPlayerTeleportManager(id),
                     crossRealmEventSender, aoiManager);

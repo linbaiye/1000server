@@ -1,20 +1,17 @@
 package org.y1000.entities.objects;
 
 import org.y1000.entities.AbstractActiveEntity;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.DynamicObjectEventListener;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-public class DynamicObject extends AbstractActiveEntity  {
+public class DynamicObject extends AbstractActiveEntity {
 
     private final String viewName;
-
 
     private final List<Object> abilities;
 
@@ -28,13 +25,17 @@ public class DynamicObject extends AbstractActiveEntity  {
 
     private final String shape;
 
+    private RealmMap realmMap;
+
+    private boolean occupying;
 
     protected DynamicObject(long id,
                             String viewName,
                             List<Object> abilities,
                             Set<Coordinate> guardCoordinates,
                             Coordinate coordinate,
-                            DynamicObjectEventListener listener, String shape) {
+                            DynamicObjectEventListener listener,
+                            String shape) {
         super(id);
         this.viewName = viewName;
         this.abilities = abilities;
@@ -43,6 +44,8 @@ public class DynamicObject extends AbstractActiveEntity  {
         this.listener = listener;
         this.shape = shape;
         currentAbility = findAbility(StaticAbility.class).orElseThrow();
+        findAbility(DynamicObjectHurtAbility.class).ifPresent(h -> h.setOnHurt(this::onHurt));
+        occupying = true;
     }
 
     public Set<Coordinate> occupiedCoordinates() {
@@ -51,6 +54,12 @@ public class DynamicObject extends AbstractActiveEntity  {
 
     public void join(RealmMap realmMap) {
         realmMap.occupy(this);
+        this.realmMap = realmMap;
+    }
+
+    public void free() {
+        realmMap.free(this);
+        occupying = false;
     }
 
     @Override
@@ -81,10 +90,10 @@ public class DynamicObject extends AbstractActiveEntity  {
     }
 
 
-    private void onHurt(DynamicObjectHurtAbility hurtAbility) {
-        if (hurtAbility.currentLife() <= 0)
+    private void onHurt(ActiveEntity attacker, DynamicObjectHurtAbility hurtAbility) {
+        hurtAbility.apply(this, attacker);
+        if (hurtAbility.isDead())
             triggered();
-//            sentEvent();
     }
 
     public String shape() {
@@ -98,6 +107,19 @@ public class DynamicObject extends AbstractActiveEntity  {
 
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DynamicObject object = (DynamicObject) o;
+        return id() == object.id();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id());
+    }
+
+    @Override
     public I2ClientMessage captureSnapshot() {
         List<Animation> animations = new ArrayList<>();
         for (Object ability : abilities) {
@@ -105,6 +127,6 @@ public class DynamicObject extends AbstractActiveEntity  {
                 a.collectAnimations(animations);
             }
         }
-        return DynamicObjectSnapshot.of(this, animations, currentAbility.currentAnimation());
+        return DynamicObjectSnapshot.of(this, animations, currentAbility.currentAnimation(), occupying);
     }
 }

@@ -7,4 +7,6 @@ public interface NpcFactory {
 
     NpcImpl create(long id, String idName, RealmMap realmMap, Coordinate coordinate, NpcEventListener listener);
 
+    NpcImpl createCalled(long id, String idName, RealmMap realmMap, Coordinate coordinate, NpcEventListener listener);
+
 }

@@ -21,7 +21,10 @@ public final class PlayerChangeStateEvent extends AbstractMessagePlayerEvent {
     private static PlayerChangeStateEvent of(Player player, boolean includeSelf) {
         PlayerStateEnum playerStateEnum = player.stateEnum();
         PlayerChangeStatePacket changeStatePacket = PlayerChangeStatePacket.newBuilder().setState(playerStateEnum.value())
-                .setId(player.id()).setDirection(player.direction().value()).build();
+                .setId(player.id())
+                .setX(player.coordinate().x())
+                .setY(player.coordinate().y())
+                .setDirection(player.direction().value()).build();
         var packet = Packet.newBuilder().setPlayerChangeState(changeStatePacket).build();
         return new PlayerChangeStateEvent(player, packet, includeSelf);
     }

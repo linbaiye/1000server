@@ -1,8 +1,14 @@
 package org.y1000.entities.objects;
 
+import lombok.Setter;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.DynamicObjectDropItemAbility;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.Damage;
+
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class DynamicObjectHurtAbility implements HurtAbility {
 
@@ -10,9 +16,22 @@ public class DynamicObjectHurtAbility implements HurtAbility {
 
     private int currentLife;
 
-    public DynamicObjectHurtAbility(int maxLife) {
+    private final String sound;
+
+    private final String dieSound;
+
+    @Setter
+    private BiConsumer<ActiveEntity, ? super DynamicObjectHurtAbility> onHurt;
+
+    private final List<String> callNpc;
+
+    public DynamicObjectHurtAbility(int maxLife, String sound, String dieSound,
+                                    List<String> callNpc) {
         this.maxLife = maxLife;
         currentLife = maxLife;
+        this.sound = sound;
+        this.dieSound = dieSound;
+        this.callNpc = callNpc;
     }
 
     @Override
@@ -27,10 +46,33 @@ public class DynamicObjectHurtAbility implements HurtAbility {
 
     @Override
     public int attacked(ActiveEntity attacker, Damage damage, int accuracy) {
+        if (isDead())
+            return -1;
         currentLife -= damage.bodyDamage();
         if (currentLife < 0)
             currentLife = 0;
+        onHurt.accept(attacker, this);
         return -1;
+    }
+
+    public boolean isDead() {
+        return currentLife == 0;
+    }
+
+    public void apply(DynamicObject dynamicObject, ActiveEntity attacker) {
+        if (maxLife > 1)
+            dynamicObject.sentEvent(DynamicObjectLifeBarEvent.of(dynamicObject, currentLife, maxLife));
+        if (isDead() && dieSound != null)
+            dynamicObject.sentEvent(DynamicObjectSoundEvent.of(dynamicObject, dieSound));
+        else if (sound != null)
+            dynamicObject.sentEvent(DynamicObjectSoundEvent.of(dynamicObject, sound));
+        if (!callNpc.isEmpty()) {
+            dynamicObject.sentEvent(new DynamicObjectCallNpcEvent(dynamicObject, attacker, callNpc));
+            callNpc.clear();
+        }
+        if (isDead())
+            dynamicObject.findAbility(DynamicObjectDropItemAbility.class)
+                    .ifPresent(d -> d.apply(dynamicObject));
     }
 
     @Override

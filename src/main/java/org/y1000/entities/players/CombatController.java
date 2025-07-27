@@ -88,7 +88,7 @@ final class CombatController {
 
     static CombatController acceptIfAllowed(PlayerImpl player, ActiveEntity target) {
         HurtAbility ability = target.findAbility(HurtAbility.class).orElse(null);
-        if (ability == null || !ability.swingAllowed())
+        if (ability == null || !ability.canBeAttacked())
                 return null;
         if (!ability.canBeAttacked() && player.attackKungFu().isRanged())
             return null;

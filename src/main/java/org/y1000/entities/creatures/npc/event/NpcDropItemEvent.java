@@ -1,5 +1,6 @@
 package org.y1000.entities.creatures.npc.event;
 
+import org.y1000.entities.AbstractDopItemAbility;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcDropItemAbility;
 import org.y1000.realm.NpcEventHandler;
@@ -8,9 +9,9 @@ import java.util.List;
 
 public class NpcDropItemEvent extends AbstractNpcEvent {
 
-    private final List<NpcDropItemAbility.Item> items;
+    private final List<AbstractDopItemAbility.Item> items;
 
-    public NpcDropItemEvent(Npc npc, List<NpcDropItemAbility.Item> items) {
+    public NpcDropItemEvent(Npc npc, List<AbstractDopItemAbility.Item> items) {
         super(npc);
         this.items = items;
     }

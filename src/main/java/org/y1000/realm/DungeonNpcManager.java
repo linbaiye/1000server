@@ -34,7 +34,6 @@ final class DungeonNpcManager extends AbstractNpcManager {
         return log;
     }
 
-
     @Override
     void onUnhandledEvent(EntityEvent entityEvent) {
         if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {

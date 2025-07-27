@@ -50,6 +50,11 @@ public final class CreateDynamicObjectSdbImpl extends AbstractCSVSdbReader imple
         return Optional.empty();
     }
 
+    @Override
+    public Optional<String> getCallNpc(String no) {
+        return getOptional(no, "CallNpc");
+    }
+
     public static void main(String[] args) {
         CreateDynamicObjectSdbImpl sdb = new CreateDynamicObjectSdbImpl(49);
         Set<String> names = sdb.columnNames();

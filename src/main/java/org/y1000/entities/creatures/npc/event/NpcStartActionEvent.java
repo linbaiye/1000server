@@ -31,6 +31,8 @@ public class NpcStartActionEvent extends AbstractNpcEvent implements I2ClientMes
                 .setChangeStatePacket(ChangeStatePacket.newBuilder()
                         .setState(actionEnum.value())
                         .setDirection(npc.direction().value())
+                        .setX(npc.coordinate().x())
+                        .setY(npc.coordinate().y())
                         .setId(npc.id()))
                 .build();
         return new NpcStartActionEvent(npc, packet);

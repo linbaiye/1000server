@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.y1000.entities.creatures.event.NpcShiftEvent;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.creatures.npc.NpcRespawnAbility;
 import org.y1000.event.EntityEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.sdb.*;
@@ -21,8 +22,6 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
     private boolean initialized = false;
 
     private final Map<Npc, Npc> shiftedNpcs;
-
-    private static final int RESPAWN_MILLIS = 8000;
 
     @Builder
     public NpcManagerImpl(MessageSender sender,
@@ -77,8 +76,8 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
 
     public void onRemove(Npc source, I2ClientMessage message) {
         syncAndRemove(source, message);
-        int respawnMillis = getRespawnMillis(source.getIdName());
-        respawningEntityManager.add(source,respawnMillis > 0 ? respawnMillis : RESPAWN_MILLIS);
+        source.findAbility(NpcRespawnAbility.class)
+                .ifPresent(a -> respawningEntityManager.add(source, a.respawnMillis()));
 //        if (removeEntityEvent.source() instanceof INpc npc) {
 //            removeNpc(npc);
 //            if (isCloned(npc)) {
@@ -101,9 +100,7 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
 
     @Override
     void onUnhandledEvent(EntityEvent entityEvent) {
-        if (entityEvent instanceof NpcShiftEvent shiftEvent) {
-//            handleShiftEvent(shiftEvent);
-        }
+
     }
 
     @Override

@@ -3,15 +3,20 @@ package org.y1000.entities.objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.DynamicObjectDropItemAbility;
+import org.y1000.entities.creatures.npc.NpcDropItemAbility;
 import org.y1000.guild.GuildStone;
 import org.y1000.persistence.GuildStonePo;
+import org.y1000.realm.DynamicObjectEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.sdb.CreateDynamicObjectSdb;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -108,26 +113,54 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
         return null;
     }
 
-    private List<Object> buildAbilities(String name, DynamicObjectSdb sdb) {
-        List<Object> abilities = new ArrayList<>();
-        int life = sdb.getLife(name);
-        if (life > 0) {
-            abilities.add(new DynamicObjectHurtAbility(life));
+    private List<String> parseNpcNames(String callNpc) {
+        String[] split = callNpc.split(":");
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i * 2 < split.length; i++) {
+            result.add(split[i * 2]);
         }
-        String eventItem = sdb.getEventItem(name);
+        return result;
+    }
+
+    private List<Object> buildAbilities(String name, String number, CreateDynamicObjectSdb createDynamicObjectSdb) {
+        String sStep0 = dynamicObjectSdb.getSStep0(name);
+        String eStep0 = dynamicObjectSdb.getEStep0(name);
+        int aniId = 1;
+        StaticAbility staticAbility = new StaticAbility(new Animation(Integer.parseInt(sStep0), Integer.parseInt(eStep0), true, aniId++));
+        List<Object> abilities = new ArrayList<>();
+        abilities.add(staticAbility);
+        int life = dynamicObjectSdb.getLife(name);
+        if (life > 0) {
+            abilities.add(new DynamicObjectHurtAbility(life, dynamicObjectSdb.getSoundSpecial(name).orElse(null),
+                    dynamicObjectSdb.getSoundDie(name).orElse(null),
+                    createDynamicObjectSdb.getCallNpc(number).map(this::parseNpcNames).orElse(Collections.emptyList())));
+        }
+        String eventItem = dynamicObjectSdb.getEventItem(name);
         if (StringUtils.isNotEmpty(eventItem)) {
             String[] split = eventItem.split(":");
-            abilities.add(new DynamicObjectTriggerAbility(split[0], Integer.parseInt(split[1]), sound));
+            abilities.add(new DynamicObjectTriggerAbility(split[0], Integer.parseInt(split[1])));
         }
-        int openedMillis = sdb.getOpenedInterval(name) * Realm.STEP_MILLIS;
+        int openedMillis = dynamicObjectSdb.getOpenedInterval(name) * Realm.STEP_MILLIS;
         if (openedMillis > 0) {
-
+            List<Animation> animations = new ArrayList<>();
+            String sStep1 = dynamicObjectSdb.getSStep1(name);
+            String eStep1 = dynamicObjectSdb.getEStep1(name);
+            animations.add(new Animation(Integer.parseInt(sStep1), Integer.parseInt(eStep1), false, aniId++));
+            String sStep2 = dynamicObjectSdb.getSStep2(name);
+            String eStep2 = dynamicObjectSdb.getEStep2(name);
+            if (StringUtils.isNotEmpty(sStep2) && StringUtils.isNotEmpty(eStep2)) {
+                animations.add(new Animation(Integer.parseInt(sStep2), Integer.parseInt(eStep2), true, aniId));
+            }
+            abilities.add(new OpenAbility(openedMillis, animations, dynamicObjectSdb.getSoundEvent(name).orElse(null),
+                    dynamicObjectSdb.isRemove(name), dynamicObjectSdb.getRegenInterval(name) * Realm.STEP_MILLIS));
         }
+        createDynamicObjectSdb.getDropItem(number).flatMap(DynamicObjectDropItemAbility::parse)
+                .ifPresent(abilities::add);
         return abilities;
     }
 
-    private static Set<Coordinate> parseCoordinates(String idName, Coordinate coordinate, DynamicObjectSdb sdb) {
-        String guardPos = sdb.getGuardPos(idName);
+    private Set<Coordinate> parseCoordinates(String idName, Coordinate coordinate) {
+        String guardPos = dynamicObjectSdb.getGuardPos(idName);
         if (StringUtils.isEmpty(guardPos)) {
             return Set.of(coordinate);
         }
@@ -145,29 +178,14 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
         return Set.of(guardCoordinates);
     }
 
-
-    private List<Animation> buildAnimations(String name, DynamicObjectSdb sdb) {
-        List<Animation> animations = new ArrayList<>();
-        String sStep0 = sdb.getSStep0(name);
-        String eStep0 = sdb.getEStep0(name);
-        if (StringUtils.isNotEmpty(sStep0) && StringUtils.isNotEmpty(eStep0)) {
-            animations.add(new Animation(Integer.parseInt(sStep0), Integer.parseInt(eStep0), true, 1));
-        }
-        String sStep1 = sdb.getSStep1(name);
-        String eStep1 = sdb.getEStep1(name);
-        if (StringUtils.isNotEmpty(sStep1) && StringUtils.isNotEmpty(eStep1)) {
-            animations.add(new Animation(Integer.parseInt(sStep1), Integer.parseInt(eStep1), false, 2));
-        }
-        String sStep2 = sdb.getSStep2(name);
-        String eStep2 = sdb.getEStep2(name);
-        if (StringUtils.isNotEmpty(sStep2) && StringUtils.isNotEmpty(eStep2)) {
-            animations.add(new Animation(Integer.parseInt(sStep2), Integer.parseInt(eStep2), true, 3));
-        }
-        return animations;
-    }
-
     @Override
-    public DynamicObject create(long id, String name, RealmMap realmMap, Coordinate coordinate) {
-        return null;
+    public DynamicObject create(long id, String number, DynamicObjectEventListener eventListener, CreateDynamicObjectSdb createDynamicObjectSdb) {
+        int x = createDynamicObjectSdb.getX(number);
+        int y = createDynamicObjectSdb.getY(number);
+        var coordinate = Coordinate.xy(x, y);
+        var name = createDynamicObjectSdb.getName(number);
+        return new DynamicObject(id, dynamicObjectSdb.getViewName(name).orElse(null),
+                buildAbilities(name, number, createDynamicObjectSdb), parseCoordinates(name, coordinate),
+                coordinate, eventListener, "x" + dynamicObjectSdb.getShape(name));
     }
 }

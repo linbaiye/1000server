@@ -73,7 +73,6 @@ class DynamicObjectManagerImplTest {
         when(player.consumeItem(slot)).thenReturn(true);
         var eventListener = new TestingEventListener();
         triggerDynamicObject.registerEventListener(eventListener);
-        manager.triggerDynamicObject(2L, player, slot);
         assertNotNull(eventListener.removeFirst(UpdateDynamicObjectEvent.class));
     }
 

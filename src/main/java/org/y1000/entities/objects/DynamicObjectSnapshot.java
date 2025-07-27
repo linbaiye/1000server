@@ -39,13 +39,15 @@ public final class DynamicObjectSnapshot implements I2ClientMessage {
     }
 
 
-    public static DynamicObjectSnapshot of(DynamicObject dynamicObject, List<Animation> animations, Animation current) {
+    public static DynamicObjectSnapshot of(DynamicObject dynamicObject, List<Animation> animations, Animation current, boolean o) {
         var builder = DynamicObjectSnapshotPacket.newBuilder()
                 .setId(dynamicObject.id())
                 .setX(dynamicObject.coordinate().x())
+                .setY(dynamicObject.coordinate().y())
                 .setShape(dynamicObject.shape())
                 .setViewName(dynamicObject.viewName().orElse(""))
                 .setCurrentAni(current.getId())
+                .setOccupying(o)
                 .setCurrentElapsed(current.getElapsed());
         dynamicObject.occupiedCoordinates().forEach(coordinate -> {
             builder.addGuardX(coordinate.x());

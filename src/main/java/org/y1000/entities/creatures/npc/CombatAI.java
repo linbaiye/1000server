@@ -23,6 +23,11 @@ public class CombatAI extends AbstractMovableNpcAI {
         this.enemyHurtAbility = enemy.findAbility(HurtAbility.class).orElseThrow();
     }
 
+
+    public CombatAI(Npc npc, ActiveEntity enemy) {
+        this(npc, enemy, npc.findAbility(NpcIdleAbility.class).orElseThrow());
+    }
+
     @Override
     public void update(int delta) {
         updateAbility(delta);
