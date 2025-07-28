@@ -13,6 +13,8 @@ public record DropOnEntityInput(long id, int slot) implements EntityInteractInpu
 
     @Override
     public void onEntityFound(Player player, Entity entity) {
+        if (player.isDead())
+            return;
         if (entity instanceof Player another) {
             player.startTradeWith(another, slot);
         } else if (entity instanceof DynamicObject object) {

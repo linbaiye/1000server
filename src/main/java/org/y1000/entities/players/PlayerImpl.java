@@ -233,6 +233,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     private boolean dropActionInvalid(int slot, Coordinate at) {
+        if (isDead())
+            return false;
         if (inventory.getItem(slot) == null)
             return true;
         if (at.directDistance(coordinate()) > 2) {
@@ -251,6 +253,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void confirmDropItem(int slot, int number, Coordinate at) {
+        if (isDead())
+            return;
         if (dropActionInvalid(slot, at))
             return;
         Item removed = inventory.remove(slot, number);
@@ -263,7 +267,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void changeTradeState(PlayerTradeStateInput.State state) {
-        if (playerTrade == null)
+        if (playerTrade == null || isDead())
             return;
         switch (state) {
             case Cancel -> playerTrade.cancel(this);
@@ -274,6 +278,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void addTradeItem(int slot, int number) {
+        if (isDead())
+            return;
         if (playerTrade != null)
             playerTrade.addTradeItem(this, slot, number);
     }
@@ -568,7 +574,9 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void handleInput(SelfHandleInput input) {
-        if (isDead() || input == null)
+        if (input == null)
+            return;
+        if (isDead() && !(input instanceof SimpleInput))
             return;
         input.accept(this);
     }
@@ -749,6 +757,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             realm.map().free(this);
         }
         realm = null;
+        if (playerTrade != null)
+            playerTrade.cancel(this);
         combatController = null;
         //emitEvent(new PlayerLeftEvent(this));
     }
@@ -1418,6 +1428,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             syncActiveKungFuList();
             dieSound().ifPresent(this::sendSound);
             changeState(PlayerDieState.of(this));
+            if (playerTrade != null)
+                playerTrade.cancel(this);
         }
         sendEvent(PlayerChangeStateEvent.allVisible(this));
         return ExperienceUtil.damageToExp(maxLife(), old - life.currentValue());
