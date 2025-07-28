@@ -21,6 +21,8 @@ public class DynamicObjectShiftEvent extends AbstractDynamicObjectEvent implemen
     public Packet toPacket() {
         return packet;
     }
+
+
     public static DynamicObjectShiftEvent of(DynamicObject object, int id, int id2, boolean lift) {
         DynamicObjectShiftPacket packet1 = DynamicObjectShiftPacket.newBuilder()
                 .setId(object.id())

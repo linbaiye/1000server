@@ -26,8 +26,8 @@ public class NpcStartActionEvent extends AbstractNpcEvent implements I2ClientMes
         return packet;
     }
 
-    public static NpcStartActionEvent of(Npc npc, NpcAction actionEnum) {
-        var packet = Packet.newBuilder()
+    public static Packet changeStatePacket(Npc npc, NpcAction actionEnum) {
+        return Packet.newBuilder()
                 .setChangeStatePacket(ChangeStatePacket.newBuilder()
                         .setState(actionEnum.value())
                         .setDirection(npc.direction().value())
@@ -35,6 +35,9 @@ public class NpcStartActionEvent extends AbstractNpcEvent implements I2ClientMes
                         .setY(npc.coordinate().y())
                         .setId(npc.id()))
                 .build();
-        return new NpcStartActionEvent(npc, packet);
+    }
+
+    public static NpcStartActionEvent of(Npc npc, NpcAction actionEnum) {
+        return new NpcStartActionEvent(npc, changeStatePacket(npc, actionEnum));
     }
 }

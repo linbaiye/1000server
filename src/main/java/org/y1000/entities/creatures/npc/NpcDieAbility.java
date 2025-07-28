@@ -1,6 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import org.apache.commons.lang3.StringUtils;
+import org.y1000.entities.creatures.npc.event.NpcDieEvent;
 import org.y1000.entities.creatures.npc.event.NpcLifeBarEvent;
 import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
 import org.y1000.entities.creatures.npc.event.NpcStartActionEvent;
@@ -20,7 +21,7 @@ public final class NpcDieAbility extends AbstractNpcNonMoveAbility {
         if (sound != null)
             npc.sendEvent(NpcSoundEvent.of(npc, sound));
         startAnimation(timeMillis);
-        npc.sendEvent(NpcStartActionEvent.of(npc, NpcAction.Die));
+        npc.sendEvent(NpcDieEvent.of(npc));
         npc.sendEvent(NpcLifeBarEvent.die(npc));
         npc.findAbility(NpcDropItemAbility.class).ifPresent(a -> a.apply(npc));
     }

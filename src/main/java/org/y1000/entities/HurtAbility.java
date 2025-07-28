@@ -23,4 +23,6 @@ public interface HurtAbility {
 
     int currentLife();
 
+    int maxLife();
+
 }

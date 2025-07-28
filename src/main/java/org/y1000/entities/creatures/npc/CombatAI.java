@@ -51,6 +51,18 @@ public class CombatAI extends AbstractMovableNpcAI {
         }
     }
 
+    private boolean ableToAttack() {
+        if (!enemy.canBeSeenAt(npc().coordinate()) || !enemyHurtAbility.canBeAttacked()) {
+            return false;
+        }
+        var ret = npc().findAbility(NpcShootAbility.class).map(NpcShootAbility::canAttack)
+                .orElse(false);
+        if (ret)
+            return true;
+        return npc().coordinate().directDistance(enemy.coordinate()) <= 1 && meleeAbility.canAttack() &&
+                hurtAbility.isRecovered();
+    }
+
     private void doRangedAttack(NpcShootAbility shootAbility) {
         if (shootAbility.shouldEscape(npc(), enemy)) {
             shootAbility.computeDirectionToSafeSpot(npc(), enemy)
@@ -99,6 +111,10 @@ public class CombatAI extends AbstractMovableNpcAI {
 
 
     private void stayOrAttack(NpcMoveAbility ability) {
+        if (ableToAttack()) {
+            tryAttack();
+            return;
+        }
         if (ability.idleTime() > 0) {
             stay(ability.idleTime());
         } else {
@@ -123,6 +139,8 @@ public class CombatAI extends AbstractMovableNpcAI {
     }
 
     private void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
+        npc().findAbility(NpcCopyAbility.class)
+                        .ifPresent(a -> a.tryApply(npc(), attacker));
         applyHurtAbility(ability);
     }
 }

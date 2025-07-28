@@ -8,7 +8,6 @@ import org.y1000.entities.players.Damage;
 
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class DynamicObjectHurtAbility implements HurtAbility {
 
@@ -78,5 +77,10 @@ public class DynamicObjectHurtAbility implements HurtAbility {
     @Override
     public int currentLife() {
         return currentLife;
+    }
+
+    @Override
+    public int maxLife() {
+        return maxLife;
     }
 }

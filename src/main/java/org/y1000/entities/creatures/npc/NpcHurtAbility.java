@@ -83,6 +83,10 @@ public final class NpcHurtAbility extends AbstractNpcNonMoveAbility implements H
         return canBeAttacked();
     }
 
+    public void instantKill() {
+        currentLife = 0;
+    }
+
     public void apply(Npc npc, NpcUpdatableAbility interruptedAbility) {
         sendActionAndStartShortAnimation(npc, recoveryMillis);
         npc.sendEvent(NpcLifeBarEvent.of(npc, currentLife, maxLife));
@@ -114,6 +118,12 @@ public final class NpcHurtAbility extends AbstractNpcNonMoveAbility implements H
     @Override
     public int currentLife() {
         return currentLife;
+    }
+
+
+    @Override
+    public int maxLife() {
+        return maxLife;
     }
 
     public boolean isDead() {

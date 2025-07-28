@@ -46,4 +46,9 @@ public interface Npc extends ActiveEntity {
 
     <T> Optional<T> findAbility(Class<T> type, Predicate<? super T> filter);
 
+
+    default void instantKill() {
+
+    }
+
 }

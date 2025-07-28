@@ -46,6 +46,14 @@ public abstract class AbstractNpcAI implements NpcAI {
         return currentAbility;
     }
 
+    public void instantKill() {
+        npc.findAbility(NpcHurtAbility.class).ifPresent(e -> {
+            if (!e.isDead()) {
+                e.instantKill();
+                changeAbilityOrThrow(NpcDieAbility.class).apply(npc());
+            }
+        });
+    }
 
     void applyHurtAbility(NpcHurtAbility ability) {
         if (currentAbility() instanceof NpcMoveAbility moveAbility) {

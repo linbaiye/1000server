@@ -19,5 +19,6 @@ public interface CreateDynamicObjectSdb {
     Optional<String> getFirstNo(String name);
 
     Optional<String> getCallNpc(String no);
+
 }
 

@@ -10,4 +10,6 @@ public interface NpcAI {
 
     void start();
 
+    void instantKill();
+
 }

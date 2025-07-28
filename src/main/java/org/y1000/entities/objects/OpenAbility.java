@@ -15,7 +15,9 @@ public class OpenAbility implements DynamicAbility {
     private int current;
 
     private final String sound;
+
     private final boolean removal;
+
     private final int respawnMillis;
 
     public OpenAbility(int openMillis,

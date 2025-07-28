@@ -8,7 +8,7 @@ public enum NpcSpellType implements ValueEnum {
 
     HIDE(0),
 
-    CLONE(1),
+    Copy(1),
 
     HEAL(2),
 

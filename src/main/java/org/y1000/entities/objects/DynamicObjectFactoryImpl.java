@@ -33,47 +33,6 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
                                               long id,
                                               RealmMap realmMap,
                                               Coordinate coordinate) {
-        Validate.notNull(name);
-        Validate.notNull(realmMap);
-        Validate.notNull(coordinate);
-        DynamicObjectType kind = dynamicObjectSdb.getKind(name);
-        if (kind == DynamicObjectType.TRIGGER) {
-            return TriggerDynamicObject.builder()
-                    .id(id)
-                    .idName(name)
-                    .realmMap(realmMap)
-                    .coordinate(coordinate)
-                    .dynamicObjectSdb(dynamicObjectSdb)
-                    .build();
-        } else if (kind == DynamicObjectType.KILLABLE) {
-            return dynamicObjectSdb.getRegenInterval(name) > 0 ?
-            RespawnKillableDynamicObject.builder()
-                    .id(id)
-                    .coordinate(coordinate)
-                    .idName(name)
-                    .realmMap(realmMap)
-                    .dynamicObjectSdb(dynamicObjectSdb)
-                    .build()
-                    :
-                    KillableDynamicObject.builder()
-                            .id(id)
-                            .coordinate(coordinate)
-                            .idName(name)
-                            .realmMap(realmMap)
-                            .dynamicObjectSdb(dynamicObjectSdb)
-                            .build();
-        } else if (kind == DynamicObjectType.YAOHUA) {
-            return Yaohua.builder()
-                    .id(id)
-                    .coordinate(coordinate)
-                    .idName(name)
-                    .realmMap(realmMap)
-                    .dynamicObjectSdb(dynamicObjectSdb)
-                    .build();
-        } else if (kind == DynamicObjectType.IMMUNE) {
-
-        }
-        log.error("Unable to create dynamic object : " + name);
         return null;
     }
 

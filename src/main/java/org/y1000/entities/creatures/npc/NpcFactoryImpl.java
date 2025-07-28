@@ -8,7 +8,6 @@ import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.kungfu.KungFuType;
-import org.y1000.quest.Quest;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.ActionSdb;
@@ -59,7 +58,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         return Direction.fromValue(v);
     }
 
-    private NpcSpell createSpell(String npcName, String magicName) {
+    private Object createMagic(String npcName, String magicName) {
         KungFuType magicType = kungFuSdb.getMagicType(magicName);
         if (magicType != KungFuType.NPC_SPELL) {
             log.error("{} is not a npc spell.", magicName);
@@ -70,10 +69,10 @@ public final class NpcFactoryImpl implements NpcFactory {
             return null;
         }
         return switch (NpcSpellType.fromValue(function)) {
-            case HIDE -> null;
-            case CLONE -> new CloneSpell(magicParamSdb.getNumberParam1(npcName, magicName), magicParamSdb.getNumberParam2(npcName, magicName));
-            case HEAL -> null;
+            case Copy -> new NpcCopyAbility(magicParamSdb.getNumberParam1(npcName, magicName), magicParamSdb.getNumberParam2(npcName, magicName));
             case SHIFT -> new ShiftSpell(magicParamSdb.getNameParam1(npcName, magicName));
+            case HEAL -> null;
+            case HIDE -> null;
         };
     }
 
@@ -117,12 +116,6 @@ public final class NpcFactoryImpl implements NpcFactory {
         return new NpcDieAbility(createAnimation(npcSdb.getAnimate(name), NpcAction.Die), npcSdb.getSoundDie(name));
     }
 
-    private int getWalkSpeed(String name) {
-        if (monsterSdb.containsName(name))
-            return monsterSdb.getWalkSpeed(name) * Realm.STEP_MILLIS;
-        return DEFAULT_WALK_MILLIS;
-    }
-
     private static final int INIT_SKILL_DIV_DAMAGE = 5000;
 
     private NpcShootAbility createShootAbility(String attackMagic, String animate, int hit) {
@@ -142,11 +135,6 @@ public final class NpcFactoryImpl implements NpcFactory {
         NpcHurtAbility hurtAbility = createHurtAbility(idName, npcSdb);
         abilities.add(hurtAbility);
         abilities.add(createIdleAbility(idName, npcSdb));
-        int walkSpeed = getWalkSpeed(idName);
-        if (walkSpeed > 0) {
-            abilities.add(createMoveAbility(idName, npcSdb, walkSpeed));
-            abilities.add(createTurnAbility(idName, npcSdb));
-        }
         abilities.add(createDieAbility(idName, npcSdb));
         String attackMagic = npcSdb.getAttackMagic(idName);
         if (StringUtils.isNotEmpty(attackMagic))
@@ -176,6 +164,8 @@ public final class NpcFactoryImpl implements NpcFactory {
             abilities.add(new NpcProtectAbility(DEFAULT_NPC_VIEW_WIDTH));
             abilities.add(createMeleeAbility(idName, nonMonsterNpcSdb));
         }
+        abilities.add(createMoveAbility(idName, nonMonsterNpcSdb, DEFAULT_WALK_MILLIS));
+        abilities.add(createTurnAbility(idName, nonMonsterNpcSdb));
         NpcSettingSdb.tryLoad(idName).ifPresent(sdb -> abilities.addAll(buildNpcInteractAbilities(sdb, nonMonsterNpcSdb.getShape(idName), id)));
         return abilities;
     }
@@ -185,6 +175,8 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (nonMonsterNpcSdb.isProtector(idName)) {
             abilities.add(createMeleeAbility(idName, nonMonsterNpcSdb));
         }
+        abilities.add(createMoveAbility(idName, nonMonsterNpcSdb, DEFAULT_WALK_MILLIS / 4));
+        abilities.add(createTurnAbility(idName, nonMonsterNpcSdb));
         abilities.add(new EngageAlivePlayerAbility(DEFAULT_NPC_VIEW_WIDTH));
         return abilities;
     }
@@ -194,6 +186,11 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (monsterSdb.attack(idName)) {
             abilities.add(createMeleeAbility(idName, monsterSdb));
         }
+        int walkSpeed = monsterSdb.getWalkSpeed(idName);
+        if (walkSpeed > 0) {
+            abilities.add(createMoveAbility(idName, monsterSdb, walkSpeed * Realm.STEP_MILLIS));
+            abilities.add(createTurnAbility(idName, monsterSdb));
+        }
         int escapeLife = monsterSdb.getEscapeLife(idName);
         if (escapeLife > 0)
             abilities.add(new LifeLowEscapeAbility(escapeLife, monsterSdb.getViewWidth(idName)));
@@ -202,6 +199,10 @@ public final class NpcFactoryImpl implements NpcFactory {
             abilities.add(new NpcSoundAbility(soundNormal));
         if (!monsterSdb.isPassive(idName))
             abilities.add(new EngageAlivePlayerAbility(monsterSdb.getViewWidth(idName)));
+        var magic = monsterSdb.getHaveMagic(idName);
+        if (StringUtils.isNotEmpty(magic)) {
+            abilities.add(createMagic(idName, magic));
+        }
         return abilities;
     }
 
@@ -243,8 +244,16 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
     @Override
-    public NpcImpl createCalled(long id, String idName, RealmMap realmMap, Coordinate coordinate, NpcEventListener listener) {
+    public NpcImpl createCalledNpc(long id, String idName, RealmMap realmMap, Coordinate coordinate, NpcEventListener listener) {
         List<Object> abilities = buildCalledNpcAbilities(idName);
         return create(id, idName, realmMap, coordinate, listener, abilities);
+    }
+
+    @Override
+    public NpcImpl createCopied(long id, String idName, RealmMap realmMap, Coordinate coordinate, NpcEventListener listener) {
+        var npc = create(id, idName, realmMap, coordinate, listener);
+        npc.removeAbility(NpcCopyAbility.class);
+        npc.removeAbility(NpcRespawnAbility.class);
+        return npc;
     }
 }

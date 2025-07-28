@@ -48,6 +48,7 @@ final class DungeonNpcManager extends AbstractNpcManager {
         syncAndRemove(npc ,message);
     }
 
+
     private void initializeNPCs(CreateNpcSdb sdb) {
         sdb.getAllSettings().forEach(this::spawnNPCs);
     }

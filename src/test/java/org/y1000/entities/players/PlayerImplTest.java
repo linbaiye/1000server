@@ -18,6 +18,8 @@ import org.y1000.message.SyncActiveKungEvent;
 import org.y1000.message.input.AbstractClickContainerSlotInput;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -119,7 +121,9 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
 
     @Test
     void tryEquipWeaponFromSlot_whenSwitchNoneWeapon() {
-        recreatePlayer(playerBuilder().male(true).hair((SexualEquipment) itemFactory.createEquipment("男子短发")));
+        Map<EquipmentType, Equipment> equipmentMap = new HashMap<>();
+        equipmentMap.put(EquipmentType.HAIR, itemFactory.createEquipment("男子短发"));
+        recreatePlayer(playerBuilder().male(true).equipments(equipmentMap));
         var equip = itemFactory.createEquipment("男子长发");
         int slot = player.inventory().add(equip);
         assertTrue(player.tryEquipFromSlot(slot, equip));

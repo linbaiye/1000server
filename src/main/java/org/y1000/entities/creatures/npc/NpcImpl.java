@@ -90,6 +90,11 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     }
 
     @Override
+    public void instantKill() {
+        ai.instantKill();
+    }
+
+    @Override
     public void changeAI(NpcAI newAi) {
         ai = newAi;
     }
@@ -155,6 +160,10 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     @Override
     public I2ClientMessage captureSnapshot() {
         return ai.captureSnapshot();
+    }
+
+    public <T> void removeAbility(Class<T> type) {
+        abilities.removeIf(a -> type.isAssignableFrom(a.getClass()));
     }
 
     @Override

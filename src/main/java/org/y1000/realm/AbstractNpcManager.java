@@ -28,11 +28,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
     private final ProjectileManager projectileManager;
 
     private final GroundItemManager itemManager;
-    private final MonstersSdb monstersSdb;
-
-    private final Set<Long> cloned;
-
-    private final AOIManager aoiManager;
 
     private final CreateNpcSdb createMonsterSdb;
 
@@ -41,6 +36,8 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
     private final RealmMap realmMap;
 
     private final HaveItemSdb haveItemSdb;
+
+    private final Map<Npc, List<Npc>> copiedNpcMap;
 
 
     public AbstractNpcManager(MessageSender sender,
@@ -68,12 +65,10 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
         this.idGenerator = idGenerator;
         this.npcFactory = npcFactory;
         this.itemManager = itemManager;
-        this.monstersSdb = monstersSdb;
-        this.aoiManager = aoiManager;
         this.haveItemSdb = haveItemSdb;
         this.realmMap = realmMap;
         projectileManager = new ProjectileManager();
-        cloned = new HashSet<>();
+        copiedNpcMap = new HashMap<>();
     }
 
     Set<Long> spawnNPCs(NpcSpawnSetting setting) {
@@ -142,11 +137,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
         sendToVisiblePlayers(npc, message);
     }
 
-
-    protected int getRespawnMillis(String idName) {
-        return monstersSdb.getRegenInterval(idName) * 10;
-    }
-
     @Override
     public void handleCrossRealmEvent(RealmEvent crossRealmEvent) {
         if (!(crossRealmEvent instanceof RealmTriggerEvent letterEvent)) {
@@ -173,14 +163,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 //        return newNpc;
 //        return null;
 //    }
-
-    boolean isCloned(Npc npc) {
-        return cloned.contains(npc.id());
-    }
-
-    void removeFromCloned(Npc npc) {
-        cloned.remove(npc.id());
-    }
 
 //    private void handleCloneEvent(NpcCastCloneEvent event) {
 //        var set =  new HashSet<INpc>();
@@ -218,9 +200,29 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 
     @Override
     public void call(String name, ActiveEntity enemy, Coordinate callAt) {
-        var npc = npcFactory.createCalled(idGenerator.next(), name, realmMap, callAt, this);
+        var npc = npcFactory.createCalledNpc(idGenerator.next(), name, realmMap, callAt, this);
         npc.startAI(new CombatAI(npc, enemy));
         addNpc(npc);
+    }
+
+    @Override
+    public void copy(Npc npc, int number, ActiveEntity enemy) {
+        List<Npc> copied = new ArrayList<>();
+        for (int i = 0; i < number; i++) {
+            var c = npcFactory.createCopied(idGenerator.next(), npc.getIdName(), realmMap, npc.coordinate(), this);
+            copied.add(c);
+            c.startAI(new CombatAI(npc, enemy));
+            addNpc(c);
+        }
+        copiedNpcMap.put(npc, copied);
+    }
+
+    @Override
+    public void onDie(Npc npc, I2ClientMessage message) {
+        sendToVisiblePlayers(npc, message);
+        var copied = copiedNpcMap.remove(npc);
+        if (copied != null)
+            copied.forEach(Npc::instantKill);
     }
 
     @Override

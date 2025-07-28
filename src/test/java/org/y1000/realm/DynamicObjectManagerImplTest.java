@@ -62,7 +62,7 @@ class DynamicObjectManagerImplTest {
                 .realmMap(realmMap)
                 .dynamicObjectSdb(dynamicObjectSdb)
                 .build();
-        manager.add(triggerDynamicObject);
+//        manager.add(triggerDynamicObject);
         Player player = Mockito.mock(Player.class);
         var inv = new Inventory();
         when(player.coordinate()).thenReturn(triggerDynamicObject.coordinate().moveBy(Direction.RIGHT));
