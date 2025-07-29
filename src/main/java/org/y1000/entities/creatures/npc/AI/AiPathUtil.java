@@ -20,7 +20,7 @@ public final class AiPathUtil {
         }
         var dir = npc.coordinate().directionTo(dest);
         Coordinate next = npc.coordinate().moveBy(dir);
-        if (next.equals(dest) && !npc.realmMap().movable(next)) {
+        if (next.equals(dest)) {
             // copied, but why?
             return dir != npc.direction() ? dir : null;
         }
@@ -28,7 +28,7 @@ public final class AiPathUtil {
         Direction towards = null;
         for (Direction direction : Direction.values()) {
             Coordinate coordinate = npc.coordinate().moveBy(direction);
-            if (!npc.realmMap().movable(coordinate) || previous.equals(coordinate)) {
+            if (!npc.realmMap().tileMovable(coordinate) || previous.equals(coordinate)) {
                 continue;
             }
             int distance = coordinate.distance(dest);

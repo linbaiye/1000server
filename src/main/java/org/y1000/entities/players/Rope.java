@@ -1,7 +1,10 @@
 package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.npc.AI.AiPathUtil;
 import org.y1000.entities.players.event.PlayerFollowRopeEvent;
+import org.y1000.entities.players.event.PlayerMovedEvent;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
 import org.y1000.message.PlayerDraggedEvent;
 import org.y1000.util.Coordinate;
@@ -63,8 +66,9 @@ end;
     private final Player dragging;
     private int mills;
     private Coordinate from;
-
     private int stepCounterMillis;
+
+    private boolean moving;
 
     public Rope(Player dragging, Player dragged) {
         Validate.isTrue(!dragging.equals(dragged));
@@ -73,6 +77,7 @@ end;
         this.mills = 5000;
         from = Coordinate.Empty;
         stepCounterMillis = 0;
+        moving = false;
     }
 
     private int distance() {
@@ -80,16 +85,16 @@ end;
     }
 
     public void update(int delta) {
-        if (!isBroken())
-            follow(delta);
-        if (mills > delta)
+        if (isBroken())
+            return;
+        follow(delta);
+        if (mills >= delta)
             mills -= delta;
     }
 
     public boolean isBroken() {
-        return !dragged.isDead() ||
+        return !dragged.canBeDragged() ||
                 dragging.isLeftGame() ||
-                dragged.isLeftGame() ||
                 dragging.getRealm().id() != dragged.getRealm().id() ||
                 mills <= 0;
     }
@@ -98,41 +103,58 @@ end;
         return this.dragging.equals(dragging) && this.dragged.equals(dragged);
     }
 
-    private void follow(int delta) {
-        if (stepCounterMillis > 0)
-            return;
-        var dist = distance();
-        if (dist < 2) {
-            var dir = dragged.coordinate().directionTo(dragging.coordinate());
-            if (dragged.direction() != dir) {
-                stepCounterMillis = 200;
-                dragged.changeDirection(dir);
-                dragged.sendEvent(PlayerFollowRopeEvent.turn(dragged));
-            }
-            return;
+
+    private Direction computeDragDirection() {
+        var dest = dragging.coordinate();
+        int minDist = Integer.MAX_VALUE;
+        Direction towards = null;
+        var dir = dragged.coordinate().directionTo(dest);
+        Coordinate next = dragged.coordinate().moveBy(dir);
+        if (next.equals(dest)) {
+            return dir != dragged.direction() ? dir : null;
         }
+        for (Direction direction : Direction.values()) {
+            Coordinate coordinate = dragged.coordinate().moveBy(direction);
+            if (!dragging.realmMap().tileMovable(coordinate) || from.equals(coordinate)) {
+                continue;
+            }
+            int distance = coordinate.distance(dest);
+            if (minDist > distance) {
+                minDist = distance;
+                towards = direction;
+            }
+        }
+        return towards;
+    }
+
+
+    private void follow(int delta) {
         stepCounterMillis -= delta;
         if (stepCounterMillis > 0)
             return;
-        var dir = dragged.coordinate().directionTo(dragging.coordinate());
-//        var nextPos = dragged.coordinate().moveBy(dir);
-//        if (nextPos.equals(dragged.coordinate())) {
-//            if (dragged.direction() != dir) {
-//                dragged.changeDirection(dir);
-//                dragged.emitEvent(new PlayerDraggedEvent(dragged));
-//            }
-//            return;
-//        }
-//        var direction = AiPathUtil.computeNextMoveDirection(dragged, moving.coordinate(), from);
-//        if (direction == null) {
-//            return;
-//        }
-//        if (dragged.direction() != direction) {
-//            dragged.changeDirection(dir);
-//        } else {
-//            dragged.changeCoordinate(dragged.coordinate().moveBy(direction));
-//            from = dragged.coordinate();
-//        }
-//        dragged.emitEvent(new PlayerDraggedEvent(dragged));
+        if (moving) {
+            moving = false;
+            from = dragged.coordinate();
+            dragged.changeCoordinate(dragged.coordinate().moveBy(dragged.direction()));
+            dragged.sendEvent(new PlayerMovedEvent(dragged));
+        }
+        stepCounterMillis = 200;
+        var dist = distance();
+        if (dist < 2) {
+            var dir = computeDragDirection();
+            if (dir == null)
+                return;
+            if (dragged.direction() != dir) {
+                dragged.changeDirection(dir);
+                dragged.sendEvent(PlayerFollowRopeEvent.turn(dragged));
+            }
+        } else {
+            var dir = computeDragDirection();
+            if (dir != null) {
+                dragged.changeDirection(dir);
+                dragged.sendEvent(PlayerFollowRopeEvent.follow(dragged));
+                moving = true;
+            }
+        }
     }
 }

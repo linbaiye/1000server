@@ -14,7 +14,7 @@ public class PlayerFollowRopeEvent extends Abstract2VisibleAndSelfMessageEvent {
         FollowRopePacket packet = FollowRopePacket.newBuilder()
                 .setDirection(player.direction().value())
                 .setX(player.coordinate().x())
-                .setX(player.coordinate().y())
+                .setY(player.coordinate().y())
                 .setDurationMillis(0)
                 .setId(player.id()).build();
         return new PlayerFollowRopeEvent(player, Packet.newBuilder().setFollowRope(packet).build());
@@ -24,7 +24,7 @@ public class PlayerFollowRopeEvent extends Abstract2VisibleAndSelfMessageEvent {
         FollowRopePacket packet = FollowRopePacket.newBuilder()
                 .setDirection(player.direction().value())
                 .setX(player.coordinate().x())
-                .setX(player.coordinate().y())
+                .setY(player.coordinate().y())
                 .setDurationMillis(200)
                 .setId(player.id()).build();
         return new PlayerFollowRopeEvent(player, Packet.newBuilder().setFollowRope(packet).build());

@@ -1214,7 +1214,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     private void dragDeadPlayer(Player dragged, int slot) {
-        if (dragged.canBeDragged())
+        if (!dragged.canBeDragged())
             return;
         Item item = inventory().getItem(slot);
         if (!item.name().equals("追魂索"))
@@ -1261,7 +1261,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public boolean canBeDragged() {
-        return state.canBeDragged();
+        return !isLeftGame() && state.canBeDragged();
     }
 
     void sendSound(String s) {
