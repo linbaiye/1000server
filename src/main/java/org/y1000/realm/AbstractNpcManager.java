@@ -107,6 +107,7 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 
     void doUpdateEntities(long delta) {
         updateManagedEntities(delta);
+        projectileManager.update(delta);
     }
 
 
@@ -125,6 +126,8 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 
     public void onMoved(Npc npc, I2ClientMessage message) {
         Set<Entity> visibleOrInvisible = getAoiManager().update(npc);
+        if (visibleOrInvisible.isEmpty())
+            return;
         visibleOrInvisible.forEach(entity -> {
             if (entity instanceof Player player) {
                 if (npc.canBeSeenAt(player.coordinate())) {
@@ -153,40 +156,6 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
         sendToVisiblePlayers(event.source(), event);
     }
 
-    abstract void onUnhandledEvent(EntityEvent entityEvent) ;
-
-//    Npc replaceNpc(NpcShiftEvent shiftEvent) {
-//        Npc npc = shiftEvent.npc();
-//        removeNpc(npc);
-//        Npc newNpc = createNpc(shiftEvent.shiftToName(), npc.coordinate());
-//        addNpc(newNpc);
-//        return newNpc;
-//        return null;
-//    }
-
-//    private void handleCloneEvent(NpcCastCloneEvent event) {
-//        var set =  new HashSet<INpc>();
-//        var random = ThreadLocalRandom.current();
-//        for (int i = 0; i < event.number(); i++) {
-//            Coordinate coordinate = event.npc().coordinate();
-//            int x = coordinate.x() - 2;
-//            x += random.nextInt(0, 4);
-//            int y = coordinate.y() - 2;
-//            y += random.nextInt(0, 4);
-//            Coordinate coordinate1 = Coordinate.xy(x, y);
-//            if (event.npc().realmMap().movable(coordinate1)) {
-//                var newNpc = npcFactory.createClonedNpc(event.npc(), idGenerator.next(), coordinate1);
-//                if (newNpc instanceof AggressiveNpc aggressiveNpc) {
-//                    aggressiveNpc.actAggressively(event.enemy());
-//                }
-//                addNpc(newNpc);
-//                set.add(newNpc);
-//                cloned.add(newNpc.id());
-//            }
-//        }
-//        linked.put(event.npc(), set);
-//    }
-
 
     @Override
     public void onEvent(NpcEvent npcEvent) {
@@ -198,9 +167,14 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
         itemManager.dropItem(name, number, dropAt);
     }
 
+    private Coordinate findSpawnCoordinate(Coordinate origin) {
+        return origin.neighbours().stream()
+                .filter(realmMap::movable).findFirst().orElse(origin);
+    }
+
     @Override
     public void call(String name, ActiveEntity enemy, Coordinate callAt) {
-        var npc = npcFactory.createCalledNpc(idGenerator.next(), name, realmMap, callAt, this);
+        var npc = npcFactory.createCalledNpc(idGenerator.next(), name, realmMap, findSpawnCoordinate(callAt), this);
         npc.startAI(new CombatAI(npc, enemy));
         addNpc(npc);
     }
@@ -209,9 +183,7 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
     public void copy(Npc npc, int number, ActiveEntity enemy) {
         List<Npc> copied = new ArrayList<>();
         for (int i = 0; i < number; i++) {
-            var coordinate = npc.coordinate().neighbours()
-                    .stream().filter(realmMap::movable).findFirst().orElse(npc.coordinate());
-            var c = npcFactory.createCopied(idGenerator.next(), npc.getIdName(), realmMap, coordinate, this);
+            var c = npcFactory.createCopied(idGenerator.next(), npc.getIdName(), realmMap, findSpawnCoordinate(npc.coordinate()), this);
             copied.add(c);
             c.startAI(new CombatAI(c, enemy));
             addNpc(c);
@@ -229,21 +201,5 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
-//        if (entityEvent instanceof MonsterShootEvent shootEvent) {
-//            projectileManager.add(shootEvent.projectile());
-//            sender.notifyVisiblePlayers(shootEvent.source(), shootEvent);
-//        } else if (entityEvent instanceof CreatureDieEvent dieEvent) {
-//            handleDieEvent(dieEvent);
-//        } else if (entityEvent instanceof NpcCastCloneEvent cloneEvent) {
-//            handleCloneEvent(cloneEvent);
-//        } else if (entityEvent instanceof SeekPlayerEvent seekPlayerEvent) {
-//            handleSeekPlayerEvent(seekPlayerEvent);
-//        } else if (entityEvent instanceof SeekAggressiveMonsterEvent seekAggressiveMonsterEvent) {
-//            seekAggressiveMonsterEvent.handle(getEntities().stream());
-//        } else if (entityEvent instanceof Npc2ClientEvent clientEvent) {
-//            sender.notifyVisiblePlayers(clientEvent.source(), clientEvent);
-//        } else {
-//            onUnhandledEvent(entityEvent);
-//        }
     }
 }

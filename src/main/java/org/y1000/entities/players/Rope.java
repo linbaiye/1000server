@@ -1,16 +1,12 @@
 package org.y1000.entities.players;
 
-import lombok.Getter;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.npc.AI.AiPathUtil;
-import org.y1000.event.EntityEvent;
-import org.y1000.event.EntityEventListener;
-import org.y1000.message.BreakRopeEvent;
+import org.y1000.entities.players.event.PlayerFollowRopeEvent;
+import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
 import org.y1000.message.PlayerDraggedEvent;
-import org.y1000.message.serverevent.PlayerLeftEvent;
 import org.y1000.util.Coordinate;
 
-public final class Rope implements EntityEventListener  {
+public final class Rope {
 
     /*
        TGotoXyRData = record ract, rdir, rlen : word; end;
@@ -64,84 +60,79 @@ end;
      */
 
     private final Player dragged;
-    private final Player moving;
+    private final Player dragging;
     private int mills;
     private Coordinate from;
 
-    @Getter
-    private boolean broken;
+    private int stepCounterMillis;
 
-    public Rope(Player dragged, Player moving) {
-        Validate.notNull(dragged);
-        Validate.notNull(moving);
+    public Rope(Player dragging, Player dragged) {
+        Validate.isTrue(!dragging.equals(dragged));
+        this.dragging = dragging;
         this.dragged = dragged;
-        this.moving = moving;
         this.mills = 5000;
         from = Coordinate.Empty;
-        broken = false;
-        dragged.registerEventListener(this);
-        moving.registerEventListener(this);
+        stepCounterMillis = 0;
     }
 
     private int distance() {
-        return dragged.coordinate().directDistance(moving.coordinate());
+        return dragged.coordinate().directDistance(dragging.coordinate());
     }
 
-    public void update(long delta) {
-        if (isBroken())
+    public void update(int delta) {
+        if (!isBroken())
+            follow(delta);
+        if (mills > delta)
+            mills -= delta;
+    }
+
+    public boolean isBroken() {
+        return !dragged.isDead() ||
+                dragging.isLeftGame() ||
+                dragged.isLeftGame() ||
+                dragging.getRealm().id() != dragged.getRealm().id() ||
+                mills <= 0;
+    }
+
+    public boolean isDragging(Player dragging, Player dragged) {
+        return this.dragging.equals(dragging) && this.dragged.equals(dragged);
+    }
+
+    private void follow(int delta) {
+        if (stepCounterMillis > 0)
             return;
-        mills -= (int)delta;
-        follow();
-        if (mills <= 0)
-            breakRope();
-    }
-
-    private void breakRope() {
-        if (!broken) {
-            broken = true;
-            dragged.emitEvent(new BreakRopeEvent(dragged));
-            dragged.deregisterEventListener(this);
-            moving.deregisterEventListener(this);
-        }
-    }
-
-    private void follow() {
         var dist = distance();
-        if (isBroken() || dist < 1 || !dragged.isDead()) {
-            return;
-        }
-        var dir = dragged.coordinate().directionTo(moving.coordinate());
-        var nextPos = dragged.coordinate().moveBy(dir);
-        if (nextPos.equals(moving.coordinate())) {
+        if (dist < 2) {
+            var dir = dragged.coordinate().directionTo(dragging.coordinate());
             if (dragged.direction() != dir) {
+                stepCounterMillis = 200;
                 dragged.changeDirection(dir);
-                dragged.emitEvent(new PlayerDraggedEvent(dragged));
+                dragged.sendEvent(PlayerFollowRopeEvent.turn(dragged));
             }
             return;
         }
-        var direction = AiPathUtil.computeNextMoveDirection(dragged, moving.coordinate(), from);
-        if (direction == null) {
+        stepCounterMillis -= delta;
+        if (stepCounterMillis > 0)
             return;
-        }
-        if (dragged.direction() != direction) {
-            dragged.changeDirection(dir);
-        } else {
-            dragged.changeCoordinate(dragged.coordinate().moveBy(direction));
-            from = dragged.coordinate();
-        }
-        dragged.emitEvent(new PlayerDraggedEvent(dragged));
-    }
-
-    public void breakIfDraggedAgain(Player dragged) {
-        if (this.dragged.equals(dragged)) {
-            breakRope();
-        }
-    }
-
-    @Override
-    public void onEvent(EntityEvent entityEvent) {
-        if (entityEvent instanceof PlayerLeftEvent || moving.isDead()|| !dragged.isDead()) {
-            breakRope();
-        }
+        var dir = dragged.coordinate().directionTo(dragging.coordinate());
+//        var nextPos = dragged.coordinate().moveBy(dir);
+//        if (nextPos.equals(dragged.coordinate())) {
+//            if (dragged.direction() != dir) {
+//                dragged.changeDirection(dir);
+//                dragged.emitEvent(new PlayerDraggedEvent(dragged));
+//            }
+//            return;
+//        }
+//        var direction = AiPathUtil.computeNextMoveDirection(dragged, moving.coordinate(), from);
+//        if (direction == null) {
+//            return;
+//        }
+//        if (dragged.direction() != direction) {
+//            dragged.changeDirection(dir);
+//        } else {
+//            dragged.changeCoordinate(dragged.coordinate().moveBy(direction));
+//            from = dragged.coordinate();
+//        }
+//        dragged.emitEvent(new PlayerDraggedEvent(dragged));
     }
 }

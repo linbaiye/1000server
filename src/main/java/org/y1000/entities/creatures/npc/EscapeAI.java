@@ -36,7 +36,7 @@ public final class EscapeAI extends AbstractMovableNpcAI {
     }
 
     private void returnToWander() {
-        npc().startAI(new WaryWanderAI(npc(), currentAbility(), escapeAbility));
+        npc().startAI(new EscapingWanderAI(npc(), currentAbility(), escapeAbility));
     }
 
     @Override

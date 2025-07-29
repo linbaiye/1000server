@@ -1,10 +1,10 @@
 package org.y1000.entities.projectile;
 
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.Damage;
 
 public final class NpcProjectile extends AbstractProjectile {
-
 
     private final int accuracy;
 
@@ -21,17 +21,8 @@ public final class NpcProjectile extends AbstractProjectile {
     }
 
     @Override
-    public Damage damage() {
-        return Damage.DEFAULT;
-    }
-
-    @Override
-    public int hit() {
-        return accuracy;
-    }
-
-    @Override
     protected void onReachTarget() {
-
+        target().findAbility(HurtAbility.class)
+                .ifPresent(hurtAbility -> hurtAbility.attacked(shooter(), damage, accuracy));
     }
 }

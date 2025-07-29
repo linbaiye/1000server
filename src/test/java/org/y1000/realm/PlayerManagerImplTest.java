@@ -24,8 +24,6 @@ class PlayerManagerImplTest extends AbstractUnitTestFixture {
 
     private ItemFactory itemFactory;
 
-    private TradeManager tradeManager;
-
     private DynamicObjectManager dynamicObjectManager;
 
     private Realm realm;

@@ -2,11 +2,8 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.RemoveEntityEvent;
-import org.y1000.entities.creatures.event.NpcShiftEvent;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
-import org.y1000.event.EntityEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.sdb.CreateNonMonsterSdb;
 import org.y1000.sdb.CreateNpcSdb;
@@ -34,14 +31,6 @@ final class DungeonNpcManager extends AbstractNpcManager {
         return log;
     }
 
-    @Override
-    void onUnhandledEvent(EntityEvent entityEvent) {
-        if (entityEvent instanceof RemoveEntityEvent removeEntityEvent) {
-            //handleRemoveEvent(removeEntityEvent);
-        } else if (entityEvent instanceof NpcShiftEvent shiftEvent) {
-//            replaceNpc(shiftEvent);
-        }
-    }
 
     @Override
     public void onRemove(Npc npc, I2ClientMessage message) {

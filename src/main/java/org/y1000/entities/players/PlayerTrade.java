@@ -99,6 +99,11 @@ public class PlayerTrade {
     }
 
     public void confirm(Player player) {
+        if (!player1.equals(player) && !player2.equals(player))
+            return;
+        if (closeIfDistanceFar()) {
+            return;
+        }
         if (player1.equals(player))
             p1Confirmed = true;
         else if (player2.equals(player))
@@ -120,6 +125,9 @@ public class PlayerTrade {
     }
 
     public void unconfirm(Player player) {
+        if (closeIfDistanceFar()) {
+            return;
+        }
         if (player1.equals(player))
             p1Confirmed = false;
         else if (player2.equals(player))
@@ -171,7 +179,23 @@ public class PlayerTrade {
         player.sendEvent(PlayerTextMessage.of(player, "交易窗口已满。"));
     }
 
+    private boolean closeIfDistanceFar() {
+        if (player1.coordinate().directDistance(player2.coordinate()) > 5) {
+            player1.sendEvent(PlayerTextMessage.of(player1, "交易因超出距离被取消。"));
+            player2.sendEvent(PlayerTextMessage.of(player2, "交易因超出距离被取消。"));
+            cancel(player1);
+            return true;
+        }
+        return false;
+    }
+
+
     public void addTradeItem(Player player, int slot, int number) {
+        if (!player1.equals(player) && !player2.equals(player))
+            return;
+        if (closeIfDistanceFar()) {
+            return;
+        }
         if (!player.inventory().hasEnough(slot, number)) {
             player.sendEvent(PlayerTextMessage.of(player, "持有数量不足。"));
             return;

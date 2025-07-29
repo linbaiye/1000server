@@ -23,4 +23,9 @@ final class PlayerDieState extends AbstractPlayerState {
         return new PlayerDieState(player);
     }
 
+    @Override
+    public boolean canBeDragged() {
+        // Done with animation.
+        return elapsedMillis() >= 1500;
+    }
 }

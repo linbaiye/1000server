@@ -1,4 +1,4 @@
-package org.y1000.entities.creatures.npc.spell;
+package org.y1000.entities.creatures.npc;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.creatures.npc.CooldownAbility;

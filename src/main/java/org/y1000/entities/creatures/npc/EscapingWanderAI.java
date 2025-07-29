@@ -9,11 +9,11 @@ import java.util.Comparator;
 import java.util.Optional;
 
 
-public class WaryWanderAI extends AbstractWanderingAI {
+public class EscapingWanderAI extends AbstractWanderingAI {
 
     private final EscapeAbility escapeAbility;
 
-    public WaryWanderAI(Npc npc, NpcUpdatableAbility from, EscapeAbility escapeAbility) {
+    public EscapingWanderAI(Npc npc, NpcUpdatableAbility from, EscapeAbility escapeAbility) {
         super(npc);
         this.escapeAbility = escapeAbility;
         changeAbility(from);

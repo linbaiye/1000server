@@ -3,7 +3,6 @@ package org.y1000.sdb;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.OldPlayerStateEnum;
-import org.y1000.entities.creatures.monster.AnimationDescriptor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -133,8 +132,9 @@ public final class AtdParser {
 //        }
 //    }
 
-    public static void main(String[] args) {
-        Map<String, List<AnimationDescriptor>> parse = new AtdParser().parse(Set.of("0"));
-        parse.values().forEach(l -> l.forEach(System.out::println));
+    public static record AnimationDescriptor(OldPlayerStateEnum playerStateEnum, Direction direction, int startFrame, int frameNumber, int tickPerFrame) {
+        public int animationLength() {
+            return tickPerFrame * 10;
+        }
     }
 }

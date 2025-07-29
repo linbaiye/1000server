@@ -16,11 +16,6 @@ public interface EntityEventVisitor {
 
     }
 
-    default void visit(CreatureAttackEvent event) {
-    }
-
-    default void visit(CreatureHurtEvent hurtEvent) {
-    }
 
     default void visit(SetPositionEvent setPositionEvent) {
         visit((AbstractPositionEvent)setPositionEvent);
@@ -42,6 +37,4 @@ public interface EntityEventVisitor {
     default void visit(ShowItemEvent event) {
     }
 
-    default void visit(NpcJoinedEvent event) {
-    }
 }

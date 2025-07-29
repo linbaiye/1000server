@@ -175,7 +175,6 @@ public abstract class AbstractNpc extends AbstractCreature implements INpc {
     @Override
     public void move(int millis) {
         Validate.isTrue(millis >= 0);
-        changeState(NpcMoveState.move(this, millis));
         emitEvent(INpcMoveEvent.move(this, this.direction(), millis));
     }
 

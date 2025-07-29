@@ -54,7 +54,6 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private Direction randomDirection() {
         var v = ThreadLocalRandom.current().nextInt(Direction.UP.value(), Direction.UP_LEFT.value() + 1);
-        log.debug("Random direction {}", Direction.fromValue(v));
         return Direction.fromValue(v);
     }
 
@@ -251,9 +250,10 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     @Override
     public NpcImpl createCopied(long id, String idName, RealmMap realmMap, Coordinate coordinate, NpcEventListener listener) {
-        var npc = create(id, idName, realmMap, coordinate, listener);
-        npc.removeAbility(NpcCopyAbility.class);
-        npc.removeAbility(NpcRespawnAbility.class);
-        return npc;
+        List<Object> abilities = buildMonsterAbilities(idName);
+        abilities.removeIf(a -> a instanceof NpcCopyAbility);
+        abilities.removeIf(a -> a instanceof NpcRespawnAbility);
+        abilities.removeIf(a -> a instanceof NpcDropItemAbility);
+        return create(id, idName, realmMap, coordinate, listener, abilities);
     }
 }

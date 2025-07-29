@@ -16,7 +16,7 @@ public record DropOnEntityInput(long id, int slot) implements EntityInteractInpu
         if (player.isDead())
             return;
         if (entity instanceof Player another) {
-            player.startTradeWith(another, slot);
+            player.dropItemOnAnother(another, slot);
         } else if (entity instanceof DynamicObject object) {
             object.findAbility(DynamicObjectTriggerAbility.class)
                     .ifPresent(t -> t.onPlayerDropItem(object, player, slot));

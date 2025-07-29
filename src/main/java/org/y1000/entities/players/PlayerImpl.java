@@ -94,6 +94,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     private PlayerTrade playerTrade;
 
+    private final List<Rope> ropes;
+
     @Builder
     public PlayerImpl(long id,
                       Coordinate coordinate,
@@ -146,6 +148,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         this.guildMembership = guildMembership;
         this.buffPillSlot = new BuffPillSlot();
         this.changeState(PlayerStandState.idle(this));
+        this.ropes = new ArrayList<>();
     }
 
     private void setRegenerateTimer() {
@@ -940,6 +943,11 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         return ret == 1;
     }
 
+    private void updateRopes(int delta) {
+        ropes.forEach(r -> r.update(delta));
+        ropes.removeIf(Rope::isBroken);
+    }
+
     @Override
     public void update(int delta) {
         cooldown(delta);
@@ -948,6 +956,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         pillSlots.update(this, delta);
         updateBuff(delta);
         this.state.update(delta);
+        updateRopes(delta);
     }
 
     public int recovery() {
@@ -1181,13 +1190,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         return innateAttributesProvider.hit();
     }
 
-    @Override
-    public void startTradeWith(Player another, int slot) {
-        if (this.equals(another))
-            return;
-        Item item = inventory().getItem(slot);
-        if (item == null)
-            return;
+    private void startTradeWith(Player another, int slot) {
         if (isDead() || isLeftGame()) {
             sendText("你无法进行交易。");
             return;
@@ -1206,7 +1209,37 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             return;
         }
         playerTrade = trade;
+        var item = inventory.getItem(slot);
         sendEvent(OpenTradeWindowMessage.proactive(this, another.viewName(), slot, item instanceof StackItem stackItem ? stackItem.number() : 1, item.name()));
+    }
+
+    private void dragDeadPlayer(Player dragged, int slot) {
+        if (dragged.canBeDragged())
+            return;
+        Item item = inventory().getItem(slot);
+        if (!item.name().equals("追魂索"))
+            return;
+        for (Rope rope : ropes) {
+            if (rope.isDragging(this, dragged))
+                return;
+        }
+        Rope rope = new Rope(this, dragged);
+        ropes.add(rope);
+        inventory.decrease(slot, 1);
+        sendEvent(UpdateInventorySlotMessage.update(this, slot));
+    }
+
+    @Override
+    public void dropItemOnAnother(Player another, int slot) {
+        if (this.equals(another))
+            return;
+        Item item = inventory().getItem(slot);
+        if (item == null)
+            return;
+        if (!another.isDead())
+            startTradeWith(another, slot);
+        else
+            dragDeadPlayer(another, slot);
     }
 
     @Override
@@ -1224,6 +1257,11 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     @Override
     public void closeTrade() {
         playerTrade = null;
+    }
+
+    @Override
+    public boolean canBeDragged() {
+        return state.canBeDragged();
     }
 
     void sendSound(String s) {
@@ -1414,7 +1452,10 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         if (life.currentValue() > 0) {
             cooldownRecovery();
             hurtSound().ifPresent(this::sendSound);
-            changeState(PlayerHurtState.create(this, state));
+            if (!(state instanceof PlayerMoveState)) {
+                changeState(PlayerHurtState.create(this, state));
+                sendEvent(PlayerChangeStateEvent.allVisible(this));
+            }
             gainProtectionExp(old - currentLife());
         } else {
             footKungfu = null;
@@ -1430,8 +1471,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             changeState(PlayerDieState.of(this));
             if (playerTrade != null)
                 playerTrade.cancel(this);
+            sendEvent(PlayerChangeStateEvent.allVisible(this));
         }
-        sendEvent(PlayerChangeStateEvent.allVisible(this));
         return ExperienceUtil.damageToExp(maxLife(), old - life.currentValue());
     }
 

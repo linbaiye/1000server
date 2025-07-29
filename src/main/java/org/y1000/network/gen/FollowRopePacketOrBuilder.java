@@ -4,8 +4,8 @@
 // Protobuf Java Version: 3.25.0-rc2
 package org.y1000.network.gen;
 
-public interface PlayerChangeStatePacketOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.PlayerChangeStatePacket)
+public interface FollowRopePacketOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:org.y1000.network.gen.FollowRopePacket)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -15,16 +15,16 @@ public interface PlayerChangeStatePacketOrBuilder extends
   long getId();
 
   /**
-   * <code>int32 state = 2;</code>
-   * @return The state.
-   */
-  int getState();
-
-  /**
-   * <code>int32 direction = 3;</code>
+   * <code>int32 direction = 2;</code>
    * @return The direction.
    */
   int getDirection();
+
+  /**
+   * <code>int32 durationMillis = 3;</code>
+   * @return The durationMillis.
+   */
+  int getDurationMillis();
 
   /**
    * <code>int32 x = 4;</code>

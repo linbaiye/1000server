@@ -27,14 +27,6 @@ public final class PlayerProjectile extends AbstractProjectile {
         this.kungFu = kungFu;
     }
 
-    @Override
-    public int hit() {
-        return hit;
-    }
-
-    public Damage damage() {
-        return damage;
-    }
 
     private void handleSingleAttack() {
         target().findAbility(HurtAbility.class)

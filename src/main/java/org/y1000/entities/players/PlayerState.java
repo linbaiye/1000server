@@ -58,4 +58,8 @@ interface PlayerState extends CreatureState {
 
     }
 
+    default boolean canBeDragged() {
+        return false;
+    }
+
 }

@@ -124,10 +124,6 @@ public interface Player extends IActiveEntity, HurtAbility {
 
     boolean consumeItem(int slotId);
 
-    default boolean canDrag(Player target, int ropeSlot) {
-        return false;
-    }
-
     PlayerExperiencedAgedAttribute innerPowerAttribute();
 
     PlayerExperiencedAgedAttribute outerPowerAttribute();
@@ -178,10 +174,12 @@ public interface Player extends IActiveEntity, HurtAbility {
 
     int accuracy();
 
-    void startTradeWith(Player another, int slot);
+    void dropItemOnAnother(Player another, int slot);
 
     boolean acceptTrade(PlayerTrade trade);
 
     void closeTrade();
+
+    boolean canBeDragged();
 }
 

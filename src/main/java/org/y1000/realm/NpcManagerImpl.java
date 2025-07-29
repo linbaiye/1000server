@@ -20,8 +20,6 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
 
     private boolean initialized = false;
 
-    private final Map<Npc, Npc> shiftedNpcs;
-
     @Builder
     public NpcManagerImpl(MessageSender sender,
                           EntityIdGenerator idGenerator,
@@ -36,7 +34,6 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
         super(sender, idGenerator, npcFactory, itemManager, monstersSdb, aoiManager, createMonsterSdb, createNpcSdb, realmMap, haveItemSdb);
         this.respawningEntityManager = new EntityTimerManager<>();
         this.npcSpawnSettings = new HashMap<>();
-        this.shiftedNpcs = new HashMap<>();
     }
 
     private void respawn(Npc npc) {
@@ -77,30 +74,8 @@ final class NpcManagerImpl extends AbstractNpcManager implements NpcManager {
         syncAndRemove(source, message);
         source.findAbility(NpcRespawnAbility.class)
                 .ifPresent(a -> respawningEntityManager.add(source, a.respawnMillis()));
-//        if (removeEntityEvent.source() instanceof INpc npc) {
-//            removeNpc(npc);
-//            if (isCloned(npc)) {
-//                removeFromCloned(npc);
-//                return;
-//            }
-//            INpc target = Objects.requireNonNullElse(shiftedNpcs.remove(npc), npc);
-//            int millis = getRespawnMillis(npc.idName());
-//            respawningEntityManager.add(target, millis > 0 ? millis : RESPAWN_MILLIS);
-//        }
     }
 
-
-//    private void handleShiftEvent(NpcShiftEvent shiftEvent) {
-//        if (shiftedNpcs.containsKey(shiftEvent.npc()))
-//            return;
-//        INpc newNpc = replaceNpc(shiftEvent);
-//        shiftedNpcs.put(newNpc, shiftEvent.npc());
-//    }
-
-    @Override
-    void onUnhandledEvent(EntityEvent entityEvent) {
-
-    }
 
     @Override
     public void init() {

@@ -1,6 +1,5 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.creatures.npc.spell.NpcSoundAbility;
 import org.y1000.util.Coordinate;
 import org.y1000.util.Counter;
 

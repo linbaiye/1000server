@@ -4,11 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.Rope;
 import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEvent;
 import org.y1000.item.Item;
-import org.y1000.item.ItemFactory;
 import org.y1000.message.*;
 import org.y1000.message.input.*;
 import org.y1000.message.serverevent.PlayerEventVisitor;
@@ -19,8 +17,6 @@ import org.y1000.repository.PlayerRepository;
 import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,14 +31,6 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
 
     private final ProjectileManager projectileManager;
 
-    private final ItemFactory itemFactory;
-
-    private final TradeManager tradeManager;
-
-    private final DynamicObjectManager dynamicObjectManager;
-
-    private final Set<Rope> ropes;
-
     private final BankManager bankManager;
 
     private final PlayerRepository playerRepository;
@@ -54,22 +42,6 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
 
     public PlayerManagerImpl(RealmPlayerConnectionManager eventSender,
                              GroundItemManager itemManager,
-                             ItemFactory itemFactory,
-                             DynamicObjectManager dynamicObjectManager,
-                             BankManager bankManager,
-                             PlayerRepository playerRepository,
-                             DeadPlayerTeleportManager deadPlayerTeleportManager,
-                             CrossRealmEventSender crossRealmEventSender,
-                             AOIManager aoiManager) {
-        this(eventSender, itemManager, itemFactory, new TradeManagerImpl(eventSender), dynamicObjectManager, bankManager, playerRepository,
-                deadPlayerTeleportManager, crossRealmEventSender, aoiManager);
-    }
-
-    public PlayerManagerImpl(RealmPlayerConnectionManager eventSender,
-                             GroundItemManager itemManager,
-                             ItemFactory itemFactory,
-                             TradeManager tradeManager,
-                             DynamicObjectManager dynamicObjectManager,
                              BankManager bankManager,
                              PlayerRepository playerRepository,
                              DeadPlayerTeleportManager deadPlayerTeleportManager,
@@ -78,13 +50,9 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
         super(aoiManager, eventSender);
         this.connectionManager = eventSender;
         this.itemManager = itemManager;
-        this.itemFactory = itemFactory;
         this.playerRepository = playerRepository;
         this.projectileManager = new ProjectileManager();
-        this.tradeManager = tradeManager;
-        this.dynamicObjectManager = dynamicObjectManager;
         this.bankManager = bankManager;
-        ropes = new HashSet<>();
         this.deadPlayerTeleportManager = deadPlayerTeleportManager;
         this.crossRealmEventSender = crossRealmEventSender;
     }
@@ -113,7 +81,7 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
         if (player == null) {
             return;
         }
-        // Need to update first least losing realm id.
+        // Need to update first lest losing realm id.
         playerRepository.update(player);
         player.leaveRealm();
         sendToVisiblePlayers(player, new RemoveEntityMessage(player.id()));
@@ -165,7 +133,6 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
             return;
         }
         player.leaveRealm();
-//        connectionManager.notifyVisiblePlayersAndSelf(player, new RemoveEntityMessage(player.id()));
         remove(player);
         player.clearListeners();
     }
@@ -179,20 +146,8 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
     public void update(long delta) {
         updateManagedEntities(delta);
         projectileManager.update(delta);
-        updateRopes(delta);
         if (deadPlayerTeleportManager != null) {
             deadPlayerTeleportManager.update(delta);
-        }
-    }
-
-    private void updateRopes(long delta) {
-        Iterator<Rope> iterator = ropes.iterator();
-        while (iterator.hasNext()) {
-            Rope rope = iterator.next();
-            rope.update(delta);
-            if (rope.isBroken()) {
-                iterator.remove();
-            }
         }
     }
 
@@ -201,57 +156,6 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
         return log;
     }
 
-
-
-    private void handleUpdateTradeEvent(Player player, ClientUpdateTradeEvent updateTradeEvent) {
-        if (updateTradeEvent.type() == ClientUpdateTradeEvent.ClientUpdateType.ADD_ITEM) {
-            tradeManager.addTradeItem(player, updateTradeEvent.slot(), updateTradeEvent.number());
-        } else if (updateTradeEvent.type() == ClientUpdateTradeEvent.ClientUpdateType.REMOVE_ITEM) {
-            tradeManager.removeTradeItem(player, updateTradeEvent.tradeWindowSlot());
-        } else if (updateTradeEvent.type() == ClientUpdateTradeEvent.ClientUpdateType.CANCEL) {
-            tradeManager.cancelTrade(player);
-        } else if (updateTradeEvent.type() == ClientUpdateTradeEvent.ClientUpdateType.CONFIRM) {
-            tradeManager.confirmTrade(player);
-        }
-    }
-
-    private void handleDragPlayerEvent(Player player, Player dragged, int ropeSlot) {
-        if (player.canDrag(dragged, ropeSlot)) {
-            player.consumeItem(ropeSlot);
-            ropes.forEach(rope -> rope.breakIfDraggedAgain(dragged));
-            ropes.add(new Rope(dragged, player));
-        }
-    }
-
-//    @Override
-//    public void onClientEvent(PlayerDataEvent dataEvent,
-//                              ActiveEntityManager<INpc> npcManager) {
-//        if (!contains(dataEvent.player())){
-//            return;
-//        }
-//        if (dataEvent.data() instanceof ClientPickItemEvent event) {
-//            itemManager.pickItem(dataEvent.player(), event.id());
-//        } else if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
-//            npcManager.find(attackEvent.entityId(), AttackableEntity.class)
-//                    .or(() -> find(attackEvent.entityId(), AttackableEntity.class))
-//                    .or(() -> dynamicObjectManager.find(attackEvent.entityId(), AttackableEntity.class))
-//                    .ifPresent(attackableEntity -> dataEvent.player().attack(attackEvent, attackableEntity));
-//        } else if (dataEvent.data() instanceof ClientTradePlayerEvent tradePlayerEvent) {
-//            find(tradePlayerEvent.targetId(), Player.class).ifPresent(tradee -> tradeManager.start(dataEvent.player(), tradee, tradePlayerEvent.slot()));
-//        } else if (dataEvent.data() instanceof ClientUpdateTradeEvent updateTradeEvent) {
-//            handleUpdateTradeEvent(dataEvent.player(), updateTradeEvent);
-//        } else if (dataEvent.data() instanceof ClientTriggerDynamicObjectEvent triggerDynamicObjectEvent) {
-//            dynamicObjectManager.triggerDynamicObject(triggerDynamicObjectEvent.id(), dataEvent.player(), triggerDynamicObjectEvent.useSlot());
-//        } else if (dataEvent.data() instanceof ClientDragPlayerEvent dragPlayerEvent) {
-//            find(dragPlayerEvent.target()).ifPresent(dragged -> handleDragPlayerEvent(dataEvent.player(), dragged, dragPlayerEvent.ropeSlot()));
-//        } else if (dataEvent.data() instanceof ClientOperateBankEvent bankEvent) {
-//            find(dataEvent.playerId()).ifPresent(player -> bankManager.handle(player, bankEvent));
-//        } else if (dataEvent.data() instanceof ClientSelfInteractEvent selfInteractEvent) {
-//            find(selfInteractEvent.getPlayerId()).ifPresent(selfInteractEvent::handle);
-//        } else {
-//            find(dataEvent.playerId()).ifPresent(player -> player.handleClientEvent(dataEvent.data()));
-//        }
-//    }
 
     @Override
     public Set<Player> allPlayers() {
