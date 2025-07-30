@@ -3,6 +3,7 @@ package org.y1000.entities.creatures.npc;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
+import org.y1000.entities.creatures.npc.AI.NpcSayAbility;
 import org.y1000.util.Coordinate;
 
 
@@ -69,6 +70,7 @@ public final class WanderingAI extends AbstractWanderingAI {
     }
 
     void onNonDieAbilityDone(NpcUpdatableAbility doneAbility) {
+        npc().findAbility(NpcSayAbility.class).ifPresent(s -> s.trySay(npc()));
         if (doneAbility instanceof NpcHurtAbility npcHurtAbility) {
             afterHurtDone(npcHurtAbility);
             return;

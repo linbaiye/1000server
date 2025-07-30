@@ -2,6 +2,7 @@ package org.y1000.entities.teleport;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Entity;
+import org.y1000.entities.players.Player;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.event.PlayerRealmEvent;
 import org.y1000.sdb.CreateGateSdb;
@@ -9,6 +10,7 @@ import org.y1000.util.UnaryAction;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public final class StaticTeleport extends AbstractTeleport implements Entity  {
 
@@ -18,10 +20,9 @@ public final class StaticTeleport extends AbstractTeleport implements Entity  {
 
     public StaticTeleport(long id, String idName,
                           CreateGateSdb createGateSdb,
-                          UnaryAction<PlayerRealmEvent> teleportEventHandler,
-                          int realmId,
-                          List<TeleportCost> costs) {
-        super(id, idName, createGateSdb, teleportEventHandler, realmId, costs);
+                          TeleportHandler teleportHandler,
+                          int realmId) {
+        super(id, idName, createGateSdb, teleportHandler, realmId);
         shapeId = createGateSdb.getShape(idName);
         name = createGateSdb.getViewName(idName);
         Validate.notEmpty(name);

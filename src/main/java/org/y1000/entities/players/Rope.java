@@ -1,12 +1,8 @@
 package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.npc.AI.AiPathUtil;
 import org.y1000.entities.players.event.PlayerFollowRopeEvent;
 import org.y1000.entities.players.event.PlayerMovedEvent;
-import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
-import org.y1000.message.PlayerDraggedEvent;
 import org.y1000.util.Coordinate;
 
 public final class Rope {
@@ -103,30 +99,9 @@ end;
         return this.dragging.equals(dragging) && this.dragged.equals(dragged);
     }
 
-
-    private Direction computeDragDirection() {
-        var dest = dragging.coordinate();
-        int minDist = Integer.MAX_VALUE;
-        Direction towards = null;
-        var dir = dragged.coordinate().directionTo(dest);
-        Coordinate next = dragged.coordinate().moveBy(dir);
-        if (next.equals(dest)) {
-            return dir != dragged.direction() ? dir : null;
-        }
-        for (Direction direction : Direction.values()) {
-            Coordinate coordinate = dragged.coordinate().moveBy(direction);
-            if (!dragging.realmMap().tileMovable(coordinate) || from.equals(coordinate)) {
-                continue;
-            }
-            int distance = coordinate.distance(dest);
-            if (minDist > distance) {
-                minDist = distance;
-                towards = direction;
-            }
-        }
-        return towards;
+    private boolean coordinateMovable(Coordinate coordinate) {
+        return dragged.realmMap().tileMovable(coordinate) && !coordinate.equals(from);
     }
-
 
     private void follow(int delta) {
         stepCounterMillis -= delta;
@@ -139,17 +114,14 @@ end;
             dragged.sendEvent(new PlayerMovedEvent(dragged));
         }
         stepCounterMillis = 200;
+        var dir = dragged.coordinate().bestDirectionTo(dragging.coordinate(), this::coordinateMovable);
         var dist = distance();
         if (dist < 2) {
-            var dir = computeDragDirection();
-            if (dir == null)
-                return;
-            if (dragged.direction() != dir) {
+            if (dir != null && dragged.direction() != dir) {
                 dragged.changeDirection(dir);
                 dragged.sendEvent(PlayerFollowRopeEvent.turn(dragged));
             }
         } else {
-            var dir = computeDragDirection();
             if (dir != null) {
                 dragged.changeDirection(dir);
                 dragged.sendEvent(PlayerFollowRopeEvent.follow(dragged));

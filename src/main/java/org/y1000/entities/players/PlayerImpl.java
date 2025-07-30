@@ -759,6 +759,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         if (realm != null) {
             realm.map().free(this);
         }
+        eventListener = null;
         realm = null;
         if (playerTrade != null)
             playerTrade.cancel(this);

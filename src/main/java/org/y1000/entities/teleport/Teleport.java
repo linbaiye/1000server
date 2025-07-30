@@ -9,8 +9,8 @@ import java.util.Set;
 public interface Teleport {
     Coordinate coordinate();
 
-    Set<Coordinate> teleportCoordinates();
+    Set<Coordinate> coordinates();
 
-    void teleport(Player player);
+    void onPlayerEntered(Player player);
 
 }

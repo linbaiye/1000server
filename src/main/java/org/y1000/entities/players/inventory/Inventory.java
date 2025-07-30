@@ -118,17 +118,6 @@ public final class Inventory extends AbstractInventory {
     }
 
 
-    public boolean canPick(GroundedItem item) {
-        var items = items();
-        for (Item value : items.values()) {
-            if (value instanceof StackItem stackItem
-                    && stackItem.name().equals(item.getName())) {
-                return stackItem.hasMoreSpace(item.getNumber());
-            }
-        }
-        return !isFull();
-    }
-
     public boolean canPick(Item item) {
         var items = items();
         for (Item value : items.values()) {
@@ -280,23 +269,6 @@ public final class Inventory extends AbstractInventory {
         return items().values().stream().anyMatch(i -> i.itemType() == type);
     }
 
-
-    private Item doConsumeStackItem(int targetSlot, Player player, UnaryAction<? super IPlayerEvent> eventSender) {
-        if (targetSlot == 0) {
-            return null;
-        }
-        var items = items();
-        var stackItem = ((StackItem)items.get(targetSlot));
-        var decreased = stackItem.decrease(1);
-        if (decreased.number() == 0) {
-            items.remove(targetSlot);
-            eventSender.invoke(UpdateInventorySlotEvent.remove(player, targetSlot));
-        } else {
-            items.put(targetSlot, decreased);
-            eventSender.invoke(UpdateInventorySlotEvent.update(player, targetSlot, getItem(targetSlot)));
-        }
-        return stackItem.item();
-    }
 
     private Item doConsumeStackItem(int targetSlot) {
         if (targetSlot == 0) {

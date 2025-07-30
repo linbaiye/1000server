@@ -40,20 +40,10 @@ final class RealmImpl extends AbstractRealm {
         acceptIfAffordableElseReject(teleportEvent);
     }
 
-    @Override
-    void handleConnectionEvent(ConnectionEstablishedEvent connectedEvent) {
-        //getEventSender().add(connectedEvent.player(), connectedEvent.connection());
-        getPlayerManager().onPlayerConnected(connectedEvent.player(), this);
-    }
 
     @Override
     void handleGuildCreation(Player source, ClientFoundGuildEvent event) {
         source.emitEvent(PlayerTextEvent.forbidGuildCreation(source));
-    }
-
-    @Override
-    void handleClientEvent(PlayerDataEvent dataEvent) {
-        playerManager().onClientEvent(dataEvent, npcManager());
     }
 
     @Override

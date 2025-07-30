@@ -6,17 +6,14 @@ import org.y1000.entities.Direction;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public record Coordinate(int x, int y) {
 
     public static final Coordinate Empty = new Coordinate(0, 0);
     public static final int VISIBLE_X_RANGE = 15;
     public static final int VISIBLE_Y_RANGE = 13;
-
-    /*public Coordinate {
-        Validate.isTrue(x >= 0);
-        Validate.isTrue(y >= 0);
-    }*/
 
     public Coordinate moveBy(Direction direction) {
         Validate.notNull(direction);
@@ -121,6 +118,28 @@ public record Coordinate(int x, int y) {
 
     public static Coordinate xy(int x, int y) {
         return new Coordinate(x, y);
+    }
+
+
+    public Direction bestDirectionTo(Coordinate dest, Predicate<Coordinate> movable) {
+        Direction towards = null;
+        var dir = this.directionTo(dest);
+        if (movable.test(this.moveBy(dir))) {
+            return dir;
+        }
+        int minDist = Integer.MAX_VALUE;
+        for (Direction direction : Direction.values()) {
+            var next = this.moveBy(direction);
+            if (!movable.test(next)) {
+                continue;
+            }
+            int distance = next.distance(dest);
+            if (minDist > distance) {
+                minDist = distance;
+                towards = direction;
+            }
+        }
+        return towards;
     }
 
 }

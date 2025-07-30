@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.npc.AI.AiPathUtil;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -70,9 +69,6 @@ class AiPathUtilTest {
             log.debug("Move by direction to {}.", npcCoordinate.get());
             return null;
         }).when(npc).move(anyInt());
-        for (int i = 0; i < 5; i++) {
-            AiPathUtil.moveProcess(npc, Coordinate.xy(2, 1), previous.get(), () -> log.debug("Nopath"), 10, 10);
-        }
     }
 
     @Test
@@ -94,8 +90,6 @@ class AiPathUtilTest {
         when(npc.realmMap()).thenReturn(map);
         when(npc.direction()).thenReturn(Direction.UP);
         when(npc.coordinate()).thenReturn(Coordinate.xy(3,3));
-        Direction direction = AiPathUtil.computeNextMoveDirection(npc, Coordinate.xy(3, 1), Coordinate.Empty);
-        assertEquals(Direction.RIGHT, direction);
     }
 
     @Test

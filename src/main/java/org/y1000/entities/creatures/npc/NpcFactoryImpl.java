@@ -3,6 +3,7 @@ package org.y1000.entities.creatures.npc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.npc.AI.NpcSayAbility;
 import org.y1000.entities.creatures.npc.spell.*;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
@@ -14,6 +15,9 @@ import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,6 +40,8 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private static final NpcRespawnAbility RESPAWN_ABILITY = new NpcRespawnAbility(8000);
 
+    private final Map<String, List<String>> dialogSetting;
+
     public NpcFactoryImpl(ActionSdb actionSdb,
                           MonstersSdb monsterSdb,
                           KungFuSdb kungFuSdb,
@@ -50,6 +56,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         this.magicParamSdb = magicParamSdb;
         this.itemSdb = itemSdb;
         this.itemFactory = itemFactory;
+        dialogSetting = new HashMap<>();
     }
 
     private Direction randomDirection() {
@@ -129,6 +136,28 @@ public final class NpcFactoryImpl implements NpcFactory {
                 damageBody, hit);
     }
 
+
+    private List<String> parseDialogFile(String idName) {
+        try (var inputstream = getClass().getResourceAsStream("/sdb/NpcDialog/" + idName + ".txt")) {
+            if (inputstream == null) {
+                return Collections.emptyList();
+            }
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream))) {
+                return bufferedReader.lines().toList();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Optional<NpcSayAbility> createSay(String idName) {
+        if (!dialogSetting.containsKey(idName)) {
+            dialogSetting.put(idName, parseDialogFile(idName));
+        }
+        List<String> strings = dialogSetting.get(idName);
+        return strings.isEmpty() ? Optional.empty() : Optional.of(new NpcSayAbility(strings));
+    }
+
     private List<Object> buildCommonAbilities(String idName, NpcSdb npcSdb, boolean hasRespawn) {
         List<Object> abilities = new ArrayList<>();
         NpcHurtAbility hurtAbility = createHurtAbility(idName, npcSdb);
@@ -143,6 +172,7 @@ public final class NpcFactoryImpl implements NpcFactory {
             int regenInterval = npcSdb.getRegenInterval(idName) * Realm.STEP_MILLIS;
             abilities.add(regenInterval > 0 ? new NpcRespawnAbility(regenInterval) : RESPAWN_ABILITY);
         }
+        createSay(idName).ifPresent(abilities::add);
         return abilities;
     }
 

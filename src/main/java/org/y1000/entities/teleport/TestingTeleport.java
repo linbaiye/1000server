@@ -48,12 +48,12 @@ public class TestingTeleport implements Teleport {
     }
 
     @Override
-    public Set<Coordinate> teleportCoordinates() {
+    public Set<Coordinate> coordinates() {
         return Collections.singleton(coordinate);
     }
 
     @Override
-    public void teleport(Player player) {
+    public void onPlayerEntered(Player player) {
         eventHandler.invoke(new RealmTeleportEvent(player, toRealm, toCoordinate));
     }
 }

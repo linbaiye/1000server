@@ -8,5 +8,4 @@ import java.util.Optional;
 
 public interface EscapeAbility {
     Optional<Coordinate> computeSafeSpot(Npc npc, ActiveEntity enemy);
-
 }

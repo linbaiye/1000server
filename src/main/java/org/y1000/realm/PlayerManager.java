@@ -13,24 +13,19 @@ import java.util.Optional;
 import java.util.Set;
 
 interface PlayerManager extends ActiveEntityManager<Player> {
-    void onPlayerConnected(Player player, Realm realm);
-
 
     void loginPlayer(Player player, Login login, Realm realm);
 
     void logoutPlayer(Connection connection);
 
     void teleportIn(Player player,
-                    Realm realm, Coordinate coordinate);
+                    Realm realm,
+                    Coordinate coordinate,
+                    Connection connection);
 
-    void clearPlayer(Player player);
-
-    void onClientEvent(PlayerDataEvent dataEvent,
-                       ActiveEntityManager<?> npcManager);
+    Connection prepareTeleport(Player player);
 
     Set<Player> allPlayers();
-
-    void onPlayerDisconnected(long playerId);
 
     void setTeleportHandler(UnaryAction<RealmTeleportEvent> teleportHandler);
 

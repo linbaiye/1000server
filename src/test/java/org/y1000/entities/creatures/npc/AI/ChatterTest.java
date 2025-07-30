@@ -13,7 +13,7 @@ import static org.mockito.Mockito.verify;
 
 class ChatterTest {
 
-    private Chatter chatter;
+    private NpcSayAbility chatter;
 
     private List<String> dialogs;
 
@@ -23,7 +23,7 @@ class ChatterTest {
         humanNpc = Mockito.mock(HumanNpc.class);
         dialogs = new ArrayList<>();
         dialogs.add("test");
-        chatter = new Chatter(dialogs);
+        chatter = new NpcSayAbility(dialogs);
     }
 
     @Test

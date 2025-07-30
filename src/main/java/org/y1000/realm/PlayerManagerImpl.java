@@ -19,6 +19,7 @@ import org.y1000.util.UnaryAction;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 
 @Slf4j
@@ -57,24 +58,11 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
         this.crossRealmEventSender = crossRealmEventSender;
     }
 
-    @Override
-    public void onPlayerConnected(Player player, Realm realm) {
-//        if (player == null || realm == null) {
-//            return;
-//        }
-//        player.registerEventListener(this);
-//        add(player);
-//        player.joinRealm(realm, this);
-//        connectionManager.notifySelf(new JoinedRealmEvent(player));
-//        connectionManager.notifyPlayerOfEntities(player);
-//        log.debug("Player {} logged in.", player);
-    }
 
     public void sendToVisiblePlayersAndSelf(Player source, I2ClientMessage message) {
         sendToVisiblePlayers(source, message);
         sendTo(source, message);
     }
-
 
 
     private void doLogout(Player player) {
@@ -89,15 +77,13 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
         remove(player);
     }
 
-    @Override
-    public void loginPlayer(Player player, Login login, Realm realm) {
-        if (player == null || login == null) {
-            return;
-        }
-        find(login.playerId()).ifPresent(this::doLogout);
-        connectionManager.add(player, login.connection());
-        player.joinRealm(realm, this);
-        sendTo(player, PlayerJoinRealmMessage.of(player));
+
+    private void doPlayerJoinRealm(Player player, Runnable joinAction, Connection connection,
+                                   Function<Player, I2ClientMessage> msgCreator) {
+        find(player.id()).ifPresent(this::doLogout);
+        connectionManager.add(player, connection);
+        joinAction.run();
+        sendTo(player, msgCreator.apply(player));
         add(player);
         I2ClientMessage snapshot = player.captureSnapshot();
         getAoiManager().filterVisibleEntities(player, Entity.class).forEach(entity -> {
@@ -106,6 +92,15 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
                 sendTo(another, snapshot);
             }
         });
+
+    }
+
+    @Override
+    public void loginPlayer(Player player, Login login, Realm realm) {
+        if (player == null || login == null) {
+            return;
+        }
+        doPlayerJoinRealm(player, () -> player.joinRealm(realm, this), login.connection(), PlayerJoinRealmMessage::of);
     }
 
     @Override
@@ -117,29 +112,18 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
 
     @Override
     public void teleportIn(Player player,
-                           Realm realm, Coordinate coordinate) {
-        if (player == null || realm == null || coordinate == null) {
-            return;
-        }
-        player.registerEventListener(this);
-        add(player);
-//        connectionManager.notifySelf(new PlayerTeleportEvent(player, realm, coordinate));
-//        connectionManager.notifyPlayerOfEntities(player);
+                           Realm realm, Coordinate coordinate,
+                           Connection connection) {
+        doPlayerJoinRealm(player, () -> player.joinRealm(realm, coordinate, this), connection, PlayerJoinRealmMessage::of);
     }
 
     @Override
-    public void clearPlayer(Player player) {
-        if (player == null) {
-            return;
-        }
+    public Connection prepareTeleport(Player player) {
         player.leaveRealm();
+        sendToVisiblePlayers(player, new RemoveEntityMessage(player.id()));
+        Connection connection = connectionManager.remove(player).orElse(null);
         remove(player);
-        player.clearListeners();
-    }
-
-    @Override
-    public void onClientEvent(PlayerDataEvent dataEvent, ActiveEntityManager<?> npcManager) {
-
+        return connection;
     }
 
     @Override
@@ -162,15 +146,6 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
         return getEntities();
     }
 
-
-    @Override
-    public void onPlayerDisconnected(long playerId) {
-//        find(playerId).ifPresent( player -> {
-//            playerRepository.update(player);
-//            clearPlayer(player);
-//            log.debug("Player {} disconnected.", player);
-//        });
-    }
 
     @Override
     public void setTeleportHandler(UnaryAction<RealmTeleportEvent> teleportHandler) {
@@ -198,36 +173,6 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
 
     @Override
     public void onEvent(EntityEvent entityEvent) {
-//        try {
-//            if (entityEvent.source() instanceof Player player) {
-//                tradeManager.onPlayerEvent(player, entityEvent);
-//            }
-//            if (entityEvent instanceof PlayerShootEvent shootEvent) {
-//                projectileManager.add(shootEvent.projectile());
-//                eventSender.notifyVisiblePlayersAndSelf(shootEvent.source(), shootEvent);
-//            } else if (entityEvent instanceof PlayerAttackEvent attackEvent) {
-//                eventSender.notifyVisiblePlayersAndSelf(attackEvent.source(), attackEvent);
-//            } else if (entityEvent instanceof PlayerDropItemEvent dropItemEvent) {
-//                itemManager.dropItem(dropItemEvent);
-//            } else if (entityEvent instanceof CreatureDieEvent dieEvent &&
-//                    dieEvent.source() instanceof Player player &&
-//                    deadPlayerTeleportManager != null) {
-//                deadPlayerTeleportManager.onPlayerDead(player);
-//            } else if (entityEvent instanceof PlayerKungFuFullEvent event) {
-//                crossRealmEventSender.send(event);
-//            } else if (entityEvent instanceof AbstractPlayerEvent playerEvent) {
-//                if (playerEvent.visibleToSelf()) {
-//                    eventSender.notifySelf(playerEvent);
-//                } else if (playerEvent.visibleToPlayers()) {
-//                    eventSender.notifyVisiblePlayersAndSelf(playerEvent.player(), playerEvent);
-//                }
-//            } else if (entityEvent instanceof I2ClientMessage message) {
-//                eventSender.findConnection((Player) entityEvent.source())
-//                        .ifPresent(connection -> connection.writeAndFlush(message));
-//            }
-//        } catch (Exception e) {
-//            log.error("Failed to handle event.", e);
-//        }
     }
 
 

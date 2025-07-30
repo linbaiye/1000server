@@ -108,7 +108,7 @@ final class RealmMapV2Impl implements RealmMap {
             throw new IllegalArgumentException("Invalid coordinate " + entity.coordinate());
         }
         if (teleportMap.containsKey(entity.coordinate()) && entity instanceof Player player) {
-            teleportMap.get(entity.coordinate()).teleport(player);
+            teleportMap.get(entity.coordinate()).onPlayerEntered(player);
             return;
         }
         free(entity);
@@ -204,10 +204,10 @@ final class RealmMapV2Impl implements RealmMap {
             return;
         }
         Set<Coordinate> coordinates = teleportMap.keySet();
-        if (teleport.teleportCoordinates().stream().anyMatch(coordinates::contains)) {
+        if (teleport.coordinates().stream().anyMatch(coordinates::contains)) {
             throw new IllegalStateException("Conflict coordinate for teleport " + teleport);
         }
-        teleport.teleportCoordinates().forEach(p -> teleportMap.put(p, teleport));
+        teleport.coordinates().forEach(p -> teleportMap.put(p, teleport));
     }
 
 

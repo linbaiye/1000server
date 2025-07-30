@@ -67,7 +67,7 @@ class TeleportManagerTest extends AbstractUnitTestFixture {
         manager.init(eventUnaryAction);
         StaticTeleport staticTeleport = manager.findStaticTeleports().stream().findFirst().get();
         var player = Mockito.mock(Player.class);
-        staticTeleport.teleport(player);
+        staticTeleport.onPlayerEntered(player);
         RealmTeleportEvent teleportEvent = (RealmTeleportEvent) event;
         assertFalse(teleportEvent.getCosts().isEmpty());
     }

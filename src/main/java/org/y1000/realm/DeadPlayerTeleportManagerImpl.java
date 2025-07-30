@@ -1,6 +1,5 @@
 package org.y1000.realm;
 
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;

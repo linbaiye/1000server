@@ -6,8 +6,6 @@ import org.y1000.entities.players.Player;
 import org.y1000.guild.GuildStone;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.*;
-import org.y1000.network.event.ConnectionEstablishedEvent;
-import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
@@ -45,11 +43,6 @@ class GuildableRealm extends AbstractRealm {
         acceptIfAffordableElseReject(teleportEvent);
     }
 
-    @Override
-    void handleConnectionEvent(ConnectionEstablishedEvent connectedEvent) {
-        //getEventSender().add(connectedEvent.player(), connectedEvent.connection());
-        getPlayerManager().onPlayerConnected(connectedEvent.player(), this);
-    }
 
     @Override
     void handleGuildCreation(Player source, ClientFoundGuildEvent event) {
@@ -77,20 +70,6 @@ class GuildableRealm extends AbstractRealm {
             sameRealmManagement(manager, event.target(), guildManager::teachGuildKungFu);
     }
 
-    @Override
-    void handleClientEvent(PlayerDataEvent dataEvent) {
-        if (dataEvent.data() instanceof ClientAttackEvent attackEvent) {
-            guildManager.find(attackEvent.entityId(), GuildStone.class)
-                    .ifPresentOrElse(guildStone -> attackGuildStone(guildStone, dataEvent.playerId(), attackEvent),
-                            () -> playerManager().onClientEvent(dataEvent, npcManager()));
-        } else if (dataEvent.data() instanceof ClientCreateGuildKungFuEvent createGuildKungFuEvent) {
-            getPlayerManager().find(dataEvent.playerId()).ifPresent(player -> guildManager.createGuildKungFu(player, createGuildKungFuEvent));
-        } else if (dataEvent.data() instanceof ClientManageGuildEvent management) {
-            playerManager().find(dataEvent.playerId()).ifPresent(player -> handleManagement(player, management));
-        } else {
-            playerManager().onClientEvent(dataEvent, npcManager());
-        }
-    }
 
     @Override
     protected void handleLogin(Login login) {
