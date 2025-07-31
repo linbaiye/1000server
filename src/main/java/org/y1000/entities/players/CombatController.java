@@ -14,7 +14,7 @@ import org.y1000.entities.players.event.PlayerAttackEvent;
 
 @Slf4j
 final class CombatController {
-    private final ActiveEntity enemy;
+    private ActiveEntity enemy;
     private final PlayerImpl player;
     private int resourceNoticeTimer;
     private final HurtAbility hurtAbility;
@@ -84,6 +84,10 @@ final class CombatController {
             return 1;
         }
         return 0;
+    }
+
+    void onPlayerLeft() {
+
     }
 
     static CombatController acceptIfAllowed(PlayerImpl player, ActiveEntity target) {

@@ -45,7 +45,7 @@ public final class BreathKungFu extends AbstractKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new BreathKungFu(name(), 0, parameters, String.valueOf(sound), icon());
+        return new BreathKungFu(name(), exp(), parameters, String.valueOf(sound), icon());
     }
     private String computeSound(boolean male) {
         var snd = sound;

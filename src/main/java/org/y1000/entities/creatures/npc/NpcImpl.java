@@ -6,6 +6,8 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.FilterVisibleEvent;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
+import org.y1000.entities.players.Player;
+import org.y1000.entities.players.PlayerLeaveListener;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
@@ -15,7 +17,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class NpcImpl extends AbstractActiveEntity implements Npc {
+public class NpcImpl extends AbstractActiveEntity implements Npc, PlayerLeaveListener {
 
     private final List<Object> abilities;
     private final NpcEventListener listener;
@@ -162,9 +164,6 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
         return ai.captureSnapshot();
     }
 
-    public <T> void removeAbility(Class<T> type) {
-        abilities.removeIf(a -> type.isAssignableFrom(a.getClass()));
-    }
 
     @Override
     public Set<Entity> getEntitiesAt(Set<Coordinate> coordinates) {
@@ -176,5 +175,10 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     @Override
     public Optional<String> clickText() {
         return Optional.of(viewName + "。");
+    }
+
+    @Override
+    public void onPlayerLeft(Player player) {
+        ai.onPlayerLeft(player);
     }
 }

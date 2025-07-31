@@ -225,10 +225,10 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
             entityManager.persist(converted);
             equipment.setId(converted.getId());
         }
-        /*for (EquipmentPo equipmentPo : equipmentPos) {
+        for (EquipmentPo equipmentPo : equipmentPos) {
             Equipment equipment = toUpdate.get(equipmentPo.getId());
             equipmentPo.merge(equipment);
-        }*/
+        }
     }
 
     @Override
@@ -242,8 +242,8 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         equipments.forEach(equipment -> {
             if (equipment.id() == null)
                 toInsert.add(equipment);
-            /*else
-                toUpdate.put(equipment.id(), equipment);*/
+            else
+                toUpdate.put(equipment.id(), equipment);
         });
         persistEquipments(entityManager, toInsert, toUpdate);
     }

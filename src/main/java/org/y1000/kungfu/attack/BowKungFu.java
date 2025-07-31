@@ -39,6 +39,6 @@ public final class BowKungFu extends AbstractRangedKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new BowKungFu(name(), 0, getParameters());
+        return new BowKungFu(name(), exp(), getParameters());
     }
 }

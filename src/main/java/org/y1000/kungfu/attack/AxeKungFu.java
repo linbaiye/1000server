@@ -25,15 +25,13 @@ public final class AxeKungFu extends AbstractMeleeKungFu {
         return AttackKungFuType.AXE;
     }
 
-
-
     @Override
     protected Logger logger() {
         return log;
     }
 
     @Override
-    public KungFu duplicate() {
-        return new AxeKungFu(name(), 0, getParameters());
+    public AxeKungFu duplicate() {
+        return new AxeKungFu(name(), exp(), getParameters());
     }
 }

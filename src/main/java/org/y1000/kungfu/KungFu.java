@@ -25,7 +25,6 @@ public interface KungFu {
 
     String detailText();
 
-
     KungFu duplicate();
 
     int icon();

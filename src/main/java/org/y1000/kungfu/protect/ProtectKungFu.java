@@ -96,7 +96,7 @@ public final class ProtectKungFu extends AbstractPeriodicalConsumingKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new ProtectKungFu(name(), 0, parameters, icon());
+        return new ProtectKungFu(name(), exp(), parameters, icon());
     }
 
 

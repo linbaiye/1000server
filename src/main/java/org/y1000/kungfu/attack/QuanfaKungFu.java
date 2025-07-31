@@ -36,6 +36,6 @@ public final class QuanfaKungFu extends AbstractMeleeKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new QuanfaKungFu(name(), 0, getParameters());
+        return new QuanfaKungFu(name(), exp(), getParameters());
     }
 }

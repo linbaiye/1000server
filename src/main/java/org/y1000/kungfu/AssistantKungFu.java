@@ -104,6 +104,6 @@ public final class AssistantKungFu extends AbstractKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new AssistantKungFu(name(), 0, eightDirection, icon());
+        return new AssistantKungFu(name(), exp(), eightDirection, icon());
     }
 }

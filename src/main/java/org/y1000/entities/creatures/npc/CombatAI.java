@@ -53,7 +53,7 @@ public class CombatAI extends AbstractMovableNpcAI {
     }
 
     private boolean ableToAttack() {
-        if (!enemy.canBeSeenAt(npc().coordinate()) || !enemyHurtAbility.canBeAttacked()) {
+        if (enemy == null || !enemy.canBeSeenAt(npc().coordinate()) || !enemyHurtAbility.canBeAttacked()) {
             return false;
         }
         var ret = npc().findAbility(NpcShootAbility.class).map(NpcShootAbility::canAttack)
@@ -93,7 +93,7 @@ public class CombatAI extends AbstractMovableNpcAI {
     }
 
     private void tryAttack() {
-        if (!enemy.canBeSeenAt(npc().coordinate()) || !enemyHurtAbility.canBeAttacked()) {
+        if (enemy == null || !enemy.canBeSeenAt(npc().coordinate()) || !enemyHurtAbility.canBeAttacked()) {
             npc().startAI(new WanderingAI(npc()));
             return;
         }
@@ -124,8 +124,6 @@ public class CombatAI extends AbstractMovableNpcAI {
     }
 
     void onNonDieAbilityDone(NpcUpdatableAbility doneAbility) {
-        if (enemy == null)
-            return;
         if (doneAbility instanceof NpcMoveAbility moveAbility) {
             computePrevious();
             stayOrAttack(moveAbility);

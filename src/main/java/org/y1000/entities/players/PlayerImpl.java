@@ -80,7 +80,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     private int attackCooldown;
 
-
     private final PillSlots pillSlots;
 
     private GuildMembership guildMembership;
@@ -775,13 +774,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         return realm == null;
     }
 
-    private void changeAttackKungFu(AttackKungFu newKungFu) {
-        if (newKungFu.level() < 9999) {
-            assistantKungFu = null;
-        }
-        this.attackKungFu = newKungFu;
-        cooldownAttack();
-    }
 
     private void equipWeaponFromSlot(int slot) {
         Weapon weaponToEquip = (Weapon) inventory.remove(slot);
@@ -978,8 +970,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     public KungFuBook kungFuBook() {
         return kungFuBook;
     }
-
-
 
     @Override
     public Optional<ProtectKungFu> protectKungFu() {
@@ -1427,6 +1417,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         throw new IllegalArgumentException();
     }
 
+
     @Override
     public <AB> Optional<AB> findAbility(Class<AB> type) {
         return  type.isAssignableFrom(this.getClass()) ?
@@ -1447,7 +1438,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     public int attacked(org.y1000.entities.ActiveEntity attacker, Damage damage, int accuracy) {
         if (isDodged(accuracy))
             return -1;
-        if (isDead())
+        if (isDead() || isLeftRealm())
             return -1;
         int old = life.currentValue();
         takeDamage(damage);
@@ -1500,8 +1491,37 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         return Optional.of(stringBuilder.toString());
     }
 
-    @Override
-    public void onPlayerLeft(Player player) {
 
+    public Player cloneForTeleport() {
+        return PlayerImpl.builder()
+                .id(id())
+                .name(viewName())
+                .inventory(inventory)
+                .attackKungFu((AttackKungFu) attackKungFu.duplicate())
+                .kungFuBook(kungFuBook)
+                .male(male)
+                .equipments(equippedEquipments)
+                .footKungfu(footKungFu().map(k -> (FootKungFu)k.duplicate()).orElse(null))
+                .protectKungFu(protectKungFu)
+                .breathKungFu(breathKungFu)
+
+        boolean male,
+        Map<EquipmentType, Equipment> equipments,
+        FootKungFu footKungfu,
+        ProtectKungFu protectKungFu,
+        BreathKungFu breathKungFu,
+        PlayerInnateAttributesProvider innateAttributesProvider,
+        PlayerLife life,
+        PlayerLife head,
+        PlayerLife arm,
+        PlayerLife leg,
+        PlayerExperiencedAgedAttribute power,
+        PlayerExperiencedAgedAttribute innerPower,
+        PlayerExperiencedAgedAttribute outerPower,
+        int revival,
+        YinYang yinYang,
+        PillSlots pillSlots,
+        GuildMembership guildMembership) {
+                .
     }
 }

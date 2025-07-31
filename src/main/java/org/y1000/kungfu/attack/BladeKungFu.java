@@ -35,6 +35,6 @@ public final class BladeKungFu extends AbstractMeleeKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new BladeKungFu(name(), 0, getParameters());
+        return new BladeKungFu(name(), exp(), getParameters());
     }
 }

@@ -24,6 +24,7 @@ public interface Player extends IActiveEntity, HurtAbility {
     default boolean isMale() {
         return true;
     }
+
     void joinRealm(Realm realm, PlayerEventListener messageListener);
 
     void joinRealm(Realm realm, Coordinate coordinate, PlayerEventListener messageListener);

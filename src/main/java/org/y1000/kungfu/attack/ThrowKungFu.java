@@ -40,6 +40,6 @@ public final class ThrowKungFu extends AbstractRangedKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new ThrowKungFu(name(), 0, getParameters());
+        return new ThrowKungFu(name(), exp(), getParameters());
     }
 }

@@ -10,6 +10,7 @@ import org.y1000.realm.PlayerEventHandler;
 import org.y1000.util.Coordinate;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -37,6 +38,13 @@ public abstract class FilterVisibleEvent<T extends Entity> implements EntityEven
                         .map(type::cast);
     }
 
+    public <R extends Entity> Optional<R> first(Class<R> type) {
+        return result.stream().filter(e -> type.isAssignableFrom(e.getClass()))
+                .map(type::cast)
+                .findFirst();
+    }
+
+
     public static class NpcFilterVisibleEntityEvent extends FilterVisibleEvent<Npc> implements NpcEvent {
         private NpcFilterVisibleEntityEvent(Npc entity, Predicate<Entity> filter) {
             super(entity, filter);
@@ -61,6 +69,10 @@ public abstract class FilterVisibleEvent<T extends Entity> implements EntityEven
         return nearbyAttackable(npc, d);
     }
 
+    public static NpcFilterVisibleEntityEvent findById(Npc npc, long id) {
+        return new NpcFilterVisibleEntityEvent(npc, e -> e.id() == id);
+    }
+
     public static NpcFilterVisibleEntityEvent nearbyAttackable(Npc npc, int d) {
         return new NpcFilterVisibleEntityEvent(npc, e -> e instanceof ActiveEntity entity
                 && entity.findAbility(HurtAbility.class).map(HurtAbility::canBeAttacked).orElse(false)
@@ -73,5 +85,9 @@ public abstract class FilterVisibleEvent<T extends Entity> implements EntityEven
 
     public static PlayerFilterVisibleEntityEvent filterVisibleAt(Player player, Set<Coordinate> coordinates) {
         return new PlayerFilterVisibleEntityEvent(player, e -> coordinates.contains(e.coordinate()));
+    }
+
+    public static PlayerFilterVisibleEntityEvent findById(Player player, long id) {
+        return new PlayerFilterVisibleEntityEvent(player, e -> e.id() == id);
     }
 }
