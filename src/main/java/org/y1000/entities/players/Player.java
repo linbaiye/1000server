@@ -32,7 +32,7 @@ public interface Player extends IActiveEntity, HurtAbility {
 
     void leaveRealm();
 
-    boolean isLeftGame();
+    boolean isLeftRealm();
 
     default Optional<FootKungFu> footKungFu() {
         return Optional.empty();

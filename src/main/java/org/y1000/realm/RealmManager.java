@@ -16,7 +16,7 @@ import java.util.concurrent.*;
 
 
 @Slf4j
-public final class RealmManager implements Runnable , CrossRealmEventSender {
+public final class RealmManager implements Runnable , RealmEventSender {
 
     private final Map<String, Integer> playerNameRealmIdMap;
 
@@ -125,7 +125,7 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
         if (StringUtils.isEmpty(text))
             return;
         var notification = new SystemNotificationEvent(text);
-        realmIdGroupMap.values().forEach(groups -> groups.handle(notification));
+        //realmIdGroupMap.values().forEach(groups -> groups.handle(notification));
     }
 
     public synchronized void testKick() {
@@ -160,21 +160,6 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
             eventQueue.add(event);
             eventQueue.notifyAll();
         }
-    }
-
-    private void handleTeleport(RealmTeleportEvent teleportEvent) {
-        int realmId = teleportEvent.toRealmId();
-        //playerRealmMap.remove(teleportEvent.player());
-        //playerRealmMap.put(teleportEvent.player(), realmId);
-        playerNameRealmIdMap.put(teleportEvent.player().viewName(), realmId);
-        RealmGroup group = realmIdGroupMap.get(realmId);
-        log.debug("Teleporting player {} to realm {} from realm {}.", teleportEvent.player(), realmId, teleportEvent.fromRealmId());
-        group.handle(teleportEvent);
-    }
-
-    @Override
-    public void send(RealmEvent realmEvent) {
-        //queueEvent(realmEvent);
     }
 
 
@@ -237,5 +222,10 @@ public final class RealmManager implements Runnable , CrossRealmEventSender {
                 log.error("Exception ", e);
             }
         }
+    }
+
+    @Override
+    public void send(RealmEvent realmEvent) {
+        realmIdGroupMap.values().forEach(r -> r.handle(realmEvent.toRealm(), realmEvent));
     }
 }

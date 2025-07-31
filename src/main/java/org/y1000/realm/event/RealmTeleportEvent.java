@@ -3,6 +3,7 @@ package org.y1000.realm.event;
 import lombok.Getter;
 import lombok.Setter;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.teleport.Teleport;
 import org.y1000.entities.teleport.TeleportCost;
 import org.y1000.network.Connection;
 import org.y1000.util.Coordinate;
@@ -11,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public final class RealmTeleportEvent implements PlayerRealmEvent {
+public final class RealmTeleportEvent implements RealmEvent {
     private final Player player;
     private final int realmId;
     private final Coordinate toCoordinate;
@@ -56,13 +57,12 @@ public final class RealmTeleportEvent implements PlayerRealmEvent {
         this.costs = costs != null ? costs : Collections.emptyList();
     }
 
-    @Override
-    public Player player() {
-        return player;
-    }
-
     public Coordinate toCoordinate() {
         return toCoordinate;
+    }
+
+    public Player player() {
+        return player;
     }
 
     public int fromRealmId() {
@@ -90,7 +90,16 @@ public final class RealmTeleportEvent implements PlayerRealmEvent {
     }
 
     @Override
-    public int toRealmId() {
+    public int toRealm() {
         return realmId;
+    }
+
+    @Override
+    public void accept(RealmEventHandler handler) {
+        handler.handleTeleportEvent(this);
+    }
+
+    public static RealmTeleportEvent create(Player player, Teleport teleport, Connection connection) {
+        return new RealmTeleportEvent(player, teleport.toRealmId(), teleport.toCoordinate(), connection, teleport.rejectRealmId(), teleport.rejectCoordinate(), teleport.costs());
     }
 }

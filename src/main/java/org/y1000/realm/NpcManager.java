@@ -1,7 +1,7 @@
 package org.y1000.realm;
 
 import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.IRealmEvent;
 
 interface NpcManager extends ActiveEntityManager<Npc>, NpcCaller {
 
@@ -9,6 +9,6 @@ interface NpcManager extends ActiveEntityManager<Npc>, NpcCaller {
 
     void init();
 
-    void handleCrossRealmEvent(RealmEvent crossRealmEvent);
+    void handleCrossRealmEvent(IRealmEvent crossRealmEvent);
 
 }

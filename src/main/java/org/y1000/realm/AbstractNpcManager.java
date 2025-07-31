@@ -10,7 +10,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.event.EntityEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.message.RemoveEntityMessage;
-import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.IRealmEvent;
 import org.y1000.realm.event.RealmTriggerEvent;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
@@ -141,7 +141,7 @@ abstract class AbstractNpcManager extends AbstractMovableEntityManager<Npc>
     }
 
     @Override
-    public void handleCrossRealmEvent(RealmEvent crossRealmEvent) {
+    public void handleCrossRealmEvent(IRealmEvent crossRealmEvent) {
         if (!(crossRealmEvent instanceof RealmTriggerEvent letterEvent)) {
             return;
         }

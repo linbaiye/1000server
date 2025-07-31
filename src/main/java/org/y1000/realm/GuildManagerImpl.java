@@ -43,7 +43,7 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
 
     private final MessageSender eventSender;
 
-    private final CrossRealmEventSender crossRealmEventSender;
+    private final RealmEventSender crossRealmEventSender;
 
     private final RealmMap realmMap;
 
@@ -62,7 +62,7 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
     public GuildManagerImpl(DynamicObjectFactory factory,
                             EntityIdGenerator entityIdGenerator,
                             MessageSender eventSender,
-                            CrossRealmEventSender crossRealmEventSender,
+                            RealmEventSender crossRealmEventSender,
                             RealmMap realmMap,
                             GuildRepository guildRepository,
                             ItemRepository itemRepository,
@@ -374,13 +374,13 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         }
         target.joinGuild(new GuildMembership(sourceMembership.guildId(),"", sourceMembership.guildName()));
 //        eventSender.notifyVisiblePlayersAndSelf(target, new PlayerUpdateGuildEvent(target));
-        crossRealmEventSender.send(GuildBroadcastTextEvent.tip(sourceMembership.guildId(), target.viewName() + "加入了门派。"));
+//        crossRealmEventSender.send(GuildBroadcastTextEvent.tip(sourceMembership.guildId(), target.viewName() + "加入了门派。"));
     }
 
     private void handleDieEvent(DynamicObjectDieEvent dieEvent) {
         if (dieEvent.source() instanceof GuildStone guildStone) {
-            crossRealmEventSender.send(BroadcastTextEvent.leftUp(guildStone.idName() + " 被灭门了"));
-            crossRealmEventSender.send(new DismissGuildEvent(guildStone.getPersistentId()));
+//            crossRealmEventSender.send(BroadcastTextEvent.leftUp(guildStone.idName() + " 被灭门了"));
+//            crossRealmEventSender.send(new DismissGuildEvent(guildStone.getPersistentId()));
 //            eventSender.notifyVisiblePlayers(dieEvent.source(), new RemoveEntityMessage(dieEvent.source().id()));
             remove(guildStone);
 //            eventSender.remove(guildStone);

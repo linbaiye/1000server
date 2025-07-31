@@ -26,8 +26,6 @@ final class TeleportManager {
 
     private final AOIManager aoiManager;
 
-    private final Set<StaticTeleport> teleports;
-
 
     public TeleportManager(int realmId,
                            RealmMap realmMap,
@@ -39,7 +37,6 @@ final class TeleportManager {
         this.realmMap = realmMap;
         this.realmId = realmId;
         this.aoiManager = aoiManager;
-        this.teleports = new HashSet<>();
     }
 
 
@@ -48,7 +45,6 @@ final class TeleportManager {
         if (createGateSdb.isVisible(idName)) {
             var port = new StaticTeleport(entityIdGenerator.next(), idName, createGateSdb, teleportHandler, realmId);
             aoiManager.add(port);
-            teleports.add(port);
             teleport = port;
         } else {
             teleport = new InvisibleTeleport(entityIdGenerator.next(), idName, createGateSdb, teleportHandler, realmId);
@@ -61,10 +57,7 @@ final class TeleportManager {
         createGateSdb.getNames(realmId).forEach(name -> addTeleport(name, teleportHandler));
     }
 
-    public void init(UnaryAction<PlayerRealmEvent> teleportEventHandler) {
-    }
-
     public Set<StaticTeleport> findStaticTeleports() {
-        return teleports;
+        return Collections.emptySet();
     }
 }

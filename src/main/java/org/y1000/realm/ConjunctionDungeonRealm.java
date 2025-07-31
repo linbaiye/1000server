@@ -12,18 +12,17 @@ final class ConjunctionDungeonRealm extends AbstractDungeonRealm {
 
     public ConjunctionDungeonRealm(int id,
                                    RealmMap realmMap,
-                                   RealmPlayerConnectionManager eventSender,
                                    GroundItemManager itemManager,
                                    NpcManager npcManager,
                                    PlayerManager playerManager,
                                    DynamicObjectManager dynamicObjectManager,
                                    TeleportManager teleportManager,
-                                   CrossRealmEventSender crossRealmEventSender,
+                                   RealmEventSender crossRealmEventSender,
                                    MapSdb mapSdb,
                                    int interval,
                                    ChatManager chatManager,
                                    PlayerRepository playerRepository) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, interval,
+        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, interval,
                 playerRepository);
     }
 
@@ -33,8 +32,7 @@ final class ConjunctionDungeonRealm extends AbstractDungeonRealm {
     }
 
     @Override
-    void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
-        acceptIfAffordableElseReject(teleportEvent);
+    public void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
     }
 
     @Override

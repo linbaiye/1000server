@@ -27,10 +27,11 @@ import org.y1000.util.Coordinate;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class PlayerImpl extends AbstractCreature implements Player, EntityEventListener, PlayerInputHandler {
+public class PlayerImpl extends AbstractCreature implements Player, EntityEventListener, PlayerInputHandler, PlayerLeaveListener {
 
     public static final int DEFAULT_REGENERATE_SECONDS = 9;
     private Realm realm;
@@ -210,7 +211,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     public void unequip(EquipmentType type) {
-        if (isDead() || isLeftGame() || type == null || !equippedEquipments.containsKey(type)) {
+        if (isDead() || isLeftRealm() || type == null || !equippedEquipments.containsKey(type)) {
             return;
         }
         if (inventory.isFull()) {
@@ -681,7 +682,8 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void sendEvent(PlayerEvent event) {
-        eventListener.onEvent(event);
+        if (eventListener != null)
+            eventListener.onEvent(event);
     }
 
     @Override
@@ -763,12 +765,13 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         realm = null;
         if (playerTrade != null)
             playerTrade.cancel(this);
+        ropes.clear();
         combatController = null;
         //emitEvent(new PlayerLeftEvent(this));
     }
 
     @Override
-    public boolean isLeftGame() {
+    public boolean isLeftRealm() {
         return realm == null;
     }
 
@@ -1164,7 +1167,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public boolean pickItem(Item item) {
-        if (isLeftGame() || isDead())
+        if (isLeftRealm() || isDead())
             return false;
         if (!inventory().canPick(item)) {
             sendText("物品栏已满。");
@@ -1192,7 +1195,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
     private void startTradeWith(Player another, int slot) {
-        if (isDead() || isLeftGame()) {
+        if (isDead() || isLeftRealm()) {
             sendText("你无法进行交易。");
             return;
         }
@@ -1245,7 +1248,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public boolean acceptTrade(PlayerTrade trade) {
-        if (isDead() || isLeftGame() || playerTrade != null)
+        if (isDead() || isLeftRealm() || playerTrade != null)
             return false;
         Player another = trade.getAnother(this).orElse(null);
         if (another == null)
@@ -1262,7 +1265,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public boolean canBeDragged() {
-        return !isLeftGame() && state.canBeDragged();
+        return !isLeftRealm() && state.canBeDragged();
     }
 
     void sendSound(String s) {
@@ -1437,7 +1440,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public boolean swingAllowed() {
-        return !isLeftGame();
+        return !isLeftRealm();
     }
 
     @Override
@@ -1495,5 +1498,10 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         assistantKungFu().ifPresent(a -> stringBuilder.append(" ").append(a.name()));
         breathKungFu().ifPresent(b -> stringBuilder.append(" ").append(b.name()));
         return Optional.of(stringBuilder.toString());
+    }
+
+    @Override
+    public void onPlayerLeft(Player player) {
+
     }
 }

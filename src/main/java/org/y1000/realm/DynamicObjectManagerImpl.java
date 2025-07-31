@@ -29,7 +29,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
 
     private final CreateDynamicObjectSdb createDynamicObjectSdb;
 
-    private final CrossRealmEventSender crossRealmEventSender;
+    private final RealmEventSender crossRealmEventSender;
 
     private final Map<DynamicObject, String> objectNumberMap;
 
@@ -42,7 +42,7 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
                                     MessageSender eventSender,
                                     GroundItemManager itemManager,
                                     CreateDynamicObjectSdb dynamicObjectSdb,
-                                    CrossRealmEventSender crossRealmEventSender,
+                                    RealmEventSender crossRealmEventSender,
                                     RealmMap realmMap,
                                     AOIManager aoiManager, NpcCaller npcCaller) {
         super(aoiManager, eventSender);

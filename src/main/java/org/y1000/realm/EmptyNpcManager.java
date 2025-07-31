@@ -3,7 +3,7 @@ package org.y1000.realm;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.event.EntityEvent;
-import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.IRealmEvent;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
@@ -39,7 +39,7 @@ public final class EmptyNpcManager implements NpcManager {
     }
 
     @Override
-    public void handleCrossRealmEvent(RealmEvent crossRealmEvent) {
+    public void handleCrossRealmEvent(IRealmEvent crossRealmEvent) {
 
     }
 

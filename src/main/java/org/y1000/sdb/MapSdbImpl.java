@@ -34,18 +34,8 @@ public final class MapSdbImpl extends AbstractCSVSdbReader implements MapSdb {
     }
 
     @Override
-    public String getTilName(int id) {
-        return get(String.valueOf(id), "TilName");
-    }
-
-    @Override
-    public String getObjName(int id) {
-        return get(String.valueOf(id), "ObjName");
-    }
-
-    @Override
-    public String getRofName(int id) {
-        return get(String.valueOf(id), "RofName");
+    public String getResourceName(int id) {
+        return get(String.valueOf(id), "ResourceName");
     }
 
     @Override

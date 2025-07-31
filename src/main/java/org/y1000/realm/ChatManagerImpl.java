@@ -8,7 +8,7 @@ import org.y1000.message.input.chat.ClientRealmChatEvent;
 import org.y1000.message.input.chat.ClientChatEvent;
 
 import org.y1000.message.input.chat.ClientWorldShoutEvent;
-import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.IRealmEvent;
 import org.y1000.realm.event.PlayerWhisperEvent;
 
 @Slf4j
@@ -18,11 +18,11 @@ final class ChatManagerImpl implements ChatManager {
 
     private final MessageSender eventSender;
 
-    private final CrossRealmEventSender crossRealmEventSender;
+    private final RealmEventSender crossRealmEventSender;
 
     public ChatManagerImpl(PlayerManager playerManager,
                            MessageSender eventSender,
-                           CrossRealmEventSender crossRealmEventSender) {
+                           RealmEventSender crossRealmEventSender) {
         Validate.notNull(playerManager);
         Validate.notNull(eventSender);
         Validate.notNull(crossRealmEventSender);
@@ -38,7 +38,7 @@ final class ChatManagerImpl implements ChatManager {
         if (event instanceof ClientRealmChatEvent realmChatEvent) {
             if (realmChatEvent instanceof ClientWorldShoutEvent)
                 player.consumeLife(1000);
-            crossRealmEventSender.send(realmChatEvent.toRealmEvent(player));
+//            crossRealmEventSender.send(realmChatEvent.toRealmEvent(player));
         } else if (event instanceof ClientChatEvent speakEvent) {
 //            eventSender.notifyVisiblePlayersAndSelf(player, speakEvent.toPlayerEvent(player));
         }
@@ -53,12 +53,12 @@ final class ChatManagerImpl implements ChatManager {
 
     private void handlePrivateChat(Player player, PlayerWhisperEvent chatEvent) {
         player.emitEvent(chatEvent.toTextEvent(player));
-        if (chatEvent.needConfirm())
-            crossRealmEventSender.send(chatEvent.createConfirmation());
+//        if (chatEvent.needConfirm())
+//            crossRealmEventSender.send(chatEvent.createConfirmation());
     }
 
     @Override
-    public void handleCrossRealmChat(RealmEvent realmEvent) {
+    public void handleCrossRealmChat(IRealmEvent realmEvent) {
         if (realmEvent == null) {
             return;
         }

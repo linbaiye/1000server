@@ -8,7 +8,7 @@ import org.y1000.message.PlayerTextEvent;
 public record PlayerWhisperEvent(String receiverName,
                                  String senderName,
                                  String content,
-                                 Type type) implements RealmEvent {
+                                 Type type) implements IRealmEvent {
 
     public static PlayerWhisperEvent send(String receiverName, String senderName, String content) {
         return new PlayerWhisperEvent(receiverName, senderName, content, Type.SEND);

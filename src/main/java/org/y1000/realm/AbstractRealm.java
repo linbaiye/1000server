@@ -3,18 +3,18 @@ package org.y1000.realm;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.teleport.Teleport;
 import org.y1000.entities.teleport.TeleportHandler;
-import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.*;
+import org.y1000.network.Connection;
 import org.y1000.realm.event.*;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
-import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class AbstractRealm implements Realm, TeleportHandler  {
+abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandler  {
     public static final int STEP_MILLIS = 10;
     private final RealmMap realmMap;
     private final NpcManager npcManager;
@@ -23,7 +23,7 @@ abstract class AbstractRealm implements Realm, TeleportHandler  {
     private final TeleportManager teleportManager;
 
     private final int id;
-    private final CrossRealmEventSender crossRealmEventSender;
+    private final RealmEventSender crossRealmEventSender;
     private final MapSdb mapSdb;
     private long accumulatedMillis;
     private final List<ActiveEntityManager<?>> entityManagers;
@@ -34,18 +34,16 @@ abstract class AbstractRealm implements Realm, TeleportHandler  {
 
     public AbstractRealm(int id,
                          RealmMap realmMap,
-                         MessageSender eventSender,
                          GroundItemManager itemManager,
                          NpcManager npcManager,
                          PlayerManager playerManager,
                          DynamicObjectManager dynamicObjectManager,
                          TeleportManager teleportManager,
-                         CrossRealmEventSender crossRealmEventSender,
+                         RealmEventSender crossRealmEventSender,
                          MapSdb mapSdb,
                          ChatManager chatManager,
                          PlayerRepository playerRepository) {
         Validate.notNull(realmMap);
-        Validate.notNull(eventSender);
         Validate.notNull(itemManager);
         Validate.notNull(playerManager);
         Validate.notNull(crossRealmEventSender);
@@ -77,7 +75,7 @@ abstract class AbstractRealm implements Realm, TeleportHandler  {
         return realmMap;
     }
 
-    public String name() {
+    public String title() {
         return mapSdb.getMapTitle(id);
     }
 
@@ -101,17 +99,6 @@ abstract class AbstractRealm implements Realm, TeleportHandler  {
     }
 
 
-    @Override
-    public void teleportPlayerTo(Player player, int realmId, Coordinate toCoordinate) {
-        var connection = playerManager.prepareTeleport(player);
-        if (connection == null)
-            return;
-        if (realmId == this.id) {
-            playerManager.teleportIn(player, this, toCoordinate, connection);
-        }
-
-    }
-
     protected void doInit() {
         try {
             accumulatedMillis = System.currentTimeMillis();
@@ -120,7 +107,7 @@ abstract class AbstractRealm implements Realm, TeleportHandler  {
             if (dynamicObjectManager != null)
                 dynamicObjectManager.init();
             teleportManager.init(this);
-            playerManager.setTeleportHandler(this::onPlayerTeleport);
+//            playerManager.setTeleportHandler(this::onPlayerTeleport);
             log().debug("Initialized {}.", this);
         } catch (Exception e) {
             log().error("Failed to init realm {}.", id, e);
@@ -137,25 +124,21 @@ abstract class AbstractRealm implements Realm, TeleportHandler  {
         return id;
     }
 
-    void onPlayerTeleport(PlayerRealmEvent event) {
-        if (!(event instanceof RealmTeleportEvent realmTeleportEvent) ||
-                !playerManager.contains(event.player())) {
+    @Override
+    public void onPlayerEnterTeleport(Player player, Teleport teleport) {
+        Connection connection = playerManager.prepareTeleport(player);
+        if (connection == null)
             return;
-        }
+        RealmTeleportEvent teleportEvent = RealmTeleportEvent.create(player, teleport, connection);
+        crossRealmEventSender.send(teleportEvent);
     }
 
-    CrossRealmEventSender getCrossRealmEventHandler() {
+    RealmEventSender getCrossRealmEventHandler() {
         return crossRealmEventSender;
     }
 
-    abstract void handleTeleportEvent(RealmTeleportEvent teleportEvent);
-
     PlayerManager playerManager() {
         return playerManager;
-    }
-
-    NpcManager npcManager() {
-        return npcManager;
     }
 
     abstract void handleGuildCreation(Player source, ClientFoundGuildEvent event);
@@ -191,13 +174,15 @@ abstract class AbstractRealm implements Realm, TeleportHandler  {
                 playerManager.logoutPlayer(logout.connection());
             } else if (event instanceof ConnectionInput connectionInput) {
                 handleInput(connectionInput);
+            } else if (event instanceof RealmEvent realmEvent) {
+                realmEvent.accept(this);
             }
         } catch (Exception e) {
             log().error("Failed to handle event.", e);
         }
     }
 
-    public void handle(RealmEvent event) {
+    public void handle(IRealmEvent event) {
         try {
         } catch (Exception e) {
             log().error("Exception when handling event .", e);

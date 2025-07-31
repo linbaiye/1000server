@@ -446,11 +446,8 @@ message TeleportPacket {
   int32 x = 1;
   int32 y = 2;
   string map = 3;
-  string tile = 4;
-  string obj = 5;
-  string rof = 6;
   string bgm = 7;
-  string realm = 8;
+  string title = 8;
   string resource = 9;
 }
 

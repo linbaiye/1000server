@@ -33,42 +33,6 @@ public interface TeleportPacketOrBuilder extends
       getMapBytes();
 
   /**
-   * <code>string tile = 4;</code>
-   * @return The tile.
-   */
-  java.lang.String getTile();
-  /**
-   * <code>string tile = 4;</code>
-   * @return The bytes for tile.
-   */
-  com.google.protobuf.ByteString
-      getTileBytes();
-
-  /**
-   * <code>string obj = 5;</code>
-   * @return The obj.
-   */
-  java.lang.String getObj();
-  /**
-   * <code>string obj = 5;</code>
-   * @return The bytes for obj.
-   */
-  com.google.protobuf.ByteString
-      getObjBytes();
-
-  /**
-   * <code>string rof = 6;</code>
-   * @return The rof.
-   */
-  java.lang.String getRof();
-  /**
-   * <code>string rof = 6;</code>
-   * @return The bytes for rof.
-   */
-  com.google.protobuf.ByteString
-      getRofBytes();
-
-  /**
    * <code>string bgm = 7;</code>
    * @return The bgm.
    */
@@ -81,16 +45,16 @@ public interface TeleportPacketOrBuilder extends
       getBgmBytes();
 
   /**
-   * <code>string realm = 8;</code>
-   * @return The realm.
+   * <code>string title = 8;</code>
+   * @return The title.
    */
-  java.lang.String getRealm();
+  java.lang.String getTitle();
   /**
-   * <code>string realm = 8;</code>
-   * @return The bytes for realm.
+   * <code>string title = 8;</code>
+   * @return The bytes for title.
    */
   com.google.protobuf.ByteString
-      getRealmBytes();
+      getTitleBytes();
 
   /**
    * <code>string resource = 9;</code>

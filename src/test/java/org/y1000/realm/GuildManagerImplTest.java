@@ -1,47 +1,17 @@
 package org.y1000.realm;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.Entity;
-import org.y1000.entities.objects.DynamicObjectDieEvent;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.event.IEntityEvent;
-import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.item.ItemFactory;
-import org.y1000.kungfu.KungFuBook;
-import org.y1000.kungfu.KungFuSdb;
-import org.y1000.kungfu.KungFuType;
-import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.RemoveEntityMessage;
-import org.y1000.message.input.ClientCreateGuildKungFuEvent;
-import org.y1000.message.serverevent.UpdateGuildKungFuFormEvent;
-import org.y1000.persistence.AttackKungFuParametersProvider;
-import org.y1000.realm.event.BroadcastTextEvent;
-import org.y1000.realm.event.DismissGuildEvent;
-import org.y1000.realm.event.GuildBroadcastTextEvent;
 import org.y1000.repository.*;
-import org.y1000.util.Coordinate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class GuildManagerImplTest extends AbstractUnitTestFixture {
 
@@ -57,7 +27,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
     private TestingEventListener testingEventListener;
 
     private List<GuildStone> stoneList;
-    private CrossRealmEventSender crossRealmEventSender;
+    private RealmEventSender crossRealmEventSender;
     private KungFuBookRepository kungFuBookRepository;
 
     /*

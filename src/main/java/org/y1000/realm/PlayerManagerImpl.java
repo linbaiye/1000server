@@ -11,7 +11,6 @@ import org.y1000.message.*;
 import org.y1000.message.input.*;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.Connection;
-import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.util.Coordinate;
@@ -38,7 +37,7 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
 
     private final DeadPlayerTeleportManager deadPlayerTeleportManager;
 
-    private final CrossRealmEventSender crossRealmEventSender;
+    private final RealmEventSender crossRealmEventSender;
 
 
     public PlayerManagerImpl(RealmPlayerConnectionManager eventSender,
@@ -46,7 +45,7 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
                              BankManager bankManager,
                              PlayerRepository playerRepository,
                              DeadPlayerTeleportManager deadPlayerTeleportManager,
-                             CrossRealmEventSender crossRealmEventSender,
+                             RealmEventSender crossRealmEventSender,
                              AOIManager aoiManager) {
         super(aoiManager, eventSender);
         this.connectionManager = eventSender;
@@ -114,7 +113,7 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
     public void teleportIn(Player player,
                            Realm realm, Coordinate coordinate,
                            Connection connection) {
-        doPlayerJoinRealm(player, () -> player.joinRealm(realm, coordinate, this), connection, PlayerJoinRealmMessage::of);
+        doPlayerJoinRealm(player, () -> player.joinRealm(realm, coordinate, this), connection, PlayerTeleportMessage::of);
     }
 
     @Override

@@ -22,36 +22,34 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
 
     public EntranceDungeonRealm(int id,
                                 RealmMap realmMap,
-                                MessageSender eventSender,
                                 GroundItemManager itemManager,
                                 NpcManager npcManager,
                                 PlayerManager playerManager,
                                 DynamicObjectManager dynamicObjectManager,
                                 TeleportManager teleportManager,
-                                CrossRealmEventSender crossRealmEventSender,
+                                RealmEventSender crossRealmEventSender,
                                 MapSdb mapSdb, int interval,
                                 ChatManager chatManager,
                                 Set<Integer> whitelistedIds,
                                 PlayerRepository playerRepository) {
-        this(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
+        this(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
                 interval, LocalDateTime::now, chatManager, whitelistedIds, playerRepository);
     }
 
     public EntranceDungeonRealm(int id,
                                 RealmMap realmMap,
-                                MessageSender eventSender,
                                 GroundItemManager itemManager,
                                 NpcManager npcManager,
                                 PlayerManager playerManager,
                                 DynamicObjectManager dynamicObjectManager,
                                 TeleportManager teleportManager,
-                                CrossRealmEventSender crossRealmEventSender,
+                                RealmEventSender crossRealmEventSender,
                                 MapSdb mapSdb,
                                 int interval,
                                 Supplier<LocalDateTime> timeSupplier,
                                 ChatManager chatManager,
                                 Set<Integer> whitelistedIds, PlayerRepository playerRepository) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, interval, playerRepository);
+        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, interval, playerRepository);
         Validate.notNull(timeSupplier);
         this.dateTimeSupplier = timeSupplier;
         this.whitelistedIds = whitelistedIds != null ? whitelistedIds : Collections.emptySet();
@@ -95,17 +93,15 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
     }
 
     @Override
-    void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
+    public void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
         if (isClosing()) {
             teleportEvent.getConnection().writeAndFlush(PlayerTextEvent.systemTip(teleportEvent.player(), "当前无法进入，请稍后重试。"));
             getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection(), id()));
         }
         if (whitelistedIds.contains(teleportEvent.fromRealmId())) {
-            acceptIfAffordableElseReject(teleportEvent);
             return;
         }
         if (isOpening()) {
-            acceptIfAffordableElseReject(teleportEvent);
         } else {
             teleportEvent.getConnection().writeAndFlush(PlayerTextEvent.systemTip(teleportEvent.player(), buildTip()));
             getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(),

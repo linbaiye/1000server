@@ -21,7 +21,7 @@ public class PlayerJoinRealmMessage implements I2ClientMessage {
         List<PlayerEquipPacket> equipments = player.getEquipments().stream().map(e -> PlayerEquipEvent.toEquipPacket(player, e)).collect(Collectors.toList());
         JoinRealmPacket joinRealmPacket = JoinRealmPacket.newBuilder()
                 .setAttribute(PlayerAttributeEvent.makeAttributePacket(player))
-                .setTeleport(PlayerTeleportEvent.teleportPacket(player.getRealm(), player.coordinate()))
+                .setTeleport(PlayerTeleportMessage.teleportPacket(player.getRealm(), player.coordinate()))
                 .setAttackKungFu(player.attackKungFu().name())
                 .setId(player.id())
                 .setName(player.viewName())

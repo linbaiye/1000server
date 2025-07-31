@@ -21,7 +21,7 @@ public final class RealmGroup implements Runnable {
 
     private final RealmFactory realmFactory;
 
-    private final CrossRealmEventSender crossRealmEventSender;
+    private final RealmEventSender crossRealmEventSender;
 
     private final Supplier<LocalDateTime> dateTimeSupplier;
 
@@ -31,7 +31,7 @@ public final class RealmGroup implements Runnable {
 
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
-                      CrossRealmEventSender crossRealmEventSender,
+                      RealmEventSender crossRealmEventSender,
                       Supplier<LocalDateTime> dateTimeSupplier) {
         Validate.isTrue(realms != null && !realms.isEmpty());
         Validate.notNull(realmFactory);
@@ -47,12 +47,11 @@ public final class RealmGroup implements Runnable {
         this.nextResetTime = now.getMinute() < 30 ? now.withMinute(29).withSecond(58).withNano(0) :
                 now.withMinute(48).withSecond(58).withNano(0);
         ids = realms.stream().map(Realm::id).collect(Collectors.toSet());
-        log.debug("Set next reset time to {}.", this.nextResetTime);
     }
 
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
-                      CrossRealmEventSender crossRealmEventSender) {
+                      RealmEventSender crossRealmEventSender) {
         this(realms, realmFactory, crossRealmEventSender, LocalDateTime::now);
     }
 
@@ -123,13 +122,6 @@ public final class RealmGroup implements Runnable {
 
     private void handleRealmEvent(Envelop envelop){
         find(envelop.realmId()).ifPresent(realm -> realm.handle(envelop.event()));
-//        if (realmEvent instanceof PlayerRealmEvent playerRealmEvent) {
-//            find(playerRealmEvent.toRealmId()).ifPresent(realm -> realm.handle(playerRealmEvent));
-//        } else if (realmEvent instanceof RealmTriggerEvent letterEvent) {
-//            find(letterEvent.toRealmId()).ifPresent(realm -> realm.handle(letterEvent));
-//        } else {
-//            Arrays.stream(realms).forEach(realm -> realm.handle(realmEvent));
-//        }
     }
 
     @Override
@@ -172,7 +164,7 @@ public final class RealmGroup implements Runnable {
         }
     }
 
-    public void handle(RealmEvent realmEvent) {
+    public void handle(IRealmEvent realmEvent) {
         if (realmEvent == null) {
             return;
         }

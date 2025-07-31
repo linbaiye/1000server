@@ -25,7 +25,7 @@ class JoinedRealmEventTest extends AbstractPlayerUnitTestFixture {
         Realm realm = Mockito.mock(Realm.class);
         when(realm.map()).thenReturn(map);
         when(realm.bgm()).thenReturn("bgm");
-        when(realm.name()).thenReturn("test");
+        when(realm.title()).thenReturn("test");
         LoginPacket loginPacket = new JoinedRealmEvent(player, player.coordinate(), player.inventory(), realm).toPacket().getLoginPacket();
         assertEquals("bgm", loginPacket.getTeleport().getBgm());
         assertEquals("map", loginPacket.getTeleport().getMap());

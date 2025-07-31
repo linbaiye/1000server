@@ -82,7 +82,7 @@ public abstract class AbstractUnitTestFixture {
 
     protected Realm mockRealm(RealmMap map) {
         Realm mockedRealm = Mockito.mock(Realm.class);
-        when(mockedRealm.name()).thenReturn("realm");
+        when(mockedRealm.title()).thenReturn("realm");
         when(mockedRealm.bgm()).thenReturn("bgm");
         when(mockedRealm.map()).thenReturn(map);
         when(mockedRealm.id()).thenReturn(1);

@@ -2,7 +2,7 @@ package org.y1000.message.serverevent;
 
 import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.entities.players.event.PlayerAttributeEvent;
-import org.y1000.entities.players.event.PlayerTeleportEvent;
+import org.y1000.entities.players.event.PlayerTeleportMessage;
 import org.y1000.item.StackItem;
 import org.y1000.kungfu.KungFu;
 import org.y1000.item.Item;
@@ -23,7 +23,7 @@ public final class JoinedRealmEvent extends IAbstractPlayerEvent {
     public JoinedRealmEvent(Player player, Coordinate coordinate, Inventory playerInventory, Realm realm) {
         super(player);
         this.playerInventory = playerInventory;
-        this.teleportPacket = PlayerTeleportEvent.teleportPacket(realm, coordinate);
+        this.teleportPacket = PlayerTeleportMessage.teleportPacket(realm, coordinate);
     }
 
     public JoinedRealmEvent(Player player) {

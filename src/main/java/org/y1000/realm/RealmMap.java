@@ -28,23 +28,14 @@ public interface RealmMap {
 
     String mapFile();
 
-    default String tileFile() {
-        return "";
-    }
-
-    default String objectFile() {
-        return "";
-    }
-    default String roofFile() {
-        return "";
-    }
+    String resource();
 
     static Optional<RealmMap> Load(String name) {
-        return RealmMapV2Impl.read(name, "", "", "");
+        return RealmMapV2Impl.read(name, "");
     }
 
-    static Optional<RealmMap> Load(String name, String tilename, String objName, String rofName) {
-        return RealmMapV2Impl.read(name, tilename, objName, rofName);
+    static Optional<RealmMap> Load(String name, String resourceName) {
+        return RealmMapV2Impl.read(name, resourceName);
     }
 
     void addTeleport(Teleport teleport);

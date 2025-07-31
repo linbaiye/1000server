@@ -14,12 +14,12 @@ abstract class AbstractDungeonRealm extends AbstractRealm {
     private final int interval;
     private boolean closing;
 
-    AbstractDungeonRealm(int id, RealmMap realmMap, MessageSender eventSender,
+    AbstractDungeonRealm(int id, RealmMap realmMap,
                          GroundItemManager itemManager, NpcManager npcManager,
                          PlayerManager playerManager, DynamicObjectManager dynamicObjectManager,
-                         TeleportManager teleportManager, CrossRealmEventSender crossRealmEventSender, MapSdb mapSdb,
+                         TeleportManager teleportManager, RealmEventSender crossRealmEventSender, MapSdb mapSdb,
                          ChatManager chatManager, int interval, PlayerRepository playerRepository) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager,
+        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager,
                 playerRepository);
         if (interval != 180000 && interval != 360000) {
             log().warn("Not a neat dungeon realm: {}.", id);
@@ -41,7 +41,7 @@ abstract class AbstractDungeonRealm extends AbstractRealm {
     }
 
     protected void teleportOut(Player player) {
-        onPlayerTeleport(new RealmTeleportEvent(player, exitRealmIt(), exitCoordinate()));
+//        onPlayerTeleport(new RealmTeleportEvent(player, exitRealmIt(), exitCoordinate()));
     }
 
     boolean isClosing() {

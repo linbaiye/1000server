@@ -37,13 +37,8 @@ final class RealmMapV2Impl implements RealmMap {
     private final int height;
     private final int width;
 
-    private final String name;
-
-    private final String tile;
-
-    private final String object;
-
-    private final String roof;
+    private final String mapFile;
+    private final String resource;
 
     private final Map<Coordinate, Set<Entity>> coordinateEntityMap;
     private final Map<Entity, Coordinate> entityCoordinateMap;
@@ -52,29 +47,25 @@ final class RealmMapV2Impl implements RealmMap {
 
 
     public RealmMapV2Impl(byte[][] movableMask, String name) {
-        this(movableMask, name, "", "", "");
+        this(movableMask, name, "");
     }
 
-    public RealmMapV2Impl(byte[][] movableMask, String name, String tile, String obj, String rof) {
+    public RealmMapV2Impl(byte[][] movableMask, String name, String resource) {
         Objects.requireNonNull(name);
-        Validate.notNull(tile);
-        Validate.notNull(obj);
         if (movableMask.length == 0) {
             throw new IllegalArgumentException();
         }
         if (movableMask[0].length == 0) {
             throw new IllegalArgumentException();
         }
-        this.name = name;
+        this.mapFile = name;
         this.movableMask = movableMask;
         this.height = movableMask.length;
         this.width = movableMask[0].length;
         coordinateEntityMap = new HashMap<>();
         entityCoordinateMap = new HashMap<>();
         teleportMap = new HashMap<>();
-        this.tile = tile;
-        this.object = obj;
-        this.roof = StringUtils.isEmpty(rof) ? null : rof;
+        this.resource = resource;
     }
 
     private boolean isInRange(Coordinate coordinate) {
@@ -179,23 +170,12 @@ final class RealmMapV2Impl implements RealmMap {
 
     @Override
     public String mapFile() {
-        return name;
+        return mapFile;
     }
 
     @Override
-    public String roofFile() {
-        return roof;
-    }
-
-
-    @Override
-    public String objectFile() {
-        return object;
-    }
-
-    @Override
-    public String tileFile() {
-        return tile;
+    public String resource() {
+        return resource;
     }
 
     @Override
@@ -235,11 +215,9 @@ final class RealmMapV2Impl implements RealmMap {
     }
 
 
-    public static Optional<RealmMap> read(String name, String tile, String obj, String rof) {
+    public static Optional<RealmMap> read(String name, String resource) {
         Validate.notNull(name);
-        Validate.notNull(tile);
-        Validate.notNull(obj);
-        Validate.notNull(rof);
+        Validate.notNull(resource);
         String mapName = name.endsWith(".map") ? name : name + ".map";
         if (!mapName.startsWith("/maps/")) {
             mapName = "/maps/" + mapName;
@@ -274,7 +252,7 @@ final class RealmMapV2Impl implements RealmMap {
                     }
                 }
             }
-            return Optional.of(new RealmMapV2Impl(cellMasks, name, tile, obj, rof));
+            return Optional.of(new RealmMapV2Impl(cellMasks, name, resource));
         } catch (Exception e) {
             log.error("Failed to read map {}.", mapName, e);
         }

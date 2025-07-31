@@ -7,6 +7,7 @@ import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class TestingTeleport implements Teleport {
@@ -54,6 +55,31 @@ public class TestingTeleport implements Teleport {
 
     @Override
     public void onPlayerEntered(Player player) {
-        eventHandler.invoke(new RealmTeleportEvent(player, toRealm, toCoordinate));
+//        eventHandler.invoke(new RealmTeleportEvent(player, toRealm, toCoordinate));
+    }
+
+    @Override
+    public int toRealmId() {
+        return 0;
+    }
+
+    @Override
+    public Coordinate toCoordinate() {
+        return null;
+    }
+
+    @Override
+    public Coordinate rejectCoordinate() {
+        return null;
+    }
+
+    @Override
+    public List<TeleportCost> costs() {
+        return null;
+    }
+
+    @Override
+    public int rejectRealmId() {
+        return 0;
     }
 }

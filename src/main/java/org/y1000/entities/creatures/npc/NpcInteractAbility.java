@@ -39,7 +39,7 @@ public class NpcInteractAbility {
     }
 
     public void interactedBy(Player player) {
-        if (player.isDead() || player.isLeftGame())
+        if (player.isDead() || player.isLeftRealm())
             return;
         player.sendEvent(NpcMenuMessage.populate(player, this));
     }

@@ -1,16 +1,15 @@
 package org.y1000.message.input.chat;
 
 import org.apache.commons.lang3.StringUtils;
-import org.y1000.entities.creatures.OldPlayerStateEnum;
 import org.y1000.entities.players.Player;
 import org.y1000.message.serverevent.TextMessage;
 import org.y1000.realm.event.BroadcastTextEvent;
-import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.IRealmEvent;
 
 public record ClientWorldShoutEvent(String content) implements ClientRealmChatEvent {
 
     @Override
-    public RealmEvent toRealmEvent(Player player) {
+    public IRealmEvent toRealmEvent(Player player) {
         return new BroadcastTextEvent(player.viewName() + "：" + content, TextMessage.TextType.PLAYER_SHOUT,
                 computeLevel(player));
     }

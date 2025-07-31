@@ -3,7 +3,7 @@ package org.y1000.message.input.chat;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.IRealmEvent;
 import org.y1000.realm.event.PlayerWhisperEvent;
 public record ClientWhisperEvent(String receiver, String content) implements ClientRealmChatEvent {
 
@@ -33,7 +33,7 @@ public record ClientWhisperEvent(String receiver, String content) implements Cli
     }
 
     @Override
-    public RealmEvent toRealmEvent(Player player) {
+    public IRealmEvent toRealmEvent(Player player) {
         Validate.notNull(player);
         return PlayerWhisperEvent.send(receiver, player.viewName(), content);
     }

@@ -4,10 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.HurtAbility;
+import org.y1000.entities.players.Player;
 
 @Slf4j
 public class CombatAI extends AbstractMovableNpcAI {
-    private final ActiveEntity enemy;
+    private ActiveEntity enemy;
     private final NpcMeleeAbility meleeAbility;
     private final NpcHurtAbility hurtAbility;
     private final HurtAbility enemyHurtAbility;
@@ -123,6 +124,8 @@ public class CombatAI extends AbstractMovableNpcAI {
     }
 
     void onNonDieAbilityDone(NpcUpdatableAbility doneAbility) {
+        if (enemy == null)
+            return;
         if (doneAbility instanceof NpcMoveAbility moveAbility) {
             computePrevious();
             stayOrAttack(moveAbility);
@@ -142,5 +145,12 @@ public class CombatAI extends AbstractMovableNpcAI {
         npc().findAbility(NpcCopyAbility.class)
                         .ifPresent(a -> a.tryApply(npc(), attacker));
         applyHurtAbility(ability);
+    }
+
+    @Override
+    public void onPlayerLeft(Player player) {
+        if (enemy.equals(player)) {
+            enemy = null;
+        }
     }
 }

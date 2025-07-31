@@ -16,18 +16,17 @@ import java.util.function.BiConsumer;
 class GuildableRealm extends AbstractRealm {
     private final GuildManager guildManager;
     public GuildableRealm(int id, RealmMap realmMap,
-                          RealmPlayerConnectionManager eventSender,
                           GroundItemManager itemManager,
                           NpcManager npcManager,
                           PlayerManager playerManager,
                           DynamicObjectManager dynamicObjectManager,
                           TeleportManager teleportManager,
-                          CrossRealmEventSender crossRealmEventSender,
+                          RealmEventSender crossRealmEventSender,
                           MapSdb mapSdb,
                           ChatManager chatManager,
                           GuildManager guildManager,
                           PlayerRepository playerRepository) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager,
+        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager,
                 playerRepository);
         addEntityManager(guildManager);
         this.guildManager = guildManager;
@@ -39,8 +38,7 @@ class GuildableRealm extends AbstractRealm {
     }
 
     @Override
-    void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
-        acceptIfAffordableElseReject(teleportEvent);
+    public void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
     }
 
 

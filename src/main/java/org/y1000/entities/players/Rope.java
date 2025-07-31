@@ -90,7 +90,7 @@ end;
 
     public boolean isBroken() {
         return !dragged.canBeDragged() ||
-                dragging.isLeftGame() ||
+                dragging.isLeftRealm() ||
                 dragging.getRealm().id() != dragged.getRealm().id() ||
                 mills <= 0;
     }
@@ -112,6 +112,9 @@ end;
             from = dragged.coordinate();
             dragged.changeCoordinate(dragged.coordinate().moveBy(dragged.direction()));
             dragged.sendEvent(new PlayerMovedEvent(dragged));
+            if (!dragged.canBeDragged()) {
+                return;
+            }
         }
         stepCounterMillis = 200;
         var dir = dragged.coordinate().bestDirectionTo(dragging.coordinate(), this::coordinateMovable);

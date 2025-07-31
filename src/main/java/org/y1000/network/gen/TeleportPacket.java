@@ -18,11 +18,8 @@ private static final long serialVersionUID = 0L;
   }
   private TeleportPacket() {
     map_ = "";
-    tile_ = "";
-    obj_ = "";
-    rof_ = "";
     bgm_ = "";
-    realm_ = "";
+    title_ = "";
     resource_ = "";
   }
 
@@ -107,123 +104,6 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int TILE_FIELD_NUMBER = 4;
-  @SuppressWarnings("serial")
-  private volatile java.lang.Object tile_ = "";
-  /**
-   * <code>string tile = 4;</code>
-   * @return The tile.
-   */
-  @java.lang.Override
-  public java.lang.String getTile() {
-    java.lang.Object ref = tile_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      tile_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string tile = 4;</code>
-   * @return The bytes for tile.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString
-      getTileBytes() {
-    java.lang.Object ref = tile_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      tile_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int OBJ_FIELD_NUMBER = 5;
-  @SuppressWarnings("serial")
-  private volatile java.lang.Object obj_ = "";
-  /**
-   * <code>string obj = 5;</code>
-   * @return The obj.
-   */
-  @java.lang.Override
-  public java.lang.String getObj() {
-    java.lang.Object ref = obj_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      obj_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string obj = 5;</code>
-   * @return The bytes for obj.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString
-      getObjBytes() {
-    java.lang.Object ref = obj_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      obj_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int ROF_FIELD_NUMBER = 6;
-  @SuppressWarnings("serial")
-  private volatile java.lang.Object rof_ = "";
-  /**
-   * <code>string rof = 6;</code>
-   * @return The rof.
-   */
-  @java.lang.Override
-  public java.lang.String getRof() {
-    java.lang.Object ref = rof_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      rof_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string rof = 6;</code>
-   * @return The bytes for rof.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString
-      getRofBytes() {
-    java.lang.Object ref = rof_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      rof_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
   public static final int BGM_FIELD_NUMBER = 7;
   @SuppressWarnings("serial")
   private volatile java.lang.Object bgm_ = "";
@@ -263,39 +143,39 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int REALM_FIELD_NUMBER = 8;
+  public static final int TITLE_FIELD_NUMBER = 8;
   @SuppressWarnings("serial")
-  private volatile java.lang.Object realm_ = "";
+  private volatile java.lang.Object title_ = "";
   /**
-   * <code>string realm = 8;</code>
-   * @return The realm.
+   * <code>string title = 8;</code>
+   * @return The title.
    */
   @java.lang.Override
-  public java.lang.String getRealm() {
-    java.lang.Object ref = realm_;
+  public java.lang.String getTitle() {
+    java.lang.Object ref = title_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      realm_ = s;
+      title_ = s;
       return s;
     }
   }
   /**
-   * <code>string realm = 8;</code>
-   * @return The bytes for realm.
+   * <code>string title = 8;</code>
+   * @return The bytes for title.
    */
   @java.lang.Override
   public com.google.protobuf.ByteString
-      getRealmBytes() {
-    java.lang.Object ref = realm_;
+      getTitleBytes() {
+    java.lang.Object ref = title_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      realm_ = b;
+      title_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -364,20 +244,11 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(map_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, map_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(tile_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, tile_);
-    }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(obj_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 5, obj_);
-    }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(rof_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 6, rof_);
-    }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(bgm_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, bgm_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(realm_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, realm_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(title_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, title_);
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(resource_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 9, resource_);
@@ -402,20 +273,11 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(map_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, map_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(tile_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, tile_);
-    }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(obj_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, obj_);
-    }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(rof_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, rof_);
-    }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(bgm_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, bgm_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(realm_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, realm_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(title_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, title_);
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(resource_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, resource_);
@@ -441,16 +303,10 @@ private static final long serialVersionUID = 0L;
         != other.getY()) return false;
     if (!getMap()
         .equals(other.getMap())) return false;
-    if (!getTile()
-        .equals(other.getTile())) return false;
-    if (!getObj()
-        .equals(other.getObj())) return false;
-    if (!getRof()
-        .equals(other.getRof())) return false;
     if (!getBgm()
         .equals(other.getBgm())) return false;
-    if (!getRealm()
-        .equals(other.getRealm())) return false;
+    if (!getTitle()
+        .equals(other.getTitle())) return false;
     if (!getResource()
         .equals(other.getResource())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
@@ -470,16 +326,10 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getY();
     hash = (37 * hash) + MAP_FIELD_NUMBER;
     hash = (53 * hash) + getMap().hashCode();
-    hash = (37 * hash) + TILE_FIELD_NUMBER;
-    hash = (53 * hash) + getTile().hashCode();
-    hash = (37 * hash) + OBJ_FIELD_NUMBER;
-    hash = (53 * hash) + getObj().hashCode();
-    hash = (37 * hash) + ROF_FIELD_NUMBER;
-    hash = (53 * hash) + getRof().hashCode();
     hash = (37 * hash) + BGM_FIELD_NUMBER;
     hash = (53 * hash) + getBgm().hashCode();
-    hash = (37 * hash) + REALM_FIELD_NUMBER;
-    hash = (53 * hash) + getRealm().hashCode();
+    hash = (37 * hash) + TITLE_FIELD_NUMBER;
+    hash = (53 * hash) + getTitle().hashCode();
     hash = (37 * hash) + RESOURCE_FIELD_NUMBER;
     hash = (53 * hash) + getResource().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
@@ -616,11 +466,8 @@ private static final long serialVersionUID = 0L;
       x_ = 0;
       y_ = 0;
       map_ = "";
-      tile_ = "";
-      obj_ = "";
-      rof_ = "";
       bgm_ = "";
-      realm_ = "";
+      title_ = "";
       resource_ = "";
       return this;
     }
@@ -665,21 +512,12 @@ private static final long serialVersionUID = 0L;
         result.map_ = map_;
       }
       if (((from_bitField0_ & 0x00000008) != 0)) {
-        result.tile_ = tile_;
-      }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
-        result.obj_ = obj_;
-      }
-      if (((from_bitField0_ & 0x00000020) != 0)) {
-        result.rof_ = rof_;
-      }
-      if (((from_bitField0_ & 0x00000040) != 0)) {
         result.bgm_ = bgm_;
       }
-      if (((from_bitField0_ & 0x00000080) != 0)) {
-        result.realm_ = realm_;
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.title_ = title_;
       }
-      if (((from_bitField0_ & 0x00000100) != 0)) {
+      if (((from_bitField0_ & 0x00000020) != 0)) {
         result.resource_ = resource_;
       }
     }
@@ -739,34 +577,19 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000004;
         onChanged();
       }
-      if (!other.getTile().isEmpty()) {
-        tile_ = other.tile_;
+      if (!other.getBgm().isEmpty()) {
+        bgm_ = other.bgm_;
         bitField0_ |= 0x00000008;
         onChanged();
       }
-      if (!other.getObj().isEmpty()) {
-        obj_ = other.obj_;
+      if (!other.getTitle().isEmpty()) {
+        title_ = other.title_;
         bitField0_ |= 0x00000010;
-        onChanged();
-      }
-      if (!other.getRof().isEmpty()) {
-        rof_ = other.rof_;
-        bitField0_ |= 0x00000020;
-        onChanged();
-      }
-      if (!other.getBgm().isEmpty()) {
-        bgm_ = other.bgm_;
-        bitField0_ |= 0x00000040;
-        onChanged();
-      }
-      if (!other.getRealm().isEmpty()) {
-        realm_ = other.realm_;
-        bitField0_ |= 0x00000080;
         onChanged();
       }
       if (!other.getResource().isEmpty()) {
         resource_ = other.resource_;
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000020;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -810,34 +633,19 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000004;
               break;
             } // case 26
-            case 34: {
-              tile_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000008;
-              break;
-            } // case 34
-            case 42: {
-              obj_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000010;
-              break;
-            } // case 42
-            case 50: {
-              rof_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000020;
-              break;
-            } // case 50
             case 58: {
               bgm_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000040;
+              bitField0_ |= 0x00000008;
               break;
             } // case 58
             case 66: {
-              realm_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000080;
+              title_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00000010;
               break;
             } // case 66
             case 74: {
               resource_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000100;
+              bitField0_ |= 0x00000020;
               break;
             } // case 74
             default: {
@@ -993,222 +801,6 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object tile_ = "";
-    /**
-     * <code>string tile = 4;</code>
-     * @return The tile.
-     */
-    public java.lang.String getTile() {
-      java.lang.Object ref = tile_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        tile_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>string tile = 4;</code>
-     * @return The bytes for tile.
-     */
-    public com.google.protobuf.ByteString
-        getTileBytes() {
-      java.lang.Object ref = tile_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        tile_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string tile = 4;</code>
-     * @param value The tile to set.
-     * @return This builder for chaining.
-     */
-    public Builder setTile(
-        java.lang.String value) {
-      if (value == null) { throw new NullPointerException(); }
-      tile_ = value;
-      bitField0_ |= 0x00000008;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string tile = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearTile() {
-      tile_ = getDefaultInstance().getTile();
-      bitField0_ = (bitField0_ & ~0x00000008);
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string tile = 4;</code>
-     * @param value The bytes for tile to set.
-     * @return This builder for chaining.
-     */
-    public Builder setTileBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      tile_ = value;
-      bitField0_ |= 0x00000008;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object obj_ = "";
-    /**
-     * <code>string obj = 5;</code>
-     * @return The obj.
-     */
-    public java.lang.String getObj() {
-      java.lang.Object ref = obj_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        obj_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>string obj = 5;</code>
-     * @return The bytes for obj.
-     */
-    public com.google.protobuf.ByteString
-        getObjBytes() {
-      java.lang.Object ref = obj_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        obj_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string obj = 5;</code>
-     * @param value The obj to set.
-     * @return This builder for chaining.
-     */
-    public Builder setObj(
-        java.lang.String value) {
-      if (value == null) { throw new NullPointerException(); }
-      obj_ = value;
-      bitField0_ |= 0x00000010;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string obj = 5;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearObj() {
-      obj_ = getDefaultInstance().getObj();
-      bitField0_ = (bitField0_ & ~0x00000010);
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string obj = 5;</code>
-     * @param value The bytes for obj to set.
-     * @return This builder for chaining.
-     */
-    public Builder setObjBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      obj_ = value;
-      bitField0_ |= 0x00000010;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object rof_ = "";
-    /**
-     * <code>string rof = 6;</code>
-     * @return The rof.
-     */
-    public java.lang.String getRof() {
-      java.lang.Object ref = rof_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        rof_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>string rof = 6;</code>
-     * @return The bytes for rof.
-     */
-    public com.google.protobuf.ByteString
-        getRofBytes() {
-      java.lang.Object ref = rof_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        rof_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string rof = 6;</code>
-     * @param value The rof to set.
-     * @return This builder for chaining.
-     */
-    public Builder setRof(
-        java.lang.String value) {
-      if (value == null) { throw new NullPointerException(); }
-      rof_ = value;
-      bitField0_ |= 0x00000020;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string rof = 6;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearRof() {
-      rof_ = getDefaultInstance().getRof();
-      bitField0_ = (bitField0_ & ~0x00000020);
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string rof = 6;</code>
-     * @param value The bytes for rof to set.
-     * @return This builder for chaining.
-     */
-    public Builder setRofBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      rof_ = value;
-      bitField0_ |= 0x00000020;
-      onChanged();
-      return this;
-    }
-
     private java.lang.Object bgm_ = "";
     /**
      * <code>string bgm = 7;</code>
@@ -1252,7 +844,7 @@ private static final long serialVersionUID = 0L;
         java.lang.String value) {
       if (value == null) { throw new NullPointerException(); }
       bgm_ = value;
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1262,7 +854,7 @@ private static final long serialVersionUID = 0L;
      */
     public Builder clearBgm() {
       bgm_ = getDefaultInstance().getBgm();
-      bitField0_ = (bitField0_ & ~0x00000040);
+      bitField0_ = (bitField0_ & ~0x00000008);
       onChanged();
       return this;
     }
@@ -1276,79 +868,79 @@ private static final long serialVersionUID = 0L;
       if (value == null) { throw new NullPointerException(); }
       checkByteStringIsUtf8(value);
       bgm_ = value;
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
 
-    private java.lang.Object realm_ = "";
+    private java.lang.Object title_ = "";
     /**
-     * <code>string realm = 8;</code>
-     * @return The realm.
+     * <code>string title = 8;</code>
+     * @return The title.
      */
-    public java.lang.String getRealm() {
-      java.lang.Object ref = realm_;
+    public java.lang.String getTitle() {
+      java.lang.Object ref = title_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        realm_ = s;
+        title_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string realm = 8;</code>
-     * @return The bytes for realm.
+     * <code>string title = 8;</code>
+     * @return The bytes for title.
      */
     public com.google.protobuf.ByteString
-        getRealmBytes() {
-      java.lang.Object ref = realm_;
+        getTitleBytes() {
+      java.lang.Object ref = title_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        realm_ = b;
+        title_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string realm = 8;</code>
-     * @param value The realm to set.
+     * <code>string title = 8;</code>
+     * @param value The title to set.
      * @return This builder for chaining.
      */
-    public Builder setRealm(
+    public Builder setTitle(
         java.lang.String value) {
       if (value == null) { throw new NullPointerException(); }
-      realm_ = value;
-      bitField0_ |= 0x00000080;
+      title_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
     /**
-     * <code>string realm = 8;</code>
+     * <code>string title = 8;</code>
      * @return This builder for chaining.
      */
-    public Builder clearRealm() {
-      realm_ = getDefaultInstance().getRealm();
-      bitField0_ = (bitField0_ & ~0x00000080);
+    public Builder clearTitle() {
+      title_ = getDefaultInstance().getTitle();
+      bitField0_ = (bitField0_ & ~0x00000010);
       onChanged();
       return this;
     }
     /**
-     * <code>string realm = 8;</code>
-     * @param value The bytes for realm to set.
+     * <code>string title = 8;</code>
+     * @param value The bytes for title to set.
      * @return This builder for chaining.
      */
-    public Builder setRealmBytes(
+    public Builder setTitleBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) { throw new NullPointerException(); }
       checkByteStringIsUtf8(value);
-      realm_ = value;
-      bitField0_ |= 0x00000080;
+      title_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -1396,7 +988,7 @@ private static final long serialVersionUID = 0L;
         java.lang.String value) {
       if (value == null) { throw new NullPointerException(); }
       resource_ = value;
-      bitField0_ |= 0x00000100;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -1406,7 +998,7 @@ private static final long serialVersionUID = 0L;
      */
     public Builder clearResource() {
       resource_ = getDefaultInstance().getResource();
-      bitField0_ = (bitField0_ & ~0x00000100);
+      bitField0_ = (bitField0_ & ~0x00000020);
       onChanged();
       return this;
     }
@@ -1420,7 +1012,7 @@ private static final long serialVersionUID = 0L;
       if (value == null) { throw new NullPointerException(); }
       checkByteStringIsUtf8(value);
       resource_ = value;
-      bitField0_ |= 0x00000100;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
