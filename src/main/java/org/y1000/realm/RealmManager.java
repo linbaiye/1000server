@@ -83,43 +83,6 @@ public final class RealmManager implements Runnable , RealmEventSender {
         }
     }
 
-    /*private void handle(IConnectionEvent event) {
-        if (event.type() == ConnectionEventType.CLOSED) {
-            handleDisconnection(event.connection());
-        } else if (event instanceof ConnectionDataEvent dataEvent) {
-            if (dataEvent.data() instanceof LoginEvent loginEvent) {
-                accountManager.removeToken(loginEvent.token())
-                        .ifPresent(accountId -> handleLogin(accountId, loginEvent.charName(), dataEvent.connection()));
-            }
-            else {
-                sendDataToRealm(dataEvent);
-            }
-        }
-    }*/
-
-//    private void handle(RealmEvent realmEvent) {
-//        if (realmEvent instanceof RealmTeleportEvent teleportEvent) {
-//            handleTeleport(teleportEvent);
-//        } else if (realmEvent instanceof BroadcastEvent) {
-//            realmIdGroupMap.values().forEach(realmGroup -> realmGroup.handle(realmEvent));
-//        } else if (realmEvent instanceof RealmTriggerEvent realmTriggerEvent) {
-//            RealmGroup group = realmIdGroupMap.get(realmTriggerEvent.toRealmId());
-//            if (group != null) {
-//                group.handle(realmTriggerEvent);
-//            }
-//        } else if (realmEvent instanceof PlayerWhisperEvent privateChat) {
-//            Integer realm = playerNameRealmIdMap.get(privateChat.receiverName());
-//            if (realm == null) {
-//                if (playerNameRealmIdMap.containsKey(privateChat.senderName()))
-//                    handle(privateChat.noRecipient());
-//            } else {
-//                RealmGroup group = realmIdGroupMap.get(realm);
-//                if (group != null) {
-//                    group.handle(privateChat);
-//                }
-//            }
-//        }
-//    }
 
     public void sendNotification(String text) {
         if (StringUtils.isEmpty(text))

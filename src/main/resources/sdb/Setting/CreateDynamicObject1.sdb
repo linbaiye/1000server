@@ -1,4 +1,4 @@
-No,Name,Script,NeedAge,NeedSkill,NeedItem,GiveItem,DropItem,DropMop,CallNpc,X,Y,DropX,DropY,Width,boDelay,
+;No,Name,Script,NeedAge,NeedSkill,NeedItem,GiveItem,DropItem,DropMop,CallNpc,X,Y,DropX,DropY,Width,boDelay,
 1,石棺洞入口,32,,,,,,,,133,706,,,,,
 2,火炉2,25,,,,,,,,139,720,,,,,
 3,火炉2,25,,,,,,,,146,720,,,,,

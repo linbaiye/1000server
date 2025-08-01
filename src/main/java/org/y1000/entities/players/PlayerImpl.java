@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class PlayerImpl extends AbstractCreature implements Player, EntityEventListener, PlayerInputHandler, PlayerLeaveListener {
+public class PlayerImpl extends AbstractCreature implements Player, PlayerInputHandler {
 
     public static final int DEFAULT_REGENERATE_SECONDS = 9;
     private Realm realm;
@@ -194,12 +194,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
         }
     }
 
-    private void disableAssistantKungFuNoTip() {
-        if (assistantKungFu != null) {
-//            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, assistantKungFu));
-        }
-        assistantKungFu = null;
-    }
 
     private void disableProtectionAndSync() {
         if (protectKungFu != null) {
@@ -256,7 +250,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void confirmDropItem(int slot, int number, Coordinate at) {
-        if (isDead())
+        if (isLeftRealm() || isDead())
             return;
         if (dropActionInvalid(slot, at))
             return;
@@ -281,7 +275,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void addTradeItem(int slot, int number) {
-        if (isDead())
+        if (isLeftRealm() || isDead())
             return;
         if (playerTrade != null)
             playerTrade.addTradeItem(this, slot, number);
@@ -555,7 +549,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
     @Override
     public void attack(org.y1000.entities.ActiveEntity target) {
-        if (target != null)
+        if (!isLeftRealm() && target != null)
             state.attack(target);
     }
 
@@ -766,7 +760,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
             playerTrade.cancel(this);
         ropes.clear();
         combatController = null;
-        //emitEvent(new PlayerLeftEvent(this));
     }
 
     @Override
@@ -1020,17 +1013,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     public int maxOuterPower() {
         return outerPower.maxValue();
     }
-
-    @Override
-    public int maxEnergy() {
-        return 0;
-    }
-
-    @Override
-    public int energy() {
-        return 0;
-    }
-
 
     @Override
     public void consumePower(int amount) {
@@ -1309,18 +1291,6 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
     }
 
 
-    @Override
-    public void onEvent(EntityEvent entityEvent) {
-//        if (!entityEvent.source().equals(getFightingEntity())) {
-//            return;
-//        }
-//        if (!canChaseOrAttack(entityEvent.source())) {
-//            clearFightingEntity();
-//        }
-//        if (creatureState() instanceof PlayerWaitDistanceState waitDistanceState) {
-//            waitDistanceState.onTargetEvent(this);
-//        }
-    }
 
     @Override
     public int avoidance() {
@@ -1493,7 +1463,7 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
 
 
     public Player cloneForTeleport() {
-        return PlayerImpl.builder()
+        var copied = PlayerImpl.builder()
                 .id(id())
                 .name(viewName())
                 .inventory(inventory)
@@ -1502,26 +1472,32 @@ public class PlayerImpl extends AbstractCreature implements Player, EntityEventL
                 .male(male)
                 .equipments(equippedEquipments)
                 .footKungfu(footKungFu().map(k -> (FootKungFu)k.duplicate()).orElse(null))
-                .protectKungFu(protectKungFu)
-                .breathKungFu(breathKungFu)
-
-        boolean male,
-        Map<EquipmentType, Equipment> equipments,
-        FootKungFu footKungfu,
-        ProtectKungFu protectKungFu,
-        BreathKungFu breathKungFu,
-        PlayerInnateAttributesProvider innateAttributesProvider,
-        PlayerLife life,
-        PlayerLife head,
-        PlayerLife arm,
-        PlayerLife leg,
-        PlayerExperiencedAgedAttribute power,
-        PlayerExperiencedAgedAttribute innerPower,
-        PlayerExperiencedAgedAttribute outerPower,
-        int revival,
-        YinYang yinYang,
-        PillSlots pillSlots,
-        GuildMembership guildMembership) {
-                .
+                .protectKungFu(protectKungFu != null ? (ProtectKungFu)protectKungFu.duplicate() : null)
+                .breathKungFu(breathKungFu != null ? (BreathKungFu) breathKungFu.duplicate() : null)
+                .innateAttributesProvider(innateAttributesProvider)
+                .life(life)
+                .head(headLife)
+                .arm(armLife)
+                .leg(legLife)
+                .power(power)
+                .innerPower(innerPower)
+                .outerPower(outerPower)
+                .revival(revival.exp())
+                .yinYang(yinYang)
+                .pillSlots(pillSlots)
+                .guildMembership(guildMembership)
+                .build();
+        copied.state = state;
+        copied.changeDirection(direction());
+        if (copied.state instanceof PlayerMoveState moveState) {
+            if (moveState.moveAction() == MoveAction.FightWalk) {
+                copied.state = PlayerStandState.fightStand(copied);
+            } else {
+                copied.state = PlayerStandState.idle(copied);
+            }
+        } else {
+            copied.state.changePlayer(copied);
+        }
+        return copied;
     }
 }

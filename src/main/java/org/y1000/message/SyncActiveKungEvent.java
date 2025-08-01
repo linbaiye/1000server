@@ -17,7 +17,7 @@ public final class SyncActiveKungEvent extends AbstractMessagePlayerEvent {
     public static SyncActiveKungEvent of(Player player) {
         Validate.notNull(player);
         SyncActiveKungFuPacket.Builder builder = SyncActiveKungFuPacket.newBuilder();
-        builder.setAttackKungFu(player.attackKungFu().name()).setId(player.id());
+        builder.setAttackKungFu(player.attackKungFu().name()).setId(player.id()).setAttackKungFuLevel(player.attackKungFu().level());
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFu(footKungFu.name()).setFootKungFuCanFly(footKungFu.canFly()));
         player.protectKungFu().ifPresent(protectKungFu -> builder.setProtectionKungFu(protectKungFu.name()));
         player.assistantKungFu().ifPresent(assistantKungFu -> builder.setAssistantKungFu(assistantKungFu.name()));

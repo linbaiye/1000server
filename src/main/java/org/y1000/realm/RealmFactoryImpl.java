@@ -274,7 +274,8 @@ public final class RealmFactoryImpl implements RealmFactory {
             if (guildManager == null)
                 return new RealmImpl(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, playerRepository);
             else
-                return new GuildableRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, guildManager, playerRepository);
+                return new RealmImpl(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, playerRepository);
+//                return new GuildableRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, guildManager, playerRepository);
         }
 
         public Realm buildDungeon(int interval) {

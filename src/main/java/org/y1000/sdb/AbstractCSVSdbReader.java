@@ -94,6 +94,9 @@ public abstract class AbstractCSVSdbReader {
             throw new NoSuchElementException("Bad sdb");
         }
         String headerLine = lines.get(0).trim();
+        if (headerLine.startsWith(";")) {
+            return;
+        }
         String[] header = headerLine.split(",");
         if (header.length == 0) {
             throw new NoSuchElementException("Bad sdb");

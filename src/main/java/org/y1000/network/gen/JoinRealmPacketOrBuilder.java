@@ -97,4 +97,10 @@ public interface JoinRealmPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getAttackKungFuBytes();
+
+  /**
+   * <code>int32 attackKungFuLevel = 8;</code>
+   * @return The attackKungFuLevel.
+   */
+  int getAttackKungFuLevel();
 }

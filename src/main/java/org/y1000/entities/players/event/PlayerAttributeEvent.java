@@ -21,8 +21,6 @@ public final class PlayerAttributeEvent extends AbstractMessagePlayerEvent {
                 .setMaxPower(player.maxPower())
                 .setCurOuterPower(player.outerPower())
                 .setMaxOuterPower(player.maxOuterPower())
-                .setCurEnergy(player.energy())
-                .setMaxEnergy(player.maxEnergy())
                 .setArmPercent(player.armPercent())
                 .setHeadPercent(player.headPercent())
                 .setLegPercent(player.legPercent())

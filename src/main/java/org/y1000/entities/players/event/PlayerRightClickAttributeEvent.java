@@ -29,7 +29,6 @@ public class PlayerRightClickAttributeEvent extends IAbstractPlayerEvent {
                 .setHeadDamage(dmg.headDamage())
                 .setArmDamage(dmg.armDamage())
                 .setLegDamage(dmg.legDamage())
-                .setMaxEnergy(player.maxEnergy())
                 .setMaxLife(player.maxLife())
                 .setMaxPower(player.maxPower())
                 .setMaxInnerPower(player.maxInnerPower())

@@ -23,6 +23,7 @@ public class PlayerJoinRealmMessage implements I2ClientMessage {
                 .setAttribute(PlayerAttributeEvent.makeAttributePacket(player))
                 .setTeleport(PlayerTeleportMessage.teleportPacket(player.getRealm(), player.coordinate()))
                 .setAttackKungFu(player.attackKungFu().name())
+                .setAttackKungFuLevel(player.attackKungFu().level())
                 .setId(player.id())
                 .setName(player.viewName())
                 .setMale(player.isMale())

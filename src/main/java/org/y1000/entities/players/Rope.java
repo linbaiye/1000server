@@ -112,7 +112,7 @@ end;
             from = dragged.coordinate();
             dragged.changeCoordinate(dragged.coordinate().moveBy(dragged.direction()));
             dragged.sendEvent(new PlayerMovedEvent(dragged));
-            if (!dragged.canBeDragged()) {
+            if (dragged.isLeftRealm()) {
                 return;
             }
         }

@@ -38,6 +38,8 @@ public final class PlayerProjectile extends AbstractProjectile {
 
     @Override
     protected void onReachTarget() {
+        if (((Player)shooter()).isLeftRealm())
+            return;
         ((Player)shooter()).assistantKungFu().ifPresentOrElse(assistantKungFu ->
                 assistantKungFu.apply((Player) shooter(), target(), assistantKungFu.affectedCoordinates(target().coordinate(), direction()), damage),
                 this::handleSingleAttack);

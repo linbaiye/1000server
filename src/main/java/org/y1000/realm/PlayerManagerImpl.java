@@ -22,8 +22,7 @@ import java.util.function.Function;
 
 
 @Slf4j
-final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> implements PlayerEventVisitor,
-        PlayerManager, PlayerEventListener, PlayerEventHandler {
+final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> implements PlayerManager, PlayerEventListener, PlayerEventHandler {
 
     private final RealmPlayerConnectionManager connectionManager;
 

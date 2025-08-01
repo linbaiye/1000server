@@ -236,6 +236,17 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int ATTACKKUNGFULEVEL_FIELD_NUMBER = 8;
+  private int attackKungFuLevel_ = 0;
+  /**
+   * <code>int32 attackKungFuLevel = 8;</code>
+   * @return The attackKungFuLevel.
+   */
+  @java.lang.Override
+  public int getAttackKungFuLevel() {
+    return attackKungFuLevel_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -270,6 +281,9 @@ private static final long serialVersionUID = 0L;
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(attackKungFu_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, attackKungFu_);
+    }
+    if (attackKungFuLevel_ != 0) {
+      output.writeInt32(8, attackKungFuLevel_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -306,6 +320,10 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(attackKungFu_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, attackKungFu_);
     }
+    if (attackKungFuLevel_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(8, attackKungFuLevel_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -341,6 +359,8 @@ private static final long serialVersionUID = 0L;
         != other.getId()) return false;
     if (!getAttackKungFu()
         .equals(other.getAttackKungFu())) return false;
+    if (getAttackKungFuLevel()
+        != other.getAttackKungFuLevel()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -374,6 +394,8 @@ private static final long serialVersionUID = 0L;
         getId());
     hash = (37 * hash) + ATTACKKUNGFU_FIELD_NUMBER;
     hash = (53 * hash) + getAttackKungFu().hashCode();
+    hash = (37 * hash) + ATTACKKUNGFULEVEL_FIELD_NUMBER;
+    hash = (53 * hash) + getAttackKungFuLevel();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -534,6 +556,7 @@ private static final long serialVersionUID = 0L;
       name_ = "";
       id_ = 0L;
       attackKungFu_ = "";
+      attackKungFuLevel_ = 0;
       return this;
     }
 
@@ -604,6 +627,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000040) != 0)) {
         result.attackKungFu_ = attackKungFu_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        result.attackKungFuLevel_ = attackKungFuLevel_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -700,6 +726,9 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000040;
         onChanged();
       }
+      if (other.getAttackKungFuLevel() != 0) {
+        setAttackKungFuLevel(other.getAttackKungFuLevel());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -773,6 +802,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000040;
               break;
             } // case 58
+            case 64: {
+              attackKungFuLevel_ = input.readInt32();
+              bitField0_ |= 0x00000080;
+              break;
+            } // case 64
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1476,6 +1510,38 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       attackKungFu_ = value;
       bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+
+    private int attackKungFuLevel_ ;
+    /**
+     * <code>int32 attackKungFuLevel = 8;</code>
+     * @return The attackKungFuLevel.
+     */
+    @java.lang.Override
+    public int getAttackKungFuLevel() {
+      return attackKungFuLevel_;
+    }
+    /**
+     * <code>int32 attackKungFuLevel = 8;</code>
+     * @param value The attackKungFuLevel to set.
+     * @return This builder for chaining.
+     */
+    public Builder setAttackKungFuLevel(int value) {
+
+      attackKungFuLevel_ = value;
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 attackKungFuLevel = 8;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearAttackKungFuLevel() {
+      bitField0_ = (bitField0_ & ~0x00000080);
+      attackKungFuLevel_ = 0;
       onChanged();
       return this;
     }

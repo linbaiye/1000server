@@ -1,5 +1,6 @@
 package org.y1000.entities.players;
 
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.creatures.IActiveEntity;
 import org.y1000.entities.players.event.PlayerEvent;
@@ -97,9 +98,6 @@ public interface Player extends IActiveEntity, HurtAbility {
 
     int maxOuterPower();
 
-    int maxEnergy();
-
-    int energy();
 
     void consumePower(int amount);
 
@@ -182,5 +180,7 @@ public interface Player extends IActiveEntity, HurtAbility {
     void closeTrade();
 
     boolean canBeDragged();
+
+    Player cloneForTeleport();
 }
 

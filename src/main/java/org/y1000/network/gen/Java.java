@@ -1161,66 +1161,67 @@ public final class Java {
       " \001(\005\022\014\n\004slot\030\002 \001(\005\022\021\n\tclickType\030\003 \001(\005\"@\n" +
       "\035ClickInventorySlotInputPacket\022\014\n\004slot\030\001" +
       " \001(\005\022\021\n\tclickType\030\003 \001(\005\"!\n\021SimpleInputPa" +
-      "cket\022\014\n\004type\030\001 \001(\005\"\201\002\n\017JoinRealmPacket\0229" +
+      "cket\022\014\n\004type\030\001 \001(\005\"\234\002\n\017JoinRealmPacket\0229" +
       "\n\tattribute\030\001 \001(\0132&.org.y1000.network.ge" +
       "n.AttributePacket\022<\n\nequipments\030\002 \003(\0132(." +
       "org.y1000.network.gen.PlayerEquipPacket\022" +
       "7\n\010teleport\030\003 \001(\0132%.org.y1000.network.ge" +
       "n.TeleportPacket\022\014\n\004male\030\004 \001(\010\022\014\n\004name\030\005" +
-      " \001(\t\022\n\n\002id\030\006 \001(\003\022\024\n\014attackKungFu\030\007 \001(\t\"\316" +
-      "\001\n\030PlayerToggleKungFuPacket\022\024\n\014attackKun" +
-      "gFu\030\001 \001(\t\022\027\n\nfootKungFu\030\002 \001(\tH\000\210\001\001\022\016\n\006ca" +
-      "nFly\030\003 \001(\010\022\035\n\020protectionKungFu\030\004 \001(\tH\001\210\001" +
-      "\001\022\034\n\017assistantKungFu\030\005 \001(\tH\002\210\001\001B\r\n\013_foot" +
-      "KungFuB\023\n\021_protectionKungFuB\022\n\020_assistan" +
-      "tKungFu\"v\n\026CreatureBaseInfoPacket\022\025\n\rela" +
-      "psedMillis\030\002 \001(\005\022\021\n\tdirection\030\003 \001(\005\022\t\n\001x" +
-      "\030\004 \001(\005\022\t\n\001y\030\005 \001(\005\022\020\n\010viewName\030\006 \001(\t\022\n\n\002i" +
-      "d\030\007 \001(\003\"\306\001\n\024PlayerSnapshotPacket\022?\n\010base" +
-      "Info\030\001 \001(\0132-.org.y1000.network.gen.Creat" +
-      "ureBaseInfoPacket\022\022\n\nmoveAction\030\002 \001(\005\022<\n" +
-      "\nequipments\030\003 \003(\0132(.org.y1000.network.ge" +
-      "n.PlayerEquipPacket\022\014\n\004male\030\004 \001(\010\022\r\n\005sta" +
-      "te\030\005 \001(\005\"\222\001\n\021NpcSnapshotPacket\022?\n\010baseIn" +
-      "fo\030\001 \001(\0132-.org.y1000.network.gen.Creatur" +
-      "eBaseInfoPacket\022\r\n\005shape\030\002 \001(\t\022\017\n\007animat" +
-      "e\030\003 \001(\t\022\r\n\005state\030\004 \001(\005\022\r\n\005speed\030\005 \001(\005\"-\n" +
-      "\021CreatureSayPacket\022\n\n\002id\030\001 \001(\003\022\014\n\004text\030\002" +
-      " \001(\t\"\216\002\n\026SyncActiveKungFuPacket\022\024\n\014attac" +
-      "kKungFu\030\001 \001(\t\022\035\n\020protectionKungFu\030\002 \001(\tH" +
-      "\000\210\001\001\022\031\n\014breathKungFu\030\003 \001(\tH\001\210\001\001\022\034\n\017assis" +
-      "tantKungFu\030\004 \001(\tH\002\210\001\001\022\027\n\nfootKungFu\030\005 \001(" +
-      "\tH\003\210\001\001\022\030\n\020footKungFuCanFly\030\006 \001(\010\022\n\n\002id\030\007" +
-      " \001(\003B\023\n\021_protectionKungFuB\017\n\r_breathKung" +
-      "FuB\022\n\020_assistantKungFuB\r\n\013_footKungFu\"]\n" +
-      "\027PlayerChangeStatePacket\022\n\n\002id\030\001 \001(\003\022\r\n\005" +
-      "state\030\002 \001(\005\022\021\n\tdirection\030\003 \001(\005\022\t\n\001x\030\004 \001(" +
-      "\005\022\t\n\001y\030\005 \001(\005\"a\n\027PlayerSetPositionPacket\022" +
-      "7\n\010position\030\001 \001(\0132%.org.y1000.network.ge" +
-      "n.PositionPacket\022\r\n\005state\030\002 \001(\005\"Y\n\022Playe" +
-      "rAttackPacket\022\n\n\002id\030\001 \001(\003\022\016\n\006action\030\002 \001(" +
-      "\005\022\021\n\tdirection\030\003 \001(\005\022\024\n\014effectSprite\030\004 \001" +
-      "(\t\"\037\n\021AttackInputPacket\022\n\n\002id\030@ \001(\003\"\035\n\017P" +
-      "ickInputPacket\022\n\n\002id\030@ \001(\003\"9\n\023DropItemIn" +
-      "putPacket\022\014\n\004slot\030\001 \001(\005\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030" +
-      "\003 \001(\005\"7\n\033DropItemOnEntityInputPacket\022\014\n\004" +
-      "slot\030\001 \001(\005\022\n\n\002id\030\002 \001(\003\"P\n\032ConfirmDropIte" +
-      "mInputPacket\022\016\n\006number\030\001 \001(\005\022\014\n\004slot\030\002 \001" +
-      "(\005\022\t\n\001x\030\003 \001(\005\022\t\n\001y\030\004 \001(\005\"=\n\032ClickNpcAbil" +
-      "ityInputPacket\022\n\n\002id\030\001 \001(\003\022\023\n\013abilityNam" +
-      "e\030\002 \001(\t\">\n\022BuyItemInputPacket\022\n\n\002id\030\001 \001(" +
-      "\003\022\014\n\004name\030\002 \001(\t\022\016\n\006number\030\003 \001(\005\"?\n\023SellI" +
-      "temInputPacket\022\n\n\002id\030\001 \001(\003\022\014\n\004slot\030\002 \001(\005" +
-      "\022\016\n\006number\030\003 \001(\005\"`\n\020PlayerMovePacket\0228\n\n" +
-      "movePacket\030\001 \001(\0132$.org.y1000.network.gen" +
-      ".NpcMovePacket\022\022\n\nmoveAction\030\002 \001(\005\"\200\001\n\023P" +
-      "layerDamagedPacket\022\017\n\007curLife\030\001 \001(\005\022\017\n\007m" +
-      "axLife\030\002 \001(\005\022\n\n\002id\030\003 \001(\003\022\023\n\013headPercent\030" +
-      "\004 \001(\005\022\022\n\narmPercent\030\005 \001(\005\022\022\n\nlegPercent\030" +
-      "\006 \001(\005\"e\n\033UpdateTradeWindowSlotPacket\022\014\n\004" +
-      "self\030\001 \001(\010\0228\n\004item\030\002 \001(\0132*.org.y1000.net" +
-      "work.gen.InventoryItemPacketB\031\n\025org.y100" +
-      "0.network.genP\001b\006proto3"
+      " \001(\t\022\n\n\002id\030\006 \001(\003\022\024\n\014attackKungFu\030\007 \001(\t\022\031" +
+      "\n\021attackKungFuLevel\030\010 \001(\005\"\316\001\n\030PlayerTogg" +
+      "leKungFuPacket\022\024\n\014attackKungFu\030\001 \001(\t\022\027\n\n" +
+      "footKungFu\030\002 \001(\tH\000\210\001\001\022\016\n\006canFly\030\003 \001(\010\022\035\n" +
+      "\020protectionKungFu\030\004 \001(\tH\001\210\001\001\022\034\n\017assistan" +
+      "tKungFu\030\005 \001(\tH\002\210\001\001B\r\n\013_footKungFuB\023\n\021_pr" +
+      "otectionKungFuB\022\n\020_assistantKungFu\"v\n\026Cr" +
+      "eatureBaseInfoPacket\022\025\n\relapsedMillis\030\002 " +
+      "\001(\005\022\021\n\tdirection\030\003 \001(\005\022\t\n\001x\030\004 \001(\005\022\t\n\001y\030\005" +
+      " \001(\005\022\020\n\010viewName\030\006 \001(\t\022\n\n\002id\030\007 \001(\003\"\306\001\n\024P" +
+      "layerSnapshotPacket\022?\n\010baseInfo\030\001 \001(\0132-." +
+      "org.y1000.network.gen.CreatureBaseInfoPa" +
+      "cket\022\022\n\nmoveAction\030\002 \001(\005\022<\n\nequipments\030\003" +
+      " \003(\0132(.org.y1000.network.gen.PlayerEquip" +
+      "Packet\022\014\n\004male\030\004 \001(\010\022\r\n\005state\030\005 \001(\005\"\222\001\n\021" +
+      "NpcSnapshotPacket\022?\n\010baseInfo\030\001 \001(\0132-.or" +
+      "g.y1000.network.gen.CreatureBaseInfoPack" +
+      "et\022\r\n\005shape\030\002 \001(\t\022\017\n\007animate\030\003 \001(\t\022\r\n\005st" +
+      "ate\030\004 \001(\005\022\r\n\005speed\030\005 \001(\005\"-\n\021CreatureSayP" +
+      "acket\022\n\n\002id\030\001 \001(\003\022\014\n\004text\030\002 \001(\t\"\251\002\n\026Sync" +
+      "ActiveKungFuPacket\022\024\n\014attackKungFu\030\001 \001(\t" +
+      "\022\035\n\020protectionKungFu\030\002 \001(\tH\000\210\001\001\022\031\n\014breat" +
+      "hKungFu\030\003 \001(\tH\001\210\001\001\022\034\n\017assistantKungFu\030\004 " +
+      "\001(\tH\002\210\001\001\022\027\n\nfootKungFu\030\005 \001(\tH\003\210\001\001\022\030\n\020foo" +
+      "tKungFuCanFly\030\006 \001(\010\022\n\n\002id\030\007 \001(\003\022\031\n\021attac" +
+      "kKungFuLevel\030\010 \001(\005B\023\n\021_protectionKungFuB" +
+      "\017\n\r_breathKungFuB\022\n\020_assistantKungFuB\r\n\013" +
+      "_footKungFu\"]\n\027PlayerChangeStatePacket\022\n" +
+      "\n\002id\030\001 \001(\003\022\r\n\005state\030\002 \001(\005\022\021\n\tdirection\030\003" +
+      " \001(\005\022\t\n\001x\030\004 \001(\005\022\t\n\001y\030\005 \001(\005\"a\n\027PlayerSetP" +
+      "ositionPacket\0227\n\010position\030\001 \001(\0132%.org.y1" +
+      "000.network.gen.PositionPacket\022\r\n\005state\030" +
+      "\002 \001(\005\"Y\n\022PlayerAttackPacket\022\n\n\002id\030\001 \001(\003\022" +
+      "\016\n\006action\030\002 \001(\005\022\021\n\tdirection\030\003 \001(\005\022\024\n\014ef" +
+      "fectSprite\030\004 \001(\t\"\037\n\021AttackInputPacket\022\n\n" +
+      "\002id\030@ \001(\003\"\035\n\017PickInputPacket\022\n\n\002id\030@ \001(\003" +
+      "\"9\n\023DropItemInputPacket\022\014\n\004slot\030\001 \001(\005\022\t\n" +
+      "\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\"7\n\033DropItemOnEntityI" +
+      "nputPacket\022\014\n\004slot\030\001 \001(\005\022\n\n\002id\030\002 \001(\003\"P\n\032" +
+      "ConfirmDropItemInputPacket\022\016\n\006number\030\001 \001" +
+      "(\005\022\014\n\004slot\030\002 \001(\005\022\t\n\001x\030\003 \001(\005\022\t\n\001y\030\004 \001(\005\"=" +
+      "\n\032ClickNpcAbilityInputPacket\022\n\n\002id\030\001 \001(\003" +
+      "\022\023\n\013abilityName\030\002 \001(\t\">\n\022BuyItemInputPac" +
+      "ket\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\022\016\n\006number\030" +
+      "\003 \001(\005\"?\n\023SellItemInputPacket\022\n\n\002id\030\001 \001(\003" +
+      "\022\014\n\004slot\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\"`\n\020Player" +
+      "MovePacket\0228\n\nmovePacket\030\001 \001(\0132$.org.y10" +
+      "00.network.gen.NpcMovePacket\022\022\n\nmoveActi" +
+      "on\030\002 \001(\005\"\200\001\n\023PlayerDamagedPacket\022\017\n\007curL" +
+      "ife\030\001 \001(\005\022\017\n\007maxLife\030\002 \001(\005\022\n\n\002id\030\003 \001(\003\022\023" +
+      "\n\013headPercent\030\004 \001(\005\022\022\n\narmPercent\030\005 \001(\005\022" +
+      "\022\n\nlegPercent\030\006 \001(\005\"e\n\033UpdateTradeWindow" +
+      "SlotPacket\022\014\n\004self\030\001 \001(\010\0228\n\004item\030\002 \001(\0132*" +
+      ".org.y1000.network.gen.InventoryItemPack" +
+      "etB\031\n\025org.y1000.network.genP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1885,7 +1886,7 @@ public final class Java {
     internal_static_org_y1000_network_gen_JoinRealmPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_JoinRealmPacket_descriptor,
-        new java.lang.String[] { "Attribute", "Equipments", "Teleport", "Male", "Name", "Id", "AttackKungFu", });
+        new java.lang.String[] { "Attribute", "Equipments", "Teleport", "Male", "Name", "Id", "AttackKungFu", "AttackKungFuLevel", });
     internal_static_org_y1000_network_gen_PlayerToggleKungFuPacket_descriptor =
       getDescriptor().getMessageTypes().get(110);
     internal_static_org_y1000_network_gen_PlayerToggleKungFuPacket_fieldAccessorTable = new
@@ -1921,7 +1922,7 @@ public final class Java {
     internal_static_org_y1000_network_gen_SyncActiveKungFuPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_y1000_network_gen_SyncActiveKungFuPacket_descriptor,
-        new java.lang.String[] { "AttackKungFu", "ProtectionKungFu", "BreathKungFu", "AssistantKungFu", "FootKungFu", "FootKungFuCanFly", "Id", });
+        new java.lang.String[] { "AttackKungFu", "ProtectionKungFu", "BreathKungFu", "AssistantKungFu", "FootKungFu", "FootKungFuCanFly", "Id", "AttackKungFuLevel", });
     internal_static_org_y1000_network_gen_PlayerChangeStatePacket_descriptor =
       getDescriptor().getMessageTypes().get(116);
     internal_static_org_y1000_network_gen_PlayerChangeStatePacket_fieldAccessorTable = new

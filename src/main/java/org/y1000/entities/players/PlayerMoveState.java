@@ -1,6 +1,5 @@
 package org.y1000.entities.players;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.players.event.PlayerMovedEvent;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
@@ -15,7 +14,6 @@ import org.y1000.util.Coordinate;
 @Slf4j
 final class PlayerMoveState extends AbstractPlayerState {
 
-    @Getter
     private final MoveAction moveAction;
 
     private final MoveInput currentInput;

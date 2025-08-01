@@ -40,8 +40,6 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private static final NpcRespawnAbility RESPAWN_ABILITY = new NpcRespawnAbility(8000);
 
-    private final Map<String, List<String>> dialogSetting;
-
     public NpcFactoryImpl(ActionSdb actionSdb,
                           MonstersSdb monsterSdb,
                           KungFuSdb kungFuSdb,
@@ -56,7 +54,6 @@ public final class NpcFactoryImpl implements NpcFactory {
         this.magicParamSdb = magicParamSdb;
         this.itemSdb = itemSdb;
         this.itemFactory = itemFactory;
-        dialogSetting = new HashMap<>();
     }
 
     private Direction randomDirection() {
@@ -151,10 +148,7 @@ public final class NpcFactoryImpl implements NpcFactory {
     }
 
     private Optional<NpcSayAbility> createSay(String idName) {
-        if (!dialogSetting.containsKey(idName)) {
-            dialogSetting.put(idName, parseDialogFile(idName));
-        }
-        List<String> strings = dialogSetting.get(idName);
+        List<String> strings = parseDialogFile(idName);
         return strings.isEmpty() ? Optional.empty() : Optional.of(new NpcSayAbility(strings));
     }
 
@@ -172,7 +166,6 @@ public final class NpcFactoryImpl implements NpcFactory {
             int regenInterval = npcSdb.getRegenInterval(idName) * Realm.STEP_MILLIS;
             abilities.add(regenInterval > 0 ? new NpcRespawnAbility(regenInterval) : RESPAWN_ABILITY);
         }
-        createSay(idName).ifPresent(abilities::add);
         return abilities;
     }
 
@@ -196,6 +189,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         abilities.add(createMoveAbility(idName, nonMonsterNpcSdb, DEFAULT_WALK_MILLIS));
         abilities.add(createTurnAbility(idName, nonMonsterNpcSdb));
         NpcSettingSdb.tryLoad(idName).ifPresent(sdb -> abilities.addAll(buildNpcInteractAbilities(sdb, nonMonsterNpcSdb.getShape(idName), id)));
+        createSay(idName).ifPresent(abilities::add);
         return abilities;
     }
 

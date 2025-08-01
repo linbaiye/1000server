@@ -100,6 +100,6 @@ public final class RealmTeleportEvent implements RealmEvent {
     }
 
     public static RealmTeleportEvent create(Player player, Teleport teleport, Connection connection) {
-        return new RealmTeleportEvent(player, teleport.toRealmId(), teleport.toCoordinate(), connection, teleport.rejectRealmId(), teleport.rejectCoordinate(), teleport.costs());
+        return new RealmTeleportEvent(player.cloneForTeleport(), teleport.toRealmId(), teleport.toCoordinate(), connection, teleport.rejectRealmId(), teleport.rejectCoordinate(), teleport.costs());
     }
 }

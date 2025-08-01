@@ -62,4 +62,6 @@ interface PlayerState extends CreatureState {
         return false;
     }
 
+    void changePlayer(PlayerImpl player);
+
 }

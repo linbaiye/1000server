@@ -893,6 +893,7 @@ message JoinRealmPacket {
   string name = 5;
   int64 id = 6;
   string attackKungFu = 7;
+  int32 attackKungFuLevel = 8;
 }
 
 message PlayerToggleKungFuPacket {
@@ -941,6 +942,7 @@ message SyncActiveKungFuPacket {
   optional string footKungFu = 5;
   bool footKungFuCanFly = 6;
   int64 id = 7;
+  int32 attackKungFuLevel = 8;
 }
 
 message PlayerChangeStatePacket {

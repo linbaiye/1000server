@@ -14,7 +14,7 @@ import org.y1000.entities.players.event.PlayerAttackEvent;
 
 @Slf4j
 final class CombatController {
-    private ActiveEntity enemy;
+    private final ActiveEntity enemy;
     private final PlayerImpl player;
     private int resourceNoticeTimer;
     private final HurtAbility hurtAbility;
@@ -63,7 +63,7 @@ final class CombatController {
      * @return -1 if this combat is over, 1 if a strike is carried, 0 when combat should carry on.
      */
     int update(int delta) {
-        if (!hurtAbility.canBeAttacked()) {
+        if (!enemy.canBeSeenAt(player.coordinate()) || !hurtAbility.canBeAttacked()) {
             return -1;
         }
         if (player.maxCooldown() > 0) {
@@ -86,9 +86,6 @@ final class CombatController {
         return 0;
     }
 
-    void onPlayerLeft() {
-
-    }
 
     static CombatController acceptIfAllowed(PlayerImpl player, ActiveEntity target) {
         HurtAbility ability = target.findAbility(HurtAbility.class).orElse(null);
