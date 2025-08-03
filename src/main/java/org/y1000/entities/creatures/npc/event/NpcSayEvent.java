@@ -12,6 +12,8 @@ public class NpcSayEvent extends AbstractNpcToVisibleEvent {
     public static NpcSayEvent say(Npc npc, String text) {
         return new NpcSayEvent(npc, Packet.newBuilder().setSay(CreatureSayPacket.newBuilder()
                 .setId(npc.id())
+                        .setCache(true)
+                .setViewName(npc.getViewName())
                 .setText(text).build()).build());
     }
 }

@@ -8,7 +8,6 @@ import org.y1000.entities.creatures.*;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.event.PlayerDropItemEvent;
 import org.y1000.event.EntityEvent;
-import org.y1000.event.EntityEventListener;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.guild.GuildMembership;
 import org.y1000.item.*;
@@ -27,7 +26,6 @@ import org.y1000.util.Coordinate;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -281,6 +279,17 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             playerTrade.addTradeItem(this, slot, number);
     }
 
+    @Override
+    public void usePill(String name) {
+        if (isLeftRealm() || isDead())
+            return;
+        int slot = inventory.findFirstSlot(name);
+        if (slot == 0)
+           return;
+        if (inventory.getStackItem(slot, Pill.class).isPresent())
+            handleInventorySlotDoubleClick(slot);
+    }
+
     private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
         if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {
             String ret = kf.checkPreconditions(this);
@@ -358,7 +367,11 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
 
     private void sendText(String t) {
-        sendEvent(PlayerTextMessage.of(this,t));
+        sendEvent(PlayerTextMessage.bottom(this,t));
+    }
+
+    private void sendLeftText(String t) {
+        sendEvent(PlayerTextMessage.left(this,t));
     }
 
     /**
@@ -424,12 +437,12 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             } else if (stackItem.item() instanceof Pill pill) {
                 if (pillSlots.canTakePill() && inventory.decrease(slotId)) {
                     if (pillSlots.tryUsePill(pill)) {
-                        sendText("服用了" + pill.name() + "。");
+                        sendLeftText("服用了" + pill.name() + "。");
                         sendEvent(UpdateInventorySlotMessage.update(this, slotId, inventory.getItem(slotId)));
                         pill.eventSound().ifPresent(this::sendSound);
                     }
                 } else {
-                    sendText("无法再服用。");
+                    sendLeftText("无法再服用。");
                 }
             }
         }
@@ -455,6 +468,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             footKungfu = null;
             protectKungFu().ifPresent(k -> sendSound(k.disableSound()));
             protectKungFu = null;
+            stopCombat();
         }
         sendEvent(PlayerSayEvent.say(this, newBreath.name()));
         syncActiveKungFuList();
@@ -497,7 +511,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         if (isDead())
             return;
         if (attackKungFu.level() < 9999) {
-            sendEvent(PlayerTextMessage.of(this, "满级武功方可使用" + newAssistant.name() + "。"));
+            sendEvent(PlayerTextMessage.bottom(this, "满级武功方可使用" + newAssistant.name() + "。"));
             return;
         }
         if (newAssistant.nameEquals(this.assistantKungFu)) {
@@ -597,6 +611,9 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             case KeyF4 -> state.sayHello();
             case KeyF3 -> state.sitOrStandUp();
             case KeyF2 -> state.switchStand();
+            case KungFuBookQuietly -> sendEvent(KungFuBookEvent.quietly(this));
+            case InventoryQuietly -> sendEvent(UpdateInventoryMessage.quiet(this));
+            case GetPills -> sendEvent(PillsMessage.of(this));
         }
     }
 
@@ -606,14 +623,41 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             if (type == ClickKungFuInput.ClickType.LeftDoubleClick) {
                 handleDoubleClickKungFu(kungFu);
             } else if (type == ClickKungFuInput.ClickType.LeftClick) {
-                sendEvent(PlayerTextMessage.of(this, kungFu.detailText()));
+                sendEvent(PlayerTextMessage.bottom(this, kungFu.detailText()));
             }
         });
     }
 
+
+    private boolean tryDye(int from, int to) {
+        var fromItem = inventory.getItem(from);
+        if (fromItem == null) {
+            return false;
+        }
+        var toItem = inventory.getItem(to);
+        if (!(toItem instanceof Equipment equipment)) {
+            return false;
+        }
+        if (fromItem instanceof StackItem stackItem && stackItem.item() instanceof Dye dye) {
+            var dyable = equipment.findAbility(Dyable.class).orElse(null);
+            if (dyable == null) {
+                return false;
+            }
+            inventory.decrease(from, 1);
+            dyable.dye(dye.color());
+            sendEvent(UpdateInventorySlotMessage.update(this, from));
+            sendEvent(UpdateInventorySlotMessage.update(this, to));
+            return true;
+        }
+        return false;
+
+    }
+
     @Override
-    public void swapItem(int slot1, int slot2) {
-        if (inventory.swap(slot1, slot2)) {
+    public void swapItem(int from, int to) {
+        if (tryDye(from, to))
+            return;
+        if (inventory.swap(from, to)) {
             sendEvent(UpdateInventoryMessage.forceful(this));
         }
     }
@@ -839,7 +883,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         gainOuterPower(resource);
         gainInnerPower(resource);
         gainPower(resource / 2);
-        sendEvent(PlayerAttributeEvent.of(this));
+        sendEvent(PlayerAttributeMessage.of(this));
     }
 
     private void doGainExperiencedResource(AgedAttribute attribute, String name, int v) {
@@ -898,7 +942,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         boolean consumed = consumeAndDisable(protectKungFu, delta, this::disableProtectionAndSync);
         consumed = consumed|| consumeAndDisable(footKungfu, delta, this::disableFootKungFuAndSync);
         if (consumed) {
-            sendEvent(PlayerAttributeEvent.of(this));
+            sendEvent(PlayerAttributeMessage.of(this));
             return;
         }
         if (breathKungFu != null) {
@@ -1148,6 +1192,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         int slot = inventory().add(item);
         sendEvent(UpdateInventorySlotMessage.update(this, slot));
         item.eventSound().ifPresent(s -> sendEvent(PlayerSoundEvent.toSelf(this, s)));
+        long number = item instanceof StackItem stackItem ? stackItem.number() : 1;
+        sendLeftText("获得 " + item.name() + " " + number + "个。");
         return true;
     }
 

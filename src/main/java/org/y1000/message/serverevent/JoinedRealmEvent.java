@@ -1,7 +1,7 @@
 package org.y1000.message.serverevent;
 
 import org.y1000.entities.players.event.IAbstractPlayerEvent;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.entities.players.event.PlayerTeleportMessage;
 import org.y1000.item.StackItem;
 import org.y1000.kungfu.KungFu;
@@ -57,7 +57,7 @@ public final class JoinedRealmEvent extends IAbstractPlayerEvent {
         LoginPacket.Builder builder = LoginPacket.newBuilder()
                 .setAttackKungFuName(player.attackKungFu().name())
                 .setInfo(PlayerInfo.toPacket(player))
-                .setAttribute(PlayerAttributeEvent.makeAttributePacket(player))
+                .setAttribute(PlayerAttributeMessage.makeAttributePacket(player))
                 .setTeleport(teleportPacket)
                 ;
         player.footKungFu().ifPresent(footKungFu -> builder.setFootKungFuName(footKungFu.name()).setFootKungFuCanFly(footKungFu.canFly()));

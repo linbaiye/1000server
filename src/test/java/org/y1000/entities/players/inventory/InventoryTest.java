@@ -291,8 +291,8 @@ class InventoryTest extends AbstractUnitTestFixture {
         assertEquals(slot, inventory.consume("生药", 999));
 
         var rs = itemFactory.createItem("锈剑", 1);
-        var slot1 = inventory.put(rs);
-        assertEquals(slot1, inventory.consume("锈剑", 1));
-        assertNull(inventory.getItem(slot1));
+        var from = inventory.put(rs);
+        assertEquals(from, inventory.consume("锈剑", 1));
+        assertNull(inventory.getItem(from));
     }*/
 }

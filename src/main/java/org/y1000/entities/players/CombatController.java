@@ -3,6 +3,7 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.item.Ammo;
@@ -55,6 +56,7 @@ final class CombatController {
             player.changeState(new PlayerMeleeState(player, action));
             player.assistantKungFu().ifPresentOrElse(a -> aoeMelee(kungFu, a), () -> singleAttack(kungFu));
         }
+        player.sendEvent(PlayerAttributeMessage.of(player));
     }
 
     /**
@@ -74,7 +76,7 @@ final class CombatController {
         if (ret != null) {
             resourceNoticeTimer -= delta;
             if (resourceNoticeTimer <= 0) {
-                player.sendEvent(PlayerTextMessage.of(player, ret));
+                player.sendEvent(PlayerTextMessage.bottom(player, ret));
                 resourceNoticeTimer = 2000;
             }
             return 0;

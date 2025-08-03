@@ -25,7 +25,7 @@ public class DynamicObjectTriggerAbility {
             return;
         Item item = player.inventory().getItem(slot);
         if (item == null || !item.name().equals(name)) {
-            player.sendEvent(PlayerTextMessage.of(player, "使用" + name + "方能开启。"));
+            player.sendEvent(PlayerTextMessage.bottom(player, "使用" + name + "方能开启。"));
             return;
         }
         if (!player.inventory().hasEnough(name, number)) {

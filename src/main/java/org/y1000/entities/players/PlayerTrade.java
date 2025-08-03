@@ -176,13 +176,13 @@ public class PlayerTrade {
             removeFromInventory(player, inventorySlot, number);
             return;
         }
-        player.sendEvent(PlayerTextMessage.of(player, "交易窗口已满。"));
+        player.sendEvent(PlayerTextMessage.bottom(player, "交易窗口已满。"));
     }
 
     private boolean closeIfDistanceFar() {
         if (player1.coordinate().directDistance(player2.coordinate()) > 5) {
-            player1.sendEvent(PlayerTextMessage.of(player1, "交易因超出距离被取消。"));
-            player2.sendEvent(PlayerTextMessage.of(player2, "交易因超出距离被取消。"));
+            player1.sendEvent(PlayerTextMessage.bottom(player1, "交易因超出距离被取消。"));
+            player2.sendEvent(PlayerTextMessage.bottom(player2, "交易因超出距离被取消。"));
             cancel(player1);
             return true;
         }
@@ -197,7 +197,7 @@ public class PlayerTrade {
             return;
         }
         if (!player.inventory().hasEnough(slot, number)) {
-            player.sendEvent(PlayerTextMessage.of(player, "持有数量不足。"));
+            player.sendEvent(PlayerTextMessage.bottom(player, "持有数量不足。"));
             return;
         }
         if (player1.equals(player)) {

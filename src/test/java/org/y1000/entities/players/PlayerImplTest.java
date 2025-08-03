@@ -275,23 +275,23 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void equipWeapon_swapEquipped() {
         Weapon sword = createWeapon("sword", AttackKungFuType.SWORD);
-        int slot1 = inventory.put(sword);
-        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot1));
+        int from = inventory.put(sword);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(from));
         eventListener.clearEvents();
         var axe = createWeapon("axe", AttackKungFuType.AXE);
-        int slot2 = inventory.put(axe);
+        int to = inventory.put(axe);
 
         // act
-        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot2));
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(to));
 
         assertEquals(player.attackKungFu().name(), player.kungFuBook().findUnnamedAttack(AttackKungFuType.AXE).name());
-        assertSame(inventory.getItem(slot2), sword);
+        assertSame(inventory.getItem(to), sword);
         assertTrue(player.weapon().isPresent());
         player.weapon().ifPresent(weapon -> assertSame(axe, weapon));
         var removeItemEvent = eventListener.dequeue(UpdateInventorySlotEvent.class);
-        assertEquals(removeItemEvent.toPacket().getUpdateSlot().getSlotId(), slot2);
+        assertEquals(removeItemEvent.toPacket().getUpdateSlot().getSlotId(), to);
         var putItemEvent = eventListener.dequeue(UpdateInventorySlotEvent.class);
-        assertEquals(putItemEvent.toPacket().getUpdateSlot().getSlotId(), slot2);
+        assertEquals(putItemEvent.toPacket().getUpdateSlot().getSlotId(), to);
         assertEquals(putItemEvent.toPacket().getUpdateSlot().getName(), "sword");
         var equipEvent = eventListener.dequeue(OldPlayerEquipEvent.class);
         assertEquals(equipEvent.toPacket().getEquip().getEquipmentName(), "axe");
@@ -303,14 +303,14 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
     @Test
     void equipWeaponWileAttacking() {
         Weapon sword = createWeapon("sword", AttackKungFuType.SWORD);
-        int slot1 = inventory.put(sword);
-        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot1));
+        int from = inventory.put(sword);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(from));
         player.setEnemy(createMonster(new Coordinate(1, 1)));
         player.changeState(PlayerAttackState.melee(player));
         eventListener.clearEvents();
         var axe = createWeapon("axe", AttackKungFuType.AXE);
-        int slot2 = inventory.put(axe);
-        player.handleClientEvent(new ClientDoubleClickSlotEvent(slot2));
+        int to = inventory.put(axe);
+        player.handleClientEvent(new ClientDoubleClickSlotEvent(to));
 
         assertEquals(player.maxCooldown(), (PlayerImpl.INNATE_ATTACKSPEED + player.kungFuBook().findUnnamedAttack(AttackKungFuType.AXE).attackSpeed()) * Realm.STEP_MILLIS);
         assertTrue(player.creatureState() instanceof PlayerCooldownState);

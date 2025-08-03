@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.exp.ExperienceUtil;
 
 @Getter
@@ -60,7 +60,7 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
         player.consumeOuterPower(applyLevelToValue(eventResourceParameters.outerPower()));
         player.consumeInnerPower(applyLevelToValue(eventResourceParameters.innerPower()));
         player.consumePower(applyLevelToValue(eventResourceParameters.power()));
-        player.sendEvent(PlayerAttributeEvent.of(player));
+        player.sendEvent(PlayerAttributeMessage.of(player));
     }
 
     @Override

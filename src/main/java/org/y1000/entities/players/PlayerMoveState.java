@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.players.event.PlayerMovedEvent;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
 import org.y1000.item.Equipment;
+import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.message.PlayerChangeStateEvent;
@@ -30,7 +31,8 @@ final class PlayerMoveState extends AbstractPlayerState {
     }
 
     private void changeToStand() {
-        if (moveAction == MoveAction.FightWalk) {
+        MoveAction currentAction = computeMoveAction(player(), moveAction);
+        if (currentAction == MoveAction.FightWalk) {
             player().changeState(PlayerStandState.fightStand(player()));
         } else {
             player().changeState(PlayerStandState.idle(player()));
@@ -125,6 +127,12 @@ final class PlayerMoveState extends AbstractPlayerState {
 
     static PlayerMoveState fightWalk(PlayerImpl player, MoveInput moveInput) {
         return new PlayerMoveState(player, moveInput, MoveAction.FightWalk);
+    }
+
+    @Override
+    public void tryToggleFootKungFu(FootKungFu footKungFu) {
+        player().stopCombat();
+        player().toggleFootAndSync(footKungFu);
     }
 
     @Override

@@ -37,14 +37,10 @@ public class TextMessage extends AbstractClientMessage {
 
     @Override
     protected Packet buildPacket() {
-        TextMessagePacket.Builder buider = TextMessagePacket.newBuilder().setType(type.value())
-                .setColorType(colorType.value())
+        TextMessagePacket.Builder buider = TextMessagePacket.newBuilder()
                 .setLocation(location.value());
         if (text != null) {
             buider.setText(text);
-        }
-        if (fromPlayer != null) {
-            buider.setFromPlayer(fromPlayer);
         }
         return Packet.newBuilder()
                 .setText(buider)

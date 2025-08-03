@@ -3,11 +3,11 @@ package org.y1000.message.input;
 import org.y1000.entities.players.PlayerInputHandler;
 import org.y1000.network.gen.SwapInventorySlotPacket;
 
-public record SwapInventoryItemInput(int slot1, int slot2) implements SelfHandleInput {
+public record SwapInventoryItemInput(int from, int to) implements SelfHandleInput {
 
     @Override
     public void accept(PlayerInputHandler handler) {
-        handler.swapItem(slot1, slot2);
+        handler.swapItem(from, to);
     }
 
     public static SwapInventoryItemInput fromPacket(SwapInventorySlotPacket packet) {

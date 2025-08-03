@@ -10,8 +10,7 @@ public record ClientWorldShoutEvent(String content) implements ClientRealmChatEv
 
     @Override
     public IRealmEvent toRealmEvent(Player player) {
-        return new BroadcastTextEvent(player.viewName() + "：" + content, TextMessage.TextType.PLAYER_SHOUT,
-                computeLevel(player));
+        return null;
     }
 
     private TextMessage.ColorType computeLevel(Player player) {

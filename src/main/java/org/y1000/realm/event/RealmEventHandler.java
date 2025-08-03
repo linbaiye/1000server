@@ -4,4 +4,6 @@ public interface RealmEventHandler {
 
     void handleTeleportEvent(RealmTeleportEvent teleportEvent);
 
+    void broadcastText(BroadcastTextEvent event);
+
 }

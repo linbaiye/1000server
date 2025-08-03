@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.event.PlayerSoundEvent;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.item.Pill;
 
@@ -63,7 +63,7 @@ public final class PillSlots {
     public void tryUsePill(Player player, Pill pill) {
         for (int i = 0; i < pillSlots.length; i++) {
             if (pillSlots[i] == null) {
-                player.sendEvent(PlayerTextMessage.of(player, "服用了" + pill.name() + "。"));
+                player.sendEvent(PlayerTextMessage.left(player, "服用了" + pill.name() + "。"));
                 pill.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toAll(player, s)));
                 pillSlots[i] = new PillSlot(pill);
                 return;
@@ -107,6 +107,6 @@ public final class PillSlots {
             }
         }
         if (needSync)
-            player.sendEvent(PlayerAttributeEvent.of(player));
+            player.sendEvent(PlayerAttributeMessage.of(player));
     }
 }

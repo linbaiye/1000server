@@ -36,7 +36,6 @@ class ClientWorldShoutEventTest {
         ClientWorldShoutEvent event = ClientWorldShoutEvent.parse("!test");
         Player player = Mockito.mock(Player.class);
         when(player.viewName()).thenReturn("好犀利");
-        ((BroadcastTextEvent)event.toRealmEvent(player)).send(player);
         doAnswer(invocationOnMock -> {
             PlayerTextEvent textEvent = invocationOnMock.getArgument(0);
             assertTrue(textEvent.toPacket().getText().getText().startsWith("好犀利：tes"));

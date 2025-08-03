@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public final class RealmTeleportEvent implements RealmEvent {
+public final class RealmTeleportEvent implements IdentifiedRealmEvent {
     private final Player player;
     private final int realmId;
     private final Coordinate toCoordinate;
@@ -89,7 +89,6 @@ public final class RealmTeleportEvent implements RealmEvent {
         return null;
     }
 
-    @Override
     public int toRealm() {
         return realmId;
     }

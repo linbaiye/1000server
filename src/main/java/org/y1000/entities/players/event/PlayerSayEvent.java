@@ -15,7 +15,9 @@ public final class PlayerSayEvent extends Abstract2VisibleAndSelfMessageEvent {
         Validate.notNull(player);
         Validate.notEmpty(text);
         return new PlayerSayEvent(player, Packet.newBuilder().setSay(CreatureSayPacket.newBuilder()
-                        .setId(player.id())
+                .setId(player.id())
+                .setCache(false)
+                .setViewName(player.viewName())
                 .setText(text).build()).build());
     }
 }

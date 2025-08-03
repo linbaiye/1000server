@@ -16,6 +16,9 @@ public record SimpleInput(SimpleInput.Type type) implements SelfHandleInput {
         KeyF2(3),
         KeyF3(4),
         KeyF4(5),
+        KungFuBookQuietly(6),
+        InventoryQuietly(7),
+        GetPills(8),
         ;
         private final int v;
 

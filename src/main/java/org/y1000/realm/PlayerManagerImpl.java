@@ -11,6 +11,8 @@ import org.y1000.message.*;
 import org.y1000.message.input.*;
 import org.y1000.message.serverevent.PlayerEventVisitor;
 import org.y1000.network.Connection;
+import org.y1000.realm.event.BroadcastEvent;
+import org.y1000.realm.event.RealmEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.util.Coordinate;
@@ -37,7 +39,6 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
     private final DeadPlayerTeleportManager deadPlayerTeleportManager;
 
     private final RealmEventSender crossRealmEventSender;
-
 
     public PlayerManagerImpl(RealmPlayerConnectionManager eventSender,
                              GroundItemManager itemManager,
@@ -205,6 +206,11 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
     @Override
     public void dropItem(Item item, Coordinate droppedAt) {
         itemManager.dropItem(item, droppedAt);
+    }
+
+    @Override
+    public void sendBroadcast(RealmEvent event) {
+        crossRealmEventSender.send(event);
     }
 
     @Override

@@ -6,8 +6,8 @@ import org.y1000.network.gen.AttributePacket;
 import org.y1000.network.gen.Packet;
 import org.y1000.realm.PlayerEventHandler;
 
-public final class PlayerAttributeEvent extends AbstractMessagePlayerEvent {
-    public PlayerAttributeEvent(Player source, Packet packet) {
+public final class PlayerAttributeMessage extends AbstractMessagePlayerEvent {
+    public PlayerAttributeMessage(Player source, Packet packet) {
         super(source, packet);
     }
 
@@ -27,9 +27,9 @@ public final class PlayerAttributeEvent extends AbstractMessagePlayerEvent {
                 .build();
     }
 
-    public static PlayerAttributeEvent of(Player player) {
+    public static PlayerAttributeMessage of(Player player) {
         Validate.notNull(player);
-        return new PlayerAttributeEvent(player, Packet.newBuilder()
+        return new PlayerAttributeMessage(player, Packet.newBuilder()
                 .setAttribute(makeAttributePacket(player))
                 .build());
     }

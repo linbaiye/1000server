@@ -10,8 +10,24 @@ public class PlayerTextMessage extends Abstract2PlayerMessageEvent {
         super(player, packet);
     }
 
-    public static PlayerTextMessage of(Player player, String text) {
+    public static PlayerTextMessage bottom(Player player, String text) {
         return new PlayerTextMessage(player, Packet.newBuilder().setText(TextMessagePacket.newBuilder().setText(text).build()).build());
+    }
+
+    public static PlayerTextMessage leftUp(Player player, String text) {
+        return new PlayerTextMessage(player, Packet.newBuilder()
+                .setText(TextMessagePacket.newBuilder()
+                        .setLocation(2)
+                        .setText(text)
+                        .build()).build());
+    }
+
+    public static PlayerTextMessage left(Player player, String text) {
+        return new PlayerTextMessage(player, Packet.newBuilder()
+                .setText(TextMessagePacket.newBuilder()
+                        .setLocation(1)
+                        .setText(text)
+                        .build()).build());
     }
 
     public static PlayerTextMessage systip(Player player, String text) {

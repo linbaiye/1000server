@@ -13,7 +13,7 @@ public interface PlayerInputHandler {
 
     void onKungFuClicked(int page, int slot, ClickKungFuInput.ClickType type);
 
-    void swapItem(int slot1, int slot2);
+    void swapItem(int from, int to);
 
     void onInventorySlotClicked(int slot, ClickInventorySlotInput.ClickType type);
 
@@ -28,5 +28,7 @@ public interface PlayerInputHandler {
     void changeTradeState(PlayerTradeStateInput.State state);
 
     void addTradeItem(int slot, int number);
+
+    void usePill(String name);
 
 }

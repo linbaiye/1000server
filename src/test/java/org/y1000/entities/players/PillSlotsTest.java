@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.event.PlayerSoundEvent;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.Pill;
@@ -54,11 +54,11 @@ class PillSlotsTest extends AbstractUnitTestFixture {
         var pill = (Pill) stackItem.item();
         slots.tryUsePill(player,  pill);
         slots.update(player, pill.useInterval());
-        Mockito.verify(player, Mockito.times(1)).sendEvent(any(PlayerAttributeEvent.class));
+        Mockito.verify(player, Mockito.times(1)).sendEvent(any(PlayerAttributeMessage.class));
         for (int i = 0; i < pill.useCount(); i++) {
             slots.update(player, pill.useInterval());
         }
-        Mockito.verify(player, Mockito.times(pill.useCount())).sendEvent(any(PlayerAttributeEvent.class));
+        Mockito.verify(player, Mockito.times(pill.useCount())).sendEvent(any(PlayerAttributeMessage.class));
 
         // make sure ropeSlot is emptied.
         Mockito.reset(player);

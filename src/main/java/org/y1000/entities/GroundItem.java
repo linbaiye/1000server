@@ -67,7 +67,7 @@ public class GroundItem extends AbstractActiveEntity {
         if (player == null)
             return;
         if (!canPickAt(player.coordinate())) {
-            player.sendEvent(PlayerTextMessage.of(player, "距离过远。"));
+            player.sendEvent(PlayerTextMessage.bottom(player, "距离过远。"));
             return;
         }
         if (player.pickItem(item))

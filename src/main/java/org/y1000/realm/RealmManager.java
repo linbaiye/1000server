@@ -189,6 +189,11 @@ public final class RealmManager implements Runnable , RealmEventSender {
 
     @Override
     public void send(RealmEvent realmEvent) {
-        realmIdGroupMap.values().forEach(r -> r.handle(realmEvent.toRealm(), realmEvent));
+        realmIdGroupMap.values().forEach(r -> {
+            if (realmEvent instanceof  IdentifiedRealmEvent identifiedRealmEvent)
+                r.handle(identifiedRealmEvent.toRealm(), realmEvent);
+            else
+                r.broadcast(realmEvent);
+        });
     }
 }

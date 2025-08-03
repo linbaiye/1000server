@@ -3,7 +3,7 @@ package org.y1000.kungfu.breath;
 import lombok.Builder;
 import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;
@@ -79,7 +79,7 @@ public final class BreathKungFu extends AbstractKungFu {
         player.gainPower(computeResource(player.maxPower(), parameters.power()));
         player.gainInnerPower(computeResource(player.maxInnerPower(), parameters.innerPower()));
         player.gainOuterPower(computeResource(player.maxOuterPower(), parameters.outerPower()));
-        player.sendEvent(PlayerAttributeEvent.of(player));
+        player.sendEvent(PlayerAttributeMessage.of(player));
         gainExp(player, ExperienceUtil.DEFAULT_EXP);
     }
 

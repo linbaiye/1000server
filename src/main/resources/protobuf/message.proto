@@ -351,7 +351,12 @@ message ClientPacket {
     DropItemOnEntityInputPacket dropOnEntityInput = 46;
     PlayerTradeStateInputPacket tradeStateInput = 47;
     AddTradeItemInputPacket addPlayerTradeInput = 48;
+    UsePillInputPacket usePill = 49;
   }
+}
+
+message UsePillInputPacket {
+  string name = 1;
 }
 
 message InterpolationPacket {
@@ -421,11 +426,10 @@ message KungFuPacket {
 }
 
 message TextMessagePacket {
-  int32 type = 1;
-  optional string text = 2;
-  int32 location = 3;
-  int32 colorType = 4;
-  optional string fromPlayer = 5;
+  optional string text = 1;
+  int32 location = 2;
+  int32 color = 3;
+  int32 bgColor = 4;
 }
 
 message ToggleKungFuPacket {
@@ -543,6 +547,7 @@ message PlayerGainExpPacket {
   string name = 1;
   int32 level = 2;
   bool kungFu = 3;
+  bool attack = 4;
 }
 
 message ProjectilePacket {
@@ -799,6 +804,7 @@ message Packet {
     DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;
     DynamicObjectShiftPacket dynamicObjectShift = 78;
     FollowRopePacket followRope = 79;
+    PillsPacket pills = 80;
   }
 }
 
@@ -932,6 +938,12 @@ message NpcSnapshotPacket {
 message CreatureSayPacket {
   int64 id = 1;
   string text = 2;
+  string viewName = 3;
+  bool cache = 4;
+}
+
+message PillsPacket {
+  repeated string pills = 1;
 }
 
 message SyncActiveKungFuPacket {

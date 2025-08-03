@@ -182,6 +182,11 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
         }
     }
 
+    @Override
+    public void broadcastText(BroadcastTextEvent event) {
+        getPlayerManager().allPlayers().forEach(player -> player.sendEvent(event.createMessage(player)));
+    }
+
     public void handle(IRealmEvent event) {
         try {
         } catch (Exception e) {

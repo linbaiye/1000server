@@ -41,7 +41,7 @@ public class NpcBuyAbility extends AbstractNpcTradeAbility {
         }
         int moneySlot = player.inventory().findFirstSlot("钱币");
         if (moneySlot == 0 && player.inventory().isFull()) {
-            player.sendEvent(PlayerTextMessage.of(player, "物品栏已满。"));
+            player.sendEvent(PlayerTextMessage.bottom(player, "物品栏已满。"));
             return;
         }
         player.inventory().decrease(slot, number);

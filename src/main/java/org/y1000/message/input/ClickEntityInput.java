@@ -23,6 +23,6 @@ public record ClickEntityInput(long id) implements EntityInteractInput {
         activeEntity.findAbility(NpcInteractAbility.class)
                 .ifPresentOrElse(a -> a.interactedBy(player),
                         () -> activeEntity.clickText().ifPresent(text ->
-                                player.sendEvent(PlayerTextMessage.of(player,text))));
+                                player.sendEvent(PlayerTextMessage.bottom(player,text))));
     }
 }

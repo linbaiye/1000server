@@ -86,6 +86,7 @@ public final class AssistantKungFu extends AbstractKungFu {
         if (hurtAbility == null)
             return false;
         int exp = hurtAbility.attacked(player, mainDamage, player.hit());
+        int counter = exp > 0 ? 1 : 0;
         Set<Entity> entities = mainTarget.getEntitiesAt(affected);
         var aoeDamage = computeDamage(mainDamage);
         for (var e : entities) {
@@ -94,11 +95,13 @@ public final class AssistantKungFu extends AbstractKungFu {
                 if (ability == null || !ability.canBeAttacked())
                     continue;
                 int tmp = ability.attacked(player, aoeDamage, player.hit());
+                counter += tmp > 0 ? 1 : 0;
                 if (exp < tmp)
                     exp = tmp;
             }
         }
-        gainExp(player, exp);
+        if (counter > 1)
+            gainExp(player, exp);
         return exp > -1;
     }
 

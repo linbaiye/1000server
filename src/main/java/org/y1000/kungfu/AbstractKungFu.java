@@ -2,6 +2,7 @@ package org.y1000.kungfu;
 
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerGainExpEvent;
+import org.y1000.entities.players.event.PlayerKungFuFullEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.exp.Experience;
 import org.y1000.exp.ExperienceUtil;
@@ -38,6 +39,7 @@ public abstract class AbstractKungFu implements KungFu {
     public boolean gainPermittedExp(int expValue) {
         var old = experience.level();
         var exp = experience.computePermitExp(expValue);
+        //experience = experience.gainExp(exp * 100);
         experience = experience.gainExp(exp * 20000);
         return old != experience.level();
     }
@@ -81,14 +83,14 @@ end;
             return;
         }
         if (player.armLife().percent() < 50) {
-            player.sendEvent(PlayerTextMessage.of(player, "手部活力不足，无法获得经验。"));
+            player.sendEvent(PlayerTextMessage.bottom(player, "手部活力不足，无法获得经验。"));
             return;
         }
         if (!gainPermittedExp(exp)) {
             return;
         }
         player.sendEvent(PlayerGainExpEvent.of(player, this));
-//        if (isLevelFull())
-//            player.sendEvent();
+        if (isLevelFull())
+            player.sendEvent(new PlayerKungFuFullEvent(player, this));
     }
 }

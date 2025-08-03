@@ -1,16 +1,6 @@
 package org.y1000.kungfu.breath;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.AbstractPlayerUnitTestFixture;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
-import org.y1000.kungfu.EventResourceParameters;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
 
 class BreathKungFuTest extends AbstractPlayerUnitTestFixture {
 

@@ -42,12 +42,12 @@ public class NpcSellAbility extends AbstractNpcTradeAbility {
         if (item == null || (!item.canStack() && number > 1))
             return;
         if (!player.inventory().hasEnough("钱币", number * item.price())) {
-            player.sendEvent(PlayerTextMessage.of(player, "持有钱币不足。"));
+            player.sendEvent(PlayerTextMessage.bottom(player, "持有钱币不足。"));
             return;
         }
         Item newItem = getItemFactory().createItem(name, number);
         if (!player.inventory().canPick(newItem)) {
-            player.sendEvent(PlayerTextMessage.of(player, "物品栏已满。"));
+            player.sendEvent(PlayerTextMessage.bottom(player, "物品栏已满。"));
             return;
         }
         int slot = player.inventory().add(newItem);
