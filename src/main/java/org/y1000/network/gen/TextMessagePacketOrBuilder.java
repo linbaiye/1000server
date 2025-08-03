@@ -9,17 +9,12 @@ public interface TextMessagePacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>optional string text = 1;</code>
-   * @return Whether the text field is set.
-   */
-  boolean hasText();
-  /**
-   * <code>optional string text = 1;</code>
+   * <code>string text = 1;</code>
    * @return The text.
    */
   java.lang.String getText();
   /**
-   * <code>optional string text = 1;</code>
+   * <code>string text = 1;</code>
    * @return The bytes for text.
    */
   com.google.protobuf.ByteString
@@ -32,14 +27,26 @@ public interface TextMessagePacketOrBuilder extends
   int getLocation();
 
   /**
-   * <code>int32 color = 3;</code>
+   * <code>string color = 3;</code>
    * @return The color.
    */
-  int getColor();
+  java.lang.String getColor();
+  /**
+   * <code>string color = 3;</code>
+   * @return The bytes for color.
+   */
+  com.google.protobuf.ByteString
+      getColorBytes();
 
   /**
-   * <code>int32 bgColor = 4;</code>
+   * <code>string bgColor = 4;</code>
    * @return The bgColor.
    */
-  int getBgColor();
+  java.lang.String getBgColor();
+  /**
+   * <code>string bgColor = 4;</code>
+   * @return The bytes for bgColor.
+   */
+  com.google.protobuf.ByteString
+      getBgColorBytes();
 }

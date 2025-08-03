@@ -15,14 +15,14 @@ public interface ClientSwapKungFuSlotPacketOrBuilder extends
   int getPage();
 
   /**
-   * <code>int32 from = 2;</code>
-   * @return The from.
+   * <code>int32 slot1 = 2;</code>
+   * @return The slot1.
    */
   int getSlot1();
 
   /**
-   * <code>int32 to = 3;</code>
-   * @return The to.
+   * <code>int32 slot2 = 3;</code>
+   * @return The slot2.
    */
   int getSlot2();
 }

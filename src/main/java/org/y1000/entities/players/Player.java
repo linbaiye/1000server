@@ -182,5 +182,10 @@ public interface Player extends IActiveEntity, HurtAbility {
     boolean canBeDragged();
 
     Player cloneForTeleport();
+
+    default int totalAttribute() {
+        return maxLife() + maxPower() + maxInnerPower()
+                + maxOuterPower() + age() / 2;
+    }
 }
 

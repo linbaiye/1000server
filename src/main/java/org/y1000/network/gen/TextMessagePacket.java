@@ -18,6 +18,8 @@ private static final long serialVersionUID = 0L;
   }
   private TextMessagePacket() {
     text_ = "";
+    color_ = "";
+    bgColor_ = "";
   }
 
   @java.lang.Override
@@ -40,20 +42,11 @@ private static final long serialVersionUID = 0L;
             org.y1000.network.gen.TextMessagePacket.class, org.y1000.network.gen.TextMessagePacket.Builder.class);
   }
 
-  private int bitField0_;
   public static final int TEXT_FIELD_NUMBER = 1;
   @SuppressWarnings("serial")
   private volatile java.lang.Object text_ = "";
   /**
-   * <code>optional string text = 1;</code>
-   * @return Whether the text field is set.
-   */
-  @java.lang.Override
-  public boolean hasText() {
-    return ((bitField0_ & 0x00000001) != 0);
-  }
-  /**
-   * <code>optional string text = 1;</code>
+   * <code>string text = 1;</code>
    * @return The text.
    */
   @java.lang.Override
@@ -70,7 +63,7 @@ private static final long serialVersionUID = 0L;
     }
   }
   /**
-   * <code>optional string text = 1;</code>
+   * <code>string text = 1;</code>
    * @return The bytes for text.
    */
   @java.lang.Override
@@ -100,25 +93,81 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int COLOR_FIELD_NUMBER = 3;
-  private int color_ = 0;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object color_ = "";
   /**
-   * <code>int32 color = 3;</code>
+   * <code>string color = 3;</code>
    * @return The color.
    */
   @java.lang.Override
-  public int getColor() {
-    return color_;
+  public java.lang.String getColor() {
+    java.lang.Object ref = color_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      color_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string color = 3;</code>
+   * @return The bytes for color.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getColorBytes() {
+    java.lang.Object ref = color_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      color_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
   public static final int BGCOLOR_FIELD_NUMBER = 4;
-  private int bgColor_ = 0;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object bgColor_ = "";
   /**
-   * <code>int32 bgColor = 4;</code>
+   * <code>string bgColor = 4;</code>
    * @return The bgColor.
    */
   @java.lang.Override
-  public int getBgColor() {
-    return bgColor_;
+  public java.lang.String getBgColor() {
+    java.lang.Object ref = bgColor_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      bgColor_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string bgColor = 4;</code>
+   * @return The bytes for bgColor.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getBgColorBytes() {
+    java.lang.Object ref = bgColor_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      bgColor_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
   private byte memoizedIsInitialized = -1;
@@ -135,17 +184,17 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (((bitField0_ & 0x00000001) != 0)) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(text_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, text_);
     }
     if (location_ != 0) {
       output.writeInt32(2, location_);
     }
-    if (color_ != 0) {
-      output.writeInt32(3, color_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(color_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, color_);
     }
-    if (bgColor_ != 0) {
-      output.writeInt32(4, bgColor_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(bgColor_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, bgColor_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -156,20 +205,18 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (((bitField0_ & 0x00000001) != 0)) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(text_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, text_);
     }
     if (location_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(2, location_);
     }
-    if (color_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, color_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(color_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, color_);
     }
-    if (bgColor_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(4, bgColor_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(bgColor_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, bgColor_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -186,17 +233,14 @@ private static final long serialVersionUID = 0L;
     }
     org.y1000.network.gen.TextMessagePacket other = (org.y1000.network.gen.TextMessagePacket) obj;
 
-    if (hasText() != other.hasText()) return false;
-    if (hasText()) {
-      if (!getText()
-          .equals(other.getText())) return false;
-    }
+    if (!getText()
+        .equals(other.getText())) return false;
     if (getLocation()
         != other.getLocation()) return false;
-    if (getColor()
-        != other.getColor()) return false;
-    if (getBgColor()
-        != other.getBgColor()) return false;
+    if (!getColor()
+        .equals(other.getColor())) return false;
+    if (!getBgColor()
+        .equals(other.getBgColor())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -208,16 +252,14 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    if (hasText()) {
-      hash = (37 * hash) + TEXT_FIELD_NUMBER;
-      hash = (53 * hash) + getText().hashCode();
-    }
+    hash = (37 * hash) + TEXT_FIELD_NUMBER;
+    hash = (53 * hash) + getText().hashCode();
     hash = (37 * hash) + LOCATION_FIELD_NUMBER;
     hash = (53 * hash) + getLocation();
     hash = (37 * hash) + COLOR_FIELD_NUMBER;
-    hash = (53 * hash) + getColor();
+    hash = (53 * hash) + getColor().hashCode();
     hash = (37 * hash) + BGCOLOR_FIELD_NUMBER;
-    hash = (53 * hash) + getBgColor();
+    hash = (53 * hash) + getBgColor().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -351,8 +393,8 @@ private static final long serialVersionUID = 0L;
       bitField0_ = 0;
       text_ = "";
       location_ = 0;
-      color_ = 0;
-      bgColor_ = 0;
+      color_ = "";
+      bgColor_ = "";
       return this;
     }
 
@@ -386,10 +428,8 @@ private static final long serialVersionUID = 0L;
 
     private void buildPartial0(org.y1000.network.gen.TextMessagePacket result) {
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.text_ = text_;
-        to_bitField0_ |= 0x00000001;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.location_ = location_;
@@ -400,7 +440,6 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000008) != 0)) {
         result.bgColor_ = bgColor_;
       }
-      result.bitField0_ |= to_bitField0_;
     }
 
     @java.lang.Override
@@ -447,7 +486,7 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(org.y1000.network.gen.TextMessagePacket other) {
       if (other == org.y1000.network.gen.TextMessagePacket.getDefaultInstance()) return this;
-      if (other.hasText()) {
+      if (!other.getText().isEmpty()) {
         text_ = other.text_;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -455,11 +494,15 @@ private static final long serialVersionUID = 0L;
       if (other.getLocation() != 0) {
         setLocation(other.getLocation());
       }
-      if (other.getColor() != 0) {
-        setColor(other.getColor());
+      if (!other.getColor().isEmpty()) {
+        color_ = other.color_;
+        bitField0_ |= 0x00000004;
+        onChanged();
       }
-      if (other.getBgColor() != 0) {
-        setBgColor(other.getBgColor());
+      if (!other.getBgColor().isEmpty()) {
+        bgColor_ = other.bgColor_;
+        bitField0_ |= 0x00000008;
+        onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -497,16 +540,16 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000002;
               break;
             } // case 16
-            case 24: {
-              color_ = input.readInt32();
+            case 26: {
+              color_ = input.readStringRequireUtf8();
               bitField0_ |= 0x00000004;
               break;
-            } // case 24
-            case 32: {
-              bgColor_ = input.readInt32();
+            } // case 26
+            case 34: {
+              bgColor_ = input.readStringRequireUtf8();
               bitField0_ |= 0x00000008;
               break;
-            } // case 32
+            } // case 34
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -526,14 +569,7 @@ private static final long serialVersionUID = 0L;
 
     private java.lang.Object text_ = "";
     /**
-     * <code>optional string text = 1;</code>
-     * @return Whether the text field is set.
-     */
-    public boolean hasText() {
-      return ((bitField0_ & 0x00000001) != 0);
-    }
-    /**
-     * <code>optional string text = 1;</code>
+     * <code>string text = 1;</code>
      * @return The text.
      */
     public java.lang.String getText() {
@@ -549,7 +585,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>optional string text = 1;</code>
+     * <code>string text = 1;</code>
      * @return The bytes for text.
      */
     public com.google.protobuf.ByteString
@@ -566,7 +602,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>optional string text = 1;</code>
+     * <code>string text = 1;</code>
      * @param value The text to set.
      * @return This builder for chaining.
      */
@@ -579,7 +615,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>optional string text = 1;</code>
+     * <code>string text = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearText() {
@@ -589,7 +625,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>optional string text = 1;</code>
+     * <code>string text = 1;</code>
      * @param value The bytes for text to set.
      * @return This builder for chaining.
      */
@@ -635,66 +671,146 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private int color_ ;
+    private java.lang.Object color_ = "";
     /**
-     * <code>int32 color = 3;</code>
+     * <code>string color = 3;</code>
      * @return The color.
      */
-    @java.lang.Override
-    public int getColor() {
-      return color_;
+    public java.lang.String getColor() {
+      java.lang.Object ref = color_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        color_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
     }
     /**
-     * <code>int32 color = 3;</code>
+     * <code>string color = 3;</code>
+     * @return The bytes for color.
+     */
+    public com.google.protobuf.ByteString
+        getColorBytes() {
+      java.lang.Object ref = color_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        color_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string color = 3;</code>
      * @param value The color to set.
      * @return This builder for chaining.
      */
-    public Builder setColor(int value) {
-
+    public Builder setColor(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
       color_ = value;
       bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 color = 3;</code>
+     * <code>string color = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearColor() {
+      color_ = getDefaultInstance().getColor();
       bitField0_ = (bitField0_ & ~0x00000004);
-      color_ = 0;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string color = 3;</code>
+     * @param value The bytes for color to set.
+     * @return This builder for chaining.
+     */
+    public Builder setColorBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      color_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
 
-    private int bgColor_ ;
+    private java.lang.Object bgColor_ = "";
     /**
-     * <code>int32 bgColor = 4;</code>
+     * <code>string bgColor = 4;</code>
      * @return The bgColor.
      */
-    @java.lang.Override
-    public int getBgColor() {
-      return bgColor_;
+    public java.lang.String getBgColor() {
+      java.lang.Object ref = bgColor_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        bgColor_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
     }
     /**
-     * <code>int32 bgColor = 4;</code>
+     * <code>string bgColor = 4;</code>
+     * @return The bytes for bgColor.
+     */
+    public com.google.protobuf.ByteString
+        getBgColorBytes() {
+      java.lang.Object ref = bgColor_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        bgColor_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string bgColor = 4;</code>
      * @param value The bgColor to set.
      * @return This builder for chaining.
      */
-    public Builder setBgColor(int value) {
-
+    public Builder setBgColor(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
       bgColor_ = value;
       bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 bgColor = 4;</code>
+     * <code>string bgColor = 4;</code>
      * @return This builder for chaining.
      */
     public Builder clearBgColor() {
+      bgColor_ = getDefaultInstance().getBgColor();
       bitField0_ = (bitField0_ & ~0x00000008);
-      bgColor_ = 0;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string bgColor = 4;</code>
+     * @param value The bytes for bgColor to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBgColorBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      bgColor_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }

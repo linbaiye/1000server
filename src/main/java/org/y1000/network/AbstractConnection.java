@@ -99,6 +99,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case TRADESTATEINPUT -> new PlayerTradeStateInput(clientPacket.getTradeStateInput().getState());
             case ADDPLAYERTRADEINPUT -> new AddPlayerTradeItemInput(clientPacket.getAddPlayerTradeInput().getSlot(), clientPacket.getAddPlayerTradeInput().getNumber());
             case USEPILL -> new UsePillInput(clientPacket.getUsePill().getName());
+            case CHAT -> new ChatInput(clientPacket.getChat().getText());
             default -> null;
         };
     }

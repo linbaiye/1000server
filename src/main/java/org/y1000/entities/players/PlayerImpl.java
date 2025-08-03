@@ -290,6 +290,13 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             handleInventorySlotDoubleClick(slot);
     }
 
+    @Override
+    public void chat(ChatInput input) {
+        if (isLeftRealm())
+            return;
+        input.toPlayerEvent(this).ifPresent(this::sendEvent);
+    }
+
     private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
         if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {
             String ret = kf.checkPreconditions(this);
@@ -324,7 +331,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         this.attackKungFu = attackKungFu;
         if (!this.attackKungFu.isLevelFull())
             assistantKungFu = null;
-        sendEvent(PlayerSayEvent.say(this, attackKungFu.name()));
+        sendEvent(PlayerSayEvent.kungfuTip(this, attackKungFu.name()));
         cooldownAttack();
     }
 
@@ -470,7 +477,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             protectKungFu = null;
             stopCombat();
         }
-        sendEvent(PlayerSayEvent.say(this, newBreath.name()));
+        sendEvent(PlayerSayEvent.kungfuTip(this, newBreath.name()));
         syncActiveKungFuList();
     }
 
@@ -484,7 +491,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             sendSound(protectKungFu.enableSound());
             protectKungFu.resetTimer();
         }
-        sendEvent(PlayerSayEvent.say(this, newProtection.name()));
+        sendEvent(PlayerSayEvent.kungfuTip(this, newProtection.name()));
         syncActiveKungFuList();
     }
 
@@ -500,7 +507,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         }
         breathKungFu = null;
         syncActiveKungFuList();
-        sendEvent(PlayerSayEvent.say(this, newKungFu.name()));
+        sendEvent(PlayerSayEvent.kungfuTip(this, newKungFu.name()));
     }
 
     boolean movable(Coordinate coordinate) {
@@ -519,7 +526,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         } else {
             assistantKungFu = newAssistant;
         }
-        sendEvent(PlayerSayEvent.say(this, newAssistant.name()));
+        sendEvent(PlayerSayEvent.kungfuTip(this, newAssistant.name()));
         syncActiveKungFuList();
     }
 
@@ -585,7 +592,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     @Override
     public void handleInput(SelfHandleInput input) {
-        if (input == null)
+        if (input == null || isLeftRealm())
             return;
         if (isDead() && !(input instanceof SimpleInput))
             return;
@@ -614,7 +621,13 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             case KungFuBookQuietly -> sendEvent(KungFuBookEvent.quietly(this));
             case InventoryQuietly -> sendEvent(UpdateInventoryMessage.quiet(this));
             case GetPills -> sendEvent(PillsMessage.of(this));
+            case AttributeEquipment -> sendEvent(AttributeEquipmentMessage.of(this));
         }
+    }
+
+    @Override
+    public boolean canBeSeenAt(Coordinate another) {
+        return realm != null && super.canBeSeenAt(another);
     }
 
     @Override
@@ -644,7 +657,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
                 return false;
             }
             inventory.decrease(from, 1);
-            dyable.dye(dye.color());
+            dye.dye(dyable);
             sendEvent(UpdateInventorySlotMessage.update(this, from));
             sendEvent(UpdateInventorySlotMessage.update(this, to));
             return true;

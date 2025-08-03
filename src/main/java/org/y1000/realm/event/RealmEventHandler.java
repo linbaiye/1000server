@@ -6,4 +6,8 @@ public interface RealmEventHandler {
 
     void broadcastText(BroadcastTextEvent event);
 
+    void deliverPrivateChat(DeliveryPrivateChatEvent event);
+
+    void deliverPrivateChatResult(long playerId, String reply);
+
 }

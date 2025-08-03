@@ -120,6 +120,7 @@ private static final long serialVersionUID = 0L;
     DYNAMICOBJECTSHIFT(78),
     FOLLOWROPE(79),
     PILLS(80),
+    ATTRIBUTEEQUIP(81),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -212,6 +213,7 @@ private static final long serialVersionUID = 0L;
         case 78: return DYNAMICOBJECTSHIFT;
         case 79: return FOLLOWROPE;
         case 80: return PILLS;
+        case 81: return ATTRIBUTEEQUIP;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -2552,6 +2554,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.PillsPacket.getDefaultInstance();
   }
 
+  public static final int ATTRIBUTEEQUIP_FIELD_NUMBER = 81;
+  /**
+   * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+   * @return Whether the attributeEquip field is set.
+   */
+  @java.lang.Override
+  public boolean hasAttributeEquip() {
+    return typedPacketCase_ == 81;
+  }
+  /**
+   * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+   * @return The attributeEquip.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AttributeEquipPacket getAttributeEquip() {
+    if (typedPacketCase_ == 81) {
+       return (org.y1000.network.gen.AttributeEquipPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.AttributeEquipPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AttributeEquipPacketOrBuilder getAttributeEquipOrBuilder() {
+    if (typedPacketCase_ == 81) {
+       return (org.y1000.network.gen.AttributeEquipPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.AttributeEquipPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -2790,6 +2823,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 80) {
       output.writeMessage(80, (org.y1000.network.gen.PillsPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 81) {
+      output.writeMessage(81, (org.y1000.network.gen.AttributeEquipPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -3099,6 +3135,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 80) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(80, (org.y1000.network.gen.PillsPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 81) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(81, (org.y1000.network.gen.AttributeEquipPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -3417,6 +3457,10 @@ private static final long serialVersionUID = 0L;
         if (!getPills()
             .equals(other.getPills())) return false;
         break;
+      case 81:
+        if (!getAttributeEquip()
+            .equals(other.getAttributeEquip())) return false;
+        break;
       case 0:
       default:
     }
@@ -3731,6 +3775,10 @@ private static final long serialVersionUID = 0L;
       case 80:
         hash = (37 * hash) + PILLS_FIELD_NUMBER;
         hash = (53 * hash) + getPills().hashCode();
+        break;
+      case 81:
+        hash = (37 * hash) + ATTRIBUTEEQUIP_FIELD_NUMBER;
+        hash = (53 * hash) + getAttributeEquip().hashCode();
         break;
       case 0:
       default:
@@ -4093,6 +4141,9 @@ private static final long serialVersionUID = 0L;
       if (pillsBuilder_ != null) {
         pillsBuilder_.clear();
       }
+      if (attributeEquipBuilder_ != null) {
+        attributeEquipBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -4444,6 +4495,10 @@ private static final long serialVersionUID = 0L;
           pillsBuilder_ != null) {
         result.typedPacket_ = pillsBuilder_.build();
       }
+      if (typedPacketCase_ == 81 &&
+          attributeEquipBuilder_ != null) {
+        result.typedPacket_ = attributeEquipBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -4789,6 +4844,10 @@ private static final long serialVersionUID = 0L;
         }
         case PILLS: {
           mergePills(other.getPills());
+          break;
+        }
+        case ATTRIBUTEEQUIP: {
+          mergeAttributeEquip(other.getAttributeEquip());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -5346,6 +5405,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 80;
               break;
             } // case 642
+            case 650: {
+              input.readMessage(
+                  getAttributeEquipFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 81;
+              break;
+            } // case 650
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -16028,6 +16094,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 80;
       onChanged();
       return pillsBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AttributeEquipPacket, org.y1000.network.gen.AttributeEquipPacket.Builder, org.y1000.network.gen.AttributeEquipPacketOrBuilder> attributeEquipBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+     * @return Whether the attributeEquip field is set.
+     */
+    @java.lang.Override
+    public boolean hasAttributeEquip() {
+      return typedPacketCase_ == 81;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+     * @return The attributeEquip.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.AttributeEquipPacket getAttributeEquip() {
+      if (attributeEquipBuilder_ == null) {
+        if (typedPacketCase_ == 81) {
+          return (org.y1000.network.gen.AttributeEquipPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.AttributeEquipPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 81) {
+          return attributeEquipBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.AttributeEquipPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+     */
+    public Builder setAttributeEquip(org.y1000.network.gen.AttributeEquipPacket value) {
+      if (attributeEquipBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        attributeEquipBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 81;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+     */
+    public Builder setAttributeEquip(
+        org.y1000.network.gen.AttributeEquipPacket.Builder builderForValue) {
+      if (attributeEquipBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        attributeEquipBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 81;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+     */
+    public Builder mergeAttributeEquip(org.y1000.network.gen.AttributeEquipPacket value) {
+      if (attributeEquipBuilder_ == null) {
+        if (typedPacketCase_ == 81 &&
+            typedPacket_ != org.y1000.network.gen.AttributeEquipPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.AttributeEquipPacket.newBuilder((org.y1000.network.gen.AttributeEquipPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 81) {
+          attributeEquipBuilder_.mergeFrom(value);
+        } else {
+          attributeEquipBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 81;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+     */
+    public Builder clearAttributeEquip() {
+      if (attributeEquipBuilder_ == null) {
+        if (typedPacketCase_ == 81) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 81) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        attributeEquipBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+     */
+    public org.y1000.network.gen.AttributeEquipPacket.Builder getAttributeEquipBuilder() {
+      return getAttributeEquipFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.AttributeEquipPacketOrBuilder getAttributeEquipOrBuilder() {
+      if ((typedPacketCase_ == 81) && (attributeEquipBuilder_ != null)) {
+        return attributeEquipBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 81) {
+          return (org.y1000.network.gen.AttributeEquipPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.AttributeEquipPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AttributeEquipPacket, org.y1000.network.gen.AttributeEquipPacket.Builder, org.y1000.network.gen.AttributeEquipPacketOrBuilder> 
+        getAttributeEquipFieldBuilder() {
+      if (attributeEquipBuilder_ == null) {
+        if (!(typedPacketCase_ == 81)) {
+          typedPacket_ = org.y1000.network.gen.AttributeEquipPacket.getDefaultInstance();
+        }
+        attributeEquipBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.AttributeEquipPacket, org.y1000.network.gen.AttributeEquipPacket.Builder, org.y1000.network.gen.AttributeEquipPacketOrBuilder>(
+                (org.y1000.network.gen.AttributeEquipPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 81;
+      onChanged();
+      return attributeEquipBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

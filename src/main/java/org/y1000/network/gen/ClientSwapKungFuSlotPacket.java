@@ -53,8 +53,8 @@ private static final long serialVersionUID = 0L;
   public static final int SLOT1_FIELD_NUMBER = 2;
   private int slot1_ = 0;
   /**
-   * <code>int32 from = 2;</code>
-   * @return The from.
+   * <code>int32 slot1 = 2;</code>
+   * @return The slot1.
    */
   @java.lang.Override
   public int getSlot1() {
@@ -64,8 +64,8 @@ private static final long serialVersionUID = 0L;
   public static final int SLOT2_FIELD_NUMBER = 3;
   private int slot2_ = 0;
   /**
-   * <code>int32 to = 3;</code>
-   * @return The to.
+   * <code>int32 slot2 = 3;</code>
+   * @return The slot2.
    */
   @java.lang.Override
   public int getSlot2() {
@@ -477,16 +477,16 @@ private static final long serialVersionUID = 0L;
 
     private int slot1_ ;
     /**
-     * <code>int32 from = 2;</code>
-     * @return The from.
+     * <code>int32 slot1 = 2;</code>
+     * @return The slot1.
      */
     @java.lang.Override
     public int getSlot1() {
       return slot1_;
     }
     /**
-     * <code>int32 from = 2;</code>
-     * @param value The from to set.
+     * <code>int32 slot1 = 2;</code>
+     * @param value The slot1 to set.
      * @return This builder for chaining.
      */
     public Builder setSlot1(int value) {
@@ -497,7 +497,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int32 from = 2;</code>
+     * <code>int32 slot1 = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearSlot1() {
@@ -509,16 +509,16 @@ private static final long serialVersionUID = 0L;
 
     private int slot2_ ;
     /**
-     * <code>int32 to = 3;</code>
-     * @return The to.
+     * <code>int32 slot2 = 3;</code>
+     * @return The slot2.
      */
     @java.lang.Override
     public int getSlot2() {
       return slot2_;
     }
     /**
-     * <code>int32 to = 3;</code>
-     * @param value The to to set.
+     * <code>int32 slot2 = 3;</code>
+     * @param value The slot2 to set.
      * @return This builder for chaining.
      */
     public Builder setSlot2(int value) {
@@ -529,7 +529,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int32 to = 3;</code>
+     * <code>int32 slot2 = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearSlot2() {

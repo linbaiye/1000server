@@ -209,7 +209,7 @@ final class PlayerManagerImpl extends AbstractMovableEntityManager<Player> imple
     }
 
     @Override
-    public void sendBroadcast(RealmEvent event) {
+    public void sendCrossRealmEvent(RealmEvent event) {
         crossRealmEventSender.send(event);
     }
 

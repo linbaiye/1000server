@@ -743,5 +743,20 @@ public interface ClientPacketOrBuilder extends
    */
   org.y1000.network.gen.UsePillInputPacketOrBuilder getUsePillOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+   * @return Whether the chat field is set.
+   */
+  boolean hasChat();
+  /**
+   * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+   * @return The chat.
+   */
+  org.y1000.network.gen.ChatInputPacket getChat();
+  /**
+   * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+   */
+  org.y1000.network.gen.ChatInputPacketOrBuilder getChatOrBuilder();
+
   org.y1000.network.gen.ClientPacket.TypeCase getTypeCase();
 }

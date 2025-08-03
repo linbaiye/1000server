@@ -11,13 +11,22 @@ public final class PlayerSayEvent extends Abstract2VisibleAndSelfMessageEvent {
         super(player, packet);
     }
 
-    public static PlayerSayEvent say(Player player, String text) {
+
+    private static PlayerSayEvent of(Player player, String text, boolean cache) {
         Validate.notNull(player);
         Validate.notEmpty(text);
         return new PlayerSayEvent(player, Packet.newBuilder().setSay(CreatureSayPacket.newBuilder()
                 .setId(player.id())
-                .setCache(false)
+                .setCache(cache)
                 .setViewName(player.viewName())
                 .setText(text).build()).build());
+    }
+
+    public static PlayerSayEvent kungfuTip(Player player, String text) {
+        return of(player, text, false);
+    }
+
+    public static PlayerSayEvent say(Player player, String text) {
+        return of(player, text, true);
     }
 }

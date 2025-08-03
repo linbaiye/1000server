@@ -9,14 +9,14 @@ public interface SwapInventorySlotPacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int32 from = 1;</code>
-   * @return The from.
+   * <code>int32 slot1 = 1;</code>
+   * @return The slot1.
    */
   int getSlot1();
 
   /**
-   * <code>int32 to = 2;</code>
-   * @return The to.
+   * <code>int32 slot2 = 2;</code>
+   * @return The slot2.
    */
   int getSlot2();
 }

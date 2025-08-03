@@ -94,6 +94,7 @@ private static final long serialVersionUID = 0L;
     TRADESTATEINPUT(47),
     ADDPLAYERTRADEINPUT(48),
     USEPILL(49),
+    CHAT(50),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -160,6 +161,7 @@ private static final long serialVersionUID = 0L;
         case 47: return TRADESTATEINPUT;
         case 48: return ADDPLAYERTRADEINPUT;
         case 49: return USEPILL;
+        case 50: return CHAT;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -1694,6 +1696,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.UsePillInputPacket.getDefaultInstance();
   }
 
+  public static final int CHAT_FIELD_NUMBER = 50;
+  /**
+   * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+   * @return Whether the chat field is set.
+   */
+  @java.lang.Override
+  public boolean hasChat() {
+    return typeCase_ == 50;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+   * @return The chat.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ChatInputPacket getChat() {
+    if (typeCase_ == 50) {
+       return (org.y1000.network.gen.ChatInputPacket) type_;
+    }
+    return org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ChatInputPacketOrBuilder getChatOrBuilder() {
+    if (typeCase_ == 50) {
+       return (org.y1000.network.gen.ChatInputPacket) type_;
+    }
+    return org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1854,6 +1887,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 49) {
       output.writeMessage(49, (org.y1000.network.gen.UsePillInputPacket) type_);
+    }
+    if (typeCase_ == 50) {
+      output.writeMessage(50, (org.y1000.network.gen.ChatInputPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -2059,6 +2095,10 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 49) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(49, (org.y1000.network.gen.UsePillInputPacket) type_);
+    }
+    if (typeCase_ == 50) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(50, (org.y1000.network.gen.ChatInputPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -2273,6 +2313,10 @@ private static final long serialVersionUID = 0L;
         if (!getUsePill()
             .equals(other.getUsePill())) return false;
         break;
+      case 50:
+        if (!getChat()
+            .equals(other.getChat())) return false;
+        break;
       case 0:
       default:
     }
@@ -2483,6 +2527,10 @@ private static final long serialVersionUID = 0L;
       case 49:
         hash = (37 * hash) + USEPILL_FIELD_NUMBER;
         hash = (53 * hash) + getUsePill().hashCode();
+        break;
+      case 50:
+        hash = (37 * hash) + CHAT_FIELD_NUMBER;
+        hash = (53 * hash) + getChat().hashCode();
         break;
       case 0:
       default:
@@ -2766,6 +2814,9 @@ private static final long serialVersionUID = 0L;
       if (usePillBuilder_ != null) {
         usePillBuilder_.clear();
       }
+      if (chatBuilder_ != null) {
+        chatBuilder_.clear();
+      }
       typeCase_ = 0;
       type_ = null;
       return this;
@@ -3008,6 +3059,10 @@ private static final long serialVersionUID = 0L;
           usePillBuilder_ != null) {
         result.type_ = usePillBuilder_.build();
       }
+      if (typeCase_ == 50 &&
+          chatBuilder_ != null) {
+        result.type_ = chatBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -3249,6 +3304,10 @@ private static final long serialVersionUID = 0L;
         }
         case USEPILL: {
           mergeUsePill(other.getUsePill());
+          break;
+        }
+        case CHAT: {
+          mergeChat(other.getChat());
           break;
         }
         case TYPE_NOT_SET: {
@@ -3624,6 +3683,13 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 49;
               break;
             } // case 394
+            case 402: {
+              input.readMessage(
+                  getChatFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 50;
+              break;
+            } // case 402
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -10613,6 +10679,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 49;
       onChanged();
       return usePillBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ChatInputPacket, org.y1000.network.gen.ChatInputPacket.Builder, org.y1000.network.gen.ChatInputPacketOrBuilder> chatBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     * @return Whether the chat field is set.
+     */
+    @java.lang.Override
+    public boolean hasChat() {
+      return typeCase_ == 50;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     * @return The chat.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ChatInputPacket getChat() {
+      if (chatBuilder_ == null) {
+        if (typeCase_ == 50) {
+          return (org.y1000.network.gen.ChatInputPacket) type_;
+        }
+        return org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 50) {
+          return chatBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    public Builder setChat(org.y1000.network.gen.ChatInputPacket value) {
+      if (chatBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        chatBuilder_.setMessage(value);
+      }
+      typeCase_ = 50;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    public Builder setChat(
+        org.y1000.network.gen.ChatInputPacket.Builder builderForValue) {
+      if (chatBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        chatBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 50;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    public Builder mergeChat(org.y1000.network.gen.ChatInputPacket value) {
+      if (chatBuilder_ == null) {
+        if (typeCase_ == 50 &&
+            type_ != org.y1000.network.gen.ChatInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ChatInputPacket.newBuilder((org.y1000.network.gen.ChatInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 50) {
+          chatBuilder_.mergeFrom(value);
+        } else {
+          chatBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 50;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    public Builder clearChat() {
+      if (chatBuilder_ == null) {
+        if (typeCase_ == 50) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 50) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        chatBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    public org.y1000.network.gen.ChatInputPacket.Builder getChatBuilder() {
+      return getChatFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ChatInputPacketOrBuilder getChatOrBuilder() {
+      if ((typeCase_ == 50) && (chatBuilder_ != null)) {
+        return chatBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 50) {
+          return (org.y1000.network.gen.ChatInputPacket) type_;
+        }
+        return org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ChatInputPacket, org.y1000.network.gen.ChatInputPacket.Builder, org.y1000.network.gen.ChatInputPacketOrBuilder> 
+        getChatFieldBuilder() {
+      if (chatBuilder_ == null) {
+        if (!(typeCase_ == 50)) {
+          type_ = org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+        }
+        chatBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ChatInputPacket, org.y1000.network.gen.ChatInputPacket.Builder, org.y1000.network.gen.ChatInputPacketOrBuilder>(
+                (org.y1000.network.gen.ChatInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 50;
+      onChanged();
+      return chatBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

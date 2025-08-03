@@ -31,4 +31,6 @@ public interface PlayerInputHandler {
 
     void usePill(String name);
 
+    void chat(ChatInput input);
+
 }

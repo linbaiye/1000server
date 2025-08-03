@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class NpcImpl extends AbstractActiveEntity implements Npc, PlayerLeaveListener {
+public class NpcImpl extends AbstractActiveEntity implements Npc {
 
     private final List<Object> abilities;
     private final NpcEventListener listener;
@@ -177,8 +177,4 @@ public class NpcImpl extends AbstractActiveEntity implements Npc, PlayerLeaveLis
         return Optional.of(viewName + "。");
     }
 
-    @Override
-    public void onPlayerLeft(Player player) {
-        ai.onPlayerLeft(player);
-    }
 }

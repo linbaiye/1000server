@@ -1,6 +1,5 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.players.Player;
 import org.y1000.message.NpcSnapshot;
 
 public interface NpcAI {
@@ -13,8 +12,6 @@ public interface NpcAI {
 
     void instantKill();
 
-    default void onPlayerLeft(Player player) {
 
-    }
 
 }

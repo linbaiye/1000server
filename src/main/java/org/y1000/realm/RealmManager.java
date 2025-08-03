@@ -24,7 +24,7 @@ public final class RealmManager implements Runnable , RealmEventSender {
 
     private final Queue<ConnectionEvent> eventQueue;
 
-    private Map<Integer, RealmGroup> realmIdGroupMap;
+    private final Map<Integer, RealmGroup> realmIdGroupMap;
 
     private volatile boolean shutdown;
 
@@ -32,26 +32,29 @@ public final class RealmManager implements Runnable , RealmEventSender {
 
     private final PlayerRepository playerRepository;
 
-
     private final Map<Connection, Long> connectedDebugPlayers;
+
+    private final int realmNumber;
 
     private final List<Long> availableDebugPlayers = List.of(100000251L, 100000301L);
 //    private final List<Long> availableDebugPlayers = List.of(100000051L, 99999951L);
 
+
     private RealmManager(AccountManager accountManager,
-                         PlayerRepository playerRepository) {
+                         PlayerRepository playerRepository, int realmNumber) {
+        this.realmNumber = realmNumber;
         eventQueue = new ArrayDeque<>(100);
         shutdown = false;
         playerNameRealmIdMap = new HashMap<>();
         this.playerRepository = playerRepository;
         this.accountManager = accountManager;
         connectedDebugPlayers = new HashMap<>();
+        realmIdGroupMap = new ConcurrentHashMap<>();
     }
 
     public void startRealms() {
         realmIdGroupMap.values().forEach(executorService::submit);
     }
-
 
 
     private Optional<Long> findAvailableDebugPlayer() {
@@ -127,7 +130,6 @@ public final class RealmManager implements Runnable , RealmEventSender {
 
 
     private void setRealmGroups(List<RealmGroup> groups) {
-        realmIdGroupMap = new ConcurrentHashMap<>();
         for (RealmGroup group : groups) {
             group.realmIds().forEach(id -> realmIdGroupMap.put(id,group));
         }
@@ -146,7 +148,7 @@ public final class RealmManager implements Runnable , RealmEventSender {
                                       AccountManager accountManager, PlayerRepository playerRepository) {
         List<Integer> realmIds = getRealmIds(mapSdb);
         List<Realm> realmList = new ArrayList<>();
-        var manager = new RealmManager(accountManager, playerRepository);
+        var manager = new RealmManager(accountManager, playerRepository, realmIds.size());
         for (Integer id : realmIds) {
             Realm realm = realmFactory.createRealm(id, manager);
             realmList.add(realm);
@@ -187,13 +189,41 @@ public final class RealmManager implements Runnable , RealmEventSender {
         }
     }
 
+    private final Map<DeliveryPrivateChatEvent, Integer> privateChatReply = new HashMap<>();
+
+    private void handlePrivateChatDelivery(DeliveryPrivateChatEvent event) {
+        privateChatReply.put(event, realmNumber);
+        realmIdGroupMap.values().forEach(r -> r.broadcast(event));
+    }
+
+    private void handlePrivateChatDeliveryResult(DeliveryPrivateChatResultEvent resultEvent) {
+        Integer i = privateChatReply.get(resultEvent.source());
+        if (i == null)
+            return;
+        i--;
+        if (resultEvent.delivered() || i <= 0) {
+            privateChatReply.remove(resultEvent.source());
+            realmIdGroupMap.values().forEach(r -> r.broadcast(resultEvent));
+        } else {
+            privateChatReply.put(resultEvent.source(), i);
+        }
+    }
+
     @Override
     public void send(RealmEvent realmEvent) {
-        realmIdGroupMap.values().forEach(r -> {
-            if (realmEvent instanceof  IdentifiedRealmEvent identifiedRealmEvent)
-                r.handle(identifiedRealmEvent.toRealm(), realmEvent);
-            else
-                r.broadcast(realmEvent);
-        });
+        synchronized (realmIdGroupMap) {
+            if (realmEvent instanceof DeliveryPrivateChatEvent deliveryPrivateChatEvent) {
+                handlePrivateChatDelivery(deliveryPrivateChatEvent);
+            } else if (realmEvent instanceof DeliveryPrivateChatResultEvent deliveryPrivateChatResultEvent) {
+                handlePrivateChatDeliveryResult(deliveryPrivateChatResultEvent);
+            } else {
+                realmIdGroupMap.values().forEach(r -> {
+                    if (realmEvent instanceof IdentifiedRealmEvent identifiedRealmEvent)
+                        r.handle(identifiedRealmEvent.toRealm(), realmEvent);
+                    else
+                        r.broadcast(realmEvent);
+                });
+            }
+        }
     }
 }

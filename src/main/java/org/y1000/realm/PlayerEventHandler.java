@@ -19,6 +19,6 @@ public interface PlayerEventHandler extends EntityEventHandler {
 
     void dropItem(Item item, Coordinate droppedAt);
 
-    void sendBroadcast(RealmEvent event);
+    void sendCrossRealmEvent(RealmEvent event);
 
 }

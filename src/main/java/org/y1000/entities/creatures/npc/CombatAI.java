@@ -144,11 +144,4 @@ public class CombatAI extends AbstractMovableNpcAI {
                         .ifPresent(a -> a.tryApply(npc(), attacker));
         applyHurtAbility(ability);
     }
-
-    @Override
-    public void onPlayerLeft(Player player) {
-        if (enemy.equals(player)) {
-            enemy = null;
-        }
-    }
 }

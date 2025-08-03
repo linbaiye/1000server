@@ -2,12 +2,11 @@ package org.y1000.entities.creatures.npc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
 
 @Slf4j
 public final class EscapeAI extends AbstractMovableNpcAI {
-    private ActiveEntity enemy;
+    private final ActiveEntity enemy;
 
     private Coordinate destination;
 
@@ -42,7 +41,7 @@ public final class EscapeAI extends AbstractMovableNpcAI {
 
     @Override
     void onNonDieAbilityDone(NpcUpdatableAbility ability) {
-        if (enemy == null || !enemy.canBeSeenAt(npc().coordinate())) {
+        if (!enemy.canBeSeenAt(npc().coordinate())) {
             returnToWander();
             return;
         }
@@ -72,11 +71,5 @@ public final class EscapeAI extends AbstractMovableNpcAI {
     public void start() {
         npc().findAbility(NpcMoveAbility.class).ifPresent(NpcMoveAbility::enableFastMove);
         computeEscapePoint();
-    }
-
-    @Override
-    public void onPlayerLeft(Player player) {
-        if (player.equals(enemy))
-            enemy = null;
     }
 }

@@ -5,71 +5,111 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.SwapKungFuSlotPacket}
+ * Protobuf type {@code org.y1000.network.gen.EquippedItemPacket}
  */
-public final class SwapKungFuSlotPacket extends
+public final class EquippedItemPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.SwapKungFuSlotPacket)
-    SwapKungFuSlotPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.EquippedItemPacket)
+    EquippedItemPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use SwapKungFuSlotPacket.newBuilder() to construct.
-  private SwapKungFuSlotPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use EquippedItemPacket.newBuilder() to construct.
+  private EquippedItemPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private SwapKungFuSlotPacket() {
+  private EquippedItemPacket() {
+    name_ = "";
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new SwapKungFuSlotPacket();
+    return new EquippedItemPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_SwapKungFuSlotPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_EquippedItemPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_SwapKungFuSlotPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_EquippedItemPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.SwapKungFuSlotPacket.class, org.y1000.network.gen.SwapKungFuSlotPacket.Builder.class);
+            org.y1000.network.gen.EquippedItemPacket.class, org.y1000.network.gen.EquippedItemPacket.Builder.class);
   }
 
-  public static final int SLOT1_FIELD_NUMBER = 1;
-  private int slot1_ = 0;
+  public static final int ICON_FIELD_NUMBER = 1;
+  private int icon_ = 0;
   /**
-   * <code>int32 slot1 = 1;</code>
-   * @return The slot1.
+   * <code>int32 icon = 1;</code>
+   * @return The icon.
    */
   @java.lang.Override
-  public int getSlot1() {
-    return slot1_;
+  public int getIcon() {
+    return icon_;
   }
 
-  public static final int SLOT2_FIELD_NUMBER = 2;
-  private int slot2_ = 0;
+  public static final int COLOR_FIELD_NUMBER = 2;
+  private int color_ = 0;
   /**
-   * <code>int32 slot2 = 2;</code>
-   * @return The slot2.
+   * <code>int32 color = 2;</code>
+   * @return The color.
    */
   @java.lang.Override
-  public int getSlot2() {
-    return slot2_;
+  public int getColor() {
+    return color_;
   }
 
-  public static final int PAGE_FIELD_NUMBER = 3;
-  private int page_ = 0;
+  public static final int NAME_FIELD_NUMBER = 3;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
-   * <code>int32 page = 3;</code>
-   * @return The page.
+   * <code>string name = 3;</code>
+   * @return The name.
    */
   @java.lang.Override
-  public int getPage() {
-    return page_;
+  public java.lang.String getName() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      name_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string name = 3;</code>
+   * @return The bytes for name.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getNameBytes() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      name_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int TYPE_FIELD_NUMBER = 4;
+  private int type_ = 0;
+  /**
+   * <code>int32 type = 4;</code>
+   * @return The type.
+   */
+  @java.lang.Override
+  public int getType() {
+    return type_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -86,14 +126,17 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (slot1_ != 0) {
-      output.writeInt32(1, slot1_);
+    if (icon_ != 0) {
+      output.writeInt32(1, icon_);
     }
-    if (slot2_ != 0) {
-      output.writeInt32(2, slot2_);
+    if (color_ != 0) {
+      output.writeInt32(2, color_);
     }
-    if (page_ != 0) {
-      output.writeInt32(3, page_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, name_);
+    }
+    if (type_ != 0) {
+      output.writeInt32(4, type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -104,17 +147,20 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (slot1_ != 0) {
+    if (icon_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(1, slot1_);
+        .computeInt32Size(1, icon_);
     }
-    if (slot2_ != 0) {
+    if (color_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, slot2_);
+        .computeInt32Size(2, color_);
     }
-    if (page_ != 0) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, name_);
+    }
+    if (type_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, page_);
+        .computeInt32Size(4, type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -126,17 +172,19 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.SwapKungFuSlotPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.EquippedItemPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.SwapKungFuSlotPacket other = (org.y1000.network.gen.SwapKungFuSlotPacket) obj;
+    org.y1000.network.gen.EquippedItemPacket other = (org.y1000.network.gen.EquippedItemPacket) obj;
 
-    if (getSlot1()
-        != other.getSlot1()) return false;
-    if (getSlot2()
-        != other.getSlot2()) return false;
-    if (getPage()
-        != other.getPage()) return false;
+    if (getIcon()
+        != other.getIcon()) return false;
+    if (getColor()
+        != other.getColor()) return false;
+    if (!getName()
+        .equals(other.getName())) return false;
+    if (getType()
+        != other.getType()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -148,55 +196,57 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + SLOT1_FIELD_NUMBER;
-    hash = (53 * hash) + getSlot1();
-    hash = (37 * hash) + SLOT2_FIELD_NUMBER;
-    hash = (53 * hash) + getSlot2();
-    hash = (37 * hash) + PAGE_FIELD_NUMBER;
-    hash = (53 * hash) + getPage();
+    hash = (37 * hash) + ICON_FIELD_NUMBER;
+    hash = (53 * hash) + getIcon();
+    hash = (37 * hash) + COLOR_FIELD_NUMBER;
+    hash = (53 * hash) + getColor();
+    hash = (37 * hash) + NAME_FIELD_NUMBER;
+    hash = (53 * hash) + getName().hashCode();
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseFrom(
+  public static org.y1000.network.gen.EquippedItemPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseFrom(
+  public static org.y1000.network.gen.EquippedItemPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseFrom(
+  public static org.y1000.network.gen.EquippedItemPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseFrom(
+  public static org.y1000.network.gen.EquippedItemPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.EquippedItemPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseFrom(
+  public static org.y1000.network.gen.EquippedItemPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.EquippedItemPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseFrom(
+  public static org.y1000.network.gen.EquippedItemPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -204,26 +254,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.EquippedItemPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.EquippedItemPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseFrom(
+  public static org.y1000.network.gen.EquippedItemPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.SwapKungFuSlotPacket parseFrom(
+  public static org.y1000.network.gen.EquippedItemPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -236,7 +286,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.SwapKungFuSlotPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.EquippedItemPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -252,26 +302,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.SwapKungFuSlotPacket}
+   * Protobuf type {@code org.y1000.network.gen.EquippedItemPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.SwapKungFuSlotPacket)
-      org.y1000.network.gen.SwapKungFuSlotPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.EquippedItemPacket)
+      org.y1000.network.gen.EquippedItemPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_SwapKungFuSlotPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_EquippedItemPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_SwapKungFuSlotPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_EquippedItemPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.SwapKungFuSlotPacket.class, org.y1000.network.gen.SwapKungFuSlotPacket.Builder.class);
+              org.y1000.network.gen.EquippedItemPacket.class, org.y1000.network.gen.EquippedItemPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.SwapKungFuSlotPacket.newBuilder()
+    // Construct using org.y1000.network.gen.EquippedItemPacket.newBuilder()
     private Builder() {
 
     }
@@ -285,26 +335,27 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      slot1_ = 0;
-      slot2_ = 0;
-      page_ = 0;
+      icon_ = 0;
+      color_ = 0;
+      name_ = "";
+      type_ = 0;
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_SwapKungFuSlotPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_EquippedItemPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.SwapKungFuSlotPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.SwapKungFuSlotPacket.getDefaultInstance();
+    public org.y1000.network.gen.EquippedItemPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.EquippedItemPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.SwapKungFuSlotPacket build() {
-      org.y1000.network.gen.SwapKungFuSlotPacket result = buildPartial();
+    public org.y1000.network.gen.EquippedItemPacket build() {
+      org.y1000.network.gen.EquippedItemPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -312,23 +363,26 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.SwapKungFuSlotPacket buildPartial() {
-      org.y1000.network.gen.SwapKungFuSlotPacket result = new org.y1000.network.gen.SwapKungFuSlotPacket(this);
+    public org.y1000.network.gen.EquippedItemPacket buildPartial() {
+      org.y1000.network.gen.EquippedItemPacket result = new org.y1000.network.gen.EquippedItemPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.SwapKungFuSlotPacket result) {
+    private void buildPartial0(org.y1000.network.gen.EquippedItemPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.slot1_ = slot1_;
+        result.icon_ = icon_;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.slot2_ = slot2_;
+        result.color_ = color_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.page_ = page_;
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.type_ = type_;
       }
     }
 
@@ -366,24 +420,29 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.SwapKungFuSlotPacket) {
-        return mergeFrom((org.y1000.network.gen.SwapKungFuSlotPacket)other);
+      if (other instanceof org.y1000.network.gen.EquippedItemPacket) {
+        return mergeFrom((org.y1000.network.gen.EquippedItemPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.SwapKungFuSlotPacket other) {
-      if (other == org.y1000.network.gen.SwapKungFuSlotPacket.getDefaultInstance()) return this;
-      if (other.getSlot1() != 0) {
-        setSlot1(other.getSlot1());
+    public Builder mergeFrom(org.y1000.network.gen.EquippedItemPacket other) {
+      if (other == org.y1000.network.gen.EquippedItemPacket.getDefaultInstance()) return this;
+      if (other.getIcon() != 0) {
+        setIcon(other.getIcon());
       }
-      if (other.getSlot2() != 0) {
-        setSlot2(other.getSlot2());
+      if (other.getColor() != 0) {
+        setColor(other.getColor());
       }
-      if (other.getPage() != 0) {
-        setPage(other.getPage());
+      if (!other.getName().isEmpty()) {
+        name_ = other.name_;
+        bitField0_ |= 0x00000004;
+        onChanged();
+      }
+      if (other.getType() != 0) {
+        setType(other.getType());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -412,20 +471,25 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              slot1_ = input.readInt32();
+              icon_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
             case 16: {
-              slot2_ = input.readInt32();
+              color_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
-            case 24: {
-              page_ = input.readInt32();
+            case 26: {
+              name_ = input.readStringRequireUtf8();
               bitField0_ |= 0x00000004;
               break;
-            } // case 24
+            } // case 26
+            case 32: {
+              type_ = input.readInt32();
+              bitField0_ |= 0x00000008;
+              break;
+            } // case 32
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -443,98 +507,170 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private int slot1_ ;
+    private int icon_ ;
     /**
-     * <code>int32 slot1 = 1;</code>
-     * @return The slot1.
+     * <code>int32 icon = 1;</code>
+     * @return The icon.
      */
     @java.lang.Override
-    public int getSlot1() {
-      return slot1_;
+    public int getIcon() {
+      return icon_;
     }
     /**
-     * <code>int32 slot1 = 1;</code>
-     * @param value The slot1 to set.
+     * <code>int32 icon = 1;</code>
+     * @param value The icon to set.
      * @return This builder for chaining.
      */
-    public Builder setSlot1(int value) {
+    public Builder setIcon(int value) {
 
-      slot1_ = value;
+      icon_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 slot1 = 1;</code>
+     * <code>int32 icon = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder clearSlot1() {
+    public Builder clearIcon() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      slot1_ = 0;
+      icon_ = 0;
       onChanged();
       return this;
     }
 
-    private int slot2_ ;
+    private int color_ ;
     /**
-     * <code>int32 slot2 = 2;</code>
-     * @return The slot2.
+     * <code>int32 color = 2;</code>
+     * @return The color.
      */
     @java.lang.Override
-    public int getSlot2() {
-      return slot2_;
+    public int getColor() {
+      return color_;
     }
     /**
-     * <code>int32 slot2 = 2;</code>
-     * @param value The slot2 to set.
+     * <code>int32 color = 2;</code>
+     * @param value The color to set.
      * @return This builder for chaining.
      */
-    public Builder setSlot2(int value) {
+    public Builder setColor(int value) {
 
-      slot2_ = value;
+      color_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 slot2 = 2;</code>
+     * <code>int32 color = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearSlot2() {
+    public Builder clearColor() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      slot2_ = 0;
+      color_ = 0;
       onChanged();
       return this;
     }
 
-    private int page_ ;
+    private java.lang.Object name_ = "";
     /**
-     * <code>int32 page = 3;</code>
-     * @return The page.
+     * <code>string name = 3;</code>
+     * @return The name.
      */
-    @java.lang.Override
-    public int getPage() {
-      return page_;
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
     }
     /**
-     * <code>int32 page = 3;</code>
-     * @param value The page to set.
+     * <code>string name = 3;</code>
+     * @return The bytes for name.
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string name = 3;</code>
+     * @param value The name to set.
      * @return This builder for chaining.
      */
-    public Builder setPage(int value) {
-
-      page_ = value;
+    public Builder setName(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      name_ = value;
       bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 page = 3;</code>
+     * <code>string name = 3;</code>
      * @return This builder for chaining.
      */
-    public Builder clearPage() {
+    public Builder clearName() {
+      name_ = getDefaultInstance().getName();
       bitField0_ = (bitField0_ & ~0x00000004);
-      page_ = 0;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string name = 3;</code>
+     * @param value The bytes for name to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      name_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+
+    private int type_ ;
+    /**
+     * <code>int32 type = 4;</code>
+     * @return The type.
+     */
+    @java.lang.Override
+    public int getType() {
+      return type_;
+    }
+    /**
+     * <code>int32 type = 4;</code>
+     * @param value The type to set.
+     * @return This builder for chaining.
+     */
+    public Builder setType(int value) {
+
+      type_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 type = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearType() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      type_ = 0;
       onChanged();
       return this;
     }
@@ -551,23 +687,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.SwapKungFuSlotPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.EquippedItemPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.SwapKungFuSlotPacket)
-  private static final org.y1000.network.gen.SwapKungFuSlotPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.EquippedItemPacket)
+  private static final org.y1000.network.gen.EquippedItemPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.SwapKungFuSlotPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.EquippedItemPacket();
   }
 
-  public static org.y1000.network.gen.SwapKungFuSlotPacket getDefaultInstance() {
+  public static org.y1000.network.gen.EquippedItemPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<SwapKungFuSlotPacket>
-      PARSER = new com.google.protobuf.AbstractParser<SwapKungFuSlotPacket>() {
+  private static final com.google.protobuf.Parser<EquippedItemPacket>
+      PARSER = new com.google.protobuf.AbstractParser<EquippedItemPacket>() {
     @java.lang.Override
-    public SwapKungFuSlotPacket parsePartialFrom(
+    public EquippedItemPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -586,17 +722,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<SwapKungFuSlotPacket> parser() {
+  public static com.google.protobuf.Parser<EquippedItemPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<SwapKungFuSlotPacket> getParserForType() {
+  public com.google.protobuf.Parser<EquippedItemPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.SwapKungFuSlotPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.EquippedItemPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

@@ -25,6 +25,6 @@ public final class PlayerKungFuFullEvent implements PlayerEvent {
 
     @Override
     public void accept(PlayerEventHandler handler) {
-        handler.sendBroadcast(toBroadcastEvent());
+        handler.sendCrossRealmEvent(toBroadcastEvent());
     }
 }

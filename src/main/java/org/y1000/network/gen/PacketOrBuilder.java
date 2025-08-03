@@ -1133,5 +1133,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.PillsPacketOrBuilder getPillsOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+   * @return Whether the attributeEquip field is set.
+   */
+  boolean hasAttributeEquip();
+  /**
+   * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+   * @return The attributeEquip.
+   */
+  org.y1000.network.gen.AttributeEquipPacket getAttributeEquip();
+  /**
+   * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+   */
+  org.y1000.network.gen.AttributeEquipPacketOrBuilder getAttributeEquipOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

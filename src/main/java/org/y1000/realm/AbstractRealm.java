@@ -3,6 +3,7 @@ package org.y1000.realm;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.entities.teleport.Teleport;
 import org.y1000.entities.teleport.TeleportHandler;
 import org.y1000.message.input.*;
@@ -185,6 +186,27 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
     @Override
     public void broadcastText(BroadcastTextEvent event) {
         getPlayerManager().allPlayers().forEach(player -> player.sendEvent(event.createMessage(player)));
+    }
+
+    @Override
+    public void deliverPrivateChat(DeliveryPrivateChatEvent event) {
+        boolean found = false;
+        for (Player player: getPlayerManager().allPlayers()) {
+            if (player.viewName().equals(event.getToPlayerName())) {
+                found = true;
+                player.sendEvent(PlayerTextMessage.privateChat(player, event.formatDeliveredContent()));
+                crossRealmEventSender.send(DeliveryPrivateChatResultEvent.delivered(event));
+                break;
+            }
+        }
+        if (!found)
+            crossRealmEventSender.send(DeliveryPrivateChatResultEvent.notFound(event));
+    }
+
+    @Override
+    public void deliverPrivateChatResult(long playerId, String reply) {
+        getPlayerManager().find(playerId)
+                .ifPresent(player -> player.sendEvent(PlayerTextMessage.privateChat(player, reply)));
     }
 
     public void handle(IRealmEvent event) {
