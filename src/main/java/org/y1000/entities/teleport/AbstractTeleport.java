@@ -50,6 +50,8 @@ public abstract class AbstractTeleport implements Teleport {
         Validate.notNull(toCoordinate);
         this.rejectCoordinate = createGateSdb.getEX(idName) != null ? Coordinate.xy(createGateSdb.getEX(idName), createGateSdb.getEY(idName)) : null;
         this.realmId = realmId;
+        if (!this.costs.isEmpty())
+            Validate.isTrue(rejectCoordinate != null);
     }
 
     public long id() {

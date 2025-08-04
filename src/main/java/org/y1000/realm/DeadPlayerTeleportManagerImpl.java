@@ -41,6 +41,6 @@ final class DeadPlayerTeleportManagerImpl implements DeadPlayerTeleportManager {
     @Override
     public void update(long delta) {
         Set<Player> players = timerManager.update(delta);
-        players.forEach(player -> teleportHandler.invoke(new RealmTeleportEvent(player, toRealmId, toCoordinate)));
+        //players.forEach(player -> teleportHandler.invoke(new RealmTeleportEvent(player, toRealmId, toCoordinate)));
     }
 }

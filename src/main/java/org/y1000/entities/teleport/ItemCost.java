@@ -2,6 +2,7 @@ package org.y1000.entities.teleport;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.UpdateInventorySlotMessage;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 
 
@@ -30,6 +31,7 @@ public final class ItemCost implements TeleportCost {
         if (check(player) != null)
             return;
         int slot = player.inventory().consume(requiredItem, requiredNumber);
-        player.emitEvent(UpdateInventorySlotEvent.update(player, slot));
+        if (slot != 0)
+            player.sendEvent(UpdateInventorySlotMessage.update(player, slot));
     }
 }

@@ -2,6 +2,7 @@ package org.y1000.realm.event;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.Teleport;
 import org.y1000.entities.teleport.TeleportCost;
@@ -55,6 +56,9 @@ public final class RealmTeleportEvent implements IdentifiedRealmEvent {
         this.fromId = from;
         this.rejectCoordinate = rejectCoordinate;
         this.costs = costs != null ? costs : Collections.emptyList();
+        if (!this.costs.isEmpty()) {
+            Validate.isTrue(rejectCoordinate != null);
+        }
     }
 
     public Coordinate toCoordinate() {

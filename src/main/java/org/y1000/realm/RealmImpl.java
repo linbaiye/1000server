@@ -3,6 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.ClientFoundGuildEvent;
 import org.y1000.message.input.Login;
@@ -33,7 +34,14 @@ final class RealmImpl extends AbstractRealm {
 
     @Override
     public void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
-        playerManager().teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate(), teleportEvent.getConnection());
+        String s = teleportEvent.checkCost();
+        if (s != null) {
+            teleportEvent.getConnection().writeAndFlush(PlayerTextMessage.bottom(teleportEvent.player(), s));
+            teleportEvent.rejectEvent().ifPresent(e -> getCrossRealmEventHandler().send(e));
+        } else {
+            playerManager().teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate(), teleportEvent.getConnection());
+            teleportEvent.getCosts().forEach(c -> c.charge(teleportEvent.player()));
+        }
     }
 
 
