@@ -149,7 +149,6 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .realmMap(realmMap)
                     .teleportManager(teleportManager)
                     .playerRepository(playerRepository)
-                    .chatManager(new ChatManagerImpl(playerManager, eventSender, crossRealmEventSender))
                     ;
             if (allowGuildCreation(id)) {
                 GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, crossRealmEventSender, realmMap, guildRepository, itemRepository,
@@ -177,8 +176,6 @@ public final class RealmFactoryImpl implements RealmFactory {
         private int id;
         private RealmEventSender crossRealmEventSender;
         private MapSdb mapSdb;
-
-        private ChatManager chatManager;
 
         private boolean conjunction;
 
@@ -212,11 +209,6 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         public RealmBuilder eventSender(RealmPlayerConnectionManager eventSender) {
             this.eventSender = eventSender;
-            return this;
-        }
-
-        public RealmBuilder chatManager(ChatManager chatManager) {
-            this.chatManager = chatManager;
             return this;
         }
 
@@ -272,17 +264,17 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         public Realm buildNormal() {
             if (guildManager == null)
-                return new RealmImpl(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, playerRepository);
+                return new RealmImpl(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository);
             else
-                return new RealmImpl(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, playerRepository);
+                return new RealmImpl(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository);
 //                return new GuildableRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, guildManager, playerRepository);
         }
 
         public Realm buildDungeon(int interval) {
             if (conjunction) {
-                return new ConjunctionDungeonRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager, playerRepository);
+                return new ConjunctionDungeonRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, playerRepository);
             } else {
-                return new EntranceDungeonRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager, whitelistIds, playerRepository);
+                return new EntranceDungeonRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, whitelistIds, playerRepository);
             }
         }
     }

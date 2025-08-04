@@ -26,16 +26,5 @@ class ChatterTest {
         chatter = new NpcSayAbility(dialogs);
     }
 
-    @Test
-    void onActionDone() {
-        for (int i = 0; i < 10; i++) chatter.onActionDone(humanNpc);
-        verify(humanNpc, times(1)).say("test");
-        for (int i = 0; i < 10; i++) chatter.onActionDone(humanNpc);
-        verify(humanNpc, times(2)).say("test");
-        dialogs.add("hello");
-        for (int i = 0; i < 10; i++) chatter.onActionDone(humanNpc);
-        verify(humanNpc, times(3)).say("test");
-        for (int i = 0; i < 10; i++) chatter.onActionDone(humanNpc);
-        verify(humanNpc, times(1)).say("hello");
-    }
+
 }

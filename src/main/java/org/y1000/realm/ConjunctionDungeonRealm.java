@@ -20,9 +20,8 @@ final class ConjunctionDungeonRealm extends AbstractDungeonRealm {
                                    RealmEventSender crossRealmEventSender,
                                    MapSdb mapSdb,
                                    int interval,
-                                   ChatManager chatManager,
                                    PlayerRepository playerRepository) {
-        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, interval,
+        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval,
                 playerRepository);
     }
 

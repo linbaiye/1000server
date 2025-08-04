@@ -28,9 +28,6 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
     private final MapSdb mapSdb;
     private long accumulatedMillis;
     private final List<ActiveEntityManager<?>> entityManagers;
-
-    private final ChatManager chatManager;
-
     private final PlayerRepository playerRepository;
 
     public AbstractRealm(int id,
@@ -42,7 +39,6 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
                          TeleportManager teleportManager,
                          RealmEventSender crossRealmEventSender,
                          MapSdb mapSdb,
-                         ChatManager chatManager,
                          PlayerRepository playerRepository) {
         Validate.notNull(realmMap);
         Validate.notNull(itemManager);
@@ -64,7 +60,6 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
             entityManagers.add(dynamicObjectManager);
         if (npcManager != null)
             entityManagers.add(npcManager);
-        this.chatManager = chatManager;
         this.playerRepository = playerRepository;
     }
 

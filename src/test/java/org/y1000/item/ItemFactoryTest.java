@@ -37,6 +37,7 @@ class ItemFactoryTest extends AbstractUnitTestFixture {
     void createWrist() {
         var equipment = itemFactory.createWrist("女子黄龙手套");
         assertEquals(EquipmentType.WRIST, equipment.equipmentType());
+        System.out.println(equipment.description());
         assertNotEquals(0, equipment.color());
     }
 

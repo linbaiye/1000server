@@ -20,6 +20,7 @@ public record SimpleInput(SimpleInput.Type type) implements SelfHandleInput {
         InventoryQuietly(7),
         GetPills(8),
         AttributeEquipment(9),
+        AttributeQuietly(10),
         ;
         private final int v;
 

@@ -18,9 +18,6 @@ class JoinedRealmEventTest extends AbstractPlayerUnitTestFixture {
     void toPacket() {
         PlayerImpl player = playerBuilder().build();
         RealmMap map = Mockito.mock(RealmMap.class);
-        when(map.objectFile()).thenReturn("obj");
-        when(map.roofFile()).thenReturn("roof");
-        when(map.tileFile()).thenReturn("tile");
         when(map.mapFile()).thenReturn("map");
         Realm realm = Mockito.mock(Realm.class);
         when(realm.map()).thenReturn(map);
@@ -29,9 +26,5 @@ class JoinedRealmEventTest extends AbstractPlayerUnitTestFixture {
         LoginPacket loginPacket = new JoinedRealmEvent(player, player.coordinate(), player.inventory(), realm).toPacket().getLoginPacket();
         assertEquals("bgm", loginPacket.getTeleport().getBgm());
         assertEquals("map", loginPacket.getTeleport().getMap());
-        assertEquals("obj", loginPacket.getTeleport().getObj());
-        assertEquals("roof", loginPacket.getTeleport().getRof());
-        assertEquals("tile", loginPacket.getTeleport().getTile());
-        assertEquals("test", loginPacket.getTeleport().getRealm());
     }
 }

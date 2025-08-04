@@ -209,7 +209,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
     @Override
     public String detailText() {
-        StringBuilder descriptionBuilder = getDescriptionBuilder();
+        StringBuilder descriptionBuilder = getDescriptionBuilder().append("\n");
         descriptionBuilder.append("攻击速度: ").append(attackSpeed()).append("\n")
                 .append("恢复: ").append(recovery()).append("\n")
                 .append("闪躲: ").append(avoidance()).append("\n");
@@ -218,6 +218,6 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
         descriptionBuilder.append(dmgStr).append("\n");
         var am = armor();
         var str = String.format("防御力: %d / %d / %d / %d", am.body(), am.head(), am.arm(), am.leg());
-        return descriptionBuilder.append(str).append("\n").toString();
+        return descriptionBuilder.append(str).toString();
     }
 }

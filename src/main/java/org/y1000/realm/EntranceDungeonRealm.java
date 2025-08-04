@@ -29,11 +29,10 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
                                 TeleportManager teleportManager,
                                 RealmEventSender crossRealmEventSender,
                                 MapSdb mapSdb, int interval,
-                                ChatManager chatManager,
                                 Set<Integer> whitelistedIds,
                                 PlayerRepository playerRepository) {
         this(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
-                interval, LocalDateTime::now, chatManager, whitelistedIds, playerRepository);
+                interval, LocalDateTime::now, whitelistedIds, playerRepository);
     }
 
     public EntranceDungeonRealm(int id,
@@ -47,9 +46,8 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
                                 MapSdb mapSdb,
                                 int interval,
                                 Supplier<LocalDateTime> timeSupplier,
-                                ChatManager chatManager,
                                 Set<Integer> whitelistedIds, PlayerRepository playerRepository) {
-        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, interval, playerRepository);
+        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, playerRepository);
         Validate.notNull(timeSupplier);
         this.dateTimeSupplier = timeSupplier;
         this.whitelistedIds = whitelistedIds != null ? whitelistedIds : Collections.emptySet();

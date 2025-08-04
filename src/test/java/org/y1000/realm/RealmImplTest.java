@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.creatures.npc.InteractableNpc;
 import org.y1000.entities.players.Player;
-import org.y1000.message.input.ClientSimpleCommandEvent;
-import org.y1000.message.input.SimpleCommand;
 import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.Connection;
 import org.y1000.network.event.ConnectionEstablishedEvent;

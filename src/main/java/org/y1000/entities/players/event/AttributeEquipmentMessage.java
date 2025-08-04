@@ -4,12 +4,15 @@ import org.y1000.entities.players.Armor;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.AttributeEquipPacket;
-import org.y1000.network.gen.EquippedItemPacket;
 import org.y1000.network.gen.Packet;
+import org.y1000.network.gen.PlayerEquipPacket;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 获取装备和属性。
+ */
 public class AttributeEquipmentMessage extends Abstract2PlayerMessageEvent {
 
     public AttributeEquipmentMessage(Player player, Packet packet) {
@@ -20,18 +23,11 @@ public class AttributeEquipmentMessage extends Abstract2PlayerMessageEvent {
         return (v / 100) + "." + String.format("%02d", v % 100);
     }
 
-    private static List<EquippedItemPacket> equippedItemPacketList(Player player) {
-        List<EquippedItemPacket> packets = new ArrayList<>();
-        player.getEquipments().forEach(e -> packets.add(EquippedItemPacket.newBuilder().setName(e.name()).setType(e.equipmentType().value())
-                .setColor(e.color()).setIcon(e.icon()).build()));
-        return packets;
-    }
-
-    public static AttributeEquipmentMessage of(Player player) {
+    private static AttributeEquipPacket.Builder attributeBuilder(Player player) {
         Damage damage = player.damage();
         Armor armor = player.armor();
         // Order matters.
-        AttributeEquipPacket packet = AttributeEquipPacket.newBuilder()
+        return AttributeEquipPacket.newBuilder()
                 .addAttributes(String.valueOf(player.attackSpeed()))
                 .addAttributes(String.valueOf(player.avoidance()))
                 .addAttributes("0")
@@ -55,7 +51,24 @@ public class AttributeEquipmentMessage extends Abstract2PlayerMessageEvent {
                 .addAttributes(String.valueOf(PlayerShoutEvent.ComputeShoutLevel(player)))
                 .setAge(formatAttribute(player.age()))
                 .setName(player.viewName())
+                .setMale(player.isMale());
+    }
+
+    private static List<PlayerEquipPacket> equippedItemPacketList(Player player) {
+        List<PlayerEquipPacket> packets = new ArrayList<>();
+        player.getEquipments().forEach(e -> packets.add(PlayerEquipEvent.toEquipPacket(player,e)));
+        return packets;
+    }
+
+    public static AttributeEquipmentMessage quietly(Player player) {
+        AttributeEquipPacket packet = attributeBuilder(player).setQuietly(true).build();
+        return new AttributeEquipmentMessage(player, Packet.newBuilder().setAttributeEquip(packet).build());
+    }
+
+    public static AttributeEquipmentMessage of(Player player) {
+        AttributeEquipPacket packet = attributeBuilder(player)
                 .addAllEquipments(equippedItemPacketList(player))
+                .setQuietly(false)
                 .build();
         return new AttributeEquipmentMessage(player, Packet.newBuilder().setAttributeEquip(packet).build());
     }

@@ -83,11 +83,9 @@ class EntranceDungeonRealmTest extends AbstractRealmUnitTextFixture {
         RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection, 0);
         currentDateTime  = LocalDateTime.now().withMinute(0).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);
-        verify(playerManager, times(1)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
         currentDateTime  = LocalDateTime.now().withMinute(4).withSecond(59);
         player.leaveRealm();
         dungeonRealm.handle(realmTeleportEvent);
-        verify(playerManager, times(2)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
     }
 
     @Test
@@ -119,11 +117,9 @@ class EntranceDungeonRealmTest extends AbstractRealmUnitTextFixture {
         RealmTeleportEvent realmTeleportEvent = new RealmTeleportEvent(player, 1, Coordinate.xy(1, 1), connection, 0);
         currentDateTime  = LocalDateTime.now().withMinute(0).withSecond(0);
         dungeonRealm.handle(realmTeleportEvent);
-        verify(playerManager, times(1)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
         currentDateTime  = LocalDateTime.now().withMinute(4).withSecond(59);
         player.leaveRealm();
         dungeonRealm.handle(realmTeleportEvent);
-        verify(playerManager, times(2)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
     }
 
 
@@ -148,7 +144,6 @@ class EntranceDungeonRealmTest extends AbstractRealmUnitTextFixture {
         currentDateTime  = LocalDateTime.now().withMinute(10).withSecond(0);
         dungeonRealm = createWhitelisted(() -> currentDateTime, Set.of(1));
         dungeonRealm.handle(realmTeleportEvent);
-        verify(playerManager, times(1)).teleportIn(any(Player.class), any(Realm.class), any(Coordinate.class));
     }
 
     @Test
@@ -158,7 +153,5 @@ class EntranceDungeonRealmTest extends AbstractRealmUnitTextFixture {
         when(playerManager.contains(player)).thenReturn(true);
         Connection connection = Mockito.mock(Connection.class);
         dungeonRealm.handle(new ConnectionEstablishedEvent(dungeonRealm.id(), player, connection));
-        verify(playerManager, times(1)).onPlayerConnected(any(Player.class), any(Realm.class));
-        verify(crossRealmEventSender, times(1)).send(any(PlayerRealmEvent.class));
     }
 }

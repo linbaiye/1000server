@@ -50,7 +50,7 @@ public interface PlayerEventVisitor extends EntityEventVisitor {
 //    default void visit(RewindEvent event) {
 //    }
 
-    default void visit(ItemOrKungFuAttributeEvent event) {
+    default void visit(ItemDescriptionMessage event) {
 
     }
 }

@@ -74,7 +74,7 @@ end;
 
     protected StringBuilder getDescriptionBuilder() {
         var str = String.format("修炼等级: %d.%02d", level() / 100, level() % 100);
-        return new StringBuilder(str).append("\n");
+        return new StringBuilder(str);
     }
 
     @Override

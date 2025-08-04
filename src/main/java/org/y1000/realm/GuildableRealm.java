@@ -23,11 +23,9 @@ class GuildableRealm extends AbstractRealm {
                           TeleportManager teleportManager,
                           RealmEventSender crossRealmEventSender,
                           MapSdb mapSdb,
-                          ChatManager chatManager,
                           GuildManager guildManager,
                           PlayerRepository playerRepository) {
-        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager,
-                playerRepository);
+        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository);
         addEntityManager(guildManager);
         this.guildManager = guildManager;
     }
@@ -47,9 +45,6 @@ class GuildableRealm extends AbstractRealm {
         guildManager.foundGuild(source, event.coordinate(), event.name(), event.inventorySlot());
     }
 
-    private void attackGuildStone(GuildStone guildStone, long playerId, ClientAttackEvent attackEvent) {
-//        playerManager().find(playerId).ifPresent(player -> player.attack(attackEvent, guildStone));
-    }
 
 
     private void sameRealmManagement(Player source, String target, BiConsumer<Player, Player> handler) {

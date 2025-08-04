@@ -5,13 +5,11 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.ServerContext;
 import org.y1000.entities.Direction;
-import org.y1000.message.input.chat.ClientInputTextEvent;
 import org.y1000.item.EquipmentType;
 import org.y1000.message.input.*;
 import org.y1000.message.input.MoveInput;
 import org.y1000.message.input.TurnInput;
 import org.y1000.network.gen.ClientPacket;
-import org.y1000.network.gen.ClientSimpleCommandPacket;
 import org.y1000.realm.RealmManager;
 import org.y1000.util.Coordinate;
 
@@ -37,22 +35,10 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
         return realmManager;
     }
 
-    private ClientEvent parseSimpleCommand(ClientSimpleCommandPacket packet) {
-        if (packet.getCommand() == SimpleCommand.CANCEL_BUFF.value()) {
-            return new CancelBuffEvent();
-        } else if (packet.getCommand() == SimpleCommand.PONG.value()) {
-            log.info("Received ping from.");
-            return null;
-        }
-        return ClientSimpleCommandEvent.parse(packet.getCommand());
-    }
-
     Object createMessage(ClientPacket clientPacket) {
         return switch (clientPacket.getTypeCase()) {
             case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
-            case ATTACKEVENTPACKET -> ClientAttackEvent.fromPacket(clientPacket.getAttackEventPacket());
             case SWAPINVENTORYSLOTPACKET -> SwapInventoryItemInput.fromPacket(clientPacket.getSwapInventorySlotPacket());
-            case DOUBLECLICKINVENTORYSLOTPACKET -> new ClientDoubleClickSlotEvent(clientPacket.getDoubleClickInventorySlotPacket().getSlot());
             case DROPITEM -> new ClientDropItemEvent(clientPacket.getDropItem().getNumber(), clientPacket.getDropItem().getSlot(),
                     clientPacket.getDropItem().getX(), clientPacket.getDropItem().getY(),
                     new Coordinate(clientPacket.getDropItem().getCoordinateX(), clientPacket.getDropItem().getCoordinateY()));
@@ -68,10 +54,6 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case UPDATETRADE -> ClientUpdateTradeEvent.fromPacket(clientPacket.getUpdateTrade());
             case TRIGGERDYNAMICOBJECT -> new ClientTriggerDynamicObjectEvent(clientPacket.getTriggerDynamicObject().getId(), clientPacket.getTriggerDynamicObject().getUseSlot());
             case SWAPKUNGFUSLOT -> new ClientSwapKungFuSlotEvent(clientPacket.getSwapKungFuSlot().getPage(), clientPacket.getSwapKungFuSlot().getSlot1(), clientPacket.getSwapKungFuSlot().getSlot2());
-            case DRAGPLAYER -> new ClientDragPlayerEvent(clientPacket.getDragPlayer().getTargetId(), clientPacket.getDragPlayer().getRopeSlot());
-            case SIMPLECOMMAND -> parseSimpleCommand(clientPacket.getSimpleCommand());
-            case DYE -> new ClientDyeEvent(clientPacket.getDye().getDyedSlotId(), clientPacket.getDye().getDyeSlotId());
-            case SAY -> ClientInputTextEvent.create(clientPacket.getSay().getText());
             case BANKOPERATION -> ClientOperateBankEvent.fromPacket(clientPacket.getBankOperation());
             case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
             case CLICKPACKET -> new ClickEntityInput(clientPacket.getClickPacket().getId());
@@ -100,6 +82,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case ADDPLAYERTRADEINPUT -> new AddPlayerTradeItemInput(clientPacket.getAddPlayerTradeInput().getSlot(), clientPacket.getAddPlayerTradeInput().getNumber());
             case USEPILL -> new UsePillInput(clientPacket.getUsePill().getName());
             case CHAT -> new ChatInput(clientPacket.getChat().getText());
+            case CLICKEQUIPMENT -> new ClickEquipmentInput(clientPacket.getClickEquipment().getEquipType());
             default -> null;
         };
     }

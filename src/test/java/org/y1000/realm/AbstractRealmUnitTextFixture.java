@@ -27,7 +27,6 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
 
     CreateGateSdb createGateSdb;
 
-    ChatManager chatManager;
 
     PlayerRepository playerRepository;
 
@@ -44,13 +43,12 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
         teleportManager = new TeleportManager(1, realmMap, createGateSdb, new EntityIdGenerator(), new RelevantScopeManager());
         crossRealmEventSender = Mockito.mock(RealmEventSender.class);
         mapSdb = Mockito.mock(MapSdb.class);
-        chatManager = Mockito.mock(ChatManager.class);
         playerRepository = Mockito.mock(PlayerRepository.class);
     }
 
     EntranceDungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> wl) {
         return new EntranceDungeonRealm(1, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
-                interval, dateTimeSupplier, chatManager, wl, playerRepository);
+                interval, dateTimeSupplier, wl, playerRepository);
     }
 
     EntranceDungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier) {

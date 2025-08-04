@@ -38,9 +38,6 @@ public abstract class AbstractUnitTestFixture {
     protected RealmMap mockRealmMap() {
         RealmMap mockedMap= Mockito.mock(RealmMap.class);
         when(mockedMap.mapFile()).thenReturn("map");
-        when(mockedMap.tileFile()).thenReturn("til");
-        when(mockedMap.objectFile()).thenReturn("obj");
-        when(mockedMap.roofFile()).thenReturn("rof");
         return mockedMap;
     }
 

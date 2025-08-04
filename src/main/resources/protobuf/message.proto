@@ -119,11 +119,6 @@ message ClientAttackEventPacket {
   int32 direction = 4;
 }
 
-message ClientAttackResponsePacket {
-  int64 sequence = 1;
-  bool accepted = 2;
-  optional int32 backToState = 3;
-}
 
 message ClientUnequipPacket {
   int32 type = 1;
@@ -233,19 +228,7 @@ message ClientSwapKungFuSlotPacket {
   int32 slot2 = 3;
 }
 
-message ClientDragPlayerPacket {
-  int64 targetId = 1;
-  int32 ropeSlot = 2;
-}
 
-message ClientDyePacket {
-  int32 dyedSlotId = 1;
-  int32 dyeSlotId = 2;
-}
-
-message ClientSayPacket {
-  string text = 1;
-}
 
 message ClientBankOperationPacket {
   int32 type = 1;
@@ -305,12 +288,15 @@ message ChatInputPacket {
   string text = 1;
 }
 
+message ClickEquipmentInputPacket {
+  int32 equipType = 1;
+}
+
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
     ClickPacket clickPacket = 2;
     PlayerLoginPacket loginPacket = 3;
-    ClientAttackEventPacket attackEventPacket = 4;
     SwapInventorySlotPacket swapInventorySlotPacket = 5;
     DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;
     DropItemPacket dropItem = 7;
@@ -326,10 +312,6 @@ message ClientPacket {
     ClientUpdateTradePacket updateTrade = 17;
     ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;
     ClientSwapKungFuSlotPacket swapKungFuSlot = 19;
-    ClientDragPlayerPacket dragPlayer = 20;
-    ClientSimpleCommandPacket simpleCommand = 21;
-    ClientDyePacket dye = 22;
-    ClientSayPacket say = 23;
     ClientBankOperationPacket bankOperation = 24;
     ClientChangeTeamPacket changeTeam = 25;
     ClientFoundGuildPacket foundGuild = 26;
@@ -357,6 +339,7 @@ message ClientPacket {
     AddTradeItemInputPacket addPlayerTradeInput = 48;
     UsePillInputPacket usePill = 49;
     ChatInputPacket chat = 50;
+    ClickEquipmentInputPacket clickEquipment = 51;
   }
 }
 
@@ -437,18 +420,15 @@ message TextMessagePacket {
   string bgColor = 4;
 }
 
-message EquippedItemPacket {
-  int32 icon = 1;
-  int32 color = 2;
-  string name = 3;
-  int32 type = 4;
-}
+
 
 message AttributeEquipPacket {
   repeated string attributes = 1;
   string name = 2;
   string age = 3;
-  repeated EquippedItemPacket equipments = 4;
+  bool male = 4;
+  repeated PlayerEquipPacket equipments = 5;
+  bool quietly = 6;
 }
 
 message ToggleKungFuPacket {
@@ -544,6 +524,7 @@ message PlayerEquipPacket {
   optional string pairedPrefix = 5;
   int32 weaponType = 6;
   string name = 7;
+  int32 icon = 8;
 }
 
 message PlayerSitDownPacket {
@@ -580,6 +561,12 @@ message ItemAttributePacket {
   int32 slotId = 2;
   optional int32 page = 3;
   string text = 4;
+}
+
+message ItemDescriptionPacket {
+  string text = 1;
+  int32 type = 2;
+  int32 index = 3;
 }
 
 message DynamicObjectSnapshotPacket {
@@ -756,7 +743,6 @@ message Packet {
     InputResponsePacket responsePacket = 6;
     PlayerInterpolationPacket playerInterpolation = 7;
     RemoveEntityPacket removeEntity = 8;
-    ClientAttackResponsePacket attackEventResponsePacket = 9;
     CreatureAttackEventPacket attackEventPacket = 10;
     CreatureHurtEventPacket hurtEventPacket = 11;
     ChangeStatePacket changeStatePacket = 12;
@@ -779,7 +765,7 @@ message Packet {
     PlayerGainExpPacket gainExp = 31;
     ProjectilePacket projectile = 32;
     KungFuPacket learnKungFu = 34;
-    ItemAttributePacket itemAttribute = 35;
+    ItemDescriptionPacket itemDescription = 35;
     PlayerRightClickAttributePacket rightClickAttribute = 36;
     UpdateTradeWindowPacket updateTradeWindow = 37;
     ShowDynamicObjectPacket showDynamicObject = 38;

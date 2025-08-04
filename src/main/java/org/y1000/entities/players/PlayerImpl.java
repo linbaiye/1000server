@@ -3,6 +3,7 @@ package org.y1000.entities.players;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.players.event.*;
@@ -297,6 +298,12 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         input.toPlayerEvent(this).ifPresent(this::sendEvent);
     }
 
+    @Override
+    public void clickEquipment(EquipmentType type) {
+        getEquipment(type, Equipment.class)
+                .ifPresent(e -> sendEvent(ItemDescriptionMessage.equip(this, type, e)));
+    }
+
     private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
         if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {
             String ret = kf.checkPreconditions(this);
@@ -366,7 +373,6 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         int slot = 0;
         if (removed != null) {
             slot = inventory.add(removed);
-            log.debug("Unequiped {} id {} and put to slot {}.", type, removed.id(), slot);
         }
         return slot;
     }
@@ -532,7 +538,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
 
     private void handleDoubleClickKungFu(KungFu kungFu) {
-        if (isDead())
+        if (isLeftRealm() || isDead())
             return;
         if (kungFu instanceof FootKungFu newKungFu) {
             state.tryToggleFootKungFu(newKungFu);
@@ -574,20 +580,20 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             state.attack(target);
     }
 
-    private void handleRightClick(ClientRightClickEvent event) {
-        if (event.type() == RightClickType.INVENTORY) {
-            Item item = inventory.getItem(event.slotId());
-            if (item != null) {
-                emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), item.description(), event.type()));
-            }
-        } else if (event.type() == RightClickType.KUNGFU) {
-            Optional<KungFu> kungFu = kungFuBook.getKungFu(event.page(), event.slotId());
-            kungFu.ifPresent(k -> emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), k.detailText(), event.type())));
-        } else if (event.type() == RightClickType.CHARACTER) {
-            emitEvent(new PlayerRightClickAttributeEvent(this));
-        }
-    }
-
+//    private void handleRightClick(ClientRightClickEvent event) {
+//        if (event.type() == RightClickType.INVENTORY) {
+//            Item item = inventory.getItem(event.slotId());
+//            if (item != null) {
+//                emitEvent(new ItemDescriptionMessage(this, event.page(), event.slotId(), item.description(), event.type()));
+//            }
+//        } else if (event.type() == RightClickType.KUNGFU) {
+//            Optional<KungFu> kungFu = kungFuBook.getKungFu(event.page(), event.slotId());
+//            kungFu.ifPresent(k -> emitEvent(new ItemDescriptionMessage(this, event.page(), event.slotId(), k.detailText(), event.type())));
+//        } else if (event.type() == RightClickType.CHARACTER) {
+//            emitEvent(new PlayerRightClickAttributeEvent(this));
+//        }
+//    }
+//
 
 
     @Override
@@ -622,6 +628,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             case InventoryQuietly -> sendEvent(UpdateInventoryMessage.quiet(this));
             case GetPills -> sendEvent(PillsMessage.of(this));
             case AttributeEquipment -> sendEvent(AttributeEquipmentMessage.of(this));
+            case AttributeQuietly -> sendEvent(AttributeEquipmentMessage.quietly(this));
         }
     }
 
@@ -632,11 +639,15 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     @Override
     public void onKungFuClicked(int page, int slot, ClickKungFuInput.ClickType type) {
+        if (isLeftRealm())
+            return;
         kungFuBook().getKungFu(page, slot).ifPresent(kungFu -> {
             if (type == ClickKungFuInput.ClickType.LeftDoubleClick) {
                 handleDoubleClickKungFu(kungFu);
             } else if (type == ClickKungFuInput.ClickType.LeftClick) {
                 sendEvent(PlayerTextMessage.bottom(this, kungFu.detailText()));
+            } else if (type == ClickKungFuInput.ClickType.RightClick) {
+                sendEvent(ItemDescriptionMessage.kungfu(this, slot, kungFu));
             }
         });
     }
@@ -668,6 +679,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     @Override
     public void swapItem(int from, int to) {
+        if (isLeftRealm())
+            return;
         if (tryDye(from, to))
             return;
         if (inventory.swap(from, to)) {
@@ -680,6 +693,10 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     public void onInventorySlotClicked(int slot, ClickInventorySlotInput.ClickType type) {
         if (type == AbstractClickContainerSlotInput.ClickType.LeftDoubleClick) {
             handleInventorySlotDoubleClick(slot);
+        } else if (type == AbstractClickContainerSlotInput.ClickType.RightClick) {
+            var item = inventory.getItem(slot);
+            if (item != null)
+                sendEvent(ItemDescriptionMessage.item(this, slot, item));
         }
     }
 
@@ -746,16 +763,6 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         this.eventListener = eventListener;
     }
 
-    private void onKilled() {
-//        disableFootKungFuNoTip();
-        disableBreathAndSync();
-        var oldLevel = revival.level();
-        revival = revival.gainExp();
-        if (oldLevel != revival.level()) {
-            sendEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
-        }
-        dieSound().ifPresent(this::sendSound);
-    }
 
     private void gainProtectionExp(int bodyDamage) {
         if (protectKungFu == null) {
@@ -763,22 +770,6 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         }
         var exp = ExperienceUtil.DEFAULT_EXP - ExperienceUtil.damageToExp(life.maxValue(), bodyDamage);
         protectKungFu.gainExp(this, exp);
-    }
-
-
-    private void afterTakingDamage(int damagedLife) {
-        if (currentLife() > 0) {
-            cooldownRecovery();
-//            creatureState().moveToHurtCoordinate(this);
-//            OldPlayerStateEnum afterHurtPlayerStateEnum = creatureState().decideAfterHurtState();
-//            this.changeState(PlayerHurtState.hurt(this, afterHurtPlayerStateEnum));
-//            emitEvent(new CreatureHurtEvent(this, afterHurtPlayerStateEnum));
-//            hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-//            gainProtectionExp(damagedLife);
-        } else {
-            onKilled();
-        }
-        //emitEvent(new PlayerAttributeMessage(this));
     }
 
 
@@ -829,10 +820,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         Weapon weaponToEquip = (Weapon) inventory.remove(slot);
         weapon().ifPresent(equippedWeapon -> {
             inventory.add(slot, equippedWeapon);
-            log.debug("Put equipped weapon {} id {} back to inventory.", equippedWeapon.name(), equippedWeapon.id());
         });
         equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
-        log.debug("Equipped weapon {}, id {}.", weaponToEquip.name(), weaponToEquip.id());
     }
 
     private void equipArmorFromSlot(int slot) {
@@ -1266,6 +1255,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     @Override
     public void dropItemOnAnother(Player another, int slot) {
+        if (isLeftRealm())
+            return;
         if (this.equals(another))
             return;
         Item item = inventory().getItem(slot);

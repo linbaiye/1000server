@@ -184,7 +184,8 @@ MaxCount,        最多持有数量；
     }
 
     public String getDesc(String itemName) {
-        return get(itemName, "Desc");
+        var desc = get(itemName, "Desc");
+        return desc != null ? desc.replace("<br>", "\n") : null;
     }
 
     @Override

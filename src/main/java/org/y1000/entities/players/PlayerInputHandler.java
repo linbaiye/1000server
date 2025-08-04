@@ -33,4 +33,6 @@ public interface PlayerInputHandler {
 
     void chat(ChatInput input);
 
+    void clickEquipment(EquipmentType type);
+
 }

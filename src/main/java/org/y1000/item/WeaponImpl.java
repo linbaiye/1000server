@@ -63,7 +63,7 @@ public final class WeaponImpl extends AbstractEquipment implements Weapon {
     public String description() {
         StringBuilder descriptionBuilder = getDescriptionBuilder();
         descriptionBuilder.append("攻击速度: ").append(attackSpeed()).append("\n");
-        descriptionBuilder.append("恢复: ").append(recovery()).append("\t")
+        descriptionBuilder.append("恢复: ").append(recovery()).append("\n")
                 .append("闪躲: ").append(avoidance()).append("\n");
         Damage dmg = damage();
         descriptionBuilder.append(String.format("破坏力: %d / %d / %d / %d", dmg.bodyDamage(), dmg.headDamage(), dmg.armDamage(), dmg.legDamage()));

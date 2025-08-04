@@ -40,6 +40,7 @@ public class PlayerEquipEvent extends Abstract2VisibleAndSelfMessageEvent {
                 .setId(player.id())
                 .setName(equipment.name())
                 .setColor(equipment.color())
+                .setIcon(equipment.icon())
                 .setEquipmentType(equipment.equipmentType().value());
         if (equipment.equipmentType() == EquipmentType.WEAPON) {
             String prefix = computeWeaponSprite(player.isMale(), equipment.wearShape());

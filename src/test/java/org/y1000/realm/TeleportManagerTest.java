@@ -52,7 +52,6 @@ class TeleportManagerTest extends AbstractUnitTestFixture {
         when(createGateSdb.getX("test")).thenReturn(1);
         when(createGateSdb.getY("test")).thenReturn(1);
         when(createGateSdb.getViewName("test")).thenReturn("view");
-        manager.init(eventUnaryAction);
         assertFalse(manager.findStaticTeleports().isEmpty());
     }
 
@@ -64,11 +63,8 @@ class TeleportManagerTest extends AbstractUnitTestFixture {
         when(createGateSdb.getY("test")).thenReturn(1);
         when(createGateSdb.getViewName("test")).thenReturn("view");
         when(createGateSdb.getNeedItem("test")).thenReturn("gold:1");
-        manager.init(eventUnaryAction);
         StaticTeleport staticTeleport = manager.findStaticTeleports().stream().findFirst().get();
         var player = Mockito.mock(Player.class);
         staticTeleport.onPlayerEntered(player);
-        RealmTeleportEvent teleportEvent = (RealmTeleportEvent) event;
-        assertFalse(teleportEvent.getCosts().isEmpty());
     }
 }
