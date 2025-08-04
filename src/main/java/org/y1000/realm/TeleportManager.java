@@ -40,6 +40,15 @@ final class TeleportManager {
     }
 
 
+    private Teleport createTeleport(String idName, TeleportHandler teleportHandler) {
+        Teleport teleport;
+        if (createGateSdb.isVisible(idName)) {
+            var port = new StaticTeleport(entityIdGenerator.next(), idName, createGateSdb, teleportHandler, realmId);
+            aoiManager.add(port);
+        }
+    }
+
+
     private void addTeleport(String idName, TeleportHandler teleportHandler) {
         Teleport teleport;
         if (createGateSdb.isVisible(idName)) {

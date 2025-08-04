@@ -3,7 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-import org.y1000.message.PlayerTextEvent;
+import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.message.input.Login;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.repository.PlayerRepository;
@@ -76,7 +76,7 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
             builder.append(seconds / 60).append("分");
         }
         if (seconds % 60 != 0) {
-            builder.append(seconds % 60).append("秒");
+            builder.append(String.format("%02d秒", seconds % 60));
         }
         return builder.append("后开启。").toString();
     }
@@ -93,24 +93,21 @@ final class EntranceDungeonRealm extends AbstractDungeonRealm {
     @Override
     public void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
         if (isClosing()) {
-            teleportEvent.getConnection().writeAndFlush(PlayerTextEvent.systemTip(teleportEvent.player(), "当前无法进入，请稍后重试。"));
-            getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection(), id()));
-        }
-        if (whitelistedIds.contains(teleportEvent.fromRealmId())) {
+            teleportEvent.getConnection().writeAndFlush(PlayerTextMessage.bottom(teleportEvent.player(), "当前无法进入，请稍后重试。"));
+            getCrossRealmEventHandler().send(RealmTeleportEvent.teleportOut(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection()));
             return;
         }
-        if (isOpening()) {
+        if (whitelistedIds.contains(teleportEvent.fromRealmId()) || isOpening()) {
+            getPlayerManager().teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate(), teleportEvent.getConnection());
         } else {
-            teleportEvent.getConnection().writeAndFlush(PlayerTextEvent.systemTip(teleportEvent.player(), buildTip()));
-            getCrossRealmEventHandler().send(new RealmTeleportEvent(teleportEvent.player(), exitRealmIt(),
-                    teleportEvent.rejectCoordinate().orElse(exitCoordinate()), teleportEvent.getConnection(), id()));
+            teleportEvent.getConnection().writeAndFlush(PlayerTextMessage.bottom(teleportEvent.player(), buildTip()));
+            getCrossRealmEventHandler().send(RealmTeleportEvent.teleportOut(teleportEvent.player(), exitRealmIt(), exitCoordinate(), teleportEvent.getConnection()));
         }
     }
 
     @Override
     protected void handleLogin(Login login) {
         acceptLogin(login);
-
     }
 
     @Override

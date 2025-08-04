@@ -21,8 +21,7 @@ public final class RealmTeleportEvent implements IdentifiedRealmEvent {
     private final int fromId;
 
     @Getter
-    @Setter
-    private Connection connection;
+    private final Connection connection;
 
     private final Coordinate rejectCoordinate;
 
@@ -49,6 +48,8 @@ public final class RealmTeleportEvent implements IdentifiedRealmEvent {
                               int from,
                               Coordinate rejectCoordinate,
                               List<TeleportCost> costs) {
+        Validate.notNull(connection);
+        Validate.notNull(toCoordinate);
         this.player = player;
         this.realmId = realmId;
         this.toCoordinate = toCoordinate;
@@ -100,6 +101,11 @@ public final class RealmTeleportEvent implements IdentifiedRealmEvent {
     @Override
     public void accept(RealmEventHandler handler) {
         handler.handleTeleportEvent(this);
+    }
+
+
+    public static RealmTeleportEvent teleportOut(Player player, int toRealm, Coordinate toCoordinate, Connection connection) {
+        return new RealmTeleportEvent(player.cloneForTeleport(), toRealm, toCoordinate, connection, 0, null, null);
     }
 
     public static RealmTeleportEvent create(Player player, Teleport teleport, Connection connection) {

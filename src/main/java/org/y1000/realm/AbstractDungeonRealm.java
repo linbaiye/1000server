@@ -3,6 +3,7 @@ package org.y1000.realm;
 import org.y1000.entities.players.Player;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.ClientFoundGuildEvent;
+import org.y1000.network.Connection;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
@@ -41,19 +42,19 @@ abstract class AbstractDungeonRealm extends AbstractRealm {
     }
 
     protected void teleportOut(Player player) {
-//        onPlayerTeleport(new RealmTeleportEvent(player, exitRealmIt(), exitCoordinate()));
+        Connection connection = getPlayerManager().prepareTeleport(player);
+        if (connection != null)
+            getCrossRealmEventHandler().send(RealmTeleportEvent.teleportOut(player, exitRealmIt(), exitCoordinate(), connection));
     }
 
     boolean isClosing() {
         return closing;
     }
 
-
     @Override
     void handleGuildCreation(Player source, ClientFoundGuildEvent event) {
         source.emitEvent(PlayerTextEvent.forbidGuildCreation(source));
     }
-
 
     @Override
     public void shutdown() {

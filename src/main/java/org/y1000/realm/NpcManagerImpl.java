@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcRespawnAbility;
-import org.y1000.event.EntityEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.sdb.*;
 

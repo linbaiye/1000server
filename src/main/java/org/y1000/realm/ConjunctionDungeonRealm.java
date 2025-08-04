@@ -32,10 +32,13 @@ final class ConjunctionDungeonRealm extends AbstractDungeonRealm {
 
     @Override
     public void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
+        getPlayerManager().teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate(), teleportEvent.getConnection());
     }
 
     @Override
     protected void handleLogin(Login login) {
         acceptLogin(login);
+        playerManager().find(login.playerId())
+                .ifPresent(this::teleportOut);
     }
 }

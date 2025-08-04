@@ -96,7 +96,7 @@ public final class RealmGroup implements Runnable {
 
     public synchronized void shutdown() throws InterruptedException {
         shutdown = true;
-        Thread.sleep(100);
+        Thread.sleep(1000);
         Stream.of(realms).forEach(Realm::shutdown);
     }
 
@@ -164,15 +164,6 @@ public final class RealmGroup implements Runnable {
         }
     }
 
-    public void handle(IRealmEvent realmEvent) {
-        if (realmEvent == null) {
-            return;
-        }
-        synchronized (pendingEvents) {
-//            pendingEvents.add(realmEvent);
-//            pendingEvents.notify();
-        }
-    }
 
     public Set<Integer> realmIds() {
         return ids;
