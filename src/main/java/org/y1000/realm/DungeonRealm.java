@@ -35,7 +35,7 @@ final class DungeonRealm extends AbstractRealm {
                         MapSdb mapSdb,
                         PlayerRepository playerRepository,
                         int interval) {
-        this(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository, interval, LocalDateTime::now)
+        this(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository, interval, LocalDateTime::now);
     }
 
     public DungeonRealm(int id, RealmMap realmMap,
@@ -70,7 +70,7 @@ final class DungeonRealm extends AbstractRealm {
         if (isHalfHourInterval()) {
             return (minute == 25 || minute == 55) && second > 5;
         } else {
-            return minute == 32 && second > 0;
+            return minute == 02 && second > 0;
         }
     }
 

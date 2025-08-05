@@ -119,14 +119,15 @@ public abstract class AbstractTeleport implements Teleport {
     }
 
     private boolean isTimeAllowedToEnter() {
-        if (activeSeconds == 0)
+        return true;
+        /*if (activeSeconds == 0)
             return true;
         LocalDateTime now = timeSupplier.get();
         var curSec = now.getMinute() * 60 + now.getSecond();
         if (regenSeconds == 1800 && curSec > 1800) {
             curSec -= 1800;
         }
-        return curSec <= activeSeconds;
+        return curSec <= activeSeconds;*/
     }
 
     private String checkCosts(Player player) {
