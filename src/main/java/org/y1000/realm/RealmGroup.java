@@ -2,7 +2,6 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.realm.event.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -25,8 +24,6 @@ public final class RealmGroup implements Runnable {
 
     private final Supplier<LocalDateTime> dateTimeSupplier;
 
-    private LocalDateTime nextResetTime;
-
     private final Set<Integer> ids;
 
     public RealmGroup(List<Realm> realms,
@@ -43,9 +40,6 @@ public final class RealmGroup implements Runnable {
         shutdown = false;
         this.crossRealmEventSender = crossRealmEventSender;
         this.dateTimeSupplier = dateTimeSupplier;
-        LocalDateTime now = dateTimeSupplier.get();
-        this.nextResetTime = now.getMinute() < 30 ? now.withMinute(29).withSecond(58).withNano(0) :
-                now.withMinute(48).withSecond(58).withNano(0);
         ids = realms.stream().map(Realm::id).collect(Collectors.toSet());
     }
 
@@ -65,27 +59,20 @@ public final class RealmGroup implements Runnable {
 
     private void resetDungeonsIfTimeUp() {
         LocalDateTime now = dateTimeSupplier.get();
-        if (now.isBefore(nextResetTime)) {
-            return;
-        }
-        log.debug("Trying to reset realms {}.", Arrays.stream(realms).toList());
         try {
             for (int i = 0; i < realms.length; i++) {
-                if (!(realms[i] instanceof AbstractDungeonRealm dungeonRealm)) {
+                if (!(realms[i] instanceof DungeonRealm dungeonRealm)) {
                     continue;
                 }
-                if (!dungeonRealm.isHalfHourInterval() && now.getMinute() != 59) {
-                    continue;
+                if (dungeonRealm.needToClose(now.getMinute(), now.getSecond())) {
+                    dungeonRealm.close();
+                    realms[i] = realmFactory.createRealm(dungeonRealm.id(), crossRealmEventSender);
+                    realms[i].init();
                 }
-                dungeonRealm.close();
-                realms[i] = realmFactory.createRealm(dungeonRealm.id(), crossRealmEventSender);
-                realms[i].init();
             }
         } catch (Exception e) {
             log.error("Failed to reset dungeon.", e);
         }
-        nextResetTime = nextResetTime.plusMinutes(30);
-        log.debug("Set next reset time to {}.", this.nextResetTime);
     }
 
     private Optional<Realm> find(int id) {

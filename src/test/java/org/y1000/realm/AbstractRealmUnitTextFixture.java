@@ -46,24 +46,23 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
         playerRepository = Mockito.mock(PlayerRepository.class);
     }
 
-    EntranceDungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> wl) {
-        return new EntranceDungeonRealm(1, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
-                interval, dateTimeSupplier, wl, playerRepository);
+    DungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> wl) {
+        return new DungeonRealm(1, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository, interval);
     }
 
-    EntranceDungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier) {
+    DungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier) {
         return createDungeon(interval, dateTimeSupplier, Collections.emptySet());
     }
 
-    EntranceDungeonRealm createHalfHourDungeon(Supplier<LocalDateTime> dateTimeSupplier) {
+    DungeonRealm createHalfHourDungeon(Supplier<LocalDateTime> dateTimeSupplier) {
         return createDungeon(180000, dateTimeSupplier);
     }
 
-    EntranceDungeonRealm createOneHourDungeon(Supplier<LocalDateTime> dateTimeSupplier) {
+    DungeonRealm createOneHourDungeon(Supplier<LocalDateTime> dateTimeSupplier) {
         return createDungeon(360000, dateTimeSupplier);
     }
 
-    EntranceDungeonRealm createWhitelisted(Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> ids) {
+    DungeonRealm createWhitelisted(Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> ids) {
         return createDungeon(360000, dateTimeSupplier, ids);
     }
 }

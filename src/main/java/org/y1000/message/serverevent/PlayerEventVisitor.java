@@ -4,11 +4,9 @@ import org.y1000.entities.players.event.*;
 import org.y1000.event.EntityEventVisitor;
 import org.y1000.message.*;
 
+@Deprecated
 public interface PlayerEventVisitor extends EntityEventVisitor {
 
-    default void visit(JoinedRealmEvent loginMessage) {
-
-    }
 
     default void visit(InputResponseMessage inputResponseMessage) {
 

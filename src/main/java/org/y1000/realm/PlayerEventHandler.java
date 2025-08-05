@@ -21,4 +21,6 @@ public interface PlayerEventHandler extends EntityEventHandler {
 
     void sendCrossRealmEvent(RealmEvent event);
 
+    void onPlayerDead(Player player, I2ClientMessage message);
+
 }

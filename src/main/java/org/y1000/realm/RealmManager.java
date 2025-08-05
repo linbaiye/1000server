@@ -90,7 +90,6 @@ public final class RealmManager implements Runnable , RealmEventSender {
     public void sendNotification(String text) {
         if (StringUtils.isEmpty(text))
             return;
-        var notification = new SystemNotificationEvent(text);
         //realmIdGroupMap.values().forEach(groups -> groups.handle(notification));
     }
 

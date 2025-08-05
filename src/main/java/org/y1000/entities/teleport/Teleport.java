@@ -13,15 +13,4 @@ public interface Teleport {
     Set<Coordinate> coordinates();
 
     void onPlayerEntered(Player player);
-
-    int toRealmId();
-
-    Coordinate toCoordinate();
-
-    Coordinate rejectCoordinate();
-
-    List<TeleportCost> costs();
-
-    int rejectRealmId();
-
 }

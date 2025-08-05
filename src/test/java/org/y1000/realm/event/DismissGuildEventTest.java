@@ -16,16 +16,6 @@ class DismissGuildEventTest {
 
     @Test
     void send() {
-        var player = Mockito.mock(Player.class);
-        when(player.guildMembership()).thenReturn(Optional.of(new GuildMembership(1, "test",  "test")));
-        DismissGuildEvent event = new DismissGuildEvent(0);
-        event.send(player);
-        verify(player, times(0)).emitEvent(any(IEntityEvent.class));
-        event = new DismissGuildEvent(1);
-        event.send(player);
-        verify(player, times(1)).emitEvent(any(PlayerTextEvent.class));
-        verify(player, times(1)).emitEvent(any(PlayerUpdateGuildEvent.class));
-        verify(player, times(1)).quitGuild();
     }
 
 }

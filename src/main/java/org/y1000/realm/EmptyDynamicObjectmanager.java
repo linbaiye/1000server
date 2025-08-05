@@ -11,10 +11,6 @@ public final class EmptyDynamicObjectmanager implements DynamicObjectManager {
 
     public static final EmptyDynamicObjectmanager INSTANCE = new EmptyDynamicObjectmanager();
 
-    @Override
-    public void onEvent(EntityEvent entityEvent) {
-
-    }
 
     @Override
     public void update(long delta) {

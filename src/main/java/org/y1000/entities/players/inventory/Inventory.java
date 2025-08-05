@@ -3,20 +3,12 @@ package org.y1000.entities.players.inventory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.GroundedItem;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
-import org.y1000.entities.players.event.IPlayerEvent;
 import org.y1000.entities.players.event.UpdateInventorySlotMessage;
-import org.y1000.event.EntityEvent;
 import org.y1000.item.*;
 import org.y1000.entities.players.Player;
 import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.message.PlayerDropItemEvent;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.input.ClientDropItemEvent;
 import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.trade.TradeItem;
-import org.y1000.util.UnaryAction;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -246,24 +238,6 @@ public final class Inventory extends AbstractInventory {
         player.emitEvent(new UpdateInventorySlotEvent(player, n, getItem(n)));
     }
 
-
-    private void handleDropEvent(Player player, ClientDropItemEvent dropItemEvent, UnaryAction<EntityEvent> eventSender) {
-        if (dropItemEvent.coordinate().directDistance(player.coordinate()) > 3) {
-            eventSender.invoke(PlayerTextEvent.tooFarAway(player));
-            return;
-        }
-        assertRange(dropItemEvent.sourceSlot());
-        Item item = getItem(dropItemEvent.sourceSlot());
-        if (item == null) {
-            return;
-        }
-        if (decrease(dropItemEvent.sourceSlot(), dropItemEvent.number())) {
-            UpdateInventorySlotEvent event = new UpdateInventorySlotEvent(player, dropItemEvent.sourceSlot(), getItem(dropItemEvent.sourceSlot()));
-            eventSender.invoke(event);
-            eventSender.invoke(new PlayerDropItemEvent(player, item.name(), dropItemEvent.number(), dropItemEvent.coordinate(), item.color()));
-            item.dropSound().ifPresent(s -> eventSender.invoke(new EntitySoundEvent(player, s)));
-        }
-    }
 
     public boolean contains(ItemType type) {
         return items().values().stream().anyMatch(i -> i.itemType() == type);

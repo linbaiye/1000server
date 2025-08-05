@@ -39,10 +39,6 @@ public final class RealmFactoryImpl implements RealmFactory {
 
     private final KungFuBookRepository kungFuBookRepository;
 
-    private static final Set<Integer> CONJUNCTION_IDS = Set.of(4, 20);
-
-    private static final Map<Integer, Set<Integer>> DUNGEON_WHITELIST_IDS = Map.of(19, Set.of(20), 3, Set.of(4));
-
     @Builder
     public RealmFactoryImpl(ItemFactory itemFactory,
                             NpcFactory npcFactory,
@@ -126,24 +122,23 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .orElseThrow(() -> new IllegalArgumentException("No map for " + id));
             var entityIdGenerator = new EntityIdGenerator();
             AOIManager aoiManager = new RelevantScopeManager();
-            var eventSender = new RealmPlayerConnectionManager();
-            var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory, aoiManager);
-            var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
+            var connectionManager = new RealmPlayerConnectionManager();
+            var itemManager = new ItemManagerImpl(connectionManager, itemSdb, entityIdGenerator, itemFactory, aoiManager);
+            var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, connectionManager, realmMap);
             var dynamicObjectManager = !realmSpecificSdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
-                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager,
+                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, connectionManager, itemManager,
                             realmSpecificSdbRepository.loadCreateObject(id), crossRealmEventSender, realmMap, aoiManager, npcManager);
-            var playerManager = new PlayerManagerImpl(eventSender, itemManager, new BankManagerImpl(eventSender, npcManager, bankRepository), playerRepository, deadPlayerTeleportManager(id),
-                    crossRealmEventSender, aoiManager);
+            var playerManager = mapSdb.getRegenInterval(id).isPresent() ?
+                    new DungeonPlayerManager(aoiManager, connectionManager, itemManager,  playerRepository, crossRealmEventSender):
+                    new PlayerManagerImpl(connectionManager, itemManager,  playerRepository, crossRealmEventSender, aoiManager);
             var teleportManager = new TeleportManager(id, realmMap, createGateSdb, entityIdGenerator, aoiManager);
             var builder = RealmBuilder.builder()
                     .id(id)
                     .crossRealmEventHandler(crossRealmEventSender)
                     .dynamicObjectManager(dynamicObjectManager)
-                    .eventSender(eventSender)
+                    .eventSender(connectionManager)
                     .itemManager(itemManager)
                     .mapSdb(mapSdb)
-                    .whitelistIds(DUNGEON_WHITELIST_IDS.getOrDefault(id, Collections.emptySet()))
-                    .conjunction(CONJUNCTION_IDS.contains(id))
                     .npcManager(npcManager)
                     .playerManager(playerManager)
                     .realmMap(realmMap)
@@ -151,7 +146,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .playerRepository(playerRepository)
                     ;
             if (allowGuildCreation(id)) {
-                GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, crossRealmEventSender, realmMap, guildRepository, itemRepository,
+                GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, connectionManager, crossRealmEventSender, realmMap, guildRepository, itemRepository,
                         entityManagerFactory, id, KungFuSdb.INSTANCE, kungFuBookRepository, aoiManager);
                 builder.guildManager(guildManager);
             }
@@ -170,16 +165,12 @@ public final class RealmFactoryImpl implements RealmFactory {
         private RealmPlayerConnectionManager eventSender;
         private ItemManagerImpl itemManager;
         private NpcManager npcManager;
-        private PlayerManagerImpl playerManager;
+        private PlayerManager playerManager;
         private DynamicObjectManager dynamicObjectManager;
         private TeleportManager teleportManager;
         private int id;
         private RealmEventSender crossRealmEventSender;
         private MapSdb mapSdb;
-
-        private boolean conjunction;
-
-        private Set<Integer> whitelistIds;
 
         private GuildManager guildManager;
 
@@ -197,10 +188,6 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder whitelistIds(Set<Integer> ids) {
-            this.whitelistIds = ids;
-            return this;
-        }
 
         public RealmBuilder guildManager(GuildManager guildManager) {
             this.guildManager = guildManager;
@@ -209,11 +196,6 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         public RealmBuilder eventSender(RealmPlayerConnectionManager eventSender) {
             this.eventSender = eventSender;
-            return this;
-        }
-
-        public RealmBuilder conjunction(boolean c) {
-            this.conjunction = c;
             return this;
         }
 
@@ -227,7 +209,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder playerManager(PlayerManagerImpl playerManager) {
+        public RealmBuilder playerManager(PlayerManager playerManager) {
             this.playerManager = playerManager;
             return this;
         }
@@ -271,11 +253,7 @@ public final class RealmFactoryImpl implements RealmFactory {
         }
 
         public Realm buildDungeon(int interval) {
-            if (conjunction) {
-                return new ConjunctionDungeonRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, playerRepository);
-            } else {
-                return new EntranceDungeonRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, whitelistIds, playerRepository);
-            }
+            return new DungeonRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository, interval);
         }
     }
 }

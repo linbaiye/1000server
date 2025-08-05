@@ -57,10 +57,6 @@ public final class DynamicObjectManagerImpl extends AbstractActiveEntityManager<
         objectNumberMap = new HashMap<>();
     }
 
-    @Override
-    public void onEvent(EntityEvent entityEvent) {
-
-    }
 
     @Override
     protected Logger log() {

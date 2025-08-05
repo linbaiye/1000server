@@ -21,8 +21,6 @@ import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.ClientCreateGuildKungFuEvent;
 import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.realm.event.BroadcastTextEvent;
-import org.y1000.realm.event.DismissGuildEvent;
-import org.y1000.realm.event.GuildBroadcastTextEvent;
 import org.y1000.repository.GuildRepository;
 import org.y1000.repository.ItemRepository;
 import org.y1000.repository.KungFuBookRepository;
@@ -153,7 +151,6 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
 //        eventSender.add(guildStone);
         add(guildStone);
 //        eventSender.notifyVisiblePlayers(guildStone, guildStone.captureSnapshot());
-        guildStone.registerEventListener(this);
     }
 
     @Override
@@ -389,14 +386,6 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         }
     }
 
-    @Override
-    public void onEvent(EntityEvent entityEvent) {
-        if (entityEvent instanceof EntityLifebarEvent lifebarEvent) {
-            handleLifebarEvent(lifebarEvent);
-        } else if (entityEvent instanceof DynamicObjectDieEvent dieEvent) {
-            handleDieEvent(dieEvent);
-        }
-    }
 
     @Override
     protected Logger log() {

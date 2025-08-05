@@ -3,8 +3,6 @@ package org.y1000.entities.teleport;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.UpdateInventorySlotMessage;
-import org.y1000.message.serverevent.UpdateInventorySlotEvent;
-
 
 public final class ItemCost implements TeleportCost {
     private final String requiredItem;

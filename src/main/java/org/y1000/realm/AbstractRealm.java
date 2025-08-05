@@ -4,13 +4,13 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
-import org.y1000.entities.teleport.Teleport;
 import org.y1000.entities.teleport.TeleportHandler;
 import org.y1000.message.input.*;
 import org.y1000.network.Connection;
 import org.y1000.realm.event.*;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
+import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,14 +85,15 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
         return playerManager;
     }
 
-    @Override
-    public void update() {
+
+    void doUpdateEntities() {
         long current = System.currentTimeMillis();
         while (accumulatedMillis <= current) {
             entityManagers.forEach(m -> m.update(STEP_MILLIS));
             accumulatedMillis += STEP_MILLIS;
         }
     }
+
 
 
     protected void doInit() {
@@ -103,14 +104,12 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
             if (dynamicObjectManager != null)
                 dynamicObjectManager.init();
             teleportManager.init(this);
-//            playerManager.setTeleportHandler(this::onPlayerTeleport);
             log().debug("Initialized {}.", this);
         } catch (Exception e) {
             log().error("Failed to init realm {}.", id, e);
             throw new RuntimeException(e);
         }
     }
-
 
     MapSdb getMapSdb() {
         return mapSdb;
@@ -121,16 +120,21 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
     }
 
     @Override
-    public void onPlayerEnterTeleport(Player player, Teleport teleport) {
+    public void teleportIn(Player player, Coordinate toCoordinate, Connection connection) {
+        playerManager.teleportIn(player, this, toCoordinate, connection);
+    }
+
+    @Override
+    public void teleportTo(Player player, int toReam, Coordinate toCoordinate) {
         Connection connection = playerManager.prepareTeleport(player);
         if (connection == null)
             return;
-        RealmTeleportEvent teleportEvent = RealmTeleportEvent.create(player, teleport, connection);
+        RealmTeleportEvent teleportEvent = RealmTeleportEvent.toDestination(player, toReam, toCoordinate, connection);
         crossRealmEventSender.send(teleportEvent);
     }
 
-    RealmEventSender getCrossRealmEventHandler() {
-        return crossRealmEventSender;
+    void sendCrossRealmEvent(RealmEvent event) {
+        crossRealmEventSender.send(event);
     }
 
     PlayerManager playerManager() {
@@ -141,9 +145,13 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
 
     protected abstract void handleLogin(Login login);
 
-
-    protected void acceptLogin(Login login) {
-        playerRepository.load(login.playerId()).ifPresent(p -> getPlayerManager().loginPlayer(p, login, this));
+    void acceptLogin(long playerId, Connection connection, Coordinate coordinate) {
+        playerRepository.load(playerId).ifPresent(p -> {
+            if (coordinate == null)
+                getPlayerManager().loginPlayer(p, this, connection);
+            else
+                getPlayerManager().loginPlayer(p, this, coordinate, connection);
+        });
     }
 
     private void handleEntityInteraction(Player player, EntityInteractInput interactionInput) {
@@ -203,11 +211,8 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
         getPlayerManager().find(playerId)
                 .ifPresent(player -> player.sendEvent(PlayerTextMessage.privateChat(player, reply)));
     }
-
-    public void handle(IRealmEvent event) {
-        try {
-        } catch (Exception e) {
-            log().error("Exception when handling event .", e);
-        }
+    @Override
+    public void handleProxiedLogin(long playerId, Coordinate toCoordinate, Connection connection) {
+        acceptLogin(playerId, connection, toCoordinate);
     }
 }

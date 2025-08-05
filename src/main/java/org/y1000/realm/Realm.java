@@ -1,12 +1,9 @@
 package org.y1000.realm;
 
-import org.y1000.realm.event.IRealmEvent;
 
 
 public interface Realm {
     int STEP_MILLIS = 10;
-
-    void handle(IRealmEvent event);
 
     void handle(Object event);
 

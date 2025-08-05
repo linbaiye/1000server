@@ -4,7 +4,6 @@ import org.y1000.entities.players.Player;
 import org.y1000.message.input.Login;
 import org.y1000.message.input.SelfHandleInput;
 import org.y1000.network.Connection;
-import org.y1000.realm.event.PlayerDataEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
 import org.y1000.util.UnaryAction;
@@ -14,7 +13,9 @@ import java.util.Set;
 
 interface PlayerManager extends ActiveEntityManager<Player> {
 
-    void loginPlayer(Player player, Login login, Realm realm);
+    void loginPlayer(Player player, Realm realm, Coordinate coordinate, Connection connection);
+
+    void loginPlayer(Player player, Realm realm, Connection connection);
 
     void logoutPlayer(Connection connection);
 
@@ -26,9 +27,6 @@ interface PlayerManager extends ActiveEntityManager<Player> {
     Connection prepareTeleport(Player player);
 
     Set<Player> allPlayers();
-
-    void setTeleportHandler(UnaryAction<RealmTeleportEvent> teleportHandler);
-
 
     void handleInput(Connection connection, SelfHandleInput input);
 

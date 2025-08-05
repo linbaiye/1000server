@@ -44,7 +44,6 @@ public class ClientSubmitQuestEvent extends AbstractClientEvent implements Clien
         }
         var check = quest.canComplete(player);
         if (check != null) {
-            entity.emitEvent(new EntityChatEvent(entity, quester.viewName() + "：" +check));
             return;
         }
         quest.complete(player, itemFactory::createItem);

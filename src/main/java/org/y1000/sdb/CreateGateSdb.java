@@ -34,4 +34,10 @@ public interface CreateGateSdb {
     String getViewName(String name);
 
     String getNeedItem(String name);
+    int getRegenInterval(String name);
+
+    int getActiveInterval(String name);
+
+
+
 }

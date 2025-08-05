@@ -34,7 +34,7 @@ final class CombatController {
     }
 
     private void singleAttack(AttackKungFu kungFu) {
-        int exp = hurtAbility.attacked(player, player.damage(), player.hit());
+        int exp = hurtAbility.attacked(player, player.damage(), player.accuracy());
         if (exp > 0)
             kungFu.gainExp(player, exp);
         player.sendEvent(PlayerSoundEvent.toAll(player, exp == -1 ? kungFu.swingSound() : kungFu.strikeSound()));

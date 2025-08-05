@@ -23,7 +23,7 @@ public final class PlayerProjectile extends AbstractProjectile {
                             String sprite) {
         super(shooter, target, sprite);
         this.damage = kungFu.damage();
-        this.hit = shooter.hit();
+        this.hit = shooter.accuracy();
         this.kungFu = kungFu;
     }
 

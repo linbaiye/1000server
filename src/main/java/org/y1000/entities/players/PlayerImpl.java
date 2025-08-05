@@ -33,8 +33,6 @@ import java.util.stream.Collectors;
 public class PlayerImpl extends AbstractCreature implements Player, PlayerInputHandler {
 
     public static final int DEFAULT_REGENERATE_SECONDS = 9;
-    private Realm realm;
-
     private AttackKungFu attackKungFu;
 
     private FootKungFu footKungfu;
@@ -95,6 +93,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     private final List<Rope> ropes;
 
+    private final ThreadLocal<Realm> realm;
+
     @Builder
     public PlayerImpl(long id,
                       Coordinate coordinate,
@@ -148,6 +148,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         this.buffPillSlot = new BuffPillSlot();
         this.changeState(PlayerStandState.idle(this));
         this.ropes = new ArrayList<>();
+        this.realm = new ThreadLocal<>();
     }
 
     private void setRegenerateTimer() {
@@ -634,7 +635,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     @Override
     public boolean canBeSeenAt(Coordinate another) {
-        return realm != null && super.canBeSeenAt(another);
+        return realm.get() != null && super.canBeSeenAt(another);
     }
 
     @Override
@@ -757,8 +758,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     public void joinRealm(Realm realm, Coordinate coordinate, PlayerEventListener eventListener) {
         Validate.notNull(realm);
         Validate.notNull(coordinate);
-        Validate.isTrue(this.realm == null);
-        this.realm = realm;
+        Validate.isTrue(this.realm.get() == null);
+        this.realm.set(realm);
         changeCoordinate(coordinate);
         this.eventListener = eventListener;
     }
@@ -794,16 +795,17 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     @Override
     public Realm getRealm() {
-        return this.realm;
+        return this.realm.get();
     }
 
     @Override
     public void leaveRealm() {
-        if (realm != null) {
-            realm.map().free(this);
+        var r = getRealm();
+        if (r != null) {
+            r.map().free(this);
         }
         eventListener = null;
-        realm = null;
+        realm.remove();
         if (playerTrade != null)
             playerTrade.cancel(this);
         ropes.clear();
@@ -812,9 +814,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     @Override
     public boolean isLeftRealm() {
-        return realm == null;
+        return realm.get() == null;
     }
-
 
     private void equipWeaponFromSlot(int slot) {
         Weapon weaponToEquip = (Weapon) inventory.remove(slot);
@@ -833,7 +834,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     @Override
     public boolean canBeAttackedNow() {
-        return realm != null && !isDead();
+        return !isLeftRealm() && !isDead();
     }
 
     @Override
@@ -1445,8 +1446,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
     @Override
     public boolean canBeAttacked() {
-//        return false;
-        return !isDead() && realm != null;
+        return !isDead() && realm.get() != null;
     }
 
     @Override
@@ -1511,43 +1511,43 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         return Optional.of(stringBuilder.toString());
     }
 
-
-    public Player cloneForTeleport() {
-        var copied = PlayerImpl.builder()
-                .id(id())
-                .name(viewName())
-                .inventory(inventory)
-                .attackKungFu((AttackKungFu) attackKungFu.duplicate())
-                .kungFuBook(kungFuBook)
-                .male(male)
-                .equipments(equippedEquipments)
-                .footKungfu(footKungFu().map(k -> (FootKungFu)k.duplicate()).orElse(null))
-                .protectKungFu(protectKungFu != null ? (ProtectKungFu)protectKungFu.duplicate() : null)
-                .breathKungFu(breathKungFu != null ? (BreathKungFu) breathKungFu.duplicate() : null)
-                .innateAttributesProvider(innateAttributesProvider)
-                .life(life)
-                .head(headLife)
-                .arm(armLife)
-                .leg(legLife)
-                .power(power)
-                .innerPower(innerPower)
-                .outerPower(outerPower)
-                .revival(revival.exp())
-                .yinYang(yinYang)
-                .pillSlots(pillSlots)
-                .guildMembership(guildMembership)
-                .build();
-        copied.state = state;
-        copied.changeDirection(direction());
-        if (copied.state instanceof PlayerMoveState moveState) {
-            if (moveState.moveAction() == MoveAction.FightWalk) {
-                copied.state = PlayerStandState.fightStand(copied);
-            } else {
-                copied.state = PlayerStandState.idle(copied);
-            }
-        } else {
-            copied.state.changePlayer(copied);
-        }
-        return copied;
-    }
+//
+//    public Player cloneForTeleport() {
+//        var copied = PlayerImpl.builder()
+//                .id(id())
+//                .name(viewName())
+//                .inventory(inventory)
+//                .attackKungFu(attackKungFu)
+//                .kungFuBook(kungFuBook)
+//                .male(male)
+//                .equipments(equippedEquipments)
+//                .footKungfu(footKungfu)
+//                .protectKungFu(protectKungFu)
+//                .breathKungFu(breathKungFu)
+//                .innateAttributesProvider(innateAttributesProvider)
+//                .life(life)
+//                .head(headLife)
+//                .arm(armLife)
+//                .leg(legLife)
+//                .power(power)
+//                .innerPower(innerPower)
+//                .outerPower(outerPower)
+//                .revival(revival.exp())
+//                .yinYang(yinYang)
+//                .pillSlots(pillSlots)
+//                .guildMembership(guildMembership)
+//                .build();
+//        copied.state = state;
+//        copied.changeDirection(direction());
+//        if (copied.state instanceof PlayerMoveState moveState) {
+//            if (moveState.moveAction() == MoveAction.FightWalk) {
+//                copied.state = PlayerStandState.fightStand(copied);
+//            } else {
+//                copied.state = PlayerStandState.idle(copied);
+//            }
+//        } else {
+//            copied.state.changePlayer(copied);
+//        }
+//        return copied;
+//    }
 }

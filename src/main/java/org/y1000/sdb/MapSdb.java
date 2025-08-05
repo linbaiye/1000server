@@ -23,4 +23,6 @@ public interface MapSdb {
 
     List<Integer> getAllIds();
 
+    String getAnnouncement(int id);
+
 }

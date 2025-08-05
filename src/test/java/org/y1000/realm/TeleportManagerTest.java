@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.StaticTeleport;
-import org.y1000.realm.event.PlayerRealmEvent;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.sdb.CreateGateSdb;
 import org.y1000.util.UnaryAction;
@@ -31,9 +30,6 @@ class TeleportManagerTest extends AbstractUnitTestFixture {
 
     private TeleportManager manager;
 
-    private UnaryAction<PlayerRealmEvent> eventUnaryAction;
-
-    private PlayerRealmEvent event;
 
     @BeforeEach
     void setUp() {
@@ -42,7 +38,6 @@ class TeleportManagerTest extends AbstractUnitTestFixture {
         createGateSdb = Mockito.mock(CreateGateSdb.class);
         aoiManager = Mockito.mock(AOIManager.class);
         manager = new TeleportManager(realmId, realmMap, createGateSdb, entityIdGenerator, aoiManager);
-        eventUnaryAction = e -> event = e;
     }
 
     @Test

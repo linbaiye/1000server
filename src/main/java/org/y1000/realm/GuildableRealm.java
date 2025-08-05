@@ -3,10 +3,8 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
-import org.y1000.guild.GuildStone;
 import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.*;
-import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
@@ -35,9 +33,6 @@ class GuildableRealm extends AbstractRealm {
         return log;
     }
 
-    @Override
-    public void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
-    }
 
 
     @Override
@@ -63,10 +58,13 @@ class GuildableRealm extends AbstractRealm {
             sameRealmManagement(manager, event.target(), guildManager::teachGuildKungFu);
     }
 
+    @Override
+    public void update() {
+        doUpdateEntities();
+    }
 
     @Override
     protected void handleLogin(Login login) {
-        acceptLogin(login);
     }
 
     @Override

@@ -22,6 +22,7 @@ public final class BroadcastTextEvent implements RealmEvent {
     private final String text;
 
     private final String color;
+
     private final String bgColor;
 
     public PlayerTextMessage createMessage(Player player) {

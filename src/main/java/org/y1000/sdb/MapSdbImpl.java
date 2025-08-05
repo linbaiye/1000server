@@ -65,6 +65,11 @@ public final class MapSdbImpl extends AbstractCSVSdbReader implements MapSdb {
     }
 
 
+    @Override
+    public String getAnnouncement(int id) {
+        return get(String.valueOf(id), "Announcement");
+    }
+
     public static void main(String[] args) {
         MapSdbImpl sdb = MapSdbImpl .INSTANCE;
 //        Set<String> names = itemSdb.names();

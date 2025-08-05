@@ -24,7 +24,6 @@ public interface ActiveEntity extends Entity {
 
     <AB> Optional<AB> findAbility(Class<AB> type);
 
-
     default Set<Entity> getEntitiesAt(Set<Coordinate> coordinates) {
         return Collections.emptySet();
     }

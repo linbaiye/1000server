@@ -46,6 +46,6 @@ public class PlayerTextMessage extends Abstract2PlayerMessageEvent {
     }
 
     public static PlayerTextMessage systip(Player player, String text) {
-        return new PlayerTextMessage(player, Packet.newBuilder().setText(TextMessagePacket.newBuilder().setText(text).build()).build());
+        return bottom(player, text, "yellow", "");
     }
 }

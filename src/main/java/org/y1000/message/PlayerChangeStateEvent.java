@@ -13,12 +13,16 @@ public final class PlayerChangeStateEvent extends AbstractMessagePlayerEvent {
     @Getter
     private final boolean includeSelf;
 
-    public PlayerChangeStateEvent(Player player, Packet packet, boolean includeSelf) {
+    private final boolean isDead;
+
+    private PlayerChangeStateEvent(Player player, Packet packet, boolean includeSelf, boolean isDead) {
         super(player, packet);
         this.includeSelf = includeSelf;
+        this.isDead = isDead;
     }
 
-    private static PlayerChangeStateEvent of(Player player, boolean includeSelf) {
+    private static PlayerChangeStateEvent of(Player player,
+                                             boolean includeSelf) {
         PlayerStateEnum playerStateEnum = player.stateEnum();
         PlayerChangeStatePacket changeStatePacket = PlayerChangeStatePacket.newBuilder().setState(playerStateEnum.value())
                 .setId(player.id())
@@ -26,7 +30,7 @@ public final class PlayerChangeStateEvent extends AbstractMessagePlayerEvent {
                 .setY(player.coordinate().y())
                 .setDirection(player.direction().value()).build();
         var packet = Packet.newBuilder().setPlayerChangeState(changeStatePacket).build();
-        return new PlayerChangeStateEvent(player, packet, includeSelf);
+        return new PlayerChangeStateEvent(player, packet, includeSelf, player.isDead());
     }
 
     public static PlayerChangeStateEvent noSelf(Player player) {
@@ -39,6 +43,10 @@ public final class PlayerChangeStateEvent extends AbstractMessagePlayerEvent {
 
     @Override
     public void accept(PlayerEventHandler handler) {
+        if (isDead) {
+            handler.onPlayerDead(source(), this);
+            return;
+        }
         if (includeSelf)
             handler.sendToVisiblePlayersAndSelf(source(), this);
         else
