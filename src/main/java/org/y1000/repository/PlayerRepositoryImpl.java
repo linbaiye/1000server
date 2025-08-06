@@ -26,6 +26,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
     private final KungFuBookRepository kungFuRepository;
 
     private static final int DEFAULT_REALM_ID = 6;
+    //private static final Coordinate DEFAULT_COORDINATE = Coordinate.xy(177, 88);
     private static final Coordinate DEFAULT_COORDINATE = Coordinate.xy(177, 221);
 
     private final EntityManagerFactory entityManagerFactory;

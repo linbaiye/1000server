@@ -226,6 +226,9 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (StringUtils.isNotEmpty(magic)) {
             abilities.add(createMagic(idName, magic));
         }
+        var effect = monsterSdb.getEffect(idName);
+        if (StringUtils.isNotEmpty(effect))
+            abilities.add(new EffectAbility(effect));
         return abilities;
     }
 

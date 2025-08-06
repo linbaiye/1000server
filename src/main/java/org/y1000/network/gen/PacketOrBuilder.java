@@ -1133,5 +1133,20 @@ public interface PacketOrBuilder extends
    */
   org.y1000.network.gen.AttributeEquipPacketOrBuilder getAttributeEquipOrBuilder();
 
+  /**
+   * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+   * @return Whether the activateEffect field is set.
+   */
+  boolean hasActivateEffect();
+  /**
+   * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+   * @return The activateEffect.
+   */
+  org.y1000.network.gen.ActivateEffectPacket getActivateEffect();
+  /**
+   * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+   */
+  org.y1000.network.gen.ActivateEffectPacketOrBuilder getActivateEffectOrBuilder();
+
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

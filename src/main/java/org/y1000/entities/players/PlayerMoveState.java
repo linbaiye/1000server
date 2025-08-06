@@ -94,11 +94,8 @@ final class PlayerMoveState extends AbstractPlayerState {
 
     @Override
     public void handleAfterHurt() {
-        if (player().movable(currentInput.destination())) {
-            player().changeCoordinate(currentInput.destination());
-        }
-        changeToStand();
-        player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
+        player().changeState(this);
+        player().sendEvent(PlayerMoveEvent.restore(player(), moveAction, elapsedMillis()));
     }
 
     @Override

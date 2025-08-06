@@ -174,4 +174,16 @@ public interface DynamicObjectSnapshotPacketOrBuilder extends
    * @return The occupying.
    */
   boolean getOccupying();
+
+  /**
+   * <code>int32 offsetX = 15;</code>
+   * @return The offsetX.
+   */
+  int getOffsetX();
+
+  /**
+   * <code>int32 offsetY = 16;</code>
+   * @return The offsetY.
+   */
+  int getOffsetY();
 }

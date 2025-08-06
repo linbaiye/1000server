@@ -77,6 +77,17 @@ private static final long serialVersionUID = 0L;
     return moveAction_;
   }
 
+  public static final int STARTMILLIS_FIELD_NUMBER = 3;
+  private int startMillis_ = 0;
+  /**
+   * <code>int32 startMillis = 3;</code>
+   * @return The startMillis.
+   */
+  @java.lang.Override
+  public int getStartMillis() {
+    return startMillis_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -97,6 +108,9 @@ private static final long serialVersionUID = 0L;
     if (moveAction_ != 0) {
       output.writeInt32(2, moveAction_);
     }
+    if (startMillis_ != 0) {
+      output.writeInt32(3, startMillis_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -113,6 +127,10 @@ private static final long serialVersionUID = 0L;
     if (moveAction_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(2, moveAction_);
+    }
+    if (startMillis_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(3, startMillis_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -136,6 +154,8 @@ private static final long serialVersionUID = 0L;
     }
     if (getMoveAction()
         != other.getMoveAction()) return false;
+    if (getStartMillis()
+        != other.getStartMillis()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -153,6 +173,8 @@ private static final long serialVersionUID = 0L;
     }
     hash = (37 * hash) + MOVEACTION_FIELD_NUMBER;
     hash = (53 * hash) + getMoveAction();
+    hash = (37 * hash) + STARTMILLIS_FIELD_NUMBER;
+    hash = (53 * hash) + getStartMillis();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -296,6 +318,7 @@ private static final long serialVersionUID = 0L;
         movePacketBuilder_ = null;
       }
       moveAction_ = 0;
+      startMillis_ = 0;
       return this;
     }
 
@@ -338,6 +361,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.moveAction_ = moveAction_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.startMillis_ = startMillis_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -392,6 +418,9 @@ private static final long serialVersionUID = 0L;
       if (other.getMoveAction() != 0) {
         setMoveAction(other.getMoveAction());
       }
+      if (other.getStartMillis() != 0) {
+        setStartMillis(other.getStartMillis());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -430,6 +459,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000002;
               break;
             } // case 16
+            case 24: {
+              startMillis_ = input.readInt32();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 24
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -596,6 +630,38 @@ private static final long serialVersionUID = 0L;
     public Builder clearMoveAction() {
       bitField0_ = (bitField0_ & ~0x00000002);
       moveAction_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int startMillis_ ;
+    /**
+     * <code>int32 startMillis = 3;</code>
+     * @return The startMillis.
+     */
+    @java.lang.Override
+    public int getStartMillis() {
+      return startMillis_;
+    }
+    /**
+     * <code>int32 startMillis = 3;</code>
+     * @param value The startMillis to set.
+     * @return This builder for chaining.
+     */
+    public Builder setStartMillis(int value) {
+
+      startMillis_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 startMillis = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearStartMillis() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      startMillis_ = 0;
       onChanged();
       return this;
     }

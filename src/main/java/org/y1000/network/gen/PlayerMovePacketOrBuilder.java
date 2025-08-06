@@ -28,4 +28,10 @@ public interface PlayerMovePacketOrBuilder extends
    * @return The moveAction.
    */
   int getMoveAction();
+
+  /**
+   * <code>int32 startMillis = 3;</code>
+   * @return The startMillis.
+   */
+  int getStartMillis();
 }

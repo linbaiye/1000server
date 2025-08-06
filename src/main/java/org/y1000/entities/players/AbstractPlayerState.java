@@ -5,7 +5,7 @@ import org.y1000.entities.creatures.AbstractCreatureState;
 
 abstract class AbstractPlayerState extends AbstractCreatureState implements PlayerState {
 
-    private PlayerImpl player;
+    private final PlayerImpl player;
 
     private final PlayerStateEnum stateEnum;
 
@@ -28,8 +28,4 @@ abstract class AbstractPlayerState extends AbstractCreatureState implements Play
         return stateEnum;
     }
 
-    @Override
-    public void changePlayer(PlayerImpl player) {
-        this.player = player;
-    }
 }

@@ -61,6 +61,11 @@ public final class MonstersSdbImpl extends AbstractNpcSdb implements MonstersSdb
         return names().stream().map(this::getAnimate).collect(Collectors.toSet());
     }
 
+    @Override
+    public String getEffect(String name) {
+        return get(name, "Effect");
+    }
+
     private static void check() {
 
         MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;

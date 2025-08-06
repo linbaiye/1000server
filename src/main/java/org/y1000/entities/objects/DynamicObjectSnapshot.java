@@ -47,6 +47,8 @@ public final class DynamicObjectSnapshot implements I2ClientMessage {
                 .setShape(dynamicObject.shape())
                 .setViewName(dynamicObject.viewName().orElse(""))
                 .setCurrentAni(current.getId())
+                .setOffsetX(dynamicObject.getOffset().x())
+                .setOffsetY(dynamicObject.getOffset().y())
                 .setOccupying(o)
                 .setCurrentElapsed(current.getElapsed());
         dynamicObject.occupiedCoordinates().forEach(coordinate -> {

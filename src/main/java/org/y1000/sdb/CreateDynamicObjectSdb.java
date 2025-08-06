@@ -20,5 +20,9 @@ public interface CreateDynamicObjectSdb {
 
     Optional<String> getCallNpc(String no);
 
+    Integer getOffsetX(String no);
+
+    Integer getOffsetY(String no);
+
 }
 

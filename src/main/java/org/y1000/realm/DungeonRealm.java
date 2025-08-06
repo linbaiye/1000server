@@ -124,7 +124,8 @@ final class DungeonRealm extends AbstractRealm {
 
     @Override
     protected void handleLogin(Login login) {
-        sendCrossRealmEvent(new ProxyLoginEvent(exitRealmIt(), login.playerId(), exitCoordinate(), login.connection()));
+        acceptLogin(login.playerId(), login.connection(), null);
+        //sendCrossRealmEvent(new ProxyLoginEvent(exitRealmIt(), login.playerId(), exitCoordinate(), login.connection()));
     }
 
     private int exitRealmIt() {

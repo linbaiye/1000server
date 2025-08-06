@@ -17,4 +17,6 @@ public interface MonstersSdb extends NpcSdb {
 
 
     Set<String> getAllAnimateIds();
+
+    String getEffect(String name);
 }

@@ -1,5 +1,6 @@
 package org.y1000.entities.objects;
 
+import lombok.Getter;
 import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.message.I2ClientMessage;
@@ -29,13 +30,16 @@ public class DynamicObject extends AbstractActiveEntity {
 
     private boolean occupying;
 
+    @Getter
+    private final Coordinate offset;
+
     protected DynamicObject(long id,
                             String viewName,
                             List<Object> abilities,
                             Set<Coordinate> guardCoordinates,
                             Coordinate coordinate,
                             DynamicObjectEventListener listener,
-                            String shape) {
+                            String shape, Coordinate offset) {
         super(id);
         this.viewName = viewName;
         this.abilities = abilities;
@@ -43,6 +47,7 @@ public class DynamicObject extends AbstractActiveEntity {
         this.coordinate = coordinate;
         this.listener = listener;
         this.shape = shape;
+        this.offset = offset;
         currentAbility = findAbility(StaticAbility.class).orElseThrow();
         findAbility(DynamicObjectHurtAbility.class).ifPresent(h -> h.setOnHurt(this::onHurt));
         occupying = true;

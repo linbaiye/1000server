@@ -584,6 +584,8 @@ message DynamicObjectSnapshotPacket {
   int32 currentAni = 12;
   int32 currentElapsed = 13;
   bool occupying = 14;
+  int32 offsetX = 15;
+  int32 offsetY = 16;
 }
 message DynamicObjectShiftPacket {
   int64 id = 1;
@@ -733,6 +735,12 @@ message AddTradeItemInputPacket {
   int32 number = 2;
 }
 
+message ActivateEffectPacket {
+  int64 id = 1;
+  int32 millis = 2;
+  string effect = 3;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -811,6 +819,7 @@ message Packet {
     FollowRopePacket followRope = 79;
     PillsPacket pills = 80;
     AttributeEquipPacket attributeEquip = 81;
+    ActivateEffectPacket activateEffect = 82;
   }
 }
 
@@ -1030,6 +1039,7 @@ message SellItemInputPacket {
 message PlayerMovePacket {
   NpcMovePacket movePacket = 1;
   int32 moveAction = 2;
+  int32 startMillis = 3;
 }
 
 message PlayerDamagedPacket {

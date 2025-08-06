@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.DynamicObjectDropItemAbility;
-import org.y1000.entities.creatures.npc.NpcDropItemAbility;
 import org.y1000.guild.GuildStone;
 import org.y1000.persistence.GuildStonePo;
 import org.y1000.realm.DynamicObjectEventListener;
@@ -23,6 +22,8 @@ import java.util.Set;
 @Slf4j
 public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
     private final DynamicObjectSdb dynamicObjectSdb;
+
+    private static final Coordinate DefaultOffset = new Coordinate(16, 12);
 
     public DynamicObjectFactoryImpl(DynamicObjectSdb dynamicObjectSdb) {
         this.dynamicObjectSdb = dynamicObjectSdb;
@@ -137,6 +138,14 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
         return Set.of(guardCoordinates);
     }
 
+    private Coordinate getOffset(String number, CreateDynamicObjectSdb createDynamicObjectSdb) {
+        Integer offsetX = createDynamicObjectSdb.getOffsetX(number);
+        Integer offsetY = createDynamicObjectSdb.getOffsetY(number);
+        if (offsetX == null || offsetY == null)
+            return DefaultOffset;
+        return Coordinate.xy(offsetX, offsetY);
+    }
+
     @Override
     public DynamicObject create(long id, String number, DynamicObjectEventListener eventListener, CreateDynamicObjectSdb createDynamicObjectSdb) {
         int x = createDynamicObjectSdb.getX(number);
@@ -145,6 +154,6 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
         var name = createDynamicObjectSdb.getName(number);
         return new DynamicObject(id, dynamicObjectSdb.getViewName(name).orElse(null),
                 buildAbilities(name, number, createDynamicObjectSdb), parseCoordinates(name, coordinate),
-                coordinate, eventListener, "x" + dynamicObjectSdb.getShape(name));
+                coordinate, eventListener, "x" + dynamicObjectSdb.getShape(name), getOffset(number, createDynamicObjectSdb));
     }
 }

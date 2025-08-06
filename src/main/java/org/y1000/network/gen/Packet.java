@@ -120,6 +120,7 @@ private static final long serialVersionUID = 0L;
     FOLLOWROPE(79),
     PILLS(80),
     ATTRIBUTEEQUIP(81),
+    ACTIVATEEFFECT(82),
     TYPEDPACKET_NOT_SET(0);
     private final int value;
     private TypedPacketCase(int value) {
@@ -212,6 +213,7 @@ private static final long serialVersionUID = 0L;
         case 79: return FOLLOWROPE;
         case 80: return PILLS;
         case 81: return ATTRIBUTEEQUIP;
+        case 82: return ACTIVATEEFFECT;
         case 0: return TYPEDPACKET_NOT_SET;
         default: return null;
       }
@@ -2552,6 +2554,37 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.AttributeEquipPacket.getDefaultInstance();
   }
 
+  public static final int ACTIVATEEFFECT_FIELD_NUMBER = 82;
+  /**
+   * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+   * @return Whether the activateEffect field is set.
+   */
+  @java.lang.Override
+  public boolean hasActivateEffect() {
+    return typedPacketCase_ == 82;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+   * @return The activateEffect.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ActivateEffectPacket getActivateEffect() {
+    if (typedPacketCase_ == 82) {
+       return (org.y1000.network.gen.ActivateEffectPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.ActivateEffectPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ActivateEffectPacketOrBuilder getActivateEffectOrBuilder() {
+    if (typedPacketCase_ == 82) {
+       return (org.y1000.network.gen.ActivateEffectPacket) typedPacket_;
+    }
+    return org.y1000.network.gen.ActivateEffectPacket.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -2790,6 +2823,9 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 81) {
       output.writeMessage(81, (org.y1000.network.gen.AttributeEquipPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 82) {
+      output.writeMessage(82, (org.y1000.network.gen.ActivateEffectPacket) typedPacket_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -3099,6 +3135,10 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 81) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(81, (org.y1000.network.gen.AttributeEquipPacket) typedPacket_);
+    }
+    if (typedPacketCase_ == 82) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(82, (org.y1000.network.gen.ActivateEffectPacket) typedPacket_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -3417,6 +3457,10 @@ private static final long serialVersionUID = 0L;
         if (!getAttributeEquip()
             .equals(other.getAttributeEquip())) return false;
         break;
+      case 82:
+        if (!getActivateEffect()
+            .equals(other.getActivateEffect())) return false;
+        break;
       case 0:
       default:
     }
@@ -3731,6 +3775,10 @@ private static final long serialVersionUID = 0L;
       case 81:
         hash = (37 * hash) + ATTRIBUTEEQUIP_FIELD_NUMBER;
         hash = (53 * hash) + getAttributeEquip().hashCode();
+        break;
+      case 82:
+        hash = (37 * hash) + ACTIVATEEFFECT_FIELD_NUMBER;
+        hash = (53 * hash) + getActivateEffect().hashCode();
         break;
       case 0:
       default:
@@ -4093,6 +4141,9 @@ private static final long serialVersionUID = 0L;
       if (attributeEquipBuilder_ != null) {
         attributeEquipBuilder_.clear();
       }
+      if (activateEffectBuilder_ != null) {
+        activateEffectBuilder_.clear();
+      }
       typedPacketCase_ = 0;
       typedPacket_ = null;
       return this;
@@ -4444,6 +4495,10 @@ private static final long serialVersionUID = 0L;
           attributeEquipBuilder_ != null) {
         result.typedPacket_ = attributeEquipBuilder_.build();
       }
+      if (typedPacketCase_ == 82 &&
+          activateEffectBuilder_ != null) {
+        result.typedPacket_ = activateEffectBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -4789,6 +4844,10 @@ private static final long serialVersionUID = 0L;
         }
         case ATTRIBUTEEQUIP: {
           mergeAttributeEquip(other.getAttributeEquip());
+          break;
+        }
+        case ACTIVATEEFFECT: {
+          mergeActivateEffect(other.getActivateEffect());
           break;
         }
         case TYPEDPACKET_NOT_SET: {
@@ -5346,6 +5405,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 81;
               break;
             } // case 650
+            case 658: {
+              input.readMessage(
+                  getActivateEffectFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 82;
+              break;
+            } // case 658
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -16028,6 +16094,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 81;
       onChanged();
       return attributeEquipBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ActivateEffectPacket, org.y1000.network.gen.ActivateEffectPacket.Builder, org.y1000.network.gen.ActivateEffectPacketOrBuilder> activateEffectBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+     * @return Whether the activateEffect field is set.
+     */
+    @java.lang.Override
+    public boolean hasActivateEffect() {
+      return typedPacketCase_ == 82;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+     * @return The activateEffect.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ActivateEffectPacket getActivateEffect() {
+      if (activateEffectBuilder_ == null) {
+        if (typedPacketCase_ == 82) {
+          return (org.y1000.network.gen.ActivateEffectPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.ActivateEffectPacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 82) {
+          return activateEffectBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ActivateEffectPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+     */
+    public Builder setActivateEffect(org.y1000.network.gen.ActivateEffectPacket value) {
+      if (activateEffectBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        activateEffectBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 82;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+     */
+    public Builder setActivateEffect(
+        org.y1000.network.gen.ActivateEffectPacket.Builder builderForValue) {
+      if (activateEffectBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        activateEffectBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 82;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+     */
+    public Builder mergeActivateEffect(org.y1000.network.gen.ActivateEffectPacket value) {
+      if (activateEffectBuilder_ == null) {
+        if (typedPacketCase_ == 82 &&
+            typedPacket_ != org.y1000.network.gen.ActivateEffectPacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.ActivateEffectPacket.newBuilder((org.y1000.network.gen.ActivateEffectPacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 82) {
+          activateEffectBuilder_.mergeFrom(value);
+        } else {
+          activateEffectBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 82;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+     */
+    public Builder clearActivateEffect() {
+      if (activateEffectBuilder_ == null) {
+        if (typedPacketCase_ == 82) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 82) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        activateEffectBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+     */
+    public org.y1000.network.gen.ActivateEffectPacket.Builder getActivateEffectBuilder() {
+      return getActivateEffectFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ActivateEffectPacketOrBuilder getActivateEffectOrBuilder() {
+      if ((typedPacketCase_ == 82) && (activateEffectBuilder_ != null)) {
+        return activateEffectBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 82) {
+          return (org.y1000.network.gen.ActivateEffectPacket) typedPacket_;
+        }
+        return org.y1000.network.gen.ActivateEffectPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ActivateEffectPacket, org.y1000.network.gen.ActivateEffectPacket.Builder, org.y1000.network.gen.ActivateEffectPacketOrBuilder> 
+        getActivateEffectFieldBuilder() {
+      if (activateEffectBuilder_ == null) {
+        if (!(typedPacketCase_ == 82)) {
+          typedPacket_ = org.y1000.network.gen.ActivateEffectPacket.getDefaultInstance();
+        }
+        activateEffectBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ActivateEffectPacket, org.y1000.network.gen.ActivateEffectPacket.Builder, org.y1000.network.gen.ActivateEffectPacketOrBuilder>(
+                (org.y1000.network.gen.ActivateEffectPacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 82;
+      onChanged();
+      return activateEffectBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

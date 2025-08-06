@@ -1467,10 +1467,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         if (life.currentValue() > 0) {
             cooldownRecovery();
             hurtSound().ifPresent(this::sendSound);
-            if (!(state instanceof PlayerMoveState)) {
-                changeState(PlayerHurtState.create(this, state));
-                sendEvent(PlayerChangeStateEvent.allVisible(this));
-            }
+            changeState(PlayerHurtState.create(this, state));
+            sendEvent(PlayerChangeStateEvent.allVisible(this));
             gainProtectionExp(old - currentLife());
         } else {
             footKungfu = null;

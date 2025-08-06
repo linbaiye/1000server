@@ -380,6 +380,28 @@ private static final long serialVersionUID = 0L;
     return occupying_;
   }
 
+  public static final int OFFSETX_FIELD_NUMBER = 15;
+  private int offsetX_ = 0;
+  /**
+   * <code>int32 offsetX = 15;</code>
+   * @return The offsetX.
+   */
+  @java.lang.Override
+  public int getOffsetX() {
+    return offsetX_;
+  }
+
+  public static final int OFFSETY_FIELD_NUMBER = 16;
+  private int offsetY_ = 0;
+  /**
+   * <code>int32 offsetY = 16;</code>
+   * @return The offsetY.
+   */
+  @java.lang.Override
+  public int getOffsetY() {
+    return offsetY_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -460,6 +482,12 @@ private static final long serialVersionUID = 0L;
     }
     if (occupying_ != false) {
       output.writeBool(14, occupying_);
+    }
+    if (offsetX_ != 0) {
+      output.writeInt32(15, offsetX_);
+    }
+    if (offsetY_ != 0) {
+      output.writeInt32(16, offsetY_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -581,6 +609,14 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeBoolSize(14, occupying_);
     }
+    if (offsetX_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(15, offsetX_);
+    }
+    if (offsetY_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(16, offsetY_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -627,6 +663,10 @@ private static final long serialVersionUID = 0L;
         != other.getCurrentElapsed()) return false;
     if (getOccupying()
         != other.getOccupying()) return false;
+    if (getOffsetX()
+        != other.getOffsetX()) return false;
+    if (getOffsetY()
+        != other.getOffsetY()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -682,6 +722,10 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + OCCUPYING_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
         getOccupying());
+    hash = (37 * hash) + OFFSETX_FIELD_NUMBER;
+    hash = (53 * hash) + getOffsetX();
+    hash = (37 * hash) + OFFSETY_FIELD_NUMBER;
+    hash = (53 * hash) + getOffsetY();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -827,6 +871,8 @@ private static final long serialVersionUID = 0L;
       currentAni_ = 0;
       currentElapsed_ = 0;
       occupying_ = false;
+      offsetX_ = 0;
+      offsetY_ = 0;
       return this;
     }
 
@@ -909,6 +955,12 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00002000) != 0)) {
         result.occupying_ = occupying_;
+      }
+      if (((from_bitField0_ & 0x00004000) != 0)) {
+        result.offsetX_ = offsetX_;
+      }
+      if (((from_bitField0_ & 0x00008000) != 0)) {
+        result.offsetY_ = offsetY_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -1050,6 +1102,12 @@ private static final long serialVersionUID = 0L;
       }
       if (other.getOccupying() != false) {
         setOccupying(other.getOccupying());
+      }
+      if (other.getOffsetX() != 0) {
+        setOffsetX(other.getOffsetX());
+      }
+      if (other.getOffsetY() != 0) {
+        setOffsetY(other.getOffsetY());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -1214,6 +1272,16 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00002000;
               break;
             } // case 112
+            case 120: {
+              offsetX_ = input.readInt32();
+              bitField0_ |= 0x00004000;
+              break;
+            } // case 120
+            case 128: {
+              offsetY_ = input.readInt32();
+              bitField0_ |= 0x00008000;
+              break;
+            } // case 128
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -2080,6 +2148,70 @@ private static final long serialVersionUID = 0L;
     public Builder clearOccupying() {
       bitField0_ = (bitField0_ & ~0x00002000);
       occupying_ = false;
+      onChanged();
+      return this;
+    }
+
+    private int offsetX_ ;
+    /**
+     * <code>int32 offsetX = 15;</code>
+     * @return The offsetX.
+     */
+    @java.lang.Override
+    public int getOffsetX() {
+      return offsetX_;
+    }
+    /**
+     * <code>int32 offsetX = 15;</code>
+     * @param value The offsetX to set.
+     * @return This builder for chaining.
+     */
+    public Builder setOffsetX(int value) {
+
+      offsetX_ = value;
+      bitField0_ |= 0x00004000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 offsetX = 15;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearOffsetX() {
+      bitField0_ = (bitField0_ & ~0x00004000);
+      offsetX_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int offsetY_ ;
+    /**
+     * <code>int32 offsetY = 16;</code>
+     * @return The offsetY.
+     */
+    @java.lang.Override
+    public int getOffsetY() {
+      return offsetY_;
+    }
+    /**
+     * <code>int32 offsetY = 16;</code>
+     * @param value The offsetY to set.
+     * @return This builder for chaining.
+     */
+    public Builder setOffsetY(int value) {
+
+      offsetY_ = value;
+      bitField0_ |= 0x00008000;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 offsetY = 16;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearOffsetY() {
+      bitField0_ = (bitField0_ & ~0x00008000);
+      offsetY_ = 0;
       onChanged();
       return this;
     }
