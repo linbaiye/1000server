@@ -1,5 +1,5 @@
 Name,ViewName,Kind,virtue,ExtraExp,VirtueLevel,RegenInterval,ActionWidth,Animate,Shape,WalkSpeed,Damage,DamageHead,DamageArm,DamageLeg,Armor,Life,AttackSpeed,Avoid,Recovery,Accuracy,SpendLife,HitArmor,boViewHuman,boAutoAttack,boGoodHeart,boHit,boNotBowHit,EscapeLife,ViewWidth,boAttack,boVassal,VassalCount,AttackMagic,HaveMagic,boChangeTarget,SoundAttack,SoundDie,SoundNormal,SoundStructed,HaveItem,ArmorWHPercent,ShortExp,LongExp,RiseShortExp,RiseLongExp,HandExp,3HitExp,LimitSkill,QuestNum,Effect
-猫,猫,,0,0,0,,8,2,z6,200,53,,,,60,800,0,0,0,,10,,TRUE,,TRUE,TRUE,,800,6,TRUE,,,,,,2403,2404,2405,,肉:1:1,,,,,,,,,,Sparkling
+猫,猫,,0,0,0,,8,2,z6,200,53,,,,60,800,0,0,0,,10,,TRUE,,TRUE,TRUE,,800,6,TRUE,,,,,,2403,2404,2405,,肉:1:1,,,,,,,,,,
 老鼠,老鼠,,0,1000,0,,8,2,z5,200,20,,,,20,300,0,0,0,,10,,TRUE,,TRUE,TRUE,,300,3,TRUE,,,,,,2427,2428,2429,,肉:1:1,,,,,,,,,,
 兔子,兔子,,0,0,0,,8,2,z7,200,33,,,,30,500,0,0,0,,10,,,,TRUE,TRUE,,500,4,TRUE,,,,,,,,,,肉:1:1,,,,,,,,,,
 狗,狗,,0,0,0,,8,3,z8,200,66,,,,80,1000,0,0,0,,10,,TRUE,,TRUE,TRUE,,50,5,TRUE,,,,,,2400,2401,2402,,肉:4:1,,,,,,,,,,
