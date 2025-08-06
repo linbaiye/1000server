@@ -4,6 +4,9 @@ import jakarta.persistence.EntityManager;
 import org.apache.commons.lang3.tuple.Pair;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
+import org.y1000.item.KungFuItem;
+import org.y1000.item.StackItem;
+import org.y1000.kungfu.KungFuBook;
 import org.y1000.util.Coordinate;
 
 import java.util.HashMap;
@@ -22,6 +25,23 @@ public class PlayerDevRepository implements PlayerRepository {
 
     private final List<Long> availableDebugPlayers = List.of(100000251L, 100000301L);
 
+
+    private void add(KungFuBook book, String name) {
+        var stackItem = (StackItem) itemFactory.createItem(name, 1);
+        book.addToBasic(((KungFuItem)stackItem.item()).kungFu());
+    }
+
+    private void addKungFu(KungFuBook book) {
+        add(book, "金钟罩");
+        add(book, "风灵旋");
+        add(book, "闪光剑破解");
+        add(book, "壁射剑法");
+        add(book, "杨家枪法");
+        add(book, "点枪术");
+        add(book, "无击阵");
+        add(book, "三弓合体");
+    }
+
     public PlayerDevRepository(PlayerRepositoryImpl factory, ItemFactory itemFactory) {
         this.playerFactory = factory;
         this.itemFactory = itemFactory;
@@ -31,30 +51,24 @@ public class PlayerDevRepository implements PlayerRepository {
         male.inventory().add(itemFactory.createItem("生药", 10000));
         male.inventory().add(itemFactory.createItem("丹药", 10000));
         male.inventory().add(itemFactory.createItem("丸药", 10000));
+        male.inventory().add(itemFactory.createItem("汤药", 10000));
         male.inventory().add(itemFactory.createEquipment("三叉戟"));
         male.inventory().add(itemFactory.createEquipment("龙光剑"));
         male.inventory().add(itemFactory.createEquipment("男子黄金铠甲"));
         male.inventory().add(itemFactory.createEquipment("男子黄龙鞋"));
-        male.inventory().add(itemFactory.createItem("黑沙刚体", 1));
-        male.inventory().add(itemFactory.createItem("闪光剑破解", 1));
-        male.inventory().add(itemFactory.createItem("风灵旋", 1));
-        male.inventory().add(itemFactory.createItem("灵动八方", 1));
-        male.inventory().add(itemFactory.createItem("壁射剑法", 1));
-        male.inventory().add(itemFactory.createItem("雷剑式", 1));
-        male.inventory().add(itemFactory.createItem("太极剑结", 1));
-        male.inventory().add(itemFactory.createItem("圣灵21剑", 1));
-        male.inventory().add(itemFactory.createItem("北马剑法", 1));
         male.inventory().add(itemFactory.createEquipment("驱魔烈火弓"));
-        male.inventory().add(itemFactory.createEquipment("斗甲"));
         male.inventory().add(itemFactory.createEquipment("男子妖华袍"));
         male.inventory().add(itemFactory.createEquipment("男子黄金护腕"));
         male.inventory().add(itemFactory.createEquipment("月光刀"));
         male.inventory().add(itemFactory.createEquipment("狼牙戟"));
         male.inventory().add(itemFactory.createEquipment("炎帝火灵斧"));
-        male.inventory().add(itemFactory.createItem("箭", 10000));
         male.inventory().add(itemFactory.createEquipment("男子斗笠", 10000));
+        addKungFu(male.kungFuBook());
+
+        male.inventory().add(itemFactory.createItem("箭", 10000));
+        male.inventory().add(itemFactory.createItem("灵动八方"));
         male.inventory().add(itemFactory.createItem("钱币", 10000));
-        male.inventory().add(itemFactory.createItem("白酒", 10000));
+        male.inventory().add(itemFactory.createItem("小丸丹", 10000));
 
         Player female = playerFactory.create("测试女", false, 100000301L);
         playerMap.put(female.id(), female);
