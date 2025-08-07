@@ -13,21 +13,29 @@ public class NpcSettingSdb {
 
     private String buyTitle;
     private String sellTitle;
+    private String title;
     private String sellCaption;
     private String buyCaption;
 
+
     private int sellImage;
     private int buyImage;
+    private int image;
     private final List<String> buyItems = new ArrayList<>();
     private final List<String> sellItems = new ArrayList<>();
+    private final List<String> quests = new ArrayList<>();
 
     private static final Map<String, NpcSettingSdb> CACHE = new HashMap<>();
 
     public int getAnyImage() {
+        if (image != 0)
+            return image;
         return sellImage == 0 ? buyImage : sellImage;
     }
 
     public String getAnyTitle() {
+        if (title != null)
+            return title;
         return buyTitle != null ? buyTitle : sellTitle;
     }
 
@@ -69,6 +77,9 @@ public class NpcSettingSdb {
                         case "SELLCAPTION" -> npcSettingsdb.sellCaption = split[1];
                         case "BUYIMAGE" -> npcSettingsdb.buyImage = Integer.parseInt(split[1]);
                         case "SELLIMAGE" -> npcSettingsdb.sellImage = Integer.parseInt(split[1]);
+                        case "TITLE" -> npcSettingsdb.title = split[1];
+                        case "IMAGE" -> npcSettingsdb.image = Integer.parseInt(split[1]);
+                        case "QUEST" -> npcSettingsdb.quests.add(split[1]);
                     }
                 }
             }

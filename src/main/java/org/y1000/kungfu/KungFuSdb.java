@@ -173,7 +173,7 @@ public final class KungFuSdb extends AbstractCSVSdbReader {
         KungFuSdb kungFuSdb = KungFuSdb.INSTANCE;
 //        Set<String> names = kungFuSdb.names();
         Set<String> names = kungFuSdb.columnNames();
-        Set<String> items = kungFuSdb.names();
+        Set<String> items = kungFuSdb.uniqueIds();
         for (String i : items) {
             if (!i.startsWith("闪光")) {
                 continue;

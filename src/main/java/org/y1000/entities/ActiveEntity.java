@@ -1,6 +1,5 @@
 package org.y1000.entities;
 
-import org.y1000.entities.creatures.npc.NpcHurtAbility;
 import org.y1000.event.TypedEntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.util.Coordinate;

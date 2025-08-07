@@ -58,13 +58,13 @@ public final class NonMonsterNpcSdbImpl extends AbstractNpcSdb implements NonMon
     }
 
     public Set<String> getAllAnimateIds() {
-        return names().stream().map(this::getAnimate).collect(Collectors.toSet());
+        return uniqueIds().stream().map(this::getAnimate).collect(Collectors.toSet());
     }
     public static void main(String[] args) {
         NonMonsterNpcSdbImpl sdb= NonMonsterNpcSdbImpl.Instance;
 //        Set<String> names = itemSdb.names();
         Set<String> names = sdb.columnNames();
-        Set<String> items = sdb.names();
+        Set<String> items = sdb.uniqueIds();
         for (String i: items) {
 
             System.out.println("----------------------------");

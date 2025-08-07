@@ -1,8 +1,6 @@
 package org.y1000.sdb;
 
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +23,7 @@ public final class CreateMonsterSdbImpl extends AbstractCreateEntitySdb {
         CreateMonsterSdbImpl sdb = new CreateMonsterSdbImpl(49);
 //        Set<String> names = itemSdb.names();
         Set<String> names = sdb.columnNames();
-        Set<String> items = sdb.names();
+        Set<String> items = sdb.uniqueIds();
         MonstersSdbImpl monstersSdb = MonstersSdbImpl.INSTANCE;
         Set<String> id = new HashSet<>();
         for (String i: items) {

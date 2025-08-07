@@ -87,7 +87,7 @@ public class PlayerEquipEvent extends Abstract2VisibleAndSelfMessageEvent {
     private static void dump() {
         ItemSdbImpl itemSdb = ItemSdbImpl.INSTANCE;
         Set<String> names = itemSdb.columnNames();
-        Set<String> items = itemSdb.names();
+        Set<String> items = itemSdb.uniqueIds();
         Set<String> shapes = new HashSet<>();
         for (String i: items) {
             if (itemSdb.getTypeValue(i) != ItemType.EQUIPMENT.value()) {

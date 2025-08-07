@@ -79,7 +79,7 @@ public abstract class AbstractCSVSdbReader {
         return StringUtils.isEmpty(str) ? null : str;
     }
 
-    public Set<String> names() {
+    public Set<String> uniqueIds() {
         return firstColumnAndValuesIndices.keySet();
     }
 

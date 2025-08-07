@@ -16,7 +16,7 @@ public final class MagicParamSdb extends AbstractCSVSdbReader {
     }
 
     private String findIndex(String monsterName, String MagicName) {
-        Set<String> names = names();
+        Set<String> names = uniqueIds();
         for (String name : names) {
             if (get(name, "ObjectName").equals(monsterName) &&
                     get(name, "MagicName").equals(MagicName)) {
@@ -43,7 +43,7 @@ public final class MagicParamSdb extends AbstractCSVSdbReader {
         MagicParamSdb monstersSdb= MagicParamSdb.INSTANCE;
 //        Set<String> names = itemSdb.names();
         Set<String> names = monstersSdb.columnNames();
-        Set<String> items = monstersSdb.names();
+        Set<String> items = monstersSdb.uniqueIds();
         for (String i: items) {
 
             System.out.println("----------------------------");

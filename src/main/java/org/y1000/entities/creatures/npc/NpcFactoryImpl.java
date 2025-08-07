@@ -38,6 +38,8 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private static final int DEFAULT_NPC_VIEW_WIDTH = 8;
 
+    private final QuestSdb questSdb;
+
     private static final NpcRespawnAbility RESPAWN_ABILITY = new NpcRespawnAbility(8000);
 
     public NpcFactoryImpl(ActionSdb actionSdb,
@@ -46,7 +48,7 @@ public final class NpcFactoryImpl implements NpcFactory {
                           NonMonsterNpcSdb nonMonsterNpcSdb,
                           MagicParamSdb magicParamSdb,
                           ItemSdb itemSdb,
-                          ItemFactory itemFactory) {
+                          ItemFactory itemFactory, QuestSdb questSdb) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
         this.kungFuSdb = kungFuSdb;
@@ -54,6 +56,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         this.magicParamSdb = magicParamSdb;
         this.itemSdb = itemSdb;
         this.itemFactory = itemFactory;
+        this.questSdb = questSdb;
     }
 
     private Direction randomDirection() {
@@ -171,11 +174,13 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private List<Object> buildNpcInteractAbilities(NpcSettingSdb npcSettingSdb, String sprite, long id) {
         List<Object> abilities = new ArrayList<>();
-        abilities.add(NpcInteractAbility.build(npcSettingSdb, sprite, id));
+        abilities.add(NpcInteractDialogAbility.build(npcSettingSdb, sprite, id));
         if (!npcSettingSdb.getSellItems().isEmpty())
             abilities.add(NpcSellAbility.build(id, npcSettingSdb, itemSdb, sprite, itemFactory));
         if (!npcSettingSdb.getBuyItems().isEmpty())
             abilities.add(NpcBuyAbility.build(id, npcSettingSdb, itemSdb, sprite, itemFactory));
+        if (!npcSettingSdb.getQuests().isEmpty())
+            abilities.add();
         return abilities;
     }
 

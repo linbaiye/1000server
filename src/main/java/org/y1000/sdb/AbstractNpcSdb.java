@@ -92,6 +92,6 @@ public abstract class AbstractNpcSdb extends AbstractCSVSdbReader implements Npc
 
     @Override
     public boolean containsName(String name) {
-        return names().contains(name);
+        return uniqueIds().contains(name);
     }
 }

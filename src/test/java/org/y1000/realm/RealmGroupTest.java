@@ -57,7 +57,7 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
         realms.add(realm);
         realms.add(latchRealm);
         dateTime = LocalDateTime.now().withMinute(1).withSecond(0);
-        realmGroup = new RealmGroup(realms, realmFactory, eventHandler, () -> dateTime);
+        realmGroup = new RealmGroup(realms, realmFactory, eventHandler);
         new Thread(realmGroup).start();
         countDownLatch.await(30, TimeUnit.SECONDS);
         realmGroup.shutdown();
@@ -72,7 +72,7 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
         dateTime = LocalDateTime.now().withMinute(29).withSecond(57);
         realms.add(createHalfHourDungeon(() -> dateTime));
         realms.add(latchRealm);
-        realmGroup = new RealmGroup(realms, realmFactory, eventHandler, () -> dateTime);
+        realmGroup = new RealmGroup(realms, realmFactory, eventHandler);
         new Thread(realmGroup).start();
         countDownLatch.await(30, TimeUnit.SECONDS);
         realmGroup.shutdown();
@@ -87,7 +87,7 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
         dateTime = LocalDateTime.now().withMinute(29).withSecond(58);
         realms.add(createHalfHourDungeon(() -> dateTime));
         realms.add(latchRealm);
-        realmGroup = new RealmGroup(realms, realmFactory, eventHandler, () -> dateTime);
+        realmGroup = new RealmGroup(realms, realmFactory, eventHandler);
         when(realmFactory.createRealm(anyInt(), any(RealmEventSender.class))).thenReturn(createHalfHourDungeon(() -> dateTime));
         new Thread(realmGroup).start();
         countDownLatch.await(30, TimeUnit.SECONDS);
@@ -104,7 +104,7 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
         dateTime = LocalDateTime.now().withMinute(59).withSecond(59);
         realms.add(createOneHourDungeon(() -> dateTime));
         realms.add(latchRealm);
-        realmGroup = new RealmGroup(realms, realmFactory, eventHandler, () -> dateTime);
+        realmGroup = new RealmGroup(realms, realmFactory, eventHandler);
         when(realmFactory.createRealm(anyInt(), any(RealmEventSender.class))).thenReturn(createOneHourDungeon(() -> dateTime));
         new Thread(realmGroup).start();
         countDownLatch.await(30, TimeUnit.SECONDS);

@@ -13,15 +13,21 @@ import java.util.List;
 
 
 public class NpcBuyAbility extends AbstractNpcTradeAbility {
-    public static final String NAME = "出售物品";
+    private static final String NAME = "出售物品";
 
     private NpcBuyAbility(long id, String name, String sprite, List<MerchantItem> items, int image, String greetings, ItemFactory itemFactory) {
         super(id, name, sprite, items, image, greetings, itemFactory);
     }
 
+
     @Override
-    public String name() {
-        return NAME;
+    public void decorateMenuActions(List<String> menuActions) {
+        menuActions.add(NAME);
+    }
+
+    @Override
+    public boolean supportsAction(String name) {
+        return NAME.equals(name);
     }
 
     public void onPlayerBuy(Player player, Npc npc, int slot, int number) {
@@ -57,7 +63,7 @@ public class NpcBuyAbility extends AbstractNpcTradeAbility {
     }
 
     @Override
-    public void startInteract(Player player, Npc npc) {
+    public void interact(Player player, Npc npc) {
         if (stateOrDistanceInvalid(player, npc))
             return;
         player.sendEvent(UpdateInventoryMessage.quiet(player));

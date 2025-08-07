@@ -21,7 +21,7 @@ public class NpcTradeMenuMessage extends Abstract2PlayerMessageEvent {
                 .setImage(ability.getImage())
                 .setSprite(ability.getSprite())
                 .setSale(sale)
-                .setName(ability.getName());
+                .setName(ability.getViewName());
         ability.getItems().forEach(i -> builder.addItems(NpcItemPacket.newBuilder()
                 .setIcon(i.getIcon()).setName(i.name()).setPrice(i.price())
                 .setColor(i.getColor()).setCanStack(i.canStack())

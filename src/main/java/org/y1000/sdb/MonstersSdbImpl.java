@@ -58,7 +58,7 @@ public final class MonstersSdbImpl extends AbstractNpcSdb implements MonstersSdb
     }
 
     public Set<String> getAllAnimateIds() {
-        return names().stream().map(this::getAnimate).collect(Collectors.toSet());
+        return uniqueIds().stream().map(this::getAnimate).collect(Collectors.toSet());
     }
 
     @Override
@@ -71,7 +71,7 @@ public final class MonstersSdbImpl extends AbstractNpcSdb implements MonstersSdb
         MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;
 //        Set<String> names = itemSdb.names();
         Set<String> names = monstersSdb.columnNames();
-        Set<String> items = monstersSdb.names();
+        Set<String> items = monstersSdb.uniqueIds();
         KungFuSdb kungFuSdb = KungFuSdb.INSTANCE;
         MagicParamSdb magicParamSdb = MagicParamSdb.INSTANCE;
         for (String i: items) {

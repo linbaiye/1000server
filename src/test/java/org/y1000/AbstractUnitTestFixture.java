@@ -66,7 +66,7 @@ public abstract class AbstractUnitTestFixture {
     }
     protected NpcFactoryImpl createNpcFactory() {
         return new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NonMonsterNpcSdbImpl.Instance,
-                MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE, Mockito.mock(ItemFactory.class));
+                MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE, Mockito.mock(ItemFactory.class), QuestSdbImpl.Instance);
     }
 
     protected KungFuBookFactory createKungFuBookFactory() {

@@ -61,7 +61,7 @@ public final class MapSdbImpl extends AbstractCSVSdbReader implements MapSdb {
 
     @Override
     public List<Integer> getAllIds() {
-        return names().stream().map(Integer::parseInt).toList();
+        return uniqueIds().stream().map(Integer::parseInt).toList();
     }
 
 
@@ -74,7 +74,7 @@ public final class MapSdbImpl extends AbstractCSVSdbReader implements MapSdb {
         MapSdbImpl sdb = MapSdbImpl .INSTANCE;
 //        Set<String> names = itemSdb.names();
         Set<String> names = sdb.columnNames();
-        Set<String> items = sdb.names();
+        Set<String> items = sdb.uniqueIds();
         for (String i: items) {
             if (!i.equals("32"))
                 continue;

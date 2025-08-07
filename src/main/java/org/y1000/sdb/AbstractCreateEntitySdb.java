@@ -25,7 +25,7 @@ public abstract class AbstractCreateEntitySdb extends AbstractCSVSdbReader imple
 1,稻草人,,110,51,1,3,,,
          */
         List<NpcSpawnSetting> settingList = new ArrayList<>();
-        for (String name : names()) {
+        for (String name : uniqueIds()) {
             String viewName = getIdName(name);
             int x = getInt(name, "X");
             int y = getInt(name, "Y");

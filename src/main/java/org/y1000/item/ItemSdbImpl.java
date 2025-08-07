@@ -1,7 +1,6 @@
 package org.y1000.item;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.sdb.AbstractCSVSdbReader;
 
@@ -316,7 +315,7 @@ MaxCount,        最多持有数量；
         ItemSdbImpl itemSdb = ItemSdbImpl.INSTANCE;
         Map<String, Set<String>> duplicateNames = new HashMap<>();
 //        Set<String> names = itemSdb.names();
-        Set<String> items = itemSdb.names();
+        Set<String> items = itemSdb.uniqueIds();
         for (String i: items) {
             String viewName = itemSdb.get(i, "ViewName");
             if (!duplicateNames.containsKey(viewName)) {
@@ -335,7 +334,7 @@ MaxCount,        最多持有数量；
     private static void dump() {
         ItemSdbImpl itemSdb = ItemSdbImpl.INSTANCE;
         Set<String> names = itemSdb.columnNames();
-        Set<String> items = itemSdb.names();
+        Set<String> items = itemSdb.uniqueIds();
         Set<String> shapes = new HashSet<>();
         for (String i: items) {
             if (itemSdb.getTypeValue(i) != ItemType.KNIFE.value()) {

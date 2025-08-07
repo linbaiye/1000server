@@ -13,7 +13,7 @@ import java.util.*;
 public class NpcSellAbility extends AbstractNpcTradeAbility {
 
 
-    public static final String NAME = "购买物品";
+    private static final String NAME = "购买物品";
 
     private NpcSellAbility(long id, String name, String sprite,
                            List<MerchantItem> items,
@@ -31,9 +31,15 @@ public class NpcSellAbility extends AbstractNpcTradeAbility {
     }
 
     @Override
-    public String name() {
-        return NAME;
+    public void decorateMenuActions(List<String> menuActions) {
+        menuActions.add(NAME);
     }
+
+    @Override
+    public boolean supportsAction(String name) {
+        return NAME.equals(name);
+    }
+
 
     public void onPlayerBuy(Player player, Npc npc, String name, int number) {
         if (stateOrDistanceInvalid(player, npc) || number < 1)
@@ -59,7 +65,7 @@ public class NpcSellAbility extends AbstractNpcTradeAbility {
     }
 
     @Override
-    public void startInteract(Player player, Npc npc) {
+    public void interact(Player player, Npc npc) {
         if (stateOrDistanceInvalid(player, npc))
             return;
         player.sendEvent(UpdateInventoryMessage.quiet(player));

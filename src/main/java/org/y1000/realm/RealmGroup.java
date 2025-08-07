@@ -22,32 +22,24 @@ public final class RealmGroup implements Runnable {
 
     private final RealmEventSender crossRealmEventSender;
 
-    private final Supplier<LocalDateTime> dateTimeSupplier;
-
     private final Set<Integer> ids;
+
 
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
-                      RealmEventSender crossRealmEventSender,
-                      Supplier<LocalDateTime> dateTimeSupplier) {
+                      RealmEventSender crossRealmEventSender) {
         Validate.isTrue(realms != null && !realms.isEmpty());
         Validate.notNull(realmFactory);
         Validate.notNull(crossRealmEventSender);
-        Validate.notNull(dateTimeSupplier);
         this.realms = realms.toArray(new Realm[0]);
         this.realmFactory = realmFactory;
         pendingEvents = new ArrayList<>();
         shutdown = false;
         this.crossRealmEventSender = crossRealmEventSender;
-        this.dateTimeSupplier = dateTimeSupplier;
         ids = realms.stream().map(Realm::id).collect(Collectors.toSet());
     }
 
-    public RealmGroup(List<Realm> realms,
-                      RealmFactory realmFactory,
-                      RealmEventSender crossRealmEventSender) {
-        this(realms, realmFactory, crossRealmEventSender, LocalDateTime::now);
-    }
+
 
     private void updateRealm(Realm realm) {
         try {
@@ -58,13 +50,12 @@ public final class RealmGroup implements Runnable {
     }
 
     private void resetDungeonsIfTimeUp() {
-        LocalDateTime now = dateTimeSupplier.get();
         try {
             for (int i = 0; i < realms.length; i++) {
                 if (!(realms[i] instanceof DungeonRealm dungeonRealm)) {
                     continue;
                 }
-                if (dungeonRealm.needToClose(now.getMinute(), now.getSecond())) {
+                if (dungeonRealm.needToClose()) {
                     dungeonRealm.close();
                     realms[i] = realmFactory.createRealm(dungeonRealm.id(), crossRealmEventSender);
                     realms[i].init();

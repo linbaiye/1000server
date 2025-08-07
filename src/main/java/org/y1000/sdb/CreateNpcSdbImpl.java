@@ -27,7 +27,7 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
         CreateNpcSdbImpl sdb = new CreateNpcSdbImpl(6);
 //        Set<String> names = itemSdb.names();
         Set<String> names = sdb.columnNames();
-        Set<String> items = sdb.names();
+        Set<String> items = sdb.uniqueIds();
         NpcSdb monstersSdb = NonMonsterNpcSdbImpl.Instance;
         Set<String> id = new HashSet<>();
         for (String i: items) {
@@ -87,7 +87,7 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
 
     @Override
     public boolean containsNpc(String viewName) {
-        for (String name : names()) {
+        for (String name : uniqueIds()) {
             if (viewName != null && viewName.equals(get(name, "NpcName")))
                 return true;
         }
@@ -111,7 +111,7 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
     }
 
     private String idNameToId(String npcName) {
-        for (String id: names()) {
+        for (String id: uniqueIds()) {
             String viewName = getIdName(id);
             if (viewName.equals(npcName)) {
                 return id;

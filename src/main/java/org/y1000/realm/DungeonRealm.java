@@ -23,6 +23,7 @@ final class DungeonRealm extends AbstractRealm {
     private String openAnnouncement;
     private final boolean[] minuteAnnouncement;
     private final Supplier<LocalDateTime> timeSupplier;
+    private final LocalDateTime closeTime;
 
     public DungeonRealm(int id, RealmMap realmMap,
                         GroundItemManager itemManager,
@@ -62,6 +63,14 @@ final class DungeonRealm extends AbstractRealm {
             minuteAnnouncement[i] = false;
         }
         this.timeSupplier = timeSupplier;
+        LocalDateTime now = timeSupplier.get();
+        if (durationSeconds == 1800) {
+            var nextRound = now.plusMinutes(30);
+            closeTime = nextRound.getMinute() > 30 ? nextRound.withMinute(59).withSecond(58) : nextRound.withMinute(29).withSecond(58);
+        } else {
+            closeTime = now.plusHours(1).withMinute(59).withSecond(58);
+        }
+        closing = false;
     }
 
 
@@ -69,7 +78,7 @@ final class DungeonRealm extends AbstractRealm {
         if (isHalfHourInterval()) {
             return (minute == 25 || minute == 55) && second > 5;
         } else {
-            return minute == 02 && second > 0;
+            return minute == 59 && second > 0;
         }
     }
 
@@ -98,14 +107,11 @@ final class DungeonRealm extends AbstractRealm {
         getPlayerManager().allPlayers().forEach(p -> p.sendEvent(PlayerTextMessage.systip(p, text)));
     }
 
-    public boolean needToClose(int minute, int second) {
+    public boolean needToClose() {
         if (closing)
             return false;
-        if (isHalfHourInterval()) {
-            return (minute == 29 || minute == 59) && second >= 58;
-        } else {
-            return minute == 59 && second >= 58;
-        }
+        var now = timeSupplier.get();
+        return closeTime.isBefore(now) || closeTime.equals(now);
     }
 
 
@@ -152,7 +158,14 @@ final class DungeonRealm extends AbstractRealm {
             return;
         }
         closing = true;
+        log().debug("Set to closing.");
         playerManager().allPlayers().forEach(this::teleportPlayerOut);
+    }
+
+
+    @Override
+    public String toString() {
+        return "[Dungeon " + id() + "]";
     }
 
     @Override

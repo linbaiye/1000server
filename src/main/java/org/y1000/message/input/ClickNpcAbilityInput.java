@@ -2,7 +2,7 @@ package org.y1000.message.input;
 
 import org.y1000.entities.Entity;
 import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.creatures.npc.NpcNamedAbility;
+import org.y1000.entities.creatures.npc.NpcInteractAbility;
 import org.y1000.entities.players.Player;
 
 public record ClickNpcAbilityInput(long id, String abilityName) implements EntityInteractInput {
@@ -15,7 +15,7 @@ public record ClickNpcAbilityInput(long id, String abilityName) implements Entit
     @Override
     public void onEntityFound(Player player, Entity entity) {
         if (entity instanceof Npc npc)
-            npc.findAbility(NpcNamedAbility.class, n -> n.name().equals(abilityName))
-                    .ifPresent(npcNamedAbility -> npcNamedAbility.startInteract(player, npc));
+            npc.findAbility(NpcInteractAbility.class, n -> n.supportsAction(abilityName))
+                    .ifPresent(npcInteractAbility -> npcInteractAbility.interact(player, npc));
     }
 }
