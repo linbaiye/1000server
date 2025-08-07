@@ -1,4 +1,4 @@
-Name,ViewName,NpcText,boMinimapShow,boSeller,boViolent,boProtecter,boObserver,boAutoAttack,boQuester,boHit,Animate,Shape,Image,Damage,Armor,ArmorHead,ArmorArm,ArmorLeg,Life,AttackSpeed,Avoid,Recovery,SpendLife,HitArmor,ActionWidth,SoundAttack,SoundDie,SoundNormal,SoundStructed,HaveItem,AttackMagic,AttackSkill,HaveMagic,RegenInterval,boAttack,boRightRemove
+Name,ViewName,NpcText,boMinimapShow,boSeller,boBanker,boProtecter,boObserver,boAutoAttack,boQuester,boHit,Animate,Shape,Image,Damage,Armor,ArmorHead,ArmorArm,ArmorLeg,Life,AttackSpeed,Avoid,Recovery,SpendLife,HitArmor,ActionWidth,SoundAttack,SoundDie,SoundNormal,SoundStructed,HaveItem,AttackMagic,AttackSkill,HaveMagic,RegenInterval,boAttack,boRightRemove
 药材商,药材商,药材商.txt,TRUE,TRUE,,,,,,TRUE,14,z33,131,150,30,,,,3500,0,0,0,0,,4,,,,,,,,,,,
 老板娘,老板娘,老板娘.txt,TRUE,TRUE,,,,,,TRUE,9,z25,108,150,30,,,,3500,0,0,0,0,,4,,,,,,,,,,,
 卒兵,卒兵,,,,,TRUE,,,,TRUE,11,z27,124,5000,1200,,,,60000,0,0,0,0,,4,4024,,,4025,,,,,,,

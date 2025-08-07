@@ -31,6 +31,15 @@ message FollowRopePacket {
   int32 y = 5;
 }
 
+message ShowQuestPacket {
+  int64 id = 1;
+  string npcName = 2;
+  string abstraction = 3;
+  string description = 4;
+  string submit = 5;
+  string quest = 6;
+}
+
 
 message InputResponsePacket {
   int64 sequence = 1;
@@ -267,6 +276,12 @@ message ClientSubmitQuestPacket {
   string questName = 2;
 }
 
+message SubmitQuestInputPacket {
+  int64 id = 1;
+  string questName = 2;
+}
+
+
 
 message ChatInputPacket {
   string text = 1;
@@ -319,6 +334,7 @@ message ClientPacket {
     UsePillInputPacket usePill = 49;
     ChatInputPacket chat = 50;
     ClickEquipmentInputPacket clickEquipment = 51;
+    SubmitQuestInputPacket submitQuestInput = 52;
   }
 }
 
@@ -800,6 +816,7 @@ message Packet {
     PillsPacket pills = 80;
     AttributeEquipPacket attributeEquip = 81;
     ActivateEffectPacket activateEffect = 82;
+    ShowQuestPacket showQuest = 83;
   }
 }
 

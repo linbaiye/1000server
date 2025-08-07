@@ -1,8 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.Getter;
-import org.y1000.entities.HurtAbility;
-import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
 
 import java.util.List;
@@ -32,11 +30,4 @@ public abstract class AbstractNpcTradeAbility implements NpcInteractAbility {
         this.greetings = greetings;
         this.itemFactory = itemFactory;
     }
-
-    protected boolean stateOrDistanceInvalid(Player player, Npc npc) {
-        return !npc.canBeSeenAt(player.coordinate()) ||
-                player.isDead() || player.isLeftRealm() ||
-                npc.findAbility(HurtAbility.class).map(h -> h.currentLife() <= 0).orElse(true);
-    }
-
 }

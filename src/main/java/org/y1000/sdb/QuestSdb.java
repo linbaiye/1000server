@@ -15,4 +15,6 @@ public interface QuestSdb {
 
     String getMenuName(String questId);
 
+    String getAbstraction(String questId);
+
 }

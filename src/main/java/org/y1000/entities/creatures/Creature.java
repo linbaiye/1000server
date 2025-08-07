@@ -28,5 +28,4 @@ public interface Creature extends AttackableEntity {
 
     Optional<String> dieSound();
 
-    boolean isDead();
 }

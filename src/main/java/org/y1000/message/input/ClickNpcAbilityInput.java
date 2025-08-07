@@ -16,6 +16,6 @@ public record ClickNpcAbilityInput(long id, String abilityName) implements Entit
     public void onEntityFound(Player player, Entity entity) {
         if (entity instanceof Npc npc)
             npc.findAbility(NpcInteractAbility.class, n -> n.supportsAction(abilityName))
-                    .ifPresent(npcInteractAbility -> npcInteractAbility.interact(player, npc));
+                    .ifPresent(npcInteractAbility -> npcInteractAbility.interact(player, npc, abilityName));
     }
 }

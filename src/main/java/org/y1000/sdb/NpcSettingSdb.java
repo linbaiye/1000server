@@ -2,6 +2,7 @@ package org.y1000.sdb;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Validate;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -43,14 +44,16 @@ public class NpcSettingSdb {
     }
 
     private void validate() {
-        if (buyTitle == null && sellTitle == null)
+        if (buyTitle == null && sellTitle == null && title == null)
             throw new IllegalStateException("No title");
-        if (sellCaption == null && buyCaption== null)
-            throw new IllegalStateException("No caption");
-        if (buyImage == 0 && sellImage == 0)
+        if (buyImage == 0 && sellImage == 0 && image == 0)
             throw new IllegalStateException("No image");
-        if (buyItems.isEmpty() && sellItems.isEmpty() )
+        if (buyItems.isEmpty() && sellItems.isEmpty() && quests.isEmpty())
             throw new IllegalStateException("No items");
+        if (!buyItems.isEmpty())
+            Validate.isTrue(buyCaption != null);
+        if (!sellItems.isEmpty())
+            Validate.isTrue(sellCaption != null);
     }
 
 
@@ -87,7 +90,7 @@ public class NpcSettingSdb {
             CACHE.put(npcIdName, npcSettingsdb);
             return Optional.of(npcSettingsdb);
         } catch (Exception e) {
-            log.error("Failed to parse file, ", e);
+            log.error("Failed to parse file for {}, ", npcIdName, e);
             throw new RuntimeException(e);
         }
     }

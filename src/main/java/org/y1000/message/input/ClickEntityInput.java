@@ -18,8 +18,6 @@ public record ClickEntityInput(long id) implements EntityInteractInput {
         if (!(entity instanceof ActiveEntity activeEntity)) {
             return;
         }
-        if (activeEntity.isDead())
-            return;
         activeEntity.findAbility(NpcInteractDialogAbility.class)
                 .ifPresentOrElse(a -> a.interact(player, activeEntity),
                         () -> activeEntity.clickText().ifPresent(text ->

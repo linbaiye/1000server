@@ -50,7 +50,7 @@ public class PlayerTrade {
             var tradeItem = tradeItems[i];
             if (tradeItem == null)
                 continue;
-            if (player.inventory().canPick(tradeItem.item)) {
+            if (player.inventory().canTake(tradeItem.item)) {
                 player.inventory().add(tradeItem.item);
                 rolled = true;
                 tradeItems[i] = null;
@@ -91,7 +91,7 @@ public class PlayerTrade {
         for (int i = 0; i < tradeItems.length; i++) {
             if (tradeItems[i] == null)
                 continue;
-            if (!player.inventory().canPick(tradeItems[i].item)) {
+            if (!player.inventory().canTake(tradeItems[i].item)) {
                 return false;
             }
         }

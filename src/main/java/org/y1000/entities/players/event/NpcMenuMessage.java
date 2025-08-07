@@ -18,7 +18,7 @@ public class NpcMenuMessage extends Abstract2PlayerMessageEvent {
                 .setId(ability.getId())
                 .setImage(ability.getImage())
                 .setGreetings(ability.getGreetings())
-                .setName(ability.getName())
+                .setName(ability.getNpcName())
                 .setSprite(ability.getSprite())
                 .addAllSupportedActions(actions)
                 .build();

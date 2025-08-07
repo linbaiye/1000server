@@ -1187,7 +1187,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     public boolean pickItem(Item item) {
         if (isLeftRealm() || isDead())
             return false;
-        if (!inventory().canPick(item)) {
+        if (!inventory().canTake(item)) {
             sendText("物品栏已满。");
             return false;
         }

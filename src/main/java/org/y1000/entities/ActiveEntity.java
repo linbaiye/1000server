@@ -31,10 +31,6 @@ public interface ActiveEntity extends Entity {
         return Optional.empty();
     }
 
-    default boolean isDead() {
-        return findAbility(HurtAbility.class)
-                .map(hurtAbility -> hurtAbility.currentLife() <= 0)
-                .orElse(false);
-    }
+
 
 }

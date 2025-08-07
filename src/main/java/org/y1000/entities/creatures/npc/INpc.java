@@ -66,9 +66,7 @@ public interface INpc extends Creature {
 
     int getStateMillis(NpcAction stateEnum);
 
-    default boolean isDead() {
-        return npcStateEnum() == NpcAction.Die;
-    }
+    boolean isDead();
 
     default boolean isMoving() {
         return npcStateEnum() == NpcAction.Move;

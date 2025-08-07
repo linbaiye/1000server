@@ -25,4 +25,8 @@ public interface HurtAbility {
 
     int maxLife();
 
+    default boolean isDead() {
+        return currentLife() <= 0;
+    }
+
 }

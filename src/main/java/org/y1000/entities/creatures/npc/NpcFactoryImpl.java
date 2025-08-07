@@ -172,7 +172,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         return abilities;
     }
 
-    private List<Object> buildNpcInteractAbilities(NpcSettingSdb npcSettingSdb, String sprite, long id) {
+    private List<Object> buildNpcInteractAbilities(NpcSettingSdb npcSettingSdb, String sprite, long id, String idName) {
         List<Object> abilities = new ArrayList<>();
         abilities.add(NpcInteractDialogAbility.build(npcSettingSdb, sprite, id));
         if (!npcSettingSdb.getSellItems().isEmpty())
@@ -180,7 +180,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         if (!npcSettingSdb.getBuyItems().isEmpty())
             abilities.add(NpcBuyAbility.build(id, npcSettingSdb, itemSdb, sprite, itemFactory));
         if (!npcSettingSdb.getQuests().isEmpty())
-            abilities.add();
+            NpcQuestAbility.of(idName, questSdb, itemFactory).ifPresent(abilities::add);
         return abilities;
     }
 
@@ -193,7 +193,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         }
         abilities.add(createMoveAbility(idName, nonMonsterNpcSdb, DEFAULT_WALK_MILLIS));
         abilities.add(createTurnAbility(idName, nonMonsterNpcSdb));
-        NpcSettingSdb.tryLoad(idName).ifPresent(sdb -> abilities.addAll(buildNpcInteractAbilities(sdb, nonMonsterNpcSdb.getShape(idName), id)));
+        NpcSettingSdb.tryLoad(idName).ifPresent(sdb -> abilities.addAll(buildNpcInteractAbilities(sdb, nonMonsterNpcSdb.getShape(idName), id, idName)));
         createSay(idName).ifPresent(abilities::add);
         return abilities;
     }

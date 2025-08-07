@@ -63,7 +63,7 @@ public class NpcBuyAbility extends AbstractNpcTradeAbility {
     }
 
     @Override
-    public void interact(Player player, Npc npc) {
+    public void interact(Player player, Npc npc, String abilityName) {
         if (stateOrDistanceInvalid(player, npc))
             return;
         player.sendEvent(UpdateInventoryMessage.quiet(player));

@@ -76,6 +76,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case USEPILL -> new UsePillInput(clientPacket.getUsePill().getName());
             case CHAT -> new ChatInput(clientPacket.getChat().getText());
             case CLICKEQUIPMENT -> new ClickEquipmentInput(clientPacket.getClickEquipment().getEquipType());
+            case SUBMITQUESTINPUT -> new SubmitQuestInput(clientPacket.getSubmitQuestInput().getId(), clientPacket.getSubmitQuestInput().getQuestName());
             default -> null;
         };
     }

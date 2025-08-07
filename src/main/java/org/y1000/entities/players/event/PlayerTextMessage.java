@@ -1,6 +1,8 @@
 package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
+import org.y1000.item.Item;
+import org.y1000.item.StackItem;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.TextMessagePacket;
 
@@ -43,6 +45,10 @@ public class PlayerTextMessage extends Abstract2PlayerMessageEvent {
                         .setLocation(1)
                         .setText(text)
                         .build()).build());
+    }
+
+    public static PlayerTextMessage gainItem(Player player, Item item) {
+        return left(player, "获得 " + item.name() + " " + (((item instanceof StackItem stackItem) ? stackItem.number() : 1) + "个。"));
     }
 
     public static PlayerTextMessage systip(Player player, String text) {

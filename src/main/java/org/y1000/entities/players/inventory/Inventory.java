@@ -110,7 +110,7 @@ public final class Inventory extends AbstractInventory {
     }
 
 
-    public boolean canPick(Item item) {
+    public boolean canTake(Item item) {
         var items = items();
         for (Item value : items.values()) {
             if (value instanceof StackItem stackItem

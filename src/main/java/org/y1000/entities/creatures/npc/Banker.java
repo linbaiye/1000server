@@ -37,4 +37,8 @@ public final class Banker extends AbstractSubmissiveNpc {
         return NpcType.BANKER;
     }
 
+    @Override
+    public boolean isDead() {
+        return false;
+    }
 }

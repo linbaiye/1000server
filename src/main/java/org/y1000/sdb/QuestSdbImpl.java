@@ -46,4 +46,9 @@ public class QuestSdbImpl extends AbstractCSVSdbReader implements QuestSdb {
     public String getMenuName(String questId) {
         return get(questId, "MenuName");
     }
+
+    @Override
+    public String getAbstraction(String questId) {
+        return get(questId, "Abstraction");
+    }
 }
