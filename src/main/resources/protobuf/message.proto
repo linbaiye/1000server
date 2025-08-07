@@ -43,7 +43,7 @@ message InputPacket {
   int32 clickedDirection = 3;
 }
 
-message ClickPacket {
+message ClickInputPacket {
   int64 id = 1;
 }
 
@@ -155,14 +155,6 @@ message DoubleClickInventorySlotPacket {
   int32 slot = 1;
 }
 
-message DropItemPacket {
-  int32 slot = 1;
-  int32 x = 2;
-  int32 y = 3;
-  int32 number = 4;
-  int32 coordinateX = 5;
-  int32 coordinateY = 6;
-}
 
 message DropItemConfirmPacket {
   int32 slot = 1;
@@ -212,10 +204,6 @@ message ClientUpdateTradePacket {
 }
 
 
-message ClientMerchantTradeItemsPacket {
-  int64 merchantId = 1;
-  repeated InventoryItemPacket items = 2;
-}
 
 message ClientTriggerDynamicObjectPacket {
   int64 id = 1;
@@ -279,10 +267,6 @@ message ClientSubmitQuestPacket {
   string questName = 2;
 }
 
-message ClientClickInteractabilityPacket {
-  int64 id = 1;
-  string name = 2;
-}
 
 message ChatInputPacket {
   string text = 1;
@@ -295,31 +279,26 @@ message ClickEquipmentInputPacket {
 message ClientPacket {
   oneof Type {
     MoveEventPacket moveEventPacket = 1;
-    ClickPacket clickPacket = 2;
     PlayerLoginPacket loginPacket = 3;
     SwapInventorySlotPacket swapInventorySlotPacket = 5;
     DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;
-    DropItemPacket dropItem = 7;
     PickItemPacket pickItem = 8;
     ClientUnequipPacket unequip = 9;
     ClientToggleKungFuPacket toggleKungFu = 10;
     ClientSitDownPacket sitDown = 11;
     ClientStandUpPacket standUp = 12;
-    ClientMerchantTradeItemsPacket sellItems = 13;
-    ClientMerchantTradeItemsPacket buyItems = 14;
     RightClickPacket rightClick = 15;
     ClientTradePlayerPacket tradeRequest = 16;
     ClientUpdateTradePacket updateTrade = 17;
-    ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;
-    ClientSwapKungFuSlotPacket swapKungFuSlot = 19;
     ClientBankOperationPacket bankOperation = 24;
     ClientChangeTeamPacket changeTeam = 25;
     ClientFoundGuildPacket foundGuild = 26;
     ClientCreateGuildKungFuPacket createGuildKungFu = 27;
     ClientManageGuildPacket manageGuild = 28;
     ClientSubmitQuestPacket submitQuest = 29;
-    ClientClickInteractabilityPacket interact = 30;
+
     DebugPacket debug = 31;
+    ClickInputPacket clickPacket = 2;
     MoveInputPacket moveInput = 32;
     TurnInputPacket turnInput = 33;
     SimpleInputPacket simpleInput = 34;
@@ -778,6 +757,7 @@ message Packet {
     UpdateTradeWindowPacket updateTradeWindow = 37;
     ShowDynamicObjectPacket showDynamicObject = 38;
     UpdateDynamicObjectPacket updateDynamicObject = 39;
+
     TeleportPacket teleport = 40;
     LifeBarPacket lifebar = 41;
     KungFuPacket updateKungFuSlot = 42;

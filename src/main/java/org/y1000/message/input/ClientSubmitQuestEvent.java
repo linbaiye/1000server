@@ -6,7 +6,6 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.creatures.npc.Quester;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
-import org.y1000.message.serverevent.EntityChatEvent;
 import org.y1000.quest.Quest;
 
 @Getter

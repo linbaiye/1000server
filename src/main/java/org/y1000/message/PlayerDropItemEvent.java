@@ -35,17 +35,6 @@ public final class PlayerDropItemEvent implements ItemEvent {
         this.color = color;
     }
 
-    public GroundedItem createGroundedItem(long id) {
-        GroundedItem.GroundedItemBuilder builder = GroundedItem.builder()
-                .coordinate(coordinate)
-                .name(droppedItemName)
-                .id(id)
-                .number(numberOnGround)
-                .color(color)
-                ;
-        return builder.build();
-    }
-
     @Override
     public ActiveEntity source() {
         return source;

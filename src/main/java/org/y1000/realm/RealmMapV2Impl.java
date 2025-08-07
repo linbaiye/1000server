@@ -3,7 +3,6 @@ package org.y1000.realm;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.Server;
 import org.y1000.entities.Entity;
@@ -45,6 +44,9 @@ final class RealmMapV2Impl implements RealmMap {
 
     private final Map<Coordinate, Teleport> teleportMap;
 
+    private final Map<Coordinate, Entity> softReserved;
+    private final Map<Entity, Coordinate> softReservedEntities;
+
 
     public RealmMapV2Impl(byte[][] movableMask, String name) {
         this(movableMask, name, "");
@@ -66,6 +68,8 @@ final class RealmMapV2Impl implements RealmMap {
         entityCoordinateMap = new HashMap<>();
         teleportMap = new HashMap<>();
         this.resource = resource;
+        this.softReserved = new HashMap<>();
+        this.softReservedEntities = new HashMap<>();
     }
 
     private boolean isInRange(Coordinate coordinate) {
@@ -91,6 +95,25 @@ final class RealmMapV2Impl implements RealmMap {
         }
         var cell = movableMask[coordinate.y()][coordinate.x()];
         return ((cell & 0x1) == 0) && ((cell & 0x2) == 0);
+    }
+
+    @Override
+    public boolean softReserve(Entity entity, Coordinate coordinate) {
+        if (!movable(coordinate))
+            return false;
+        Entity reservedEntity = softReserved.get(coordinate);
+        if (reservedEntity == null) {
+            softReserved.put(coordinate, entity);
+            softReservedEntities.put(entity, coordinate);
+            return true;
+        }
+        return reservedEntity.equals(entity);
+    }
+
+    private void clearSoftReserved(Entity entity) {
+        Coordinate remove = softReservedEntities.remove(entity);
+        if (remove != null)
+            softReserved.remove(remove);
     }
 
     public void occupy(Entity entity) {
@@ -122,6 +145,7 @@ final class RealmMapV2Impl implements RealmMap {
         if (c != null) {
             doRemoveCoordinate(entity, c);
         }
+        clearSoftReserved(entity);
     }
 
 
@@ -144,6 +168,8 @@ final class RealmMapV2Impl implements RealmMap {
         for (Coordinate coordinate : dynamicObject.occupiedCoordinates()) {
             doRemoveCoordinate(dynamicObject, coordinate);
         }
+        softReservedEntities.remove(dynamicObject);
+        clearSoftReserved(dynamicObject);
     }
 
 

@@ -171,7 +171,8 @@ abstract class AbstractNpcManager extends AbstractActiveEntityManager<Npc>
     public void copy(Npc npc, int number, ActiveEntity enemy) {
         List<Npc> copied = new ArrayList<>();
         for (int i = 0; i < number; i++) {
-            var c = npcFactory.createCopied(idGenerator.next(), npc.getIdName(), realmMap, findSpawnCoordinate(npc.coordinate()), this);
+            var c = npcFactory.createCopied(idGenerator.next(), npc.getIdName(), realmMap, npc.getSpawnCoordinate(), this);
+            c.changeCoordinate(findSpawnCoordinate(npc.coordinate()));
             copied.add(c);
             c.startAI(new CombatAI(c, enemy));
             addNpc(c);

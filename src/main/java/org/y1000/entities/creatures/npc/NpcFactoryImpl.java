@@ -275,7 +275,6 @@ public final class NpcFactoryImpl implements NpcFactory {
         return create(id, idName, realmMap, coordinate, listener, abilities);
     }
 
-    // Wandering coordinaten needs to fixe.
     @Override
     public NpcImpl createCopied(long id, String idName, RealmMap realmMap, Coordinate coordinate, NpcEventListener listener) {
         List<Object> abilities = buildMonsterAbilities(idName);

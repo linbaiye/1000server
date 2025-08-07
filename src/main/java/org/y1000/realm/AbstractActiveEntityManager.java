@@ -77,7 +77,7 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
         }
     }
 
-    protected AOIManager getAoiManager() {
+    AOIManager getAoiManager() {
         return aoiManager;
     }
 

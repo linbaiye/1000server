@@ -1,27 +1,17 @@
 package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.event.EntitySoundEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerSoundEvent;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.TypedEntityEvent;
 import org.y1000.event.IEntityEvent;
 import org.y1000.event.item.ItemEventVisitor;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
-import org.y1000.message.PlayerDropItemEvent;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.RemoveEntityMessage;
-import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.util.Coordinate;
-
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> implements ItemEventVisitor, GroundItemManager {
@@ -121,7 +111,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> impl
 
 
     @Override
-    public void onEvent(EntityEvent entityEvent) {
+    public void onEvent(TypedEntityEvent entityEvent) {
         try {
             if (entityEvent instanceof IEntityEvent iEntityEvent)
                 iEntityEvent.accept(this);

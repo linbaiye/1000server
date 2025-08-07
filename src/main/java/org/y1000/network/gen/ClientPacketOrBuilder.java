@@ -24,21 +24,6 @@ public interface ClientPacketOrBuilder extends
   org.y1000.network.gen.MoveEventPacketOrBuilder getMoveEventPacketOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-   * @return Whether the clickPacket field is set.
-   */
-  boolean hasClickPacket();
-  /**
-   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-   * @return The clickPacket.
-   */
-  org.y1000.network.gen.ClickPacket getClickPacket();
-  /**
-   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-   */
-  org.y1000.network.gen.ClickPacketOrBuilder getClickPacketOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
    * @return Whether the loginPacket field is set.
    */
@@ -82,21 +67,6 @@ public interface ClientPacketOrBuilder extends
    * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
    */
   org.y1000.network.gen.DoubleClickInventorySlotPacketOrBuilder getDoubleClickInventorySlotPacketOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-   * @return Whether the dropItem field is set.
-   */
-  boolean hasDropItem();
-  /**
-   * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-   * @return The dropItem.
-   */
-  org.y1000.network.gen.DropItemPacket getDropItem();
-  /**
-   * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-   */
-  org.y1000.network.gen.DropItemPacketOrBuilder getDropItemOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
@@ -174,36 +144,6 @@ public interface ClientPacketOrBuilder extends
   org.y1000.network.gen.ClientStandUpPacketOrBuilder getStandUpOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-   * @return Whether the sellItems field is set.
-   */
-  boolean hasSellItems();
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-   * @return The sellItems.
-   */
-  org.y1000.network.gen.ClientMerchantTradeItemsPacket getSellItems();
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-   */
-  org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getSellItemsOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-   * @return Whether the buyItems field is set.
-   */
-  boolean hasBuyItems();
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-   * @return The buyItems.
-   */
-  org.y1000.network.gen.ClientMerchantTradeItemsPacket getBuyItems();
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-   */
-  org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getBuyItemsOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
    * @return Whether the rightClick field is set.
    */
@@ -247,36 +187,6 @@ public interface ClientPacketOrBuilder extends
    * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
    */
   org.y1000.network.gen.ClientUpdateTradePacketOrBuilder getUpdateTradeOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-   * @return Whether the triggerDynamicObject field is set.
-   */
-  boolean hasTriggerDynamicObject();
-  /**
-   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-   * @return The triggerDynamicObject.
-   */
-  org.y1000.network.gen.ClientTriggerDynamicObjectPacket getTriggerDynamicObject();
-  /**
-   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-   */
-  org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder getTriggerDynamicObjectOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-   * @return Whether the swapKungFuSlot field is set.
-   */
-  boolean hasSwapKungFuSlot();
-  /**
-   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-   * @return The swapKungFuSlot.
-   */
-  org.y1000.network.gen.ClientSwapKungFuSlotPacket getSwapKungFuSlot();
-  /**
-   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-   */
-  org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder getSwapKungFuSlotOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
@@ -369,21 +279,6 @@ public interface ClientPacketOrBuilder extends
   org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder getSubmitQuestOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-   * @return Whether the interact field is set.
-   */
-  boolean hasInteract();
-  /**
-   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-   * @return The interact.
-   */
-  org.y1000.network.gen.ClientClickInteractabilityPacket getInteract();
-  /**
-   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-   */
-  org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder getInteractOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
    * @return Whether the debug field is set.
    */
@@ -397,6 +292,21 @@ public interface ClientPacketOrBuilder extends
    * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
    */
   org.y1000.network.gen.DebugPacketOrBuilder getDebugOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+   * @return Whether the clickPacket field is set.
+   */
+  boolean hasClickPacket();
+  /**
+   * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+   * @return The clickPacket.
+   */
+  org.y1000.network.gen.ClickInputPacket getClickPacket();
+  /**
+   * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+   */
+  org.y1000.network.gen.ClickInputPacketOrBuilder getClickPacketOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>

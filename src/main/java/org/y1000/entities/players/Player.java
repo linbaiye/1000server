@@ -167,10 +167,6 @@ public interface Player extends IActiveEntity, HurtAbility {
 
     PlayerStateEnum stateEnum();
 
-    default boolean isDead() {
-        return stateEnum() == PlayerStateEnum.Die;
-    }
-
     int accuracy();
 
     void dropItemOnAnother(Player another, int slot);

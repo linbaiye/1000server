@@ -1,7 +1,7 @@
 package org.y1000.entities;
 
 import org.y1000.entities.creatures.npc.NpcHurtAbility;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.TypedEntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.util.Coordinate;
 
@@ -14,7 +14,7 @@ public interface ActiveEntity extends Entity {
 
     void update(int delta);
 
-    void emitEvent(EntityEvent event);
+    void emitEvent(TypedEntityEvent event);
 
     void registerEventListener(EntityEventListener listener);
 
@@ -33,7 +33,7 @@ public interface ActiveEntity extends Entity {
     }
 
     default boolean isDead() {
-        return findAbility(NpcHurtAbility.class)
+        return findAbility(HurtAbility.class)
                 .map(hurtAbility -> hurtAbility.currentLife() <= 0)
                 .orElse(false);
     }

@@ -5,38 +5,38 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.ClickPacket}
+ * Protobuf type {@code org.y1000.network.gen.ClickInputPacket}
  */
-public final class ClickPacket extends
+public final class ClickInputPacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ClickPacket)
-    ClickPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.ClickInputPacket)
+    ClickInputPacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ClickPacket.newBuilder() to construct.
-  private ClickPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use ClickInputPacket.newBuilder() to construct.
+  private ClickInputPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ClickPacket() {
+  private ClickInputPacket() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new ClickPacket();
+    return new ClickInputPacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClickPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClickInputPacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClickPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClickInputPacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.ClickPacket.class, org.y1000.network.gen.ClickPacket.Builder.class);
+            org.y1000.network.gen.ClickInputPacket.class, org.y1000.network.gen.ClickInputPacket.Builder.class);
   }
 
   public static final int ID_FIELD_NUMBER = 1;
@@ -90,10 +90,10 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.ClickPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.ClickInputPacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.ClickPacket other = (org.y1000.network.gen.ClickPacket) obj;
+    org.y1000.network.gen.ClickInputPacket other = (org.y1000.network.gen.ClickInputPacket) obj;
 
     if (getId()
         != other.getId()) return false;
@@ -116,44 +116,44 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static org.y1000.network.gen.ClickPacket parseFrom(
+  public static org.y1000.network.gen.ClickInputPacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClickPacket parseFrom(
+  public static org.y1000.network.gen.ClickInputPacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClickPacket parseFrom(
+  public static org.y1000.network.gen.ClickInputPacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClickPacket parseFrom(
+  public static org.y1000.network.gen.ClickInputPacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClickPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.ClickInputPacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.ClickPacket parseFrom(
+  public static org.y1000.network.gen.ClickInputPacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClickPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ClickInputPacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.ClickPacket parseFrom(
+  public static org.y1000.network.gen.ClickInputPacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -161,26 +161,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.ClickPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.ClickInputPacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.ClickPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.ClickInputPacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.ClickPacket parseFrom(
+  public static org.y1000.network.gen.ClickInputPacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.ClickPacket parseFrom(
+  public static org.y1000.network.gen.ClickInputPacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -193,7 +193,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.ClickPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.ClickInputPacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -209,26 +209,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.ClickPacket}
+   * Protobuf type {@code org.y1000.network.gen.ClickInputPacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ClickPacket)
-      org.y1000.network.gen.ClickPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.ClickInputPacket)
+      org.y1000.network.gen.ClickInputPacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClickPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClickInputPacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClickPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClickInputPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.ClickPacket.class, org.y1000.network.gen.ClickPacket.Builder.class);
+              org.y1000.network.gen.ClickInputPacket.class, org.y1000.network.gen.ClickInputPacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.ClickPacket.newBuilder()
+    // Construct using org.y1000.network.gen.ClickInputPacket.newBuilder()
     private Builder() {
 
     }
@@ -249,17 +249,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClickPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_ClickInputPacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClickPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.ClickPacket.getDefaultInstance();
+    public org.y1000.network.gen.ClickInputPacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClickPacket build() {
-      org.y1000.network.gen.ClickPacket result = buildPartial();
+    public org.y1000.network.gen.ClickInputPacket build() {
+      org.y1000.network.gen.ClickInputPacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -267,14 +267,14 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.ClickPacket buildPartial() {
-      org.y1000.network.gen.ClickPacket result = new org.y1000.network.gen.ClickPacket(this);
+    public org.y1000.network.gen.ClickInputPacket buildPartial() {
+      org.y1000.network.gen.ClickInputPacket result = new org.y1000.network.gen.ClickInputPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.ClickPacket result) {
+    private void buildPartial0(org.y1000.network.gen.ClickInputPacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.id_ = id_;
@@ -315,16 +315,16 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.ClickPacket) {
-        return mergeFrom((org.y1000.network.gen.ClickPacket)other);
+      if (other instanceof org.y1000.network.gen.ClickInputPacket) {
+        return mergeFrom((org.y1000.network.gen.ClickInputPacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.ClickPacket other) {
-      if (other == org.y1000.network.gen.ClickPacket.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.y1000.network.gen.ClickInputPacket other) {
+      if (other == org.y1000.network.gen.ClickInputPacket.getDefaultInstance()) return this;
       if (other.getId() != 0L) {
         setId(other.getId());
       }
@@ -420,23 +420,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClickPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.ClickInputPacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ClickPacket)
-  private static final org.y1000.network.gen.ClickPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.ClickInputPacket)
+  private static final org.y1000.network.gen.ClickInputPacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.ClickPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.ClickInputPacket();
   }
 
-  public static org.y1000.network.gen.ClickPacket getDefaultInstance() {
+  public static org.y1000.network.gen.ClickInputPacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ClickPacket>
-      PARSER = new com.google.protobuf.AbstractParser<ClickPacket>() {
+  private static final com.google.protobuf.Parser<ClickInputPacket>
+      PARSER = new com.google.protobuf.AbstractParser<ClickInputPacket>() {
     @java.lang.Override
-    public ClickPacket parsePartialFrom(
+    public ClickInputPacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -455,17 +455,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<ClickPacket> parser() {
+  public static com.google.protobuf.Parser<ClickInputPacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ClickPacket> getParserForType() {
+  public com.google.protobuf.Parser<ClickInputPacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.ClickPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.ClickInputPacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

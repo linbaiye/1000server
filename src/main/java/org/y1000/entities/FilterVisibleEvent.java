@@ -2,9 +2,12 @@ package org.y1000.entities;
 
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
+import org.y1000.entities.objects.DynamicObject;
+import org.y1000.entities.objects.DynamicObjectEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerEvent;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.TypedEntityEvent;
+import org.y1000.realm.DynamicObjectEventHandler;
 import org.y1000.realm.NpcEventHandler;
 import org.y1000.realm.PlayerEventHandler;
 import org.y1000.util.Coordinate;
@@ -15,7 +18,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public abstract class FilterVisibleEvent<T extends Entity> implements EntityEvent<T> {
+public abstract class FilterVisibleEvent<T extends Entity> implements TypedEntityEvent<T> {
 
     protected Set<Entity> result;
     private final T source;
@@ -65,13 +68,20 @@ public abstract class FilterVisibleEvent<T extends Entity> implements EntityEven
         }
     }
 
+    public static class DynamicObjectFilterVisibleEntityEvent extends FilterVisibleEvent<DynamicObject> implements DynamicObjectEvent {
+        private DynamicObjectFilterVisibleEntityEvent(DynamicObject entity, Predicate<Entity> filter) {
+            super(entity, filter);
+        }
+        @Override
+        public void accept(DynamicObjectEventHandler handler) {
+            result = handler.filterVisible(source(), filter);
+        }
+    }
+
     public static NpcFilterVisibleEntityEvent nearbyAlive(Npc npc, int d) {
         return nearbyAttackable(npc, d);
     }
 
-    public static NpcFilterVisibleEntityEvent findById(Npc npc, long id) {
-        return new NpcFilterVisibleEntityEvent(npc, e -> e.id() == id);
-    }
 
     public static NpcFilterVisibleEntityEvent nearbyAttackable(Npc npc, int d) {
         return new NpcFilterVisibleEntityEvent(npc, e -> e instanceof ActiveEntity entity
@@ -87,7 +97,8 @@ public abstract class FilterVisibleEvent<T extends Entity> implements EntityEven
         return new PlayerFilterVisibleEntityEvent(player, e -> coordinates.contains(e.coordinate()));
     }
 
-    public static PlayerFilterVisibleEntityEvent findById(Player player, long id) {
-        return new PlayerFilterVisibleEntityEvent(player, e -> e.id() == id);
+    public static DynamicObjectFilterVisibleEntityEvent filterVisibleAt(DynamicObject object, Set<Coordinate> coordinates) {
+        return new DynamicObjectFilterVisibleEntityEvent(object, e -> coordinates.contains(e.coordinate()));
     }
+
 }

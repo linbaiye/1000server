@@ -1,7 +1,6 @@
 package org.y1000.entities;
 
-import org.y1000.event.EntityEvent;
-import org.y1000.event.IEntityEvent;
+import org.y1000.event.TypedEntityEvent;
 import org.y1000.event.EntityEventListener;
 
 import java.util.*;
@@ -14,7 +13,7 @@ public final class EventListeners {
         listeners = new HashSet<>();
     }
 
-    public void notifyListeners(EntityEvent event) {
+    public void notifyListeners(TypedEntityEvent event) {
         Objects.requireNonNull(event);
         List<EntityEventListener> listenerList = new ArrayList<>(listeners);
         listenerList.forEach(listener -> listener.onEvent(event));

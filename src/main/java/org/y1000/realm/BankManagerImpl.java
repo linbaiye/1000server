@@ -6,7 +6,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.AbstractInventory;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.TypedEntityEvent;
 import org.y1000.event.EntityEventListener;
 import org.y1000.item.Item;
 import org.y1000.item.ItemType;
@@ -41,7 +41,7 @@ final class BankManagerImpl implements EntityEventListener, BankManager {
     }
 
     @Override
-    public void onEvent(EntityEvent entityEvent) {
+    public void onEvent(TypedEntityEvent entityEvent) {
         if (entityEvent == null || !(entityEvent.source() instanceof Player player)) {
             return;
         }

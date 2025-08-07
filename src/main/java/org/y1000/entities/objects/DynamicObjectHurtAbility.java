@@ -60,13 +60,13 @@ public class DynamicObjectHurtAbility implements HurtAbility {
 
     public void apply(DynamicObject dynamicObject, ActiveEntity attacker) {
         if (maxLife > 1)
-            dynamicObject.sentEvent(DynamicObjectLifeBarEvent.of(dynamicObject, currentLife, maxLife));
+            dynamicObject.sendEvent(DynamicObjectLifeBarEvent.of(dynamicObject, currentLife, maxLife));
         if (isDead() && dieSound != null)
-            dynamicObject.sentEvent(DynamicObjectSoundEvent.of(dynamicObject, dieSound));
+            dynamicObject.sendEvent(DynamicObjectSoundEvent.of(dynamicObject, dieSound));
         else if (sound != null)
-            dynamicObject.sentEvent(DynamicObjectSoundEvent.of(dynamicObject, sound));
+            dynamicObject.sendEvent(DynamicObjectSoundEvent.of(dynamicObject, sound));
         if (!callNpc.isEmpty()) {
-            dynamicObject.sentEvent(new DynamicObjectCallNpcEvent(dynamicObject, attacker, callNpc));
+            dynamicObject.sendEvent(new DynamicObjectCallNpcEvent(dynamicObject, attacker, callNpc));
             callNpc.clear();
         }
         if (isDead())

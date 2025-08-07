@@ -2,6 +2,7 @@ package org.y1000.kungfu.attack;
 
 
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerImpl;
@@ -50,8 +51,9 @@ public abstract class AbstractRangedKungFu extends AbstractAttackKungFu {
     }
 
 
+
     @Override
-    public boolean isWithinAttackRange(Coordinate coordinate1, Coordinate coordinate2) {
-        return coordinate1 != null && coordinate1.isWithinVisibleRange(coordinate2);
+    public boolean isWithinAttackRange(Coordinate playerCoordinate, ActiveEntity entity) {
+        return playerCoordinate != null && playerCoordinate.isWithinVisibleRange(entity.coordinate());
     }
 }

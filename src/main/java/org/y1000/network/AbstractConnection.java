@@ -38,31 +38,24 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
     Object createMessage(ClientPacket clientPacket) {
         return switch (clientPacket.getTypeCase()) {
             case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
-            case SWAPINVENTORYSLOTPACKET -> SwapInventoryItemInput.fromPacket(clientPacket.getSwapInventorySlotPacket());
-            case DROPITEM -> new ClientDropItemEvent(clientPacket.getDropItem().getNumber(), clientPacket.getDropItem().getSlot(),
-                    clientPacket.getDropItem().getX(), clientPacket.getDropItem().getY(),
-                    new Coordinate(clientPacket.getDropItem().getCoordinateX(), clientPacket.getDropItem().getCoordinateY()));
             case PICKITEM -> new ClientPickItemEvent(clientPacket.getPickItem().getId());
             case UNEQUIP -> new ClientUnequipEvent(EquipmentType.fromValue(clientPacket.getUnequip().getType()));
             case TOGGLEKUNGFU -> new ClientToggleKungFuEvent(clientPacket.getToggleKungFu().getTab(), clientPacket.getToggleKungFu().getSlot());
             case SITDOWN -> new ClientSitDownEvent(new Coordinate(clientPacket.getSitDown().getX(), clientPacket.getSitDown().getY()));
             case STANDUP -> ClientStandUpEvent.INSTANCE;
-            case SELLITEMS -> ClientSellEvent.fromPacket(clientPacket.getSellItems(), serverContext.getItemFactory());
-            case BUYITEMS -> ClientBuyItemsEvent.fromPacket(clientPacket.getBuyItems(), serverContext.getItemFactory());
             case RIGHTCLICK -> ClientRightClickEvent.fromPacket(clientPacket.getRightClick());
             case TRADEREQUEST -> new ClientTradePlayerEvent(clientPacket.getTradeRequest().getTargetId(), clientPacket.getTradeRequest().getSlot());
             case UPDATETRADE -> ClientUpdateTradeEvent.fromPacket(clientPacket.getUpdateTrade());
-            case TRIGGERDYNAMICOBJECT -> new ClientTriggerDynamicObjectEvent(clientPacket.getTriggerDynamicObject().getId(), clientPacket.getTriggerDynamicObject().getUseSlot());
-            case SWAPKUNGFUSLOT -> new ClientSwapKungFuSlotEvent(clientPacket.getSwapKungFuSlot().getPage(), clientPacket.getSwapKungFuSlot().getSlot1(), clientPacket.getSwapKungFuSlot().getSlot2());
             case BANKOPERATION -> ClientOperateBankEvent.fromPacket(clientPacket.getBankOperation());
             case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
-            case CLICKPACKET -> new ClickEntityInput(clientPacket.getClickPacket().getId());
             case FOUNDGUILD -> ClientFoundGuildEvent.parse(clientPacket.getFoundGuild());
             case CREATEGUILDKUNGFU -> ClientCreateGuildKungFuEvent.parse(clientPacket.getCreateGuildKungFu());
             case MANAGEGUILD -> new ClientManageGuildEvent(clientPacket.getManageGuild().getType(), clientPacket.getManageGuild().getTarget());
             case SUBMITQUEST -> new ClientSubmitQuestEvent(clientPacket.getSubmitQuest().getId(), clientPacket.getSubmitQuest().getQuestName(), serverContext.getItemFactory());
-            case INTERACT -> new ClientClickInteractabilityEvent(clientPacket.getInteract().getId(), clientPacket.getInteract().getName());
+
             case DEBUG -> new DebugInput(1);
+            case SWAPINVENTORYSLOTPACKET -> SwapInventoryItemInput.fromPacket(clientPacket.getSwapInventorySlotPacket());
+            case CLICKPACKET -> new ClickEntityInput(clientPacket.getClickPacket().getId());
             case MOVEINPUT -> new MoveInput(Coordinate.xy(clientPacket.getMoveInput().getX(), clientPacket.getMoveInput().getY()), Direction.fromValue(clientPacket.getMoveInput().getDirection()));
             case TURNINPUT -> new TurnInput(Direction.fromValue(clientPacket.getTurnInput().getDirection()));
             case SIMPLEINPUT -> SimpleInput.fromValue(clientPacket.getSimpleInput().getType());

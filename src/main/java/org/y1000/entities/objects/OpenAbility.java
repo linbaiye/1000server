@@ -47,18 +47,18 @@ public class OpenAbility implements DynamicAbility {
         if (openMillis > 0)
             return;
         if (removal)
-            dynamicObject.sentEvent(DynamicObjectRemoveEvent.of(dynamicObject, respawnMillis));
+            dynamicObject.sendEvent(DynamicObjectRemoveEvent.of(dynamicObject, respawnMillis));
         else
-            dynamicObject.sentEvent(new DynamicObjectRespawnEvent(dynamicObject));
+            dynamicObject.sendEvent(new DynamicObjectRespawnEvent(dynamicObject));
     }
 
     public void triggered(DynamicObject object) {
         if (sound != null)
-            object.sentEvent(DynamicObjectSoundEvent.of(object, sound));
+            object.sendEvent(DynamicObjectSoundEvent.of(object, sound));
         if (animations.length == 1)
-            object.sentEvent(DynamicObjectShiftEvent.of(object, animations[0].getId(), removal));
+            object.sendEvent(DynamicObjectShiftEvent.of(object, animations[0].getId(), removal));
         else
-            object.sentEvent(DynamicObjectShiftEvent.of(object, animations[0].getId(), animations[1].getId(), removal));
+            object.sendEvent(DynamicObjectShiftEvent.of(object, animations[0].getId(), animations[1].getId(), removal));
     }
 
     @Override

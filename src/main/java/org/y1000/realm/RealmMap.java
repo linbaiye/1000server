@@ -14,12 +14,16 @@ public interface RealmMap {
     boolean movable(Coordinate coordinate);
     boolean tileMovable(Coordinate coordinate);
 
+    boolean softReserve(Entity entity, Coordinate coordinate);
+
     void occupy(Entity entity);
 
     void free(Entity creature);
 
+    @Deprecated
     void occupy(IDynamicObject dynamicObject);
 
+    @Deprecated
     void free(IDynamicObject dynamicObject);
 
     void occupy(DynamicObject dynamicObject);

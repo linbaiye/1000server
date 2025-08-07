@@ -8,7 +8,7 @@ import org.y1000.message.serverevent.ShowItemEvent;
 
 @Deprecated
 public interface EntityEventVisitor {
-    default void visit(EntityEvent event) {
+    default void visit(TypedEntityEvent event) {
 
     }
 

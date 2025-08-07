@@ -8,7 +8,6 @@ import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.message.input.ClientFoundGuildEvent;
 import org.y1000.message.input.Login;
 import org.y1000.realm.event.BroadcastTextEvent;
-import org.y1000.realm.event.ProxyLoginEvent;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 import org.y1000.util.Coordinate;
@@ -100,6 +99,8 @@ final class DungeonRealm extends AbstractRealm {
     }
 
     public boolean needToClose(int minute, int second) {
+        if (closing)
+            return false;
         if (isHalfHourInterval()) {
             return (minute == 29 || minute == 59) && second >= 58;
         } else {

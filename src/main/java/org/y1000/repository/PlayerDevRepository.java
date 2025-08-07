@@ -46,29 +46,29 @@ public class PlayerDevRepository implements PlayerRepository {
         this.playerFactory = factory;
         this.itemFactory = itemFactory;
         Player male = playerFactory.create("测试男名字不能太长了", true, 100000251L);
+        while (male.age() < 3000) {
+            male.update(1000);
+        }
         playerMap.put(male.id(), male);
         playerRealmMap.put(male.id(), 6);
         male.inventory().add(itemFactory.createItem("生药", 10000));
         male.inventory().add(itemFactory.createItem("丹药", 10000));
         male.inventory().add(itemFactory.createItem("丸药", 10000));
         male.inventory().add(itemFactory.createItem("汤药", 10000));
-        male.inventory().add(itemFactory.createEquipment("三叉戟"));
-        male.inventory().add(itemFactory.createEquipment("龙光剑"));
-        male.inventory().add(itemFactory.createEquipment("男子黄金铠甲"));
+        male.inventory().add(itemFactory.createEquipment("银狼破皇剑"));
         male.inventory().add(itemFactory.createEquipment("男子黄龙鞋"));
-        male.inventory().add(itemFactory.createEquipment("驱魔烈火弓"));
-        male.inventory().add(itemFactory.createEquipment("男子妖华袍"));
-        male.inventory().add(itemFactory.createEquipment("男子黄金护腕"));
-        male.inventory().add(itemFactory.createEquipment("月光刀"));
-        male.inventory().add(itemFactory.createEquipment("狼牙戟"));
-        male.inventory().add(itemFactory.createEquipment("炎帝火灵斧"));
+        male.inventory().add(itemFactory.createEquipment("木弓"));
+        male.inventory().add(itemFactory.createEquipment("男子黄龙弓服"));
+        male.inventory().add(itemFactory.createEquipment("男子黄龙手套"));
+        male.inventory().add(itemFactory.createEquipment("龙恨"));
+        male.inventory().add(itemFactory.createEquipment("黄龙斧"));
         male.inventory().add(itemFactory.createEquipment("男子斗笠", 10000));
         addKungFu(male.kungFuBook());
 
         male.inventory().add(itemFactory.createItem("箭", 10000));
         male.inventory().add(itemFactory.createItem("灵动八方"));
         male.inventory().add(itemFactory.createItem("钱币", 10000));
-        male.inventory().add(itemFactory.createItem("小丸丹", 10000));
+        male.inventory().add(itemFactory.createItem("白酒", 10000));
 
         Player female = playerFactory.create("测试女", false, 100000301L);
         playerMap.put(female.id(), female);

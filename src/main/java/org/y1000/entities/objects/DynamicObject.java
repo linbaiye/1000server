@@ -3,12 +3,15 @@ package org.y1000.entities.objects;
 import lombok.Getter;
 import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.Entity;
+import org.y1000.entities.FilterVisibleEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.DynamicObjectEventListener;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DynamicObject extends AbstractActiveEntity {
 
@@ -76,7 +79,7 @@ public class DynamicObject extends AbstractActiveEntity {
         return Optional.ofNullable(viewName);
     }
 
-    public void sentEvent(DynamicObjectEvent event) {
+    public void sendEvent(DynamicObjectEvent event) {
         listener.onEvent(event);
     }
 
@@ -122,6 +125,13 @@ public class DynamicObject extends AbstractActiveEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id());
+    }
+
+    @Override
+    public Set<Entity> getEntitiesAt(Set<Coordinate> coordinates) {
+        var event = FilterVisibleEvent.filterVisibleAt(this, coordinates);
+        sendEvent(event);
+        return event.resultStream(Entity.class).collect(Collectors.toSet());
     }
 
     @Override

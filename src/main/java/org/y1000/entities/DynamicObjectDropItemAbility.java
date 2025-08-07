@@ -14,7 +14,7 @@ public class DynamicObjectDropItemAbility extends AbstractDopItemAbility {
     }
 
     public void apply(DynamicObject object) {
-        object.sentEvent(new DynamicObjectDropItemEvent(items, object));
+        object.sendEvent(new DynamicObjectDropItemEvent(items, object));
     }
 
     public static Optional<DynamicObjectDropItemAbility> parse(String text) {

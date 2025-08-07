@@ -3,12 +3,11 @@ package org.y1000.entities.players;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.event.PlayerDropItemEvent;
-import org.y1000.event.EntityEvent;
+import org.y1000.event.TypedEntityEvent;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.guild.GuildMembership;
 import org.y1000.item.*;
@@ -1408,6 +1407,11 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
                 (isMale() ? "2005" : "2205") );
     }
 
+    @Override
+    public boolean isDead() {
+        return stateEnum() == PlayerStateEnum.Die;
+    }
+
 
     @Override
     public int recoveryCooldown() {
@@ -1434,7 +1438,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
 
     @Override
-    public void emitEvent(EntityEvent event) {
+    public void emitEvent(TypedEntityEvent event) {
         throw new IllegalArgumentException();
     }
 

@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.objects.*;
 import org.y1000.entities.players.Player;
-import org.y1000.event.EntityEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.sdb.CreateDynamicObjectSdb;
 import org.y1000.util.Coordinate;

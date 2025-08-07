@@ -1,10 +1,7 @@
 package org.y1000.entities;
 
-import org.y1000.event.EntityEvent;
+import org.y1000.event.TypedEntityEvent;
 import org.y1000.event.EntityEventListener;
-
-import java.util.Set;
-import java.util.function.Predicate;
 
 public abstract class AbstractActiveEntity implements ActiveEntity {
     private final long id;
@@ -15,7 +12,7 @@ public abstract class AbstractActiveEntity implements ActiveEntity {
         this.eventListeners = new EventListeners();
     }
 
-    public void emitEvent(EntityEvent event) {
+    public void emitEvent(TypedEntityEvent event) {
         eventListeners.notifyListeners(event);
     }
 

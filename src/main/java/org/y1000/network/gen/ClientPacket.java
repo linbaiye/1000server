@@ -46,31 +46,25 @@ private static final long serialVersionUID = 0L;
       implements com.google.protobuf.Internal.EnumLite,
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     MOVEEVENTPACKET(1),
-    CLICKPACKET(2),
     LOGINPACKET(3),
     SWAPINVENTORYSLOTPACKET(5),
     DOUBLECLICKINVENTORYSLOTPACKET(6),
-    DROPITEM(7),
     PICKITEM(8),
     UNEQUIP(9),
     TOGGLEKUNGFU(10),
     SITDOWN(11),
     STANDUP(12),
-    SELLITEMS(13),
-    BUYITEMS(14),
     RIGHTCLICK(15),
     TRADEREQUEST(16),
     UPDATETRADE(17),
-    TRIGGERDYNAMICOBJECT(18),
-    SWAPKUNGFUSLOT(19),
     BANKOPERATION(24),
     CHANGETEAM(25),
     FOUNDGUILD(26),
     CREATEGUILDKUNGFU(27),
     MANAGEGUILD(28),
     SUBMITQUEST(29),
-    INTERACT(30),
     DEBUG(31),
+    CLICKPACKET(2),
     MOVEINPUT(32),
     TURNINPUT(33),
     SIMPLEINPUT(34),
@@ -109,31 +103,25 @@ private static final long serialVersionUID = 0L;
     public static TypeCase forNumber(int value) {
       switch (value) {
         case 1: return MOVEEVENTPACKET;
-        case 2: return CLICKPACKET;
         case 3: return LOGINPACKET;
         case 5: return SWAPINVENTORYSLOTPACKET;
         case 6: return DOUBLECLICKINVENTORYSLOTPACKET;
-        case 7: return DROPITEM;
         case 8: return PICKITEM;
         case 9: return UNEQUIP;
         case 10: return TOGGLEKUNGFU;
         case 11: return SITDOWN;
         case 12: return STANDUP;
-        case 13: return SELLITEMS;
-        case 14: return BUYITEMS;
         case 15: return RIGHTCLICK;
         case 16: return TRADEREQUEST;
         case 17: return UPDATETRADE;
-        case 18: return TRIGGERDYNAMICOBJECT;
-        case 19: return SWAPKUNGFUSLOT;
         case 24: return BANKOPERATION;
         case 25: return CHANGETEAM;
         case 26: return FOUNDGUILD;
         case 27: return CREATEGUILDKUNGFU;
         case 28: return MANAGEGUILD;
         case 29: return SUBMITQUEST;
-        case 30: return INTERACT;
         case 31: return DEBUG;
+        case 2: return CLICKPACKET;
         case 32: return MOVEINPUT;
         case 33: return TURNINPUT;
         case 34: return SIMPLEINPUT;
@@ -198,37 +186,6 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.MoveEventPacket) type_;
     }
     return org.y1000.network.gen.MoveEventPacket.getDefaultInstance();
-  }
-
-  public static final int CLICKPACKET_FIELD_NUMBER = 2;
-  /**
-   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-   * @return Whether the clickPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasClickPacket() {
-    return typeCase_ == 2;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-   * @return The clickPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClickPacket getClickPacket() {
-    if (typeCase_ == 2) {
-       return (org.y1000.network.gen.ClickPacket) type_;
-    }
-    return org.y1000.network.gen.ClickPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClickPacketOrBuilder getClickPacketOrBuilder() {
-    if (typeCase_ == 2) {
-       return (org.y1000.network.gen.ClickPacket) type_;
-    }
-    return org.y1000.network.gen.ClickPacket.getDefaultInstance();
   }
 
   public static final int LOGINPACKET_FIELD_NUMBER = 3;
@@ -322,37 +279,6 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.DoubleClickInventorySlotPacket) type_;
     }
     return org.y1000.network.gen.DoubleClickInventorySlotPacket.getDefaultInstance();
-  }
-
-  public static final int DROPITEM_FIELD_NUMBER = 7;
-  /**
-   * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-   * @return Whether the dropItem field is set.
-   */
-  @java.lang.Override
-  public boolean hasDropItem() {
-    return typeCase_ == 7;
-  }
-  /**
-   * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-   * @return The dropItem.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.DropItemPacket getDropItem() {
-    if (typeCase_ == 7) {
-       return (org.y1000.network.gen.DropItemPacket) type_;
-    }
-    return org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.DropItemPacketOrBuilder getDropItemOrBuilder() {
-    if (typeCase_ == 7) {
-       return (org.y1000.network.gen.DropItemPacket) type_;
-    }
-    return org.y1000.network.gen.DropItemPacket.getDefaultInstance();
   }
 
   public static final int PICKITEM_FIELD_NUMBER = 8;
@@ -510,68 +436,6 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientStandUpPacket.getDefaultInstance();
   }
 
-  public static final int SELLITEMS_FIELD_NUMBER = 13;
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-   * @return Whether the sellItems field is set.
-   */
-  @java.lang.Override
-  public boolean hasSellItems() {
-    return typeCase_ == 13;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-   * @return The sellItems.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientMerchantTradeItemsPacket getSellItems() {
-    if (typeCase_ == 13) {
-       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-    }
-    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getSellItemsOrBuilder() {
-    if (typeCase_ == 13) {
-       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-    }
-    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-  }
-
-  public static final int BUYITEMS_FIELD_NUMBER = 14;
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-   * @return Whether the buyItems field is set.
-   */
-  @java.lang.Override
-  public boolean hasBuyItems() {
-    return typeCase_ == 14;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-   * @return The buyItems.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientMerchantTradeItemsPacket getBuyItems() {
-    if (typeCase_ == 14) {
-       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-    }
-    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getBuyItemsOrBuilder() {
-    if (typeCase_ == 14) {
-       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-    }
-    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-  }
-
   public static final int RIGHTCLICK_FIELD_NUMBER = 15;
   /**
    * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
@@ -663,68 +527,6 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.ClientUpdateTradePacket) type_;
     }
     return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
-  }
-
-  public static final int TRIGGERDYNAMICOBJECT_FIELD_NUMBER = 18;
-  /**
-   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-   * @return Whether the triggerDynamicObject field is set.
-   */
-  @java.lang.Override
-  public boolean hasTriggerDynamicObject() {
-    return typeCase_ == 18;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-   * @return The triggerDynamicObject.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientTriggerDynamicObjectPacket getTriggerDynamicObject() {
-    if (typeCase_ == 18) {
-       return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
-    }
-    return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder getTriggerDynamicObjectOrBuilder() {
-    if (typeCase_ == 18) {
-       return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
-    }
-    return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-  }
-
-  public static final int SWAPKUNGFUSLOT_FIELD_NUMBER = 19;
-  /**
-   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-   * @return Whether the swapKungFuSlot field is set.
-   */
-  @java.lang.Override
-  public boolean hasSwapKungFuSlot() {
-    return typeCase_ == 19;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-   * @return The swapKungFuSlot.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientSwapKungFuSlotPacket getSwapKungFuSlot() {
-    if (typeCase_ == 19) {
-       return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
-    }
-    return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder getSwapKungFuSlotOrBuilder() {
-    if (typeCase_ == 19) {
-       return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
-    }
-    return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
   }
 
   public static final int BANKOPERATION_FIELD_NUMBER = 24;
@@ -913,37 +715,6 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
   }
 
-  public static final int INTERACT_FIELD_NUMBER = 30;
-  /**
-   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-   * @return Whether the interact field is set.
-   */
-  @java.lang.Override
-  public boolean hasInteract() {
-    return typeCase_ == 30;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-   * @return The interact.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientClickInteractabilityPacket getInteract() {
-    if (typeCase_ == 30) {
-       return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
-    }
-    return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder getInteractOrBuilder() {
-    if (typeCase_ == 30) {
-       return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
-    }
-    return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-  }
-
   public static final int DEBUG_FIELD_NUMBER = 31;
   /**
    * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
@@ -973,6 +744,37 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.DebugPacket) type_;
     }
     return org.y1000.network.gen.DebugPacket.getDefaultInstance();
+  }
+
+  public static final int CLICKPACKET_FIELD_NUMBER = 2;
+  /**
+   * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+   * @return Whether the clickPacket field is set.
+   */
+  @java.lang.Override
+  public boolean hasClickPacket() {
+    return typeCase_ == 2;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+   * @return The clickPacket.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickInputPacket getClickPacket() {
+    if (typeCase_ == 2) {
+       return (org.y1000.network.gen.ClickInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickInputPacketOrBuilder getClickPacketOrBuilder() {
+    if (typeCase_ == 2) {
+       return (org.y1000.network.gen.ClickInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
   }
 
   public static final int MOVEINPUT_FIELD_NUMBER = 32;
@@ -1613,7 +1415,7 @@ private static final long serialVersionUID = 0L;
       output.writeMessage(1, (org.y1000.network.gen.MoveEventPacket) type_);
     }
     if (typeCase_ == 2) {
-      output.writeMessage(2, (org.y1000.network.gen.ClickPacket) type_);
+      output.writeMessage(2, (org.y1000.network.gen.ClickInputPacket) type_);
     }
     if (typeCase_ == 3) {
       output.writeMessage(3, (org.y1000.network.gen.PlayerLoginPacket) type_);
@@ -1623,9 +1425,6 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 6) {
       output.writeMessage(6, (org.y1000.network.gen.DoubleClickInventorySlotPacket) type_);
-    }
-    if (typeCase_ == 7) {
-      output.writeMessage(7, (org.y1000.network.gen.DropItemPacket) type_);
     }
     if (typeCase_ == 8) {
       output.writeMessage(8, (org.y1000.network.gen.PickItemPacket) type_);
@@ -1642,12 +1441,6 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 12) {
       output.writeMessage(12, (org.y1000.network.gen.ClientStandUpPacket) type_);
     }
-    if (typeCase_ == 13) {
-      output.writeMessage(13, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
-    }
-    if (typeCase_ == 14) {
-      output.writeMessage(14, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
-    }
     if (typeCase_ == 15) {
       output.writeMessage(15, (org.y1000.network.gen.RightClickPacket) type_);
     }
@@ -1656,12 +1449,6 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 17) {
       output.writeMessage(17, (org.y1000.network.gen.ClientUpdateTradePacket) type_);
-    }
-    if (typeCase_ == 18) {
-      output.writeMessage(18, (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_);
-    }
-    if (typeCase_ == 19) {
-      output.writeMessage(19, (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_);
     }
     if (typeCase_ == 24) {
       output.writeMessage(24, (org.y1000.network.gen.ClientBankOperationPacket) type_);
@@ -1680,9 +1467,6 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 29) {
       output.writeMessage(29, (org.y1000.network.gen.ClientSubmitQuestPacket) type_);
-    }
-    if (typeCase_ == 30) {
-      output.writeMessage(30, (org.y1000.network.gen.ClientClickInteractabilityPacket) type_);
     }
     if (typeCase_ == 31) {
       output.writeMessage(31, (org.y1000.network.gen.DebugPacket) type_);
@@ -1762,7 +1546,7 @@ private static final long serialVersionUID = 0L;
     }
     if (typeCase_ == 2) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, (org.y1000.network.gen.ClickPacket) type_);
+        .computeMessageSize(2, (org.y1000.network.gen.ClickInputPacket) type_);
     }
     if (typeCase_ == 3) {
       size += com.google.protobuf.CodedOutputStream
@@ -1775,10 +1559,6 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 6) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(6, (org.y1000.network.gen.DoubleClickInventorySlotPacket) type_);
-    }
-    if (typeCase_ == 7) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(7, (org.y1000.network.gen.DropItemPacket) type_);
     }
     if (typeCase_ == 8) {
       size += com.google.protobuf.CodedOutputStream
@@ -1800,14 +1580,6 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(12, (org.y1000.network.gen.ClientStandUpPacket) type_);
     }
-    if (typeCase_ == 13) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(13, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
-    }
-    if (typeCase_ == 14) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(14, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
-    }
     if (typeCase_ == 15) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(15, (org.y1000.network.gen.RightClickPacket) type_);
@@ -1819,14 +1591,6 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 17) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(17, (org.y1000.network.gen.ClientUpdateTradePacket) type_);
-    }
-    if (typeCase_ == 18) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(18, (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_);
-    }
-    if (typeCase_ == 19) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(19, (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_);
     }
     if (typeCase_ == 24) {
       size += com.google.protobuf.CodedOutputStream
@@ -1851,10 +1615,6 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 29) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(29, (org.y1000.network.gen.ClientSubmitQuestPacket) type_);
-    }
-    if (typeCase_ == 30) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(30, (org.y1000.network.gen.ClientClickInteractabilityPacket) type_);
     }
     if (typeCase_ == 31) {
       size += com.google.protobuf.CodedOutputStream
@@ -1961,10 +1721,6 @@ private static final long serialVersionUID = 0L;
         if (!getMoveEventPacket()
             .equals(other.getMoveEventPacket())) return false;
         break;
-      case 2:
-        if (!getClickPacket()
-            .equals(other.getClickPacket())) return false;
-        break;
       case 3:
         if (!getLoginPacket()
             .equals(other.getLoginPacket())) return false;
@@ -1976,10 +1732,6 @@ private static final long serialVersionUID = 0L;
       case 6:
         if (!getDoubleClickInventorySlotPacket()
             .equals(other.getDoubleClickInventorySlotPacket())) return false;
-        break;
-      case 7:
-        if (!getDropItem()
-            .equals(other.getDropItem())) return false;
         break;
       case 8:
         if (!getPickItem()
@@ -2001,14 +1753,6 @@ private static final long serialVersionUID = 0L;
         if (!getStandUp()
             .equals(other.getStandUp())) return false;
         break;
-      case 13:
-        if (!getSellItems()
-            .equals(other.getSellItems())) return false;
-        break;
-      case 14:
-        if (!getBuyItems()
-            .equals(other.getBuyItems())) return false;
-        break;
       case 15:
         if (!getRightClick()
             .equals(other.getRightClick())) return false;
@@ -2020,14 +1764,6 @@ private static final long serialVersionUID = 0L;
       case 17:
         if (!getUpdateTrade()
             .equals(other.getUpdateTrade())) return false;
-        break;
-      case 18:
-        if (!getTriggerDynamicObject()
-            .equals(other.getTriggerDynamicObject())) return false;
-        break;
-      case 19:
-        if (!getSwapKungFuSlot()
-            .equals(other.getSwapKungFuSlot())) return false;
         break;
       case 24:
         if (!getBankOperation()
@@ -2053,13 +1789,13 @@ private static final long serialVersionUID = 0L;
         if (!getSubmitQuest()
             .equals(other.getSubmitQuest())) return false;
         break;
-      case 30:
-        if (!getInteract()
-            .equals(other.getInteract())) return false;
-        break;
       case 31:
         if (!getDebug()
             .equals(other.getDebug())) return false;
+        break;
+      case 2:
+        if (!getClickPacket()
+            .equals(other.getClickPacket())) return false;
         break;
       case 32:
         if (!getMoveInput()
@@ -2160,10 +1896,6 @@ private static final long serialVersionUID = 0L;
         hash = (37 * hash) + MOVEEVENTPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getMoveEventPacket().hashCode();
         break;
-      case 2:
-        hash = (37 * hash) + CLICKPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getClickPacket().hashCode();
-        break;
       case 3:
         hash = (37 * hash) + LOGINPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getLoginPacket().hashCode();
@@ -2175,10 +1907,6 @@ private static final long serialVersionUID = 0L;
       case 6:
         hash = (37 * hash) + DOUBLECLICKINVENTORYSLOTPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getDoubleClickInventorySlotPacket().hashCode();
-        break;
-      case 7:
-        hash = (37 * hash) + DROPITEM_FIELD_NUMBER;
-        hash = (53 * hash) + getDropItem().hashCode();
         break;
       case 8:
         hash = (37 * hash) + PICKITEM_FIELD_NUMBER;
@@ -2200,14 +1928,6 @@ private static final long serialVersionUID = 0L;
         hash = (37 * hash) + STANDUP_FIELD_NUMBER;
         hash = (53 * hash) + getStandUp().hashCode();
         break;
-      case 13:
-        hash = (37 * hash) + SELLITEMS_FIELD_NUMBER;
-        hash = (53 * hash) + getSellItems().hashCode();
-        break;
-      case 14:
-        hash = (37 * hash) + BUYITEMS_FIELD_NUMBER;
-        hash = (53 * hash) + getBuyItems().hashCode();
-        break;
       case 15:
         hash = (37 * hash) + RIGHTCLICK_FIELD_NUMBER;
         hash = (53 * hash) + getRightClick().hashCode();
@@ -2219,14 +1939,6 @@ private static final long serialVersionUID = 0L;
       case 17:
         hash = (37 * hash) + UPDATETRADE_FIELD_NUMBER;
         hash = (53 * hash) + getUpdateTrade().hashCode();
-        break;
-      case 18:
-        hash = (37 * hash) + TRIGGERDYNAMICOBJECT_FIELD_NUMBER;
-        hash = (53 * hash) + getTriggerDynamicObject().hashCode();
-        break;
-      case 19:
-        hash = (37 * hash) + SWAPKUNGFUSLOT_FIELD_NUMBER;
-        hash = (53 * hash) + getSwapKungFuSlot().hashCode();
         break;
       case 24:
         hash = (37 * hash) + BANKOPERATION_FIELD_NUMBER;
@@ -2252,13 +1964,13 @@ private static final long serialVersionUID = 0L;
         hash = (37 * hash) + SUBMITQUEST_FIELD_NUMBER;
         hash = (53 * hash) + getSubmitQuest().hashCode();
         break;
-      case 30:
-        hash = (37 * hash) + INTERACT_FIELD_NUMBER;
-        hash = (53 * hash) + getInteract().hashCode();
-        break;
       case 31:
         hash = (37 * hash) + DEBUG_FIELD_NUMBER;
         hash = (53 * hash) + getDebug().hashCode();
+        break;
+      case 2:
+        hash = (37 * hash) + CLICKPACKET_FIELD_NUMBER;
+        hash = (53 * hash) + getClickPacket().hashCode();
         break;
       case 32:
         hash = (37 * hash) + MOVEINPUT_FIELD_NUMBER;
@@ -2478,9 +2190,6 @@ private static final long serialVersionUID = 0L;
       if (moveEventPacketBuilder_ != null) {
         moveEventPacketBuilder_.clear();
       }
-      if (clickPacketBuilder_ != null) {
-        clickPacketBuilder_.clear();
-      }
       if (loginPacketBuilder_ != null) {
         loginPacketBuilder_.clear();
       }
@@ -2489,9 +2198,6 @@ private static final long serialVersionUID = 0L;
       }
       if (doubleClickInventorySlotPacketBuilder_ != null) {
         doubleClickInventorySlotPacketBuilder_.clear();
-      }
-      if (dropItemBuilder_ != null) {
-        dropItemBuilder_.clear();
       }
       if (pickItemBuilder_ != null) {
         pickItemBuilder_.clear();
@@ -2508,12 +2214,6 @@ private static final long serialVersionUID = 0L;
       if (standUpBuilder_ != null) {
         standUpBuilder_.clear();
       }
-      if (sellItemsBuilder_ != null) {
-        sellItemsBuilder_.clear();
-      }
-      if (buyItemsBuilder_ != null) {
-        buyItemsBuilder_.clear();
-      }
       if (rightClickBuilder_ != null) {
         rightClickBuilder_.clear();
       }
@@ -2522,12 +2222,6 @@ private static final long serialVersionUID = 0L;
       }
       if (updateTradeBuilder_ != null) {
         updateTradeBuilder_.clear();
-      }
-      if (triggerDynamicObjectBuilder_ != null) {
-        triggerDynamicObjectBuilder_.clear();
-      }
-      if (swapKungFuSlotBuilder_ != null) {
-        swapKungFuSlotBuilder_.clear();
       }
       if (bankOperationBuilder_ != null) {
         bankOperationBuilder_.clear();
@@ -2547,11 +2241,11 @@ private static final long serialVersionUID = 0L;
       if (submitQuestBuilder_ != null) {
         submitQuestBuilder_.clear();
       }
-      if (interactBuilder_ != null) {
-        interactBuilder_.clear();
-      }
       if (debugBuilder_ != null) {
         debugBuilder_.clear();
+      }
+      if (clickPacketBuilder_ != null) {
+        clickPacketBuilder_.clear();
       }
       if (moveInputBuilder_ != null) {
         moveInputBuilder_.clear();
@@ -2663,10 +2357,6 @@ private static final long serialVersionUID = 0L;
           moveEventPacketBuilder_ != null) {
         result.type_ = moveEventPacketBuilder_.build();
       }
-      if (typeCase_ == 2 &&
-          clickPacketBuilder_ != null) {
-        result.type_ = clickPacketBuilder_.build();
-      }
       if (typeCase_ == 3 &&
           loginPacketBuilder_ != null) {
         result.type_ = loginPacketBuilder_.build();
@@ -2678,10 +2368,6 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 6 &&
           doubleClickInventorySlotPacketBuilder_ != null) {
         result.type_ = doubleClickInventorySlotPacketBuilder_.build();
-      }
-      if (typeCase_ == 7 &&
-          dropItemBuilder_ != null) {
-        result.type_ = dropItemBuilder_.build();
       }
       if (typeCase_ == 8 &&
           pickItemBuilder_ != null) {
@@ -2703,14 +2389,6 @@ private static final long serialVersionUID = 0L;
           standUpBuilder_ != null) {
         result.type_ = standUpBuilder_.build();
       }
-      if (typeCase_ == 13 &&
-          sellItemsBuilder_ != null) {
-        result.type_ = sellItemsBuilder_.build();
-      }
-      if (typeCase_ == 14 &&
-          buyItemsBuilder_ != null) {
-        result.type_ = buyItemsBuilder_.build();
-      }
       if (typeCase_ == 15 &&
           rightClickBuilder_ != null) {
         result.type_ = rightClickBuilder_.build();
@@ -2722,14 +2400,6 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 17 &&
           updateTradeBuilder_ != null) {
         result.type_ = updateTradeBuilder_.build();
-      }
-      if (typeCase_ == 18 &&
-          triggerDynamicObjectBuilder_ != null) {
-        result.type_ = triggerDynamicObjectBuilder_.build();
-      }
-      if (typeCase_ == 19 &&
-          swapKungFuSlotBuilder_ != null) {
-        result.type_ = swapKungFuSlotBuilder_.build();
       }
       if (typeCase_ == 24 &&
           bankOperationBuilder_ != null) {
@@ -2755,13 +2425,13 @@ private static final long serialVersionUID = 0L;
           submitQuestBuilder_ != null) {
         result.type_ = submitQuestBuilder_.build();
       }
-      if (typeCase_ == 30 &&
-          interactBuilder_ != null) {
-        result.type_ = interactBuilder_.build();
-      }
       if (typeCase_ == 31 &&
           debugBuilder_ != null) {
         result.type_ = debugBuilder_.build();
+      }
+      if (typeCase_ == 2 &&
+          clickPacketBuilder_ != null) {
+        result.type_ = clickPacketBuilder_.build();
       }
       if (typeCase_ == 32 &&
           moveInputBuilder_ != null) {
@@ -2894,10 +2564,6 @@ private static final long serialVersionUID = 0L;
           mergeMoveEventPacket(other.getMoveEventPacket());
           break;
         }
-        case CLICKPACKET: {
-          mergeClickPacket(other.getClickPacket());
-          break;
-        }
         case LOGINPACKET: {
           mergeLoginPacket(other.getLoginPacket());
           break;
@@ -2908,10 +2574,6 @@ private static final long serialVersionUID = 0L;
         }
         case DOUBLECLICKINVENTORYSLOTPACKET: {
           mergeDoubleClickInventorySlotPacket(other.getDoubleClickInventorySlotPacket());
-          break;
-        }
-        case DROPITEM: {
-          mergeDropItem(other.getDropItem());
           break;
         }
         case PICKITEM: {
@@ -2934,14 +2596,6 @@ private static final long serialVersionUID = 0L;
           mergeStandUp(other.getStandUp());
           break;
         }
-        case SELLITEMS: {
-          mergeSellItems(other.getSellItems());
-          break;
-        }
-        case BUYITEMS: {
-          mergeBuyItems(other.getBuyItems());
-          break;
-        }
         case RIGHTCLICK: {
           mergeRightClick(other.getRightClick());
           break;
@@ -2952,14 +2606,6 @@ private static final long serialVersionUID = 0L;
         }
         case UPDATETRADE: {
           mergeUpdateTrade(other.getUpdateTrade());
-          break;
-        }
-        case TRIGGERDYNAMICOBJECT: {
-          mergeTriggerDynamicObject(other.getTriggerDynamicObject());
-          break;
-        }
-        case SWAPKUNGFUSLOT: {
-          mergeSwapKungFuSlot(other.getSwapKungFuSlot());
           break;
         }
         case BANKOPERATION: {
@@ -2986,12 +2632,12 @@ private static final long serialVersionUID = 0L;
           mergeSubmitQuest(other.getSubmitQuest());
           break;
         }
-        case INTERACT: {
-          mergeInteract(other.getInteract());
-          break;
-        }
         case DEBUG: {
           mergeDebug(other.getDebug());
+          break;
+        }
+        case CLICKPACKET: {
+          mergeClickPacket(other.getClickPacket());
           break;
         }
         case MOVEINPUT: {
@@ -3139,13 +2785,6 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 6;
               break;
             } // case 50
-            case 58: {
-              input.readMessage(
-                  getDropItemFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 7;
-              break;
-            } // case 58
             case 66: {
               input.readMessage(
                   getPickItemFieldBuilder().getBuilder(),
@@ -3181,20 +2820,6 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 12;
               break;
             } // case 98
-            case 106: {
-              input.readMessage(
-                  getSellItemsFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 13;
-              break;
-            } // case 106
-            case 114: {
-              input.readMessage(
-                  getBuyItemsFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 14;
-              break;
-            } // case 114
             case 122: {
               input.readMessage(
                   getRightClickFieldBuilder().getBuilder(),
@@ -3216,20 +2841,6 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 17;
               break;
             } // case 138
-            case 146: {
-              input.readMessage(
-                  getTriggerDynamicObjectFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 18;
-              break;
-            } // case 146
-            case 154: {
-              input.readMessage(
-                  getSwapKungFuSlotFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 19;
-              break;
-            } // case 154
             case 194: {
               input.readMessage(
                   getBankOperationFieldBuilder().getBuilder(),
@@ -3272,13 +2883,6 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 29;
               break;
             } // case 234
-            case 242: {
-              input.readMessage(
-                  getInteractFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 30;
-              break;
-            } // case 242
             case 250: {
               input.readMessage(
                   getDebugFieldBuilder().getBuilder(),
@@ -3599,148 +3203,6 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 1;
       onChanged();
       return moveEventPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClickPacket, org.y1000.network.gen.ClickPacket.Builder, org.y1000.network.gen.ClickPacketOrBuilder> clickPacketBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     * @return Whether the clickPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasClickPacket() {
-      return typeCase_ == 2;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     * @return The clickPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClickPacket getClickPacket() {
-      if (clickPacketBuilder_ == null) {
-        if (typeCase_ == 2) {
-          return (org.y1000.network.gen.ClickPacket) type_;
-        }
-        return org.y1000.network.gen.ClickPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 2) {
-          return clickPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClickPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    public Builder setClickPacket(org.y1000.network.gen.ClickPacket value) {
-      if (clickPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        clickPacketBuilder_.setMessage(value);
-      }
-      typeCase_ = 2;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    public Builder setClickPacket(
-        org.y1000.network.gen.ClickPacket.Builder builderForValue) {
-      if (clickPacketBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        clickPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 2;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    public Builder mergeClickPacket(org.y1000.network.gen.ClickPacket value) {
-      if (clickPacketBuilder_ == null) {
-        if (typeCase_ == 2 &&
-            type_ != org.y1000.network.gen.ClickPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClickPacket.newBuilder((org.y1000.network.gen.ClickPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 2) {
-          clickPacketBuilder_.mergeFrom(value);
-        } else {
-          clickPacketBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 2;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    public Builder clearClickPacket() {
-      if (clickPacketBuilder_ == null) {
-        if (typeCase_ == 2) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 2) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        clickPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    public org.y1000.network.gen.ClickPacket.Builder getClickPacketBuilder() {
-      return getClickPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClickPacketOrBuilder getClickPacketOrBuilder() {
-      if ((typeCase_ == 2) && (clickPacketBuilder_ != null)) {
-        return clickPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 2) {
-          return (org.y1000.network.gen.ClickPacket) type_;
-        }
-        return org.y1000.network.gen.ClickPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClickPacket, org.y1000.network.gen.ClickPacket.Builder, org.y1000.network.gen.ClickPacketOrBuilder> 
-        getClickPacketFieldBuilder() {
-      if (clickPacketBuilder_ == null) {
-        if (!(typeCase_ == 2)) {
-          type_ = org.y1000.network.gen.ClickPacket.getDefaultInstance();
-        }
-        clickPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClickPacket, org.y1000.network.gen.ClickPacket.Builder, org.y1000.network.gen.ClickPacketOrBuilder>(
-                (org.y1000.network.gen.ClickPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 2;
-      onChanged();
-      return clickPacketBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -4167,148 +3629,6 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 6;
       onChanged();
       return doubleClickInventorySlotPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.DropItemPacket, org.y1000.network.gen.DropItemPacket.Builder, org.y1000.network.gen.DropItemPacketOrBuilder> dropItemBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     * @return Whether the dropItem field is set.
-     */
-    @java.lang.Override
-    public boolean hasDropItem() {
-      return typeCase_ == 7;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     * @return The dropItem.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.DropItemPacket getDropItem() {
-      if (dropItemBuilder_ == null) {
-        if (typeCase_ == 7) {
-          return (org.y1000.network.gen.DropItemPacket) type_;
-        }
-        return org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 7) {
-          return dropItemBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    public Builder setDropItem(org.y1000.network.gen.DropItemPacket value) {
-      if (dropItemBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        dropItemBuilder_.setMessage(value);
-      }
-      typeCase_ = 7;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    public Builder setDropItem(
-        org.y1000.network.gen.DropItemPacket.Builder builderForValue) {
-      if (dropItemBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        dropItemBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 7;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    public Builder mergeDropItem(org.y1000.network.gen.DropItemPacket value) {
-      if (dropItemBuilder_ == null) {
-        if (typeCase_ == 7 &&
-            type_ != org.y1000.network.gen.DropItemPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.DropItemPacket.newBuilder((org.y1000.network.gen.DropItemPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 7) {
-          dropItemBuilder_.mergeFrom(value);
-        } else {
-          dropItemBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 7;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    public Builder clearDropItem() {
-      if (dropItemBuilder_ == null) {
-        if (typeCase_ == 7) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 7) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        dropItemBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    public org.y1000.network.gen.DropItemPacket.Builder getDropItemBuilder() {
-      return getDropItemFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.DropItemPacketOrBuilder getDropItemOrBuilder() {
-      if ((typeCase_ == 7) && (dropItemBuilder_ != null)) {
-        return dropItemBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 7) {
-          return (org.y1000.network.gen.DropItemPacket) type_;
-        }
-        return org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.DropItemPacket, org.y1000.network.gen.DropItemPacket.Builder, org.y1000.network.gen.DropItemPacketOrBuilder> 
-        getDropItemFieldBuilder() {
-      if (dropItemBuilder_ == null) {
-        if (!(typeCase_ == 7)) {
-          type_ = org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-        }
-        dropItemBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.DropItemPacket, org.y1000.network.gen.DropItemPacket.Builder, org.y1000.network.gen.DropItemPacketOrBuilder>(
-                (org.y1000.network.gen.DropItemPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 7;
-      onChanged();
-      return dropItemBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -5022,290 +4342,6 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> sellItemsBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     * @return Whether the sellItems field is set.
-     */
-    @java.lang.Override
-    public boolean hasSellItems() {
-      return typeCase_ == 13;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     * @return The sellItems.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacket getSellItems() {
-      if (sellItemsBuilder_ == null) {
-        if (typeCase_ == 13) {
-          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-        }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 13) {
-          return sellItemsBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     */
-    public Builder setSellItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
-      if (sellItemsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        sellItemsBuilder_.setMessage(value);
-      }
-      typeCase_ = 13;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     */
-    public Builder setSellItems(
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder builderForValue) {
-      if (sellItemsBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        sellItemsBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 13;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     */
-    public Builder mergeSellItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
-      if (sellItemsBuilder_ == null) {
-        if (typeCase_ == 13 &&
-            type_ != org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.newBuilder((org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 13) {
-          sellItemsBuilder_.mergeFrom(value);
-        } else {
-          sellItemsBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 13;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     */
-    public Builder clearSellItems() {
-      if (sellItemsBuilder_ == null) {
-        if (typeCase_ == 13) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 13) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        sellItemsBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     */
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder getSellItemsBuilder() {
-      return getSellItemsFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getSellItemsOrBuilder() {
-      if ((typeCase_ == 13) && (sellItemsBuilder_ != null)) {
-        return sellItemsBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 13) {
-          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-        }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> 
-        getSellItemsFieldBuilder() {
-      if (sellItemsBuilder_ == null) {
-        if (!(typeCase_ == 13)) {
-          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-        }
-        sellItemsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder>(
-                (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 13;
-      onChanged();
-      return sellItemsBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> buyItemsBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     * @return Whether the buyItems field is set.
-     */
-    @java.lang.Override
-    public boolean hasBuyItems() {
-      return typeCase_ == 14;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     * @return The buyItems.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacket getBuyItems() {
-      if (buyItemsBuilder_ == null) {
-        if (typeCase_ == 14) {
-          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-        }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 14) {
-          return buyItemsBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    public Builder setBuyItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
-      if (buyItemsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        buyItemsBuilder_.setMessage(value);
-      }
-      typeCase_ = 14;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    public Builder setBuyItems(
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder builderForValue) {
-      if (buyItemsBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        buyItemsBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 14;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    public Builder mergeBuyItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
-      if (buyItemsBuilder_ == null) {
-        if (typeCase_ == 14 &&
-            type_ != org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.newBuilder((org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 14) {
-          buyItemsBuilder_.mergeFrom(value);
-        } else {
-          buyItemsBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 14;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    public Builder clearBuyItems() {
-      if (buyItemsBuilder_ == null) {
-        if (typeCase_ == 14) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 14) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        buyItemsBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder getBuyItemsBuilder() {
-      return getBuyItemsFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getBuyItemsOrBuilder() {
-      if ((typeCase_ == 14) && (buyItemsBuilder_ != null)) {
-        return buyItemsBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 14) {
-          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-        }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> 
-        getBuyItemsFieldBuilder() {
-      if (buyItemsBuilder_ == null) {
-        if (!(typeCase_ == 14)) {
-          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-        }
-        buyItemsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder>(
-                (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 14;
-      onChanged();
-      return buyItemsBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.RightClickPacket, org.y1000.network.gen.RightClickPacket.Builder, org.y1000.network.gen.RightClickPacketOrBuilder> rightClickBuilder_;
     /**
      * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
@@ -5729,290 +4765,6 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 17;
       onChanged();
       return updateTradeBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientTriggerDynamicObjectPacket, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder, org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder> triggerDynamicObjectBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     * @return Whether the triggerDynamicObject field is set.
-     */
-    @java.lang.Override
-    public boolean hasTriggerDynamicObject() {
-      return typeCase_ == 18;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     * @return The triggerDynamicObject.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientTriggerDynamicObjectPacket getTriggerDynamicObject() {
-      if (triggerDynamicObjectBuilder_ == null) {
-        if (typeCase_ == 18) {
-          return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
-        }
-        return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 18) {
-          return triggerDynamicObjectBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    public Builder setTriggerDynamicObject(org.y1000.network.gen.ClientTriggerDynamicObjectPacket value) {
-      if (triggerDynamicObjectBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        triggerDynamicObjectBuilder_.setMessage(value);
-      }
-      typeCase_ = 18;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    public Builder setTriggerDynamicObject(
-        org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder builderForValue) {
-      if (triggerDynamicObjectBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        triggerDynamicObjectBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 18;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    public Builder mergeTriggerDynamicObject(org.y1000.network.gen.ClientTriggerDynamicObjectPacket value) {
-      if (triggerDynamicObjectBuilder_ == null) {
-        if (typeCase_ == 18 &&
-            type_ != org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientTriggerDynamicObjectPacket.newBuilder((org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 18) {
-          triggerDynamicObjectBuilder_.mergeFrom(value);
-        } else {
-          triggerDynamicObjectBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 18;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    public Builder clearTriggerDynamicObject() {
-      if (triggerDynamicObjectBuilder_ == null) {
-        if (typeCase_ == 18) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 18) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        triggerDynamicObjectBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    public org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder getTriggerDynamicObjectBuilder() {
-      return getTriggerDynamicObjectFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder getTriggerDynamicObjectOrBuilder() {
-      if ((typeCase_ == 18) && (triggerDynamicObjectBuilder_ != null)) {
-        return triggerDynamicObjectBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 18) {
-          return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
-        }
-        return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientTriggerDynamicObjectPacket, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder, org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder> 
-        getTriggerDynamicObjectFieldBuilder() {
-      if (triggerDynamicObjectBuilder_ == null) {
-        if (!(typeCase_ == 18)) {
-          type_ = org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-        }
-        triggerDynamicObjectBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientTriggerDynamicObjectPacket, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder, org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder>(
-                (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 18;
-      onChanged();
-      return triggerDynamicObjectBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSwapKungFuSlotPacket, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder, org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder> swapKungFuSlotBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     * @return Whether the swapKungFuSlot field is set.
-     */
-    @java.lang.Override
-    public boolean hasSwapKungFuSlot() {
-      return typeCase_ == 19;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     * @return The swapKungFuSlot.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientSwapKungFuSlotPacket getSwapKungFuSlot() {
-      if (swapKungFuSlotBuilder_ == null) {
-        if (typeCase_ == 19) {
-          return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
-        }
-        return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 19) {
-          return swapKungFuSlotBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    public Builder setSwapKungFuSlot(org.y1000.network.gen.ClientSwapKungFuSlotPacket value) {
-      if (swapKungFuSlotBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        swapKungFuSlotBuilder_.setMessage(value);
-      }
-      typeCase_ = 19;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    public Builder setSwapKungFuSlot(
-        org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder builderForValue) {
-      if (swapKungFuSlotBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        swapKungFuSlotBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 19;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    public Builder mergeSwapKungFuSlot(org.y1000.network.gen.ClientSwapKungFuSlotPacket value) {
-      if (swapKungFuSlotBuilder_ == null) {
-        if (typeCase_ == 19 &&
-            type_ != org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientSwapKungFuSlotPacket.newBuilder((org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 19) {
-          swapKungFuSlotBuilder_.mergeFrom(value);
-        } else {
-          swapKungFuSlotBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 19;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    public Builder clearSwapKungFuSlot() {
-      if (swapKungFuSlotBuilder_ == null) {
-        if (typeCase_ == 19) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 19) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        swapKungFuSlotBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    public org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder getSwapKungFuSlotBuilder() {
-      return getSwapKungFuSlotFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder getSwapKungFuSlotOrBuilder() {
-      if ((typeCase_ == 19) && (swapKungFuSlotBuilder_ != null)) {
-        return swapKungFuSlotBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 19) {
-          return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
-        }
-        return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSwapKungFuSlotPacket, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder, org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder> 
-        getSwapKungFuSlotFieldBuilder() {
-      if (swapKungFuSlotBuilder_ == null) {
-        if (!(typeCase_ == 19)) {
-          type_ = org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-        }
-        swapKungFuSlotBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientSwapKungFuSlotPacket, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder, org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder>(
-                (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 19;
-      onChanged();
-      return swapKungFuSlotBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -6868,148 +5620,6 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientClickInteractabilityPacket, org.y1000.network.gen.ClientClickInteractabilityPacket.Builder, org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder> interactBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     * @return Whether the interact field is set.
-     */
-    @java.lang.Override
-    public boolean hasInteract() {
-      return typeCase_ == 30;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     * @return The interact.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientClickInteractabilityPacket getInteract() {
-      if (interactBuilder_ == null) {
-        if (typeCase_ == 30) {
-          return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
-        }
-        return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 30) {
-          return interactBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    public Builder setInteract(org.y1000.network.gen.ClientClickInteractabilityPacket value) {
-      if (interactBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        interactBuilder_.setMessage(value);
-      }
-      typeCase_ = 30;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    public Builder setInteract(
-        org.y1000.network.gen.ClientClickInteractabilityPacket.Builder builderForValue) {
-      if (interactBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        interactBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 30;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    public Builder mergeInteract(org.y1000.network.gen.ClientClickInteractabilityPacket value) {
-      if (interactBuilder_ == null) {
-        if (typeCase_ == 30 &&
-            type_ != org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientClickInteractabilityPacket.newBuilder((org.y1000.network.gen.ClientClickInteractabilityPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 30) {
-          interactBuilder_.mergeFrom(value);
-        } else {
-          interactBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 30;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    public Builder clearInteract() {
-      if (interactBuilder_ == null) {
-        if (typeCase_ == 30) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 30) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        interactBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    public org.y1000.network.gen.ClientClickInteractabilityPacket.Builder getInteractBuilder() {
-      return getInteractFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder getInteractOrBuilder() {
-      if ((typeCase_ == 30) && (interactBuilder_ != null)) {
-        return interactBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 30) {
-          return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
-        }
-        return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientClickInteractabilityPacket, org.y1000.network.gen.ClientClickInteractabilityPacket.Builder, org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder> 
-        getInteractFieldBuilder() {
-      if (interactBuilder_ == null) {
-        if (!(typeCase_ == 30)) {
-          type_ = org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-        }
-        interactBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientClickInteractabilityPacket, org.y1000.network.gen.ClientClickInteractabilityPacket.Builder, org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder>(
-                (org.y1000.network.gen.ClientClickInteractabilityPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 30;
-      onChanged();
-      return interactBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.DebugPacket, org.y1000.network.gen.DebugPacket.Builder, org.y1000.network.gen.DebugPacketOrBuilder> debugBuilder_;
     /**
      * <code>.org.y1000.network.gen.DebugPacket debug = 31;</code>
@@ -7149,6 +5759,148 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 31;
       onChanged();
       return debugBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickInputPacket, org.y1000.network.gen.ClickInputPacket.Builder, org.y1000.network.gen.ClickInputPacketOrBuilder> clickPacketBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     * @return Whether the clickPacket field is set.
+     */
+    @java.lang.Override
+    public boolean hasClickPacket() {
+      return typeCase_ == 2;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     * @return The clickPacket.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickInputPacket getClickPacket() {
+      if (clickPacketBuilder_ == null) {
+        if (typeCase_ == 2) {
+          return (org.y1000.network.gen.ClickInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 2) {
+          return clickPacketBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    public Builder setClickPacket(org.y1000.network.gen.ClickInputPacket value) {
+      if (clickPacketBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        clickPacketBuilder_.setMessage(value);
+      }
+      typeCase_ = 2;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    public Builder setClickPacket(
+        org.y1000.network.gen.ClickInputPacket.Builder builderForValue) {
+      if (clickPacketBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        clickPacketBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 2;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    public Builder mergeClickPacket(org.y1000.network.gen.ClickInputPacket value) {
+      if (clickPacketBuilder_ == null) {
+        if (typeCase_ == 2 &&
+            type_ != org.y1000.network.gen.ClickInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClickInputPacket.newBuilder((org.y1000.network.gen.ClickInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 2) {
+          clickPacketBuilder_.mergeFrom(value);
+        } else {
+          clickPacketBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 2;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    public Builder clearClickPacket() {
+      if (clickPacketBuilder_ == null) {
+        if (typeCase_ == 2) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 2) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        clickPacketBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    public org.y1000.network.gen.ClickInputPacket.Builder getClickPacketBuilder() {
+      return getClickPacketFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickInputPacketOrBuilder getClickPacketOrBuilder() {
+      if ((typeCase_ == 2) && (clickPacketBuilder_ != null)) {
+        return clickPacketBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 2) {
+          return (org.y1000.network.gen.ClickInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickInputPacket, org.y1000.network.gen.ClickInputPacket.Builder, org.y1000.network.gen.ClickInputPacketOrBuilder> 
+        getClickPacketFieldBuilder() {
+      if (clickPacketBuilder_ == null) {
+        if (!(typeCase_ == 2)) {
+          type_ = org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+        }
+        clickPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClickInputPacket, org.y1000.network.gen.ClickInputPacket.Builder, org.y1000.network.gen.ClickInputPacketOrBuilder>(
+                (org.y1000.network.gen.ClickInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 2;
+      onChanged();
+      return clickPacketBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<

@@ -1,6 +1,7 @@
 package org.y1000.kungfu.attack;
 
 
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.players.*;
 import org.y1000.kungfu.KungFu;
 import org.y1000.util.Coordinate;
@@ -54,7 +55,7 @@ public interface AttackKungFu extends KungFu {
 
     void consumeAttributes(Player player);
 
-    boolean isWithinAttackRange(Coordinate coordinate1, Coordinate coordinate2);
+    boolean isWithinAttackRange(Coordinate playerCoordinate, ActiveEntity entity);
 
 
 }

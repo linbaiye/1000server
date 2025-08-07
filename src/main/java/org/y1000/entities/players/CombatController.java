@@ -81,7 +81,7 @@ final class CombatController {
             }
             return 0;
         }
-        if (player.attackKungFu().isWithinAttackRange(player.coordinate(), enemy.coordinate())) {
+        if (player.attackKungFu().isWithinAttackRange(player.coordinate(), enemy)) {
             attack();
             return 1;
         }

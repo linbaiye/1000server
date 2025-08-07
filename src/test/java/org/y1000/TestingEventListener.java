@@ -1,6 +1,6 @@
 package org.y1000;
 
-import org.y1000.event.EntityEvent;
+import org.y1000.event.TypedEntityEvent;
 import org.y1000.event.IEntityEvent;
 import org.y1000.event.EntityEventListener;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TestingEventListener implements EntityEventListener {
 
-    private final List<EntityEvent> entityEvents = new ArrayList<>();
+    private final List<TypedEntityEvent> entityEvents = new ArrayList<>();
 
 
 
@@ -27,9 +27,9 @@ public class TestingEventListener implements EntityEventListener {
     }
 
     public <T extends IEntityEvent> T removeFirst(Class<T> clazz) {
-        Iterator<EntityEvent> iterator = entityEvents.iterator();
+        Iterator<TypedEntityEvent> iterator = entityEvents.iterator();
         while (iterator.hasNext()) {
-            EntityEvent next = iterator.next();
+            TypedEntityEvent next = iterator.next();
             if (clazz.isAssignableFrom(next.getClass())) {
                 iterator.remove();
                 return clazz.cast(next);
@@ -43,7 +43,7 @@ public class TestingEventListener implements EntityEventListener {
     }
 
     @Override
-    public void onEvent(EntityEvent entityEvent) {
+    public void onEvent(TypedEntityEvent entityEvent) {
 
     }
 }

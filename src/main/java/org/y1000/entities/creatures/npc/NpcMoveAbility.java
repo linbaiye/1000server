@@ -81,7 +81,7 @@ public class NpcMoveAbility extends AbstractNpcAbility {
 
 
     public boolean tryMove(Npc npc, Direction direction) {
-        if (!npc.getRealmMap().movable(npc.coordinate().moveBy(direction))) {
+        if (!npc.getRealmMap().softReserve(npc, npc.coordinate().moveBy(direction))) {
             return false;
         }
         this.direction = direction;
