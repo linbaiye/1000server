@@ -12,44 +12,28 @@ import java.util.*;
 @Slf4j
 public class NpcSettingSdb {
 
-    private String buyTitle;
-    private String sellTitle;
     private String title;
     private String sellCaption;
     private String buyCaption;
 
 
-    private int sellImage;
-    private int buyImage;
     private int image;
     private final List<String> buyItems = new ArrayList<>();
     private final List<String> sellItems = new ArrayList<>();
     private final List<String> quests = new ArrayList<>();
 
+    private boolean bank = false;
+
     private static final Map<String, NpcSettingSdb> CACHE = new HashMap<>();
-
-    public int getAnyImage() {
-        if (image != 0)
-            return image;
-        return sellImage == 0 ? buyImage : sellImage;
-    }
-
-    public String getAnyTitle() {
-        if (title != null)
-            return title;
-        return buyTitle != null ? buyTitle : sellTitle;
-    }
 
     private NpcSettingSdb() {
     }
 
     private void validate() {
-        if (buyTitle == null && sellTitle == null && title == null)
+        if (title == null)
             throw new IllegalStateException("No title");
-        if (buyImage == 0 && sellImage == 0 && image == 0)
+        if (image == 0)
             throw new IllegalStateException("No image");
-        if (buyItems.isEmpty() && sellItems.isEmpty() && quests.isEmpty())
-            throw new IllegalStateException("No items");
         if (!buyItems.isEmpty())
             Validate.isTrue(buyCaption != null);
         if (!sellItems.isEmpty())
@@ -74,15 +58,12 @@ public class NpcSettingSdb {
                     switch (split[0]) {
                         case "SELLITEM" -> npcSettingsdb.sellItems.add(split[1]);
                         case "BUYITEM" -> npcSettingsdb.buyItems.add(split[1]);
-                        case "SELLTITLE" -> npcSettingsdb.sellTitle = split[1];
-                        case "BUYTITLE" -> npcSettingsdb.buyTitle = split[1];
+                        case "SELLTITLE", "BUYTITLE", "TITLE" -> npcSettingsdb.title = split[1];
                         case "BUYCAPTION" -> npcSettingsdb.buyCaption = split[1];
                         case "SELLCAPTION" -> npcSettingsdb.sellCaption = split[1];
-                        case "BUYIMAGE" -> npcSettingsdb.buyImage = Integer.parseInt(split[1]);
-                        case "SELLIMAGE" -> npcSettingsdb.sellImage = Integer.parseInt(split[1]);
-                        case "TITLE" -> npcSettingsdb.title = split[1];
-                        case "IMAGE" -> npcSettingsdb.image = Integer.parseInt(split[1]);
+                        case "BUYIMAGE", "IMAGE", "SELLIMAGE" -> npcSettingsdb.image = Integer.parseInt(split[1]);
                         case "QUEST" -> npcSettingsdb.quests.add(split[1]);
+                        case "BANK" -> npcSettingsdb.bank = true;
                     }
                 }
             }

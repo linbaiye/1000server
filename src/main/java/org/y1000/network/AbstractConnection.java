@@ -38,20 +38,11 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
     Object createMessage(ClientPacket clientPacket) {
         return switch (clientPacket.getTypeCase()) {
             case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
-            case PICKITEM -> new ClientPickItemEvent(clientPacket.getPickItem().getId());
             case UNEQUIP -> new ClientUnequipEvent(EquipmentType.fromValue(clientPacket.getUnequip().getType()));
-            case TOGGLEKUNGFU -> new ClientToggleKungFuEvent(clientPacket.getToggleKungFu().getTab(), clientPacket.getToggleKungFu().getSlot());
-            case SITDOWN -> new ClientSitDownEvent(new Coordinate(clientPacket.getSitDown().getX(), clientPacket.getSitDown().getY()));
-            case STANDUP -> ClientStandUpEvent.INSTANCE;
-            case RIGHTCLICK -> ClientRightClickEvent.fromPacket(clientPacket.getRightClick());
-            case TRADEREQUEST -> new ClientTradePlayerEvent(clientPacket.getTradeRequest().getTargetId(), clientPacket.getTradeRequest().getSlot());
-            case UPDATETRADE -> ClientUpdateTradeEvent.fromPacket(clientPacket.getUpdateTrade());
-            case BANKOPERATION -> ClientOperateBankEvent.fromPacket(clientPacket.getBankOperation());
             case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
             case FOUNDGUILD -> ClientFoundGuildEvent.parse(clientPacket.getFoundGuild());
             case CREATEGUILDKUNGFU -> ClientCreateGuildKungFuEvent.parse(clientPacket.getCreateGuildKungFu());
             case MANAGEGUILD -> new ClientManageGuildEvent(clientPacket.getManageGuild().getType(), clientPacket.getManageGuild().getTarget());
-            case SUBMITQUEST -> new ClientSubmitQuestEvent(clientPacket.getSubmitQuest().getId(), clientPacket.getSubmitQuest().getQuestName(), serverContext.getItemFactory());
 
             case DEBUG -> new DebugInput(1);
             case SWAPINVENTORYSLOTPACKET -> SwapInventoryItemInput.fromPacket(clientPacket.getSwapInventorySlotPacket());
@@ -77,6 +68,8 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case CHAT -> new ChatInput(clientPacket.getChat().getText());
             case CLICKEQUIPMENT -> new ClickEquipmentInput(clientPacket.getClickEquipment().getEquipType());
             case SUBMITQUESTINPUT -> new SubmitQuestInput(clientPacket.getSubmitQuestInput().getId(), clientPacket.getSubmitQuestInput().getQuestName());
+            case UNLOCKBANK -> new UnlockBankInput(clientPacket.getUnlockBank().getNpcId());
+            case BANKOPERATION -> BankOperationInput.fromPacket(clientPacket.getBankOperation());
             default -> null;
         };
     }

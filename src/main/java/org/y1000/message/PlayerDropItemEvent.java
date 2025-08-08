@@ -8,6 +8,7 @@ import org.y1000.event.item.ItemEvent;
 import org.y1000.event.item.ItemEventVisitor;
 import org.y1000.util.Coordinate;
 
+@Deprecated
 public final class PlayerDropItemEvent implements ItemEvent {
 
     @Getter

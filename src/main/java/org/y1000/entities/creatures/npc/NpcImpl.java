@@ -92,6 +92,13 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     }
 
     @Override
+    public <T> List<T> findAbilities(Class<T> type) {
+        return abilities.stream().filter(a -> type.isAssignableFrom(a.getClass()))
+                .map(type::cast)
+                .toList();
+    }
+
+    @Override
     public void instantKill() {
         ai.instantKill();
     }

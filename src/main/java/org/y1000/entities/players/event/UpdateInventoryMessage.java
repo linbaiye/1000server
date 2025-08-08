@@ -14,7 +14,7 @@ public class UpdateInventoryMessage extends Abstract2PlayerMessageEvent {
     }
 
 
-    private static InventoryItemPacket toItem(int slot, Item item) {
+    public static InventoryItemPacket toItem(int slot, Item item) {
         return InventoryItemPacket.newBuilder()
                 .setSlotId(slot)
                 .setName(item.name())

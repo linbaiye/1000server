@@ -28,7 +28,7 @@ public final class ItemCost implements TeleportCost {
     public void charge(Player player) {
         if (check(player) != null)
             return;
-        int slot = player.inventory().consume(requiredItem, requiredNumber);
+        int slot = player.inventory().decrease(requiredItem, requiredNumber);
         if (slot != 0)
             player.sendEvent(UpdateInventorySlotMessage.update(player, slot));
     }

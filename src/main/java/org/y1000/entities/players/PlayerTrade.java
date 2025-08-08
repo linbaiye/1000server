@@ -81,8 +81,8 @@ public class PlayerTrade {
             return;
         giveItemsToPlayer(player1, p1Items);
         giveItemsToPlayer(player2, p2Items);
-        player1.sendEvent(CloseTradeWindowMessage.of(player1));
-        player2.sendEvent(CloseTradeWindowMessage.of(player2));
+        player1.sendEvent(CloseTradeWindowMessage.playerTrade(player1));
+        player2.sendEvent(CloseTradeWindowMessage.playerTrade(player2));
         closeOrNotify(player1, p1Items);
         closeOrNotify(player2, p2Items);
     }
@@ -118,8 +118,8 @@ public class PlayerTrade {
         }
         giveItemsToPlayer(player1, p2Items);
         giveItemsToPlayer(player2, p1Items);
-        player1.sendEvent(CloseTradeWindowMessage.of(player1));
-        player2.sendEvent(CloseTradeWindowMessage.of(player2));
+        player1.sendEvent(CloseTradeWindowMessage.playerTrade(player1));
+        player2.sendEvent(CloseTradeWindowMessage.playerTrade(player2));
         player1.closeTrade();
         player2.closeTrade();
     }

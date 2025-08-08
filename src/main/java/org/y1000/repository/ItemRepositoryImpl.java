@@ -13,6 +13,8 @@ import org.y1000.persistence.*;
 import org.y1000.sdb.ItemDrugSdb;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, BankRepository {
@@ -171,7 +173,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
     }
 
 
-    private void restoreInventory(EntityManager entityManager, AbstractInventoryPo inventoryPo, AbstractInventory inventory) {
+    private void restoreInventory(EntityManager entityManager, AbstractInventoryPo inventoryPo, BiConsumer<Integer, ? super Item> inventoryAdder) {
         Set<Long> ids = inventoryPo.selectEquipmentIds();
         Map<Long, Equipment> equipments = Collections.emptyMap();
         if (!ids.isEmpty()) {
@@ -182,22 +184,22 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         }
         for (SlotItem slotItem : inventoryPo.getSlots()) {
             if (slotItem.isEquipment()) {
-                inventory.add(slotItem.getSlot(), equipments.get(slotItem.getEquipmentId()));
+                inventoryAdder.accept(slotItem.getSlot(), equipments.get(slotItem.getEquipmentId()));
             } else {
-                inventory.add(slotItem.getSlot(), createItem(slotItem.getName(), slotItem.getNumber()));
+                inventoryAdder.accept(slotItem.getSlot(), createItem(slotItem.getName(), slotItem.getNumber()));
             }
         }
     }
 
     private Inventory restoreInventory(EntityManager entityManager, InventoryPo inventoryPo) {
         Inventory inventory = new Inventory();
-        restoreInventory(entityManager, inventoryPo, inventory);
+        restoreInventory(entityManager, inventoryPo, inventory::add);
         return inventory;
     }
 
     private Bank restoreBank(EntityManager entityManager, BankPo bankPo) {
         Bank bank = new Bank(bankPo.getCapacity(), bankPo.getUnlocked());
-        restoreInventory(entityManager, bankPo, bank);
+        restoreInventory(entityManager, bankPo, bank::add);
         return bank;
     }
 
@@ -274,7 +276,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         queryResult.ifPresentOrElse(inventoryPo -> inventoryPo.merge(inventory),
                 () -> entityManager.persist(InventoryPo.convert(playerId, inventory)));
     }
-
 
 
     private void persist(EntityManager entityManager, long playerId, Bank bank) {

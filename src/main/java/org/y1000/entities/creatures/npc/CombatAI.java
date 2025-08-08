@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.HurtAbility;
-import org.y1000.entities.players.Player;
 
 @Slf4j
 public class CombatAI extends AbstractMovableNpcAI {
@@ -14,7 +13,7 @@ public class CombatAI extends AbstractMovableNpcAI {
     private final HurtAbility enemyHurtAbility;
 
     public CombatAI(Npc npc, ActiveEntity entity,
-                     NpcUpdatableAbility ability) {
+                     NpcAnimatedAbility ability) {
         super(npc);
         this.enemy = entity;
         changeAbility(ability);
@@ -123,7 +122,7 @@ public class CombatAI extends AbstractMovableNpcAI {
         }
     }
 
-    void onNonDieAbilityDone(NpcUpdatableAbility doneAbility) {
+    void onNonDieAbilityDone(NpcAnimatedAbility doneAbility) {
         if (doneAbility instanceof NpcMoveAbility moveAbility) {
             computePrevious();
             stayOrAttack(moveAbility);

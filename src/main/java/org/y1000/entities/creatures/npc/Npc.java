@@ -6,6 +6,7 @@ import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -45,6 +46,9 @@ public interface Npc extends ActiveEntity {
     void sendEvent(NpcEvent event);
 
     <T> Optional<T> findAbility(Class<T> type, Predicate<? super T> filter);
+
+
+    <T> List<T> findAbilities(Class<T> type);
 
 
     default void instantKill() {

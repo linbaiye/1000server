@@ -32,7 +32,7 @@ public final class NpcHurtAbility extends AbstractNpcNonMoveAbility implements H
     private BiConsumer<? super ActiveEntity, NpcHurtAbility> hurtTrigger;
 
     @Getter
-    private NpcUpdatableAbility interruptedAbility;
+    private NpcAnimatedAbility interruptedAbility;
 
     private final int recoveryMillis;
 
@@ -87,7 +87,7 @@ public final class NpcHurtAbility extends AbstractNpcNonMoveAbility implements H
         currentLife = 0;
     }
 
-    public void apply(Npc npc, NpcUpdatableAbility interruptedAbility) {
+    public void apply(Npc npc, NpcAnimatedAbility interruptedAbility) {
         sendActionAndStartShortAnimation(npc, recoveryMillis);
         npc.sendEvent(NpcLifeBarEvent.of(npc, currentLife, maxLife));
         if (hurtSound != null) {

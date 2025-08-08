@@ -56,11 +56,6 @@ message ClickInputPacket {
   int64 id = 1;
 }
 
-message RightClickPacket {
-  int32 type = 1;
-  optional int32 slotId = 2;
-  optional int32 page = 3;
-}
 
 message ClientKeyPressedPacket {
   int32 key = 1;
@@ -68,9 +63,6 @@ message ClientKeyPressedPacket {
   int32 y = 3;
 }
 
-message PickItemPacket {
-  int32 id = 1;
-}
 
 message PlayerLoginPacket {
   string token = 1;
@@ -115,37 +107,9 @@ message ChangeStatePacket {
 }
 
 
-message MoveEventPacket {
-  InputPacket input = 1;
-  int32 happenedAtX = 2;
-  int32 happenedAtY = 3;
-}
-
-message ClientAttackEventPacket {
-  int64 sequence = 1;
-  int64 targetId = 2;
-  int32 state = 3;
-  int32 direction = 4;
-}
-
 
 message ClientUnequipPacket {
   int32 type = 1;
-}
-
-message ClientToggleKungFuPacket {
-  int32 tab = 1;
-  int32 slot = 2;
-}
-
-message ClientSitDownPacket {
-  int32 x = 1;
-  int32 y = 2;
-}
-
-
-message ClientStandUpPacket {
-  bool padding = 1;
 }
 
 
@@ -158,10 +122,6 @@ message SwapKungFuSlotPacket {
   int32 slot1 = 1;
   int32 slot2 = 2;
   int32 page = 3;
-}
-
-message DoubleClickInventorySlotPacket {
-  int32 slot = 1;
 }
 
 
@@ -189,51 +149,12 @@ message ShowTeleportPacket {
   int32 shape = 8;
 }
 
-message ClientSimpleCommandPacket {
-  int32 command = 1;
-}
-
-
 message CharacterKungFuPacket {
   string attackKungFuName = 1;
   int32 attackKungFuLevel = 2;
   int32 attackKungFuType = 3;
 }
 
-message ClientTradePlayerPacket {
-  int64 targetId = 1;
-  int32 slot = 2;
-}
-
-message ClientUpdateTradePacket {
-  int32 inventorySlot = 1;
-  int64 itemNumber = 2;
-  int32 type = 3;
-  int32 tradeWindowSlot = 4;
-}
-
-
-
-message ClientTriggerDynamicObjectPacket {
-  int64 id = 1;
-  int32 useSlot = 2;
-}
-
-message ClientSwapKungFuSlotPacket {
-  int32 page = 1;
-  int32 slot1 = 2;
-  int32 slot2 = 3;
-}
-
-
-
-message ClientBankOperationPacket {
-  int32 type = 1;
-  int32 fromSlot = 2;
-  int32 toSlot = 3;
-  int64 number = 4;
-  int64 bankerId = 5;
-}
 
 message ClientChangeTeamPacket {
   int32 teamNumber = 1;
@@ -271,17 +192,11 @@ message ClientManageGuildPacket {
   string target = 2;
 }
 
-message ClientSubmitQuestPacket {
-  int64 id = 1;
-  string questName = 2;
-}
 
 message SubmitQuestInputPacket {
   int64 id = 1;
   string questName = 2;
 }
-
-
 
 message ChatInputPacket {
   string text = 1;
@@ -291,27 +206,29 @@ message ClickEquipmentInputPacket {
   int32 equipType = 1;
 }
 
+message UnlockBankInputPacket {
+  int64 npcId = 1;
+}
+
+message BankOperationInputPacket {
+  int64 npcId = 1;
+  int32 type = 2;
+  int32 fromSlot = 3;
+  int32 toSlot = 4;
+  int32 number = 5;
+}
+
 message ClientPacket {
   oneof Type {
-    MoveEventPacket moveEventPacket = 1;
     PlayerLoginPacket loginPacket = 3;
-    SwapInventorySlotPacket swapInventorySlotPacket = 5;
-    DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;
-    PickItemPacket pickItem = 8;
     ClientUnequipPacket unequip = 9;
-    ClientToggleKungFuPacket toggleKungFu = 10;
-    ClientSitDownPacket sitDown = 11;
-    ClientStandUpPacket standUp = 12;
-    RightClickPacket rightClick = 15;
-    ClientTradePlayerPacket tradeRequest = 16;
-    ClientUpdateTradePacket updateTrade = 17;
-    ClientBankOperationPacket bankOperation = 24;
     ClientChangeTeamPacket changeTeam = 25;
     ClientFoundGuildPacket foundGuild = 26;
     ClientCreateGuildKungFuPacket createGuildKungFu = 27;
     ClientManageGuildPacket manageGuild = 28;
-    ClientSubmitQuestPacket submitQuest = 29;
 
+
+    SwapInventorySlotPacket swapInventorySlotPacket = 5;
     DebugPacket debug = 31;
     ClickInputPacket clickPacket = 2;
     MoveInputPacket moveInput = 32;
@@ -335,6 +252,8 @@ message ClientPacket {
     ChatInputPacket chat = 50;
     ClickEquipmentInputPacket clickEquipment = 51;
     SubmitQuestInputPacket submitQuestInput = 52;
+    UnlockBankInputPacket unlockBank = 53;
+    BankOperationInputPacket bankOperation = 54;
   }
 }
 
@@ -382,13 +301,21 @@ message OpenTradeWindowPacket {
 }
 
 message CloseTradeWindowPacket {
-
+  int32 which = 1;
 }
 
 message InventoryPacket {
   repeated InventoryItemPacket items = 1;
   bool forceful = 2;
 }
+
+message ShowBankWindowPacket {
+  int64 bankerId = 1;
+  repeated InventoryItemPacket items = 2;
+  int32 capacity = 3;
+  int32 unlocked = 4;
+}
+
 
 message UpdateTradeWindowPacket {
   int32 type = 1;
@@ -628,11 +555,6 @@ message ChatPacket {
   optional string fromPlayer = 3;
 }
 
-message OpenBankPacket {
-  repeated InventoryItemPacket items = 1;
-  int32 capacity = 2;
-  int32 unlocked = 3;
-}
 
 message UpdateBankPacket {
   int32 type = 1;
@@ -781,7 +703,6 @@ message Packet {
     BreakRopePacket breakRope = 44;
     NpcPositionPacket npcPosition = 45;
     ChatPacket chat = 46;
-    OpenBankPacket openBank = 47;
     UpdateBankPacket updateBank = 48;
     NameColorPacket nameColor = 49;
     UpdateGuildPacket updateGuild = 50;
@@ -817,6 +738,7 @@ message Packet {
     AttributeEquipPacket attributeEquip = 81;
     ActivateEffectPacket activateEffect = 82;
     ShowQuestPacket showQuest = 83;
+    ShowBankWindowPacket showBank = 84;
   }
 }
 

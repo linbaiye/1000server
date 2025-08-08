@@ -14,7 +14,7 @@ import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.breath.BreathKungFu;
-import org.y1000.message.SyncActiveKungEvent;
+import org.y1000.entities.players.event.SyncActiveKungMessage;
 import org.y1000.message.input.AbstractClickContainerSlotInput;
 
 
@@ -105,7 +105,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(0, player.attackCooldown());
         assertTrue(player.tryChangeAttackKungFu((AttackKungFu) kungFu));
         assertNotNull(eventListener.remove(PlayerSayEvent.class));
-        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungMessage.class));
         assertNotEquals(0, player.attackCooldown());
     }
 
@@ -152,7 +152,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         assertTrue(player.tryEquipFromSlot(slot, equip));
         assertTrue(eventListener.findFirst(PlayerEquipEvent.class).isPresent());
         assertTrue(eventListener.findFirst(UpdateInventoryMessage.class).isPresent());
-        assertTrue(eventListener.findFirst(SyncActiveKungEvent.class).isPresent());
+        assertTrue(eventListener.findFirst(SyncActiveKungMessage.class).isPresent());
         assertTrue(eventListener.findFirst(PlayerSayEvent.class).isPresent());
         assertEquals(player.attackKungFu(), player.kungFuBook().findUnnamedAttack(AttackKungFuType.SWORD));
     }
@@ -162,19 +162,19 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         BreathKungFu unnamedBreath = player.kungFuBook().getUnnamedBreath();
         player.toggleBreathAndSync(unnamedBreath);
         assertNotNull(eventListener.remove(PlayerSayEvent.class));
-        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungMessage.class));
         assertTrue(eventListener.isEmpty());
         assertTrue(player.breathKungFu().isPresent());
 
         BreathKungFu kf = (BreathKungFu) kungFuFactory.create("爆发呼吸");
         player.toggleBreathAndSync(kf);
         assertNotNull(eventListener.remove(PlayerSayEvent.class));
-        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungMessage.class));
         assertEquals(kf.name(), player.breathKungFu().get().name());
 
         player.toggleBreathAndSync(kf);
         assertNotNull(eventListener.remove(PlayerSayEvent.class));
-        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungMessage.class));
         assertTrue(player.breathKungFu().isEmpty());
     }
 
@@ -183,18 +183,18 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         var unnamedFoot = player.kungFuBook().getUnnamedFoot();
         player.toggleFootAndSync(unnamedFoot);
         assertNotNull(eventListener.remove(PlayerSayEvent.class));
-        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungMessage.class));
         assertTrue(player.footKungFu().isPresent());
 
         var kf = (FootKungFu) kungFuFactory.create("归归步法");
         player.toggleFootAndSync(kf);
         assertNotNull(eventListener.remove(PlayerSayEvent.class));
-        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungMessage.class));
         assertEquals(kf.name(), player.footKungFu().get().name());
 
         player.toggleFootAndSync(kf);
         assertNotNull(eventListener.remove(PlayerSayEvent.class));
-        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungMessage.class));
         assertTrue(player.footKungFu().isEmpty());
 
     }

@@ -63,7 +63,7 @@ public class NpcBuyAbility extends AbstractNpcTradeAbility {
     }
 
     @Override
-    public void interact(Player player, Npc npc, String abilityName) {
+    public void onAbilityClicked(Player player, Npc npc, String abilityName) {
         if (stateOrDistanceInvalid(player, npc))
             return;
         player.sendEvent(UpdateInventoryMessage.quiet(player));
@@ -75,6 +75,6 @@ public class NpcBuyAbility extends AbstractNpcTradeAbility {
         List<MerchantItem> list = sdb.getBuyItems().stream()
                 .map(n -> new MerchantItem(n, itemSdb.getPrice(n), itemSdb.getIcon(n), itemSdb.getColor(n), itemSdb.canStack(n)))
                 .toList();
-        return new NpcBuyAbility(id, sdb.getBuyTitle(), sprite, list, sdb.getBuyImage(), sdb.getBuyCaption(), itemFactory);
+        return new NpcBuyAbility(id, sdb.getTitle(), sprite, list, sdb.getImage(), sdb.getBuyCaption(), itemFactory);
     }
 }

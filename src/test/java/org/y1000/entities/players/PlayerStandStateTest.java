@@ -13,8 +13,8 @@ import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.breath.BreathKungFu;
-import org.y1000.message.PlayerChangeStateEvent;
-import org.y1000.message.SyncActiveKungEvent;
+import org.y1000.entities.players.event.PlayerChangeStateEvent;
+import org.y1000.entities.players.event.SyncActiveKungMessage;
 import org.y1000.message.input.MoveInput;
 import org.y1000.message.input.TurnInput;
 import org.y1000.util.Coordinate;
@@ -144,7 +144,7 @@ class PlayerStandStateTest extends AbstractPlayerUnitTestFixture {
         assertNotNull(eventListener.remove(PlayerChangeStateEvent.class));
         assertEquals(PlayerStateEnum.Sit, player.stateEnum());
         assertTrue(player.footKungFu().isEmpty());
-        assertNotNull(eventListener.remove(SyncActiveKungEvent.class));
+        assertNotNull(eventListener.remove(SyncActiveKungMessage.class));
         assertTrue(eventListener.isEmpty());
     }
 

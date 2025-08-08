@@ -11,6 +11,7 @@ import org.y1000.kungfu.KungFuSdb;
 import org.y1000.kungfu.KungFuType;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.repository.BankRepository;
 import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
@@ -40,6 +41,8 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private final QuestSdb questSdb;
 
+    private final BankRepository bankRepository;
+
     private static final NpcRespawnAbility RESPAWN_ABILITY = new NpcRespawnAbility(8000);
 
     public NpcFactoryImpl(ActionSdb actionSdb,
@@ -48,7 +51,9 @@ public final class NpcFactoryImpl implements NpcFactory {
                           NonMonsterNpcSdb nonMonsterNpcSdb,
                           MagicParamSdb magicParamSdb,
                           ItemSdb itemSdb,
-                          ItemFactory itemFactory, QuestSdb questSdb) {
+                          ItemFactory itemFactory,
+                          QuestSdb questSdb,
+                          BankRepository bankRepository) {
         this.actionSdb = actionSdb;
         this.monsterSdb = monsterSdb;
         this.kungFuSdb = kungFuSdb;
@@ -57,6 +62,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         this.itemSdb = itemSdb;
         this.itemFactory = itemFactory;
         this.questSdb = questSdb;
+        this.bankRepository = bankRepository;
     }
 
     private Direction randomDirection() {
@@ -181,6 +187,8 @@ public final class NpcFactoryImpl implements NpcFactory {
             abilities.add(NpcBuyAbility.build(id, npcSettingSdb, itemSdb, sprite, itemFactory));
         if (!npcSettingSdb.getQuests().isEmpty())
             NpcQuestAbility.of(idName, questSdb, itemFactory).ifPresent(abilities::add);
+        if (npcSettingSdb.isBank())
+            abilities.add(new NpcBankAbility(bankRepository));
         return abilities;
     }
 

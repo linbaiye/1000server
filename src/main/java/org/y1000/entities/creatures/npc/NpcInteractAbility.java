@@ -10,7 +10,7 @@ public interface NpcInteractAbility {
 
     boolean supportsAction(String name);
 
-    void interact(Player player, Npc npc, String abilityName);
+    void onAbilityClicked(Player player, Npc npc, String abilityName);
 
     default boolean stateOrDistanceInvalid(Player player, Npc npc) {
         return !npc.canBeSeenAt(player.coordinate()) ||

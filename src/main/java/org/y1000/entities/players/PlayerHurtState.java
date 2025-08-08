@@ -4,7 +4,7 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.item.Equipment;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.message.PlayerChangeStateEvent;
+import org.y1000.entities.players.event.PlayerChangeStateEvent;
 
 @Slf4j
 final class PlayerHurtState extends AbstractPlayerState implements PlayerState {

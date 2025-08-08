@@ -1,6 +1,6 @@
 package org.y1000.entities.players;
 
-import org.y1000.message.PlayerChangeStateEvent;
+import org.y1000.entities.players.event.PlayerChangeStateEvent;
 
 final class PlayerDieState extends AbstractPlayerState {
 

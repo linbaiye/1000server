@@ -2,7 +2,7 @@ package org.y1000;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.nio.NioIoHandler;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldPrepender;
@@ -17,6 +17,7 @@ import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
+import org.y1000.item.BankInventory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
@@ -145,8 +146,8 @@ public final class Server implements ServerContext {
 
 
     public Server() {
-        workerGroup = new NioEventLoopGroup();
-        bossGroup = new NioEventLoopGroup();
+        workerGroup = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
+        bossGroup = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
         gameServer = new ServerBootstrap();
         accountServer = new ServerBootstrap();
         managementServer = new ServerBootstrap();
@@ -155,7 +156,7 @@ public final class Server implements ServerContext {
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl, entityManagerFactory);
         itemRepository = repository;
         npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE,
-                NonMonsterNpcSdbImpl.Instance, MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE, itemRepository, QuestSdbImpl.Instance);
+                NonMonsterNpcSdbImpl.Instance, MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE, itemRepository, QuestSdbImpl.Instance, Dev ? new BankDevRepository() : itemRepository);
         dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
         PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);

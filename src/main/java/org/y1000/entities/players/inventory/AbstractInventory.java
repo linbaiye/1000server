@@ -18,9 +18,8 @@ public abstract class AbstractInventory {
         this.capacity = cap;
         items = new HashMap<>(cap);
     }
-    public boolean isFull() {
-        return items.size() >= capacity();
-    }
+
+    public abstract boolean isFull();
 
     protected Map<Integer, Item> items() {
         return items;
@@ -135,22 +134,40 @@ public abstract class AbstractInventory {
         return true;
     }
 
-    public boolean increase(int slot, long number) {
+    public void increase(int slot, long number) {
         if (number <= 0)
-            return false;
+            return;
         Item item = items.get(slot);
         if (item == null) {
-            return false;
+            return;
         }
         if (item instanceof StackItem stackItem) {
             StackItem increased = stackItem.increase(number);
             items.put(slot, increased);
-            return true;
         }
-        return false;
     }
 
-    public void add(int slot, Item item) {
+    public boolean canTake(Item item) {
+        if (item == null)
+            return false;
+        long number = (item instanceof StackItem stackItem) ? stackItem.number() : 1;
+        return canTake(item.name(), number);
+    }
+
+
+    public boolean canTake(String name, long number) {
+        var items = items();
+        for (Item value : items.values()) {
+            if (value instanceof StackItem stackItem
+                    && stackItem.name().equals(name)) {
+                return stackItem.hasMoreSpace(number);
+            }
+        }
+        return !isFull();
+    }
+
+
+    void doAdd(int slot, Item item) {
         Validate.notNull(item, "item must not be null.");
         var items = items();
         Item current = items.get(slot);
@@ -164,6 +181,8 @@ public abstract class AbstractInventory {
         }
         throw new UnsupportedOperationException("Slot " + slot + " has item already.");
     }
+
+
 
     protected void decreaseStack(int slot, long number) {
         var item = getItem(slot);

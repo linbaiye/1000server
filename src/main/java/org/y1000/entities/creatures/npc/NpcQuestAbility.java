@@ -70,7 +70,7 @@ public class NpcQuestAbility implements NpcInteractAbility {
             }
         }
         for (Map.Entry<String, Integer> nameNumber: quest.requiredItems.entrySet()) {
-            player.inventory().consume(nameNumber.getKey(), nameNumber.getValue());
+            player.inventory().decrease(nameNumber.getKey(), nameNumber.getValue());
         }
         for (Item rewardItem : quest.getRewardItems()) {
             player.inventory().add(rewardItem);
@@ -92,7 +92,7 @@ public class NpcQuestAbility implements NpcInteractAbility {
     }
 
     @Override
-    public void interact(Player player, Npc npc, String abilityName) {
+    public void onAbilityClicked(Player player, Npc npc, String abilityName) {
         if (stateOrDistanceInvalid(player, npc))
             return;
         for (Quest quest : quests) {

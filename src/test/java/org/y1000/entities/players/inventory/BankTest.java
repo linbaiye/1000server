@@ -39,4 +39,13 @@ class BankTest extends AbstractUnitTestFixture {
         assertFalse(bank.canUnlock());
         assertEquals(40, bank.getUnlocked());
     }
+
+    @Test
+    void isSlotUnlocked() {
+        Bank bank = Bank.open();
+        assertFalse(bank.isSlotUnlocked(0));
+        assertFalse(bank.isSlotUnlocked(1));
+        bank.unlock();
+        assertTrue(bank.isSlotUnlocked(10));
+    }
 }

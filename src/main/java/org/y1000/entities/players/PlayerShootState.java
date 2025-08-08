@@ -3,9 +3,8 @@ package org.y1000.entities.players;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.players.event.PlayerLetFlyProjectileEvent;
 import org.y1000.entities.projectile.PlayerProjectile;
-import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.attack.AbstractRangedKungFu;
-import org.y1000.message.PlayerChangeStateEvent;
+import org.y1000.entities.players.event.PlayerChangeStateEvent;
 
 final class PlayerShootState extends AbstractPlayerAttackState {
 

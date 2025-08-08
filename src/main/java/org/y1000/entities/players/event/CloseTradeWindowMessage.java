@@ -10,7 +10,15 @@ public class CloseTradeWindowMessage extends Abstract2PlayerMessageEvent {
         super(player, packet);
     }
 
-    public static CloseTradeWindowMessage of(Player player) {
-        return new CloseTradeWindowMessage(player, Packet.newBuilder().setCloseTradePacket(CloseTradeWindowPacket.newBuilder().build()).build());
+    public static CloseTradeWindowMessage playerTrade(Player player) {
+        return new CloseTradeWindowMessage(player, Packet.newBuilder().setCloseTradePacket(CloseTradeWindowPacket.newBuilder()
+                .setWhich(1)
+                .build()).build());
+    }
+
+    public static CloseTradeWindowMessage bank(Player player) {
+        return new CloseTradeWindowMessage(player, Packet.newBuilder().setCloseTradePacket(CloseTradeWindowPacket.newBuilder()
+                .setWhich(2)
+                .build()).build());
     }
 }

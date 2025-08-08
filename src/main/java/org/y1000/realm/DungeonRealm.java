@@ -65,10 +65,10 @@ final class DungeonRealm extends AbstractRealm {
         this.timeSupplier = timeSupplier;
         LocalDateTime now = timeSupplier.get();
         if (durationSeconds == 1800) {
-            var nextRound = now.plusMinutes(30);
-            closeTime = nextRound.getMinute() > 30 ? nextRound.withMinute(59).withSecond(58) : nextRound.withMinute(29).withSecond(58);
+            closeTime = now.plusMinutes(30).withSecond(58);
+            //closeTime = nextRound.getMinute() > 30 ? nextRound.withMinute(59).withSecond(58) : nextRound.withMinute(29).withSecond(58);
         } else {
-            closeTime = now.plusHours(1).withMinute(59).withSecond(58);
+            closeTime = now.plusHours(1).withSecond(58);
         }
         closing = false;
     }

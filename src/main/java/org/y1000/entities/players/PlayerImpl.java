@@ -502,7 +502,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
 
     void syncActiveKungFuList() {
-        sendEvent(SyncActiveKungEvent.of(this));
+        sendEvent(SyncActiveKungMessage.of(this));
     }
 
     void toggleFootAndSync(FootKungFu newKungFu) {

@@ -23,41 +23,6 @@ public final class Inventory extends AbstractInventory {
         super(MAX_CAP);
     }
 
-    private Optional<StackItem> findStackItem(String name) {
-        return items().values().stream()
-                .filter(item -> item instanceof StackItem stackItem && stackItem.name().equals(name))
-                .findFirst()
-                .map(StackItem.class::cast);
-    }
-
-    private int requiredSpace(List<StackItem> items) {
-        int count = items.size();
-        for (StackItem item : items) {
-            int firstSlot = findFirstSlot(item.name());
-            if (firstSlot == 0) {
-                continue;
-            }
-            if (getItem(firstSlot) instanceof StackItem stackItem &&
-                    stackItem.hasMoreSpace(item.number())) {
-                count--;
-            }
-        }
-        return count;
-    }
-
-    public boolean canTakeAll(List<Item> items) {
-        if (items == null || items.isEmpty()) {
-            return true;
-        }
-        List<StackItem> stackItems = items.stream()
-                .filter(i -> i instanceof StackItem)
-                .map(StackItem.class::cast)
-                .toList();
-        int space = requiredSpace(stackItems);
-        var nonStackSize = items.size() - stackItems.size();
-        return nonStackSize + space <= availableSlots();
-    }
-
     private <T extends Item> Optional<T> findFirst(Predicate<T> predicate, Class<T> type) {
         return items().values().stream()
                 .filter(i -> type.isAssignableFrom(i.getClass()))
@@ -80,11 +45,6 @@ public final class Inventory extends AbstractInventory {
                 Optional.of(type.cast(item)) : Optional.empty();
     }
 
-    public Optional<StackItem> findFirstStackItem(String name) {
-        return findFirst(i -> i.name().equals(name), StackItem.class);
-    }
-
-
     public Optional<Weapon> findWeapon(AttackKungFuType type) {
         Objects.requireNonNull(type, "type can't be null.");
         return findFirst(weapon -> weapon.kungFuType() == type, Weapon.class);
@@ -105,40 +65,8 @@ public final class Inventory extends AbstractInventory {
         return items().values().stream().anyMatch(item -> item.name().equals(name));
     }
 
-    private void assertRange(int slot) {
-        Validate.isTrue(slot >= 1 && slot <= capacity(), "Slot out of range.");
-    }
-
-
-    public boolean canTake(Item item) {
-        var items = items();
-        for (Item value : items.values()) {
-            if (value instanceof StackItem stackItem
-                    && stackItem.name().equals(item.name())) {
-                return stackItem.hasMoreSpace(stackItem.number());
-            }
-        }
-        return !isFull();
-    }
-
-    public boolean canBuy(Collection<TradeItem> buyingItems, long cost) {
-        Validate.notNull(buyingItems);
-        for (TradeItem buyingItem : buyingItems) {
-            assertRange(buyingItem.slotId());
-            Item item = getItem(buyingItem.slotId());
-            if (item == null) {
-                continue;
-            }
-            if (item instanceof StackItem stackItem &&
-                    stackItem.name().equals(buyingItem.name()) &&
-                    stackItem.hasMoreSpace(buyingItem.number())) {
-                continue;
-            }
-            return false;
-        }
-        return findStackItem(ItemType.MONEY_NAME)
-                .map(money -> money.number() >= cost)
-                .orElse(false);
+    public void add(int slot, Item item) {
+        doAdd(slot, item);
     }
 
     public boolean hasEnough(String name, int number) {
@@ -149,13 +77,17 @@ public final class Inventory extends AbstractInventory {
         return slot != 0 && hasEnough(slot, number);
     }
 
+    public boolean hasEnoughMoney(int number) {
+        return hasEnough("钱币", number);
+    }
+
     /**
      * Consume item by name and number.
      * @param name item name.
      * @param number item number.
      * @return the slot if consumed, 0 if not.
      */
-    public int consume(String name, int number) {
+    public int decrease(String name, int number) {
         if (!hasEnough(name, number)) {
             return 0;
         }
@@ -163,21 +95,10 @@ public final class Inventory extends AbstractInventory {
         return remove(firstSlot, number) != null ? firstSlot : 0;
     }
 
-
-    public boolean canSell(Collection<TradeItem> items) {
-        Validate.notNull(items);
-        for (TradeItem sellingItem : items) {
-            assertRange(sellingItem.slotId());
-            Item item = getItem(sellingItem.slotId());
-            if (item == null || !item.name().equals(sellingItem.name())) {
-                return false;
-            }
-            if (item instanceof StackItem stackItem && stackItem.number() < sellingItem.number()) {
-                return false;
-            }
-        }
-        return contains(ItemType.MONEY_NAME) || availableSlots() > 0;
+    public int decreaseMoney(int number) {
+        return decrease("钱币", number);
     }
+
 
     private int findFirstSlot(Predicate<? super Item> predicate) {
         var items = items();
@@ -193,50 +114,6 @@ public final class Inventory extends AbstractInventory {
         return name != null ? findFirstSlot(i -> i.name().equals(name)) : 0;
     }
 
-    public void buy(Collection<TradeItem> buyingItems, long cost, Player player, BiFunction<String, Long, Item> itemCreator) {
-        Validate.notNull(player);
-        Validate.notNull(itemCreator);
-        Validate.isTrue(cost > 0);
-        if (!canBuy(buyingItems, cost)) {
-            throw new IllegalArgumentException();
-        }
-        var items = items();
-        for (TradeItem buyingItem : buyingItems) {
-            Item item = getItem(buyingItem.slotId());
-            if (item == null) {
-                items.put(buyingItem.slotId(), itemCreator.apply(buyingItem.name(), (long)buyingItem.number()));
-            } else if (item instanceof StackItem stackItem) {
-                items.put(buyingItem.slotId(), stackItem.increase(buyingItem.number()));
-            }
-            player.emitEvent(new UpdateInventorySlotEvent(player, buyingItem.slotId(), getItem(buyingItem.slotId())));
-        }
-        int moneySlot = findFirstSlot(ItemType.MONEY_NAME);
-        if (moneySlot != 0) {
-            decreaseStack(moneySlot, cost);
-            player.emitEvent(new UpdateInventorySlotEvent(player, moneySlot, getItem(moneySlot)));
-        }
-    }
-
-    public void sell(Collection<TradeItem> items, StackItem profit, Player player) {
-        Validate.notNull(player);
-        Validate.notNull(profit);
-        Validate.isTrue(profit.number() > 0);
-        if (!canSell(items)) {
-            throw new IllegalArgumentException();
-        }
-        for (TradeItem sellingItem : items) {
-            Item item = getItem(sellingItem.slotId());
-            if (item instanceof StackItem) {
-                decreaseStack(sellingItem.slotId(), sellingItem.number());
-            } else {
-                remove(sellingItem.slotId());
-            }
-            player.emitEvent(new UpdateInventorySlotEvent(player, sellingItem.slotId(), getItem(sellingItem.slotId())));
-        }
-        add(profit);
-        int n = findFirstSlot(ItemType.MONEY_NAME);
-        player.emitEvent(new UpdateInventorySlotEvent(player, n, getItem(n)));
-    }
 
 
     public boolean contains(ItemType type) {
@@ -271,6 +148,10 @@ public final class Inventory extends AbstractInventory {
     }
 
 
+    @Override
+    public boolean isFull() {
+        return items().size() >= capacity();
+    }
 
     @Override
     public boolean canPut(int slot, Item item) {

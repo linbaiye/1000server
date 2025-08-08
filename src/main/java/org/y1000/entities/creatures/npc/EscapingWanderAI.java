@@ -13,7 +13,7 @@ public class EscapingWanderAI extends AbstractWanderingAI {
 
     private final EscapeAbility escapeAbility;
 
-    public EscapingWanderAI(Npc npc, NpcUpdatableAbility from, EscapeAbility escapeAbility) {
+    public EscapingWanderAI(Npc npc, NpcAnimatedAbility from, EscapeAbility escapeAbility) {
         super(npc);
         this.escapeAbility = escapeAbility;
         changeAbility(from);
@@ -28,7 +28,7 @@ public class EscapingWanderAI extends AbstractWanderingAI {
     }
 
     @Override
-    void onNonDieAbilityDone(NpcUpdatableAbility ability) {
+    void onNonDieAbilityDone(NpcAnimatedAbility ability) {
         findNearestViewRangePlayer().ifPresentOrElse(
                 p -> npc().startAI(new EscapeAI(npc(), p, currentAbility(), escapeAbility)),
                 () -> continueWander(ability));

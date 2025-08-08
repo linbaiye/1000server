@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.y1000.message.PlayerChangeStateEvent;
+import org.y1000.entities.players.event.PlayerChangeStateEvent;
 
 import static org.junit.jupiter.api.Assertions.*;
 

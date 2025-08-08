@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 
-public abstract class AbstractNpcAbility implements NpcUpdatableAbility {
+public abstract class AbstractNpcAbility implements NpcAnimatedAbility {
     private final NpcAnimation animation;
 
     public AbstractNpcAbility(NpcAnimation animation) {

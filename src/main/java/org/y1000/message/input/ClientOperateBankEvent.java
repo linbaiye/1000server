@@ -1,7 +1,6 @@
 package org.y1000.message.input;
 
 import org.y1000.message.ValueEnum;
-import org.y1000.network.gen.ClientBankOperationPacket;
 
 
 public record ClientOperateBankEvent(Operation operation, long bankerId, int fromSlot, int toSlot, long number)
@@ -55,14 +54,5 @@ public record ClientOperateBankEvent(Operation operation, long bankerId, int fro
         return operation == Operation.BANK_TO_INVENTORY;
     }
 
-    public static ClientOperateBankEvent fromPacket(ClientBankOperationPacket packet) {
-        Operation op = Operation.fromValue(packet.getType());
-        return switch (op) {
-            case OPEN -> open(packet.getBankerId());
-            case UNLOCK_SLOTS -> unlock(packet.getFromSlot());
-            case INVENTORY_TO_BANK, BANK_TO_INVENTORY ->
-                    new ClientOperateBankEvent(op, 0, packet.getFromSlot(), packet.getToSlot(), packet.getNumber());
-            case CLOSE -> new ClientOperateBankEvent(op, 0, 0, 0, 0);
-        };
-    }
+
 }

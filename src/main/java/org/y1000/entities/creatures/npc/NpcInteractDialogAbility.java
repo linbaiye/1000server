@@ -53,6 +53,6 @@ public class NpcInteractDialogAbility {
     }
 
     public static NpcInteractDialogAbility build(NpcSettingSdb sdb, String sprite, long id) {
-        return new NpcInteractDialogAbility(id, sdb.getAnyTitle(), sprite, sdb.getAnyImage());
+        return new NpcInteractDialogAbility(id, sdb.getTitle(), sprite, sdb.getImage());
     }
 }
