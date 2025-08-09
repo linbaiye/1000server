@@ -13,7 +13,7 @@ public class EffectAbility {
     }
 
     public void tryApply(Npc npc) {
-        if (++counter < 5)
+        if (++counter < 2)
             return;
         counter = 0;
         npc.sendEvent(NpcActivateEffectEvent.of(npc, effectName, 1000));

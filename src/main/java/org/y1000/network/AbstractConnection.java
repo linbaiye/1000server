@@ -70,6 +70,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case SUBMITQUESTINPUT -> new SubmitQuestInput(clientPacket.getSubmitQuestInput().getId(), clientPacket.getSubmitQuestInput().getQuestName());
             case UNLOCKBANK -> new UnlockBankInput(clientPacket.getUnlockBank().getNpcId());
             case BANKOPERATION -> BankOperationInput.fromPacket(clientPacket.getBankOperation());
+            case REALMINPUT -> RealmInput.of(clientPacket.getRealmInput().getType());
             default -> null;
         };
     }

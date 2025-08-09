@@ -5,7 +5,7 @@ public interface ValueEnum {
 
     int value();
 
-    static <E extends Enum<E> & ValueEnum> E fromValueOrThrow(ValueEnum[] values, int v) {
+    static <E extends Enum<E> & ValueEnum> E getTypeOrThrow(E [] values, int v) {
         for (var value : values) {
             if (value.value() == v)
                 return (E) value;

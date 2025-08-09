@@ -24,6 +24,6 @@ public enum EquipmentType implements ValueEnum {
     }
 
     public static EquipmentType fromValue(int v) {
-        return ValueEnum.fromValueOrThrow(values(), v);
+        return ValueEnum.getTypeOrThrow(values(), v);
     }
 }

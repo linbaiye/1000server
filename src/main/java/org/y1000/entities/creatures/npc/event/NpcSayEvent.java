@@ -13,7 +13,7 @@ public class NpcSayEvent extends AbstractNpcToVisibleEvent {
         return new NpcSayEvent(npc, Packet.newBuilder().setSay(CreatureSayPacket.newBuilder()
                 .setId(npc.id())
                         .setCache(true)
-                .setViewName(npc.getViewName())
+                .setViewName(npc.viewName())
                 .setText(text).build()).build());
     }
 }

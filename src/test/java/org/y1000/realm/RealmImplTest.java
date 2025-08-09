@@ -1,18 +1,7 @@
 package org.y1000.realm;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.y1000.entities.creatures.npc.InteractableNpc;
 import org.y1000.entities.players.Player;
-import org.y1000.message.serverevent.NpcPositionEvent;
 import org.y1000.network.Connection;
-import org.y1000.util.Coordinate;
-
-import java.util.Collections;
-import java.util.Set;
-
-import static org.mockito.Mockito.*;
 
 class RealmImplTest extends AbstractRealmUnitTextFixture {
 

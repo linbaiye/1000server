@@ -12,7 +12,7 @@ public class NpcSoundEvent extends AbstractNpcToVisibleEvent {
     public static NpcSoundEvent of(Npc npc, String sound) {
         return new NpcSoundEvent(npc, Packet.newBuilder().setEntitySound(EntitySoundPacket.newBuilder()
                         .setSound(sound)
-                        .setEntityName(npc.getViewName())
+                        .setEntityName(npc.viewName())
                 ).build());
     }
 }

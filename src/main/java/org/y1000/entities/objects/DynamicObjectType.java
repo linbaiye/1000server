@@ -30,6 +30,6 @@ public enum DynamicObjectType implements ValueEnum  {
     }
 
     public static DynamicObjectType fromValue(int v) {
-        return ValueEnum.fromValueOrThrow(values(), v);
+        return ValueEnum.getTypeOrThrow(values(), v);
     }
 }

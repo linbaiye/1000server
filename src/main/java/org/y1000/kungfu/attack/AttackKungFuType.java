@@ -57,6 +57,6 @@ public enum AttackKungFuType implements ValueEnum {
     }
 
     public static AttackKungFuType fromValue(int v) {
-        return ValueEnum.fromValueOrThrow(values(), v);
+        return ValueEnum.getTypeOrThrow(values(), v);
     }
 }

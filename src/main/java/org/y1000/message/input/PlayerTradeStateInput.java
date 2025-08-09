@@ -23,7 +23,7 @@ public record PlayerTradeStateInput(int v) implements SelfHandleInput {
         }
 
         public static State fromValue(int v) {
-            return ValueEnum.fromValueOrThrow(values(), v);
+            return ValueEnum.getTypeOrThrow(values(), v);
         }
     }
     @Override

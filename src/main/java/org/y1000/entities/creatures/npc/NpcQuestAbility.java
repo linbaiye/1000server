@@ -64,7 +64,7 @@ public class NpcQuestAbility implements NpcInteractAbility {
             }
         }
         for (Item rewardItem : quest.getRewardItems()) {
-            if (!player.inventory().canTake(rewardItem)) {
+            if (!player.inventory().canAdd(rewardItem)) {
                 player.sendEvent(PlayerTextMessage.bottom(player, "物品栏已满。"));
                 return;
             }
@@ -97,7 +97,7 @@ public class NpcQuestAbility implements NpcInteractAbility {
             return;
         for (Quest quest : quests) {
             if (quest.name.equals(abilityName)) {
-                player.sendEvent(NpcQuestMessage.toPlayer(player, npc.id(), npc.getViewName(), quest.name, quest.getAbstraction(), quest.getDescription(), quest.submit));
+                player.sendEvent(NpcQuestMessage.toPlayer(player, npc.id(), npc.viewName(), quest.name, quest.getAbstraction(), quest.getDescription(), quest.submit));
                 return;
             }
         }

@@ -26,7 +26,7 @@ public record NpcSnapshot(Packet packet) implements I2ClientMessage {
                 .setX(coordinate.x())
                 .setElapsedMillis(elapsed)
                 .setId(npc.id())
-                .setViewName(npc.getViewName())
+                .setViewName(npc.viewName())
                 .setDirection(npc.direction().value())
                 .build();
         NpcSnapshotPacket.Builder builder = NpcSnapshotPacket.newBuilder()

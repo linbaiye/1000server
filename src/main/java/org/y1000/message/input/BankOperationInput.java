@@ -12,6 +12,8 @@ public record BankOperationInput(long id, int type, int fromSlot, int toSlot, in
     private static final int Swap = 2;
     private static final int BankToInventory = 3;
     private static final int InventoryToBankAvailable = 4;
+    private static final int BankToInventoryAvailable = 5;
+    private static final int RightClick = 6;
     @Override
     public long interactId() {
         return id;
@@ -23,11 +25,17 @@ public record BankOperationInput(long id, int type, int fromSlot, int toSlot, in
             return;
         npc.findAbility(NpcBankAbility.class).ifPresent(npcBankAbility -> {
             if (type == Swap)
-                npcBankAbility.swap(npc, player, fromSlot, toSlot);
+                npcBankAbility.move(npc, player, fromSlot, toSlot);
             else if (type == InventoryToBank)
                 npcBankAbility.inventoryToBank(npc, player, fromSlot, toSlot, number);
             else if (type == InventoryToBankAvailable)
                 npcBankAbility.inventoryToBank(npc, player, fromSlot, number);
+            else if (type == BankToInventory)
+                npcBankAbility.bankToInventory(npc, player, fromSlot, toSlot, number);
+            else if (type == BankToInventoryAvailable)
+                npcBankAbility.bankToInventory(npc, player, fromSlot,number);
+            else if (type == RightClick)
+                npcBankAbility.onRightClickSlot(npc, player, fromSlot);
         });
     }
 

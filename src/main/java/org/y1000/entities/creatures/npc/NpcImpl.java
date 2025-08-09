@@ -28,7 +28,6 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
 
     private NpcAI ai;
 
-    @Getter
     private final String viewName;
 
     @Getter
@@ -150,6 +149,11 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     @Override
     public void free() {
         realmMap.free(this);
+    }
+
+    @Override
+    public String viewName() {
+        return viewName;
     }
 
     @Override

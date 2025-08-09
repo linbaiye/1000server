@@ -71,6 +71,6 @@ public enum ItemType implements ValueEnum  {
         if (ITEM_TYPE_MAPPING.containsKey(v)) {
             v = ITEM_TYPE_MAPPING.get(v);
         }
-        return ValueEnum.fromValueOrThrow(values(), v);
+        return ValueEnum.getTypeOrThrow(values(), v);
     }
 }

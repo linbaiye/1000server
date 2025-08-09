@@ -65,9 +65,6 @@ public final class Inventory extends AbstractInventory {
         return items().values().stream().anyMatch(item -> item.name().equals(name));
     }
 
-    public void add(int slot, Item item) {
-        doAdd(slot, item);
-    }
 
     public boolean hasEnough(String name, int number) {
         if (StringUtils.isEmpty(name) || number <= 0) {
@@ -154,8 +151,12 @@ public final class Inventory extends AbstractInventory {
     }
 
     @Override
-    public boolean canPut(int slot, Item item) {
-        return slot > 0 && slot <= capacity()
-                && canPut(item, slot);
+    public boolean isSlotOpen(int slot) {
+        return slot >=1 && slot <= capacity();
+    }
+
+    @Override
+    public boolean canAdd(int slot, Item item) {
+        return isSlotOpen(slot) && canPut(item, slot);
     }
 }

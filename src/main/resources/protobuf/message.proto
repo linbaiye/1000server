@@ -15,13 +15,6 @@ message NpcMovePacket {
   int32 speedMillis = 5;
 }
 
-message MonsterMoveEventPacket {
-  int64 id = 1;
-  int32 direction = 2;
-  int32 speed = 3;
-  int32 x = 4;
-  int32 y = 5;
-}
 
 message FollowRopePacket {
   int64 id = 1;
@@ -40,17 +33,6 @@ message ShowQuestPacket {
   string quest = 6;
 }
 
-
-message InputResponsePacket {
-  int64 sequence = 1;
-  PositionPacket positionPacket = 2;
-}
-
-message InputPacket {
-  int32 type = 1;
-  int64 sequence = 2;
-  int32 clickedDirection = 3;
-}
 
 message ClickInputPacket {
   int64 id = 1;
@@ -218,6 +200,10 @@ message BankOperationInputPacket {
   int32 number = 5;
 }
 
+message RealmInputPacket {
+  int32 type = 1;
+}
+
 message ClientPacket {
   oneof Type {
     PlayerLoginPacket loginPacket = 3;
@@ -254,6 +240,7 @@ message ClientPacket {
     SubmitQuestInputPacket submitQuestInput = 52;
     UnlockBankInputPacket unlockBank = 53;
     BankOperationInputPacket bankOperation = 54;
+    RealmInputPacket realmInput = 56;
   }
 }
 
@@ -270,9 +257,6 @@ message InterpolationPacket {
   int32 y = 9;
 }
 
-message InterpolationsPacket {
-  repeated InterpolationPacket interpolations = 1;
-}
 
 message InventoryItemPacket {
   string name = 1;
@@ -664,8 +648,6 @@ message Packet {
     PositionPacket positionPacket = 1;
     CreatureInterpolationPacket creatureInterpolation = 2;
     LoginPacket loginPacket = 4;
-    InterpolationsPacket interpolations = 5;
-    InputResponsePacket responsePacket = 6;
     PlayerInterpolationPacket playerInterpolation = 7;
     RemoveEntityPacket removeEntity = 8;
     CreatureAttackEventPacket attackEventPacket = 10;

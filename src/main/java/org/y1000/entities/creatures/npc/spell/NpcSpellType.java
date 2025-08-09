@@ -29,7 +29,7 @@ public enum NpcSpellType implements ValueEnum {
     }
 
     public static NpcSpellType fromValue(int v) {
-        return ValueEnum.fromValueOrThrow(values(), v);
+        return ValueEnum.getTypeOrThrow(values(), v);
     }
 
     public static boolean contains(int v) {

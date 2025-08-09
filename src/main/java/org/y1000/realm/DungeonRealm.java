@@ -57,16 +57,15 @@ final class DungeonRealm extends AbstractRealm {
         }
         openAnnouncement = mapSdb.getAnnouncement(id);
         dungeonPlayerManager.setDeadPlayerTeleportor(this::teleportPlayerOut);
-        int max = durationSeconds == 1800 ? 30 : 60;
-        minuteAnnouncement = new boolean[max + 1];
-        for (int i = 0; i <= max; i++) {
+        int minutes = durationSeconds == 1800 ? 30 : 60;
+        minuteAnnouncement = new boolean[minutes + 1];
+        for (int i = 0; i <= minutes; i++) {
             minuteAnnouncement[i] = false;
         }
         this.timeSupplier = timeSupplier;
         LocalDateTime now = timeSupplier.get();
         if (durationSeconds == 1800) {
             closeTime = now.plusMinutes(30).withSecond(58);
-            //closeTime = nextRound.getMinute() > 30 ? nextRound.withMinute(59).withSecond(58) : nextRound.withMinute(29).withSecond(58);
         } else {
             closeTime = now.plusHours(1).withSecond(58);
         }

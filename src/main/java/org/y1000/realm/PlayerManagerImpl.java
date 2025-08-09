@@ -29,6 +29,7 @@ final class PlayerManagerImpl extends AbstractPlayerManager {
         sendToVisiblePlayersAndSelf(player, deadMessage);
     }
 
+
     @Override
     public void update(long delta) {
         updatePlayersAndProjectiles(delta);

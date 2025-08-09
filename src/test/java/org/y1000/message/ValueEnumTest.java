@@ -23,10 +23,10 @@ class ValueEnumTest {
 
     @org.junit.jupiter.api.Test
     void getEnumByInt() {
-        assertEquals(TestEnum.EA, ValueEnum.fromValueOrThrow(TestEnum.values(), 1));
-        assertEquals(TestEnum.EC, ValueEnum.fromValueOrThrow(TestEnum.values(), 3));
-        assertThrows(IllegalArgumentException.class, () -> ValueEnum.fromValueOrThrow(TestEnum.values(),0));
-        assertThrows(IllegalArgumentException.class, () -> ValueEnum.fromValueOrThrow(TestEnum.values(),2));
+        assertEquals(TestEnum.EA, ValueEnum.getTypeOrThrow(TestEnum.values(), 1));
+        assertEquals(TestEnum.EC, ValueEnum.getTypeOrThrow(TestEnum.values(), 3));
+        assertThrows(IllegalArgumentException.class, () -> ValueEnum.getTypeOrThrow(TestEnum.values(),0));
+        assertThrows(IllegalArgumentException.class, () -> ValueEnum.getTypeOrThrow(TestEnum.values(),2));
     }
 
 }

@@ -2,10 +2,14 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+import org.y1000.entities.creatures.npc.NpcInteractAbility;
+import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
+import org.y1000.entities.teleport.StaticTeleport;
 import org.y1000.entities.teleport.TeleportHandler;
 import org.y1000.message.input.*;
+import org.y1000.message.serverevent.InteractableCoordinateNameMessage;
 import org.y1000.network.Connection;
 import org.y1000.realm.event.*;
 import org.y1000.repository.PlayerRepository;
@@ -14,6 +18,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandler  {
     public static final int STEP_MILLIS = 10;
@@ -99,8 +104,8 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
     protected void doInit() {
         try {
             accumulatedMillis = System.currentTimeMillis();
-            if (npcManager != null)
-                npcManager.init();
+            //if (npcManager != null)
+            //    npcManager.init();
             if (dynamicObjectManager != null)
                 dynamicObjectManager.init();
             teleportManager.init(this);
@@ -161,11 +166,23 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
         }
     }
 
+    private void handleRealmInput(Connection connection, RealmInput input) {
+        if (playerManager.find(connection).isEmpty())
+            return;
+        if (input.type() == RealmInput.Type.GetNpcCoordinates) {
+            var npcSet = npcManager.find(npc -> npc.findAbility(NpcInteractAbility.class).isPresent());
+            var staticTeleports = teleportManager.findStaticTeleports();
+            connection.writeAndFlush(new InteractableCoordinateNameMessage(npcSet, staticTeleports));
+        }
+    }
+
     private void handleInput(ConnectionInput connectionInput) {
         if (connectionInput.input() instanceof SelfHandleInput selfHandleInput) {
             playerManager().handleInput(connectionInput.connection(), selfHandleInput);
         } else if (connectionInput.input() instanceof EntityInteractInput interactionInput) {
             playerManager().find(connectionInput.connection()).ifPresent(p -> handleEntityInteraction(p, interactionInput));
+        } else if (connectionInput.input() instanceof RealmInput realmInput) {
+            handleRealmInput(connectionInput.connection(), realmInput);
         }
     }
 

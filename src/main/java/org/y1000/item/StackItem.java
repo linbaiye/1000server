@@ -51,7 +51,7 @@ public record StackItem(Item item, long number) implements Item {
     }
 
     public boolean hasMoreSpace(long more) {
-        return number + more <= MAX_NUMBER;
+        return more >= 0 && number + more <= MAX_NUMBER;
     }
 
     public long number() {

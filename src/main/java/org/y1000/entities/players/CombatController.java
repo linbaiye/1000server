@@ -49,8 +49,7 @@ final class CombatController {
         player.sendEvent(message);
         if (kungFu instanceof AbstractRangedKungFu rangedKungFu) {
             Ammo ammo = rangedKungFu.consumeResources(player);
-            player.changeState(PlayerShootState.aimTarget(player, rangedKungFu, enemy, ammo.getFlySprite()));
-            player.sendEvent(PlayerSoundEvent.toAll(player, kungFu.swingSound()));
+            player.changeState(PlayerShootState.aimTarget(player, rangedKungFu, enemy, ammo.getFlySprite(), kungFu.swingSound()));
         } else {
             kungFu.consumeAttributes(player);
             player.changeState(new PlayerMeleeState(player, action));

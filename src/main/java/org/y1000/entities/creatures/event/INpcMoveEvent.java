@@ -3,7 +3,6 @@ package org.y1000.entities.creatures.event;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.INpc;
 import org.y1000.event.EntityEventVisitor;
-import org.y1000.network.gen.MonsterMoveEventPacket;
 import org.y1000.network.gen.Packet;
 
 public final class INpcMoveEvent extends AbstractCreatureEvent {

@@ -8,7 +8,6 @@ import org.y1000.util.Coordinate;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
 
 public interface Npc extends ActiveEntity {
@@ -31,7 +30,7 @@ public interface Npc extends ActiveEntity {
 
     RealmMap getRealmMap();
 
-    String getViewName();
+    String viewName();
 
     String getAnimate();
 

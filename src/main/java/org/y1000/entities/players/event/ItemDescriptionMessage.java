@@ -24,7 +24,7 @@ public class ItemDescriptionMessage extends Abstract2PlayerMessageEvent {
         return Packet.newBuilder().setItemDescription(packet).build();
     }
 
-    public static ItemDescriptionMessage item(Player player, int slot, Item item) {
+    public static ItemDescriptionMessage inventory(Player player, int slot, Item item) {
         return new ItemDescriptionMessage(player, build(item.name(), slot, 0, item.description()));
     }
 
@@ -32,7 +32,12 @@ public class ItemDescriptionMessage extends Abstract2PlayerMessageEvent {
         return new ItemDescriptionMessage(player, build(kungFu.name(), slot, 1, kungFu.detailText()));
     }
 
-    public static ItemDescriptionMessage equip(Player player, EquipmentType type, Equipment item) {
+    public static ItemDescriptionMessage equipWindow(Player player, EquipmentType type, Equipment item) {
         return new ItemDescriptionMessage(player, build(item.name(), type.value(), 2, item.description()));
     }
+
+    public static ItemDescriptionMessage bankWindow(Player player, int slot, Item item) {
+        return new ItemDescriptionMessage(player, build(item.name(), slot, 3, item.description()));
+    }
+
 }

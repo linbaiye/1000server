@@ -2,10 +2,8 @@ package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerShowBankMessage;
-import org.y1000.entities.players.event.PlayerSoundEvent;
-import org.y1000.entities.players.event.PlayerTextMessage;
-import org.y1000.entities.players.event.UpdateInventorySlotMessage;
+import org.y1000.entities.players.event.*;
+import org.y1000.entities.players.inventory.AbstractInventory;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
@@ -38,77 +36,125 @@ public class NpcBankAbility implements NpcInteractAbility, NpcAnimatedAwareAbili
         return name.equals(menuAction);
     }
 
-    private void swap(long npcId, Player player, Bank bank, int inventorySlot, int bankSlot) {
-        Item inventoryItem = player.inventory().remove(inventorySlot);
-        Item bankItem = bank.remove(bankSlot);
-        if (inventoryItem != null)
-            bank.add(bankSlot, inventoryItem);
-        if (bankItem != null)
-            player.inventory().add(inventorySlot, bankItem);
-        player.sendEvent(UpdateInventorySlotMessage.update(player, inventorySlot));
-        player.sendEvent(PlayerShowBankMessage.of(player, npcId, bank));
-        if (bankItem != null) {
-            bankItem.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toSelf(player, s)));
-            return;
-        }
-        if (inventoryItem != null)
-            inventoryItem.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toSelf(player, s)));
-    }
-
     public void inventoryToBank(Npc npc, Player player, int inventorySlot, int number) {
         if (stateOrDistanceInvalid(player, npc))
             return;
         Bank bank = transactions.get(player);
         if (bank == null)
             return;
-        if (!player.inventory().hasEnough(inventorySlot, number)) {
-            player.sendEvent(PlayerTextMessage.systip(player, "数量不足。"));
-            return;
+        if (moveToEmptySlot(player, player.inventory(), bank, inventorySlot, number, "福袋已满") != 0) {
+            player.sendEvent(UpdateInventorySlotMessage.update(player, inventorySlot));
+            player.sendEvent(PlayerShowBankMessage.of(player, npc.id(), bank));
         }
-        Item inventoryItem = player.inventory().getItem(inventorySlot);
-        if (!bank.canTake(inventoryItem.name(), number)) {
-            player.sendEvent(PlayerTextMessage.systip(player, "福袋已满。"));
-            return;
-        }
-        var removed = player.inventory().remove(inventorySlot, number);
-        bank.add(removed);
-        player.sendEvent(UpdateInventorySlotMessage.update(player, inventorySlot));
-        player.sendEvent(PlayerShowBankMessage.of(player, npc.id(), bank));
-        inventoryItem.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toSelf(player, s)));
         bankRepository.save(player.id(), bank);
+    }
+
+    private int moveToEmptySlot(Player player, AbstractInventory fromInventory,
+                                 AbstractInventory toInventory,
+                                 int fromSlot, int number,
+                                 String fullTip) {
+        if (!fromInventory.hasEnough(fromSlot, number)) {
+            player.sendEvent(PlayerTextMessage.systip(player, "数量不足。"));
+            return 0;
+        }
+        Item fromitem = fromInventory.getItem(fromSlot);
+        if (!toInventory.canAdd(fromitem)) {
+            player.sendEvent(PlayerTextMessage.systip(player, fullTip));
+            return 0;
+        }
+        Item removedItem = fromInventory.remove(fromSlot, number);
+        int addedSlot = toInventory.add(removedItem);
+        removedItem.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toSelf(player, s)));
+        return addedSlot;
+    }
+
+
+    public void bankToInventory(Npc npc, Player player, int bankSlot, int number) {
+        if (stateOrDistanceInvalid(player, npc))
+            return;
+        Bank bank = transactions.get(player);
+        if (bank == null)
+            return;
+        var addedSlot = moveToEmptySlot(player, bank, player.inventory(), bankSlot, number, "物品栏已满。");
+        if (addedSlot != 0) {
+            player.sendEvent(UpdateInventorySlotMessage.update(player, addedSlot));
+            player.sendEvent(PlayerShowBankMessage.of(player, npc.id(), bank));
+        }
+        bankRepository.save(player.id(), bank);
+    }
+
+
+    private boolean moveItem(Player player,
+                             AbstractInventory fromInventory,
+                             AbstractInventory toInventory,
+                             int fromSlot,
+                             int toSlot,
+                             int number,
+                             String fullTip) {
+        if (!fromInventory.hasEnough(fromSlot, number)) {
+            player.sendEvent(PlayerTextMessage.systip(player, "数量不足。"));
+            return false;
+        }
+        Item fromItem = fromInventory.getItem(fromSlot);
+        if (!(fromItem instanceof StackItem)) {
+            fromItem = fromInventory.remove(fromSlot);
+            if (toInventory.canAdd(toSlot, fromItem)) {
+                toInventory.add(toSlot, fromItem);
+            } else {
+                Item toItem = toInventory.remove(toSlot);
+                fromInventory.add(fromSlot, toItem);
+                toInventory.add(toSlot, fromItem);
+            }
+            return true;
+        }
+        if (!toInventory.canAdd(toSlot, fromItem.name(), number)) {
+            player.sendEvent(PlayerTextMessage.systip(player, fullTip));
+            return false;
+        }
+        Item moved = fromInventory.remove(fromSlot, number);
+        toInventory.add(toSlot, moved);
+        return true;
     }
 
     public void inventoryToBank(Npc npc, Player player, int inventorySlot, int bankSlot, int number) {
         if (stateOrDistanceInvalid(player, npc))
             return;
         Bank bank = transactions.get(player);
-        if (bank == null || !bank.isSlotUnlocked(bankSlot))
+        if (bank == null || !bank.isSlotOpen(bankSlot))
             return;
-        if (!player.inventory().hasEnough(inventorySlot, number)) {
-            player.sendEvent(PlayerTextMessage.systip(player, "数量不足。"));
-            return;
+        var item = player.inventory().getItem(inventorySlot);
+        if (moveItem(player, player.inventory(), bank, inventorySlot, bankSlot, number, "福袋已满。")) {
+            item.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toSelf(player, s)));
+            player.sendEvent(UpdateInventorySlotMessage.update(player, inventorySlot));
+            player.sendEvent(PlayerShowBankMessage.of(player, npc.id(), bank));
+            bankRepository.save(player.id(), bank);
         }
-        Item inventoryItem = player.inventory().getItem(inventorySlot);
-        Item bankItem = bank.getItem(bankSlot);
-        if (!(bankItem instanceof StackItem) && !(inventoryItem instanceof StackItem)) {
-            swap(npc.id(), player, bank, inventorySlot, bankSlot);
-        }
-        bankRepository.save(player.id(), bank);
     }
 
-    public void swap(Npc npc, Player player, int from, int to) {
+    public void bankToInventory(Npc npc, Player player, int bankSlot, int inventorySlot, int number) {
         if (stateOrDistanceInvalid(player, npc))
             return;
         Bank bank = transactions.get(player);
         if (bank == null)
             return;
-        Item fromItem = bank.remove(from);
-        if (fromItem == null)
+        var item = bank.getItem(bankSlot);
+        if (moveItem(player, bank, player.inventory(), bankSlot, inventorySlot, number, "物品栏已满。")) {
+            item.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toSelf(player, s)));
+            player.sendEvent(UpdateInventorySlotMessage.update(player, inventorySlot));
+            player.sendEvent(PlayerShowBankMessage.of(player, npc.id(), bank));
+            bankRepository.save(player.id(), bank);
+        }
+    }
+
+    public void move(Npc npc, Player player, int from, int to) {
+        if (stateOrDistanceInvalid(player, npc))
             return;
-        Item toItem = bank.remove(to);
-        bank.add(to, fromItem);
-        if (toItem != null)
-            bank.add(from, toItem);
+        Bank bank = transactions.get(player);
+        if (bank == null)
+            return;
+        Item fromItem = bank.getItem(from);
+        if (fromItem == null || !bank.move(from, to))
+            return;
         player.sendEvent(PlayerShowBankMessage.of(player, npc.id(), bank));
         fromItem.eventSound().ifPresent(s -> player.sendEvent(PlayerSoundEvent.toSelf(player, s)));
         bankRepository.save(player.id(), bank);
@@ -125,7 +171,7 @@ public class NpcBankAbility implements NpcInteractAbility, NpcAnimatedAwareAbili
             return;
         }
         if (!player.inventory().hasEnoughMoney(10000)) {
-            player.sendEvent(PlayerTextMessage.systip(player, "需要10000钱币解锁。"));
+            player.sendEvent(PlayerTextMessage.systip(player, "需要10000钱币。"));
             return;
         }
         int slot  = player.inventory().decreaseMoney(10000);
@@ -147,11 +193,23 @@ public class NpcBankAbility implements NpcInteractAbility, NpcAnimatedAwareAbili
         player.sendEvent(PlayerShowBankMessage.of(player, npc.id(), bank));
     }
 
+    public void onRightClickSlot(Npc npc, Player player, int slot) {
+        if (stateOrDistanceInvalid(player, npc))
+            return;
+        Bank bank = transactions.get(player);
+        if (bank == null || bank.getItem(slot) == null)
+            return;
+        Item item = bank.getItem(slot);
+        player.sendEvent(ItemDescriptionMessage.bankWindow(player, slot, item));
+    }
+
 
     @Override
     public void onStateChanged(Npc npc) {
         if (npc.findAbility(HurtAbility.class).map(HurtAbility::isDead).orElse(false)) {
-
+            transactions.clear();
+        } else {
+            transactions.entrySet().removeIf(e -> e.getKey().isLeftRealm());
         }
     }
 }

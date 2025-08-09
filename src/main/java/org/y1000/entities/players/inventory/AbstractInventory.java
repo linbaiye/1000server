@@ -33,13 +33,6 @@ public abstract class AbstractInventory {
         return capacity;
     }
 
-    public int itemCount() {
-        return items.size();
-    }
-
-    public int availableSlots() {
-        return capacity() - itemCount();
-    }
 
     public int add(Item item) {
         if (item == null) {
@@ -48,8 +41,8 @@ public abstract class AbstractInventory {
         if (item instanceof StackItem stackItem) {
             var targetSlot = -1;
             for (int slot : items.keySet()) {
-                Item slotItem = items.get(slot);
-                if (slotItem instanceof StackItem slotStackItem && slotStackItem.containsSameItem(stackItem)) {
+                Item currentItem = items.get(slot);
+                if (currentItem instanceof StackItem slotStackItem && slotStackItem.containsSameItem(stackItem)) {
                     targetSlot = slot;
                     break;
                 }
@@ -91,12 +84,18 @@ public abstract class AbstractInventory {
         return item;
     }
 
-    public boolean swap(int from, int to) {
-        if ((!items.containsKey(from) && !items.containsKey(to)) || from == to) {
+    public abstract boolean isSlotOpen(int slot);
+
+    public boolean move(int from, int to) {
+        if (from == to || !isSlotOpen(to) || !items.containsKey(from)) {
             return false;
         }
         Item fromItem = items.remove(from);
-        Item toItem = items.remove(to);
+        Item toItem = items.get(to);
+        if (toItem instanceof StackItem toStackItem && toStackItem.canMerge(fromItem)) {
+            items.put(to, toStackItem.merge(fromItem));
+            return true;
+        }
         if (fromItem != null)
             items.put(to, fromItem);
         if (toItem != null)
@@ -117,6 +116,11 @@ public abstract class AbstractInventory {
             return stackItem.number() >= number;
         }
         return number == 1;
+    }
+
+    public void add(int slot, Item item) {
+        if (canAdd(slot, item))
+            doAdd(slot, item);
     }
 
     public boolean decrease(int slot, long number) {
@@ -147,15 +151,25 @@ public abstract class AbstractInventory {
         }
     }
 
-    public boolean canTake(Item item) {
+    public boolean canAdd(Item item) {
         if (item == null)
             return false;
         long number = (item instanceof StackItem stackItem) ? stackItem.number() : 1;
-        return canTake(item.name(), number);
+        return canAdd(item.name(), number);
     }
 
+    public boolean canAdd(int slot, String name, long number) {
+        if (!isSlotOpen(slot))
+            return false;
+        Item item = getItem(slot);
+        if (item instanceof StackItem stackItem
+                && stackItem.name().equals(name)
+                && stackItem.hasMoreSpace(number))
+            return true;
+        return item == null;
+    }
 
-    public boolean canTake(String name, long number) {
+    public boolean canAdd(String name, long number) {
         var items = items();
         for (Item value : items.values()) {
             if (value instanceof StackItem stackItem
@@ -165,6 +179,7 @@ public abstract class AbstractInventory {
         }
         return !isFull();
     }
+
 
 
     void doAdd(int slot, Item item) {
@@ -177,11 +192,8 @@ public abstract class AbstractInventory {
         }
         if (current instanceof StackItem stackItem && stackItem.canMerge(item)) {
             items.put(slot, stackItem.merge(item));
-            return;
         }
-        throw new UnsupportedOperationException("Slot " + slot + " has item already.");
     }
-
 
 
     protected void decreaseStack(int slot, long number) {
@@ -201,14 +213,14 @@ public abstract class AbstractInventory {
     }
 
     boolean canPut(Item item, int slot) {
-        Item bankItem = getItem(slot);
-        if (bankItem instanceof StackItem bankStackItem && item
-                instanceof StackItem stackItem) {
-            return bankStackItem.name().equals(stackItem.name()) &&
-                    bankStackItem.hasMoreSpace(stackItem.number());
+        Item currentItem = getItem(slot);
+        if (currentItem instanceof StackItem currentStackItem && item
+                instanceof StackItem addingStackItem) {
+            return currentStackItem.name().equals(addingStackItem.name()) &&
+                    currentStackItem.hasMoreSpace(addingStackItem.number());
         }
-        return bankItem == null;
+        return currentItem == null;
     }
 
-    public abstract boolean canPut(int slot, Item item);
+    public abstract boolean canAdd(int slot, Item item);
 }

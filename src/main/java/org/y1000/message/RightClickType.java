@@ -18,6 +18,6 @@ public enum RightClickType implements ValueEnum {
     }
 
     public static RightClickType fromValue(int v) {
-        return ValueEnum.fromValueOrThrow(values(), v);
+        return ValueEnum.getTypeOrThrow(values(), v);
     }
 }

@@ -301,7 +301,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     @Override
     public void clickEquipment(EquipmentType type) {
         getEquipment(type, Equipment.class)
-                .ifPresent(e -> sendEvent(ItemDescriptionMessage.equip(this, type, e)));
+                .ifPresent(e -> sendEvent(ItemDescriptionMessage.equipWindow(this, type, e)));
     }
 
     private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
@@ -580,21 +580,6 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             state.attack(target);
     }
 
-//    private void handleRightClick(ClientRightClickEvent event) {
-//        if (event.type() == RightClickType.INVENTORY) {
-//            Item item = inventory.getItem(event.slotId());
-//            if (item != null) {
-//                emitEvent(new ItemDescriptionMessage(this, event.page(), event.slotId(), item.description(), event.type()));
-//            }
-//        } else if (event.type() == RightClickType.KUNGFU) {
-//            Optional<KungFu> kungFu = kungFuBook.getKungFu(event.page(), event.slotId());
-//            kungFu.ifPresent(k -> emitEvent(new ItemDescriptionMessage(this, event.page(), event.slotId(), k.detailText(), event.type())));
-//        } else if (event.type() == RightClickType.CHARACTER) {
-//            emitEvent(new PlayerRightClickAttributeEvent(this));
-//        }
-//    }
-//
-
 
     @Override
     public void handleInput(SelfHandleInput input) {
@@ -683,7 +668,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             return;
         if (tryDye(from, to))
             return;
-        if (inventory.swap(from, to)) {
+        if (inventory.move(from, to)) {
             sendEvent(UpdateInventoryMessage.forceful(this));
         }
     }
@@ -696,7 +681,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         } else if (type == AbstractClickContainerSlotInput.ClickType.RightClick) {
             var item = inventory.getItem(slot);
             if (item != null)
-                sendEvent(ItemDescriptionMessage.item(this, slot, item));
+                sendEvent(ItemDescriptionMessage.inventory(this, slot, item));
         }
     }
 
@@ -1187,7 +1172,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     public boolean pickItem(Item item) {
         if (isLeftRealm() || isDead())
             return false;
-        if (!inventory().canTake(item)) {
+        if (!inventory().canAdd(item)) {
             sendText("物品栏已满。");
             return false;
         }
@@ -1290,7 +1275,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         return !isLeftRealm() && state.canBeDragged();
     }
 
-    void sendSound(String s) {
+    private void sendSound(String s) {
         sendEvent(PlayerSoundEvent.toAll(this, s));
     }
 

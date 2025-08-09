@@ -27,7 +27,7 @@ public final class UpdateTradeWindowEvent extends IAbstractPlayerEvent {
         }
 
         public static Type fromValue(int v) {
-            return ValueEnum.fromValueOrThrow(values(), v);
+            return ValueEnum.getTypeOrThrow(values(), v);
         }
     }
 

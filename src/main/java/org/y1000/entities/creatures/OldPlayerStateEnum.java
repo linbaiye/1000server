@@ -64,6 +64,6 @@ public enum OldPlayerStateEnum implements ValueEnum {
     }
 
     public static OldPlayerStateEnum valueOf(int v) {
-        return ValueEnum.fromValueOrThrow(OldPlayerStateEnum.values(), v);
+        return ValueEnum.getTypeOrThrow(OldPlayerStateEnum.values(), v);
     }
 }

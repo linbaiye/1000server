@@ -24,7 +24,7 @@ public record ClientOperateBankEvent(Operation operation, long bankerId, int fro
             return v;
         }
         public static Operation fromValue(int v) {
-            return ValueEnum.fromValueOrThrow(values(), v);
+            return ValueEnum.getTypeOrThrow(values(), v);
         }
     }
     public static ClientOperateBankEvent open(long bankerId) {

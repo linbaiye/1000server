@@ -52,7 +52,7 @@ public class NpcSellAbility extends AbstractNpcTradeAbility {
             return;
         }
         Item newItem = getItemFactory().createItem(name, number);
-        if (!player.inventory().canTake(newItem)) {
+        if (!player.inventory().canAdd(newItem)) {
             player.sendEvent(PlayerTextMessage.bottom(player, "物品栏已满。"));
             return;
         }
