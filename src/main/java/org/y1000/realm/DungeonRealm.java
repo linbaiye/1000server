@@ -63,13 +63,20 @@ final class DungeonRealm extends AbstractRealm {
             minuteAnnouncement[i] = false;
         }
         this.timeSupplier = timeSupplier;
-        LocalDateTime now = timeSupplier.get();
-        if (durationSeconds == 1800) {
-            closeTime = now.plusMinutes(30).withSecond(58);
-        } else {
-            closeTime = now.plusHours(1).withSecond(58);
-        }
+        closeTime = computeCloseTime(timeSupplier.get(), minutes);
         closing = false;
+    }
+
+    private LocalDateTime computeCloseTime(LocalDateTime now, int openMinutes) {
+        if (openMinutes == 30) {
+            if ((now.getMinute() == 29 || now.getMinute() == 59) && now.getSecond() >= 58)
+                return now.plusMinutes(30);
+            return now.getMinute() > 30 ? now.withMinute(59).withSecond(58) : now.withMinute(29).withSecond(58);
+        } else {
+            if (now.getMinute() == 59 && now.getSecond() >= 58)
+                return now.plusHours(1);
+            return now.withMinute(59).withSecond(58);
+        }
     }
 
 
@@ -77,7 +84,7 @@ final class DungeonRealm extends AbstractRealm {
         if (isHalfHourInterval()) {
             return (minute == 25 || minute == 55) && second > 5;
         } else {
-            return minute == 59 && second > 0;
+            return minute == 55 && second > 0;
         }
     }
 

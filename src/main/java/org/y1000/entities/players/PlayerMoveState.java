@@ -72,12 +72,13 @@ final class PlayerMoveState extends AbstractPlayerState {
             }
         });
         player().changeCoordinate(currentInput.destination());
-        player().sendEvent(new PlayerMovedEvent(player()));
         if (newInput == null) {
             changeToStand();
+            player().sendEvent(new PlayerMovedEvent(player()));
             player().sendEvent(PlayerChangeStateEvent.noSelf(player()));
             return;
         }
+        player().sendEvent(new PlayerMovedEvent(player()));
         if (!player().coordinate().equals(newInput.from())) {
             changeToStand();
             player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));

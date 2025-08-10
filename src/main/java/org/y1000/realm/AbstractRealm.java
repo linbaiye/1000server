@@ -104,10 +104,8 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
     protected void doInit() {
         try {
             accumulatedMillis = System.currentTimeMillis();
-            //if (npcManager != null)
-            //    npcManager.init();
-            if (dynamicObjectManager != null)
-                dynamicObjectManager.init();
+            npcManager.init();
+            dynamicObjectManager.init();
             teleportManager.init(this);
             log().debug("Initialized {}.", this);
         } catch (Exception e) {
