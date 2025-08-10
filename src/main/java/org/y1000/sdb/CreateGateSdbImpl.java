@@ -122,4 +122,9 @@ public final class CreateGateSdbImpl extends AbstractCSVSdbReader implements Cre
         return getIntOrZero(name, "ActiveInterval");
     }
 
+    @Override
+    public String announcement(String name) {
+        return get(name, "Announcement");
+    }
+
 }

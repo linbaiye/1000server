@@ -13,4 +13,6 @@ public interface Teleport {
     Set<Coordinate> coordinates();
 
     void onPlayerEntered(Player player);
+
+    boolean isPeriodic();
 }

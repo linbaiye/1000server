@@ -3,11 +3,9 @@ package org.y1000.realm;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.y1000.entities.creatures.npc.NpcInteractAbility;
-import org.y1000.entities.creatures.npc.interactability.NpcInteractability;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
-import org.y1000.entities.teleport.StaticTeleport;
-import org.y1000.entities.teleport.TeleportHandler;
+import org.y1000.entities.teleport.TeleportEventHandler;
 import org.y1000.message.input.*;
 import org.y1000.message.serverevent.InteractableCoordinateNameMessage;
 import org.y1000.network.Connection;
@@ -18,9 +16,8 @@ import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandler  {
+abstract class AbstractRealm implements Realm, TeleportEventHandler, RealmEventHandler  {
     public static final int STEP_MILLIS = 10;
     private final RealmMap realmMap;
     private final NpcManager npcManager;
@@ -99,6 +96,12 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
         }
     }
 
+    @Override
+    public void announceDungeonOpen(String announcement) {
+        playerManager.allPlayers().forEach(
+                p -> p.sendEvent(PlayerTextMessage.left(p, announcement))
+        );
+    }
 
 
     protected void doInit() {
@@ -106,7 +109,7 @@ abstract class AbstractRealm implements Realm, TeleportHandler, RealmEventHandle
             accumulatedMillis = System.currentTimeMillis();
             npcManager.init();
             dynamicObjectManager.init();
-            teleportManager.init(this);
+            teleportManager.init(this );
             log().debug("Initialized {}.", this);
         } catch (Exception e) {
             log().error("Failed to init realm {}.", id, e);

@@ -2,15 +2,10 @@ package org.y1000.realm;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
-import org.y1000.entities.players.Player;
 import org.y1000.entities.teleport.*;
 import org.y1000.sdb.CreateGateSdb;
-import org.y1000.util.UnaryAction;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 @Slf4j
 final class TeleportManager {
@@ -41,7 +36,7 @@ final class TeleportManager {
     }
 
 
-    private void addTeleport(String idName, TeleportHandler teleportHandler) {
+    private void addTeleport(String idName, TeleportEventHandler teleportHandler) {
         Teleport teleport;
         if (createGateSdb.isVisible(idName)) {
             var port = new StaticTeleport(entityIdGenerator.next(), idName, createGateSdb, teleportHandler, realmId);
@@ -49,13 +44,13 @@ final class TeleportManager {
             aoiManager.add(port);
             teleport = port;
         } else {
-            teleport = new InvisibleTeleport(entityIdGenerator.next(), idName, createGateSdb, teleportHandler, realmId);
+            teleport = new InvisibleTeleport(entityIdGenerator.next(), idName, createGateSdb, teleportHandler,  realmId);
         }
         realmMap.addTeleport(teleport);
         log.debug("Added port at {} in realm {}.", teleport.coordinate(), realmId);
     }
 
-    public void init(TeleportHandler teleportHandler) {
+    public void init(TeleportEventHandler teleportHandler) {
         createGateSdb.getNames(realmId).forEach(name -> addTeleport(name, teleportHandler));
     }
 

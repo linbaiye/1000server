@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class AbstractTeleport implements Teleport {
@@ -34,7 +35,7 @@ public abstract class AbstractTeleport implements Teleport {
 
     private final List<TeleportCost> costs;
 
-    private final TeleportHandler teleportHandler;
+    private final TeleportEventHandler teleportHandler;
 
     private final int activeSeconds;
 
@@ -42,10 +43,15 @@ public abstract class AbstractTeleport implements Teleport {
 
     private final Supplier<LocalDateTime> timeSupplier;
 
+    private LocalDateTime announceTime;
+
+    private final String annoucement;
+
+
     public AbstractTeleport(long id,
                             String idName,
                             CreateGateSdb createGateSdb,
-                            TeleportHandler teleportHandler,
+                            TeleportEventHandler teleportHandler,
                             int realmId) {
         this(id, idName, createGateSdb, teleportHandler, realmId, LocalDateTime::now);
     }
@@ -53,7 +59,7 @@ public abstract class AbstractTeleport implements Teleport {
     public AbstractTeleport(long id,
                             String idName,
                             CreateGateSdb createGateSdb,
-                            TeleportHandler teleportHandler,
+                            TeleportEventHandler teleportHandler,
                             int realmId, Supplier<LocalDateTime> timeSupplier) {
         Validate.notNull(idName);
         Validate.notNull(createGateSdb);
@@ -76,9 +82,54 @@ public abstract class AbstractTeleport implements Teleport {
             Validate.isTrue(regenSeconds == 3600 || regenSeconds == 1800);
             Validate.isTrue(rejectCoordinate != null);
         }
-        if (activeSeconds != 0)
-            Validate.isTrue(regenSeconds != 0);
         this.timeSupplier = timeSupplier;
+        if (activeSeconds != 0) {
+            Validate.isTrue(regenSeconds != 0);
+            announceTime = computeAnnounceTime(regenSeconds, timeSupplier.get());
+        }
+        this.annoucement = createGateSdb.announcement(idName);
+    }
+
+    @Override
+    public boolean isPeriodic() {
+        return activeSeconds != 0;
+    }
+
+    private LocalDateTime computeAnnounceTime(int regenSeconds, LocalDateTime time) {
+        if (regenSeconds == 1800) {
+            if (time.getMinute() >= 55)
+                return time;
+            else if (time.getMinute() > 25)
+                return time.withMinute(55).withSecond(5);
+            else
+                return time.withMinute(25).withSecond(5);
+        } else {
+            if (time.getMinute() >= 55)
+                return time.withSecond(0);
+            else
+                return time.withMinute(55).withSecond(0);
+        }
+    }
+
+    private int computeMinuteToOpen(LocalDateTime now) {
+        return 5;
+    }
+
+    private void announce(LocalDateTime now) {
+        int minute = now.getMinute();
+        if (regenSeconds == 1800) {
+
+        }
+    }
+
+
+    public void tryAnnounce() {
+        if (!isPeriodic())
+            return;
+        LocalDateTime now = timeSupplier.get();
+        if (now.isAfter(announceTime) || now.isEqual(announceTime)) {
+            announceTime = computeAnnounceTime(regenSeconds, now);
+        }
     }
 
     public long id() {

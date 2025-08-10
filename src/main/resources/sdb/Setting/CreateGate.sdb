@@ -1,5 +1,5 @@
-Name,GateName,ViewName,Kind,boShow,Shape,X,Y,TX,TY,EX,EY,MapId,ServerId,Width,LimitAge,OverAge,LimitPowerLevel,NeedAge,BelowEnergy,OverEnergy,AgeNeedItem,NeedItem,DelItem,AddItem,boRemainItem,Quest,QuestNOtice,RegenInterval,ActiveInterval,EjectNotice,RandomPos,OpenClock,boAlarmRemainTime,AlarmNotice,MaxUser,script,GuildName,
-6,进入王陵,,0,TRUE,8,716,672,37,63,686,690,1,3,5,,,,4000,,,2500,,,,,,,360000,60000,25岁以后才能进入(40岁以前进入需10000钱币),,,,,,,,
+Name,GateName,ViewName,Kind,boShow,Shape,X,Y,TX,TY,EX,EY,MapId,ServerId,Width,LimitAge,OverAge,LimitPowerLevel,NeedAge,BelowEnergy,OverEnergy,AgeNeedItem,NeedItem,DelItem,AddItem,Announcement,Quest,QuestNOtice,RegenInterval,ActiveInterval,EjectNotice,RandomPos,OpenClock,boAlarmRemainTime,AlarmNotice,MaxUser,script,GuildName,
+6,进入王陵,,0,TRUE,8,716,672,37,63,686,690,1,3,5,,,,4000,,,2500,,,,帝王陵将于%d分钟后开启。,,,360000,60000,25岁以后才能进入(40岁以前进入需10000钱币),,,,,,,,
 8,向大战场,向大战场,0,TRUE,69,797,230,61,61,,,1,2,1,,,,,,,,,,,,,,,,,,,,,,,,
 9,向大战场,向大战场,0,TRUE,69,770,940,65,65,,,1,2,1,,,,,,,,,,,,,,,,,,,,,,,,
 10,向大战场,向大战场,0,TRUE,69,211,925,65,65,,,1,2,1,,,,,,,,,,,,,,,,,,,,,,,,

@@ -6,6 +6,7 @@ import org.y1000.message.I2ClientMessage;
 import org.y1000.sdb.CreateGateSdb;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public final class StaticTeleport extends AbstractTeleport implements Entity  {
 
@@ -15,7 +16,7 @@ public final class StaticTeleport extends AbstractTeleport implements Entity  {
 
     public StaticTeleport(long id, String idName,
                           CreateGateSdb createGateSdb,
-                          TeleportHandler teleportHandler,
+                          TeleportEventHandler teleportHandler,
                           int realmId) {
         super(id, idName, createGateSdb, teleportHandler, realmId);
         shapeId = createGateSdb.getShape(idName);
