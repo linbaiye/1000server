@@ -204,8 +204,22 @@ message RealmInputPacket {
   int32 type = 1;
 }
 
+message LoginRequestPacket {
+  string username = 1;
+  string password = 2;
+}
+
+message RegisterRequestPacket {
+  string username = 1;
+  string password = 2;
+}
+
+
 message ClientPacket {
   oneof Type {
+    LoginRequestPacket loginRequest = 57;
+    RegisterRequestPacket registerRequest = 58;
+
     PlayerLoginPacket loginPacket = 3;
     ClientUnequipPacket unequip = 9;
     ClientChangeTeamPacket changeTeam = 25;
@@ -241,6 +255,7 @@ message ClientPacket {
     UnlockBankInputPacket unlockBank = 53;
     BankOperationInputPacket bankOperation = 54;
     RealmInputPacket realmInput = 56;
+
   }
 }
 
@@ -397,25 +412,6 @@ message AttributePacket {
   int32 legPercent = 13;
 }
 
-message PlayerRightClickAttributePacket {
-  int32 attackSpeed = 1;
-  int32 maxLife = 2;
-  int32 avoidance = 3;
-  int32 maxPower = 4;
-  int32 recovery = 5;
-  int32 maxInnerPower = 6;
-  int32 maxOuterPower = 8;
-  int32 maxEnergy = 10;
-  int32 bodyDamage = 7;
-  int32 headDamage = 9;
-  int32 armDamage = 11;
-  int32 legDamage = 12;
-  int32 bodyArmor = 13;
-  int32 headArmor = 14;
-  int32 armArmor = 15;
-  int32 legArmor = 16;
-  int32 age = 17;
-}
 
 message PlayerUnequipPacket {
   int64 id = 1;
@@ -431,18 +427,6 @@ message PlayerEquipPacket {
   int32 weaponType = 6;
   string name = 7;
   int32 icon = 8;
-}
-
-message PlayerSitDownPacket {
-  int64 id = 1;
-}
-
-message PlayerStandUpPacket {
-  int64 id = 1;
-}
-
-message PlayerCooldownPacket {
-  int64 id = 1;
 }
 
 message PlayerRevivePacket {
@@ -642,9 +626,22 @@ message ActivateEffectPacket {
   string effect = 3;
 }
 
+message LoginResponsePacket {
+  int32 code = 1;
+  string description = 2;
+  repeated string characters = 3;
+}
+
+message RegisterResponsePacket {
+  int32 code = 1;
+  string description = 2;
+}
+
 
 message Packet {
   oneof TypedPacket {
+    LoginResponsePacket loginResponse = 3;
+    RegisterResponsePacket registerResponse = 5;
     PositionPacket positionPacket = 1;
     CreatureInterpolationPacket creatureInterpolation = 2;
     LoginPacket loginPacket = 4;
@@ -662,9 +659,6 @@ message Packet {
     PlayerEquipPacket equip = 21;
     OpenTradeWindowPacket openTradeWindow = 22;
     ToggleKungFuPacket toggleKungFu = 23;
-    PlayerSitDownPacket sitDown = 24;
-    PlayerStandUpPacket standUp = 25;
-    PlayerCooldownPacket cooldown = 26;
     AttributePacket attribute = 27;
     CreatureSoundEventPacket sound = 28;
     CreatureDieEventPacket die = 29;
@@ -673,7 +667,6 @@ message Packet {
     ProjectilePacket projectile = 32;
     KungFuPacket learnKungFu = 34;
     ItemDescriptionPacket itemDescription = 35;
-    PlayerRightClickAttributePacket rightClickAttribute = 36;
     UpdateTradeWindowPacket updateTradeWindow = 37;
     ShowDynamicObjectPacket showDynamicObject = 38;
     UpdateDynamicObjectPacket updateDynamicObject = 39;

@@ -78,6 +78,8 @@ public final class RealmManager implements Runnable , RealmEventSender {
     }
 
 
+
+
     private void handleDataEvent(Connection connection, Object data) {
         if (data instanceof DebugInput) {
             handleDebug(connection);

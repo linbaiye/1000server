@@ -2,11 +2,13 @@ package org.y1000.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.y1000.message.I2ClientMessage;
+import org.y1000.network.gen.Packet;
 
 
 @Data
 @AllArgsConstructor
-public class CreateCharResponse {
+public class CreateCharResponse implements I2ClientMessage  {
     private int code;
 
     private String msg;
@@ -23,5 +25,10 @@ public class CreateCharResponse {
 
     public static CreateCharResponse serverError() {
         return new CreateCharResponse(1, "服务器错误", null);
+    }
+
+    @Override
+    public Packet toPacket() {
+        return null;
     }
 }

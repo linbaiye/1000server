@@ -34,39 +34,21 @@ public final class Server implements ServerContext {
 
     private final ServerBootstrap gameServer;
 
+    private final EventLoopGroup workerGroup;
 
-    private EventLoopGroup workerGroup;
+    private final EventLoopGroup bossGroup;
 
-    private EventLoopGroup bossGroup;
-
-    private PlayerRepository playerRepository;
-
-    private RealmManager realmManager;
+    private final RealmManager realmManager;
 
     private final ItemRepositoryImpl itemRepository;
-
-    private DynamicObjectFactory dynamicObjectFactory;
-
-    private NpcFactory npcFactory;
 
     private final EntityManagerFactory entityManagerFactory;
 
     private static final int port = 9999;
-    private static final int accountPort = 9901;
-
     private static final int managementPort = 9902;
-
-    private final ServerBootstrap accountServer;
-
-    private final AccountManager accountManager;
-
-    private final AccountRepository accountRepository;
-
     private Channel gameSercerChannel;
-    private Channel accountChannel;
     private Channel managmentChannel;
-    private ServerBootstrap managementServer;
-
+    private final ServerBootstrap managementServer;
     private boolean shutdown;
 
     private static class TestEntityManager implements EntityManagerFactory {
@@ -149,24 +131,23 @@ public final class Server implements ServerContext {
         workerGroup = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
         bossGroup = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
         gameServer = new ServerBootstrap();
-        accountServer = new ServerBootstrap();
         managementServer = new ServerBootstrap();
         entityManagerFactory = Dev ? new TestEntityManager() : Persistence.createEntityManagerFactory("org.y1000");
         KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl(entityManagerFactory);
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl, entityManagerFactory);
         itemRepository = repository;
-        npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE,
+        NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE,
                 NonMonsterNpcSdbImpl.Instance, MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE, itemRepository, QuestSdbImpl.Instance, Dev ? new BankDevRepository() : itemRepository);
-        dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
+        DynamicObjectFactory dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
         PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
-        playerRepository = Dev ? new PlayerDevRepository(factory, itemRepository) :
-        new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
+        PlayerRepository playerRepository = Dev ? new PlayerDevRepository(factory, itemRepository) :
+                new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, RealmSpecificSdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
                 entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE, guildRepository, itemRepository, kungFuRepositoryImpl);
-        accountRepository = new AccountRepositoryImpl();
-        accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, factory);
+        AccountRepository accountRepository = new AccountRepositoryImpl();
+        AccountManager accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, factory);
         realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory, accountManager, playerRepository);
         shutdown = false;
     }
@@ -190,22 +171,6 @@ public final class Server implements ServerContext {
                 });
     }
 
-    private void setupAccountServer() {
-        accountServer.group(bossGroup, workerGroup)
-                .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.SO_BACKLOG, 4096)
-                .childOption(ChannelOption.TCP_NODELAY, true)
-                .childOption(ChannelOption.SO_KEEPALIVE, true)
-                .childHandler(new ChannelInitializer<NioSocketChannel>() {
-                    @Override
-                    protected void initChannel(NioSocketChannel channel) throws Exception {
-                        ChannelPipeline p = channel.pipeline();
-                        p.addLast(new HttpRequestDecoder());
-                        p.addLast(new HttpResponseEncoder());
-                        p.addLast(new AccountConnectionHandler(accountManager));
-                    }
-                });
-    }
 
     private void setupManagementServer() {
         managementServer.group(bossGroup, workerGroup)
@@ -243,7 +208,6 @@ public final class Server implements ServerContext {
         shutdown = true;
         realmManager.shut();
         close(gameSercerChannel);
-        close(accountChannel);
         close(managmentChannel);
         workerGroup.shutdownGracefully();
         bossGroup.shutdownGracefully();
@@ -255,8 +219,6 @@ public final class Server implements ServerContext {
         try {
             setupGameServer();
             gameSercerChannel = gameServer.bind(port).sync().channel();
-            setupAccountServer();
-            accountChannel = accountServer.bind(accountPort).sync().channel();
             setupManagementServer();
             managmentChannel = managementServer.bind(managementPort).sync().channel();
             log.info("All servers ready.");
