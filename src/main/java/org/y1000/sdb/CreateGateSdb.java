@@ -38,6 +38,6 @@ public interface CreateGateSdb {
 
     int getActiveInterval(String name);
 
-    String announcement(String name);
+    String getAnnouncement(String name);
 
 }

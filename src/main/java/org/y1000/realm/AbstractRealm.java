@@ -58,10 +58,8 @@ abstract class AbstractRealm implements Realm, TeleportEventHandler, RealmEventH
         this.entityManagers = new ArrayList<>();
         entityManagers.add(playerManager);
         entityManagers.add(itemManager);
-        if (dynamicObjectManager != null)
-            entityManagers.add(dynamicObjectManager);
-        if (npcManager != null)
-            entityManagers.add(npcManager);
+        entityManagers.add(dynamicObjectManager);
+        entityManagers.add(npcManager);
         this.playerRepository = playerRepository;
     }
 
@@ -92,6 +90,7 @@ abstract class AbstractRealm implements Realm, TeleportEventHandler, RealmEventH
         long current = System.currentTimeMillis();
         while (accumulatedMillis <= current) {
             entityManagers.forEach(m -> m.update(STEP_MILLIS));
+            teleportManager.update();
             accumulatedMillis += STEP_MILLIS;
         }
     }

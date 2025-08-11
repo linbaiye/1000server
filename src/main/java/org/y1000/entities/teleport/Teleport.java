@@ -15,4 +15,6 @@ public interface Teleport {
     void onPlayerEntered(Player player);
 
     boolean isPeriodic();
+
+    void tryAnnounce();
 }

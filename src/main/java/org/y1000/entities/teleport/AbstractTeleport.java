@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class AbstractTeleport implements Teleport {
@@ -36,8 +35,6 @@ public abstract class AbstractTeleport implements Teleport {
     private final List<TeleportCost> costs;
 
     private final TeleportEventHandler teleportHandler;
-
-    private final int activeSeconds;
 
     private final int regenSeconds;
 
@@ -76,49 +73,35 @@ public abstract class AbstractTeleport implements Teleport {
         this.realmId = realmId;
         if (!this.costs.isEmpty())
             Validate.isTrue(rejectCoordinate != null);
-        activeSeconds = createGateSdb.getActiveInterval(idName) / 100;
         regenSeconds = createGateSdb.getRegenInterval(idName) / 100;
         if (regenSeconds != 0) {
             Validate.isTrue(regenSeconds == 3600 || regenSeconds == 1800);
             Validate.isTrue(rejectCoordinate != null);
+            Validate.notNull(createGateSdb.getAnnouncement(idName));
         }
         this.timeSupplier = timeSupplier;
-        if (activeSeconds != 0) {
-            Validate.isTrue(regenSeconds != 0);
-            announceTime = computeAnnounceTime(regenSeconds, timeSupplier.get());
-        }
-        this.annoucement = createGateSdb.announcement(idName);
+        this.annoucement = createGateSdb.getAnnouncement(idName);
+        announceTime = computeAnnounceTime(regenSeconds, timeSupplier.get());
     }
 
     @Override
     public boolean isPeriodic() {
-        return activeSeconds != 0;
+        return regenSeconds != 0;
     }
 
     private LocalDateTime computeAnnounceTime(int regenSeconds, LocalDateTime time) {
         if (regenSeconds == 1800) {
             if (time.getMinute() >= 55)
-                return time;
-            else if (time.getMinute() > 25)
+                return time.plusHours(1).withMinute(25).withSecond(5);
+            else if (time.getMinute() >= 25)
                 return time.withMinute(55).withSecond(5);
             else
                 return time.withMinute(25).withSecond(5);
         } else {
             if (time.getMinute() >= 55)
-                return time.withSecond(0);
+                return time.plusHours(1).withMinute(55).withSecond(0);
             else
                 return time.withMinute(55).withSecond(0);
-        }
-    }
-
-    private int computeMinuteToOpen(LocalDateTime now) {
-        return 5;
-    }
-
-    private void announce(LocalDateTime now) {
-        int minute = now.getMinute();
-        if (regenSeconds == 1800) {
-
         }
     }
 
@@ -128,6 +111,7 @@ public abstract class AbstractTeleport implements Teleport {
             return;
         LocalDateTime now = timeSupplier.get();
         if (now.isAfter(announceTime) || now.isEqual(announceTime)) {
+            teleportHandler.announceDungeonOpen(annoucement);
             announceTime = computeAnnounceTime(regenSeconds, now);
         }
     }
@@ -170,15 +154,14 @@ public abstract class AbstractTeleport implements Teleport {
     }
 
     private boolean isTimeAllowedToEnter() {
-        return true;
-        /*if (activeSeconds == 0)
+        if (regenSeconds == 0)
             return true;
         LocalDateTime now = timeSupplier.get();
-        var curSec = now.getMinute() * 60 + now.getSecond();
-        if (regenSeconds == 1800 && curSec > 1800) {
-            curSec -= 1800;
+        if (regenSeconds == 1800) {
+            return now.getMinute() <= 5 || (now.getMinute() >= 30 && now.getMinute() <= 35);
+        } else {
+            return now.getMinute() <= 5;
         }
-        return curSec <= activeSeconds;*/
     }
 
     private String checkCosts(Player player) {

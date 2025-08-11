@@ -5,8 +5,10 @@ import org.y1000.entities.Entity;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.sdb.CreateGateSdb;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public final class StaticTeleport extends AbstractTeleport implements Entity  {
 
@@ -18,7 +20,15 @@ public final class StaticTeleport extends AbstractTeleport implements Entity  {
                           CreateGateSdb createGateSdb,
                           TeleportEventHandler teleportHandler,
                           int realmId) {
-        super(id, idName, createGateSdb, teleportHandler, realmId);
+        this(id, idName, createGateSdb, teleportHandler, realmId, LocalDateTime::now);
+    }
+
+    public StaticTeleport(long id, String idName,
+                          CreateGateSdb createGateSdb,
+                          TeleportEventHandler teleportHandler,
+                          int realmId,
+                          Supplier<LocalDateTime> supplier) {
+        super(id, idName, createGateSdb, teleportHandler, realmId, supplier);
         shapeId = createGateSdb.getShape(idName);
         name = createGateSdb.getViewName(idName);
         Validate.notEmpty(name);

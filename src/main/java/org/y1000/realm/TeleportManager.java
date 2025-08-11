@@ -22,6 +22,8 @@ final class TeleportManager {
 
     private final Set<StaticTeleport> staticTeleports;
 
+    private final Set<Teleport> periodicOpenTeleports;
+
     public TeleportManager(int realmId,
                            RealmMap realmMap,
                            CreateGateSdb createGateSdb,
@@ -33,6 +35,11 @@ final class TeleportManager {
         this.realmId = realmId;
         this.aoiManager = aoiManager;
         staticTeleports = new HashSet<>();
+        periodicOpenTeleports = new HashSet<>();
+    }
+
+    public void update() {
+        periodicOpenTeleports.forEach(Teleport::tryAnnounce);
     }
 
 
@@ -47,6 +54,8 @@ final class TeleportManager {
             teleport = new InvisibleTeleport(entityIdGenerator.next(), idName, createGateSdb, teleportHandler,  realmId);
         }
         realmMap.addTeleport(teleport);
+        if (teleport.isPeriodic())
+            periodicOpenTeleports.add(teleport);
         log.debug("Added port at {} in realm {}.", teleport.coordinate(), realmId);
     }
 

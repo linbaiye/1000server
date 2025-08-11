@@ -123,7 +123,7 @@ public final class CreateGateSdbImpl extends AbstractCSVSdbReader implements Cre
     }
 
     @Override
-    public String announcement(String name) {
+    public String getAnnouncement(String name) {
         return get(name, "Announcement");
     }
 
