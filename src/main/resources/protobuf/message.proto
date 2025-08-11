@@ -46,11 +46,6 @@ message ClientKeyPressedPacket {
 }
 
 
-message PlayerLoginPacket {
-  string token = 1;
-  string charName = 2;
-}
-
 message CreatureDieEventPacket {
   int64 id = 1;
 }
@@ -204,23 +199,32 @@ message RealmInputPacket {
   int32 type = 1;
 }
 
-message LoginRequestPacket {
+message LoginAccountRequestPacket {
   string username = 1;
   string password = 2;
 }
 
-message RegisterRequestPacket {
+message RegisterAccountRequestPacket {
   string username = 1;
   string password = 2;
 }
 
+message LoginCharacterRequestPacket {
+  string characterName = 1;
+}
+
+message CreateCharacterRequestPacket {
+  string characterName = 1;
+  bool male = 2;
+}
 
 message ClientPacket {
   oneof Type {
-    LoginRequestPacket loginRequest = 57;
-    RegisterRequestPacket registerRequest = 58;
+    LoginAccountRequestPacket loginAccount = 10;
+    RegisterAccountRequestPacket registerAccount = 11;
+    LoginCharacterRequestPacket loginCharacter = 12;
+    CreateCharacterRequestPacket createCharacter = 13;
 
-    PlayerLoginPacket loginPacket = 3;
     ClientUnequipPacket unequip = 9;
     ClientChangeTeamPacket changeTeam = 25;
     ClientFoundGuildPacket foundGuild = 26;
@@ -339,6 +343,7 @@ message TextMessagePacket {
   int32 location = 2;
   string color = 3;
   string bgColor = 4;
+  int32 type = 5;
 }
 
 

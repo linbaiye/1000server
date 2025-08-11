@@ -15,6 +15,7 @@ public interface NpcInteractAbility {
     default boolean stateOrDistanceInvalid(Player player, Npc npc) {
         return !npc.canBeSeenAt(player.coordinate()) ||
                 player.isDead() || player.isLeftRealm() ||
-                npc.findAbility(HurtAbility.class).map(HurtAbility::isDead).orElse(true);
+                npc.findAbility(HurtAbility.class).map(HurtAbility::isDead)
+                        .orElse(false);
     }
 }

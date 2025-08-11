@@ -1,12 +1,9 @@
 package org.y1000.realm;
 
 import org.y1000.entities.players.Player;
-import org.y1000.message.input.Login;
 import org.y1000.message.input.SelfHandleInput;
 import org.y1000.network.Connection;
-import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
-import org.y1000.util.UnaryAction;
 
 import java.util.Optional;
 import java.util.Set;
@@ -18,6 +15,8 @@ interface PlayerManager extends ActiveEntityManager<Player> {
     void loginPlayer(Player player, Realm realm, Connection connection);
 
     void logoutPlayer(Connection connection);
+
+    void logoutPlayer(Player player);
 
     void teleportIn(Player player,
                     Realm realm,

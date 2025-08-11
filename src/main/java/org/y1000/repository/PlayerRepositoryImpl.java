@@ -87,8 +87,8 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         KungFuBook kungFuBook = restoreKungFuBook(entityManager, playerPo);
         Equipment equipment = equipments.get(EquipmentType.WEAPON);
         var attackKUngFu = kungFuBook.findUnnamedAttack(AttackKungFuType.Fist);
-        if (equipment instanceof Weapon) {
-            attackKUngFu = kungFuBook.findUnnamedAttack(attackKUngFu.getType());
+        if (equipment instanceof Weapon weapon) {
+            attackKUngFu = kungFuBook.findUnnamedAttack(weapon.kungFuType());
         }
         return PlayerImpl.builder()
                 .id(playerPo.getId())

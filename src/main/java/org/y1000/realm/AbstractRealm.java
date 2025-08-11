@@ -98,7 +98,7 @@ abstract class AbstractRealm implements Realm, TeleportEventHandler, RealmEventH
     @Override
     public void announceDungeonOpen(String announcement) {
         playerManager.allPlayers().forEach(
-                p -> p.sendEvent(PlayerTextMessage.left(p, announcement))
+                p -> p.sendEvent(PlayerTextMessage.leftUp(p, announcement))
         );
     }
 
@@ -186,13 +186,21 @@ abstract class AbstractRealm implements Realm, TeleportEventHandler, RealmEventH
         }
     }
 
+    private void handleLogout(Logout logout) {
+        if (logout.playerId() != null) {
+            playerManager().find(logout.playerId()).ifPresent(playerManager()::logoutPlayer);
+        } else {
+            playerManager.logoutPlayer(logout.connection());
+        }
+    }
+
     @Override
     public void handle(Object event) {
         try {
             if (event instanceof Login login) {
                 handleLogin(login);
             } else if (event instanceof Logout logout) {
-                playerManager.logoutPlayer(logout.connection());
+                handleLogout(logout);
             } else if (event instanceof ConnectionInput connectionInput) {
                 handleInput(connectionInput);
             } else if (event instanceof RealmEvent realmEvent) {

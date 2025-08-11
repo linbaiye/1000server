@@ -7,6 +7,7 @@ import org.y1000.entities.players.PlayerPrivateChatEvent;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.event.PlayerSayEvent;
 import org.y1000.entities.players.event.PlayerShoutEvent;
+import org.y1000.entities.players.event.PlayerTextMessage;
 
 import java.util.Optional;
 
@@ -23,6 +24,9 @@ public class ChatInput implements SelfHandleInput {
     private Optional<PlayerEvent> handleShout(Player player) {
         if (text.length() < 2)
             return Optional.empty();
+        if (player.currentLife() < 5000) {
+            return Optional.of(PlayerTextMessage.systip(player, "活力需大于50。"));
+        }
         char level = text.charAt(1);
         int l = 0;
         if (level >= '0' && level <= '9') {

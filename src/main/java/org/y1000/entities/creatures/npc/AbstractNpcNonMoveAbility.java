@@ -15,7 +15,8 @@ abstract class AbstractNpcNonMoveAbility extends AbstractNpcAbility {
     }
 
     void sendActionAndStartShortAnimation(Npc npc, int millis) {
-        npc.sendEvent(NpcStartActionEvent.of(npc, type()));
+        if (millis > 0)
+            npc.sendEvent(NpcStartActionEvent.of(npc, type()));
         startShorter(millis);
     }
 

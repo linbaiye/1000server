@@ -43,6 +43,10 @@ public interface NpcSdb {
         return null;
     }
 
+    default boolean hit(String name){
+        return true;
+    }
+
     default int getViewWidth(String name) {
         return 0;
     }

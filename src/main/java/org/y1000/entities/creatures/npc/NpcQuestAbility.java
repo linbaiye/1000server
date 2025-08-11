@@ -56,16 +56,16 @@ public class NpcQuestAbility implements NpcInteractAbility {
         return quests.stream().anyMatch(q -> q.getName().equals(name));
     }
 
-    private void submitQuest(Npc npc, Quest quest, Player player) {
+    private void submitQuest(Quest quest, Player player) {
         for (Map.Entry<String, Integer> nameNumber: quest.requiredItems.entrySet()) {
             if (!player.inventory().hasEnough(nameNumber.getKey(), nameNumber.getValue())) {
-                npc.sendEvent(NpcSayEvent.say(npc, "阿弥陀佛，施主何故戏耍老衲。"));
+                player.sendEvent(PlayerTextMessage.systip(player, "没有足够的物品。"));
                 return;
             }
         }
         for (Item rewardItem : quest.getRewardItems()) {
             if (!player.inventory().canAdd(rewardItem)) {
-                player.sendEvent(PlayerTextMessage.bottom(player, "物品栏已满。"));
+                player.sendEvent(PlayerTextMessage.systip(player, "物品栏已满。"));
                 return;
             }
         }
@@ -85,7 +85,7 @@ public class NpcQuestAbility implements NpcInteractAbility {
             return;
         for (Quest quest : quests) {
             if (quest.name.equals(questName)) {
-                submitQuest(npc, quest, player);
+                submitQuest(quest, player);
                 return;
             }
         }

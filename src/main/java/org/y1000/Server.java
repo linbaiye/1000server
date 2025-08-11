@@ -13,11 +13,12 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.metamodel.Metamodel;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.account.AccountManager;
+import org.y1000.account.AccountManagerImpl;
+import org.y1000.account.DevAccountManager;
 import org.y1000.entities.creatures.npc.NpcFactory;
 import org.y1000.entities.creatures.npc.NpcFactoryImpl;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
-import org.y1000.item.BankInventory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuSdb;
@@ -124,7 +125,8 @@ public final class Server implements ServerContext {
         }
     }
 
-    private static boolean Dev = true;
+    private static final boolean Dev = true;
+
 
 
     public Server() {
@@ -141,14 +143,15 @@ public final class Server implements ServerContext {
         DynamicObjectFactory dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
         PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
-        PlayerRepository playerRepository = Dev ? new PlayerDevRepository(factory, itemRepository) :
+        PlayerRepository playerRepository = Dev ? new DevPlayerRepository(factory, itemRepository) :
                 new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, RealmSpecificSdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
                 entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE, guildRepository, itemRepository, kungFuRepositoryImpl);
         AccountRepository accountRepository = new AccountRepositoryImpl();
-        AccountManager accountManager = new AccountManager(entityManagerFactory, accountRepository, playerRepository, factory);
-        realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory, accountManager, playerRepository);
+        AccountManager accountManager = Dev ? new DevAccountManager((DevPlayerRepository)playerRepository):
+                new AccountManagerImpl(entityManagerFactory, accountRepository, playerRepository, factory);
+        realmManager = RealmManager.create(MapSdbImpl.INSTANCE, realmFactory, accountManager);
         shutdown = false;
     }
 

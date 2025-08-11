@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.y1000.message.I2ClientMessage;
+import org.y1000.network.gen.LoginResponsePacket;
 import org.y1000.network.gen.Packet;
 
 import java.util.Collections;
@@ -30,11 +31,11 @@ public class LoginResponse implements I2ClientMessage  {
 
 
     public static LoginResponse ok(List<String> chars) {
-        return new LoginResponse(0, chars, null);
+        return new LoginResponse(0, chars, "登录成功");
     }
 
     @Override
     public Packet toPacket() {
-        return null;
+        return Packet.newBuilder().setLoginResponse(LoginResponsePacket.newBuilder().setCode(code).setDescription(msg).addAllCharacters(charNames)).build();
     }
 }

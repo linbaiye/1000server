@@ -1067,9 +1067,9 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         }
         life.consume(amount);
         if (life.currentValue() == 0) {
-//            onKilled();
+            handleKilled();
         } else {
-//            sendEvent(PlayerAttributeEvent.of(this));
+            sendEvent(PlayerAttributeMessage.of(this));
         }
     }
 
@@ -1427,6 +1427,23 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         throw new IllegalArgumentException();
     }
 
+    private void handleKilled() {
+        footKungfu = null;
+        breathKungFu = null;
+        combatController = null;
+        var oldLevel = revival.level();
+        revival = revival.gainExp();
+        if (oldLevel != revival.level()) {
+            sendEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
+        }
+        syncActiveKungFuList();
+        dieSound().ifPresent(this::sendSound);
+        changeState(PlayerDieState.of(this));
+        if (playerTrade != null)
+            playerTrade.cancel(this);
+        sendEvent(PlayerChangeStateEvent.allVisible(this));
+    }
+
 
     @Override
     public <AB> Optional<AB> findAbility(Class<AB> type) {
@@ -1460,20 +1477,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             sendEvent(PlayerChangeStateEvent.allVisible(this));
             gainProtectionExp(old - currentLife());
         } else {
-            footKungfu = null;
-            breathKungFu = null;
-            combatController = null;
-            var oldLevel = revival.level();
-            revival = revival.gainExp();
-            if (oldLevel != revival.level()) {
-                sendEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
-            }
-            syncActiveKungFuList();
-            dieSound().ifPresent(this::sendSound);
-            changeState(PlayerDieState.of(this));
-            if (playerTrade != null)
-                playerTrade.cancel(this);
-            sendEvent(PlayerChangeStateEvent.allVisible(this));
+            handleKilled();
         }
         return ExperienceUtil.damageToExp(maxLife(), old - life.currentValue());
     }

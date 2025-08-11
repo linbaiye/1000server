@@ -163,10 +163,10 @@ public final class NpcFactoryImpl implements NpcFactory {
 
     private List<Object> buildCommonAbilities(String idName, NpcSdb npcSdb, boolean hasRespawn) {
         List<Object> abilities = new ArrayList<>();
-        NpcHurtAbility hurtAbility = createHurtAbility(idName, npcSdb);
-        abilities.add(hurtAbility);
-        abilities.add(createIdleAbility(idName, npcSdb));
+        if (npcSdb.hit(idName))
+            abilities.add(createHurtAbility(idName, npcSdb));
         abilities.add(createDieAbility(idName, npcSdb));
+        abilities.add(createIdleAbility(idName, npcSdb));
         String attackMagic = npcSdb.getAttackMagic(idName);
         if (StringUtils.isNotEmpty(attackMagic))
             abilities.add(createShootAbility(attackMagic, npcSdb.getAnimate(idName), npcSdb.getAccuracy(idName) + 70));

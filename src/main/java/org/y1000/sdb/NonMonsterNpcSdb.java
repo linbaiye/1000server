@@ -8,8 +8,6 @@ public interface NonMonsterNpcSdb extends NpcSdb {
 
     String getSoundNormal(String name);
 
-    String getAttackMagic(String name);
-
     boolean isProtector(String name);
 
     String getNpcText(String name);

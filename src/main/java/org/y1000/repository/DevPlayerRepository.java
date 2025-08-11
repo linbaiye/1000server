@@ -7,14 +7,10 @@ import org.y1000.item.ItemFactory;
 import org.y1000.item.KungFuItem;
 import org.y1000.item.StackItem;
 import org.y1000.kungfu.KungFuBook;
-import org.y1000.util.Coordinate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-public class PlayerDevRepository implements PlayerRepository {
+public class DevPlayerRepository implements PlayerRepository {
 
     private final Map<Long, Player> playerMap = new HashMap<>();
     private final Map<Long, Integer> playerRealmMap = new HashMap<>();
@@ -23,7 +19,7 @@ public class PlayerDevRepository implements PlayerRepository {
 
     private final ItemFactory itemFactory;
 
-    private final List<Long> availableDebugPlayers = List.of(100000251L, 100000301L);
+    private final Set<Long> used = new HashSet<>();
 
 
     private void add(KungFuBook book, String name) {
@@ -42,7 +38,17 @@ public class PlayerDevRepository implements PlayerRepository {
         add(book, "三弓合体");
     }
 
-    public PlayerDevRepository(PlayerRepositoryImpl factory, ItemFactory itemFactory) {
+    public synchronized long[] getAvailablePlayer() {
+        for (Map.Entry<Long, Integer> longIntegerEntry : playerRealmMap.entrySet()) {
+            if (!used.contains(longIntegerEntry.getKey())) {
+                used.add(longIntegerEntry.getKey());
+                return new long[]{longIntegerEntry.getKey(), longIntegerEntry.getValue()};
+            }
+        }
+        return null;
+    }
+
+    public DevPlayerRepository(PlayerRepositoryImpl factory, ItemFactory itemFactory) {
         this.playerFactory = factory;
         this.itemFactory = itemFactory;
         Player male = playerFactory.create("测试男名字不能太长了", true, 100000251L);
@@ -101,10 +107,10 @@ public class PlayerDevRepository implements PlayerRepository {
         return Optional.ofNullable(playerRealmMap.get(id));
     }
 
-
     @Override
     public synchronized void update(Player player) {
         playerMap.put(player.id(), player);
+        used.remove(player.id());
         playerRealmMap.put(player.id(), player.getRealm().id());
     }
 

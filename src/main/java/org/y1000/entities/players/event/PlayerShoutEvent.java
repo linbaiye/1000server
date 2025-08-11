@@ -69,17 +69,6 @@ public class PlayerShoutEvent implements PlayerEvent {
         this.color = color;
     }
 
-    private static ShoutColor computeColor(Player player) {
-        int total = player.totalAttribute();
-        int l = total / 100;
-        for (int i = 0; i < Level.length; i++) {
-            if (l < Level[i]) {
-                return Colors[i];
-            }
-        }
-        return Colors[9];
-    }
-
     public static int ComputeShoutLevel(Player player) {
         int total = player.totalAttribute();
         int l = total / 100;
@@ -96,6 +85,7 @@ public class PlayerShoutEvent implements PlayerEvent {
 
     @Override
     public void accept(PlayerEventHandler handler) {
+        source().consumeLife(2000);
         handler.sendCrossRealmEvent(BroadcastTextEvent.bottom(text, color.color(), color.bgColor()));
     }
 

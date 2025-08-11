@@ -3,12 +3,13 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.account.AccountManager;
+import org.y1000.message.account.AccountMessage;
+import org.y1000.message.account.LoginCharacterRequest;
 import org.y1000.message.input.*;
 import org.y1000.network.ConnectionEvent;
 import org.y1000.realm.event.*;
 import org.y1000.network.Connection;
 import org.y1000.network.ConnectionEventType;
-import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
 import java.util.*;
@@ -17,8 +18,6 @@ import java.util.concurrent.*;
 
 @Slf4j
 public final class RealmManager implements Runnable , RealmEventSender {
-
-    private final Map<String, Integer> playerNameRealmIdMap;
 
     private ExecutorService executorService;
 
@@ -30,25 +29,13 @@ public final class RealmManager implements Runnable , RealmEventSender {
 
     private final AccountManager accountManager;
 
-    private final PlayerRepository playerRepository;
-
-    private final Map<Connection, Long> connectedDebugPlayers;
-
     private final int realmNumber;
 
-    private final List<Long> availableDebugPlayers = List.of(100000251L, 100000301L);
-//    private final List<Long> availableDebugPlayers = List.of(100000051L, 99999951L);
-
-
-    private RealmManager(AccountManager accountManager,
-                         PlayerRepository playerRepository, int realmNumber) {
+    private RealmManager(AccountManager accountManager, int realmNumber) {
         this.realmNumber = realmNumber;
         eventQueue = new ArrayDeque<>(100);
         shutdown = false;
-        playerNameRealmIdMap = new HashMap<>();
-        this.playerRepository = playerRepository;
         this.accountManager = accountManager;
-        connectedDebugPlayers = new HashMap<>();
         realmIdGroupMap = new ConcurrentHashMap<>();
     }
 
@@ -57,35 +44,34 @@ public final class RealmManager implements Runnable , RealmEventSender {
     }
 
 
-    private Optional<Long> findAvailableDebugPlayer() {
-        return availableDebugPlayers.stream().filter(playerId  -> !connectedDebugPlayers.containsValue(playerId)).findFirst();
+    private void logoutPlayer(long playerId) {
+        realmIdGroupMap.values().forEach(r -> r.broadcast(Logout.byPlayerId(playerId)));
     }
 
 
-    private void handleDebug(Connection connection) {
-        findAvailableDebugPlayer().ifPresentOrElse( playerId -> {
-                    playerRepository.findRealm(playerId)
-                        .ifPresent(realmId ->  {
-                            realmIdGroupMap.values().forEach(r -> r.handle(realmId, new Login(connection, playerId)));
-                            connectedDebugPlayers.put(connection, playerId);
-                        });
-                }, connection::tryClose);
+    private void handleAccountMessage(Connection connection, AccountMessage message) {
+        if (message instanceof LoginCharacterRequest characterRequest) {
+            accountManager.getAllPlayerId(connection).forEach(this::logoutPlayer);
+            long[] idAndRealmId = accountManager.loginCharacter(connection, characterRequest.name());
+            if (idAndRealmId != null) {
+                realmIdGroupMap.values().forEach(r -> r.handle((int) idAndRealmId[1], new Login(connection, idAndRealmId[0])));
+            }
+            else
+                connection.tryClose();
+        } else {
+            accountManager.handle(connection, message);
+        }
     }
 
     private void handleLogout(Connection co) {
-        connectedDebugPlayers.remove(co);
-        realmIdGroupMap.values().forEach(r -> r.broadcast(new Logout(co)));
+        realmIdGroupMap.values().forEach(r -> r.broadcast(Logout.byConnection(co)));
     }
 
-
-
-
     private void handleDataEvent(Connection connection, Object data) {
-        if (data instanceof DebugInput) {
-            handleDebug(connection);
-        } else {
+        if (data instanceof AccountMessage accountMessage)
+            handleAccountMessage(connection, accountMessage);
+        else
             realmIdGroupMap.values().forEach(r -> r.broadcast(new ConnectionInput(connection, data)));
-        }
     }
 
 
@@ -146,10 +132,10 @@ public final class RealmManager implements Runnable , RealmEventSender {
     }
 
     public static RealmManager create(MapSdb mapSdb, RealmFactory realmFactory,
-                                      AccountManager accountManager, PlayerRepository playerRepository) {
+                                      AccountManager accountManager) {
         List<Integer> realmIds = getRealmIds(mapSdb);
         List<Realm> realmList = new ArrayList<>();
-        var manager = new RealmManager(accountManager, playerRepository, realmIds.size());
+        var manager = new RealmManager(accountManager, realmIds.size());
         for (Integer id : realmIds) {
             Realm realm = realmFactory.createRealm(id, manager);
             realmList.add(realm);

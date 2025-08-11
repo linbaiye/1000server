@@ -20,7 +20,6 @@ import java.util.function.Supplier;
 final class DungeonRealm extends AbstractRealm {
     private boolean closing;
     private final int durationSeconds;
-    private String openAnnouncement;
     private final boolean[] minuteAnnouncement;
     private final Supplier<LocalDateTime> timeSupplier;
     private final LocalDateTime closeTime;
@@ -55,7 +54,6 @@ final class DungeonRealm extends AbstractRealm {
         if (!(playerManager instanceof DungeonPlayerManager dungeonPlayerManager)) {
             throw new IllegalArgumentException();
         }
-        openAnnouncement = mapSdb.getAnnouncement(id);
         dungeonPlayerManager.setDeadPlayerTeleportor(this::teleportPlayerOut);
         int minutes = durationSeconds == 1800 ? 30 : 60;
         minuteAnnouncement = new boolean[minutes + 1];
@@ -79,27 +77,14 @@ final class DungeonRealm extends AbstractRealm {
         }
     }
 
-
-    private boolean isTimeToAnnounce(int minute, int second) {
-        if (isHalfHourInterval()) {
-            return (minute == 25 || minute == 55) && second > 5;
-        } else {
-            return minute == 55 && second > 0;
-        }
-    }
-
     @Override
     public void update() {
         doUpdateEntities();
         LocalDateTime time = timeSupplier.get();
-        sendBroadcast(time.getMinute(), time.getSecond());
+        sendBroadcast(time.getMinute());
     }
 
-    private void sendBroadcast(int minute, int second) {
-        if (openAnnouncement != null && isTimeToAnnounce(minute, second)) {
-            sendCrossRealmEvent(BroadcastTextEvent.leftUp(openAnnouncement + "将在5分钟后开放。"));
-            openAnnouncement = null;
-        }
+    private void sendBroadcast(int minute) {
         if (minuteAnnouncement[minute]) {
             return;
         }

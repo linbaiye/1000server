@@ -6,6 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.y1000.ServerContext;
 import org.y1000.entities.Direction;
 import org.y1000.item.EquipmentType;
+import org.y1000.message.account.CreateCharacterRequest;
+import org.y1000.message.account.LoginAccountRequest;
+import org.y1000.message.account.LoginCharacterRequest;
+import org.y1000.message.account.RegisterAccountRequest;
 import org.y1000.message.input.*;
 import org.y1000.message.input.MoveInput;
 import org.y1000.message.input.TurnInput;
@@ -37,12 +41,16 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     Object createMessage(ClientPacket clientPacket) {
         return switch (clientPacket.getTypeCase()) {
-            case LOGINPACKET -> LoginEvent.fromPacket(clientPacket.getLoginPacket());
             case UNEQUIP -> new ClientUnequipEvent(EquipmentType.fromValue(clientPacket.getUnequip().getType()));
             case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
             case FOUNDGUILD -> ClientFoundGuildEvent.parse(clientPacket.getFoundGuild());
             case CREATEGUILDKUNGFU -> ClientCreateGuildKungFuEvent.parse(clientPacket.getCreateGuildKungFu());
             case MANAGEGUILD -> new ClientManageGuildEvent(clientPacket.getManageGuild().getType(), clientPacket.getManageGuild().getTarget());
+
+            case LOGINCHARACTER -> new LoginCharacterRequest(clientPacket.getLoginCharacter().getCharacterName());
+            case LOGINACCOUNT -> new LoginAccountRequest(clientPacket.getLoginAccount().getUsername(), clientPacket.getLoginAccount().getPassword());
+            case REGISTERACCOUNT -> new RegisterAccountRequest(clientPacket.getRegisterAccount().getUsername(), clientPacket.getRegisterAccount().getPassword());
+            case CREATECHARACTER -> new CreateCharacterRequest(clientPacket.getCreateCharacter().getCharacterName(), clientPacket.getCreateCharacter().getMale());
 
             case DEBUG -> new DebugInput(1);
             case SWAPINVENTORYSLOTPACKET -> SwapInventoryItemInput.fromPacket(clientPacket.getSwapInventorySlotPacket());

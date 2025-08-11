@@ -10,7 +10,6 @@ import org.y1000.item.Item;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.message.PlayerEventListener;
 import org.y1000.message.RemoveEntityMessage;
-import org.y1000.message.input.Login;
 import org.y1000.message.input.SelfHandleInput;
 import org.y1000.network.Connection;
 import org.y1000.realm.event.RealmEvent;
@@ -49,10 +48,9 @@ abstract class AbstractPlayerManager extends AbstractActiveEntityManager<Player>
         sendTo(source, message);
     }
 
-    private void doLogout(Player player) {
-        if (player == null) {
+    public void logoutPlayer(Player player) {
+        if (player == null)
             return;
-        }
         // Need to update first lest losing realm id.
         playerRepository.update(player);
         player.leaveRealm();
@@ -63,7 +61,6 @@ abstract class AbstractPlayerManager extends AbstractActiveEntityManager<Player>
 
     private void doPlayerJoinRealm(Player player, Runnable joinAction, Connection connection,
                                    Function<Player, I2ClientMessage> characterMsgCreator) {
-        find(player.id()).ifPresent(this::doLogout);
         connectionManager.add(player, connection);
         joinAction.run();
         sendTo(player, characterMsgCreator.apply(player));
@@ -91,7 +88,7 @@ abstract class AbstractPlayerManager extends AbstractActiveEntityManager<Player>
     public void logoutPlayer(Connection connection) {
         if (connection == null)
             return;
-        connectionManager.findPlayer(connection).ifPresent(this::doLogout);
+        connectionManager.findPlayer(connection).ifPresent(this::logoutPlayer);
     }
 
     @Override

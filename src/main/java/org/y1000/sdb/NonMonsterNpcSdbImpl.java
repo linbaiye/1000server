@@ -46,6 +46,10 @@ public final class NonMonsterNpcSdbImpl extends AbstractNpcSdb implements NonMon
         return "TRUE".equals(get(name, "boSeller"));
     }
 
+    @Override
+    public boolean hit(String name) {
+        return "TRUE".equals(get(name, "boHit"));
+    }
 
     @Override
     public boolean isQuester(String name) {
