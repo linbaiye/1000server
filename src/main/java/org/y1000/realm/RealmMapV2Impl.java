@@ -98,7 +98,7 @@ final class RealmMapV2Impl implements RealmMap {
     }
 
     @Override
-    public boolean softReserve(Entity entity, Coordinate coordinate) {
+    public boolean softOccupy(Entity entity, Coordinate coordinate) {
         if (!movable(coordinate))
             return false;
         Entity reservedEntity = softReserved.get(coordinate);
@@ -110,7 +110,7 @@ final class RealmMapV2Impl implements RealmMap {
         return reservedEntity.equals(entity);
     }
 
-    private void clearSoftReserved(Entity entity) {
+    private void clearSoftOccupied(Entity entity) {
         Coordinate remove = softReservedEntities.remove(entity);
         if (remove != null)
             softReserved.remove(remove);
@@ -145,7 +145,7 @@ final class RealmMapV2Impl implements RealmMap {
         if (c != null) {
             doRemoveCoordinate(entity, c);
         }
-        clearSoftReserved(entity);
+        clearSoftOccupied(entity);
     }
 
 
@@ -169,7 +169,7 @@ final class RealmMapV2Impl implements RealmMap {
             doRemoveCoordinate(dynamicObject, coordinate);
         }
         softReservedEntities.remove(dynamicObject);
-        clearSoftReserved(dynamicObject);
+        clearSoftOccupied(dynamicObject);
     }
 
 

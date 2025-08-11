@@ -14,7 +14,7 @@ public interface RealmMap {
     boolean movable(Coordinate coordinate);
     boolean tileMovable(Coordinate coordinate);
 
-    boolean softReserve(Entity entity, Coordinate coordinate);
+    boolean softOccupy(Entity entity, Coordinate coordinate);
 
     void occupy(Entity entity);
 

@@ -139,6 +139,8 @@ public class CombatAI extends AbstractMovableNpcAI {
     }
 
     private void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
+        if (attacker.findAbility(HurtAbility.class).isPresent())
+            enemy = attacker;
         npc().findAbility(NpcCopyAbility.class)
                         .ifPresent(a -> a.tryApply(npc(), attacker));
         applyHurtAbility(ability);

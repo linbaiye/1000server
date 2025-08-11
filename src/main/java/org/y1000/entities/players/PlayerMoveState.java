@@ -58,6 +58,7 @@ final class PlayerMoveState extends AbstractPlayerState {
             // Not able to keep after this move, disable it in advance.
             if (player().footKungFu().map(k -> !k.canKeep(player())).orElse(false))
                 player().disableFootKungFuAndSync();
+            player().realmMap().softOccupy(player(), currentInput.destination());
         }
         if (!elapse(delta))
             return;
