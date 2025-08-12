@@ -8,7 +8,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.y1000.entities.players.*;
-import org.y1000.factory.PlayerFactory;
+import org.y1000.entities.players.PlayerFactory;
 import org.y1000.kungfu.*;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;

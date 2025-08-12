@@ -1,4 +1,4 @@
-package org.y1000.factory;
+package org.y1000.entities.players;
 
 import org.y1000.entities.players.Player;
 

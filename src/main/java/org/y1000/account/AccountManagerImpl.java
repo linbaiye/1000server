@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.factory.PlayerFactory;
+import org.y1000.entities.players.PlayerFactory;
 import org.y1000.network.Connection;
 import org.y1000.persistence.PlayerPo;
 import org.y1000.repository.AccountRepository;
