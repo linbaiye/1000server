@@ -520,6 +520,7 @@ message NpcPositionPacket {
   repeated int32 xList = 1;
   repeated int32 yList = 2;
   repeated string nameList = 3;
+  repeated int64 idList = 4;
 }
 
 message ChatPacket {

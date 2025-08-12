@@ -26,11 +26,13 @@ public final class InteractableCoordinateNameMessage implements I2ClientMessage 
     private Packet buildPacket() {
         NpcPositionPacket.Builder builder = NpcPositionPacket.newBuilder();
         for (var merchant : merchants) {
+            builder.addIdList(merchant.id());
             builder.addNameList(merchant.viewName());
             builder.addXList(merchant.coordinate().x());
             builder.addYList(merchant.coordinate().y());
         }
         for (StaticTeleport teleport : teleports) {
+            builder.addIdList(teleport.id());
             builder.addNameList(teleport.viewName());
             builder.addXList(teleport.coordinate().x());
             builder.addYList(teleport.coordinate().y());

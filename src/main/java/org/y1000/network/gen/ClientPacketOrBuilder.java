@@ -69,21 +69,6 @@ public interface ClientPacketOrBuilder extends
   org.y1000.network.gen.CreateCharacterRequestPacketOrBuilder getCreateCharacterOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-   * @return Whether the loginPacket field is set.
-   */
-  boolean hasLoginPacket();
-  /**
-   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-   * @return The loginPacket.
-   */
-  org.y1000.network.gen.PlayerLoginPacket getLoginPacket();
-  /**
-   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-   */
-  org.y1000.network.gen.PlayerLoginPacketOrBuilder getLoginPacketOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
    * @return Whether the unequip field is set.
    */

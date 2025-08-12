@@ -49,7 +49,6 @@ private static final long serialVersionUID = 0L;
     REGISTERACCOUNT(11),
     LOGINCHARACTER(12),
     CREATECHARACTER(13),
-    LOGINPACKET(3),
     UNEQUIP(9),
     CHANGETEAM(25),
     FOUNDGUILD(26),
@@ -103,7 +102,6 @@ private static final long serialVersionUID = 0L;
         case 11: return REGISTERACCOUNT;
         case 12: return LOGINCHARACTER;
         case 13: return CREATECHARACTER;
-        case 3: return LOGINPACKET;
         case 9: return UNEQUIP;
         case 25: return CHANGETEAM;
         case 26: return FOUNDGUILD;
@@ -273,37 +271,6 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.CreateCharacterRequestPacket) type_;
     }
     return org.y1000.network.gen.CreateCharacterRequestPacket.getDefaultInstance();
-  }
-
-  public static final int LOGINPACKET_FIELD_NUMBER = 3;
-  /**
-   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-   * @return Whether the loginPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasLoginPacket() {
-    return typeCase_ == 3;
-  }
-  /**
-   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-   * @return The loginPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PlayerLoginPacket getLoginPacket() {
-    if (typeCase_ == 3) {
-       return (org.y1000.network.gen.PlayerLoginPacket) type_;
-    }
-    return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PlayerLoginPacketOrBuilder getLoginPacketOrBuilder() {
-    if (typeCase_ == 3) {
-       return (org.y1000.network.gen.PlayerLoginPacket) type_;
-    }
-    return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
   }
 
   public static final int UNEQUIP_FIELD_NUMBER = 9;
@@ -1315,9 +1282,6 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 2) {
       output.writeMessage(2, (org.y1000.network.gen.ClickInputPacket) type_);
     }
-    if (typeCase_ == 3) {
-      output.writeMessage(3, (org.y1000.network.gen.PlayerLoginPacket) type_);
-    }
     if (typeCase_ == 5) {
       output.writeMessage(5, (org.y1000.network.gen.SwapInventorySlotPacket) type_);
     }
@@ -1435,10 +1399,6 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 2) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(2, (org.y1000.network.gen.ClickInputPacket) type_);
-    }
-    if (typeCase_ == 3) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, (org.y1000.network.gen.PlayerLoginPacket) type_);
     }
     if (typeCase_ == 5) {
       size += com.google.protobuf.CodedOutputStream
@@ -1613,10 +1573,6 @@ private static final long serialVersionUID = 0L;
         if (!getCreateCharacter()
             .equals(other.getCreateCharacter())) return false;
         break;
-      case 3:
-        if (!getLoginPacket()
-            .equals(other.getLoginPacket())) return false;
-        break;
       case 9:
         if (!getUnequip()
             .equals(other.getUnequip())) return false;
@@ -1775,10 +1731,6 @@ private static final long serialVersionUID = 0L;
       case 13:
         hash = (37 * hash) + CREATECHARACTER_FIELD_NUMBER;
         hash = (53 * hash) + getCreateCharacter().hashCode();
-        break;
-      case 3:
-        hash = (37 * hash) + LOGINPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getLoginPacket().hashCode();
         break;
       case 9:
         hash = (37 * hash) + UNEQUIP_FIELD_NUMBER;
@@ -2055,9 +2007,6 @@ private static final long serialVersionUID = 0L;
       if (createCharacterBuilder_ != null) {
         createCharacterBuilder_.clear();
       }
-      if (loginPacketBuilder_ != null) {
-        loginPacketBuilder_.clear();
-      }
       if (unequipBuilder_ != null) {
         unequipBuilder_.clear();
       }
@@ -2215,10 +2164,6 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 13 &&
           createCharacterBuilder_ != null) {
         result.type_ = createCharacterBuilder_.build();
-      }
-      if (typeCase_ == 3 &&
-          loginPacketBuilder_ != null) {
-        result.type_ = loginPacketBuilder_.build();
       }
       if (typeCase_ == 9 &&
           unequipBuilder_ != null) {
@@ -2411,10 +2356,6 @@ private static final long serialVersionUID = 0L;
           mergeCreateCharacter(other.getCreateCharacter());
           break;
         }
-        case LOGINPACKET: {
-          mergeLoginPacket(other.getLoginPacket());
-          break;
-        }
         case UNEQUIP: {
           mergeUnequip(other.getUnequip());
           break;
@@ -2580,13 +2521,6 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 2;
               break;
             } // case 18
-            case 26: {
-              input.readMessage(
-                  getLoginPacketFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 3;
-              break;
-            } // case 26
             case 42: {
               input.readMessage(
                   getSwapInventorySlotPacketFieldBuilder().getBuilder(),
@@ -3431,148 +3365,6 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 13;
       onChanged();
       return createCharacterBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PlayerLoginPacket, org.y1000.network.gen.PlayerLoginPacket.Builder, org.y1000.network.gen.PlayerLoginPacketOrBuilder> loginPacketBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     * @return Whether the loginPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasLoginPacket() {
-      return typeCase_ == 3;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     * @return The loginPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.PlayerLoginPacket getLoginPacket() {
-      if (loginPacketBuilder_ == null) {
-        if (typeCase_ == 3) {
-          return (org.y1000.network.gen.PlayerLoginPacket) type_;
-        }
-        return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 3) {
-          return loginPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    public Builder setLoginPacket(org.y1000.network.gen.PlayerLoginPacket value) {
-      if (loginPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        loginPacketBuilder_.setMessage(value);
-      }
-      typeCase_ = 3;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    public Builder setLoginPacket(
-        org.y1000.network.gen.PlayerLoginPacket.Builder builderForValue) {
-      if (loginPacketBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        loginPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 3;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    public Builder mergeLoginPacket(org.y1000.network.gen.PlayerLoginPacket value) {
-      if (loginPacketBuilder_ == null) {
-        if (typeCase_ == 3 &&
-            type_ != org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.PlayerLoginPacket.newBuilder((org.y1000.network.gen.PlayerLoginPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 3) {
-          loginPacketBuilder_.mergeFrom(value);
-        } else {
-          loginPacketBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 3;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    public Builder clearLoginPacket() {
-      if (loginPacketBuilder_ == null) {
-        if (typeCase_ == 3) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 3) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        loginPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    public org.y1000.network.gen.PlayerLoginPacket.Builder getLoginPacketBuilder() {
-      return getLoginPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.PlayerLoginPacketOrBuilder getLoginPacketOrBuilder() {
-      if ((typeCase_ == 3) && (loginPacketBuilder_ != null)) {
-        return loginPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 3) {
-          return (org.y1000.network.gen.PlayerLoginPacket) type_;
-        }
-        return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PlayerLoginPacket, org.y1000.network.gen.PlayerLoginPacket.Builder, org.y1000.network.gen.PlayerLoginPacketOrBuilder> 
-        getLoginPacketFieldBuilder() {
-      if (loginPacketBuilder_ == null) {
-        if (!(typeCase_ == 3)) {
-          type_ = org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-        }
-        loginPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.PlayerLoginPacket, org.y1000.network.gen.PlayerLoginPacket.Builder, org.y1000.network.gen.PlayerLoginPacketOrBuilder>(
-                (org.y1000.network.gen.PlayerLoginPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 3;
-      onChanged();
-      return loginPacketBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<

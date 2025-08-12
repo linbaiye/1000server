@@ -49,4 +49,10 @@ public interface TextMessagePacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getBgColorBytes();
+
+  /**
+   * <code>int32 type = 5;</code>
+   * @return The type.
+   */
+  int getType();
 }

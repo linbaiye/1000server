@@ -66,4 +66,21 @@ public interface NpcPositionPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getNameListBytes(int index);
+
+  /**
+   * <code>repeated int64 idList = 4;</code>
+   * @return A list containing the idList.
+   */
+  java.util.List<java.lang.Long> getIdListList();
+  /**
+   * <code>repeated int64 idList = 4;</code>
+   * @return The count of idList.
+   */
+  int getIdListCount();
+  /**
+   * <code>repeated int64 idList = 4;</code>
+   * @param index The index of the element to return.
+   * @return The idList at the given index.
+   */
+  long getIdList(int index);
 }

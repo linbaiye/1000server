@@ -170,6 +170,17 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int TYPE_FIELD_NUMBER = 5;
+  private int type_ = 0;
+  /**
+   * <code>int32 type = 5;</code>
+   * @return The type.
+   */
+  @java.lang.Override
+  public int getType() {
+    return type_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -196,6 +207,9 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(bgColor_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 4, bgColor_);
     }
+    if (type_ != 0) {
+      output.writeInt32(5, type_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -217,6 +231,10 @@ private static final long serialVersionUID = 0L;
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(bgColor_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, bgColor_);
+    }
+    if (type_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(5, type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -241,6 +259,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getColor())) return false;
     if (!getBgColor()
         .equals(other.getBgColor())) return false;
+    if (getType()
+        != other.getType()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -260,6 +280,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getColor().hashCode();
     hash = (37 * hash) + BGCOLOR_FIELD_NUMBER;
     hash = (53 * hash) + getBgColor().hashCode();
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getType();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -395,6 +417,7 @@ private static final long serialVersionUID = 0L;
       location_ = 0;
       color_ = "";
       bgColor_ = "";
+      type_ = 0;
       return this;
     }
 
@@ -439,6 +462,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000008) != 0)) {
         result.bgColor_ = bgColor_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.type_ = type_;
       }
     }
 
@@ -504,6 +530,9 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000008;
         onChanged();
       }
+      if (other.getType() != 0) {
+        setType(other.getType());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -550,6 +579,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000008;
               break;
             } // case 34
+            case 40: {
+              type_ = input.readInt32();
+              bitField0_ |= 0x00000010;
+              break;
+            } // case 40
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -811,6 +845,38 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       bgColor_ = value;
       bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+
+    private int type_ ;
+    /**
+     * <code>int32 type = 5;</code>
+     * @return The type.
+     */
+    @java.lang.Override
+    public int getType() {
+      return type_;
+    }
+    /**
+     * <code>int32 type = 5;</code>
+     * @param value The type to set.
+     * @return This builder for chaining.
+     */
+    public Builder setType(int value) {
+
+      type_ = value;
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 type = 5;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearType() {
+      bitField0_ = (bitField0_ & ~0x00000010);
+      type_ = 0;
       onChanged();
       return this;
     }
