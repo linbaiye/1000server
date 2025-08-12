@@ -15,7 +15,6 @@ message NpcMovePacket {
   int32 speedMillis = 5;
 }
 
-
 message FollowRopePacket {
   int64 id = 1;
   int32 direction = 2;
@@ -471,14 +470,6 @@ message NpcPositionPacket {
   repeated int64 idList = 4;
 }
 
-message ChatPacket {
-  int64 id = 1;
-  string content = 2;
-  optional string fromPlayer = 3;
-}
-
-
-
 message NameColorPacket {
   int64 id = 1;
   int32 color = 2;
@@ -602,7 +593,6 @@ message Packet {
     ShowTeleportPacket showTeleport = 43;
     BreakRopePacket breakRope = 44;
     NpcPositionPacket npcPosition = 45;
-    ChatPacket chat = 46;
     NameColorPacket nameColor = 49;
     UpdateGuildPacket updateGuild = 50;
     UpdateGuildKungFuFormPacket kungFuForm = 51;
