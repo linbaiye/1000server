@@ -7,6 +7,8 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
+import org.y1000.input.MoveInput;
+import org.y1000.input.TurnInput;
 import org.y1000.item.Equipment;
 import org.y1000.item.ItemFactory;
 import org.y1000.kungfu.FootKungFu;
@@ -15,8 +17,6 @@ import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.entities.players.event.PlayerChangeStateEvent;
 import org.y1000.entities.players.event.SyncActiveKungMessage;
-import org.y1000.message.input.MoveInput;
-import org.y1000.message.input.TurnInput;
 import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;

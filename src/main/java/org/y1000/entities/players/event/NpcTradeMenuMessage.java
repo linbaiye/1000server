@@ -1,6 +1,6 @@
 package org.y1000.entities.players.event;
 
-import org.y1000.entities.creatures.npc.AbstractNpcTradeAbility;
+import org.y1000.entities.npc.AbstractNpcTradeAbility;
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.NpcItemPacket;
 import org.y1000.network.gen.NpcTradeMenuPacket;

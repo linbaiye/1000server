@@ -7,9 +7,9 @@ import org.y1000.entities.Direction;
 import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.entities.players.event.PlayerMovedEvent;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
+import org.y1000.input.MoveInput;
 import org.y1000.item.Equipment;
 import org.y1000.entities.players.event.PlayerChangeStateEvent;
-import org.y1000.message.input.MoveInput;
 import org.y1000.util.Coordinate;
 
 

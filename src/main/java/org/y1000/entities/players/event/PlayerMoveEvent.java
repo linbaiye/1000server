@@ -1,6 +1,6 @@
 package org.y1000.entities.players.event;
 
-import org.y1000.entities.creatures.npc.event.NpcMoveEvent;
+import org.y1000.entities.npc.event.NpcMoveEvent;
 import org.y1000.entities.players.MoveAction;
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.Packet;

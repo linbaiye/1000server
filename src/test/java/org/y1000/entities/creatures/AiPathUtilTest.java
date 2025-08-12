@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.npc.Npc;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 

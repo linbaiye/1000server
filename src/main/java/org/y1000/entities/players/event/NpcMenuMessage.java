@@ -1,6 +1,6 @@
 package org.y1000.entities.players.event;
 
-import org.y1000.entities.creatures.npc.NpcInteractDialogAbility;
+import org.y1000.entities.npc.NpcInteractDialogAbility;
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.NpcMenuPacket;
 import org.y1000.network.gen.Packet;

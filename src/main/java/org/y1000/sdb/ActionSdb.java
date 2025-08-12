@@ -1,7 +1,7 @@
 package org.y1000.sdb;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.y1000.entities.creatures.npc.NpcAction;
+import org.y1000.entities.npc.NpcAction;
 
 import java.util.HashMap;
 import java.util.Map;

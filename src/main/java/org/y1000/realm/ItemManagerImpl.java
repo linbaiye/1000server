@@ -3,7 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.*;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
+import org.y1000.entities.EntitySoundEvent;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;

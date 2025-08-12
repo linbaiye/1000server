@@ -1,8 +1,8 @@
 package org.y1000.input;
 
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.creatures.npc.NpcBankAbility;
+import org.y1000.entities.npc.Npc;
+import org.y1000.entities.npc.NpcBankAbility;
 import org.y1000.entities.players.Player;
 
 public record UnlockBankInput(long id) implements EntityInteractInput {

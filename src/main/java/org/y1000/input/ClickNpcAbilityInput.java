@@ -1,8 +1,8 @@
 package org.y1000.input;
 
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.creatures.npc.NpcInteractAbility;
+import org.y1000.entities.npc.Npc;
+import org.y1000.entities.npc.NpcInteractAbility;
 import org.y1000.entities.players.Player;
 
 public record ClickNpcAbilityInput(long id, String abilityName) implements EntityInteractInput {

@@ -2,7 +2,7 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-import org.y1000.entities.creatures.npc.NpcInteractAbility;
+import org.y1000.entities.npc.NpcInteractAbility;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.entities.teleport.TeleportEventHandler;

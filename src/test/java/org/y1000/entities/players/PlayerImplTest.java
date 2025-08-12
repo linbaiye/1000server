@@ -8,6 +8,7 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.event.*;
+import org.y1000.input.AbstractClickContainerSlotInput;
 import org.y1000.item.*;
 import org.y1000.kungfu.*;
 import org.y1000.entities.players.inventory.Inventory;
@@ -15,7 +16,6 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.entities.players.event.SyncActiveKungMessage;
-import org.y1000.message.input.AbstractClickContainerSlotInput;
 
 
 import java.util.HashMap;

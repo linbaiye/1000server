@@ -2,7 +2,7 @@ package org.y1000;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.mockito.Mockito;
-import org.y1000.entities.creatures.npc.NpcFactoryImpl;
+import org.y1000.entities.npc.NpcFactoryImpl;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
 import org.y1000.entities.players.*;

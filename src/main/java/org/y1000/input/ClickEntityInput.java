@@ -2,7 +2,7 @@ package org.y1000.input;
 
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
-import org.y1000.entities.creatures.npc.NpcInteractDialogAbility;
+import org.y1000.entities.npc.NpcInteractDialogAbility;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
 

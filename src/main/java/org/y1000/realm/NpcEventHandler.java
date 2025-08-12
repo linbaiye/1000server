@@ -2,8 +2,8 @@ package org.y1000.realm;
 
 
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.creatures.npc.event.NpcShootEvent;
+import org.y1000.entities.npc.Npc;
+import org.y1000.entities.npc.event.NpcShootEvent;
 import org.y1000.network.I2ClientMessage;
 import org.y1000.util.Coordinate;
 

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.npc.Npc;
 import org.y1000.entities.objects.DynamicObject;
 import org.y1000.util.Coordinate;
 

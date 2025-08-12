@@ -1,7 +1,7 @@
 package org.y1000.realm.event;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.entities.npc.Npc;
 import org.y1000.entities.teleport.StaticTeleport;
 import org.y1000.network.I2ClientMessage;
 import org.y1000.network.gen.NpcPositionPacket;

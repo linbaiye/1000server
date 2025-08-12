@@ -1,6 +1,6 @@
 package org.y1000.entities.objects;
 
-import org.y1000.entities.creatures.npc.event.NpcLifeBarEvent;
+import org.y1000.entities.npc.event.NpcLifeBarEvent;
 import org.y1000.network.I2ClientMessage;
 import org.y1000.network.gen.Packet;
 import org.y1000.realm.DynamicObjectEventHandler;

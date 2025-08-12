@@ -3,7 +3,7 @@ package org.y1000.realm;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.npc.NpcFactory;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 

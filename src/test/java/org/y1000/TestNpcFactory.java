@@ -2,10 +2,10 @@ package org.y1000;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.mockito.Mockito;
-import org.y1000.entities.creatures.npc.NpcMeleeAbility;
-import org.y1000.entities.creatures.npc.NpcFactory;
-import org.y1000.entities.creatures.npc.NpcFactoryImpl;
-import org.y1000.entities.creatures.npc.NpcImpl;
+import org.y1000.entities.npc.NpcMeleeAbility;
+import org.y1000.entities.npc.NpcFactory;
+import org.y1000.entities.npc.NpcFactoryImpl;
+import org.y1000.entities.npc.NpcImpl;
 import org.y1000.item.ItemSdbImpl;
 import org.y1000.kungfu.KungFuFactory;
 import org.y1000.kungfu.KungFuSdb;

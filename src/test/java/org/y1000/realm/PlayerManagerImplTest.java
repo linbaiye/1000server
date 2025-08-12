@@ -6,7 +6,7 @@ import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.Player;
 import org.y1000.item.ItemFactory;
-import org.y1000.message.input.*;
+import org.y1000.input.*;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.util.Coordinate;
 

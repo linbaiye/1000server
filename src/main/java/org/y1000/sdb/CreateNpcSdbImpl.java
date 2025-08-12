@@ -1,7 +1,6 @@
 package org.y1000.sdb;
 
 import org.apache.commons.lang3.StringUtils;
-import org.y1000.entities.creatures.NpcType;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -73,11 +72,6 @@ public final class CreateNpcSdbImpl extends AbstractCreateEntitySdb implements C
         return get(id, key);
     }
 
-    @Override
-    public Optional<NpcType> getType(String idName) {
-        String type = getValue(idName, "Type");
-        return StringUtils.isEmpty(type) ? Optional.empty() : Optional.of(NpcType.valueOf(type));
-    }
 
     @Override
     public Optional<String> getConfig(String idName) {

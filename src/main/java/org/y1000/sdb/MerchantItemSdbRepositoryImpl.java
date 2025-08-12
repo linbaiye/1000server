@@ -1,7 +1,7 @@
 package org.y1000.sdb;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.npc.MerchantItem;
+import org.y1000.entities.npc.MerchantItem;
 import org.y1000.item.ItemSdb;
 
 import java.io.BufferedReader;

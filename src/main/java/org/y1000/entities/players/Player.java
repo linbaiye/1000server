@@ -2,7 +2,7 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
-import org.y1000.entities.creatures.Creature;
+import org.y1000.entities.Creature;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.guild.GuildMembership;

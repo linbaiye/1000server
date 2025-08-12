@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.AbstractCreatureState;
+import org.y1000.entities.AbstractCreatureState;
 
 abstract class AbstractPlayerState extends AbstractCreatureState implements PlayerState {
 

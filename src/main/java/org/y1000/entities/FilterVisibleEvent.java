@@ -1,7 +1,7 @@
 package org.y1000.entities;
 
-import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.creatures.npc.event.NpcEvent;
+import org.y1000.entities.npc.Npc;
+import org.y1000.entities.npc.event.NpcEvent;
 import org.y1000.entities.objects.DynamicObject;
 import org.y1000.entities.objects.DynamicObjectEvent;
 import org.y1000.entities.players.Player;
