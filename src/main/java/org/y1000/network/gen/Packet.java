@@ -48,9 +48,6 @@ private static final long serialVersionUID = 0L;
     LOGINRESPONSE(3),
     REGISTERRESPONSE(5),
     POSITIONPACKET(1),
-    CREATUREINTERPOLATION(2),
-    LOGINPACKET(4),
-    PLAYERINTERPOLATION(7),
     REMOVEENTITY(8),
     ATTACKEVENTPACKET(10),
     CHANGESTATEPACKET(12),
@@ -69,7 +66,6 @@ private static final long serialVersionUID = 0L;
     PROJECTILE(32),
     LEARNKUNGFU(34),
     ITEMDESCRIPTION(35),
-    UPDATETRADEWINDOW(37),
     SHOWDYNAMICOBJECT(38),
     UPDATEDYNAMICOBJECT(39),
     TELEPORT(40),
@@ -132,9 +128,6 @@ private static final long serialVersionUID = 0L;
         case 3: return LOGINRESPONSE;
         case 5: return REGISTERRESPONSE;
         case 1: return POSITIONPACKET;
-        case 2: return CREATUREINTERPOLATION;
-        case 4: return LOGINPACKET;
-        case 7: return PLAYERINTERPOLATION;
         case 8: return REMOVEENTITY;
         case 10: return ATTACKEVENTPACKET;
         case 12: return CHANGESTATEPACKET;
@@ -153,7 +146,6 @@ private static final long serialVersionUID = 0L;
         case 32: return PROJECTILE;
         case 34: return LEARNKUNGFU;
         case 35: return ITEMDESCRIPTION;
-        case 37: return UPDATETRADEWINDOW;
         case 38: return SHOWDYNAMICOBJECT;
         case 39: return UPDATEDYNAMICOBJECT;
         case 40: return TELEPORT;
@@ -302,99 +294,6 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.PositionPacket) typedPacket_;
     }
     return org.y1000.network.gen.PositionPacket.getDefaultInstance();
-  }
-
-  public static final int CREATUREINTERPOLATION_FIELD_NUMBER = 2;
-  /**
-   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-   * @return Whether the creatureInterpolation field is set.
-   */
-  @java.lang.Override
-  public boolean hasCreatureInterpolation() {
-    return typedPacketCase_ == 2;
-  }
-  /**
-   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-   * @return The creatureInterpolation.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.CreatureInterpolationPacket getCreatureInterpolation() {
-    if (typedPacketCase_ == 2) {
-       return (org.y1000.network.gen.CreatureInterpolationPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.CreatureInterpolationPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.CreatureInterpolationPacketOrBuilder getCreatureInterpolationOrBuilder() {
-    if (typedPacketCase_ == 2) {
-       return (org.y1000.network.gen.CreatureInterpolationPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.CreatureInterpolationPacket.getDefaultInstance();
-  }
-
-  public static final int LOGINPACKET_FIELD_NUMBER = 4;
-  /**
-   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-   * @return Whether the loginPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasLoginPacket() {
-    return typedPacketCase_ == 4;
-  }
-  /**
-   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-   * @return The loginPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.LoginPacket getLoginPacket() {
-    if (typedPacketCase_ == 4) {
-       return (org.y1000.network.gen.LoginPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.LoginPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.LoginPacketOrBuilder getLoginPacketOrBuilder() {
-    if (typedPacketCase_ == 4) {
-       return (org.y1000.network.gen.LoginPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.LoginPacket.getDefaultInstance();
-  }
-
-  public static final int PLAYERINTERPOLATION_FIELD_NUMBER = 7;
-  /**
-   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-   * @return Whether the playerInterpolation field is set.
-   */
-  @java.lang.Override
-  public boolean hasPlayerInterpolation() {
-    return typedPacketCase_ == 7;
-  }
-  /**
-   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-   * @return The playerInterpolation.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PlayerInterpolationPacket getPlayerInterpolation() {
-    if (typedPacketCase_ == 7) {
-       return (org.y1000.network.gen.PlayerInterpolationPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.PlayerInterpolationPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder() {
-    if (typedPacketCase_ == 7) {
-       return (org.y1000.network.gen.PlayerInterpolationPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.PlayerInterpolationPacket.getDefaultInstance();
   }
 
   public static final int REMOVEENTITY_FIELD_NUMBER = 8;
@@ -953,37 +852,6 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.ItemDescriptionPacket) typedPacket_;
     }
     return org.y1000.network.gen.ItemDescriptionPacket.getDefaultInstance();
-  }
-
-  public static final int UPDATETRADEWINDOW_FIELD_NUMBER = 37;
-  /**
-   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-   * @return Whether the updateTradeWindow field is set.
-   */
-  @java.lang.Override
-  public boolean hasUpdateTradeWindow() {
-    return typedPacketCase_ == 37;
-  }
-  /**
-   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-   * @return The updateTradeWindow.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.UpdateTradeWindowPacket getUpdateTradeWindow() {
-    if (typedPacketCase_ == 37) {
-       return (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder getUpdateTradeWindowOrBuilder() {
-    if (typedPacketCase_ == 37) {
-       return (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
   }
 
   public static final int SHOWDYNAMICOBJECT_FIELD_NUMBER = 38;
@@ -2305,20 +2173,11 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 1) {
       output.writeMessage(1, (org.y1000.network.gen.PositionPacket) typedPacket_);
     }
-    if (typedPacketCase_ == 2) {
-      output.writeMessage(2, (org.y1000.network.gen.CreatureInterpolationPacket) typedPacket_);
-    }
     if (typedPacketCase_ == 3) {
       output.writeMessage(3, (org.y1000.network.gen.LoginResponsePacket) typedPacket_);
     }
-    if (typedPacketCase_ == 4) {
-      output.writeMessage(4, (org.y1000.network.gen.LoginPacket) typedPacket_);
-    }
     if (typedPacketCase_ == 5) {
       output.writeMessage(5, (org.y1000.network.gen.RegisterResponsePacket) typedPacket_);
-    }
-    if (typedPacketCase_ == 7) {
-      output.writeMessage(7, (org.y1000.network.gen.PlayerInterpolationPacket) typedPacket_);
     }
     if (typedPacketCase_ == 8) {
       output.writeMessage(8, (org.y1000.network.gen.RemoveEntityPacket) typedPacket_);
@@ -2373,9 +2232,6 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 35) {
       output.writeMessage(35, (org.y1000.network.gen.ItemDescriptionPacket) typedPacket_);
-    }
-    if (typedPacketCase_ == 37) {
-      output.writeMessage(37, (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_);
     }
     if (typedPacketCase_ == 38) {
       output.writeMessage(38, (org.y1000.network.gen.ShowDynamicObjectPacket) typedPacket_);
@@ -2516,25 +2372,13 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(1, (org.y1000.network.gen.PositionPacket) typedPacket_);
     }
-    if (typedPacketCase_ == 2) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, (org.y1000.network.gen.CreatureInterpolationPacket) typedPacket_);
-    }
     if (typedPacketCase_ == 3) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(3, (org.y1000.network.gen.LoginResponsePacket) typedPacket_);
     }
-    if (typedPacketCase_ == 4) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(4, (org.y1000.network.gen.LoginPacket) typedPacket_);
-    }
     if (typedPacketCase_ == 5) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(5, (org.y1000.network.gen.RegisterResponsePacket) typedPacket_);
-    }
-    if (typedPacketCase_ == 7) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(7, (org.y1000.network.gen.PlayerInterpolationPacket) typedPacket_);
     }
     if (typedPacketCase_ == 8) {
       size += com.google.protobuf.CodedOutputStream
@@ -2607,10 +2451,6 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 35) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(35, (org.y1000.network.gen.ItemDescriptionPacket) typedPacket_);
-    }
-    if (typedPacketCase_ == 37) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(37, (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_);
     }
     if (typedPacketCase_ == 38) {
       size += com.google.protobuf.CodedOutputStream
@@ -2809,18 +2649,6 @@ private static final long serialVersionUID = 0L;
         if (!getPositionPacket()
             .equals(other.getPositionPacket())) return false;
         break;
-      case 2:
-        if (!getCreatureInterpolation()
-            .equals(other.getCreatureInterpolation())) return false;
-        break;
-      case 4:
-        if (!getLoginPacket()
-            .equals(other.getLoginPacket())) return false;
-        break;
-      case 7:
-        if (!getPlayerInterpolation()
-            .equals(other.getPlayerInterpolation())) return false;
-        break;
       case 8:
         if (!getRemoveEntity()
             .equals(other.getRemoveEntity())) return false;
@@ -2892,10 +2720,6 @@ private static final long serialVersionUID = 0L;
       case 35:
         if (!getItemDescription()
             .equals(other.getItemDescription())) return false;
-        break;
-      case 37:
-        if (!getUpdateTradeWindow()
-            .equals(other.getUpdateTradeWindow())) return false;
         break;
       case 38:
         if (!getShowDynamicObject()
@@ -3092,18 +2916,6 @@ private static final long serialVersionUID = 0L;
         hash = (37 * hash) + POSITIONPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getPositionPacket().hashCode();
         break;
-      case 2:
-        hash = (37 * hash) + CREATUREINTERPOLATION_FIELD_NUMBER;
-        hash = (53 * hash) + getCreatureInterpolation().hashCode();
-        break;
-      case 4:
-        hash = (37 * hash) + LOGINPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getLoginPacket().hashCode();
-        break;
-      case 7:
-        hash = (37 * hash) + PLAYERINTERPOLATION_FIELD_NUMBER;
-        hash = (53 * hash) + getPlayerInterpolation().hashCode();
-        break;
       case 8:
         hash = (37 * hash) + REMOVEENTITY_FIELD_NUMBER;
         hash = (53 * hash) + getRemoveEntity().hashCode();
@@ -3175,10 +2987,6 @@ private static final long serialVersionUID = 0L;
       case 35:
         hash = (37 * hash) + ITEMDESCRIPTION_FIELD_NUMBER;
         hash = (53 * hash) + getItemDescription().hashCode();
-        break;
-      case 37:
-        hash = (37 * hash) + UPDATETRADEWINDOW_FIELD_NUMBER;
-        hash = (53 * hash) + getUpdateTradeWindow().hashCode();
         break;
       case 38:
         hash = (37 * hash) + SHOWDYNAMICOBJECT_FIELD_NUMBER;
@@ -3483,7 +3291,6 @@ private static final long serialVersionUID = 0L;
       super.clear();
       bitField0_ = 0;
       bitField1_ = 0;
-      bitField2_ = 0;
       if (loginResponseBuilder_ != null) {
         loginResponseBuilder_.clear();
       }
@@ -3492,15 +3299,6 @@ private static final long serialVersionUID = 0L;
       }
       if (positionPacketBuilder_ != null) {
         positionPacketBuilder_.clear();
-      }
-      if (creatureInterpolationBuilder_ != null) {
-        creatureInterpolationBuilder_.clear();
-      }
-      if (loginPacketBuilder_ != null) {
-        loginPacketBuilder_.clear();
-      }
-      if (playerInterpolationBuilder_ != null) {
-        playerInterpolationBuilder_.clear();
       }
       if (removeEntityBuilder_ != null) {
         removeEntityBuilder_.clear();
@@ -3555,9 +3353,6 @@ private static final long serialVersionUID = 0L;
       }
       if (itemDescriptionBuilder_ != null) {
         itemDescriptionBuilder_.clear();
-      }
-      if (updateTradeWindowBuilder_ != null) {
-        updateTradeWindowBuilder_.clear();
       }
       if (showDynamicObjectBuilder_ != null) {
         showDynamicObjectBuilder_.clear();
@@ -3715,7 +3510,6 @@ private static final long serialVersionUID = 0L;
       org.y1000.network.gen.Packet result = new org.y1000.network.gen.Packet(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       if (bitField1_ != 0) { buildPartial1(result); }
-      if (bitField2_ != 0) { buildPartial2(result); }
       buildPartialOneofs(result);
       onBuilt();
       return result;
@@ -3727,10 +3521,6 @@ private static final long serialVersionUID = 0L;
 
     private void buildPartial1(org.y1000.network.gen.Packet result) {
       int from_bitField1_ = bitField1_;
-    }
-
-    private void buildPartial2(org.y1000.network.gen.Packet result) {
-      int from_bitField2_ = bitField2_;
     }
 
     private void buildPartialOneofs(org.y1000.network.gen.Packet result) {
@@ -3747,18 +3537,6 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 1 &&
           positionPacketBuilder_ != null) {
         result.typedPacket_ = positionPacketBuilder_.build();
-      }
-      if (typedPacketCase_ == 2 &&
-          creatureInterpolationBuilder_ != null) {
-        result.typedPacket_ = creatureInterpolationBuilder_.build();
-      }
-      if (typedPacketCase_ == 4 &&
-          loginPacketBuilder_ != null) {
-        result.typedPacket_ = loginPacketBuilder_.build();
-      }
-      if (typedPacketCase_ == 7 &&
-          playerInterpolationBuilder_ != null) {
-        result.typedPacket_ = playerInterpolationBuilder_.build();
       }
       if (typedPacketCase_ == 8 &&
           removeEntityBuilder_ != null) {
@@ -3831,10 +3609,6 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 35 &&
           itemDescriptionBuilder_ != null) {
         result.typedPacket_ = itemDescriptionBuilder_.build();
-      }
-      if (typedPacketCase_ == 37 &&
-          updateTradeWindowBuilder_ != null) {
-        result.typedPacket_ = updateTradeWindowBuilder_.build();
       }
       if (typedPacketCase_ == 38 &&
           showDynamicObjectBuilder_ != null) {
@@ -4063,18 +3837,6 @@ private static final long serialVersionUID = 0L;
           mergePositionPacket(other.getPositionPacket());
           break;
         }
-        case CREATUREINTERPOLATION: {
-          mergeCreatureInterpolation(other.getCreatureInterpolation());
-          break;
-        }
-        case LOGINPACKET: {
-          mergeLoginPacket(other.getLoginPacket());
-          break;
-        }
-        case PLAYERINTERPOLATION: {
-          mergePlayerInterpolation(other.getPlayerInterpolation());
-          break;
-        }
         case REMOVEENTITY: {
           mergeRemoveEntity(other.getRemoveEntity());
           break;
@@ -4145,10 +3907,6 @@ private static final long serialVersionUID = 0L;
         }
         case ITEMDESCRIPTION: {
           mergeItemDescription(other.getItemDescription());
-          break;
-        }
-        case UPDATETRADEWINDOW: {
-          mergeUpdateTradeWindow(other.getUpdateTradeWindow());
           break;
         }
         case SHOWDYNAMICOBJECT: {
@@ -4356,13 +4114,6 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 1;
               break;
             } // case 10
-            case 18: {
-              input.readMessage(
-                  getCreatureInterpolationFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typedPacketCase_ = 2;
-              break;
-            } // case 18
             case 26: {
               input.readMessage(
                   getLoginResponseFieldBuilder().getBuilder(),
@@ -4370,13 +4121,6 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 3;
               break;
             } // case 26
-            case 34: {
-              input.readMessage(
-                  getLoginPacketFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typedPacketCase_ = 4;
-              break;
-            } // case 34
             case 42: {
               input.readMessage(
                   getRegisterResponseFieldBuilder().getBuilder(),
@@ -4384,13 +4128,6 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 5;
               break;
             } // case 42
-            case 58: {
-              input.readMessage(
-                  getPlayerInterpolationFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typedPacketCase_ = 7;
-              break;
-            } // case 58
             case 66: {
               input.readMessage(
                   getRemoveEntityFieldBuilder().getBuilder(),
@@ -4517,13 +4254,6 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 35;
               break;
             } // case 282
-            case 298: {
-              input.readMessage(
-                  getUpdateTradeWindowFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typedPacketCase_ = 37;
-              break;
-            } // case 298
             case 306: {
               input.readMessage(
                   getShowDynamicObjectFieldBuilder().getBuilder(),
@@ -4850,7 +4580,6 @@ private static final long serialVersionUID = 0L;
 
     private int bitField0_;
     private int bitField1_;
-    private int bitField2_;
 
     private com.google.protobuf.SingleFieldBuilderV3<
         org.y1000.network.gen.LoginResponsePacket, org.y1000.network.gen.LoginResponsePacket.Builder, org.y1000.network.gen.LoginResponsePacketOrBuilder> loginResponseBuilder_;
@@ -5276,432 +5005,6 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 1;
       onChanged();
       return positionPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.CreatureInterpolationPacket, org.y1000.network.gen.CreatureInterpolationPacket.Builder, org.y1000.network.gen.CreatureInterpolationPacketOrBuilder> creatureInterpolationBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-     * @return Whether the creatureInterpolation field is set.
-     */
-    @java.lang.Override
-    public boolean hasCreatureInterpolation() {
-      return typedPacketCase_ == 2;
-    }
-    /**
-     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-     * @return The creatureInterpolation.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.CreatureInterpolationPacket getCreatureInterpolation() {
-      if (creatureInterpolationBuilder_ == null) {
-        if (typedPacketCase_ == 2) {
-          return (org.y1000.network.gen.CreatureInterpolationPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.CreatureInterpolationPacket.getDefaultInstance();
-      } else {
-        if (typedPacketCase_ == 2) {
-          return creatureInterpolationBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.CreatureInterpolationPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-     */
-    public Builder setCreatureInterpolation(org.y1000.network.gen.CreatureInterpolationPacket value) {
-      if (creatureInterpolationBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        typedPacket_ = value;
-        onChanged();
-      } else {
-        creatureInterpolationBuilder_.setMessage(value);
-      }
-      typedPacketCase_ = 2;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-     */
-    public Builder setCreatureInterpolation(
-        org.y1000.network.gen.CreatureInterpolationPacket.Builder builderForValue) {
-      if (creatureInterpolationBuilder_ == null) {
-        typedPacket_ = builderForValue.build();
-        onChanged();
-      } else {
-        creatureInterpolationBuilder_.setMessage(builderForValue.build());
-      }
-      typedPacketCase_ = 2;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-     */
-    public Builder mergeCreatureInterpolation(org.y1000.network.gen.CreatureInterpolationPacket value) {
-      if (creatureInterpolationBuilder_ == null) {
-        if (typedPacketCase_ == 2 &&
-            typedPacket_ != org.y1000.network.gen.CreatureInterpolationPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.network.gen.CreatureInterpolationPacket.newBuilder((org.y1000.network.gen.CreatureInterpolationPacket) typedPacket_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          typedPacket_ = value;
-        }
-        onChanged();
-      } else {
-        if (typedPacketCase_ == 2) {
-          creatureInterpolationBuilder_.mergeFrom(value);
-        } else {
-          creatureInterpolationBuilder_.setMessage(value);
-        }
-      }
-      typedPacketCase_ = 2;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-     */
-    public Builder clearCreatureInterpolation() {
-      if (creatureInterpolationBuilder_ == null) {
-        if (typedPacketCase_ == 2) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-          onChanged();
-        }
-      } else {
-        if (typedPacketCase_ == 2) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-        }
-        creatureInterpolationBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-     */
-    public org.y1000.network.gen.CreatureInterpolationPacket.Builder getCreatureInterpolationBuilder() {
-      return getCreatureInterpolationFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.CreatureInterpolationPacketOrBuilder getCreatureInterpolationOrBuilder() {
-      if ((typedPacketCase_ == 2) && (creatureInterpolationBuilder_ != null)) {
-        return creatureInterpolationBuilder_.getMessageOrBuilder();
-      } else {
-        if (typedPacketCase_ == 2) {
-          return (org.y1000.network.gen.CreatureInterpolationPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.CreatureInterpolationPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.CreatureInterpolationPacket, org.y1000.network.gen.CreatureInterpolationPacket.Builder, org.y1000.network.gen.CreatureInterpolationPacketOrBuilder> 
-        getCreatureInterpolationFieldBuilder() {
-      if (creatureInterpolationBuilder_ == null) {
-        if (!(typedPacketCase_ == 2)) {
-          typedPacket_ = org.y1000.network.gen.CreatureInterpolationPacket.getDefaultInstance();
-        }
-        creatureInterpolationBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.CreatureInterpolationPacket, org.y1000.network.gen.CreatureInterpolationPacket.Builder, org.y1000.network.gen.CreatureInterpolationPacketOrBuilder>(
-                (org.y1000.network.gen.CreatureInterpolationPacket) typedPacket_,
-                getParentForChildren(),
-                isClean());
-        typedPacket_ = null;
-      }
-      typedPacketCase_ = 2;
-      onChanged();
-      return creatureInterpolationBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.LoginPacket, org.y1000.network.gen.LoginPacket.Builder, org.y1000.network.gen.LoginPacketOrBuilder> loginPacketBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-     * @return Whether the loginPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasLoginPacket() {
-      return typedPacketCase_ == 4;
-    }
-    /**
-     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-     * @return The loginPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.LoginPacket getLoginPacket() {
-      if (loginPacketBuilder_ == null) {
-        if (typedPacketCase_ == 4) {
-          return (org.y1000.network.gen.LoginPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.LoginPacket.getDefaultInstance();
-      } else {
-        if (typedPacketCase_ == 4) {
-          return loginPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.LoginPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-     */
-    public Builder setLoginPacket(org.y1000.network.gen.LoginPacket value) {
-      if (loginPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        typedPacket_ = value;
-        onChanged();
-      } else {
-        loginPacketBuilder_.setMessage(value);
-      }
-      typedPacketCase_ = 4;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-     */
-    public Builder setLoginPacket(
-        org.y1000.network.gen.LoginPacket.Builder builderForValue) {
-      if (loginPacketBuilder_ == null) {
-        typedPacket_ = builderForValue.build();
-        onChanged();
-      } else {
-        loginPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typedPacketCase_ = 4;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-     */
-    public Builder mergeLoginPacket(org.y1000.network.gen.LoginPacket value) {
-      if (loginPacketBuilder_ == null) {
-        if (typedPacketCase_ == 4 &&
-            typedPacket_ != org.y1000.network.gen.LoginPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.network.gen.LoginPacket.newBuilder((org.y1000.network.gen.LoginPacket) typedPacket_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          typedPacket_ = value;
-        }
-        onChanged();
-      } else {
-        if (typedPacketCase_ == 4) {
-          loginPacketBuilder_.mergeFrom(value);
-        } else {
-          loginPacketBuilder_.setMessage(value);
-        }
-      }
-      typedPacketCase_ = 4;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-     */
-    public Builder clearLoginPacket() {
-      if (loginPacketBuilder_ == null) {
-        if (typedPacketCase_ == 4) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-          onChanged();
-        }
-      } else {
-        if (typedPacketCase_ == 4) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-        }
-        loginPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-     */
-    public org.y1000.network.gen.LoginPacket.Builder getLoginPacketBuilder() {
-      return getLoginPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.LoginPacketOrBuilder getLoginPacketOrBuilder() {
-      if ((typedPacketCase_ == 4) && (loginPacketBuilder_ != null)) {
-        return loginPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typedPacketCase_ == 4) {
-          return (org.y1000.network.gen.LoginPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.LoginPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.LoginPacket, org.y1000.network.gen.LoginPacket.Builder, org.y1000.network.gen.LoginPacketOrBuilder> 
-        getLoginPacketFieldBuilder() {
-      if (loginPacketBuilder_ == null) {
-        if (!(typedPacketCase_ == 4)) {
-          typedPacket_ = org.y1000.network.gen.LoginPacket.getDefaultInstance();
-        }
-        loginPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.LoginPacket, org.y1000.network.gen.LoginPacket.Builder, org.y1000.network.gen.LoginPacketOrBuilder>(
-                (org.y1000.network.gen.LoginPacket) typedPacket_,
-                getParentForChildren(),
-                isClean());
-        typedPacket_ = null;
-      }
-      typedPacketCase_ = 4;
-      onChanged();
-      return loginPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PlayerInterpolationPacket, org.y1000.network.gen.PlayerInterpolationPacket.Builder, org.y1000.network.gen.PlayerInterpolationPacketOrBuilder> playerInterpolationBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-     * @return Whether the playerInterpolation field is set.
-     */
-    @java.lang.Override
-    public boolean hasPlayerInterpolation() {
-      return typedPacketCase_ == 7;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-     * @return The playerInterpolation.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.PlayerInterpolationPacket getPlayerInterpolation() {
-      if (playerInterpolationBuilder_ == null) {
-        if (typedPacketCase_ == 7) {
-          return (org.y1000.network.gen.PlayerInterpolationPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.PlayerInterpolationPacket.getDefaultInstance();
-      } else {
-        if (typedPacketCase_ == 7) {
-          return playerInterpolationBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.PlayerInterpolationPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-     */
-    public Builder setPlayerInterpolation(org.y1000.network.gen.PlayerInterpolationPacket value) {
-      if (playerInterpolationBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        typedPacket_ = value;
-        onChanged();
-      } else {
-        playerInterpolationBuilder_.setMessage(value);
-      }
-      typedPacketCase_ = 7;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-     */
-    public Builder setPlayerInterpolation(
-        org.y1000.network.gen.PlayerInterpolationPacket.Builder builderForValue) {
-      if (playerInterpolationBuilder_ == null) {
-        typedPacket_ = builderForValue.build();
-        onChanged();
-      } else {
-        playerInterpolationBuilder_.setMessage(builderForValue.build());
-      }
-      typedPacketCase_ = 7;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-     */
-    public Builder mergePlayerInterpolation(org.y1000.network.gen.PlayerInterpolationPacket value) {
-      if (playerInterpolationBuilder_ == null) {
-        if (typedPacketCase_ == 7 &&
-            typedPacket_ != org.y1000.network.gen.PlayerInterpolationPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.network.gen.PlayerInterpolationPacket.newBuilder((org.y1000.network.gen.PlayerInterpolationPacket) typedPacket_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          typedPacket_ = value;
-        }
-        onChanged();
-      } else {
-        if (typedPacketCase_ == 7) {
-          playerInterpolationBuilder_.mergeFrom(value);
-        } else {
-          playerInterpolationBuilder_.setMessage(value);
-        }
-      }
-      typedPacketCase_ = 7;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-     */
-    public Builder clearPlayerInterpolation() {
-      if (playerInterpolationBuilder_ == null) {
-        if (typedPacketCase_ == 7) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-          onChanged();
-        }
-      } else {
-        if (typedPacketCase_ == 7) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-        }
-        playerInterpolationBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-     */
-    public org.y1000.network.gen.PlayerInterpolationPacket.Builder getPlayerInterpolationBuilder() {
-      return getPlayerInterpolationFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder() {
-      if ((typedPacketCase_ == 7) && (playerInterpolationBuilder_ != null)) {
-        return playerInterpolationBuilder_.getMessageOrBuilder();
-      } else {
-        if (typedPacketCase_ == 7) {
-          return (org.y1000.network.gen.PlayerInterpolationPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.PlayerInterpolationPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PlayerInterpolationPacket, org.y1000.network.gen.PlayerInterpolationPacket.Builder, org.y1000.network.gen.PlayerInterpolationPacketOrBuilder> 
-        getPlayerInterpolationFieldBuilder() {
-      if (playerInterpolationBuilder_ == null) {
-        if (!(typedPacketCase_ == 7)) {
-          typedPacket_ = org.y1000.network.gen.PlayerInterpolationPacket.getDefaultInstance();
-        }
-        playerInterpolationBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.PlayerInterpolationPacket, org.y1000.network.gen.PlayerInterpolationPacket.Builder, org.y1000.network.gen.PlayerInterpolationPacketOrBuilder>(
-                (org.y1000.network.gen.PlayerInterpolationPacket) typedPacket_,
-                getParentForChildren(),
-                isClean());
-        typedPacket_ = null;
-      }
-      typedPacketCase_ = 7;
-      onChanged();
-      return playerInterpolationBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -8258,148 +7561,6 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 35;
       onChanged();
       return itemDescriptionBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.UpdateTradeWindowPacket, org.y1000.network.gen.UpdateTradeWindowPacket.Builder, org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder> updateTradeWindowBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-     * @return Whether the updateTradeWindow field is set.
-     */
-    @java.lang.Override
-    public boolean hasUpdateTradeWindow() {
-      return typedPacketCase_ == 37;
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-     * @return The updateTradeWindow.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.UpdateTradeWindowPacket getUpdateTradeWindow() {
-      if (updateTradeWindowBuilder_ == null) {
-        if (typedPacketCase_ == 37) {
-          return (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
-      } else {
-        if (typedPacketCase_ == 37) {
-          return updateTradeWindowBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-     */
-    public Builder setUpdateTradeWindow(org.y1000.network.gen.UpdateTradeWindowPacket value) {
-      if (updateTradeWindowBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        typedPacket_ = value;
-        onChanged();
-      } else {
-        updateTradeWindowBuilder_.setMessage(value);
-      }
-      typedPacketCase_ = 37;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-     */
-    public Builder setUpdateTradeWindow(
-        org.y1000.network.gen.UpdateTradeWindowPacket.Builder builderForValue) {
-      if (updateTradeWindowBuilder_ == null) {
-        typedPacket_ = builderForValue.build();
-        onChanged();
-      } else {
-        updateTradeWindowBuilder_.setMessage(builderForValue.build());
-      }
-      typedPacketCase_ = 37;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-     */
-    public Builder mergeUpdateTradeWindow(org.y1000.network.gen.UpdateTradeWindowPacket value) {
-      if (updateTradeWindowBuilder_ == null) {
-        if (typedPacketCase_ == 37 &&
-            typedPacket_ != org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.network.gen.UpdateTradeWindowPacket.newBuilder((org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          typedPacket_ = value;
-        }
-        onChanged();
-      } else {
-        if (typedPacketCase_ == 37) {
-          updateTradeWindowBuilder_.mergeFrom(value);
-        } else {
-          updateTradeWindowBuilder_.setMessage(value);
-        }
-      }
-      typedPacketCase_ = 37;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-     */
-    public Builder clearUpdateTradeWindow() {
-      if (updateTradeWindowBuilder_ == null) {
-        if (typedPacketCase_ == 37) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-          onChanged();
-        }
-      } else {
-        if (typedPacketCase_ == 37) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-        }
-        updateTradeWindowBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-     */
-    public org.y1000.network.gen.UpdateTradeWindowPacket.Builder getUpdateTradeWindowBuilder() {
-      return getUpdateTradeWindowFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder getUpdateTradeWindowOrBuilder() {
-      if ((typedPacketCase_ == 37) && (updateTradeWindowBuilder_ != null)) {
-        return updateTradeWindowBuilder_.getMessageOrBuilder();
-      } else {
-        if (typedPacketCase_ == 37) {
-          return (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.UpdateTradeWindowPacket, org.y1000.network.gen.UpdateTradeWindowPacket.Builder, org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder> 
-        getUpdateTradeWindowFieldBuilder() {
-      if (updateTradeWindowBuilder_ == null) {
-        if (!(typedPacketCase_ == 37)) {
-          typedPacket_ = org.y1000.network.gen.UpdateTradeWindowPacket.getDefaultInstance();
-        }
-        updateTradeWindowBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.UpdateTradeWindowPacket, org.y1000.network.gen.UpdateTradeWindowPacket.Builder, org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder>(
-                (org.y1000.network.gen.UpdateTradeWindowPacket) typedPacket_,
-                getParentForChildren(),
-                isClean());
-        typedPacket_ = null;
-      }
-      typedPacketCase_ = 37;
-      onChanged();
-      return updateTradeWindowBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<

@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-import org.y1000.entities.EntityLifebarEvent;
-import org.y1000.entities.objects.DynamicObjectDieEvent;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
@@ -298,13 +296,13 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         getEntities().forEach(guildRepository::update);
     }
 
-    private void handleLifebarEvent(EntityLifebarEvent lifebarEvent) {
+    /*private void handleLifebarEvent(EntityLifebarEvent lifebarEvent) {
         if (lifebarEvent.source() instanceof GuildStone guildStone) {
-//            eventSender.notifyVisiblePlayers(lifebarEvent.source(), lifebarEvent);
-//            eventSender.notifyVisiblePlayers(lifebarEvent.source(),
-//                    TextMessage.leftside(guildStone.idName() + ": " + lifebarEvent.getCurrent() + "/" + lifebarEvent.getMax()));
+            eventSender.notifyVisiblePlayers(lifebarEvent.source(), lifebarEvent);
+            eventSender.notifyVisiblePlayers(lifebarEvent.source(),
+                    TextMessage.leftside(guildStone.idName() + ": " + lifebarEvent.getCurrent() + "/" + lifebarEvent.getMax()));
         }
-    }
+    }*/
 
     private String checkNotNullAndGuildRange(Player source, Player target) {
         Validate.notNull(source);
@@ -372,16 +370,17 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
 //        crossRealmEventSender.send(GuildBroadcastTextEvent.tip(sourceMembership.guildId(), target.viewName() + "加入了门派。"));
     }
 
+    /*
     private void handleDieEvent(DynamicObjectDieEvent dieEvent) {
         if (dieEvent.source() instanceof GuildStone guildStone) {
-//            crossRealmEventSender.send(BroadcastTextEvent.leftUp(guildStone.idName() + " 被灭门了"));
-//            crossRealmEventSender.send(new DismissGuildEvent(guildStone.getPersistentId()));
-//            eventSender.notifyVisiblePlayers(dieEvent.source(), new RemoveEntityMessage(dieEvent.source().id()));
+            crossRealmEventSender.send(BroadcastTextEvent.leftUp(guildStone.idName() + " 被灭门了"));
+            crossRealmEventSender.send(new DismissGuildEvent(guildStone.getPersistentId()));
+            eventSender.notifyVisiblePlayers(dieEvent.source(), new RemoveEntityMessage(dieEvent.source().id()));
             remove(guildStone);
-//            eventSender.remove(guildStone);
+            eventSender.remove(guildStone);
             guildRepository.deleteGuildAndMembership(guildStone.getPersistentId());
         }
-    }
+    }*/
 
 
     @Override

@@ -19,7 +19,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
 
     private NpcManagerImpl npcManager;
 
-    private EntityEventSender eventSender;
+    private MessageSender eventSender;
 
     private GroundItemManager itemManager;
 
@@ -44,7 +44,7 @@ class NpcManagerImplTest extends AbstractUnitTestFixture  {
     @BeforeEach
     void setUp() {
         NpcFactory npcFactory = createNpcFactory();
-        eventSender = Mockito.mock(EntityEventSender.class);
+        eventSender = Mockito.mock(MessageSender.class);
         itemManager = Mockito.mock(GroundItemManager.class);
         npcSdbRepository = Mockito.mock(RealmSpecificSdbRepository.class);
         monsterSettings = new ArrayList<>();

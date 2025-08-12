@@ -6,11 +6,11 @@ import org.y1000.entities.players.Player;
 import org.y1000.event.IEntityEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.network.Connection;
-import org.y1000.realm.EntityEventSender;
+import org.y1000.realm.MessageSender;
 
 import java.util.*;
 
-public final class TestingEntityEventSender implements EntityEventSender {
+public final class TestingEntityEventSender implements MessageSender  {
     private final TestingEventListener eventListener;
 
     private final Set<Entity> entities;
@@ -36,12 +36,10 @@ public final class TestingEntityEventSender implements EntityEventSender {
     }
 
 
-    @Override
     public void add(Entity entity) {
         entities.add(entity);
     }
 
-    @Override
     public void remove(Entity entity) {
         entities.remove(entity);
     }
@@ -76,7 +74,6 @@ public final class TestingEntityEventSender implements EntityEventSender {
     }
 
 
-    @Override
     public void sendEvent(IEntityEvent entityEvent) {
         eventListener.onEvent(entityEvent);
     }
@@ -95,13 +92,11 @@ public final class TestingEntityEventSender implements EntityEventSender {
     }
 
 
-    @Override
     public void notifyVisiblePlayers(Entity source, I2ClientMessage serverMessage) {
         entityMessages.putIfAbsent(source, new ArrayList<>());
         entityMessages.get(source).add(serverMessage);
     }
 
-    @Override
     public void notifyVisiblePlayersAndSelf(Entity source, I2ClientMessage serverMessage) {
 
     }

@@ -7,8 +7,6 @@ import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.IAbstractPlayerEvent;
-import org.y1000.entities.players.event.UpdateTradeWindowEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;

@@ -2,12 +2,12 @@ package org.y1000.message.serverevent;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.IAbstractPlayerEvent;
 import org.y1000.message.ValueEnum;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateGuildKungFuFormPacket;
 
-public final class UpdateGuildKungFuFormEvent extends IAbstractPlayerEvent {
+public final class UpdateGuildKungFuFormEvent {
+    /*
     private final Packet packet;
 
     public UpdateGuildKungFuFormEvent(Player source, Command command, String text) {
@@ -57,5 +57,5 @@ public final class UpdateGuildKungFuFormEvent extends IAbstractPlayerEvent {
         Validate.notNull(player);
         Validate.notNull(text);
         return new UpdateGuildKungFuFormEvent(player, Command.TEXT, text);
-    }
+    }A*/
 }

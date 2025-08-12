@@ -1,31 +1,19 @@
 package org.y1000.entities.creatures.event;
 
-import org.y1000.entities.ActiveEntity;
-import org.y1000.message.serverevent.Abstract2ClientEvent;
-import org.y1000.event.EntityEventVisitor;
-import org.y1000.network.gen.CreatureSoundEventPacket;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.network.gen.EntitySoundPacket;
 import org.y1000.network.gen.Packet;
 
-public final class EntitySoundEvent extends Abstract2ClientEvent {
+public final class EntitySoundEvent implements I2ClientMessage {
 
-    private final String sound;
+    private final Packet packet;
 
-    public EntitySoundEvent(ActiveEntity source, String sound) {
-        this(source, sound, source.id());
+    public EntitySoundEvent(String sound) {
+        packet = buildPacket(sound);
     }
 
-    public EntitySoundEvent(ActiveEntity source, String sound, long id) {
-        super(source);
-        this.sound = sound;
-    }
 
-    public static EntitySoundEvent broadcast(ActiveEntity source, String sound) {
-        return new EntitySoundEvent(source, sound, 0);
-    }
-
-    @Override
-    protected Packet buildPacket() {
+    private static Packet buildPacket(String sound) {
         return Packet.newBuilder()
                 .setEntitySound(EntitySoundPacket.newBuilder()
                         .setSound(sound)
@@ -34,7 +22,7 @@ public final class EntitySoundEvent extends Abstract2ClientEvent {
     }
 
     @Override
-    public void accept(EntityEventVisitor visitor) {
-        visitor.visit(this);
+    public Packet toPacket() {
+        return packet;
     }
 }

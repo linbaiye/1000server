@@ -47,7 +47,7 @@ final class ItemManagerImpl extends AbstractActiveEntityManager<GroundItem> impl
         GroundItem groundItem = new GroundItem(idGenerator.next(), item, droppedAt, this::removeItem);
         add(groundItem);
         sendToVisiblePlayers(groundItem, groundItem.captureSnapshot());
-        item.dropSound().ifPresent(s -> sendToVisiblePlayers(groundItem, new EntitySoundEvent(groundItem, s)));
+        item.dropSound().ifPresent(s -> sendToVisiblePlayers(groundItem, new EntitySoundEvent(s)));
     }
 
 

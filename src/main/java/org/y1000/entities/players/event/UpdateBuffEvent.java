@@ -7,8 +7,9 @@ import org.y1000.message.serverevent.Visibility;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateBuffPacket;
 
-public final class UpdateBuffEvent extends IAbstractPlayerEvent {
+public final class UpdateBuffEvent {
 
+    /*
     private static final int GAIN = 1;
 
     private static final int FADE = 2;
@@ -47,5 +48,5 @@ public final class UpdateBuffEvent extends IAbstractPlayerEvent {
     @Override
     protected Packet buildPacket() {
         return packet;
-    }
+    }*/
 }

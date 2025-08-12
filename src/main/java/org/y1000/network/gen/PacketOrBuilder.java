@@ -54,51 +54,6 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.PositionPacketOrBuilder getPositionPacketOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-   * @return Whether the creatureInterpolation field is set.
-   */
-  boolean hasCreatureInterpolation();
-  /**
-   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-   * @return The creatureInterpolation.
-   */
-  org.y1000.network.gen.CreatureInterpolationPacket getCreatureInterpolation();
-  /**
-   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-   */
-  org.y1000.network.gen.CreatureInterpolationPacketOrBuilder getCreatureInterpolationOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-   * @return Whether the loginPacket field is set.
-   */
-  boolean hasLoginPacket();
-  /**
-   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-   * @return The loginPacket.
-   */
-  org.y1000.network.gen.LoginPacket getLoginPacket();
-  /**
-   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-   */
-  org.y1000.network.gen.LoginPacketOrBuilder getLoginPacketOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-   * @return Whether the playerInterpolation field is set.
-   */
-  boolean hasPlayerInterpolation();
-  /**
-   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-   * @return The playerInterpolation.
-   */
-  org.y1000.network.gen.PlayerInterpolationPacket getPlayerInterpolation();
-  /**
-   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-   */
-  org.y1000.network.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
    * @return Whether the removeEntity field is set.
    */
@@ -367,21 +322,6 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.network.gen.ItemDescriptionPacket itemDescription = 35;</code>
    */
   org.y1000.network.gen.ItemDescriptionPacketOrBuilder getItemDescriptionOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-   * @return Whether the updateTradeWindow field is set.
-   */
-  boolean hasUpdateTradeWindow();
-  /**
-   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-   * @return The updateTradeWindow.
-   */
-  org.y1000.network.gen.UpdateTradeWindowPacket getUpdateTradeWindow();
-  /**
-   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-   */
-  org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder getUpdateTradeWindowOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.ShowDynamicObjectPacket showDynamicObject = 38;</code>

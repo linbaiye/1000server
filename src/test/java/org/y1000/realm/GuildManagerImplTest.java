@@ -18,7 +18,6 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
     private final DynamicObjectFactory dynamicObjectFactory = createDynamicObjectFactory();
     private GuildManager guildManager;
     private GuildRepository guildRepository;
-    private EntityEventSender entityEventSender;
     private Player player;
     private Inventory inventory;
     private RealmMap realmMap;
