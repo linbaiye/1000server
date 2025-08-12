@@ -1,13 +1,12 @@
 package org.y1000.entities.teleport;
 
-import org.y1000.message.AbstractEntitySnapshot;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ShowTeleportPacket;
 
-public final class TeleportSnapshot extends AbstractEntitySnapshot {
+public final class TeleportSnapshot implements I2ClientMessage {
     private final Packet packet;
     public TeleportSnapshot(StaticTeleport teleport) {
-        super(teleport.id(), teleport.coordinate());
         packet = Packet.newBuilder()
                 .setShowTeleport(ShowTeleportPacket.newBuilder()
                         .setId(teleport.id())

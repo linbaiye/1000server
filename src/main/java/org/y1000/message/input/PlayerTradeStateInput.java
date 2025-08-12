@@ -1,8 +1,12 @@
 package org.y1000.message.input;
 
 import org.y1000.entities.players.PlayerInputHandler;
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
+/**
+ * 玩家之间交易输入.
+ * @param v
+ */
 public record PlayerTradeStateInput(int v) implements SelfHandleInput {
 
     public enum State implements ValueEnum {

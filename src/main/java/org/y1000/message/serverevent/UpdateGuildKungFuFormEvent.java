@@ -1,11 +1,5 @@
 package org.y1000.message.serverevent;
 
-import org.apache.commons.lang3.Validate;
-import org.y1000.entities.players.Player;
-import org.y1000.message.ValueEnum;
-import org.y1000.network.gen.Packet;
-import org.y1000.network.gen.UpdateGuildKungFuFormPacket;
-
 public final class UpdateGuildKungFuFormEvent {
     /*
     private final Packet packet;

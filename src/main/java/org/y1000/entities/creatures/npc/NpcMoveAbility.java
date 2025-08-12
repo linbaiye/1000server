@@ -4,7 +4,7 @@ package org.y1000.entities.creatures.npc;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.event.NpcMoveEvent;
 import org.y1000.entities.creatures.npc.event.NpcMovedEvent;
-import org.y1000.message.NpcSnapshot;
+import org.y1000.entities.creatures.npc.event.NpcSnapshot;
 import org.y1000.util.Coordinate;
 
 

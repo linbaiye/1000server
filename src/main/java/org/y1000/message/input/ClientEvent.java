@@ -2,6 +2,7 @@ package org.y1000.message.input;
 
 import org.apache.commons.lang3.NotImplementedException;
 
+@Deprecated
 public interface ClientEvent {
     default long getPlayerId() {
         throw new NotImplementedException();

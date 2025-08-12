@@ -4,12 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
-import org.y1000.message.PositionType;
-import org.y1000.network.gen.PositionPacket;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class RopeTest extends AbstractPlayerUnitTestFixture {
 

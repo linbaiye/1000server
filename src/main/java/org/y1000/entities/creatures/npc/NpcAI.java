@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.message.NpcSnapshot;
+import org.y1000.entities.creatures.npc.event.NpcSnapshot;
 
 public interface NpcAI {
 

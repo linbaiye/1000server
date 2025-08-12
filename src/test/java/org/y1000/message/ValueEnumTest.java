@@ -1,6 +1,8 @@
 package org.y1000.message;
 
 
+import org.y1000.util.ValueEnum;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

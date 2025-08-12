@@ -1,4 +1,4 @@
-package org.y1000.message;
+package org.y1000.realm;
 
 import org.y1000.entities.players.event.PlayerEvent;
 

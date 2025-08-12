@@ -2,7 +2,7 @@ package org.y1000.sdb;
 
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 import java.io.IOException;
 import java.io.InputStream;

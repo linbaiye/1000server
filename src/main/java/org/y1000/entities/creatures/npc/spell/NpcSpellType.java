@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.npc.spell;
 
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 import java.util.Arrays;
 

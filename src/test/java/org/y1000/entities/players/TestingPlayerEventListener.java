@@ -1,8 +1,7 @@
 package org.y1000.entities.players;
 
-import org.y1000.TestingEventListener;
 import org.y1000.entities.players.event.PlayerEvent;
-import org.y1000.message.PlayerEventListener;
+import org.y1000.realm.PlayerEventListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;

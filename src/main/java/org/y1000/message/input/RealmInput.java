@@ -1,6 +1,6 @@
 package org.y1000.message.input;
 
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 public record RealmInput(Type type) {
     public enum Type implements ValueEnum {

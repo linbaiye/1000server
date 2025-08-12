@@ -1,7 +1,8 @@
-package org.y1000.message;
+package org.y1000.entities.creatures.npc.event;
 
 import org.y1000.entities.creatures.npc.NpcAction;
 import org.y1000.entities.creatures.npc.Npc;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.network.gen.CreatureBaseInfoPacket;
 import org.y1000.network.gen.NpcSnapshotPacket;
 import org.y1000.network.gen.Packet;

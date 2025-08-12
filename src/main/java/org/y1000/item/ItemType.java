@@ -1,6 +1,6 @@
 package org.y1000.item;
 
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 import java.util.Arrays;
 import java.util.Map;

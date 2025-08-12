@@ -1,7 +1,7 @@
 package org.y1000.message.input;
 
 import org.y1000.entities.players.PlayerInputHandler;
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 public record SimpleInput(SimpleInput.Type type) implements SelfHandleInput {
 

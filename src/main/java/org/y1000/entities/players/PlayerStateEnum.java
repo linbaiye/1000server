@@ -1,6 +1,6 @@
 package org.y1000.entities.players;
 
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 public enum PlayerStateEnum implements ValueEnum {
     Idle(1),

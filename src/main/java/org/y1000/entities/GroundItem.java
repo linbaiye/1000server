@@ -5,7 +5,6 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
-import org.y1000.message.GroundItemSnapshot;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.util.Coordinate;
 

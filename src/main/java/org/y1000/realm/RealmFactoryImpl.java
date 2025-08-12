@@ -102,13 +102,6 @@ public final class RealmFactoryImpl implements RealmFactory {
                 new NpcManagerImpl(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap, haveItemSdb);
     }
 
-    private DeadPlayerTeleportManager deadPlayerTeleportManager(int id) {
-        return posByDieSdb.findIdByRealmId(id)
-                .map(server -> new DeadPlayerTeleportManagerImpl(posByDieSdb.getDestServer(server), Coordinate.xy(posByDieSdb.getDestX(server), posByDieSdb.getDestY(server))))
-                .orElse(null);
-    }
-
-
     private boolean allowGuildCreation(int id) {
         return 1 == id;
     }

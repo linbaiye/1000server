@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.npc.event.NpcStartActionEvent;
-import org.y1000.message.NpcSnapshot;
+import org.y1000.entities.creatures.npc.event.NpcSnapshot;
 
 abstract class AbstractNpcNonMoveAbility extends AbstractNpcAbility {
 

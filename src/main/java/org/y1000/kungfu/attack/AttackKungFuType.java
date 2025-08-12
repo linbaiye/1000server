@@ -2,7 +2,7 @@ package org.y1000.kungfu.attack;
 
 import lombok.Getter;
 import org.y1000.kungfu.KungFuType;
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 public enum AttackKungFuType implements ValueEnum {
 

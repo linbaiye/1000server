@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import lombok.Getter;
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 public enum AttackAction implements ValueEnum  {
     Punch(1, 400),

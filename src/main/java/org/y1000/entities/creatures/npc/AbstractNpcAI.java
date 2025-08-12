@@ -1,7 +1,7 @@
 package org.y1000.entities.creatures.npc;
 
 import org.y1000.entities.creatures.npc.event.NpcRemoveEvent;
-import org.y1000.message.NpcSnapshot;
+import org.y1000.entities.creatures.npc.event.NpcSnapshot;
 
 public abstract class AbstractNpcAI implements NpcAI {
 

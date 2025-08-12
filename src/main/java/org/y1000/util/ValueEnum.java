@@ -1,4 +1,4 @@
-package org.y1000.message;
+package org.y1000.util;
 
 @SuppressWarnings("ALL")
 public interface ValueEnum {

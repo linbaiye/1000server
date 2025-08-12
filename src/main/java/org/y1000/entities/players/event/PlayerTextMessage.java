@@ -3,7 +3,7 @@ package org.y1000.entities.players.event;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.TextMessagePacket;
 

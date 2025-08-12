@@ -1,6 +1,6 @@
 package org.y1000.entities.objects;
 
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 public enum DynamicObjectType implements ValueEnum  {
     TRIGGER(2),
