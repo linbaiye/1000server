@@ -1,12 +1,12 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.AbstractDopItemAbility;
+import org.y1000.entities.AbstractDropItemAbility;
 import org.y1000.entities.creatures.npc.event.NpcDropItemEvent;
 
 import java.util.List;
 import java.util.Optional;
 
-public class NpcDropItemAbility extends AbstractDopItemAbility {
+public class NpcDropItemAbility extends AbstractDropItemAbility {
     private final List<Item> items;
 
     public NpcDropItemAbility(List<Item> items) {

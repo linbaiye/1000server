@@ -1,12 +1,11 @@
 package org.y1000.entities.creatures;
 
-import org.y1000.entities.AttackableEntity;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
+import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
-import java.util.Optional;
-
-public interface Creature extends AttackableEntity {
+public interface Creature extends ActiveEntity  {
 
     Direction direction();
 
@@ -14,18 +13,7 @@ public interface Creature extends AttackableEntity {
 
     void changeCoordinate(Coordinate coordinate);
 
-    int avoidance();
-
     String viewName();
 
-    int maxLife();
-
-    int currentLife();
-
-    int bodyArmor();
-
-    Optional<String> hurtSound();
-
-    Optional<String> dieSound();
-
+    RealmMap realmMap();
 }

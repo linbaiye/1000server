@@ -1,7 +1,7 @@
 package org.y1000.kungfu;
 
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerGainExpEvent;
+import org.y1000.entities.players.event.PlayerGainExpMessage;
 import org.y1000.entities.players.event.PlayerKungFuFullEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.exp.Experience;
@@ -83,7 +83,7 @@ end;
         if (!gainPermittedExp(exp)) {
             return;
         }
-        player.sendEvent(PlayerGainExpEvent.of(player, this));
+        player.sendEvent(PlayerGainExpMessage.of(player, this));
         if (isLevelFull())
             player.sendEvent(new PlayerKungFuFullEvent(player, this));
     }

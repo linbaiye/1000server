@@ -42,23 +42,6 @@ public abstract class AbstractCreature extends AbstractActiveEntity implements C
         return name;
     }
 
-
-    protected boolean isDodged(int attackerHit) {
-        var rand = ThreadLocalRandom.current().nextInt(0, attackerHit + avoidance());
-        return rand < avoidance();
-    }
-
-    protected int getHurtAndGiveExp(Damage damage, Consumer<Damage> damageAction, Consumer<Integer> gainExp) {
-        var before = currentLife();
-        damageAction.accept(damage);
-        var damagedLife = before - currentLife();
-        if (damagedLife > 0) {
-            var exp = damagedLifeToExp(damagedLife);
-            gainExp.accept(exp);
-        }
-        return damagedLife;
-    }
-
     @Override
     public void changeDirection(Direction newdir) {
         direction = newdir;
@@ -68,10 +51,5 @@ public abstract class AbstractCreature extends AbstractActiveEntity implements C
     public void changeCoordinate(Coordinate newCoor) {
         coordinate = newCoor;
         realmMap().occupy(this);
-    }
-
-    protected int damagedLifeToExp(int damagedLife) {
-        var n = maxLife() / damagedLife;
-        return n > 15 ? ExperienceUtil.DEFAULT_EXP : ExperienceUtil.DEFAULT_EXP * n * n / (15 * 15);
     }
 }

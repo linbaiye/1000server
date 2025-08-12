@@ -6,7 +6,6 @@ import org.y1000.entities.objects.DynamicObject;
 import org.y1000.entities.objects.DynamicObjectEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerEvent;
-import org.y1000.event.TypedEntityEvent;
 import org.y1000.realm.DynamicObjectEventHandler;
 import org.y1000.realm.NpcEventHandler;
 import org.y1000.realm.PlayerEventHandler;

@@ -1,16 +1,11 @@
 package org.y1000.entities.players;
 
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.kungfu.KungFu;
-import org.y1000.kungfu.TestingAttackKungFuParameters;
-import org.y1000.kungfu.attack.QuanfaKungFu;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;

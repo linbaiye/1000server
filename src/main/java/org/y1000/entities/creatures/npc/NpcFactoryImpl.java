@@ -3,7 +3,6 @@ package org.y1000.entities.creatures.npc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.npc.AI.NpcSayAbility;
 import org.y1000.entities.creatures.npc.spell.*;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;

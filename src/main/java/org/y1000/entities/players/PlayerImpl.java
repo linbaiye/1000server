@@ -93,6 +93,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     private final ThreadLocal<Realm> realm;
 
+
     @Builder
     public PlayerImpl(long id,
                       Coordinate coordinate,
@@ -329,7 +330,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
 
     private void syncKungFuBookQuietly() {
-        sendEvent(KungFuBookEvent.quietly(this));
+        sendEvent(KungFuBookMessage.quietly(this));
     }
 
 
@@ -603,12 +604,12 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     @Override
     public void handleSimpleInput(SimpleInput.Type type) {
         switch (type) {
-            case KungFuBook -> sendEvent(KungFuBookEvent.forceful(this));
+            case KungFuBook -> sendEvent(KungFuBookMessage.forceful(this));
             case Inventory -> sendEvent(UpdateInventoryMessage.forceful(this));
             case KeyF4 -> state.sayHello();
             case KeyF3 -> state.sitOrStandUp();
             case KeyF2 -> state.switchStand();
-            case KungFuBookQuietly -> sendEvent(KungFuBookEvent.quietly(this));
+            case KungFuBookQuietly -> sendEvent(KungFuBookMessage.quietly(this));
             case InventoryQuietly -> sendEvent(UpdateInventoryMessage.quiet(this));
             case GetPills -> sendEvent(PillsMessage.of(this));
             case AttributeEquipment -> sendEvent(AttributeEquipmentMessage.of(this));
@@ -816,11 +817,6 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
 
     @Override
-    public boolean canBeAttackedNow() {
-        return !isLeftRealm() && !isDead();
-    }
-
-    @Override
     public int attackSpeed() {
         var spd = weapon().map(Weapon::attackSpeed).orElse(0) * -1 +
                 innateAttributesProvider.attackSpeed() + attackKungFu.attackSpeed();
@@ -847,7 +843,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         setRegenerateTimer();
         var newYY = yinYang.accumulate(DEFAULT_REGENERATE_SECONDS);
         if (newYY.hasHigherLevel(yinYang)) {
-             sendEvent(PlayerGainExpEvent.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
+             sendEvent(PlayerGainExpMessage.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
         }
         int newAge = newYY.age();
         if (newAge != yinYang.age()) {
@@ -876,7 +872,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         int old = attribute.maxValue();
         attribute.gain(v);
         if (attribute.maxValue() != old) {
-            sendEvent(PlayerGainExpEvent.nonKungFu(this, name));
+            sendEvent(PlayerGainExpMessage.nonKungFu(this, name));
         }
     }
 
@@ -1284,11 +1280,6 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
 
     @Override
-    public int hit() {
-        return innateAttributesProvider.hit();
-    }
-
-    @Override
     public Damage damage() {
         var dmg = weapon().map(Weapon::damage).orElse(Damage.ZERO)
                 .add(innateAttributesProvider.damage())
@@ -1362,19 +1353,13 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
 
     @Override
-    public int bodyArmor() {
-        return armor().body();
-    }
-
-    @Override
     public Armor armor() {
         return aggregateArmor();
     }
 
     // mandieNew 2003, ManDieOld 2005, womanDieNew 2203, womanDieOld 2205.
 
-    @Override
-    public Optional<String> hurtSound() {
+    private Optional<String> hurtSound() {
         if (ThreadLocalRandom.current().nextInt(0, 10) < 4) {
             return Optional.empty();
         }
@@ -1383,9 +1368,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
                 (isMale() ? "2004" : "2204") );
     }
 
-
-    @Override
-    public Optional<String> dieSound() {
+    private Optional<String> dieSound() {
         return Optional.of(age() < 6000 ?
                 (isMale() ? "2003" : "2203") :
                 (isMale() ? "2005" : "2205") );
@@ -1397,13 +1380,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
 
 
-    @Override
-    public int recoveryCooldown() {
-        return recoveryCooldown;
-    }
-
-    @Override
-    public int attackCooldown() {
+   int attackCooldown() {
         return attackCooldown;
     }
 
@@ -1412,14 +1389,13 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
     }
 
-    public void cooldownRecovery() {
+    private void cooldownRecovery() {
         recoveryCooldown = recovery() * Realm.STEP_MILLIS;
     }
 
-    public void cooldownAttack() {
+    void cooldownAttack() {
         attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
-
 
     private void handleKilled() {
         footKungfu = null;
@@ -1428,7 +1404,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         var oldLevel = revival.level();
         revival = revival.gainExp();
         if (oldLevel != revival.level()) {
-            sendEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
+            sendEvent(PlayerGainExpMessage.nonKungFu(this, "再生"));
         }
         syncActiveKungFuList();
         dieSound().ifPresent(this::sendSound);
@@ -1454,8 +1430,18 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         return !isLeftRealm();
     }
 
+    int maxCooldown(){
+        return Math.max(attackCooldown, recoveryCooldown);
+    }
+
+    private boolean isDodged(int attackerHit) {
+        var rand = ThreadLocalRandom.current().nextInt(0, attackerHit + avoidance());
+        return rand < avoidance();
+    }
+
+
     @Override
-    public int attacked(org.y1000.entities.ActiveEntity attacker, Damage damage, int accuracy) {
+    public int attacked(ActiveEntity attacker, Damage damage, int accuracy) {
         if (isDodged(accuracy))
             return -1;
         if (isDead() || isLeftRealm())
@@ -1495,44 +1481,4 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         breathKungFu().ifPresent(b -> stringBuilder.append(" ").append(b.name()));
         return Optional.of(stringBuilder.toString());
     }
-
-//
-//    public Player cloneForTeleport() {
-//        var copied = PlayerImpl.builder()
-//                .id(id())
-//                .name(viewName())
-//                .inventory(inventory)
-//                .attackKungFu(attackKungFu)
-//                .kungFuBook(kungFuBook)
-//                .male(male)
-//                .equipments(equippedEquipments)
-//                .footKungfu(footKungfu)
-//                .protectKungFu(protectKungFu)
-//                .breathKungFu(breathKungFu)
-//                .innateAttributesProvider(innateAttributesProvider)
-//                .life(life)
-//                .head(headLife)
-//                .arm(armLife)
-//                .leg(legLife)
-//                .power(power)
-//                .innerPower(innerPower)
-//                .outerPower(outerPower)
-//                .revival(revival.exp())
-//                .yinYang(yinYang)
-//                .pillSlots(pillSlots)
-//                .guildMembership(guildMembership)
-//                .build();
-//        copied.state = state;
-//        copied.changeDirection(direction());
-//        if (copied.state instanceof PlayerMoveState moveState) {
-//            if (moveState.moveAction() == MoveAction.FightWalk) {
-//                copied.state = PlayerStandState.fightStand(copied);
-//            } else {
-//                copied.state = PlayerStandState.idle(copied);
-//            }
-//        } else {
-//            copied.state.changePlayer(copied);
-//        }
-//        return copied;
-//    }
 }

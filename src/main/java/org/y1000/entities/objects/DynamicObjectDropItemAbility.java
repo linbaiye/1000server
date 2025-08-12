@@ -1,12 +1,11 @@
-package org.y1000.entities;
+package org.y1000.entities.objects;
 
-import org.y1000.entities.objects.DynamicObject;
-import org.y1000.entities.objects.DynamicObjectDropItemEvent;
+import org.y1000.entities.AbstractDropItemAbility;
 
 import java.util.List;
 import java.util.Optional;
 
-public class DynamicObjectDropItemAbility extends AbstractDopItemAbility {
+public class DynamicObjectDropItemAbility extends AbstractDropItemAbility {
     private final List<Item> items;
 
     public DynamicObjectDropItemAbility(List<Item> items) {

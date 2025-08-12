@@ -3,7 +3,6 @@ package org.y1000.realm;
 
 import org.y1000.entities.Entity;
 import org.y1000.entities.objects.DynamicObject;
-import org.y1000.entities.objects.IDynamicObject;
 import org.y1000.entities.teleport.Teleport;
 import org.y1000.util.Coordinate;
 
@@ -19,12 +18,6 @@ public interface RealmMap {
     void occupy(Entity entity);
 
     void free(Entity creature);
-
-    @Deprecated
-    void occupy(IDynamicObject dynamicObject);
-
-    @Deprecated
-    void free(IDynamicObject dynamicObject);
 
     void occupy(DynamicObject dynamicObject);
 

@@ -24,7 +24,7 @@ public class LifeLowEscapeAbility implements EscapeAbility {
     private static Coordinate computeByDirection(Npc npc, Direction direction, int range) {
         Coordinate origin = npc.coordinate();
         Coordinate dest = origin.move(direction.x() * range, direction.y() * range);
-        return npc.getRealmMap().movable(dest) ? dest : null;
+        return npc.realmMap().movable(dest) ? dest : null;
     }
 
     private static Coordinate doCompute(Npc npc, ActiveEntity enemy, int range) {

@@ -3,7 +3,6 @@ package org.y1000.entities.creatures.npc;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.HurtAbility;
-import org.y1000.entities.creatures.npc.AI.NpcSayAbility;
 import org.y1000.util.Coordinate;
 
 

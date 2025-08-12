@@ -45,6 +45,6 @@ public abstract class AbstractMovableNpcAI extends AbstractNpcAI {
 
     Direction computeDirectionTo(Coordinate dest) {
         return npc().coordinate().bestDirectionTo(dest,
-                coordinate -> npc().getRealmMap().movable(coordinate) && !previous.equals(coordinate));
+                coordinate -> npc().realmMap().movable(coordinate) && !previous.equals(coordinate));
     }
 }

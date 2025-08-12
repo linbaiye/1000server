@@ -6,10 +6,10 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerGainExpPacket;
 
-public final class PlayerGainExpEvent extends Abstract2PlayerMessageEvent {
+public final class PlayerGainExpMessage extends Abstract2PlayerMessageEvent {
 
 
-    public PlayerGainExpEvent(Player player, Packet packet) {
+    public PlayerGainExpMessage(Player player, Packet packet) {
         super(player, packet);
     }
 
@@ -24,11 +24,11 @@ public final class PlayerGainExpEvent extends Abstract2PlayerMessageEvent {
                 .build();
     }
 
-    public static PlayerGainExpEvent of(Player player, KungFu kungFu) {
-        return new PlayerGainExpEvent(player, buildPacket(true, kungFu.name(), kungFu.level(), kungFu instanceof AttackKungFu));
+    public static PlayerGainExpMessage of(Player player, KungFu kungFu) {
+        return new PlayerGainExpMessage(player, buildPacket(true, kungFu.name(), kungFu.level(), kungFu instanceof AttackKungFu));
     }
 
-    public static PlayerGainExpEvent nonKungFu(Player player, String name) {
-        return new PlayerGainExpEvent(player, buildPacket(false, name, 0, false));
+    public static PlayerGainExpMessage nonKungFu(Player player, String name) {
+        return new PlayerGainExpMessage(player, buildPacket(false, name, 0, false));
     }
 }

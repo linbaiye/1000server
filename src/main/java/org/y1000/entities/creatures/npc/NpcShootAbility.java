@@ -77,11 +77,11 @@ public class NpcShootAbility extends AbstractNpcAttackAbility {
         }
         Direction direction = entity.coordinate().directionTo(npc.coordinate());
         Coordinate coordinate = npc.coordinate().moveBy(direction);
-        if (npc.getRealmMap().movable(coordinate))
+        if (npc.realmMap().movable(coordinate))
             return Optional.of(direction);
         for (Direction neighbour : direction.neighbours()) {
             coordinate = npc.coordinate().moveBy(neighbour);
-            if (npc.getRealmMap().movable(coordinate))
+            if (npc.realmMap().movable(coordinate))
                 return Optional.of(neighbour);
         }
         return Optional.empty();

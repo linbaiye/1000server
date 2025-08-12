@@ -3,7 +3,6 @@ package org.y1000.entities.objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.DynamicObjectDropItemAbility;
 import org.y1000.guild.GuildStone;
 import org.y1000.persistence.GuildStonePo;
 import org.y1000.realm.DynamicObjectEventListener;
@@ -29,13 +28,6 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
         this.dynamicObjectSdb = dynamicObjectSdb;
     }
 
-    @Override
-    public IDynamicObject createDynamicObject(String name,
-                                              long id,
-                                              RealmMap realmMap,
-                                              Coordinate coordinate) {
-        return null;
-    }
 
     @Override
     public GuildStone createGuildStone(long id, String name, int realmId, RealmMap realmMap, Coordinate coordinate) {

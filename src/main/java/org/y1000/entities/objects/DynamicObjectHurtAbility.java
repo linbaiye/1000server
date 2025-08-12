@@ -2,7 +2,6 @@ package org.y1000.entities.objects;
 
 import lombok.Setter;
 import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.DynamicObjectDropItemAbility;
 import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.Damage;
 

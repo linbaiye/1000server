@@ -1,16 +1,14 @@
 package org.y1000.entities.creatures.npc;
 
-import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.Direction;
+import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
-import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public interface Npc extends ActiveEntity {
+public interface Npc extends Creature  {
     void changeAI(NpcAI newAi);
 
     void startAI();
@@ -20,17 +18,7 @@ public interface Npc extends ActiveEntity {
         startAI();
     }
 
-    Direction direction();
-
-    void changeCoordinate(Coordinate coordinate);
-
-    void changeDirection(Direction direction);
-
     void free();
-
-    RealmMap getRealmMap();
-
-    String viewName();
 
     String getAnimate();
 
@@ -48,7 +36,6 @@ public interface Npc extends ActiveEntity {
 
 
     <T> List<T> findAbilities(Class<T> type);
-
 
     default void instantKill() {
 

@@ -7,8 +7,8 @@ import org.y1000.network.gen.KungFuBookPacket;
 import org.y1000.network.gen.KungFuPacket;
 import org.y1000.network.gen.Packet;
 
-public final class KungFuBookEvent extends Abstract2PlayerMessageEvent {
-    private KungFuBookEvent(Player player, Packet packet) {
+public final class KungFuBookMessage extends Abstract2PlayerMessageEvent {
+    private KungFuBookMessage(Player player, Packet packet) {
         super(player, packet);
     }
 
@@ -22,20 +22,20 @@ public final class KungFuBookEvent extends Abstract2PlayerMessageEvent {
                 .build();
     }
 
-    private static KungFuBookEvent forPlayer(Player player, boolean forceful) {
+    private static KungFuBookMessage forPlayer(Player player, boolean forceful) {
         Validate.notNull(player);
         KungFuBookPacket.Builder builder = KungFuBookPacket.newBuilder();
         player.kungFuBook().foreachUnnamed((slot, k) -> builder.addUnnamedKungFuList(toPacket(slot, k)));
         player.kungFuBook().foreachBasic((slot, k) -> builder.addBasicKungFuList(toPacket(slot, k)));
         builder.setForceful(forceful);
-        return new KungFuBookEvent(player, Packet.newBuilder().setKungFuBook(builder.build()).build());
+        return new KungFuBookMessage(player, Packet.newBuilder().setKungFuBook(builder.build()).build());
     }
 
-    public static KungFuBookEvent forceful(Player player) {
+    public static KungFuBookMessage forceful(Player player) {
         return forPlayer(player, true);
     }
 
-    public static KungFuBookEvent quietly(Player player) {
+    public static KungFuBookMessage quietly(Player player) {
         return forPlayer(player, false);
     }
 }

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class AbstractDopItemAbility {
+public abstract class AbstractDropItemAbility {
     public record Item(String name, int number) { }
 
     public static List<Item> parseItems(String dropText) {

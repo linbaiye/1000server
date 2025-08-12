@@ -9,7 +9,6 @@ public abstract class AbstractActiveEntity implements ActiveEntity {
         this.id = id;
     }
 
-
     @Override
     public long id() {
         return id;

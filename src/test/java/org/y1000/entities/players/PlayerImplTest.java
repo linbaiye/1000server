@@ -215,7 +215,7 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         var slot = player.inventory().add(item);
         player.onInventorySlotClicked(slot, AbstractClickContainerSlotInput.ClickType.LeftDoubleClick);
         assertNotNull(eventListener.remove(UpdateInventoryMessage.class));
-        assertNotNull(eventListener.remove(KungFuBookEvent.class));
+        assertNotNull(eventListener.remove(KungFuBookMessage.class));
         assertNotNull(eventListener.remove(PlayerSoundEvent.class));
     }
 

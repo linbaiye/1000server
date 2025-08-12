@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.entities.objects.IDynamicObject;
+import org.y1000.entities.objects.DynamicObject;
 import org.y1000.util.Coordinate;
 
 import java.util.Arrays;
@@ -86,8 +86,8 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
 
     @Test
     void dynamicObjectOccupy() {
-        IDynamicObject dynamicObject = Mockito.mock(IDynamicObject.class);
-        when(dynamicObject.occupyingCoordinates()).thenReturn(Set.of(Coordinate.xy(1, 1), Coordinate.xy(1, 2)));
+        DynamicObject dynamicObject = Mockito.mock(DynamicObject.class);
+        when(dynamicObject.occupiedCoordinates()).thenReturn(Set.of(Coordinate.xy(1, 1), Coordinate.xy(1, 2)));
         assertTrue(realmMap.movable(Coordinate.xy(1, 1)));
         assertTrue(realmMap.movable(Coordinate.xy(1, 2)));
         realmMap.occupy(dynamicObject);
@@ -97,8 +97,8 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
 
     @Test
     void dynamicObjectFree() {
-        IDynamicObject dynamicObject = Mockito.mock(IDynamicObject.class);
-        when(dynamicObject.occupyingCoordinates()).thenReturn(Set.of(Coordinate.xy(3, 1), Coordinate.xy(3, 2)));
+        DynamicObject dynamicObject = Mockito.mock(DynamicObject.class);
+        when(dynamicObject.occupiedCoordinates()).thenReturn(Set.of(Coordinate.xy(3, 1), Coordinate.xy(3, 2)));
         realmMap.occupy(dynamicObject);
         assertFalse(realmMap.movable(Coordinate.xy(3, 1)));
         assertFalse(realmMap.movable(Coordinate.xy(3, 2)));
@@ -109,8 +109,8 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
 
     @Test
     void intersectedOccupy() {
-        IDynamicObject dynamicObject = Mockito.mock(IDynamicObject.class);
-        when(dynamicObject.occupyingCoordinates()).thenReturn(Set.of(Coordinate.xy(1, 1), Coordinate.xy(1, 2)));
+        DynamicObject dynamicObject = Mockito.mock(DynamicObject.class);
+        when(dynamicObject.occupiedCoordinates()).thenReturn(Set.of(Coordinate.xy(1, 1), Coordinate.xy(1, 2)));
         realmMap.occupy(dynamicObject);
         var monster = createNpc(Coordinate.xy(1, 1));
         realmMap.occupy(monster);

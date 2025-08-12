@@ -1,6 +1,5 @@
-package org.y1000.event;
+package org.y1000.entities;
 
-import org.y1000.entities.Entity;
 
 public interface TypedEntityEvent<E extends Entity> {
     E source();

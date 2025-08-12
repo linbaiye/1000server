@@ -11,6 +11,7 @@ public interface ActiveEntity extends Entity {
 
     void update(int delta);
 
+
     <AB> Optional<AB> findAbility(Class<AB> type);
 
     default Set<Entity> getEntitiesAt(Set<Coordinate> coordinates) {
@@ -20,7 +21,4 @@ public interface ActiveEntity extends Entity {
     default Optional<String> clickText() {
         return Optional.empty();
     }
-
-
-
 }

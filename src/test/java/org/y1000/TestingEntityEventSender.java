@@ -3,7 +3,6 @@ package org.y1000;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-import org.y1000.event.IEntityEvent;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.network.Connection;
 import org.y1000.realm.MessageSender;
@@ -49,21 +48,6 @@ public final class TestingEntityEventSender implements MessageSender  {
     }
 
 
-    public <T extends IEntityEvent> T dequeue(Class<T> clazz) {
-        return eventListener.dequeue(clazz);
-    }
-
-    public int eventSize() {
-        return eventListener.eventSize();
-    }
-
-    public <T extends IEntityEvent> T removeFirst(Class<T> clazz) {
-        return eventListener.removeFirst(clazz);
-    }
-
-    public void clearEvents() {
-        eventListener.clearEvents();
-    }
 
     public <T extends ActiveEntity> T getEntity(Class<T> clazz) {
         return entities.stream()
@@ -73,10 +57,6 @@ public final class TestingEntityEventSender implements MessageSender  {
                 .orElse(null);
     }
 
-
-    public void sendEvent(IEntityEvent entityEvent) {
-        eventListener.onEvent(entityEvent);
-    }
 
     public <T extends I2ClientMessage> T removeFirst(Entity source, Class<T> clazz) {
         List<I2ClientMessage> messages = entityMessages.get(source);

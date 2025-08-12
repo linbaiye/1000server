@@ -43,7 +43,7 @@ public class NpcMoveAbility extends AbstractNpcAbility {
     public boolean update(int delta) {
         if (!updateAnimation(delta))
             return false;
-        if (!npc.getRealmMap().movable(start.moveBy(direction))) {
+        if (!npc.realmMap().movable(start.moveBy(direction))) {
             npc.changeCoordinate(start);
         } else {
             npc.changeCoordinate(start.moveBy(direction));
@@ -81,7 +81,7 @@ public class NpcMoveAbility extends AbstractNpcAbility {
 
 
     public boolean tryMove(Npc npc, Direction direction) {
-        if (!npc.getRealmMap().softOccupy(npc, npc.coordinate().moveBy(direction))) {
+        if (!npc.realmMap().softOccupy(npc, npc.coordinate().moveBy(direction))) {
             return false;
         }
         this.direction = direction;

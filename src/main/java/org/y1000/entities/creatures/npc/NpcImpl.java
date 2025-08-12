@@ -5,6 +5,7 @@ import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.FilterVisibleEvent;
+import org.y1000.entities.creatures.AbstractCreature;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerLeaveListener;
@@ -17,18 +18,14 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class NpcImpl extends AbstractActiveEntity implements Npc {
+public class NpcImpl extends AbstractCreature implements Npc {
 
     private final List<Object> abilities;
     private final NpcEventListener listener;
-    private Coordinate coordinate;
 
-    @Getter
     private final RealmMap realmMap;
 
     private NpcAI ai;
-
-    private final String viewName;
 
     @Getter
     private final String animate;
@@ -38,8 +35,6 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
 
     @Getter
     private final Coordinate spawnCoordinate;
-
-    private Direction direction;
 
     @Getter
     private final String idName;
@@ -60,17 +55,14 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
                    String idName,
                    Direction direction,
                    int wanderRage) {
-        super(id);
+        super(id, coordinate, direction, viewName);
         this.abilities = abilities;
         this.listener = listener;
         this.realmMap = realmMap;
-        this.viewName = viewName != null ? viewName : "";
         this.spawnCoordinate = coordinate;
-        this.coordinate = coordinate;
         this.animate = animate;
         this.shape = shape;
         this.idName = idName;
-        this.direction = direction;
         this.wanderRage = wanderRage;
         this.cooldownList = abilities.stream().filter(a -> CooldownAbility.class.isAssignableFrom(a.getClass()))
                         .map(CooldownAbility.class::cast).collect(Collectors.toList());
@@ -119,8 +111,8 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
     }
 
     @Override
-    public Coordinate coordinate() {
-        return coordinate;
+    public RealmMap realmMap() {
+        return realmMap;
     }
 
     @Override
@@ -130,30 +122,10 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
                 .findFirst().map(type::cast);
     }
 
-    @Override
-    public Direction direction() {
-        return direction;
-    }
-
-    @Override
-    public void changeCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
-        realmMap.occupy(this);
-    }
-
-    @Override
-    public void changeDirection(Direction direction) {
-        this.direction = direction;
-    }
 
     @Override
     public void free() {
         realmMap.free(this);
-    }
-
-    @Override
-    public String viewName() {
-        return viewName;
     }
 
     @Override
@@ -185,7 +157,7 @@ public class NpcImpl extends AbstractActiveEntity implements Npc {
 
     @Override
     public Optional<String> clickText() {
-        return Optional.of(viewName + "。");
+        return Optional.of(viewName() + "。");
     }
 
 }
