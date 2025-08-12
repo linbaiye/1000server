@@ -37,10 +37,6 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     Object createMessage(ClientPacket clientPacket) {
         return switch (clientPacket.getTypeCase()) {
-            case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
-            case FOUNDGUILD -> ClientFoundGuildEvent.parse(clientPacket.getFoundGuild());
-            case CREATEGUILDKUNGFU -> ClientCreateGuildKungFuEvent.parse(clientPacket.getCreateGuildKungFu());
-            case MANAGEGUILD -> new ClientManageGuildEvent(clientPacket.getManageGuild().getType(), clientPacket.getManageGuild().getTarget());
 
             case LOGINCHARACTER -> new LoginCharacterRequest(clientPacket.getLoginCharacter().getCharacterName());
             case LOGINACCOUNT -> new LoginAccountRequest(clientPacket.getLoginAccount().getUsername(), clientPacket.getLoginAccount().getPassword());

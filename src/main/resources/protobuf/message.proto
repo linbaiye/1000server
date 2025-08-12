@@ -452,13 +452,6 @@ message ShowDynamicObjectPacket {
   bool loop = 13;
 }
 
-message UpdateDynamicObjectPacket {
-  int64 id = 1;
-  int32 start = 2;
-  int32 end = 3;
-  bool loop = 4;
-}
-
 message BreakRopePacket {
   int64 id = 1;
 }
@@ -585,7 +578,6 @@ message Packet {
     KungFuPacket learnKungFu = 34;
     ItemDescriptionPacket itemDescription = 35;
     ShowDynamicObjectPacket showDynamicObject = 38;
-    UpdateDynamicObjectPacket updateDynamicObject = 39;
 
     TeleportPacket teleport = 40;
     LifeBarPacket lifebar = 41;

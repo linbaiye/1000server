@@ -2,7 +2,6 @@ package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
-import org.y1000.message.AbstractPlayerEvent;
 import org.y1000.realm.PlayerEventHandler;
 import org.y1000.util.Coordinate;
 

@@ -3,7 +3,6 @@ package org.y1000.entities.players.event;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.item.BuffPill;
-import org.y1000.message.serverevent.Visibility;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateBuffPacket;
 
