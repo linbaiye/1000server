@@ -7,7 +7,6 @@ import org.y1000.entities.*;
 import org.y1000.entities.creatures.*;
 import org.y1000.entities.players.event.*;
 import org.y1000.entities.players.event.PlayerDropItemEvent;
-import org.y1000.event.TypedEntityEvent;
 import org.y1000.exp.ExperienceUtil;
 import org.y1000.guild.GuildMembership;
 import org.y1000.item.*;
@@ -1149,7 +1148,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     @Override
     public void joinGuild(GuildMembership membership) {
         if (guildMembership().isPresent()) {
-            emitEvent(PlayerTextEvent.systemTip(this, "你已有门派。"));
+            sendEvent(PlayerTextMessage.systip(this, "你已有门派。"));
         } else {
             guildMembership = membership;
         }
@@ -1164,7 +1163,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     public void cancelBuff() {
         if (buffPillSlot.isEffective()) {
             buffPillSlot.cancel();
-            emitEvent(UpdateBuffEvent.fade(this));
+            //emitEvent(UpdateBuffEvent.fade(this));
         }
     }
 
@@ -1421,11 +1420,6 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
 
-
-    @Override
-    public void emitEvent(TypedEntityEvent event) {
-        throw new IllegalArgumentException();
-    }
 
     private void handleKilled() {
         footKungfu = null;

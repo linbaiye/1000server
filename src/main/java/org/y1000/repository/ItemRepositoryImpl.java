@@ -3,7 +3,6 @@ package org.y1000.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.GroundedItem;
 import org.y1000.entities.players.inventory.AbstractInventory;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
@@ -62,16 +61,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         };
     }
 
-    @Override
-    public Item createItem(GroundedItem item) {
-        Validate.notNull(item, "item must not be null");
-        Item restored = item.getNumber() != null ?
-                createItem(item.getName(), item.getNumber()) : createItem(item.getName());
-        if (restored instanceof Equipment equipment) {
-            equipment.findAbility(Dyable.class).ifPresent(d -> d.dye(item.getColor()));
-        }
-        return restored;
-    }
 
 
     private BuffPill createBuffPill(String name) {

@@ -6,7 +6,6 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerUpdateGuildEvent;
 import org.y1000.event.IEntityEvent;
 import org.y1000.guild.GuildMembership;
-import org.y1000.message.PlayerTextEvent;
 
 import java.util.Optional;
 

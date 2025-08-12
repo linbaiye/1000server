@@ -2,7 +2,6 @@ package org.y1000.network;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.ServerContext;
 import org.y1000.message.I2ClientMessage;
 import org.y1000.network.gen.ClientPacket;
 import org.y1000.realm.RealmManager;
@@ -17,13 +16,10 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
 
     private final List<LatencyMessage<I2ClientMessage>> writingMessages;
     private final List<LatencyMessage<Object>> deliveryMessages;
-
     public final Thread sender;
 
-
-    public DevelopingConnection(RealmManager realmManager,
-                                ServerContext serverContext) {
-        super(realmManager, serverContext);
+    public DevelopingConnection(RealmManager realmManager) {
+        super(realmManager);
         deliveryMessages = new ArrayList<>();
         writingMessages = new ArrayList<>();
         sender = new Thread(this);

@@ -5,6 +5,7 @@ import org.y1000.message.I2ClientMessage;
 import org.y1000.message.serverevent.Visibility;
 import org.y1000.network.gen.Packet;
 
+@Deprecated
 public abstract class IAbstractPlayerEvent implements IPlayerEvent, I2ClientMessage {
 
     private final Visibility visibility;

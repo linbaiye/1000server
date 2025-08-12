@@ -1,7 +1,5 @@
 package org.y1000.entities;
 
-import org.y1000.event.TypedEntityEvent;
-import org.y1000.event.EntityEventListener;
 import org.y1000.util.Coordinate;
 
 import java.util.Collections;
@@ -12,14 +10,6 @@ import java.util.Set;
 public interface ActiveEntity extends Entity {
 
     void update(int delta);
-
-    void emitEvent(TypedEntityEvent event);
-
-    void registerEventListener(EntityEventListener listener);
-
-    void deregisterEventListener(EntityEventListener listener);
-
-    void clearListeners();
 
     <AB> Optional<AB> findAbility(Class<AB> type);
 

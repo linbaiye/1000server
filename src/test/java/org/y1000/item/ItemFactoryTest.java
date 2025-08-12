@@ -2,8 +2,6 @@ package org.y1000.item;
 
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.entities.GroundedItem;
-import org.y1000.util.Coordinate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,12 +39,5 @@ class ItemFactoryTest extends AbstractUnitTestFixture {
         assertNotEquals(0, equipment.color());
     }
 
-    @Test
-    void createFromGroundItem() {
-        var equip = itemFactory.createEquipment("女子长发");
-        equip.findAbility(Dyable.class).ifPresent(d -> d.dye(100));
-        GroundedItem groundedItem = new GroundedItem(1L, equip.name(), Coordinate.xy(1,1), 1, "", equip.color());
-        Item item = itemFactory.createItem(groundedItem);
-        assertEquals(100, item.color());
-    }
+
 }

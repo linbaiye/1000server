@@ -31,7 +31,7 @@ import org.y1000.sdb.*;
 import java.util.Map;
 
 @Slf4j
-public final class Server implements ServerContext {
+public final class Server {
 
     private final ServerBootstrap gameServer;
 
@@ -40,8 +40,6 @@ public final class Server implements ServerContext {
     private final EventLoopGroup bossGroup;
 
     private final RealmManager realmManager;
-
-    private final ItemRepositoryImpl itemRepository;
 
     private final EntityManagerFactory entityManagerFactory;
 
@@ -137,17 +135,16 @@ public final class Server implements ServerContext {
         entityManagerFactory = Dev ? new TestEntityManager() : Persistence.createEntityManagerFactory("org.y1000");
         KungFuBookRepositoryImpl kungFuRepositoryImpl = new KungFuBookRepositoryImpl(entityManagerFactory);
         ItemRepositoryImpl repository = new ItemRepositoryImpl(ItemSdbImpl.INSTANCE, ItemDrugSdbImpl.INSTANCE, kungFuRepositoryImpl, entityManagerFactory);
-        itemRepository = repository;
         NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE,
-                NonMonsterNpcSdbImpl.Instance, MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE, itemRepository, QuestSdbImpl.Instance, Dev ? new BankDevRepository() : itemRepository);
+                NonMonsterNpcSdbImpl.Instance, MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE, repository, QuestSdbImpl.Instance, Dev ? new BankDevRepository() : repository);
         DynamicObjectFactory dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
-        PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
-        PlayerRepository playerRepository = Dev ? new DevPlayerRepository(factory, itemRepository) :
-                new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, itemRepository, guildRepository);
+        PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, repository, guildRepository);
+        PlayerRepository playerRepository = Dev ? new DevPlayerRepository(factory, repository) :
+                new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, repository, guildRepository);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, RealmSpecificSdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,
-                entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE, guildRepository, itemRepository, kungFuRepositoryImpl);
+                entityManagerFactory, playerRepository, repository, PosByDieImpl.INSTANCE, guildRepository, repository, kungFuRepositoryImpl);
         AccountRepository accountRepository = new AccountRepositoryImpl();
         AccountManager accountManager = Dev ? new DevAccountManager((DevPlayerRepository)playerRepository):
                 new AccountManagerImpl(entityManagerFactory, accountRepository, playerRepository, factory);
@@ -166,7 +163,7 @@ public final class Server implements ServerContext {
                     protected void initChannel(NioSocketChannel channel) throws Exception {
                         channel.pipeline()
                                 .addLast("packetDecoder", new LengthBasedMessageDecoder())
-                                .addLast("packetHandler", new DevelopingConnection(realmManager, Server.this))
+                                .addLast("packetHandler", new DevelopingConnection(realmManager))
                                 //.addLast("packetHandler", new ConnectionImpl(realmManager, Server.this))
                                 .addLast("packetLengthAppender", new LengthFieldPrepender(4))
                                 .addLast("packetEncoder", MessageEncoder.ENCODER);
@@ -246,8 +243,4 @@ public final class Server implements ServerContext {
         server.startNetworking();
     }
 
-    @Override
-    public ItemFactory getItemFactory() {
-        return itemRepository;
-    }
 }

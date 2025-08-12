@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.npc.INpc;
+import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
@@ -49,12 +49,12 @@ class AiPathUtilTest {
          //x:0,1,2,3
         };
         RealmMap map = buildMap(mapmask);
-        INpc npc = Mockito.mock(INpc.class);
+        var npc = Mockito.mock(Npc.class);
         previous.set(Coordinate.xy(0, 0));
         npcCoordinate.set(Coordinate.xy(0, 3));
         npcDirection.set(Direction.RIGHT);
         when(npc.coordinate()).thenAnswer(invocationOnMock -> npcCoordinate.get());
-        when(npc.realmMap()).thenReturn(map);
+        when(npc.getRealmMap()).thenReturn(map);
         when(npc.direction()).thenAnswer(invocationOnMock -> npcDirection.get());
 
         Mockito.doAnswer(invocationOnMock -> {
@@ -62,13 +62,13 @@ class AiPathUtilTest {
             log.debug("Change direction to {}.",npcDirection.get());
             return null;
         }).when(npc).changeDirection(any(Direction.class));
-
-        Mockito.doAnswer(invocationOnMock -> {
-            previous.set(npcCoordinate.get());
-            npcCoordinate.set(npcCoordinate.get().moveBy(npcDirection.get()));
-            log.debug("Move by direction to {}.", npcCoordinate.get());
-            return null;
-        }).when(npc).move(anyInt());
+//
+//        Mockito.doAnswer(invocationOnMock -> {
+//            previous.set(npcCoordinate.get());
+//            npcCoordinate.set(npcCoordinate.get().moveBy(npcDirection.get()));
+//            log.debug("Move by direction to {}.", npcCoordinate.get());
+//            return null;
+//        }).when(npc).move(anyInt());
     }
 
     @Test
@@ -86,8 +86,8 @@ class AiPathUtilTest {
                 System.out.println(Coordinate.xy(i, j) + ": " + map.movable(Coordinate.xy(i, j)));
             }
         }
-        INpc npc = Mockito.mock(INpc.class);
-        when(npc.realmMap()).thenReturn(map);
+        Npc npc = Mockito.mock(Npc.class);
+        when(npc.getRealmMap()).thenReturn(map);
         when(npc.direction()).thenReturn(Direction.UP);
         when(npc.coordinate()).thenReturn(Coordinate.xy(3,3));
     }

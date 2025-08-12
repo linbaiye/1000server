@@ -65,15 +65,6 @@ message CreatureSoundEventPacket {
   string sound = 2;
 }
 
-message CreatureHurtEventPacket {
-  int64 id = 1;
-  int32 direction = 2;
-  int32 x = 3;
-  int32 y = 4;
-  int32 afterHurtState = 5;
-  int32 currentLife = 6;
-  int32 maxLife = 7;
-}
 
 message ChangeStatePacket {
   int64 id = 1;
@@ -82,13 +73,6 @@ message ChangeStatePacket {
   int32 x = 4;
   int32 y = 5;
 }
-
-
-
-message ClientUnequipPacket {
-  int32 type = 1;
-}
-
 
 message SwapInventorySlotPacket {
   int32 slot1 = 1;
@@ -225,7 +209,6 @@ message ClientPacket {
     LoginCharacterRequestPacket loginCharacter = 12;
     CreateCharacterRequestPacket createCharacter = 13;
 
-    ClientUnequipPacket unequip = 9;
     ClientChangeTeamPacket changeTeam = 25;
     ClientFoundGuildPacket foundGuild = 26;
     ClientCreateGuildKungFuPacket createGuildKungFu = 27;
@@ -233,7 +216,6 @@ message ClientPacket {
 
 
     SwapInventorySlotPacket swapInventorySlotPacket = 5;
-    DebugPacket debug = 31;
     ClickInputPacket clickPacket = 2;
     MoveInputPacket moveInput = 32;
     TurnInputPacket turnInput = 33;
@@ -357,13 +339,6 @@ message AttributeEquipPacket {
   bool quietly = 6;
 }
 
-message ToggleKungFuPacket {
-  string name = 1;
-  optional int32 level = 2;
-  int64 id = 3;
-  bool quietly = 4;
-  int32 type = 5;
-}
 
 message LifeBarPacket {
   int64 id = 1;
@@ -432,10 +407,6 @@ message PlayerEquipPacket {
   int32 weaponType = 6;
   string name = 7;
   int32 icon = 8;
-}
-
-message PlayerRevivePacket {
-  int64 id = 1;
 }
 
 message PlayerGainExpPacket {
@@ -530,10 +501,6 @@ message ChatPacket {
 }
 
 
-message UpdateBankPacket {
-  int32 type = 1;
-  optional InventoryItemPacket updateSlot = 2;
-}
 
 message NameColorPacket {
   int64 id = 1;
@@ -566,28 +533,10 @@ message UpdateBuffPacket {
   optional string description = 5;
 }
 
-message NpcInteractionMenuPacket {
-  int64 id = 1;
-  string viewName = 2;
-  string shape = 3;
-  int32 avatarIdx = 4;
-  string text = 5;
-  repeated string interactions = 6;
-}
 
 message EntityDamagedPacket {
   int64 id = 1;
   int32 percent = 2;
-}
-
-message MerchantMenuPacket {
-  int64 id = 1;
-  string viewName = 2;
-  string shape = 3;
-  int32 avatarIdx = 4;
-  string text = 5;
-  repeated NpcItemPacket items = 6;
-  bool sell = 7;
 }
 
 message StartDopItemPacket {
@@ -654,7 +603,6 @@ message Packet {
     PlayerInterpolationPacket playerInterpolation = 7;
     RemoveEntityPacket removeEntity = 8;
     CreatureAttackEventPacket attackEventPacket = 10;
-    CreatureHurtEventPacket hurtEventPacket = 11;
     ChangeStatePacket changeStatePacket = 12;
     SwapInventorySlotPacket swapInventorySlotPacket = 13;
     DropItemConfirmPacket dropItem = 16;
@@ -664,11 +612,9 @@ message Packet {
     PlayerUnequipPacket unequip = 20;
     PlayerEquipPacket equip = 21;
     OpenTradeWindowPacket openTradeWindow = 22;
-    ToggleKungFuPacket toggleKungFu = 23;
     AttributePacket attribute = 27;
     CreatureSoundEventPacket sound = 28;
     CreatureDieEventPacket die = 29;
-    PlayerRevivePacket playerRevive = 30;
     PlayerGainExpPacket gainExp = 31;
     ProjectilePacket projectile = 32;
     KungFuPacket learnKungFu = 34;
@@ -684,14 +630,11 @@ message Packet {
     BreakRopePacket breakRope = 44;
     NpcPositionPacket npcPosition = 45;
     ChatPacket chat = 46;
-    UpdateBankPacket updateBank = 48;
     NameColorPacket nameColor = 49;
     UpdateGuildPacket updateGuild = 50;
     UpdateGuildKungFuFormPacket kungFuForm = 51;
     UpdateQuestWindowPacket questWindow = 52;
     UpdateBuffPacket updateBuff = 53;
-    NpcInteractionMenuPacket interactionMenu = 54;
-    MerchantMenuPacket merchantMenu = 55;
     KungFuBookPacket kungFuBook = 56;
     InventoryPacket inventory = 57;
     JoinRealmPacket joinRealm = 58;
@@ -783,9 +726,6 @@ message UnequipInputPacket {
   int32 type = 1;
 }
 
-message DebugPacket {
-  int32 padding = 1;
-}
 
 message TurnInputPacket {
   int32 direction = 3;

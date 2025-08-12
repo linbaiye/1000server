@@ -6,15 +6,10 @@ import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEntityEventSender;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.GroundedItem;
-import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
-import org.y1000.message.PlayerDropItemEvent;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.serverevent.TextMessage;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;

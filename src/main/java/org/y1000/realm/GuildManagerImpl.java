@@ -11,12 +11,12 @@ import org.y1000.entities.EntityLifebarEvent;
 import org.y1000.entities.objects.DynamicObjectDieEvent;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.item.Item;
 import org.y1000.item.ItemType;
 import org.y1000.kungfu.KungFuSdb;
-import org.y1000.message.PlayerTextEvent;
 import org.y1000.message.input.ClientCreateGuildKungFuEvent;
 import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.repository.GuildRepository;
@@ -106,25 +106,25 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
             return;
         }
         if (founder.guildMembership().isPresent()) {
-            founder.emitEvent(PlayerTextEvent.systemTip(founder, "你已有门派。"));
+            founder.sendEvent(PlayerTextMessage.systip(founder, "你已有门派。"));
             return;
         }
         if (!realmMap.movable(coordinate)) {
-            founder.emitEvent(PlayerTextEvent.systemTip(founder, "该位置不可放置门派石。"));
+            founder.sendEvent(PlayerTextMessage.systip(founder, "该位置不可放置门派石。"));
             return;
         }
         if (coordinate.neighbours().stream().anyMatch(c -> !realmMap.tileMovable(c))) {
-            founder.emitEvent(PlayerTextEvent.systemTip(founder, "门派石八方不可有遮挡。"));
+            founder.sendEvent(PlayerTextMessage.systip(founder, "门派石八方不可有遮挡。"));
             return;
         }
         int i = guildRepository.countByName(name);
         if (i > 0) {
-            founder.emitEvent(PlayerTextEvent.systemTip(founder, "此门派名称已存在。"));
+            founder.sendEvent(PlayerTextMessage.systip(founder, "此门派名称已存在。"));
             return;
         }
         var reason = factory.checkCreateGuildStone(name);
         if (reason != null) {
-            founder.emitEvent(PlayerTextEvent.systemTip(founder, reason));
+            founder.sendEvent(PlayerTextMessage.systip(founder, reason));
             return;
         }
         GuildStone guildstone = factory.createGuildStone(entityIdGenerator.next(), name, realmId, realmMap, coordinate);
@@ -140,7 +140,7 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
             transaction.commit();
 //            eventSender.notifySelf(UpdateInventorySlotEvent.remove(founder, inventorySlot));
             doAdd(guildstone);
-            founder.emitEvent(PlayerTextEvent.systemTip(founder, "恭喜你，你已成为<" + guildstone.idName() + ">的门主。"));
+            founder.sendEvent(PlayerTextMessage.systip(founder, "恭喜你，你已成为<" + guildstone.idName() + ">的门主。"));
 //            eventSender.notifyVisiblePlayersAndSelf(founder, new PlayerUpdateGuildEvent(founder));
         }
     }
@@ -174,7 +174,7 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         }
         saveGuildKungfuParameter(event, guildId);
 //        eventSender.notifySelf(UpdateGuildKungFuFormEvent.close(applicant));
-//        eventSender.notifySelf(PlayerTextEvent.systemTip(applicant, "门武申请成功。"));
+//        eventSender.notifySelf(PlayerTextMessage.systip(applicant, "门武申请成功。"));
     }
 
 
@@ -329,17 +329,17 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
     public void teachGuildKungFu(Player source, Player target) {
         var ret = checkNotNullAndGuildRange(source, target);
         if (ret != null) {
-//            eventSender.notifySelf(PlayerTextEvent.systemTip(source, ret));
+//            eventSender.notifySelf(PlayerTextMessage.systip(source, ret));
             return;
         }
         GuildMembership sourceMembership = source.guildMembership().orElseThrow();
         if (target.guildMembership().isEmpty() || sourceMembership.guildId() !=
                 target.guildMembership().get().guildId()) {
-//            eventSender.notifySelf(PlayerTextEvent.systemTip(source, "门派不同，不可传授。"));
+//            eventSender.notifySelf(PlayerTextMessage.systip(source, "门派不同，不可传授。"));
             return;
         }
         if (!sourceMembership.canGiveKungFu()) {
-//            eventSender.notifySelf(PlayerTextEvent.systemTip(source, "门主或副门才能传授门武。"));
+//            eventSender.notifySelf(PlayerTextMessage.systip(source, "门主或副门才能传授门武。"));
             return;
         }
         kungFuBookRepository.findGuildKungfu(sourceMembership.guildId()).ifPresentOrElse(attackKungFu ->
@@ -348,23 +348,23 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
                     if (slot != 0) {}
 //                        eventSender.notifySelf(new PlayerLearnKungFuEvent(target, slot, attackKungFu));
                 }, () -> {});
-//                () -> eventSender.notifySelf(PlayerTextEvent.systemTip(source, "没有门武。")));
+//                () -> eventSender.notifySelf(PlayerTextMessage.systip(source, "没有门武。")));
     }
 
     @Override
     public void inviteMember(Player source, Player target) {
         var ret = checkNotNullAndGuildRange(source, target);
         if (ret != null) {
-//            eventSender.notifySelf(PlayerTextEvent.systemTip(source, ret));
+//            eventSender.notifySelf(PlayerTextMessage.systip(source, ret));
             return;
         }
         if (target.guildMembership().isPresent()) {
-//            eventSender.notifySelf(PlayerTextEvent.systemTip(source, target.viewName() + "已有门派。"));
+//            eventSender.notifySelf(PlayerTextMessage.systip(source, target.viewName() + "已有门派。"));
             return;
         }
         GuildMembership sourceMembership = source.guildMembership().orElseThrow();
         if (!sourceMembership.canInvite()) {
-//            eventSender.notifySelf(PlayerTextEvent.systemTip(source, "门主或副门才能邀请门人。"));
+//            eventSender.notifySelf(PlayerTextMessage.systip(source, "门主或副门才能邀请门人。"));
             return;
         }
         target.joinGuild(new GuildMembership(sourceMembership.guildId(),"", sourceMembership.guildName()));
@@ -380,7 +380,6 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
             remove(guildStone);
 //            eventSender.remove(guildStone);
             guildRepository.deleteGuildAndMembership(guildStone.getPersistentId());
-            guildStone.clearListeners();
         }
     }
 

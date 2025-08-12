@@ -7,8 +7,6 @@ import org.y1000.entities.players.event.UpdateInventorySlotMessage;
 import org.y1000.item.*;
 import org.y1000.entities.players.Player;
 import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.message.serverevent.UpdateInventorySlotEvent;
-import org.y1000.trade.TradeItem;
 
 import java.util.*;
 import java.util.function.BiFunction;

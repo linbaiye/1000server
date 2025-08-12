@@ -8,16 +8,12 @@ import org.y1000.TestingEventListener;
 import org.y1000.entities.Direction;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.IAbstractPlayerEvent;
-import org.y1000.entities.players.event.OpenTradeWindowEvent;
 import org.y1000.entities.players.event.UpdateTradeWindowEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.StackItem;
 import org.y1000.entities.players.event.PlayerMoveEvent;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.serverevent.TextMessage;
-import org.y1000.message.serverevent.UpdateInventorySlotEvent;
 import org.y1000.network.gen.TextMessagePacket;
 import org.y1000.util.Coordinate;
 

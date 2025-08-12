@@ -2,16 +2,14 @@ package org.y1000;
 
 import org.y1000.event.TypedEntityEvent;
 import org.y1000.event.IEntityEvent;
-import org.y1000.event.EntityEventListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TestingEventListener implements EntityEventListener {
+public class TestingEventListener {
 
     private final List<TypedEntityEvent> entityEvents = new ArrayList<>();
-
 
 
     public <T extends IEntityEvent> T dequeue(Class<T> clazz) {

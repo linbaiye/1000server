@@ -2,8 +2,10 @@ package org.y1000.guild;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.objects.*;
 import org.y1000.entities.players.Damage;
+import org.y1000.message.I2ClientMessage;
 import org.y1000.realm.RealmMap;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
@@ -12,7 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Getter
-public final class GuildStone extends AbstractKillableDynamicObject  {
+public final class GuildStone extends AbstractActiveEntity {
 
     private final int realmId;
 
@@ -35,10 +37,22 @@ public final class GuildStone extends AbstractKillableDynamicObject  {
                       String idName,
                       int realmId,
                       Integer persistentId) {
-        super(id, coordinate, realmMap, dynamicObjectSdb, currentHealth, idName, new IAnimation[]{new IAnimation(0, 0, false)});
+        super(id);
+        //super(id, coordinate, realmMap, dynamicObjectSdb, currentHealth, idName, new IAnimation[]{new IAnimation(0, 0, false)});
         this.realmId = realmId;
         this.persistentId = persistentId;
         nextHealthTime = 0;
+    }
+
+    public String idName() {
+        return "";
+    }
+
+    public int getMaxLife() {
+        return 0;
+    }
+    public int currentLife() {
+        return 0;
     }
 
     @Override
@@ -55,31 +69,51 @@ public final class GuildStone extends AbstractKillableDynamicObject  {
     }
 
     @Override
-    public DynamicObjectType type() {
-        return DynamicObjectType.GUILD_STONE;
-    }
-
-    @Override
-    protected void handleDamaged(Damage damage) {
-        damageLife(damage);
-        if (currentLife() <= 0) {
-            realmMap().free(this);
-            emitEvent(new DynamicObjectDieEvent(this));
-        }
-    }
-
-    @Override
-    protected void onAnimationDone() {
-    }
-
-    @Override
     public void update(int delta) {
-        if (nextHealthTime > 0)
-            nextHealthTime -= delta;
+
     }
 
     @Override
     public <AB> Optional<AB> findAbility(Class<AB> type) {
         return Optional.empty();
     }
+
+    @Override
+    public Coordinate coordinate() {
+        return null;
+    }
+
+    @Override
+    public I2ClientMessage captureSnapshot() {
+        return null;
+    }
+
+//    @Override
+//    public DynamicObjectType type() {
+//        return DynamicObjectType.GUILD_STONE;
+//    }
+//
+//    @Override
+//    protected void handleDamaged(Damage damage) {
+//        damageLife(damage);
+//        if (currentLife() <= 0) {
+//            realmMap().free(this);
+//            emitEvent(new DynamicObjectDieEvent(this));
+//        }
+//    }
+//
+//    @Override
+//    protected void onAnimationDone() {
+//    }
+//
+//    @Override
+//    public void update(int delta) {
+//        if (nextHealthTime > 0)
+//            nextHealthTime -= delta;
+//    }
+//
+//    @Override
+//    public <AB> Optional<AB> findAbility(Class<AB> type) {
+//        return Optional.empty();
+//    }
 }

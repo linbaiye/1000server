@@ -3,7 +3,6 @@ package org.y1000.network;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.ServerContext;
 import org.y1000.entities.Direction;
 import org.y1000.item.EquipmentType;
 import org.y1000.message.account.CreateCharacterRequest;
@@ -26,12 +25,9 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     private final RealmManager realmManager;
 
-    private final ServerContext serverContext;
 
-    public AbstractConnection(RealmManager realmManager,
-                              ServerContext serverContext) {
+    public AbstractConnection(RealmManager realmManager) {
         this.realmManager = realmManager;
-        this.serverContext = serverContext;
         context = new AtomicReference<>();
     }
 
@@ -41,7 +37,6 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
 
     Object createMessage(ClientPacket clientPacket) {
         return switch (clientPacket.getTypeCase()) {
-            case UNEQUIP -> new ClientUnequipEvent(EquipmentType.fromValue(clientPacket.getUnequip().getType()));
             case CHANGETEAM -> new ClientChangeTeamEvent(clientPacket.getChangeTeam().getTeamNumber());
             case FOUNDGUILD -> ClientFoundGuildEvent.parse(clientPacket.getFoundGuild());
             case CREATEGUILDKUNGFU -> ClientCreateGuildKungFuEvent.parse(clientPacket.getCreateGuildKungFu());
@@ -52,7 +47,6 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case REGISTERACCOUNT -> new RegisterAccountRequest(clientPacket.getRegisterAccount().getUsername(), clientPacket.getRegisterAccount().getPassword());
             case CREATECHARACTER -> new CreateCharacterRequest(clientPacket.getCreateCharacter().getCharacterName(), clientPacket.getCreateCharacter().getMale());
 
-            case DEBUG -> new DebugInput(1);
             case SWAPINVENTORYSLOTPACKET -> SwapInventoryItemInput.fromPacket(clientPacket.getSwapInventorySlotPacket());
             case CLICKPACKET -> new ClickEntityInput(clientPacket.getClickPacket().getId());
             case MOVEINPUT -> new MoveInput(Coordinate.xy(clientPacket.getMoveInput().getX(), clientPacket.getMoveInput().getY()), Direction.fromValue(clientPacket.getMoveInput().getDirection()));

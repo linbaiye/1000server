@@ -4,15 +4,18 @@ import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.RemoveEntityPacket;
 
 
-public final class RemoveEntityMessage extends AbstractClientMessage {
+public final class RemoveEntityMessage implements I2ClientMessage {
 
     private final long id;
 
+    private final Packet packet;
+
     public RemoveEntityMessage(long id) {
+        packet = createPacket(id);
         this.id = id;
     }
 
-    public static Packet createPacket(long id) {
+    private static Packet createPacket(long id) {
         return Packet.newBuilder()
                 .setRemoveEntity(
                         RemoveEntityPacket.newBuilder()
@@ -23,14 +26,14 @@ public final class RemoveEntityMessage extends AbstractClientMessage {
     }
 
     @Override
-    protected Packet buildPacket() {
-        return createPacket(id);
-    }
-
-    @Override
     public String toString() {
         return "RemoveEntityMessage{" +
                 "id=" + id +
                 '}';
+    }
+
+    @Override
+    public Packet toPacket() {
+        return packet;
     }
 }

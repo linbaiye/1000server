@@ -82,7 +82,7 @@ public final class NpcFactoryImpl implements NpcFactory {
         }
         return switch (NpcSpellType.fromValue(function)) {
             case Copy -> new NpcCopyAbility(magicParamSdb.getNumberParam1(npcName, magicName), magicParamSdb.getNumberParam2(npcName, magicName));
-            case SHIFT -> new ShiftSpell(magicParamSdb.getNameParam1(npcName, magicName));
+            case SHIFT -> null;
             case HEAL -> null;
             case HIDE -> null;
         };

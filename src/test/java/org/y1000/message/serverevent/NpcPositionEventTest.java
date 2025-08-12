@@ -2,7 +2,6 @@ package org.y1000.message.serverevent;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.y1000.entities.creatures.npc.InteractableNpc;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.NpcPositionPacket;

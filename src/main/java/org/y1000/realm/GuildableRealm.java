@@ -3,7 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
-import org.y1000.message.PlayerTextEvent;
+import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.message.input.*;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
@@ -47,7 +47,7 @@ class GuildableRealm extends AbstractRealm {
                 .filter(player -> player.viewName().equals(target))
                 .findFirst()
                 .ifPresentOrElse(t -> handler.accept(source, t),
-                        () -> source.emitEvent(PlayerTextEvent.systemTip(source, "玩家不在线或不在身边。")));
+                        () -> source.sendEvent(PlayerTextMessage.systip(source, "玩家不在线或不在身边。")));
     }
 
 
