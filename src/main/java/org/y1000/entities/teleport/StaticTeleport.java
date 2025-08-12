@@ -2,12 +2,11 @@ package org.y1000.entities.teleport;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.Entity;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.sdb.CreateGateSdb;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public final class StaticTeleport extends AbstractTeleport implements Entity  {

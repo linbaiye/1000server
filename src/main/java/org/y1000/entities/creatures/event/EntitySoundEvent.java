@@ -1,6 +1,6 @@
 package org.y1000.entities.creatures.event;
 
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.network.gen.EntitySoundPacket;
 import org.y1000.network.gen.Packet;
 

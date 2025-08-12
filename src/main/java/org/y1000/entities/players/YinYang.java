@@ -1,7 +1,5 @@
 package org.y1000.entities.players;
 
-import org.y1000.exp.Experience;
-import org.y1000.exp.ExperienceUtil;
 import java.time.LocalDateTime;
 
 public final class YinYang {

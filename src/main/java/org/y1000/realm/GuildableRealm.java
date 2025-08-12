@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
-import org.y1000.message.input.*;
+import org.y1000.input.*;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 

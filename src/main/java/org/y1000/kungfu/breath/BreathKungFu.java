@@ -4,7 +4,7 @@ import lombok.Builder;
 import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeMessage;
-import org.y1000.exp.ExperienceUtil;
+import org.y1000.entities.players.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;
 import org.y1000.kungfu.KungFu;

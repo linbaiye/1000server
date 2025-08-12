@@ -15,7 +15,7 @@ import org.y1000.guild.GuildStone;
 import org.y1000.item.Item;
 import org.y1000.item.ItemType;
 import org.y1000.kungfu.KungFuSdb;
-import org.y1000.message.input.ClientCreateGuildKungFuEvent;
+import org.y1000.input.ClientCreateGuildKungFuEvent;
 import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.repository.GuildRepository;
 import org.y1000.repository.ItemRepository;

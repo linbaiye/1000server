@@ -1,7 +1,7 @@
 package org.y1000.realm;
 
 import org.y1000.entities.Entity;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 
 import java.util.Set;
 import java.util.function.Predicate;

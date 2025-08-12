@@ -1,7 +1,7 @@
 package org.y1000.entities.players;
 
 import org.y1000.item.EquipmentType;
-import org.y1000.message.input.*;
+import org.y1000.input.*;
 import org.y1000.util.Coordinate;
 
 public interface PlayerInputHandler {

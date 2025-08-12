@@ -1,22 +1,18 @@
 package org.y1000.entities.creatures.npc;
 
 import lombok.Getter;
-import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.Entity;
 import org.y1000.entities.FilterVisibleEvent;
 import org.y1000.entities.creatures.AbstractCreature;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
-import org.y1000.entities.players.Player;
-import org.y1000.entities.players.PlayerLeaveListener;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class NpcImpl extends AbstractCreature implements Npc {
 

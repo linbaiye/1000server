@@ -6,7 +6,7 @@ import lombok.Getter;
 import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerAttributeMessage;
-import org.y1000.exp.ExperienceUtil;
+import org.y1000.entities.players.ExperienceUtil;
 
 @Getter
 public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {

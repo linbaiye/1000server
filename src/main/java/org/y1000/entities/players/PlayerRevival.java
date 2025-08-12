@@ -1,7 +1,5 @@
 package org.y1000.entities.players;
 
-import org.y1000.exp.Experience;
-
 public final class PlayerRevival {
     private final Experience experience;
 

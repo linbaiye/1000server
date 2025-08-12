@@ -4,14 +4,13 @@ import org.slf4j.Logger;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implements ActiveEntityManager<T>, EntityEventHandler {
     private boolean iterating;

@@ -1,7 +1,7 @@
 package org.y1000.entities.objects;
 
 import lombok.Getter;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.RemoveEntityPacket;
 import org.y1000.realm.DynamicObjectEventHandler;

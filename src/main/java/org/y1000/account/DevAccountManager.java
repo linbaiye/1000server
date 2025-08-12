@@ -1,6 +1,5 @@
 package org.y1000.account;
 
-import org.y1000.message.account.AccountMessage;
 import org.y1000.network.Connection;
 import org.y1000.repository.DevPlayerRepository;
 

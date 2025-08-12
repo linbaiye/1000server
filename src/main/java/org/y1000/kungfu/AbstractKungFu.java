@@ -4,8 +4,8 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerGainExpMessage;
 import org.y1000.entities.players.event.PlayerKungFuFullEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
-import org.y1000.exp.Experience;
-import org.y1000.exp.ExperienceUtil;
+import org.y1000.entities.players.Experience;
+import org.y1000.entities.players.ExperienceUtil;
 
 public abstract class AbstractKungFu implements KungFu {
 

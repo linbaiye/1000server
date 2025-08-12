@@ -8,7 +8,7 @@ import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.entities.players.event.PlayerChangeStateEvent;
-import org.y1000.message.input.MoveInput;
+import org.y1000.input.MoveInput;
 import org.y1000.util.Coordinate;
 
 

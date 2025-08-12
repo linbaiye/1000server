@@ -2,10 +2,9 @@ package org.y1000.realm;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.y1000.entities.players.Player;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.network.Connection;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

@@ -1,8 +1,6 @@
 package org.y1000.entities.players;
 
 
-import org.y1000.exp.ExperienceUtil;
-
 public final class PlayerLife extends AbstractAgedAttribute {
     private static final int LEVEL = ExperienceUtil.computeLevel(0);
 

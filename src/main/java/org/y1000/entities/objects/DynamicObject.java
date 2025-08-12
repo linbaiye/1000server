@@ -5,7 +5,7 @@ import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.FilterVisibleEvent;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.realm.DynamicObjectEventListener;
 import org.y1000.realm.RealmMap;
 import org.y1000.util.Coordinate;

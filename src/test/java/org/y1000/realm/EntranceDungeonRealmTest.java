@@ -6,7 +6,7 @@ package org.y1000.realm;
 //import org.y1000.entities.players.Player;
 //import org.y1000.entities.players.PlayerImpl;
 //import org.y1000.message.PlayerTextEvent;
-//import org.y1000.message.I2ClientMessage;
+//import org.y1000.network.I2ClientMessage;
 //import org.y1000.network.Connection;
 //import org.y1000.network.event.ConnectionEstablishedEvent;
 //import org.y1000.realm.event.PlayerRealmEvent;

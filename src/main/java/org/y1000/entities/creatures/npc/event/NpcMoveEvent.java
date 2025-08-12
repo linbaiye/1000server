@@ -3,7 +3,7 @@ package org.y1000.entities.creatures.npc.event;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.creatures.npc.Npc;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.network.gen.NpcMovePacket;
 import org.y1000.network.gen.Packet;
 import org.y1000.realm.NpcEventHandler;

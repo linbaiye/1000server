@@ -1,7 +1,7 @@
 package org.y1000.realm;
 
 import org.y1000.entities.players.Player;
-import org.y1000.message.input.SelfHandleInput;
+import org.y1000.input.SelfHandleInput;
 import org.y1000.network.Connection;
 import org.y1000.util.Coordinate;
 

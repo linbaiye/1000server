@@ -5,6 +5,7 @@ import org.mockito.Mockito;
 import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.network.gen.NpcPositionPacket;
+import org.y1000.realm.event.InteractableCoordinateNameMessage;
 import org.y1000.util.Coordinate;
 
 import java.util.Collections;

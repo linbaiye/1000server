@@ -9,7 +9,7 @@ import org.y1000.entities.HurtAbility;
 import org.y1000.entities.creatures.npc.event.NpcLifeBarEvent;
 import org.y1000.entities.creatures.npc.event.NpcSoundEvent;
 import org.y1000.entities.players.Damage;
-import org.y1000.exp.ExperienceUtil;
+import org.y1000.entities.players.ExperienceUtil;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;

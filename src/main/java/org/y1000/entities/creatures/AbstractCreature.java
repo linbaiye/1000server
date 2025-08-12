@@ -2,12 +2,7 @@ package org.y1000.entities.creatures;
 
 import org.y1000.entities.AbstractActiveEntity;
 import org.y1000.entities.Direction;
-import org.y1000.entities.players.Damage;
-import org.y1000.exp.ExperienceUtil;
 import org.y1000.util.Coordinate;
-
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Consumer;
 
 public abstract class AbstractCreature extends AbstractActiveEntity implements Creature {
 

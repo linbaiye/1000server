@@ -3,7 +3,7 @@ package org.y1000;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.network.Connection;
 import org.y1000.realm.MessageSender;
 

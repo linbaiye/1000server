@@ -6,6 +6,7 @@ import org.y1000.entities.creatures.Creature;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.guild.GuildMembership;
+import org.y1000.input.SelfHandleInput;
 import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.item.*;
@@ -14,7 +15,6 @@ import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.realm.PlayerEventListener;
-import org.y1000.message.input.SelfHandleInput;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 

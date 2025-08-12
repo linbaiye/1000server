@@ -2,7 +2,6 @@ package org.y1000.network;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.message.I2ClientMessage;
 import org.y1000.network.gen.ClientPacket;
 import org.y1000.realm.RealmManager;
 

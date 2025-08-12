@@ -1,7 +1,7 @@
 package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.network.gen.JoinRealmPacket;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerEquipPacket;

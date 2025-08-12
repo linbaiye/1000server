@@ -7,7 +7,7 @@ import org.y1000.entities.creatures.npc.*;
 import org.y1000.entities.creatures.npc.event.NpcEvent;
 import org.y1000.entities.creatures.npc.event.NpcShootEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.message.I2ClientMessage;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.entities.RemoveEntityMessage;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
