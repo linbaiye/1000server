@@ -8,7 +8,7 @@ import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.*;
 import org.y1000.persistence.InventoryPo;
-import org.y1000.persistence.SlotItem;
+import org.y1000.persistence.SlotItemPo;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -68,7 +68,7 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
         InventoryPo inventoryPo = entityManager.createQuery("select i from InventoryPo i where i.playerId = ?1", InventoryPo.class)
                 .setParameter(1, player.id())
                 .getResultList().get(0);
-        assertTrue(inventoryPo.getSlots().stream().map(SlotItem::getSlot).collect(Collectors.toSet()).containsAll(Set.of(slot0, slot1, slot2)));
+        assertTrue(inventoryPo.getSlots().stream().map(SlotItemPo::getSlot).collect(Collectors.toSet()).containsAll(Set.of(slot0, slot1, slot2)));
         assertNotNull(inventory.getItem(slot2, Equipment.class).get().id());
         assertFalse(entityManager.createQuery("select e from EquipmentPo e where id = ?1")
                 .setParameter(1, inventory.getItem(slot2, Equipment.class).get().id())

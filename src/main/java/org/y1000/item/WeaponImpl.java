@@ -8,33 +8,52 @@ import java.util.Set;
 
 public final class WeaponImpl extends AbstractEquipment implements Weapon {
 
-    private final ItemSdb itemSdb;
 
     private final Damage damage;
+
+    private final int attackSpeed;
+    private final int recovery;
+    private final int avoid;
+    private final AttackKungFuType kungFuType;
 
     public WeaponImpl(String name, ItemSdb itemSdb) {
         this(name, itemSdb, new HashSet<>());
     }
 
-    public WeaponImpl(String name, ItemSdb itemSdb, Set<Object> abilities) {
+    private WeaponImpl(String name, Damage damage,
+                       int attackSpeed, int recovery, int avoid,
+                       ItemSdb itemSdb,
+                       Set<Object> abilities) {
         super(name, itemSdb, abilities);
-        this.itemSdb = itemSdb;
-        this.damage = new Damage(itemSdb.getDamageBody(name()), itemSdb.getDamageHead(name()), itemSdb.getDamageArm(name()), itemSdb.getDamageLeg(name()));
+        this.attackSpeed = attackSpeed;
+        this.damage = damage;
+        this.kungFuType = itemSdb.getAttackKungFuType(name);
+        this.recovery = recovery;
+        this.avoid = avoid;
+    }
+
+    public WeaponImpl(String name, ItemSdb itemSdb, Set<Object> abilities) {
+        this(name, new Damage(itemSdb.getDamageBody(name), itemSdb.getDamageHead(name), itemSdb.getDamageArm(name), itemSdb.getDamageLeg(name)),
+                itemSdb.getAttackSpeed(name),itemSdb.getRecovery(name), itemSdb.getAvoid(name), itemSdb, abilities );
+    }
+
+    public static WeaponImpl randomAttribute(String name, ItemSdb itemSdb, Set<Object> abilities) {
+        return null;
     }
 
     @Override
     public AttackKungFuType kungFuType() {
-        return itemSdb.getAttackKungFuType(name());
+        return kungFuType;
     }
 
     @Override
     public int attackSpeed() {
-        return itemSdb.getAttackSpeed(name());
+        return attackSpeed;
     }
 
     @Override
     public int recovery() {
-        return itemSdb.getRecovery(name());
+        return recovery;
     }
     @Override
     public EquipmentType equipmentType() {
@@ -42,7 +61,7 @@ public final class WeaponImpl extends AbstractEquipment implements Weapon {
     }
 
     private int getOriginAvoid() {
-        return itemSdb.getAvoid(name());
+        return avoid;
     }
 
     @Override

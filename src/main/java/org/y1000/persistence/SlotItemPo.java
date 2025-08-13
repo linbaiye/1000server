@@ -10,7 +10,7 @@ import org.y1000.item.StackItem;
 import java.io.Serializable;
 
 @Data
-public class SlotItem implements Serializable {
+public class SlotItemPo implements Serializable {
     private static final String ITEM_TYPE = "I";
     private static final String EQUIP_TYPE = "E";
     private int slot;
@@ -22,17 +22,17 @@ public class SlotItem implements Serializable {
     private Long number;
     private Long equipmentId;
 
-    private static SlotItem ofEquipment(int slot, Equipment equipment) {
+    private static SlotItemPo ofEquipment(int slot, Equipment equipment) {
         Validate.notNull(equipment.id());
-        var slotItem = new SlotItem();
+        var slotItem = new SlotItemPo();
         slotItem.setSlot(slot);
         slotItem.setType(EQUIP_TYPE);
         slotItem.setEquipmentId(equipment.id());
         return slotItem;
     }
 
-    private static SlotItem ofItem(int slot, Item item) {
-        var slotItem = new SlotItem();
+    private static SlotItemPo ofItem(int slot, Item item) {
+        var slotItem = new SlotItemPo();
         slotItem.setSlot(slot);
         slotItem.setType(ITEM_TYPE);
         slotItem.setName(item.name());
@@ -49,7 +49,7 @@ public class SlotItem implements Serializable {
         return EQUIP_TYPE.equals(type);
     }
 
-    public static SlotItem of(int slot, Item item) {
+    public static SlotItemPo of(int slot, Item item) {
         Validate.notNull(item);
         if (item instanceof Equipment equipment) {
             return ofEquipment(slot, equipment);

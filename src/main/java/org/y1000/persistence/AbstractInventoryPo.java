@@ -22,19 +22,19 @@ public abstract class AbstractInventoryPo {
 
     @JoinColumn
     @JdbcTypeCode(SqlTypes.JSON)
-    private List<SlotItem> slots;
+    private List<SlotItemPo> slots;
 
 
     public void merge(AbstractInventory inventory) {
         Validate.notNull(inventory);
         slots = new ArrayList<>();
-        inventory.foreach((slot, item) -> slots.add(SlotItem.of(slot, item)));
+        inventory.foreach((slot, item) -> slots.add(SlotItemPo.of(slot, item)));
     }
 
     public Set<Long> selectEquipmentIds() {
         return slots == null ? Collections.emptySet() :
-                slots.stream().filter(SlotItem::isEquipment)
-                        .map(SlotItem::getEquipmentId)
+                slots.stream().filter(SlotItemPo::isEquipment)
+                        .map(SlotItemPo::getEquipmentId)
                         .collect(Collectors.toSet());
     }
 }

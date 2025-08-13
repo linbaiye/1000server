@@ -13,7 +13,6 @@ import org.y1000.sdb.ItemDrugSdb;
 
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, BankRepository {
@@ -171,7 +170,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                     .getResultStream()
                     .collect(Collectors.toMap(EquipmentPo::getId, this::createEquipment));
         }
-        for (SlotItem slotItem : inventoryPo.getSlots()) {
+        for (SlotItemPo slotItem : inventoryPo.getSlots()) {
             if (slotItem.isEquipment()) {
                 inventoryAdder.accept(slotItem.getSlot(), equipments.get(slotItem.getEquipmentId()));
             } else {
