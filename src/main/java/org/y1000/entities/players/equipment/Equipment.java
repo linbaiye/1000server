@@ -1,5 +1,7 @@
-package org.y1000.item;
+package org.y1000.entities.players.equipment;
 
+
+import org.y1000.item.Item;
 
 import java.util.Optional;
 

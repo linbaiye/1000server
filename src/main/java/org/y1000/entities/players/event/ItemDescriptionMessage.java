@@ -2,8 +2,8 @@ package org.y1000.entities.players.event;
 
 import org.apache.commons.lang3.StringUtils;
 import org.y1000.entities.players.Player;
-import org.y1000.item.Equipment;
-import org.y1000.item.EquipmentType;
+import org.y1000.entities.players.equipment.Equipment;
+import org.y1000.entities.players.equipment.EquipmentType;
 import org.y1000.item.Item;
 import org.y1000.kungfu.KungFu;
 import org.y1000.network.gen.ItemDescriptionPacket;

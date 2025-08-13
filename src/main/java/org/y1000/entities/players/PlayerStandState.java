@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
-import org.y1000.item.Equipment;
+import org.y1000.entities.players.equipment.Equipment;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;

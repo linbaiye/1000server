@@ -3,6 +3,7 @@ package org.y1000.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
+import org.y1000.entities.players.equipment.Dyable;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.item.*;
 import org.y1000.persistence.BankPo;

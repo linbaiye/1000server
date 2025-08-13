@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.players.equipment.Equipment;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.*;
 import org.y1000.persistence.InventoryPo;
@@ -80,7 +81,7 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
         PlayerImpl player = playerBuilder().id(11).build();
         Inventory inventory = player.inventory();
         int slot1 = inventory.add(itemFactory.createItem("生药", 2));
-        Equipment equipment = itemFactory.createEquipment("女子黄龙弓服", 4);
+        Equipment equipment = itemFactory.createEquipment("女子黄龙弓服");
         equipment.findAbility(Upgradable.class).get().upgrade();
         int slot2 = inventory.add(equipment);
         EntityManager entityManager = jpaFixture.beginTx();

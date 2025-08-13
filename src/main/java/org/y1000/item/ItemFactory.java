@@ -1,6 +1,9 @@
 package org.y1000.item;
 
 
+import org.y1000.entities.players.equipment.ArmorEquipment;
+import org.y1000.entities.players.equipment.Equipment;
+import org.y1000.entities.players.equipment.SexualEquipment;
 import org.y1000.persistence.EquipmentPo;
 
 public interface ItemFactory {
@@ -13,9 +16,6 @@ public interface ItemFactory {
 
     Item createItem(String name, long number);
 
-    SexualEquipment createTrouser(String name);
-
-    ArmorEquipment createHat(String name);
 
     ArmorEquipment createChest(String name);
 
@@ -25,11 +25,7 @@ public interface ItemFactory {
 
     ArmorEquipment createWrist(String name);
 
-    SexualEquipment createClothing(String name);
-
     Equipment createEquipment(String name);
-
-    Equipment createEquipment(String name, int color);
 
     Equipment createEquipment(EquipmentPo equipmentPo);
 }

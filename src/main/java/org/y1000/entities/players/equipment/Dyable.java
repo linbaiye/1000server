@@ -1,4 +1,4 @@
-package org.y1000.item;
+package org.y1000.entities.players.equipment;
 
 public interface Dyable {
 

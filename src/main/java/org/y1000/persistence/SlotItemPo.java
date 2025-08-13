@@ -1,15 +1,17 @@
 package org.y1000.persistence;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.apache.commons.lang3.Validate;
-import org.y1000.item.Equipment;
+import org.y1000.entities.players.equipment.Equipment;
 import org.y1000.item.Item;
 import org.y1000.item.StackItem;
 
 import java.io.Serializable;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SlotItemPo implements Serializable {
     private static final String ITEM_TYPE = "I";
     private static final String EQUIP_TYPE = "E";
@@ -18,7 +20,7 @@ public class SlotItemPo implements Serializable {
     // 'E' for equipment, equipmentId is used.
     private String type;
     private String name;
-    private int color;
+    private Integer color;
     private Long number;
     private Long equipmentId;
 

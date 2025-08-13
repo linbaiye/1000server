@@ -1,6 +1,9 @@
-package org.y1000.item;
+package org.y1000.entities.players.equipment;
 
-public final class DyableImpl implements Dyable {
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public final class DyableImpl implements Dyable, EquipmentAbility {
 
     private int color;
 
@@ -20,8 +23,13 @@ public final class DyableImpl implements Dyable {
     }
 
     @Override
+    @JsonProperty
     public int color() {
         return color;
     }
 
+    @Override
+    public EquipmentAbilityType abilityType() {
+        return EquipmentAbilityType.Dyable;
+    }
 }

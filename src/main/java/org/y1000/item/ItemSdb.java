@@ -1,5 +1,6 @@
 package org.y1000.item;
 
+import org.y1000.entities.players.equipment.EquipmentType;
 import org.y1000.kungfu.attack.AttackKungFuType;
 
 public interface ItemSdb {

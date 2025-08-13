@@ -1,8 +1,12 @@
-package org.y1000.item;
+package org.y1000.entities.players.equipment;
 
 
 import org.apache.commons.lang3.StringUtils;
+import org.y1000.item.AbstractItem;
+import org.y1000.item.ItemSdb;
+import org.y1000.item.ItemType;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -11,16 +15,16 @@ public abstract class AbstractEquipment extends AbstractItem implements Equipmen
 
     private Long id;
 
-    private final Set<Object> abilities;
+    private final Set<EquipmentAbility> abilities;
 
     private final int originColor;
 
     private final String wearShape;
 
 
-    public AbstractEquipment(String name, ItemSdb itemSdb, Set<Object> abilities) {
+    public AbstractEquipment(String name, ItemSdb itemSdb, Set<EquipmentAbility> abilities) {
         super(name, ItemType.EQUIPMENT, itemSdb);
-        this.abilities = abilities != null ? abilities : new HashSet<>();
+        this.abilities = abilities != null ? abilities : Collections.emptySet();
         this.originColor = itemSdb.getColor(name);
         this.wearShape = itemSdb.getWearShape(name);
     }

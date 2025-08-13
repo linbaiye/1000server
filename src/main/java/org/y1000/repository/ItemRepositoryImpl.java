@@ -3,6 +3,8 @@ package org.y1000.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.apache.commons.lang3.Validate;
+import org.y1000.item.BankBag;
+import org.y1000.entities.players.equipment.*;
 import org.y1000.entities.players.inventory.AbstractInventory;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
@@ -33,25 +35,20 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
     }
 
 
-    private Set<Object> buildEquipmentAbilities(String name, int color) {
-        Set<Object> abilities = new HashSet<>();
-        if (itemSdb.isUpgrade(name)) {
-            abilities.add(new UpgradableImpl());
-        }
+    private Set<EquipmentAbility> buildEquipmentAbilities(String name) {
+        Set<EquipmentAbility> abilities = new HashSet<>();
         if (itemSdb.isColoring(name)) {
-            abilities.add(new DyableImpl(color));
+            abilities.add(new DyableImpl(itemSdb.getColor(name)));
         }
         return abilities;
     }
 
     public Equipment createEquipment(String name) {
-        return createEquipment(name, itemSdb.getColor(name));
+        return createEquipment(name, buildEquipmentAbilities(name));
     }
 
-    @Override
-    public Equipment createEquipment(String name, int color) {
-        Validate.notNull(name);
-        Set<Object> abilities = buildEquipmentAbilities(name, color);
+
+    public Equipment createEquipment(String name, Set<EquipmentAbility> abilities) {
         EquipmentType equipmentType = itemSdb.getEquipmentType(name);
         return switch (equipmentType) {
             case WEAPON -> new WeaponImpl(name, itemSdb, abilities);
@@ -59,7 +56,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
             case HAT, CHEST, BOOT, WRIST -> new ArmorImpl(name, itemSdb, abilities);
         };
     }
-
 
 
     private BuffPill createBuffPill(String name) {
@@ -84,7 +80,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
             case DYE -> new Dye(name, itemSdb);
             case PILL -> new Pill(name, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
             case KUNGFU -> createKungFuItem(name);
-            case BANK_INVENTORY -> new BankInventory(name, itemSdb);
+            case BANK_INVENTORY -> new BankBag(name, itemSdb);
             case BUFF_PILL -> createBuffPill(name);
             default -> SimpleItem.uncategoried(name, itemSdb);
         };
@@ -115,48 +111,36 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
     }
 
     @Override
-    public SexualEquipment createTrouser(String name) {
-        return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
-    }
-
-    @Override
-    public ArmorEquipment createHat(String name) {
-        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
-    }
-
-    @Override
     public ArmorEquipment createChest(String name) {
-        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
+        return (ArmorEquipment) createEquipment(name);
     }
 
     @Override
     public SexualEquipment createHair(String name) {
-        return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
+        return (SexualEquipment) createEquipment(name);
     }
 
     @Override
     public ArmorEquipment createBoot(String name) {
-        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
+        return (ArmorEquipment) createEquipment(name);
     }
 
     @Override
     public ArmorEquipment createWrist(String name) {
-        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
+        return (ArmorEquipment) createEquipment(name);
     }
 
-    @Override
-    public SexualEquipment createClothing(String name) {
-        return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
+    private Set<EquipmentAbility> restoreAbilities(List<EquipmentPo.EquipmentAbilityPo> abilityPos) {
+        if (abilityPos == null)
+            return Collections.emptySet();
+        return abilityPos.stream().map(EquipmentPo.EquipmentAbilityPo::restore).collect(Collectors.toSet());
     }
 
     @Override
     public Equipment createEquipment(EquipmentPo equipmentPo) {
-        var e = createEquipment(equipmentPo.getName(), equipmentPo.getColor());
+        Set<EquipmentAbility> abilities = restoreAbilities(equipmentPo.getAbilities());
+        var e = createEquipment(equipmentPo.getName(), abilities);
         e.setId(equipmentPo.getId());
-        e.findAbility(Upgradable.class).ifPresent(u -> {
-            while (u.level() < equipmentPo.getLevel())
-                u.upgrade();
-        });
         return e;
     }
 

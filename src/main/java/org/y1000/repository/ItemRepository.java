@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.item.Equipment;
+import org.y1000.entities.players.equipment.Equipment;
 
 import java.util.Collection;
 import java.util.Optional;

@@ -3,13 +3,13 @@ package org.y1000.entities.players.inventory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.players.equipment.Weapon;
 import org.y1000.entities.players.event.UpdateInventorySlotMessage;
 import org.y1000.item.*;
 import org.y1000.entities.players.Player;
 import org.y1000.kungfu.attack.AttackKungFuType;
 
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 @Slf4j

@@ -9,7 +9,7 @@ import org.y1000.entities.players.event.PlayerMoveEvent;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
 import org.y1000.input.MoveInput;
 import org.y1000.input.TurnInput;
-import org.y1000.item.Equipment;
+import org.y1000.entities.players.equipment.Equipment;
 import org.y1000.item.ItemFactory;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;

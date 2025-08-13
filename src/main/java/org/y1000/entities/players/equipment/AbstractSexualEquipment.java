@@ -1,6 +1,7 @@
-package org.y1000.item;
+package org.y1000.entities.players.equipment;
 
 import lombok.Getter;
+import org.y1000.item.ItemSdb;
 
 import java.util.Set;
 
@@ -11,7 +12,7 @@ public abstract class AbstractSexualEquipment extends AbstractEquipment implemen
 
     public AbstractSexualEquipment(String name,
                                    ItemSdb itemSdb,
-                                   Set<Object> abilities) {
+                                   Set<EquipmentAbility> abilities) {
         super(name, itemSdb, abilities);
         this.male = itemSdb.isMale(name);
     }

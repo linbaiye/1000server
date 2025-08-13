@@ -2,6 +2,9 @@ package org.y1000.entities.players.event;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.equipment.Equipment;
+import org.y1000.entities.players.equipment.EquipmentType;
+import org.y1000.entities.players.equipment.Weapon;
 import org.y1000.item.*;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.network.gen.Packet;

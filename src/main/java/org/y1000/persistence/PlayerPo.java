@@ -10,7 +10,7 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerExperiencedAgedAttribute;
 import org.y1000.entities.players.PlayerLife;
 import org.y1000.entities.players.YinYang;
-import org.y1000.item.Equipment;
+import org.y1000.entities.players.equipment.Equipment;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
@@ -119,7 +119,6 @@ public class PlayerPo {
     public PlayerExperiencedAgedAttribute outerPower(int innate) {
         return new PlayerExperiencedAgedAttribute(innate, outerPowerExp, outerPower, yinYang().age());
     }
-
 
     public void addEquipments(Collection<Equipment> equipmentSet) {
         equipments.clear();

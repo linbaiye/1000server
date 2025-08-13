@@ -71,7 +71,7 @@ public class DevPlayerRepository implements PlayerRepository {
         male.inventory().add(itemFactory.createEquipment("男子黄龙手套"));
         male.inventory().add(itemFactory.createEquipment("龙恨"));
         male.inventory().add(itemFactory.createEquipment("黄龙斧"));
-        male.inventory().add(itemFactory.createEquipment("男子斗笠", 10000));
+        male.inventory().add(itemFactory.createEquipment("男子斗笠"));
         addKungFu(male.kungFuBook());
 
         male.inventory().add(itemFactory.createItem("箭", 10000));

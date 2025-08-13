@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.Direction;
-import org.y1000.item.EquipmentType;
+import org.y1000.entities.players.equipment.EquipmentType;
 import org.y1000.account.CreateCharacterRequest;
 import org.y1000.account.LoginAccountRequest;
 import org.y1000.account.LoginCharacterRequest;

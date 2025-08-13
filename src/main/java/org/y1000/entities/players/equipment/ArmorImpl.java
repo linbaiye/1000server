@@ -1,6 +1,8 @@
-package org.y1000.item;
+package org.y1000.entities.players.equipment;
 
 import org.y1000.entities.players.Armor;
+import org.y1000.item.ItemSdb;
+import org.y1000.item.Upgradable;
 
 import java.util.Set;
 
@@ -12,7 +14,7 @@ public final class ArmorImpl extends AbstractSexualEquipment implements ArmorEqu
 
     public ArmorImpl(String name,
                      ItemSdb itemSdb,
-                     Set<Object> abilities) {
+                     Set<EquipmentAbility> abilities) {
         super(name, itemSdb, abilities);
         this.originArmor =  new Armor(itemSdb.getArmorBody(name), itemSdb.getArmorHead(name), itemSdb.getArmorArm(name), itemSdb.getArmorLeg(name));
         this.itemSdb = itemSdb;

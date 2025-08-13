@@ -2,6 +2,7 @@ package org.y1000.item;
 
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
+import org.y1000.entities.players.equipment.EquipmentType;
 
 import static org.junit.jupiter.api.Assertions.*;
 

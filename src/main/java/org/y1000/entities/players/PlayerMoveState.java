@@ -3,7 +3,7 @@ package org.y1000.entities.players;
 import lombok.extern.slf4j.Slf4j;
 import org.y1000.entities.players.event.PlayerMovedEvent;
 import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
-import org.y1000.item.Equipment;
+import org.y1000.entities.players.equipment.Equipment;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.entities.players.event.PlayerMoveEvent;

@@ -1,6 +1,7 @@
-package org.y1000.item;
+package org.y1000.entities.players.equipment;
 
 import org.apache.commons.lang3.Validate;
+import org.y1000.item.ItemSdb;
 
 import java.util.Set;
 
@@ -11,7 +12,7 @@ public final class SexualEquipmentImpl extends AbstractSexualEquipment {
     public SexualEquipmentImpl(String name,
                                ItemSdb itemSdb,
                                EquipmentType type,
-                               Set<Object> abilities) {
+                               Set<EquipmentAbility> abilities) {
         super(name, itemSdb, abilities);
         Validate.notNull(type);
         this.type = type;

@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.Player;
+import org.y1000.entities.players.equipment.SexualEquipment;
+import org.y1000.entities.players.equipment.Weapon;
+import org.y1000.entities.players.equipment.WeaponImpl;
 import org.y1000.item.*;
 import org.y1000.kungfu.attack.AttackKungFuType;
 

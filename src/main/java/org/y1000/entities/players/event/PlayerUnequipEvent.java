@@ -1,7 +1,7 @@
 package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
-import org.y1000.item.EquipmentType;
+import org.y1000.entities.players.equipment.EquipmentType;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.PlayerUnequipPacket;
 

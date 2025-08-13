@@ -54,9 +54,8 @@ CREATE TABLE `player_equipment` (
 
 
 create table equipment (id bigint primary key not null auto_increment,
-                        level int not null default 0,
                         `name` varchar(32) not null,
-                        color int not null default 0
+                        abilities json
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

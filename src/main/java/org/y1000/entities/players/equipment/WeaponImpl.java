@@ -1,6 +1,8 @@
-package org.y1000.item;
+package org.y1000.entities.players.equipment;
 
 import org.y1000.entities.players.Damage;
+import org.y1000.item.ItemSdb;
+import org.y1000.item.Upgradable;
 import org.y1000.kungfu.attack.AttackKungFuType;
 
 import java.util.HashSet;
@@ -23,7 +25,7 @@ public final class WeaponImpl extends AbstractEquipment implements Weapon {
     private WeaponImpl(String name, Damage damage,
                        int attackSpeed, int recovery, int avoid,
                        ItemSdb itemSdb,
-                       Set<Object> abilities) {
+                       Set<EquipmentAbility> abilities) {
         super(name, itemSdb, abilities);
         this.attackSpeed = attackSpeed;
         this.damage = damage;
@@ -32,7 +34,7 @@ public final class WeaponImpl extends AbstractEquipment implements Weapon {
         this.avoid = avoid;
     }
 
-    public WeaponImpl(String name, ItemSdb itemSdb, Set<Object> abilities) {
+    public WeaponImpl(String name, ItemSdb itemSdb, Set<EquipmentAbility> abilities) {
         this(name, new Damage(itemSdb.getDamageBody(name), itemSdb.getDamageHead(name), itemSdb.getDamageArm(name), itemSdb.getDamageLeg(name)),
                 itemSdb.getAttackSpeed(name),itemSdb.getRecovery(name), itemSdb.getAvoid(name), itemSdb, abilities );
     }
