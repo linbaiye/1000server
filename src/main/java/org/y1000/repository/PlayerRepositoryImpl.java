@@ -21,6 +21,7 @@ import org.y1000.persistence.PlayerPo;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFactory {
 
@@ -69,13 +70,10 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
     };
 
 
-    private Map<EquipmentType, Equipment> restoreEquipments(PlayerPo playerPo) {
-        Map<EquipmentType, Equipment> equipments = new HashMap<>();
-        for (EquipmentPo e: playerPo.getEquipments()) {
-            Equipment equipment = itemFactory.createEquipment(e);
-            equipments.put(equipment.equipmentType(), equipment);
-        }
-        return equipments;
+    private Map<EquipmentType, Equipment> restoreEquipments(EntityManager entityManager, PlayerPo playerPo) {
+        List<Equipment> equipments = itemRepository.loadEquipments(entityManager, playerPo.getEquipments() != null ?
+                playerPo.getEquipments().values() : Collections.emptyList());
+        return equipments.stream().collect(Collectors.toMap(Equipment::equipmentType, equipment -> equipment));
     }
 
     private KungFuBook restoreKungFuBook(EntityManager entityManager, PlayerPo playerPo) {
@@ -86,7 +84,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
 
     private Player restore(EntityManager entityManager, PlayerPo playerPo) {
         PlayerDefaultAttributes innate = PlayerDefaultAttributes.INSTANCE;
-        Map<EquipmentType, Equipment> equipments = restoreEquipments(playerPo);
+        Map<EquipmentType, Equipment> equipments = restoreEquipments(entityManager, playerPo);
         KungFuBook kungFuBook = restoreKungFuBook(entityManager, playerPo);
         Equipment equipment = equipments.get(EquipmentType.WEAPON);
         var attackKUngFu = kungFuBook.findUnnamedAttack(AttackKungFuType.Fist);
@@ -159,7 +157,6 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
             kungFuRepository.save(entityManager, playerPo.getId(), player.kungFuBook());
             itemRepository.saveInventory(entityManager, player.id(), player.inventory());
             tx.commit();
-            setEquipmentIds(playerPo, player);
         }
     }
 
@@ -174,31 +171,13 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         }
     }
 
-    private void setEquipmentIdIfNull(Equipment equipment, PlayerPo playerPo) {
-        if (equipment.id() != null)
-            return;
-        playerPo.findEquipment(equipment.name())
-                .ifPresent(e -> equipment.setId(e.getId()));
-    }
-
-    private void setEquipmentIds(PlayerPo playerPo, Player player) {
-        player.hat().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.chest().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.wrist().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.hair().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.boot().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.trouser().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.clothing().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.weapon().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-    }
 
     @Override
     public long save(EntityManager entityManager, int accountId, Player player) {
         Validate.notNull(entityManager);
         Validate.notNull(player);
-        PlayerPo converted = PlayerPo.convert(player, accountId, DEFAULT_REALM_ID);
         itemRepository.saveEquipments(entityManager, player.getEquipments());
-        converted.addEquipments(player.getEquipments());
+        PlayerPo converted = PlayerPo.convert(player, accountId, DEFAULT_REALM_ID);
         entityManager.persist(converted);
         kungFuRepository.save(entityManager, converted.getId(), player.kungFuBook());
         itemRepository.saveInventory(entityManager, player.id(), player.inventory());

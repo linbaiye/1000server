@@ -138,10 +138,6 @@ abstract class AbstractRealm implements Realm, TeleportEventHandler, RealmEventH
         crossRealmEventSender.send(teleportEvent);
     }
 
-    void sendCrossRealmEvent(RealmEvent event) {
-        crossRealmEventSender.send(event);
-    }
-
     PlayerManager playerManager() {
         return playerManager;
     }

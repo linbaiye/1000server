@@ -140,8 +140,8 @@ public class GuildStonePo implements DynamicObjectSdb  {
 
     public static GuildStonePo convert(GuildStone guildStone) {
         return GuildStonePo.builder()
-                .name(guildStone.idName())
-                .realmId(guildStone.getRealmId())
+                .name(guildStone.guildName())
+                .realmId(guildStone.getRealm().id())
                 .maxHealth(guildStone.getMaxLife())
                 .currentHealth(guildStone.currentLife())
                 .x(guildStone.coordinate().x())

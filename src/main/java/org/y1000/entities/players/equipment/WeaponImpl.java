@@ -39,10 +39,6 @@ public final class WeaponImpl extends AbstractEquipment implements Weapon {
                 itemSdb.getAttackSpeed(name),itemSdb.getRecovery(name), itemSdb.getAvoid(name), itemSdb, abilities );
     }
 
-    public static WeaponImpl randomAttribute(String name, ItemSdb itemSdb, Set<Object> abilities) {
-        return null;
-    }
-
     @Override
     public AttackKungFuType kungFuType() {
         return kungFuType;
@@ -68,15 +64,13 @@ public final class WeaponImpl extends AbstractEquipment implements Weapon {
 
     @Override
     public int avoidance() {
-        return findAbility(Upgradable.class)
-                .map(upgradable -> getOriginAvoid() + (int)(getOriginAvoid() * upgradable.percentage()))
-                .orElseGet(this::getOriginAvoid);
+        return getOriginAvoid();
     }
 
     @Override
     public Damage damage() {
-        return findAbility(Upgradable.class)
-                .map(upgradable -> damage.add(damage.multiply(upgradable.percentage())))
+        return findAbility(RandomAttributeAbility.class)
+                .map(random -> random.getDamage().add(damage))
                 .orElse(damage);
     }
 

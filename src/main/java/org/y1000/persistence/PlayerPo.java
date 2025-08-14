@@ -6,11 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.Validate;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerExperiencedAgedAttribute;
 import org.y1000.entities.players.PlayerLife;
 import org.y1000.entities.players.YinYang;
 import org.y1000.entities.players.equipment.Equipment;
+import org.y1000.entities.players.equipment.EquipmentType;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
@@ -74,12 +77,10 @@ public class PlayerPo {
     @Transient
     private YinYang yinYang;
 
-    @OneToMany(cascade = CascadeType.MERGE)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "player_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id")
-    )
-    private Set<EquipmentPo> equipments = new HashSet<>();
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Map<EquipmentType, Long> equipments;
+
 
     public YinYang yinYang() {
         if (yinYang == null)
@@ -120,11 +121,6 @@ public class PlayerPo {
         return new PlayerExperiencedAgedAttribute(innate, outerPowerExp, outerPower, yinYang().age());
     }
 
-    public void addEquipments(Collection<Equipment> equipmentSet) {
-        equipments.clear();
-        equipmentSet.stream().map(EquipmentPo::convert)
-                .forEach(equipments::add);
-    }
 
     public static PlayerPo convert(Player player, int accountId, int realmId) {
         Validate.notNull(player);
@@ -135,6 +131,8 @@ public class PlayerPo {
         playerPo.setMale(player.isMale());
         playerPo.setName(player.viewName());
         playerPo.setId(null);
+        playerPo.equipments = new HashMap<>();
+        player.getEquipments().forEach(e -> playerPo.equipments.put(e.equipmentType(), e.id()));
         return playerPo;
     }
 
@@ -160,11 +158,8 @@ public class PlayerPo {
     public void merge(Player player) {
         Validate.notNull(player);
         mergeWithoutEquipments(player);
-        addEquipments(player.getEquipments());
+        equipments = new HashMap<>();
+        player.getEquipments().forEach(e -> equipments.put(e.equipmentType(), e.id()));
     }
 
-    public Optional<EquipmentPo> findEquipment(String name) {
-        return equipments != null ? equipments.stream().filter(e -> e.getName().equals(name)).findFirst() :
-                Optional.empty();
-    }
 }

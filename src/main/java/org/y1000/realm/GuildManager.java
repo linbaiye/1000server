@@ -6,6 +6,9 @@ import org.y1000.input.ClientCreateGuildKungFuEvent;
 import org.y1000.util.Coordinate;
 
 public interface GuildManager extends ActiveEntityManager<GuildStone> {
+
+    GuildStone create(String name, Coordinate coordinate);
+
     void foundGuild(Player founder, Coordinate coordinate, String name, int inventorySlot);
 
     void init();

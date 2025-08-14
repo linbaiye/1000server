@@ -5,8 +5,11 @@ import org.slf4j.Logger;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.input.*;
+import org.y1000.item.Item;
+import org.y1000.item.ItemType;
 import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
+import org.y1000.util.Coordinate;
 
 import java.util.function.BiConsumer;
 
@@ -61,6 +64,18 @@ class GuildableRealm extends AbstractRealm {
     @Override
     public void update() {
         doUpdateEntities();
+    }
+
+    @Override
+    public void playerDropGuildStone(Player player, Coordinate at, int slot) {
+        Item item = player.inventory().getItem(slot);
+        if (item == null || item.itemType() != ItemType.GUILD_STONE)
+            return;
+        player.sendEvent(PlayerTextMessage.systip(player, "确定在此处创立门派吗？"));
+        var guildStone = guildManager.create("", at);
+        playerManager().sendMessage(player, guildStone.captureSnapshot());
+        //GuildStone guildStone = new GuildStone()
+        //player.sendEvent();
     }
 
     @Override

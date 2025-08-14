@@ -1,6 +1,7 @@
 package org.y1000.entities;
 
 import org.apache.commons.lang3.StringUtils;
+import org.y1000.entities.players.equipment.RandomAttributeAbility;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class AbstractDropItemAbility {
     public record Item(String name, int number) { }
+
 
     public static List<Item> parseItems(String dropText) {
         if (StringUtils.isEmpty(dropText))

@@ -78,6 +78,7 @@ public class DevPlayerRepository implements PlayerRepository {
         male.inventory().add(itemFactory.createItem("灵动八方"));
         male.inventory().add(itemFactory.createItem("钱币", 10000));
         male.inventory().add(itemFactory.createItem("白酒", 10000));
+        male.inventory().add(itemFactory.createItem("门派石"));
 
         Player female = playerFactory.create("测试女", false, 100000301L);
         playerMap.put(female.id(), female);
@@ -95,6 +96,7 @@ public class DevPlayerRepository implements PlayerRepository {
         female.inventory().add(itemFactory.createEquipment("斗甲"));
         female.inventory().add(itemFactory.createItem("箭", 10000));
         female.inventory().add(itemFactory.createItem("飞刀", 10000));
+        female.inventory().add(itemFactory.createItem("门派石"));
     }
 
     @Override

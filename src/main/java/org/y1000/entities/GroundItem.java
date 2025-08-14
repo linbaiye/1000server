@@ -92,6 +92,7 @@ public class GroundItem extends AbstractActiveEntity {
                 .coordinate(coordinate)
                 .color(item.color())
                 .icon(item.icon())
+                .guildStone(false)
                 .build();
     }
 }

@@ -115,13 +115,13 @@ class KungFuBookRepositoryImplTest {
         var saved = kungFuBookRepository.find(entityManager, playerId).get();
         assertNotNull(saved.getKungFu(1, 1));
         saved.foreachUnnamed((slot, kf) -> {
-            assertEquals(slot, kf.exp());
+            assertEquals(kungFuBook.getKungFu(1, slot).get().exp(), saved.getKungFu(1, slot).get().exp());
             assertEquals(kungFuBook.getKungFu(1, slot).get().name(), saved.getKungFu(1, slot).get().name());
         });
         Optional<KungFu> kungFu = saved.getKungFu(2, 10);
         assertFalse(kungFu.isEmpty());
         assertEquals("雷剑式", kungFu.get().name());
-        assertEquals(10, kungFu.get().exp());
+        assertEquals(attackKungFu.exp(), kungFu.get().exp());
     }
 
     @Test

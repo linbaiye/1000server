@@ -1,24 +1,33 @@
 package org.y1000.guild;
 
-import lombok.Builder;
 import lombok.Getter;
-import org.y1000.entities.AbstractActiveEntity;
+import org.y1000.entities.*;
+import org.y1000.entities.players.Damage;
 import org.y1000.network.I2ClientMessage;
-import org.y1000.realm.RealmMap;
-import org.y1000.sdb.DynamicObjectSdb;
+import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
 import java.util.Objects;
 import java.util.Optional;
 
-@Getter
-public final class GuildStone extends AbstractActiveEntity {
+public final class GuildStone extends AbstractActiveEntity implements HurtAbility  {
 
-    private final int realmId;
-
+    @Getter
     private Integer persistentId;
 
-    private int nextHealthTime;
+    private int currentHealth;
+
+    private final int maxHealth;
+
+    private final String guildName;
+
+    private final Coordinate coordinate;
+
+    @Getter
+    private Realm realm;
+
+    @Getter
+    private final int icon;
 
     public void setPersistentId(int persistentId) {
         if (this.persistentId != null)
@@ -26,30 +35,51 @@ public final class GuildStone extends AbstractActiveEntity {
         this.persistentId = persistentId;
     }
 
-    @Builder
     public GuildStone(long id,
                       Coordinate coordinate,
-                      RealmMap realmMap,
-                      DynamicObjectSdb dynamicObjectSdb,
                       int currentHealth,
-                      String idName,
-                      int realmId,
-                      Integer persistentId) {
+                      int maxHealth,
+                      String name,
+                      Integer persistentId,
+                      int icon) {
         super(id);
-        //super(id, coordinate, realmMap, dynamicObjectSdb, currentHealth, idName, new IAnimation[]{new IAnimation(0, 0, false)});
-        this.realmId = realmId;
         this.persistentId = persistentId;
-        nextHealthTime = 0;
+        this.coordinate = coordinate;
+        this.guildName = name;
+        this.maxHealth = maxHealth;
+        this.icon = icon;
     }
 
-    public String idName() {
-        return "";
+    public String guildName() {
+        return guildName;
     }
 
     public int getMaxLife() {
         return 0;
     }
+
+    @Override
+    public boolean canBeAttacked() {
+        return currentLife() > 0;
+    }
+
+
+    @Override
+    public boolean swingAllowed() {
+        return false;
+    }
+
+    @Override
+    public int attacked(ActiveEntity attacker, Damage damage, int accuracy) {
+        return 0;
+    }
+
     public int currentLife() {
+        return 0;
+    }
+
+    @Override
+    public int maxLife() {
         return 0;
     }
 
@@ -78,40 +108,11 @@ public final class GuildStone extends AbstractActiveEntity {
 
     @Override
     public Coordinate coordinate() {
-        return null;
+        return coordinate;
     }
 
     @Override
     public I2ClientMessage captureSnapshot() {
-        return null;
+        return GroundItemSnapshot.of(this);
     }
-
-//    @Override
-//    public DynamicObjectType type() {
-//        return DynamicObjectType.GUILD_STONE;
-//    }
-//
-//    @Override
-//    protected void handleDamaged(Damage damage) {
-//        damageLife(damage);
-//        if (currentLife() <= 0) {
-//            realmMap().free(this);
-//            emitEvent(new DynamicObjectDieEvent(this));
-//        }
-//    }
-//
-//    @Override
-//    protected void onAnimationDone() {
-//    }
-//
-//    @Override
-//    public void update(int delta) {
-//        if (nextHealthTime > 0)
-//            nextHealthTime -= delta;
-//    }
-//
-//    @Override
-//    public <AB> Optional<AB> findAbility(Class<AB> type) {
-//        return Optional.empty();
-//    }
 }

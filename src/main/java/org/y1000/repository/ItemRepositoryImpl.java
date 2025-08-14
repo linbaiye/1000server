@@ -2,7 +2,9 @@ package org.y1000.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.hibernate.Session;
 import org.y1000.item.BankBag;
 import org.y1000.entities.players.equipment.*;
 import org.y1000.entities.players.inventory.AbstractInventory;
@@ -17,6 +19,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+@Slf4j
 public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, BankRepository {
 
     private final ItemSdbImpl itemSdb;
@@ -39,6 +42,9 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         Set<EquipmentAbility> abilities = new HashSet<>();
         if (itemSdb.isColoring(name)) {
             abilities.add(new DyableImpl(itemSdb.getColor(name)));
+        }
+        if (itemSdb.isRandomAttribute(name)) {
+            abilities.add(RandomAttributeAbility.randomDamage(itemSdb.getDamage(name)));
         }
         return abilities;
     }
@@ -200,8 +206,11 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
             equipment.setId(converted.getId());
         }
         for (EquipmentPo equipmentPo : equipmentPos) {
+            Session session = entityManager.unwrap(Session.class);
+            session.evict(equipmentPo);
             Equipment equipment = toUpdate.get(equipmentPo.getId());
             equipmentPo.merge(equipment);
+            session.update(equipmentPo);
         }
     }
 
@@ -220,6 +229,15 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                 toUpdate.put(equipment.id(), equipment);
         });
         persistEquipments(entityManager, toInsert, toUpdate);
+    }
+
+    @Override
+    public List<Equipment> loadEquipments(EntityManager entityManager, Collection<Long> equipmentIds) {
+        List<EquipmentPo> equipmentPos = equipmentIds.isEmpty() ? Collections.emptyList() :
+                entityManager.createQuery("select e from EquipmentPo e where e.id in ?1", EquipmentPo.class)
+                        .setParameter(1, equipmentIds)
+                        .getResultList();
+        return equipmentPos.stream().map(this::createEquipment).toList();
     }
 
     private void persistEquipments(EntityManager entityManager, AbstractInventory inventory) {

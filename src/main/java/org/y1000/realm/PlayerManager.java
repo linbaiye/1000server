@@ -3,6 +3,7 @@ package org.y1000.realm;
 import org.y1000.entities.players.Player;
 import org.y1000.input.SelfHandleInput;
 import org.y1000.network.Connection;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
@@ -34,5 +35,7 @@ interface PlayerManager extends ActiveEntityManager<Player> {
     default void shutdown() {
 
     }
+
+    void sendMessage(Player player, I2ClientMessage message);
 
 }

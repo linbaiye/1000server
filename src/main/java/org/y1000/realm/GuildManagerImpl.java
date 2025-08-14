@@ -13,6 +13,7 @@ import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.item.Item;
+import org.y1000.item.ItemSdb;
 import org.y1000.item.ItemType;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.input.ClientCreateGuildKungFuEvent;
@@ -31,7 +32,6 @@ import java.util.Optional;
 @Slf4j
 public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildStone> implements GuildManager {
 
-    private final DynamicObjectFactory factory;
 
     private final EntityIdGenerator entityIdGenerator;
 
@@ -53,7 +53,9 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
 
     private final KungFuBookRepository kungFuBookRepository;
 
-    public GuildManagerImpl(DynamicObjectFactory factory,
+    private final ItemSdb itemSdb;
+
+    public GuildManagerImpl(ItemSdb itemSdb,
                             EntityIdGenerator entityIdGenerator,
                             MessageSender eventSender,
                             RealmEventSender crossRealmEventSender,
@@ -66,7 +68,6 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
                             KungFuBookRepository kungFuBookRepository,
                             AOIManager aoiManager) {
         super(aoiManager, eventSender);
-        Validate.notNull(factory);
         Validate.notNull(entityIdGenerator);
         Validate.notNull(eventSender);
         Validate.notNull(crossRealmEventSender);
@@ -76,7 +77,6 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         Validate.notNull(entityManagerFactory);
         Validate.notNull(kungFuSdb);
         Validate.notNull(kungFuBookRepository);
-        this.factory = factory;
         this.entityIdGenerator = entityIdGenerator;
         this.eventSender = eventSender;
         this.crossRealmEventSender = crossRealmEventSender;
@@ -87,6 +87,12 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         this.realmId = realmId;
         this.kungFuSdb = kungFuSdb;
         this.kungFuBookRepository = kungFuBookRepository;
+        this.itemSdb = itemSdb;
+    }
+
+
+    public GuildStone create(String name, Coordinate coordinate) {
+        return new GuildStone(entityIdGenerator.next(), coordinate, 1000000, 1000000, name, null, itemSdb.getShape("门派石"));
     }
 
     @Override
@@ -120,17 +126,13 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
             founder.sendEvent(PlayerTextMessage.systip(founder, "此门派名称已存在。"));
             return;
         }
-        var reason = factory.checkCreateGuildStone(name);
-        if (reason != null) {
-            founder.sendEvent(PlayerTextMessage.systip(founder, reason));
-            return;
-        }
-        GuildStone guildstone = factory.createGuildStone(entityIdGenerator.next(), name, realmId, realmMap, coordinate);
+        GuildStone guildstone = create(name, coordinate);
+                //factory.createGuildStone(entityIdGenerator.next(), name, realmId, realmMap, coordinate);
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
             guildRepository.save(entityManager, guildstone, founder.id());
-            GuildMembership membership = new GuildMembership(guildstone.getPersistentId(), "门主", guildstone.idName());
+            GuildMembership membership = new GuildMembership(guildstone.getPersistentId(), "门主", guildstone.guildName());
             founder.joinGuild(membership);
             guildRepository.upsertMembership(entityManager, founder.id(), membership);
             founder.inventory().remove(inventorySlot);
@@ -138,7 +140,7 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
             transaction.commit();
 //            eventSender.notifySelf(UpdateInventorySlotEvent.remove(founder, inventorySlot));
             doAdd(guildstone);
-            founder.sendEvent(PlayerTextMessage.systip(founder, "恭喜你，你已成为<" + guildstone.idName() + ">的门主。"));
+            founder.sendEvent(PlayerTextMessage.systip(founder, "恭喜你，你已成为<" + guildstone.guildName() + ">的门主。"));
 //            eventSender.notifyVisiblePlayersAndSelf(founder, new PlayerUpdateGuildEvent(founder));
         }
     }

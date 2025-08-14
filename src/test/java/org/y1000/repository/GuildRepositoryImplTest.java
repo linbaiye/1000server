@@ -52,7 +52,7 @@ class GuildRepositoryImplTest {
         saveStone(stone2, 2L);
         List<GuildStone> guildStones = guildRepository.findByRealm(1, new EntityIdGenerator(), realmMap);
         assertEquals(2, guildStones.size());
-        var stone = guildStones.stream().filter(s -> s.idName().equals("test")).findFirst().get();
+        var stone = guildStones.stream().filter(s -> s.guildName().equals("test")).findFirst().get();
         assertEquals(1, stone.getRealmId());
         assertEquals(Coordinate.xy(2, 3), stone.coordinate());
         assertEquals(stone1.getMaxLife(), stone.getMaxLife());
@@ -97,7 +97,7 @@ class GuildRepositoryImplTest {
         Player player = Mockito.mock(Player.class);
         when(player.damage()).thenReturn(new Damage(1, 1,1,1));
         when(player.coordinate()).thenReturn(stone.coordinate().moveBy(Direction.RIGHT));
-        stone.attackedBy(player);
+//        stone.attackedBy(player);
         guildRepository.update(stone);
         GuildStonePo guildStonePo = jpaFixture.newEntityManager().find(GuildStonePo.class, stone.getPersistentId());
         assertEquals(stone.getMaxLife() - 1, guildStonePo.getCurrentHealth());

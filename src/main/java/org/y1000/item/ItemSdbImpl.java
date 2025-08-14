@@ -303,6 +303,11 @@ MaxCount,        最多持有数量；
         return get(name, "WearShape");
     }
 
+    @Override
+    public boolean isRandomAttribute(String name) {
+        return "TRUE".equals(get(name, "boRandomAttribute"));
+    }
+
     public static final ItemSdbImpl INSTANCE = read();
 
     private static ItemSdbImpl read() {

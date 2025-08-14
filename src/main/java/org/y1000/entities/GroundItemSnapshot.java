@@ -1,6 +1,7 @@
 package org.y1000.entities;
 
 import lombok.Builder;
+import org.y1000.guild.GuildStone;
 import org.y1000.network.I2ClientMessage;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ShowItemPacket;
@@ -16,16 +17,22 @@ public final class GroundItemSnapshot implements I2ClientMessage {
     private final int icon;
     private final long id;
     private final Coordinate coordinate;
+    private final boolean stone;
 
 
     @Builder
-    public GroundItemSnapshot(long id, Coordinate coordinate, String name, Integer number, int color, int icon) {
+    public GroundItemSnapshot(long id, Coordinate coordinate, String name, Integer number, int color, int icon, boolean guildStone) {
         this.id = id;
         this.coordinate = coordinate;
         this.name = name;
         this.number = number;
         this.color = color;
         this.icon = icon;
+        this.stone = guildStone;
+    }
+
+    public static GroundItemSnapshot of(GuildStone guildStone) {
+        return new GroundItemSnapshot(guildStone.id(), guildStone.coordinate(), guildStone.guildName(), 1, 0, guildStone.getIcon(),true);
     }
 
     @Override
@@ -39,6 +46,7 @@ public final class GroundItemSnapshot implements I2ClientMessage {
                 .setName(name)
                 .setColor(color)
                 .setIcon(icon)
+                .setGuildStone(stone)
                 .setId(id);
         if (number != null) {
             showItemBuidler.setNumber(number);

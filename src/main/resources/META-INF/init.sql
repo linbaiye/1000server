@@ -30,6 +30,7 @@ create table player (
                         yin integer not null,
                         id bigint not null,
                         `name` varchar(32) not null,
+                        equipments json,
                         primary key (id)) engine=InnoDB, charset = utf8mb4;
 
 
@@ -45,12 +46,6 @@ CREATE TABLE `player_seq` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 insert into player_seq(next_val) values(100000000);
-
-CREATE TABLE `player_equipment` (
-                                    player_id bigint not null,
-                                    equipment_id bigint not null unique,
-                                    primary key (player_id, `equipment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 
 create table equipment (id bigint primary key not null auto_increment,

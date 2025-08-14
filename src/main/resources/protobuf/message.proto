@@ -99,6 +99,7 @@ message ShowItemPacket {
   int32 coordinateY = 6;
   string name = 7;
   int32 color = 8;
+  bool guildStone = 9;
 }
 
 message ShowTeleportPacket {
@@ -553,6 +554,10 @@ message RegisterResponsePacket {
   string description = 2;
 }
 
+message ShowCreateGuildWindowPacket {
+  string msg = 1;
+}
+
 
 message Packet {
   oneof TypedPacket {
@@ -618,6 +623,7 @@ message Packet {
     ActivateEffectPacket activateEffect = 82;
     ShowQuestPacket showQuest = 83;
     ShowBankWindowPacket showBank = 84;
+    ShowCreateGuildWindowPacket showCreateGuild = 85;
   }
 }
 

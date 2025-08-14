@@ -37,7 +37,7 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
 
         Npc npc = Mockito.mock(Npc.class);
         when(npc.id()).thenReturn(1L);
-        when(npc.getRealmMap()).thenReturn(mockRealmMap());
+        when(npc.realmMap()).thenReturn(mockRealmMap());
         when(npc.coordinate()).thenReturn(coordinate);
         return npc;
     }

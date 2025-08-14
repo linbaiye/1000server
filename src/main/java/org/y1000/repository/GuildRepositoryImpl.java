@@ -26,16 +26,17 @@ public final class GuildRepositoryImpl implements GuildRepository {
     private GuildStone restore(GuildStonePo stonePo,
                                EntityIdGenerator entityIdGenerator,
                                RealmMap realmMap) {
-        return GuildStone.builder()
-                .idName(stonePo.getName())
-                .currentHealth(stonePo.getCurrentHealth())
-                .dynamicObjectSdb(stonePo)
-                .realmMap(realmMap)
-                .id(entityIdGenerator.next())
-                .coordinate(stonePo.coordinate())
-                .persistentId(stonePo.getId())
-                .realmId(stonePo.getRealmId())
-                .build();
+        return null;
+//        return GuildStone.builder()
+//                .idName(stonePo.getName())
+//                .currentHealth(stonePo.getCurrentHealth())
+//                .dynamicObjectSdb(stonePo)
+//                .realmMap(realmMap)
+//                .id(entityIdGenerator.next())
+//                .coordinate(stonePo.coordinate())
+//                .persistentId(stonePo.getId())
+//                .realmId(stonePo.getRealmId())
+//                .build();
     }
 
     @Override

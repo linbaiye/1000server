@@ -2,6 +2,7 @@ package org.y1000.realm;
 
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerLetFlyProjectileEvent;
+import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.item.Item;
 import org.y1000.network.I2ClientMessage;
 import org.y1000.realm.event.RealmEvent;
@@ -22,5 +23,6 @@ public interface PlayerEventHandler extends EntityEventHandler {
     void sendCrossRealmEvent(RealmEvent event);
 
     void onPlayerDead(Player player, I2ClientMessage message);
+
 
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.y1000.entities.players.Armor;
@@ -20,6 +21,7 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
+@Slf4j
 public class EquipmentPo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,13 +29,11 @@ public class EquipmentPo {
 
     private String name;
 
-    @JoinColumn
     @JdbcTypeCode(SqlTypes.JSON)
     private List<EquipmentAbilityPo> abilities;
 
     public void merge(Equipment equipment) {
-        abilities.clear();
-        abilities.addAll(convertAbilities(equipment));
+        abilities = convertAbilities(equipment);
     }
 
     private static List<EquipmentAbilityPo> convertAbilities(Equipment equipment){
@@ -49,8 +49,8 @@ public class EquipmentPo {
 
     public static EquipmentPo convert(Equipment equipment) {
         EquipmentPo po = new EquipmentPo();
-        po.id = equipment.id();
         po.name = equipment.name();
+        po.id = equipment.id();
         po.abilities = convertAbilities(equipment);
         return po;
     }
@@ -84,7 +84,7 @@ public class EquipmentPo {
             randomAttributePo.bodyArmor = ability.getArmor().body();
             randomAttributePo.headArmor = ability.getArmor().head();
             randomAttributePo.armArmor = ability.getArmor().arm();
-            randomAttributePo.setType(EquipmentAbilityType.RandomAttribute.name());
+            randomAttributePo.setType(ability.abilityType().name());
             return randomAttributePo;
         }
 
@@ -97,12 +97,13 @@ public class EquipmentPo {
 
     @Setter
     @Getter
+    @ToString
     public static class DyablePo extends EquipmentAbilityPo {
         private int color;
         public static DyablePo of(Dyable dyable) {
             DyablePo po = new DyablePo();
             po.color = dyable.color();
-            po.setType(EquipmentAbilityType.Dyable.name());
+            po.setType(dyable.abilityType().name());
             return po;
         }
 

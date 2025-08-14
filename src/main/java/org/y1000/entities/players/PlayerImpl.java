@@ -20,6 +20,7 @@ import org.y1000.network.I2ClientMessage;
 import org.y1000.realm.PlayerEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.realm.event.PlayerDropGuildStoneEvent;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 
@@ -244,7 +245,12 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     public void startDropItem(int slot, Coordinate at) {
         if (dropActionInvalid(slot, at))
             return;
-        sendEvent(StartDropItemMessage.of(this, slot, inventory.getItem(slot), at));
+        Item item = inventory.getItem(slot);
+        if (item.itemType() == ItemType.GUILD_STONE) {
+            realm.get().handle(new PlayerDropGuildStoneEvent(this, at, slot));
+        } else {
+            sendEvent(StartDropItemMessage.of(this, slot, inventory.getItem(slot), at));
+        }
     }
 
     @Override
@@ -1342,7 +1348,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     private Armor aggregateArmor() {
         var armor = protectKungFu().map(ProtectKungFu::armor)
-                .orElse(Armor.Empty)
+                .orElse(Armor.Zero)
                 .add(attackKungFu.armor());
         for (var e : equippedEquipments.values()) {
             if (e instanceof ArmorEquipment armorEquipment) {

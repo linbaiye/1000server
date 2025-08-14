@@ -45,15 +45,16 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
                 .realmId(realmId)
                 .name(name)
                 .build();
-        return GuildStone.builder()
-                .id(id)
-                .realmMap(realmMap)
-                .coordinate(coordinate)
-                .realmId(stonePo.getRealmId())
-                .dynamicObjectSdb(stonePo)
-                .currentHealth(stonePo.getCurrentHealth())
-                .idName(stonePo.getName())
-                .build();
+        return null;
+//        return GuildStone.builder()
+//                .id(id)
+//                .realmMap(realmMap)
+//                .coordinate(coordinate)
+//                .realmId(stonePo.getRealmId())
+//                .dynamicObjectSdb(stonePo)
+//                .currentHealth(stonePo.getCurrentHealth())
+//                .idName(stonePo.getName())
+//                .build();
     }
 
     @Override

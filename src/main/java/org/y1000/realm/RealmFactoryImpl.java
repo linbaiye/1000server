@@ -83,11 +83,11 @@ public final class RealmFactoryImpl implements RealmFactory {
     }
 
     private NpcManager createNpcManager(int id,
-                                                AOIManager aoiManager,
-                                                EntityIdGenerator idGenerator,
-                                                GroundItemManager itemManager,
-                                                MessageSender entityEventSender,
-                                                RealmMap realmMap) {
+                                        AOIManager aoiManager,
+                                        EntityIdGenerator idGenerator,
+                                        GroundItemManager itemManager,
+                                        MessageSender entityEventSender,
+                                        RealmMap realmMap) {
         if (!realmSpecificSdbRepository.monsterSdbExists(id) && !realmSpecificSdbRepository.npcSdbExists(id)) {
             return NpcManager.EMPTY;
         }
@@ -136,7 +136,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .playerRepository(playerRepository)
                     ;
             if (allowGuildCreation(id)) {
-                GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, connectionManager, crossRealmEventSender, realmMap, guildRepository, itemRepository,
+                GuildManager guildManager = new GuildManagerImpl(itemSdb, entityIdGenerator, connectionManager, crossRealmEventSender, realmMap, guildRepository, itemRepository,
                         entityManagerFactory, id, KungFuSdb.INSTANCE, kungFuBookRepository, aoiManager);
                 builder.guildManager(guildManager);
             }
@@ -238,8 +238,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             if (guildManager == null)
                 return new RealmImpl(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository);
             else
-                return new RealmImpl(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository);
-//                return new GuildableRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, guildManager, playerRepository);
+                return new GuildableRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, guildManager, playerRepository);
         }
 
         public Realm buildDungeon(int interval) {

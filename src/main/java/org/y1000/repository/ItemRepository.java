@@ -7,6 +7,7 @@ import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.entities.players.equipment.Equipment;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface ItemRepository {
@@ -20,4 +21,6 @@ public interface ItemRepository {
     void saveInventory(EntityManager entityManager, long playerId, Inventory inventory);
 
     void saveEquipments(EntityManager entityManager, Collection<Equipment> equipments);
+
+    List<Equipment> loadEquipments(EntityManager entityManager, Collection<Long> equipmentIds);
 }

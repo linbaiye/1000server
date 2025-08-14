@@ -1,6 +1,6 @@
-Name,ViewName,Kind,Desc,Grade,boDouble,boColoring,Shape,WearPos,WearShape,ActionImage,HitMotion,HitType,Color,Sex,Price,BuyPrice,SoundEvent,SoundDrop,boPower,AttackSpeed,Recovery,Avoid,Accuracy,DamageBody,DamageHead,DamageArm,DamageLeg,ArmorBody,ArmorHead,ArmorArm,ArmorLeg,RandomCount,NameParam1,NameParam2,Attribute,boUpgrade,MaxUpgrade
+Name,ViewName,Kind,Desc,Grade,boDouble,boColoring,Shape,WearPos,WearShape,ActionImage,HitMotion,HitType,Color,Sex,Price,BuyPrice,SoundEvent,SoundDrop,boPower,AttackSpeed,Recovery,Avoid,Accuracy,DamageBody,DamageHead,DamageArm,DamageLeg,ArmorBody,ArmorHead,ArmorArm,ArmorLeg,RandomCount,NameParam1,NameParam2,Attribute,boUpgrade,MaxUpgrade,boRandomAttribute
 褐色染剂,褐色染剂,1,给物品染上颜色的试剂,,TRUE,FALSE,54,0,0,,0,0,3,,150,110,4419,4819,,,,,,,,,,,,,,,,,,FALSE,
-紫色染剂,紫色染剂,1,给物品染上颜色的试剂,,TRUE,FALSE,54,0,0,,0,0,7,,290,110,4419,4819,,,,,,,,,,,,,,,,,,FALSE,
+紫色染剂,紫色染剂,1,给物品染上颜色的试剂,,TRUE,FALSE,54,0,0,,0,0,7,,290,110,4419,4819,,,,,,,,,,,,,,,,,,FALSE,,
 红色染剂,红色染剂,1,给物品染上颜色的试剂,,TRUE,FALSE,54,0,0,,0,0,5,,200,110,4419,4819,,,,,,,,,,,,,,,,,,FALSE,
 染发剂,染发剂,1,给物品染上颜色的试剂,,TRUE,FALSE,54,0,0,,0,0,1,,100,,,,,,,,,,,,,,,,,,,,,FALSE,
 紫红染剂,紫红染剂,1,给物品染上颜色的试剂,,TRUE,FALSE,54,0,0,,0,0,9,,400,110,4419,4819,,,,,,,,,,,,,,,,,,FALSE,
@@ -154,7 +154,7 @@ Name,ViewName,Kind,Desc,Grade,boDouble,boColoring,Shape,WearPos,WearShape,Action
 龙光剑,龙光剑,6,,8,FALSE,FALSE,126,9,7,,2,1,1,,50000,50000,4404,4805,TRUE,23,20,12,,90,,,,,,,,4100,,,1,TRUE,4
 白龙剑,白龙剑,6,,6,FALSE,FALSE,149,9,8,,2,1,1,,50000,,4404,4805,TRUE,,,10,,90,15,65,,,,,,,,,,TRUE,4
 黑龙剑,黑龙剑,6,,6,FALSE,FALSE,149,9,8,,2,1,1,,50000,,4404,4805,TRUE,,,5,,90,15,,70,,,,,,,,,TRUE,4
-浪人长剑,浪人长剑,6,制作简单的武器,,FALSE,FALSE,1,9,1,,2,1,1,,1000,,4404,4805,TRUE,2,0,0,,30,30,,30,,,,,,,,,TRUE,4
+浪人长剑,浪人长剑,6,制作简单的武器,,FALSE,FALSE,1,9,1,,2,1,1,,1000,,4404,4805,TRUE,2,0,0,,30,30,,30,,,,,,,,,TRUE,4,TRUE
 长剑,长剑,6,使用剑术时最基本的武器,,FALSE,FALSE,1,9,1,,2,1,1,,100,,4404,4805,,,,,,,,,,,,,,,,,,,
 三叉剑,三叉剑,6,,,FALSE,FALSE,112,9,6,,2,1,1,,50000,50000,4404,4805,TRUE,20,,,,110,,,15,,,,,2000,,,,TRUE,4
 短刀,短刀,6,,,FALSE,FALSE,1,9,1,,2,2,1,,100,,4413,4812,,,,,,,,,,,,,,,,,,FALSE,
@@ -165,12 +165,12 @@ Name,ViewName,Kind,Desc,Grade,boDouble,boColoring,Shape,WearPos,WearShape,Action
 月光刀,月光刀,6,,8,FALSE,FALSE,126,9,7,,2,2,1,,50000,,4412,4813,TRUE,25,23,16,,80,,,,,,,,4100,,,3,TRUE,4
 白龙刀,白龙刀,6,,6,FALSE,FALSE,149,9,8,,2,2,1,,50000,,4412,4813,TRUE,,,10,,90,15,65,,,,,,,,,,TRUE,4
 黑龙刀,黑龙刀,6,,6,FALSE,FALSE,149,9,8,,2,2,1,,50000,,4412,4813,TRUE,,,5,,90,15,,70,,,,,,,,,TRUE,4
-浪人长刀,浪人长刀,6,制作简单的武器,,FALSE,FALSE,1,9,1,,2,2,1,,1000,,4412,4813,TRUE,2,0,0,,30,30,,30,,,,,,,,,TRUE,4
+浪人长刀,浪人长刀,6,制作简单的武器,,FALSE,FALSE,1,9,1,,2,2,1,,1000,,4412,4813,TRUE,2,0,0,,30,30,,30,,,,,,,,,TRUE,4,TRUE
 龙恨,龙恨,6,,6,FALSE,FALSE,98,9,42,,3,4,1,,30000,30000,4435,4834,TRUE,,,,,100,,,,,,,,4300,,,,TRUE,4
 桂林竹枪,桂林竹枪,6,,6,FALSE,FALSE,117,9,45,,3,4,1,,45000,45000,4435,4834,TRUE,10,,,,120,,,20,,,,,10,,,,TRUE,4
 狼牙戟,狼牙戟,6,,8,FALSE,FALSE,147,9,46,,3,4,1,,50000,,4435,4834,TRUE,28,,30,,90,,,,,,,,4300,,,,TRUE,4
 白龙枪,白龙枪,6,,6,FALSE,FALSE,146,9,47,,3,4,1,,50000,,4435,4834,TRUE,,,10,,90,15,65,,,,,,,,,,TRUE,4
-黑龙枪,黑龙枪,6,,6,FALSE,FALSE,146,9,47,,3,4,1,,50000,,4435,4834,TRUE,,,5,,90,15,,70,,,,,,,,,TRUE,4
+黑龙枪,黑龙枪,6,,6,FALSE,FALSE,146,9,47,,3,4,1,,50000,,4435,4834,TRUE,,,5,,90,15,,70,,,,,,,,,TRUE,4,
 浪人长枪,浪人长枪,6,制作简单的武器,,FALSE,FALSE,6,9,41,,3,4,1,,1000,,4435,4834,TRUE,2,0,0,,30,30,,30,,,,,,,,,TRUE,4
 长枪,长枪,6,使用枪术最普通的武器,,FALSE,FALSE,6,9,41,,3,4,1,,100,,4435,4834,,,,,,,,,,,,,,,,,,FALSE,
 铁槌,铁槌,6,,,FALSE,FALSE,2,9,11,,3,3,1,,20,,4416,4815,,,,,,,,,,,,,,,,,,FALSE,

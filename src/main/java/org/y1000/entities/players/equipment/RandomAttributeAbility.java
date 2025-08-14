@@ -4,6 +4,8 @@ import lombok.Getter;
 import org.y1000.entities.players.Armor;
 import org.y1000.entities.players.Damage;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 @Getter
 public class RandomAttributeAbility implements EquipmentAbility {
 
@@ -28,5 +30,14 @@ public class RandomAttributeAbility implements EquipmentAbility {
     @Override
     public EquipmentAbilityType abilityType() {
         return EquipmentAbilityType.RandomAttribute;
+    }
+
+    public static RandomAttributeAbility randomDamage(Damage base, int fromPercent, int toPercent) {
+        var percent = ThreadLocalRandom.current().nextInt(fromPercent, toPercent + 1);
+        return new RandomAttributeAbility(base.multiply((float) percent / 100), 0, 0, 0, Armor.Zero);
+    }
+
+    public static RandomAttributeAbility randomDamage(Damage base) {
+        return randomDamage(base, -200, 30);
     }
 }

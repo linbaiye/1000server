@@ -19,10 +19,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-abstract class AbstractPlayerManager extends AbstractActiveEntityManager<Player> implements PlayerManager, PlayerEventListener, PlayerEventHandler {
+abstract class AbstractPlayerManager extends AbstractActiveEntityManager<Player> implements PlayerManager,
+        PlayerEventListener, PlayerEventHandler {
+
     protected final RealmPlayerConnectionManager connectionManager;
 
     protected final GroundItemManager itemManager;
+
     protected final ProjectileManager projectileManager;
 
     protected final PlayerRepository playerRepository;
@@ -153,6 +156,7 @@ abstract class AbstractPlayerManager extends AbstractActiveEntityManager<Player>
         });
     }
 
+
     @Override
     public void onPlayerFireProjectile(PlayerLetFlyProjectileEvent event) {
         projectileManager.add(event.getProjectile());
@@ -172,5 +176,10 @@ abstract class AbstractPlayerManager extends AbstractActiveEntityManager<Player>
     @Override
     public void onEvent(PlayerEvent event) {
         event.accept(this);
+    }
+
+    @Override
+    public void sendMessage(Player player, I2ClientMessage message) {
+        connectionManager.sendTo(player, message);
     }
 }

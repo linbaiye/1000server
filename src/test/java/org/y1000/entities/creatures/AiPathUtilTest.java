@@ -53,7 +53,7 @@ class AiPathUtilTest {
         npcCoordinate.set(Coordinate.xy(0, 3));
         npcDirection.set(Direction.RIGHT);
         when(npc.coordinate()).thenAnswer(invocationOnMock -> npcCoordinate.get());
-        when(npc.getRealmMap()).thenReturn(map);
+        when(npc.realmMap()).thenReturn(map);
         when(npc.direction()).thenAnswer(invocationOnMock -> npcDirection.get());
 
         Mockito.doAnswer(invocationOnMock -> {
@@ -86,7 +86,7 @@ class AiPathUtilTest {
             }
         }
         Npc npc = Mockito.mock(Npc.class);
-        when(npc.getRealmMap()).thenReturn(map);
+        when(npc.realmMap()).thenReturn(map);
         when(npc.direction()).thenReturn(Direction.UP);
         when(npc.coordinate()).thenReturn(Coordinate.xy(3,3));
     }
