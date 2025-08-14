@@ -100,6 +100,7 @@ message ShowItemPacket {
   string name = 7;
   int32 color = 8;
   bool guildStone = 9;
+  bool demo = 10;
 }
 
 message ShowTeleportPacket {
@@ -242,6 +243,7 @@ message ClientPacket {
     BankOperationInputPacket bankOperation = 54;
     RealmInputPacket realmInput = 56;
 
+    CreateGuildInputPacket createGuildInput = 57;
   }
 }
 
@@ -555,7 +557,15 @@ message RegisterResponsePacket {
 }
 
 message ShowCreateGuildWindowPacket {
-  string msg = 1;
+  int32 fromSlot = 1;
+  string tip = 3;
+  string tile = 4;
+}
+
+message CreateGuildInputPacket {
+  bool confirm = 1;
+  int32 fromSlot = 2;
+  string name = 3;
 }
 
 

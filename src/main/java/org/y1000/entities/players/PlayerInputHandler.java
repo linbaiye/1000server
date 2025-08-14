@@ -35,4 +35,8 @@ public interface PlayerInputHandler {
 
     void clickEquipment(EquipmentType type);
 
+    void confirmGuildCreation(int slotId, String name);
+
+    void cancelGuildCreation();
+
 }

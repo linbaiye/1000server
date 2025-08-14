@@ -21,4 +21,12 @@ public interface RealmEventHandler {
         player.sendEvent(PlayerTextMessage.systip(player, "此地禁止创立门派。"));
     }
 
+    default void confirmGuildCreation(Player player, int slot, String name) {
+
+    }
+
+    default void cancelGuildCreation(Player player) {
+
+    }
+
 }

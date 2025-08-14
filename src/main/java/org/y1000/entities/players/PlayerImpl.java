@@ -20,6 +20,7 @@ import org.y1000.network.I2ClientMessage;
 import org.y1000.realm.PlayerEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.realm.event.GuildCreationEvent;
 import org.y1000.realm.event.PlayerDropGuildStoneEvent;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
@@ -309,6 +310,18 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         getEquipment(type, Equipment.class)
                 .ifPresent(e -> sendEvent(ItemDescriptionMessage.equipWindow(this, type, e)));
     }
+
+    @Override
+    public void confirmGuildCreation(int slotId, String name) {
+        realm.get().handle(GuildCreationEvent.confirm(this, slotId, name));
+
+    }
+
+    @Override
+    public void cancelGuildCreation() {
+        realm.get().handle(GuildCreationEvent.cancel(this));
+    }
+
 
     private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
         if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {

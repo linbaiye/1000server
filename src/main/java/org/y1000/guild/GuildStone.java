@@ -110,6 +110,9 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
     public Coordinate coordinate() {
         return coordinate;
     }
+    public I2ClientMessage captureDemoSnapshot() {
+        return GroundItemSnapshot.ofDemo(this );
+    }
 
     @Override
     public I2ClientMessage captureSnapshot() {

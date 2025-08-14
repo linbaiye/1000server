@@ -18,10 +18,11 @@ public final class GroundItemSnapshot implements I2ClientMessage {
     private final long id;
     private final Coordinate coordinate;
     private final boolean stone;
+    private final boolean demo;
 
 
     @Builder
-    public GroundItemSnapshot(long id, Coordinate coordinate, String name, Integer number, int color, int icon, boolean guildStone) {
+    public GroundItemSnapshot(long id, Coordinate coordinate, String name, Integer number, int color, int icon, boolean guildStone, boolean demo) {
         this.id = id;
         this.coordinate = coordinate;
         this.name = name;
@@ -29,10 +30,15 @@ public final class GroundItemSnapshot implements I2ClientMessage {
         this.color = color;
         this.icon = icon;
         this.stone = guildStone;
+        this.demo = demo;
+    }
+
+    public static GroundItemSnapshot ofDemo(GuildStone guildStone) {
+        return new GroundItemSnapshot(guildStone.id(), guildStone.coordinate(), guildStone.guildName(), 1, 0, guildStone.getIcon(),true,true);
     }
 
     public static GroundItemSnapshot of(GuildStone guildStone) {
-        return new GroundItemSnapshot(guildStone.id(), guildStone.coordinate(), guildStone.guildName(), 1, 0, guildStone.getIcon(),true);
+        return new GroundItemSnapshot(guildStone.id(), guildStone.coordinate(), guildStone.guildName(), 1, 0, guildStone.getIcon(),true,false);
     }
 
     @Override
@@ -47,6 +53,7 @@ public final class GroundItemSnapshot implements I2ClientMessage {
                 .setColor(color)
                 .setIcon(icon)
                 .setGuildStone(stone)
+                .setDemo(demo)
                 .setId(id);
         if (number != null) {
             showItemBuidler.setNumber(number);

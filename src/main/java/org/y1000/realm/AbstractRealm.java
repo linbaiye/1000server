@@ -142,8 +142,6 @@ abstract class AbstractRealm implements Realm, TeleportEventHandler, RealmEventH
         return playerManager;
     }
 
-    abstract void handleGuildCreation(Player source, ClientFoundGuildEvent event);
-
     protected abstract void handleLogin(Login login);
 
     void acceptLogin(long playerId, Connection connection, Coordinate coordinate) {

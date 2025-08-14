@@ -115,10 +115,6 @@ final class DungeonRealm extends AbstractRealm {
         return log;
     }
 
-    @Override
-    void handleGuildCreation(Player source, ClientFoundGuildEvent event) {
-
-    }
 
     @Override
     protected void handleLogin(Login login) {

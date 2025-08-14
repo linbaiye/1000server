@@ -67,6 +67,7 @@ public abstract class AbstractConnection extends ChannelInboundHandlerAdapter im
             case UNLOCKBANK -> new UnlockBankInput(clientPacket.getUnlockBank().getNpcId());
             case BANKOPERATION -> BankOperationInput.fromPacket(clientPacket.getBankOperation());
             case REALMINPUT -> RealmInput.of(clientPacket.getRealmInput().getType());
+            case CREATEGUILDINPUT -> CreateGuildInput.fromPacket(clientPacket.getCreateGuildInput());
             default -> null;
         };
     }
