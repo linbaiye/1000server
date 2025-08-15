@@ -562,6 +562,9 @@ message ShowCreateGuildWindowPacket {
   string tile = 4;
 }
 
+message ShowApplyKungFuWindowPacket {
+}
+
 message CreateGuildInputPacket {
   bool confirm = 1;
   int32 fromSlot = 2;
@@ -634,6 +637,7 @@ message Packet {
     ShowQuestPacket showQuest = 83;
     ShowBankWindowPacket showBank = 84;
     ShowCreateGuildWindowPacket showCreateGuild = 85;
+    ShowApplyKungFuWindowPacket showApplyKungFu = 86;
   }
 }
 

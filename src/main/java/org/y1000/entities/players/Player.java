@@ -7,6 +7,7 @@ import org.y1000.entities.players.equipment.ArmorEquipment;
 import org.y1000.entities.players.equipment.Equipment;
 import org.y1000.entities.players.equipment.SexualEquipment;
 import org.y1000.entities.players.equipment.Weapon;
+import org.y1000.entities.players.event.DirectMessage;
 import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.guild.GuildMembership;
@@ -18,6 +19,7 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.realm.PlayerEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
@@ -192,5 +194,13 @@ public interface Player extends Creature, HurtAbility {
     }
 
     int avoidance();
+
+    /**
+     * Send to self.
+     * @param message
+     */
+    default void sendMessage(I2ClientMessage message) {
+        sendEvent(DirectMessage.of(this, message));
+    }
 }
 

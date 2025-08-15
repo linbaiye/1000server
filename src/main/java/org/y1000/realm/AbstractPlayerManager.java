@@ -177,9 +177,4 @@ abstract class AbstractPlayerManager extends AbstractActiveEntityManager<Player>
     public void onEvent(PlayerEvent event) {
         event.accept(this);
     }
-
-    @Override
-    public void sendMessage(Player player, I2ClientMessage message) {
-        connectionManager.sendTo(player, message);
-    }
 }

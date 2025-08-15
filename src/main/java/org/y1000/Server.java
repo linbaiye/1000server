@@ -124,7 +124,6 @@ public final class Server {
     private static final boolean Dev = true;
 
 
-
     public Server() {
         workerGroup = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
         bossGroup = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
@@ -136,7 +135,7 @@ public final class Server {
         NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE,
                 NonMonsterNpcSdbImpl.Instance, MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE, repository, QuestSdbImpl.Instance, Dev ? new BankDevRepository() : repository);
         DynamicObjectFactory dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
-        GuildRepository guildRepository = new GuildRepositoryImpl(entityManagerFactory);
+        GuildRepository guildRepository = Dev ? new DevGuildRepository() : new GuildRepositoryImpl(entityManagerFactory);
         PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, repository, guildRepository);
         PlayerRepository playerRepository = Dev ? new DevPlayerRepository(factory, repository) :
                 new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, repository, guildRepository);

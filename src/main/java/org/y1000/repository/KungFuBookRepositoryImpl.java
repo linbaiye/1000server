@@ -12,7 +12,7 @@ import org.y1000.kungfu.protect.ProtectKungFu;
 import org.y1000.kungfu.protect.ProtectionParametersImpl;
 import org.y1000.persistence.AttackKungFuParametersProvider;
 import org.y1000.persistence.GuildKungFuPo;
-import org.y1000.persistence.KungFuPo;
+import org.y1000.persistence.PlayerKungFuPo;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,7 +28,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             , "无名投法", "无名步法", "无名心法", "无名强身"
     );
 
-    private List<AttackKungFuParametersProvider> providers;
+    private List<GuildKungFuPo> providers;
 
     public KungFuBookRepositoryImpl(EntityManagerFactory entityManagerFactory) {
         Validate.notNull(entityManagerFactory);
@@ -157,7 +157,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
 
-    private Optional<AttackKungFuParametersProvider> getProvider(String name) {
+    private Optional<GuildKungFuPo> getProvider(String name) {
         return getProviders().stream()
                 .filter(provider -> provider.getName().equals(name))
                 .findFirst();
@@ -206,10 +206,15 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             em.persist(provider);
-            em.persist(new GuildKungFuPo(guildId, provider.getId()));
+//            em.persist(new GuildKungFuPo(guildId, provider.getId()));
             transaction.commit();
-            addToList(provider);
+//            addToList(provider);
         }
+    }
+
+    @Override
+    public void saveGuildKungFu(AttackKungFu attackKungFu, int guildId) {
+
     }
 
     @Override
@@ -225,7 +230,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     @Override
     public int countGuildKungFu(int guildId) {
         try (var em = entityManagerFactory.createEntityManager()) {
-            Query query = em.createQuery("select count(p) from GuildKungFuPo p where p.guildId = ?1")
+            Query query = em.createQuery("select count(p) from GuildKungFuPo p where p = ?1")
                     .setParameter(1, guildId);
             return ((Long)query.getSingleResult()).intValue();
         }
@@ -238,16 +243,17 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             if (guildKungFuPo == null) {
                 return Optional.empty();
             }
-            return getProviders()
-                    .stream()
-                    .filter(p -> p.getId() == guildKungFuPo.getAttackKungfuId())
-                    .map(p -> create(p.getName(), 0))
-                    .map(AttackKungFu.class::cast)
-                    .findFirst();
+            return Optional.empty();
+//            return getProviders()
+//                    .stream()
+//                    .filter(p -> p.getId() == guildKungFuPo.getAttackKungfuId())
+//                    .map(p -> create(p.getName(), 0))
+//                    .map(AttackKungFu.class::cast)
+//                    .findFirst();
         }
     }
 
-    private synchronized void addToList(AttackKungFuParametersProvider provider) {
+    private synchronized void addToList(GuildKungFuPo provider) {
         if (providers != null) {
             providers.add(provider);
         }
@@ -273,18 +279,18 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return protectKungFu(name, 0);
     }
 
-    private void addOrUpdate(int slot, KungFu kungFu, Map<String, KungFuPo> saved, EntityManager entityManager, long playerId) {
-        KungFuPo managed = saved.remove(kungFu.name());
+    private void addOrUpdate(int slot, KungFu kungFu, Map<String, PlayerKungFuPo> saved, EntityManager entityManager, long playerId) {
+        PlayerKungFuPo managed = saved.remove(kungFu.name());
         if (managed != null) {
             managed.setExp(kungFu.exp());
             managed.setSlot(slot);
         } else {
-            entityManager.persist(KungFuPo.create(slot, playerId, kungFu));
+            entityManager.persist(PlayerKungFuPo.create(slot, playerId, kungFu));
         }
     }
 
-    private List<KungFuPo> getKungFuPoList(EntityManager entityManager, long playerId) {
-        var query = entityManager.createQuery("select kf from KungFuPo kf where kf.key.playerId = ?1", KungFuPo.class);
+    private List<PlayerKungFuPo> getKungFuPoList(EntityManager entityManager, long playerId) {
+        var query = entityManager.createQuery("select kf from PlayerKungFuPo kf where kf.key.playerId = ?1", PlayerKungFuPo.class);
         query.setParameter(1, playerId);
         return  query.getResultList();
     }
@@ -293,23 +299,23 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     public void save(EntityManager entityManager, long playerId, KungFuBook kungFuBook) {
         Validate.notNull(entityManager);
         Validate.notNull(kungFuBook);
-        List<KungFuPo> resultList = getKungFuPoList(entityManager, playerId);
-        Map<String, KungFuPo> namePoMap =
+        List<PlayerKungFuPo> resultList = getKungFuPoList(entityManager, playerId);
+        Map<String, PlayerKungFuPo> namePoMap =
                 resultList.stream().collect(Collectors.toMap(kungFuPo -> kungFuPo.getKey().getName(), kungFuPo -> kungFuPo));
         kungFuBook.foreachUnnamed((slot, kungFu) -> addOrUpdate(slot, kungFu, namePoMap, entityManager, playerId));
         kungFuBook.foreachBasic((slot, kungFu) -> addOrUpdate(slot, kungFu, namePoMap, entityManager, playerId));
     }
 
 
-    private synchronized List<AttackKungFuParametersProvider> getProviders(EntityManager entityManager) {
+    private synchronized List<GuildKungFuPo> getProviders(EntityManager entityManager) {
         if (providers == null) {
-            providers = entityManager.createQuery("select p from AttackKungFuParametersProvider p",
-                    AttackKungFuParametersProvider.class).getResultList();
+            providers = entityManager.createQuery("select p from GuildKungFuPo p",
+                    GuildKungFuPo.class).getResultList();
         }
         return new ArrayList<>(providers);
     }
 
-    private List<AttackKungFuParametersProvider> getProviders() {
+    private List<GuildKungFuPo> getProviders() {
         try (var em = entityManagerFactory.createEntityManager()) {
             return getProviders(em);
         }
@@ -319,13 +325,13 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     @Override
     public Optional<KungFuBook> find(EntityManager entityManager, long playerId) {
         Validate.notNull(entityManager);
-        List<KungFuPo> resultList = getKungFuPoList(entityManager, playerId);
+        List<PlayerKungFuPo> resultList = getKungFuPoList(entityManager, playerId);
         if (resultList.isEmpty()) {
             return Optional.empty();
         }
         Map<Integer, KungFu> unnamed = resultList.stream()
                 .filter(k -> UNNAMED_NAMES.contains(k.getKey().getName()))
-                .collect(Collectors.toMap(KungFuPo::getSlot, kf -> create(kf.getKey().getName(), kf.getExp())));
+                .collect(Collectors.toMap(PlayerKungFuPo::getSlot, kf -> create(kf.getKey().getName(), kf.getExp())));
         KungFuBook kungFuBook = new KungFuBook(unnamed);
         resultList.stream()
                 .filter(k -> !UNNAMED_NAMES.contains(k.getKey().getName()))

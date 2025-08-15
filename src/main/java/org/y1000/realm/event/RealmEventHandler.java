@@ -29,4 +29,8 @@ public interface RealmEventHandler {
 
     }
 
+    default void applyGuildKungFu(Player player) {
+        player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
+    }
+
 }

@@ -6,12 +6,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.y1000.entities.objects.DynamicObjectType;
+import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
+import org.y1000.realm.EntityIdGenerator;
+import org.y1000.realm.Realm;
 import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -19,7 +23,7 @@ import java.util.Optional;
 @Table(name = "guild_stone")
 @NoArgsConstructor
 @AllArgsConstructor
-public class GuildStonePo implements DynamicObjectSdb  {
+public class GuildStonePo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -36,110 +40,32 @@ public class GuildStonePo implements DynamicObjectSdb  {
 
     private int currentHealth;
 
+    private int icon;
+
     @Column(updatable = false)
     private LocalDateTime createdTime;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "guildStone", fetch = FetchType.EAGER)
+    private GuildKungFuPo guildKungFuPo;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "guildStone", fetch = FetchType.EAGER)
+    private List<GuildMembershipPo> members;
 
     public Coordinate coordinate() {
         return Coordinate.xy(x, y);
     }
 
-    @Override
-    public String getShape(String name) {
-        return "67";
+    public void merge(GuildStone guildStone) {
+
     }
 
-    @Override
-    public boolean isRemove(String name) {
-        return true;
-    }
-
-    @Override
-    public Optional<String> getViewName(String name) {
-        return Optional.of(name);
-    }
-
-    @Override
-    public int getRegenInterval(String name) {
-        return 0;
-    }
-
-    @Override
-    public int getOpenedInterval(String name) {
-        return 0;
-    }
-
-    @Override
-    public int getArmor(String name) {
-        return 0;
-    }
-
-    @Override
-    public DynamicObjectType getKind(String name) {
-        return DynamicObjectType.KILLABLE;
-    }
-
-    @Override
-    public String getSStep0(String name) {
-        return "0";
-    }
-
-    @Override
-    public String getEStep0(String name) {
-        return "0";
-    }
-
-    @Override
-    public String getSStep1(String name) {
-        return "0";
-    }
-
-    @Override
-    public String getEStep1(String name) {
-        return "0";
-    }
-
-    @Override
-    public String getSStep2(String name) {
-        return null;
-    }
-
-    @Override
-    public String getEStep2(String name) {
-        return null;
-    }
-
-    @Override
-    public String getEventItem(String name) {
-        return null;
-    }
-
-    @Override
-    public String getGuardPos(String name) {
-        return null;
-    }
-
-    @Override
-    public Optional<String> getSoundEvent(String name) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<String> getSoundDie(String name) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<String> getSoundSpecial(String name) {
-        return Optional.empty();
-    }
-
-    @Override
-    public int getLife(String name) {
-        return maxHealth;
+    public GuildStone restore(Realm realm, long id) {
+        Set<GuildMembership> m = members.stream().map(GuildMembershipPo::restore).collect(Collectors.toSet());
+        return new GuildStone(id, coordinate(), currentHealth, maxHealth, name, this.id, icon, realm, m);
     }
 
     public static GuildStonePo convert(GuildStone guildStone) {
-        return GuildStonePo.builder()
+        GuildStonePo stonePo = GuildStonePo.builder()
                 .name(guildStone.guildName())
                 .realmId(guildStone.getRealm().id())
                 .maxHealth(guildStone.getMaxLife())
@@ -147,7 +73,10 @@ public class GuildStonePo implements DynamicObjectSdb  {
                 .x(guildStone.coordinate().x())
                 .y(guildStone.coordinate().y())
                 .createdTime(LocalDateTime.now())
+                .icon(guildStone.getIcon())
                 .build();
-
+        stonePo.members = new ArrayList<>();
+        guildStone.getMembers().forEach(membership -> stonePo.members.add(GuildMembershipPo.of(stonePo, membership)));
+        return stonePo;
     }
 }

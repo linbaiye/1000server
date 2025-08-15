@@ -14,6 +14,8 @@ public interface KungFuBookRepository {
 
     void saveGuildKungFuParameter(AttackKungFuParametersProvider parametersProvider, int guildId);
 
+    void saveGuildKungFu(AttackKungFu attackKungFu, int guildId);
+
     int countGuildKungFuByName(String name);
 
     int countGuildKungFu(int guildId);

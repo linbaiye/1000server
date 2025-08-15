@@ -4,13 +4,13 @@ import jakarta.persistence.EntityManager;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.realm.EntityIdGenerator;
-import org.y1000.realm.RealmMap;
+import org.y1000.realm.Realm;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface GuildRepository {
-    List<GuildStone> findByRealm(int realmId, EntityIdGenerator entityIdGenerator, RealmMap realmMap);
+    List<GuildStone> findByRealm(Realm realm, EntityIdGenerator entityIdGenerator);
 
     int countByName(String name);
 
@@ -23,5 +23,7 @@ public interface GuildRepository {
     void deleteGuildAndMembership(int guildId);
 
     void update(GuildStone guildStone);
+
+    void save(GuildStone guildStone);
 
 }

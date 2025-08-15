@@ -11,8 +11,7 @@ import org.y1000.kungfu.KungFu;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class KungFuPo {
-
+public class PlayerKungFuPo {
 
     @EmbeddedId
     private PlayerIdNameKey key;
@@ -21,8 +20,8 @@ public class KungFuPo {
 
     private int slot;
 
-    public static KungFuPo create(int slot, long playerId, KungFu kungFu) {
-        return KungFuPo.builder()
+    public static PlayerKungFuPo create(int slot, long playerId, KungFu kungFu) {
+        return PlayerKungFuPo.builder()
                 .slot(slot)
                 .exp(kungFu.exp())
                 .key(PlayerIdNameKey.builder()

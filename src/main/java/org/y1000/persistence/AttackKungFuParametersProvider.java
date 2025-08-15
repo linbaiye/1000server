@@ -12,7 +12,7 @@ import org.y1000.kungfu.attack.AttackKungFuType;
 @Data
 @Entity
 @Builder
-@Table(name = "attack_kungfu")
+@Table(name = "guild_kung_fu")
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttackKungFuParametersProvider {

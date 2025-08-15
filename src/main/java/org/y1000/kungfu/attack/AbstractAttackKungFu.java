@@ -142,6 +142,12 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
                 .orElse(val);
     }
 
+
+    @Override
+    public AttackKungFuParameters originParameters() {
+        return parameters;
+    }
+
     @Override
     public Armor armor() {
         return new Armor(bodyArmor(), headArmor(), armArmor(), legArmor());

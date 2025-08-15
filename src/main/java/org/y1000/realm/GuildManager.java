@@ -11,7 +11,7 @@ public interface GuildManager extends ActiveEntityManager<GuildStone> {
 
     void foundGuild(Player founder, Coordinate coordinate, String name, int inventorySlot);
 
-    void init();
+    void init(Realm realm);
 
     void createGuildKungFu(Player applicant, ClientCreateGuildKungFuEvent event);
 
@@ -21,4 +21,11 @@ public interface GuildManager extends ActiveEntityManager<GuildStone> {
 
     void inviteMember(Player source, Player target);
 
+    void playerDropGuildStone(Player player, Coordinate at, int slot);
+
+    void confirmGuildCreation(Player player, int slot, String name);
+
+    void cancelGuildCreation(Player player);
+
+    void applyGuildKungFu(Player player);
 }

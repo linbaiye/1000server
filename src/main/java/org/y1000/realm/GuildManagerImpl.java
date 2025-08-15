@@ -1,15 +1,13 @@
 package org.y1000.realm;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-import org.y1000.entities.objects.DynamicObjectFactory;
+import org.y1000.entities.RemoveEntityMessage;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerTextMessage;
+import org.y1000.entities.players.event.*;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
 import org.y1000.item.Item;
@@ -23,7 +21,7 @@ import org.y1000.repository.ItemRepository;
 import org.y1000.repository.KungFuBookRepository;
 import org.y1000.util.Coordinate;
 
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -54,6 +52,10 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
     private final KungFuBookRepository kungFuBookRepository;
 
     private final ItemSdb itemSdb;
+
+    private final Map<Player, GuildStone> creatingStones;
+
+    private final Set<Player> removeCreating;
 
     public GuildManagerImpl(ItemSdb itemSdb,
                             EntityIdGenerator entityIdGenerator,
@@ -88,6 +90,8 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         this.kungFuSdb = kungFuSdb;
         this.kungFuBookRepository = kungFuBookRepository;
         this.itemSdb = itemSdb;
+        creatingStones = new HashMap<>();
+        removeCreating = new HashSet<>();
     }
 
 
@@ -97,82 +101,82 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
 
     @Override
     public void foundGuild(Player founder, Coordinate coordinate, String name, int inventorySlot) {
-        Validate.notNull(founder);
-        Validate.notNull(coordinate);
-        Validate.notNull(name);
-        Item item = founder.inventory().getItem(inventorySlot);
-        if (item == null || item.itemType() != ItemType.GUILD_STONE) {
-            log().error("Invalid guild creation from player {} detected.", founder.id());
-            return;
-        }
-        if (coordinate.directDistance(founder.coordinate()) > 4) {
-            log().error("Invalid guild creation from player {} detected.", founder.id());
-            return;
-        }
-        if (founder.guildMembership().isPresent()) {
-            founder.sendEvent(PlayerTextMessage.systip(founder, "你已有门派。"));
-            return;
-        }
-        if (!realmMap.movable(coordinate)) {
-            founder.sendEvent(PlayerTextMessage.systip(founder, "该位置不可放置门派石。"));
-            return;
-        }
-        if (coordinate.neighbours().stream().anyMatch(c -> !realmMap.tileMovable(c))) {
-            founder.sendEvent(PlayerTextMessage.systip(founder, "门派石八方不可有遮挡。"));
-            return;
-        }
-        int i = guildRepository.countByName(name);
-        if (i > 0) {
-            founder.sendEvent(PlayerTextMessage.systip(founder, "此门派名称已存在。"));
-            return;
-        }
-        GuildStone guildstone = create(name, coordinate);
-                //factory.createGuildStone(entityIdGenerator.next(), name, realmId, realmMap, coordinate);
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            transaction.begin();
-            guildRepository.save(entityManager, guildstone, founder.id());
-            GuildMembership membership = new GuildMembership(guildstone.getPersistentId(), "门主", guildstone.guildName());
-            founder.joinGuild(membership);
-            guildRepository.upsertMembership(entityManager, founder.id(), membership);
-            founder.inventory().remove(inventorySlot);
-            itemRepository.save(entityManager, founder);
-            transaction.commit();
+//        Validate.notNull(founder);
+//        Validate.notNull(coordinate);
+//        Validate.notNull(name);
+//        Item item = founder.inventory().getItem(inventorySlot);
+//        if (item == null || item.itemType() != ItemType.GUILD_STONE) {
+//            log().error("Invalid guild creation from player {} detected.", founder.id());
+//            return;
+//        }
+//        if (coordinate.directDistance(founder.coordinate()) > 4) {
+//            log().error("Invalid guild creation from player {} detected.", founder.id());
+//            return;
+//        }
+//        if (founder.guildMembership().isPresent()) {
+//            founder.sendEvent(PlayerTextMessage.systip(founder, "你已有门派。"));
+//            return;
+//        }
+//        if (!realmMap.movable(coordinate)) {
+//            founder.sendEvent(PlayerTextMessage.systip(founder, "该位置不可放置门派石。"));
+//            return;
+//        }
+//        if (coordinate.neighbours().stream().anyMatch(c -> !realmMap.tileMovable(c))) {
+//            founder.sendEvent(PlayerTextMessage.systip(founder, "门派石八方不可有遮挡。"));
+//            return;
+//        }
+//        int i = guildRepository.countByName(name);
+//        if (i > 0) {
+//            founder.sendEvent(PlayerTextMessage.systip(founder, "此门派名称已存在。"));
+//            return;
+//        }
+//        GuildStone guildstone = create(name, coordinate);
+//        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+//            EntityTransaction transaction = entityManager.getTransaction();
+//            transaction.begin();
+//            guildRepository.save(entityManager, guildstone, founder.id());
+//            GuildMembership membership = new GuildMembership(guildstone.getGuildId(), "门主", guildstone.guildName());
+//            founder.joinGuild(membership);
+//            guildRepository.upsertMembership(entityManager, founder.id(), membership);
+//            founder.inventory().remove(inventorySlot);
+//            itemRepository.save(entityManager, founder);
+//            transaction.commit();
 //            eventSender.notifySelf(UpdateInventorySlotEvent.remove(founder, inventorySlot));
-            doAdd(guildstone);
-            founder.sendEvent(PlayerTextMessage.systip(founder, "恭喜你，你已成为<" + guildstone.guildName() + ">的门主。"));
+//            doAdd(guildstone);
+//            founder.sendEvent(PlayerTextMessage.systip(founder, "恭喜你，你已成为<" + guildstone.guildName() + ">的门主。"));
 //            eventSender.notifyVisiblePlayersAndSelf(founder, new PlayerUpdateGuildEvent(founder));
-        }
+//        }
     }
 
     private void doAdd(GuildStone guildStone) {
-//        eventSender.add(guildStone);
         add(guildStone);
-//        eventSender.notifyVisiblePlayers(guildStone, guildStone.captureSnapshot());
+        var snapshot = guildStone.captureSnapshot();
+        getAoiManager().filterVisibleEntities(guildStone, Player.class)
+                .forEach(player -> player.sendMessage(snapshot));
     }
 
     @Override
-    public void init() {
-        guildRepository.findByRealm(realmId, entityIdGenerator, realmMap).forEach(this::doAdd);
+    public void init(Realm realm) {
+        guildRepository.findByRealm(realm, entityIdGenerator).forEach(this::doAdd);
     }
 
     @Override
     public void createGuildKungFu(Player applicant, ClientCreateGuildKungFuEvent event) {
-        Validate.notNull(applicant);
-        Validate.notNull(event);
-        boolean founder = applicant.guildMembership()
-                .map(GuildMembership::isFounder).orElse(false);
-        if (!founder) {
-            return;
-        }
-        int guildId = applicant.guildMembership().map(GuildMembership::guildId)
-                .orElseThrow();
-        var ret = checkGuildKungFuSpecification(event, guildId);
-        if (ret != null) {
+//        Validate.notNull(applicant);
+//        Validate.notNull(event);
+//        boolean founder = applicant.guildMembership()
+//                .map(GuildMembership::isFounder).orElse(false);
+//        if (!founder) {
+//            return;
+//        }
+//        int guildId = applicant.guildMembership().map(GuildMembership::guildId)
+//                .orElseThrow();
+//        var ret = checkGuildKungFuSpecification(event, guildId);
+//        if (ret != null) {
 //            eventSender.notifySelf(UpdateGuildKungFuFormEvent.text(applicant, ret));
-            return;
-        }
-        saveGuildKungfuParameter(event, guildId);
+//            return;
+//        }
+//        saveGuildKungfuParameter(event, guildId);
 //        eventSender.notifySelf(UpdateGuildKungFuFormEvent.close(applicant));
 //        eventSender.notifySelf(PlayerTextMessage.systip(applicant, "门武申请成功。"));
     }
@@ -252,9 +256,9 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
         if (kungFuBookRepository.countGuildKungFuByName(request.getName()) > 0) {
             return "武功名已存在";
         }
-        if (kungFuBookRepository.countGuildKungFu(guildId) > 0) {
-            return "已有门武，不可再申请";
-        }
+//        if (kungFuBookRepository.countGuildKungFu(guildId) > 0) {
+//            return "已有门武，不可再申请";
+//        }
         return null;
     }
 
@@ -307,47 +311,47 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
     }*/
 
     private String checkNotNullAndGuildRange(Player source, Player target) {
-        Validate.notNull(source);
-        Validate.notNull(target);
-        if (source.guildMembership().isEmpty()) {
-            return "你还没有门派。";
-        }
-        GuildMembership sourceMembership = source.guildMembership().get();
-        Optional<GuildStone> first = getEntities().stream().filter(guildStone -> guildStone.getPersistentId() == sourceMembership.guildId())
-                .findFirst();
-        if (first.isEmpty() || first.get().coordinate().directDistance(source.coordinate()) > 2) {
-            return "门派石距离太远。";
-        }
-        if (source.coordinate().directDistance(target.coordinate()) > 2) {
-            return "玩家距离太远。";
-        }
+//        Validate.notNull(source);
+//        Validate.notNull(target);
+//        if (source.guildMembership().isEmpty()) {
+//            return "你还没有门派。";
+//        }
+//        GuildMembership sourceMembership = source.guildMembership().get();
+//        Optional<GuildStone> first = getEntities().stream().filter(guildStone -> guildStone.getGuildId() == sourceMembership.guildId())
+//                .findFirst();
+//        if (first.isEmpty() || first.get().coordinate().directDistance(source.coordinate()) > 2) {
+//            return "门派石距离太远。";
+//        }
+//        if (source.coordinate().directDistance(target.coordinate()) > 2) {
+//            return "玩家距离太远。";
+//        }
         return null;
     }
 
 
     @Override
     public void teachGuildKungFu(Player source, Player target) {
-        var ret = checkNotNullAndGuildRange(source, target);
-        if (ret != null) {
+//        var ret = checkNotNullAndGuildRange(source, target);
+//        if (ret != null) {
 //            eventSender.notifySelf(PlayerTextMessage.systip(source, ret));
-            return;
-        }
-        GuildMembership sourceMembership = source.guildMembership().orElseThrow();
-        if (target.guildMembership().isEmpty() || sourceMembership.guildId() !=
-                target.guildMembership().get().guildId()) {
+//            return;
+//        }
+//        GuildMembership sourceMembership = source.guildMembership().orElseThrow();
+//        if (target.guildMembership().isEmpty() || sourceMembership.guildId() !=
+//                target.guildMembership().get().guildId()) {
 //            eventSender.notifySelf(PlayerTextMessage.systip(source, "门派不同，不可传授。"));
-            return;
-        }
-        if (!sourceMembership.canGiveKungFu()) {
+//            return;
+//        }
+//        if (!sourceMembership.canGiveKungFu()) {
 //            eventSender.notifySelf(PlayerTextMessage.systip(source, "门主或副门才能传授门武。"));
-            return;
-        }
-        kungFuBookRepository.findGuildKungfu(sourceMembership.guildId()).ifPresentOrElse(attackKungFu ->
-                {
-                    int slot = target.kungFuBook().addToBasic(attackKungFu);
-                    if (slot != 0) {}
+//            return;
+//        }
+//        kungFuBookRepository.findGuildKungfu(sourceMembership.guildId()).ifPresentOrElse(attackKungFu ->
+//                {
+//                    int slot = target.kungFuBook().addToBasic(attackKungFu);
+//                    if (slot != 0) {}
 //                        eventSender.notifySelf(new PlayerLearnKungFuEvent(target, slot, attackKungFu));
-                }, () -> {});
+//                }, () -> {});
 //                () -> eventSender.notifySelf(PlayerTextMessage.systip(source, "没有门武。")));
     }
 
@@ -367,7 +371,7 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
 //            eventSender.notifySelf(PlayerTextMessage.systip(source, "门主或副门才能邀请门人。"));
             return;
         }
-        target.joinGuild(new GuildMembership(sourceMembership.guildId(),"", sourceMembership.guildName()));
+//        target.joinGuild(new GuildMembership(sourceMembership.guildId(),"", sourceMembership.guildName()));
 //        eventSender.notifyVisiblePlayersAndSelf(target, new PlayerUpdateGuildEvent(target));
 //        crossRealmEventSender.send(GuildBroadcastTextEvent.tip(sourceMembership.guildId(), target.viewName() + "加入了门派。"));
     }
@@ -391,7 +395,79 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<GuildSto
     }
 
     @Override
+    public void playerDropGuildStone(Player player, Coordinate at, int slot) {
+        if (player.guildMembership().isPresent()) {
+            player.sendEvent(PlayerTextMessage.systip(player, "你已有门派。"));
+            return;
+        }
+        Item item = player.inventory().getItem(slot);
+        if (item == null || item.itemType() != ItemType.GUILD_STONE)
+            return;
+        var s = creatingStones.remove(player);
+        if (s != null)
+            player.sendEvent(DirectMessage.of(player,  new RemoveEntityMessage(s.id())));
+        var guildStone = create("你的门派石将放置于此处", at);
+        creatingStones.put(player, guildStone);
+        player.sendEvent(new DirectMessage(player, guildStone.captureDemoSnapshot()));
+        player.sendEvent(new DirectMessage(player, ShowCreateGuildWindowMessage.show(guildStone.id(), slot)));
+    }
+
+    @Override
+    public void confirmGuildCreation(Player player, int slot, String name) {
+        GuildStone demo = creatingStones.remove(player);
+        if (demo == null)
+            return;
+        Item item = player.inventory().getItem(slot);
+        if (item == null || item.itemType() != ItemType.GUILD_STONE)
+            return;
+        if (guildRepository.countByName(name) > 0) {
+            player.sendEvent(PlayerTextMessage.systip(player, "门派名称已经存在。"));
+            return;
+        }
+        var guildStone = create(name, demo.coordinate());
+        guildStone.foundedBy(player);
+        guildRepository.save(guildStone);
+        player.sendMessage(new RemoveEntityMessage(demo.id()));
+        player.inventory().decrease(slot);
+        player.sendEvent(UpdateInventorySlotMessage.update(player, slot));
+        player.sendEvent(PlayerTextMessage.systip(player, "恭喜你成为了<" + name + ">门派门主。"));
+        doAdd(guildStone);
+    }
+
+    @Override
     public void update(long delta) {
         getEntities().forEach(guildStone -> guildStone.update((int)delta));
+        removeCreating.clear();
+        creatingStones.forEach((p, s) -> {
+            if (p.isLeftRealm() || p.coordinate().directDistance(s.coordinate()) >= 5) {
+                p.sendMessage(new RemoveEntityMessage(s.id()));
+                removeCreating.add(p);
+            }
+        });
+        removeCreating.forEach(creatingStones::remove);
+    }
+
+    @Override
+    public void cancelGuildCreation(Player player) {
+        GuildStone remove = creatingStones.remove(player);
+        if (remove != null)
+            player.sendMessage(new RemoveEntityMessage(remove.id()));
+    }
+
+    @Override
+    public void applyGuildKungFu(Player player) {
+        GuildMembership guildMembership = player.guildMembership().orElse(null);
+        if (guildMembership == null || !guildMembership.isFounder()) {
+            player.sendEvent(PlayerTextMessage.systip(player, "门主方可申请。"));
+            return;
+        }
+        Set<GuildStone> guildStones = getAoiManager().filterVisibleEntities(player, GuildStone.class);
+        for (GuildStone guildStone : guildStones) {
+            if (guildStone.contains(guildMembership)) {
+                player.sendMessage(ShowKungFuWindowMessage.INSTANCE);
+                return;
+            }
+        }
+        player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
     }
 }

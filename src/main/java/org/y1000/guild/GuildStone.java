@@ -3,17 +3,21 @@ package org.y1000.guild;
 import lombok.Getter;
 import org.y1000.entities.*;
 import org.y1000.entities.players.Damage;
+import org.y1000.entities.players.Player;
+import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.network.I2ClientMessage;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 public final class GuildStone extends AbstractActiveEntity implements HurtAbility  {
 
     @Getter
-    private Integer persistentId;
+    private Integer guildId;
 
     private int currentHealth;
 
@@ -29,10 +33,16 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
     @Getter
     private final int icon;
 
-    public void setPersistentId(int persistentId) {
-        if (this.persistentId != null)
+    @Getter
+    private AttackKungFu guildKungFu;
+
+    @Getter
+    private final Set<GuildMembership> members;
+
+    public void setGuildId(int guildId) {
+        if (this.guildId != null)
             throw new IllegalStateException();
-        this.persistentId = persistentId;
+        this.guildId = guildId;
     }
 
     public GuildStone(long id,
@@ -43,11 +53,34 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
                       Integer persistentId,
                       int icon) {
         super(id);
-        this.persistentId = persistentId;
+        this.guildId = persistentId;
         this.coordinate = coordinate;
         this.guildName = name;
         this.maxHealth = maxHealth;
+        this.currentHealth = currentHealth;
         this.icon = icon;
+        this.members = new HashSet<>();
+    }
+
+    public GuildStone(long id,
+                      Coordinate coordinate,
+                      int currentHealth,
+                      int maxHealth,
+                      String name,
+                      Integer persistentId,
+                      int icon,
+                      Realm realm,
+                      Set<GuildMembership> members) {
+        super(id);
+        this.guildId = persistentId;
+        this.coordinate = coordinate;
+        this.guildName = name;
+        this.maxHealth = maxHealth;
+        this.currentHealth = currentHealth;
+        this.icon = icon;
+        this.members = members;
+        this.realm = realm;
+        this.realm.map().occupy(this);
     }
 
     public String guildName() {
@@ -55,7 +88,7 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
     }
 
     public int getMaxLife() {
-        return 0;
+        return maxHealth;
     }
 
     @Override
@@ -63,6 +96,16 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
         return currentLife() > 0;
     }
 
+    public void foundedBy(Player player) {
+        if (guildId != null || player.guildMembership().isPresent()) {
+            return;
+        }
+        realm = player.getRealm();
+        realm.map().occupy(this);
+        GuildMembership membership = GuildMembership.founder(player, this);
+        members.add(membership);
+        player.joinGuild(membership);
+    }
 
     @Override
     public boolean swingAllowed() {
@@ -75,7 +118,7 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
     }
 
     public int currentLife() {
-        return 0;
+        return currentHealth;
     }
 
     @Override
@@ -88,17 +131,21 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GuildStone that = (GuildStone) o;
-        return Objects.equals(persistentId, that.persistentId);
+        return Objects.equals(guildId, that.guildId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(persistentId);
+        return Objects.hash(guildId);
     }
 
     @Override
     public void update(int delta) {
 
+    }
+
+    public boolean contains(GuildMembership membership) {
+        return members.contains(membership);
     }
 
     @Override

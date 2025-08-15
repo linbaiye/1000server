@@ -36,6 +36,4 @@ interface PlayerManager extends ActiveEntityManager<Player> {
 
     }
 
-    void sendMessage(Player player, I2ClientMessage message);
-
 }

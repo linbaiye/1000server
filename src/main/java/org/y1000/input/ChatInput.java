@@ -8,8 +8,11 @@ import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.event.PlayerSayEvent;
 import org.y1000.entities.players.event.PlayerShoutEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
+import org.y1000.realm.event.ApplyGuildKungFuEvent;
+import org.y1000.realm.event.RealmEvent;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * 玩家聊天输入。
@@ -20,6 +23,10 @@ public class ChatInput implements SelfHandleInput {
     public ChatInput(String text) {
         this.text = text;
     }
+
+    private static final String CreateGuildKungFu = "@申请门武";
+
+    private final Set<String> RealmEventPrefixes = Set.of(CreateGuildKungFu);
 
     private Optional<PlayerEvent> handleShout(Player player) {
         if (text.length() < 2)
@@ -42,6 +49,12 @@ public class ChatInput implements SelfHandleInput {
         return Optional.of(PlayerPrivateChatEvent.of(player, segments[1], segments[2]));
     }
 
+    public Optional<RealmEvent> toRealmEvent(Player player) {
+        if (!RealmEventPrefixes.contains(text)) {
+            return Optional.empty();
+        }
+        return Optional.of(new ApplyGuildKungFuEvent(player));
+    }
 
     public Optional<PlayerEvent> toPlayerEvent(Player player) {
         if (text.startsWith("!")) {

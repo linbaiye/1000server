@@ -10,7 +10,7 @@ import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.persistence.AttackKungFuParametersProvider;
-import org.y1000.persistence.KungFuPo;
+import org.y1000.persistence.PlayerKungFuPo;
 
 import java.util.List;
 import java.util.Map;
@@ -59,8 +59,8 @@ class KungFuBookRepositoryImplTest {
     }
 
 
-    private List<KungFuPo> select() {
-        Query query = entityManager.createQuery("select kf from KungFuPo kf where kf.key.playerId = ?1");
+    private List<PlayerKungFuPo> select() {
+        Query query = entityManager.createQuery("select kf from PlayerKungFuPo kf where kf.key.playerId = ?1");
         query.setParameter(1, playerId);
         return query.getResultList();
     }
@@ -77,9 +77,9 @@ class KungFuBookRepositoryImplTest {
         saveBook();
         var kungFuPoList = select();
         assertFalse(kungFuPoList.isEmpty());
-        Map<String, KungFuPo> map = kungFuPoList.stream().collect(Collectors.toMap(kungFuPo -> kungFuPo.getKey().getName(), Function.identity()));
+        Map<String, PlayerKungFuPo> map = kungFuPoList.stream().collect(Collectors.toMap(kungFuPo -> kungFuPo.getKey().getName(), Function.identity()));
         kungFuBook.foreachUnnamed((slot, kf) -> {
-            KungFuPo removed = map.remove(kf.name());
+            PlayerKungFuPo removed = map.remove(kf.name());
             assertEquals(slot, removed.getSlot());
         });
         assertTrue(map.isEmpty());
@@ -96,8 +96,8 @@ class KungFuBookRepositoryImplTest {
         attackKungFu.gainPermittedExp(200);
         kungFuBook.swapSlot(2, slot1, slot2);
         saveBook();
-        List<KungFuPo> kungFuPoList = select();
-        KungFuPo saved = kungFuPoList.stream().filter(kungFuPo -> kungFuPo.getKey().getName().equals(attackKungFu.name()))
+        List<PlayerKungFuPo> kungFuPoList = select();
+        PlayerKungFuPo saved = kungFuPoList.stream().filter(kungFuPo -> kungFuPo.getKey().getName().equals(attackKungFu.name()))
                 .findFirst().get();
         assertEquals(saved.getExp(), attackKungFu.exp());
         assertEquals(saved.getSlot(), slot2);

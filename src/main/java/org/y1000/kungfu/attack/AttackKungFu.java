@@ -46,6 +46,9 @@ public interface AttackKungFu extends KungFu {
 
     AttackAction computeAttackAction();
 
+
+    AttackKungFuParameters originParameters();
+
     /**
      *  Check if resource is enough to attack.
      * @return

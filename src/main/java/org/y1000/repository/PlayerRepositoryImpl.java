@@ -16,7 +16,6 @@ import org.y1000.kungfu.*;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.persistence.EquipmentPo;
 import org.y1000.persistence.PlayerPo;
 import org.y1000.util.Coordinate;
 
@@ -34,7 +33,6 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
     private static final Coordinate DEFAULT_COORDINATE = Coordinate.xy(177, 221);
 
     private final EntityManagerFactory entityManagerFactory;
-
     private final ItemRepository itemRepository;
 
     private final GuildRepository guildRepository;

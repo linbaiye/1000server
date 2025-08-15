@@ -302,7 +302,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     public void chat(ChatInput input) {
         if (isLeftRealm())
             return;
-        input.toPlayerEvent(this).ifPresent(this::sendEvent);
+        input.toRealmEvent(this).ifPresentOrElse(realmEvent -> realm.get().handle(realmEvent),
+                () -> input.toPlayerEvent(this).ifPresent(this::sendEvent));
     }
 
     @Override
@@ -862,7 +863,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         setRegenerateTimer();
         var newYY = yinYang.accumulate(DEFAULT_REGENERATE_SECONDS);
         if (newYY.hasHigherLevel(yinYang)) {
-             sendEvent(PlayerGainExpMessage.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
+            sendEvent(PlayerGainExpMessage.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
         }
         int newAge = newYY.age();
         if (newAge != yinYang.age()) {
@@ -1399,7 +1400,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
 
 
-   int attackCooldown() {
+    int attackCooldown() {
         return attackCooldown;
     }
 
@@ -1437,7 +1438,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     @Override
     public <AB> Optional<AB> findAbility(Class<AB> type) {
         return  type.isAssignableFrom(this.getClass()) ?
-            Optional.of(type.cast(this)) : Optional.empty();
+                Optional.of(type.cast(this)) : Optional.empty();
     }
     @Override
     public boolean canBeAttacked() {
@@ -1492,7 +1493,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     public Optional<String> clickText() {
         StringBuilder stringBuilder = new StringBuilder("名称: ")
                 .append(viewName()).append("\r\n");
-        guildMembership().ifPresent(m -> m.append(stringBuilder));
+        guildMembership().ifPresent(m -> m.appendGuildInfo(stringBuilder).append("\r\n"));
         stringBuilder.append("使用武功: ").append(attackKungFu().name());
         protectKungFu().ifPresent(p -> stringBuilder.append(" ").append(p.name()));
         footKungFu().ifPresent(f -> stringBuilder.append(" ").append(f.name()));

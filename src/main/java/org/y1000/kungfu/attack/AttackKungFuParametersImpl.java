@@ -2,7 +2,7 @@ package org.y1000.kungfu.attack;
 
 import org.apache.commons.lang3.Validate;
 import org.y1000.kungfu.*;
-import org.y1000.persistence.AttackKungFuParametersProvider;
+import org.y1000.persistence.GuildKungFuPo;
 
 import static org.y1000.kungfu.ParameterConstants.*;
 
@@ -64,7 +64,7 @@ public final class AttackKungFuParametersImpl implements AttackKungFuParameters 
         this.icon = kungFuSdb.icon(name);
     }
 
-    public AttackKungFuParametersImpl(AttackKungFuParametersProvider provider) {
+    public AttackKungFuParametersImpl(GuildKungFuPo provider) {
         Validate.notNull(provider);
         eventResourceParameters = new DefaultEventResourceParameters(provider.getSwingLife(),
                 provider.getSwingPower(), provider.getSwingOuterPower(), provider.getSwingInnerPower());

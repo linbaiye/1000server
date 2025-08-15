@@ -66,29 +66,30 @@ create table bank (id bigint primary key auto_increment,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-create table attack_kungfu(
-                              id integer not null primary key auto_increment,
-                              `name` varchar(12) not null unique,
-                              `type` varchar(12) not null,
-                              attack_speed integer not null,
-                              recovery integer not null,
-                              avoid integer not null,
-                              body_damage integer not null,
-                              head_damage integer not null,
-                              arm_damage integer not null,
-                              leg_damage integer not null,
-                              body_armor integer not null,
-                              head_armor integer not null,
-                              arm_armor integer not null,
-                              leg_armor integer not null,
-                              swing_life integer not null,
-                              swing_inner_power integer not null,
-                              swing_power integer not null,
-                              swing_outer_power integer not null,
-                              strike_sound integer not null,
-                              swing_sound integer not null,
-                              effect_color integer not null,
-                              icon integer not null default 0
+create table guild_kung_fu (
+                               id integer not null primary key auto_increment,
+                               guild_id integer not null,
+                               `name` varchar(12) not null unique,
+                               `type` varchar(12) not null,
+                               attack_speed integer not null,
+                               recovery integer not null,
+                               avoid integer not null,
+                               body_damage integer not null,
+                               head_damage integer not null,
+                               arm_damage integer not null,
+                               leg_damage integer not null,
+                               body_armor integer not null,
+                               head_armor integer not null,
+                               arm_armor integer not null,
+                               leg_armor integer not null,
+                               swing_life integer not null,
+                               swing_inner_power integer not null,
+                               swing_power integer not null,
+                               swing_outer_power integer not null,
+                               strike_sound integer not null,
+                               swing_sound integer not null,
+                               effect_color integer not null,
+                               icon integer not null default 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -98,6 +99,7 @@ create table guild_stone (
                              realm_id integer not null,
                              x integer not null,
                              y integer not null,
+                             icon integer not null,
                              max_health integer not null,
                              current_health integer not null,
                              created_time timestamp not null default now()
@@ -110,9 +112,4 @@ create table guild_membership (
                                   created_time timestamp not null default now(),
                                   key idx_guild_id (`guild_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-create table guild_kungfu (
-                              guild_id integer not null primary key,
-                              attack_kungfu_id integer not null unique
-)ENGINE=InnoDB;
 
