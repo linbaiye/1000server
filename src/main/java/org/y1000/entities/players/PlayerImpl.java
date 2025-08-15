@@ -20,6 +20,7 @@ import org.y1000.network.I2ClientMessage;
 import org.y1000.realm.PlayerEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.realm.event.ApplyKungFuEvent;
 import org.y1000.realm.event.GuildCreationEvent;
 import org.y1000.realm.event.PlayerDropGuildStoneEvent;
 import org.y1000.util.Action;
@@ -299,7 +300,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
 
     @Override
-    public void chat(ChatInput input) {
+    public void handleChat(ChatInput input) {
         if (isLeftRealm())
             return;
         input.toRealmEvent(this).ifPresentOrElse(realmEvent -> realm.get().handle(realmEvent),
@@ -315,12 +316,16 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     @Override
     public void confirmGuildCreation(int slotId, String name) {
         realm.get().handle(GuildCreationEvent.confirm(this, slotId, name));
-
     }
 
     @Override
     public void cancelGuildCreation() {
         realm.get().handle(GuildCreationEvent.cancel(this));
+    }
+
+    @Override
+    public void applyGuildKungFu(ApplyGuildKungFuInput input) {
+        realm.get().handle(new ApplyKungFuEvent(this, input));
     }
 
 
@@ -400,6 +405,10 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
 
     private void sendText(String t) {
+        sendEvent(PlayerTextMessage.bottom(this,t));
+    }
+
+    private void sendSystip(String t) {
         sendEvent(PlayerTextMessage.bottom(this,t));
     }
 
@@ -1347,6 +1356,24 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             }
         }
         return av;
+    }
+
+    @Override
+    public boolean learnGuildKungFu(AttackKungFu attackKungFu) {
+        if (!attackKungFu.guild())
+            return false;
+        if (kungFuBook.hasGuildKungFu()) {
+            sendSystip("已有门武，传授失败。");
+            return false;
+        }
+        int i = kungFuBook.addToBasic(attackKungFu);
+        if (i == 0) {
+            sendSystip("传授失败，武功栏已满。");
+            return false;
+        }
+        syncKungFuBookQuietly();
+        sendSystip("习得新武功<" + attackKungFu.name() + ">。");
+        return true;
     }
 
     @Override

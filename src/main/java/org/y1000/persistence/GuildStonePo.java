@@ -5,12 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.y1000.entities.objects.DynamicObjectType;
 import org.y1000.guild.GuildMembership;
 import org.y1000.guild.GuildStone;
-import org.y1000.realm.EntityIdGenerator;
+import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.realm.Realm;
-import org.y1000.sdb.DynamicObjectSdb;
 import org.y1000.util.Coordinate;
 
 import java.time.LocalDateTime;
@@ -56,12 +54,30 @@ public class GuildStonePo {
     }
 
     public void merge(GuildStone guildStone) {
-
+        currentHealth = guildStone.currentLife();
+        guildStone.guildKungFu().ifPresent(k -> {
+            if (guildKungFuPo == null)
+                guildKungFuPo = GuildKungFuPo.convert(this, k);
+        });
+        if (members == null) {
+            members = guildStone.getMembers().stream().map(m -> GuildMembershipPo.of(this, m)).toList();
+            return;
+        }
+        var current = guildStone.getMembers().stream().map(GuildMembership::playerId).collect(Collectors.toSet());
+        members.removeIf(m -> !current.contains(m.getPlayerId()));
+        guildStone.getMembers().forEach(m -> {
+            if (members.stream().anyMatch(mo -> mo.getPlayerId() == m.playerId()))
+                return;
+            members.add(GuildMembershipPo.of(this, m));
+        });
     }
 
-    public GuildStone restore(Realm realm, long id) {
+
+    public GuildStone restore(Realm realm, long id, AttackKungFu attackKungFu) {
         Set<GuildMembership> m = members.stream().map(GuildMembershipPo::restore).collect(Collectors.toSet());
-        return new GuildStone(id, coordinate(), currentHealth, maxHealth, name, this.id, icon, realm, m);
+        var st = new GuildStone(id, coordinate(), currentHealth, maxHealth, name, this.id, icon, realm, m);
+        st.registerGuildKungFu(attackKungFu);
+        return st;
     }
 
     public static GuildStonePo convert(GuildStone guildStone) {

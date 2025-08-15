@@ -48,12 +48,17 @@ public class DevGuildRepository implements GuildRepository {
 
     @Override
     public void update(GuildStone guildStone) {
-
     }
 
     @Override
     public void save(GuildStone guildStone) {
         stones.add(guildStone);
         guildStone.setGuildId(id++);
+    }
+
+    @Override
+    public int countGuildKungFu(String name) {
+        return stones.stream().filter(s -> s.guildKungFu().map(k -> k.name().equals(name)).orElse(false))
+                .findFirst().map(e -> 1).orElse(0);
     }
 }

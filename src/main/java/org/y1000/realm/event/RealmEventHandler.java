@@ -2,6 +2,7 @@ package org.y1000.realm.event;
 
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
+import org.y1000.input.ApplyGuildKungFuInput;
 import org.y1000.network.Connection;
 import org.y1000.util.Coordinate;
 
@@ -29,7 +30,15 @@ public interface RealmEventHandler {
 
     }
 
-    default void applyGuildKungFu(Player player) {
+    default void handleApplyKungFuCommand(Player player) {
+        player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
+    }
+
+    default void applyGuildKungFu(Player player, ApplyGuildKungFuInput params) {
+
+    }
+
+    default void grantGuildKungFu(Player player, String toPlayer) {
         player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
     }
 

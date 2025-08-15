@@ -202,5 +202,7 @@ public interface Player extends Creature, HurtAbility {
     default void sendMessage(I2ClientMessage message) {
         sendEvent(DirectMessage.of(this, message));
     }
+
+    boolean learnGuildKungFu(AttackKungFu attackKungFu);
 }
 

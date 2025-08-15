@@ -2,12 +2,13 @@ package org.y1000.input;
 
 import lombok.Builder;
 import lombok.Data;
+import org.y1000.entities.players.PlayerInputHandler;
 import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.network.gen.ClientCreateGuildKungFuPacket;
+import org.y1000.network.gen.ApplyGuildKungFuInputPacket;
 
 @Data
 @Builder
-public class ClientCreateGuildKungFuEvent implements ClientEvent {
+public class ApplyGuildKungFuInput implements SelfHandleInput {
 
     private final String name;
     private final int speed;
@@ -25,11 +26,10 @@ public class ClientCreateGuildKungFuEvent implements ClientEvent {
     private final int innerPowerToSwing;
     private final int outerPowerToSwing;
     private final int lifeToSwing;
-    
     private final AttackKungFuType type;
 
-    public static ClientCreateGuildKungFuEvent parse(ClientCreateGuildKungFuPacket packet) {
-        return ClientCreateGuildKungFuEvent.builder()
+    public static ApplyGuildKungFuInput parse(ApplyGuildKungFuInputPacket packet) {
+        return ApplyGuildKungFuInput.builder()
                 .name(packet.getName())
                 .type(AttackKungFuType.fromValue(packet.getType()))
                 .speed(packet.getAttackSpeed())
@@ -48,5 +48,10 @@ public class ClientCreateGuildKungFuEvent implements ClientEvent {
                 .innerPowerToSwing(packet.getInnerPower())
                 .outerPowerToSwing(packet.getOuterPower())
                 .build();
+    }
+
+    @Override
+    public void accept(PlayerInputHandler handler) {
+        handler.applyGuildKungFu(this);
     }
 }

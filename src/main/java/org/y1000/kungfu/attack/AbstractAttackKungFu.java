@@ -144,7 +144,7 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
 
 
     @Override
-    public AttackKungFuParameters originParameters() {
+    public AttackKungFuParameters parameters() {
         return parameters;
     }
 
@@ -206,6 +206,11 @@ public abstract class AbstractAttackKungFu extends AbstractKungFu implements Att
             case BOW -> 160;
             case THROW -> 170;
         };
+    }
+
+    @Override
+    public boolean guild() {
+        return parameters.isGuild();
     }
 
     @Override

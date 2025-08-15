@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import org.apache.commons.lang3.Validate;
+import org.y1000.input.ApplyGuildKungFuInput;
 import org.y1000.kungfu.*;
 import org.y1000.kungfu.attack.*;
 import org.y1000.kungfu.breath.BreathKungFu;
@@ -53,7 +54,7 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
             return new AttackKungFuParametersImpl(name, kungFuSdb, new DefaultArmorParameters(name, kungFuSdb),
                     new DefaultEventResourceParameters(name, kungFuSdb));
         }
-        return getProvider(name).map(AttackKungFuParametersImpl::new)
+        return getProvider(name).map(GuildKungFuParameters::new)
                 .orElseThrow(() -> new IllegalArgumentException(name + "does not exist."));
     }
 
@@ -200,6 +201,44 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     }
 
     @Override
+    public void registerAttackKungFuParameters(ApplyGuildKungFuInput input) {
+        String template;
+        switch (input.getType()) {
+            case AXE -> template = "无名槌法";
+            case Fist -> template = "无名拳法";
+            case SWORD -> template = "无名剑法";
+            case BLADE -> template = "无名刀法";
+            case SPEAR -> template = "无名枪术";
+            default -> throw new IllegalArgumentException("Invalid type " + input.getType().name());
+        }
+        GuildKungFuPo provider = GuildKungFuPo.builder()
+                .attackSpeed(input.getSpeed())
+                .recovery(input.getRecovery())
+                .avoid(input.getAvoid())
+                .headDamage(input.getHeadDamage())
+                .bodyDamage(input.getBodyDamage())
+                .armDamage(input.getArmDamage())
+                .legDamage(input.getLegDamage())
+                .headArmor(input.getHeadArmor())
+                .bodyArmor(input.getBodyArmor())
+                .armArmor(input.getArmArmor())
+                .legArmor(input.getLegArmor())
+                .swingLife(input.getLifeToSwing())
+                .swingPower(input.getPowerToSwing())
+                .swingInnerPower(input.getInnerPowerToSwing())
+                .swingOuterPower(input.getOuterPowerToSwing())
+                .name(input.getName())
+                .type(input.getType())
+                .effectColor(kungFuSdb.effectColor(template))
+                .icon(kungFuSdb.icon(template))
+                .swingSound(Integer.parseInt(kungFuSdb.getSoundSwing(template)))
+                .strikeSound(Integer.parseInt(kungFuSdb.getSoundStrike(template)))
+                .build();
+        addToProviders(provider);
+    }
+
+
+    @Override
     public void saveGuildKungFuParameter(AttackKungFuParametersProvider provider, int guildId) {
         Validate.notNull(provider);
         try (var em = entityManagerFactory.createEntityManager()) {
@@ -212,16 +251,12 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         }
     }
 
-    @Override
-    public void saveGuildKungFu(AttackKungFu attackKungFu, int guildId) {
-
-    }
 
     @Override
     public int countGuildKungFuByName(String name) {
         Validate.notNull(name);
         try (var em = entityManagerFactory.createEntityManager()) {
-            Query query = em.createQuery("select count(p) from AttackKungFuParametersProvider p where p.name = ?1")
+            Query query = em.createQuery("select count(p) from GuildKungFuPo p where p.name = ?1")
                     .setParameter(1, name);
             return ((Long)query.getSingleResult()).intValue();
         }
@@ -253,10 +288,14 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         }
     }
 
-    private synchronized void addToList(GuildKungFuPo provider) {
-        if (providers != null) {
-            providers.add(provider);
+    private synchronized void addToProviders(GuildKungFuPo provider) {
+        if (providers == null)
+            providers = new ArrayList<>();
+        for (GuildKungFuPo guildKungFuPo : providers) {
+            if (guildKungFuPo.getName().equals(provider.getName()))
+                return;
         }
+        providers.add(provider);
     }
 
 
@@ -274,10 +313,6 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
         return (AttackKungFu) create(name);
     }
 
-    @Override
-    public ProtectKungFu createProtection(String name) {
-        return protectKungFu(name, 0);
-    }
 
     private void addOrUpdate(int slot, KungFu kungFu, Map<String, PlayerKungFuPo> saved, EntityManager entityManager, long playerId) {
         PlayerKungFuPo managed = saved.remove(kungFu.name());

@@ -33,7 +33,6 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
     @Getter
     private final int icon;
 
-    @Getter
     private AttackKungFu guildKungFu;
 
     @Getter
@@ -91,6 +90,10 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
         return maxHealth;
     }
 
+    public Optional<AttackKungFu> guildKungFu() {
+        return Optional.ofNullable(guildKungFu);
+    }
+
     @Override
     public boolean canBeAttacked() {
         return currentLife() > 0;
@@ -129,7 +132,7 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass() || guildId == null) return false;
         GuildStone that = (GuildStone) o;
         return Objects.equals(guildId, that.guildId);
     }
@@ -144,8 +147,19 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
 
     }
 
-    public boolean contains(GuildMembership membership) {
-        return members.contains(membership);
+    public boolean has(Player player) {
+        return player.guildMembership().map(members::contains).orElse(false);
+    }
+
+    public boolean isFounder(Player player) {
+        return player.guildMembership().map(m -> m.isFounder() && members.contains(m))
+                .orElse(false);
+    }
+
+    public void registerGuildKungFu(AttackKungFu attackKungFu) {
+        if (this.guildKungFu != null)
+            return;
+        this.guildKungFu = attackKungFu;
     }
 
     @Override

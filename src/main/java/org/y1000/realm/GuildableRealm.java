@@ -9,7 +9,6 @@ import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 import org.y1000.util.Coordinate;
 
-import java.util.*;
 import java.util.function.BiConsumer;
 
 @Slf4j
@@ -86,8 +85,18 @@ class GuildableRealm extends AbstractRealm {
     }
 
     @Override
-    public void applyGuildKungFu(Player player) {
-        guildManager.applyGuildKungFu(player);
+    public void handleApplyKungFuCommand(Player player) {
+        guildManager.handleApplyGuildKungFuCommand(player);
+    }
+
+    @Override
+    public void applyGuildKungFu(Player player, ApplyGuildKungFuInput params) {
+        guildManager.applyGuildKungFu(player, params);
+    }
+
+    @Override
+    public void grantGuildKungFu(Player player, String toPlayer) {
+        guildManager.grantGuildKungFu(player, toPlayer);
     }
 
     @Override

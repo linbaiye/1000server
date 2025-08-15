@@ -2,15 +2,17 @@ package org.y1000.persistence;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.y1000.guild.GuildStone;
 import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuParameters;
 import org.y1000.kungfu.attack.AttackKungFuType;
+import org.y1000.kungfu.attack.GuildKungFuParameters;
 
 @Data
 @Entity
+@Builder
 @Table(name = "guild_kung_fu")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -49,28 +51,34 @@ public class GuildKungFuPo {
 
     public static GuildKungFuPo convert(GuildStonePo guildStone, AttackKungFu attackKungFu) {
         if (guildStone == null || attackKungFu == null)
-            return null;
-        AttackKungFuParameters parameters = attackKungFu.originParameters();
+            throw new IllegalArgumentException();
+        AttackKungFuParameters parameters = attackKungFu.parameters();
+        if (!(parameters instanceof GuildKungFuParameters kungFuParameters)) {
+            throw new IllegalArgumentException();
+        }
+        GuildKungFuPo provider = kungFuParameters.getProvider();
         GuildKungFuPo guildKungFuPo = new GuildKungFuPo();
-        guildKungFuPo.attackSpeed = parameters.attackSpeed();
-        guildKungFuPo.recovery = parameters.recovery();
-        guildKungFuPo.avoid = parameters.avoidance();
-        guildKungFuPo.headDamage = parameters.headDamage();
-        guildKungFuPo.armDamage = parameters.armDamage();
-        guildKungFuPo.bodyDamage = parameters.bodyDamage();
-        guildKungFuPo.legDamage = parameters.legDamage();
-        guildKungFuPo.headArmor = parameters.headArmor();
-        guildKungFuPo.armArmor = parameters.armArmor();
-        guildKungFuPo.bodyArmor = parameters.bodyArmor();
-        guildKungFuPo.legArmor = parameters.legArmor();
-        guildKungFuPo.swingPower = parameters.powerToSwing();
-        guildKungFuPo.swingInnerPower = parameters.innerPowerToSwing();
-        guildKungFuPo.swingOuterPower = parameters.outerPowerToSwing();
-        guildKungFuPo.swingLife = parameters.lifeToSwing();
-        guildKungFuPo.swingSound = parameters.swingSound();
-        guildKungFuPo.strikeSound = parameters.swingSound();
-        guildKungFuPo.effectColor = parameters.effectId();
-        guildKungFuPo.icon = parameters.icon();
+        guildKungFuPo.attackSpeed = provider.attackSpeed;
+        guildKungFuPo.recovery = provider.recovery;
+        guildKungFuPo.avoid = provider.avoid;
+        guildKungFuPo.headDamage = provider.headDamage;
+        guildKungFuPo.bodyDamage = provider.bodyDamage;
+        guildKungFuPo.armDamage = provider.armDamage;
+        guildKungFuPo.legDamage = provider.legDamage;
+        guildKungFuPo.headArmor = provider.headArmor;
+        guildKungFuPo.armArmor = provider.armArmor;
+        guildKungFuPo.bodyArmor = provider.bodyArmor;
+        guildKungFuPo.legArmor = provider.legArmor;
+        guildKungFuPo.swingPower = provider.swingPower;;
+        guildKungFuPo.swingInnerPower = provider.swingInnerPower;
+        guildKungFuPo.swingOuterPower = provider.swingOuterPower;
+        guildKungFuPo.swingLife = provider.swingLife;
+        guildKungFuPo.swingSound = provider.swingSound;
+        guildKungFuPo.strikeSound = provider.strikeSound;
+        guildKungFuPo.effectColor = provider.effectColor;
+        guildKungFuPo.icon = provider.icon;
+        guildKungFuPo.name = provider.name;
+        guildKungFuPo.type = provider.type;
         guildKungFuPo.guildStone = guildStone;
         return guildKungFuPo;
     }

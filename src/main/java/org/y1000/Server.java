@@ -121,7 +121,7 @@ public final class Server {
         }
     }
 
-    private static final boolean Dev = true;
+    private static final boolean Dev = false;
 
 
     public Server() {
@@ -135,7 +135,7 @@ public final class Server {
         NpcFactory npcFactory = new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE,
                 NonMonsterNpcSdbImpl.Instance, MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE, repository, QuestSdbImpl.Instance, Dev ? new BankDevRepository() : repository);
         DynamicObjectFactory dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
-        GuildRepository guildRepository = Dev ? new DevGuildRepository() : new GuildRepositoryImpl(entityManagerFactory);
+        GuildRepository guildRepository = Dev ? new DevGuildRepository() : new GuildRepositoryImpl(entityManagerFactory, kungFuRepositoryImpl);
         PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, repository, guildRepository);
         PlayerRepository playerRepository = Dev ? new DevPlayerRepository(factory, repository) :
                 new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, repository, guildRepository);

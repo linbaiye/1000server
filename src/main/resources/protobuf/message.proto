@@ -111,25 +111,12 @@ message ShowTeleportPacket {
   int32 shape = 8;
 }
 
-message CharacterKungFuPacket {
-  string attackKungFuName = 1;
-  int32 attackKungFuLevel = 2;
-  int32 attackKungFuType = 3;
-}
-
-
 message ClientChangeTeamPacket {
   int32 teamNumber = 1;
 }
 
-message ClientFoundGuildPacket{
-  string name = 1;
-  int32 x = 2;
-  int32 y = 3;
-  int32 inventorySlot = 4;
-}
 
-message ClientCreateGuildKungFuPacket {
+message ApplyGuildKungFuInputPacket {
   int32 attackSpeed = 1;
   int32 life = 2;
   int32 avoidance = 3;
@@ -211,8 +198,6 @@ message ClientPacket {
     CreateCharacterRequestPacket createCharacter = 13;
 
     ClientChangeTeamPacket changeTeam = 25;
-    ClientFoundGuildPacket foundGuild = 26;
-    ClientCreateGuildKungFuPacket createGuildKungFu = 27;
     ClientManageGuildPacket manageGuild = 28;
 
 
@@ -244,6 +229,7 @@ message ClientPacket {
     RealmInputPacket realmInput = 56;
 
     CreateGuildInputPacket createGuildInput = 57;
+    ApplyGuildKungFuInputPacket applyGuildKungFu = 27;
   }
 }
 
@@ -562,7 +548,9 @@ message ShowCreateGuildWindowPacket {
   string tile = 4;
 }
 
-message ShowApplyKungFuWindowPacket {
+message ApplyKungFuWindowPacket {
+  int32 type = 1;
+  string msg = 2;
 }
 
 message CreateGuildInputPacket {
@@ -637,7 +625,7 @@ message Packet {
     ShowQuestPacket showQuest = 83;
     ShowBankWindowPacket showBank = 84;
     ShowCreateGuildWindowPacket showCreateGuild = 85;
-    ShowApplyKungFuWindowPacket showApplyKungFu = 86;
+    ApplyKungFuWindowPacket showApplyKungFu = 86;
   }
 }
 

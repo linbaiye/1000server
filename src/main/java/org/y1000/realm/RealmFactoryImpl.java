@@ -34,7 +34,7 @@ public final class RealmFactoryImpl implements RealmFactory {
 
     private final ItemRepository itemRepository;
 
-    private final KungFuBookRepository kungFuBookRepository;
+    private final KungFuBookRepositoryImpl kungFuBookRepository;
 
     @Builder
     public RealmFactoryImpl(ItemFactory itemFactory,
@@ -51,7 +51,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                             PosByDieSdb posByDieSdb,
                             GuildRepository guildRepository,
                             ItemRepository itemRepository,
-                            KungFuBookRepository kungFuBookRepository) {
+                            KungFuBookRepositoryImpl kungFuBookRepository) {
         Validate.notNull(itemFactory);
         Validate.notNull(npcFactory);
         Validate.notNull(itemSdb);

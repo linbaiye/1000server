@@ -31,12 +31,14 @@ public interface PlayerInputHandler {
 
     void usePill(String name);
 
-    void chat(ChatInput input);
+    void handleChat(ChatInput input);
 
     void clickEquipment(EquipmentType type);
 
     void confirmGuildCreation(int slotId, String name);
 
     void cancelGuildCreation();
+
+    void applyGuildKungFu(ApplyGuildKungFuInput input);
 
 }

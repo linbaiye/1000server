@@ -26,4 +26,6 @@ public interface GuildRepository {
 
     void save(GuildStone guildStone);
 
+    int countGuildKungFu(String name);
+
 }

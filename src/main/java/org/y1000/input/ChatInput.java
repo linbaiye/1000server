@@ -8,7 +8,8 @@ import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.event.PlayerSayEvent;
 import org.y1000.entities.players.event.PlayerShoutEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
-import org.y1000.realm.event.ApplyGuildKungFuEvent;
+import org.y1000.realm.event.ApplyGuildKungFuCommandEvent;
+import org.y1000.realm.event.GrantGuildKungFuEvent;
 import org.y1000.realm.event.RealmEvent;
 
 import java.util.Optional;
@@ -25,8 +26,9 @@ public class ChatInput implements SelfHandleInput {
     }
 
     private static final String CreateGuildKungFu = "@申请门武";
+    private static final String GrantGuildKungFu = "@传授门武";
 
-    private final Set<String> RealmEventPrefixes = Set.of(CreateGuildKungFu);
+    private final Set<String> RealmEventPrefixes = Set.of(CreateGuildKungFu, GrantGuildKungFu);
 
     private Optional<PlayerEvent> handleShout(Player player) {
         if (text.length() < 2)
@@ -50,10 +52,17 @@ public class ChatInput implements SelfHandleInput {
     }
 
     public Optional<RealmEvent> toRealmEvent(Player player) {
-        if (!RealmEventPrefixes.contains(text)) {
+        String[] split = text.split(" ");
+        if (!RealmEventPrefixes.contains(split[0])) {
             return Optional.empty();
         }
-        return Optional.of(new ApplyGuildKungFuEvent(player));
+        if (CreateGuildKungFu.equals(split[0]))
+            return Optional.of(new ApplyGuildKungFuCommandEvent(player));
+        else if (GrantGuildKungFu.equals(split[0])) {
+            return split.length == 2 ? Optional.of(new GrantGuildKungFuEvent(player, split[1])) :
+                    Optional.empty();
+        }
+        return Optional.empty();
     }
 
     public Optional<PlayerEvent> toPlayerEvent(Player player) {
@@ -69,6 +78,6 @@ public class ChatInput implements SelfHandleInput {
     @Override
     public void accept(PlayerInputHandler handler) {
         if (!StringUtils.isEmpty(text))
-            handler.chat(this);
+            handler.handleChat(this);
     }
 }

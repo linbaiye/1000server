@@ -47,7 +47,7 @@ public interface AttackKungFu extends KungFu {
     AttackAction computeAttackAction();
 
 
-    AttackKungFuParameters originParameters();
+    AttackKungFuParameters parameters();
 
     /**
      *  Check if resource is enough to attack.
@@ -60,5 +60,6 @@ public interface AttackKungFu extends KungFu {
 
     boolean isWithinAttackRange(Coordinate playerCoordinate, ActiveEntity entity);
 
+    boolean guild();
 
 }

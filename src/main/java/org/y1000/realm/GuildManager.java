@@ -2,18 +2,13 @@ package org.y1000.realm;
 
 import org.y1000.entities.players.Player;
 import org.y1000.guild.GuildStone;
-import org.y1000.input.ClientCreateGuildKungFuEvent;
+import org.y1000.input.ApplyGuildKungFuInput;
 import org.y1000.util.Coordinate;
 
 public interface GuildManager extends ActiveEntityManager<GuildStone> {
 
-    GuildStone create(String name, Coordinate coordinate);
-
-    void foundGuild(Player founder, Coordinate coordinate, String name, int inventorySlot);
 
     void init(Realm realm);
-
-    void createGuildKungFu(Player applicant, ClientCreateGuildKungFuEvent event);
 
     void shutdown();
 
@@ -27,5 +22,9 @@ public interface GuildManager extends ActiveEntityManager<GuildStone> {
 
     void cancelGuildCreation(Player player);
 
-    void applyGuildKungFu(Player player);
+    void handleApplyGuildKungFuCommand(Player player);
+
+    void applyGuildKungFu(Player player, ApplyGuildKungFuInput params);
+
+    void grantGuildKungFu(Player player, String toPlayer);
 }
