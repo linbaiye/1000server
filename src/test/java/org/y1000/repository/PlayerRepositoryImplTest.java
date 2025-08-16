@@ -154,6 +154,17 @@ class PlayerRepositoryImplTest extends AbstractPlayerUnitTestFixture {
         assertEquals(1, count);
     }
 
+    @Test
+    void findId() {
+        assertTrue(playerRepository.findId(player.viewName()).isEmpty());
+        var em = jpaFixture.newEntityManager();
+        em = jpaFixture.beginTx();
+        long id = playerRepository.save(em, 1, player);
+        jpaFixture.submitTx();
+        KungFuBook kungFuBook = createKungFuBookFactory().create();
+        when(kungFuBookRepository.find(any(EntityManager.class), anyLong())).thenReturn(Optional.of(kungFuBook));
+        assertEquals(id, playerRepository.findId(player.viewName()).get());
+    }
 
     private void assertPlayerLifeEquals(PlayerLife life, PlayerLife life2) {
         assertEquals(life.maxValue(), life2.maxValue());

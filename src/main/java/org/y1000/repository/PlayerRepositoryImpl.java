@@ -156,6 +156,18 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         }
     }
 
+    @Override
+    public Optional<Long> findId(String name) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            Query query = entityManager.createNamedQuery("selectIdByName")
+                    .setParameter(1, name);
+            List resultList = query.getResultList();
+            if (resultList.isEmpty())
+                return Optional.empty();
+            return Optional.of((Long)resultList.get(0));
+        }
+    }
+
 
     @Override
     public long save(EntityManager entityManager, int accountId, Player player) {

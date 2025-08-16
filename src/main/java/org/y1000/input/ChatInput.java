@@ -8,9 +8,7 @@ import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.event.PlayerSayEvent;
 import org.y1000.entities.players.event.PlayerShoutEvent;
 import org.y1000.entities.players.event.PlayerTextMessage;
-import org.y1000.realm.event.ApplyGuildKungFuCommandEvent;
-import org.y1000.realm.event.GrantGuildKungFuEvent;
-import org.y1000.realm.event.RealmEvent;
+import org.y1000.realm.event.*;
 
 import java.util.Optional;
 import java.util.Set;
@@ -27,9 +25,12 @@ public class ChatInput implements SelfHandleInput {
 
     private static final String CreateGuildKungFu = "@申请门武";
     private static final String GrantGuildKungFu = "@传授门武";
+    private static final String GuildInviteMember = "@邀请加入门派";
     private static final String UnlearnKungFu = "@删除武功";
+    private static final String QuitGuild = "@退出门派";
+    private static final String KickMember = "@逐出门人";
 
-    private final Set<String> RealmEventPrefixes = Set.of(CreateGuildKungFu, GrantGuildKungFu);
+    private final Set<String> RealmEventPrefixes = Set.of(CreateGuildKungFu, GrantGuildKungFu, GuildInviteMember, QuitGuild, KickMember);
 
     private Optional<PlayerEvent> handleShout(Player player) {
         if (text.length() < 2)
@@ -62,6 +63,13 @@ public class ChatInput implements SelfHandleInput {
         else if (GrantGuildKungFu.equals(split[0])) {
             return split.length == 2 ? Optional.of(new GrantGuildKungFuEvent(player, split[1])) :
                     Optional.empty();
+        } else if (GuildInviteMember.equals(split[0])) {
+            return split.length == 2 ? Optional.of(new GuildInviteEvent(player, split[1])) :
+                    Optional.empty();
+        } else if (QuitGuild.equals(split[0])) {
+            return split.length == 1 ? Optional.of(new QuitGuildEvent(player)) : Optional.empty();
+        } else if (KickMember.equals(split[0])) {
+            return split.length == 2 ? Optional.of(new KickGuildMember(player, split[1])) : Optional.empty();
         }
         return Optional.empty();
     }

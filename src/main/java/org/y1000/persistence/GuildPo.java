@@ -24,18 +24,24 @@ public class GuildPo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(updatable = false)
     private String name;
 
+    @Column(updatable = false)
     private int realmId;
 
+    @Column(updatable = false)
     private int x;
 
+    @Column(updatable = false)
     private int y;
 
+    @Column(updatable = false)
     private int maxHealth;
 
     private int currentHealth;
 
+    @Column(updatable = false)
     private int icon;
 
     @Column(updatable = false)

@@ -417,7 +417,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
 
     private void sendSystip(String t) {
-        sendEvent(PlayerTextMessage.bottom(this,t));
+        sendEvent(PlayerTextMessage.systip(this,t));
     }
 
     private void sendLeftText(String t) {

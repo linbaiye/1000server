@@ -15,6 +15,8 @@ public interface PlayerRepository {
 
     Optional<Player> load(long id);
 
+    Optional<Long> findId(String name);
+
     long save(EntityManager entityManager, int accountId, Player player);
 
     int countByName(EntityManager entityManager, String name);

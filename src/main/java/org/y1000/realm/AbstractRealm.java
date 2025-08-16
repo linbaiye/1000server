@@ -144,6 +144,10 @@ abstract class AbstractRealm implements Realm, TeleportEventHandler, RealmEventH
 
     protected abstract void handleLogin(Login login);
 
+    PlayerRepository getPlayerRepository() {
+        return playerRepository;
+    }
+
     void acceptLogin(long playerId, Connection connection, Coordinate coordinate) {
         playerRepository.load(playerId).ifPresent(p -> {
             if (coordinate == null)

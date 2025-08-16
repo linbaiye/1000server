@@ -136,8 +136,8 @@ public final class RealmFactoryImpl implements RealmFactory {
                     .playerRepository(playerRepository)
                     ;
             if (allowGuildCreation(id)) {
-                GuildManager guildManager = new GuildManagerImpl(itemSdb, entityIdGenerator, connectionManager, crossRealmEventSender, realmMap, guildRepository, itemRepository,
-                        entityManagerFactory, id, KungFuSdb.INSTANCE, kungFuBookRepository, aoiManager);
+                GuildManager guildManager = new GuildManagerImpl(itemSdb, entityIdGenerator, connectionManager, crossRealmEventSender, realmMap,
+                        guildRepository, KungFuSdb.INSTANCE, kungFuBookRepository, aoiManager);
                 builder.guildManager(guildManager);
             }
             return mapSdb.getRegenInterval(id)

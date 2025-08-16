@@ -25,4 +25,10 @@ public interface GuildManager extends ActiveEntityManager<Guild> {
 
     void grantGuildKungFu(Player player, String toPlayer);
 
+    void guildInvite(Player player, String inviteeName);
+
+    void quitGuild(Player player);
+
+    void kick(Player player, long kickeeId);
+
 }

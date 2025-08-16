@@ -118,6 +118,13 @@ public class DevPlayerRepository implements PlayerRepository {
     }
 
     @Override
+    public Optional<Long> findId(String name) {
+        return playerMap.values().stream().filter(p -> p.viewName().equals(name))
+                .findFirst()
+                .map(Player::id);
+    }
+
+    @Override
     public long save(EntityManager entityManager, int accountId, Player player) {
         player.leaveRealm();
         playerMap.put(player.id(), player);

@@ -121,7 +121,7 @@ public final class Server {
         }
     }
 
-    private static final boolean Dev = false;
+    private static final boolean Dev = true;
 
 
     public Server() {

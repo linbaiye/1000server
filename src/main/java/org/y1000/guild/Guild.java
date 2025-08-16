@@ -179,6 +179,9 @@ public final class Guild extends AbstractActiveEntity implements HurtAbility  {
         return player.guildMembership().map(m -> m.canGrantKungFu() && members.contains(m))
                 .orElse(false);
     }
+    public boolean canInvite(Player player) {
+        return canGrantKungFu(player);
+    }
 
     public void registerGuildKungFu(AttackKungFu attackKungFu) {
         if (this.guildKungFu != null)

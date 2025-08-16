@@ -39,12 +39,6 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<Guild> i
 
     private final GuildRepository guildRepository;
 
-    private final ItemRepository itemRepository;
-
-    private final EntityManagerFactory entityManagerFactory;
-
-    private final int realmId;
-
     private final KungFuSdb kungFuSdb;
 
     private final KungFuFactory kungFuFactory;
@@ -61,9 +55,6 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<Guild> i
                             RealmEventSender crossRealmEventSender,
                             RealmMap realmMap,
                             GuildRepository guildRepository,
-                            ItemRepository itemRepository,
-                            EntityManagerFactory entityManagerFactory,
-                            int realmId,
                             KungFuSdb kungFuSdb,
                             KungFuFactory kungFuFactory,
                             AOIManager aoiManager) {
@@ -73,17 +64,12 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<Guild> i
         Validate.notNull(crossRealmEventSender);
         Validate.notNull(realmMap);
         Validate.notNull(guildRepository);
-        Validate.notNull(itemRepository);
-        Validate.notNull(entityManagerFactory);
         Validate.notNull(kungFuSdb);
         Validate.notNull(kungFuFactory);
         this.entityIdGenerator = entityIdGenerator;
         this.crossRealmEventSender = crossRealmEventSender;
         this.realmMap = realmMap;
         this.guildRepository = guildRepository;
-        this.itemRepository = itemRepository;
-        this.entityManagerFactory = entityManagerFactory;
-        this.realmId = realmId;
         this.kungFuSdb = kungFuSdb;
         this.kungFuFactory = kungFuFactory;
         this.itemSdb = itemSdb;
@@ -296,14 +282,14 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<Guild> i
             player.sendEvent(PlayerTextMessage.systip(player, "门派名称已经存在。"));
             return;
         }
-        var guildStone = create(name, demo.coordinate());
-        guildStone.foundedBy(player);
-        guildRepository.save(guildStone);
+        var guild = create(name, demo.coordinate());
+        guild.foundedBy(player);
+        guildRepository.save(guild);
         player.sendMessage(new RemoveEntityMessage(demo.id()));
         player.inventory().decrease(slot);
         player.sendEvent(UpdateInventorySlotMessage.update(player, slot));
         player.sendEvent(PlayerTextMessage.systip(player, "恭喜你成为了<" + name + ">门派门主。"));
-        doAdd(guildStone);
+        doAdd(guild);
     }
 
     @Override
@@ -411,4 +397,64 @@ public final class GuildManagerImpl extends AbstractActiveEntityManager<Guild> i
             player.sendEvent(PlayerTextMessage.systip(player, "传授失败。"));
     }
 
+    @Override
+    public void guildInvite(Player player, String inviteeName) {
+        Guild playerGuild = findPlayerGuildStone(player);
+        if (playerGuild == null) {
+            player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
+            return;
+        }
+        if (!playerGuild.canInvite(player)) {
+            player.sendEvent(PlayerTextMessage.systip(player, "你不是门主或副门主。"));
+            return;
+        }
+        var t = findNearbyPlayer(player, inviteeName);
+        if (t == null) {
+            player.sendEvent(PlayerTextMessage.systip(player, "被邀请玩家需在门派石附近。"));
+            return;
+        }
+        if (t.guildMembership().isPresent()) {
+            player.sendEvent(PlayerTextMessage.systip(player, "被邀请玩家已有门派。"));
+            return;
+        }
+        playerGuild.addMember(t);
+        guildRepository.update(playerGuild);
+        player.sendEvent(PlayerTextMessage.systip(player, "成功邀请<" + inviteeName + ">加入门派。"));
+    }
+
+
+    @Override
+    public void quitGuild(Player player) {
+        Guild playerGuild = findPlayerGuildStone(player);
+        if (playerGuild == null) {
+            player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
+            return;
+        }
+        if (playerGuild.isFounder(player)) {
+            player.sendEvent(PlayerTextMessage.systip(player, "门主不可退出，只可转让。"));
+            return;
+        }
+        playerGuild.removeMember(player.id());
+        guildRepository.update(playerGuild);
+        player.quitGuild();
+        player.sendEvent(PlayerTextMessage.systip(player, "你已不再是门人。"));
+    }
+
+    @Override
+    public void kick(Player player, long kickeeId) {
+        Guild playerGuild = findPlayerGuildStone(player);
+        if (playerGuild == null) {
+            player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
+            return;
+        }
+        if (!playerGuild.canInvite(player)) {
+            player.sendEvent(PlayerTextMessage.systip(player, "你不是门主或副门主。"));
+            return;
+        }
+        if (playerGuild.removeMember(kickeeId)) {
+            player.sendEvent(PlayerTextMessage.systip(player, "成功逐出玩家，玩家重新上线后不再显示本门门派。"));
+        } else {
+            player.sendEvent(PlayerTextMessage.systip(player, "玩家不是本门门人。"));
+        }
+    }
 }

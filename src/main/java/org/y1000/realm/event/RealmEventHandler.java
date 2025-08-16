@@ -42,4 +42,15 @@ public interface RealmEventHandler {
         player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
     }
 
+    default void guildInvite(Player player, String inviteeName) {
+        player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
+    }
+
+    default void quitGuild(Player player) {
+        player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
+    }
+
+    default void kickGuildMember(Player player, String kickee) {
+        player.sendEvent(PlayerTextMessage.systip(player, "需在门派石附近。"));
+    }
 }

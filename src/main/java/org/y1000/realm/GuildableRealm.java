@@ -15,7 +15,6 @@ import java.util.function.BiConsumer;
 class GuildableRealm extends AbstractRealm {
     private final GuildManager guildManager;
 
-
     public GuildableRealm(int id, RealmMap realmMap,
                           GroundItemManager itemManager,
                           NpcManager npcManager,
@@ -97,7 +96,20 @@ class GuildableRealm extends AbstractRealm {
         guildManager.grantGuildKungFu(player, toPlayer);
     }
 
+    @Override
+    public void guildInvite(Player player, String inviteeName) {
+        guildManager.guildInvite(player, inviteeName);
+    }
 
+    @Override
+    public void quitGuild(Player player) {
+        guildManager.quitGuild(player);
+    }
+
+    @Override
+    public void kickGuildMember(Player player, String kickee) {
+        getPlayerRepository().findId(kickee).ifPresent(id -> guildManager.kick(player, id));
+    }
 
     @Override
     public void shutdown() {

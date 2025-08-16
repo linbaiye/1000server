@@ -23,6 +23,8 @@ import java.util.*;
 @Table(name = "player")
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedNativeQuery(name = "selectIdByName",
+        query = "SELECT p.id FROM player p where p.name = ?1")
 public class PlayerPo {
 
     @Id
