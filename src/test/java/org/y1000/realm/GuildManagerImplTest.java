@@ -5,7 +5,7 @@ import org.y1000.TestingEventListener;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.guild.GuildStone;
+import org.y1000.guild.Guild;
 import org.y1000.item.ItemFactory;
 import org.y1000.repository.*;
 
@@ -25,7 +25,7 @@ class GuildManagerImplTest extends AbstractUnitTestFixture {
 
     private TestingEventListener testingEventListener;
 
-    private List<GuildStone> stoneList;
+    private List<Guild> stoneList;
     private RealmEventSender crossRealmEventSender;
     private KungFuBookRepository kungFuBookRepository;
 

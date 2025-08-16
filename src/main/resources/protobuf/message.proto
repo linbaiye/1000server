@@ -136,10 +136,6 @@ message ApplyGuildKungFuInputPacket {
   int32 type = 18;
 }
 
-message ClientManageGuildPacket {
-  int32 type = 1;
-  string target = 2;
-}
 
 
 message SubmitQuestInputPacket {
@@ -198,7 +194,6 @@ message ClientPacket {
     CreateCharacterRequestPacket createCharacter = 13;
 
     ClientChangeTeamPacket changeTeam = 25;
-    ClientManageGuildPacket manageGuild = 28;
 
 
     SwapInventorySlotPacket swapInventorySlotPacket = 5;
@@ -457,10 +452,6 @@ message NameColorPacket {
   int32 color = 2;
 }
 
-message UpdateGuildPacket {
-  int64 id = 1;
-  string name = 2;
-}
 
 message UpdateGuildKungFuFormPacket {
   int32 command = 1;
@@ -542,6 +533,12 @@ message RegisterResponsePacket {
   string description = 2;
 }
 
+message CreateCharacterResponsePacket {
+  int32 code = 1;
+  string description = 2;
+  string characterName = 3;
+}
+
 message ShowCreateGuildWindowPacket {
   int32 fromSlot = 1;
   string tip = 3;
@@ -564,6 +561,7 @@ message Packet {
   oneof TypedPacket {
     LoginResponsePacket loginResponse = 3;
     RegisterResponsePacket registerResponse = 5;
+    CreateCharacterResponsePacket createCharacterResponse = 4;
     PositionPacket positionPacket = 1;
     RemoveEntityPacket removeEntity = 8;
     CreatureAttackEventPacket attackEventPacket = 10;
@@ -592,7 +590,6 @@ message Packet {
     BreakRopePacket breakRope = 44;
     NpcPositionPacket npcPosition = 45;
     NameColorPacket nameColor = 49;
-    UpdateGuildPacket updateGuild = 50;
     UpdateGuildKungFuFormPacket kungFuForm = 51;
     UpdateQuestWindowPacket questWindow = 52;
     UpdateBuffPacket updateBuff = 53;

@@ -104,10 +104,6 @@ public class DevPlayerRepository implements PlayerRepository {
         return Optional.empty();
     }
 
-    @Override
-    public synchronized Optional<Integer> findRealm(long id) {
-        return Optional.ofNullable(playerRealmMap.get(id));
-    }
 
     @Override
     public synchronized void update(Player player) {
@@ -134,8 +130,4 @@ public class DevPlayerRepository implements PlayerRepository {
         return 0;
     }
 
-    @Override
-    public int countByAccount(EntityManager entityManager, int accountId) {
-        return 0;
-    }
 }

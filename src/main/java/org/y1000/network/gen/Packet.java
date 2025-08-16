@@ -47,6 +47,7 @@ private static final long serialVersionUID = 0L;
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     LOGINRESPONSE(3),
     REGISTERRESPONSE(5),
+    CREATECHARACTERRESPONSE(4),
     POSITIONPACKET(1),
     REMOVEENTITY(8),
     ATTACKEVENTPACKET(10),
@@ -74,7 +75,6 @@ private static final long serialVersionUID = 0L;
     BREAKROPE(44),
     NPCPOSITION(45),
     NAMECOLOR(49),
-    UPDATEGUILD(50),
     KUNGFUFORM(51),
     QUESTWINDOW(52),
     UPDATEBUFF(53),
@@ -127,6 +127,7 @@ private static final long serialVersionUID = 0L;
       switch (value) {
         case 3: return LOGINRESPONSE;
         case 5: return REGISTERRESPONSE;
+        case 4: return CREATECHARACTERRESPONSE;
         case 1: return POSITIONPACKET;
         case 8: return REMOVEENTITY;
         case 10: return ATTACKEVENTPACKET;
@@ -154,7 +155,6 @@ private static final long serialVersionUID = 0L;
         case 44: return BREAKROPE;
         case 45: return NPCPOSITION;
         case 49: return NAMECOLOR;
-        case 50: return UPDATEGUILD;
         case 51: return KUNGFUFORM;
         case 52: return QUESTWINDOW;
         case 53: return UPDATEBUFF;
@@ -263,6 +263,37 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.RegisterResponsePacket) typedPacket_;
     }
     return org.y1000.network.gen.RegisterResponsePacket.getDefaultInstance();
+  }
+
+  public static final int CREATECHARACTERRESPONSE_FIELD_NUMBER = 4;
+  /**
+   * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+   * @return Whether the createCharacterResponse field is set.
+   */
+  @java.lang.Override
+  public boolean hasCreateCharacterResponse() {
+    return typedPacketCase_ == 4;
+  }
+  /**
+   * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+   * @return The createCharacterResponse.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.CreateCharacterResponsePacket getCreateCharacterResponse() {
+    if (typedPacketCase_ == 4) {
+       return (org.y1000.network.gen.CreateCharacterResponsePacket) typedPacket_;
+    }
+    return org.y1000.network.gen.CreateCharacterResponsePacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.CreateCharacterResponsePacketOrBuilder getCreateCharacterResponseOrBuilder() {
+    if (typedPacketCase_ == 4) {
+       return (org.y1000.network.gen.CreateCharacterResponsePacket) typedPacket_;
+    }
+    return org.y1000.network.gen.CreateCharacterResponsePacket.getDefaultInstance();
   }
 
   public static final int POSITIONPACKET_FIELD_NUMBER = 1;
@@ -1100,37 +1131,6 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.NameColorPacket) typedPacket_;
     }
     return org.y1000.network.gen.NameColorPacket.getDefaultInstance();
-  }
-
-  public static final int UPDATEGUILD_FIELD_NUMBER = 50;
-  /**
-   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-   * @return Whether the updateGuild field is set.
-   */
-  @java.lang.Override
-  public boolean hasUpdateGuild() {
-    return typedPacketCase_ == 50;
-  }
-  /**
-   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-   * @return The updateGuild.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.UpdateGuildPacket getUpdateGuild() {
-    if (typedPacketCase_ == 50) {
-       return (org.y1000.network.gen.UpdateGuildPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.UpdateGuildPacketOrBuilder getUpdateGuildOrBuilder() {
-    if (typedPacketCase_ == 50) {
-       return (org.y1000.network.gen.UpdateGuildPacket) typedPacket_;
-    }
-    return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
   }
 
   public static final int KUNGFUFORM_FIELD_NUMBER = 51;
@@ -2176,6 +2176,9 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 3) {
       output.writeMessage(3, (org.y1000.network.gen.LoginResponsePacket) typedPacket_);
     }
+    if (typedPacketCase_ == 4) {
+      output.writeMessage(4, (org.y1000.network.gen.CreateCharacterResponsePacket) typedPacket_);
+    }
     if (typedPacketCase_ == 5) {
       output.writeMessage(5, (org.y1000.network.gen.RegisterResponsePacket) typedPacket_);
     }
@@ -2256,9 +2259,6 @@ private static final long serialVersionUID = 0L;
     }
     if (typedPacketCase_ == 49) {
       output.writeMessage(49, (org.y1000.network.gen.NameColorPacket) typedPacket_);
-    }
-    if (typedPacketCase_ == 50) {
-      output.writeMessage(50, (org.y1000.network.gen.UpdateGuildPacket) typedPacket_);
     }
     if (typedPacketCase_ == 51) {
       output.writeMessage(51, (org.y1000.network.gen.UpdateGuildKungFuFormPacket) typedPacket_);
@@ -2376,6 +2376,10 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(3, (org.y1000.network.gen.LoginResponsePacket) typedPacket_);
     }
+    if (typedPacketCase_ == 4) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(4, (org.y1000.network.gen.CreateCharacterResponsePacket) typedPacket_);
+    }
     if (typedPacketCase_ == 5) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(5, (org.y1000.network.gen.RegisterResponsePacket) typedPacket_);
@@ -2483,10 +2487,6 @@ private static final long serialVersionUID = 0L;
     if (typedPacketCase_ == 49) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(49, (org.y1000.network.gen.NameColorPacket) typedPacket_);
-    }
-    if (typedPacketCase_ == 50) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(50, (org.y1000.network.gen.UpdateGuildPacket) typedPacket_);
     }
     if (typedPacketCase_ == 51) {
       size += com.google.protobuf.CodedOutputStream
@@ -2645,6 +2645,10 @@ private static final long serialVersionUID = 0L;
         if (!getRegisterResponse()
             .equals(other.getRegisterResponse())) return false;
         break;
+      case 4:
+        if (!getCreateCharacterResponse()
+            .equals(other.getCreateCharacterResponse())) return false;
+        break;
       case 1:
         if (!getPositionPacket()
             .equals(other.getPositionPacket())) return false;
@@ -2752,10 +2756,6 @@ private static final long serialVersionUID = 0L;
       case 49:
         if (!getNameColor()
             .equals(other.getNameColor())) return false;
-        break;
-      case 50:
-        if (!getUpdateGuild()
-            .equals(other.getUpdateGuild())) return false;
         break;
       case 51:
         if (!getKungFuForm()
@@ -2912,6 +2912,10 @@ private static final long serialVersionUID = 0L;
         hash = (37 * hash) + REGISTERRESPONSE_FIELD_NUMBER;
         hash = (53 * hash) + getRegisterResponse().hashCode();
         break;
+      case 4:
+        hash = (37 * hash) + CREATECHARACTERRESPONSE_FIELD_NUMBER;
+        hash = (53 * hash) + getCreateCharacterResponse().hashCode();
+        break;
       case 1:
         hash = (37 * hash) + POSITIONPACKET_FIELD_NUMBER;
         hash = (53 * hash) + getPositionPacket().hashCode();
@@ -3019,10 +3023,6 @@ private static final long serialVersionUID = 0L;
       case 49:
         hash = (37 * hash) + NAMECOLOR_FIELD_NUMBER;
         hash = (53 * hash) + getNameColor().hashCode();
-        break;
-      case 50:
-        hash = (37 * hash) + UPDATEGUILD_FIELD_NUMBER;
-        hash = (53 * hash) + getUpdateGuild().hashCode();
         break;
       case 51:
         hash = (37 * hash) + KUNGFUFORM_FIELD_NUMBER;
@@ -3297,6 +3297,9 @@ private static final long serialVersionUID = 0L;
       if (registerResponseBuilder_ != null) {
         registerResponseBuilder_.clear();
       }
+      if (createCharacterResponseBuilder_ != null) {
+        createCharacterResponseBuilder_.clear();
+      }
       if (positionPacketBuilder_ != null) {
         positionPacketBuilder_.clear();
       }
@@ -3377,9 +3380,6 @@ private static final long serialVersionUID = 0L;
       }
       if (nameColorBuilder_ != null) {
         nameColorBuilder_.clear();
-      }
-      if (updateGuildBuilder_ != null) {
-        updateGuildBuilder_.clear();
       }
       if (kungFuFormBuilder_ != null) {
         kungFuFormBuilder_.clear();
@@ -3534,6 +3534,10 @@ private static final long serialVersionUID = 0L;
           registerResponseBuilder_ != null) {
         result.typedPacket_ = registerResponseBuilder_.build();
       }
+      if (typedPacketCase_ == 4 &&
+          createCharacterResponseBuilder_ != null) {
+        result.typedPacket_ = createCharacterResponseBuilder_.build();
+      }
       if (typedPacketCase_ == 1 &&
           positionPacketBuilder_ != null) {
         result.typedPacket_ = positionPacketBuilder_.build();
@@ -3641,10 +3645,6 @@ private static final long serialVersionUID = 0L;
       if (typedPacketCase_ == 49 &&
           nameColorBuilder_ != null) {
         result.typedPacket_ = nameColorBuilder_.build();
-      }
-      if (typedPacketCase_ == 50 &&
-          updateGuildBuilder_ != null) {
-        result.typedPacket_ = updateGuildBuilder_.build();
       }
       if (typedPacketCase_ == 51 &&
           kungFuFormBuilder_ != null) {
@@ -3833,6 +3833,10 @@ private static final long serialVersionUID = 0L;
           mergeRegisterResponse(other.getRegisterResponse());
           break;
         }
+        case CREATECHARACTERRESPONSE: {
+          mergeCreateCharacterResponse(other.getCreateCharacterResponse());
+          break;
+        }
         case POSITIONPACKET: {
           mergePositionPacket(other.getPositionPacket());
           break;
@@ -3939,10 +3943,6 @@ private static final long serialVersionUID = 0L;
         }
         case NAMECOLOR: {
           mergeNameColor(other.getNameColor());
-          break;
-        }
-        case UPDATEGUILD: {
-          mergeUpdateGuild(other.getUpdateGuild());
           break;
         }
         case KUNGFUFORM: {
@@ -4121,6 +4121,13 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 3;
               break;
             } // case 26
+            case 34: {
+              input.readMessage(
+                  getCreateCharacterResponseFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedPacketCase_ = 4;
+              break;
+            } // case 34
             case 42: {
               input.readMessage(
                   getRegisterResponseFieldBuilder().getBuilder(),
@@ -4310,13 +4317,6 @@ private static final long serialVersionUID = 0L;
               typedPacketCase_ = 49;
               break;
             } // case 394
-            case 402: {
-              input.readMessage(
-                  getUpdateGuildFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typedPacketCase_ = 50;
-              break;
-            } // case 402
             case 410: {
               input.readMessage(
                   getKungFuFormFieldBuilder().getBuilder(),
@@ -4863,6 +4863,148 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 5;
       onChanged();
       return registerResponseBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.CreateCharacterResponsePacket, org.y1000.network.gen.CreateCharacterResponsePacket.Builder, org.y1000.network.gen.CreateCharacterResponsePacketOrBuilder> createCharacterResponseBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+     * @return Whether the createCharacterResponse field is set.
+     */
+    @java.lang.Override
+    public boolean hasCreateCharacterResponse() {
+      return typedPacketCase_ == 4;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+     * @return The createCharacterResponse.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.CreateCharacterResponsePacket getCreateCharacterResponse() {
+      if (createCharacterResponseBuilder_ == null) {
+        if (typedPacketCase_ == 4) {
+          return (org.y1000.network.gen.CreateCharacterResponsePacket) typedPacket_;
+        }
+        return org.y1000.network.gen.CreateCharacterResponsePacket.getDefaultInstance();
+      } else {
+        if (typedPacketCase_ == 4) {
+          return createCharacterResponseBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.CreateCharacterResponsePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+     */
+    public Builder setCreateCharacterResponse(org.y1000.network.gen.CreateCharacterResponsePacket value) {
+      if (createCharacterResponseBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedPacket_ = value;
+        onChanged();
+      } else {
+        createCharacterResponseBuilder_.setMessage(value);
+      }
+      typedPacketCase_ = 4;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+     */
+    public Builder setCreateCharacterResponse(
+        org.y1000.network.gen.CreateCharacterResponsePacket.Builder builderForValue) {
+      if (createCharacterResponseBuilder_ == null) {
+        typedPacket_ = builderForValue.build();
+        onChanged();
+      } else {
+        createCharacterResponseBuilder_.setMessage(builderForValue.build());
+      }
+      typedPacketCase_ = 4;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+     */
+    public Builder mergeCreateCharacterResponse(org.y1000.network.gen.CreateCharacterResponsePacket value) {
+      if (createCharacterResponseBuilder_ == null) {
+        if (typedPacketCase_ == 4 &&
+            typedPacket_ != org.y1000.network.gen.CreateCharacterResponsePacket.getDefaultInstance()) {
+          typedPacket_ = org.y1000.network.gen.CreateCharacterResponsePacket.newBuilder((org.y1000.network.gen.CreateCharacterResponsePacket) typedPacket_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedPacket_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedPacketCase_ == 4) {
+          createCharacterResponseBuilder_.mergeFrom(value);
+        } else {
+          createCharacterResponseBuilder_.setMessage(value);
+        }
+      }
+      typedPacketCase_ = 4;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+     */
+    public Builder clearCreateCharacterResponse() {
+      if (createCharacterResponseBuilder_ == null) {
+        if (typedPacketCase_ == 4) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedPacketCase_ == 4) {
+          typedPacketCase_ = 0;
+          typedPacket_ = null;
+        }
+        createCharacterResponseBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+     */
+    public org.y1000.network.gen.CreateCharacterResponsePacket.Builder getCreateCharacterResponseBuilder() {
+      return getCreateCharacterResponseFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.CreateCharacterResponsePacketOrBuilder getCreateCharacterResponseOrBuilder() {
+      if ((typedPacketCase_ == 4) && (createCharacterResponseBuilder_ != null)) {
+        return createCharacterResponseBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedPacketCase_ == 4) {
+          return (org.y1000.network.gen.CreateCharacterResponsePacket) typedPacket_;
+        }
+        return org.y1000.network.gen.CreateCharacterResponsePacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.CreateCharacterResponsePacket, org.y1000.network.gen.CreateCharacterResponsePacket.Builder, org.y1000.network.gen.CreateCharacterResponsePacketOrBuilder> 
+        getCreateCharacterResponseFieldBuilder() {
+      if (createCharacterResponseBuilder_ == null) {
+        if (!(typedPacketCase_ == 4)) {
+          typedPacket_ = org.y1000.network.gen.CreateCharacterResponsePacket.getDefaultInstance();
+        }
+        createCharacterResponseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.CreateCharacterResponsePacket, org.y1000.network.gen.CreateCharacterResponsePacket.Builder, org.y1000.network.gen.CreateCharacterResponsePacketOrBuilder>(
+                (org.y1000.network.gen.CreateCharacterResponsePacket) typedPacket_,
+                getParentForChildren(),
+                isClean());
+        typedPacket_ = null;
+      }
+      typedPacketCase_ = 4;
+      onChanged();
+      return createCharacterResponseBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -8697,148 +8839,6 @@ private static final long serialVersionUID = 0L;
       typedPacketCase_ = 49;
       onChanged();
       return nameColorBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.UpdateGuildPacket, org.y1000.network.gen.UpdateGuildPacket.Builder, org.y1000.network.gen.UpdateGuildPacketOrBuilder> updateGuildBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-     * @return Whether the updateGuild field is set.
-     */
-    @java.lang.Override
-    public boolean hasUpdateGuild() {
-      return typedPacketCase_ == 50;
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-     * @return The updateGuild.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.UpdateGuildPacket getUpdateGuild() {
-      if (updateGuildBuilder_ == null) {
-        if (typedPacketCase_ == 50) {
-          return (org.y1000.network.gen.UpdateGuildPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
-      } else {
-        if (typedPacketCase_ == 50) {
-          return updateGuildBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-     */
-    public Builder setUpdateGuild(org.y1000.network.gen.UpdateGuildPacket value) {
-      if (updateGuildBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        typedPacket_ = value;
-        onChanged();
-      } else {
-        updateGuildBuilder_.setMessage(value);
-      }
-      typedPacketCase_ = 50;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-     */
-    public Builder setUpdateGuild(
-        org.y1000.network.gen.UpdateGuildPacket.Builder builderForValue) {
-      if (updateGuildBuilder_ == null) {
-        typedPacket_ = builderForValue.build();
-        onChanged();
-      } else {
-        updateGuildBuilder_.setMessage(builderForValue.build());
-      }
-      typedPacketCase_ = 50;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-     */
-    public Builder mergeUpdateGuild(org.y1000.network.gen.UpdateGuildPacket value) {
-      if (updateGuildBuilder_ == null) {
-        if (typedPacketCase_ == 50 &&
-            typedPacket_ != org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance()) {
-          typedPacket_ = org.y1000.network.gen.UpdateGuildPacket.newBuilder((org.y1000.network.gen.UpdateGuildPacket) typedPacket_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          typedPacket_ = value;
-        }
-        onChanged();
-      } else {
-        if (typedPacketCase_ == 50) {
-          updateGuildBuilder_.mergeFrom(value);
-        } else {
-          updateGuildBuilder_.setMessage(value);
-        }
-      }
-      typedPacketCase_ = 50;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-     */
-    public Builder clearUpdateGuild() {
-      if (updateGuildBuilder_ == null) {
-        if (typedPacketCase_ == 50) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-          onChanged();
-        }
-      } else {
-        if (typedPacketCase_ == 50) {
-          typedPacketCase_ = 0;
-          typedPacket_ = null;
-        }
-        updateGuildBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-     */
-    public org.y1000.network.gen.UpdateGuildPacket.Builder getUpdateGuildBuilder() {
-      return getUpdateGuildFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.UpdateGuildPacketOrBuilder getUpdateGuildOrBuilder() {
-      if ((typedPacketCase_ == 50) && (updateGuildBuilder_ != null)) {
-        return updateGuildBuilder_.getMessageOrBuilder();
-      } else {
-        if (typedPacketCase_ == 50) {
-          return (org.y1000.network.gen.UpdateGuildPacket) typedPacket_;
-        }
-        return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.UpdateGuildPacket, org.y1000.network.gen.UpdateGuildPacket.Builder, org.y1000.network.gen.UpdateGuildPacketOrBuilder> 
-        getUpdateGuildFieldBuilder() {
-      if (updateGuildBuilder_ == null) {
-        if (!(typedPacketCase_ == 50)) {
-          typedPacket_ = org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
-        }
-        updateGuildBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.UpdateGuildPacket, org.y1000.network.gen.UpdateGuildPacket.Builder, org.y1000.network.gen.UpdateGuildPacketOrBuilder>(
-                (org.y1000.network.gen.UpdateGuildPacket) typedPacket_,
-                getParentForChildren(),
-                isClean());
-        typedPacket_ = null;
-      }
-      typedPacketCase_ = 50;
-      onChanged();
-      return updateGuildBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<

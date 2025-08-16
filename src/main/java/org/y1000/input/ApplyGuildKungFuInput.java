@@ -2,9 +2,12 @@ package org.y1000.input;
 
 import lombok.Builder;
 import lombok.Data;
+import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerInputHandler;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.network.gen.ApplyGuildKungFuInputPacket;
+import org.y1000.realm.event.ApplyKungFuEvent;
+
 
 @Data
 @Builder
@@ -50,8 +53,12 @@ public class ApplyGuildKungFuInput implements SelfHandleInput {
                 .build();
     }
 
+    private ApplyKungFuEvent toRealmEvent(Player player) {
+        return new ApplyKungFuEvent(player, this);
+    }
+
     @Override
     public void accept(PlayerInputHandler handler) {
-        handler.applyGuildKungFu(this);
+        handler.proxyToRealm(this::toRealmEvent);
     }
 }

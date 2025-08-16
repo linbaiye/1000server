@@ -126,6 +126,12 @@ public final class KungFuBook {
         return Optional.empty();
     }
 
+
+    public void removeBasic(int slot) {
+        basic.remove(slot);
+    }
+
+
     public boolean swapSlot(int page, int slot1, int slot2) {
         if (page != 2) {
             return false;

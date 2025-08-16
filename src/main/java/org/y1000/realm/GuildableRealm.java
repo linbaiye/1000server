@@ -49,8 +49,6 @@ class GuildableRealm extends AbstractRealm {
     private void handleManagement(Player manager, ClientManageGuildEvent event) {
         if (event.isInvite())
             sameRealmManagement(manager, event.target(), guildManager::inviteMember);
-        else if (event.isTeachKungFu())
-            sameRealmManagement(manager, event.target(), guildManager::teachGuildKungFu);
     }
 
     @Override
@@ -98,6 +96,8 @@ class GuildableRealm extends AbstractRealm {
     public void grantGuildKungFu(Player player, String toPlayer) {
         guildManager.grantGuildKungFu(player, toPlayer);
     }
+
+
 
     @Override
     public void shutdown() {

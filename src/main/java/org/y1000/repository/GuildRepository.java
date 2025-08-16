@@ -2,7 +2,7 @@ package org.y1000.repository;
 
 import jakarta.persistence.EntityManager;
 import org.y1000.guild.GuildMembership;
-import org.y1000.guild.GuildStone;
+import org.y1000.guild.Guild;
 import org.y1000.realm.EntityIdGenerator;
 import org.y1000.realm.Realm;
 
@@ -10,21 +10,19 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GuildRepository {
-    List<GuildStone> findByRealm(Realm realm, EntityIdGenerator entityIdGenerator);
+    List<Guild> findByRealm(Realm realm, EntityIdGenerator entityIdGenerator);
 
     int countByName(String name);
 
-    void save(EntityManager entityManager, GuildStone guildStone, long creator);
+    void save(EntityManager entityManager, Guild guild, long creator);
 
     Optional<GuildMembership> findGuildMembership(EntityManager entityManager, long playerId);
 
-    void upsertMembership(EntityManager entityManager, long playerId, GuildMembership guildMembership);
+    void delete(int guildId);
 
-    void deleteGuildAndMembership(int guildId);
+    void update(Guild guild);
 
-    void update(GuildStone guildStone);
-
-    void save(GuildStone guildStone);
+    void save(Guild guild);
 
     int countGuildKungFu(String name);
 

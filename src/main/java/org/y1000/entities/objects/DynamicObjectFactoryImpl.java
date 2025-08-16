@@ -3,8 +3,8 @@ package org.y1000.entities.objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.y1000.guild.GuildStone;
-import org.y1000.persistence.GuildStonePo;
+import org.y1000.guild.Guild;
+import org.y1000.persistence.GuildPo;
 import org.y1000.realm.DynamicObjectEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
@@ -30,13 +30,13 @@ public final class DynamicObjectFactoryImpl implements DynamicObjectFactory {
 
 
     @Override
-    public GuildStone createGuildStone(long id, String name, int realmId, RealmMap realmMap, Coordinate coordinate) {
+    public Guild createGuildStone(long id, String name, int realmId, RealmMap realmMap, Coordinate coordinate) {
         Validate.notNull(name);
         Validate.notNull(realmMap);
         Validate.notNull(coordinate);
         if (checkCreateGuildStone(name) != null)
             throw new IllegalArgumentException();
-        GuildStonePo stonePo = GuildStonePo.builder()
+        GuildPo stonePo = GuildPo.builder()
                 .createdTime(LocalDateTime.now())
                 .x(coordinate.x())
                 .y(coordinate.y())

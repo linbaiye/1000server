@@ -23,11 +23,13 @@ import org.y1000.realm.RealmMap;
 import org.y1000.realm.event.ApplyKungFuEvent;
 import org.y1000.realm.event.GuildCreationEvent;
 import org.y1000.realm.event.PlayerDropGuildStoneEvent;
+import org.y1000.realm.event.RealmEvent;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -303,7 +305,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     public void handleChat(ChatInput input) {
         if (isLeftRealm())
             return;
-        input.toRealmEvent(this).ifPresentOrElse(realmEvent -> realm.get().handle(realmEvent),
+        input.toRealmEvent(this).ifPresentOrElse(re -> realm.get().handle(re),
                 () -> input.toPlayerEvent(this).ifPresent(this::sendEvent));
     }
 
@@ -314,20 +316,26 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     }
 
     @Override
-    public void confirmGuildCreation(int slotId, String name) {
-        realm.get().handle(GuildCreationEvent.confirm(this, slotId, name));
+    public void unlearnKungFu(String name) {
+        if (isLeftRealm() || isDead())
+            return;
+        int basicSlot = kungFuBook.findBasicSlot(name);
+        if (basicSlot == 0)
+            return;
+        kungFuBook.removeBasic(basicSlot);
+        if (attackKungFu.name().equals(name)) {
+            changeAndSayAndCooldown(kungFuBook.findUnnamedAttack(attackKungFu.getType()));
+            syncActiveKungFuList();
+        }
+        syncKungFuBookQuietly();
     }
 
     @Override
-    public void cancelGuildCreation() {
-        realm.get().handle(GuildCreationEvent.cancel(this));
+    public void proxyToRealm(Function<Player, RealmEvent> eventCreator) {
+        if (isLeftRealm())
+            return;
+        realm.get().handle(eventCreator.apply(this));
     }
-
-    @Override
-    public void applyGuildKungFu(ApplyGuildKungFuInput input) {
-        realm.get().handle(new ApplyKungFuEvent(this, input));
-    }
-
 
     private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
         if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {
@@ -415,6 +423,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
     private void sendLeftText(String t) {
         sendEvent(PlayerTextMessage.left(this,t));
     }
+
+
 
     /**
      * Return true if attack kung fu is changed.
@@ -1360,6 +1370,8 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     @Override
     public boolean learnGuildKungFu(AttackKungFu attackKungFu) {
+        if (isLeftRealm())
+            return false;
         if (!attackKungFu.guild())
             return false;
         if (kungFuBook.hasGuildKungFu()) {

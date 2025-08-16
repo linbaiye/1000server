@@ -84,21 +84,6 @@ public interface ClientPacketOrBuilder extends
   org.y1000.network.gen.ClientChangeTeamPacketOrBuilder getChangeTeamOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-   * @return Whether the manageGuild field is set.
-   */
-  boolean hasManageGuild();
-  /**
-   * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-   * @return The manageGuild.
-   */
-  org.y1000.network.gen.ClientManageGuildPacket getManageGuild();
-  /**
-   * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-   */
-  org.y1000.network.gen.ClientManageGuildPacketOrBuilder getManageGuildOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
    * @return Whether the swapInventorySlotPacket field is set.
    */

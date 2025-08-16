@@ -23,7 +23,6 @@ create table player (
                         power_exp integer not null,
                         realm_id integer not null,
                         revival_exp integer not null,
-                        playerStateEnum integer not null,
                         x integer not null,
                         y integer not null,
                         yang integer not null,
@@ -33,13 +32,13 @@ create table player (
                         equipments json,
                         primary key (id)) engine=InnoDB, charset = utf8mb4;
 
+    create table kung_fu_book (
+        player_id bigint not null,
+        basic json,
+        unnamed json,
+        primary key (player_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-create table player_kung_fu (
-                                exp integer not null,
-                                slot integer not null,
-                                player_id bigint not null,
-                                `name` varchar(32) not null,
-                                primary key (player_id, `name`)) engine=InnoDB, charset=utf8mb4;
 
 CREATE TABLE `player_seq` (
     `next_val` bigint DEFAULT NULL
@@ -67,7 +66,7 @@ create table bank (id bigint primary key auto_increment,
 
 
 create table guild_kung_fu (
-                               id integer not null primary key auto_increment,
+                             id integer not null primary key auto_increment,
                                guild_id integer not null,
                                `name` varchar(12) not null unique,
                                `type` varchar(12) not null,
@@ -89,11 +88,13 @@ create table guild_kung_fu (
                                strike_sound integer not null,
                                swing_sound integer not null,
                                effect_color integer not null,
-                               icon integer not null default 0
+                               icon integer not null default 0,
+                              key idx_guild_id (`guild_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-create table guild_stone (
+
+create table guild(
                              id integer not null primary key auto_increment,
                              `name` varchar(12) not null unique,
                              realm_id integer not null,

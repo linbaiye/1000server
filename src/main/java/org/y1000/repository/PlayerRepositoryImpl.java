@@ -126,19 +126,6 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
     }
 
 
-
-    @Override
-    public Optional<Integer> findRealm(long id) {
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            return entityManager.createQuery("select p from PlayerPo p where p.id = ?1", PlayerPo.class)
-                    .setParameter(1, id)
-                    .getResultStream()
-                    .findFirst()
-                    .map(PlayerPo::getRealmId);
-        }
-    }
-
-
     @Override
     public void update(Player player) {
         Validate.notNull(player);
@@ -178,8 +165,7 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         PlayerPo converted = PlayerPo.convert(player, accountId, DEFAULT_REALM_ID);
         entityManager.persist(converted);
         kungFuRepository.save(entityManager, converted.getId(), player.kungFuBook());
-        itemRepository.saveInventory(entityManager, player.id(), player.inventory());
-        player.guildMembership().ifPresent(gm -> guildRepository.upsertMembership(entityManager, player.id(), gm));
+        itemRepository.saveInventory(entityManager, converted.getId(), player.inventory());
         return converted.getId();
     }
 
@@ -192,13 +178,6 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         return ((Long)query.getSingleResult()).intValue();
     }
 
-    @Override
-    public int countByAccount(EntityManager entityManager, int accountId) {
-        Validate.notNull(entityManager);
-        Query query = entityManager.createQuery("select count(p) from PlayerPo p where accountId = ?1");
-        query.setParameter(1, accountId);
-        return ((Long)query.getSingleResult()).intValue();
-    }
 
     @Override
     public Player create(String name, boolean male) {
@@ -225,6 +204,11 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
                 .outerPower(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.outerPower(), yinyang.age()))
                 .pillSlots(new PillSlots())
                 .build();
+    }
+
+    @Override
+    public int defaultRealm() {
+        return DEFAULT_REALM_ID;
     }
 
     public Player create(String name, boolean male, long id) {

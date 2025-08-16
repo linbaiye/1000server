@@ -10,7 +10,6 @@ public interface PlayerRepository {
 
     Optional<Pair<Player, Integer>> find(int accountId, String charName);
 
-    Optional<Integer> findRealm(long id);
 
     void update(Player player);
 
@@ -19,7 +18,5 @@ public interface PlayerRepository {
     long save(EntityManager entityManager, int accountId, Player player);
 
     int countByName(EntityManager entityManager, String name);
-
-    int countByAccount(EntityManager entityManager, int accountId);
 
 }

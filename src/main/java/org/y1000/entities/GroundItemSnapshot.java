@@ -1,7 +1,7 @@
 package org.y1000.entities;
 
 import lombok.Builder;
-import org.y1000.guild.GuildStone;
+import org.y1000.guild.Guild;
 import org.y1000.network.I2ClientMessage;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.ShowItemPacket;
@@ -33,12 +33,12 @@ public final class GroundItemSnapshot implements I2ClientMessage {
         this.demo = demo;
     }
 
-    public static GroundItemSnapshot ofDemo(GuildStone guildStone) {
-        return new GroundItemSnapshot(guildStone.id(), guildStone.coordinate(), guildStone.guildName(), 1, 0, guildStone.getIcon(),true,true);
+    public static GroundItemSnapshot ofDemo(Guild guild) {
+        return new GroundItemSnapshot(guild.id(), guild.coordinate(), guild.guildName(), 1, 0, guild.getIcon(),true,true);
     }
 
-    public static GroundItemSnapshot of(GuildStone guildStone) {
-        return new GroundItemSnapshot(guildStone.id(), guildStone.coordinate(), guildStone.guildName(), 1, 0, guildStone.getIcon(),true,false);
+    public static GroundItemSnapshot of(Guild guild) {
+        return new GroundItemSnapshot(guild.id(), guild.coordinate(), guild.guildName(), 1, 0, guild.getIcon(),true,false);
     }
 
     @Override

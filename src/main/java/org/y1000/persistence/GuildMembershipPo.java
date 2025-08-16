@@ -2,11 +2,9 @@ package org.y1000.persistence;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.y1000.guild.GuildMembership;
-import org.y1000.guild.GuildStone;
 
 import java.time.LocalDateTime;
 
@@ -22,16 +20,16 @@ public class GuildMembershipPo {
     private String role;
 
     @JoinColumn(name = "guild_id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private GuildStonePo guildStone;
+    @ManyToOne
+    private GuildPo guild;
 
     @Column(updatable = false, name = "created_time")
     private LocalDateTime createdTime;
 
 
-    public static GuildMembershipPo of(GuildStonePo stone, GuildMembership membership) {
+    public static GuildMembershipPo of(GuildPo stone, GuildMembership membership) {
         GuildMembershipPo  guildMembershipPo = new GuildMembershipPo();
-        guildMembershipPo.setGuildStone(stone);
+        guildMembershipPo.setGuild(stone);
         guildMembershipPo.role = membership.guildRole();
         guildMembershipPo.playerId = membership.playerId();
         guildMembershipPo.createdTime = LocalDateTime.now();
@@ -39,7 +37,7 @@ public class GuildMembershipPo {
     }
 
     public GuildMembership restore() {
-        return new GuildMembership(role, guildStone.getName(), playerId);
+        return new GuildMembership(role, guild.getName(), playerId);
     }
 
 }

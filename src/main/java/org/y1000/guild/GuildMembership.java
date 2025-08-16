@@ -18,12 +18,12 @@ public record GuildMembership(String guildRole, String guildName, long playerId)
         return "门主".equals(guildRole);
     }
 
-    public boolean canGiveKungFu() {
+    public boolean canGrantKungFu() {
         return "门主".equals(guildRole) || "副门主".equals(guildRole);
     }
 
     public boolean canInvite() {
-        return canGiveKungFu();
+        return canGrantKungFu();
     }
 
 
@@ -38,7 +38,11 @@ public record GuildMembership(String guildRole, String guildName, long playerId)
         return Objects.hashCode(playerId());
     }
 
-    public static GuildMembership founder(Player player, GuildStone guildStone) {
-        return new GuildMembership("门主", guildStone.guildName(), player.id());
+    public static GuildMembership member(Player player, String guildName) {
+        return new GuildMembership("门人", guildName, player.id());
+    }
+
+    public static GuildMembership founder(Player player, Guild guild) {
+        return new GuildMembership("门主", guild.guildName(), player.id());
     }
 }

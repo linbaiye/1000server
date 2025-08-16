@@ -2,7 +2,10 @@ package org.y1000.entities.players;
 
 import org.y1000.entities.players.equipment.EquipmentType;
 import org.y1000.input.*;
+import org.y1000.realm.event.RealmEvent;
 import org.y1000.util.Coordinate;
+
+import java.util.function.Function;
 
 public interface PlayerInputHandler {
     void move(MoveInput moveInput);
@@ -35,10 +38,8 @@ public interface PlayerInputHandler {
 
     void clickEquipment(EquipmentType type);
 
-    void confirmGuildCreation(int slotId, String name);
+    void unlearnKungFu(String name);
 
-    void cancelGuildCreation();
-
-    void applyGuildKungFu(ApplyGuildKungFuInput input);
+    void proxyToRealm(Function<Player, RealmEvent> eventCreator);
 
 }

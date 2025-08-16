@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-public final class GuildStone extends AbstractActiveEntity implements HurtAbility  {
+public final class Guild extends AbstractActiveEntity implements HurtAbility  {
 
     @Getter
     private Integer guildId;
@@ -38,19 +38,21 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
     @Getter
     private final Set<GuildMembership> members;
 
+    private String founderName;
+
     public void setGuildId(int guildId) {
         if (this.guildId != null)
             throw new IllegalStateException();
         this.guildId = guildId;
     }
 
-    public GuildStone(long id,
-                      Coordinate coordinate,
-                      int currentHealth,
-                      int maxHealth,
-                      String name,
-                      Integer persistentId,
-                      int icon) {
+    public Guild(long id,
+                 Coordinate coordinate,
+                 int currentHealth,
+                 int maxHealth,
+                 String name,
+                 Integer persistentId,
+                 int icon) {
         super(id);
         this.guildId = persistentId;
         this.coordinate = coordinate;
@@ -61,15 +63,16 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
         this.members = new HashSet<>();
     }
 
-    public GuildStone(long id,
-                      Coordinate coordinate,
-                      int currentHealth,
-                      int maxHealth,
-                      String name,
-                      Integer persistentId,
-                      int icon,
-                      Realm realm,
-                      Set<GuildMembership> members) {
+    public Guild(long id,
+                 Coordinate coordinate,
+                 int currentHealth,
+                 int maxHealth,
+                 String name,
+                 Integer persistentId,
+                 int icon,
+                 Realm realm,
+                 Set<GuildMembership> members,
+                 String founderName) {
         super(id);
         this.guildId = persistentId;
         this.coordinate = coordinate;
@@ -80,6 +83,7 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
         this.members = members;
         this.realm = realm;
         this.realm.map().occupy(this);
+        this.founderName = founderName;
     }
 
     public String guildName() {
@@ -103,6 +107,7 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
         if (guildId != null || player.guildMembership().isPresent()) {
             return;
         }
+        founderName = player.viewName();
         realm = player.getRealm();
         realm.map().occupy(this);
         GuildMembership membership = GuildMembership.founder(player, this);
@@ -133,7 +138,7 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass() || guildId == null) return false;
-        GuildStone that = (GuildStone) o;
+        Guild that = (Guild) o;
         return Objects.equals(guildId, that.guildId);
     }
 
@@ -156,11 +161,31 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
                 .orElse(false);
     }
 
+    public void addMember(Player player) {
+        if (player.guildMembership().isPresent())
+            return;
+        if (has(player))
+            return;
+        GuildMembership member = GuildMembership.member(player, this.guildName);
+        members.add(member);
+        player.joinGuild(member);
+    }
+
+    public boolean removeMember(long playerId) {
+        return members.removeIf(m -> m.playerId() == playerId);
+    }
+
+    public boolean canGrantKungFu(Player player) {
+        return player.guildMembership().map(m -> m.canGrantKungFu() && members.contains(m))
+                .orElse(false);
+    }
+
     public void registerGuildKungFu(AttackKungFu attackKungFu) {
         if (this.guildKungFu != null)
             return;
         this.guildKungFu = attackKungFu;
     }
+
 
     @Override
     public <AB> Optional<AB> findAbility(Class<AB> type) {
@@ -178,5 +203,10 @@ public final class GuildStone extends AbstractActiveEntity implements HurtAbilit
     @Override
     public I2ClientMessage captureSnapshot() {
         return GroundItemSnapshot.of(this);
+    }
+
+    @Override
+    public Optional<String> clickText() {
+        return Optional.of("门派：" + guildName + "，门主：" + founderName + "。");
     }
 }

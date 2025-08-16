@@ -46,12 +46,12 @@ public final class AccountManagerImpl implements AccountManager {
     private final Map<Connection, LoginInfo> loggedConnections;
 
     private record LoginInfo(int accountId, List<NameIdRealm> nameIdRealms) {
-
         public int characterNumber() {
             return nameIdRealms.size();
         }
-        public boolean containsName(String name) {
-            return nameIdRealms.stream().anyMatch(n -> n.name.equals(name));
+
+        public void add(long id, String name, int realm) {
+            nameIdRealms.add(new NameIdRealm(name, id, realm));
         }
     }
 
@@ -114,7 +114,7 @@ public final class AccountManagerImpl implements AccountManager {
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
             if (accountRepository.find(entityManager, username).isPresent()) {
-                connection.writeAndFlush(new RegisterResponse(1, "账号已存在"));
+                connection.writeAndFlush(new RegisterResponse(1, "账号已存在。"));
                 transaction.rollback();
                 return;
             }
@@ -130,7 +130,7 @@ public final class AccountManagerImpl implements AccountManager {
             accountRepository.save(entityManager, account);
             transaction.commit();
         }
-        connection.writeAndFlush(new RegisterResponse(0, "注册成功，请返回登陆页面登陆账号"));
+        connection.writeAndFlush(new RegisterResponse(0, "注册成功，请返回登陆页面登陆账号。"));
     }
 
 
@@ -209,40 +209,42 @@ public final class AccountManagerImpl implements AccountManager {
 
     private void createCharacter(Connection connection, String charName, boolean male) {
         if (!loggedConnections.containsKey(connection)) {
-            connection.writeAndFlush(CreateCharResponse.badRequest("请登录"));
+            connection.writeAndFlush(CreateCharResponse.badRequest("请登录。"));
             return;
         }
         if (StringUtils.isBlank(charName)) {
-            connection.writeAndFlush(CreateCharResponse.badRequest("请输入角色名"));
+            connection.writeAndFlush(CreateCharResponse.badRequest("请输入角色名。"));
             return;
         }
         if (!isValidName(charName)) {
-            connection.writeAndFlush(CreateCharResponse.badRequest("角色名只能是汉字且不可超8字符"));
+            connection.writeAndFlush(CreateCharResponse.badRequest("只能是汉字且不可超8个字。"));
             return;
         }
         LoginInfo loginInfo = loggedConnections.get(connection);
         if (loginInfo.characterNumber() >= 5) {
-            connection.writeAndFlush(CreateCharResponse.badRequest("最多创建5个角色"));
+            connection.writeAndFlush(CreateCharResponse.badRequest("最多创建5个角色。"));
             return;
         }
-        if (loginInfo.containsName(charName)) {
-            connection.writeAndFlush(CreateCharResponse.badRequest("角色已存在"));
-            return;
-        }
-        Player player = playerFactory.create(charName, male);
+
 
         EntityTransaction transaction = null;
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            if (playerRepository.countByName(entityManager, charName) > 0) {
+                connection.writeAndFlush(CreateCharResponse.badRequest("角色已存在。"));
+                return;
+            }
+            Player player = playerFactory.create(charName, male);
             transaction = entityManager.getTransaction();
             transaction.begin();
-            playerRepository.save(entityManager, loginInfo.accountId, player);
+            long id = playerRepository.save(entityManager, loginInfo.accountId, player);
             transaction.commit();
+            loginInfo.add(id, player.viewName(), playerFactory.defaultRealm());
             connection.writeAndFlush(CreateCharResponse.ok(charName));
         } catch (Exception e) {
             log.error("Failed to handle request, ", e);
             if (transaction != null)
                 transaction.rollback();
+            connection.writeAndFlush(CreateCharResponse.serverError());
         }
-        connection.writeAndFlush(CreateCharResponse.serverError());
     }
 }

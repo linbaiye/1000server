@@ -30,7 +30,7 @@ class GuildStoneTest extends AbstractUnitTestFixture {
         var player = Mockito.mock(Player.class);
         when(player.coordinate()).thenReturn(stone.coordinate().moveBy(Direction.RIGHT));
         when(player.damage()).thenReturn(new Damage(stone.getMaxLife() / 2, 1, 1,1));
-        verify(realmMap, times(1)).free(any(GuildStone.class));
+        verify(realmMap, times(1)).free(any(Guild.class));
     }
 
 }

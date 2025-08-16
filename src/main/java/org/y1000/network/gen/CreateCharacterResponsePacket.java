@@ -5,85 +5,125 @@
 package org.y1000.network.gen;
 
 /**
- * Protobuf type {@code org.y1000.network.gen.UpdateGuildPacket}
+ * Protobuf type {@code org.y1000.network.gen.CreateCharacterResponsePacket}
  */
-public final class UpdateGuildPacket extends
+public final class CreateCharacterResponsePacket extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.UpdateGuildPacket)
-    UpdateGuildPacketOrBuilder {
+    // @@protoc_insertion_point(message_implements:org.y1000.network.gen.CreateCharacterResponsePacket)
+    CreateCharacterResponsePacketOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use UpdateGuildPacket.newBuilder() to construct.
-  private UpdateGuildPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use CreateCharacterResponsePacket.newBuilder() to construct.
+  private CreateCharacterResponsePacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private UpdateGuildPacket() {
-    name_ = "";
+  private CreateCharacterResponsePacket() {
+    description_ = "";
+    characterName_ = "";
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new UpdateGuildPacket();
+    return new CreateCharacterResponsePacket();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UpdateGuildPacket_descriptor;
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_CreateCharacterResponsePacket_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UpdateGuildPacket_fieldAccessorTable
+    return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_CreateCharacterResponsePacket_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.y1000.network.gen.UpdateGuildPacket.class, org.y1000.network.gen.UpdateGuildPacket.Builder.class);
+            org.y1000.network.gen.CreateCharacterResponsePacket.class, org.y1000.network.gen.CreateCharacterResponsePacket.Builder.class);
   }
 
-  public static final int ID_FIELD_NUMBER = 1;
-  private long id_ = 0L;
+  public static final int CODE_FIELD_NUMBER = 1;
+  private int code_ = 0;
   /**
-   * <code>int64 id = 1;</code>
-   * @return The id.
+   * <code>int32 code = 1;</code>
+   * @return The code.
    */
   @java.lang.Override
-  public long getId() {
-    return id_;
+  public int getCode() {
+    return code_;
   }
 
-  public static final int NAME_FIELD_NUMBER = 2;
+  public static final int DESCRIPTION_FIELD_NUMBER = 2;
   @SuppressWarnings("serial")
-  private volatile java.lang.Object name_ = "";
+  private volatile java.lang.Object description_ = "";
   /**
-   * <code>string name = 2;</code>
-   * @return The name.
+   * <code>string description = 2;</code>
+   * @return The description.
    */
   @java.lang.Override
-  public java.lang.String getName() {
-    java.lang.Object ref = name_;
+  public java.lang.String getDescription() {
+    java.lang.Object ref = description_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      name_ = s;
+      description_ = s;
       return s;
     }
   }
   /**
-   * <code>string name = 2;</code>
-   * @return The bytes for name.
+   * <code>string description = 2;</code>
+   * @return The bytes for description.
    */
   @java.lang.Override
   public com.google.protobuf.ByteString
-      getNameBytes() {
-    java.lang.Object ref = name_;
+      getDescriptionBytes() {
+    java.lang.Object ref = description_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      name_ = b;
+      description_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int CHARACTERNAME_FIELD_NUMBER = 3;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object characterName_ = "";
+  /**
+   * <code>string characterName = 3;</code>
+   * @return The characterName.
+   */
+  @java.lang.Override
+  public java.lang.String getCharacterName() {
+    java.lang.Object ref = characterName_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      characterName_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string characterName = 3;</code>
+   * @return The bytes for characterName.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getCharacterNameBytes() {
+    java.lang.Object ref = characterName_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      characterName_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -104,11 +144,14 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (id_ != 0L) {
-      output.writeInt64(1, id_);
+    if (code_ != 0) {
+      output.writeInt32(1, code_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, name_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(description_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, description_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(characterName_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, characterName_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -119,12 +162,15 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (id_ != 0L) {
+    if (code_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, id_);
+        .computeInt32Size(1, code_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, name_);
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(description_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, description_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(characterName_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, characterName_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -136,15 +182,17 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.y1000.network.gen.UpdateGuildPacket)) {
+    if (!(obj instanceof org.y1000.network.gen.CreateCharacterResponsePacket)) {
       return super.equals(obj);
     }
-    org.y1000.network.gen.UpdateGuildPacket other = (org.y1000.network.gen.UpdateGuildPacket) obj;
+    org.y1000.network.gen.CreateCharacterResponsePacket other = (org.y1000.network.gen.CreateCharacterResponsePacket) obj;
 
-    if (getId()
-        != other.getId()) return false;
-    if (!getName()
-        .equals(other.getName())) return false;
+    if (getCode()
+        != other.getCode()) return false;
+    if (!getDescription()
+        .equals(other.getDescription())) return false;
+    if (!getCharacterName()
+        .equals(other.getCharacterName())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -156,54 +204,55 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + ID_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getId());
-    hash = (37 * hash) + NAME_FIELD_NUMBER;
-    hash = (53 * hash) + getName().hashCode();
+    hash = (37 * hash) + CODE_FIELD_NUMBER;
+    hash = (53 * hash) + getCode();
+    hash = (37 * hash) + DESCRIPTION_FIELD_NUMBER;
+    hash = (53 * hash) + getDescription().hashCode();
+    hash = (37 * hash) + CHARACTERNAME_FIELD_NUMBER;
+    hash = (53 * hash) + getCharacterName().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(byte[] data)
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -211,26 +260,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.y1000.network.gen.UpdateGuildPacket parseDelimitedFrom(java.io.InputStream input)
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.y1000.network.gen.UpdateGuildPacket parseDelimitedFrom(
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.y1000.network.gen.UpdateGuildPacket parseFrom(
+  public static org.y1000.network.gen.CreateCharacterResponsePacket parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -243,7 +292,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.y1000.network.gen.UpdateGuildPacket prototype) {
+  public static Builder newBuilder(org.y1000.network.gen.CreateCharacterResponsePacket prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -259,26 +308,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code org.y1000.network.gen.UpdateGuildPacket}
+   * Protobuf type {@code org.y1000.network.gen.CreateCharacterResponsePacket}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.UpdateGuildPacket)
-      org.y1000.network.gen.UpdateGuildPacketOrBuilder {
+      // @@protoc_insertion_point(builder_implements:org.y1000.network.gen.CreateCharacterResponsePacket)
+      org.y1000.network.gen.CreateCharacterResponsePacketOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UpdateGuildPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_CreateCharacterResponsePacket_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UpdateGuildPacket_fieldAccessorTable
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_CreateCharacterResponsePacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.y1000.network.gen.UpdateGuildPacket.class, org.y1000.network.gen.UpdateGuildPacket.Builder.class);
+              org.y1000.network.gen.CreateCharacterResponsePacket.class, org.y1000.network.gen.CreateCharacterResponsePacket.Builder.class);
     }
 
-    // Construct using org.y1000.network.gen.UpdateGuildPacket.newBuilder()
+    // Construct using org.y1000.network.gen.CreateCharacterResponsePacket.newBuilder()
     private Builder() {
 
     }
@@ -292,25 +341,26 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      id_ = 0L;
-      name_ = "";
+      code_ = 0;
+      description_ = "";
+      characterName_ = "";
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_UpdateGuildPacket_descriptor;
+      return org.y1000.network.gen.Java.internal_static_org_y1000_network_gen_CreateCharacterResponsePacket_descriptor;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.UpdateGuildPacket getDefaultInstanceForType() {
-      return org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance();
+    public org.y1000.network.gen.CreateCharacterResponsePacket getDefaultInstanceForType() {
+      return org.y1000.network.gen.CreateCharacterResponsePacket.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.UpdateGuildPacket build() {
-      org.y1000.network.gen.UpdateGuildPacket result = buildPartial();
+    public org.y1000.network.gen.CreateCharacterResponsePacket build() {
+      org.y1000.network.gen.CreateCharacterResponsePacket result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -318,20 +368,23 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.y1000.network.gen.UpdateGuildPacket buildPartial() {
-      org.y1000.network.gen.UpdateGuildPacket result = new org.y1000.network.gen.UpdateGuildPacket(this);
+    public org.y1000.network.gen.CreateCharacterResponsePacket buildPartial() {
+      org.y1000.network.gen.CreateCharacterResponsePacket result = new org.y1000.network.gen.CreateCharacterResponsePacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.y1000.network.gen.UpdateGuildPacket result) {
+    private void buildPartial0(org.y1000.network.gen.CreateCharacterResponsePacket result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.id_ = id_;
+        result.code_ = code_;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.name_ = name_;
+        result.description_ = description_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.characterName_ = characterName_;
       }
     }
 
@@ -369,22 +422,27 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.y1000.network.gen.UpdateGuildPacket) {
-        return mergeFrom((org.y1000.network.gen.UpdateGuildPacket)other);
+      if (other instanceof org.y1000.network.gen.CreateCharacterResponsePacket) {
+        return mergeFrom((org.y1000.network.gen.CreateCharacterResponsePacket)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.y1000.network.gen.UpdateGuildPacket other) {
-      if (other == org.y1000.network.gen.UpdateGuildPacket.getDefaultInstance()) return this;
-      if (other.getId() != 0L) {
-        setId(other.getId());
+    public Builder mergeFrom(org.y1000.network.gen.CreateCharacterResponsePacket other) {
+      if (other == org.y1000.network.gen.CreateCharacterResponsePacket.getDefaultInstance()) return this;
+      if (other.getCode() != 0) {
+        setCode(other.getCode());
       }
-      if (!other.getName().isEmpty()) {
-        name_ = other.name_;
+      if (!other.getDescription().isEmpty()) {
+        description_ = other.description_;
         bitField0_ |= 0x00000002;
+        onChanged();
+      }
+      if (!other.getCharacterName().isEmpty()) {
+        characterName_ = other.characterName_;
+        bitField0_ |= 0x00000004;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -414,15 +472,20 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              id_ = input.readInt64();
+              code_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
             case 18: {
-              name_ = input.readStringRequireUtf8();
+              description_ = input.readStringRequireUtf8();
               bitField0_ |= 0x00000002;
               break;
             } // case 18
+            case 26: {
+              characterName_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 26
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -440,106 +503,178 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private long id_ ;
+    private int code_ ;
     /**
-     * <code>int64 id = 1;</code>
-     * @return The id.
+     * <code>int32 code = 1;</code>
+     * @return The code.
      */
     @java.lang.Override
-    public long getId() {
-      return id_;
+    public int getCode() {
+      return code_;
     }
     /**
-     * <code>int64 id = 1;</code>
-     * @param value The id to set.
+     * <code>int32 code = 1;</code>
+     * @param value The code to set.
      * @return This builder for chaining.
      */
-    public Builder setId(long value) {
+    public Builder setCode(int value) {
 
-      id_ = value;
+      code_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>int64 id = 1;</code>
+     * <code>int32 code = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder clearId() {
+    public Builder clearCode() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      id_ = 0L;
+      code_ = 0;
       onChanged();
       return this;
     }
 
-    private java.lang.Object name_ = "";
+    private java.lang.Object description_ = "";
     /**
-     * <code>string name = 2;</code>
-     * @return The name.
+     * <code>string description = 2;</code>
+     * @return The description.
      */
-    public java.lang.String getName() {
-      java.lang.Object ref = name_;
+    public java.lang.String getDescription() {
+      java.lang.Object ref = description_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        name_ = s;
+        description_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string name = 2;</code>
-     * @return The bytes for name.
+     * <code>string description = 2;</code>
+     * @return The bytes for description.
      */
     public com.google.protobuf.ByteString
-        getNameBytes() {
-      java.lang.Object ref = name_;
+        getDescriptionBytes() {
+      java.lang.Object ref = description_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        name_ = b;
+        description_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string name = 2;</code>
-     * @param value The name to set.
+     * <code>string description = 2;</code>
+     * @param value The description to set.
      * @return This builder for chaining.
      */
-    public Builder setName(
+    public Builder setDescription(
         java.lang.String value) {
       if (value == null) { throw new NullPointerException(); }
-      name_ = value;
+      description_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>string name = 2;</code>
+     * <code>string description = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearName() {
-      name_ = getDefaultInstance().getName();
+    public Builder clearDescription() {
+      description_ = getDefaultInstance().getDescription();
       bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
     /**
-     * <code>string name = 2;</code>
-     * @param value The bytes for name to set.
+     * <code>string description = 2;</code>
+     * @param value The bytes for description to set.
      * @return This builder for chaining.
      */
-    public Builder setNameBytes(
+    public Builder setDescriptionBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) { throw new NullPointerException(); }
       checkByteStringIsUtf8(value);
-      name_ = value;
+      description_ = value;
       bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object characterName_ = "";
+    /**
+     * <code>string characterName = 3;</code>
+     * @return The characterName.
+     */
+    public java.lang.String getCharacterName() {
+      java.lang.Object ref = characterName_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        characterName_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string characterName = 3;</code>
+     * @return The bytes for characterName.
+     */
+    public com.google.protobuf.ByteString
+        getCharacterNameBytes() {
+      java.lang.Object ref = characterName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        characterName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string characterName = 3;</code>
+     * @param value The characterName to set.
+     * @return This builder for chaining.
+     */
+    public Builder setCharacterName(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      characterName_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string characterName = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearCharacterName() {
+      characterName_ = getDefaultInstance().getCharacterName();
+      bitField0_ = (bitField0_ & ~0x00000004);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string characterName = 3;</code>
+     * @param value The bytes for characterName to set.
+     * @return This builder for chaining.
+     */
+    public Builder setCharacterNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      characterName_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -556,23 +691,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.UpdateGuildPacket)
+    // @@protoc_insertion_point(builder_scope:org.y1000.network.gen.CreateCharacterResponsePacket)
   }
 
-  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.UpdateGuildPacket)
-  private static final org.y1000.network.gen.UpdateGuildPacket DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:org.y1000.network.gen.CreateCharacterResponsePacket)
+  private static final org.y1000.network.gen.CreateCharacterResponsePacket DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.y1000.network.gen.UpdateGuildPacket();
+    DEFAULT_INSTANCE = new org.y1000.network.gen.CreateCharacterResponsePacket();
   }
 
-  public static org.y1000.network.gen.UpdateGuildPacket getDefaultInstance() {
+  public static org.y1000.network.gen.CreateCharacterResponsePacket getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<UpdateGuildPacket>
-      PARSER = new com.google.protobuf.AbstractParser<UpdateGuildPacket>() {
+  private static final com.google.protobuf.Parser<CreateCharacterResponsePacket>
+      PARSER = new com.google.protobuf.AbstractParser<CreateCharacterResponsePacket>() {
     @java.lang.Override
-    public UpdateGuildPacket parsePartialFrom(
+    public CreateCharacterResponsePacket parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -591,17 +726,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<UpdateGuildPacket> parser() {
+  public static com.google.protobuf.Parser<CreateCharacterResponsePacket> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<UpdateGuildPacket> getParserForType() {
+  public com.google.protobuf.Parser<CreateCharacterResponsePacket> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.y1000.network.gen.UpdateGuildPacket getDefaultInstanceForType() {
+  public org.y1000.network.gen.CreateCharacterResponsePacket getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

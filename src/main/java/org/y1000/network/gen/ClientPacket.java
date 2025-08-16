@@ -50,7 +50,6 @@ private static final long serialVersionUID = 0L;
     LOGINCHARACTER(12),
     CREATECHARACTER(13),
     CHANGETEAM(25),
-    MANAGEGUILD(28),
     SWAPINVENTORYSLOTPACKET(5),
     CLICKPACKET(2),
     MOVEINPUT(32),
@@ -101,7 +100,6 @@ private static final long serialVersionUID = 0L;
         case 12: return LOGINCHARACTER;
         case 13: return CREATECHARACTER;
         case 25: return CHANGETEAM;
-        case 28: return MANAGEGUILD;
         case 5: return SWAPINVENTORYSLOTPACKET;
         case 2: return CLICKPACKET;
         case 32: return MOVEINPUT;
@@ -298,37 +296,6 @@ private static final long serialVersionUID = 0L;
        return (org.y1000.network.gen.ClientChangeTeamPacket) type_;
     }
     return org.y1000.network.gen.ClientChangeTeamPacket.getDefaultInstance();
-  }
-
-  public static final int MANAGEGUILD_FIELD_NUMBER = 28;
-  /**
-   * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-   * @return Whether the manageGuild field is set.
-   */
-  @java.lang.Override
-  public boolean hasManageGuild() {
-    return typeCase_ == 28;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-   * @return The manageGuild.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientManageGuildPacket getManageGuild() {
-    if (typeCase_ == 28) {
-       return (org.y1000.network.gen.ClientManageGuildPacket) type_;
-    }
-    return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientManageGuildPacketOrBuilder getManageGuildOrBuilder() {
-    if (typeCase_ == 28) {
-       return (org.y1000.network.gen.ClientManageGuildPacket) type_;
-    }
-    return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
   }
 
   public static final int SWAPINVENTORYSLOTPACKET_FIELD_NUMBER = 5;
@@ -1237,9 +1204,6 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 27) {
       output.writeMessage(27, (org.y1000.network.gen.ApplyGuildKungFuInputPacket) type_);
     }
-    if (typeCase_ == 28) {
-      output.writeMessage(28, (org.y1000.network.gen.ClientManageGuildPacket) type_);
-    }
     if (typeCase_ == 32) {
       output.writeMessage(32, (org.y1000.network.gen.MoveInputPacket) type_);
     }
@@ -1355,10 +1319,6 @@ private static final long serialVersionUID = 0L;
     if (typeCase_ == 27) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(27, (org.y1000.network.gen.ApplyGuildKungFuInputPacket) type_);
-    }
-    if (typeCase_ == 28) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(28, (org.y1000.network.gen.ClientManageGuildPacket) type_);
     }
     if (typeCase_ == 32) {
       size += com.google.protobuf.CodedOutputStream
@@ -1496,10 +1456,6 @@ private static final long serialVersionUID = 0L;
       case 25:
         if (!getChangeTeam()
             .equals(other.getChangeTeam())) return false;
-        break;
-      case 28:
-        if (!getManageGuild()
-            .equals(other.getManageGuild())) return false;
         break;
       case 5:
         if (!getSwapInventorySlotPacket()
@@ -1647,10 +1603,6 @@ private static final long serialVersionUID = 0L;
       case 25:
         hash = (37 * hash) + CHANGETEAM_FIELD_NUMBER;
         hash = (53 * hash) + getChangeTeam().hashCode();
-        break;
-      case 28:
-        hash = (37 * hash) + MANAGEGUILD_FIELD_NUMBER;
-        hash = (53 * hash) + getManageGuild().hashCode();
         break;
       case 5:
         hash = (37 * hash) + SWAPINVENTORYSLOTPACKET_FIELD_NUMBER;
@@ -1914,9 +1866,6 @@ private static final long serialVersionUID = 0L;
       if (changeTeamBuilder_ != null) {
         changeTeamBuilder_.clear();
       }
-      if (manageGuildBuilder_ != null) {
-        manageGuildBuilder_.clear();
-      }
       if (swapInventorySlotPacketBuilder_ != null) {
         swapInventorySlotPacketBuilder_.clear();
       }
@@ -2066,10 +2015,6 @@ private static final long serialVersionUID = 0L;
       if (typeCase_ == 25 &&
           changeTeamBuilder_ != null) {
         result.type_ = changeTeamBuilder_.build();
-      }
-      if (typeCase_ == 28 &&
-          manageGuildBuilder_ != null) {
-        result.type_ = manageGuildBuilder_.build();
       }
       if (typeCase_ == 5 &&
           swapInventorySlotPacketBuilder_ != null) {
@@ -2248,10 +2193,6 @@ private static final long serialVersionUID = 0L;
         }
         case CHANGETEAM: {
           mergeChangeTeam(other.getChangeTeam());
-          break;
-        }
-        case MANAGEGUILD: {
-          mergeManageGuild(other.getManageGuild());
           break;
         }
         case SWAPINVENTORYSLOTPACKET: {
@@ -2452,13 +2393,6 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 27;
               break;
             } // case 218
-            case 226: {
-              input.readMessage(
-                  getManageGuildFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 28;
-              break;
-            } // case 226
             case 258: {
               input.readMessage(
                   getMoveInputFieldBuilder().getBuilder(),
@@ -3375,148 +3309,6 @@ private static final long serialVersionUID = 0L;
       typeCase_ = 25;
       onChanged();
       return changeTeamBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientManageGuildPacket, org.y1000.network.gen.ClientManageGuildPacket.Builder, org.y1000.network.gen.ClientManageGuildPacketOrBuilder> manageGuildBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     * @return Whether the manageGuild field is set.
-     */
-    @java.lang.Override
-    public boolean hasManageGuild() {
-      return typeCase_ == 28;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     * @return The manageGuild.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientManageGuildPacket getManageGuild() {
-      if (manageGuildBuilder_ == null) {
-        if (typeCase_ == 28) {
-          return (org.y1000.network.gen.ClientManageGuildPacket) type_;
-        }
-        return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 28) {
-          return manageGuildBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    public Builder setManageGuild(org.y1000.network.gen.ClientManageGuildPacket value) {
-      if (manageGuildBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        manageGuildBuilder_.setMessage(value);
-      }
-      typeCase_ = 28;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    public Builder setManageGuild(
-        org.y1000.network.gen.ClientManageGuildPacket.Builder builderForValue) {
-      if (manageGuildBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        manageGuildBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 28;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    public Builder mergeManageGuild(org.y1000.network.gen.ClientManageGuildPacket value) {
-      if (manageGuildBuilder_ == null) {
-        if (typeCase_ == 28 &&
-            type_ != org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientManageGuildPacket.newBuilder((org.y1000.network.gen.ClientManageGuildPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 28) {
-          manageGuildBuilder_.mergeFrom(value);
-        } else {
-          manageGuildBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 28;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    public Builder clearManageGuild() {
-      if (manageGuildBuilder_ == null) {
-        if (typeCase_ == 28) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 28) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        manageGuildBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    public org.y1000.network.gen.ClientManageGuildPacket.Builder getManageGuildBuilder() {
-      return getManageGuildFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientManageGuildPacketOrBuilder getManageGuildOrBuilder() {
-      if ((typeCase_ == 28) && (manageGuildBuilder_ != null)) {
-        return manageGuildBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 28) {
-          return (org.y1000.network.gen.ClientManageGuildPacket) type_;
-        }
-        return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientManageGuildPacket, org.y1000.network.gen.ClientManageGuildPacket.Builder, org.y1000.network.gen.ClientManageGuildPacketOrBuilder> 
-        getManageGuildFieldBuilder() {
-      if (manageGuildBuilder_ == null) {
-        if (!(typeCase_ == 28)) {
-          type_ = org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-        }
-        manageGuildBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientManageGuildPacket, org.y1000.network.gen.ClientManageGuildPacket.Builder, org.y1000.network.gen.ClientManageGuildPacketOrBuilder>(
-                (org.y1000.network.gen.ClientManageGuildPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 28;
-      onChanged();
-      return manageGuildBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<

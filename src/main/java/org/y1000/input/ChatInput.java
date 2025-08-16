@@ -27,6 +27,7 @@ public class ChatInput implements SelfHandleInput {
 
     private static final String CreateGuildKungFu = "@申请门武";
     private static final String GrantGuildKungFu = "@传授门武";
+    private static final String UnlearnKungFu = "@删除武功";
 
     private final Set<String> RealmEventPrefixes = Set.of(CreateGuildKungFu, GrantGuildKungFu);
 
@@ -75,9 +76,19 @@ public class ChatInput implements SelfHandleInput {
         }
     }
 
+    private void handleDeleteKungFu(PlayerInputHandler inputHandler) {
+        String[] split = text.split(" ");
+        if (split.length == 2)
+            inputHandler.unlearnKungFu(split[1]);
+    }
+
     @Override
     public void accept(PlayerInputHandler handler) {
-        if (!StringUtils.isEmpty(text))
+        if (StringUtils.isEmpty(text))
+            return;
+        if (text.startsWith(UnlearnKungFu))
+            handleDeleteKungFu(handler);
+        else
             handler.handleChat(this);
     }
 }

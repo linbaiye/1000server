@@ -39,6 +39,21 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.RegisterResponsePacketOrBuilder getRegisterResponseOrBuilder();
 
   /**
+   * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+   * @return Whether the createCharacterResponse field is set.
+   */
+  boolean hasCreateCharacterResponse();
+  /**
+   * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+   * @return The createCharacterResponse.
+   */
+  org.y1000.network.gen.CreateCharacterResponsePacket getCreateCharacterResponse();
+  /**
+   * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+   */
+  org.y1000.network.gen.CreateCharacterResponsePacketOrBuilder getCreateCharacterResponseOrBuilder();
+
+  /**
    * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
    * @return Whether the positionPacket field is set.
    */
@@ -442,21 +457,6 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
    */
   org.y1000.network.gen.NameColorPacketOrBuilder getNameColorOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-   * @return Whether the updateGuild field is set.
-   */
-  boolean hasUpdateGuild();
-  /**
-   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-   * @return The updateGuild.
-   */
-  org.y1000.network.gen.UpdateGuildPacket getUpdateGuild();
-  /**
-   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-   */
-  org.y1000.network.gen.UpdateGuildPacketOrBuilder getUpdateGuildOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.UpdateGuildKungFuFormPacket kungFuForm = 51;</code>

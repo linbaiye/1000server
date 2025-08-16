@@ -2,7 +2,7 @@ package org.y1000.repository;
 
 import jakarta.persistence.EntityManager;
 import org.y1000.guild.GuildMembership;
-import org.y1000.guild.GuildStone;
+import org.y1000.guild.Guild;
 import org.y1000.realm.EntityIdGenerator;
 import org.y1000.realm.Realm;
 
@@ -12,12 +12,12 @@ import java.util.Optional;
 
 public class DevGuildRepository implements GuildRepository {
 
-    private final List<GuildStone> stones = new ArrayList<>();
+    private final List<Guild> stones = new ArrayList<>();
 
     private int id = 1;
 
     @Override
-    public List<GuildStone> findByRealm(Realm realm, EntityIdGenerator entityIdGenerator) {
+    public List<Guild> findByRealm(Realm realm, EntityIdGenerator entityIdGenerator) {
         return List.of();
     }
 
@@ -27,7 +27,7 @@ public class DevGuildRepository implements GuildRepository {
     }
 
     @Override
-    public void save(EntityManager entityManager, GuildStone guildStone, long creator) {
+    public void save(EntityManager entityManager, Guild guild, long creator) {
 
     }
 
@@ -37,23 +37,18 @@ public class DevGuildRepository implements GuildRepository {
     }
 
     @Override
-    public void upsertMembership(EntityManager entityManager, long playerId, GuildMembership guildMembership) {
+    public void delete(int guildId) {
 
     }
 
     @Override
-    public void deleteGuildAndMembership(int guildId) {
-
+    public void update(Guild guild) {
     }
 
     @Override
-    public void update(GuildStone guildStone) {
-    }
-
-    @Override
-    public void save(GuildStone guildStone) {
-        stones.add(guildStone);
-        guildStone.setGuildId(id++);
+    public void save(Guild guild) {
+        stones.add(guild);
+        guild.setGuildId(id++);
     }
 
     @Override

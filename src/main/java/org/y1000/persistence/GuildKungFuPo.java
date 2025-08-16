@@ -1,16 +1,11 @@
 package org.y1000.persistence;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.kungfu.attack.AttackKungFuParameters;
-import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.kungfu.attack.GuildKungFuParameters;
+import lombok.*;
+import org.y1000.kungfu.attack.*;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
 @Table(name = "guild_kung_fu")
@@ -22,9 +17,9 @@ public class GuildKungFuPo {
     private Integer id;
     private String name;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "guild_id")
-    private GuildStonePo guildStone;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "guild_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private GuildPo guild;
 
     @Enumerated(EnumType.STRING)
     private AttackKungFuType type;
@@ -49,10 +44,10 @@ public class GuildKungFuPo {
     private int icon;
 
 
-    public static GuildKungFuPo convert(GuildStonePo guildStone, AttackKungFu attackKungFu) {
+    public static GuildKungFuPo convert(GuildPo guildStone, AttackKungFu attackKungFu) {
         if (guildStone == null || attackKungFu == null)
             throw new IllegalArgumentException();
-        AttackKungFuParameters parameters = attackKungFu.parameters();
+        AttackKungFuParameters parameters = ((AbstractAttackKungFu)attackKungFu).parameters();
         if (!(parameters instanceof GuildKungFuParameters kungFuParameters)) {
             throw new IllegalArgumentException();
         }
@@ -79,7 +74,7 @@ public class GuildKungFuPo {
         guildKungFuPo.icon = provider.icon;
         guildKungFuPo.name = provider.name;
         guildKungFuPo.type = provider.type;
-        guildKungFuPo.guildStone = guildStone;
+        guildKungFuPo.guild = guildStone;
         return guildKungFuPo;
     }
 }

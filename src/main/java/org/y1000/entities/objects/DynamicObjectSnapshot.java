@@ -1,6 +1,5 @@
 package org.y1000.entities.objects;
 
-import org.y1000.guild.GuildStone;
 import org.y1000.network.I2ClientMessage;
 import org.y1000.network.gen.DynamicObjectSnapshotPacket;
 import org.y1000.network.gen.Packet;

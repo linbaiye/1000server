@@ -12,7 +12,6 @@ import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerExperiencedAgedAttribute;
 import org.y1000.entities.players.PlayerLife;
 import org.y1000.entities.players.YinYang;
-import org.y1000.entities.players.equipment.Equipment;
 import org.y1000.entities.players.equipment.EquipmentType;
 import org.y1000.util.Coordinate;
 
@@ -28,7 +27,7 @@ public class PlayerPo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "player_seq")
+    @SequenceGenerator(name = "player_seq", allocationSize = 1)
     private Long id;
 
     @Column(unique = true)
@@ -65,8 +64,6 @@ public class PlayerPo {
     private int x;
 
     private int y;
-
-    private int state;
 
     private int realmId;
 
