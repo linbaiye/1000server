@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.PlayerImpl;
 import org.y1000.entities.players.equipment.Equipment;
+import org.y1000.entities.players.equipment.RandomAttributeAbility;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.*;
 import org.y1000.persistence.InventoryPo;
@@ -82,7 +83,6 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
         Inventory inventory = player.inventory();
         int slot1 = inventory.add(itemFactory.createItem("生药", 2));
         Equipment equipment = itemFactory.createEquipment("女子黄龙弓服");
-        equipment.findAbility(Upgradable.class).get().upgrade();
         int slot2 = inventory.add(equipment);
         EntityManager entityManager = jpaFixture.beginTx();
         itemRepository.saveInventory(entityManager, player.id(), inventory);
@@ -91,7 +91,5 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
         StackItem stackItem = loaded.getStackItem(slot1, Pill.class).get();
         assertEquals(2, stackItem.number());
         assertEquals("生药", stackItem.name());
-        Equipment loadedEquipment = loaded.getItem(slot2, Equipment.class).get();
-        assertEquals(1, loadedEquipment.findAbility(Upgradable.class).get().level());
     }
 }

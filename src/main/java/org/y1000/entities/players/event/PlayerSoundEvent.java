@@ -17,14 +17,12 @@ public final class PlayerSoundEvent extends AbstractMessagePlayerEvent {
 
     public static PlayerSoundEvent toAll(Player player, String sound) {
         EntitySoundPacket packet = EntitySoundPacket.newBuilder()
-                .setEntityName(player.viewName())
                 .setSound(sound).build();
         return new PlayerSoundEvent(player, Packet.newBuilder().setEntitySound(packet).build(), true);
     }
 
     public static PlayerSoundEvent toSelf(Player player, String sound) {
         EntitySoundPacket packet = EntitySoundPacket.newBuilder()
-                .setEntityName(player.viewName())
                 .setSound(sound).build();
         return new PlayerSoundEvent(player, Packet.newBuilder().setEntitySound(packet).build(), false);
     }

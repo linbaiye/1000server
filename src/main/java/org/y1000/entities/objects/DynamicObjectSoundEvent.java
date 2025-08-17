@@ -21,7 +21,6 @@ public class DynamicObjectSoundEvent extends AbstractDynamicObjectEvent implemen
 
     public static DynamicObjectSoundEvent of(DynamicObject source, String s) {
         EntitySoundPacket packet = EntitySoundPacket.newBuilder()
-                .setEntityName("")
                 .setSound(s).build();
         return new DynamicObjectSoundEvent(source, Packet.newBuilder().setEntitySound(packet).build());
     }

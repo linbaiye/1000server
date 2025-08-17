@@ -228,13 +228,14 @@ class PlayerImplTest extends AbstractPlayerUnitTestFixture {
         var entity = Mockito.mock(ActiveEntity.class);
         assertEquals(-1, player.tryAcceptAttack(entity));
         HurtAbility hurtAbility = Mockito.mock(HurtAbility.class);
-        when(hurtAbility.swingAllowed()).thenReturn(false);
+        when(hurtAbility.canBeAttacked()).thenReturn(false);
         when(entity.findAbility(HurtAbility.class)).thenReturn(Optional.of(hurtAbility));
         assertEquals(-1, player.tryAcceptAttack(entity));
 
-        when(hurtAbility.swingAllowed()).thenReturn(true);
+        when(hurtAbility.canBeAttacked()).thenReturn(true);
         when(entity.coordinate()).thenReturn(player.coordinate().move(2, 0));
-        player.toggleFootAndSync(player.kungFuBook().getUnnamedFoot());
+        System.out.println(entity.canBeSeenAt(player.coordinate()));
+        when(entity.canBeSeenAt(any())).thenReturn(true);
         assertEquals(0, player.tryAcceptAttack(entity));
         assertTrue(player.footKungFu().isEmpty());
     }

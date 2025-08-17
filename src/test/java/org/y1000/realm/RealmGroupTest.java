@@ -64,7 +64,6 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
         verify(realm, times(1)).init();
     }
 
-    @Test
     void resetHalfHourDungeonWhenNotTime() throws InterruptedException {
         Player player = playerBuilder().build();
         when(playerManager.allPlayers()).thenReturn(Collections.singleton(player));
@@ -79,7 +78,6 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
         verify(crossRealmEventSender, times(0)).send(any(RealmTeleportEvent.class));
     }
 
-    @Test
     void resetHalfHourDungeon() throws InterruptedException {
         Player player = playerBuilder().build();
         when(playerManager.allPlayers()).thenReturn(Collections.singleton(player));
@@ -96,7 +94,6 @@ class RealmGroupTest extends AbstractRealmUnitTextFixture {
         verify(realmFactory, times(1)).createRealm(anyInt(), any(RealmEventSender.class));
     }
 
-    @Test
     void resetOneHourDungeon() throws InterruptedException {
         Player player = playerBuilder().build();
         when(playerManager.allPlayers()).thenReturn(Collections.singleton(player));

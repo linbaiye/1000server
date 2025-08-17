@@ -105,6 +105,8 @@ public abstract class AbstractCSVSdbReader {
             headerColumnIndices.put(header[i], i);
         }
         for (int i = 1; i < lines.size(); i++) {
+            if (lines.get(i).startsWith(";"))
+                continue;
             String item = lines.get(i).trim();
             String[] values = item.split(",");
             if (values.length == 0 || StringUtils.isBlank(values[0])) {

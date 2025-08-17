@@ -31,8 +31,12 @@ public final class EscapeAI extends AbstractMovableNpcAI {
 
     @Override
     void onMoveFailed() {
+        resetPrevious();
         computeEscapePoint();
-        changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
+        if (destination == null)
+            changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());
+        else
+            moveCloser(destination);
     }
 
     private void returnToWander() {
@@ -45,7 +49,10 @@ public final class EscapeAI extends AbstractMovableNpcAI {
             returnToWander();
             return;
         }
-        computePrevious();
+        if (ability instanceof NpcMoveAbility) {
+            computePrevious();
+            log.debug("Set previous to {}.", getPrevious());
+        }
         if (destination == null) {
             computeEscapePoint();
             changeAbilityOrThrow(NpcIdleAbility.class).apply(npc());

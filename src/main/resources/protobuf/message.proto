@@ -628,7 +628,6 @@ message Packet {
 
 message EntitySoundPacket {
   string sound = 1;
-  string entityName = 2;
 }
 
 message PlayerInfoPacket {

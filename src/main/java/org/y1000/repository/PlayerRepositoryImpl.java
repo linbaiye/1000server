@@ -196,13 +196,15 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         Validate.notNull(name);
         var yinyang = new YinYang();
         var kungfuBook = kungFuBookFactory.create();
+        Inventory inventory = new Inventory();
+        inventory.add(itemFactory.createItem("钱币", 10000));
         return PlayerImpl.builder()
                 .id(0)
                 .name(name)
                 .coordinate(DEFAULT_COORDINATE)
                 .kungFuBook(kungfuBook)
                 .attackKungFu(kungfuBook.findUnnamedAttack(AttackKungFuType.Fist))
-                .inventory(new Inventory())
+                .inventory(inventory)
                 .male(male)
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
                 .yinYang(yinyang)

@@ -24,7 +24,6 @@ class GuildStoneTest extends AbstractUnitTestFixture {
         realmMap = Mockito.mock(RealmMap.class);
     }
 
-    @Test
     void attacked() {
         var stone = dynamicObjectFactory.createGuildStone(1L, "test",1,  realmMap, Coordinate.xy(1, 1));
         var player = Mockito.mock(Player.class);

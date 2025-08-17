@@ -19,16 +19,4 @@ public interface EntitySoundPacketOrBuilder extends
    */
   com.google.protobuf.ByteString
       getSoundBytes();
-
-  /**
-   * <code>string entityName = 2;</code>
-   * @return The entityName.
-   */
-  java.lang.String getEntityName();
-  /**
-   * <code>string entityName = 2;</code>
-   * @return The bytes for entityName.
-   */
-  com.google.protobuf.ByteString
-      getEntityNameBytes();
 }

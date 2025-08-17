@@ -16,6 +16,10 @@ public abstract class AbstractMovableNpcAI extends AbstractNpcAI {
 
     abstract void onMoveFailed();
 
+    Coordinate getPrevious() {
+        return previous;
+    }
+
     void computePrevious() {
         previous = npc().coordinate().moveBy(npc().direction().opposite());
     }

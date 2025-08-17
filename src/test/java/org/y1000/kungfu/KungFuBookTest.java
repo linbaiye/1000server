@@ -2,13 +2,16 @@ package org.y1000.kungfu;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.kungfu.attack.AttackKungFu;
+import org.y1000.kungfu.attack.AttackKungFuParameters;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.attack.SwordKungFu;
 import org.y1000.repository.KungFuBookRepositoryImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 class KungFuBookTest extends AbstractUnitTestFixture {
 
@@ -25,10 +28,12 @@ class KungFuBookTest extends AbstractUnitTestFixture {
 
     @Test
     void findKungFu() {
+        AttackKungFuParameters parameters = Mockito.mock(AttackKungFuParameters.class);
+        when(parameters.icon()).thenReturn(0);
         assertEquals(book.findUnnamedAttack(AttackKungFuType.SWORD).name(), "无名剑法");
         assertEquals(book.getUnnamedFoot().name(), "无名步法");
         assertEquals(book.getUnnamedProtection().name(), "无名强身");
-        book.addToBasic(SwordKungFu.builder().name("test").exp(0).build());
+        book.addToBasic(SwordKungFu.builder().name("test").exp(0).parameters(parameters).build());
         assertNotNull(book.getKungFu(2, 1));
     }
 

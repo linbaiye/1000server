@@ -291,9 +291,12 @@ public final class KungFuBookRepositoryImpl implements KungFuBookRepository, Kun
     @Override
     public Optional<KungFuBook> find(EntityManager entityManager, long playerId) {
         Validate.notNull(entityManager);
-        var bookPo = entityManager.createQuery("select b from KungFuBookPo b where b.playerId = ?1", KungFuBookPo.class)
+        var list = entityManager.createQuery("select b from KungFuBookPo b where b.playerId = ?1", KungFuBookPo.class)
                 .setParameter(1, playerId)
-                .getSingleResult();
+                .getResultList();
+        if (list.isEmpty())
+            return Optional.empty();
+        var bookPo = list.get(0);
         Map<Integer, KungFu> unnamed = new HashMap<>();
         bookPo.getUnnamed().forEach(kungFuSlotPo -> unnamed.put(kungFuSlotPo.getSlot(), create(kungFuSlotPo.getName(), kungFuSlotPo.getExp())));
         KungFuBook kungFuBook = new KungFuBook(unnamed);

@@ -99,8 +99,8 @@ class PlayerMoveStateTest extends AbstractPlayerUnitTestFixture {
     void handleAfterHurt() {
         state = PlayerMoveState.fightWalk(player, current);
         state.handleAfterHurt();
-        assertEquals(current.destination(), player.coordinate());
-        assertEquals(PlayerStateEnum.FightStand, player.stateEnum());
-        assertNotNull(eventListener.remove(PlayerSetPositionAndStateEvent.class));
+        assertEquals(current.from(), player.coordinate());
+        assertEquals(PlayerStateEnum.Move, player.stateEnum());
+        assertNotNull(eventListener.remove(PlayerMoveEvent.class));
     }
 }

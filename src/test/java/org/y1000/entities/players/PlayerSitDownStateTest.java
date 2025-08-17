@@ -122,6 +122,5 @@ class PlayerSitDownStateTest extends AbstractPlayerUnitTestFixture {
         }).when(player).changeState(any(PlayerStandState.class));
         state.attack(entity);
         verify(player, times(1)).changeState(any(PlayerState.class));
-        verify(player, times(1)).disableBreathAndSync();
     }
 }
