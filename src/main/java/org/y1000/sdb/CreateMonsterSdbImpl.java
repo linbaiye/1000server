@@ -1,8 +1,7 @@
 package org.y1000.sdb;
 
 
-import org.apache.commons.lang3.StringUtils;
-
+import java.util.HashSet;
 import java.util.Set;
 
 public final class CreateMonsterSdbImpl extends AbstractCreateEntitySdb {
@@ -16,7 +15,7 @@ public final class CreateMonsterSdbImpl extends AbstractCreateEntitySdb {
     }
 
     @Override
-    protected String getViewName(String id) {
+    protected String getIdName(String id) {
         return get(id, "MonsterName");
     }
 
@@ -24,23 +23,27 @@ public final class CreateMonsterSdbImpl extends AbstractCreateEntitySdb {
         CreateMonsterSdbImpl sdb = new CreateMonsterSdbImpl(49);
 //        Set<String> names = itemSdb.names();
         Set<String> names = sdb.columnNames();
-        Set<String> items = sdb.names();
+        Set<String> items = sdb.uniqueIds();
+        MonstersSdbImpl monstersSdb = MonstersSdbImpl.INSTANCE;
+        Set<String> id = new HashSet<>();
         for (String i: items) {
 //            if (!i.startsWith("狐狸") || !"2".equals(sdb.get(i, "Kind")))
 //            if (!"2".equals(sdb.get(i, "Kind")))
 //                continue;
-            System.out.println("----------------------------");
-            System.out.println(i);
+            //System.out.println("----------------------------");
+            //System.out.println(i);
             for (String name : names) {
-                if (name.contains("_")) {
+                id.add(monstersSdb.getShape(sdb.getIdName(i)));
+                /*if (name.contains("_")) {
                     continue;
                 }
                 if (!StringUtils.isEmpty(sdb.get(i, name)))
-                    System.out.println(name + ": " + sdb.get(i, name));
+                    System.out.println(name + ": " + sdb.get(i, name));*/
             }
         }
+        id.forEach( i -> {
+            System.out.println("cp /d/work/godot/y1000/Sprites/" + i+".zip /d/godot_qn/qn_client/sprites");
+        });
     }
-
-
 
 }

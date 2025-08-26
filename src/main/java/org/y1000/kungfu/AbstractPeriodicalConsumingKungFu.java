@@ -14,8 +14,8 @@ public abstract class AbstractPeriodicalConsumingKungFu extends AbstractKungFu i
 
     protected AbstractPeriodicalConsumingKungFu(String name, int exp,
                                                 KeepParameters keepParameters,
-                                                FiveSecondsParameters consumingParameters) {
-        super(name, exp);
+                                                FiveSecondsParameters consumingParameters, int icon) {
+        super(name, exp, icon);
         this.keepParameters = keepParameters;
         this.consumingParameters = consumingParameters;
         resetTimer();
@@ -26,7 +26,7 @@ public abstract class AbstractPeriodicalConsumingKungFu extends AbstractKungFu i
         consumingTimer = 5000;
     }
 
-    public boolean updateResources(Player player, int delta) {
+    public boolean consumeResources(Player player, int delta) {
         consumingTimer -= delta;
         if (consumingTimer > 0) {
             return false;

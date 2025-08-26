@@ -61,6 +61,39 @@ private static final long serialVersionUID = 0L;
     return state_;
   }
 
+  public static final int DIRECTION_FIELD_NUMBER = 3;
+  private int direction_ = 0;
+  /**
+   * <code>int32 direction = 3;</code>
+   * @return The direction.
+   */
+  @java.lang.Override
+  public int getDirection() {
+    return direction_;
+  }
+
+  public static final int X_FIELD_NUMBER = 4;
+  private int x_ = 0;
+  /**
+   * <code>int32 x = 4;</code>
+   * @return The x.
+   */
+  @java.lang.Override
+  public int getX() {
+    return x_;
+  }
+
+  public static final int Y_FIELD_NUMBER = 5;
+  private int y_ = 0;
+  /**
+   * <code>int32 y = 5;</code>
+   * @return The y.
+   */
+  @java.lang.Override
+  public int getY() {
+    return y_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -81,6 +114,15 @@ private static final long serialVersionUID = 0L;
     if (state_ != 0) {
       output.writeInt32(2, state_);
     }
+    if (direction_ != 0) {
+      output.writeInt32(3, direction_);
+    }
+    if (x_ != 0) {
+      output.writeInt32(4, x_);
+    }
+    if (y_ != 0) {
+      output.writeInt32(5, y_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -97,6 +139,18 @@ private static final long serialVersionUID = 0L;
     if (state_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(2, state_);
+    }
+    if (direction_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(3, direction_);
+    }
+    if (x_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(4, x_);
+    }
+    if (y_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(5, y_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -117,6 +171,12 @@ private static final long serialVersionUID = 0L;
         != other.getId()) return false;
     if (getState()
         != other.getState()) return false;
+    if (getDirection()
+        != other.getDirection()) return false;
+    if (getX()
+        != other.getX()) return false;
+    if (getY()
+        != other.getY()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -133,6 +193,12 @@ private static final long serialVersionUID = 0L;
         getId());
     hash = (37 * hash) + STATE_FIELD_NUMBER;
     hash = (53 * hash) + getState();
+    hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
+    hash = (53 * hash) + getDirection();
+    hash = (37 * hash) + X_FIELD_NUMBER;
+    hash = (53 * hash) + getX();
+    hash = (37 * hash) + Y_FIELD_NUMBER;
+    hash = (53 * hash) + getY();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -266,6 +332,9 @@ private static final long serialVersionUID = 0L;
       bitField0_ = 0;
       id_ = 0L;
       state_ = 0;
+      direction_ = 0;
+      x_ = 0;
+      y_ = 0;
       return this;
     }
 
@@ -304,6 +373,15 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.state_ = state_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.direction_ = direction_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.x_ = x_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.y_ = y_;
       }
     }
 
@@ -357,6 +435,15 @@ private static final long serialVersionUID = 0L;
       if (other.getState() != 0) {
         setState(other.getState());
       }
+      if (other.getDirection() != 0) {
+        setDirection(other.getDirection());
+      }
+      if (other.getX() != 0) {
+        setX(other.getX());
+      }
+      if (other.getY() != 0) {
+        setY(other.getY());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -393,6 +480,21 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000002;
               break;
             } // case 16
+            case 24: {
+              direction_ = input.readInt32();
+              bitField0_ |= 0x00000004;
+              break;
+            } // case 24
+            case 32: {
+              x_ = input.readInt32();
+              bitField0_ |= 0x00000008;
+              break;
+            } // case 32
+            case 40: {
+              y_ = input.readInt32();
+              bitField0_ |= 0x00000010;
+              break;
+            } // case 40
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -470,6 +572,102 @@ private static final long serialVersionUID = 0L;
     public Builder clearState() {
       bitField0_ = (bitField0_ & ~0x00000002);
       state_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int direction_ ;
+    /**
+     * <code>int32 direction = 3;</code>
+     * @return The direction.
+     */
+    @java.lang.Override
+    public int getDirection() {
+      return direction_;
+    }
+    /**
+     * <code>int32 direction = 3;</code>
+     * @param value The direction to set.
+     * @return This builder for chaining.
+     */
+    public Builder setDirection(int value) {
+
+      direction_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 direction = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearDirection() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      direction_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int x_ ;
+    /**
+     * <code>int32 x = 4;</code>
+     * @return The x.
+     */
+    @java.lang.Override
+    public int getX() {
+      return x_;
+    }
+    /**
+     * <code>int32 x = 4;</code>
+     * @param value The x to set.
+     * @return This builder for chaining.
+     */
+    public Builder setX(int value) {
+
+      x_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 x = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearX() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      x_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int y_ ;
+    /**
+     * <code>int32 y = 5;</code>
+     * @return The y.
+     */
+    @java.lang.Override
+    public int getY() {
+      return y_;
+    }
+    /**
+     * <code>int32 y = 5;</code>
+     * @param value The y to set.
+     * @return This builder for chaining.
+     */
+    public Builder setY(int value) {
+
+      y_ = value;
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 y = 5;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearY() {
+      bitField0_ = (bitField0_ & ~0x00000010);
+      y_ = 0;
       onChanged();
       return this;
     }

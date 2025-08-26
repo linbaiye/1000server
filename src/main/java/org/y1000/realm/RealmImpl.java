@@ -2,57 +2,41 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.players.Player;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.clientevent.ClientFoundGuildEvent;
-import org.y1000.network.event.ConnectionEstablishedEvent;
-import org.y1000.realm.event.PlayerDataEvent;
-import org.y1000.realm.event.RealmTeleportEvent;
+import org.y1000.input.Login;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
 
 @Slf4j
 final class RealmImpl extends AbstractRealm {
 
-
     public RealmImpl(int id, RealmMap realmMap,
-                     RealmEntityEventSender eventSender,
                      GroundItemManager itemManager,
                      NpcManager npcManager,
                      PlayerManager playerManager,
                      DynamicObjectManager dynamicObjectManager,
                      TeleportManager teleportManager,
-                     CrossRealmEventSender crossRealmEventSender,
+                     RealmEventSender crossRealmEventSender,
                      MapSdb mapSdb,
-                     ChatManager chatManager) {
-        super(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+                     PlayerRepository playerRepository) {
+        super(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository);
     }
+
 
     @Override
     protected Logger log() {
         return log;
     }
 
+
     @Override
-    void handleTeleportEvent(RealmTeleportEvent teleportEvent) {
-        acceptIfAffordableElseReject(teleportEvent);
+    protected void handleLogin(Login login) {
+        acceptLogin(login.playerId(), login.connection(), null);
     }
 
     @Override
-    void handleConnectionEvent(ConnectionEstablishedEvent connectedEvent) {
-        getEventSender().add(connectedEvent.player(), connectedEvent.connection());
-        getPlayerManager().onPlayerConnected(connectedEvent.player(), this);
+    public void update() {
+        doUpdateEntities();
     }
-
-    @Override
-    void handleGuildCreation(Player source, ClientFoundGuildEvent event) {
-        source.emitEvent(PlayerTextEvent.forbidGuildCreation(source));
-    }
-
-    @Override
-    void handleClientEvent(PlayerDataEvent dataEvent) {
-        playerManager().onClientEvent(dataEvent, npcManager());
-    }
-
 
     @Override
     public void shutdown() {

@@ -11,11 +11,7 @@ public interface MapSdb {
 
     String getSoundBase(int id);
 
-    String getTilName(int id);
-
-    String getObjName(int id);
-
-    String getRofName(int id);
+    String getResourceName(int id);
 
     Optional<Integer> getRegenInterval(int id);
 

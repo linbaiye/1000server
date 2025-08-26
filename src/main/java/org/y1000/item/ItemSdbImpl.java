@@ -1,7 +1,7 @@
 package org.y1000.item;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.y1000.entities.players.equipment.EquipmentType;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.sdb.AbstractCSVSdbReader;
 
@@ -184,7 +184,8 @@ MaxCount,        最多持有数量；
     }
 
     public String getDesc(String itemName) {
-        return get(itemName, "Desc");
+        var desc = get(itemName, "Desc");
+        return desc != null ? desc.replace("<br>", "\n") : null;
     }
 
     @Override
@@ -292,6 +293,21 @@ MaxCount,        最多持有数量；
         return "TRUE".equals(get(name, "boUpgrade"));
     }
 
+    @Override
+    public int getIcon(String name) {
+        return getInt(name, "Shape");
+    }
+
+    @Override
+    public String getWearShape(String name) {
+        return get(name, "WearShape");
+    }
+
+    @Override
+    public boolean isRandomAttribute(String name) {
+        return "TRUE".equals(get(name, "boRandomAttribute"));
+    }
+
     public static final ItemSdbImpl INSTANCE = read();
 
     private static ItemSdbImpl read() {
@@ -305,7 +321,7 @@ MaxCount,        最多持有数量；
         ItemSdbImpl itemSdb = ItemSdbImpl.INSTANCE;
         Map<String, Set<String>> duplicateNames = new HashMap<>();
 //        Set<String> names = itemSdb.names();
-        Set<String> items = itemSdb.names();
+        Set<String> items = itemSdb.uniqueIds();
         for (String i: items) {
             String viewName = itemSdb.get(i, "ViewName");
             if (!duplicateNames.containsKey(viewName)) {
@@ -324,18 +340,20 @@ MaxCount,        最多持有数量；
     private static void dump() {
         ItemSdbImpl itemSdb = ItemSdbImpl.INSTANCE;
         Set<String> names = itemSdb.columnNames();
-        Set<String> items = itemSdb.names();
+        Set<String> items = itemSdb.uniqueIds();
+        Set<String> shapes = new HashSet<>();
         for (String i: items) {
-            if (itemSdb.getTypeValue(i) != ItemType.EQUIPMENT.value()) {
+            if (itemSdb.getTypeValue(i) != ItemType.KNIFE.value()) {
                 continue;
             }
-            System.out.println("----------------------------");
-            System.out.println(i);
-            for (String name : names) {
+            //System.out.println("----------------------------");
+            System.out.println(i + ":" + itemSdb.getActionImage(i));
+            /*for (String name : names) {
                 if (!StringUtils.isEmpty(itemSdb.get(i, name)))
                     System.out.println(name + ": " + itemSdb.get(i, name));
-            }
+            }*/
         }
+        System.out.println(shapes);
     }
     public static void main(String[] args) {
         dump();

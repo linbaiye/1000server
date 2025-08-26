@@ -2,55 +2,94 @@ package org.y1000.network;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.ServerContext;
-import org.y1000.message.ServerMessage;
+import org.y1000.network.gen.ClientPacket;
 import org.y1000.realm.RealmManager;
 
 import java.util.*;
 
 /**
- * An implementation that introduces 200ms latency, for development only.
+ * An implementation that introduces latency, for development only.
  */
 @Slf4j
 public final class DevelopingConnection extends AbstractConnection implements Runnable {
 
-    private final List<ServerMessage> messages;
-
+    private final List<LatencyMessage<I2ClientMessage>> writingMessages;
+    private final List<LatencyMessage<Object>> deliveryMessages;
     public final Thread sender;
 
-
-    public DevelopingConnection(RealmManager realmManager,
-                                ServerContext serverContext) {
-        super(realmManager, serverContext);
-        messages = new ArrayList<>();
+    public DevelopingConnection(RealmManager realmManager) {
+        super(realmManager);
+        deliveryMessages = new ArrayList<>();
+        writingMessages = new ArrayList<>();
         sender = new Thread(this);
         sender.start();
     }
 
+    private record LatencyMessage<T>(T msg, long deliveryTime) {
+        public static LatencyMessage<I2ClientMessage> of(I2ClientMessage msg) {
+            return new LatencyMessage<>(msg, System.currentTimeMillis() + 50);
+        }
 
-    @Override
-    public void write(ServerMessage message) {
-        synchronized (messages) {
-            messages.add(message);
+        public static LatencyMessage<Object> of(Object msg) {
+            return new LatencyMessage<>(msg, System.currentTimeMillis() + 50);
         }
     }
 
-    private void handleMessages() {
-        ChannelHandlerContext context = getContext();
-        if (context == null) {
-            return;
-        }
-        synchronized (messages) {
-            if (messages.isEmpty()) {
-                return;
-            }
+
+
+    @Override
+    public synchronized void writeAndFlush(I2ClientMessage message) {
+        writingMessages.add(LatencyMessage.of(message));
+        notify();
+    }
+
+    private synchronized void addToDelivery(Object msg) {
+        deliveryMessages.add(LatencyMessage.of(msg));
+        notify();
+    }
+
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        if (msg instanceof ClientPacket packet) {
             try {
-                messages.forEach(context.channel()::write);
-               //  messages.forEach(m -> log.debug("Sent message {}.", m));
-                context.channel().flush();
-                messages.clear();
+                var message = createMessage(packet);
+                if (message != null) {
+                    addToDelivery(message);
+                }
             } catch (Exception e) {
-                log.error("Failed to write message.", e);;
+                log.error("Exception ", e);
+            }
+        }
+    }
+
+
+    private synchronized void handleDelivery() {
+        if (deliveryMessages.isEmpty())
+            return;
+        Iterator<LatencyMessage<Object>> iterator = deliveryMessages.iterator();
+        long l = System.currentTimeMillis();
+        while (iterator.hasNext()) {
+            LatencyMessage<Object> next = iterator.next();
+            if (next.deliveryTime >= l) {
+                getRealmManager().queueEvent(ConnectionEvent.Data(this, next.msg));
+                iterator.remove();
+            }
+        }
+    }
+
+
+    private synchronized void handleWrite() {
+        if (writingMessages.isEmpty())
+            return;
+        Iterator<LatencyMessage<I2ClientMessage>> iterator = writingMessages.iterator();
+        long l = System.currentTimeMillis();
+        while (iterator.hasNext()) {
+            LatencyMessage<I2ClientMessage> next = iterator.next();
+            if (next.deliveryTime >= l) {
+                iterator.remove();
+                var context = getContext();
+                context.channel().writeAndFlush(next.msg);
             }
         }
     }
@@ -59,9 +98,15 @@ public final class DevelopingConnection extends AbstractConnection implements Ru
     public void run() {
         while (true) {
             try {
-                handleMessages();
-                Thread.sleep(120);
+                synchronized (this) {
+                    while (writingMessages.isEmpty() && deliveryMessages.isEmpty()) {
+                        wait(10);
+                    }
+                }
+                handleDelivery();
+                handleWrite();
             } catch (InterruptedException e) {
+                log.error("Exception ", e);
                 break;
             }
         }

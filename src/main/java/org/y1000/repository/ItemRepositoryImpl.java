@@ -2,8 +2,11 @@ package org.y1000.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.GroundedItem;
+import org.hibernate.Session;
+import org.y1000.item.BankBag;
+import org.y1000.entities.players.equipment.*;
 import org.y1000.entities.players.inventory.AbstractInventory;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.entities.players.inventory.Inventory;
@@ -13,8 +16,10 @@ import org.y1000.persistence.*;
 import org.y1000.sdb.ItemDrugSdb;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+@Slf4j
 public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, BankRepository {
 
     private final ItemSdbImpl itemSdb;
@@ -33,42 +38,29 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
     }
 
 
-    private Set<Object> buildEquipmentAbilities(String name, int color) {
-        Set<Object> abilities = new HashSet<>();
-        if (itemSdb.isUpgrade(name)) {
-            abilities.add(new UpgradableImpl());
-        }
+    private Set<EquipmentAbility> buildEquipmentAbilities(String name) {
+        Set<EquipmentAbility> abilities = new HashSet<>();
         if (itemSdb.isColoring(name)) {
-            abilities.add(new DyableImpl(color));
+            abilities.add(new DyableImpl(itemSdb.getColor(name)));
+        }
+        if (itemSdb.isRandomAttribute(name)) {
+            abilities.add(RandomAttributeAbility.randomDamage(itemSdb.getDamage(name)));
         }
         return abilities;
     }
 
     public Equipment createEquipment(String name) {
-        return createEquipment(name, itemSdb.getColor(name));
+        return createEquipment(name, buildEquipmentAbilities(name));
     }
 
-    @Override
-    public Equipment createEquipment(String name, int color) {
-        Validate.notNull(name);
-        Set<Object> abilities = buildEquipmentAbilities(name, color);
+
+    public Equipment createEquipment(String name, Set<EquipmentAbility> abilities) {
         EquipmentType equipmentType = itemSdb.getEquipmentType(name);
         return switch (equipmentType) {
             case WEAPON -> new WeaponImpl(name, itemSdb, abilities);
             case TROUSER, CLOTHING, HAIR -> new SexualEquipmentImpl(name, itemSdb, equipmentType, abilities);
-            case HAT, CHEST, BOOT, WRIST, WRIST_CHESTED -> new ArmorImpl(name, itemSdb, abilities);
+            case HAT, CHEST, BOOT, WRIST -> new ArmorImpl(name, itemSdb, abilities);
         };
-    }
-
-    @Override
-    public Item createItem(GroundedItem item) {
-        Validate.notNull(item, "item must not be null");
-        Item restored = item.getNumber() != null ?
-                createItem(item.getName(), item.getNumber()) : createItem(item.getName());
-        if (restored instanceof Equipment equipment) {
-            equipment.findAbility(Dyable.class).ifPresent(d -> d.dye(item.getColor()));
-        }
-        return restored;
     }
 
 
@@ -94,7 +86,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
             case DYE -> new Dye(name, itemSdb);
             case PILL -> new Pill(name, new PillAttributeProviderImpl(name, itemSdb, itemDrugSdb));
             case KUNGFU -> createKungFuItem(name);
-            case BANK_INVENTORY -> new BankInventory(name, itemSdb);
+            case BANK_INVENTORY -> new BankBag(name, itemSdb);
             case BUFF_PILL -> createBuffPill(name);
             default -> SimpleItem.uncategoried(name, itemSdb);
         };
@@ -112,6 +104,7 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                 .name(name)
                 .kungFu(kungFuFactory.create(name))
                 .desc(itemSdb.getDesc(name))
+                .icon(itemSdb.getIcon(name))
                 .build();
     }
 
@@ -124,53 +117,41 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
     }
 
     @Override
-    public SexualEquipment createTrouser(String name) {
-        return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
-    }
-
-    @Override
-    public ArmorEquipment createHat(String name) {
-        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
-    }
-
-    @Override
     public ArmorEquipment createChest(String name) {
-        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
+        return (ArmorEquipment) createEquipment(name);
     }
 
     @Override
     public SexualEquipment createHair(String name) {
-        return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
+        return (SexualEquipment) createEquipment(name);
     }
 
     @Override
     public ArmorEquipment createBoot(String name) {
-        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
+        return (ArmorEquipment) createEquipment(name);
     }
 
     @Override
     public ArmorEquipment createWrist(String name) {
-        return (ArmorEquipment) createEquipment(name, itemSdb.getColor(name));
+        return (ArmorEquipment) createEquipment(name);
     }
 
-    @Override
-    public SexualEquipment createClothing(String name) {
-        return (SexualEquipment) createEquipment(name, itemSdb.getColor(name));
+    private Set<EquipmentAbility> restoreAbilities(List<EquipmentPo.EquipmentAbilityPo> abilityPos) {
+        if (abilityPos == null)
+            return Collections.emptySet();
+        return abilityPos.stream().map(EquipmentPo.EquipmentAbilityPo::restore).collect(Collectors.toSet());
     }
 
     @Override
     public Equipment createEquipment(EquipmentPo equipmentPo) {
-        var e = createEquipment(equipmentPo.getName(), equipmentPo.getColor());
+        Set<EquipmentAbility> abilities = restoreAbilities(equipmentPo.getAbilities());
+        var e = createEquipment(equipmentPo.getName(), abilities);
         e.setId(equipmentPo.getId());
-        e.findAbility(Upgradable.class).ifPresent(u -> {
-            while (u.level() < equipmentPo.getLevel())
-                u.upgrade();
-        });
         return e;
     }
 
 
-    private void restoreInventory(EntityManager entityManager, AbstractInventoryPo inventoryPo, AbstractInventory inventory) {
+    private void restoreInventory(EntityManager entityManager, AbstractInventoryPo inventoryPo, BiConsumer<Integer, ? super Item> inventoryAdder) {
         Set<Long> ids = inventoryPo.selectEquipmentIds();
         Map<Long, Equipment> equipments = Collections.emptyMap();
         if (!ids.isEmpty()) {
@@ -179,24 +160,24 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                     .getResultStream()
                     .collect(Collectors.toMap(EquipmentPo::getId, this::createEquipment));
         }
-        for (SlotItem slotItem : inventoryPo.getSlots()) {
+        for (SlotItemPo slotItem : inventoryPo.getSlots()) {
             if (slotItem.isEquipment()) {
-                inventory.put(slotItem.getSlot(), equipments.get(slotItem.getEquipmentId()));
+                inventoryAdder.accept(slotItem.getSlot(), equipments.get(slotItem.getEquipmentId()));
             } else {
-                inventory.put(slotItem.getSlot(), createItem(slotItem.getName(), slotItem.getNumber()));
+                inventoryAdder.accept(slotItem.getSlot(), createItem(slotItem.getName(), slotItem.getNumber()));
             }
         }
     }
 
     private Inventory restoreInventory(EntityManager entityManager, InventoryPo inventoryPo) {
         Inventory inventory = new Inventory();
-        restoreInventory(entityManager, inventoryPo, inventory);
+        restoreInventory(entityManager, inventoryPo, inventory::add);
         return inventory;
     }
 
     private Bank restoreBank(EntityManager entityManager, BankPo bankPo) {
         Bank bank = new Bank(bankPo.getCapacity(), bankPo.getUnlocked());
-        restoreInventory(entityManager, bankPo, bank);
+        restoreInventory(entityManager, bankPo, bank::add);
         return bank;
     }
 
@@ -225,8 +206,11 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
             equipment.setId(converted.getId());
         }
         for (EquipmentPo equipmentPo : equipmentPos) {
+            Session session = entityManager.unwrap(Session.class);
+            session.evict(equipmentPo);
             Equipment equipment = toUpdate.get(equipmentPo.getId());
             equipmentPo.merge(equipment);
+            session.update(equipmentPo);
         }
     }
 
@@ -245,6 +229,15 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
                 toUpdate.put(equipment.id(), equipment);
         });
         persistEquipments(entityManager, toInsert, toUpdate);
+    }
+
+    @Override
+    public List<Equipment> loadEquipments(EntityManager entityManager, Collection<Long> equipmentIds) {
+        List<EquipmentPo> equipmentPos = equipmentIds.isEmpty() ? Collections.emptyList() :
+                entityManager.createQuery("select e from EquipmentPo e where e.id in ?1", EquipmentPo.class)
+                        .setParameter(1, equipmentIds)
+                        .getResultList();
+        return equipmentPos.stream().map(this::createEquipment).toList();
     }
 
     private void persistEquipments(EntityManager entityManager, AbstractInventory inventory) {
@@ -273,7 +266,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
         queryResult.ifPresentOrElse(inventoryPo -> inventoryPo.merge(inventory),
                 () -> entityManager.persist(InventoryPo.convert(playerId, inventory)));
     }
-
 
 
     private void persist(EntityManager entityManager, long playerId, Bank bank) {

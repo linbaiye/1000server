@@ -16,8 +16,18 @@ public final class Bank extends AbstractInventory {
         this.unlocked = unlocked;
     }
 
-    public boolean canPut(int slot, Item item) {
-        if (slot < 1 || slot > unlocked || item == null) {
+    @Override
+    public boolean isFull() {
+        return unlocked == items().size();
+    }
+
+    @Override
+    public boolean isSlotOpen(int slot) {
+        return slot >= 1 && slot <= unlocked;
+    }
+
+    public boolean canAdd(int slot, Item item) {
+        if (!isSlotOpen(slot) || item == null) {
             return false;
         }
         return canPut(item, slot);
@@ -27,6 +37,7 @@ public final class Bank extends AbstractInventory {
         if (canUnlock())
             unlocked += 10;
     }
+
 
     public boolean canUnlock() {
         return unlocked < capacity();

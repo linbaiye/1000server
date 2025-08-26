@@ -6,8 +6,9 @@ import org.y1000.kungfu.KungFuSdb;
 import org.y1000.kungfu.KungFuType;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public final class MonstersSdbImpl extends AbstractCSVSdbReader implements MonstersSdb {
+public final class MonstersSdbImpl extends AbstractNpcSdb implements MonstersSdb {
 
     public static final MonstersSdbImpl INSTANCE = new MonstersSdbImpl();
 
@@ -15,47 +16,6 @@ public final class MonstersSdbImpl extends AbstractCSVSdbReader implements Monst
         read("Monster.sdb", "utf8");
     }
 
-    @Override
-    public int getRecovery(String name) {
-        return getInt(name, "Recovery");
-    }
-
-
-    @Override
-    public String getAnimate(String name) {
-        return get(name, "Animate");
-    }
-
-
-    @Override
-    public int getAvoid(String name) {
-        return getIntOrZero(name, "Avoid");
-    }
-
-    @Override
-    public int getAttackSpeed(String name) {
-        return getInt(name, "AttackSpeed");
-    }
-
-    @Override
-    public String getSoundAttack(String name) {
-        return get(name, "SoundAttack");
-    }
-
-    @Override
-    public String getSoundStructed(String name) {
-        return get(name, "SoundStructed");
-    }
-
-    @Override
-    public String getViewName(String name) {
-        return get(name, "ViewName");
-    }
-
-    @Override
-    public String getShape(String name) {
-        return get(name, "Shape");
-    }
 
     @Override
     public String getSoundStart(String name) {
@@ -67,36 +27,6 @@ public final class MonstersSdbImpl extends AbstractCSVSdbReader implements Monst
         return get(name, "SoundNormal");
     }
 
-    @Override
-    public String getSoundDie(String name) {
-        return get(name, "SoundDie");
-    }
-
-
-    @Override
-    public int getLife(String name) {
-        return getInt(name, "Life");
-    }
-
-    @Override
-    public int getAccuracy(String name) {
-        return getIntOrZero(name, "Accuracy");
-    }
-
-    @Override
-    public int getDamage(String name) {
-        return getIntOrZero(name, "Damage");
-    }
-
-    @Override
-    public int getArmor(String name) {
-        return getIntOrZero(name, "Armor");
-    }
-
-    @Override
-    public int getActionWidth(String name) {
-        return getInt(name, "ActionWidth");
-    }
 
     @Override
     public String getAttackMagic(String name) {
@@ -105,25 +35,12 @@ public final class MonstersSdbImpl extends AbstractCSVSdbReader implements Monst
 
 
     @Override
-    public int getWalkSpeed(String name) {
-        return getInt(name, "WalkSpeed");
-    }
-
-    @Override
     public boolean isPassive(String name) {
         String s = get(name, "boAutoAttack");
         return !"TRUE".equals(s);
     }
 
-    @Override
-    public String getHaveItem(String name) {
-        return getOrNull(name, "HaveItem");
-    }
 
-    @Override
-    public boolean attack(String name) {
-        return "TRUE".equals(get(name, "boAttack"));
-    }
 
     @Override
     public String getHaveMagic(String name) {
@@ -140,18 +57,21 @@ public final class MonstersSdbImpl extends AbstractCSVSdbReader implements Monst
         return getIntOrZero(name, "EscapeLife");
     }
 
-    @Override
-    public int getRegenInterval(String name) {
-        return getIntOrZero(name, "RegenInterval");
+    public Set<String> getAllAnimateIds() {
+        return uniqueIds().stream().map(this::getAnimate).collect(Collectors.toSet());
     }
 
+    @Override
+    public String getEffect(String name) {
+        return get(name, "Effect");
+    }
 
     private static void check() {
 
         MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;
 //        Set<String> names = itemSdb.names();
         Set<String> names = monstersSdb.columnNames();
-        Set<String> items = monstersSdb.names();
+        Set<String> items = monstersSdb.uniqueIds();
         KungFuSdb kungFuSdb = KungFuSdb.INSTANCE;
         MagicParamSdb magicParamSdb = MagicParamSdb.INSTANCE;
         for (String i: items) {
@@ -185,26 +105,27 @@ public final class MonstersSdbImpl extends AbstractCSVSdbReader implements Monst
 
     private static void dump( ) {
         MonstersSdbImpl monstersSdb= MonstersSdbImpl.INSTANCE;
+        System.out.println(monstersSdb.getAllAnimateIds().stream().sorted().collect(Collectors.toList()));
 //        Set<String> names = itemSdb.names();
-        Set<String> names = monstersSdb.columnNames();
-        Set<String> items = monstersSdb.names();
-        for (String i: items) {
-            if (!NAMES.contains(i)) {
-                continue;
-            }
-        /*if (monstersSdb.getRecovery(i) > 10 || i.contains("NK")) {
-                continue;
-            }
-             */
-            System.out.println("----------------------------");
-            System.out.println("Name: " + i);
-            for (String name : names) {
-                if (!StringUtils.isEmpty(monstersSdb.get(i, name)) &&
-                ATTRS.contains(name))
-                    System.out.println(name + ": " + monstersSdb.get(i, name));
-            }
-        }
-
+//        Set<String> names = monstersSdb.columnNames();
+//        Set<String> items = monstersSdb.names();
+//        for (String i: items) {
+//            if (!NAMES.contains(i)) {
+//                continue;
+//            }
+//        /*if (monstersSdb.getRecovery(i) > 10 || i.contains("NK")) {
+//                continue;
+//            }
+//             */
+//            System.out.println("----------------------------");
+//            System.out.println("Name: " + i);
+//            for (String name : names) {
+//                if (!StringUtils.isEmpty(monstersSdb.get(i, name)) &&
+//                ATTRS.contains(name))
+//                    System.out.println(name + ": " + monstersSdb.get(i, name));
+//            }
+//        }
+//
     }
 
     public static void main(String[] args) {

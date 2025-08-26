@@ -31,4 +31,10 @@ public interface PlayerGainExpPacketOrBuilder extends
    * @return The kungFu.
    */
   boolean getKungFu();
+
+  /**
+   * <code>bool attack = 4;</code>
+   * @return The attack.
+   */
+  boolean getAttack();
 }

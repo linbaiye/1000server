@@ -1,37 +1,59 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.AbstractCreatureState;
-import org.y1000.entities.creatures.State;
 
-public final class PlayerStandUpState extends AbstractCreatureState<PlayerImpl> implements PlayerState {
+import org.y1000.entities.players.equipment.Equipment;
+import org.y1000.kungfu.attack.AttackKungFu;
+import org.y1000.entities.players.event.PlayerChangeStateEvent;
 
-    public PlayerStandUpState(int totalMillis) {
-        super(totalMillis);
+final class PlayerStandUpState extends AbstractPlayerState {
+
+
+    private final boolean toFight;
+
+    private PlayerStandUpState(PlayerImpl player, boolean toFight) {
+        super(player, PlayerStateEnum.StandUp, 750);
+        this.toFight = toFight;
     }
 
     public PlayerStandUpState(PlayerImpl player) {
-        this(player.getStateMillis(State.STANDUP));
+        this(player, false);
+    }
+    public static PlayerStandUpState toCombat(PlayerImpl player) {
+        return new PlayerStandUpState(player, true);
     }
 
     @Override
-    public State stateEnum() {
-        return State.STANDUP;
-    }
-
-    @Override
-    public boolean canUseFootKungFu() {
-        return elapsedMillis() >= totalMillis();
-    }
-
-    @Override
-    public void afterHurt(PlayerImpl player) {
-        player.changeState(PlayerStillState.idle(player));
-    }
-
-    @Override
-    public void update(PlayerImpl player, int delta) {
+    public void update(int delta) {
         if (elapse(delta)) {
-            player.changeState(PlayerStillState.idle(player));
+            changeToNext();
         }
+    }
+
+    @Override
+    public void equip(int slot, Equipment equipment) {
+        player().tryEquipFromSlot(slot, equipment);
+    }
+
+    private void changeToNext() {
+        if (toFight)
+            player().changeState(PlayerStandState.fightStand(player()));
+        else
+            player().changeState(PlayerStandState.idle(player()));
+        player().sendEvent(PlayerChangeStateEvent.allVisible(player()));
+    }
+
+    @Override
+    public void handleAfterHurt() {
+        changeToNext();
+    }
+
+    @Override
+    public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
+        player().tryChangeAttackKungFu(attackKungFu);
+    }
+
+    @Override
+    protected PlayerImpl player() {
+        return super.player();
     }
 }

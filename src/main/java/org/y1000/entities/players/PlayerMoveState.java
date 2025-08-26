@@ -1,60 +1,141 @@
 package org.y1000.entities.players;
 
 import lombok.extern.slf4j.Slf4j;
-import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.players.event.PlayerMovedEvent;
+import org.y1000.entities.players.event.PlayerSetPositionAndStateEvent;
+import org.y1000.entities.players.equipment.Equipment;
 import org.y1000.kungfu.FootKungFu;
+import org.y1000.kungfu.attack.AttackKungFu;
+import org.y1000.entities.players.event.PlayerMoveEvent;
+import org.y1000.entities.players.event.PlayerChangeStateEvent;
+import org.y1000.input.MoveInput;
 import org.y1000.util.Coordinate;
-import java.util.Set;
+
 
 @Slf4j
-public final class PlayerMoveState extends AbstractPlayerMoveState {
+final class PlayerMoveState extends AbstractPlayerState {
 
-    private static final Set<State> MOVE_STATES = Set.of(
-            State.WALK, State.RUN, State.FLY, State.ENFIGHT_WALK
-    );
+    private final MoveAction moveAction;
 
-    private PlayerMoveState(State state, Coordinate start, Direction towards,  int millisPerUnit) {
-        super(state, start, towards, millisPerUnit);
+    private final MoveInput currentInput;
+
+    private MoveInput newInput;
+
+
+    private PlayerMoveState(PlayerImpl player,
+            MoveInput input,
+            MoveAction moveAction) {
+        super(player, PlayerStateEnum.Move, moveAction.getMillis());
+        this.moveAction = moveAction;
+        currentInput = input;
     }
 
-    @Override
-    protected PlayerState rewindState(PlayerImpl player) {
-        return idle(player);
-    }
-
-
-    private void useResource(PlayerImpl player, FootKungFu footKungFu) {
-        footKungFu.tryGainExpAndUseResources(player, player::emitEvent);
-        if (!footKungFu.canKeep(player)) {
-            player.disableFootKungFuNoTip();
+    private void changeToStand() {
+        MoveAction currentAction = computeMoveAction(player(), moveAction);
+        if (currentAction == MoveAction.FightWalk) {
+            player().changeState(PlayerStandState.fightStand(player()));
+        } else {
+            player().changeState(PlayerStandState.idle(player()));
         }
     }
 
-    @Override
-    protected void onMoved(PlayerImpl player) {
-        player.changeState(idle(player));
-        player.footKungFu().ifPresent(kf -> useResource(player, kf));
+    public MoveAction moveAction() {
+        return moveAction;
     }
 
-    private PlayerState idle(PlayerImpl player) {
-        return stateEnum() == State.ENFIGHT_WALK ? PlayerStillState.chillOut(player) : PlayerStillState.idle(player);
-    }
-
-    public static PlayerMoveState moveBy(PlayerImpl player, State state, Direction direction) {
-        if (!MOVE_STATES.contains(state)) {
-            throw new IllegalArgumentException("Not a move state: " + state);
+    private boolean resetIfNotMovable(Coordinate destination) {
+        if (!player().movable(destination)) {
+            changeToStand();
+            player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
+            return true;
         }
-        return new PlayerMoveState(state, player.coordinate(), direction, player.getStateMillis(state));
-    }
-
-    public static PlayerMoveState moveBy(PlayerImpl player, Direction direction) {
-        State state = player.footKungFu().map(kf -> kf.canFly() ? State.FLY : State.RUN).orElse(State.WALK);
-        return moveBy(player, state, direction);
+        return false;
     }
 
     @Override
-    public State decideAfterHurtState() {
-        return stateEnum() == State.ENFIGHT_WALK ? State.COOLDOWN: State.IDLE;
+    public void update(int delta) {
+        if (elapsedMillis() == 0) {
+            // Not able to keep after this move, disable it in advance.
+            if (player().footKungFu().map(k -> !k.canKeep(player())).orElse(false))
+                player().disableFootKungFuAndSync();
+            player().realmMap().softOccupy(player(), currentInput.destination());
+        }
+        if (!elapse(delta))
+            return;
+        if (resetIfNotMovable(currentInput.destination())) {
+            return;
+        }
+        player().footKungFu().ifPresent(footKungFu -> {
+            boolean canFlyBefore = footKungFu.canFly();
+            footKungFu.tryGainExpAndUseResources(player());
+            if (!canFlyBefore && footKungFu.canFly()) {
+                player().syncActiveKungFuList();
+            }
+        });
+        player().changeCoordinate(currentInput.destination());
+        if (newInput == null) {
+            changeToStand();
+            player().sendEvent(new PlayerMovedEvent(player()));
+            player().sendEvent(PlayerChangeStateEvent.noSelf(player()));
+            return;
+        }
+        player().sendEvent(new PlayerMovedEvent(player()));
+        if (!player().coordinate().equals(newInput.from())) {
+            changeToStand();
+            player().sendEvent(PlayerSetPositionAndStateEvent.of(player()));
+            return;
+        }
+        player().changeDirection(newInput.direction());
+        if (resetIfNotMovable(newInput.destination())) {
+            return;
+        }
+        MoveAction newAction = computeMoveAction(player(), moveAction);
+        player().changeState(new PlayerMoveState(player(), newInput, newAction));
+        player().sendEvent(PlayerMoveEvent.moveBy(player(), newAction));
+    }
+
+    @Override
+    public void handleAfterHurt() {
+        player().changeState(this);
+        player().sendEvent(PlayerMoveEvent.restore(player(), moveAction, elapsedMillis()));
+    }
+
+    @Override
+    public void tryMove(MoveInput moveInput) {
+        newInput = moveInput;
+    }
+
+    @Override
+    public void equip(int slot, Equipment equipment) {
+        player().tryEquipFromSlot(slot, equipment);
+    }
+
+    private static MoveAction computeMoveAction(PlayerImpl player, MoveAction current) {
+        return player.footKungFu().map(k -> k.canFly() ? MoveAction.Fly : MoveAction.Run)
+                .orElse(current);
+    }
+
+    private static MoveAction computeNonFightMoveAction(PlayerImpl player) {
+        return player.footKungFu().map(k -> k.canFly() ? MoveAction.Fly : MoveAction.Run)
+                .orElse(MoveAction.Walk);
+    }
+
+    static PlayerMoveState noneFightMove(PlayerImpl player, MoveInput input) {
+        return new PlayerMoveState(player, input, computeNonFightMoveAction(player));
+    }
+
+    static PlayerMoveState fightWalk(PlayerImpl player, MoveInput moveInput) {
+        return new PlayerMoveState(player, moveInput, MoveAction.FightWalk);
+    }
+
+    @Override
+    public void tryToggleFootKungFu(FootKungFu footKungFu) {
+        player().stopCombat();
+        player().toggleFootAndSync(footKungFu);
+    }
+
+    @Override
+    public void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
+        player().tryChangeAttackKungFu(attackKungFu);
     }
 }

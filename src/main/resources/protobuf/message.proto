@@ -5,39 +5,38 @@ message PositionPacket {
   int32 y = 2;
   int32 direction = 3;
   int64 id = 4;
-  int32 type = 5;
-  int32 state = 6;
 }
 
-message MonsterMoveEventPacket {
+message NpcMovePacket {
   int64 id = 1;
   int32 direction = 2;
-  int32 speed = 3;
+  int32 x = 3;
+  int32 y = 4;
+  int32 speedMillis = 5;
+}
+
+message FollowRopePacket {
+  int64 id = 1;
+  int32 direction = 2;
+  int32 durationMillis = 3;
   int32 x = 4;
   int32 y = 5;
 }
 
-
-message InputResponsePacket {
-  int64 sequence = 1;
-  PositionPacket positionPacket = 2;
+message ShowQuestPacket {
+  int64 id = 1;
+  string npcName = 2;
+  string abstraction = 3;
+  string description = 4;
+  string submit = 5;
+  string quest = 6;
 }
 
-message InputPacket {
-  int32 type = 1;
-  int64 sequence = 2;
-  int32 clickedDirection = 3;
-}
 
-message ClickPacket {
+message ClickInputPacket {
   int64 id = 1;
 }
 
-message RightClickPacket {
-  int32 type = 1;
-  optional int32 slotId = 2;
-  optional int32 page = 3;
-}
 
 message ClientKeyPressedPacket {
   int32 key = 1;
@@ -45,14 +44,6 @@ message ClientKeyPressedPacket {
   int32 y = 3;
 }
 
-message PickItemPacket {
-  int32 id = 1;
-}
-
-message PlayerLoginPacket {
-  string token = 1;
-  string charName = 2;
-}
 
 message CreatureDieEventPacket {
   int64 id = 1;
@@ -73,78 +64,26 @@ message CreatureSoundEventPacket {
   string sound = 2;
 }
 
-message CreatureHurtEventPacket {
-  int64 id = 1;
-  int32 direction = 2;
-  int32 x = 3;
-  int32 y = 4;
-  int32 afterHurtState = 5;
-  int32 currentLife = 6;
-  int32 maxLife = 7;
-}
 
 message ChangeStatePacket {
   int64 id = 1;
   int32 state = 2;
+  int32 direction = 3;
+  int32 x = 4;
+  int32 y = 5;
 }
-
-
-message MoveEventPacket {
-  InputPacket input = 1;
-  int32 happenedAtX = 2;
-  int32 happenedAtY = 3;
-}
-
-message ClientAttackEventPacket {
-  int64 sequence = 1;
-  int64 targetId = 2;
-  int32 state = 3;
-  int32 direction = 4;
-}
-
-message ClientAttackResponsePacket {
-  int64 sequence = 1;
-  bool accepted = 2;
-  optional int32 backToState = 3;
-}
-
-message ClientUnequipPacket {
-  int32 type = 1;
-}
-
-message ClientToggleKungFuPacket {
-  int32 tab = 1;
-  int32 slot = 2;
-}
-
-message ClientSitDownPacket {
-  int32 x = 1;
-  int32 y = 2;
-}
-
-
-message ClientStandUpPacket {
-  bool padding = 1;
-}
-
 
 message SwapInventorySlotPacket {
   int32 slot1 = 1;
   int32 slot2 = 2;
 }
 
-message DoubleClickInventorySlotPacket {
-  int32 slot = 1;
+message SwapKungFuSlotPacket {
+  int32 slot1 = 1;
+  int32 slot2 = 2;
+  int32 page = 3;
 }
 
-message DropItemPacket {
-  int32 slot = 1;
-  int32 x = 2;
-  int32 y = 3;
-  int32 number = 4;
-  int32 coordinateX = 5;
-  int32 coordinateY = 6;
-}
 
 message DropItemConfirmPacket {
   int32 slot = 1;
@@ -154,11 +93,14 @@ message DropItemConfirmPacket {
 
 message ShowItemPacket {
   int64 id = 1;
+  int32 icon = 2;
   optional int32 number = 4;
   int32 coordinateX = 5;
   int32 coordinateY = 6;
   string name = 7;
   int32 color = 8;
+  bool guildStone = 9;
+  bool demo = 10;
 }
 
 message ShowTeleportPacket {
@@ -169,80 +111,12 @@ message ShowTeleportPacket {
   int32 shape = 8;
 }
 
-message ClientSimpleCommandPacket {
-  int32 command = 1;
-}
-
-
-message CharacterKungFuPacket {
-  string attackKungFuName = 1;
-  int32 attackKungFuLevel = 2;
-  int32 attackKungFuType = 3;
-}
-
-message ClientTradePlayerPacket {
-  int64 targetId = 1;
-  int32 slot = 2;
-}
-
-message ClientUpdateTradePacket {
-  int32 inventorySlot = 1;
-  int64 itemNumber = 2;
-  int32 type = 3;
-  int32 tradeWindowSlot = 4;
-}
-
-
-message ClientMerchantTradeItemsPacket {
-  int64 merchantId = 1;
-  repeated InventoryItemPacket items = 2;
-}
-
-message ClientTriggerDynamicObjectPacket {
-  int64 id = 1;
-  int32 useSlot = 2;
-}
-
-message ClientSwapKungFuSlotPacket {
-  int32 page = 1;
-  int32 slot1 = 2;
-  int32 slot2 = 3;
-}
-
-message ClientDragPlayerPacket {
-  int64 targetId = 1;
-  int32 ropeSlot = 2;
-}
-
-message ClientDyePacket {
-  int32 dyedSlotId = 1;
-  int32 dyeSlotId = 2;
-}
-
-message ClientSayPacket {
-  string text = 1;
-}
-
-message ClientBankOperationPacket {
-  int32 type = 1;
-  int32 fromSlot = 2;
-  int32 toSlot = 3;
-  int64 number = 4;
-  int64 bankerId = 5;
-}
-
 message ClientChangeTeamPacket {
   int32 teamNumber = 1;
 }
 
-message ClientFoundGuildPacket{
-  string name = 1;
-  int32 x = 2;
-  int32 y = 3;
-  int32 inventorySlot = 4;
-}
 
-message ClientCreateGuildKungFuPacket {
+message ApplyGuildKungFuInputPacket {
   int32 attackSpeed = 1;
   int32 life = 2;
   int32 avoidance = 3;
@@ -262,57 +136,104 @@ message ClientCreateGuildKungFuPacket {
   int32 type = 18;
 }
 
-message ClientManageGuildPacket {
-  int32 type = 1;
-  string target = 2;
-}
 
-message ClientSubmitQuestPacket {
+
+message SubmitQuestInputPacket {
   int64 id = 1;
   string questName = 2;
 }
 
-message ClientClickInteractabilityPacket {
-  int64 id = 1;
-  string name = 2;
+message ChatInputPacket {
+  string text = 1;
+}
+
+message ClickEquipmentInputPacket {
+  int32 equipType = 1;
+}
+
+message UnlockBankInputPacket {
+  int64 npcId = 1;
+}
+
+message BankOperationInputPacket {
+  int64 npcId = 1;
+  int32 type = 2;
+  int32 fromSlot = 3;
+  int32 toSlot = 4;
+  int32 number = 5;
+}
+
+message RealmInputPacket {
+  int32 type = 1;
+}
+
+message LoginAccountRequestPacket {
+  string username = 1;
+  string password = 2;
+}
+
+message RegisterAccountRequestPacket {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginCharacterRequestPacket {
+  string characterName = 1;
+}
+
+message CreateCharacterRequestPacket {
+  string characterName = 1;
+  bool male = 2;
 }
 
 message ClientPacket {
   oneof Type {
-    MoveEventPacket moveEventPacket = 1;
-    ClickPacket clickPacket = 2;
-    PlayerLoginPacket loginPacket = 3;
-    ClientAttackEventPacket attackEventPacket = 4;
-    SwapInventorySlotPacket swapInventorySlotPacket = 5;
-    DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;
-    DropItemPacket dropItem = 7;
-    PickItemPacket pickItem = 8;
-    ClientUnequipPacket unequip = 9;
-    ClientToggleKungFuPacket toggleKungFu = 10;
-    ClientSitDownPacket sitDown = 11;
-    ClientStandUpPacket standUp = 12;
-    ClientMerchantTradeItemsPacket sellItems = 13;
-    ClientMerchantTradeItemsPacket buyItems = 14;
-    RightClickPacket rightClick = 15;
-    ClientTradePlayerPacket tradeRequest = 16;
-    ClientUpdateTradePacket updateTrade = 17;
-    ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;
-    ClientSwapKungFuSlotPacket swapKungFuSlot = 19;
-    ClientDragPlayerPacket dragPlayer = 20;
-    ClientSimpleCommandPacket simpleCommand = 21;
-    ClientDyePacket dye = 22;
-    ClientSayPacket say = 23;
-    ClientBankOperationPacket bankOperation = 24;
+    LoginAccountRequestPacket loginAccount = 10;
+    RegisterAccountRequestPacket registerAccount = 11;
+    LoginCharacterRequestPacket loginCharacter = 12;
+    CreateCharacterRequestPacket createCharacter = 13;
+
     ClientChangeTeamPacket changeTeam = 25;
-    ClientFoundGuildPacket foundGuild = 26;
-    ClientCreateGuildKungFuPacket createGuildKungFu = 27;
-    ClientManageGuildPacket manageGuild = 28;
-    ClientSubmitQuestPacket submitQuest = 29;
-    ClientClickInteractabilityPacket interact = 30;
+
+
+    SwapInventorySlotPacket swapInventorySlotPacket = 5;
+    ClickInputPacket clickPacket = 2;
+    MoveInputPacket moveInput = 32;
+    TurnInputPacket turnInput = 33;
+    SimpleInputPacket simpleInput = 34;
+    ClickKungFuInputPacket clickKungFuInput = 35;
+    ClickInventorySlotInputPacket clickInventorySlotInput = 36;
+    AttackInputPacket attackInput = 37;
+    UnequipInputPacket unequipInput = 38;
+    SwapKungFuSlotPacket swapKungFuSlotPacket = 39;
+    PickInputPacket pickInput = 40;
+    DropItemInputPacket dropInput = 41;
+    ConfirmDropItemInputPacket confirmDropInput = 42;
+    ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;
+    BuyItemInputPacket buyItem = 44;
+    SellItemInputPacket sellItem = 45;
+    DropItemOnEntityInputPacket dropOnEntityInput = 46;
+    PlayerTradeStateInputPacket tradeStateInput = 47;
+    AddTradeItemInputPacket addPlayerTradeInput = 48;
+    UsePillInputPacket usePill = 49;
+    ChatInputPacket chat = 50;
+    ClickEquipmentInputPacket clickEquipment = 51;
+    SubmitQuestInputPacket submitQuestInput = 52;
+    UnlockBankInputPacket unlockBank = 53;
+    BankOperationInputPacket bankOperation = 54;
+    RealmInputPacket realmInput = 56;
+
+    CreateGuildInputPacket createGuildInput = 57;
+    ApplyGuildKungFuInputPacket applyGuildKungFu = 27;
   }
 }
 
+message UsePillInputPacket {
+  string name = 1;
+}
+
 message InterpolationPacket {
+  int32 moveAction = 1;
   int32 state = 2;
   int32 elapsedMillis = 5;
   int32 direction = 7;
@@ -320,15 +241,13 @@ message InterpolationPacket {
   int32 y = 9;
 }
 
-message InterpolationsPacket {
-  repeated InterpolationPacket interpolations = 1;
-}
 
 message InventoryItemPacket {
   string name = 1;
   int32 slotId = 2;
   optional int64 number = 3;
   int32 color = 4;
+  int32 icon = 5;
 }
 
 message NpcItemPacket {
@@ -341,17 +260,30 @@ message NpcItemPacket {
 
 message OpenTradeWindowPacket {
   int64 anotherPlayerId = 1;
-  optional int32 slot = 2;
+  int32 slot = 2;
+  int64 maxNumber = 3;
+  bool passive = 4;
+  string itemName = 5;
+  string selfName = 6;
+  string anotherName = 7;
 }
 
-message UpdateTradeWindowPacket {
-  int32 type = 1;
-  optional string name = 2;
-  optional int64 number = 3;
-  optional int32 slot = 4;
-  optional bool self = 5;
-  int32 color = 6;
+message CloseTradeWindowPacket {
+  int32 which = 1;
 }
+
+message InventoryPacket {
+  repeated InventoryItemPacket items = 1;
+  bool forceful = 2;
+}
+
+message ShowBankWindowPacket {
+  int64 bankerId = 1;
+  repeated InventoryItemPacket items = 2;
+  int32 capacity = 3;
+  int32 unlocked = 4;
+}
+
 
 
 message KungFuPacket {
@@ -359,23 +291,28 @@ message KungFuPacket {
   int32 level = 2;
   int32 slot = 3;
   int32 type = 4;
+  int32 icon = 5;
 }
 
 message TextMessagePacket {
-  int32 type = 1;
-  optional string text = 2;
-  int32 location = 3;
-  int32 colorType = 4;
-  optional string fromPlayer = 5;
-}
-
-message ToggleKungFuPacket {
-  string name = 1;
-  optional int32 level = 2;
-  int64 id = 3;
-  bool quietly = 4;
+  string text = 1;
+  int32 location = 2;
+  string color = 3;
+  string bgColor = 4;
   int32 type = 5;
 }
+
+
+
+message AttributeEquipPacket {
+  repeated string attributes = 1;
+  string name = 2;
+  string age = 3;
+  bool male = 4;
+  repeated PlayerEquipPacket equipments = 5;
+  bool quietly = 6;
+}
+
 
 message LifeBarPacket {
   int64 id = 1;
@@ -387,25 +324,16 @@ message TeleportPacket {
   int32 x = 1;
   int32 y = 2;
   string map = 3;
-  string tile = 4;
-  string obj = 5;
-  string rof = 6;
   string bgm = 7;
-  string realm = 8;
+  string title = 8;
+  string resource = 9;
 }
 
-message LoginPacket {
-  TeleportPacket teleport = 1;
-  PlayerInfoPacket info = 2;
-  string attackKungFuName = 3;
-  optional string footKungFuName = 8;
-  repeated InventoryItemPacket inventoryItems = 9;
-  repeated KungFuPacket unnamedKungFuList = 11;
-  repeated KungFuPacket basicKungFuList = 12;
-  optional string protectionKungFu = 13;
-  optional string assistantKungFu = 14;
-  optional string breathKungFu = 15;
-  AttributePacket attribute = 17;
+
+message KungFuBookPacket {
+  repeated KungFuPacket unnamedKungFuList = 1;
+  repeated KungFuPacket basicKungFuList = 2;
+  bool forceful = 3;
 }
 
 message AttributePacket {
@@ -424,25 +352,6 @@ message AttributePacket {
   int32 legPercent = 13;
 }
 
-message PlayerRightClickAttributePacket {
-  int32 attackSpeed = 1;
-  int32 maxLife = 2;
-  int32 avoidance = 3;
-  int32 maxPower = 4;
-  int32 recovery = 5;
-  int32 maxInnerPower = 6;
-  int32 maxOuterPower = 8;
-  int32 maxEnergy = 10;
-  int32 bodyDamage = 7;
-  int32 headDamage = 9;
-  int32 armDamage = 11;
-  int32 legDamage = 12;
-  int32 bodyArmor = 13;
-  int32 headArmor = 14;
-  int32 armArmor = 15;
-  int32 legArmor = 16;
-  int32 age = 17;
-}
 
 message PlayerUnequipPacket {
   int64 id = 1;
@@ -451,44 +360,64 @@ message PlayerUnequipPacket {
 
 message PlayerEquipPacket {
   int64 id = 1;
-  string equipmentName = 2;
+  int32 equipmentType = 2;
   int32 color = 3;
-}
-
-message PlayerSitDownPacket {
-  int64 id = 1;
-}
-
-message PlayerStandUpPacket {
-  int64 id = 1;
-}
-
-message PlayerCooldownPacket {
-  int64 id = 1;
-}
-
-message PlayerRevivePacket {
-  int64 id = 1;
+  string prefix = 4;
+  optional string pairedPrefix = 5;
+  int32 weaponType = 6;
+  string name = 7;
+  int32 icon = 8;
 }
 
 message PlayerGainExpPacket {
   string name = 1;
   int32 level = 2;
   bool kungFu = 3;
+  bool attack = 4;
 }
 
 message ProjectilePacket {
   int64 id = 1;
   int64 targetId = 2;
   int32 flyingTimeMillis = 3;
-  int32 sprite = 4;
+  string sprite = 4;
 }
-
 message ItemAttributePacket {
   int32 type = 1;
   int32 slotId = 2;
   optional int32 page = 3;
   string text = 4;
+}
+
+message ItemDescriptionPacket {
+  string text = 1;
+  int32 type = 2;
+  int32 index = 3;
+}
+
+message DynamicObjectSnapshotPacket {
+  int64 id = 1;
+  int32 x = 2;
+  int32 y = 3;
+  repeated int32 aniStart = 4;
+  repeated int32 aniEnd = 5;
+  repeated bool aniLoop = 7;
+  repeated int32 aniId = 8;
+  string shape = 6;
+  optional string viewName = 9;
+  repeated int32 guardX = 10;
+  repeated int32 guardY = 11;
+  int32 currentAni = 12;
+  int32 currentElapsed = 13;
+  bool occupying = 14;
+  int32 offsetX = 15;
+  int32 offsetY = 16;
+}
+message DynamicObjectShiftPacket {
+  int64 id = 1;
+  int32 animationId = 2;
+  int32 animationId2 = 4;
+  bool liftCoordinates = 3;
 }
 
 message ShowDynamicObjectPacket {
@@ -507,13 +436,6 @@ message ShowDynamicObjectPacket {
   bool loop = 13;
 }
 
-message UpdateDynamicObjectPacket {
-  int64 id = 1;
-  int32 start = 2;
-  int32 end = 3;
-  bool loop = 4;
-}
-
 message BreakRopePacket {
   int64 id = 1;
 }
@@ -522,23 +444,7 @@ message NpcPositionPacket {
   repeated int32 xList = 1;
   repeated int32 yList = 2;
   repeated string nameList = 3;
-}
-
-message ChatPacket {
-  int64 id = 1;
-  string content = 2;
-  optional string fromPlayer = 3;
-}
-
-message OpenBankPacket {
-  repeated InventoryItemPacket items = 1;
-  int32 capacity = 2;
-  int32 unlocked = 3;
-}
-
-message UpdateBankPacket {
-  int32 type = 1;
-  optional InventoryItemPacket updateSlot = 2;
+  repeated int64 idList = 4;
 }
 
 message NameColorPacket {
@@ -546,10 +452,6 @@ message NameColorPacket {
   int32 color = 2;
 }
 
-message UpdateGuildPacket {
-  int64 id = 1;
-  string name = 2;
-}
 
 message UpdateGuildKungFuFormPacket {
   int32 command = 1;
@@ -572,38 +474,97 @@ message UpdateBuffPacket {
   optional string description = 5;
 }
 
-message NpcInteractionMenuPacket {
+
+message EntityDamagedPacket {
   int64 id = 1;
-  string viewName = 2;
-  string shape = 3;
-  int32 avatarIdx = 4;
-  string text = 5;
-  repeated string interactions = 6;
+  int32 percent = 2;
 }
 
-message MerchantMenuPacket {
-  int64 id = 1;
-  string viewName = 2;
-  string shape = 3;
-  int32 avatarIdx = 4;
-  string text = 5;
+message StartDopItemPacket {
+  int32 maxNumber = 1;
+  int32 x = 2;
+  int32 y = 3;
+  string name = 4;
+  int32 slot = 5;
+}
+
+message NpcMenuPacket {
+  string name = 1;
+  int64 id = 2;
+  int32 image = 3;
+  string sprite = 4;
+  string greetings = 5;
+  repeated string supportedActions = 6;
+}
+
+message NpcTradeMenuPacket {
+  string name = 1;
+  int64 id = 2;
+  int32 image = 3;
+  string sprite = 4;
+  string greetings = 5;
   repeated NpcItemPacket items = 6;
-  bool sell = 7;
+  bool sale = 7;
+}
+
+message PlayerTradeStateInputPacket {
+  int32 state = 1;
+}
+
+message AddTradeItemInputPacket {
+  int32 slot = 1;
+  int32 number = 2;
+}
+
+message ActivateEffectPacket {
+  int64 id = 1;
+  int32 millis = 2;
+  string effect = 3;
+}
+
+message LoginResponsePacket {
+  int32 code = 1;
+  string description = 2;
+  repeated string characters = 3;
+}
+
+message RegisterResponsePacket {
+  int32 code = 1;
+  string description = 2;
+}
+
+message CreateCharacterResponsePacket {
+  int32 code = 1;
+  string description = 2;
+  string characterName = 3;
+}
+
+message ShowCreateGuildWindowPacket {
+  int32 fromSlot = 1;
+  string tip = 3;
+  string tile = 4;
+}
+
+message ApplyKungFuWindowPacket {
+  int32 type = 1;
+  string msg = 2;
+}
+
+message CreateGuildInputPacket {
+  bool confirm = 1;
+  int32 fromSlot = 2;
+  string name = 3;
 }
 
 
 message Packet {
   oneof TypedPacket {
+    LoginResponsePacket loginResponse = 3;
+    RegisterResponsePacket registerResponse = 5;
+    CreateCharacterResponsePacket createCharacterResponse = 4;
     PositionPacket positionPacket = 1;
-    CreatureInterpolationPacket creatureInterpolation = 2;
-    LoginPacket loginPacket = 4;
-    InterpolationsPacket interpolations = 5;
-    InputResponsePacket responsePacket = 6;
-    PlayerInterpolationPacket playerInterpolation = 7;
     RemoveEntityPacket removeEntity = 8;
-    ClientAttackResponsePacket attackEventResponsePacket = 9;
     CreatureAttackEventPacket attackEventPacket = 10;
-    CreatureHurtEventPacket hurtEventPacket = 11;
     ChangeStatePacket changeStatePacket = 12;
     SwapInventorySlotPacket swapInventorySlotPacket = 13;
     DropItemConfirmPacket dropItem = 16;
@@ -613,53 +574,61 @@ message Packet {
     PlayerUnequipPacket unequip = 20;
     PlayerEquipPacket equip = 21;
     OpenTradeWindowPacket openTradeWindow = 22;
-    ToggleKungFuPacket toggleKungFu = 23;
-    PlayerSitDownPacket sitDown = 24;
-    PlayerStandUpPacket standUp = 25;
-    PlayerCooldownPacket cooldown = 26;
     AttributePacket attribute = 27;
     CreatureSoundEventPacket sound = 28;
     CreatureDieEventPacket die = 29;
-    PlayerRevivePacket playerRevive = 30;
     PlayerGainExpPacket gainExp = 31;
     ProjectilePacket projectile = 32;
-    MonsterMoveEventPacket monsterMove = 33;
     KungFuPacket learnKungFu = 34;
-    ItemAttributePacket itemAttribute = 35;
-    PlayerRightClickAttributePacket rightClickAttribute = 36;
-    UpdateTradeWindowPacket updateTradeWindow = 37;
+    ItemDescriptionPacket itemDescription = 35;
     ShowDynamicObjectPacket showDynamicObject = 38;
-    UpdateDynamicObjectPacket updateDynamicObject = 39;
+
     TeleportPacket teleport = 40;
     LifeBarPacket lifebar = 41;
     KungFuPacket updateKungFuSlot = 42;
     ShowTeleportPacket showTeleport = 43;
     BreakRopePacket breakRope = 44;
     NpcPositionPacket npcPosition = 45;
-    ChatPacket chat = 46;
-    OpenBankPacket openBank = 47;
-    UpdateBankPacket updateBank = 48;
     NameColorPacket nameColor = 49;
-    UpdateGuildPacket updateGuild = 50;
     UpdateGuildKungFuFormPacket kungFuForm = 51;
     UpdateQuestWindowPacket questWindow = 52;
     UpdateBuffPacket updateBuff = 53;
-    NpcInteractionMenuPacket interactionMenu = 54;
-    MerchantMenuPacket merchantMenu = 55;
+    KungFuBookPacket kungFuBook = 56;
+    InventoryPacket inventory = 57;
+    JoinRealmPacket joinRealm = 58;
+    PlayerSnapshotPacket playerSnapshot = 59;
+    NpcSnapshotPacket npcSnapshot = 60;
+    CreatureSayPacket say = 61;
+    SyncActiveKungFuPacket activeKungFuList = 62;
+    PlayerChangeStatePacket playerChangeState = 63;
+    PlayerAttackPacket attack = 64;
+    PlayerSetPositionPacket playerSetPosition = 66;
+    NpcMovePacket npcMove = 67;
+    PlayerMovePacket playerMove = 68;
+    EntitySoundPacket entitySound = 69;
+    PlayerDamagedPacket playerDamaged = 70;
+    EntityDamagedPacket entityDamaged = 71;
+    StartDopItemPacket dropItemPacket = 72;
+    NpcMenuPacket npcMenuPacket = 73;
+    NpcTradeMenuPacket tradeMenuPacket = 74;
+    CloseTradeWindowPacket closeTradePacket = 75;
+    UpdateTradeWindowSlotPacket updateTradeWindowSlot = 76;
+    DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;
+    DynamicObjectShiftPacket dynamicObjectShift = 78;
+    FollowRopePacket followRope = 79;
+    PillsPacket pills = 80;
+    AttributeEquipPacket attributeEquip = 81;
+    ActivateEffectPacket activateEffect = 82;
+    ShowQuestPacket showQuest = 83;
+    ShowBankWindowPacket showBank = 84;
+    ShowCreateGuildWindowPacket showCreateGuild = 85;
+    ApplyKungFuWindowPacket showApplyKungFu = 86;
   }
 }
 
-message CreatureInterpolationPacket {
-  InterpolationPacket interpolation = 1;
-  int64 id = 2;
-  string name = 3;
-  int32 type = 4;
-  optional string merchantFile = 5;
-  string shape = 6;
-  string animate = 7;
-  repeated string menus = 8;
+message EntitySoundPacket {
+  string sound = 1;
 }
-
 
 message PlayerInfoPacket {
   int64 id = 2;
@@ -685,11 +654,187 @@ message PlayerInfoPacket {
 }
 
 
-message PlayerInterpolationPacket {
-  InterpolationPacket interpolation = 1;
-  PlayerInfoPacket info = 2;
-}
-
 message RemoveEntityPacket {
   int64 id = 1;
 }
+
+message MoveInputPacket {
+  int32 x = 1;
+  int32 y = 2;
+  int32 direction = 3;
+}
+
+message UnequipInputPacket {
+  int32 type = 1;
+}
+
+
+message TurnInputPacket {
+  int32 direction = 3;
+}
+
+message ClickKungFuInputPacket {
+  int32 page = 1;
+  int32 slot = 2;
+  int32 clickType = 3;
+}
+
+message ClickInventorySlotInputPacket {
+  int32 slot = 1;
+  int32 clickType = 3;
+}
+
+message SimpleInputPacket {
+  int32 type = 1;
+}
+
+message JoinRealmPacket {
+  AttributePacket attribute = 1;
+  repeated PlayerEquipPacket equipments = 2;
+  TeleportPacket teleport = 3;
+  bool male = 4;
+  string name = 5;
+  int64 id = 6;
+  string attackKungFu = 7;
+  int32 attackKungFuLevel = 8;
+}
+
+message PlayerToggleKungFuPacket {
+  string attackKungFu = 1;
+  optional string footKungFu = 2;
+  bool canFly = 3;
+  optional string protectionKungFu = 4;
+  optional string assistantKungFu = 5;
+}
+
+message CreatureBaseInfoPacket {
+  int32 elapsedMillis = 2;
+  int32 direction = 3;
+  int32 x = 4;
+  int32 y = 5;
+  string viewName = 6;
+  int64 id = 7;
+}
+
+message PlayerSnapshotPacket {
+  CreatureBaseInfoPacket baseInfo = 1;
+  int32 moveAction = 2;
+  repeated PlayerEquipPacket equipments = 3;
+  bool male = 4;
+  int32 state = 5;
+}
+
+message NpcSnapshotPacket {
+  CreatureBaseInfoPacket baseInfo = 1;
+  string shape = 2;
+  string animate = 3;
+  int32 state = 4;
+  int32 speed = 5;
+}
+
+message CreatureSayPacket {
+  int64 id = 1;
+  string text = 2;
+  string viewName = 3;
+  bool cache = 4;
+}
+
+message PillsPacket {
+  repeated string pills = 1;
+}
+
+message SyncActiveKungFuPacket {
+  string attackKungFu = 1;
+  optional string protectionKungFu = 2;
+  optional string breathKungFu = 3;
+  optional string assistantKungFu = 4;
+  optional string footKungFu = 5;
+  bool footKungFuCanFly = 6;
+  int64 id = 7;
+  int32 attackKungFuLevel = 8;
+}
+
+message PlayerChangeStatePacket {
+  int64 id = 1;
+  int32 state = 2;
+  int32 direction = 3;
+  int32 x = 4;
+  int32 y = 5;
+}
+
+message PlayerSetPositionPacket {
+  PositionPacket position = 1;
+  int32 state = 2;
+}
+
+
+message PlayerAttackPacket {
+  int64 id = 1;
+  int32 action = 2;
+  int32 direction = 3;
+  string effectSprite = 4;
+}
+
+message AttackInputPacket {
+  int64 id = 64;
+}
+
+message PickInputPacket {
+  int64 id = 64;
+}
+
+message DropItemInputPacket {
+  int32 slot = 1;
+  int32 x = 2;
+  int32 y = 3;
+}
+
+message DropItemOnEntityInputPacket {
+  int32 slot = 1;
+  int64 id = 2;
+}
+
+message ConfirmDropItemInputPacket {
+  int32 number = 1;
+  int32 slot = 2;
+  int32 x = 3;
+  int32 y = 4;
+}
+
+message ClickNpcAbilityInputPacket {
+  int64 id = 1;
+  string abilityName = 2;
+}
+
+message BuyItemInputPacket {
+  int64 id = 1;
+  string name = 2;
+  int32 number = 3;
+}
+
+message SellItemInputPacket {
+  int64 id = 1;
+  int32 slot = 2;
+  int32 number = 3;
+}
+
+message PlayerMovePacket {
+  NpcMovePacket movePacket = 1;
+  int32 moveAction = 2;
+  int32 startMillis = 3;
+}
+
+message PlayerDamagedPacket {
+  int32 curLife = 1;
+  int32 maxLife = 2;
+  int64 id = 3;
+  int32 headPercent = 4;
+  int32 armPercent = 5;
+  int32 legPercent = 6;
+}
+
+message UpdateTradeWindowSlotPacket {
+  bool self = 1;
+  InventoryItemPacket item = 2;
+}
+

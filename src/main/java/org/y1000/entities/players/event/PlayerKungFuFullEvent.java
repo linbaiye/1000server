@@ -1,33 +1,30 @@
 package org.y1000.entities.players.event;
 
-import org.y1000.entities.Entity;
 import org.y1000.entities.players.Player;
 import org.y1000.kungfu.KungFu;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.serverevent.PlayerEventVisitor;
-import org.y1000.realm.event.BroadcastEvent;
+import org.y1000.realm.PlayerEventHandler;
+import org.y1000.realm.event.BroadcastTextEvent;
 
-public final class PlayerKungFuFullEvent implements BroadcastEvent, PlayerEvent {
+public final class PlayerKungFuFullEvent implements PlayerEvent {
     private final String text;
     private final Player player;
 
     public PlayerKungFuFullEvent(Player source, KungFu kungFu) {
-        text = source.viewName() +  " 恭喜你\n" + kungFu.name() + " 修炼值已到顶点";
+        text = source.viewName() +  "，恭喜你，" + kungFu.name() + "修炼值已到顶点！";
         this.player = source;
     }
 
-    @Override
-    public void accept(PlayerEventVisitor playerEventHandler) {
-
+    public BroadcastTextEvent toBroadcastEvent() {
+        return BroadcastTextEvent.leftUp(text);
     }
 
     @Override
-    public void send(Player player) {
-        player.emitEvent(PlayerTextEvent.leftup(player, text));
-    }
-
-    @Override
-    public Entity source() {
+    public Player source() {
         return player;
+    }
+
+    @Override
+    public void accept(PlayerEventHandler handler) {
+        handler.sendCrossRealmEvent(toBroadcastEvent());
     }
 }

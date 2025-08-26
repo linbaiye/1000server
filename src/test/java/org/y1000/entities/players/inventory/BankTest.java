@@ -13,19 +13,19 @@ class BankTest extends AbstractUnitTestFixture {
     @Test
     void canPut() {
         Bank bank = Bank.open();
-        assertFalse(bank.canPut(1, itemFactory.createItem("长剑")));
+        assertFalse(bank.canAdd(1, itemFactory.createItem("长剑")));
         bank.unlock();
-        assertFalse(bank.canPut(0, itemFactory.createItem("长剑")));
-        assertTrue(bank.canPut(1, itemFactory.createItem("长剑")));
-        assertTrue(bank.canPut(10, itemFactory.createItem("长剑")));
-        assertFalse(bank.canPut(11, itemFactory.createItem("长剑")));
-        bank.put(1, itemFactory.createItem("长剑"));
-        assertFalse(bank.canPut(1, itemFactory.createItem("长剑")));
+        assertFalse(bank.canAdd(0, itemFactory.createItem("长剑")));
+        assertTrue(bank.canAdd(1, itemFactory.createItem("长剑")));
+        assertTrue(bank.canAdd(10, itemFactory.createItem("长剑")));
+        assertFalse(bank.canAdd(11, itemFactory.createItem("长剑")));
+        bank.add(1, itemFactory.createItem("长剑"));
+        assertFalse(bank.canAdd(1, itemFactory.createItem("长剑")));
         bank.unlock();
         bank.unlock();
         bank.unlock();
-        assertFalse(bank.canPut(41, itemFactory.createItem("长剑")));
-        assertTrue(bank.canPut(40, itemFactory.createItem("长剑")));
+        assertFalse(bank.canAdd(41, itemFactory.createItem("长剑")));
+        assertTrue(bank.canAdd(40, itemFactory.createItem("长剑")));
     }
 
     @Test
@@ -38,5 +38,14 @@ class BankTest extends AbstractUnitTestFixture {
         bank.unlock();
         assertFalse(bank.canUnlock());
         assertEquals(40, bank.getUnlocked());
+    }
+
+    @Test
+    void isSlotOpen() {
+        Bank bank = Bank.open();
+        assertFalse(bank.isSlotOpen(0));
+        assertFalse(bank.isSlotOpen(1));
+        bank.unlock();
+        assertTrue(bank.isSlotOpen(10));
     }
 }

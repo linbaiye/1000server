@@ -19,4 +19,22 @@ public interface ChangeStatePacketOrBuilder extends
    * @return The state.
    */
   int getState();
+
+  /**
+   * <code>int32 direction = 3;</code>
+   * @return The direction.
+   */
+  int getDirection();
+
+  /**
+   * <code>int32 x = 4;</code>
+   * @return The x.
+   */
+  int getX();
+
+  /**
+   * <code>int32 y = 5;</code>
+   * @return The y.
+   */
+  int getY();
 }

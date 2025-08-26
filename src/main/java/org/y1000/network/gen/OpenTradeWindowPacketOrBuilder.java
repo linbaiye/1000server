@@ -15,13 +15,56 @@ public interface OpenTradeWindowPacketOrBuilder extends
   long getAnotherPlayerId();
 
   /**
-   * <code>optional int32 slot = 2;</code>
-   * @return Whether the slot field is set.
-   */
-  boolean hasSlot();
-  /**
-   * <code>optional int32 slot = 2;</code>
+   * <code>int32 slot = 2;</code>
    * @return The slot.
    */
   int getSlot();
+
+  /**
+   * <code>int64 maxNumber = 3;</code>
+   * @return The maxNumber.
+   */
+  long getMaxNumber();
+
+  /**
+   * <code>bool passive = 4;</code>
+   * @return The passive.
+   */
+  boolean getPassive();
+
+  /**
+   * <code>string itemName = 5;</code>
+   * @return The itemName.
+   */
+  java.lang.String getItemName();
+  /**
+   * <code>string itemName = 5;</code>
+   * @return The bytes for itemName.
+   */
+  com.google.protobuf.ByteString
+      getItemNameBytes();
+
+  /**
+   * <code>string selfName = 6;</code>
+   * @return The selfName.
+   */
+  java.lang.String getSelfName();
+  /**
+   * <code>string selfName = 6;</code>
+   * @return The bytes for selfName.
+   */
+  com.google.protobuf.ByteString
+      getSelfNameBytes();
+
+  /**
+   * <code>string anotherName = 7;</code>
+   * @return The anotherName.
+   */
+  java.lang.String getAnotherName();
+  /**
+   * <code>string anotherName = 7;</code>
+   * @return The bytes for anotherName.
+   */
+  com.google.protobuf.ByteString
+      getAnotherNameBytes();
 }

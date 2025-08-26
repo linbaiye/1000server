@@ -26,6 +26,8 @@ public interface PillAttributeProvider {
 
     String description();
 
+    int icon();
+
     /*
     Name,Type,UseInterval,UseCount,StillInterval,eEnergy,eInPower,eOutPower,eMagic,eLife,eHeadLife,eArmLife,eLegLife,DamageBody,DamageHead,DamageArm,DamageLeg,ArmorBody,ArmorHead,ArmorArm,ArmorLeg,AttackSpeed,Avoid,Recovery,Accuracy,KeepRecovery,LightDark,
 

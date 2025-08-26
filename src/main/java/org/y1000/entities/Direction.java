@@ -7,30 +7,27 @@ import java.util.Map;
 
 public enum Direction {
 
-    UP(new Coordinate(0, -1), 1, -1, 0),
-    UP_RIGHT(new Coordinate(1, -1), 6, -1, 1),
+    UP(new Coordinate(0, -1), 0),
+    UP_RIGHT(new Coordinate(1, -1), 1),
 
 
-    RIGHT(new Coordinate(1, 0), 3, 0, 1),
+    RIGHT(new Coordinate(1, 0), 2),
 
-    DOWN_RIGHT(new Coordinate(1, 1), 4, 1, 1),
+    DOWN_RIGHT(new Coordinate(1, 1), 3),
 
-    DOWN(new Coordinate(0, 1), 0, 1, 0),
+    DOWN(new Coordinate(0, 1), 4),
 
-    DOWN_LEFT(new Coordinate(-1, 1), 5, 1, -1),
+    DOWN_LEFT(new Coordinate(-1, 1), 5),
 
-    LEFT(new Coordinate(-1, 0), 2, 0, -1),
+    LEFT(new Coordinate(-1, 0), 6),
 
-    UP_LEFT(new Coordinate(-1, -1), 7, -1, -1),
+    UP_LEFT(new Coordinate(-1, -1), 7),
 
     ;
 
     private final Coordinate offset;
 
     private final int value;
-
-    private final int v;
-    private final int h;
 
     private static final Map<Direction, Direction[]> NEIBOURS_MAP = new HashMap<>() {
         {
@@ -58,12 +55,13 @@ public enum Direction {
         }
     };
 
+    public Direction[] neighbours() {
+        return NEIBOURS_MAP.get(this);
+    }
 
-    Direction(Coordinate offset, int value, int v, int h) {
+    Direction(Coordinate offset, int value) {
         this.offset = offset;
         this.value = value;
-        this.v = v;
-        this.h = h;
     }
 
     public Coordinate offset() {
@@ -74,12 +72,12 @@ public enum Direction {
         return value;
     }
 
-    public int xVector() {
-        return h;
+    public int x() {
+        return offset.x();
     }
 
-    public int yVector() {
-        return v;
+    public int y() {
+        return offset.y();
     }
 
     public Direction opposite() {

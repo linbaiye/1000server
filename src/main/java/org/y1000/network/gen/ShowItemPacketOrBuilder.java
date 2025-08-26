@@ -15,6 +15,12 @@ public interface ShowItemPacketOrBuilder extends
   long getId();
 
   /**
+   * <code>int32 icon = 2;</code>
+   * @return The icon.
+   */
+  int getIcon();
+
+  /**
    * <code>optional int32 number = 4;</code>
    * @return Whether the number field is set.
    */
@@ -54,4 +60,16 @@ public interface ShowItemPacketOrBuilder extends
    * @return The color.
    */
   int getColor();
+
+  /**
+   * <code>bool guildStone = 9;</code>
+   * @return The guildStone.
+   */
+  boolean getGuildStone();
+
+  /**
+   * <code>bool demo = 10;</code>
+   * @return The demo.
+   */
+  boolean getDemo();
 }

@@ -3,12 +3,12 @@ package org.y1000.entities.players.event;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.players.Player;
 import org.y1000.item.BuffPill;
-import org.y1000.message.serverevent.Visibility;
 import org.y1000.network.gen.Packet;
 import org.y1000.network.gen.UpdateBuffPacket;
 
-public final class UpdateBuffEvent extends AbstractPlayerEvent {
+public final class UpdateBuffEvent {
 
+    /*
     private static final int GAIN = 1;
 
     private static final int FADE = 2;
@@ -26,7 +26,7 @@ public final class UpdateBuffEvent extends AbstractPlayerEvent {
                     .setUpdateBuff(UpdateBuffPacket.newBuilder().setType(GAIN)
                             .setSeconds(pill.getLastingSeconds())
                             .setDescription(pill.description())
-                            .setIcon(pill.getIconId())
+                            .setIcon(pill.icon())
                             .setColor(pill.color())
                     ).build();
         }
@@ -47,5 +47,5 @@ public final class UpdateBuffEvent extends AbstractPlayerEvent {
     @Override
     protected Packet buildPacket() {
         return packet;
-    }
+    }*/
 }

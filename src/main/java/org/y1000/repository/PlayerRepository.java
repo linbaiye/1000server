@@ -10,12 +10,15 @@ public interface PlayerRepository {
 
     Optional<Pair<Player, Integer>> find(int accountId, String charName);
 
+
     void update(Player player);
+
+    Optional<Player> load(long id);
+
+    Optional<Long> findId(String name);
 
     long save(EntityManager entityManager, int accountId, Player player);
 
     int countByName(EntityManager entityManager, String name);
-
-    int countByAccount(EntityManager entityManager, int accountId);
 
 }

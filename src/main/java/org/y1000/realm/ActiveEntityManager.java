@@ -1,14 +1,13 @@
 package org.y1000.realm;
 
 import org.y1000.entities.ActiveEntity;
-import org.y1000.event.EntityEventListener;
 
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public interface ActiveEntityManager<T extends ActiveEntity> extends EntityEventListener {
+public interface ActiveEntityManager<T extends ActiveEntity> {
 
     void update(long delta);
 

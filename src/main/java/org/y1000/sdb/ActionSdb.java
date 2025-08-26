@@ -1,7 +1,7 @@
 package org.y1000.sdb;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.npc.NpcAction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,19 +12,19 @@ public final class ActionSdb extends AbstractCSVSdbReader {
         read("Action.sdb");
     }
 
-    private static final Map<State, String>  ACTION_NAME_MAP = new HashMap<>() {{
-        put(State.IDLE, "Idle");
-        put(State.ATTACK, "Attack");
-        put(State.WALK, "Move");
-        put(State.DIE, "Die");
-        put(State.HURT, "Hurt");
-        put(State.FROZEN, "Freeze");
+    private static final Map<NpcAction, String>  ACTION_NAME_MAP = new HashMap<>() {{
+        put(NpcAction.Idle, "Idle");
+        put(NpcAction.Attack, "Attack");
+        put(NpcAction.Move, "Move");
+        put(NpcAction.Die, "Die");
+        put(NpcAction.Hurt, "Hurt");
+        put(NpcAction.Turn, "Freeze");
     }};
 
-    public int getActionLength(String name, State state) {
-        if (!ACTION_NAME_MAP.containsKey(state)) {
+    public int getActionLength(String animate, NpcAction npcStateEnum) {
+        if (!ACTION_NAME_MAP.containsKey(npcStateEnum)) {
             throw new NotImplementedException();
         }
-        return getInt(name, ACTION_NAME_MAP.get(state));
+        return getInt(animate, ACTION_NAME_MAP.get(npcStateEnum));
     }
 }

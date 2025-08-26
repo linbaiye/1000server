@@ -1,0 +1,48 @@
+package org.y1000.entities;
+
+import org.y1000.util.Coordinate;
+
+public abstract class AbstractCreature extends AbstractActiveEntity implements Creature {
+
+    private Coordinate coordinate;
+
+    private Direction direction;
+
+    private final String name;
+
+    public AbstractCreature(long id,
+                             Coordinate coordinate,
+                             Direction direction,
+                             String name) {
+        super(id);
+        this.name = name;
+        this.direction = direction;
+        this.coordinate = coordinate;
+    }
+
+    @Override
+    public Coordinate coordinate() {
+        return coordinate;
+    }
+
+    @Override
+    public Direction direction() {
+        return direction;
+    }
+
+    @Override
+    public String viewName() {
+        return name;
+    }
+
+    @Override
+    public void changeDirection(Direction newdir) {
+        direction = newdir;
+    }
+
+    @Override
+    public void changeCoordinate(Coordinate newCoor) {
+        coordinate = newCoor;
+        realmMap().occupy(this);
+    }
+}

@@ -1,43 +1,54 @@
 package org.y1000.sdb;
 
-import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuestSdbImpl extends AbstractCSVSdbReader implements QuestSdb {
-
-    public QuestSdbImpl(String name) {
-        Validate.notNull(name);
-        read("NpcSetting/" + name + ".sdb", "utf8");
+    public static final QuestSdbImpl Instance = new QuestSdbImpl();
+    private QuestSdbImpl() {
+        read("NpcSetting/Quest.sdb", "utf8");
     }
 
     @Override
-    public List<String> getNames() {
-        return new ArrayList<>(names());
+    public List<String> getNpcQuestIds(String npcName) {
+        List<String> questIds = new ArrayList<>();
+        uniqueIds().forEach(id -> {
+            if (npcName.equals(get(id, "NpcName"))) {
+                questIds.add(id);
+            }
+        });
+        return questIds;
     }
 
     @Override
-    public String getRequiredItems(String questName) {
-        return get(questName, "RequiredItems");
+    public String getRequiredItems(String questId) {
+        return get(questId, "RequiredItems");
+    }
+
+
+    @Override
+    public String getReward(String questId) {
+        return get(questId, "Reward");
     }
 
     @Override
-    public String getReward(String questName) {
-        return get(questName, "Reward");
+    public String getDescription(String questId) {
+        return get(questId, "Description");
     }
 
     @Override
-    public String getDescription(String questName) {
-        return get(questName, "Description");
+    public String getSubmitText(String questId) {
+        return get(questId, "SubmitText");
     }
 
     @Override
-    public String getSubmitText(String questName) {
-        return get(questName, "SubmitText");
+    public String getMenuName(String questId) {
+        return get(questId, "MenuName");
     }
 
-    public static QuestSdbImpl forNpc(String name) {
-        return new QuestSdbImpl(name);
+    @Override
+    public String getAbstraction(String questId) {
+        return get(questId, "Abstraction");
     }
 }

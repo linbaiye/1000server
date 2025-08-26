@@ -3,7 +3,6 @@ package org.y1000.realm;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.y1000.Server;
 import org.y1000.entities.Entity;
@@ -36,44 +35,40 @@ final class RealmMapV2Impl implements RealmMap {
     private final int height;
     private final int width;
 
-    private final String name;
-
-    private final String tile;
-
-    private final String object;
-
-    private final String roof;
+    private final String mapFile;
+    private final String resource;
 
     private final Map<Coordinate, Set<Entity>> coordinateEntityMap;
     private final Map<Entity, Coordinate> entityCoordinateMap;
 
     private final Map<Coordinate, Teleport> teleportMap;
 
+    private final Map<Coordinate, Entity> softReserved;
+    private final Map<Entity, Coordinate> softReservedEntities;
+
 
     public RealmMapV2Impl(byte[][] movableMask, String name) {
-        this(movableMask, name, "", "", "");
+        this(movableMask, name, "");
     }
 
-    public RealmMapV2Impl(byte[][] movableMask, String name, String tile, String obj, String rof) {
+    public RealmMapV2Impl(byte[][] movableMask, String name, String resource) {
         Objects.requireNonNull(name);
-        Validate.notNull(tile);
-        Validate.notNull(obj);
         if (movableMask.length == 0) {
             throw new IllegalArgumentException();
         }
         if (movableMask[0].length == 0) {
             throw new IllegalArgumentException();
         }
-        this.name = name;
+        this.mapFile = name;
         this.movableMask = movableMask;
         this.height = movableMask.length;
         this.width = movableMask[0].length;
         coordinateEntityMap = new HashMap<>();
         entityCoordinateMap = new HashMap<>();
         teleportMap = new HashMap<>();
-        this.tile = tile;
-        this.object = obj;
-        this.roof = StringUtils.isEmpty(rof) ? null : rof;
+        this.resource = resource;
+        this.softReserved = new HashMap<>();
+        this.softReservedEntities = new HashMap<>();
     }
 
     private boolean isInRange(Coordinate coordinate) {
@@ -101,13 +96,32 @@ final class RealmMapV2Impl implements RealmMap {
         return ((cell & 0x1) == 0) && ((cell & 0x2) == 0);
     }
 
+    @Override
+    public boolean softOccupy(Entity entity, Coordinate coordinate) {
+        if (!movable(coordinate))
+            return false;
+        Entity reservedEntity = softReserved.get(coordinate);
+        if (reservedEntity == null) {
+            softReserved.put(coordinate, entity);
+            softReservedEntities.put(entity, coordinate);
+            return true;
+        }
+        return reservedEntity.equals(entity);
+    }
+
+    private void clearSoftOccupied(Entity entity) {
+        Coordinate remove = softReservedEntities.remove(entity);
+        if (remove != null)
+            softReserved.remove(remove);
+    }
+
     public void occupy(Entity entity) {
         Validate.notNull(entity);
         if (!isInRange(entity.coordinate())) {
             throw new IllegalArgumentException("Invalid coordinate " + entity.coordinate());
         }
         if (teleportMap.containsKey(entity.coordinate()) && entity instanceof Player player) {
-            teleportMap.get(entity.coordinate()).teleport(player);
+            teleportMap.get(entity.coordinate()).onPlayerEntered(player);
             return;
         }
         free(entity);
@@ -130,17 +144,18 @@ final class RealmMapV2Impl implements RealmMap {
         if (c != null) {
             doRemoveCoordinate(entity, c);
         }
+        clearSoftOccupied(entity);
     }
 
 
     @Override
     public void occupy(DynamicObject dynamicObject) {
         Validate.notNull(dynamicObject);
-        if (dynamicObject.occupyingCoordinates().stream().anyMatch(c -> !isInRange(c)))  {
+        if (dynamicObject.occupiedCoordinates().stream().anyMatch(c -> !isInRange(c)))  {
             throw new IllegalArgumentException("Coordinate out of range.");
         }
         entityCoordinateMap.put(dynamicObject, dynamicObject.coordinate());
-        for (Coordinate coordinate : dynamicObject.occupyingCoordinates()) {
+        for (Coordinate coordinate : dynamicObject.occupiedCoordinates()) {
             coordinateEntityMap.computeIfAbsent(coordinate, c -> new HashSet<>()).add(dynamicObject);
         }
     }
@@ -149,29 +164,22 @@ final class RealmMapV2Impl implements RealmMap {
     public void free(DynamicObject dynamicObject) {
         Validate.notNull(dynamicObject);
         entityCoordinateMap.remove(dynamicObject);
-        for (Coordinate coordinate : dynamicObject.occupyingCoordinates()) {
+        for (Coordinate coordinate : dynamicObject.occupiedCoordinates()) {
             doRemoveCoordinate(dynamicObject, coordinate);
         }
+        softReservedEntities.remove(dynamicObject);
+        clearSoftOccupied(dynamicObject);
     }
+
 
     @Override
     public String mapFile() {
-        return name;
+        return mapFile;
     }
 
     @Override
-    public String roofFile() {
-        return roof;
-    }
-
-    @Override
-    public String objectFile() {
-        return object;
-    }
-
-    @Override
-    public String tileFile() {
-        return tile;
+    public String resource() {
+        return resource;
     }
 
     @Override
@@ -180,10 +188,10 @@ final class RealmMapV2Impl implements RealmMap {
             return;
         }
         Set<Coordinate> coordinates = teleportMap.keySet();
-        if (teleport.teleportCoordinates().stream().anyMatch(coordinates::contains)) {
+        if (teleport.coordinates().stream().anyMatch(coordinates::contains)) {
             throw new IllegalStateException("Conflict coordinate for teleport " + teleport);
         }
-        teleport.teleportCoordinates().forEach(p -> teleportMap.put(p, teleport));
+        teleport.coordinates().forEach(p -> teleportMap.put(p, teleport));
     }
 
 
@@ -211,11 +219,9 @@ final class RealmMapV2Impl implements RealmMap {
     }
 
 
-    public static Optional<RealmMap> read(String name, String tile, String obj, String rof) {
+    public static Optional<RealmMap> read(String name, String resource) {
         Validate.notNull(name);
-        Validate.notNull(tile);
-        Validate.notNull(obj);
-        Validate.notNull(rof);
+        Validate.notNull(resource);
         String mapName = name.endsWith(".map") ? name : name + ".map";
         if (!mapName.startsWith("/maps/")) {
             mapName = "/maps/" + mapName;
@@ -250,7 +256,7 @@ final class RealmMapV2Impl implements RealmMap {
                     }
                 }
             }
-            return Optional.of(new RealmMapV2Impl(cellMasks, name, tile, obj, rof));
+            return Optional.of(new RealmMapV2Impl(cellMasks, name, resource));
         } catch (Exception e) {
             log.error("Failed to read map {}.", mapName, e);
         }

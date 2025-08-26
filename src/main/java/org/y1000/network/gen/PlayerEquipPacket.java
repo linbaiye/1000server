@@ -17,7 +17,9 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private PlayerEquipPacket() {
-    equipmentName_ = "";
+    prefix_ = "";
+    pairedPrefix_ = "";
+    name_ = "";
   }
 
   @java.lang.Override
@@ -40,6 +42,7 @@ private static final long serialVersionUID = 0L;
             org.y1000.network.gen.PlayerEquipPacket.class, org.y1000.network.gen.PlayerEquipPacket.Builder.class);
   }
 
+  private int bitField0_;
   public static final int ID_FIELD_NUMBER = 1;
   private long id_ = 0L;
   /**
@@ -51,43 +54,15 @@ private static final long serialVersionUID = 0L;
     return id_;
   }
 
-  public static final int EQUIPMENTNAME_FIELD_NUMBER = 2;
-  @SuppressWarnings("serial")
-  private volatile java.lang.Object equipmentName_ = "";
+  public static final int EQUIPMENTTYPE_FIELD_NUMBER = 2;
+  private int equipmentType_ = 0;
   /**
-   * <code>string equipmentName = 2;</code>
-   * @return The equipmentName.
+   * <code>int32 equipmentType = 2;</code>
+   * @return The equipmentType.
    */
   @java.lang.Override
-  public java.lang.String getEquipmentName() {
-    java.lang.Object ref = equipmentName_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      equipmentName_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string equipmentName = 2;</code>
-   * @return The bytes for equipmentName.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString
-      getEquipmentNameBytes() {
-    java.lang.Object ref = equipmentName_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      equipmentName_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public int getEquipmentType() {
+    return equipmentType_;
   }
 
   public static final int COLOR_FIELD_NUMBER = 3;
@@ -99,6 +74,153 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public int getColor() {
     return color_;
+  }
+
+  public static final int PREFIX_FIELD_NUMBER = 4;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object prefix_ = "";
+  /**
+   * <code>string prefix = 4;</code>
+   * @return The prefix.
+   */
+  @java.lang.Override
+  public java.lang.String getPrefix() {
+    java.lang.Object ref = prefix_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      prefix_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string prefix = 4;</code>
+   * @return The bytes for prefix.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getPrefixBytes() {
+    java.lang.Object ref = prefix_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      prefix_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int PAIREDPREFIX_FIELD_NUMBER = 5;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object pairedPrefix_ = "";
+  /**
+   * <code>optional string pairedPrefix = 5;</code>
+   * @return Whether the pairedPrefix field is set.
+   */
+  @java.lang.Override
+  public boolean hasPairedPrefix() {
+    return ((bitField0_ & 0x00000001) != 0);
+  }
+  /**
+   * <code>optional string pairedPrefix = 5;</code>
+   * @return The pairedPrefix.
+   */
+  @java.lang.Override
+  public java.lang.String getPairedPrefix() {
+    java.lang.Object ref = pairedPrefix_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      pairedPrefix_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>optional string pairedPrefix = 5;</code>
+   * @return The bytes for pairedPrefix.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getPairedPrefixBytes() {
+    java.lang.Object ref = pairedPrefix_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      pairedPrefix_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int WEAPONTYPE_FIELD_NUMBER = 6;
+  private int weaponType_ = 0;
+  /**
+   * <code>int32 weaponType = 6;</code>
+   * @return The weaponType.
+   */
+  @java.lang.Override
+  public int getWeaponType() {
+    return weaponType_;
+  }
+
+  public static final int NAME_FIELD_NUMBER = 7;
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
+  /**
+   * <code>string name = 7;</code>
+   * @return The name.
+   */
+  @java.lang.Override
+  public java.lang.String getName() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      name_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string name = 7;</code>
+   * @return The bytes for name.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getNameBytes() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      name_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int ICON_FIELD_NUMBER = 8;
+  private int icon_ = 0;
+  /**
+   * <code>int32 icon = 8;</code>
+   * @return The icon.
+   */
+  @java.lang.Override
+  public int getIcon() {
+    return icon_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -118,11 +240,26 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0L) {
       output.writeInt64(1, id_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(equipmentName_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, equipmentName_);
+    if (equipmentType_ != 0) {
+      output.writeInt32(2, equipmentType_);
     }
     if (color_ != 0) {
       output.writeInt32(3, color_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(prefix_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, prefix_);
+    }
+    if (((bitField0_ & 0x00000001) != 0)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 5, pairedPrefix_);
+    }
+    if (weaponType_ != 0) {
+      output.writeInt32(6, weaponType_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 7, name_);
+    }
+    if (icon_ != 0) {
+      output.writeInt32(8, icon_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -137,12 +274,30 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(1, id_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(equipmentName_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, equipmentName_);
+    if (equipmentType_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(2, equipmentType_);
     }
     if (color_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(3, color_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(prefix_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, prefix_);
+    }
+    if (((bitField0_ & 0x00000001) != 0)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, pairedPrefix_);
+    }
+    if (weaponType_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(6, weaponType_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, name_);
+    }
+    if (icon_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(8, icon_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -161,10 +316,23 @@ private static final long serialVersionUID = 0L;
 
     if (getId()
         != other.getId()) return false;
-    if (!getEquipmentName()
-        .equals(other.getEquipmentName())) return false;
+    if (getEquipmentType()
+        != other.getEquipmentType()) return false;
     if (getColor()
         != other.getColor()) return false;
+    if (!getPrefix()
+        .equals(other.getPrefix())) return false;
+    if (hasPairedPrefix() != other.hasPairedPrefix()) return false;
+    if (hasPairedPrefix()) {
+      if (!getPairedPrefix()
+          .equals(other.getPairedPrefix())) return false;
+    }
+    if (getWeaponType()
+        != other.getWeaponType()) return false;
+    if (!getName()
+        .equals(other.getName())) return false;
+    if (getIcon()
+        != other.getIcon()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -179,10 +347,22 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getId());
-    hash = (37 * hash) + EQUIPMENTNAME_FIELD_NUMBER;
-    hash = (53 * hash) + getEquipmentName().hashCode();
+    hash = (37 * hash) + EQUIPMENTTYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getEquipmentType();
     hash = (37 * hash) + COLOR_FIELD_NUMBER;
     hash = (53 * hash) + getColor();
+    hash = (37 * hash) + PREFIX_FIELD_NUMBER;
+    hash = (53 * hash) + getPrefix().hashCode();
+    if (hasPairedPrefix()) {
+      hash = (37 * hash) + PAIREDPREFIX_FIELD_NUMBER;
+      hash = (53 * hash) + getPairedPrefix().hashCode();
+    }
+    hash = (37 * hash) + WEAPONTYPE_FIELD_NUMBER;
+    hash = (53 * hash) + getWeaponType();
+    hash = (37 * hash) + NAME_FIELD_NUMBER;
+    hash = (53 * hash) + getName().hashCode();
+    hash = (37 * hash) + ICON_FIELD_NUMBER;
+    hash = (53 * hash) + getIcon();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -315,8 +495,13 @@ private static final long serialVersionUID = 0L;
       super.clear();
       bitField0_ = 0;
       id_ = 0L;
-      equipmentName_ = "";
+      equipmentType_ = 0;
       color_ = 0;
+      prefix_ = "";
+      pairedPrefix_ = "";
+      weaponType_ = 0;
+      name_ = "";
+      icon_ = 0;
       return this;
     }
 
@@ -354,11 +539,29 @@ private static final long serialVersionUID = 0L;
         result.id_ = id_;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.equipmentName_ = equipmentName_;
+        result.equipmentType_ = equipmentType_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
         result.color_ = color_;
       }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.prefix_ = prefix_;
+      }
+      int to_bitField0_ = 0;
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.pairedPrefix_ = pairedPrefix_;
+        to_bitField0_ |= 0x00000001;
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.weaponType_ = weaponType_;
+      }
+      if (((from_bitField0_ & 0x00000040) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        result.icon_ = icon_;
+      }
+      result.bitField0_ |= to_bitField0_;
     }
 
     @java.lang.Override
@@ -408,13 +611,32 @@ private static final long serialVersionUID = 0L;
       if (other.getId() != 0L) {
         setId(other.getId());
       }
-      if (!other.getEquipmentName().isEmpty()) {
-        equipmentName_ = other.equipmentName_;
-        bitField0_ |= 0x00000002;
-        onChanged();
+      if (other.getEquipmentType() != 0) {
+        setEquipmentType(other.getEquipmentType());
       }
       if (other.getColor() != 0) {
         setColor(other.getColor());
+      }
+      if (!other.getPrefix().isEmpty()) {
+        prefix_ = other.prefix_;
+        bitField0_ |= 0x00000008;
+        onChanged();
+      }
+      if (other.hasPairedPrefix()) {
+        pairedPrefix_ = other.pairedPrefix_;
+        bitField0_ |= 0x00000010;
+        onChanged();
+      }
+      if (other.getWeaponType() != 0) {
+        setWeaponType(other.getWeaponType());
+      }
+      if (!other.getName().isEmpty()) {
+        name_ = other.name_;
+        bitField0_ |= 0x00000040;
+        onChanged();
+      }
+      if (other.getIcon() != 0) {
+        setIcon(other.getIcon());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -447,16 +669,41 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000001;
               break;
             } // case 8
-            case 18: {
-              equipmentName_ = input.readStringRequireUtf8();
+            case 16: {
+              equipmentType_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
-            } // case 18
+            } // case 16
             case 24: {
               color_ = input.readInt32();
               bitField0_ |= 0x00000004;
               break;
             } // case 24
+            case 34: {
+              prefix_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00000008;
+              break;
+            } // case 34
+            case 42: {
+              pairedPrefix_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00000010;
+              break;
+            } // case 42
+            case 48: {
+              weaponType_ = input.readInt32();
+              bitField0_ |= 0x00000020;
+              break;
+            } // case 48
+            case 58: {
+              name_ = input.readStringRequireUtf8();
+              bitField0_ |= 0x00000040;
+              break;
+            } // case 58
+            case 64: {
+              icon_ = input.readInt32();
+              bitField0_ |= 0x00000080;
+              break;
+            } // case 64
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -506,74 +753,34 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object equipmentName_ = "";
+    private int equipmentType_ ;
     /**
-     * <code>string equipmentName = 2;</code>
-     * @return The equipmentName.
+     * <code>int32 equipmentType = 2;</code>
+     * @return The equipmentType.
      */
-    public java.lang.String getEquipmentName() {
-      java.lang.Object ref = equipmentName_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        equipmentName_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
+    @java.lang.Override
+    public int getEquipmentType() {
+      return equipmentType_;
     }
     /**
-     * <code>string equipmentName = 2;</code>
-     * @return The bytes for equipmentName.
-     */
-    public com.google.protobuf.ByteString
-        getEquipmentNameBytes() {
-      java.lang.Object ref = equipmentName_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        equipmentName_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string equipmentName = 2;</code>
-     * @param value The equipmentName to set.
+     * <code>int32 equipmentType = 2;</code>
+     * @param value The equipmentType to set.
      * @return This builder for chaining.
      */
-    public Builder setEquipmentName(
-        java.lang.String value) {
-      if (value == null) { throw new NullPointerException(); }
-      equipmentName_ = value;
+    public Builder setEquipmentType(int value) {
+
+      equipmentType_ = value;
       bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>string equipmentName = 2;</code>
+     * <code>int32 equipmentType = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearEquipmentName() {
-      equipmentName_ = getDefaultInstance().getEquipmentName();
+    public Builder clearEquipmentType() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string equipmentName = 2;</code>
-     * @param value The bytes for equipmentName to set.
-     * @return This builder for chaining.
-     */
-    public Builder setEquipmentNameBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      equipmentName_ = value;
-      bitField0_ |= 0x00000002;
+      equipmentType_ = 0;
       onChanged();
       return this;
     }
@@ -606,6 +813,293 @@ private static final long serialVersionUID = 0L;
     public Builder clearColor() {
       bitField0_ = (bitField0_ & ~0x00000004);
       color_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object prefix_ = "";
+    /**
+     * <code>string prefix = 4;</code>
+     * @return The prefix.
+     */
+    public java.lang.String getPrefix() {
+      java.lang.Object ref = prefix_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        prefix_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string prefix = 4;</code>
+     * @return The bytes for prefix.
+     */
+    public com.google.protobuf.ByteString
+        getPrefixBytes() {
+      java.lang.Object ref = prefix_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        prefix_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string prefix = 4;</code>
+     * @param value The prefix to set.
+     * @return This builder for chaining.
+     */
+    public Builder setPrefix(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      prefix_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string prefix = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearPrefix() {
+      prefix_ = getDefaultInstance().getPrefix();
+      bitField0_ = (bitField0_ & ~0x00000008);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string prefix = 4;</code>
+     * @param value The bytes for prefix to set.
+     * @return This builder for chaining.
+     */
+    public Builder setPrefixBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      prefix_ = value;
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object pairedPrefix_ = "";
+    /**
+     * <code>optional string pairedPrefix = 5;</code>
+     * @return Whether the pairedPrefix field is set.
+     */
+    public boolean hasPairedPrefix() {
+      return ((bitField0_ & 0x00000010) != 0);
+    }
+    /**
+     * <code>optional string pairedPrefix = 5;</code>
+     * @return The pairedPrefix.
+     */
+    public java.lang.String getPairedPrefix() {
+      java.lang.Object ref = pairedPrefix_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        pairedPrefix_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string pairedPrefix = 5;</code>
+     * @return The bytes for pairedPrefix.
+     */
+    public com.google.protobuf.ByteString
+        getPairedPrefixBytes() {
+      java.lang.Object ref = pairedPrefix_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        pairedPrefix_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string pairedPrefix = 5;</code>
+     * @param value The pairedPrefix to set.
+     * @return This builder for chaining.
+     */
+    public Builder setPairedPrefix(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      pairedPrefix_ = value;
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string pairedPrefix = 5;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearPairedPrefix() {
+      pairedPrefix_ = getDefaultInstance().getPairedPrefix();
+      bitField0_ = (bitField0_ & ~0x00000010);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string pairedPrefix = 5;</code>
+     * @param value The bytes for pairedPrefix to set.
+     * @return This builder for chaining.
+     */
+    public Builder setPairedPrefixBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      pairedPrefix_ = value;
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+
+    private int weaponType_ ;
+    /**
+     * <code>int32 weaponType = 6;</code>
+     * @return The weaponType.
+     */
+    @java.lang.Override
+    public int getWeaponType() {
+      return weaponType_;
+    }
+    /**
+     * <code>int32 weaponType = 6;</code>
+     * @param value The weaponType to set.
+     * @return This builder for chaining.
+     */
+    public Builder setWeaponType(int value) {
+
+      weaponType_ = value;
+      bitField0_ |= 0x00000020;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 weaponType = 6;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearWeaponType() {
+      bitField0_ = (bitField0_ & ~0x00000020);
+      weaponType_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object name_ = "";
+    /**
+     * <code>string name = 7;</code>
+     * @return The name.
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string name = 7;</code>
+     * @return The bytes for name.
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string name = 7;</code>
+     * @param value The name to set.
+     * @return This builder for chaining.
+     */
+    public Builder setName(
+        java.lang.String value) {
+      if (value == null) { throw new NullPointerException(); }
+      name_ = value;
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string name = 7;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearName() {
+      name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000040);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string name = 7;</code>
+     * @param value The bytes for name to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) { throw new NullPointerException(); }
+      checkByteStringIsUtf8(value);
+      name_ = value;
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+
+    private int icon_ ;
+    /**
+     * <code>int32 icon = 8;</code>
+     * @return The icon.
+     */
+    @java.lang.Override
+    public int getIcon() {
+      return icon_;
+    }
+    /**
+     * <code>int32 icon = 8;</code>
+     * @param value The icon to set.
+     * @return This builder for chaining.
+     */
+    public Builder setIcon(int value) {
+
+      icon_ = value;
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 icon = 8;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearIcon() {
+      bitField0_ = (bitField0_ & ~0x00000080);
+      icon_ = 0;
       onChanged();
       return this;
     }

@@ -13,11 +13,13 @@ public abstract class AbstractItem implements Item {
     private final String dropSound;
     private final String eventSound;
     private final String description;
+    private final int icon;
     public AbstractItem(String name,
                         ItemType type,
                         String dropSound,
                         String eventSound,
-                        String description) {
+                        String description,
+                        int icon) {
         Validate.notNull(name, "viewName must not be null.");
         Validate.notNull(type, "type must not be null.");
         this.name = name;
@@ -25,6 +27,7 @@ public abstract class AbstractItem implements Item {
         this.dropSound = StringUtils.isEmpty(dropSound) ? null : dropSound;
         this.eventSound  = StringUtils.isEmpty(eventSound) ? null : eventSound;
         this.description = description != null ? description : "";
+        this.icon = icon;
     }
 
     public AbstractItem(String name, ItemType type, ItemSdb itemSdb) {
@@ -33,6 +36,7 @@ public abstract class AbstractItem implements Item {
         this.dropSound = StringUtils.isEmpty(itemSdb.getSoundDrop(name)) ? null : itemSdb.getSoundDrop(name);
         this.eventSound = StringUtils.isEmpty(itemSdb.getSoundEvent(name)) ? null : itemSdb.getSoundEvent(name);
         this.description = itemSdb.getDesc(name) != null ? itemSdb.getDesc(name) : "";
+        this.icon = itemSdb.getIcon(name);
     }
 
 
@@ -61,4 +65,8 @@ public abstract class AbstractItem implements Item {
         return type;
     }
 
+    @Override
+    public int icon() {
+        return icon;
+    }
 }

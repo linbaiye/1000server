@@ -3,18 +3,18 @@ package org.y1000.sdb;
 import java.util.List;
 
 public interface QuestSdb {
-    List<String> getNames();
+    List<String> getNpcQuestIds(String npcName);
 
-    String getRequiredItems(String questName);
+    String getRequiredItems(String questId);
 
-    String getReward(String questName);
+    String getReward(String questId);
 
-    String getDescription(String questName);
+    String getDescription(String questId);
 
-    String getSubmitText(String questName);
+    String getSubmitText(String questId);
 
-    static QuestSdb forNpc(String name) {
-        return new QuestSdbImpl(name);
-    }
+    String getMenuName(String questId);
+
+    String getAbstraction(String questId);
 
 }

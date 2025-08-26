@@ -4,16 +4,13 @@ import jakarta.persistence.EntityManagerFactory;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.npc.NpcFactory;
+import org.y1000.entities.npc.*;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
 import org.y1000.kungfu.KungFuSdb;
 import org.y1000.repository.*;
 import org.y1000.sdb.*;
-import org.y1000.util.Coordinate;
-
-import java.util.*;
 
 @Slf4j
 public final class RealmFactoryImpl implements RealmFactory {
@@ -37,11 +34,7 @@ public final class RealmFactoryImpl implements RealmFactory {
 
     private final ItemRepository itemRepository;
 
-    private final KungFuBookRepository kungFuBookRepository;
-
-    private static final Set<Integer> CONJUNCTION_IDS = Set.of(4, 20);
-
-    private static final Map<Integer, Set<Integer>> DUNGEON_WHITELIST_IDS = Map.of(19, Set.of(20), 3, Set.of(4));
+    private final KungFuBookRepositoryImpl kungFuBookRepository;
 
     @Builder
     public RealmFactoryImpl(ItemFactory itemFactory,
@@ -58,7 +51,7 @@ public final class RealmFactoryImpl implements RealmFactory {
                             PosByDieSdb posByDieSdb,
                             GuildRepository guildRepository,
                             ItemRepository itemRepository,
-                            KungFuBookRepository kungFuBookRepository) {
+                            KungFuBookRepositoryImpl kungFuBookRepository) {
         Validate.notNull(itemFactory);
         Validate.notNull(npcFactory);
         Validate.notNull(itemSdb);
@@ -90,11 +83,11 @@ public final class RealmFactoryImpl implements RealmFactory {
     }
 
     private NpcManager createNpcManager(int id,
-                                                AOIManager aoiManager,
-                                                EntityIdGenerator idGenerator,
-                                                GroundItemManager itemManager,
-                                                EntityEventSender entityEventSender,
-                                                RealmMap realmMap) {
+                                        AOIManager aoiManager,
+                                        EntityIdGenerator idGenerator,
+                                        GroundItemManager itemManager,
+                                        MessageSender entityEventSender,
+                                        RealmMap realmMap) {
         if (!realmSpecificSdbRepository.monsterSdbExists(id) && !realmSpecificSdbRepository.npcSdbExists(id)) {
             return NpcManager.EMPTY;
         }
@@ -106,53 +99,45 @@ public final class RealmFactoryImpl implements RealmFactory {
                 new NpcManagerImpl(entityEventSender, idGenerator,  npcFactory, itemManager, monstersSdb, aoiManager,  monsterSdb, npcSdb, realmMap, haveItemSdb);
     }
 
-    private DeadPlayerTeleportManager deadPlayerTeleportManager(int id) {
-        return posByDieSdb.findIdByRealmId(id)
-                .map(server -> new DeadPlayerTeleportManagerImpl(posByDieSdb.getDestServer(server), Coordinate.xy(posByDieSdb.getDestX(server), posByDieSdb.getDestY(server))))
-                .orElse(null);
-    }
-
-
     private boolean allowGuildCreation(int id) {
         return 1 == id;
     }
 
     @Override
     public Realm createRealm(int id,
-                             CrossRealmEventSender crossRealmEventSender) {
+                             RealmEventSender crossRealmEventSender) {
         try {
             Validate.notNull(crossRealmEventSender);
-            var realmMap = RealmMap.Load(mapSdb.getMapName(id), mapSdb.getTilName(id), mapSdb.getObjName(id), mapSdb.getRofName(id))
+            var realmMap = RealmMap.Load(mapSdb.getMapName(id), mapSdb.getResourceName(id))
                     .orElseThrow(() -> new IllegalArgumentException("No map for " + id));
             var entityIdGenerator = new EntityIdGenerator();
             AOIManager aoiManager = new RelevantScopeManager();
-            var eventSender = new RealmEntityEventSender(aoiManager);
-            var itemManager = new ItemManagerImpl(eventSender, itemSdb, entityIdGenerator, itemFactory);
-            var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, eventSender, realmMap);
+            var connectionManager = new RealmPlayerConnectionManager();
+            var itemManager = new ItemManagerImpl(connectionManager, itemSdb, entityIdGenerator, itemFactory, aoiManager);
+            var npcManager = createNpcManager(id, aoiManager, entityIdGenerator, itemManager, connectionManager, realmMap);
             var dynamicObjectManager = !realmSpecificSdbRepository.objectSdbExists(id) ? DynamicObjectManager.EMPTY:
-                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, itemManager, realmSpecificSdbRepository.loadCreateObject(id), crossRealmEventSender, realmMap);
-            var playerManager = new PlayerManagerImpl(eventSender, itemManager, itemFactory, dynamicObjectManager,
-                    new BankManagerImpl(eventSender, npcManager, bankRepository), playerRepository, deadPlayerTeleportManager(id),
-                    crossRealmEventSender);
+                    new DynamicObjectManagerImpl(dynamicObjectFactory, entityIdGenerator, connectionManager, itemManager,
+                            realmSpecificSdbRepository.loadCreateObject(id), crossRealmEventSender, realmMap, aoiManager, npcManager);
+            var playerManager = mapSdb.getRegenInterval(id).isPresent() ?
+                    new DungeonPlayerManager(aoiManager, connectionManager, itemManager,  playerRepository, crossRealmEventSender):
+                    new PlayerManagerImpl(connectionManager, itemManager,  playerRepository, crossRealmEventSender, aoiManager);
             var teleportManager = new TeleportManager(id, realmMap, createGateSdb, entityIdGenerator, aoiManager);
             var builder = RealmBuilder.builder()
                     .id(id)
                     .crossRealmEventHandler(crossRealmEventSender)
                     .dynamicObjectManager(dynamicObjectManager)
-                    .eventSender(eventSender)
+                    .eventSender(connectionManager)
                     .itemManager(itemManager)
                     .mapSdb(mapSdb)
-                    .whitelistIds(DUNGEON_WHITELIST_IDS.getOrDefault(id, Collections.emptySet()))
-                    .conjunction(CONJUNCTION_IDS.contains(id))
                     .npcManager(npcManager)
                     .playerManager(playerManager)
                     .realmMap(realmMap)
                     .teleportManager(teleportManager)
-                    .chatManager(new ChatManagerImpl(playerManager, eventSender, crossRealmEventSender))
+                    .playerRepository(playerRepository)
                     ;
             if (allowGuildCreation(id)) {
-                GuildManager guildManager = new GuildManagerImpl(dynamicObjectFactory, entityIdGenerator, eventSender, crossRealmEventSender, realmMap, guildRepository, itemRepository,
-                        entityManagerFactory, id, KungFuSdb.INSTANCE, kungFuBookRepository);
+                GuildManager guildManager = new GuildManagerImpl(itemSdb, entityIdGenerator, connectionManager, crossRealmEventSender, realmMap,
+                        guildRepository, KungFuSdb.INSTANCE, kungFuBookRepository, aoiManager);
                 builder.guildManager(guildManager);
             }
             return mapSdb.getRegenInterval(id)
@@ -167,23 +152,19 @@ public final class RealmFactoryImpl implements RealmFactory {
     @Slf4j
     private static final class RealmBuilder {
         private RealmMap realmMap;
-        private RealmEntityEventSender eventSender;
+        private RealmPlayerConnectionManager eventSender;
         private ItemManagerImpl itemManager;
         private NpcManager npcManager;
-        private PlayerManagerImpl playerManager;
+        private PlayerManager playerManager;
         private DynamicObjectManager dynamicObjectManager;
         private TeleportManager teleportManager;
         private int id;
-        private CrossRealmEventSender crossRealmEventSender;
+        private RealmEventSender crossRealmEventSender;
         private MapSdb mapSdb;
 
-        private ChatManager chatManager;
-
-        private boolean conjunction;
-
-        private Set<Integer> whitelistIds;
-
         private GuildManager guildManager;
+
+        private PlayerRepository playerRepository;
 
         private RealmBuilder() {
         }
@@ -197,28 +178,14 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder whitelistIds(Set<Integer> ids) {
-            this.whitelistIds = ids;
-            return this;
-        }
 
         public RealmBuilder guildManager(GuildManager guildManager) {
             this.guildManager = guildManager;
             return this;
         }
 
-        public RealmBuilder eventSender(RealmEntityEventSender eventSender) {
+        public RealmBuilder eventSender(RealmPlayerConnectionManager eventSender) {
             this.eventSender = eventSender;
-            return this;
-        }
-
-        public RealmBuilder chatManager(ChatManager chatManager) {
-            this.chatManager = chatManager;
-            return this;
-        }
-
-        public RealmBuilder conjunction(boolean c) {
-            this.conjunction = c;
             return this;
         }
 
@@ -232,7 +199,7 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder playerManager(PlayerManagerImpl playerManager) {
+        public RealmBuilder playerManager(PlayerManager playerManager) {
             this.playerManager = playerManager;
             return this;
         }
@@ -252,8 +219,13 @@ public final class RealmFactoryImpl implements RealmFactory {
             return this;
         }
 
-        public RealmBuilder crossRealmEventHandler(CrossRealmEventSender crossRealmEventSender) {
+        public RealmBuilder crossRealmEventHandler(RealmEventSender crossRealmEventSender) {
             this.crossRealmEventSender = crossRealmEventSender;
+            return this;
+        }
+
+        public RealmBuilder playerRepository(PlayerRepository playerRepository) {
+            this.playerRepository = playerRepository;
             return this;
         }
 
@@ -264,17 +236,13 @@ public final class RealmFactoryImpl implements RealmFactory {
 
         public Realm buildNormal() {
             if (guildManager == null)
-                return new RealmImpl(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager);
+                return new RealmImpl(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository);
             else
-                return new GuildableRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, chatManager, guildManager);
+                return new GuildableRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, guildManager, playerRepository);
         }
 
         public Realm buildDungeon(int interval) {
-            if (conjunction) {
-                return new ConjunctionDungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager);
-            } else {
-                return new EntranceDungeonRealm(id, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, interval, chatManager, whitelistIds);
-            }
+            return new DungeonRealm(id, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository, interval);
         }
     }
 }

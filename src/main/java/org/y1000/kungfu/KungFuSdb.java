@@ -162,6 +162,9 @@ public final class KungFuSdb extends AbstractCSVSdbReader {
         return getInt(name, "EffectColor");
     }
 
+    public int icon(String name) {
+        return getInt(name, "Shape");
+    }
 
     public static void main(String[] args) {
 //        System.out.println(INSTANCE.get("无名剑法", "SoundSwing"));
@@ -170,7 +173,7 @@ public final class KungFuSdb extends AbstractCSVSdbReader {
         KungFuSdb kungFuSdb = KungFuSdb.INSTANCE;
 //        Set<String> names = kungFuSdb.names();
         Set<String> names = kungFuSdb.columnNames();
-        Set<String> items = kungFuSdb.names();
+        Set<String> items = kungFuSdb.uniqueIds();
         for (String i : items) {
             if (!i.startsWith("闪光")) {
                 continue;

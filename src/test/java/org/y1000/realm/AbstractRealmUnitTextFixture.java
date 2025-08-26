@@ -2,10 +2,10 @@ package org.y1000.realm;
 
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.CreateGateSdb;
 import org.y1000.sdb.MapSdb;
 
-import javax.print.DocFlavor;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
@@ -16,21 +16,23 @@ import static org.mockito.Mockito.when;
 
 public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixture {
     RealmMap realmMap;
-    RealmEntityEventSender eventSender;
+    MessageSender eventSender;
     GroundItemManager itemManager;
     NpcManager npcManager;
     PlayerManager playerManager;
     DynamicObjectManager dynamicObjectManager;
     TeleportManager teleportManager;
-    CrossRealmEventSender crossRealmEventSender;
+    RealmEventSender crossRealmEventSender;
     MapSdb mapSdb;
 
     CreateGateSdb createGateSdb;
 
-    ChatManager chatManager;
+
+    PlayerRepository playerRepository;
 
     void setup() {
-        eventSender = new RealmEntityEventSender(Mockito.mock(AOIManager.class));
+        //eventSender = new RealmPlayerConnectionManager(Mockito.mock(AOIManager.class));
+        eventSender = Mockito.mock(MessageSender.class);
         realmMap = mockRealmMap();
         itemManager = Mockito.mock(GroundItemManager.class);
         npcManager = Mockito.mock(NpcManager.class);
@@ -39,29 +41,28 @@ public abstract class AbstractRealmUnitTextFixture extends AbstractUnitTestFixtu
         createGateSdb = Mockito.mock(CreateGateSdb.class);
         when(createGateSdb.getNames(anyInt())).thenReturn(Collections.emptySet());
         teleportManager = new TeleportManager(1, realmMap, createGateSdb, new EntityIdGenerator(), new RelevantScopeManager());
-        crossRealmEventSender = Mockito.mock(CrossRealmEventSender.class);
+        crossRealmEventSender = Mockito.mock(RealmEventSender.class);
         mapSdb = Mockito.mock(MapSdb.class);
-        chatManager = Mockito.mock(ChatManager.class);
+        playerRepository = Mockito.mock(PlayerRepository.class);
     }
 
-    EntranceDungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> wl) {
-        return new EntranceDungeonRealm(1, realmMap, eventSender, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb,
-                interval, dateTimeSupplier, chatManager, wl);
+    DungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> wl) {
+        return new DungeonRealm(1, realmMap, itemManager, npcManager, playerManager, dynamicObjectManager, teleportManager, crossRealmEventSender, mapSdb, playerRepository, interval);
     }
 
-    EntranceDungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier) {
+    DungeonRealm createDungeon(int interval, Supplier<LocalDateTime> dateTimeSupplier) {
         return createDungeon(interval, dateTimeSupplier, Collections.emptySet());
     }
 
-    EntranceDungeonRealm createHalfHourDungeon(Supplier<LocalDateTime> dateTimeSupplier) {
+    DungeonRealm createHalfHourDungeon(Supplier<LocalDateTime> dateTimeSupplier) {
         return createDungeon(180000, dateTimeSupplier);
     }
 
-    EntranceDungeonRealm createOneHourDungeon(Supplier<LocalDateTime> dateTimeSupplier) {
+    DungeonRealm createOneHourDungeon(Supplier<LocalDateTime> dateTimeSupplier) {
         return createDungeon(360000, dateTimeSupplier);
     }
 
-    EntranceDungeonRealm createWhitelisted(Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> ids) {
+    DungeonRealm createWhitelisted(Supplier<LocalDateTime> dateTimeSupplier, Set<Integer> ids) {
         return createDungeon(360000, dateTimeSupplier, ids);
     }
 }

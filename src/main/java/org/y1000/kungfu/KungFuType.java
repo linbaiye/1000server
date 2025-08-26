@@ -1,6 +1,6 @@
 package org.y1000.kungfu;
 
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 public enum KungFuType implements ValueEnum {
 
@@ -42,6 +42,6 @@ public enum KungFuType implements ValueEnum {
 
 
     public static KungFuType fromValue(int v) {
-        return ValueEnum.fromValueOrThrow(values(), v);
+        return ValueEnum.getTypeOrThrow(values(), v);
     }
 }

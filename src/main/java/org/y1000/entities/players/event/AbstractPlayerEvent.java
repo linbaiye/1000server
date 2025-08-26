@@ -1,36 +1,18 @@
 package org.y1000.entities.players.event;
 
 import org.y1000.entities.players.Player;
-import org.y1000.message.serverevent.Abstract2ClientEntityEvent;
-import org.y1000.message.serverevent.Visibility;
+import org.y1000.entities.players.event.PlayerEvent;
+import org.y1000.network.gen.Packet;
 
-public abstract class AbstractPlayerEvent extends Abstract2ClientEntityEvent implements PlayerEvent {
+public abstract class AbstractPlayerEvent implements PlayerEvent {
+    private final Player player;
 
-
-    private final Visibility visibility;
-
-    public AbstractPlayerEvent(Player source) {
-        this(source, false);
-    }
-    public AbstractPlayerEvent(Player source, boolean selfEvent) {
-        super(source);
-        visibility = selfEvent? Visibility.SELF : Visibility.SPECIFIC;
+    public AbstractPlayerEvent(Player player) {
+        this.player = player;
     }
 
-    public AbstractPlayerEvent(Player source, Visibility visibility) {
-        super(source);
-        this.visibility = visibility;
-    }
-
-    public boolean visibleToSelf() {
-        return visibility == Visibility.SELF;
-    }
-
-    public boolean visibleToPlayers() {
-        return visibility == Visibility.VISIBLE_PLAYERS;
-    }
-
-    public Player player() {
-        return (Player) source();
+    @Override
+    public Player source() {
+        return player;
     }
 }

@@ -11,16 +11,13 @@ public final class BuffPill extends AbstractItem {
 
     private final int duration;
 
-    private final int iconId;
-
     public BuffPill(String name,
                     String dropSound,
                     String eventSound,
                     String description,
                     int bodyDamage,
                     int duration, int iconId) {
-        super(name, ItemType.BUFF_PILL, dropSound, eventSound, description);
-        this.iconId = iconId;
+        super(name, ItemType.BUFF_PILL, dropSound, eventSound, description, iconId);
         Validate.isTrue(duration >= 1000);
         this.damage = new Damage(bodyDamage, 0, 0, 0);
         this.duration = duration;

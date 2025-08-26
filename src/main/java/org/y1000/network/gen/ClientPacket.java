@@ -45,36 +45,39 @@ private static final long serialVersionUID = 0L;
   public enum TypeCase
       implements com.google.protobuf.Internal.EnumLite,
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
-    MOVEEVENTPACKET(1),
-    CLICKPACKET(2),
-    LOGINPACKET(3),
-    ATTACKEVENTPACKET(4),
-    SWAPINVENTORYSLOTPACKET(5),
-    DOUBLECLICKINVENTORYSLOTPACKET(6),
-    DROPITEM(7),
-    PICKITEM(8),
-    UNEQUIP(9),
-    TOGGLEKUNGFU(10),
-    SITDOWN(11),
-    STANDUP(12),
-    SELLITEMS(13),
-    BUYITEMS(14),
-    RIGHTCLICK(15),
-    TRADEREQUEST(16),
-    UPDATETRADE(17),
-    TRIGGERDYNAMICOBJECT(18),
-    SWAPKUNGFUSLOT(19),
-    DRAGPLAYER(20),
-    SIMPLECOMMAND(21),
-    DYE(22),
-    SAY(23),
-    BANKOPERATION(24),
+    LOGINACCOUNT(10),
+    REGISTERACCOUNT(11),
+    LOGINCHARACTER(12),
+    CREATECHARACTER(13),
     CHANGETEAM(25),
-    FOUNDGUILD(26),
-    CREATEGUILDKUNGFU(27),
-    MANAGEGUILD(28),
-    SUBMITQUEST(29),
-    INTERACT(30),
+    SWAPINVENTORYSLOTPACKET(5),
+    CLICKPACKET(2),
+    MOVEINPUT(32),
+    TURNINPUT(33),
+    SIMPLEINPUT(34),
+    CLICKKUNGFUINPUT(35),
+    CLICKINVENTORYSLOTINPUT(36),
+    ATTACKINPUT(37),
+    UNEQUIPINPUT(38),
+    SWAPKUNGFUSLOTPACKET(39),
+    PICKINPUT(40),
+    DROPINPUT(41),
+    CONFIRMDROPINPUT(42),
+    CLICKNPCABILITYINPUT(43),
+    BUYITEM(44),
+    SELLITEM(45),
+    DROPONENTITYINPUT(46),
+    TRADESTATEINPUT(47),
+    ADDPLAYERTRADEINPUT(48),
+    USEPILL(49),
+    CHAT(50),
+    CLICKEQUIPMENT(51),
+    SUBMITQUESTINPUT(52),
+    UNLOCKBANK(53),
+    BANKOPERATION(54),
+    REALMINPUT(56),
+    CREATEGUILDINPUT(57),
+    APPLYGUILDKUNGFU(27),
     TYPE_NOT_SET(0);
     private final int value;
     private TypeCase(int value) {
@@ -92,36 +95,39 @@ private static final long serialVersionUID = 0L;
 
     public static TypeCase forNumber(int value) {
       switch (value) {
-        case 1: return MOVEEVENTPACKET;
-        case 2: return CLICKPACKET;
-        case 3: return LOGINPACKET;
-        case 4: return ATTACKEVENTPACKET;
-        case 5: return SWAPINVENTORYSLOTPACKET;
-        case 6: return DOUBLECLICKINVENTORYSLOTPACKET;
-        case 7: return DROPITEM;
-        case 8: return PICKITEM;
-        case 9: return UNEQUIP;
-        case 10: return TOGGLEKUNGFU;
-        case 11: return SITDOWN;
-        case 12: return STANDUP;
-        case 13: return SELLITEMS;
-        case 14: return BUYITEMS;
-        case 15: return RIGHTCLICK;
-        case 16: return TRADEREQUEST;
-        case 17: return UPDATETRADE;
-        case 18: return TRIGGERDYNAMICOBJECT;
-        case 19: return SWAPKUNGFUSLOT;
-        case 20: return DRAGPLAYER;
-        case 21: return SIMPLECOMMAND;
-        case 22: return DYE;
-        case 23: return SAY;
-        case 24: return BANKOPERATION;
+        case 10: return LOGINACCOUNT;
+        case 11: return REGISTERACCOUNT;
+        case 12: return LOGINCHARACTER;
+        case 13: return CREATECHARACTER;
         case 25: return CHANGETEAM;
-        case 26: return FOUNDGUILD;
-        case 27: return CREATEGUILDKUNGFU;
-        case 28: return MANAGEGUILD;
-        case 29: return SUBMITQUEST;
-        case 30: return INTERACT;
+        case 5: return SWAPINVENTORYSLOTPACKET;
+        case 2: return CLICKPACKET;
+        case 32: return MOVEINPUT;
+        case 33: return TURNINPUT;
+        case 34: return SIMPLEINPUT;
+        case 35: return CLICKKUNGFUINPUT;
+        case 36: return CLICKINVENTORYSLOTINPUT;
+        case 37: return ATTACKINPUT;
+        case 38: return UNEQUIPINPUT;
+        case 39: return SWAPKUNGFUSLOTPACKET;
+        case 40: return PICKINPUT;
+        case 41: return DROPINPUT;
+        case 42: return CONFIRMDROPINPUT;
+        case 43: return CLICKNPCABILITYINPUT;
+        case 44: return BUYITEM;
+        case 45: return SELLITEM;
+        case 46: return DROPONENTITYINPUT;
+        case 47: return TRADESTATEINPUT;
+        case 48: return ADDPLAYERTRADEINPUT;
+        case 49: return USEPILL;
+        case 50: return CHAT;
+        case 51: return CLICKEQUIPMENT;
+        case 52: return SUBMITQUESTINPUT;
+        case 53: return UNLOCKBANK;
+        case 54: return BANKOPERATION;
+        case 56: return REALMINPUT;
+        case 57: return CREATEGUILDINPUT;
+        case 27: return APPLYGUILDKUNGFU;
         case 0: return TYPE_NOT_SET;
         default: return null;
       }
@@ -137,748 +143,128 @@ private static final long serialVersionUID = 0L;
         typeCase_);
   }
 
-  public static final int MOVEEVENTPACKET_FIELD_NUMBER = 1;
+  public static final int LOGINACCOUNT_FIELD_NUMBER = 10;
   /**
-   * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-   * @return Whether the moveEventPacket field is set.
+   * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
+   * @return Whether the loginAccount field is set.
    */
   @java.lang.Override
-  public boolean hasMoveEventPacket() {
-    return typeCase_ == 1;
-  }
-  /**
-   * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-   * @return The moveEventPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.MoveEventPacket getMoveEventPacket() {
-    if (typeCase_ == 1) {
-       return (org.y1000.network.gen.MoveEventPacket) type_;
-    }
-    return org.y1000.network.gen.MoveEventPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.MoveEventPacketOrBuilder getMoveEventPacketOrBuilder() {
-    if (typeCase_ == 1) {
-       return (org.y1000.network.gen.MoveEventPacket) type_;
-    }
-    return org.y1000.network.gen.MoveEventPacket.getDefaultInstance();
-  }
-
-  public static final int CLICKPACKET_FIELD_NUMBER = 2;
-  /**
-   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-   * @return Whether the clickPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasClickPacket() {
-    return typeCase_ == 2;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-   * @return The clickPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClickPacket getClickPacket() {
-    if (typeCase_ == 2) {
-       return (org.y1000.network.gen.ClickPacket) type_;
-    }
-    return org.y1000.network.gen.ClickPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClickPacketOrBuilder getClickPacketOrBuilder() {
-    if (typeCase_ == 2) {
-       return (org.y1000.network.gen.ClickPacket) type_;
-    }
-    return org.y1000.network.gen.ClickPacket.getDefaultInstance();
-  }
-
-  public static final int LOGINPACKET_FIELD_NUMBER = 3;
-  /**
-   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-   * @return Whether the loginPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasLoginPacket() {
-    return typeCase_ == 3;
-  }
-  /**
-   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-   * @return The loginPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PlayerLoginPacket getLoginPacket() {
-    if (typeCase_ == 3) {
-       return (org.y1000.network.gen.PlayerLoginPacket) type_;
-    }
-    return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PlayerLoginPacketOrBuilder getLoginPacketOrBuilder() {
-    if (typeCase_ == 3) {
-       return (org.y1000.network.gen.PlayerLoginPacket) type_;
-    }
-    return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-  }
-
-  public static final int ATTACKEVENTPACKET_FIELD_NUMBER = 4;
-  /**
-   * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-   * @return Whether the attackEventPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasAttackEventPacket() {
-    return typeCase_ == 4;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-   * @return The attackEventPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientAttackEventPacket getAttackEventPacket() {
-    if (typeCase_ == 4) {
-       return (org.y1000.network.gen.ClientAttackEventPacket) type_;
-    }
-    return org.y1000.network.gen.ClientAttackEventPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientAttackEventPacketOrBuilder getAttackEventPacketOrBuilder() {
-    if (typeCase_ == 4) {
-       return (org.y1000.network.gen.ClientAttackEventPacket) type_;
-    }
-    return org.y1000.network.gen.ClientAttackEventPacket.getDefaultInstance();
-  }
-
-  public static final int SWAPINVENTORYSLOTPACKET_FIELD_NUMBER = 5;
-  /**
-   * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-   * @return Whether the swapInventorySlotPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasSwapInventorySlotPacket() {
-    return typeCase_ == 5;
-  }
-  /**
-   * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-   * @return The swapInventorySlotPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.SwapInventorySlotPacket getSwapInventorySlotPacket() {
-    if (typeCase_ == 5) {
-       return (org.y1000.network.gen.SwapInventorySlotPacket) type_;
-    }
-    return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.SwapInventorySlotPacketOrBuilder getSwapInventorySlotPacketOrBuilder() {
-    if (typeCase_ == 5) {
-       return (org.y1000.network.gen.SwapInventorySlotPacket) type_;
-    }
-    return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
-  }
-
-  public static final int DOUBLECLICKINVENTORYSLOTPACKET_FIELD_NUMBER = 6;
-  /**
-   * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-   * @return Whether the doubleClickInventorySlotPacket field is set.
-   */
-  @java.lang.Override
-  public boolean hasDoubleClickInventorySlotPacket() {
-    return typeCase_ == 6;
-  }
-  /**
-   * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-   * @return The doubleClickInventorySlotPacket.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.DoubleClickInventorySlotPacket getDoubleClickInventorySlotPacket() {
-    if (typeCase_ == 6) {
-       return (org.y1000.network.gen.DoubleClickInventorySlotPacket) type_;
-    }
-    return org.y1000.network.gen.DoubleClickInventorySlotPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.DoubleClickInventorySlotPacketOrBuilder getDoubleClickInventorySlotPacketOrBuilder() {
-    if (typeCase_ == 6) {
-       return (org.y1000.network.gen.DoubleClickInventorySlotPacket) type_;
-    }
-    return org.y1000.network.gen.DoubleClickInventorySlotPacket.getDefaultInstance();
-  }
-
-  public static final int DROPITEM_FIELD_NUMBER = 7;
-  /**
-   * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-   * @return Whether the dropItem field is set.
-   */
-  @java.lang.Override
-  public boolean hasDropItem() {
-    return typeCase_ == 7;
-  }
-  /**
-   * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-   * @return The dropItem.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.DropItemPacket getDropItem() {
-    if (typeCase_ == 7) {
-       return (org.y1000.network.gen.DropItemPacket) type_;
-    }
-    return org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.DropItemPacketOrBuilder getDropItemOrBuilder() {
-    if (typeCase_ == 7) {
-       return (org.y1000.network.gen.DropItemPacket) type_;
-    }
-    return org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-  }
-
-  public static final int PICKITEM_FIELD_NUMBER = 8;
-  /**
-   * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-   * @return Whether the pickItem field is set.
-   */
-  @java.lang.Override
-  public boolean hasPickItem() {
-    return typeCase_ == 8;
-  }
-  /**
-   * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-   * @return The pickItem.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PickItemPacket getPickItem() {
-    if (typeCase_ == 8) {
-       return (org.y1000.network.gen.PickItemPacket) type_;
-    }
-    return org.y1000.network.gen.PickItemPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.PickItemPacketOrBuilder getPickItemOrBuilder() {
-    if (typeCase_ == 8) {
-       return (org.y1000.network.gen.PickItemPacket) type_;
-    }
-    return org.y1000.network.gen.PickItemPacket.getDefaultInstance();
-  }
-
-  public static final int UNEQUIP_FIELD_NUMBER = 9;
-  /**
-   * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-   * @return Whether the unequip field is set.
-   */
-  @java.lang.Override
-  public boolean hasUnequip() {
-    return typeCase_ == 9;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-   * @return The unequip.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientUnequipPacket getUnequip() {
-    if (typeCase_ == 9) {
-       return (org.y1000.network.gen.ClientUnequipPacket) type_;
-    }
-    return org.y1000.network.gen.ClientUnequipPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientUnequipPacketOrBuilder getUnequipOrBuilder() {
-    if (typeCase_ == 9) {
-       return (org.y1000.network.gen.ClientUnequipPacket) type_;
-    }
-    return org.y1000.network.gen.ClientUnequipPacket.getDefaultInstance();
-  }
-
-  public static final int TOGGLEKUNGFU_FIELD_NUMBER = 10;
-  /**
-   * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
-   * @return Whether the toggleKungFu field is set.
-   */
-  @java.lang.Override
-  public boolean hasToggleKungFu() {
+  public boolean hasLoginAccount() {
     return typeCase_ == 10;
   }
   /**
-   * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
-   * @return The toggleKungFu.
+   * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
+   * @return The loginAccount.
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientToggleKungFuPacket getToggleKungFu() {
+  public org.y1000.network.gen.LoginAccountRequestPacket getLoginAccount() {
     if (typeCase_ == 10) {
-       return (org.y1000.network.gen.ClientToggleKungFuPacket) type_;
+       return (org.y1000.network.gen.LoginAccountRequestPacket) type_;
     }
-    return org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+    return org.y1000.network.gen.LoginAccountRequestPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+   * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder getToggleKungFuOrBuilder() {
+  public org.y1000.network.gen.LoginAccountRequestPacketOrBuilder getLoginAccountOrBuilder() {
     if (typeCase_ == 10) {
-       return (org.y1000.network.gen.ClientToggleKungFuPacket) type_;
+       return (org.y1000.network.gen.LoginAccountRequestPacket) type_;
     }
-    return org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+    return org.y1000.network.gen.LoginAccountRequestPacket.getDefaultInstance();
   }
 
-  public static final int SITDOWN_FIELD_NUMBER = 11;
+  public static final int REGISTERACCOUNT_FIELD_NUMBER = 11;
   /**
-   * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
-   * @return Whether the sitDown field is set.
+   * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
+   * @return Whether the registerAccount field is set.
    */
   @java.lang.Override
-  public boolean hasSitDown() {
+  public boolean hasRegisterAccount() {
     return typeCase_ == 11;
   }
   /**
-   * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
-   * @return The sitDown.
+   * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
+   * @return The registerAccount.
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientSitDownPacket getSitDown() {
+  public org.y1000.network.gen.RegisterAccountRequestPacket getRegisterAccount() {
     if (typeCase_ == 11) {
-       return (org.y1000.network.gen.ClientSitDownPacket) type_;
+       return (org.y1000.network.gen.RegisterAccountRequestPacket) type_;
     }
-    return org.y1000.network.gen.ClientSitDownPacket.getDefaultInstance();
+    return org.y1000.network.gen.RegisterAccountRequestPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
+   * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientSitDownPacketOrBuilder getSitDownOrBuilder() {
+  public org.y1000.network.gen.RegisterAccountRequestPacketOrBuilder getRegisterAccountOrBuilder() {
     if (typeCase_ == 11) {
-       return (org.y1000.network.gen.ClientSitDownPacket) type_;
+       return (org.y1000.network.gen.RegisterAccountRequestPacket) type_;
     }
-    return org.y1000.network.gen.ClientSitDownPacket.getDefaultInstance();
+    return org.y1000.network.gen.RegisterAccountRequestPacket.getDefaultInstance();
   }
 
-  public static final int STANDUP_FIELD_NUMBER = 12;
+  public static final int LOGINCHARACTER_FIELD_NUMBER = 12;
   /**
-   * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
-   * @return Whether the standUp field is set.
+   * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
+   * @return Whether the loginCharacter field is set.
    */
   @java.lang.Override
-  public boolean hasStandUp() {
+  public boolean hasLoginCharacter() {
     return typeCase_ == 12;
   }
   /**
-   * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
-   * @return The standUp.
+   * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
+   * @return The loginCharacter.
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientStandUpPacket getStandUp() {
+  public org.y1000.network.gen.LoginCharacterRequestPacket getLoginCharacter() {
     if (typeCase_ == 12) {
-       return (org.y1000.network.gen.ClientStandUpPacket) type_;
+       return (org.y1000.network.gen.LoginCharacterRequestPacket) type_;
     }
-    return org.y1000.network.gen.ClientStandUpPacket.getDefaultInstance();
+    return org.y1000.network.gen.LoginCharacterRequestPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
+   * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientStandUpPacketOrBuilder getStandUpOrBuilder() {
+  public org.y1000.network.gen.LoginCharacterRequestPacketOrBuilder getLoginCharacterOrBuilder() {
     if (typeCase_ == 12) {
-       return (org.y1000.network.gen.ClientStandUpPacket) type_;
+       return (org.y1000.network.gen.LoginCharacterRequestPacket) type_;
     }
-    return org.y1000.network.gen.ClientStandUpPacket.getDefaultInstance();
+    return org.y1000.network.gen.LoginCharacterRequestPacket.getDefaultInstance();
   }
 
-  public static final int SELLITEMS_FIELD_NUMBER = 13;
+  public static final int CREATECHARACTER_FIELD_NUMBER = 13;
   /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-   * @return Whether the sellItems field is set.
+   * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
+   * @return Whether the createCharacter field is set.
    */
   @java.lang.Override
-  public boolean hasSellItems() {
+  public boolean hasCreateCharacter() {
     return typeCase_ == 13;
   }
   /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-   * @return The sellItems.
+   * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
+   * @return The createCharacter.
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientMerchantTradeItemsPacket getSellItems() {
+  public org.y1000.network.gen.CreateCharacterRequestPacket getCreateCharacter() {
     if (typeCase_ == 13) {
-       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
+       return (org.y1000.network.gen.CreateCharacterRequestPacket) type_;
     }
-    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+    return org.y1000.network.gen.CreateCharacterRequestPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
+   * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getSellItemsOrBuilder() {
+  public org.y1000.network.gen.CreateCharacterRequestPacketOrBuilder getCreateCharacterOrBuilder() {
     if (typeCase_ == 13) {
-       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
+       return (org.y1000.network.gen.CreateCharacterRequestPacket) type_;
     }
-    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-  }
-
-  public static final int BUYITEMS_FIELD_NUMBER = 14;
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-   * @return Whether the buyItems field is set.
-   */
-  @java.lang.Override
-  public boolean hasBuyItems() {
-    return typeCase_ == 14;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-   * @return The buyItems.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientMerchantTradeItemsPacket getBuyItems() {
-    if (typeCase_ == 14) {
-       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-    }
-    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getBuyItemsOrBuilder() {
-    if (typeCase_ == 14) {
-       return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-    }
-    return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-  }
-
-  public static final int RIGHTCLICK_FIELD_NUMBER = 15;
-  /**
-   * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-   * @return Whether the rightClick field is set.
-   */
-  @java.lang.Override
-  public boolean hasRightClick() {
-    return typeCase_ == 15;
-  }
-  /**
-   * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-   * @return The rightClick.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.RightClickPacket getRightClick() {
-    if (typeCase_ == 15) {
-       return (org.y1000.network.gen.RightClickPacket) type_;
-    }
-    return org.y1000.network.gen.RightClickPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.RightClickPacketOrBuilder getRightClickOrBuilder() {
-    if (typeCase_ == 15) {
-       return (org.y1000.network.gen.RightClickPacket) type_;
-    }
-    return org.y1000.network.gen.RightClickPacket.getDefaultInstance();
-  }
-
-  public static final int TRADEREQUEST_FIELD_NUMBER = 16;
-  /**
-   * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-   * @return Whether the tradeRequest field is set.
-   */
-  @java.lang.Override
-  public boolean hasTradeRequest() {
-    return typeCase_ == 16;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-   * @return The tradeRequest.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientTradePlayerPacket getTradeRequest() {
-    if (typeCase_ == 16) {
-       return (org.y1000.network.gen.ClientTradePlayerPacket) type_;
-    }
-    return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientTradePlayerPacketOrBuilder getTradeRequestOrBuilder() {
-    if (typeCase_ == 16) {
-       return (org.y1000.network.gen.ClientTradePlayerPacket) type_;
-    }
-    return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
-  }
-
-  public static final int UPDATETRADE_FIELD_NUMBER = 17;
-  /**
-   * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-   * @return Whether the updateTrade field is set.
-   */
-  @java.lang.Override
-  public boolean hasUpdateTrade() {
-    return typeCase_ == 17;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-   * @return The updateTrade.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientUpdateTradePacket getUpdateTrade() {
-    if (typeCase_ == 17) {
-       return (org.y1000.network.gen.ClientUpdateTradePacket) type_;
-    }
-    return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientUpdateTradePacketOrBuilder getUpdateTradeOrBuilder() {
-    if (typeCase_ == 17) {
-       return (org.y1000.network.gen.ClientUpdateTradePacket) type_;
-    }
-    return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
-  }
-
-  public static final int TRIGGERDYNAMICOBJECT_FIELD_NUMBER = 18;
-  /**
-   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-   * @return Whether the triggerDynamicObject field is set.
-   */
-  @java.lang.Override
-  public boolean hasTriggerDynamicObject() {
-    return typeCase_ == 18;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-   * @return The triggerDynamicObject.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientTriggerDynamicObjectPacket getTriggerDynamicObject() {
-    if (typeCase_ == 18) {
-       return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
-    }
-    return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder getTriggerDynamicObjectOrBuilder() {
-    if (typeCase_ == 18) {
-       return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
-    }
-    return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-  }
-
-  public static final int SWAPKUNGFUSLOT_FIELD_NUMBER = 19;
-  /**
-   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-   * @return Whether the swapKungFuSlot field is set.
-   */
-  @java.lang.Override
-  public boolean hasSwapKungFuSlot() {
-    return typeCase_ == 19;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-   * @return The swapKungFuSlot.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientSwapKungFuSlotPacket getSwapKungFuSlot() {
-    if (typeCase_ == 19) {
-       return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
-    }
-    return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder getSwapKungFuSlotOrBuilder() {
-    if (typeCase_ == 19) {
-       return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
-    }
-    return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-  }
-
-  public static final int DRAGPLAYER_FIELD_NUMBER = 20;
-  /**
-   * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-   * @return Whether the dragPlayer field is set.
-   */
-  @java.lang.Override
-  public boolean hasDragPlayer() {
-    return typeCase_ == 20;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-   * @return The dragPlayer.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientDragPlayerPacket getDragPlayer() {
-    if (typeCase_ == 20) {
-       return (org.y1000.network.gen.ClientDragPlayerPacket) type_;
-    }
-    return org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientDragPlayerPacketOrBuilder getDragPlayerOrBuilder() {
-    if (typeCase_ == 20) {
-       return (org.y1000.network.gen.ClientDragPlayerPacket) type_;
-    }
-    return org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
-  }
-
-  public static final int SIMPLECOMMAND_FIELD_NUMBER = 21;
-  /**
-   * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-   * @return Whether the simpleCommand field is set.
-   */
-  @java.lang.Override
-  public boolean hasSimpleCommand() {
-    return typeCase_ == 21;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-   * @return The simpleCommand.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientSimpleCommandPacket getSimpleCommand() {
-    if (typeCase_ == 21) {
-       return (org.y1000.network.gen.ClientSimpleCommandPacket) type_;
-    }
-    return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder getSimpleCommandOrBuilder() {
-    if (typeCase_ == 21) {
-       return (org.y1000.network.gen.ClientSimpleCommandPacket) type_;
-    }
-    return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
-  }
-
-  public static final int DYE_FIELD_NUMBER = 22;
-  /**
-   * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-   * @return Whether the dye field is set.
-   */
-  @java.lang.Override
-  public boolean hasDye() {
-    return typeCase_ == 22;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-   * @return The dye.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientDyePacket getDye() {
-    if (typeCase_ == 22) {
-       return (org.y1000.network.gen.ClientDyePacket) type_;
-    }
-    return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientDyePacketOrBuilder getDyeOrBuilder() {
-    if (typeCase_ == 22) {
-       return (org.y1000.network.gen.ClientDyePacket) type_;
-    }
-    return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
-  }
-
-  public static final int SAY_FIELD_NUMBER = 23;
-  /**
-   * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-   * @return Whether the say field is set.
-   */
-  @java.lang.Override
-  public boolean hasSay() {
-    return typeCase_ == 23;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-   * @return The say.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientSayPacket getSay() {
-    if (typeCase_ == 23) {
-       return (org.y1000.network.gen.ClientSayPacket) type_;
-    }
-    return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientSayPacketOrBuilder getSayOrBuilder() {
-    if (typeCase_ == 23) {
-       return (org.y1000.network.gen.ClientSayPacket) type_;
-    }
-    return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
-  }
-
-  public static final int BANKOPERATION_FIELD_NUMBER = 24;
-  /**
-   * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-   * @return Whether the bankOperation field is set.
-   */
-  @java.lang.Override
-  public boolean hasBankOperation() {
-    return typeCase_ == 24;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-   * @return The bankOperation.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientBankOperationPacket getBankOperation() {
-    if (typeCase_ == 24) {
-       return (org.y1000.network.gen.ClientBankOperationPacket) type_;
-    }
-    return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientBankOperationPacketOrBuilder getBankOperationOrBuilder() {
-    if (typeCase_ == 24) {
-       return (org.y1000.network.gen.ClientBankOperationPacket) type_;
-    }
-    return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
+    return org.y1000.network.gen.CreateCharacterRequestPacket.getDefaultInstance();
   }
 
   public static final int CHANGETEAM_FIELD_NUMBER = 25;
@@ -912,159 +298,872 @@ private static final long serialVersionUID = 0L;
     return org.y1000.network.gen.ClientChangeTeamPacket.getDefaultInstance();
   }
 
-  public static final int FOUNDGUILD_FIELD_NUMBER = 26;
+  public static final int SWAPINVENTORYSLOTPACKET_FIELD_NUMBER = 5;
   /**
-   * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
-   * @return Whether the foundGuild field is set.
+   * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
+   * @return Whether the swapInventorySlotPacket field is set.
    */
   @java.lang.Override
-  public boolean hasFoundGuild() {
-    return typeCase_ == 26;
+  public boolean hasSwapInventorySlotPacket() {
+    return typeCase_ == 5;
   }
   /**
-   * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
-   * @return The foundGuild.
+   * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
+   * @return The swapInventorySlotPacket.
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientFoundGuildPacket getFoundGuild() {
-    if (typeCase_ == 26) {
-       return (org.y1000.network.gen.ClientFoundGuildPacket) type_;
+  public org.y1000.network.gen.SwapInventorySlotPacket getSwapInventorySlotPacket() {
+    if (typeCase_ == 5) {
+       return (org.y1000.network.gen.SwapInventorySlotPacket) type_;
     }
-    return org.y1000.network.gen.ClientFoundGuildPacket.getDefaultInstance();
+    return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
+   * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientFoundGuildPacketOrBuilder getFoundGuildOrBuilder() {
-    if (typeCase_ == 26) {
-       return (org.y1000.network.gen.ClientFoundGuildPacket) type_;
+  public org.y1000.network.gen.SwapInventorySlotPacketOrBuilder getSwapInventorySlotPacketOrBuilder() {
+    if (typeCase_ == 5) {
+       return (org.y1000.network.gen.SwapInventorySlotPacket) type_;
     }
-    return org.y1000.network.gen.ClientFoundGuildPacket.getDefaultInstance();
+    return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
   }
 
-  public static final int CREATEGUILDKUNGFU_FIELD_NUMBER = 27;
+  public static final int CLICKPACKET_FIELD_NUMBER = 2;
   /**
-   * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
-   * @return Whether the createGuildKungFu field is set.
+   * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+   * @return Whether the clickPacket field is set.
    */
   @java.lang.Override
-  public boolean hasCreateGuildKungFu() {
+  public boolean hasClickPacket() {
+    return typeCase_ == 2;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+   * @return The clickPacket.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickInputPacket getClickPacket() {
+    if (typeCase_ == 2) {
+       return (org.y1000.network.gen.ClickInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickInputPacketOrBuilder getClickPacketOrBuilder() {
+    if (typeCase_ == 2) {
+       return (org.y1000.network.gen.ClickInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+  }
+
+  public static final int MOVEINPUT_FIELD_NUMBER = 32;
+  /**
+   * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+   * @return Whether the moveInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasMoveInput() {
+    return typeCase_ == 32;
+  }
+  /**
+   * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+   * @return The moveInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.MoveInputPacket getMoveInput() {
+    if (typeCase_ == 32) {
+       return (org.y1000.network.gen.MoveInputPacket) type_;
+    }
+    return org.y1000.network.gen.MoveInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.MoveInputPacketOrBuilder getMoveInputOrBuilder() {
+    if (typeCase_ == 32) {
+       return (org.y1000.network.gen.MoveInputPacket) type_;
+    }
+    return org.y1000.network.gen.MoveInputPacket.getDefaultInstance();
+  }
+
+  public static final int TURNINPUT_FIELD_NUMBER = 33;
+  /**
+   * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+   * @return Whether the turnInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasTurnInput() {
+    return typeCase_ == 33;
+  }
+  /**
+   * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+   * @return The turnInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.TurnInputPacket getTurnInput() {
+    if (typeCase_ == 33) {
+       return (org.y1000.network.gen.TurnInputPacket) type_;
+    }
+    return org.y1000.network.gen.TurnInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.TurnInputPacketOrBuilder getTurnInputOrBuilder() {
+    if (typeCase_ == 33) {
+       return (org.y1000.network.gen.TurnInputPacket) type_;
+    }
+    return org.y1000.network.gen.TurnInputPacket.getDefaultInstance();
+  }
+
+  public static final int SIMPLEINPUT_FIELD_NUMBER = 34;
+  /**
+   * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+   * @return Whether the simpleInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasSimpleInput() {
+    return typeCase_ == 34;
+  }
+  /**
+   * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+   * @return The simpleInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.SimpleInputPacket getSimpleInput() {
+    if (typeCase_ == 34) {
+       return (org.y1000.network.gen.SimpleInputPacket) type_;
+    }
+    return org.y1000.network.gen.SimpleInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.SimpleInputPacketOrBuilder getSimpleInputOrBuilder() {
+    if (typeCase_ == 34) {
+       return (org.y1000.network.gen.SimpleInputPacket) type_;
+    }
+    return org.y1000.network.gen.SimpleInputPacket.getDefaultInstance();
+  }
+
+  public static final int CLICKKUNGFUINPUT_FIELD_NUMBER = 35;
+  /**
+   * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+   * @return Whether the clickKungFuInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasClickKungFuInput() {
+    return typeCase_ == 35;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+   * @return The clickKungFuInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickKungFuInputPacket getClickKungFuInput() {
+    if (typeCase_ == 35) {
+       return (org.y1000.network.gen.ClickKungFuInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickKungFuInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickKungFuInputPacketOrBuilder getClickKungFuInputOrBuilder() {
+    if (typeCase_ == 35) {
+       return (org.y1000.network.gen.ClickKungFuInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickKungFuInputPacket.getDefaultInstance();
+  }
+
+  public static final int CLICKINVENTORYSLOTINPUT_FIELD_NUMBER = 36;
+  /**
+   * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+   * @return Whether the clickInventorySlotInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasClickInventorySlotInput() {
+    return typeCase_ == 36;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+   * @return The clickInventorySlotInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickInventorySlotInputPacket getClickInventorySlotInput() {
+    if (typeCase_ == 36) {
+       return (org.y1000.network.gen.ClickInventorySlotInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickInventorySlotInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickInventorySlotInputPacketOrBuilder getClickInventorySlotInputOrBuilder() {
+    if (typeCase_ == 36) {
+       return (org.y1000.network.gen.ClickInventorySlotInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickInventorySlotInputPacket.getDefaultInstance();
+  }
+
+  public static final int ATTACKINPUT_FIELD_NUMBER = 37;
+  /**
+   * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+   * @return Whether the attackInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasAttackInput() {
+    return typeCase_ == 37;
+  }
+  /**
+   * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+   * @return The attackInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AttackInputPacket getAttackInput() {
+    if (typeCase_ == 37) {
+       return (org.y1000.network.gen.AttackInputPacket) type_;
+    }
+    return org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AttackInputPacketOrBuilder getAttackInputOrBuilder() {
+    if (typeCase_ == 37) {
+       return (org.y1000.network.gen.AttackInputPacket) type_;
+    }
+    return org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+  }
+
+  public static final int UNEQUIPINPUT_FIELD_NUMBER = 38;
+  /**
+   * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+   * @return Whether the unequipInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasUnequipInput() {
+    return typeCase_ == 38;
+  }
+  /**
+   * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+   * @return The unequipInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UnequipInputPacket getUnequipInput() {
+    if (typeCase_ == 38) {
+       return (org.y1000.network.gen.UnequipInputPacket) type_;
+    }
+    return org.y1000.network.gen.UnequipInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UnequipInputPacketOrBuilder getUnequipInputOrBuilder() {
+    if (typeCase_ == 38) {
+       return (org.y1000.network.gen.UnequipInputPacket) type_;
+    }
+    return org.y1000.network.gen.UnequipInputPacket.getDefaultInstance();
+  }
+
+  public static final int SWAPKUNGFUSLOTPACKET_FIELD_NUMBER = 39;
+  /**
+   * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+   * @return Whether the swapKungFuSlotPacket field is set.
+   */
+  @java.lang.Override
+  public boolean hasSwapKungFuSlotPacket() {
+    return typeCase_ == 39;
+  }
+  /**
+   * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+   * @return The swapKungFuSlotPacket.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.SwapKungFuSlotPacket getSwapKungFuSlotPacket() {
+    if (typeCase_ == 39) {
+       return (org.y1000.network.gen.SwapKungFuSlotPacket) type_;
+    }
+    return org.y1000.network.gen.SwapKungFuSlotPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.SwapKungFuSlotPacketOrBuilder getSwapKungFuSlotPacketOrBuilder() {
+    if (typeCase_ == 39) {
+       return (org.y1000.network.gen.SwapKungFuSlotPacket) type_;
+    }
+    return org.y1000.network.gen.SwapKungFuSlotPacket.getDefaultInstance();
+  }
+
+  public static final int PICKINPUT_FIELD_NUMBER = 40;
+  /**
+   * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+   * @return Whether the pickInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasPickInput() {
+    return typeCase_ == 40;
+  }
+  /**
+   * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+   * @return The pickInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.PickInputPacket getPickInput() {
+    if (typeCase_ == 40) {
+       return (org.y1000.network.gen.PickInputPacket) type_;
+    }
+    return org.y1000.network.gen.PickInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.PickInputPacketOrBuilder getPickInputOrBuilder() {
+    if (typeCase_ == 40) {
+       return (org.y1000.network.gen.PickInputPacket) type_;
+    }
+    return org.y1000.network.gen.PickInputPacket.getDefaultInstance();
+  }
+
+  public static final int DROPINPUT_FIELD_NUMBER = 41;
+  /**
+   * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+   * @return Whether the dropInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasDropInput() {
+    return typeCase_ == 41;
+  }
+  /**
+   * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+   * @return The dropInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.DropItemInputPacket getDropInput() {
+    if (typeCase_ == 41) {
+       return (org.y1000.network.gen.DropItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.DropItemInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.DropItemInputPacketOrBuilder getDropInputOrBuilder() {
+    if (typeCase_ == 41) {
+       return (org.y1000.network.gen.DropItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.DropItemInputPacket.getDefaultInstance();
+  }
+
+  public static final int CONFIRMDROPINPUT_FIELD_NUMBER = 42;
+  /**
+   * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+   * @return Whether the confirmDropInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasConfirmDropInput() {
+    return typeCase_ == 42;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+   * @return The confirmDropInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ConfirmDropItemInputPacket getConfirmDropInput() {
+    if (typeCase_ == 42) {
+       return (org.y1000.network.gen.ConfirmDropItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.ConfirmDropItemInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ConfirmDropItemInputPacketOrBuilder getConfirmDropInputOrBuilder() {
+    if (typeCase_ == 42) {
+       return (org.y1000.network.gen.ConfirmDropItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.ConfirmDropItemInputPacket.getDefaultInstance();
+  }
+
+  public static final int CLICKNPCABILITYINPUT_FIELD_NUMBER = 43;
+  /**
+   * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+   * @return Whether the clickNpcAbilityInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasClickNpcAbilityInput() {
+    return typeCase_ == 43;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+   * @return The clickNpcAbilityInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickNpcAbilityInputPacket getClickNpcAbilityInput() {
+    if (typeCase_ == 43) {
+       return (org.y1000.network.gen.ClickNpcAbilityInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickNpcAbilityInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickNpcAbilityInputPacketOrBuilder getClickNpcAbilityInputOrBuilder() {
+    if (typeCase_ == 43) {
+       return (org.y1000.network.gen.ClickNpcAbilityInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickNpcAbilityInputPacket.getDefaultInstance();
+  }
+
+  public static final int BUYITEM_FIELD_NUMBER = 44;
+  /**
+   * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+   * @return Whether the buyItem field is set.
+   */
+  @java.lang.Override
+  public boolean hasBuyItem() {
+    return typeCase_ == 44;
+  }
+  /**
+   * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+   * @return The buyItem.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.BuyItemInputPacket getBuyItem() {
+    if (typeCase_ == 44) {
+       return (org.y1000.network.gen.BuyItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.BuyItemInputPacketOrBuilder getBuyItemOrBuilder() {
+    if (typeCase_ == 44) {
+       return (org.y1000.network.gen.BuyItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+  }
+
+  public static final int SELLITEM_FIELD_NUMBER = 45;
+  /**
+   * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+   * @return Whether the sellItem field is set.
+   */
+  @java.lang.Override
+  public boolean hasSellItem() {
+    return typeCase_ == 45;
+  }
+  /**
+   * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+   * @return The sellItem.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.SellItemInputPacket getSellItem() {
+    if (typeCase_ == 45) {
+       return (org.y1000.network.gen.SellItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.SellItemInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.SellItemInputPacketOrBuilder getSellItemOrBuilder() {
+    if (typeCase_ == 45) {
+       return (org.y1000.network.gen.SellItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.SellItemInputPacket.getDefaultInstance();
+  }
+
+  public static final int DROPONENTITYINPUT_FIELD_NUMBER = 46;
+  /**
+   * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+   * @return Whether the dropOnEntityInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasDropOnEntityInput() {
+    return typeCase_ == 46;
+  }
+  /**
+   * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+   * @return The dropOnEntityInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.DropItemOnEntityInputPacket getDropOnEntityInput() {
+    if (typeCase_ == 46) {
+       return (org.y1000.network.gen.DropItemOnEntityInputPacket) type_;
+    }
+    return org.y1000.network.gen.DropItemOnEntityInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.DropItemOnEntityInputPacketOrBuilder getDropOnEntityInputOrBuilder() {
+    if (typeCase_ == 46) {
+       return (org.y1000.network.gen.DropItemOnEntityInputPacket) type_;
+    }
+    return org.y1000.network.gen.DropItemOnEntityInputPacket.getDefaultInstance();
+  }
+
+  public static final int TRADESTATEINPUT_FIELD_NUMBER = 47;
+  /**
+   * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+   * @return Whether the tradeStateInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasTradeStateInput() {
+    return typeCase_ == 47;
+  }
+  /**
+   * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+   * @return The tradeStateInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.PlayerTradeStateInputPacket getTradeStateInput() {
+    if (typeCase_ == 47) {
+       return (org.y1000.network.gen.PlayerTradeStateInputPacket) type_;
+    }
+    return org.y1000.network.gen.PlayerTradeStateInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.PlayerTradeStateInputPacketOrBuilder getTradeStateInputOrBuilder() {
+    if (typeCase_ == 47) {
+       return (org.y1000.network.gen.PlayerTradeStateInputPacket) type_;
+    }
+    return org.y1000.network.gen.PlayerTradeStateInputPacket.getDefaultInstance();
+  }
+
+  public static final int ADDPLAYERTRADEINPUT_FIELD_NUMBER = 48;
+  /**
+   * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+   * @return Whether the addPlayerTradeInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasAddPlayerTradeInput() {
+    return typeCase_ == 48;
+  }
+  /**
+   * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+   * @return The addPlayerTradeInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AddTradeItemInputPacket getAddPlayerTradeInput() {
+    if (typeCase_ == 48) {
+       return (org.y1000.network.gen.AddTradeItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.AddTradeItemInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.AddTradeItemInputPacketOrBuilder getAddPlayerTradeInputOrBuilder() {
+    if (typeCase_ == 48) {
+       return (org.y1000.network.gen.AddTradeItemInputPacket) type_;
+    }
+    return org.y1000.network.gen.AddTradeItemInputPacket.getDefaultInstance();
+  }
+
+  public static final int USEPILL_FIELD_NUMBER = 49;
+  /**
+   * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+   * @return Whether the usePill field is set.
+   */
+  @java.lang.Override
+  public boolean hasUsePill() {
+    return typeCase_ == 49;
+  }
+  /**
+   * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+   * @return The usePill.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UsePillInputPacket getUsePill() {
+    if (typeCase_ == 49) {
+       return (org.y1000.network.gen.UsePillInputPacket) type_;
+    }
+    return org.y1000.network.gen.UsePillInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UsePillInputPacketOrBuilder getUsePillOrBuilder() {
+    if (typeCase_ == 49) {
+       return (org.y1000.network.gen.UsePillInputPacket) type_;
+    }
+    return org.y1000.network.gen.UsePillInputPacket.getDefaultInstance();
+  }
+
+  public static final int CHAT_FIELD_NUMBER = 50;
+  /**
+   * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+   * @return Whether the chat field is set.
+   */
+  @java.lang.Override
+  public boolean hasChat() {
+    return typeCase_ == 50;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+   * @return The chat.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ChatInputPacket getChat() {
+    if (typeCase_ == 50) {
+       return (org.y1000.network.gen.ChatInputPacket) type_;
+    }
+    return org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ChatInputPacketOrBuilder getChatOrBuilder() {
+    if (typeCase_ == 50) {
+       return (org.y1000.network.gen.ChatInputPacket) type_;
+    }
+    return org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+  }
+
+  public static final int CLICKEQUIPMENT_FIELD_NUMBER = 51;
+  /**
+   * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+   * @return Whether the clickEquipment field is set.
+   */
+  @java.lang.Override
+  public boolean hasClickEquipment() {
+    return typeCase_ == 51;
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+   * @return The clickEquipment.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickEquipmentInputPacket getClickEquipment() {
+    if (typeCase_ == 51) {
+       return (org.y1000.network.gen.ClickEquipmentInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickEquipmentInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.ClickEquipmentInputPacketOrBuilder getClickEquipmentOrBuilder() {
+    if (typeCase_ == 51) {
+       return (org.y1000.network.gen.ClickEquipmentInputPacket) type_;
+    }
+    return org.y1000.network.gen.ClickEquipmentInputPacket.getDefaultInstance();
+  }
+
+  public static final int SUBMITQUESTINPUT_FIELD_NUMBER = 52;
+  /**
+   * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+   * @return Whether the submitQuestInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasSubmitQuestInput() {
+    return typeCase_ == 52;
+  }
+  /**
+   * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+   * @return The submitQuestInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.SubmitQuestInputPacket getSubmitQuestInput() {
+    if (typeCase_ == 52) {
+       return (org.y1000.network.gen.SubmitQuestInputPacket) type_;
+    }
+    return org.y1000.network.gen.SubmitQuestInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.SubmitQuestInputPacketOrBuilder getSubmitQuestInputOrBuilder() {
+    if (typeCase_ == 52) {
+       return (org.y1000.network.gen.SubmitQuestInputPacket) type_;
+    }
+    return org.y1000.network.gen.SubmitQuestInputPacket.getDefaultInstance();
+  }
+
+  public static final int UNLOCKBANK_FIELD_NUMBER = 53;
+  /**
+   * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+   * @return Whether the unlockBank field is set.
+   */
+  @java.lang.Override
+  public boolean hasUnlockBank() {
+    return typeCase_ == 53;
+  }
+  /**
+   * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+   * @return The unlockBank.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UnlockBankInputPacket getUnlockBank() {
+    if (typeCase_ == 53) {
+       return (org.y1000.network.gen.UnlockBankInputPacket) type_;
+    }
+    return org.y1000.network.gen.UnlockBankInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.UnlockBankInputPacketOrBuilder getUnlockBankOrBuilder() {
+    if (typeCase_ == 53) {
+       return (org.y1000.network.gen.UnlockBankInputPacket) type_;
+    }
+    return org.y1000.network.gen.UnlockBankInputPacket.getDefaultInstance();
+  }
+
+  public static final int BANKOPERATION_FIELD_NUMBER = 54;
+  /**
+   * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+   * @return Whether the bankOperation field is set.
+   */
+  @java.lang.Override
+  public boolean hasBankOperation() {
+    return typeCase_ == 54;
+  }
+  /**
+   * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+   * @return The bankOperation.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.BankOperationInputPacket getBankOperation() {
+    if (typeCase_ == 54) {
+       return (org.y1000.network.gen.BankOperationInputPacket) type_;
+    }
+    return org.y1000.network.gen.BankOperationInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.BankOperationInputPacketOrBuilder getBankOperationOrBuilder() {
+    if (typeCase_ == 54) {
+       return (org.y1000.network.gen.BankOperationInputPacket) type_;
+    }
+    return org.y1000.network.gen.BankOperationInputPacket.getDefaultInstance();
+  }
+
+  public static final int REALMINPUT_FIELD_NUMBER = 56;
+  /**
+   * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+   * @return Whether the realmInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasRealmInput() {
+    return typeCase_ == 56;
+  }
+  /**
+   * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+   * @return The realmInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.RealmInputPacket getRealmInput() {
+    if (typeCase_ == 56) {
+       return (org.y1000.network.gen.RealmInputPacket) type_;
+    }
+    return org.y1000.network.gen.RealmInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.RealmInputPacketOrBuilder getRealmInputOrBuilder() {
+    if (typeCase_ == 56) {
+       return (org.y1000.network.gen.RealmInputPacket) type_;
+    }
+    return org.y1000.network.gen.RealmInputPacket.getDefaultInstance();
+  }
+
+  public static final int CREATEGUILDINPUT_FIELD_NUMBER = 57;
+  /**
+   * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+   * @return Whether the createGuildInput field is set.
+   */
+  @java.lang.Override
+  public boolean hasCreateGuildInput() {
+    return typeCase_ == 57;
+  }
+  /**
+   * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+   * @return The createGuildInput.
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.CreateGuildInputPacket getCreateGuildInput() {
+    if (typeCase_ == 57) {
+       return (org.y1000.network.gen.CreateGuildInputPacket) type_;
+    }
+    return org.y1000.network.gen.CreateGuildInputPacket.getDefaultInstance();
+  }
+  /**
+   * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+   */
+  @java.lang.Override
+  public org.y1000.network.gen.CreateGuildInputPacketOrBuilder getCreateGuildInputOrBuilder() {
+    if (typeCase_ == 57) {
+       return (org.y1000.network.gen.CreateGuildInputPacket) type_;
+    }
+    return org.y1000.network.gen.CreateGuildInputPacket.getDefaultInstance();
+  }
+
+  public static final int APPLYGUILDKUNGFU_FIELD_NUMBER = 27;
+  /**
+   * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
+   * @return Whether the applyGuildKungFu field is set.
+   */
+  @java.lang.Override
+  public boolean hasApplyGuildKungFu() {
     return typeCase_ == 27;
   }
   /**
-   * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
-   * @return The createGuildKungFu.
+   * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
+   * @return The applyGuildKungFu.
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientCreateGuildKungFuPacket getCreateGuildKungFu() {
+  public org.y1000.network.gen.ApplyGuildKungFuInputPacket getApplyGuildKungFu() {
     if (typeCase_ == 27) {
-       return (org.y1000.network.gen.ClientCreateGuildKungFuPacket) type_;
+       return (org.y1000.network.gen.ApplyGuildKungFuInputPacket) type_;
     }
-    return org.y1000.network.gen.ClientCreateGuildKungFuPacket.getDefaultInstance();
+    return org.y1000.network.gen.ApplyGuildKungFuInputPacket.getDefaultInstance();
   }
   /**
-   * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
+   * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
    */
   @java.lang.Override
-  public org.y1000.network.gen.ClientCreateGuildKungFuPacketOrBuilder getCreateGuildKungFuOrBuilder() {
+  public org.y1000.network.gen.ApplyGuildKungFuInputPacketOrBuilder getApplyGuildKungFuOrBuilder() {
     if (typeCase_ == 27) {
-       return (org.y1000.network.gen.ClientCreateGuildKungFuPacket) type_;
+       return (org.y1000.network.gen.ApplyGuildKungFuInputPacket) type_;
     }
-    return org.y1000.network.gen.ClientCreateGuildKungFuPacket.getDefaultInstance();
-  }
-
-  public static final int MANAGEGUILD_FIELD_NUMBER = 28;
-  /**
-   * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-   * @return Whether the manageGuild field is set.
-   */
-  @java.lang.Override
-  public boolean hasManageGuild() {
-    return typeCase_ == 28;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-   * @return The manageGuild.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientManageGuildPacket getManageGuild() {
-    if (typeCase_ == 28) {
-       return (org.y1000.network.gen.ClientManageGuildPacket) type_;
-    }
-    return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientManageGuildPacketOrBuilder getManageGuildOrBuilder() {
-    if (typeCase_ == 28) {
-       return (org.y1000.network.gen.ClientManageGuildPacket) type_;
-    }
-    return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-  }
-
-  public static final int SUBMITQUEST_FIELD_NUMBER = 29;
-  /**
-   * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-   * @return Whether the submitQuest field is set.
-   */
-  @java.lang.Override
-  public boolean hasSubmitQuest() {
-    return typeCase_ == 29;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-   * @return The submitQuest.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientSubmitQuestPacket getSubmitQuest() {
-    if (typeCase_ == 29) {
-       return (org.y1000.network.gen.ClientSubmitQuestPacket) type_;
-    }
-    return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder getSubmitQuestOrBuilder() {
-    if (typeCase_ == 29) {
-       return (org.y1000.network.gen.ClientSubmitQuestPacket) type_;
-    }
-    return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
-  }
-
-  public static final int INTERACT_FIELD_NUMBER = 30;
-  /**
-   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-   * @return Whether the interact field is set.
-   */
-  @java.lang.Override
-  public boolean hasInteract() {
-    return typeCase_ == 30;
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-   * @return The interact.
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientClickInteractabilityPacket getInteract() {
-    if (typeCase_ == 30) {
-       return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
-    }
-    return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-  }
-  /**
-   * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-   */
-  @java.lang.Override
-  public org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder getInteractOrBuilder() {
-    if (typeCase_ == 30) {
-       return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
-    }
-    return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
+    return org.y1000.network.gen.ApplyGuildKungFuInputPacket.getDefaultInstance();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -1081,95 +1180,104 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (typeCase_ == 1) {
-      output.writeMessage(1, (org.y1000.network.gen.MoveEventPacket) type_);
-    }
     if (typeCase_ == 2) {
-      output.writeMessage(2, (org.y1000.network.gen.ClickPacket) type_);
-    }
-    if (typeCase_ == 3) {
-      output.writeMessage(3, (org.y1000.network.gen.PlayerLoginPacket) type_);
-    }
-    if (typeCase_ == 4) {
-      output.writeMessage(4, (org.y1000.network.gen.ClientAttackEventPacket) type_);
+      output.writeMessage(2, (org.y1000.network.gen.ClickInputPacket) type_);
     }
     if (typeCase_ == 5) {
       output.writeMessage(5, (org.y1000.network.gen.SwapInventorySlotPacket) type_);
     }
-    if (typeCase_ == 6) {
-      output.writeMessage(6, (org.y1000.network.gen.DoubleClickInventorySlotPacket) type_);
-    }
-    if (typeCase_ == 7) {
-      output.writeMessage(7, (org.y1000.network.gen.DropItemPacket) type_);
-    }
-    if (typeCase_ == 8) {
-      output.writeMessage(8, (org.y1000.network.gen.PickItemPacket) type_);
-    }
-    if (typeCase_ == 9) {
-      output.writeMessage(9, (org.y1000.network.gen.ClientUnequipPacket) type_);
-    }
     if (typeCase_ == 10) {
-      output.writeMessage(10, (org.y1000.network.gen.ClientToggleKungFuPacket) type_);
+      output.writeMessage(10, (org.y1000.network.gen.LoginAccountRequestPacket) type_);
     }
     if (typeCase_ == 11) {
-      output.writeMessage(11, (org.y1000.network.gen.ClientSitDownPacket) type_);
+      output.writeMessage(11, (org.y1000.network.gen.RegisterAccountRequestPacket) type_);
     }
     if (typeCase_ == 12) {
-      output.writeMessage(12, (org.y1000.network.gen.ClientStandUpPacket) type_);
+      output.writeMessage(12, (org.y1000.network.gen.LoginCharacterRequestPacket) type_);
     }
     if (typeCase_ == 13) {
-      output.writeMessage(13, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
-    }
-    if (typeCase_ == 14) {
-      output.writeMessage(14, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
-    }
-    if (typeCase_ == 15) {
-      output.writeMessage(15, (org.y1000.network.gen.RightClickPacket) type_);
-    }
-    if (typeCase_ == 16) {
-      output.writeMessage(16, (org.y1000.network.gen.ClientTradePlayerPacket) type_);
-    }
-    if (typeCase_ == 17) {
-      output.writeMessage(17, (org.y1000.network.gen.ClientUpdateTradePacket) type_);
-    }
-    if (typeCase_ == 18) {
-      output.writeMessage(18, (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_);
-    }
-    if (typeCase_ == 19) {
-      output.writeMessage(19, (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_);
-    }
-    if (typeCase_ == 20) {
-      output.writeMessage(20, (org.y1000.network.gen.ClientDragPlayerPacket) type_);
-    }
-    if (typeCase_ == 21) {
-      output.writeMessage(21, (org.y1000.network.gen.ClientSimpleCommandPacket) type_);
-    }
-    if (typeCase_ == 22) {
-      output.writeMessage(22, (org.y1000.network.gen.ClientDyePacket) type_);
-    }
-    if (typeCase_ == 23) {
-      output.writeMessage(23, (org.y1000.network.gen.ClientSayPacket) type_);
-    }
-    if (typeCase_ == 24) {
-      output.writeMessage(24, (org.y1000.network.gen.ClientBankOperationPacket) type_);
+      output.writeMessage(13, (org.y1000.network.gen.CreateCharacterRequestPacket) type_);
     }
     if (typeCase_ == 25) {
       output.writeMessage(25, (org.y1000.network.gen.ClientChangeTeamPacket) type_);
     }
-    if (typeCase_ == 26) {
-      output.writeMessage(26, (org.y1000.network.gen.ClientFoundGuildPacket) type_);
-    }
     if (typeCase_ == 27) {
-      output.writeMessage(27, (org.y1000.network.gen.ClientCreateGuildKungFuPacket) type_);
+      output.writeMessage(27, (org.y1000.network.gen.ApplyGuildKungFuInputPacket) type_);
     }
-    if (typeCase_ == 28) {
-      output.writeMessage(28, (org.y1000.network.gen.ClientManageGuildPacket) type_);
+    if (typeCase_ == 32) {
+      output.writeMessage(32, (org.y1000.network.gen.MoveInputPacket) type_);
     }
-    if (typeCase_ == 29) {
-      output.writeMessage(29, (org.y1000.network.gen.ClientSubmitQuestPacket) type_);
+    if (typeCase_ == 33) {
+      output.writeMessage(33, (org.y1000.network.gen.TurnInputPacket) type_);
     }
-    if (typeCase_ == 30) {
-      output.writeMessage(30, (org.y1000.network.gen.ClientClickInteractabilityPacket) type_);
+    if (typeCase_ == 34) {
+      output.writeMessage(34, (org.y1000.network.gen.SimpleInputPacket) type_);
+    }
+    if (typeCase_ == 35) {
+      output.writeMessage(35, (org.y1000.network.gen.ClickKungFuInputPacket) type_);
+    }
+    if (typeCase_ == 36) {
+      output.writeMessage(36, (org.y1000.network.gen.ClickInventorySlotInputPacket) type_);
+    }
+    if (typeCase_ == 37) {
+      output.writeMessage(37, (org.y1000.network.gen.AttackInputPacket) type_);
+    }
+    if (typeCase_ == 38) {
+      output.writeMessage(38, (org.y1000.network.gen.UnequipInputPacket) type_);
+    }
+    if (typeCase_ == 39) {
+      output.writeMessage(39, (org.y1000.network.gen.SwapKungFuSlotPacket) type_);
+    }
+    if (typeCase_ == 40) {
+      output.writeMessage(40, (org.y1000.network.gen.PickInputPacket) type_);
+    }
+    if (typeCase_ == 41) {
+      output.writeMessage(41, (org.y1000.network.gen.DropItemInputPacket) type_);
+    }
+    if (typeCase_ == 42) {
+      output.writeMessage(42, (org.y1000.network.gen.ConfirmDropItemInputPacket) type_);
+    }
+    if (typeCase_ == 43) {
+      output.writeMessage(43, (org.y1000.network.gen.ClickNpcAbilityInputPacket) type_);
+    }
+    if (typeCase_ == 44) {
+      output.writeMessage(44, (org.y1000.network.gen.BuyItemInputPacket) type_);
+    }
+    if (typeCase_ == 45) {
+      output.writeMessage(45, (org.y1000.network.gen.SellItemInputPacket) type_);
+    }
+    if (typeCase_ == 46) {
+      output.writeMessage(46, (org.y1000.network.gen.DropItemOnEntityInputPacket) type_);
+    }
+    if (typeCase_ == 47) {
+      output.writeMessage(47, (org.y1000.network.gen.PlayerTradeStateInputPacket) type_);
+    }
+    if (typeCase_ == 48) {
+      output.writeMessage(48, (org.y1000.network.gen.AddTradeItemInputPacket) type_);
+    }
+    if (typeCase_ == 49) {
+      output.writeMessage(49, (org.y1000.network.gen.UsePillInputPacket) type_);
+    }
+    if (typeCase_ == 50) {
+      output.writeMessage(50, (org.y1000.network.gen.ChatInputPacket) type_);
+    }
+    if (typeCase_ == 51) {
+      output.writeMessage(51, (org.y1000.network.gen.ClickEquipmentInputPacket) type_);
+    }
+    if (typeCase_ == 52) {
+      output.writeMessage(52, (org.y1000.network.gen.SubmitQuestInputPacket) type_);
+    }
+    if (typeCase_ == 53) {
+      output.writeMessage(53, (org.y1000.network.gen.UnlockBankInputPacket) type_);
+    }
+    if (typeCase_ == 54) {
+      output.writeMessage(54, (org.y1000.network.gen.BankOperationInputPacket) type_);
+    }
+    if (typeCase_ == 56) {
+      output.writeMessage(56, (org.y1000.network.gen.RealmInputPacket) type_);
+    }
+    if (typeCase_ == 57) {
+      output.writeMessage(57, (org.y1000.network.gen.CreateGuildInputPacket) type_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1180,125 +1288,137 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (typeCase_ == 1) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(1, (org.y1000.network.gen.MoveEventPacket) type_);
-    }
     if (typeCase_ == 2) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, (org.y1000.network.gen.ClickPacket) type_);
-    }
-    if (typeCase_ == 3) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, (org.y1000.network.gen.PlayerLoginPacket) type_);
-    }
-    if (typeCase_ == 4) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(4, (org.y1000.network.gen.ClientAttackEventPacket) type_);
+        .computeMessageSize(2, (org.y1000.network.gen.ClickInputPacket) type_);
     }
     if (typeCase_ == 5) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(5, (org.y1000.network.gen.SwapInventorySlotPacket) type_);
     }
-    if (typeCase_ == 6) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(6, (org.y1000.network.gen.DoubleClickInventorySlotPacket) type_);
-    }
-    if (typeCase_ == 7) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(7, (org.y1000.network.gen.DropItemPacket) type_);
-    }
-    if (typeCase_ == 8) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(8, (org.y1000.network.gen.PickItemPacket) type_);
-    }
-    if (typeCase_ == 9) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(9, (org.y1000.network.gen.ClientUnequipPacket) type_);
-    }
     if (typeCase_ == 10) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(10, (org.y1000.network.gen.ClientToggleKungFuPacket) type_);
+        .computeMessageSize(10, (org.y1000.network.gen.LoginAccountRequestPacket) type_);
     }
     if (typeCase_ == 11) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(11, (org.y1000.network.gen.ClientSitDownPacket) type_);
+        .computeMessageSize(11, (org.y1000.network.gen.RegisterAccountRequestPacket) type_);
     }
     if (typeCase_ == 12) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(12, (org.y1000.network.gen.ClientStandUpPacket) type_);
+        .computeMessageSize(12, (org.y1000.network.gen.LoginCharacterRequestPacket) type_);
     }
     if (typeCase_ == 13) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(13, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
-    }
-    if (typeCase_ == 14) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(14, (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_);
-    }
-    if (typeCase_ == 15) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(15, (org.y1000.network.gen.RightClickPacket) type_);
-    }
-    if (typeCase_ == 16) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(16, (org.y1000.network.gen.ClientTradePlayerPacket) type_);
-    }
-    if (typeCase_ == 17) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(17, (org.y1000.network.gen.ClientUpdateTradePacket) type_);
-    }
-    if (typeCase_ == 18) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(18, (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_);
-    }
-    if (typeCase_ == 19) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(19, (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_);
-    }
-    if (typeCase_ == 20) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(20, (org.y1000.network.gen.ClientDragPlayerPacket) type_);
-    }
-    if (typeCase_ == 21) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(21, (org.y1000.network.gen.ClientSimpleCommandPacket) type_);
-    }
-    if (typeCase_ == 22) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(22, (org.y1000.network.gen.ClientDyePacket) type_);
-    }
-    if (typeCase_ == 23) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(23, (org.y1000.network.gen.ClientSayPacket) type_);
-    }
-    if (typeCase_ == 24) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(24, (org.y1000.network.gen.ClientBankOperationPacket) type_);
+        .computeMessageSize(13, (org.y1000.network.gen.CreateCharacterRequestPacket) type_);
     }
     if (typeCase_ == 25) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(25, (org.y1000.network.gen.ClientChangeTeamPacket) type_);
     }
-    if (typeCase_ == 26) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(26, (org.y1000.network.gen.ClientFoundGuildPacket) type_);
-    }
     if (typeCase_ == 27) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(27, (org.y1000.network.gen.ClientCreateGuildKungFuPacket) type_);
+        .computeMessageSize(27, (org.y1000.network.gen.ApplyGuildKungFuInputPacket) type_);
     }
-    if (typeCase_ == 28) {
+    if (typeCase_ == 32) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(28, (org.y1000.network.gen.ClientManageGuildPacket) type_);
+        .computeMessageSize(32, (org.y1000.network.gen.MoveInputPacket) type_);
     }
-    if (typeCase_ == 29) {
+    if (typeCase_ == 33) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(29, (org.y1000.network.gen.ClientSubmitQuestPacket) type_);
+        .computeMessageSize(33, (org.y1000.network.gen.TurnInputPacket) type_);
     }
-    if (typeCase_ == 30) {
+    if (typeCase_ == 34) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(30, (org.y1000.network.gen.ClientClickInteractabilityPacket) type_);
+        .computeMessageSize(34, (org.y1000.network.gen.SimpleInputPacket) type_);
+    }
+    if (typeCase_ == 35) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(35, (org.y1000.network.gen.ClickKungFuInputPacket) type_);
+    }
+    if (typeCase_ == 36) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(36, (org.y1000.network.gen.ClickInventorySlotInputPacket) type_);
+    }
+    if (typeCase_ == 37) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(37, (org.y1000.network.gen.AttackInputPacket) type_);
+    }
+    if (typeCase_ == 38) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(38, (org.y1000.network.gen.UnequipInputPacket) type_);
+    }
+    if (typeCase_ == 39) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(39, (org.y1000.network.gen.SwapKungFuSlotPacket) type_);
+    }
+    if (typeCase_ == 40) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(40, (org.y1000.network.gen.PickInputPacket) type_);
+    }
+    if (typeCase_ == 41) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(41, (org.y1000.network.gen.DropItemInputPacket) type_);
+    }
+    if (typeCase_ == 42) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(42, (org.y1000.network.gen.ConfirmDropItemInputPacket) type_);
+    }
+    if (typeCase_ == 43) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(43, (org.y1000.network.gen.ClickNpcAbilityInputPacket) type_);
+    }
+    if (typeCase_ == 44) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(44, (org.y1000.network.gen.BuyItemInputPacket) type_);
+    }
+    if (typeCase_ == 45) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(45, (org.y1000.network.gen.SellItemInputPacket) type_);
+    }
+    if (typeCase_ == 46) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(46, (org.y1000.network.gen.DropItemOnEntityInputPacket) type_);
+    }
+    if (typeCase_ == 47) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(47, (org.y1000.network.gen.PlayerTradeStateInputPacket) type_);
+    }
+    if (typeCase_ == 48) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(48, (org.y1000.network.gen.AddTradeItemInputPacket) type_);
+    }
+    if (typeCase_ == 49) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(49, (org.y1000.network.gen.UsePillInputPacket) type_);
+    }
+    if (typeCase_ == 50) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(50, (org.y1000.network.gen.ChatInputPacket) type_);
+    }
+    if (typeCase_ == 51) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(51, (org.y1000.network.gen.ClickEquipmentInputPacket) type_);
+    }
+    if (typeCase_ == 52) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(52, (org.y1000.network.gen.SubmitQuestInputPacket) type_);
+    }
+    if (typeCase_ == 53) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(53, (org.y1000.network.gen.UnlockBankInputPacket) type_);
+    }
+    if (typeCase_ == 54) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(54, (org.y1000.network.gen.BankOperationInputPacket) type_);
+    }
+    if (typeCase_ == 56) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(56, (org.y1000.network.gen.RealmInputPacket) type_);
+    }
+    if (typeCase_ == 57) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(57, (org.y1000.network.gen.CreateGuildInputPacket) type_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -1317,125 +1437,137 @@ private static final long serialVersionUID = 0L;
 
     if (!getTypeCase().equals(other.getTypeCase())) return false;
     switch (typeCase_) {
-      case 1:
-        if (!getMoveEventPacket()
-            .equals(other.getMoveEventPacket())) return false;
-        break;
-      case 2:
-        if (!getClickPacket()
-            .equals(other.getClickPacket())) return false;
-        break;
-      case 3:
-        if (!getLoginPacket()
-            .equals(other.getLoginPacket())) return false;
-        break;
-      case 4:
-        if (!getAttackEventPacket()
-            .equals(other.getAttackEventPacket())) return false;
-        break;
-      case 5:
-        if (!getSwapInventorySlotPacket()
-            .equals(other.getSwapInventorySlotPacket())) return false;
-        break;
-      case 6:
-        if (!getDoubleClickInventorySlotPacket()
-            .equals(other.getDoubleClickInventorySlotPacket())) return false;
-        break;
-      case 7:
-        if (!getDropItem()
-            .equals(other.getDropItem())) return false;
-        break;
-      case 8:
-        if (!getPickItem()
-            .equals(other.getPickItem())) return false;
-        break;
-      case 9:
-        if (!getUnequip()
-            .equals(other.getUnequip())) return false;
-        break;
       case 10:
-        if (!getToggleKungFu()
-            .equals(other.getToggleKungFu())) return false;
+        if (!getLoginAccount()
+            .equals(other.getLoginAccount())) return false;
         break;
       case 11:
-        if (!getSitDown()
-            .equals(other.getSitDown())) return false;
+        if (!getRegisterAccount()
+            .equals(other.getRegisterAccount())) return false;
         break;
       case 12:
-        if (!getStandUp()
-            .equals(other.getStandUp())) return false;
+        if (!getLoginCharacter()
+            .equals(other.getLoginCharacter())) return false;
         break;
       case 13:
-        if (!getSellItems()
-            .equals(other.getSellItems())) return false;
-        break;
-      case 14:
-        if (!getBuyItems()
-            .equals(other.getBuyItems())) return false;
-        break;
-      case 15:
-        if (!getRightClick()
-            .equals(other.getRightClick())) return false;
-        break;
-      case 16:
-        if (!getTradeRequest()
-            .equals(other.getTradeRequest())) return false;
-        break;
-      case 17:
-        if (!getUpdateTrade()
-            .equals(other.getUpdateTrade())) return false;
-        break;
-      case 18:
-        if (!getTriggerDynamicObject()
-            .equals(other.getTriggerDynamicObject())) return false;
-        break;
-      case 19:
-        if (!getSwapKungFuSlot()
-            .equals(other.getSwapKungFuSlot())) return false;
-        break;
-      case 20:
-        if (!getDragPlayer()
-            .equals(other.getDragPlayer())) return false;
-        break;
-      case 21:
-        if (!getSimpleCommand()
-            .equals(other.getSimpleCommand())) return false;
-        break;
-      case 22:
-        if (!getDye()
-            .equals(other.getDye())) return false;
-        break;
-      case 23:
-        if (!getSay()
-            .equals(other.getSay())) return false;
-        break;
-      case 24:
-        if (!getBankOperation()
-            .equals(other.getBankOperation())) return false;
+        if (!getCreateCharacter()
+            .equals(other.getCreateCharacter())) return false;
         break;
       case 25:
         if (!getChangeTeam()
             .equals(other.getChangeTeam())) return false;
         break;
-      case 26:
-        if (!getFoundGuild()
-            .equals(other.getFoundGuild())) return false;
+      case 5:
+        if (!getSwapInventorySlotPacket()
+            .equals(other.getSwapInventorySlotPacket())) return false;
+        break;
+      case 2:
+        if (!getClickPacket()
+            .equals(other.getClickPacket())) return false;
+        break;
+      case 32:
+        if (!getMoveInput()
+            .equals(other.getMoveInput())) return false;
+        break;
+      case 33:
+        if (!getTurnInput()
+            .equals(other.getTurnInput())) return false;
+        break;
+      case 34:
+        if (!getSimpleInput()
+            .equals(other.getSimpleInput())) return false;
+        break;
+      case 35:
+        if (!getClickKungFuInput()
+            .equals(other.getClickKungFuInput())) return false;
+        break;
+      case 36:
+        if (!getClickInventorySlotInput()
+            .equals(other.getClickInventorySlotInput())) return false;
+        break;
+      case 37:
+        if (!getAttackInput()
+            .equals(other.getAttackInput())) return false;
+        break;
+      case 38:
+        if (!getUnequipInput()
+            .equals(other.getUnequipInput())) return false;
+        break;
+      case 39:
+        if (!getSwapKungFuSlotPacket()
+            .equals(other.getSwapKungFuSlotPacket())) return false;
+        break;
+      case 40:
+        if (!getPickInput()
+            .equals(other.getPickInput())) return false;
+        break;
+      case 41:
+        if (!getDropInput()
+            .equals(other.getDropInput())) return false;
+        break;
+      case 42:
+        if (!getConfirmDropInput()
+            .equals(other.getConfirmDropInput())) return false;
+        break;
+      case 43:
+        if (!getClickNpcAbilityInput()
+            .equals(other.getClickNpcAbilityInput())) return false;
+        break;
+      case 44:
+        if (!getBuyItem()
+            .equals(other.getBuyItem())) return false;
+        break;
+      case 45:
+        if (!getSellItem()
+            .equals(other.getSellItem())) return false;
+        break;
+      case 46:
+        if (!getDropOnEntityInput()
+            .equals(other.getDropOnEntityInput())) return false;
+        break;
+      case 47:
+        if (!getTradeStateInput()
+            .equals(other.getTradeStateInput())) return false;
+        break;
+      case 48:
+        if (!getAddPlayerTradeInput()
+            .equals(other.getAddPlayerTradeInput())) return false;
+        break;
+      case 49:
+        if (!getUsePill()
+            .equals(other.getUsePill())) return false;
+        break;
+      case 50:
+        if (!getChat()
+            .equals(other.getChat())) return false;
+        break;
+      case 51:
+        if (!getClickEquipment()
+            .equals(other.getClickEquipment())) return false;
+        break;
+      case 52:
+        if (!getSubmitQuestInput()
+            .equals(other.getSubmitQuestInput())) return false;
+        break;
+      case 53:
+        if (!getUnlockBank()
+            .equals(other.getUnlockBank())) return false;
+        break;
+      case 54:
+        if (!getBankOperation()
+            .equals(other.getBankOperation())) return false;
+        break;
+      case 56:
+        if (!getRealmInput()
+            .equals(other.getRealmInput())) return false;
+        break;
+      case 57:
+        if (!getCreateGuildInput()
+            .equals(other.getCreateGuildInput())) return false;
         break;
       case 27:
-        if (!getCreateGuildKungFu()
-            .equals(other.getCreateGuildKungFu())) return false;
-        break;
-      case 28:
-        if (!getManageGuild()
-            .equals(other.getManageGuild())) return false;
-        break;
-      case 29:
-        if (!getSubmitQuest()
-            .equals(other.getSubmitQuest())) return false;
-        break;
-      case 30:
-        if (!getInteract()
-            .equals(other.getInteract())) return false;
+        if (!getApplyGuildKungFu()
+            .equals(other.getApplyGuildKungFu())) return false;
         break;
       case 0:
       default:
@@ -1452,125 +1584,137 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     switch (typeCase_) {
-      case 1:
-        hash = (37 * hash) + MOVEEVENTPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getMoveEventPacket().hashCode();
-        break;
-      case 2:
-        hash = (37 * hash) + CLICKPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getClickPacket().hashCode();
-        break;
-      case 3:
-        hash = (37 * hash) + LOGINPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getLoginPacket().hashCode();
-        break;
-      case 4:
-        hash = (37 * hash) + ATTACKEVENTPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getAttackEventPacket().hashCode();
-        break;
-      case 5:
-        hash = (37 * hash) + SWAPINVENTORYSLOTPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getSwapInventorySlotPacket().hashCode();
-        break;
-      case 6:
-        hash = (37 * hash) + DOUBLECLICKINVENTORYSLOTPACKET_FIELD_NUMBER;
-        hash = (53 * hash) + getDoubleClickInventorySlotPacket().hashCode();
-        break;
-      case 7:
-        hash = (37 * hash) + DROPITEM_FIELD_NUMBER;
-        hash = (53 * hash) + getDropItem().hashCode();
-        break;
-      case 8:
-        hash = (37 * hash) + PICKITEM_FIELD_NUMBER;
-        hash = (53 * hash) + getPickItem().hashCode();
-        break;
-      case 9:
-        hash = (37 * hash) + UNEQUIP_FIELD_NUMBER;
-        hash = (53 * hash) + getUnequip().hashCode();
-        break;
       case 10:
-        hash = (37 * hash) + TOGGLEKUNGFU_FIELD_NUMBER;
-        hash = (53 * hash) + getToggleKungFu().hashCode();
+        hash = (37 * hash) + LOGINACCOUNT_FIELD_NUMBER;
+        hash = (53 * hash) + getLoginAccount().hashCode();
         break;
       case 11:
-        hash = (37 * hash) + SITDOWN_FIELD_NUMBER;
-        hash = (53 * hash) + getSitDown().hashCode();
+        hash = (37 * hash) + REGISTERACCOUNT_FIELD_NUMBER;
+        hash = (53 * hash) + getRegisterAccount().hashCode();
         break;
       case 12:
-        hash = (37 * hash) + STANDUP_FIELD_NUMBER;
-        hash = (53 * hash) + getStandUp().hashCode();
+        hash = (37 * hash) + LOGINCHARACTER_FIELD_NUMBER;
+        hash = (53 * hash) + getLoginCharacter().hashCode();
         break;
       case 13:
-        hash = (37 * hash) + SELLITEMS_FIELD_NUMBER;
-        hash = (53 * hash) + getSellItems().hashCode();
-        break;
-      case 14:
-        hash = (37 * hash) + BUYITEMS_FIELD_NUMBER;
-        hash = (53 * hash) + getBuyItems().hashCode();
-        break;
-      case 15:
-        hash = (37 * hash) + RIGHTCLICK_FIELD_NUMBER;
-        hash = (53 * hash) + getRightClick().hashCode();
-        break;
-      case 16:
-        hash = (37 * hash) + TRADEREQUEST_FIELD_NUMBER;
-        hash = (53 * hash) + getTradeRequest().hashCode();
-        break;
-      case 17:
-        hash = (37 * hash) + UPDATETRADE_FIELD_NUMBER;
-        hash = (53 * hash) + getUpdateTrade().hashCode();
-        break;
-      case 18:
-        hash = (37 * hash) + TRIGGERDYNAMICOBJECT_FIELD_NUMBER;
-        hash = (53 * hash) + getTriggerDynamicObject().hashCode();
-        break;
-      case 19:
-        hash = (37 * hash) + SWAPKUNGFUSLOT_FIELD_NUMBER;
-        hash = (53 * hash) + getSwapKungFuSlot().hashCode();
-        break;
-      case 20:
-        hash = (37 * hash) + DRAGPLAYER_FIELD_NUMBER;
-        hash = (53 * hash) + getDragPlayer().hashCode();
-        break;
-      case 21:
-        hash = (37 * hash) + SIMPLECOMMAND_FIELD_NUMBER;
-        hash = (53 * hash) + getSimpleCommand().hashCode();
-        break;
-      case 22:
-        hash = (37 * hash) + DYE_FIELD_NUMBER;
-        hash = (53 * hash) + getDye().hashCode();
-        break;
-      case 23:
-        hash = (37 * hash) + SAY_FIELD_NUMBER;
-        hash = (53 * hash) + getSay().hashCode();
-        break;
-      case 24:
-        hash = (37 * hash) + BANKOPERATION_FIELD_NUMBER;
-        hash = (53 * hash) + getBankOperation().hashCode();
+        hash = (37 * hash) + CREATECHARACTER_FIELD_NUMBER;
+        hash = (53 * hash) + getCreateCharacter().hashCode();
         break;
       case 25:
         hash = (37 * hash) + CHANGETEAM_FIELD_NUMBER;
         hash = (53 * hash) + getChangeTeam().hashCode();
         break;
-      case 26:
-        hash = (37 * hash) + FOUNDGUILD_FIELD_NUMBER;
-        hash = (53 * hash) + getFoundGuild().hashCode();
+      case 5:
+        hash = (37 * hash) + SWAPINVENTORYSLOTPACKET_FIELD_NUMBER;
+        hash = (53 * hash) + getSwapInventorySlotPacket().hashCode();
+        break;
+      case 2:
+        hash = (37 * hash) + CLICKPACKET_FIELD_NUMBER;
+        hash = (53 * hash) + getClickPacket().hashCode();
+        break;
+      case 32:
+        hash = (37 * hash) + MOVEINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getMoveInput().hashCode();
+        break;
+      case 33:
+        hash = (37 * hash) + TURNINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getTurnInput().hashCode();
+        break;
+      case 34:
+        hash = (37 * hash) + SIMPLEINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getSimpleInput().hashCode();
+        break;
+      case 35:
+        hash = (37 * hash) + CLICKKUNGFUINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getClickKungFuInput().hashCode();
+        break;
+      case 36:
+        hash = (37 * hash) + CLICKINVENTORYSLOTINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getClickInventorySlotInput().hashCode();
+        break;
+      case 37:
+        hash = (37 * hash) + ATTACKINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getAttackInput().hashCode();
+        break;
+      case 38:
+        hash = (37 * hash) + UNEQUIPINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getUnequipInput().hashCode();
+        break;
+      case 39:
+        hash = (37 * hash) + SWAPKUNGFUSLOTPACKET_FIELD_NUMBER;
+        hash = (53 * hash) + getSwapKungFuSlotPacket().hashCode();
+        break;
+      case 40:
+        hash = (37 * hash) + PICKINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getPickInput().hashCode();
+        break;
+      case 41:
+        hash = (37 * hash) + DROPINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getDropInput().hashCode();
+        break;
+      case 42:
+        hash = (37 * hash) + CONFIRMDROPINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getConfirmDropInput().hashCode();
+        break;
+      case 43:
+        hash = (37 * hash) + CLICKNPCABILITYINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getClickNpcAbilityInput().hashCode();
+        break;
+      case 44:
+        hash = (37 * hash) + BUYITEM_FIELD_NUMBER;
+        hash = (53 * hash) + getBuyItem().hashCode();
+        break;
+      case 45:
+        hash = (37 * hash) + SELLITEM_FIELD_NUMBER;
+        hash = (53 * hash) + getSellItem().hashCode();
+        break;
+      case 46:
+        hash = (37 * hash) + DROPONENTITYINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getDropOnEntityInput().hashCode();
+        break;
+      case 47:
+        hash = (37 * hash) + TRADESTATEINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getTradeStateInput().hashCode();
+        break;
+      case 48:
+        hash = (37 * hash) + ADDPLAYERTRADEINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getAddPlayerTradeInput().hashCode();
+        break;
+      case 49:
+        hash = (37 * hash) + USEPILL_FIELD_NUMBER;
+        hash = (53 * hash) + getUsePill().hashCode();
+        break;
+      case 50:
+        hash = (37 * hash) + CHAT_FIELD_NUMBER;
+        hash = (53 * hash) + getChat().hashCode();
+        break;
+      case 51:
+        hash = (37 * hash) + CLICKEQUIPMENT_FIELD_NUMBER;
+        hash = (53 * hash) + getClickEquipment().hashCode();
+        break;
+      case 52:
+        hash = (37 * hash) + SUBMITQUESTINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getSubmitQuestInput().hashCode();
+        break;
+      case 53:
+        hash = (37 * hash) + UNLOCKBANK_FIELD_NUMBER;
+        hash = (53 * hash) + getUnlockBank().hashCode();
+        break;
+      case 54:
+        hash = (37 * hash) + BANKOPERATION_FIELD_NUMBER;
+        hash = (53 * hash) + getBankOperation().hashCode();
+        break;
+      case 56:
+        hash = (37 * hash) + REALMINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getRealmInput().hashCode();
+        break;
+      case 57:
+        hash = (37 * hash) + CREATEGUILDINPUT_FIELD_NUMBER;
+        hash = (53 * hash) + getCreateGuildInput().hashCode();
         break;
       case 27:
-        hash = (37 * hash) + CREATEGUILDKUNGFU_FIELD_NUMBER;
-        hash = (53 * hash) + getCreateGuildKungFu().hashCode();
-        break;
-      case 28:
-        hash = (37 * hash) + MANAGEGUILD_FIELD_NUMBER;
-        hash = (53 * hash) + getManageGuild().hashCode();
-        break;
-      case 29:
-        hash = (37 * hash) + SUBMITQUEST_FIELD_NUMBER;
-        hash = (53 * hash) + getSubmitQuest().hashCode();
-        break;
-      case 30:
-        hash = (37 * hash) + INTERACT_FIELD_NUMBER;
-        hash = (53 * hash) + getInteract().hashCode();
+        hash = (37 * hash) + APPLYGUILDKUNGFU_FIELD_NUMBER;
+        hash = (53 * hash) + getApplyGuildKungFu().hashCode();
         break;
       case 0:
       default:
@@ -1706,95 +1850,105 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      if (moveEventPacketBuilder_ != null) {
-        moveEventPacketBuilder_.clear();
+      bitField1_ = 0;
+      if (loginAccountBuilder_ != null) {
+        loginAccountBuilder_.clear();
       }
-      if (clickPacketBuilder_ != null) {
-        clickPacketBuilder_.clear();
+      if (registerAccountBuilder_ != null) {
+        registerAccountBuilder_.clear();
       }
-      if (loginPacketBuilder_ != null) {
-        loginPacketBuilder_.clear();
+      if (loginCharacterBuilder_ != null) {
+        loginCharacterBuilder_.clear();
       }
-      if (attackEventPacketBuilder_ != null) {
-        attackEventPacketBuilder_.clear();
-      }
-      if (swapInventorySlotPacketBuilder_ != null) {
-        swapInventorySlotPacketBuilder_.clear();
-      }
-      if (doubleClickInventorySlotPacketBuilder_ != null) {
-        doubleClickInventorySlotPacketBuilder_.clear();
-      }
-      if (dropItemBuilder_ != null) {
-        dropItemBuilder_.clear();
-      }
-      if (pickItemBuilder_ != null) {
-        pickItemBuilder_.clear();
-      }
-      if (unequipBuilder_ != null) {
-        unequipBuilder_.clear();
-      }
-      if (toggleKungFuBuilder_ != null) {
-        toggleKungFuBuilder_.clear();
-      }
-      if (sitDownBuilder_ != null) {
-        sitDownBuilder_.clear();
-      }
-      if (standUpBuilder_ != null) {
-        standUpBuilder_.clear();
-      }
-      if (sellItemsBuilder_ != null) {
-        sellItemsBuilder_.clear();
-      }
-      if (buyItemsBuilder_ != null) {
-        buyItemsBuilder_.clear();
-      }
-      if (rightClickBuilder_ != null) {
-        rightClickBuilder_.clear();
-      }
-      if (tradeRequestBuilder_ != null) {
-        tradeRequestBuilder_.clear();
-      }
-      if (updateTradeBuilder_ != null) {
-        updateTradeBuilder_.clear();
-      }
-      if (triggerDynamicObjectBuilder_ != null) {
-        triggerDynamicObjectBuilder_.clear();
-      }
-      if (swapKungFuSlotBuilder_ != null) {
-        swapKungFuSlotBuilder_.clear();
-      }
-      if (dragPlayerBuilder_ != null) {
-        dragPlayerBuilder_.clear();
-      }
-      if (simpleCommandBuilder_ != null) {
-        simpleCommandBuilder_.clear();
-      }
-      if (dyeBuilder_ != null) {
-        dyeBuilder_.clear();
-      }
-      if (sayBuilder_ != null) {
-        sayBuilder_.clear();
-      }
-      if (bankOperationBuilder_ != null) {
-        bankOperationBuilder_.clear();
+      if (createCharacterBuilder_ != null) {
+        createCharacterBuilder_.clear();
       }
       if (changeTeamBuilder_ != null) {
         changeTeamBuilder_.clear();
       }
-      if (foundGuildBuilder_ != null) {
-        foundGuildBuilder_.clear();
+      if (swapInventorySlotPacketBuilder_ != null) {
+        swapInventorySlotPacketBuilder_.clear();
       }
-      if (createGuildKungFuBuilder_ != null) {
-        createGuildKungFuBuilder_.clear();
+      if (clickPacketBuilder_ != null) {
+        clickPacketBuilder_.clear();
       }
-      if (manageGuildBuilder_ != null) {
-        manageGuildBuilder_.clear();
+      if (moveInputBuilder_ != null) {
+        moveInputBuilder_.clear();
       }
-      if (submitQuestBuilder_ != null) {
-        submitQuestBuilder_.clear();
+      if (turnInputBuilder_ != null) {
+        turnInputBuilder_.clear();
       }
-      if (interactBuilder_ != null) {
-        interactBuilder_.clear();
+      if (simpleInputBuilder_ != null) {
+        simpleInputBuilder_.clear();
+      }
+      if (clickKungFuInputBuilder_ != null) {
+        clickKungFuInputBuilder_.clear();
+      }
+      if (clickInventorySlotInputBuilder_ != null) {
+        clickInventorySlotInputBuilder_.clear();
+      }
+      if (attackInputBuilder_ != null) {
+        attackInputBuilder_.clear();
+      }
+      if (unequipInputBuilder_ != null) {
+        unequipInputBuilder_.clear();
+      }
+      if (swapKungFuSlotPacketBuilder_ != null) {
+        swapKungFuSlotPacketBuilder_.clear();
+      }
+      if (pickInputBuilder_ != null) {
+        pickInputBuilder_.clear();
+      }
+      if (dropInputBuilder_ != null) {
+        dropInputBuilder_.clear();
+      }
+      if (confirmDropInputBuilder_ != null) {
+        confirmDropInputBuilder_.clear();
+      }
+      if (clickNpcAbilityInputBuilder_ != null) {
+        clickNpcAbilityInputBuilder_.clear();
+      }
+      if (buyItemBuilder_ != null) {
+        buyItemBuilder_.clear();
+      }
+      if (sellItemBuilder_ != null) {
+        sellItemBuilder_.clear();
+      }
+      if (dropOnEntityInputBuilder_ != null) {
+        dropOnEntityInputBuilder_.clear();
+      }
+      if (tradeStateInputBuilder_ != null) {
+        tradeStateInputBuilder_.clear();
+      }
+      if (addPlayerTradeInputBuilder_ != null) {
+        addPlayerTradeInputBuilder_.clear();
+      }
+      if (usePillBuilder_ != null) {
+        usePillBuilder_.clear();
+      }
+      if (chatBuilder_ != null) {
+        chatBuilder_.clear();
+      }
+      if (clickEquipmentBuilder_ != null) {
+        clickEquipmentBuilder_.clear();
+      }
+      if (submitQuestInputBuilder_ != null) {
+        submitQuestInputBuilder_.clear();
+      }
+      if (unlockBankBuilder_ != null) {
+        unlockBankBuilder_.clear();
+      }
+      if (bankOperationBuilder_ != null) {
+        bankOperationBuilder_.clear();
+      }
+      if (realmInputBuilder_ != null) {
+        realmInputBuilder_.clear();
+      }
+      if (createGuildInputBuilder_ != null) {
+        createGuildInputBuilder_.clear();
+      }
+      if (applyGuildKungFuBuilder_ != null) {
+        applyGuildKungFuBuilder_.clear();
       }
       typeCase_ = 0;
       type_ = null;
@@ -1825,6 +1979,7 @@ private static final long serialVersionUID = 0L;
     public org.y1000.network.gen.ClientPacket buildPartial() {
       org.y1000.network.gen.ClientPacket result = new org.y1000.network.gen.ClientPacket(this);
       if (bitField0_ != 0) { buildPartial0(result); }
+      if (bitField1_ != 0) { buildPartial1(result); }
       buildPartialOneofs(result);
       onBuilt();
       return result;
@@ -1834,128 +1989,144 @@ private static final long serialVersionUID = 0L;
       int from_bitField0_ = bitField0_;
     }
 
+    private void buildPartial1(org.y1000.network.gen.ClientPacket result) {
+      int from_bitField1_ = bitField1_;
+    }
+
     private void buildPartialOneofs(org.y1000.network.gen.ClientPacket result) {
       result.typeCase_ = typeCase_;
       result.type_ = this.type_;
-      if (typeCase_ == 1 &&
-          moveEventPacketBuilder_ != null) {
-        result.type_ = moveEventPacketBuilder_.build();
-      }
-      if (typeCase_ == 2 &&
-          clickPacketBuilder_ != null) {
-        result.type_ = clickPacketBuilder_.build();
-      }
-      if (typeCase_ == 3 &&
-          loginPacketBuilder_ != null) {
-        result.type_ = loginPacketBuilder_.build();
-      }
-      if (typeCase_ == 4 &&
-          attackEventPacketBuilder_ != null) {
-        result.type_ = attackEventPacketBuilder_.build();
-      }
-      if (typeCase_ == 5 &&
-          swapInventorySlotPacketBuilder_ != null) {
-        result.type_ = swapInventorySlotPacketBuilder_.build();
-      }
-      if (typeCase_ == 6 &&
-          doubleClickInventorySlotPacketBuilder_ != null) {
-        result.type_ = doubleClickInventorySlotPacketBuilder_.build();
-      }
-      if (typeCase_ == 7 &&
-          dropItemBuilder_ != null) {
-        result.type_ = dropItemBuilder_.build();
-      }
-      if (typeCase_ == 8 &&
-          pickItemBuilder_ != null) {
-        result.type_ = pickItemBuilder_.build();
-      }
-      if (typeCase_ == 9 &&
-          unequipBuilder_ != null) {
-        result.type_ = unequipBuilder_.build();
-      }
       if (typeCase_ == 10 &&
-          toggleKungFuBuilder_ != null) {
-        result.type_ = toggleKungFuBuilder_.build();
+          loginAccountBuilder_ != null) {
+        result.type_ = loginAccountBuilder_.build();
       }
       if (typeCase_ == 11 &&
-          sitDownBuilder_ != null) {
-        result.type_ = sitDownBuilder_.build();
+          registerAccountBuilder_ != null) {
+        result.type_ = registerAccountBuilder_.build();
       }
       if (typeCase_ == 12 &&
-          standUpBuilder_ != null) {
-        result.type_ = standUpBuilder_.build();
+          loginCharacterBuilder_ != null) {
+        result.type_ = loginCharacterBuilder_.build();
       }
       if (typeCase_ == 13 &&
-          sellItemsBuilder_ != null) {
-        result.type_ = sellItemsBuilder_.build();
-      }
-      if (typeCase_ == 14 &&
-          buyItemsBuilder_ != null) {
-        result.type_ = buyItemsBuilder_.build();
-      }
-      if (typeCase_ == 15 &&
-          rightClickBuilder_ != null) {
-        result.type_ = rightClickBuilder_.build();
-      }
-      if (typeCase_ == 16 &&
-          tradeRequestBuilder_ != null) {
-        result.type_ = tradeRequestBuilder_.build();
-      }
-      if (typeCase_ == 17 &&
-          updateTradeBuilder_ != null) {
-        result.type_ = updateTradeBuilder_.build();
-      }
-      if (typeCase_ == 18 &&
-          triggerDynamicObjectBuilder_ != null) {
-        result.type_ = triggerDynamicObjectBuilder_.build();
-      }
-      if (typeCase_ == 19 &&
-          swapKungFuSlotBuilder_ != null) {
-        result.type_ = swapKungFuSlotBuilder_.build();
-      }
-      if (typeCase_ == 20 &&
-          dragPlayerBuilder_ != null) {
-        result.type_ = dragPlayerBuilder_.build();
-      }
-      if (typeCase_ == 21 &&
-          simpleCommandBuilder_ != null) {
-        result.type_ = simpleCommandBuilder_.build();
-      }
-      if (typeCase_ == 22 &&
-          dyeBuilder_ != null) {
-        result.type_ = dyeBuilder_.build();
-      }
-      if (typeCase_ == 23 &&
-          sayBuilder_ != null) {
-        result.type_ = sayBuilder_.build();
-      }
-      if (typeCase_ == 24 &&
-          bankOperationBuilder_ != null) {
-        result.type_ = bankOperationBuilder_.build();
+          createCharacterBuilder_ != null) {
+        result.type_ = createCharacterBuilder_.build();
       }
       if (typeCase_ == 25 &&
           changeTeamBuilder_ != null) {
         result.type_ = changeTeamBuilder_.build();
       }
-      if (typeCase_ == 26 &&
-          foundGuildBuilder_ != null) {
-        result.type_ = foundGuildBuilder_.build();
+      if (typeCase_ == 5 &&
+          swapInventorySlotPacketBuilder_ != null) {
+        result.type_ = swapInventorySlotPacketBuilder_.build();
+      }
+      if (typeCase_ == 2 &&
+          clickPacketBuilder_ != null) {
+        result.type_ = clickPacketBuilder_.build();
+      }
+      if (typeCase_ == 32 &&
+          moveInputBuilder_ != null) {
+        result.type_ = moveInputBuilder_.build();
+      }
+      if (typeCase_ == 33 &&
+          turnInputBuilder_ != null) {
+        result.type_ = turnInputBuilder_.build();
+      }
+      if (typeCase_ == 34 &&
+          simpleInputBuilder_ != null) {
+        result.type_ = simpleInputBuilder_.build();
+      }
+      if (typeCase_ == 35 &&
+          clickKungFuInputBuilder_ != null) {
+        result.type_ = clickKungFuInputBuilder_.build();
+      }
+      if (typeCase_ == 36 &&
+          clickInventorySlotInputBuilder_ != null) {
+        result.type_ = clickInventorySlotInputBuilder_.build();
+      }
+      if (typeCase_ == 37 &&
+          attackInputBuilder_ != null) {
+        result.type_ = attackInputBuilder_.build();
+      }
+      if (typeCase_ == 38 &&
+          unequipInputBuilder_ != null) {
+        result.type_ = unequipInputBuilder_.build();
+      }
+      if (typeCase_ == 39 &&
+          swapKungFuSlotPacketBuilder_ != null) {
+        result.type_ = swapKungFuSlotPacketBuilder_.build();
+      }
+      if (typeCase_ == 40 &&
+          pickInputBuilder_ != null) {
+        result.type_ = pickInputBuilder_.build();
+      }
+      if (typeCase_ == 41 &&
+          dropInputBuilder_ != null) {
+        result.type_ = dropInputBuilder_.build();
+      }
+      if (typeCase_ == 42 &&
+          confirmDropInputBuilder_ != null) {
+        result.type_ = confirmDropInputBuilder_.build();
+      }
+      if (typeCase_ == 43 &&
+          clickNpcAbilityInputBuilder_ != null) {
+        result.type_ = clickNpcAbilityInputBuilder_.build();
+      }
+      if (typeCase_ == 44 &&
+          buyItemBuilder_ != null) {
+        result.type_ = buyItemBuilder_.build();
+      }
+      if (typeCase_ == 45 &&
+          sellItemBuilder_ != null) {
+        result.type_ = sellItemBuilder_.build();
+      }
+      if (typeCase_ == 46 &&
+          dropOnEntityInputBuilder_ != null) {
+        result.type_ = dropOnEntityInputBuilder_.build();
+      }
+      if (typeCase_ == 47 &&
+          tradeStateInputBuilder_ != null) {
+        result.type_ = tradeStateInputBuilder_.build();
+      }
+      if (typeCase_ == 48 &&
+          addPlayerTradeInputBuilder_ != null) {
+        result.type_ = addPlayerTradeInputBuilder_.build();
+      }
+      if (typeCase_ == 49 &&
+          usePillBuilder_ != null) {
+        result.type_ = usePillBuilder_.build();
+      }
+      if (typeCase_ == 50 &&
+          chatBuilder_ != null) {
+        result.type_ = chatBuilder_.build();
+      }
+      if (typeCase_ == 51 &&
+          clickEquipmentBuilder_ != null) {
+        result.type_ = clickEquipmentBuilder_.build();
+      }
+      if (typeCase_ == 52 &&
+          submitQuestInputBuilder_ != null) {
+        result.type_ = submitQuestInputBuilder_.build();
+      }
+      if (typeCase_ == 53 &&
+          unlockBankBuilder_ != null) {
+        result.type_ = unlockBankBuilder_.build();
+      }
+      if (typeCase_ == 54 &&
+          bankOperationBuilder_ != null) {
+        result.type_ = bankOperationBuilder_.build();
+      }
+      if (typeCase_ == 56 &&
+          realmInputBuilder_ != null) {
+        result.type_ = realmInputBuilder_.build();
+      }
+      if (typeCase_ == 57 &&
+          createGuildInputBuilder_ != null) {
+        result.type_ = createGuildInputBuilder_.build();
       }
       if (typeCase_ == 27 &&
-          createGuildKungFuBuilder_ != null) {
-        result.type_ = createGuildKungFuBuilder_.build();
-      }
-      if (typeCase_ == 28 &&
-          manageGuildBuilder_ != null) {
-        result.type_ = manageGuildBuilder_.build();
-      }
-      if (typeCase_ == 29 &&
-          submitQuestBuilder_ != null) {
-        result.type_ = submitQuestBuilder_.build();
-      }
-      if (typeCase_ == 30 &&
-          interactBuilder_ != null) {
-        result.type_ = interactBuilder_.build();
+          applyGuildKungFuBuilder_ != null) {
+        result.type_ = applyGuildKungFuBuilder_.build();
       }
     }
 
@@ -2004,124 +2175,136 @@ private static final long serialVersionUID = 0L;
     public Builder mergeFrom(org.y1000.network.gen.ClientPacket other) {
       if (other == org.y1000.network.gen.ClientPacket.getDefaultInstance()) return this;
       switch (other.getTypeCase()) {
-        case MOVEEVENTPACKET: {
-          mergeMoveEventPacket(other.getMoveEventPacket());
+        case LOGINACCOUNT: {
+          mergeLoginAccount(other.getLoginAccount());
           break;
         }
-        case CLICKPACKET: {
-          mergeClickPacket(other.getClickPacket());
+        case REGISTERACCOUNT: {
+          mergeRegisterAccount(other.getRegisterAccount());
           break;
         }
-        case LOGINPACKET: {
-          mergeLoginPacket(other.getLoginPacket());
+        case LOGINCHARACTER: {
+          mergeLoginCharacter(other.getLoginCharacter());
           break;
         }
-        case ATTACKEVENTPACKET: {
-          mergeAttackEventPacket(other.getAttackEventPacket());
-          break;
-        }
-        case SWAPINVENTORYSLOTPACKET: {
-          mergeSwapInventorySlotPacket(other.getSwapInventorySlotPacket());
-          break;
-        }
-        case DOUBLECLICKINVENTORYSLOTPACKET: {
-          mergeDoubleClickInventorySlotPacket(other.getDoubleClickInventorySlotPacket());
-          break;
-        }
-        case DROPITEM: {
-          mergeDropItem(other.getDropItem());
-          break;
-        }
-        case PICKITEM: {
-          mergePickItem(other.getPickItem());
-          break;
-        }
-        case UNEQUIP: {
-          mergeUnequip(other.getUnequip());
-          break;
-        }
-        case TOGGLEKUNGFU: {
-          mergeToggleKungFu(other.getToggleKungFu());
-          break;
-        }
-        case SITDOWN: {
-          mergeSitDown(other.getSitDown());
-          break;
-        }
-        case STANDUP: {
-          mergeStandUp(other.getStandUp());
-          break;
-        }
-        case SELLITEMS: {
-          mergeSellItems(other.getSellItems());
-          break;
-        }
-        case BUYITEMS: {
-          mergeBuyItems(other.getBuyItems());
-          break;
-        }
-        case RIGHTCLICK: {
-          mergeRightClick(other.getRightClick());
-          break;
-        }
-        case TRADEREQUEST: {
-          mergeTradeRequest(other.getTradeRequest());
-          break;
-        }
-        case UPDATETRADE: {
-          mergeUpdateTrade(other.getUpdateTrade());
-          break;
-        }
-        case TRIGGERDYNAMICOBJECT: {
-          mergeTriggerDynamicObject(other.getTriggerDynamicObject());
-          break;
-        }
-        case SWAPKUNGFUSLOT: {
-          mergeSwapKungFuSlot(other.getSwapKungFuSlot());
-          break;
-        }
-        case DRAGPLAYER: {
-          mergeDragPlayer(other.getDragPlayer());
-          break;
-        }
-        case SIMPLECOMMAND: {
-          mergeSimpleCommand(other.getSimpleCommand());
-          break;
-        }
-        case DYE: {
-          mergeDye(other.getDye());
-          break;
-        }
-        case SAY: {
-          mergeSay(other.getSay());
-          break;
-        }
-        case BANKOPERATION: {
-          mergeBankOperation(other.getBankOperation());
+        case CREATECHARACTER: {
+          mergeCreateCharacter(other.getCreateCharacter());
           break;
         }
         case CHANGETEAM: {
           mergeChangeTeam(other.getChangeTeam());
           break;
         }
-        case FOUNDGUILD: {
-          mergeFoundGuild(other.getFoundGuild());
+        case SWAPINVENTORYSLOTPACKET: {
+          mergeSwapInventorySlotPacket(other.getSwapInventorySlotPacket());
           break;
         }
-        case CREATEGUILDKUNGFU: {
-          mergeCreateGuildKungFu(other.getCreateGuildKungFu());
+        case CLICKPACKET: {
+          mergeClickPacket(other.getClickPacket());
           break;
         }
-        case MANAGEGUILD: {
-          mergeManageGuild(other.getManageGuild());
+        case MOVEINPUT: {
+          mergeMoveInput(other.getMoveInput());
           break;
         }
-        case SUBMITQUEST: {
-          mergeSubmitQuest(other.getSubmitQuest());
+        case TURNINPUT: {
+          mergeTurnInput(other.getTurnInput());
           break;
         }
-        case INTERACT: {
-          mergeInteract(other.getInteract());
+        case SIMPLEINPUT: {
+          mergeSimpleInput(other.getSimpleInput());
+          break;
+        }
+        case CLICKKUNGFUINPUT: {
+          mergeClickKungFuInput(other.getClickKungFuInput());
+          break;
+        }
+        case CLICKINVENTORYSLOTINPUT: {
+          mergeClickInventorySlotInput(other.getClickInventorySlotInput());
+          break;
+        }
+        case ATTACKINPUT: {
+          mergeAttackInput(other.getAttackInput());
+          break;
+        }
+        case UNEQUIPINPUT: {
+          mergeUnequipInput(other.getUnequipInput());
+          break;
+        }
+        case SWAPKUNGFUSLOTPACKET: {
+          mergeSwapKungFuSlotPacket(other.getSwapKungFuSlotPacket());
+          break;
+        }
+        case PICKINPUT: {
+          mergePickInput(other.getPickInput());
+          break;
+        }
+        case DROPINPUT: {
+          mergeDropInput(other.getDropInput());
+          break;
+        }
+        case CONFIRMDROPINPUT: {
+          mergeConfirmDropInput(other.getConfirmDropInput());
+          break;
+        }
+        case CLICKNPCABILITYINPUT: {
+          mergeClickNpcAbilityInput(other.getClickNpcAbilityInput());
+          break;
+        }
+        case BUYITEM: {
+          mergeBuyItem(other.getBuyItem());
+          break;
+        }
+        case SELLITEM: {
+          mergeSellItem(other.getSellItem());
+          break;
+        }
+        case DROPONENTITYINPUT: {
+          mergeDropOnEntityInput(other.getDropOnEntityInput());
+          break;
+        }
+        case TRADESTATEINPUT: {
+          mergeTradeStateInput(other.getTradeStateInput());
+          break;
+        }
+        case ADDPLAYERTRADEINPUT: {
+          mergeAddPlayerTradeInput(other.getAddPlayerTradeInput());
+          break;
+        }
+        case USEPILL: {
+          mergeUsePill(other.getUsePill());
+          break;
+        }
+        case CHAT: {
+          mergeChat(other.getChat());
+          break;
+        }
+        case CLICKEQUIPMENT: {
+          mergeClickEquipment(other.getClickEquipment());
+          break;
+        }
+        case SUBMITQUESTINPUT: {
+          mergeSubmitQuestInput(other.getSubmitQuestInput());
+          break;
+        }
+        case UNLOCKBANK: {
+          mergeUnlockBank(other.getUnlockBank());
+          break;
+        }
+        case BANKOPERATION: {
+          mergeBankOperation(other.getBankOperation());
+          break;
+        }
+        case REALMINPUT: {
+          mergeRealmInput(other.getRealmInput());
+          break;
+        }
+        case CREATEGUILDINPUT: {
+          mergeCreateGuildInput(other.getCreateGuildInput());
+          break;
+        }
+        case APPLYGUILDKUNGFU: {
+          mergeApplyGuildKungFu(other.getApplyGuildKungFu());
           break;
         }
         case TYPE_NOT_SET: {
@@ -2154,13 +2337,6 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 10: {
-              input.readMessage(
-                  getMoveEventPacketFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 1;
-              break;
-            } // case 10
             case 18: {
               input.readMessage(
                   getClickPacketFieldBuilder().getBuilder(),
@@ -2168,20 +2344,6 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 2;
               break;
             } // case 18
-            case 26: {
-              input.readMessage(
-                  getLoginPacketFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 3;
-              break;
-            } // case 26
-            case 34: {
-              input.readMessage(
-                  getAttackEventPacketFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 4;
-              break;
-            } // case 34
             case 42: {
               input.readMessage(
                   getSwapInventorySlotPacketFieldBuilder().getBuilder(),
@@ -2189,139 +2351,34 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 5;
               break;
             } // case 42
-            case 50: {
-              input.readMessage(
-                  getDoubleClickInventorySlotPacketFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 6;
-              break;
-            } // case 50
-            case 58: {
-              input.readMessage(
-                  getDropItemFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 7;
-              break;
-            } // case 58
-            case 66: {
-              input.readMessage(
-                  getPickItemFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 8;
-              break;
-            } // case 66
-            case 74: {
-              input.readMessage(
-                  getUnequipFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 9;
-              break;
-            } // case 74
             case 82: {
               input.readMessage(
-                  getToggleKungFuFieldBuilder().getBuilder(),
+                  getLoginAccountFieldBuilder().getBuilder(),
                   extensionRegistry);
               typeCase_ = 10;
               break;
             } // case 82
             case 90: {
               input.readMessage(
-                  getSitDownFieldBuilder().getBuilder(),
+                  getRegisterAccountFieldBuilder().getBuilder(),
                   extensionRegistry);
               typeCase_ = 11;
               break;
             } // case 90
             case 98: {
               input.readMessage(
-                  getStandUpFieldBuilder().getBuilder(),
+                  getLoginCharacterFieldBuilder().getBuilder(),
                   extensionRegistry);
               typeCase_ = 12;
               break;
             } // case 98
             case 106: {
               input.readMessage(
-                  getSellItemsFieldBuilder().getBuilder(),
+                  getCreateCharacterFieldBuilder().getBuilder(),
                   extensionRegistry);
               typeCase_ = 13;
               break;
             } // case 106
-            case 114: {
-              input.readMessage(
-                  getBuyItemsFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 14;
-              break;
-            } // case 114
-            case 122: {
-              input.readMessage(
-                  getRightClickFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 15;
-              break;
-            } // case 122
-            case 130: {
-              input.readMessage(
-                  getTradeRequestFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 16;
-              break;
-            } // case 130
-            case 138: {
-              input.readMessage(
-                  getUpdateTradeFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 17;
-              break;
-            } // case 138
-            case 146: {
-              input.readMessage(
-                  getTriggerDynamicObjectFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 18;
-              break;
-            } // case 146
-            case 154: {
-              input.readMessage(
-                  getSwapKungFuSlotFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 19;
-              break;
-            } // case 154
-            case 162: {
-              input.readMessage(
-                  getDragPlayerFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 20;
-              break;
-            } // case 162
-            case 170: {
-              input.readMessage(
-                  getSimpleCommandFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 21;
-              break;
-            } // case 170
-            case 178: {
-              input.readMessage(
-                  getDyeFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 22;
-              break;
-            } // case 178
-            case 186: {
-              input.readMessage(
-                  getSayFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 23;
-              break;
-            } // case 186
-            case 194: {
-              input.readMessage(
-                  getBankOperationFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 24;
-              break;
-            } // case 194
             case 202: {
               input.readMessage(
                   getChangeTeamFieldBuilder().getBuilder(),
@@ -2329,41 +2386,188 @@ private static final long serialVersionUID = 0L;
               typeCase_ = 25;
               break;
             } // case 202
-            case 210: {
-              input.readMessage(
-                  getFoundGuildFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              typeCase_ = 26;
-              break;
-            } // case 210
             case 218: {
               input.readMessage(
-                  getCreateGuildKungFuFieldBuilder().getBuilder(),
+                  getApplyGuildKungFuFieldBuilder().getBuilder(),
                   extensionRegistry);
               typeCase_ = 27;
               break;
             } // case 218
-            case 226: {
+            case 258: {
               input.readMessage(
-                  getManageGuildFieldBuilder().getBuilder(),
+                  getMoveInputFieldBuilder().getBuilder(),
                   extensionRegistry);
-              typeCase_ = 28;
+              typeCase_ = 32;
               break;
-            } // case 226
-            case 234: {
+            } // case 258
+            case 266: {
               input.readMessage(
-                  getSubmitQuestFieldBuilder().getBuilder(),
+                  getTurnInputFieldBuilder().getBuilder(),
                   extensionRegistry);
-              typeCase_ = 29;
+              typeCase_ = 33;
               break;
-            } // case 234
-            case 242: {
+            } // case 266
+            case 274: {
               input.readMessage(
-                  getInteractFieldBuilder().getBuilder(),
+                  getSimpleInputFieldBuilder().getBuilder(),
                   extensionRegistry);
-              typeCase_ = 30;
+              typeCase_ = 34;
               break;
-            } // case 242
+            } // case 274
+            case 282: {
+              input.readMessage(
+                  getClickKungFuInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 35;
+              break;
+            } // case 282
+            case 290: {
+              input.readMessage(
+                  getClickInventorySlotInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 36;
+              break;
+            } // case 290
+            case 298: {
+              input.readMessage(
+                  getAttackInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 37;
+              break;
+            } // case 298
+            case 306: {
+              input.readMessage(
+                  getUnequipInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 38;
+              break;
+            } // case 306
+            case 314: {
+              input.readMessage(
+                  getSwapKungFuSlotPacketFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 39;
+              break;
+            } // case 314
+            case 322: {
+              input.readMessage(
+                  getPickInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 40;
+              break;
+            } // case 322
+            case 330: {
+              input.readMessage(
+                  getDropInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 41;
+              break;
+            } // case 330
+            case 338: {
+              input.readMessage(
+                  getConfirmDropInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 42;
+              break;
+            } // case 338
+            case 346: {
+              input.readMessage(
+                  getClickNpcAbilityInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 43;
+              break;
+            } // case 346
+            case 354: {
+              input.readMessage(
+                  getBuyItemFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 44;
+              break;
+            } // case 354
+            case 362: {
+              input.readMessage(
+                  getSellItemFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 45;
+              break;
+            } // case 362
+            case 370: {
+              input.readMessage(
+                  getDropOnEntityInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 46;
+              break;
+            } // case 370
+            case 378: {
+              input.readMessage(
+                  getTradeStateInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 47;
+              break;
+            } // case 378
+            case 386: {
+              input.readMessage(
+                  getAddPlayerTradeInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 48;
+              break;
+            } // case 386
+            case 394: {
+              input.readMessage(
+                  getUsePillFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 49;
+              break;
+            } // case 394
+            case 402: {
+              input.readMessage(
+                  getChatFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 50;
+              break;
+            } // case 402
+            case 410: {
+              input.readMessage(
+                  getClickEquipmentFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 51;
+              break;
+            } // case 410
+            case 418: {
+              input.readMessage(
+                  getSubmitQuestInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 52;
+              break;
+            } // case 418
+            case 426: {
+              input.readMessage(
+                  getUnlockBankFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 53;
+              break;
+            } // case 426
+            case 434: {
+              input.readMessage(
+                  getBankOperationFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 54;
+              break;
+            } // case 434
+            case 450: {
+              input.readMessage(
+                  getRealmInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 56;
+              break;
+            } // case 450
+            case 458: {
+              input.readMessage(
+                  getCreateGuildInputFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typeCase_ = 57;
+              break;
+            } // case 458
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -2395,1351 +2599,74 @@ private static final long serialVersionUID = 0L;
     }
 
     private int bitField0_;
+    private int bitField1_;
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.MoveEventPacket, org.y1000.network.gen.MoveEventPacket.Builder, org.y1000.network.gen.MoveEventPacketOrBuilder> moveEventPacketBuilder_;
+        org.y1000.network.gen.LoginAccountRequestPacket, org.y1000.network.gen.LoginAccountRequestPacket.Builder, org.y1000.network.gen.LoginAccountRequestPacketOrBuilder> loginAccountBuilder_;
     /**
-     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-     * @return Whether the moveEventPacket field is set.
+     * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
+     * @return Whether the loginAccount field is set.
      */
     @java.lang.Override
-    public boolean hasMoveEventPacket() {
-      return typeCase_ == 1;
-    }
-    /**
-     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-     * @return The moveEventPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.MoveEventPacket getMoveEventPacket() {
-      if (moveEventPacketBuilder_ == null) {
-        if (typeCase_ == 1) {
-          return (org.y1000.network.gen.MoveEventPacket) type_;
-        }
-        return org.y1000.network.gen.MoveEventPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 1) {
-          return moveEventPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.MoveEventPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-     */
-    public Builder setMoveEventPacket(org.y1000.network.gen.MoveEventPacket value) {
-      if (moveEventPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        moveEventPacketBuilder_.setMessage(value);
-      }
-      typeCase_ = 1;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-     */
-    public Builder setMoveEventPacket(
-        org.y1000.network.gen.MoveEventPacket.Builder builderForValue) {
-      if (moveEventPacketBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        moveEventPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 1;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-     */
-    public Builder mergeMoveEventPacket(org.y1000.network.gen.MoveEventPacket value) {
-      if (moveEventPacketBuilder_ == null) {
-        if (typeCase_ == 1 &&
-            type_ != org.y1000.network.gen.MoveEventPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.MoveEventPacket.newBuilder((org.y1000.network.gen.MoveEventPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 1) {
-          moveEventPacketBuilder_.mergeFrom(value);
-        } else {
-          moveEventPacketBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 1;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-     */
-    public Builder clearMoveEventPacket() {
-      if (moveEventPacketBuilder_ == null) {
-        if (typeCase_ == 1) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 1) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        moveEventPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-     */
-    public org.y1000.network.gen.MoveEventPacket.Builder getMoveEventPacketBuilder() {
-      return getMoveEventPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.MoveEventPacketOrBuilder getMoveEventPacketOrBuilder() {
-      if ((typeCase_ == 1) && (moveEventPacketBuilder_ != null)) {
-        return moveEventPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 1) {
-          return (org.y1000.network.gen.MoveEventPacket) type_;
-        }
-        return org.y1000.network.gen.MoveEventPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.MoveEventPacket moveEventPacket = 1;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.MoveEventPacket, org.y1000.network.gen.MoveEventPacket.Builder, org.y1000.network.gen.MoveEventPacketOrBuilder> 
-        getMoveEventPacketFieldBuilder() {
-      if (moveEventPacketBuilder_ == null) {
-        if (!(typeCase_ == 1)) {
-          type_ = org.y1000.network.gen.MoveEventPacket.getDefaultInstance();
-        }
-        moveEventPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.MoveEventPacket, org.y1000.network.gen.MoveEventPacket.Builder, org.y1000.network.gen.MoveEventPacketOrBuilder>(
-                (org.y1000.network.gen.MoveEventPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 1;
-      onChanged();
-      return moveEventPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClickPacket, org.y1000.network.gen.ClickPacket.Builder, org.y1000.network.gen.ClickPacketOrBuilder> clickPacketBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     * @return Whether the clickPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasClickPacket() {
-      return typeCase_ == 2;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     * @return The clickPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClickPacket getClickPacket() {
-      if (clickPacketBuilder_ == null) {
-        if (typeCase_ == 2) {
-          return (org.y1000.network.gen.ClickPacket) type_;
-        }
-        return org.y1000.network.gen.ClickPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 2) {
-          return clickPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClickPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    public Builder setClickPacket(org.y1000.network.gen.ClickPacket value) {
-      if (clickPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        clickPacketBuilder_.setMessage(value);
-      }
-      typeCase_ = 2;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    public Builder setClickPacket(
-        org.y1000.network.gen.ClickPacket.Builder builderForValue) {
-      if (clickPacketBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        clickPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 2;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    public Builder mergeClickPacket(org.y1000.network.gen.ClickPacket value) {
-      if (clickPacketBuilder_ == null) {
-        if (typeCase_ == 2 &&
-            type_ != org.y1000.network.gen.ClickPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClickPacket.newBuilder((org.y1000.network.gen.ClickPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 2) {
-          clickPacketBuilder_.mergeFrom(value);
-        } else {
-          clickPacketBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 2;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    public Builder clearClickPacket() {
-      if (clickPacketBuilder_ == null) {
-        if (typeCase_ == 2) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 2) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        clickPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    public org.y1000.network.gen.ClickPacket.Builder getClickPacketBuilder() {
-      return getClickPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClickPacketOrBuilder getClickPacketOrBuilder() {
-      if ((typeCase_ == 2) && (clickPacketBuilder_ != null)) {
-        return clickPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 2) {
-          return (org.y1000.network.gen.ClickPacket) type_;
-        }
-        return org.y1000.network.gen.ClickPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClickPacket clickPacket = 2;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClickPacket, org.y1000.network.gen.ClickPacket.Builder, org.y1000.network.gen.ClickPacketOrBuilder> 
-        getClickPacketFieldBuilder() {
-      if (clickPacketBuilder_ == null) {
-        if (!(typeCase_ == 2)) {
-          type_ = org.y1000.network.gen.ClickPacket.getDefaultInstance();
-        }
-        clickPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClickPacket, org.y1000.network.gen.ClickPacket.Builder, org.y1000.network.gen.ClickPacketOrBuilder>(
-                (org.y1000.network.gen.ClickPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 2;
-      onChanged();
-      return clickPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PlayerLoginPacket, org.y1000.network.gen.PlayerLoginPacket.Builder, org.y1000.network.gen.PlayerLoginPacketOrBuilder> loginPacketBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     * @return Whether the loginPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasLoginPacket() {
-      return typeCase_ == 3;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     * @return The loginPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.PlayerLoginPacket getLoginPacket() {
-      if (loginPacketBuilder_ == null) {
-        if (typeCase_ == 3) {
-          return (org.y1000.network.gen.PlayerLoginPacket) type_;
-        }
-        return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 3) {
-          return loginPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    public Builder setLoginPacket(org.y1000.network.gen.PlayerLoginPacket value) {
-      if (loginPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        loginPacketBuilder_.setMessage(value);
-      }
-      typeCase_ = 3;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    public Builder setLoginPacket(
-        org.y1000.network.gen.PlayerLoginPacket.Builder builderForValue) {
-      if (loginPacketBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        loginPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 3;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    public Builder mergeLoginPacket(org.y1000.network.gen.PlayerLoginPacket value) {
-      if (loginPacketBuilder_ == null) {
-        if (typeCase_ == 3 &&
-            type_ != org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.PlayerLoginPacket.newBuilder((org.y1000.network.gen.PlayerLoginPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 3) {
-          loginPacketBuilder_.mergeFrom(value);
-        } else {
-          loginPacketBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 3;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    public Builder clearLoginPacket() {
-      if (loginPacketBuilder_ == null) {
-        if (typeCase_ == 3) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 3) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        loginPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    public org.y1000.network.gen.PlayerLoginPacket.Builder getLoginPacketBuilder() {
-      return getLoginPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.PlayerLoginPacketOrBuilder getLoginPacketOrBuilder() {
-      if ((typeCase_ == 3) && (loginPacketBuilder_ != null)) {
-        return loginPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 3) {
-          return (org.y1000.network.gen.PlayerLoginPacket) type_;
-        }
-        return org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PlayerLoginPacket loginPacket = 3;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PlayerLoginPacket, org.y1000.network.gen.PlayerLoginPacket.Builder, org.y1000.network.gen.PlayerLoginPacketOrBuilder> 
-        getLoginPacketFieldBuilder() {
-      if (loginPacketBuilder_ == null) {
-        if (!(typeCase_ == 3)) {
-          type_ = org.y1000.network.gen.PlayerLoginPacket.getDefaultInstance();
-        }
-        loginPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.PlayerLoginPacket, org.y1000.network.gen.PlayerLoginPacket.Builder, org.y1000.network.gen.PlayerLoginPacketOrBuilder>(
-                (org.y1000.network.gen.PlayerLoginPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 3;
-      onChanged();
-      return loginPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientAttackEventPacket, org.y1000.network.gen.ClientAttackEventPacket.Builder, org.y1000.network.gen.ClientAttackEventPacketOrBuilder> attackEventPacketBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-     * @return Whether the attackEventPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasAttackEventPacket() {
-      return typeCase_ == 4;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-     * @return The attackEventPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientAttackEventPacket getAttackEventPacket() {
-      if (attackEventPacketBuilder_ == null) {
-        if (typeCase_ == 4) {
-          return (org.y1000.network.gen.ClientAttackEventPacket) type_;
-        }
-        return org.y1000.network.gen.ClientAttackEventPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 4) {
-          return attackEventPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientAttackEventPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-     */
-    public Builder setAttackEventPacket(org.y1000.network.gen.ClientAttackEventPacket value) {
-      if (attackEventPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        attackEventPacketBuilder_.setMessage(value);
-      }
-      typeCase_ = 4;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-     */
-    public Builder setAttackEventPacket(
-        org.y1000.network.gen.ClientAttackEventPacket.Builder builderForValue) {
-      if (attackEventPacketBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        attackEventPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 4;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-     */
-    public Builder mergeAttackEventPacket(org.y1000.network.gen.ClientAttackEventPacket value) {
-      if (attackEventPacketBuilder_ == null) {
-        if (typeCase_ == 4 &&
-            type_ != org.y1000.network.gen.ClientAttackEventPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientAttackEventPacket.newBuilder((org.y1000.network.gen.ClientAttackEventPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 4) {
-          attackEventPacketBuilder_.mergeFrom(value);
-        } else {
-          attackEventPacketBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 4;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-     */
-    public Builder clearAttackEventPacket() {
-      if (attackEventPacketBuilder_ == null) {
-        if (typeCase_ == 4) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 4) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        attackEventPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-     */
-    public org.y1000.network.gen.ClientAttackEventPacket.Builder getAttackEventPacketBuilder() {
-      return getAttackEventPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientAttackEventPacketOrBuilder getAttackEventPacketOrBuilder() {
-      if ((typeCase_ == 4) && (attackEventPacketBuilder_ != null)) {
-        return attackEventPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 4) {
-          return (org.y1000.network.gen.ClientAttackEventPacket) type_;
-        }
-        return org.y1000.network.gen.ClientAttackEventPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientAttackEventPacket attackEventPacket = 4;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientAttackEventPacket, org.y1000.network.gen.ClientAttackEventPacket.Builder, org.y1000.network.gen.ClientAttackEventPacketOrBuilder> 
-        getAttackEventPacketFieldBuilder() {
-      if (attackEventPacketBuilder_ == null) {
-        if (!(typeCase_ == 4)) {
-          type_ = org.y1000.network.gen.ClientAttackEventPacket.getDefaultInstance();
-        }
-        attackEventPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientAttackEventPacket, org.y1000.network.gen.ClientAttackEventPacket.Builder, org.y1000.network.gen.ClientAttackEventPacketOrBuilder>(
-                (org.y1000.network.gen.ClientAttackEventPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 4;
-      onChanged();
-      return attackEventPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.SwapInventorySlotPacket, org.y1000.network.gen.SwapInventorySlotPacket.Builder, org.y1000.network.gen.SwapInventorySlotPacketOrBuilder> swapInventorySlotPacketBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-     * @return Whether the swapInventorySlotPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasSwapInventorySlotPacket() {
-      return typeCase_ == 5;
-    }
-    /**
-     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-     * @return The swapInventorySlotPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.SwapInventorySlotPacket getSwapInventorySlotPacket() {
-      if (swapInventorySlotPacketBuilder_ == null) {
-        if (typeCase_ == 5) {
-          return (org.y1000.network.gen.SwapInventorySlotPacket) type_;
-        }
-        return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 5) {
-          return swapInventorySlotPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-     */
-    public Builder setSwapInventorySlotPacket(org.y1000.network.gen.SwapInventorySlotPacket value) {
-      if (swapInventorySlotPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        swapInventorySlotPacketBuilder_.setMessage(value);
-      }
-      typeCase_ = 5;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-     */
-    public Builder setSwapInventorySlotPacket(
-        org.y1000.network.gen.SwapInventorySlotPacket.Builder builderForValue) {
-      if (swapInventorySlotPacketBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        swapInventorySlotPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 5;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-     */
-    public Builder mergeSwapInventorySlotPacket(org.y1000.network.gen.SwapInventorySlotPacket value) {
-      if (swapInventorySlotPacketBuilder_ == null) {
-        if (typeCase_ == 5 &&
-            type_ != org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.SwapInventorySlotPacket.newBuilder((org.y1000.network.gen.SwapInventorySlotPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 5) {
-          swapInventorySlotPacketBuilder_.mergeFrom(value);
-        } else {
-          swapInventorySlotPacketBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 5;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-     */
-    public Builder clearSwapInventorySlotPacket() {
-      if (swapInventorySlotPacketBuilder_ == null) {
-        if (typeCase_ == 5) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 5) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        swapInventorySlotPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-     */
-    public org.y1000.network.gen.SwapInventorySlotPacket.Builder getSwapInventorySlotPacketBuilder() {
-      return getSwapInventorySlotPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.SwapInventorySlotPacketOrBuilder getSwapInventorySlotPacketOrBuilder() {
-      if ((typeCase_ == 5) && (swapInventorySlotPacketBuilder_ != null)) {
-        return swapInventorySlotPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 5) {
-          return (org.y1000.network.gen.SwapInventorySlotPacket) type_;
-        }
-        return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.SwapInventorySlotPacket, org.y1000.network.gen.SwapInventorySlotPacket.Builder, org.y1000.network.gen.SwapInventorySlotPacketOrBuilder> 
-        getSwapInventorySlotPacketFieldBuilder() {
-      if (swapInventorySlotPacketBuilder_ == null) {
-        if (!(typeCase_ == 5)) {
-          type_ = org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
-        }
-        swapInventorySlotPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.SwapInventorySlotPacket, org.y1000.network.gen.SwapInventorySlotPacket.Builder, org.y1000.network.gen.SwapInventorySlotPacketOrBuilder>(
-                (org.y1000.network.gen.SwapInventorySlotPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 5;
-      onChanged();
-      return swapInventorySlotPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.DoubleClickInventorySlotPacket, org.y1000.network.gen.DoubleClickInventorySlotPacket.Builder, org.y1000.network.gen.DoubleClickInventorySlotPacketOrBuilder> doubleClickInventorySlotPacketBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-     * @return Whether the doubleClickInventorySlotPacket field is set.
-     */
-    @java.lang.Override
-    public boolean hasDoubleClickInventorySlotPacket() {
-      return typeCase_ == 6;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-     * @return The doubleClickInventorySlotPacket.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.DoubleClickInventorySlotPacket getDoubleClickInventorySlotPacket() {
-      if (doubleClickInventorySlotPacketBuilder_ == null) {
-        if (typeCase_ == 6) {
-          return (org.y1000.network.gen.DoubleClickInventorySlotPacket) type_;
-        }
-        return org.y1000.network.gen.DoubleClickInventorySlotPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 6) {
-          return doubleClickInventorySlotPacketBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.DoubleClickInventorySlotPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-     */
-    public Builder setDoubleClickInventorySlotPacket(org.y1000.network.gen.DoubleClickInventorySlotPacket value) {
-      if (doubleClickInventorySlotPacketBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        doubleClickInventorySlotPacketBuilder_.setMessage(value);
-      }
-      typeCase_ = 6;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-     */
-    public Builder setDoubleClickInventorySlotPacket(
-        org.y1000.network.gen.DoubleClickInventorySlotPacket.Builder builderForValue) {
-      if (doubleClickInventorySlotPacketBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        doubleClickInventorySlotPacketBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 6;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-     */
-    public Builder mergeDoubleClickInventorySlotPacket(org.y1000.network.gen.DoubleClickInventorySlotPacket value) {
-      if (doubleClickInventorySlotPacketBuilder_ == null) {
-        if (typeCase_ == 6 &&
-            type_ != org.y1000.network.gen.DoubleClickInventorySlotPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.DoubleClickInventorySlotPacket.newBuilder((org.y1000.network.gen.DoubleClickInventorySlotPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 6) {
-          doubleClickInventorySlotPacketBuilder_.mergeFrom(value);
-        } else {
-          doubleClickInventorySlotPacketBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 6;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-     */
-    public Builder clearDoubleClickInventorySlotPacket() {
-      if (doubleClickInventorySlotPacketBuilder_ == null) {
-        if (typeCase_ == 6) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 6) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        doubleClickInventorySlotPacketBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-     */
-    public org.y1000.network.gen.DoubleClickInventorySlotPacket.Builder getDoubleClickInventorySlotPacketBuilder() {
-      return getDoubleClickInventorySlotPacketFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.DoubleClickInventorySlotPacketOrBuilder getDoubleClickInventorySlotPacketOrBuilder() {
-      if ((typeCase_ == 6) && (doubleClickInventorySlotPacketBuilder_ != null)) {
-        return doubleClickInventorySlotPacketBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 6) {
-          return (org.y1000.network.gen.DoubleClickInventorySlotPacket) type_;
-        }
-        return org.y1000.network.gen.DoubleClickInventorySlotPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.DoubleClickInventorySlotPacket doubleClickInventorySlotPacket = 6;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.DoubleClickInventorySlotPacket, org.y1000.network.gen.DoubleClickInventorySlotPacket.Builder, org.y1000.network.gen.DoubleClickInventorySlotPacketOrBuilder> 
-        getDoubleClickInventorySlotPacketFieldBuilder() {
-      if (doubleClickInventorySlotPacketBuilder_ == null) {
-        if (!(typeCase_ == 6)) {
-          type_ = org.y1000.network.gen.DoubleClickInventorySlotPacket.getDefaultInstance();
-        }
-        doubleClickInventorySlotPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.DoubleClickInventorySlotPacket, org.y1000.network.gen.DoubleClickInventorySlotPacket.Builder, org.y1000.network.gen.DoubleClickInventorySlotPacketOrBuilder>(
-                (org.y1000.network.gen.DoubleClickInventorySlotPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 6;
-      onChanged();
-      return doubleClickInventorySlotPacketBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.DropItemPacket, org.y1000.network.gen.DropItemPacket.Builder, org.y1000.network.gen.DropItemPacketOrBuilder> dropItemBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     * @return Whether the dropItem field is set.
-     */
-    @java.lang.Override
-    public boolean hasDropItem() {
-      return typeCase_ == 7;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     * @return The dropItem.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.DropItemPacket getDropItem() {
-      if (dropItemBuilder_ == null) {
-        if (typeCase_ == 7) {
-          return (org.y1000.network.gen.DropItemPacket) type_;
-        }
-        return org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 7) {
-          return dropItemBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    public Builder setDropItem(org.y1000.network.gen.DropItemPacket value) {
-      if (dropItemBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        dropItemBuilder_.setMessage(value);
-      }
-      typeCase_ = 7;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    public Builder setDropItem(
-        org.y1000.network.gen.DropItemPacket.Builder builderForValue) {
-      if (dropItemBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        dropItemBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 7;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    public Builder mergeDropItem(org.y1000.network.gen.DropItemPacket value) {
-      if (dropItemBuilder_ == null) {
-        if (typeCase_ == 7 &&
-            type_ != org.y1000.network.gen.DropItemPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.DropItemPacket.newBuilder((org.y1000.network.gen.DropItemPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 7) {
-          dropItemBuilder_.mergeFrom(value);
-        } else {
-          dropItemBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 7;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    public Builder clearDropItem() {
-      if (dropItemBuilder_ == null) {
-        if (typeCase_ == 7) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 7) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        dropItemBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    public org.y1000.network.gen.DropItemPacket.Builder getDropItemBuilder() {
-      return getDropItemFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.DropItemPacketOrBuilder getDropItemOrBuilder() {
-      if ((typeCase_ == 7) && (dropItemBuilder_ != null)) {
-        return dropItemBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 7) {
-          return (org.y1000.network.gen.DropItemPacket) type_;
-        }
-        return org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.DropItemPacket dropItem = 7;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.DropItemPacket, org.y1000.network.gen.DropItemPacket.Builder, org.y1000.network.gen.DropItemPacketOrBuilder> 
-        getDropItemFieldBuilder() {
-      if (dropItemBuilder_ == null) {
-        if (!(typeCase_ == 7)) {
-          type_ = org.y1000.network.gen.DropItemPacket.getDefaultInstance();
-        }
-        dropItemBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.DropItemPacket, org.y1000.network.gen.DropItemPacket.Builder, org.y1000.network.gen.DropItemPacketOrBuilder>(
-                (org.y1000.network.gen.DropItemPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 7;
-      onChanged();
-      return dropItemBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PickItemPacket, org.y1000.network.gen.PickItemPacket.Builder, org.y1000.network.gen.PickItemPacketOrBuilder> pickItemBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-     * @return Whether the pickItem field is set.
-     */
-    @java.lang.Override
-    public boolean hasPickItem() {
-      return typeCase_ == 8;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-     * @return The pickItem.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.PickItemPacket getPickItem() {
-      if (pickItemBuilder_ == null) {
-        if (typeCase_ == 8) {
-          return (org.y1000.network.gen.PickItemPacket) type_;
-        }
-        return org.y1000.network.gen.PickItemPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 8) {
-          return pickItemBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.PickItemPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-     */
-    public Builder setPickItem(org.y1000.network.gen.PickItemPacket value) {
-      if (pickItemBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        pickItemBuilder_.setMessage(value);
-      }
-      typeCase_ = 8;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-     */
-    public Builder setPickItem(
-        org.y1000.network.gen.PickItemPacket.Builder builderForValue) {
-      if (pickItemBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        pickItemBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 8;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-     */
-    public Builder mergePickItem(org.y1000.network.gen.PickItemPacket value) {
-      if (pickItemBuilder_ == null) {
-        if (typeCase_ == 8 &&
-            type_ != org.y1000.network.gen.PickItemPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.PickItemPacket.newBuilder((org.y1000.network.gen.PickItemPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 8) {
-          pickItemBuilder_.mergeFrom(value);
-        } else {
-          pickItemBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 8;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-     */
-    public Builder clearPickItem() {
-      if (pickItemBuilder_ == null) {
-        if (typeCase_ == 8) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 8) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        pickItemBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-     */
-    public org.y1000.network.gen.PickItemPacket.Builder getPickItemBuilder() {
-      return getPickItemFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.PickItemPacketOrBuilder getPickItemOrBuilder() {
-      if ((typeCase_ == 8) && (pickItemBuilder_ != null)) {
-        return pickItemBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 8) {
-          return (org.y1000.network.gen.PickItemPacket) type_;
-        }
-        return org.y1000.network.gen.PickItemPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.PickItemPacket pickItem = 8;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.PickItemPacket, org.y1000.network.gen.PickItemPacket.Builder, org.y1000.network.gen.PickItemPacketOrBuilder> 
-        getPickItemFieldBuilder() {
-      if (pickItemBuilder_ == null) {
-        if (!(typeCase_ == 8)) {
-          type_ = org.y1000.network.gen.PickItemPacket.getDefaultInstance();
-        }
-        pickItemBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.PickItemPacket, org.y1000.network.gen.PickItemPacket.Builder, org.y1000.network.gen.PickItemPacketOrBuilder>(
-                (org.y1000.network.gen.PickItemPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 8;
-      onChanged();
-      return pickItemBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientUnequipPacket, org.y1000.network.gen.ClientUnequipPacket.Builder, org.y1000.network.gen.ClientUnequipPacketOrBuilder> unequipBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-     * @return Whether the unequip field is set.
-     */
-    @java.lang.Override
-    public boolean hasUnequip() {
-      return typeCase_ == 9;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-     * @return The unequip.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientUnequipPacket getUnequip() {
-      if (unequipBuilder_ == null) {
-        if (typeCase_ == 9) {
-          return (org.y1000.network.gen.ClientUnequipPacket) type_;
-        }
-        return org.y1000.network.gen.ClientUnequipPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 9) {
-          return unequipBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientUnequipPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-     */
-    public Builder setUnequip(org.y1000.network.gen.ClientUnequipPacket value) {
-      if (unequipBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        unequipBuilder_.setMessage(value);
-      }
-      typeCase_ = 9;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-     */
-    public Builder setUnequip(
-        org.y1000.network.gen.ClientUnequipPacket.Builder builderForValue) {
-      if (unequipBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        unequipBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 9;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-     */
-    public Builder mergeUnequip(org.y1000.network.gen.ClientUnequipPacket value) {
-      if (unequipBuilder_ == null) {
-        if (typeCase_ == 9 &&
-            type_ != org.y1000.network.gen.ClientUnequipPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientUnequipPacket.newBuilder((org.y1000.network.gen.ClientUnequipPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 9) {
-          unequipBuilder_.mergeFrom(value);
-        } else {
-          unequipBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 9;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-     */
-    public Builder clearUnequip() {
-      if (unequipBuilder_ == null) {
-        if (typeCase_ == 9) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 9) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        unequipBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-     */
-    public org.y1000.network.gen.ClientUnequipPacket.Builder getUnequipBuilder() {
-      return getUnequipFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientUnequipPacketOrBuilder getUnequipOrBuilder() {
-      if ((typeCase_ == 9) && (unequipBuilder_ != null)) {
-        return unequipBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 9) {
-          return (org.y1000.network.gen.ClientUnequipPacket) type_;
-        }
-        return org.y1000.network.gen.ClientUnequipPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUnequipPacket unequip = 9;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientUnequipPacket, org.y1000.network.gen.ClientUnequipPacket.Builder, org.y1000.network.gen.ClientUnequipPacketOrBuilder> 
-        getUnequipFieldBuilder() {
-      if (unequipBuilder_ == null) {
-        if (!(typeCase_ == 9)) {
-          type_ = org.y1000.network.gen.ClientUnequipPacket.getDefaultInstance();
-        }
-        unequipBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientUnequipPacket, org.y1000.network.gen.ClientUnequipPacket.Builder, org.y1000.network.gen.ClientUnequipPacketOrBuilder>(
-                (org.y1000.network.gen.ClientUnequipPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 9;
-      onChanged();
-      return unequipBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientToggleKungFuPacket, org.y1000.network.gen.ClientToggleKungFuPacket.Builder, org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder> toggleKungFuBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
-     * @return Whether the toggleKungFu field is set.
-     */
-    @java.lang.Override
-    public boolean hasToggleKungFu() {
+    public boolean hasLoginAccount() {
       return typeCase_ == 10;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
-     * @return The toggleKungFu.
+     * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
+     * @return The loginAccount.
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientToggleKungFuPacket getToggleKungFu() {
-      if (toggleKungFuBuilder_ == null) {
+    public org.y1000.network.gen.LoginAccountRequestPacket getLoginAccount() {
+      if (loginAccountBuilder_ == null) {
         if (typeCase_ == 10) {
-          return (org.y1000.network.gen.ClientToggleKungFuPacket) type_;
+          return (org.y1000.network.gen.LoginAccountRequestPacket) type_;
         }
-        return org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+        return org.y1000.network.gen.LoginAccountRequestPacket.getDefaultInstance();
       } else {
         if (typeCase_ == 10) {
-          return toggleKungFuBuilder_.getMessage();
+          return loginAccountBuilder_.getMessage();
         }
-        return org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+        return org.y1000.network.gen.LoginAccountRequestPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
      */
-    public Builder setToggleKungFu(org.y1000.network.gen.ClientToggleKungFuPacket value) {
-      if (toggleKungFuBuilder_ == null) {
+    public Builder setLoginAccount(org.y1000.network.gen.LoginAccountRequestPacket value) {
+      if (loginAccountBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
         type_ = value;
         onChanged();
       } else {
-        toggleKungFuBuilder_.setMessage(value);
+        loginAccountBuilder_.setMessage(value);
       }
       typeCase_ = 10;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
      */
-    public Builder setToggleKungFu(
-        org.y1000.network.gen.ClientToggleKungFuPacket.Builder builderForValue) {
-      if (toggleKungFuBuilder_ == null) {
+    public Builder setLoginAccount(
+        org.y1000.network.gen.LoginAccountRequestPacket.Builder builderForValue) {
+      if (loginAccountBuilder_ == null) {
         type_ = builderForValue.build();
         onChanged();
       } else {
-        toggleKungFuBuilder_.setMessage(builderForValue.build());
+        loginAccountBuilder_.setMessage(builderForValue.build());
       }
       typeCase_ = 10;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
      */
-    public Builder mergeToggleKungFu(org.y1000.network.gen.ClientToggleKungFuPacket value) {
-      if (toggleKungFuBuilder_ == null) {
+    public Builder mergeLoginAccount(org.y1000.network.gen.LoginAccountRequestPacket value) {
+      if (loginAccountBuilder_ == null) {
         if (typeCase_ == 10 &&
-            type_ != org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientToggleKungFuPacket.newBuilder((org.y1000.network.gen.ClientToggleKungFuPacket) type_)
+            type_ != org.y1000.network.gen.LoginAccountRequestPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.LoginAccountRequestPacket.newBuilder((org.y1000.network.gen.LoginAccountRequestPacket) type_)
               .mergeFrom(value).buildPartial();
         } else {
           type_ = value;
@@ -3747,19 +2674,19 @@ private static final long serialVersionUID = 0L;
         onChanged();
       } else {
         if (typeCase_ == 10) {
-          toggleKungFuBuilder_.mergeFrom(value);
+          loginAccountBuilder_.mergeFrom(value);
         } else {
-          toggleKungFuBuilder_.setMessage(value);
+          loginAccountBuilder_.setMessage(value);
         }
       }
       typeCase_ = 10;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
      */
-    public Builder clearToggleKungFu() {
-      if (toggleKungFuBuilder_ == null) {
+    public Builder clearLoginAccount() {
+      if (loginAccountBuilder_ == null) {
         if (typeCase_ == 10) {
           typeCase_ = 0;
           type_ = null;
@@ -3770,118 +2697,118 @@ private static final long serialVersionUID = 0L;
           typeCase_ = 0;
           type_ = null;
         }
-        toggleKungFuBuilder_.clear();
+        loginAccountBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
      */
-    public org.y1000.network.gen.ClientToggleKungFuPacket.Builder getToggleKungFuBuilder() {
-      return getToggleKungFuFieldBuilder().getBuilder();
+    public org.y1000.network.gen.LoginAccountRequestPacket.Builder getLoginAccountBuilder() {
+      return getLoginAccountFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder getToggleKungFuOrBuilder() {
-      if ((typeCase_ == 10) && (toggleKungFuBuilder_ != null)) {
-        return toggleKungFuBuilder_.getMessageOrBuilder();
+    public org.y1000.network.gen.LoginAccountRequestPacketOrBuilder getLoginAccountOrBuilder() {
+      if ((typeCase_ == 10) && (loginAccountBuilder_ != null)) {
+        return loginAccountBuilder_.getMessageOrBuilder();
       } else {
         if (typeCase_ == 10) {
-          return (org.y1000.network.gen.ClientToggleKungFuPacket) type_;
+          return (org.y1000.network.gen.LoginAccountRequestPacket) type_;
         }
-        return org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+        return org.y1000.network.gen.LoginAccountRequestPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientToggleKungFuPacket toggleKungFu = 10;</code>
+     * <code>.org.y1000.network.gen.LoginAccountRequestPacket loginAccount = 10;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientToggleKungFuPacket, org.y1000.network.gen.ClientToggleKungFuPacket.Builder, org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder> 
-        getToggleKungFuFieldBuilder() {
-      if (toggleKungFuBuilder_ == null) {
+        org.y1000.network.gen.LoginAccountRequestPacket, org.y1000.network.gen.LoginAccountRequestPacket.Builder, org.y1000.network.gen.LoginAccountRequestPacketOrBuilder> 
+        getLoginAccountFieldBuilder() {
+      if (loginAccountBuilder_ == null) {
         if (!(typeCase_ == 10)) {
-          type_ = org.y1000.network.gen.ClientToggleKungFuPacket.getDefaultInstance();
+          type_ = org.y1000.network.gen.LoginAccountRequestPacket.getDefaultInstance();
         }
-        toggleKungFuBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientToggleKungFuPacket, org.y1000.network.gen.ClientToggleKungFuPacket.Builder, org.y1000.network.gen.ClientToggleKungFuPacketOrBuilder>(
-                (org.y1000.network.gen.ClientToggleKungFuPacket) type_,
+        loginAccountBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.LoginAccountRequestPacket, org.y1000.network.gen.LoginAccountRequestPacket.Builder, org.y1000.network.gen.LoginAccountRequestPacketOrBuilder>(
+                (org.y1000.network.gen.LoginAccountRequestPacket) type_,
                 getParentForChildren(),
                 isClean());
         type_ = null;
       }
       typeCase_ = 10;
       onChanged();
-      return toggleKungFuBuilder_;
+      return loginAccountBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSitDownPacket, org.y1000.network.gen.ClientSitDownPacket.Builder, org.y1000.network.gen.ClientSitDownPacketOrBuilder> sitDownBuilder_;
+        org.y1000.network.gen.RegisterAccountRequestPacket, org.y1000.network.gen.RegisterAccountRequestPacket.Builder, org.y1000.network.gen.RegisterAccountRequestPacketOrBuilder> registerAccountBuilder_;
     /**
-     * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
-     * @return Whether the sitDown field is set.
+     * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
+     * @return Whether the registerAccount field is set.
      */
     @java.lang.Override
-    public boolean hasSitDown() {
+    public boolean hasRegisterAccount() {
       return typeCase_ == 11;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
-     * @return The sitDown.
+     * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
+     * @return The registerAccount.
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientSitDownPacket getSitDown() {
-      if (sitDownBuilder_ == null) {
+    public org.y1000.network.gen.RegisterAccountRequestPacket getRegisterAccount() {
+      if (registerAccountBuilder_ == null) {
         if (typeCase_ == 11) {
-          return (org.y1000.network.gen.ClientSitDownPacket) type_;
+          return (org.y1000.network.gen.RegisterAccountRequestPacket) type_;
         }
-        return org.y1000.network.gen.ClientSitDownPacket.getDefaultInstance();
+        return org.y1000.network.gen.RegisterAccountRequestPacket.getDefaultInstance();
       } else {
         if (typeCase_ == 11) {
-          return sitDownBuilder_.getMessage();
+          return registerAccountBuilder_.getMessage();
         }
-        return org.y1000.network.gen.ClientSitDownPacket.getDefaultInstance();
+        return org.y1000.network.gen.RegisterAccountRequestPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
+     * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
      */
-    public Builder setSitDown(org.y1000.network.gen.ClientSitDownPacket value) {
-      if (sitDownBuilder_ == null) {
+    public Builder setRegisterAccount(org.y1000.network.gen.RegisterAccountRequestPacket value) {
+      if (registerAccountBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
         type_ = value;
         onChanged();
       } else {
-        sitDownBuilder_.setMessage(value);
+        registerAccountBuilder_.setMessage(value);
       }
       typeCase_ = 11;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
+     * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
      */
-    public Builder setSitDown(
-        org.y1000.network.gen.ClientSitDownPacket.Builder builderForValue) {
-      if (sitDownBuilder_ == null) {
+    public Builder setRegisterAccount(
+        org.y1000.network.gen.RegisterAccountRequestPacket.Builder builderForValue) {
+      if (registerAccountBuilder_ == null) {
         type_ = builderForValue.build();
         onChanged();
       } else {
-        sitDownBuilder_.setMessage(builderForValue.build());
+        registerAccountBuilder_.setMessage(builderForValue.build());
       }
       typeCase_ = 11;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
+     * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
      */
-    public Builder mergeSitDown(org.y1000.network.gen.ClientSitDownPacket value) {
-      if (sitDownBuilder_ == null) {
+    public Builder mergeRegisterAccount(org.y1000.network.gen.RegisterAccountRequestPacket value) {
+      if (registerAccountBuilder_ == null) {
         if (typeCase_ == 11 &&
-            type_ != org.y1000.network.gen.ClientSitDownPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientSitDownPacket.newBuilder((org.y1000.network.gen.ClientSitDownPacket) type_)
+            type_ != org.y1000.network.gen.RegisterAccountRequestPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.RegisterAccountRequestPacket.newBuilder((org.y1000.network.gen.RegisterAccountRequestPacket) type_)
               .mergeFrom(value).buildPartial();
         } else {
           type_ = value;
@@ -3889,19 +2816,19 @@ private static final long serialVersionUID = 0L;
         onChanged();
       } else {
         if (typeCase_ == 11) {
-          sitDownBuilder_.mergeFrom(value);
+          registerAccountBuilder_.mergeFrom(value);
         } else {
-          sitDownBuilder_.setMessage(value);
+          registerAccountBuilder_.setMessage(value);
         }
       }
       typeCase_ = 11;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
+     * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
      */
-    public Builder clearSitDown() {
-      if (sitDownBuilder_ == null) {
+    public Builder clearRegisterAccount() {
+      if (registerAccountBuilder_ == null) {
         if (typeCase_ == 11) {
           typeCase_ = 0;
           type_ = null;
@@ -3912,118 +2839,118 @@ private static final long serialVersionUID = 0L;
           typeCase_ = 0;
           type_ = null;
         }
-        sitDownBuilder_.clear();
+        registerAccountBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
+     * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
      */
-    public org.y1000.network.gen.ClientSitDownPacket.Builder getSitDownBuilder() {
-      return getSitDownFieldBuilder().getBuilder();
+    public org.y1000.network.gen.RegisterAccountRequestPacket.Builder getRegisterAccountBuilder() {
+      return getRegisterAccountFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
+     * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientSitDownPacketOrBuilder getSitDownOrBuilder() {
-      if ((typeCase_ == 11) && (sitDownBuilder_ != null)) {
-        return sitDownBuilder_.getMessageOrBuilder();
+    public org.y1000.network.gen.RegisterAccountRequestPacketOrBuilder getRegisterAccountOrBuilder() {
+      if ((typeCase_ == 11) && (registerAccountBuilder_ != null)) {
+        return registerAccountBuilder_.getMessageOrBuilder();
       } else {
         if (typeCase_ == 11) {
-          return (org.y1000.network.gen.ClientSitDownPacket) type_;
+          return (org.y1000.network.gen.RegisterAccountRequestPacket) type_;
         }
-        return org.y1000.network.gen.ClientSitDownPacket.getDefaultInstance();
+        return org.y1000.network.gen.RegisterAccountRequestPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientSitDownPacket sitDown = 11;</code>
+     * <code>.org.y1000.network.gen.RegisterAccountRequestPacket registerAccount = 11;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSitDownPacket, org.y1000.network.gen.ClientSitDownPacket.Builder, org.y1000.network.gen.ClientSitDownPacketOrBuilder> 
-        getSitDownFieldBuilder() {
-      if (sitDownBuilder_ == null) {
+        org.y1000.network.gen.RegisterAccountRequestPacket, org.y1000.network.gen.RegisterAccountRequestPacket.Builder, org.y1000.network.gen.RegisterAccountRequestPacketOrBuilder> 
+        getRegisterAccountFieldBuilder() {
+      if (registerAccountBuilder_ == null) {
         if (!(typeCase_ == 11)) {
-          type_ = org.y1000.network.gen.ClientSitDownPacket.getDefaultInstance();
+          type_ = org.y1000.network.gen.RegisterAccountRequestPacket.getDefaultInstance();
         }
-        sitDownBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientSitDownPacket, org.y1000.network.gen.ClientSitDownPacket.Builder, org.y1000.network.gen.ClientSitDownPacketOrBuilder>(
-                (org.y1000.network.gen.ClientSitDownPacket) type_,
+        registerAccountBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.RegisterAccountRequestPacket, org.y1000.network.gen.RegisterAccountRequestPacket.Builder, org.y1000.network.gen.RegisterAccountRequestPacketOrBuilder>(
+                (org.y1000.network.gen.RegisterAccountRequestPacket) type_,
                 getParentForChildren(),
                 isClean());
         type_ = null;
       }
       typeCase_ = 11;
       onChanged();
-      return sitDownBuilder_;
+      return registerAccountBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientStandUpPacket, org.y1000.network.gen.ClientStandUpPacket.Builder, org.y1000.network.gen.ClientStandUpPacketOrBuilder> standUpBuilder_;
+        org.y1000.network.gen.LoginCharacterRequestPacket, org.y1000.network.gen.LoginCharacterRequestPacket.Builder, org.y1000.network.gen.LoginCharacterRequestPacketOrBuilder> loginCharacterBuilder_;
     /**
-     * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
-     * @return Whether the standUp field is set.
+     * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
+     * @return Whether the loginCharacter field is set.
      */
     @java.lang.Override
-    public boolean hasStandUp() {
+    public boolean hasLoginCharacter() {
       return typeCase_ == 12;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
-     * @return The standUp.
+     * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
+     * @return The loginCharacter.
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientStandUpPacket getStandUp() {
-      if (standUpBuilder_ == null) {
+    public org.y1000.network.gen.LoginCharacterRequestPacket getLoginCharacter() {
+      if (loginCharacterBuilder_ == null) {
         if (typeCase_ == 12) {
-          return (org.y1000.network.gen.ClientStandUpPacket) type_;
+          return (org.y1000.network.gen.LoginCharacterRequestPacket) type_;
         }
-        return org.y1000.network.gen.ClientStandUpPacket.getDefaultInstance();
+        return org.y1000.network.gen.LoginCharacterRequestPacket.getDefaultInstance();
       } else {
         if (typeCase_ == 12) {
-          return standUpBuilder_.getMessage();
+          return loginCharacterBuilder_.getMessage();
         }
-        return org.y1000.network.gen.ClientStandUpPacket.getDefaultInstance();
+        return org.y1000.network.gen.LoginCharacterRequestPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
+     * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
      */
-    public Builder setStandUp(org.y1000.network.gen.ClientStandUpPacket value) {
-      if (standUpBuilder_ == null) {
+    public Builder setLoginCharacter(org.y1000.network.gen.LoginCharacterRequestPacket value) {
+      if (loginCharacterBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
         type_ = value;
         onChanged();
       } else {
-        standUpBuilder_.setMessage(value);
+        loginCharacterBuilder_.setMessage(value);
       }
       typeCase_ = 12;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
+     * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
      */
-    public Builder setStandUp(
-        org.y1000.network.gen.ClientStandUpPacket.Builder builderForValue) {
-      if (standUpBuilder_ == null) {
+    public Builder setLoginCharacter(
+        org.y1000.network.gen.LoginCharacterRequestPacket.Builder builderForValue) {
+      if (loginCharacterBuilder_ == null) {
         type_ = builderForValue.build();
         onChanged();
       } else {
-        standUpBuilder_.setMessage(builderForValue.build());
+        loginCharacterBuilder_.setMessage(builderForValue.build());
       }
       typeCase_ = 12;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
+     * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
      */
-    public Builder mergeStandUp(org.y1000.network.gen.ClientStandUpPacket value) {
-      if (standUpBuilder_ == null) {
+    public Builder mergeLoginCharacter(org.y1000.network.gen.LoginCharacterRequestPacket value) {
+      if (loginCharacterBuilder_ == null) {
         if (typeCase_ == 12 &&
-            type_ != org.y1000.network.gen.ClientStandUpPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientStandUpPacket.newBuilder((org.y1000.network.gen.ClientStandUpPacket) type_)
+            type_ != org.y1000.network.gen.LoginCharacterRequestPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.LoginCharacterRequestPacket.newBuilder((org.y1000.network.gen.LoginCharacterRequestPacket) type_)
               .mergeFrom(value).buildPartial();
         } else {
           type_ = value;
@@ -4031,19 +2958,19 @@ private static final long serialVersionUID = 0L;
         onChanged();
       } else {
         if (typeCase_ == 12) {
-          standUpBuilder_.mergeFrom(value);
+          loginCharacterBuilder_.mergeFrom(value);
         } else {
-          standUpBuilder_.setMessage(value);
+          loginCharacterBuilder_.setMessage(value);
         }
       }
       typeCase_ = 12;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
+     * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
      */
-    public Builder clearStandUp() {
-      if (standUpBuilder_ == null) {
+    public Builder clearLoginCharacter() {
+      if (loginCharacterBuilder_ == null) {
         if (typeCase_ == 12) {
           typeCase_ = 0;
           type_ = null;
@@ -4054,118 +2981,118 @@ private static final long serialVersionUID = 0L;
           typeCase_ = 0;
           type_ = null;
         }
-        standUpBuilder_.clear();
+        loginCharacterBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
+     * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
      */
-    public org.y1000.network.gen.ClientStandUpPacket.Builder getStandUpBuilder() {
-      return getStandUpFieldBuilder().getBuilder();
+    public org.y1000.network.gen.LoginCharacterRequestPacket.Builder getLoginCharacterBuilder() {
+      return getLoginCharacterFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
+     * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientStandUpPacketOrBuilder getStandUpOrBuilder() {
-      if ((typeCase_ == 12) && (standUpBuilder_ != null)) {
-        return standUpBuilder_.getMessageOrBuilder();
+    public org.y1000.network.gen.LoginCharacterRequestPacketOrBuilder getLoginCharacterOrBuilder() {
+      if ((typeCase_ == 12) && (loginCharacterBuilder_ != null)) {
+        return loginCharacterBuilder_.getMessageOrBuilder();
       } else {
         if (typeCase_ == 12) {
-          return (org.y1000.network.gen.ClientStandUpPacket) type_;
+          return (org.y1000.network.gen.LoginCharacterRequestPacket) type_;
         }
-        return org.y1000.network.gen.ClientStandUpPacket.getDefaultInstance();
+        return org.y1000.network.gen.LoginCharacterRequestPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientStandUpPacket standUp = 12;</code>
+     * <code>.org.y1000.network.gen.LoginCharacterRequestPacket loginCharacter = 12;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientStandUpPacket, org.y1000.network.gen.ClientStandUpPacket.Builder, org.y1000.network.gen.ClientStandUpPacketOrBuilder> 
-        getStandUpFieldBuilder() {
-      if (standUpBuilder_ == null) {
+        org.y1000.network.gen.LoginCharacterRequestPacket, org.y1000.network.gen.LoginCharacterRequestPacket.Builder, org.y1000.network.gen.LoginCharacterRequestPacketOrBuilder> 
+        getLoginCharacterFieldBuilder() {
+      if (loginCharacterBuilder_ == null) {
         if (!(typeCase_ == 12)) {
-          type_ = org.y1000.network.gen.ClientStandUpPacket.getDefaultInstance();
+          type_ = org.y1000.network.gen.LoginCharacterRequestPacket.getDefaultInstance();
         }
-        standUpBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientStandUpPacket, org.y1000.network.gen.ClientStandUpPacket.Builder, org.y1000.network.gen.ClientStandUpPacketOrBuilder>(
-                (org.y1000.network.gen.ClientStandUpPacket) type_,
+        loginCharacterBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.LoginCharacterRequestPacket, org.y1000.network.gen.LoginCharacterRequestPacket.Builder, org.y1000.network.gen.LoginCharacterRequestPacketOrBuilder>(
+                (org.y1000.network.gen.LoginCharacterRequestPacket) type_,
                 getParentForChildren(),
                 isClean());
         type_ = null;
       }
       typeCase_ = 12;
       onChanged();
-      return standUpBuilder_;
+      return loginCharacterBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> sellItemsBuilder_;
+        org.y1000.network.gen.CreateCharacterRequestPacket, org.y1000.network.gen.CreateCharacterRequestPacket.Builder, org.y1000.network.gen.CreateCharacterRequestPacketOrBuilder> createCharacterBuilder_;
     /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     * @return Whether the sellItems field is set.
+     * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
+     * @return Whether the createCharacter field is set.
      */
     @java.lang.Override
-    public boolean hasSellItems() {
+    public boolean hasCreateCharacter() {
       return typeCase_ == 13;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
-     * @return The sellItems.
+     * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
+     * @return The createCharacter.
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacket getSellItems() {
-      if (sellItemsBuilder_ == null) {
+    public org.y1000.network.gen.CreateCharacterRequestPacket getCreateCharacter() {
+      if (createCharacterBuilder_ == null) {
         if (typeCase_ == 13) {
-          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
+          return (org.y1000.network.gen.CreateCharacterRequestPacket) type_;
         }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+        return org.y1000.network.gen.CreateCharacterRequestPacket.getDefaultInstance();
       } else {
         if (typeCase_ == 13) {
-          return sellItemsBuilder_.getMessage();
+          return createCharacterBuilder_.getMessage();
         }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+        return org.y1000.network.gen.CreateCharacterRequestPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
      */
-    public Builder setSellItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
-      if (sellItemsBuilder_ == null) {
+    public Builder setCreateCharacter(org.y1000.network.gen.CreateCharacterRequestPacket value) {
+      if (createCharacterBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
         type_ = value;
         onChanged();
       } else {
-        sellItemsBuilder_.setMessage(value);
+        createCharacterBuilder_.setMessage(value);
       }
       typeCase_ = 13;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
      */
-    public Builder setSellItems(
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder builderForValue) {
-      if (sellItemsBuilder_ == null) {
+    public Builder setCreateCharacter(
+        org.y1000.network.gen.CreateCharacterRequestPacket.Builder builderForValue) {
+      if (createCharacterBuilder_ == null) {
         type_ = builderForValue.build();
         onChanged();
       } else {
-        sellItemsBuilder_.setMessage(builderForValue.build());
+        createCharacterBuilder_.setMessage(builderForValue.build());
       }
       typeCase_ = 13;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
      */
-    public Builder mergeSellItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
-      if (sellItemsBuilder_ == null) {
+    public Builder mergeCreateCharacter(org.y1000.network.gen.CreateCharacterRequestPacket value) {
+      if (createCharacterBuilder_ == null) {
         if (typeCase_ == 13 &&
-            type_ != org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.newBuilder((org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_)
+            type_ != org.y1000.network.gen.CreateCharacterRequestPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.CreateCharacterRequestPacket.newBuilder((org.y1000.network.gen.CreateCharacterRequestPacket) type_)
               .mergeFrom(value).buildPartial();
         } else {
           type_ = value;
@@ -4173,19 +3100,19 @@ private static final long serialVersionUID = 0L;
         onChanged();
       } else {
         if (typeCase_ == 13) {
-          sellItemsBuilder_.mergeFrom(value);
+          createCharacterBuilder_.mergeFrom(value);
         } else {
-          sellItemsBuilder_.setMessage(value);
+          createCharacterBuilder_.setMessage(value);
         }
       }
       typeCase_ = 13;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
      */
-    public Builder clearSellItems() {
-      if (sellItemsBuilder_ == null) {
+    public Builder clearCreateCharacter() {
+      if (createCharacterBuilder_ == null) {
         if (typeCase_ == 13) {
           typeCase_ = 0;
           type_ = null;
@@ -4196,1612 +3123,50 @@ private static final long serialVersionUID = 0L;
           typeCase_ = 0;
           type_ = null;
         }
-        sellItemsBuilder_.clear();
+        createCharacterBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
      */
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder getSellItemsBuilder() {
-      return getSellItemsFieldBuilder().getBuilder();
+    public org.y1000.network.gen.CreateCharacterRequestPacket.Builder getCreateCharacterBuilder() {
+      return getCreateCharacterFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getSellItemsOrBuilder() {
-      if ((typeCase_ == 13) && (sellItemsBuilder_ != null)) {
-        return sellItemsBuilder_.getMessageOrBuilder();
+    public org.y1000.network.gen.CreateCharacterRequestPacketOrBuilder getCreateCharacterOrBuilder() {
+      if ((typeCase_ == 13) && (createCharacterBuilder_ != null)) {
+        return createCharacterBuilder_.getMessageOrBuilder();
       } else {
         if (typeCase_ == 13) {
-          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
+          return (org.y1000.network.gen.CreateCharacterRequestPacket) type_;
         }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+        return org.y1000.network.gen.CreateCharacterRequestPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket sellItems = 13;</code>
+     * <code>.org.y1000.network.gen.CreateCharacterRequestPacket createCharacter = 13;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> 
-        getSellItemsFieldBuilder() {
-      if (sellItemsBuilder_ == null) {
+        org.y1000.network.gen.CreateCharacterRequestPacket, org.y1000.network.gen.CreateCharacterRequestPacket.Builder, org.y1000.network.gen.CreateCharacterRequestPacketOrBuilder> 
+        getCreateCharacterFieldBuilder() {
+      if (createCharacterBuilder_ == null) {
         if (!(typeCase_ == 13)) {
-          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
+          type_ = org.y1000.network.gen.CreateCharacterRequestPacket.getDefaultInstance();
         }
-        sellItemsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder>(
-                (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_,
+        createCharacterBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.CreateCharacterRequestPacket, org.y1000.network.gen.CreateCharacterRequestPacket.Builder, org.y1000.network.gen.CreateCharacterRequestPacketOrBuilder>(
+                (org.y1000.network.gen.CreateCharacterRequestPacket) type_,
                 getParentForChildren(),
                 isClean());
         type_ = null;
       }
       typeCase_ = 13;
       onChanged();
-      return sellItemsBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> buyItemsBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     * @return Whether the buyItems field is set.
-     */
-    @java.lang.Override
-    public boolean hasBuyItems() {
-      return typeCase_ == 14;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     * @return The buyItems.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacket getBuyItems() {
-      if (buyItemsBuilder_ == null) {
-        if (typeCase_ == 14) {
-          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-        }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 14) {
-          return buyItemsBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    public Builder setBuyItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
-      if (buyItemsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        buyItemsBuilder_.setMessage(value);
-      }
-      typeCase_ = 14;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    public Builder setBuyItems(
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder builderForValue) {
-      if (buyItemsBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        buyItemsBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 14;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    public Builder mergeBuyItems(org.y1000.network.gen.ClientMerchantTradeItemsPacket value) {
-      if (buyItemsBuilder_ == null) {
-        if (typeCase_ == 14 &&
-            type_ != org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.newBuilder((org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 14) {
-          buyItemsBuilder_.mergeFrom(value);
-        } else {
-          buyItemsBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 14;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    public Builder clearBuyItems() {
-      if (buyItemsBuilder_ == null) {
-        if (typeCase_ == 14) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 14) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        buyItemsBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder getBuyItemsBuilder() {
-      return getBuyItemsFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder getBuyItemsOrBuilder() {
-      if ((typeCase_ == 14) && (buyItemsBuilder_ != null)) {
-        return buyItemsBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 14) {
-          return (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_;
-        }
-        return org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientMerchantTradeItemsPacket buyItems = 14;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder> 
-        getBuyItemsFieldBuilder() {
-      if (buyItemsBuilder_ == null) {
-        if (!(typeCase_ == 14)) {
-          type_ = org.y1000.network.gen.ClientMerchantTradeItemsPacket.getDefaultInstance();
-        }
-        buyItemsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientMerchantTradeItemsPacket, org.y1000.network.gen.ClientMerchantTradeItemsPacket.Builder, org.y1000.network.gen.ClientMerchantTradeItemsPacketOrBuilder>(
-                (org.y1000.network.gen.ClientMerchantTradeItemsPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 14;
-      onChanged();
-      return buyItemsBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.RightClickPacket, org.y1000.network.gen.RightClickPacket.Builder, org.y1000.network.gen.RightClickPacketOrBuilder> rightClickBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-     * @return Whether the rightClick field is set.
-     */
-    @java.lang.Override
-    public boolean hasRightClick() {
-      return typeCase_ == 15;
-    }
-    /**
-     * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-     * @return The rightClick.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.RightClickPacket getRightClick() {
-      if (rightClickBuilder_ == null) {
-        if (typeCase_ == 15) {
-          return (org.y1000.network.gen.RightClickPacket) type_;
-        }
-        return org.y1000.network.gen.RightClickPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 15) {
-          return rightClickBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.RightClickPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-     */
-    public Builder setRightClick(org.y1000.network.gen.RightClickPacket value) {
-      if (rightClickBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        rightClickBuilder_.setMessage(value);
-      }
-      typeCase_ = 15;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-     */
-    public Builder setRightClick(
-        org.y1000.network.gen.RightClickPacket.Builder builderForValue) {
-      if (rightClickBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        rightClickBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 15;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-     */
-    public Builder mergeRightClick(org.y1000.network.gen.RightClickPacket value) {
-      if (rightClickBuilder_ == null) {
-        if (typeCase_ == 15 &&
-            type_ != org.y1000.network.gen.RightClickPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.RightClickPacket.newBuilder((org.y1000.network.gen.RightClickPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 15) {
-          rightClickBuilder_.mergeFrom(value);
-        } else {
-          rightClickBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 15;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-     */
-    public Builder clearRightClick() {
-      if (rightClickBuilder_ == null) {
-        if (typeCase_ == 15) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 15) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        rightClickBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-     */
-    public org.y1000.network.gen.RightClickPacket.Builder getRightClickBuilder() {
-      return getRightClickFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.RightClickPacketOrBuilder getRightClickOrBuilder() {
-      if ((typeCase_ == 15) && (rightClickBuilder_ != null)) {
-        return rightClickBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 15) {
-          return (org.y1000.network.gen.RightClickPacket) type_;
-        }
-        return org.y1000.network.gen.RightClickPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.RightClickPacket rightClick = 15;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.RightClickPacket, org.y1000.network.gen.RightClickPacket.Builder, org.y1000.network.gen.RightClickPacketOrBuilder> 
-        getRightClickFieldBuilder() {
-      if (rightClickBuilder_ == null) {
-        if (!(typeCase_ == 15)) {
-          type_ = org.y1000.network.gen.RightClickPacket.getDefaultInstance();
-        }
-        rightClickBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.RightClickPacket, org.y1000.network.gen.RightClickPacket.Builder, org.y1000.network.gen.RightClickPacketOrBuilder>(
-                (org.y1000.network.gen.RightClickPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 15;
-      onChanged();
-      return rightClickBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientTradePlayerPacket, org.y1000.network.gen.ClientTradePlayerPacket.Builder, org.y1000.network.gen.ClientTradePlayerPacketOrBuilder> tradeRequestBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-     * @return Whether the tradeRequest field is set.
-     */
-    @java.lang.Override
-    public boolean hasTradeRequest() {
-      return typeCase_ == 16;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-     * @return The tradeRequest.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientTradePlayerPacket getTradeRequest() {
-      if (tradeRequestBuilder_ == null) {
-        if (typeCase_ == 16) {
-          return (org.y1000.network.gen.ClientTradePlayerPacket) type_;
-        }
-        return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 16) {
-          return tradeRequestBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-     */
-    public Builder setTradeRequest(org.y1000.network.gen.ClientTradePlayerPacket value) {
-      if (tradeRequestBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        tradeRequestBuilder_.setMessage(value);
-      }
-      typeCase_ = 16;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-     */
-    public Builder setTradeRequest(
-        org.y1000.network.gen.ClientTradePlayerPacket.Builder builderForValue) {
-      if (tradeRequestBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        tradeRequestBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 16;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-     */
-    public Builder mergeTradeRequest(org.y1000.network.gen.ClientTradePlayerPacket value) {
-      if (tradeRequestBuilder_ == null) {
-        if (typeCase_ == 16 &&
-            type_ != org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientTradePlayerPacket.newBuilder((org.y1000.network.gen.ClientTradePlayerPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 16) {
-          tradeRequestBuilder_.mergeFrom(value);
-        } else {
-          tradeRequestBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 16;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-     */
-    public Builder clearTradeRequest() {
-      if (tradeRequestBuilder_ == null) {
-        if (typeCase_ == 16) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 16) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        tradeRequestBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-     */
-    public org.y1000.network.gen.ClientTradePlayerPacket.Builder getTradeRequestBuilder() {
-      return getTradeRequestFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientTradePlayerPacketOrBuilder getTradeRequestOrBuilder() {
-      if ((typeCase_ == 16) && (tradeRequestBuilder_ != null)) {
-        return tradeRequestBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 16) {
-          return (org.y1000.network.gen.ClientTradePlayerPacket) type_;
-        }
-        return org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTradePlayerPacket tradeRequest = 16;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientTradePlayerPacket, org.y1000.network.gen.ClientTradePlayerPacket.Builder, org.y1000.network.gen.ClientTradePlayerPacketOrBuilder> 
-        getTradeRequestFieldBuilder() {
-      if (tradeRequestBuilder_ == null) {
-        if (!(typeCase_ == 16)) {
-          type_ = org.y1000.network.gen.ClientTradePlayerPacket.getDefaultInstance();
-        }
-        tradeRequestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientTradePlayerPacket, org.y1000.network.gen.ClientTradePlayerPacket.Builder, org.y1000.network.gen.ClientTradePlayerPacketOrBuilder>(
-                (org.y1000.network.gen.ClientTradePlayerPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 16;
-      onChanged();
-      return tradeRequestBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientUpdateTradePacket, org.y1000.network.gen.ClientUpdateTradePacket.Builder, org.y1000.network.gen.ClientUpdateTradePacketOrBuilder> updateTradeBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-     * @return Whether the updateTrade field is set.
-     */
-    @java.lang.Override
-    public boolean hasUpdateTrade() {
-      return typeCase_ == 17;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-     * @return The updateTrade.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientUpdateTradePacket getUpdateTrade() {
-      if (updateTradeBuilder_ == null) {
-        if (typeCase_ == 17) {
-          return (org.y1000.network.gen.ClientUpdateTradePacket) type_;
-        }
-        return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 17) {
-          return updateTradeBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-     */
-    public Builder setUpdateTrade(org.y1000.network.gen.ClientUpdateTradePacket value) {
-      if (updateTradeBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        updateTradeBuilder_.setMessage(value);
-      }
-      typeCase_ = 17;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-     */
-    public Builder setUpdateTrade(
-        org.y1000.network.gen.ClientUpdateTradePacket.Builder builderForValue) {
-      if (updateTradeBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        updateTradeBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 17;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-     */
-    public Builder mergeUpdateTrade(org.y1000.network.gen.ClientUpdateTradePacket value) {
-      if (updateTradeBuilder_ == null) {
-        if (typeCase_ == 17 &&
-            type_ != org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientUpdateTradePacket.newBuilder((org.y1000.network.gen.ClientUpdateTradePacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 17) {
-          updateTradeBuilder_.mergeFrom(value);
-        } else {
-          updateTradeBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 17;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-     */
-    public Builder clearUpdateTrade() {
-      if (updateTradeBuilder_ == null) {
-        if (typeCase_ == 17) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 17) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        updateTradeBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-     */
-    public org.y1000.network.gen.ClientUpdateTradePacket.Builder getUpdateTradeBuilder() {
-      return getUpdateTradeFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientUpdateTradePacketOrBuilder getUpdateTradeOrBuilder() {
-      if ((typeCase_ == 17) && (updateTradeBuilder_ != null)) {
-        return updateTradeBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 17) {
-          return (org.y1000.network.gen.ClientUpdateTradePacket) type_;
-        }
-        return org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientUpdateTradePacket updateTrade = 17;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientUpdateTradePacket, org.y1000.network.gen.ClientUpdateTradePacket.Builder, org.y1000.network.gen.ClientUpdateTradePacketOrBuilder> 
-        getUpdateTradeFieldBuilder() {
-      if (updateTradeBuilder_ == null) {
-        if (!(typeCase_ == 17)) {
-          type_ = org.y1000.network.gen.ClientUpdateTradePacket.getDefaultInstance();
-        }
-        updateTradeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientUpdateTradePacket, org.y1000.network.gen.ClientUpdateTradePacket.Builder, org.y1000.network.gen.ClientUpdateTradePacketOrBuilder>(
-                (org.y1000.network.gen.ClientUpdateTradePacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 17;
-      onChanged();
-      return updateTradeBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientTriggerDynamicObjectPacket, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder, org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder> triggerDynamicObjectBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     * @return Whether the triggerDynamicObject field is set.
-     */
-    @java.lang.Override
-    public boolean hasTriggerDynamicObject() {
-      return typeCase_ == 18;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     * @return The triggerDynamicObject.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientTriggerDynamicObjectPacket getTriggerDynamicObject() {
-      if (triggerDynamicObjectBuilder_ == null) {
-        if (typeCase_ == 18) {
-          return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
-        }
-        return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 18) {
-          return triggerDynamicObjectBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    public Builder setTriggerDynamicObject(org.y1000.network.gen.ClientTriggerDynamicObjectPacket value) {
-      if (triggerDynamicObjectBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        triggerDynamicObjectBuilder_.setMessage(value);
-      }
-      typeCase_ = 18;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    public Builder setTriggerDynamicObject(
-        org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder builderForValue) {
-      if (triggerDynamicObjectBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        triggerDynamicObjectBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 18;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    public Builder mergeTriggerDynamicObject(org.y1000.network.gen.ClientTriggerDynamicObjectPacket value) {
-      if (triggerDynamicObjectBuilder_ == null) {
-        if (typeCase_ == 18 &&
-            type_ != org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientTriggerDynamicObjectPacket.newBuilder((org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 18) {
-          triggerDynamicObjectBuilder_.mergeFrom(value);
-        } else {
-          triggerDynamicObjectBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 18;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    public Builder clearTriggerDynamicObject() {
-      if (triggerDynamicObjectBuilder_ == null) {
-        if (typeCase_ == 18) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 18) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        triggerDynamicObjectBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    public org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder getTriggerDynamicObjectBuilder() {
-      return getTriggerDynamicObjectFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder getTriggerDynamicObjectOrBuilder() {
-      if ((typeCase_ == 18) && (triggerDynamicObjectBuilder_ != null)) {
-        return triggerDynamicObjectBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 18) {
-          return (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_;
-        }
-        return org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientTriggerDynamicObjectPacket triggerDynamicObject = 18;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientTriggerDynamicObjectPacket, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder, org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder> 
-        getTriggerDynamicObjectFieldBuilder() {
-      if (triggerDynamicObjectBuilder_ == null) {
-        if (!(typeCase_ == 18)) {
-          type_ = org.y1000.network.gen.ClientTriggerDynamicObjectPacket.getDefaultInstance();
-        }
-        triggerDynamicObjectBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientTriggerDynamicObjectPacket, org.y1000.network.gen.ClientTriggerDynamicObjectPacket.Builder, org.y1000.network.gen.ClientTriggerDynamicObjectPacketOrBuilder>(
-                (org.y1000.network.gen.ClientTriggerDynamicObjectPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 18;
-      onChanged();
-      return triggerDynamicObjectBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSwapKungFuSlotPacket, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder, org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder> swapKungFuSlotBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     * @return Whether the swapKungFuSlot field is set.
-     */
-    @java.lang.Override
-    public boolean hasSwapKungFuSlot() {
-      return typeCase_ == 19;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     * @return The swapKungFuSlot.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientSwapKungFuSlotPacket getSwapKungFuSlot() {
-      if (swapKungFuSlotBuilder_ == null) {
-        if (typeCase_ == 19) {
-          return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
-        }
-        return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 19) {
-          return swapKungFuSlotBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    public Builder setSwapKungFuSlot(org.y1000.network.gen.ClientSwapKungFuSlotPacket value) {
-      if (swapKungFuSlotBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        swapKungFuSlotBuilder_.setMessage(value);
-      }
-      typeCase_ = 19;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    public Builder setSwapKungFuSlot(
-        org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder builderForValue) {
-      if (swapKungFuSlotBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        swapKungFuSlotBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 19;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    public Builder mergeSwapKungFuSlot(org.y1000.network.gen.ClientSwapKungFuSlotPacket value) {
-      if (swapKungFuSlotBuilder_ == null) {
-        if (typeCase_ == 19 &&
-            type_ != org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientSwapKungFuSlotPacket.newBuilder((org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 19) {
-          swapKungFuSlotBuilder_.mergeFrom(value);
-        } else {
-          swapKungFuSlotBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 19;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    public Builder clearSwapKungFuSlot() {
-      if (swapKungFuSlotBuilder_ == null) {
-        if (typeCase_ == 19) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 19) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        swapKungFuSlotBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    public org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder getSwapKungFuSlotBuilder() {
-      return getSwapKungFuSlotFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder getSwapKungFuSlotOrBuilder() {
-      if ((typeCase_ == 19) && (swapKungFuSlotBuilder_ != null)) {
-        return swapKungFuSlotBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 19) {
-          return (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_;
-        }
-        return org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSwapKungFuSlotPacket swapKungFuSlot = 19;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSwapKungFuSlotPacket, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder, org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder> 
-        getSwapKungFuSlotFieldBuilder() {
-      if (swapKungFuSlotBuilder_ == null) {
-        if (!(typeCase_ == 19)) {
-          type_ = org.y1000.network.gen.ClientSwapKungFuSlotPacket.getDefaultInstance();
-        }
-        swapKungFuSlotBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientSwapKungFuSlotPacket, org.y1000.network.gen.ClientSwapKungFuSlotPacket.Builder, org.y1000.network.gen.ClientSwapKungFuSlotPacketOrBuilder>(
-                (org.y1000.network.gen.ClientSwapKungFuSlotPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 19;
-      onChanged();
-      return swapKungFuSlotBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientDragPlayerPacket, org.y1000.network.gen.ClientDragPlayerPacket.Builder, org.y1000.network.gen.ClientDragPlayerPacketOrBuilder> dragPlayerBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-     * @return Whether the dragPlayer field is set.
-     */
-    @java.lang.Override
-    public boolean hasDragPlayer() {
-      return typeCase_ == 20;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-     * @return The dragPlayer.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientDragPlayerPacket getDragPlayer() {
-      if (dragPlayerBuilder_ == null) {
-        if (typeCase_ == 20) {
-          return (org.y1000.network.gen.ClientDragPlayerPacket) type_;
-        }
-        return org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 20) {
-          return dragPlayerBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-     */
-    public Builder setDragPlayer(org.y1000.network.gen.ClientDragPlayerPacket value) {
-      if (dragPlayerBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        dragPlayerBuilder_.setMessage(value);
-      }
-      typeCase_ = 20;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-     */
-    public Builder setDragPlayer(
-        org.y1000.network.gen.ClientDragPlayerPacket.Builder builderForValue) {
-      if (dragPlayerBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        dragPlayerBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 20;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-     */
-    public Builder mergeDragPlayer(org.y1000.network.gen.ClientDragPlayerPacket value) {
-      if (dragPlayerBuilder_ == null) {
-        if (typeCase_ == 20 &&
-            type_ != org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientDragPlayerPacket.newBuilder((org.y1000.network.gen.ClientDragPlayerPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 20) {
-          dragPlayerBuilder_.mergeFrom(value);
-        } else {
-          dragPlayerBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 20;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-     */
-    public Builder clearDragPlayer() {
-      if (dragPlayerBuilder_ == null) {
-        if (typeCase_ == 20) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 20) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        dragPlayerBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-     */
-    public org.y1000.network.gen.ClientDragPlayerPacket.Builder getDragPlayerBuilder() {
-      return getDragPlayerFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientDragPlayerPacketOrBuilder getDragPlayerOrBuilder() {
-      if ((typeCase_ == 20) && (dragPlayerBuilder_ != null)) {
-        return dragPlayerBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 20) {
-          return (org.y1000.network.gen.ClientDragPlayerPacket) type_;
-        }
-        return org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDragPlayerPacket dragPlayer = 20;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientDragPlayerPacket, org.y1000.network.gen.ClientDragPlayerPacket.Builder, org.y1000.network.gen.ClientDragPlayerPacketOrBuilder> 
-        getDragPlayerFieldBuilder() {
-      if (dragPlayerBuilder_ == null) {
-        if (!(typeCase_ == 20)) {
-          type_ = org.y1000.network.gen.ClientDragPlayerPacket.getDefaultInstance();
-        }
-        dragPlayerBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientDragPlayerPacket, org.y1000.network.gen.ClientDragPlayerPacket.Builder, org.y1000.network.gen.ClientDragPlayerPacketOrBuilder>(
-                (org.y1000.network.gen.ClientDragPlayerPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 20;
-      onChanged();
-      return dragPlayerBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSimpleCommandPacket, org.y1000.network.gen.ClientSimpleCommandPacket.Builder, org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder> simpleCommandBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-     * @return Whether the simpleCommand field is set.
-     */
-    @java.lang.Override
-    public boolean hasSimpleCommand() {
-      return typeCase_ == 21;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-     * @return The simpleCommand.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientSimpleCommandPacket getSimpleCommand() {
-      if (simpleCommandBuilder_ == null) {
-        if (typeCase_ == 21) {
-          return (org.y1000.network.gen.ClientSimpleCommandPacket) type_;
-        }
-        return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 21) {
-          return simpleCommandBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-     */
-    public Builder setSimpleCommand(org.y1000.network.gen.ClientSimpleCommandPacket value) {
-      if (simpleCommandBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        simpleCommandBuilder_.setMessage(value);
-      }
-      typeCase_ = 21;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-     */
-    public Builder setSimpleCommand(
-        org.y1000.network.gen.ClientSimpleCommandPacket.Builder builderForValue) {
-      if (simpleCommandBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        simpleCommandBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 21;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-     */
-    public Builder mergeSimpleCommand(org.y1000.network.gen.ClientSimpleCommandPacket value) {
-      if (simpleCommandBuilder_ == null) {
-        if (typeCase_ == 21 &&
-            type_ != org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientSimpleCommandPacket.newBuilder((org.y1000.network.gen.ClientSimpleCommandPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 21) {
-          simpleCommandBuilder_.mergeFrom(value);
-        } else {
-          simpleCommandBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 21;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-     */
-    public Builder clearSimpleCommand() {
-      if (simpleCommandBuilder_ == null) {
-        if (typeCase_ == 21) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 21) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        simpleCommandBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-     */
-    public org.y1000.network.gen.ClientSimpleCommandPacket.Builder getSimpleCommandBuilder() {
-      return getSimpleCommandFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder getSimpleCommandOrBuilder() {
-      if ((typeCase_ == 21) && (simpleCommandBuilder_ != null)) {
-        return simpleCommandBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 21) {
-          return (org.y1000.network.gen.ClientSimpleCommandPacket) type_;
-        }
-        return org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSimpleCommandPacket simpleCommand = 21;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSimpleCommandPacket, org.y1000.network.gen.ClientSimpleCommandPacket.Builder, org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder> 
-        getSimpleCommandFieldBuilder() {
-      if (simpleCommandBuilder_ == null) {
-        if (!(typeCase_ == 21)) {
-          type_ = org.y1000.network.gen.ClientSimpleCommandPacket.getDefaultInstance();
-        }
-        simpleCommandBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientSimpleCommandPacket, org.y1000.network.gen.ClientSimpleCommandPacket.Builder, org.y1000.network.gen.ClientSimpleCommandPacketOrBuilder>(
-                (org.y1000.network.gen.ClientSimpleCommandPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 21;
-      onChanged();
-      return simpleCommandBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientDyePacket, org.y1000.network.gen.ClientDyePacket.Builder, org.y1000.network.gen.ClientDyePacketOrBuilder> dyeBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-     * @return Whether the dye field is set.
-     */
-    @java.lang.Override
-    public boolean hasDye() {
-      return typeCase_ == 22;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-     * @return The dye.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientDyePacket getDye() {
-      if (dyeBuilder_ == null) {
-        if (typeCase_ == 22) {
-          return (org.y1000.network.gen.ClientDyePacket) type_;
-        }
-        return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 22) {
-          return dyeBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-     */
-    public Builder setDye(org.y1000.network.gen.ClientDyePacket value) {
-      if (dyeBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        dyeBuilder_.setMessage(value);
-      }
-      typeCase_ = 22;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-     */
-    public Builder setDye(
-        org.y1000.network.gen.ClientDyePacket.Builder builderForValue) {
-      if (dyeBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        dyeBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 22;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-     */
-    public Builder mergeDye(org.y1000.network.gen.ClientDyePacket value) {
-      if (dyeBuilder_ == null) {
-        if (typeCase_ == 22 &&
-            type_ != org.y1000.network.gen.ClientDyePacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientDyePacket.newBuilder((org.y1000.network.gen.ClientDyePacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 22) {
-          dyeBuilder_.mergeFrom(value);
-        } else {
-          dyeBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 22;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-     */
-    public Builder clearDye() {
-      if (dyeBuilder_ == null) {
-        if (typeCase_ == 22) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 22) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        dyeBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-     */
-    public org.y1000.network.gen.ClientDyePacket.Builder getDyeBuilder() {
-      return getDyeFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientDyePacketOrBuilder getDyeOrBuilder() {
-      if ((typeCase_ == 22) && (dyeBuilder_ != null)) {
-        return dyeBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 22) {
-          return (org.y1000.network.gen.ClientDyePacket) type_;
-        }
-        return org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientDyePacket dye = 22;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientDyePacket, org.y1000.network.gen.ClientDyePacket.Builder, org.y1000.network.gen.ClientDyePacketOrBuilder> 
-        getDyeFieldBuilder() {
-      if (dyeBuilder_ == null) {
-        if (!(typeCase_ == 22)) {
-          type_ = org.y1000.network.gen.ClientDyePacket.getDefaultInstance();
-        }
-        dyeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientDyePacket, org.y1000.network.gen.ClientDyePacket.Builder, org.y1000.network.gen.ClientDyePacketOrBuilder>(
-                (org.y1000.network.gen.ClientDyePacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 22;
-      onChanged();
-      return dyeBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSayPacket, org.y1000.network.gen.ClientSayPacket.Builder, org.y1000.network.gen.ClientSayPacketOrBuilder> sayBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-     * @return Whether the say field is set.
-     */
-    @java.lang.Override
-    public boolean hasSay() {
-      return typeCase_ == 23;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-     * @return The say.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientSayPacket getSay() {
-      if (sayBuilder_ == null) {
-        if (typeCase_ == 23) {
-          return (org.y1000.network.gen.ClientSayPacket) type_;
-        }
-        return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 23) {
-          return sayBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-     */
-    public Builder setSay(org.y1000.network.gen.ClientSayPacket value) {
-      if (sayBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        sayBuilder_.setMessage(value);
-      }
-      typeCase_ = 23;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-     */
-    public Builder setSay(
-        org.y1000.network.gen.ClientSayPacket.Builder builderForValue) {
-      if (sayBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        sayBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 23;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-     */
-    public Builder mergeSay(org.y1000.network.gen.ClientSayPacket value) {
-      if (sayBuilder_ == null) {
-        if (typeCase_ == 23 &&
-            type_ != org.y1000.network.gen.ClientSayPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientSayPacket.newBuilder((org.y1000.network.gen.ClientSayPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 23) {
-          sayBuilder_.mergeFrom(value);
-        } else {
-          sayBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 23;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-     */
-    public Builder clearSay() {
-      if (sayBuilder_ == null) {
-        if (typeCase_ == 23) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 23) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        sayBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-     */
-    public org.y1000.network.gen.ClientSayPacket.Builder getSayBuilder() {
-      return getSayFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientSayPacketOrBuilder getSayOrBuilder() {
-      if ((typeCase_ == 23) && (sayBuilder_ != null)) {
-        return sayBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 23) {
-          return (org.y1000.network.gen.ClientSayPacket) type_;
-        }
-        return org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSayPacket say = 23;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSayPacket, org.y1000.network.gen.ClientSayPacket.Builder, org.y1000.network.gen.ClientSayPacketOrBuilder> 
-        getSayFieldBuilder() {
-      if (sayBuilder_ == null) {
-        if (!(typeCase_ == 23)) {
-          type_ = org.y1000.network.gen.ClientSayPacket.getDefaultInstance();
-        }
-        sayBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientSayPacket, org.y1000.network.gen.ClientSayPacket.Builder, org.y1000.network.gen.ClientSayPacketOrBuilder>(
-                (org.y1000.network.gen.ClientSayPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 23;
-      onChanged();
-      return sayBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientBankOperationPacket, org.y1000.network.gen.ClientBankOperationPacket.Builder, org.y1000.network.gen.ClientBankOperationPacketOrBuilder> bankOperationBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-     * @return Whether the bankOperation field is set.
-     */
-    @java.lang.Override
-    public boolean hasBankOperation() {
-      return typeCase_ == 24;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-     * @return The bankOperation.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientBankOperationPacket getBankOperation() {
-      if (bankOperationBuilder_ == null) {
-        if (typeCase_ == 24) {
-          return (org.y1000.network.gen.ClientBankOperationPacket) type_;
-        }
-        return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 24) {
-          return bankOperationBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-     */
-    public Builder setBankOperation(org.y1000.network.gen.ClientBankOperationPacket value) {
-      if (bankOperationBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        bankOperationBuilder_.setMessage(value);
-      }
-      typeCase_ = 24;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-     */
-    public Builder setBankOperation(
-        org.y1000.network.gen.ClientBankOperationPacket.Builder builderForValue) {
-      if (bankOperationBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        bankOperationBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 24;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-     */
-    public Builder mergeBankOperation(org.y1000.network.gen.ClientBankOperationPacket value) {
-      if (bankOperationBuilder_ == null) {
-        if (typeCase_ == 24 &&
-            type_ != org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientBankOperationPacket.newBuilder((org.y1000.network.gen.ClientBankOperationPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 24) {
-          bankOperationBuilder_.mergeFrom(value);
-        } else {
-          bankOperationBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 24;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-     */
-    public Builder clearBankOperation() {
-      if (bankOperationBuilder_ == null) {
-        if (typeCase_ == 24) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 24) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        bankOperationBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-     */
-    public org.y1000.network.gen.ClientBankOperationPacket.Builder getBankOperationBuilder() {
-      return getBankOperationFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientBankOperationPacketOrBuilder getBankOperationOrBuilder() {
-      if ((typeCase_ == 24) && (bankOperationBuilder_ != null)) {
-        return bankOperationBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 24) {
-          return (org.y1000.network.gen.ClientBankOperationPacket) type_;
-        }
-        return org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientBankOperationPacket bankOperation = 24;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientBankOperationPacket, org.y1000.network.gen.ClientBankOperationPacket.Builder, org.y1000.network.gen.ClientBankOperationPacketOrBuilder> 
-        getBankOperationFieldBuilder() {
-      if (bankOperationBuilder_ == null) {
-        if (!(typeCase_ == 24)) {
-          type_ = org.y1000.network.gen.ClientBankOperationPacket.getDefaultInstance();
-        }
-        bankOperationBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientBankOperationPacket, org.y1000.network.gen.ClientBankOperationPacket.Builder, org.y1000.network.gen.ClientBankOperationPacketOrBuilder>(
-                (org.y1000.network.gen.ClientBankOperationPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 24;
-      onChanged();
-      return bankOperationBuilder_;
+      return createCharacterBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -5947,213 +3312,3905 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientFoundGuildPacket, org.y1000.network.gen.ClientFoundGuildPacket.Builder, org.y1000.network.gen.ClientFoundGuildPacketOrBuilder> foundGuildBuilder_;
+        org.y1000.network.gen.SwapInventorySlotPacket, org.y1000.network.gen.SwapInventorySlotPacket.Builder, org.y1000.network.gen.SwapInventorySlotPacketOrBuilder> swapInventorySlotPacketBuilder_;
     /**
-     * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
-     * @return Whether the foundGuild field is set.
+     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
+     * @return Whether the swapInventorySlotPacket field is set.
      */
     @java.lang.Override
-    public boolean hasFoundGuild() {
-      return typeCase_ == 26;
+    public boolean hasSwapInventorySlotPacket() {
+      return typeCase_ == 5;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
-     * @return The foundGuild.
+     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
+     * @return The swapInventorySlotPacket.
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientFoundGuildPacket getFoundGuild() {
-      if (foundGuildBuilder_ == null) {
-        if (typeCase_ == 26) {
-          return (org.y1000.network.gen.ClientFoundGuildPacket) type_;
+    public org.y1000.network.gen.SwapInventorySlotPacket getSwapInventorySlotPacket() {
+      if (swapInventorySlotPacketBuilder_ == null) {
+        if (typeCase_ == 5) {
+          return (org.y1000.network.gen.SwapInventorySlotPacket) type_;
         }
-        return org.y1000.network.gen.ClientFoundGuildPacket.getDefaultInstance();
+        return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
       } else {
-        if (typeCase_ == 26) {
-          return foundGuildBuilder_.getMessage();
+        if (typeCase_ == 5) {
+          return swapInventorySlotPacketBuilder_.getMessage();
         }
-        return org.y1000.network.gen.ClientFoundGuildPacket.getDefaultInstance();
+        return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
+     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
      */
-    public Builder setFoundGuild(org.y1000.network.gen.ClientFoundGuildPacket value) {
-      if (foundGuildBuilder_ == null) {
+    public Builder setSwapInventorySlotPacket(org.y1000.network.gen.SwapInventorySlotPacket value) {
+      if (swapInventorySlotPacketBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
         type_ = value;
         onChanged();
       } else {
-        foundGuildBuilder_.setMessage(value);
+        swapInventorySlotPacketBuilder_.setMessage(value);
       }
-      typeCase_ = 26;
+      typeCase_ = 5;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
+     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
      */
-    public Builder setFoundGuild(
-        org.y1000.network.gen.ClientFoundGuildPacket.Builder builderForValue) {
-      if (foundGuildBuilder_ == null) {
+    public Builder setSwapInventorySlotPacket(
+        org.y1000.network.gen.SwapInventorySlotPacket.Builder builderForValue) {
+      if (swapInventorySlotPacketBuilder_ == null) {
         type_ = builderForValue.build();
         onChanged();
       } else {
-        foundGuildBuilder_.setMessage(builderForValue.build());
+        swapInventorySlotPacketBuilder_.setMessage(builderForValue.build());
       }
-      typeCase_ = 26;
+      typeCase_ = 5;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
+     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
      */
-    public Builder mergeFoundGuild(org.y1000.network.gen.ClientFoundGuildPacket value) {
-      if (foundGuildBuilder_ == null) {
-        if (typeCase_ == 26 &&
-            type_ != org.y1000.network.gen.ClientFoundGuildPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientFoundGuildPacket.newBuilder((org.y1000.network.gen.ClientFoundGuildPacket) type_)
+    public Builder mergeSwapInventorySlotPacket(org.y1000.network.gen.SwapInventorySlotPacket value) {
+      if (swapInventorySlotPacketBuilder_ == null) {
+        if (typeCase_ == 5 &&
+            type_ != org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.SwapInventorySlotPacket.newBuilder((org.y1000.network.gen.SwapInventorySlotPacket) type_)
               .mergeFrom(value).buildPartial();
         } else {
           type_ = value;
         }
         onChanged();
       } else {
-        if (typeCase_ == 26) {
-          foundGuildBuilder_.mergeFrom(value);
+        if (typeCase_ == 5) {
+          swapInventorySlotPacketBuilder_.mergeFrom(value);
         } else {
-          foundGuildBuilder_.setMessage(value);
+          swapInventorySlotPacketBuilder_.setMessage(value);
         }
       }
-      typeCase_ = 26;
+      typeCase_ = 5;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
+     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
      */
-    public Builder clearFoundGuild() {
-      if (foundGuildBuilder_ == null) {
-        if (typeCase_ == 26) {
+    public Builder clearSwapInventorySlotPacket() {
+      if (swapInventorySlotPacketBuilder_ == null) {
+        if (typeCase_ == 5) {
           typeCase_ = 0;
           type_ = null;
           onChanged();
         }
       } else {
-        if (typeCase_ == 26) {
+        if (typeCase_ == 5) {
           typeCase_ = 0;
           type_ = null;
         }
-        foundGuildBuilder_.clear();
+        swapInventorySlotPacketBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
+     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
      */
-    public org.y1000.network.gen.ClientFoundGuildPacket.Builder getFoundGuildBuilder() {
-      return getFoundGuildFieldBuilder().getBuilder();
+    public org.y1000.network.gen.SwapInventorySlotPacket.Builder getSwapInventorySlotPacketBuilder() {
+      return getSwapInventorySlotPacketFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
+     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientFoundGuildPacketOrBuilder getFoundGuildOrBuilder() {
-      if ((typeCase_ == 26) && (foundGuildBuilder_ != null)) {
-        return foundGuildBuilder_.getMessageOrBuilder();
+    public org.y1000.network.gen.SwapInventorySlotPacketOrBuilder getSwapInventorySlotPacketOrBuilder() {
+      if ((typeCase_ == 5) && (swapInventorySlotPacketBuilder_ != null)) {
+        return swapInventorySlotPacketBuilder_.getMessageOrBuilder();
       } else {
-        if (typeCase_ == 26) {
-          return (org.y1000.network.gen.ClientFoundGuildPacket) type_;
+        if (typeCase_ == 5) {
+          return (org.y1000.network.gen.SwapInventorySlotPacket) type_;
         }
-        return org.y1000.network.gen.ClientFoundGuildPacket.getDefaultInstance();
+        return org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientFoundGuildPacket foundGuild = 26;</code>
+     * <code>.org.y1000.network.gen.SwapInventorySlotPacket swapInventorySlotPacket = 5;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientFoundGuildPacket, org.y1000.network.gen.ClientFoundGuildPacket.Builder, org.y1000.network.gen.ClientFoundGuildPacketOrBuilder> 
-        getFoundGuildFieldBuilder() {
-      if (foundGuildBuilder_ == null) {
-        if (!(typeCase_ == 26)) {
-          type_ = org.y1000.network.gen.ClientFoundGuildPacket.getDefaultInstance();
+        org.y1000.network.gen.SwapInventorySlotPacket, org.y1000.network.gen.SwapInventorySlotPacket.Builder, org.y1000.network.gen.SwapInventorySlotPacketOrBuilder> 
+        getSwapInventorySlotPacketFieldBuilder() {
+      if (swapInventorySlotPacketBuilder_ == null) {
+        if (!(typeCase_ == 5)) {
+          type_ = org.y1000.network.gen.SwapInventorySlotPacket.getDefaultInstance();
         }
-        foundGuildBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientFoundGuildPacket, org.y1000.network.gen.ClientFoundGuildPacket.Builder, org.y1000.network.gen.ClientFoundGuildPacketOrBuilder>(
-                (org.y1000.network.gen.ClientFoundGuildPacket) type_,
+        swapInventorySlotPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.SwapInventorySlotPacket, org.y1000.network.gen.SwapInventorySlotPacket.Builder, org.y1000.network.gen.SwapInventorySlotPacketOrBuilder>(
+                (org.y1000.network.gen.SwapInventorySlotPacket) type_,
                 getParentForChildren(),
                 isClean());
         type_ = null;
       }
-      typeCase_ = 26;
+      typeCase_ = 5;
       onChanged();
-      return foundGuildBuilder_;
+      return swapInventorySlotPacketBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientCreateGuildKungFuPacket, org.y1000.network.gen.ClientCreateGuildKungFuPacket.Builder, org.y1000.network.gen.ClientCreateGuildKungFuPacketOrBuilder> createGuildKungFuBuilder_;
+        org.y1000.network.gen.ClickInputPacket, org.y1000.network.gen.ClickInputPacket.Builder, org.y1000.network.gen.ClickInputPacketOrBuilder> clickPacketBuilder_;
     /**
-     * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
-     * @return Whether the createGuildKungFu field is set.
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     * @return Whether the clickPacket field is set.
      */
     @java.lang.Override
-    public boolean hasCreateGuildKungFu() {
+    public boolean hasClickPacket() {
+      return typeCase_ == 2;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     * @return The clickPacket.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickInputPacket getClickPacket() {
+      if (clickPacketBuilder_ == null) {
+        if (typeCase_ == 2) {
+          return (org.y1000.network.gen.ClickInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 2) {
+          return clickPacketBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    public Builder setClickPacket(org.y1000.network.gen.ClickInputPacket value) {
+      if (clickPacketBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        clickPacketBuilder_.setMessage(value);
+      }
+      typeCase_ = 2;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    public Builder setClickPacket(
+        org.y1000.network.gen.ClickInputPacket.Builder builderForValue) {
+      if (clickPacketBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        clickPacketBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 2;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    public Builder mergeClickPacket(org.y1000.network.gen.ClickInputPacket value) {
+      if (clickPacketBuilder_ == null) {
+        if (typeCase_ == 2 &&
+            type_ != org.y1000.network.gen.ClickInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClickInputPacket.newBuilder((org.y1000.network.gen.ClickInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 2) {
+          clickPacketBuilder_.mergeFrom(value);
+        } else {
+          clickPacketBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 2;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    public Builder clearClickPacket() {
+      if (clickPacketBuilder_ == null) {
+        if (typeCase_ == 2) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 2) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        clickPacketBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    public org.y1000.network.gen.ClickInputPacket.Builder getClickPacketBuilder() {
+      return getClickPacketFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickInputPacketOrBuilder getClickPacketOrBuilder() {
+      if ((typeCase_ == 2) && (clickPacketBuilder_ != null)) {
+        return clickPacketBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 2) {
+          return (org.y1000.network.gen.ClickInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInputPacket clickPacket = 2;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickInputPacket, org.y1000.network.gen.ClickInputPacket.Builder, org.y1000.network.gen.ClickInputPacketOrBuilder> 
+        getClickPacketFieldBuilder() {
+      if (clickPacketBuilder_ == null) {
+        if (!(typeCase_ == 2)) {
+          type_ = org.y1000.network.gen.ClickInputPacket.getDefaultInstance();
+        }
+        clickPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClickInputPacket, org.y1000.network.gen.ClickInputPacket.Builder, org.y1000.network.gen.ClickInputPacketOrBuilder>(
+                (org.y1000.network.gen.ClickInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 2;
+      onChanged();
+      return clickPacketBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.MoveInputPacket, org.y1000.network.gen.MoveInputPacket.Builder, org.y1000.network.gen.MoveInputPacketOrBuilder> moveInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+     * @return Whether the moveInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasMoveInput() {
+      return typeCase_ == 32;
+    }
+    /**
+     * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+     * @return The moveInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.MoveInputPacket getMoveInput() {
+      if (moveInputBuilder_ == null) {
+        if (typeCase_ == 32) {
+          return (org.y1000.network.gen.MoveInputPacket) type_;
+        }
+        return org.y1000.network.gen.MoveInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 32) {
+          return moveInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.MoveInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+     */
+    public Builder setMoveInput(org.y1000.network.gen.MoveInputPacket value) {
+      if (moveInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        moveInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 32;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+     */
+    public Builder setMoveInput(
+        org.y1000.network.gen.MoveInputPacket.Builder builderForValue) {
+      if (moveInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        moveInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 32;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+     */
+    public Builder mergeMoveInput(org.y1000.network.gen.MoveInputPacket value) {
+      if (moveInputBuilder_ == null) {
+        if (typeCase_ == 32 &&
+            type_ != org.y1000.network.gen.MoveInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.MoveInputPacket.newBuilder((org.y1000.network.gen.MoveInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 32) {
+          moveInputBuilder_.mergeFrom(value);
+        } else {
+          moveInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 32;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+     */
+    public Builder clearMoveInput() {
+      if (moveInputBuilder_ == null) {
+        if (typeCase_ == 32) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 32) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        moveInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+     */
+    public org.y1000.network.gen.MoveInputPacket.Builder getMoveInputBuilder() {
+      return getMoveInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.MoveInputPacketOrBuilder getMoveInputOrBuilder() {
+      if ((typeCase_ == 32) && (moveInputBuilder_ != null)) {
+        return moveInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 32) {
+          return (org.y1000.network.gen.MoveInputPacket) type_;
+        }
+        return org.y1000.network.gen.MoveInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.MoveInputPacket moveInput = 32;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.MoveInputPacket, org.y1000.network.gen.MoveInputPacket.Builder, org.y1000.network.gen.MoveInputPacketOrBuilder> 
+        getMoveInputFieldBuilder() {
+      if (moveInputBuilder_ == null) {
+        if (!(typeCase_ == 32)) {
+          type_ = org.y1000.network.gen.MoveInputPacket.getDefaultInstance();
+        }
+        moveInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.MoveInputPacket, org.y1000.network.gen.MoveInputPacket.Builder, org.y1000.network.gen.MoveInputPacketOrBuilder>(
+                (org.y1000.network.gen.MoveInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 32;
+      onChanged();
+      return moveInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.TurnInputPacket, org.y1000.network.gen.TurnInputPacket.Builder, org.y1000.network.gen.TurnInputPacketOrBuilder> turnInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+     * @return Whether the turnInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasTurnInput() {
+      return typeCase_ == 33;
+    }
+    /**
+     * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+     * @return The turnInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.TurnInputPacket getTurnInput() {
+      if (turnInputBuilder_ == null) {
+        if (typeCase_ == 33) {
+          return (org.y1000.network.gen.TurnInputPacket) type_;
+        }
+        return org.y1000.network.gen.TurnInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 33) {
+          return turnInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.TurnInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+     */
+    public Builder setTurnInput(org.y1000.network.gen.TurnInputPacket value) {
+      if (turnInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        turnInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 33;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+     */
+    public Builder setTurnInput(
+        org.y1000.network.gen.TurnInputPacket.Builder builderForValue) {
+      if (turnInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        turnInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 33;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+     */
+    public Builder mergeTurnInput(org.y1000.network.gen.TurnInputPacket value) {
+      if (turnInputBuilder_ == null) {
+        if (typeCase_ == 33 &&
+            type_ != org.y1000.network.gen.TurnInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.TurnInputPacket.newBuilder((org.y1000.network.gen.TurnInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 33) {
+          turnInputBuilder_.mergeFrom(value);
+        } else {
+          turnInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 33;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+     */
+    public Builder clearTurnInput() {
+      if (turnInputBuilder_ == null) {
+        if (typeCase_ == 33) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 33) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        turnInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+     */
+    public org.y1000.network.gen.TurnInputPacket.Builder getTurnInputBuilder() {
+      return getTurnInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.TurnInputPacketOrBuilder getTurnInputOrBuilder() {
+      if ((typeCase_ == 33) && (turnInputBuilder_ != null)) {
+        return turnInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 33) {
+          return (org.y1000.network.gen.TurnInputPacket) type_;
+        }
+        return org.y1000.network.gen.TurnInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.TurnInputPacket turnInput = 33;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.TurnInputPacket, org.y1000.network.gen.TurnInputPacket.Builder, org.y1000.network.gen.TurnInputPacketOrBuilder> 
+        getTurnInputFieldBuilder() {
+      if (turnInputBuilder_ == null) {
+        if (!(typeCase_ == 33)) {
+          type_ = org.y1000.network.gen.TurnInputPacket.getDefaultInstance();
+        }
+        turnInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.TurnInputPacket, org.y1000.network.gen.TurnInputPacket.Builder, org.y1000.network.gen.TurnInputPacketOrBuilder>(
+                (org.y1000.network.gen.TurnInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 33;
+      onChanged();
+      return turnInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.SimpleInputPacket, org.y1000.network.gen.SimpleInputPacket.Builder, org.y1000.network.gen.SimpleInputPacketOrBuilder> simpleInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+     * @return Whether the simpleInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasSimpleInput() {
+      return typeCase_ == 34;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+     * @return The simpleInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.SimpleInputPacket getSimpleInput() {
+      if (simpleInputBuilder_ == null) {
+        if (typeCase_ == 34) {
+          return (org.y1000.network.gen.SimpleInputPacket) type_;
+        }
+        return org.y1000.network.gen.SimpleInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 34) {
+          return simpleInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.SimpleInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+     */
+    public Builder setSimpleInput(org.y1000.network.gen.SimpleInputPacket value) {
+      if (simpleInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        simpleInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 34;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+     */
+    public Builder setSimpleInput(
+        org.y1000.network.gen.SimpleInputPacket.Builder builderForValue) {
+      if (simpleInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        simpleInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 34;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+     */
+    public Builder mergeSimpleInput(org.y1000.network.gen.SimpleInputPacket value) {
+      if (simpleInputBuilder_ == null) {
+        if (typeCase_ == 34 &&
+            type_ != org.y1000.network.gen.SimpleInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.SimpleInputPacket.newBuilder((org.y1000.network.gen.SimpleInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 34) {
+          simpleInputBuilder_.mergeFrom(value);
+        } else {
+          simpleInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 34;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+     */
+    public Builder clearSimpleInput() {
+      if (simpleInputBuilder_ == null) {
+        if (typeCase_ == 34) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 34) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        simpleInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+     */
+    public org.y1000.network.gen.SimpleInputPacket.Builder getSimpleInputBuilder() {
+      return getSimpleInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.SimpleInputPacketOrBuilder getSimpleInputOrBuilder() {
+      if ((typeCase_ == 34) && (simpleInputBuilder_ != null)) {
+        return simpleInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 34) {
+          return (org.y1000.network.gen.SimpleInputPacket) type_;
+        }
+        return org.y1000.network.gen.SimpleInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.SimpleInputPacket simpleInput = 34;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.SimpleInputPacket, org.y1000.network.gen.SimpleInputPacket.Builder, org.y1000.network.gen.SimpleInputPacketOrBuilder> 
+        getSimpleInputFieldBuilder() {
+      if (simpleInputBuilder_ == null) {
+        if (!(typeCase_ == 34)) {
+          type_ = org.y1000.network.gen.SimpleInputPacket.getDefaultInstance();
+        }
+        simpleInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.SimpleInputPacket, org.y1000.network.gen.SimpleInputPacket.Builder, org.y1000.network.gen.SimpleInputPacketOrBuilder>(
+                (org.y1000.network.gen.SimpleInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 34;
+      onChanged();
+      return simpleInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickKungFuInputPacket, org.y1000.network.gen.ClickKungFuInputPacket.Builder, org.y1000.network.gen.ClickKungFuInputPacketOrBuilder> clickKungFuInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+     * @return Whether the clickKungFuInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasClickKungFuInput() {
+      return typeCase_ == 35;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+     * @return The clickKungFuInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickKungFuInputPacket getClickKungFuInput() {
+      if (clickKungFuInputBuilder_ == null) {
+        if (typeCase_ == 35) {
+          return (org.y1000.network.gen.ClickKungFuInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickKungFuInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 35) {
+          return clickKungFuInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClickKungFuInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+     */
+    public Builder setClickKungFuInput(org.y1000.network.gen.ClickKungFuInputPacket value) {
+      if (clickKungFuInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        clickKungFuInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 35;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+     */
+    public Builder setClickKungFuInput(
+        org.y1000.network.gen.ClickKungFuInputPacket.Builder builderForValue) {
+      if (clickKungFuInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        clickKungFuInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 35;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+     */
+    public Builder mergeClickKungFuInput(org.y1000.network.gen.ClickKungFuInputPacket value) {
+      if (clickKungFuInputBuilder_ == null) {
+        if (typeCase_ == 35 &&
+            type_ != org.y1000.network.gen.ClickKungFuInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClickKungFuInputPacket.newBuilder((org.y1000.network.gen.ClickKungFuInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 35) {
+          clickKungFuInputBuilder_.mergeFrom(value);
+        } else {
+          clickKungFuInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 35;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+     */
+    public Builder clearClickKungFuInput() {
+      if (clickKungFuInputBuilder_ == null) {
+        if (typeCase_ == 35) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 35) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        clickKungFuInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+     */
+    public org.y1000.network.gen.ClickKungFuInputPacket.Builder getClickKungFuInputBuilder() {
+      return getClickKungFuInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickKungFuInputPacketOrBuilder getClickKungFuInputOrBuilder() {
+      if ((typeCase_ == 35) && (clickKungFuInputBuilder_ != null)) {
+        return clickKungFuInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 35) {
+          return (org.y1000.network.gen.ClickKungFuInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickKungFuInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickKungFuInputPacket clickKungFuInput = 35;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickKungFuInputPacket, org.y1000.network.gen.ClickKungFuInputPacket.Builder, org.y1000.network.gen.ClickKungFuInputPacketOrBuilder> 
+        getClickKungFuInputFieldBuilder() {
+      if (clickKungFuInputBuilder_ == null) {
+        if (!(typeCase_ == 35)) {
+          type_ = org.y1000.network.gen.ClickKungFuInputPacket.getDefaultInstance();
+        }
+        clickKungFuInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClickKungFuInputPacket, org.y1000.network.gen.ClickKungFuInputPacket.Builder, org.y1000.network.gen.ClickKungFuInputPacketOrBuilder>(
+                (org.y1000.network.gen.ClickKungFuInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 35;
+      onChanged();
+      return clickKungFuInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickInventorySlotInputPacket, org.y1000.network.gen.ClickInventorySlotInputPacket.Builder, org.y1000.network.gen.ClickInventorySlotInputPacketOrBuilder> clickInventorySlotInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+     * @return Whether the clickInventorySlotInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasClickInventorySlotInput() {
+      return typeCase_ == 36;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+     * @return The clickInventorySlotInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickInventorySlotInputPacket getClickInventorySlotInput() {
+      if (clickInventorySlotInputBuilder_ == null) {
+        if (typeCase_ == 36) {
+          return (org.y1000.network.gen.ClickInventorySlotInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickInventorySlotInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 36) {
+          return clickInventorySlotInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClickInventorySlotInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+     */
+    public Builder setClickInventorySlotInput(org.y1000.network.gen.ClickInventorySlotInputPacket value) {
+      if (clickInventorySlotInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        clickInventorySlotInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 36;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+     */
+    public Builder setClickInventorySlotInput(
+        org.y1000.network.gen.ClickInventorySlotInputPacket.Builder builderForValue) {
+      if (clickInventorySlotInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        clickInventorySlotInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 36;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+     */
+    public Builder mergeClickInventorySlotInput(org.y1000.network.gen.ClickInventorySlotInputPacket value) {
+      if (clickInventorySlotInputBuilder_ == null) {
+        if (typeCase_ == 36 &&
+            type_ != org.y1000.network.gen.ClickInventorySlotInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClickInventorySlotInputPacket.newBuilder((org.y1000.network.gen.ClickInventorySlotInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 36) {
+          clickInventorySlotInputBuilder_.mergeFrom(value);
+        } else {
+          clickInventorySlotInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 36;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+     */
+    public Builder clearClickInventorySlotInput() {
+      if (clickInventorySlotInputBuilder_ == null) {
+        if (typeCase_ == 36) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 36) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        clickInventorySlotInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+     */
+    public org.y1000.network.gen.ClickInventorySlotInputPacket.Builder getClickInventorySlotInputBuilder() {
+      return getClickInventorySlotInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickInventorySlotInputPacketOrBuilder getClickInventorySlotInputOrBuilder() {
+      if ((typeCase_ == 36) && (clickInventorySlotInputBuilder_ != null)) {
+        return clickInventorySlotInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 36) {
+          return (org.y1000.network.gen.ClickInventorySlotInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickInventorySlotInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickInventorySlotInputPacket clickInventorySlotInput = 36;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickInventorySlotInputPacket, org.y1000.network.gen.ClickInventorySlotInputPacket.Builder, org.y1000.network.gen.ClickInventorySlotInputPacketOrBuilder> 
+        getClickInventorySlotInputFieldBuilder() {
+      if (clickInventorySlotInputBuilder_ == null) {
+        if (!(typeCase_ == 36)) {
+          type_ = org.y1000.network.gen.ClickInventorySlotInputPacket.getDefaultInstance();
+        }
+        clickInventorySlotInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClickInventorySlotInputPacket, org.y1000.network.gen.ClickInventorySlotInputPacket.Builder, org.y1000.network.gen.ClickInventorySlotInputPacketOrBuilder>(
+                (org.y1000.network.gen.ClickInventorySlotInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 36;
+      onChanged();
+      return clickInventorySlotInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AttackInputPacket, org.y1000.network.gen.AttackInputPacket.Builder, org.y1000.network.gen.AttackInputPacketOrBuilder> attackInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     * @return Whether the attackInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasAttackInput() {
+      return typeCase_ == 37;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     * @return The attackInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.AttackInputPacket getAttackInput() {
+      if (attackInputBuilder_ == null) {
+        if (typeCase_ == 37) {
+          return (org.y1000.network.gen.AttackInputPacket) type_;
+        }
+        return org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 37) {
+          return attackInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    public Builder setAttackInput(org.y1000.network.gen.AttackInputPacket value) {
+      if (attackInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        attackInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 37;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    public Builder setAttackInput(
+        org.y1000.network.gen.AttackInputPacket.Builder builderForValue) {
+      if (attackInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        attackInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 37;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    public Builder mergeAttackInput(org.y1000.network.gen.AttackInputPacket value) {
+      if (attackInputBuilder_ == null) {
+        if (typeCase_ == 37 &&
+            type_ != org.y1000.network.gen.AttackInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.AttackInputPacket.newBuilder((org.y1000.network.gen.AttackInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 37) {
+          attackInputBuilder_.mergeFrom(value);
+        } else {
+          attackInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 37;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    public Builder clearAttackInput() {
+      if (attackInputBuilder_ == null) {
+        if (typeCase_ == 37) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 37) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        attackInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    public org.y1000.network.gen.AttackInputPacket.Builder getAttackInputBuilder() {
+      return getAttackInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.AttackInputPacketOrBuilder getAttackInputOrBuilder() {
+      if ((typeCase_ == 37) && (attackInputBuilder_ != null)) {
+        return attackInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 37) {
+          return (org.y1000.network.gen.AttackInputPacket) type_;
+        }
+        return org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AttackInputPacket attackInput = 37;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AttackInputPacket, org.y1000.network.gen.AttackInputPacket.Builder, org.y1000.network.gen.AttackInputPacketOrBuilder> 
+        getAttackInputFieldBuilder() {
+      if (attackInputBuilder_ == null) {
+        if (!(typeCase_ == 37)) {
+          type_ = org.y1000.network.gen.AttackInputPacket.getDefaultInstance();
+        }
+        attackInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.AttackInputPacket, org.y1000.network.gen.AttackInputPacket.Builder, org.y1000.network.gen.AttackInputPacketOrBuilder>(
+                (org.y1000.network.gen.AttackInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 37;
+      onChanged();
+      return attackInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UnequipInputPacket, org.y1000.network.gen.UnequipInputPacket.Builder, org.y1000.network.gen.UnequipInputPacketOrBuilder> unequipInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+     * @return Whether the unequipInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasUnequipInput() {
+      return typeCase_ == 38;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+     * @return The unequipInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UnequipInputPacket getUnequipInput() {
+      if (unequipInputBuilder_ == null) {
+        if (typeCase_ == 38) {
+          return (org.y1000.network.gen.UnequipInputPacket) type_;
+        }
+        return org.y1000.network.gen.UnequipInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 38) {
+          return unequipInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.UnequipInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+     */
+    public Builder setUnequipInput(org.y1000.network.gen.UnequipInputPacket value) {
+      if (unequipInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        unequipInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 38;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+     */
+    public Builder setUnequipInput(
+        org.y1000.network.gen.UnequipInputPacket.Builder builderForValue) {
+      if (unequipInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        unequipInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 38;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+     */
+    public Builder mergeUnequipInput(org.y1000.network.gen.UnequipInputPacket value) {
+      if (unequipInputBuilder_ == null) {
+        if (typeCase_ == 38 &&
+            type_ != org.y1000.network.gen.UnequipInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.UnequipInputPacket.newBuilder((org.y1000.network.gen.UnequipInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 38) {
+          unequipInputBuilder_.mergeFrom(value);
+        } else {
+          unequipInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 38;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+     */
+    public Builder clearUnequipInput() {
+      if (unequipInputBuilder_ == null) {
+        if (typeCase_ == 38) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 38) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        unequipInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+     */
+    public org.y1000.network.gen.UnequipInputPacket.Builder getUnequipInputBuilder() {
+      return getUnequipInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UnequipInputPacketOrBuilder getUnequipInputOrBuilder() {
+      if ((typeCase_ == 38) && (unequipInputBuilder_ != null)) {
+        return unequipInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 38) {
+          return (org.y1000.network.gen.UnequipInputPacket) type_;
+        }
+        return org.y1000.network.gen.UnequipInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnequipInputPacket unequipInput = 38;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UnequipInputPacket, org.y1000.network.gen.UnequipInputPacket.Builder, org.y1000.network.gen.UnequipInputPacketOrBuilder> 
+        getUnequipInputFieldBuilder() {
+      if (unequipInputBuilder_ == null) {
+        if (!(typeCase_ == 38)) {
+          type_ = org.y1000.network.gen.UnequipInputPacket.getDefaultInstance();
+        }
+        unequipInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.UnequipInputPacket, org.y1000.network.gen.UnequipInputPacket.Builder, org.y1000.network.gen.UnequipInputPacketOrBuilder>(
+                (org.y1000.network.gen.UnequipInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 38;
+      onChanged();
+      return unequipInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.SwapKungFuSlotPacket, org.y1000.network.gen.SwapKungFuSlotPacket.Builder, org.y1000.network.gen.SwapKungFuSlotPacketOrBuilder> swapKungFuSlotPacketBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+     * @return Whether the swapKungFuSlotPacket field is set.
+     */
+    @java.lang.Override
+    public boolean hasSwapKungFuSlotPacket() {
+      return typeCase_ == 39;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+     * @return The swapKungFuSlotPacket.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.SwapKungFuSlotPacket getSwapKungFuSlotPacket() {
+      if (swapKungFuSlotPacketBuilder_ == null) {
+        if (typeCase_ == 39) {
+          return (org.y1000.network.gen.SwapKungFuSlotPacket) type_;
+        }
+        return org.y1000.network.gen.SwapKungFuSlotPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 39) {
+          return swapKungFuSlotPacketBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.SwapKungFuSlotPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+     */
+    public Builder setSwapKungFuSlotPacket(org.y1000.network.gen.SwapKungFuSlotPacket value) {
+      if (swapKungFuSlotPacketBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        swapKungFuSlotPacketBuilder_.setMessage(value);
+      }
+      typeCase_ = 39;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+     */
+    public Builder setSwapKungFuSlotPacket(
+        org.y1000.network.gen.SwapKungFuSlotPacket.Builder builderForValue) {
+      if (swapKungFuSlotPacketBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        swapKungFuSlotPacketBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 39;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+     */
+    public Builder mergeSwapKungFuSlotPacket(org.y1000.network.gen.SwapKungFuSlotPacket value) {
+      if (swapKungFuSlotPacketBuilder_ == null) {
+        if (typeCase_ == 39 &&
+            type_ != org.y1000.network.gen.SwapKungFuSlotPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.SwapKungFuSlotPacket.newBuilder((org.y1000.network.gen.SwapKungFuSlotPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 39) {
+          swapKungFuSlotPacketBuilder_.mergeFrom(value);
+        } else {
+          swapKungFuSlotPacketBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 39;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+     */
+    public Builder clearSwapKungFuSlotPacket() {
+      if (swapKungFuSlotPacketBuilder_ == null) {
+        if (typeCase_ == 39) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 39) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        swapKungFuSlotPacketBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+     */
+    public org.y1000.network.gen.SwapKungFuSlotPacket.Builder getSwapKungFuSlotPacketBuilder() {
+      return getSwapKungFuSlotPacketFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.SwapKungFuSlotPacketOrBuilder getSwapKungFuSlotPacketOrBuilder() {
+      if ((typeCase_ == 39) && (swapKungFuSlotPacketBuilder_ != null)) {
+        return swapKungFuSlotPacketBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 39) {
+          return (org.y1000.network.gen.SwapKungFuSlotPacket) type_;
+        }
+        return org.y1000.network.gen.SwapKungFuSlotPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.SwapKungFuSlotPacket swapKungFuSlotPacket = 39;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.SwapKungFuSlotPacket, org.y1000.network.gen.SwapKungFuSlotPacket.Builder, org.y1000.network.gen.SwapKungFuSlotPacketOrBuilder> 
+        getSwapKungFuSlotPacketFieldBuilder() {
+      if (swapKungFuSlotPacketBuilder_ == null) {
+        if (!(typeCase_ == 39)) {
+          type_ = org.y1000.network.gen.SwapKungFuSlotPacket.getDefaultInstance();
+        }
+        swapKungFuSlotPacketBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.SwapKungFuSlotPacket, org.y1000.network.gen.SwapKungFuSlotPacket.Builder, org.y1000.network.gen.SwapKungFuSlotPacketOrBuilder>(
+                (org.y1000.network.gen.SwapKungFuSlotPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 39;
+      onChanged();
+      return swapKungFuSlotPacketBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.PickInputPacket, org.y1000.network.gen.PickInputPacket.Builder, org.y1000.network.gen.PickInputPacketOrBuilder> pickInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+     * @return Whether the pickInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasPickInput() {
+      return typeCase_ == 40;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+     * @return The pickInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.PickInputPacket getPickInput() {
+      if (pickInputBuilder_ == null) {
+        if (typeCase_ == 40) {
+          return (org.y1000.network.gen.PickInputPacket) type_;
+        }
+        return org.y1000.network.gen.PickInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 40) {
+          return pickInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.PickInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+     */
+    public Builder setPickInput(org.y1000.network.gen.PickInputPacket value) {
+      if (pickInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        pickInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 40;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+     */
+    public Builder setPickInput(
+        org.y1000.network.gen.PickInputPacket.Builder builderForValue) {
+      if (pickInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        pickInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 40;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+     */
+    public Builder mergePickInput(org.y1000.network.gen.PickInputPacket value) {
+      if (pickInputBuilder_ == null) {
+        if (typeCase_ == 40 &&
+            type_ != org.y1000.network.gen.PickInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.PickInputPacket.newBuilder((org.y1000.network.gen.PickInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 40) {
+          pickInputBuilder_.mergeFrom(value);
+        } else {
+          pickInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 40;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+     */
+    public Builder clearPickInput() {
+      if (pickInputBuilder_ == null) {
+        if (typeCase_ == 40) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 40) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        pickInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+     */
+    public org.y1000.network.gen.PickInputPacket.Builder getPickInputBuilder() {
+      return getPickInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.PickInputPacketOrBuilder getPickInputOrBuilder() {
+      if ((typeCase_ == 40) && (pickInputBuilder_ != null)) {
+        return pickInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 40) {
+          return (org.y1000.network.gen.PickInputPacket) type_;
+        }
+        return org.y1000.network.gen.PickInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.PickInputPacket pickInput = 40;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.PickInputPacket, org.y1000.network.gen.PickInputPacket.Builder, org.y1000.network.gen.PickInputPacketOrBuilder> 
+        getPickInputFieldBuilder() {
+      if (pickInputBuilder_ == null) {
+        if (!(typeCase_ == 40)) {
+          type_ = org.y1000.network.gen.PickInputPacket.getDefaultInstance();
+        }
+        pickInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.PickInputPacket, org.y1000.network.gen.PickInputPacket.Builder, org.y1000.network.gen.PickInputPacketOrBuilder>(
+                (org.y1000.network.gen.PickInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 40;
+      onChanged();
+      return pickInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.DropItemInputPacket, org.y1000.network.gen.DropItemInputPacket.Builder, org.y1000.network.gen.DropItemInputPacketOrBuilder> dropInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+     * @return Whether the dropInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasDropInput() {
+      return typeCase_ == 41;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+     * @return The dropInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.DropItemInputPacket getDropInput() {
+      if (dropInputBuilder_ == null) {
+        if (typeCase_ == 41) {
+          return (org.y1000.network.gen.DropItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.DropItemInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 41) {
+          return dropInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.DropItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+     */
+    public Builder setDropInput(org.y1000.network.gen.DropItemInputPacket value) {
+      if (dropInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        dropInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 41;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+     */
+    public Builder setDropInput(
+        org.y1000.network.gen.DropItemInputPacket.Builder builderForValue) {
+      if (dropInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        dropInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 41;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+     */
+    public Builder mergeDropInput(org.y1000.network.gen.DropItemInputPacket value) {
+      if (dropInputBuilder_ == null) {
+        if (typeCase_ == 41 &&
+            type_ != org.y1000.network.gen.DropItemInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.DropItemInputPacket.newBuilder((org.y1000.network.gen.DropItemInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 41) {
+          dropInputBuilder_.mergeFrom(value);
+        } else {
+          dropInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 41;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+     */
+    public Builder clearDropInput() {
+      if (dropInputBuilder_ == null) {
+        if (typeCase_ == 41) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 41) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        dropInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+     */
+    public org.y1000.network.gen.DropItemInputPacket.Builder getDropInputBuilder() {
+      return getDropInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.DropItemInputPacketOrBuilder getDropInputOrBuilder() {
+      if ((typeCase_ == 41) && (dropInputBuilder_ != null)) {
+        return dropInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 41) {
+          return (org.y1000.network.gen.DropItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.DropItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemInputPacket dropInput = 41;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.DropItemInputPacket, org.y1000.network.gen.DropItemInputPacket.Builder, org.y1000.network.gen.DropItemInputPacketOrBuilder> 
+        getDropInputFieldBuilder() {
+      if (dropInputBuilder_ == null) {
+        if (!(typeCase_ == 41)) {
+          type_ = org.y1000.network.gen.DropItemInputPacket.getDefaultInstance();
+        }
+        dropInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.DropItemInputPacket, org.y1000.network.gen.DropItemInputPacket.Builder, org.y1000.network.gen.DropItemInputPacketOrBuilder>(
+                (org.y1000.network.gen.DropItemInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 41;
+      onChanged();
+      return dropInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ConfirmDropItemInputPacket, org.y1000.network.gen.ConfirmDropItemInputPacket.Builder, org.y1000.network.gen.ConfirmDropItemInputPacketOrBuilder> confirmDropInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+     * @return Whether the confirmDropInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasConfirmDropInput() {
+      return typeCase_ == 42;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+     * @return The confirmDropInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ConfirmDropItemInputPacket getConfirmDropInput() {
+      if (confirmDropInputBuilder_ == null) {
+        if (typeCase_ == 42) {
+          return (org.y1000.network.gen.ConfirmDropItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.ConfirmDropItemInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 42) {
+          return confirmDropInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ConfirmDropItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+     */
+    public Builder setConfirmDropInput(org.y1000.network.gen.ConfirmDropItemInputPacket value) {
+      if (confirmDropInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        confirmDropInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 42;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+     */
+    public Builder setConfirmDropInput(
+        org.y1000.network.gen.ConfirmDropItemInputPacket.Builder builderForValue) {
+      if (confirmDropInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        confirmDropInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 42;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+     */
+    public Builder mergeConfirmDropInput(org.y1000.network.gen.ConfirmDropItemInputPacket value) {
+      if (confirmDropInputBuilder_ == null) {
+        if (typeCase_ == 42 &&
+            type_ != org.y1000.network.gen.ConfirmDropItemInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ConfirmDropItemInputPacket.newBuilder((org.y1000.network.gen.ConfirmDropItemInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 42) {
+          confirmDropInputBuilder_.mergeFrom(value);
+        } else {
+          confirmDropInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 42;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+     */
+    public Builder clearConfirmDropInput() {
+      if (confirmDropInputBuilder_ == null) {
+        if (typeCase_ == 42) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 42) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        confirmDropInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+     */
+    public org.y1000.network.gen.ConfirmDropItemInputPacket.Builder getConfirmDropInputBuilder() {
+      return getConfirmDropInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ConfirmDropItemInputPacketOrBuilder getConfirmDropInputOrBuilder() {
+      if ((typeCase_ == 42) && (confirmDropInputBuilder_ != null)) {
+        return confirmDropInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 42) {
+          return (org.y1000.network.gen.ConfirmDropItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.ConfirmDropItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ConfirmDropItemInputPacket confirmDropInput = 42;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ConfirmDropItemInputPacket, org.y1000.network.gen.ConfirmDropItemInputPacket.Builder, org.y1000.network.gen.ConfirmDropItemInputPacketOrBuilder> 
+        getConfirmDropInputFieldBuilder() {
+      if (confirmDropInputBuilder_ == null) {
+        if (!(typeCase_ == 42)) {
+          type_ = org.y1000.network.gen.ConfirmDropItemInputPacket.getDefaultInstance();
+        }
+        confirmDropInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ConfirmDropItemInputPacket, org.y1000.network.gen.ConfirmDropItemInputPacket.Builder, org.y1000.network.gen.ConfirmDropItemInputPacketOrBuilder>(
+                (org.y1000.network.gen.ConfirmDropItemInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 42;
+      onChanged();
+      return confirmDropInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickNpcAbilityInputPacket, org.y1000.network.gen.ClickNpcAbilityInputPacket.Builder, org.y1000.network.gen.ClickNpcAbilityInputPacketOrBuilder> clickNpcAbilityInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+     * @return Whether the clickNpcAbilityInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasClickNpcAbilityInput() {
+      return typeCase_ == 43;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+     * @return The clickNpcAbilityInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickNpcAbilityInputPacket getClickNpcAbilityInput() {
+      if (clickNpcAbilityInputBuilder_ == null) {
+        if (typeCase_ == 43) {
+          return (org.y1000.network.gen.ClickNpcAbilityInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickNpcAbilityInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 43) {
+          return clickNpcAbilityInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClickNpcAbilityInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+     */
+    public Builder setClickNpcAbilityInput(org.y1000.network.gen.ClickNpcAbilityInputPacket value) {
+      if (clickNpcAbilityInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        clickNpcAbilityInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 43;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+     */
+    public Builder setClickNpcAbilityInput(
+        org.y1000.network.gen.ClickNpcAbilityInputPacket.Builder builderForValue) {
+      if (clickNpcAbilityInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        clickNpcAbilityInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 43;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+     */
+    public Builder mergeClickNpcAbilityInput(org.y1000.network.gen.ClickNpcAbilityInputPacket value) {
+      if (clickNpcAbilityInputBuilder_ == null) {
+        if (typeCase_ == 43 &&
+            type_ != org.y1000.network.gen.ClickNpcAbilityInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClickNpcAbilityInputPacket.newBuilder((org.y1000.network.gen.ClickNpcAbilityInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 43) {
+          clickNpcAbilityInputBuilder_.mergeFrom(value);
+        } else {
+          clickNpcAbilityInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 43;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+     */
+    public Builder clearClickNpcAbilityInput() {
+      if (clickNpcAbilityInputBuilder_ == null) {
+        if (typeCase_ == 43) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 43) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        clickNpcAbilityInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+     */
+    public org.y1000.network.gen.ClickNpcAbilityInputPacket.Builder getClickNpcAbilityInputBuilder() {
+      return getClickNpcAbilityInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickNpcAbilityInputPacketOrBuilder getClickNpcAbilityInputOrBuilder() {
+      if ((typeCase_ == 43) && (clickNpcAbilityInputBuilder_ != null)) {
+        return clickNpcAbilityInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 43) {
+          return (org.y1000.network.gen.ClickNpcAbilityInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickNpcAbilityInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickNpcAbilityInputPacket clickNpcAbilityInput = 43;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickNpcAbilityInputPacket, org.y1000.network.gen.ClickNpcAbilityInputPacket.Builder, org.y1000.network.gen.ClickNpcAbilityInputPacketOrBuilder> 
+        getClickNpcAbilityInputFieldBuilder() {
+      if (clickNpcAbilityInputBuilder_ == null) {
+        if (!(typeCase_ == 43)) {
+          type_ = org.y1000.network.gen.ClickNpcAbilityInputPacket.getDefaultInstance();
+        }
+        clickNpcAbilityInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClickNpcAbilityInputPacket, org.y1000.network.gen.ClickNpcAbilityInputPacket.Builder, org.y1000.network.gen.ClickNpcAbilityInputPacketOrBuilder>(
+                (org.y1000.network.gen.ClickNpcAbilityInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 43;
+      onChanged();
+      return clickNpcAbilityInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.BuyItemInputPacket, org.y1000.network.gen.BuyItemInputPacket.Builder, org.y1000.network.gen.BuyItemInputPacketOrBuilder> buyItemBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     * @return Whether the buyItem field is set.
+     */
+    @java.lang.Override
+    public boolean hasBuyItem() {
+      return typeCase_ == 44;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     * @return The buyItem.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.BuyItemInputPacket getBuyItem() {
+      if (buyItemBuilder_ == null) {
+        if (typeCase_ == 44) {
+          return (org.y1000.network.gen.BuyItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 44) {
+          return buyItemBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    public Builder setBuyItem(org.y1000.network.gen.BuyItemInputPacket value) {
+      if (buyItemBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        buyItemBuilder_.setMessage(value);
+      }
+      typeCase_ = 44;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    public Builder setBuyItem(
+        org.y1000.network.gen.BuyItemInputPacket.Builder builderForValue) {
+      if (buyItemBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        buyItemBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 44;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    public Builder mergeBuyItem(org.y1000.network.gen.BuyItemInputPacket value) {
+      if (buyItemBuilder_ == null) {
+        if (typeCase_ == 44 &&
+            type_ != org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.BuyItemInputPacket.newBuilder((org.y1000.network.gen.BuyItemInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 44) {
+          buyItemBuilder_.mergeFrom(value);
+        } else {
+          buyItemBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 44;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    public Builder clearBuyItem() {
+      if (buyItemBuilder_ == null) {
+        if (typeCase_ == 44) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 44) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        buyItemBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    public org.y1000.network.gen.BuyItemInputPacket.Builder getBuyItemBuilder() {
+      return getBuyItemFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.BuyItemInputPacketOrBuilder getBuyItemOrBuilder() {
+      if ((typeCase_ == 44) && (buyItemBuilder_ != null)) {
+        return buyItemBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 44) {
+          return (org.y1000.network.gen.BuyItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.BuyItemInputPacket buyItem = 44;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.BuyItemInputPacket, org.y1000.network.gen.BuyItemInputPacket.Builder, org.y1000.network.gen.BuyItemInputPacketOrBuilder> 
+        getBuyItemFieldBuilder() {
+      if (buyItemBuilder_ == null) {
+        if (!(typeCase_ == 44)) {
+          type_ = org.y1000.network.gen.BuyItemInputPacket.getDefaultInstance();
+        }
+        buyItemBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.BuyItemInputPacket, org.y1000.network.gen.BuyItemInputPacket.Builder, org.y1000.network.gen.BuyItemInputPacketOrBuilder>(
+                (org.y1000.network.gen.BuyItemInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 44;
+      onChanged();
+      return buyItemBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.SellItemInputPacket, org.y1000.network.gen.SellItemInputPacket.Builder, org.y1000.network.gen.SellItemInputPacketOrBuilder> sellItemBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+     * @return Whether the sellItem field is set.
+     */
+    @java.lang.Override
+    public boolean hasSellItem() {
+      return typeCase_ == 45;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+     * @return The sellItem.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.SellItemInputPacket getSellItem() {
+      if (sellItemBuilder_ == null) {
+        if (typeCase_ == 45) {
+          return (org.y1000.network.gen.SellItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.SellItemInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 45) {
+          return sellItemBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.SellItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+     */
+    public Builder setSellItem(org.y1000.network.gen.SellItemInputPacket value) {
+      if (sellItemBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        sellItemBuilder_.setMessage(value);
+      }
+      typeCase_ = 45;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+     */
+    public Builder setSellItem(
+        org.y1000.network.gen.SellItemInputPacket.Builder builderForValue) {
+      if (sellItemBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        sellItemBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 45;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+     */
+    public Builder mergeSellItem(org.y1000.network.gen.SellItemInputPacket value) {
+      if (sellItemBuilder_ == null) {
+        if (typeCase_ == 45 &&
+            type_ != org.y1000.network.gen.SellItemInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.SellItemInputPacket.newBuilder((org.y1000.network.gen.SellItemInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 45) {
+          sellItemBuilder_.mergeFrom(value);
+        } else {
+          sellItemBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 45;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+     */
+    public Builder clearSellItem() {
+      if (sellItemBuilder_ == null) {
+        if (typeCase_ == 45) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 45) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        sellItemBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+     */
+    public org.y1000.network.gen.SellItemInputPacket.Builder getSellItemBuilder() {
+      return getSellItemFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.SellItemInputPacketOrBuilder getSellItemOrBuilder() {
+      if ((typeCase_ == 45) && (sellItemBuilder_ != null)) {
+        return sellItemBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 45) {
+          return (org.y1000.network.gen.SellItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.SellItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.SellItemInputPacket sellItem = 45;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.SellItemInputPacket, org.y1000.network.gen.SellItemInputPacket.Builder, org.y1000.network.gen.SellItemInputPacketOrBuilder> 
+        getSellItemFieldBuilder() {
+      if (sellItemBuilder_ == null) {
+        if (!(typeCase_ == 45)) {
+          type_ = org.y1000.network.gen.SellItemInputPacket.getDefaultInstance();
+        }
+        sellItemBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.SellItemInputPacket, org.y1000.network.gen.SellItemInputPacket.Builder, org.y1000.network.gen.SellItemInputPacketOrBuilder>(
+                (org.y1000.network.gen.SellItemInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 45;
+      onChanged();
+      return sellItemBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.DropItemOnEntityInputPacket, org.y1000.network.gen.DropItemOnEntityInputPacket.Builder, org.y1000.network.gen.DropItemOnEntityInputPacketOrBuilder> dropOnEntityInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+     * @return Whether the dropOnEntityInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasDropOnEntityInput() {
+      return typeCase_ == 46;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+     * @return The dropOnEntityInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.DropItemOnEntityInputPacket getDropOnEntityInput() {
+      if (dropOnEntityInputBuilder_ == null) {
+        if (typeCase_ == 46) {
+          return (org.y1000.network.gen.DropItemOnEntityInputPacket) type_;
+        }
+        return org.y1000.network.gen.DropItemOnEntityInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 46) {
+          return dropOnEntityInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.DropItemOnEntityInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+     */
+    public Builder setDropOnEntityInput(org.y1000.network.gen.DropItemOnEntityInputPacket value) {
+      if (dropOnEntityInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        dropOnEntityInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 46;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+     */
+    public Builder setDropOnEntityInput(
+        org.y1000.network.gen.DropItemOnEntityInputPacket.Builder builderForValue) {
+      if (dropOnEntityInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        dropOnEntityInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 46;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+     */
+    public Builder mergeDropOnEntityInput(org.y1000.network.gen.DropItemOnEntityInputPacket value) {
+      if (dropOnEntityInputBuilder_ == null) {
+        if (typeCase_ == 46 &&
+            type_ != org.y1000.network.gen.DropItemOnEntityInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.DropItemOnEntityInputPacket.newBuilder((org.y1000.network.gen.DropItemOnEntityInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 46) {
+          dropOnEntityInputBuilder_.mergeFrom(value);
+        } else {
+          dropOnEntityInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 46;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+     */
+    public Builder clearDropOnEntityInput() {
+      if (dropOnEntityInputBuilder_ == null) {
+        if (typeCase_ == 46) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 46) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        dropOnEntityInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+     */
+    public org.y1000.network.gen.DropItemOnEntityInputPacket.Builder getDropOnEntityInputBuilder() {
+      return getDropOnEntityInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.DropItemOnEntityInputPacketOrBuilder getDropOnEntityInputOrBuilder() {
+      if ((typeCase_ == 46) && (dropOnEntityInputBuilder_ != null)) {
+        return dropOnEntityInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 46) {
+          return (org.y1000.network.gen.DropItemOnEntityInputPacket) type_;
+        }
+        return org.y1000.network.gen.DropItemOnEntityInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.DropItemOnEntityInputPacket dropOnEntityInput = 46;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.DropItemOnEntityInputPacket, org.y1000.network.gen.DropItemOnEntityInputPacket.Builder, org.y1000.network.gen.DropItemOnEntityInputPacketOrBuilder> 
+        getDropOnEntityInputFieldBuilder() {
+      if (dropOnEntityInputBuilder_ == null) {
+        if (!(typeCase_ == 46)) {
+          type_ = org.y1000.network.gen.DropItemOnEntityInputPacket.getDefaultInstance();
+        }
+        dropOnEntityInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.DropItemOnEntityInputPacket, org.y1000.network.gen.DropItemOnEntityInputPacket.Builder, org.y1000.network.gen.DropItemOnEntityInputPacketOrBuilder>(
+                (org.y1000.network.gen.DropItemOnEntityInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 46;
+      onChanged();
+      return dropOnEntityInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.PlayerTradeStateInputPacket, org.y1000.network.gen.PlayerTradeStateInputPacket.Builder, org.y1000.network.gen.PlayerTradeStateInputPacketOrBuilder> tradeStateInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+     * @return Whether the tradeStateInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasTradeStateInput() {
+      return typeCase_ == 47;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+     * @return The tradeStateInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.PlayerTradeStateInputPacket getTradeStateInput() {
+      if (tradeStateInputBuilder_ == null) {
+        if (typeCase_ == 47) {
+          return (org.y1000.network.gen.PlayerTradeStateInputPacket) type_;
+        }
+        return org.y1000.network.gen.PlayerTradeStateInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 47) {
+          return tradeStateInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.PlayerTradeStateInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+     */
+    public Builder setTradeStateInput(org.y1000.network.gen.PlayerTradeStateInputPacket value) {
+      if (tradeStateInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        tradeStateInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 47;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+     */
+    public Builder setTradeStateInput(
+        org.y1000.network.gen.PlayerTradeStateInputPacket.Builder builderForValue) {
+      if (tradeStateInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        tradeStateInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 47;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+     */
+    public Builder mergeTradeStateInput(org.y1000.network.gen.PlayerTradeStateInputPacket value) {
+      if (tradeStateInputBuilder_ == null) {
+        if (typeCase_ == 47 &&
+            type_ != org.y1000.network.gen.PlayerTradeStateInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.PlayerTradeStateInputPacket.newBuilder((org.y1000.network.gen.PlayerTradeStateInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 47) {
+          tradeStateInputBuilder_.mergeFrom(value);
+        } else {
+          tradeStateInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 47;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+     */
+    public Builder clearTradeStateInput() {
+      if (tradeStateInputBuilder_ == null) {
+        if (typeCase_ == 47) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 47) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        tradeStateInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+     */
+    public org.y1000.network.gen.PlayerTradeStateInputPacket.Builder getTradeStateInputBuilder() {
+      return getTradeStateInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.PlayerTradeStateInputPacketOrBuilder getTradeStateInputOrBuilder() {
+      if ((typeCase_ == 47) && (tradeStateInputBuilder_ != null)) {
+        return tradeStateInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 47) {
+          return (org.y1000.network.gen.PlayerTradeStateInputPacket) type_;
+        }
+        return org.y1000.network.gen.PlayerTradeStateInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.PlayerTradeStateInputPacket tradeStateInput = 47;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.PlayerTradeStateInputPacket, org.y1000.network.gen.PlayerTradeStateInputPacket.Builder, org.y1000.network.gen.PlayerTradeStateInputPacketOrBuilder> 
+        getTradeStateInputFieldBuilder() {
+      if (tradeStateInputBuilder_ == null) {
+        if (!(typeCase_ == 47)) {
+          type_ = org.y1000.network.gen.PlayerTradeStateInputPacket.getDefaultInstance();
+        }
+        tradeStateInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.PlayerTradeStateInputPacket, org.y1000.network.gen.PlayerTradeStateInputPacket.Builder, org.y1000.network.gen.PlayerTradeStateInputPacketOrBuilder>(
+                (org.y1000.network.gen.PlayerTradeStateInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 47;
+      onChanged();
+      return tradeStateInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AddTradeItemInputPacket, org.y1000.network.gen.AddTradeItemInputPacket.Builder, org.y1000.network.gen.AddTradeItemInputPacketOrBuilder> addPlayerTradeInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+     * @return Whether the addPlayerTradeInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasAddPlayerTradeInput() {
+      return typeCase_ == 48;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+     * @return The addPlayerTradeInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.AddTradeItemInputPacket getAddPlayerTradeInput() {
+      if (addPlayerTradeInputBuilder_ == null) {
+        if (typeCase_ == 48) {
+          return (org.y1000.network.gen.AddTradeItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.AddTradeItemInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 48) {
+          return addPlayerTradeInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.AddTradeItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+     */
+    public Builder setAddPlayerTradeInput(org.y1000.network.gen.AddTradeItemInputPacket value) {
+      if (addPlayerTradeInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        addPlayerTradeInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 48;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+     */
+    public Builder setAddPlayerTradeInput(
+        org.y1000.network.gen.AddTradeItemInputPacket.Builder builderForValue) {
+      if (addPlayerTradeInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        addPlayerTradeInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 48;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+     */
+    public Builder mergeAddPlayerTradeInput(org.y1000.network.gen.AddTradeItemInputPacket value) {
+      if (addPlayerTradeInputBuilder_ == null) {
+        if (typeCase_ == 48 &&
+            type_ != org.y1000.network.gen.AddTradeItemInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.AddTradeItemInputPacket.newBuilder((org.y1000.network.gen.AddTradeItemInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 48) {
+          addPlayerTradeInputBuilder_.mergeFrom(value);
+        } else {
+          addPlayerTradeInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 48;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+     */
+    public Builder clearAddPlayerTradeInput() {
+      if (addPlayerTradeInputBuilder_ == null) {
+        if (typeCase_ == 48) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 48) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        addPlayerTradeInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+     */
+    public org.y1000.network.gen.AddTradeItemInputPacket.Builder getAddPlayerTradeInputBuilder() {
+      return getAddPlayerTradeInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.AddTradeItemInputPacketOrBuilder getAddPlayerTradeInputOrBuilder() {
+      if ((typeCase_ == 48) && (addPlayerTradeInputBuilder_ != null)) {
+        return addPlayerTradeInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 48) {
+          return (org.y1000.network.gen.AddTradeItemInputPacket) type_;
+        }
+        return org.y1000.network.gen.AddTradeItemInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.AddTradeItemInputPacket addPlayerTradeInput = 48;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.AddTradeItemInputPacket, org.y1000.network.gen.AddTradeItemInputPacket.Builder, org.y1000.network.gen.AddTradeItemInputPacketOrBuilder> 
+        getAddPlayerTradeInputFieldBuilder() {
+      if (addPlayerTradeInputBuilder_ == null) {
+        if (!(typeCase_ == 48)) {
+          type_ = org.y1000.network.gen.AddTradeItemInputPacket.getDefaultInstance();
+        }
+        addPlayerTradeInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.AddTradeItemInputPacket, org.y1000.network.gen.AddTradeItemInputPacket.Builder, org.y1000.network.gen.AddTradeItemInputPacketOrBuilder>(
+                (org.y1000.network.gen.AddTradeItemInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 48;
+      onChanged();
+      return addPlayerTradeInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UsePillInputPacket, org.y1000.network.gen.UsePillInputPacket.Builder, org.y1000.network.gen.UsePillInputPacketOrBuilder> usePillBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+     * @return Whether the usePill field is set.
+     */
+    @java.lang.Override
+    public boolean hasUsePill() {
+      return typeCase_ == 49;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+     * @return The usePill.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UsePillInputPacket getUsePill() {
+      if (usePillBuilder_ == null) {
+        if (typeCase_ == 49) {
+          return (org.y1000.network.gen.UsePillInputPacket) type_;
+        }
+        return org.y1000.network.gen.UsePillInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 49) {
+          return usePillBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.UsePillInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+     */
+    public Builder setUsePill(org.y1000.network.gen.UsePillInputPacket value) {
+      if (usePillBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        usePillBuilder_.setMessage(value);
+      }
+      typeCase_ = 49;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+     */
+    public Builder setUsePill(
+        org.y1000.network.gen.UsePillInputPacket.Builder builderForValue) {
+      if (usePillBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        usePillBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 49;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+     */
+    public Builder mergeUsePill(org.y1000.network.gen.UsePillInputPacket value) {
+      if (usePillBuilder_ == null) {
+        if (typeCase_ == 49 &&
+            type_ != org.y1000.network.gen.UsePillInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.UsePillInputPacket.newBuilder((org.y1000.network.gen.UsePillInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 49) {
+          usePillBuilder_.mergeFrom(value);
+        } else {
+          usePillBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 49;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+     */
+    public Builder clearUsePill() {
+      if (usePillBuilder_ == null) {
+        if (typeCase_ == 49) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 49) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        usePillBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+     */
+    public org.y1000.network.gen.UsePillInputPacket.Builder getUsePillBuilder() {
+      return getUsePillFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UsePillInputPacketOrBuilder getUsePillOrBuilder() {
+      if ((typeCase_ == 49) && (usePillBuilder_ != null)) {
+        return usePillBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 49) {
+          return (org.y1000.network.gen.UsePillInputPacket) type_;
+        }
+        return org.y1000.network.gen.UsePillInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UsePillInputPacket usePill = 49;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UsePillInputPacket, org.y1000.network.gen.UsePillInputPacket.Builder, org.y1000.network.gen.UsePillInputPacketOrBuilder> 
+        getUsePillFieldBuilder() {
+      if (usePillBuilder_ == null) {
+        if (!(typeCase_ == 49)) {
+          type_ = org.y1000.network.gen.UsePillInputPacket.getDefaultInstance();
+        }
+        usePillBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.UsePillInputPacket, org.y1000.network.gen.UsePillInputPacket.Builder, org.y1000.network.gen.UsePillInputPacketOrBuilder>(
+                (org.y1000.network.gen.UsePillInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 49;
+      onChanged();
+      return usePillBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ChatInputPacket, org.y1000.network.gen.ChatInputPacket.Builder, org.y1000.network.gen.ChatInputPacketOrBuilder> chatBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     * @return Whether the chat field is set.
+     */
+    @java.lang.Override
+    public boolean hasChat() {
+      return typeCase_ == 50;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     * @return The chat.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ChatInputPacket getChat() {
+      if (chatBuilder_ == null) {
+        if (typeCase_ == 50) {
+          return (org.y1000.network.gen.ChatInputPacket) type_;
+        }
+        return org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 50) {
+          return chatBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    public Builder setChat(org.y1000.network.gen.ChatInputPacket value) {
+      if (chatBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        chatBuilder_.setMessage(value);
+      }
+      typeCase_ = 50;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    public Builder setChat(
+        org.y1000.network.gen.ChatInputPacket.Builder builderForValue) {
+      if (chatBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        chatBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 50;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    public Builder mergeChat(org.y1000.network.gen.ChatInputPacket value) {
+      if (chatBuilder_ == null) {
+        if (typeCase_ == 50 &&
+            type_ != org.y1000.network.gen.ChatInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ChatInputPacket.newBuilder((org.y1000.network.gen.ChatInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 50) {
+          chatBuilder_.mergeFrom(value);
+        } else {
+          chatBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 50;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    public Builder clearChat() {
+      if (chatBuilder_ == null) {
+        if (typeCase_ == 50) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 50) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        chatBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    public org.y1000.network.gen.ChatInputPacket.Builder getChatBuilder() {
+      return getChatFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ChatInputPacketOrBuilder getChatOrBuilder() {
+      if ((typeCase_ == 50) && (chatBuilder_ != null)) {
+        return chatBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 50) {
+          return (org.y1000.network.gen.ChatInputPacket) type_;
+        }
+        return org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ChatInputPacket chat = 50;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ChatInputPacket, org.y1000.network.gen.ChatInputPacket.Builder, org.y1000.network.gen.ChatInputPacketOrBuilder> 
+        getChatFieldBuilder() {
+      if (chatBuilder_ == null) {
+        if (!(typeCase_ == 50)) {
+          type_ = org.y1000.network.gen.ChatInputPacket.getDefaultInstance();
+        }
+        chatBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ChatInputPacket, org.y1000.network.gen.ChatInputPacket.Builder, org.y1000.network.gen.ChatInputPacketOrBuilder>(
+                (org.y1000.network.gen.ChatInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 50;
+      onChanged();
+      return chatBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickEquipmentInputPacket, org.y1000.network.gen.ClickEquipmentInputPacket.Builder, org.y1000.network.gen.ClickEquipmentInputPacketOrBuilder> clickEquipmentBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+     * @return Whether the clickEquipment field is set.
+     */
+    @java.lang.Override
+    public boolean hasClickEquipment() {
+      return typeCase_ == 51;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+     * @return The clickEquipment.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickEquipmentInputPacket getClickEquipment() {
+      if (clickEquipmentBuilder_ == null) {
+        if (typeCase_ == 51) {
+          return (org.y1000.network.gen.ClickEquipmentInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickEquipmentInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 51) {
+          return clickEquipmentBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.ClickEquipmentInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+     */
+    public Builder setClickEquipment(org.y1000.network.gen.ClickEquipmentInputPacket value) {
+      if (clickEquipmentBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        clickEquipmentBuilder_.setMessage(value);
+      }
+      typeCase_ = 51;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+     */
+    public Builder setClickEquipment(
+        org.y1000.network.gen.ClickEquipmentInputPacket.Builder builderForValue) {
+      if (clickEquipmentBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        clickEquipmentBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 51;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+     */
+    public Builder mergeClickEquipment(org.y1000.network.gen.ClickEquipmentInputPacket value) {
+      if (clickEquipmentBuilder_ == null) {
+        if (typeCase_ == 51 &&
+            type_ != org.y1000.network.gen.ClickEquipmentInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ClickEquipmentInputPacket.newBuilder((org.y1000.network.gen.ClickEquipmentInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 51) {
+          clickEquipmentBuilder_.mergeFrom(value);
+        } else {
+          clickEquipmentBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 51;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+     */
+    public Builder clearClickEquipment() {
+      if (clickEquipmentBuilder_ == null) {
+        if (typeCase_ == 51) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 51) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        clickEquipmentBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+     */
+    public org.y1000.network.gen.ClickEquipmentInputPacket.Builder getClickEquipmentBuilder() {
+      return getClickEquipmentFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.ClickEquipmentInputPacketOrBuilder getClickEquipmentOrBuilder() {
+      if ((typeCase_ == 51) && (clickEquipmentBuilder_ != null)) {
+        return clickEquipmentBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 51) {
+          return (org.y1000.network.gen.ClickEquipmentInputPacket) type_;
+        }
+        return org.y1000.network.gen.ClickEquipmentInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.ClickEquipmentInputPacket clickEquipment = 51;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ClickEquipmentInputPacket, org.y1000.network.gen.ClickEquipmentInputPacket.Builder, org.y1000.network.gen.ClickEquipmentInputPacketOrBuilder> 
+        getClickEquipmentFieldBuilder() {
+      if (clickEquipmentBuilder_ == null) {
+        if (!(typeCase_ == 51)) {
+          type_ = org.y1000.network.gen.ClickEquipmentInputPacket.getDefaultInstance();
+        }
+        clickEquipmentBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ClickEquipmentInputPacket, org.y1000.network.gen.ClickEquipmentInputPacket.Builder, org.y1000.network.gen.ClickEquipmentInputPacketOrBuilder>(
+                (org.y1000.network.gen.ClickEquipmentInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 51;
+      onChanged();
+      return clickEquipmentBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.SubmitQuestInputPacket, org.y1000.network.gen.SubmitQuestInputPacket.Builder, org.y1000.network.gen.SubmitQuestInputPacketOrBuilder> submitQuestInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+     * @return Whether the submitQuestInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasSubmitQuestInput() {
+      return typeCase_ == 52;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+     * @return The submitQuestInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.SubmitQuestInputPacket getSubmitQuestInput() {
+      if (submitQuestInputBuilder_ == null) {
+        if (typeCase_ == 52) {
+          return (org.y1000.network.gen.SubmitQuestInputPacket) type_;
+        }
+        return org.y1000.network.gen.SubmitQuestInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 52) {
+          return submitQuestInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.SubmitQuestInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+     */
+    public Builder setSubmitQuestInput(org.y1000.network.gen.SubmitQuestInputPacket value) {
+      if (submitQuestInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        submitQuestInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 52;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+     */
+    public Builder setSubmitQuestInput(
+        org.y1000.network.gen.SubmitQuestInputPacket.Builder builderForValue) {
+      if (submitQuestInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        submitQuestInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 52;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+     */
+    public Builder mergeSubmitQuestInput(org.y1000.network.gen.SubmitQuestInputPacket value) {
+      if (submitQuestInputBuilder_ == null) {
+        if (typeCase_ == 52 &&
+            type_ != org.y1000.network.gen.SubmitQuestInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.SubmitQuestInputPacket.newBuilder((org.y1000.network.gen.SubmitQuestInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 52) {
+          submitQuestInputBuilder_.mergeFrom(value);
+        } else {
+          submitQuestInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 52;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+     */
+    public Builder clearSubmitQuestInput() {
+      if (submitQuestInputBuilder_ == null) {
+        if (typeCase_ == 52) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 52) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        submitQuestInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+     */
+    public org.y1000.network.gen.SubmitQuestInputPacket.Builder getSubmitQuestInputBuilder() {
+      return getSubmitQuestInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.SubmitQuestInputPacketOrBuilder getSubmitQuestInputOrBuilder() {
+      if ((typeCase_ == 52) && (submitQuestInputBuilder_ != null)) {
+        return submitQuestInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 52) {
+          return (org.y1000.network.gen.SubmitQuestInputPacket) type_;
+        }
+        return org.y1000.network.gen.SubmitQuestInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.SubmitQuestInputPacket submitQuestInput = 52;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.SubmitQuestInputPacket, org.y1000.network.gen.SubmitQuestInputPacket.Builder, org.y1000.network.gen.SubmitQuestInputPacketOrBuilder> 
+        getSubmitQuestInputFieldBuilder() {
+      if (submitQuestInputBuilder_ == null) {
+        if (!(typeCase_ == 52)) {
+          type_ = org.y1000.network.gen.SubmitQuestInputPacket.getDefaultInstance();
+        }
+        submitQuestInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.SubmitQuestInputPacket, org.y1000.network.gen.SubmitQuestInputPacket.Builder, org.y1000.network.gen.SubmitQuestInputPacketOrBuilder>(
+                (org.y1000.network.gen.SubmitQuestInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 52;
+      onChanged();
+      return submitQuestInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UnlockBankInputPacket, org.y1000.network.gen.UnlockBankInputPacket.Builder, org.y1000.network.gen.UnlockBankInputPacketOrBuilder> unlockBankBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+     * @return Whether the unlockBank field is set.
+     */
+    @java.lang.Override
+    public boolean hasUnlockBank() {
+      return typeCase_ == 53;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+     * @return The unlockBank.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UnlockBankInputPacket getUnlockBank() {
+      if (unlockBankBuilder_ == null) {
+        if (typeCase_ == 53) {
+          return (org.y1000.network.gen.UnlockBankInputPacket) type_;
+        }
+        return org.y1000.network.gen.UnlockBankInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 53) {
+          return unlockBankBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.UnlockBankInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+     */
+    public Builder setUnlockBank(org.y1000.network.gen.UnlockBankInputPacket value) {
+      if (unlockBankBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        unlockBankBuilder_.setMessage(value);
+      }
+      typeCase_ = 53;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+     */
+    public Builder setUnlockBank(
+        org.y1000.network.gen.UnlockBankInputPacket.Builder builderForValue) {
+      if (unlockBankBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        unlockBankBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 53;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+     */
+    public Builder mergeUnlockBank(org.y1000.network.gen.UnlockBankInputPacket value) {
+      if (unlockBankBuilder_ == null) {
+        if (typeCase_ == 53 &&
+            type_ != org.y1000.network.gen.UnlockBankInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.UnlockBankInputPacket.newBuilder((org.y1000.network.gen.UnlockBankInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 53) {
+          unlockBankBuilder_.mergeFrom(value);
+        } else {
+          unlockBankBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 53;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+     */
+    public Builder clearUnlockBank() {
+      if (unlockBankBuilder_ == null) {
+        if (typeCase_ == 53) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 53) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        unlockBankBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+     */
+    public org.y1000.network.gen.UnlockBankInputPacket.Builder getUnlockBankBuilder() {
+      return getUnlockBankFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.UnlockBankInputPacketOrBuilder getUnlockBankOrBuilder() {
+      if ((typeCase_ == 53) && (unlockBankBuilder_ != null)) {
+        return unlockBankBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 53) {
+          return (org.y1000.network.gen.UnlockBankInputPacket) type_;
+        }
+        return org.y1000.network.gen.UnlockBankInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.UnlockBankInputPacket unlockBank = 53;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.UnlockBankInputPacket, org.y1000.network.gen.UnlockBankInputPacket.Builder, org.y1000.network.gen.UnlockBankInputPacketOrBuilder> 
+        getUnlockBankFieldBuilder() {
+      if (unlockBankBuilder_ == null) {
+        if (!(typeCase_ == 53)) {
+          type_ = org.y1000.network.gen.UnlockBankInputPacket.getDefaultInstance();
+        }
+        unlockBankBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.UnlockBankInputPacket, org.y1000.network.gen.UnlockBankInputPacket.Builder, org.y1000.network.gen.UnlockBankInputPacketOrBuilder>(
+                (org.y1000.network.gen.UnlockBankInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 53;
+      onChanged();
+      return unlockBankBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.BankOperationInputPacket, org.y1000.network.gen.BankOperationInputPacket.Builder, org.y1000.network.gen.BankOperationInputPacketOrBuilder> bankOperationBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+     * @return Whether the bankOperation field is set.
+     */
+    @java.lang.Override
+    public boolean hasBankOperation() {
+      return typeCase_ == 54;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+     * @return The bankOperation.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.BankOperationInputPacket getBankOperation() {
+      if (bankOperationBuilder_ == null) {
+        if (typeCase_ == 54) {
+          return (org.y1000.network.gen.BankOperationInputPacket) type_;
+        }
+        return org.y1000.network.gen.BankOperationInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 54) {
+          return bankOperationBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.BankOperationInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+     */
+    public Builder setBankOperation(org.y1000.network.gen.BankOperationInputPacket value) {
+      if (bankOperationBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        bankOperationBuilder_.setMessage(value);
+      }
+      typeCase_ = 54;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+     */
+    public Builder setBankOperation(
+        org.y1000.network.gen.BankOperationInputPacket.Builder builderForValue) {
+      if (bankOperationBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        bankOperationBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 54;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+     */
+    public Builder mergeBankOperation(org.y1000.network.gen.BankOperationInputPacket value) {
+      if (bankOperationBuilder_ == null) {
+        if (typeCase_ == 54 &&
+            type_ != org.y1000.network.gen.BankOperationInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.BankOperationInputPacket.newBuilder((org.y1000.network.gen.BankOperationInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 54) {
+          bankOperationBuilder_.mergeFrom(value);
+        } else {
+          bankOperationBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 54;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+     */
+    public Builder clearBankOperation() {
+      if (bankOperationBuilder_ == null) {
+        if (typeCase_ == 54) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 54) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        bankOperationBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+     */
+    public org.y1000.network.gen.BankOperationInputPacket.Builder getBankOperationBuilder() {
+      return getBankOperationFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.BankOperationInputPacketOrBuilder getBankOperationOrBuilder() {
+      if ((typeCase_ == 54) && (bankOperationBuilder_ != null)) {
+        return bankOperationBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 54) {
+          return (org.y1000.network.gen.BankOperationInputPacket) type_;
+        }
+        return org.y1000.network.gen.BankOperationInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.BankOperationInputPacket bankOperation = 54;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.BankOperationInputPacket, org.y1000.network.gen.BankOperationInputPacket.Builder, org.y1000.network.gen.BankOperationInputPacketOrBuilder> 
+        getBankOperationFieldBuilder() {
+      if (bankOperationBuilder_ == null) {
+        if (!(typeCase_ == 54)) {
+          type_ = org.y1000.network.gen.BankOperationInputPacket.getDefaultInstance();
+        }
+        bankOperationBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.BankOperationInputPacket, org.y1000.network.gen.BankOperationInputPacket.Builder, org.y1000.network.gen.BankOperationInputPacketOrBuilder>(
+                (org.y1000.network.gen.BankOperationInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 54;
+      onChanged();
+      return bankOperationBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.RealmInputPacket, org.y1000.network.gen.RealmInputPacket.Builder, org.y1000.network.gen.RealmInputPacketOrBuilder> realmInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+     * @return Whether the realmInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasRealmInput() {
+      return typeCase_ == 56;
+    }
+    /**
+     * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+     * @return The realmInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.RealmInputPacket getRealmInput() {
+      if (realmInputBuilder_ == null) {
+        if (typeCase_ == 56) {
+          return (org.y1000.network.gen.RealmInputPacket) type_;
+        }
+        return org.y1000.network.gen.RealmInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 56) {
+          return realmInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.RealmInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+     */
+    public Builder setRealmInput(org.y1000.network.gen.RealmInputPacket value) {
+      if (realmInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        realmInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 56;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+     */
+    public Builder setRealmInput(
+        org.y1000.network.gen.RealmInputPacket.Builder builderForValue) {
+      if (realmInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        realmInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 56;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+     */
+    public Builder mergeRealmInput(org.y1000.network.gen.RealmInputPacket value) {
+      if (realmInputBuilder_ == null) {
+        if (typeCase_ == 56 &&
+            type_ != org.y1000.network.gen.RealmInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.RealmInputPacket.newBuilder((org.y1000.network.gen.RealmInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 56) {
+          realmInputBuilder_.mergeFrom(value);
+        } else {
+          realmInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 56;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+     */
+    public Builder clearRealmInput() {
+      if (realmInputBuilder_ == null) {
+        if (typeCase_ == 56) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 56) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        realmInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+     */
+    public org.y1000.network.gen.RealmInputPacket.Builder getRealmInputBuilder() {
+      return getRealmInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.RealmInputPacketOrBuilder getRealmInputOrBuilder() {
+      if ((typeCase_ == 56) && (realmInputBuilder_ != null)) {
+        return realmInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 56) {
+          return (org.y1000.network.gen.RealmInputPacket) type_;
+        }
+        return org.y1000.network.gen.RealmInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.RealmInputPacket realmInput = 56;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.RealmInputPacket, org.y1000.network.gen.RealmInputPacket.Builder, org.y1000.network.gen.RealmInputPacketOrBuilder> 
+        getRealmInputFieldBuilder() {
+      if (realmInputBuilder_ == null) {
+        if (!(typeCase_ == 56)) {
+          type_ = org.y1000.network.gen.RealmInputPacket.getDefaultInstance();
+        }
+        realmInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.RealmInputPacket, org.y1000.network.gen.RealmInputPacket.Builder, org.y1000.network.gen.RealmInputPacketOrBuilder>(
+                (org.y1000.network.gen.RealmInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 56;
+      onChanged();
+      return realmInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.CreateGuildInputPacket, org.y1000.network.gen.CreateGuildInputPacket.Builder, org.y1000.network.gen.CreateGuildInputPacketOrBuilder> createGuildInputBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+     * @return Whether the createGuildInput field is set.
+     */
+    @java.lang.Override
+    public boolean hasCreateGuildInput() {
+      return typeCase_ == 57;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+     * @return The createGuildInput.
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.CreateGuildInputPacket getCreateGuildInput() {
+      if (createGuildInputBuilder_ == null) {
+        if (typeCase_ == 57) {
+          return (org.y1000.network.gen.CreateGuildInputPacket) type_;
+        }
+        return org.y1000.network.gen.CreateGuildInputPacket.getDefaultInstance();
+      } else {
+        if (typeCase_ == 57) {
+          return createGuildInputBuilder_.getMessage();
+        }
+        return org.y1000.network.gen.CreateGuildInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+     */
+    public Builder setCreateGuildInput(org.y1000.network.gen.CreateGuildInputPacket value) {
+      if (createGuildInputBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        type_ = value;
+        onChanged();
+      } else {
+        createGuildInputBuilder_.setMessage(value);
+      }
+      typeCase_ = 57;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+     */
+    public Builder setCreateGuildInput(
+        org.y1000.network.gen.CreateGuildInputPacket.Builder builderForValue) {
+      if (createGuildInputBuilder_ == null) {
+        type_ = builderForValue.build();
+        onChanged();
+      } else {
+        createGuildInputBuilder_.setMessage(builderForValue.build());
+      }
+      typeCase_ = 57;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+     */
+    public Builder mergeCreateGuildInput(org.y1000.network.gen.CreateGuildInputPacket value) {
+      if (createGuildInputBuilder_ == null) {
+        if (typeCase_ == 57 &&
+            type_ != org.y1000.network.gen.CreateGuildInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.CreateGuildInputPacket.newBuilder((org.y1000.network.gen.CreateGuildInputPacket) type_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          type_ = value;
+        }
+        onChanged();
+      } else {
+        if (typeCase_ == 57) {
+          createGuildInputBuilder_.mergeFrom(value);
+        } else {
+          createGuildInputBuilder_.setMessage(value);
+        }
+      }
+      typeCase_ = 57;
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+     */
+    public Builder clearCreateGuildInput() {
+      if (createGuildInputBuilder_ == null) {
+        if (typeCase_ == 57) {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+        }
+      } else {
+        if (typeCase_ == 57) {
+          typeCase_ = 0;
+          type_ = null;
+        }
+        createGuildInputBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+     */
+    public org.y1000.network.gen.CreateGuildInputPacket.Builder getCreateGuildInputBuilder() {
+      return getCreateGuildInputFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+     */
+    @java.lang.Override
+    public org.y1000.network.gen.CreateGuildInputPacketOrBuilder getCreateGuildInputOrBuilder() {
+      if ((typeCase_ == 57) && (createGuildInputBuilder_ != null)) {
+        return createGuildInputBuilder_.getMessageOrBuilder();
+      } else {
+        if (typeCase_ == 57) {
+          return (org.y1000.network.gen.CreateGuildInputPacket) type_;
+        }
+        return org.y1000.network.gen.CreateGuildInputPacket.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.org.y1000.network.gen.CreateGuildInputPacket createGuildInput = 57;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.CreateGuildInputPacket, org.y1000.network.gen.CreateGuildInputPacket.Builder, org.y1000.network.gen.CreateGuildInputPacketOrBuilder> 
+        getCreateGuildInputFieldBuilder() {
+      if (createGuildInputBuilder_ == null) {
+        if (!(typeCase_ == 57)) {
+          type_ = org.y1000.network.gen.CreateGuildInputPacket.getDefaultInstance();
+        }
+        createGuildInputBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.CreateGuildInputPacket, org.y1000.network.gen.CreateGuildInputPacket.Builder, org.y1000.network.gen.CreateGuildInputPacketOrBuilder>(
+                (org.y1000.network.gen.CreateGuildInputPacket) type_,
+                getParentForChildren(),
+                isClean());
+        type_ = null;
+      }
+      typeCase_ = 57;
+      onChanged();
+      return createGuildInputBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        org.y1000.network.gen.ApplyGuildKungFuInputPacket, org.y1000.network.gen.ApplyGuildKungFuInputPacket.Builder, org.y1000.network.gen.ApplyGuildKungFuInputPacketOrBuilder> applyGuildKungFuBuilder_;
+    /**
+     * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
+     * @return Whether the applyGuildKungFu field is set.
+     */
+    @java.lang.Override
+    public boolean hasApplyGuildKungFu() {
       return typeCase_ == 27;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
-     * @return The createGuildKungFu.
+     * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
+     * @return The applyGuildKungFu.
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientCreateGuildKungFuPacket getCreateGuildKungFu() {
-      if (createGuildKungFuBuilder_ == null) {
+    public org.y1000.network.gen.ApplyGuildKungFuInputPacket getApplyGuildKungFu() {
+      if (applyGuildKungFuBuilder_ == null) {
         if (typeCase_ == 27) {
-          return (org.y1000.network.gen.ClientCreateGuildKungFuPacket) type_;
+          return (org.y1000.network.gen.ApplyGuildKungFuInputPacket) type_;
         }
-        return org.y1000.network.gen.ClientCreateGuildKungFuPacket.getDefaultInstance();
+        return org.y1000.network.gen.ApplyGuildKungFuInputPacket.getDefaultInstance();
       } else {
         if (typeCase_ == 27) {
-          return createGuildKungFuBuilder_.getMessage();
+          return applyGuildKungFuBuilder_.getMessage();
         }
-        return org.y1000.network.gen.ClientCreateGuildKungFuPacket.getDefaultInstance();
+        return org.y1000.network.gen.ApplyGuildKungFuInputPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
+     * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
      */
-    public Builder setCreateGuildKungFu(org.y1000.network.gen.ClientCreateGuildKungFuPacket value) {
-      if (createGuildKungFuBuilder_ == null) {
+    public Builder setApplyGuildKungFu(org.y1000.network.gen.ApplyGuildKungFuInputPacket value) {
+      if (applyGuildKungFuBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
         type_ = value;
         onChanged();
       } else {
-        createGuildKungFuBuilder_.setMessage(value);
+        applyGuildKungFuBuilder_.setMessage(value);
       }
       typeCase_ = 27;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
+     * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
      */
-    public Builder setCreateGuildKungFu(
-        org.y1000.network.gen.ClientCreateGuildKungFuPacket.Builder builderForValue) {
-      if (createGuildKungFuBuilder_ == null) {
+    public Builder setApplyGuildKungFu(
+        org.y1000.network.gen.ApplyGuildKungFuInputPacket.Builder builderForValue) {
+      if (applyGuildKungFuBuilder_ == null) {
         type_ = builderForValue.build();
         onChanged();
       } else {
-        createGuildKungFuBuilder_.setMessage(builderForValue.build());
+        applyGuildKungFuBuilder_.setMessage(builderForValue.build());
       }
       typeCase_ = 27;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
+     * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
      */
-    public Builder mergeCreateGuildKungFu(org.y1000.network.gen.ClientCreateGuildKungFuPacket value) {
-      if (createGuildKungFuBuilder_ == null) {
+    public Builder mergeApplyGuildKungFu(org.y1000.network.gen.ApplyGuildKungFuInputPacket value) {
+      if (applyGuildKungFuBuilder_ == null) {
         if (typeCase_ == 27 &&
-            type_ != org.y1000.network.gen.ClientCreateGuildKungFuPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientCreateGuildKungFuPacket.newBuilder((org.y1000.network.gen.ClientCreateGuildKungFuPacket) type_)
+            type_ != org.y1000.network.gen.ApplyGuildKungFuInputPacket.getDefaultInstance()) {
+          type_ = org.y1000.network.gen.ApplyGuildKungFuInputPacket.newBuilder((org.y1000.network.gen.ApplyGuildKungFuInputPacket) type_)
               .mergeFrom(value).buildPartial();
         } else {
           type_ = value;
@@ -6161,19 +7218,19 @@ private static final long serialVersionUID = 0L;
         onChanged();
       } else {
         if (typeCase_ == 27) {
-          createGuildKungFuBuilder_.mergeFrom(value);
+          applyGuildKungFuBuilder_.mergeFrom(value);
         } else {
-          createGuildKungFuBuilder_.setMessage(value);
+          applyGuildKungFuBuilder_.setMessage(value);
         }
       }
       typeCase_ = 27;
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
+     * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
      */
-    public Builder clearCreateGuildKungFu() {
-      if (createGuildKungFuBuilder_ == null) {
+    public Builder clearApplyGuildKungFu() {
+      if (applyGuildKungFuBuilder_ == null) {
         if (typeCase_ == 27) {
           typeCase_ = 0;
           type_ = null;
@@ -6184,476 +7241,50 @@ private static final long serialVersionUID = 0L;
           typeCase_ = 0;
           type_ = null;
         }
-        createGuildKungFuBuilder_.clear();
+        applyGuildKungFuBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
+     * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
      */
-    public org.y1000.network.gen.ClientCreateGuildKungFuPacket.Builder getCreateGuildKungFuBuilder() {
-      return getCreateGuildKungFuFieldBuilder().getBuilder();
+    public org.y1000.network.gen.ApplyGuildKungFuInputPacket.Builder getApplyGuildKungFuBuilder() {
+      return getApplyGuildKungFuFieldBuilder().getBuilder();
     }
     /**
-     * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
+     * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
      */
     @java.lang.Override
-    public org.y1000.network.gen.ClientCreateGuildKungFuPacketOrBuilder getCreateGuildKungFuOrBuilder() {
-      if ((typeCase_ == 27) && (createGuildKungFuBuilder_ != null)) {
-        return createGuildKungFuBuilder_.getMessageOrBuilder();
+    public org.y1000.network.gen.ApplyGuildKungFuInputPacketOrBuilder getApplyGuildKungFuOrBuilder() {
+      if ((typeCase_ == 27) && (applyGuildKungFuBuilder_ != null)) {
+        return applyGuildKungFuBuilder_.getMessageOrBuilder();
       } else {
         if (typeCase_ == 27) {
-          return (org.y1000.network.gen.ClientCreateGuildKungFuPacket) type_;
+          return (org.y1000.network.gen.ApplyGuildKungFuInputPacket) type_;
         }
-        return org.y1000.network.gen.ClientCreateGuildKungFuPacket.getDefaultInstance();
+        return org.y1000.network.gen.ApplyGuildKungFuInputPacket.getDefaultInstance();
       }
     }
     /**
-     * <code>.org.y1000.network.gen.ClientCreateGuildKungFuPacket createGuildKungFu = 27;</code>
+     * <code>.org.y1000.network.gen.ApplyGuildKungFuInputPacket applyGuildKungFu = 27;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientCreateGuildKungFuPacket, org.y1000.network.gen.ClientCreateGuildKungFuPacket.Builder, org.y1000.network.gen.ClientCreateGuildKungFuPacketOrBuilder> 
-        getCreateGuildKungFuFieldBuilder() {
-      if (createGuildKungFuBuilder_ == null) {
+        org.y1000.network.gen.ApplyGuildKungFuInputPacket, org.y1000.network.gen.ApplyGuildKungFuInputPacket.Builder, org.y1000.network.gen.ApplyGuildKungFuInputPacketOrBuilder> 
+        getApplyGuildKungFuFieldBuilder() {
+      if (applyGuildKungFuBuilder_ == null) {
         if (!(typeCase_ == 27)) {
-          type_ = org.y1000.network.gen.ClientCreateGuildKungFuPacket.getDefaultInstance();
+          type_ = org.y1000.network.gen.ApplyGuildKungFuInputPacket.getDefaultInstance();
         }
-        createGuildKungFuBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientCreateGuildKungFuPacket, org.y1000.network.gen.ClientCreateGuildKungFuPacket.Builder, org.y1000.network.gen.ClientCreateGuildKungFuPacketOrBuilder>(
-                (org.y1000.network.gen.ClientCreateGuildKungFuPacket) type_,
+        applyGuildKungFuBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            org.y1000.network.gen.ApplyGuildKungFuInputPacket, org.y1000.network.gen.ApplyGuildKungFuInputPacket.Builder, org.y1000.network.gen.ApplyGuildKungFuInputPacketOrBuilder>(
+                (org.y1000.network.gen.ApplyGuildKungFuInputPacket) type_,
                 getParentForChildren(),
                 isClean());
         type_ = null;
       }
       typeCase_ = 27;
       onChanged();
-      return createGuildKungFuBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientManageGuildPacket, org.y1000.network.gen.ClientManageGuildPacket.Builder, org.y1000.network.gen.ClientManageGuildPacketOrBuilder> manageGuildBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     * @return Whether the manageGuild field is set.
-     */
-    @java.lang.Override
-    public boolean hasManageGuild() {
-      return typeCase_ == 28;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     * @return The manageGuild.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientManageGuildPacket getManageGuild() {
-      if (manageGuildBuilder_ == null) {
-        if (typeCase_ == 28) {
-          return (org.y1000.network.gen.ClientManageGuildPacket) type_;
-        }
-        return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 28) {
-          return manageGuildBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    public Builder setManageGuild(org.y1000.network.gen.ClientManageGuildPacket value) {
-      if (manageGuildBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        manageGuildBuilder_.setMessage(value);
-      }
-      typeCase_ = 28;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    public Builder setManageGuild(
-        org.y1000.network.gen.ClientManageGuildPacket.Builder builderForValue) {
-      if (manageGuildBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        manageGuildBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 28;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    public Builder mergeManageGuild(org.y1000.network.gen.ClientManageGuildPacket value) {
-      if (manageGuildBuilder_ == null) {
-        if (typeCase_ == 28 &&
-            type_ != org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientManageGuildPacket.newBuilder((org.y1000.network.gen.ClientManageGuildPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 28) {
-          manageGuildBuilder_.mergeFrom(value);
-        } else {
-          manageGuildBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 28;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    public Builder clearManageGuild() {
-      if (manageGuildBuilder_ == null) {
-        if (typeCase_ == 28) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 28) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        manageGuildBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    public org.y1000.network.gen.ClientManageGuildPacket.Builder getManageGuildBuilder() {
-      return getManageGuildFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientManageGuildPacketOrBuilder getManageGuildOrBuilder() {
-      if ((typeCase_ == 28) && (manageGuildBuilder_ != null)) {
-        return manageGuildBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 28) {
-          return (org.y1000.network.gen.ClientManageGuildPacket) type_;
-        }
-        return org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientManageGuildPacket manageGuild = 28;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientManageGuildPacket, org.y1000.network.gen.ClientManageGuildPacket.Builder, org.y1000.network.gen.ClientManageGuildPacketOrBuilder> 
-        getManageGuildFieldBuilder() {
-      if (manageGuildBuilder_ == null) {
-        if (!(typeCase_ == 28)) {
-          type_ = org.y1000.network.gen.ClientManageGuildPacket.getDefaultInstance();
-        }
-        manageGuildBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientManageGuildPacket, org.y1000.network.gen.ClientManageGuildPacket.Builder, org.y1000.network.gen.ClientManageGuildPacketOrBuilder>(
-                (org.y1000.network.gen.ClientManageGuildPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 28;
-      onChanged();
-      return manageGuildBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSubmitQuestPacket, org.y1000.network.gen.ClientSubmitQuestPacket.Builder, org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder> submitQuestBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-     * @return Whether the submitQuest field is set.
-     */
-    @java.lang.Override
-    public boolean hasSubmitQuest() {
-      return typeCase_ == 29;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-     * @return The submitQuest.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientSubmitQuestPacket getSubmitQuest() {
-      if (submitQuestBuilder_ == null) {
-        if (typeCase_ == 29) {
-          return (org.y1000.network.gen.ClientSubmitQuestPacket) type_;
-        }
-        return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 29) {
-          return submitQuestBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-     */
-    public Builder setSubmitQuest(org.y1000.network.gen.ClientSubmitQuestPacket value) {
-      if (submitQuestBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        submitQuestBuilder_.setMessage(value);
-      }
-      typeCase_ = 29;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-     */
-    public Builder setSubmitQuest(
-        org.y1000.network.gen.ClientSubmitQuestPacket.Builder builderForValue) {
-      if (submitQuestBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        submitQuestBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 29;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-     */
-    public Builder mergeSubmitQuest(org.y1000.network.gen.ClientSubmitQuestPacket value) {
-      if (submitQuestBuilder_ == null) {
-        if (typeCase_ == 29 &&
-            type_ != org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientSubmitQuestPacket.newBuilder((org.y1000.network.gen.ClientSubmitQuestPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 29) {
-          submitQuestBuilder_.mergeFrom(value);
-        } else {
-          submitQuestBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 29;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-     */
-    public Builder clearSubmitQuest() {
-      if (submitQuestBuilder_ == null) {
-        if (typeCase_ == 29) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 29) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        submitQuestBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-     */
-    public org.y1000.network.gen.ClientSubmitQuestPacket.Builder getSubmitQuestBuilder() {
-      return getSubmitQuestFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder getSubmitQuestOrBuilder() {
-      if ((typeCase_ == 29) && (submitQuestBuilder_ != null)) {
-        return submitQuestBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 29) {
-          return (org.y1000.network.gen.ClientSubmitQuestPacket) type_;
-        }
-        return org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientSubmitQuestPacket submitQuest = 29;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientSubmitQuestPacket, org.y1000.network.gen.ClientSubmitQuestPacket.Builder, org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder> 
-        getSubmitQuestFieldBuilder() {
-      if (submitQuestBuilder_ == null) {
-        if (!(typeCase_ == 29)) {
-          type_ = org.y1000.network.gen.ClientSubmitQuestPacket.getDefaultInstance();
-        }
-        submitQuestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientSubmitQuestPacket, org.y1000.network.gen.ClientSubmitQuestPacket.Builder, org.y1000.network.gen.ClientSubmitQuestPacketOrBuilder>(
-                (org.y1000.network.gen.ClientSubmitQuestPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 29;
-      onChanged();
-      return submitQuestBuilder_;
-    }
-
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientClickInteractabilityPacket, org.y1000.network.gen.ClientClickInteractabilityPacket.Builder, org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder> interactBuilder_;
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     * @return Whether the interact field is set.
-     */
-    @java.lang.Override
-    public boolean hasInteract() {
-      return typeCase_ == 30;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     * @return The interact.
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientClickInteractabilityPacket getInteract() {
-      if (interactBuilder_ == null) {
-        if (typeCase_ == 30) {
-          return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
-        }
-        return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-      } else {
-        if (typeCase_ == 30) {
-          return interactBuilder_.getMessage();
-        }
-        return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    public Builder setInteract(org.y1000.network.gen.ClientClickInteractabilityPacket value) {
-      if (interactBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        type_ = value;
-        onChanged();
-      } else {
-        interactBuilder_.setMessage(value);
-      }
-      typeCase_ = 30;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    public Builder setInteract(
-        org.y1000.network.gen.ClientClickInteractabilityPacket.Builder builderForValue) {
-      if (interactBuilder_ == null) {
-        type_ = builderForValue.build();
-        onChanged();
-      } else {
-        interactBuilder_.setMessage(builderForValue.build());
-      }
-      typeCase_ = 30;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    public Builder mergeInteract(org.y1000.network.gen.ClientClickInteractabilityPacket value) {
-      if (interactBuilder_ == null) {
-        if (typeCase_ == 30 &&
-            type_ != org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance()) {
-          type_ = org.y1000.network.gen.ClientClickInteractabilityPacket.newBuilder((org.y1000.network.gen.ClientClickInteractabilityPacket) type_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          type_ = value;
-        }
-        onChanged();
-      } else {
-        if (typeCase_ == 30) {
-          interactBuilder_.mergeFrom(value);
-        } else {
-          interactBuilder_.setMessage(value);
-        }
-      }
-      typeCase_ = 30;
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    public Builder clearInteract() {
-      if (interactBuilder_ == null) {
-        if (typeCase_ == 30) {
-          typeCase_ = 0;
-          type_ = null;
-          onChanged();
-        }
-      } else {
-        if (typeCase_ == 30) {
-          typeCase_ = 0;
-          type_ = null;
-        }
-        interactBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    public org.y1000.network.gen.ClientClickInteractabilityPacket.Builder getInteractBuilder() {
-      return getInteractFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    @java.lang.Override
-    public org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder getInteractOrBuilder() {
-      if ((typeCase_ == 30) && (interactBuilder_ != null)) {
-        return interactBuilder_.getMessageOrBuilder();
-      } else {
-        if (typeCase_ == 30) {
-          return (org.y1000.network.gen.ClientClickInteractabilityPacket) type_;
-        }
-        return org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-      }
-    }
-    /**
-     * <code>.org.y1000.network.gen.ClientClickInteractabilityPacket interact = 30;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        org.y1000.network.gen.ClientClickInteractabilityPacket, org.y1000.network.gen.ClientClickInteractabilityPacket.Builder, org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder> 
-        getInteractFieldBuilder() {
-      if (interactBuilder_ == null) {
-        if (!(typeCase_ == 30)) {
-          type_ = org.y1000.network.gen.ClientClickInteractabilityPacket.getDefaultInstance();
-        }
-        interactBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            org.y1000.network.gen.ClientClickInteractabilityPacket, org.y1000.network.gen.ClientClickInteractabilityPacket.Builder, org.y1000.network.gen.ClientClickInteractabilityPacketOrBuilder>(
-                (org.y1000.network.gen.ClientClickInteractabilityPacket) type_,
-                getParentForChildren(),
-                isClean());
-        type_ = null;
-      }
-      typeCase_ = 30;
-      onChanged();
-      return interactBuilder_;
+      return applyGuildKungFuBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

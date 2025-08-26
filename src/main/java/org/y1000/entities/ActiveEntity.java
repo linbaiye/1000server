@@ -1,20 +1,23 @@
 package org.y1000.entities;
 
-import org.y1000.event.EntityEvent;
-import org.y1000.message.AbstractEntityInterpolation;
-import org.y1000.event.EntityEventListener;
 import org.y1000.util.Coordinate;
+
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
 
 
 public interface ActiveEntity extends Entity {
 
     void update(int delta);
 
-    void emitEvent(EntityEvent event);
+    <AB> Optional<AB> findAbility(Class<AB> type);
 
-    void registerEventListener(EntityEventListener listener);
+    default Set<Entity> getEntitiesAt(Set<Coordinate> coordinates) {
+        return Collections.emptySet();
+    }
 
-    void deregisterEventListener(EntityEventListener listener);
-
-    void clearListeners();
+    default Optional<String> clickText() {
+        return Optional.empty();
+    }
 }

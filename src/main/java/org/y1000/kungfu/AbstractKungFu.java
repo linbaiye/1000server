@@ -1,17 +1,23 @@
 package org.y1000.kungfu;
 
-import org.y1000.exp.Experience;
-import org.y1000.exp.ExperienceUtil;
+import org.y1000.entities.players.Player;
+import org.y1000.entities.players.event.PlayerGainExpMessage;
+import org.y1000.entities.players.event.PlayerKungFuFullEvent;
+import org.y1000.entities.players.event.PlayerTextMessage;
+import org.y1000.entities.players.Experience;
+import org.y1000.entities.players.ExperienceUtil;
 
 public abstract class AbstractKungFu implements KungFu {
 
     private final String name;
 
     private Experience experience;
+    private final int icon;
 
-    protected AbstractKungFu(String name, int exp) {
+    protected AbstractKungFu(String name, int exp, int icon) {
         this.name = name;
         experience = new Experience(exp);
+        this.icon = icon;
     }
 
     public int level() {
@@ -26,7 +32,10 @@ public abstract class AbstractKungFu implements KungFu {
     @Override
     public boolean gainPermittedExp(int expValue) {
         var old = experience.level();
-        experience = experience.gainPermitExp(expValue);
+        var exp = experience.computePermitExp(expValue);
+        //experience = experience.gainExp(exp);
+        //experience = experience.gainExp(exp * 30000);
+        experience = experience.gainExp(exp * 100);
         return old != experience.level();
     }
 
@@ -38,11 +47,11 @@ public abstract class AbstractKungFu implements KungFu {
     private int getPermitExp(int value) {
         /*
         function  GetPermitExp (aLevel, addvalue: integer): integer;
-var n : integer;
+var number : integer;
 begin
-   n := GetLevelMaxExp (aLevel);
-   if n > addvalue then n := addvalue;
-   Result := n;
+   number := GetLevelMaxExp (aLevel);
+   if number > addvalue then number := addvalue;
+   Result := number;
 end;
          */
         int n = ExperienceUtil.GetLevelMaxExp(level());
@@ -53,9 +62,30 @@ end;
         return name;
     }
 
-    protected StringBuilder getDescriptionBuilder() {
-        var str = String.format("修炼等级: %d.%02d", level() / 100, level() % 100);
-        return new StringBuilder(str).append("\n");
+    @Override
+    public int icon() {
+        return icon;
     }
 
+    protected StringBuilder getDescriptionBuilder() {
+        var str = String.format("修炼等级: %d.%02d", level() / 100, level() % 100);
+        return new StringBuilder(str);
+    }
+
+    @Override
+    public void gainExp(Player player, int exp) {
+        if (exp <= 0 || isLevelFull()) {
+            return;
+        }
+        if (player.armLife().percent() < 50) {
+            player.sendEvent(PlayerTextMessage.bottom(player, "手部活力不足，无法获得经验。"));
+            return;
+        }
+        if (!gainPermittedExp(exp)) {
+            return;
+        }
+        player.sendEvent(PlayerGainExpMessage.of(player, this));
+        if (isLevelFull())
+            player.sendEvent(new PlayerKungFuFullEvent(player, this));
+    }
 }

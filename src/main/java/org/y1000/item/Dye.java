@@ -1,6 +1,7 @@
 package org.y1000.item;
 
 
+import org.y1000.entities.players.equipment.Dyable;
 
 public final class Dye extends AbstractItem {
     private final int color;

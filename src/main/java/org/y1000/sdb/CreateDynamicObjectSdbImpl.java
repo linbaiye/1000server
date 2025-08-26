@@ -31,7 +31,7 @@ public final class CreateDynamicObjectSdbImpl extends AbstractCSVSdbReader imple
 
     @Override
     public Set<String> getNumbers() {
-        return names();
+        return uniqueIds();
     }
 
     @Override
@@ -41,7 +41,7 @@ public final class CreateDynamicObjectSdbImpl extends AbstractCSVSdbReader imple
 
     @Override
     public Optional<String> getFirstNo(String name) {
-        Set<String> numbers = names();
+        Set<String> numbers = uniqueIds();
         for (String nu : numbers) {
             if (name.equals(getName(nu))) {
                 return Optional.of(nu);
@@ -50,10 +50,25 @@ public final class CreateDynamicObjectSdbImpl extends AbstractCSVSdbReader imple
         return Optional.empty();
     }
 
+    @Override
+    public Optional<String> getCallNpc(String no) {
+        return getOptional(no, "CallNpc");
+    }
+
+    @Override
+    public Integer getOffsetX(String no) {
+        return getInt(no, "OffsetX");
+    }
+
+    @Override
+    public Integer getOffsetY(String no) {
+        return getInt(no, "OffsetY");
+    }
+
     public static void main(String[] args) {
         CreateDynamicObjectSdbImpl sdb = new CreateDynamicObjectSdbImpl(49);
         Set<String> names = sdb.columnNames();
-        Set<String> items = sdb.names();
+        Set<String> items = sdb.uniqueIds();
         for (String i: items) {
 
             System.out.println("----------------------------");

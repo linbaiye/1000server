@@ -1,23 +1,66 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.CreatureState;
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.CreatureState;
+import org.y1000.entities.players.equipment.Equipment;
+import org.y1000.kungfu.FootKungFu;
+import org.y1000.kungfu.attack.AttackKungFu;
+import org.y1000.kungfu.breath.BreathKungFu;
+import org.y1000.input.MoveInput;
+import org.y1000.input.TurnInput;
 
-public interface PlayerState extends CreatureState<PlayerImpl> {
+interface PlayerState extends CreatureState {
 
-    default void afterHurt(PlayerImpl player) {
+    PlayerStateEnum playerStateEnum();
+
+    default void tryMove(MoveInput input) {
 
     }
 
-    default boolean canUseFootKungFu() {
-        return true;
+    default void sayHello() {
+
     }
 
-    default boolean canSitDown() {
+    default void sitOrStandUp() {
+
+    }
+
+    default void switchStand() {
+
+    }
+
+    default void tryToggleFootKungFu(FootKungFu footKungFu) {
+
+    }
+
+    default void tryToggleBreathKungFu(BreathKungFu breathKungFu) {
+
+    }
+
+    default void tryToggleAttackKungFu(AttackKungFu attackKungFu) {
+
+    }
+
+
+    default void turn(TurnInput input) {
+
+    }
+
+    default void equip(int slot, Equipment equipment) {
+
+    }
+
+    default void attack(ActiveEntity entity) {
+
+    }
+
+    default void handleAfterHurt() {
+
+    }
+
+    default boolean canBeDragged() {
         return false;
     }
 
-    default boolean canStandUp() {
-        return false;
-    }
 
 }

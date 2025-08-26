@@ -1,17 +1,11 @@
 package org.y1000.entities.players;
 
-import lombok.Getter;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.npc.AI.AiPathUtil;
-import org.y1000.entities.creatures.State;
-import org.y1000.event.EntityEvent;
-import org.y1000.event.EntityEventListener;
-import org.y1000.message.BreakRopeEvent;
-import org.y1000.message.PlayerDraggedEvent;
-import org.y1000.message.serverevent.PlayerLeftEvent;
+import org.y1000.entities.players.event.PlayerFollowRopeEvent;
+import org.y1000.entities.players.event.PlayerMovedEvent;
 import org.y1000.util.Coordinate;
 
-public final class Rope implements EntityEventListener  {
+public final class Rope {
 
     /*
        TGotoXyRData = record ract, rdir, rlen : word; end;
@@ -65,85 +59,77 @@ end;
      */
 
     private final Player dragged;
-    private final Player moving;
+    private final Player dragging;
     private int mills;
     private Coordinate from;
+    private int stepCounterMillis;
 
-    @Getter
-    private boolean broken;
+    private boolean moving;
 
-    public Rope(Player dragged, Player moving) {
-        Validate.notNull(dragged);
-        Validate.notNull(moving);
+    public Rope(Player dragging, Player dragged) {
+        Validate.isTrue(!dragging.equals(dragged));
+        this.dragging = dragging;
         this.dragged = dragged;
-        this.moving = moving;
         this.mills = 5000;
         from = Coordinate.Empty;
-        broken = false;
-        dragged.registerEventListener(this);
-        moving.registerEventListener(this);
+        stepCounterMillis = 0;
+        moving = false;
     }
 
     private int distance() {
-        return dragged.coordinate().directDistance(moving.coordinate());
+        return dragged.coordinate().directDistance(dragging.coordinate());
     }
 
-    public void update(long delta) {
+    public void update(int delta) {
         if (isBroken())
             return;
-        mills -= (int)delta;
-        follow();
-        if (mills <= 0)
-            breakRope();
+        follow(delta);
+        if (mills >= delta)
+            mills -= delta;
     }
 
-    private void breakRope() {
-        if (!broken) {
-            broken = true;
-            dragged.emitEvent(new BreakRopeEvent(dragged));
-            dragged.deregisterEventListener(this);
-            moving.deregisterEventListener(this);
-        }
+    public boolean isBroken() {
+        return !dragged.canBeDragged() ||
+                dragging.isLeftRealm() ||
+                dragging.getRealm().id() != dragged.getRealm().id() ||
+                mills <= 0;
     }
 
-    private void follow() {
-        var dist = distance();
-        if (isBroken() || dist < 1 || dragged.stateEnum() != State.DIE) {
+    public boolean isDragging(Player dragging, Player dragged) {
+        return this.dragging.equals(dragging) && this.dragged.equals(dragged);
+    }
+
+    private boolean coordinateMovable(Coordinate coordinate) {
+        return dragged.realmMap().tileMovable(coordinate) && !coordinate.equals(from);
+    }
+
+    private void follow(int delta) {
+        stepCounterMillis -= delta;
+        if (stepCounterMillis > 0)
             return;
-        }
-        var dir = dragged.coordinate().computeDirection(moving.coordinate());
-        var nextPos = dragged.coordinate().moveBy(dir);
-        if (nextPos.equals(moving.coordinate())) {
-            if (dragged.direction() != dir) {
-                dragged.changeDirection(dir);
-                dragged.emitEvent(new PlayerDraggedEvent(dragged));
-            }
-            return;
-        }
-        var direction = AiPathUtil.computeNextMoveDirection(dragged, moving.coordinate(), from);
-        if (direction == null) {
-            return;
-        }
-        if (dragged.direction() != direction) {
-            dragged.changeDirection(dir);
-        } else {
-            dragged.changeCoordinate(dragged.coordinate().moveBy(direction));
+        if (moving) {
+            moving = false;
             from = dragged.coordinate();
+            dragged.changeCoordinate(dragged.coordinate().moveBy(dragged.direction()));
+            dragged.sendEvent(new PlayerMovedEvent(dragged));
+            if (dragged.isLeftRealm()) {
+                return;
+            }
         }
-        dragged.emitEvent(new PlayerDraggedEvent(dragged));
-    }
-
-    public void breakIfDraggedAgain(Player dragged) {
-        if (this.dragged.equals(dragged)) {
-            breakRope();
-        }
-    }
-
-    @Override
-    public void onEvent(EntityEvent entityEvent) {
-        if (entityEvent instanceof PlayerLeftEvent || moving.stateEnum() == State.DIE ||
-                dragged.stateEnum() != State.DIE) {
-            breakRope();
+        stepCounterMillis = 200;
+        var dir = dragged.coordinate().bestDirectionTo(dragging.coordinate(), this::coordinateMovable);
+        var dist = distance();
+        if (dist < 2) {
+            if (dir != null && dragged.direction() != dir) {
+                dragged.changeDirection(dir);
+                dragged.sendEvent(PlayerFollowRopeEvent.turn(dragged));
+            }
+        } else {
+            if (dir != null) {
+                dragged.changeDirection(dir);
+                dragged.sendEvent(PlayerFollowRopeEvent.follow(dragged));
+                moving = true;
+            }
         }
     }
 }

@@ -2,13 +2,7 @@ package org.y1000;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.mockito.Mockito;
-import org.y1000.entities.Direction;
-import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.monster.PassiveMonster;
-import org.y1000.entities.creatures.monster.TestingMonsterAttributeProvider;
-import org.y1000.entities.creatures.npc.AI.MonsterWanderingAI;
-import org.y1000.entities.creatures.npc.NpcFactory;
-import org.y1000.entities.creatures.npc.NpcFactoryImpl;
+import org.y1000.entities.npc.NpcFactoryImpl;
 import org.y1000.entities.objects.DynamicObjectFactory;
 import org.y1000.entities.objects.DynamicObjectFactoryImpl;
 import org.y1000.entities.players.*;
@@ -29,9 +23,6 @@ import org.y1000.repository.KungFuBookRepositoryImpl;
 import org.y1000.sdb.*;
 import org.y1000.util.Coordinate;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -40,14 +31,13 @@ public abstract class AbstractUnitTestFixture {
     protected final KungFuBookFactory kungFuBookFactory = createKungFuBookFactory();
     protected final KungFuFactory kungFuFactory = createKungFuFactory();
 
+    protected final TestNpcFactory npcFactory = TestNpcFactory.Instance;
+
     private int id;
 
     protected RealmMap mockRealmMap() {
         RealmMap mockedMap= Mockito.mock(RealmMap.class);
         when(mockedMap.mapFile()).thenReturn("map");
-        when(mockedMap.tileFile()).thenReturn("til");
-        when(mockedMap.objectFile()).thenReturn("obj");
-        when(mockedMap.roofFile()).thenReturn("rof");
         return mockedMap;
     }
 
@@ -75,8 +65,8 @@ public abstract class AbstractUnitTestFixture {
         return new KungFuBookRepositoryImpl(Mockito.mock(EntityManagerFactory.class));
     }
     protected NpcFactoryImpl createNpcFactory() {
-        return new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NpcSdbImpl.Instance,
-                MagicParamSdb.INSTANCE, new MerchantItemSdbRepositoryImpl(ItemSdbImpl.INSTANCE), RealmSpecificSdbRepositoryImpl.INSTANCE);
+        return new NpcFactoryImpl(ActionSdb.INSTANCE, MonstersSdbImpl.INSTANCE, KungFuSdb.INSTANCE, NonMonsterNpcSdbImpl.Instance,
+                MagicParamSdb.INSTANCE, ItemSdbImpl.INSTANCE, Mockito.mock(ItemFactory.class), QuestSdbImpl.Instance, Mockito.mock(BankRepository.class));
     }
 
     protected KungFuBookFactory createKungFuBookFactory() {
@@ -89,7 +79,7 @@ public abstract class AbstractUnitTestFixture {
 
     protected Realm mockRealm(RealmMap map) {
         Realm mockedRealm = Mockito.mock(Realm.class);
-        when(mockedRealm.name()).thenReturn("realm");
+        when(mockedRealm.title()).thenReturn("realm");
         when(mockedRealm.bgm()).thenReturn("bgm");
         when(mockedRealm.map()).thenReturn(map);
         when(mockedRealm.id()).thenReturn(1);
@@ -103,31 +93,7 @@ public abstract class AbstractUnitTestFixture {
     }
 
 
-    protected static final Map<State, Integer> MONSTER_STATE_MILLIS = new HashMap<>() {
-        {
-            put(State.IDLE, 1000);
-            put(State.WALK, 770);
-            put(State.HURT, 540);
-            put(State.ATTACK, 700);
-            put(State.DIE, 700);
-            put(State.FROZEN, 900);
-        }
-    };
 
-
-    protected PassiveMonster.PassiveMonsterBuilder monsterBuilder() {
-        return PassiveMonster.builder()
-                .id(nextId())
-                .coordinate(Coordinate.xy(1, 1))
-                .direction(Direction.UP)
-                .name("test")
-                .realmMap(Mockito.mock(RealmMap.class))
-                .skill(null)
-                .attributeProvider(new TestingMonsterAttributeProvider())
-                .ai(new MonsterWanderingAI(Coordinate.xy(1, 1)))
-                .stateMillis(MONSTER_STATE_MILLIS)
-                ;
-    }
 
     protected PlayerImpl.PlayerImplBuilder playerBuilder() {
         KungFuBook kungFuBook = kungFuBookFactory.create();
@@ -136,7 +102,7 @@ public abstract class AbstractUnitTestFixture {
                 .coordinate(new Coordinate(1, 1))
                 .name("test")
                 .kungFuBook(kungFuBook)
-                .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA))
+                .attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.Fist))
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
                 .yinYang(new YinYang())
                 .life(PlayerLife.create())

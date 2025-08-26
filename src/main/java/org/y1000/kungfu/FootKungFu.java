@@ -3,14 +3,10 @@ package org.y1000.kungfu;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
+import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
-import org.y1000.entities.players.event.PlayerGainExpEvent;
-import org.y1000.entities.players.event.PlayerKungFuFullEvent;
-import org.y1000.exp.ExperienceUtil;
-import org.y1000.event.EntityEvent;
-import org.y1000.util.UnaryAction;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
+import org.y1000.entities.players.ExperienceUtil;
 
 @Getter
 public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
@@ -26,8 +22,8 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
     public FootKungFu(String name, int exp,
                       FiveSecondsParameters fiveSecondsParameters,
                       KeepParameters keepParameters, String sound,
-                      EventResourceParameters eventResourceParameters) {
-        super(name, exp, keepParameters, fiveSecondsParameters);
+                      EventResourceParameters eventResourceParameters, int icon) {
+        super(name, exp, keepParameters, fiveSecondsParameters, icon);
         this.sound = Integer.parseInt(sound);
         this.eventResourceParameters = eventResourceParameters;
         this.counter = 0;
@@ -45,7 +41,7 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
     }
 
 
-    public void tryGainExpAndUseResources(Player player, UnaryAction<EntityEvent> eventSender) {
+    public void tryGainExpAndUseResources(Player player) {
         if (++counter < 10) {
             return;
         }
@@ -56,19 +52,15 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
         } else if (level() >= 5000) {
             snd = sound + 1;
         }
-        eventSender.invoke(new EntitySoundEvent(player, String.valueOf(snd)));
-        if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
-            eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
-            if (isLevelFull())
-                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
-        }
+        player.sendEvent(PlayerSoundEvent.toAll(player, String.valueOf(snd)));
+        gainExp(player, ExperienceUtil.DEFAULT_EXP);
         int life = applyLevelToValue(eventResourceParameters.life());
         int useLife =  player.currentLife() > life ? life : player.currentLife() - 1;
         player.consumeLife(useLife);
         player.consumeOuterPower(applyLevelToValue(eventResourceParameters.outerPower()));
         player.consumeInnerPower(applyLevelToValue(eventResourceParameters.innerPower()));
         player.consumePower(applyLevelToValue(eventResourceParameters.power()));
-        eventSender.invoke(new PlayerAttributeEvent(player));
+        player.sendEvent(PlayerAttributeMessage.of(player));
     }
 
     @Override
@@ -77,12 +69,12 @@ public final class FootKungFu extends AbstractPeriodicalConsumingKungFu {
     }
 
     @Override
-    public String description() {
+    public String detailText() {
         return getDescriptionBuilder().toString();
     }
 
     @Override
     public KungFu duplicate() {
-        return new FootKungFu(name(), 0, getConsumingParameters(), getKeepParameters(), String.valueOf(sound), getEventResourceParameters());
+        return new FootKungFu(name(), exp(), getConsumingParameters(), getKeepParameters(), String.valueOf(sound), getEventResourceParameters(), icon());
     }
 }

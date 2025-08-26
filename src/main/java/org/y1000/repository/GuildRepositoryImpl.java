@@ -1,55 +1,60 @@
 package org.y1000.repository;
 
 import jakarta.persistence.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.guild.GuildMembership;
-import org.y1000.guild.GuildStone;
+import org.y1000.guild.Guild;
+import org.y1000.kungfu.KungFuFactory;
+import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.persistence.GuildMembershipPo;
-import org.y1000.persistence.GuildStonePo;
+import org.y1000.persistence.GuildPo;
 import org.y1000.realm.EntityIdGenerator;
-import org.y1000.realm.RealmMap;
+import org.y1000.realm.Realm;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+@Slf4j
 public final class GuildRepositoryImpl implements GuildRepository {
 
     private final EntityManagerFactory entityManagerFactory;
+    private final KungFuFactory kungFuFactory;
 
-    public GuildRepositoryImpl(EntityManagerFactory entityManagerFactory) {
+    public GuildRepositoryImpl(EntityManagerFactory entityManagerFactory,
+                               KungFuFactory kungFuFactory) {
         Validate.notNull(entityManagerFactory);
         this.entityManagerFactory = entityManagerFactory;
+        this.kungFuFactory = kungFuFactory;
     }
 
-    private GuildStone restore(GuildStonePo stonePo,
-                               EntityIdGenerator entityIdGenerator,
-                               RealmMap realmMap) {
-        return GuildStone.builder()
-                .idName(stonePo.getName())
-                .currentHealth(stonePo.getCurrentHealth())
-                .dynamicObjectSdb(stonePo)
-                .realmMap(realmMap)
-                .id(entityIdGenerator.next())
-                .coordinate(stonePo.coordinate())
-                .persistentId(stonePo.getId())
-                .realmId(stonePo.getRealmId())
-                .build();
+
+    private Guild restore(Map<Long, String> founderNames, Realm realm, long id, GuildPo stonePo) {
+        AttackKungFu kf = null;
+        if (stonePo.getGuildKungFuPo() != null)
+            kf = (AttackKungFu) kungFuFactory.create(stonePo.getGuildKungFuPo().getName());
+        return stonePo.restore(realm, id, kf, founderNames.get(stonePo.findFounderId()));
     }
+
+    private Map<Long, String> loadFounderNames(EntityManager entityManager, List<Long> founderIds) {
+        var query =  entityManager.createNativeQuery("select p.id, p.name from player p where p.id in ?");
+        query.setParameter(1, founderIds);
+        List<Object[]> queryResultList = query.getResultList();
+        Map<Long, String> result = new HashMap<>();
+        queryResultList.forEach(o -> result.put((Long)o[0], (String)o[1]));
+        return result;
+    }
+
+
 
     @Override
-    public List<GuildStone> findByRealm(int realmId, EntityIdGenerator entityIdGenerator, RealmMap realmMap) {
-        Validate.notNull(entityIdGenerator);
-        Validate.notNull(realmMap);
+    public List<Guild> findByRealm(Realm realm, EntityIdGenerator entityIdGenerator) {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            return entityManager.createQuery("select gs from GuildStonePo gs where gs.realmId = ?1", GuildStonePo.class)
-                    .setParameter(1, realmId)
-                    .getResultStream()
-                    .map(stonePo -> restore(stonePo, entityIdGenerator, realmMap))
-                    .toList();
-        } catch (Exception e) {
-            return Collections.emptyList();
+            List<GuildPo> resultList = entityManager.createQuery("select gs from GuildPo gs where gs.realmId = ?1", GuildPo.class)
+                    .setParameter(1, realm.id())
+                    .getResultList();
+            var founders = resultList.stream().map(GuildPo::findFounderId).toList();
+            Map<Long, String> names = loadFounderNames(entityManager, founders);
+            return resultList.stream().map(s -> restore(names, realm, entityIdGenerator.next(),s)).toList();
         }
     }
 
@@ -57,7 +62,7 @@ public final class GuildRepositoryImpl implements GuildRepository {
     public int countByName(String name) {
         Validate.notNull(name);
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            Query query = entityManager.createQuery("select count(gs) from GuildStonePo gs where gs.name = ?1")
+            Query query = entityManager.createQuery("select count(gs) from GuildPo gs where gs.name = ?1")
                     .setParameter(1, name);
             return ((Long)query.getSingleResult()).intValue();
         }
@@ -65,62 +70,78 @@ public final class GuildRepositoryImpl implements GuildRepository {
 
 
     @Override
-    public void save(EntityManager em, GuildStone guildStone,
+    public void save(EntityManager em, Guild guild,
                      long creatorId) {
         Validate.notNull(em);
-        Validate.notNull(guildStone);
-        GuildStonePo stonePo = GuildStonePo.convert(guildStone);
+        Validate.notNull(guild);
+        GuildPo stonePo = GuildPo.convert(guild);
         em.persist(stonePo);
-        guildStone.setPersistentId(stonePo.getId());
+        guild.setGuildId(stonePo.getId());
     }
 
     @Override
     public Optional<GuildMembership> findGuildMembership(EntityManager entityManager, long playerId) {
-        Validate.notNull(entityManager);
-        GuildMembershipPo membershipPo = entityManager.find(GuildMembershipPo.class, playerId);
-        if (membershipPo == null) {
-            return Optional.empty();
-        }
-        var stonePo = entityManager.find(GuildStonePo.class, membershipPo.getGuildId());
-        return stonePo == null ? Optional.empty() : Optional.of(new GuildMembership(stonePo.getId(), membershipPo.getRole(), stonePo.getName()));
+        var membership = entityManager.createQuery("select g from GuildMembershipPo g where g.playerId = ?1",GuildMembershipPo.class)
+                .setParameter(1, playerId)
+                .getResultStream()
+                .findFirst()
+                .map(GuildMembershipPo::restore)
+                .orElse(null);
+        return Optional.ofNullable(membership);
     }
 
-    @Override
-    public void upsertMembership(EntityManager entityManager, long playerId, GuildMembership guildMembership) {
-        Validate.notNull(entityManager);
-        Validate.notNull(guildMembership);
-        var membershipPo = entityManager.find(GuildMembershipPo.class, playerId);
-        if (membershipPo != null) {
-            membershipPo.setRole(guildMembership.guildRole());
-        } else {
-            var po = new GuildMembershipPo(playerId, guildMembership.guildId(), guildMembership.guildRole(), LocalDateTime.now());
-            entityManager.persist(po);
-        }
-    }
 
     @Override
-    public void deleteGuildAndMembership(int guildId) {
+    public void delete(int guildId) {
         try (var em = entityManagerFactory.createEntityManager()) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            em.createQuery("delete from GuildMembershipPo gm where gm.guildId = ?1")
+            em.createNativeQuery("delete from guild_membership where guild_id = ?")
                     .setParameter(1, guildId).executeUpdate();
-            em.createQuery("delete from GuildStonePo gs where gs.id = ?1")
+            em.createNativeQuery("delete from guild where id = ?")
                     .setParameter(1, guildId).executeUpdate();
             transaction.commit();
         }
     }
 
     @Override
-    public void update(GuildStone guildStone) {
-        Validate.notNull(guildStone);
+    public void update(Guild guild) {
+        Validate.notNull(guild);
+        if (guild.getGuildId() == null)
+            return;
         try (var em = entityManagerFactory.createEntityManager()) {
-            em.getTransaction().begin();
-            GuildStonePo guildStonePo = em.find(GuildStonePo.class, guildStone.getPersistentId());
-            if (guildStonePo != null) {
-                guildStonePo.setCurrentHealth(guildStone.currentLife());
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            GuildPo guildStonePo = em.find(GuildPo.class, guild.getGuildId());
+            if (guildStonePo == null) {
+                transaction.rollback();
+                return;
             }
-            em.getTransaction().commit();
+            guildStonePo.merge(guild);
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void save(Guild guild) {
+        Validate.isTrue(!guild.getMembers().isEmpty());
+        try (var em = entityManagerFactory.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            GuildPo stonePo = GuildPo.convert(guild);
+            em.persist(stonePo);
+            transaction.commit();
+            guild.setGuildId(stonePo.getId());
+        }
+    }
+
+    @Override
+    public int countGuildKungFu(String name) {
+        Validate.notNull(name);
+        try (var em = entityManagerFactory.createEntityManager()) {
+            Query query = em.createQuery("select count(p) from GuildKungFuPo p where p.name = ?1")
+                    .setParameter(1, name);
+            return ((Long)query.getSingleResult()).intValue();
         }
     }
 }

@@ -3,8 +3,7 @@ package org.y1000.kungfu.attack;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.creatures.State;
-import org.y1000.kungfu.KungFu;
+import org.y1000.entities.players.AttackAction;
 
 @Slf4j
 public final class AxeKungFu extends AbstractMeleeKungFu {
@@ -15,17 +14,14 @@ public final class AxeKungFu extends AbstractMeleeKungFu {
     }
 
     @Override
-    public State randomAttackState() {
-        return State.AXE;
+    public AttackAction computeAttackAction() {
+        return AttackAction.Axe;
     }
-
 
     @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.AXE;
     }
-
-
 
     @Override
     protected Logger logger() {
@@ -33,7 +29,7 @@ public final class AxeKungFu extends AbstractMeleeKungFu {
     }
 
     @Override
-    public KungFu duplicate() {
-        return new AxeKungFu(name(), 0, getParameters());
+    public AxeKungFu duplicate() {
+        return new AxeKungFu(name(), exp(), getParameters());
     }
 }

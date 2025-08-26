@@ -1,6 +1,6 @@
 package org.y1000.item;
 
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -71,6 +71,6 @@ public enum ItemType implements ValueEnum  {
         if (ITEM_TYPE_MAPPING.containsKey(v)) {
             v = ITEM_TYPE_MAPPING.get(v);
         }
-        return ValueEnum.fromValueOrThrow(values(), v);
+        return ValueEnum.getTypeOrThrow(values(), v);
     }
 }

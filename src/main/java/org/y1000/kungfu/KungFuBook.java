@@ -77,6 +77,10 @@ public final class KungFuBook {
         return getKungFu(BASIC_PAGE, slot);
     }
 
+    public boolean hasGuildKungFu() {
+        return basic.values().stream().anyMatch(kungFu -> kungFu instanceof AttackKungFu attackKungFu && attackKungFu.guild());
+    }
+
     public void foreachUnnamed(BiConsumer<Integer, KungFu> kungFuBiConsumer) {
         unnamed.forEach(kungFuBiConsumer);
     }
@@ -121,6 +125,12 @@ public final class KungFuBook {
         }
         return Optional.empty();
     }
+
+
+    public void removeBasic(int slot) {
+        basic.remove(slot);
+    }
+
 
     public boolean swapSlot(int page, int slot1, int slot2) {
         if (page != 2) {

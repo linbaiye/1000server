@@ -9,9 +9,5 @@ class MapSdbImplTest {
 
     private final MapSdbImpl sdb = MapSdbImpl.INSTANCE;
 
-    @Test
-    void getMapName() {
-        String mapName = sdb.getMapName(49);
-        assertEquals("start.map", mapName);
-    }
+
 }

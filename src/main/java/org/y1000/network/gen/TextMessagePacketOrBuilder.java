@@ -9,54 +9,50 @@ public interface TextMessagePacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int32 type = 1;</code>
-   * @return The type.
-   */
-  int getType();
-
-  /**
-   * <code>optional string text = 2;</code>
-   * @return Whether the text field is set.
-   */
-  boolean hasText();
-  /**
-   * <code>optional string text = 2;</code>
+   * <code>string text = 1;</code>
    * @return The text.
    */
   java.lang.String getText();
   /**
-   * <code>optional string text = 2;</code>
+   * <code>string text = 1;</code>
    * @return The bytes for text.
    */
   com.google.protobuf.ByteString
       getTextBytes();
 
   /**
-   * <code>int32 location = 3;</code>
+   * <code>int32 location = 2;</code>
    * @return The location.
    */
   int getLocation();
 
   /**
-   * <code>int32 colorType = 4;</code>
-   * @return The colorType.
+   * <code>string color = 3;</code>
+   * @return The color.
    */
-  int getColorType();
-
+  java.lang.String getColor();
   /**
-   * <code>optional string fromPlayer = 5;</code>
-   * @return Whether the fromPlayer field is set.
-   */
-  boolean hasFromPlayer();
-  /**
-   * <code>optional string fromPlayer = 5;</code>
-   * @return The fromPlayer.
-   */
-  java.lang.String getFromPlayer();
-  /**
-   * <code>optional string fromPlayer = 5;</code>
-   * @return The bytes for fromPlayer.
+   * <code>string color = 3;</code>
+   * @return The bytes for color.
    */
   com.google.protobuf.ByteString
-      getFromPlayerBytes();
+      getColorBytes();
+
+  /**
+   * <code>string bgColor = 4;</code>
+   * @return The bgColor.
+   */
+  java.lang.String getBgColor();
+  /**
+   * <code>string bgColor = 4;</code>
+   * @return The bytes for bgColor.
+   */
+  com.google.protobuf.ByteString
+      getBgColorBytes();
+
+  /**
+   * <code>int32 type = 5;</code>
+   * @return The type.
+   */
+  int getType();
 }

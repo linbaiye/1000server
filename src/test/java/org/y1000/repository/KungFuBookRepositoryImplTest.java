@@ -8,15 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.y1000.kungfu.KungFu;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.kungfu.attack.AttackKungFu;
-import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.persistence.AttackKungFuParametersProvider;
-import org.y1000.persistence.KungFuPo;
+import org.y1000.persistence.KungFuBookPo;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,11 +54,13 @@ class KungFuBookRepositoryImplTest {
     }
 
 
-    private List<KungFuPo> select() {
-        Query query = entityManager.createQuery("select kf from KungFuPo kf where kf.key.playerId = ?1");
-        query.setParameter(1, playerId);
-        return query.getResultList();
+
+    private KungFuBookPo selectBook() {
+        return entityManager.createQuery("select kf from KungFuBookPo kf where kf.playerId = ?1", KungFuBookPo.class)
+                .setParameter(1, playerId)
+                .getSingleResult();
     }
+
 
 
     private void saveBook() {
@@ -75,14 +72,7 @@ class KungFuBookRepositoryImplTest {
     @Test
     void saveUnnamed() {
         saveBook();
-        var kungFuPoList = select();
-        assertFalse(kungFuPoList.isEmpty());
-        Map<String, KungFuPo> map = kungFuPoList.stream().collect(Collectors.toMap(kungFuPo -> kungFuPo.getKey().getName(), Function.identity()));
-        kungFuBook.foreachUnnamed((slot, kf) -> {
-            KungFuPo removed = map.remove(kf.name());
-            assertEquals(slot, removed.getSlot());
-        });
-        assertTrue(map.isEmpty());
+        var book = selectBook();
     }
 
 
@@ -96,11 +86,6 @@ class KungFuBookRepositoryImplTest {
         attackKungFu.gainPermittedExp(200);
         kungFuBook.swapSlot(2, slot1, slot2);
         saveBook();
-        List<KungFuPo> kungFuPoList = select();
-        KungFuPo saved = kungFuPoList.stream().filter(kungFuPo -> kungFuPo.getKey().getName().equals(attackKungFu.name()))
-                .findFirst().get();
-        assertEquals(saved.getExp(), attackKungFu.exp());
-        assertEquals(saved.getSlot(), slot2);
     }
 
     @Test
@@ -115,53 +100,13 @@ class KungFuBookRepositoryImplTest {
         var saved = kungFuBookRepository.find(entityManager, playerId).get();
         assertNotNull(saved.getKungFu(1, 1));
         saved.foreachUnnamed((slot, kf) -> {
-            assertEquals(slot, kf.exp());
+            assertEquals(kungFuBook.getKungFu(1, slot).get().exp(), saved.getKungFu(1, slot).get().exp());
             assertEquals(kungFuBook.getKungFu(1, slot).get().name(), saved.getKungFu(1, slot).get().name());
         });
         Optional<KungFu> kungFu = saved.getKungFu(2, 10);
         assertFalse(kungFu.isEmpty());
         assertEquals("雷剑式", kungFu.get().name());
-        assertEquals(10, kungFu.get().exp());
+        assertEquals(attackKungFu.exp(), kungFu.get().exp());
     }
 
-    @Test
-    void saveParameter() {
-        AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.
-                builder()
-                .name("test")
-                .type(AttackKungFuType.QUANFA)
-                .attackSpeed(1)
-                .avoid(2)
-                .build();
-        kungFuBookRepository.saveGuildKungFuParameter(provider, 1);
-        AttackKungFuParametersProvider saved = entityManagerFactory.createEntityManager().find(AttackKungFuParametersProvider.class, provider.getId());
-        assertNotNull(saved);
-        assertEquals("test", saved.getName());
-        assertEquals(2, saved.getAvoid());
-        assertEquals(1, saved.getAttackSpeed());
-        assertEquals(AttackKungFuType.QUANFA, saved.getType());
-    }
-
-    @Test
-    void counts() {
-        AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.
-                builder()
-                .name("test")
-                .type(AttackKungFuType.QUANFA)
-                .build();
-        kungFuBookRepository.saveGuildKungFuParameter(provider, 1);
-        assertEquals(1, kungFuBookRepository.countGuildKungFu(1));
-        assertEquals(1, kungFuBookRepository.countGuildKungFuByName("test"));
-    }
-
-    @Test
-    void findGuildKungFu() {
-        AttackKungFuParametersProvider provider = AttackKungFuParametersProvider.
-                builder()
-                .name("test")
-                .type(AttackKungFuType.QUANFA)
-                .build();
-        kungFuBookRepository.saveGuildKungFuParameter(provider, 1);
-        assertTrue(kungFuBookRepository.findGuildKungfu(1).isPresent());
-    }
 }

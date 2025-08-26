@@ -15,12 +15,10 @@
         <jar-file>file:./org/y1000/account</jar-file>
 
         <properties>
-            <!-- Database connection settings -->
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/y1000" />
             <property name="jakarta.persistence.jdbc.user" value="dev" />
             <property name="jakarta.persistence.jdbc.password" value="test" />
 
-            <!-- Echo all executed SQL to console -->
             <property name="hibernate.physical_naming_strategy" value="org.y1000.persistence.NamingStrategy" />
 
             <property name="hibernate.hikari.minimumIdle" value="5" />
@@ -28,7 +26,6 @@
             <property name="hibernate.hikari.idleTimeout" value="30000" />
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
-            <!--property name="jakarta.persistence.schema-generation.database.action" value="create" /-->
         </properties>
     </persistence-unit>
     <persistence-unit name="org.y1000.test">
@@ -37,15 +34,12 @@
         <jar-file>file:./org/y1000/account</jar-file>
 
         <properties>
-            <!-- Database connection settings -->
             <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1" />
             <property name="jakarta.persistence.jdbc.user" value="sa" />
             <property name="jakarta.persistence.jdbc.password" value="" />
 
-            <!-- Automatically export the schema -->
             <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create" />
 
-            <!-- Echo all executed SQL to console -->
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.highlight_sql" value="true" />

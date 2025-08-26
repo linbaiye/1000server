@@ -1,31 +1,36 @@
 package org.y1000.realm;
 
-import org.y1000.entities.creatures.npc.Npc;
 import org.y1000.entities.players.Player;
-import org.y1000.realm.event.PlayerDataEvent;
-import org.y1000.realm.event.RealmTeleportEvent;
+import org.y1000.input.SelfHandleInput;
+import org.y1000.network.Connection;
+import org.y1000.network.I2ClientMessage;
 import org.y1000.util.Coordinate;
-import org.y1000.util.UnaryAction;
 
+import java.util.Optional;
 import java.util.Set;
 
 interface PlayerManager extends ActiveEntityManager<Player> {
-    void onPlayerConnected(Player player, Realm realm);
+
+    void loginPlayer(Player player, Realm realm, Coordinate coordinate, Connection connection);
+
+    void loginPlayer(Player player, Realm realm, Connection connection);
+
+    void logoutPlayer(Connection connection);
+
+    void logoutPlayer(Player player);
 
     void teleportIn(Player player,
-                    Realm realm, Coordinate coordinate);
+                    Realm realm,
+                    Coordinate coordinate,
+                    Connection connection);
 
-    void clearPlayer(Player player);
-
-    void onClientEvent(PlayerDataEvent dataEvent,
-                       ActiveEntityManager<Npc> npcManager);
+    Connection prepareTeleport(Player player);
 
     Set<Player> allPlayers();
 
+    void handleInput(Connection connection, SelfHandleInput input);
 
-    void onPlayerDisconnected(long playerId);
-
-    void setTeleportHandler(UnaryAction<RealmTeleportEvent> teleportHandler);
+    Optional<Player> find(Connection connection);
 
     default void shutdown() {
 

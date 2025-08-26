@@ -8,16 +8,19 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.y1000.entities.players.*;
-import org.y1000.factory.PlayerFactory;
+import org.y1000.entities.players.PlayerFactory;
+import org.y1000.entities.players.equipment.Equipment;
+import org.y1000.entities.players.equipment.EquipmentType;
+import org.y1000.entities.players.equipment.Weapon;
 import org.y1000.kungfu.*;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.kungfu.attack.AttackKungFuType;
-import org.y1000.persistence.EquipmentPo;
 import org.y1000.persistence.PlayerPo;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFactory {
 
@@ -26,10 +29,10 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
     private final KungFuBookRepository kungFuRepository;
 
     private static final int DEFAULT_REALM_ID = 6;
-    private static final Coordinate DEFAULT_COORDINATE = Coordinate.xy(191, 238);
+    //private static final Coordinate DEFAULT_COORDINATE = Coordinate.xy(177, 88);
+    private static final Coordinate DEFAULT_COORDINATE = Coordinate.xy(177, 221);
 
     private final EntityManagerFactory entityManagerFactory;
-
     private final ItemRepository itemRepository;
 
     private final GuildRepository guildRepository;
@@ -64,35 +67,29 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         }
     };
 
-    private PlayerImpl.PlayerImplBuilder restoreEquipmentAndKungFu(PlayerImpl.PlayerImplBuilder builder,
-                                                                   EntityManager entityManager,
-                                                                   PlayerPo playerPo) {
-        Optional<Weapon> weapon = Optional.empty();
-        for (EquipmentPo e: playerPo.getEquipments()) {
-            Equipment equipment = itemFactory.createEquipment(e);
-            switch (equipment.equipmentType()) {
-                case WEAPON -> weapon = Optional.of((Weapon)equipment);
-                case TROUSER -> builder.trouser((SexualEquipment) equipment);
-                case CLOTHING -> builder.clothing((SexualEquipment) equipment);
-                case HAIR -> builder.hair((SexualEquipment) equipment);
-                case CHEST -> builder.chest((ArmorEquipment)equipment);
-                case WRIST -> builder.wrist((ArmorEquipment)equipment);
-                case HAT -> builder.hat((ArmorEquipment)equipment);
-                case BOOT -> builder.boot((ArmorEquipment)equipment);
-            }
-        }
-        var kungFuBook = kungFuRepository.find(entityManager, playerPo.getId())
+
+    private Map<EquipmentType, Equipment> restoreEquipments(EntityManager entityManager, PlayerPo playerPo) {
+        List<Equipment> equipments = itemRepository.loadEquipments(entityManager, playerPo.getEquipments() != null ?
+                playerPo.getEquipments().values() : Collections.emptyList());
+        return equipments.stream().collect(Collectors.toMap(Equipment::equipmentType, equipment -> equipment));
+    }
+
+    private KungFuBook restoreKungFuBook(EntityManager entityManager, PlayerPo playerPo) {
+        return kungFuRepository.find(entityManager, playerPo.getId())
                 .orElseGet(kungFuBookFactory::create);
-        builder.kungFuBook(kungFuBook);
-        weapon.ifPresentOrElse(w -> builder.weapon(w).attackKungFu(kungFuBook.findUnnamedAttack(w.kungFuType())),
-                () -> builder.attackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA)));
-        return builder;
     }
 
 
     private Player restore(EntityManager entityManager, PlayerPo playerPo) {
         PlayerDefaultAttributes innate = PlayerDefaultAttributes.INSTANCE;
-        PlayerImpl.PlayerImplBuilder builder = PlayerImpl.builder()
+        Map<EquipmentType, Equipment> equipments = restoreEquipments(entityManager, playerPo);
+        KungFuBook kungFuBook = restoreKungFuBook(entityManager, playerPo);
+        Equipment equipment = equipments.get(EquipmentType.WEAPON);
+        var attackKUngFu = kungFuBook.findUnnamedAttack(AttackKungFuType.Fist);
+        if (equipment instanceof Weapon weapon) {
+            attackKUngFu = kungFuBook.findUnnamedAttack(weapon.kungFuType());
+        }
+        return PlayerImpl.builder()
                 .id(playerPo.getId())
                 .coordinate(playerPo.coordinate())
                 .male(playerPo.isMale())
@@ -109,8 +106,10 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
                 .innateAttributesProvider(innate)
                 .pillSlots(new PillSlots())
                 .guildMembership(guildRepository.findGuildMembership(entityManager, playerPo.getId()).orElse(null))
-                .inventory(itemRepository.findInventory(entityManager, playerPo.getId()).orElseGet(Inventory::new));
-        return restoreEquipmentAndKungFu(builder, entityManager, playerPo)
+                .inventory(itemRepository.findInventory(entityManager, playerPo.getId()).orElseGet(Inventory::new))
+                .equipments(equipments)
+                .kungFuBook(kungFuBook)
+                .attackKungFu(attackKUngFu)
                 .build();
     }
 
@@ -143,39 +142,42 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
             kungFuRepository.save(entityManager, playerPo.getId(), player.kungFuBook());
             itemRepository.saveInventory(entityManager, player.id(), player.inventory());
             tx.commit();
-            setEquipmentIds(playerPo, player);
         }
     }
 
-    private void setEquipmentIdIfNull(Equipment equipment, PlayerPo playerPo) {
-        if (equipment.id() != null)
-            return;
-        playerPo.findEquipment(equipment.name())
-                .ifPresent(e -> equipment.setId(e.getId()));
+    @Override
+    public Optional<Player> load(long id) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            return entityManager.createQuery("select p from PlayerPo p where p.id = ?1", PlayerPo.class)
+                    .setParameter(1, id)
+                    .getResultStream()
+                    .findFirst()
+                    .map(playerPo -> restore(entityManager, playerPo));
+        }
     }
 
-    private void setEquipmentIds(PlayerPo playerPo, Player player) {
-        player.hat().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.chest().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.wrist().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.hair().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.boot().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.trouser().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.clothing().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
-        player.weapon().ifPresent(e -> setEquipmentIdIfNull(e, playerPo));
+    @Override
+    public Optional<Long> findId(String name) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            Query query = entityManager.createNamedQuery("selectIdByName")
+                    .setParameter(1, name);
+            List resultList = query.getResultList();
+            if (resultList.isEmpty())
+                return Optional.empty();
+            return Optional.of((Long)resultList.get(0));
+        }
     }
+
 
     @Override
     public long save(EntityManager entityManager, int accountId, Player player) {
         Validate.notNull(entityManager);
         Validate.notNull(player);
-        PlayerPo converted = PlayerPo.convert(player, accountId, DEFAULT_REALM_ID);
         itemRepository.saveEquipments(entityManager, player.getEquipments());
-        converted.addEquipments(player.getEquipments());
+        PlayerPo converted = PlayerPo.convert(player, accountId, DEFAULT_REALM_ID);
         entityManager.persist(converted);
         kungFuRepository.save(entityManager, converted.getId(), player.kungFuBook());
-        itemRepository.saveInventory(entityManager, player.id(), player.inventory());
-        player.guildMembership().ifPresent(gm -> guildRepository.upsertMembership(entityManager, player.id(), gm));
+        itemRepository.saveInventory(entityManager, converted.getId(), player.inventory());
         return converted.getId();
     }
 
@@ -188,25 +190,51 @@ public final class PlayerRepositoryImpl implements PlayerRepository, PlayerFacto
         return ((Long)query.getSingleResult()).intValue();
     }
 
-    @Override
-    public int countByAccount(EntityManager entityManager, int accountId) {
-        Validate.notNull(entityManager);
-        Query query = entityManager.createQuery("select count(p) from PlayerPo p where accountId = ?1");
-        query.setParameter(1, accountId);
-        return ((Long)query.getSingleResult()).intValue();
-    }
 
     @Override
     public Player create(String name, boolean male) {
         Validate.notNull(name);
         var yinyang = new YinYang();
         var kungfuBook = kungFuBookFactory.create();
+        Inventory inventory = new Inventory();
+        inventory.add(itemFactory.createItem("钱币", 10000));
         return PlayerImpl.builder()
                 .id(0)
                 .name(name)
                 .coordinate(DEFAULT_COORDINATE)
                 .kungFuBook(kungfuBook)
-                .attackKungFu(kungfuBook.findUnnamedAttack(AttackKungFuType.QUANFA))
+                .attackKungFu(kungfuBook.findUnnamedAttack(AttackKungFuType.Fist))
+                .inventory(inventory)
+                .male(male)
+                .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)
+                .yinYang(yinyang)
+                .revival(0)
+                .life(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .head(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .arm(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .leg(new PlayerLife(PlayerDefaultAttributes.INSTANCE.life(), yinyang.age()))
+                .power(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.power(), yinyang.age()))
+                .innerPower(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.innerPower(), yinyang.age()))
+                .outerPower(new PlayerExperiencedAgedAttribute(PlayerDefaultAttributes.INSTANCE.outerPower(), yinyang.age()))
+                .pillSlots(new PillSlots())
+                .build();
+    }
+
+    @Override
+    public int defaultRealm() {
+        return DEFAULT_REALM_ID;
+    }
+
+    public Player create(String name, boolean male, long id) {
+        Validate.notNull(name);
+        var yinyang = new YinYang();
+        var kungfuBook = kungFuBookFactory.create();
+        return PlayerImpl.builder()
+                .id(id)
+                .name(name)
+                .coordinate(DEFAULT_COORDINATE)
+                .kungFuBook(kungfuBook)
+                .attackKungFu(kungfuBook.findUnnamedAttack(AttackKungFuType.Fist))
                 .inventory(new Inventory())
                 .male(male)
                 .innateAttributesProvider(PlayerDefaultAttributes.INSTANCE)

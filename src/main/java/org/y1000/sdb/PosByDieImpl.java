@@ -29,7 +29,7 @@ public final class PosByDieImpl extends AbstractCSVSdbReader implements PosByDie
 
     @Override
     public Optional<String> findIdByRealmId(int realmId) {
-        Set<String> names = names();
+        Set<String> names = uniqueIds();
         for (String id : names) {
             Integer serverId = getInt(id, "Server");
             if (serverId != null && serverId == realmId)
@@ -42,7 +42,7 @@ public final class PosByDieImpl extends AbstractCSVSdbReader implements PosByDie
         PosByDieImpl sdb= PosByDieImpl.INSTANCE;
 //        Set<String> names = itemSdb.names();
         Set<String> names = sdb.columnNames();
-        Set<String> items = sdb.names();
+        Set<String> items = sdb.uniqueIds();
         for (String i: items) {
             System.out.println("----------------------------");
             System.out.println(i);

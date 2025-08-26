@@ -9,6 +9,12 @@ public interface InterpolationPacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   * <code>int32 moveAction = 1;</code>
+   * @return The moveAction.
+   */
+  int getMoveAction();
+
+  /**
    * <code>int32 state = 2;</code>
    * @return The state.
    */

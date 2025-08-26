@@ -1,10 +1,9 @@
 package org.y1000.kungfu.attack;
 
 import lombok.Builder;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.players.AttackAction;
 import org.y1000.kungfu.KungFu;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,17 +16,16 @@ public final class QuanfaKungFu extends AbstractMeleeKungFu {
         super(name, exp, parameters);
     }
 
-    @Override
-    public State randomAttackState() {
-        return level() < 5000 || ThreadLocalRandom.current().nextInt(0, 2) == 1 ? State.FIST: State.KICK;
-    }
-
 
     @Override
     public AttackKungFuType getType() {
-        return AttackKungFuType.QUANFA;
+        return AttackKungFuType.Fist;
     }
 
+    @Override
+    public AttackAction computeAttackAction() {
+        return level() < 5000 || ThreadLocalRandom.current().nextInt(0, 2) == 1 ? AttackAction.Punch: AttackAction.Kick;
+    }
 
 
     @Override
@@ -37,6 +35,6 @@ public final class QuanfaKungFu extends AbstractMeleeKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new QuanfaKungFu(name(), 0, getParameters());
+        return new QuanfaKungFu(name(), exp(), getParameters());
     }
 }

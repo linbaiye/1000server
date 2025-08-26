@@ -1,18 +1,14 @@
 package org.y1000.kungfu.breath;
 
 import lombok.Builder;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
+import org.y1000.entities.players.event.PlayerSoundEvent;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.players.event.PlayerAttributeEvent;
-import org.y1000.entities.players.event.PlayerGainExpEvent;
-import org.y1000.entities.players.event.PlayerKungFuFullEvent;
-import org.y1000.exp.ExperienceUtil;
+import org.y1000.entities.players.event.PlayerAttributeMessage;
+import org.y1000.entities.players.ExperienceUtil;
 import org.y1000.kungfu.AbstractKungFu;
 import org.y1000.kungfu.EventResourceParameters;
 import org.y1000.kungfu.KungFu;
 import org.y1000.kungfu.KungFuType;
-import org.y1000.event.EntityEvent;
-import org.y1000.util.UnaryAction;
 
 public final class BreathKungFu extends AbstractKungFu {
     private final EventResourceParameters parameters;
@@ -26,8 +22,8 @@ public final class BreathKungFu extends AbstractKungFu {
     @Builder
     public BreathKungFu(String name, int exp,
                         EventResourceParameters parameters,
-                        String sound) {
-        super(name, exp);
+                        String sound, int icon) {
+        super(name, exp, icon);
         this.parameters = parameters;
         this.sound = Integer.parseInt(sound);
         setTimer();
@@ -43,13 +39,13 @@ public final class BreathKungFu extends AbstractKungFu {
     }
 
     @Override
-    public String description() {
+    public String detailText() {
         return getDescriptionBuilder().toString();
     }
 
     @Override
     public KungFu duplicate() {
-        return new BreathKungFu(name(), 0, parameters, String.valueOf(sound));
+        return new BreathKungFu(name(), exp(), parameters, String.valueOf(sound), icon());
     }
     private String computeSound(boolean male) {
         var snd = sound;
@@ -69,7 +65,7 @@ public final class BreathKungFu extends AbstractKungFu {
         return 5 * max * inParameter / 100 ;
     }
 
-    public void update(Player player, int delta, UnaryAction<? super EntityEvent> eventSender) {
+    public void update(Player player, int delta) {
         timer -= delta;
         if (timer > 0) {
             return;
@@ -78,17 +74,13 @@ public final class BreathKungFu extends AbstractKungFu {
         /*if (!canRegenerateResources(player)) {
             return;
         }*/
-        eventSender.invoke(new EntitySoundEvent(player, computeSound(player.isMale())));
+        player.sendEvent(PlayerSoundEvent.toAll(player, computeSound(player.isMale())));
         player.gainLife(computeResource(player.maxLife(), parameters.life()));
         player.gainPower(computeResource(player.maxPower(), parameters.power()));
         player.gainInnerPower(computeResource(player.maxInnerPower(), parameters.innerPower()));
         player.gainOuterPower(computeResource(player.maxOuterPower(), parameters.outerPower()));
-        eventSender.invoke(new PlayerAttributeEvent(player));
-        if (gainPermittedExp(ExperienceUtil.DEFAULT_EXP)) {
-            eventSender.invoke(new PlayerGainExpEvent(player, name(), level()));
-            if (isLevelFull())
-                eventSender.invoke(new PlayerKungFuFullEvent(player, this));
-        }
+        player.sendEvent(PlayerAttributeMessage.of(player));
+        gainExp(player, ExperienceUtil.DEFAULT_EXP);
     }
 
     public boolean canRegenerateResources(Player player) {

@@ -2,60 +2,52 @@ package org.y1000.realm;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-import org.y1000.entities.ActiveEntity;
-import org.y1000.entities.creatures.npc.InteractableNpc;
-import org.y1000.entities.creatures.npc.Merchant;
+import org.y1000.entities.npc.NpcInteractAbility;
 import org.y1000.entities.players.Player;
-import org.y1000.entities.teleport.StaticTeleport;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.clientevent.*;
-import org.y1000.message.clientevent.chat.ClientInputTextEvent;
-import org.y1000.message.serverevent.NpcPositionEvent;
-import org.y1000.network.event.ConnectionEstablishedEvent;
+import org.y1000.entities.players.event.PlayerTextMessage;
+import org.y1000.entities.teleport.TeleportEventHandler;
+import org.y1000.input.*;
+import org.y1000.realm.event.InteractableCoordinateNameMessage;
+import org.y1000.network.Connection;
 import org.y1000.realm.event.*;
+import org.y1000.repository.PlayerRepository;
 import org.y1000.sdb.MapSdb;
+import org.y1000.util.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
-abstract class AbstractRealm implements Realm {
+abstract class AbstractRealm implements Realm, TeleportEventHandler, RealmEventHandler  {
     public static final int STEP_MILLIS = 10;
     private final RealmMap realmMap;
-    private final RealmEntityEventSender eventSender;
     private final NpcManager npcManager;
     private final PlayerManager playerManager;
     private final DynamicObjectManager dynamicObjectManager;
     private final TeleportManager teleportManager;
 
     private final int id;
-    private final CrossRealmEventSender crossRealmEventSender;
+    private final RealmEventSender crossRealmEventSender;
     private final MapSdb mapSdb;
     private long accumulatedMillis;
     private final List<ActiveEntityManager<?>> entityManagers;
-
-    private final ChatManager chatManager;
+    private final PlayerRepository playerRepository;
 
     public AbstractRealm(int id,
                          RealmMap realmMap,
-                         RealmEntityEventSender eventSender,
                          GroundItemManager itemManager,
                          NpcManager npcManager,
                          PlayerManager playerManager,
                          DynamicObjectManager dynamicObjectManager,
                          TeleportManager teleportManager,
-                         CrossRealmEventSender crossRealmEventSender,
+                         RealmEventSender crossRealmEventSender,
                          MapSdb mapSdb,
-                         ChatManager chatManager) {
+                         PlayerRepository playerRepository) {
         Validate.notNull(realmMap);
-        Validate.notNull(eventSender);
         Validate.notNull(itemManager);
         Validate.notNull(playerManager);
         Validate.notNull(crossRealmEventSender);
         Validate.notNull(mapSdb);
         this.realmMap = realmMap;
-        this.eventSender = eventSender;
         this.npcManager = npcManager;
         this.playerManager = playerManager;
         this.dynamicObjectManager = dynamicObjectManager;
@@ -66,11 +58,9 @@ abstract class AbstractRealm implements Realm {
         this.entityManagers = new ArrayList<>();
         entityManagers.add(playerManager);
         entityManagers.add(itemManager);
-        if (dynamicObjectManager != null)
-            entityManagers.add(dynamicObjectManager);
-        if (npcManager != null)
-            entityManagers.add(npcManager);
-        this.chatManager = chatManager;
+        entityManagers.add(dynamicObjectManager);
+        entityManagers.add(npcManager);
+        this.playerRepository = playerRepository;
     }
 
     void addEntityManager(ActiveEntityManager<?> manager) {
@@ -81,7 +71,7 @@ abstract class AbstractRealm implements Realm {
         return realmMap;
     }
 
-    public String name() {
+    public String title() {
         return mapSdb.getMapTitle(id);
     }
 
@@ -91,41 +81,40 @@ abstract class AbstractRealm implements Realm {
 
     abstract Logger log();
 
-    RealmEntityEventSender getEventSender() {
-        return eventSender;
-    }
-
     PlayerManager getPlayerManager() {
         return playerManager;
     }
 
-    @Override
-    public void update() {
+
+    void doUpdateEntities() {
         long current = System.currentTimeMillis();
         while (accumulatedMillis <= current) {
             entityManagers.forEach(m -> m.update(STEP_MILLIS));
+            teleportManager.update();
             accumulatedMillis += STEP_MILLIS;
         }
     }
 
+    @Override
+    public void announceDungeonOpen(String announcement) {
+        playerManager.allPlayers().forEach(
+                p -> p.sendEvent(PlayerTextMessage.leftUp(p, announcement))
+        );
+    }
 
 
     protected void doInit() {
         try {
             accumulatedMillis = System.currentTimeMillis();
-            if (npcManager != null)
-                npcManager.init();
-            if (dynamicObjectManager != null)
-                dynamicObjectManager.init();
-            teleportManager.init(this::onPlayerTeleport);
-            playerManager.setTeleportHandler(this::onPlayerTeleport);
+            npcManager.init();
+            dynamicObjectManager.init();
+            teleportManager.init(this );
             log().debug("Initialized {}.", this);
         } catch (Exception e) {
             log().error("Failed to init realm {}.", id, e);
             throw new RuntimeException(e);
         }
     }
-
 
     MapSdb getMapSdb() {
         return mapSdb;
@@ -135,110 +124,118 @@ abstract class AbstractRealm implements Realm {
         return id;
     }
 
+    @Override
+    public void teleportIn(Player player, Coordinate toCoordinate, Connection connection) {
+        playerManager.teleportIn(player, this, toCoordinate, connection);
+    }
 
-
-    void onPlayerTeleport(PlayerRealmEvent event) {
-        if (!(event instanceof RealmTeleportEvent realmTeleportEvent) ||
-                !playerManager.contains(event.player())) {
+    @Override
+    public void teleportTo(Player player, int toReam, Coordinate toCoordinate) {
+        Connection connection = playerManager.prepareTeleport(player);
+        if (connection == null)
             return;
-        }
-        playerManager.clearPlayer(event.player());
-        var connection = eventSender.remove(event.player());
-        realmTeleportEvent.setConnection(connection);
-        crossRealmEventSender.send(event);
-        log().debug("Removed player {}.", event.player().id());
+        RealmTeleportEvent teleportEvent = RealmTeleportEvent.toDestination(player, toReam, toCoordinate, connection);
+        crossRealmEventSender.send(teleportEvent);
     }
-
-    CrossRealmEventSender getCrossRealmEventHandler() {
-        return crossRealmEventSender;
-    }
-
-    void acceptIfAffordableElseReject(RealmTeleportEvent teleportEvent) {
-        var unaffordableCost = teleportEvent.checkCost();
-        if (unaffordableCost != null) {
-            teleportEvent.getConnection().write(PlayerTextEvent.systemTip(teleportEvent.player(), unaffordableCost));
-            teleportEvent.rejectEvent().ifPresentOrElse(getCrossRealmEventHandler()::send, () ->
-                    log().error("Bad teleport config at {} in realm {}.", teleportEvent.toCoordinate(), teleportEvent.toRealmId()));
-            return;
-        }
-        // order matters, so AOI can be computed correctly.
-        teleportEvent.player().joinRealm(this, teleportEvent.toCoordinate());
-        eventSender.add(teleportEvent.player(), teleportEvent.getConnection());
-        playerManager.teleportIn(teleportEvent.player(), this, teleportEvent.toCoordinate());
-        teleportEvent.getCosts().forEach(teleportCost -> teleportCost.charge(teleportEvent.player()));
-    }
-
-    abstract void handleTeleportEvent(RealmTeleportEvent teleportEvent);
-
-    abstract void handleConnectionEvent(ConnectionEstablishedEvent connectedEvent);
 
     PlayerManager playerManager() {
         return playerManager;
     }
 
-    NpcManager npcManager() {
-        return npcManager;
+    protected abstract void handleLogin(Login login);
+
+    PlayerRepository getPlayerRepository() {
+        return playerRepository;
     }
 
-    abstract void handleGuildCreation(Player source, ClientFoundGuildEvent event);
+    void acceptLogin(long playerId, Connection connection, Coordinate coordinate) {
+        playerRepository.load(playerId).ifPresent(p -> {
+            if (coordinate == null)
+                getPlayerManager().loginPlayer(p, this, connection);
+            else
+                getPlayerManager().loginPlayer(p, this, coordinate, connection);
+        });
+    }
 
-    abstract void handleClientEvent(PlayerDataEvent dataEvent);
-
-    private void findEntityAndHandle(Player player, ClientSingleInteractEvent event) {
+    private void handleEntityInteraction(Player player, EntityInteractInput interactionInput) {
         for (ActiveEntityManager<?> entityManager : entityManagers) {
-            Optional<? extends ActiveEntity> entity = entityManager.find(event.targetId());
-            if (entity.isPresent()) {
-                event.handle(player, entity.get());
-                return;
-            }
+            entityManager.find(interactionInput.interactId())
+                    .ifPresent(e -> interactionInput.onEntityFound(player, e));
         }
     }
 
-    private void handlePlayerDataEvent(PlayerDataEvent dataEvent) {
-        if (dataEvent.data() instanceof ClientSimpleCommandEvent commandEvent) {
-            if (commandEvent.isAskingPosition()) {
-                Set<InteractableNpc> merchants = npcManager.findMerchants();
-                Set<StaticTeleport> staticTeleports = teleportManager.findStaticTeleports();
-                if (!merchants.isEmpty() || !staticTeleports.isEmpty())
-                    eventSender.notifySelf(new NpcPositionEvent(dataEvent.player(), merchants, staticTeleports));
-            } else if (commandEvent.isQuit()) {
-                playerManager.onPlayerDisconnected(dataEvent.playerId());
-            } else {
-                handleClientEvent(dataEvent);
-            }
-        } else if (dataEvent.data() instanceof ClientFoundGuildEvent guildEvent) {
-            playerManager().find(dataEvent.playerId()).ifPresent(player -> handleGuildCreation(player, guildEvent));
-        } else if (dataEvent.data() instanceof ClientInputTextEvent clientInputTextEvent) {
-            chatManager.handleClientChat(dataEvent.playerId(), clientInputTextEvent);
-        } else if (dataEvent.data() instanceof ClientSingleInteractEvent singleInteractEvent) {
-            playerManager.find(singleInteractEvent.getPlayerId())
-                    .ifPresent(player -> findEntityAndHandle(player, singleInteractEvent));
+    private void handleRealmInput(Connection connection, RealmInput input) {
+        if (playerManager.find(connection).isEmpty())
+            return;
+        if (input.type() == RealmInput.Type.GetNpcCoordinates) {
+            var npcSet = npcManager.find(npc -> npc.findAbility(NpcInteractAbility.class).isPresent());
+            var staticTeleports = teleportManager.findStaticTeleports();
+            connection.writeAndFlush(new InteractableCoordinateNameMessage(npcSet, staticTeleports));
+        }
+    }
+
+    private void handleInput(ConnectionInput connectionInput) {
+        if (connectionInput.input() instanceof SelfHandleInput selfHandleInput) {
+            playerManager().handleInput(connectionInput.connection(), selfHandleInput);
+        } else if (connectionInput.input() instanceof EntityInteractInput interactionInput) {
+            playerManager().find(connectionInput.connection()).ifPresent(p -> handleEntityInteraction(p, interactionInput));
+        } else if (connectionInput.input() instanceof RealmInput realmInput) {
+            handleRealmInput(connectionInput.connection(), realmInput);
+        }
+    }
+
+    private void handleLogout(Logout logout) {
+        if (logout.playerId() != null) {
+            playerManager().find(logout.playerId()).ifPresent(playerManager()::logoutPlayer);
         } else {
-            handleClientEvent(dataEvent);
+            playerManager.logoutPlayer(logout.connection());
         }
     }
 
-
-    public void handle(RealmEvent event) {
+    @Override
+    public void handle(Object event) {
         try {
-            if (event instanceof ConnectionEstablishedEvent connectedEvent) {
-                handleConnectionEvent(connectedEvent);
-            } else if (event instanceof PlayerDisconnectedEvent disconnectedEvent) {
-                playerManager.onPlayerDisconnected(disconnectedEvent.player().id());
-                eventSender.remove(disconnectedEvent.player());
-            } else if (event instanceof PlayerDataEvent dataEvent) {
-                handlePlayerDataEvent(dataEvent);
-            } else if (event instanceof RealmTeleportEvent teleportEvent) {
-                handleTeleportEvent(teleportEvent);
-            } else if (event instanceof BroadcastEvent broadcastEvent) {
-                playerManager().allPlayers().forEach(broadcastEvent::send);
-            } else if (event instanceof RealmTriggerEvent letterEvent) {
-                npcManager.handleCrossRealmEvent(letterEvent);
-            } else if (event instanceof PlayerWhisperEvent privateMessageEvent) {
-                chatManager.handleCrossRealmChat(privateMessageEvent);
+            if (event instanceof Login login) {
+                handleLogin(login);
+            } else if (event instanceof Logout logout) {
+                handleLogout(logout);
+            } else if (event instanceof ConnectionInput connectionInput) {
+                handleInput(connectionInput);
+            } else if (event instanceof RealmEvent realmEvent) {
+                realmEvent.accept(this);
             }
         } catch (Exception e) {
-            log().error("Exception when handling event .", e);
+            log().error("Failed to handle event.", e);
         }
+    }
+
+    @Override
+    public void broadcastText(BroadcastTextEvent event) {
+        getPlayerManager().allPlayers().forEach(player -> player.sendEvent(event.createMessage(player)));
+    }
+
+    @Override
+    public void deliverPrivateChat(DeliveryPrivateChatEvent event) {
+        boolean found = false;
+        for (Player player: getPlayerManager().allPlayers()) {
+            if (player.viewName().equals(event.getToPlayerName())) {
+                found = true;
+                player.sendEvent(PlayerTextMessage.privateChat(player, event.formatDeliveredContent()));
+                crossRealmEventSender.send(DeliveryPrivateChatResultEvent.delivered(event));
+                break;
+            }
+        }
+        if (!found)
+            crossRealmEventSender.send(DeliveryPrivateChatResultEvent.notFound(event));
+    }
+
+    @Override
+    public void deliverPrivateChatResult(long playerId, String reply) {
+        getPlayerManager().find(playerId)
+                .ifPresent(player -> player.sendEvent(PlayerTextMessage.privateChat(player, reply)));
+    }
+    @Override
+    public void handleProxiedLogin(long playerId, Coordinate toCoordinate, Connection connection) {
+        acceptLogin(playerId, connection, toCoordinate);
     }
 }

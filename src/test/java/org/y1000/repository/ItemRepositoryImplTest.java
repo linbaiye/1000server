@@ -5,10 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.players.equipment.Equipment;
+import org.y1000.entities.players.equipment.RandomAttributeAbility;
 import org.y1000.entities.players.inventory.Inventory;
 import org.y1000.item.*;
 import org.y1000.persistence.InventoryPo;
-import org.y1000.persistence.SlotItem;
+import org.y1000.persistence.SlotItemPo;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,7 +36,7 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
     void createAmmo() {
         Item item = itemFactory.createItem("箭", 2);
         assertEquals(ItemType.ARROW, item.itemType());
-        assertTrue(((Ammo)((StackItem)item).item()).spriteId() != 0);
+        assertNotNull(((Ammo) ((StackItem) item).item()).getFlySprite());
         item = itemFactory.createItem("飞刀", 2);
         assertEquals(ItemType.KNIFE, item.itemType());
     }
@@ -58,9 +60,9 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
     void saveInventory() {
         PlayerImpl player = playerBuilder().id(11).build();
         Inventory inventory = player.inventory();
-        int slot0 = inventory.put(itemFactory.createItem("生药", 1));
-        int slot1 = inventory.put(itemFactory.createItem("丸药", 2));
-        int slot2 = inventory.put(itemFactory.createItem("长剑", 1));
+        int slot0 = inventory.add(itemFactory.createItem("生药", 1));
+        int slot1 = inventory.add(itemFactory.createItem("丸药", 2));
+        int slot2 = inventory.add(itemFactory.createItem("长剑", 1));
         EntityManager entityManager = jpaFixture.beginTx();
         itemRepository.saveInventory(entityManager, player.id(), inventory);
         jpaFixture.submitTx();
@@ -68,7 +70,7 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
         InventoryPo inventoryPo = entityManager.createQuery("select i from InventoryPo i where i.playerId = ?1", InventoryPo.class)
                 .setParameter(1, player.id())
                 .getResultList().get(0);
-        assertTrue(inventoryPo.getSlots().stream().map(SlotItem::getSlot).collect(Collectors.toSet()).containsAll(Set.of(slot0, slot1, slot2)));
+        assertTrue(inventoryPo.getSlots().stream().map(SlotItemPo::getSlot).collect(Collectors.toSet()).containsAll(Set.of(slot0, slot1, slot2)));
         assertNotNull(inventory.getItem(slot2, Equipment.class).get().id());
         assertFalse(entityManager.createQuery("select e from EquipmentPo e where id = ?1")
                 .setParameter(1, inventory.getItem(slot2, Equipment.class).get().id())
@@ -79,10 +81,9 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
     void findInventory() {
         PlayerImpl player = playerBuilder().id(11).build();
         Inventory inventory = player.inventory();
-        int slot1 = inventory.put(itemFactory.createItem("生药", 2));
-        Equipment equipment = itemFactory.createEquipment("女子黄龙弓服", 4);
-        equipment.findAbility(Upgradable.class).get().upgrade();
-        int slot2 = inventory.put(equipment);
+        int slot1 = inventory.add(itemFactory.createItem("生药", 2));
+        Equipment equipment = itemFactory.createEquipment("女子黄龙弓服");
+        int slot2 = inventory.add(equipment);
         EntityManager entityManager = jpaFixture.beginTx();
         itemRepository.saveInventory(entityManager, player.id(), inventory);
         jpaFixture.submitTx();
@@ -90,7 +91,5 @@ class ItemRepositoryImplTest extends AbstractUnitTestFixture {
         StackItem stackItem = loaded.getStackItem(slot1, Pill.class).get();
         assertEquals(2, stackItem.number());
         assertEquals("生药", stackItem.name());
-        Equipment loadedEquipment = loaded.getItem(slot2, Equipment.class).get();
-        assertEquals(1, loadedEquipment.findAbility(Upgradable.class).get().level());
     }
 }

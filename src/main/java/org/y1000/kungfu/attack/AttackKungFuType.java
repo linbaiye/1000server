@@ -2,11 +2,11 @@ package org.y1000.kungfu.attack;
 
 import lombok.Getter;
 import org.y1000.kungfu.KungFuType;
-import org.y1000.message.ValueEnum;
+import org.y1000.util.ValueEnum;
 
 public enum AttackKungFuType implements ValueEnum {
 
-    QUANFA(0, 400, 560, true),
+    Fist(0, 400, 560, true),
 
     SWORD(1, 720, 1100, true),
 
@@ -29,6 +29,7 @@ public enum AttackKungFuType implements ValueEnum {
 
     @Getter
     private final boolean melee;
+
 
 
     AttackKungFuType(int v, int below50, int above50, boolean melee) {
@@ -56,6 +57,6 @@ public enum AttackKungFuType implements ValueEnum {
     }
 
     public static AttackKungFuType fromValue(int v) {
-        return ValueEnum.fromValueOrThrow(values(), v);
+        return ValueEnum.getTypeOrThrow(values(), v);
     }
 }

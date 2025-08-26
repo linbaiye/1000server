@@ -1,0 +1,61 @@
+package org.y1000.entities.players.equipment;
+
+import org.y1000.entities.players.Armor;
+import org.y1000.item.ItemSdb;
+import org.y1000.item.Upgradable;
+
+import java.util.Set;
+
+public final class ArmorImpl extends AbstractSexualEquipment implements ArmorEquipment {
+
+    private final ItemSdb itemSdb;
+
+    private final Armor originArmor;
+
+    public ArmorImpl(String name,
+                     ItemSdb itemSdb,
+                     Set<EquipmentAbility> abilities) {
+        super(name, itemSdb, abilities);
+        this.originArmor =  new Armor(itemSdb.getArmorBody(name), itemSdb.getArmorHead(name), itemSdb.getArmorArm(name), itemSdb.getArmorLeg(name));
+        this.itemSdb = itemSdb;
+    }
+
+    @Override
+    public Armor armor() {
+        return findAbility(Upgradable.class)
+                .map(upgradable -> originArmor.add(originArmor.multiply(upgradable.percentage())))
+                .orElse(originArmor);
+    }
+
+    private int getOriginAvoid() {
+        return itemSdb.getAvoid(name());
+    }
+
+    @Override
+    public int avoidance() {
+        return findAbility(Upgradable.class)
+                .map(upgradable -> getOriginAvoid() + (int)(getOriginAvoid() * upgradable.percentage()))
+                .orElseGet(this::getOriginAvoid);
+    }
+
+    @Override
+    public int recovery() {
+        return itemSdb.getRecovery(name());
+    }
+
+    @Override
+    public EquipmentType equipmentType() {
+        return itemSdb.getEquipmentType(name());
+    }
+
+    @Override
+    public String description() {
+        StringBuilder descriptionBuilder = getDescriptionBuilder();
+        descriptionBuilder.append("恢复: ").append(recovery()).append("\n")
+                .append("闪躲: ").append(avoidance()).append("\n");
+        Armor armor = armor();
+        descriptionBuilder.append(String.format("防御力: %d / %d / %d / %d", armor.body(), armor.head(), armor.arm(), armor.leg()));
+        return descriptionBuilder.toString();
+    }
+
+}

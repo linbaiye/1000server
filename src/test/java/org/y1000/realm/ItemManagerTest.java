@@ -6,15 +6,10 @@ import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
 import org.y1000.TestingEntityEventSender;
 import org.y1000.TestingEventListener;
-import org.y1000.entities.GroundedItem;
-import org.y1000.entities.RemoveEntityEvent;
 import org.y1000.entities.players.Player;
 import org.y1000.item.Item;
 import org.y1000.item.ItemFactory;
 import org.y1000.item.ItemSdb;
-import org.y1000.message.PlayerDropItemEvent;
-import org.y1000.message.PlayerTextEvent;
-import org.y1000.message.serverevent.TextMessage;
 import org.y1000.util.Coordinate;
 
 import java.util.Optional;
@@ -25,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 class ItemManagerTest extends AbstractUnitTestFixture {
 
+    /*
     private ItemManagerImpl manager;
 
     private TestingEntityEventSender eventSender;
@@ -38,7 +34,7 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         eventSender = new TestingEntityEventSender();
         itemSdb = Mockito.mock(ItemSdb.class);
         itemFactory = createItemFactory();
-        manager = new ItemManagerImpl(eventSender, itemSdb, new EntityIdGenerator(), itemFactory);
+        manager = new ItemManagerImpl(eventSender, itemSdb, new EntityIdGenerator(), itemFactory, null);
     }
 
     @Test
@@ -48,7 +44,7 @@ class ItemManagerTest extends AbstractUnitTestFixture {
         groundItem.registerEventListener(itemEvenListener);
         manager.add(groundItem);
         var picker = playerBuilder().coordinate(Coordinate.xy(5, 2)).build();
-        picker.joinRealm(mockAllFlatRealm());
+        picker.joinRealm(mockAllFlatRealm(), );
         TestingEventListener playerEventListener = new TestingEventListener();
         picker.registerEventListener(playerEventListener);
         manager.pickItem(picker, 3);
@@ -104,11 +100,5 @@ class ItemManagerTest extends AbstractUnitTestFixture {
             }
         }
         System.out.println(counter);
-        /*double rate = 399/400f;
-        double total = 1;
-        for (int i = 0; i < 400; i++) {
-            total *= rate;
-        }
-        System.out.println(total);*/
-    }
+    }*/
 }

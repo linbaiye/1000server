@@ -2,7 +2,10 @@ package org.y1000.kungfu;
 
 import lombok.Builder;
 import org.apache.commons.lang3.Validate;
+import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
+import org.y1000.entities.Entity;
+import org.y1000.entities.HurtAbility;
 import org.y1000.entities.players.Damage;
 import org.y1000.entities.players.Player;
 import org.y1000.util.Coordinate;
@@ -26,8 +29,8 @@ public final class AssistantKungFu extends AbstractKungFu {
     private static final Set<Direction> STRAIGHT = Set.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
 
     @Builder
-    public AssistantKungFu(String name, int exp, boolean eightDirection) {
-        super(name, exp);
+    public AssistantKungFu(String name, int exp, boolean eightDirection, int icon) {
+        super(name, exp, icon);
         this.eightDirection = eightDirection;
     }
 
@@ -61,7 +64,7 @@ public final class AssistantKungFu extends AbstractKungFu {
     }
 
     @Override
-    public String description() {
+    public String detailText() {
         return getDescriptionBuilder().toString();
     }
 
@@ -71,13 +74,39 @@ public final class AssistantKungFu extends AbstractKungFu {
             return null;
         }
         String error = "需要风灵旋满方可修炼。";
-        return player.kungFuBook().findBasic("风灵旋")
-                .map(kf -> kf.isLevelFull() ? null : error)
-                .orElse(error);
+        KungFu kf = player.kungFuBook().findBasic("风灵旋").orElse(null);
+        if (kf == null || !kf.isLevelFull())
+            return error;
+        return null;
+    }
+
+
+    public boolean apply(Player player, ActiveEntity mainTarget, Set<Coordinate> affected, Damage mainDamage) {
+        HurtAbility hurtAbility = mainTarget.findAbility(HurtAbility.class).orElse(null);
+        if (hurtAbility == null)
+            return false;
+        int exp = hurtAbility.attacked(player, mainDamage, player.accuracy());
+        int counter = exp > 0 ? 1 : 0;
+        Set<Entity> entities = mainTarget.getEntitiesAt(affected);
+        var aoeDamage = computeDamage(mainDamage);
+        for (var e : entities) {
+            if (e instanceof ActiveEntity entity) {
+                HurtAbility ability = entity.findAbility(HurtAbility.class).orElse(null);
+                if (ability == null || !ability.canBeAttacked())
+                    continue;
+                int tmp = ability.attacked(player, aoeDamage, player.accuracy());
+                counter += tmp > 0 ? 1 : 0;
+                if (exp < tmp)
+                    exp = tmp;
+            }
+        }
+        if (counter > 1)
+            gainExp(player, exp);
+        return exp > -1;
     }
 
     @Override
     public KungFu duplicate() {
-        return new AssistantKungFu(name(), 0, eightDirection);
+        return new AssistantKungFu(name(), exp(), eightDirection, icon());
     }
 }

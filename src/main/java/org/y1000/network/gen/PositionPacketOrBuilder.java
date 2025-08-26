@@ -31,16 +31,4 @@ public interface PositionPacketOrBuilder extends
    * @return The id.
    */
   long getId();
-
-  /**
-   * <code>int32 type = 5;</code>
-   * @return The type.
-   */
-  int getType();
-
-  /**
-   * <code>int32 state = 6;</code>
-   * @return The state.
-   */
-  int getState();
 }

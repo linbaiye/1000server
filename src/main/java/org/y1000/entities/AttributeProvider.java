@@ -4,11 +4,16 @@ import java.util.Optional;
 
 public interface AttributeProvider {
     int life();
-    int avoidance();
     int recovery();
     int attackSpeed();
     int wanderingRange();
+
     int armor();
+
+    int avoidance();
+
+    String hurtSound();
+
     int hit();
 
     int viewWidth();
@@ -23,7 +28,6 @@ public interface AttributeProvider {
 
     int damage();
 
-    String hurtSound();
 
     default Optional<String> normalSound() {
         return Optional.empty();

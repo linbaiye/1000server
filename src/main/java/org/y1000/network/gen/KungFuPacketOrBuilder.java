@@ -37,4 +37,10 @@ public interface KungFuPacketOrBuilder extends
    * @return The type.
    */
   int getType();
+
+  /**
+   * <code>int32 icon = 5;</code>
+   * @return The icon.
+   */
+  int getIcon();
 }

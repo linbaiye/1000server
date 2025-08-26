@@ -16,7 +16,7 @@ public abstract class AbstractNpcUnitTestFixture extends AbstractUnitTestFixture
         var player = Mockito.mock(Player.class);
         when(player.coordinate()).thenReturn(coordinate.move(0, 1));
         when(player.damage()).thenReturn(new Damage(1, 1, 1, 1));
-        when(player.hit()).thenReturn(10000);
+        when(player.accuracy()).thenReturn(10000);
         return player;
     }
 

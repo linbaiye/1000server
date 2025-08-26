@@ -1,5 +1,7 @@
 package org.y1000.item;
 
+import org.y1000.entities.players.Damage;
+import org.y1000.entities.players.equipment.EquipmentType;
 import org.y1000.kungfu.attack.AttackKungFuType;
 
 public interface ItemSdb {
@@ -58,4 +60,15 @@ public interface ItemSdb {
     int getShape(String name);
 
     boolean isUpgrade(String name);
+
+    int getIcon(String name);
+
+    String getWearShape(String name);
+
+    boolean isRandomAttribute(String name);
+
+    default Damage getDamage(String name) {
+        return new Damage(getDamageBody(name), getDamageHead(name), getDamageArm(name), getDamageLeg(name));
+    }
+
 }

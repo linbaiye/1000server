@@ -2,6 +2,9 @@ package org.y1000.realm;
 
 import org.slf4j.Logger;
 import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.Entity;
+import org.y1000.entities.players.Player;
+import org.y1000.network.I2ClientMessage;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -9,7 +12,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implements ActiveEntityManager<T> {
+public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implements ActiveEntityManager<T>, EntityEventHandler {
     private boolean iterating;
     private final Set<T> entities;
 
@@ -17,7 +20,14 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
 
     private final Set<T> deleting;
 
-    protected AbstractActiveEntityManager() {
+    private final AOIManager aoiManager;
+
+    private final MessageSender messageSender;
+
+    protected AbstractActiveEntityManager(AOIManager aoiManager,
+                                          MessageSender messageSender) {
+        this.aoiManager = aoiManager;
+        this.messageSender = messageSender;
         this.iterating = false;
         this.entities = new HashSet<>();
         this.adding = new HashSet<>();
@@ -66,6 +76,10 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
         }
     }
 
+    AOIManager getAoiManager() {
+        return aoiManager;
+    }
+
     private void doDelete(T entity) {
         try {
             entities.remove(entity);
@@ -74,13 +88,18 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
         }
     }
 
+
+
     void add(T entity) {
+        if (entities.contains(entity))
+            return;
         if (iterating) {
             deleting.remove(entity);
             adding.add(entity);
         } else {
             doAdd(entity);
         }
+        aoiManager.add(entity);
     }
 
     public boolean contains(T entity) {
@@ -92,20 +111,45 @@ public abstract class AbstractActiveEntityManager<T extends ActiveEntity> implem
     public Optional<T> find(long id) {
         return entities.stream()
                 .filter(e -> e.id() == id)
+                .filter(e -> !deleting.contains(e))
                 .findFirst();
     }
 
+
     @Override
     public Set<T> find(Predicate<? super T> predicate) {
-        return entities.stream().filter(predicate).collect(Collectors.toSet());
+        return entities.stream()
+                .filter(e -> !deleting.contains(e))
+                .filter(predicate).collect(Collectors.toSet());
     }
 
+    @Override
+    public Set<Entity> filterVisible(Entity source, Predicate<Entity> filter) {
+        return aoiManager.filterVisibleEntities(source, Entity.class)
+                .stream()
+                .filter(filter)
+                .collect(Collectors.toSet());
+    }
+
+    protected MessageSender getMessageSender() {
+        return messageSender;
+    }
+
+    public void sendToVisiblePlayers(Entity source, I2ClientMessage message) {
+        aoiManager.filterVisibleEntities(source, Player.class)
+                .forEach(p -> messageSender.sendTo(p, message));
+    }
+
+
     void remove(T entity) {
+        if (!entities.contains(entity))
+            return;
         if (iterating) {
             adding.remove(entity);
             deleting.add(entity);
         } else {
             doDelete(entity);
         }
+        aoiManager.remove(entity);
     }
 }

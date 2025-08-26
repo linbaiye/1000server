@@ -52,6 +52,17 @@ private static final long serialVersionUID = 0L;
     return id_;
   }
 
+  public static final int ICON_FIELD_NUMBER = 2;
+  private int icon_ = 0;
+  /**
+   * <code>int32 icon = 2;</code>
+   * @return The icon.
+   */
+  @java.lang.Override
+  public int getIcon() {
+    return icon_;
+  }
+
   public static final int NUMBER_FIELD_NUMBER = 4;
   private int number_ = 0;
   /**
@@ -143,6 +154,28 @@ private static final long serialVersionUID = 0L;
     return color_;
   }
 
+  public static final int GUILDSTONE_FIELD_NUMBER = 9;
+  private boolean guildStone_ = false;
+  /**
+   * <code>bool guildStone = 9;</code>
+   * @return The guildStone.
+   */
+  @java.lang.Override
+  public boolean getGuildStone() {
+    return guildStone_;
+  }
+
+  public static final int DEMO_FIELD_NUMBER = 10;
+  private boolean demo_ = false;
+  /**
+   * <code>bool demo = 10;</code>
+   * @return The demo.
+   */
+  @java.lang.Override
+  public boolean getDemo() {
+    return demo_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -160,6 +193,9 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0L) {
       output.writeInt64(1, id_);
     }
+    if (icon_ != 0) {
+      output.writeInt32(2, icon_);
+    }
     if (((bitField0_ & 0x00000001) != 0)) {
       output.writeInt32(4, number_);
     }
@@ -175,6 +211,12 @@ private static final long serialVersionUID = 0L;
     if (color_ != 0) {
       output.writeInt32(8, color_);
     }
+    if (guildStone_ != false) {
+      output.writeBool(9, guildStone_);
+    }
+    if (demo_ != false) {
+      output.writeBool(10, demo_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -187,6 +229,10 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(1, id_);
+    }
+    if (icon_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(2, icon_);
     }
     if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.CodedOutputStream
@@ -207,6 +253,14 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(8, color_);
     }
+    if (guildStone_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(9, guildStone_);
+    }
+    if (demo_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(10, demo_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -224,6 +278,8 @@ private static final long serialVersionUID = 0L;
 
     if (getId()
         != other.getId()) return false;
+    if (getIcon()
+        != other.getIcon()) return false;
     if (hasNumber() != other.hasNumber()) return false;
     if (hasNumber()) {
       if (getNumber()
@@ -237,6 +293,10 @@ private static final long serialVersionUID = 0L;
         .equals(other.getName())) return false;
     if (getColor()
         != other.getColor()) return false;
+    if (getGuildStone()
+        != other.getGuildStone()) return false;
+    if (getDemo()
+        != other.getDemo()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -251,6 +311,8 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getId());
+    hash = (37 * hash) + ICON_FIELD_NUMBER;
+    hash = (53 * hash) + getIcon();
     if (hasNumber()) {
       hash = (37 * hash) + NUMBER_FIELD_NUMBER;
       hash = (53 * hash) + getNumber();
@@ -263,6 +325,12 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getName().hashCode();
     hash = (37 * hash) + COLOR_FIELD_NUMBER;
     hash = (53 * hash) + getColor();
+    hash = (37 * hash) + GUILDSTONE_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getGuildStone());
+    hash = (37 * hash) + DEMO_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getDemo());
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -395,11 +463,14 @@ private static final long serialVersionUID = 0L;
       super.clear();
       bitField0_ = 0;
       id_ = 0L;
+      icon_ = 0;
       number_ = 0;
       coordinateX_ = 0;
       coordinateY_ = 0;
       name_ = "";
       color_ = 0;
+      guildStone_ = false;
+      demo_ = false;
       return this;
     }
 
@@ -436,22 +507,31 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.id_ = id_;
       }
-      int to_bitField0_ = 0;
       if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.icon_ = icon_;
+      }
+      int to_bitField0_ = 0;
+      if (((from_bitField0_ & 0x00000004) != 0)) {
         result.number_ = number_;
         to_bitField0_ |= 0x00000001;
       }
-      if (((from_bitField0_ & 0x00000004) != 0)) {
+      if (((from_bitField0_ & 0x00000008) != 0)) {
         result.coordinateX_ = coordinateX_;
       }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
+      if (((from_bitField0_ & 0x00000010) != 0)) {
         result.coordinateY_ = coordinateY_;
       }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
+      if (((from_bitField0_ & 0x00000020) != 0)) {
         result.name_ = name_;
       }
-      if (((from_bitField0_ & 0x00000020) != 0)) {
+      if (((from_bitField0_ & 0x00000040) != 0)) {
         result.color_ = color_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        result.guildStone_ = guildStone_;
+      }
+      if (((from_bitField0_ & 0x00000100) != 0)) {
+        result.demo_ = demo_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -503,6 +583,9 @@ private static final long serialVersionUID = 0L;
       if (other.getId() != 0L) {
         setId(other.getId());
       }
+      if (other.getIcon() != 0) {
+        setIcon(other.getIcon());
+      }
       if (other.hasNumber()) {
         setNumber(other.getNumber());
       }
@@ -514,11 +597,17 @@ private static final long serialVersionUID = 0L;
       }
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000020;
         onChanged();
       }
       if (other.getColor() != 0) {
         setColor(other.getColor());
+      }
+      if (other.getGuildStone() != false) {
+        setGuildStone(other.getGuildStone());
+      }
+      if (other.getDemo() != false) {
+        setDemo(other.getDemo());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -551,31 +640,46 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000001;
               break;
             } // case 8
+            case 16: {
+              icon_ = input.readInt32();
+              bitField0_ |= 0x00000002;
+              break;
+            } // case 16
             case 32: {
               number_ = input.readInt32();
-              bitField0_ |= 0x00000002;
+              bitField0_ |= 0x00000004;
               break;
             } // case 32
             case 40: {
               coordinateX_ = input.readInt32();
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000008;
               break;
             } // case 40
             case 48: {
               coordinateY_ = input.readInt32();
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000010;
               break;
             } // case 48
             case 58: {
               name_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000020;
               break;
             } // case 58
             case 64: {
               color_ = input.readInt32();
-              bitField0_ |= 0x00000020;
+              bitField0_ |= 0x00000040;
               break;
             } // case 64
+            case 72: {
+              guildStone_ = input.readBool();
+              bitField0_ |= 0x00000080;
+              break;
+            } // case 72
+            case 80: {
+              demo_ = input.readBool();
+              bitField0_ |= 0x00000100;
+              break;
+            } // case 80
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -625,6 +729,38 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
+    private int icon_ ;
+    /**
+     * <code>int32 icon = 2;</code>
+     * @return The icon.
+     */
+    @java.lang.Override
+    public int getIcon() {
+      return icon_;
+    }
+    /**
+     * <code>int32 icon = 2;</code>
+     * @param value The icon to set.
+     * @return This builder for chaining.
+     */
+    public Builder setIcon(int value) {
+
+      icon_ = value;
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 icon = 2;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearIcon() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      icon_ = 0;
+      onChanged();
+      return this;
+    }
+
     private int number_ ;
     /**
      * <code>optional int32 number = 4;</code>
@@ -632,7 +768,7 @@ private static final long serialVersionUID = 0L;
      */
     @java.lang.Override
     public boolean hasNumber() {
-      return ((bitField0_ & 0x00000002) != 0);
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      * <code>optional int32 number = 4;</code>
@@ -650,7 +786,7 @@ private static final long serialVersionUID = 0L;
     public Builder setNumber(int value) {
 
       number_ = value;
-      bitField0_ |= 0x00000002;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -659,7 +795,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearNumber() {
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000004);
       number_ = 0;
       onChanged();
       return this;
@@ -682,7 +818,7 @@ private static final long serialVersionUID = 0L;
     public Builder setCoordinateX(int value) {
 
       coordinateX_ = value;
-      bitField0_ |= 0x00000004;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -691,7 +827,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearCoordinateX() {
-      bitField0_ = (bitField0_ & ~0x00000004);
+      bitField0_ = (bitField0_ & ~0x00000008);
       coordinateX_ = 0;
       onChanged();
       return this;
@@ -714,7 +850,7 @@ private static final long serialVersionUID = 0L;
     public Builder setCoordinateY(int value) {
 
       coordinateY_ = value;
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -723,7 +859,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearCoordinateY() {
-      bitField0_ = (bitField0_ & ~0x00000008);
+      bitField0_ = (bitField0_ & ~0x00000010);
       coordinateY_ = 0;
       onChanged();
       return this;
@@ -772,7 +908,7 @@ private static final long serialVersionUID = 0L;
         java.lang.String value) {
       if (value == null) { throw new NullPointerException(); }
       name_ = value;
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -782,7 +918,7 @@ private static final long serialVersionUID = 0L;
      */
     public Builder clearName() {
       name_ = getDefaultInstance().getName();
-      bitField0_ = (bitField0_ & ~0x00000010);
+      bitField0_ = (bitField0_ & ~0x00000020);
       onChanged();
       return this;
     }
@@ -796,7 +932,7 @@ private static final long serialVersionUID = 0L;
       if (value == null) { throw new NullPointerException(); }
       checkByteStringIsUtf8(value);
       name_ = value;
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -818,7 +954,7 @@ private static final long serialVersionUID = 0L;
     public Builder setColor(int value) {
 
       color_ = value;
-      bitField0_ |= 0x00000020;
+      bitField0_ |= 0x00000040;
       onChanged();
       return this;
     }
@@ -827,8 +963,72 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearColor() {
-      bitField0_ = (bitField0_ & ~0x00000020);
+      bitField0_ = (bitField0_ & ~0x00000040);
       color_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private boolean guildStone_ ;
+    /**
+     * <code>bool guildStone = 9;</code>
+     * @return The guildStone.
+     */
+    @java.lang.Override
+    public boolean getGuildStone() {
+      return guildStone_;
+    }
+    /**
+     * <code>bool guildStone = 9;</code>
+     * @param value The guildStone to set.
+     * @return This builder for chaining.
+     */
+    public Builder setGuildStone(boolean value) {
+
+      guildStone_ = value;
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>bool guildStone = 9;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearGuildStone() {
+      bitField0_ = (bitField0_ & ~0x00000080);
+      guildStone_ = false;
+      onChanged();
+      return this;
+    }
+
+    private boolean demo_ ;
+    /**
+     * <code>bool demo = 10;</code>
+     * @return The demo.
+     */
+    @java.lang.Override
+    public boolean getDemo() {
+      return demo_;
+    }
+    /**
+     * <code>bool demo = 10;</code>
+     * @param value The demo to set.
+     * @return This builder for chaining.
+     */
+    public Builder setDemo(boolean value) {
+
+      demo_ = value;
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>bool demo = 10;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearDemo() {
+      bitField0_ = (bitField0_ & ~0x00000100);
+      demo_ = false;
       onChanged();
       return this;
     }

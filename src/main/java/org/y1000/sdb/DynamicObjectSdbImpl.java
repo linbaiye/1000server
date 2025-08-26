@@ -18,7 +18,7 @@ public final class DynamicObjectSdbImpl extends AbstractCSVSdbReader implements 
         DynamicObjectSdbImpl sdb = DynamicObjectSdbImpl.INSTANCE;
 //        Set<String> names = itemSdb.names();
         Set<String> names = sdb.columnNames();
-        Set<String> items = sdb.names();
+        Set<String> items = sdb.uniqueIds();
         for (String i: items) {
             if (!i.contains("妖"))
                 continue;
@@ -57,7 +57,7 @@ public final class DynamicObjectSdbImpl extends AbstractCSVSdbReader implements 
 
     @Override
     public int getOpenedInterval(String name) {
-        return getInt(name, "OpennedInterval");
+        return getIntOrZero(name, "OpennedInterval");
     }
 
     @Override

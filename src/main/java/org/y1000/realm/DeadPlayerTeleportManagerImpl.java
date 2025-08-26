@@ -1,6 +1,5 @@
 package org.y1000.realm;
 
-import org.y1000.entities.creatures.State;
 import org.y1000.entities.players.Player;
 import org.y1000.realm.event.RealmTeleportEvent;
 import org.y1000.util.Coordinate;
@@ -33,7 +32,7 @@ final class DeadPlayerTeleportManagerImpl implements DeadPlayerTeleportManager {
     @Override
     public void onPlayerDead(Player player) {
         if (teleportHandler == null || player == null
-                || player.stateEnum() != State.DIE) {
+                || !player.isDead()) {
             return;
         }
         timerManager.add(player, 10000);
@@ -42,6 +41,6 @@ final class DeadPlayerTeleportManagerImpl implements DeadPlayerTeleportManager {
     @Override
     public void update(long delta) {
         Set<Player> players = timerManager.update(delta);
-        players.forEach(player -> teleportHandler.invoke(new RealmTeleportEvent(player, toRealmId, toCoordinate)));
+        //players.forEach(player -> teleportHandler.invoke(new RealmTeleportEvent(player, toRealmId, toCoordinate)));
     }
 }

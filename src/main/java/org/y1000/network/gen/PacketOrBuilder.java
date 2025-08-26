@@ -9,6 +9,51 @@ public interface PacketOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   * <code>.org.y1000.network.gen.LoginResponsePacket loginResponse = 3;</code>
+   * @return Whether the loginResponse field is set.
+   */
+  boolean hasLoginResponse();
+  /**
+   * <code>.org.y1000.network.gen.LoginResponsePacket loginResponse = 3;</code>
+   * @return The loginResponse.
+   */
+  org.y1000.network.gen.LoginResponsePacket getLoginResponse();
+  /**
+   * <code>.org.y1000.network.gen.LoginResponsePacket loginResponse = 3;</code>
+   */
+  org.y1000.network.gen.LoginResponsePacketOrBuilder getLoginResponseOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.RegisterResponsePacket registerResponse = 5;</code>
+   * @return Whether the registerResponse field is set.
+   */
+  boolean hasRegisterResponse();
+  /**
+   * <code>.org.y1000.network.gen.RegisterResponsePacket registerResponse = 5;</code>
+   * @return The registerResponse.
+   */
+  org.y1000.network.gen.RegisterResponsePacket getRegisterResponse();
+  /**
+   * <code>.org.y1000.network.gen.RegisterResponsePacket registerResponse = 5;</code>
+   */
+  org.y1000.network.gen.RegisterResponsePacketOrBuilder getRegisterResponseOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+   * @return Whether the createCharacterResponse field is set.
+   */
+  boolean hasCreateCharacterResponse();
+  /**
+   * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+   * @return The createCharacterResponse.
+   */
+  org.y1000.network.gen.CreateCharacterResponsePacket getCreateCharacterResponse();
+  /**
+   * <code>.org.y1000.network.gen.CreateCharacterResponsePacket createCharacterResponse = 4;</code>
+   */
+  org.y1000.network.gen.CreateCharacterResponsePacketOrBuilder getCreateCharacterResponseOrBuilder();
+
+  /**
    * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
    * @return Whether the positionPacket field is set.
    */
@@ -22,81 +67,6 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.network.gen.PositionPacket positionPacket = 1;</code>
    */
   org.y1000.network.gen.PositionPacketOrBuilder getPositionPacketOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-   * @return Whether the creatureInterpolation field is set.
-   */
-  boolean hasCreatureInterpolation();
-  /**
-   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-   * @return The creatureInterpolation.
-   */
-  org.y1000.network.gen.CreatureInterpolationPacket getCreatureInterpolation();
-  /**
-   * <code>.org.y1000.network.gen.CreatureInterpolationPacket creatureInterpolation = 2;</code>
-   */
-  org.y1000.network.gen.CreatureInterpolationPacketOrBuilder getCreatureInterpolationOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-   * @return Whether the loginPacket field is set.
-   */
-  boolean hasLoginPacket();
-  /**
-   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-   * @return The loginPacket.
-   */
-  org.y1000.network.gen.LoginPacket getLoginPacket();
-  /**
-   * <code>.org.y1000.network.gen.LoginPacket loginPacket = 4;</code>
-   */
-  org.y1000.network.gen.LoginPacketOrBuilder getLoginPacketOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
-   * @return Whether the interpolations field is set.
-   */
-  boolean hasInterpolations();
-  /**
-   * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
-   * @return The interpolations.
-   */
-  org.y1000.network.gen.InterpolationsPacket getInterpolations();
-  /**
-   * <code>.org.y1000.network.gen.InterpolationsPacket interpolations = 5;</code>
-   */
-  org.y1000.network.gen.InterpolationsPacketOrBuilder getInterpolationsOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
-   * @return Whether the responsePacket field is set.
-   */
-  boolean hasResponsePacket();
-  /**
-   * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
-   * @return The responsePacket.
-   */
-  org.y1000.network.gen.InputResponsePacket getResponsePacket();
-  /**
-   * <code>.org.y1000.network.gen.InputResponsePacket responsePacket = 6;</code>
-   */
-  org.y1000.network.gen.InputResponsePacketOrBuilder getResponsePacketOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-   * @return Whether the playerInterpolation field is set.
-   */
-  boolean hasPlayerInterpolation();
-  /**
-   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-   * @return The playerInterpolation.
-   */
-  org.y1000.network.gen.PlayerInterpolationPacket getPlayerInterpolation();
-  /**
-   * <code>.org.y1000.network.gen.PlayerInterpolationPacket playerInterpolation = 7;</code>
-   */
-  org.y1000.network.gen.PlayerInterpolationPacketOrBuilder getPlayerInterpolationOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.RemoveEntityPacket removeEntity = 8;</code>
@@ -114,21 +84,6 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.RemoveEntityPacketOrBuilder getRemoveEntityOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.ClientAttackResponsePacket attackEventResponsePacket = 9;</code>
-   * @return Whether the attackEventResponsePacket field is set.
-   */
-  boolean hasAttackEventResponsePacket();
-  /**
-   * <code>.org.y1000.network.gen.ClientAttackResponsePacket attackEventResponsePacket = 9;</code>
-   * @return The attackEventResponsePacket.
-   */
-  org.y1000.network.gen.ClientAttackResponsePacket getAttackEventResponsePacket();
-  /**
-   * <code>.org.y1000.network.gen.ClientAttackResponsePacket attackEventResponsePacket = 9;</code>
-   */
-  org.y1000.network.gen.ClientAttackResponsePacketOrBuilder getAttackEventResponsePacketOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.CreatureAttackEventPacket attackEventPacket = 10;</code>
    * @return Whether the attackEventPacket field is set.
    */
@@ -142,21 +97,6 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.network.gen.CreatureAttackEventPacket attackEventPacket = 10;</code>
    */
   org.y1000.network.gen.CreatureAttackEventPacketOrBuilder getAttackEventPacketOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.CreatureHurtEventPacket hurtEventPacket = 11;</code>
-   * @return Whether the hurtEventPacket field is set.
-   */
-  boolean hasHurtEventPacket();
-  /**
-   * <code>.org.y1000.network.gen.CreatureHurtEventPacket hurtEventPacket = 11;</code>
-   * @return The hurtEventPacket.
-   */
-  org.y1000.network.gen.CreatureHurtEventPacket getHurtEventPacket();
-  /**
-   * <code>.org.y1000.network.gen.CreatureHurtEventPacket hurtEventPacket = 11;</code>
-   */
-  org.y1000.network.gen.CreatureHurtEventPacketOrBuilder getHurtEventPacketOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.ChangeStatePacket changeStatePacket = 12;</code>
@@ -294,66 +234,6 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.OpenTradeWindowPacketOrBuilder getOpenTradeWindowOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.ToggleKungFuPacket toggleKungFu = 23;</code>
-   * @return Whether the toggleKungFu field is set.
-   */
-  boolean hasToggleKungFu();
-  /**
-   * <code>.org.y1000.network.gen.ToggleKungFuPacket toggleKungFu = 23;</code>
-   * @return The toggleKungFu.
-   */
-  org.y1000.network.gen.ToggleKungFuPacket getToggleKungFu();
-  /**
-   * <code>.org.y1000.network.gen.ToggleKungFuPacket toggleKungFu = 23;</code>
-   */
-  org.y1000.network.gen.ToggleKungFuPacketOrBuilder getToggleKungFuOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.PlayerSitDownPacket sitDown = 24;</code>
-   * @return Whether the sitDown field is set.
-   */
-  boolean hasSitDown();
-  /**
-   * <code>.org.y1000.network.gen.PlayerSitDownPacket sitDown = 24;</code>
-   * @return The sitDown.
-   */
-  org.y1000.network.gen.PlayerSitDownPacket getSitDown();
-  /**
-   * <code>.org.y1000.network.gen.PlayerSitDownPacket sitDown = 24;</code>
-   */
-  org.y1000.network.gen.PlayerSitDownPacketOrBuilder getSitDownOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.PlayerStandUpPacket standUp = 25;</code>
-   * @return Whether the standUp field is set.
-   */
-  boolean hasStandUp();
-  /**
-   * <code>.org.y1000.network.gen.PlayerStandUpPacket standUp = 25;</code>
-   * @return The standUp.
-   */
-  org.y1000.network.gen.PlayerStandUpPacket getStandUp();
-  /**
-   * <code>.org.y1000.network.gen.PlayerStandUpPacket standUp = 25;</code>
-   */
-  org.y1000.network.gen.PlayerStandUpPacketOrBuilder getStandUpOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.PlayerCooldownPacket cooldown = 26;</code>
-   * @return Whether the cooldown field is set.
-   */
-  boolean hasCooldown();
-  /**
-   * <code>.org.y1000.network.gen.PlayerCooldownPacket cooldown = 26;</code>
-   * @return The cooldown.
-   */
-  org.y1000.network.gen.PlayerCooldownPacket getCooldown();
-  /**
-   * <code>.org.y1000.network.gen.PlayerCooldownPacket cooldown = 26;</code>
-   */
-  org.y1000.network.gen.PlayerCooldownPacketOrBuilder getCooldownOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.AttributePacket attribute = 27;</code>
    * @return Whether the attribute field is set.
    */
@@ -399,21 +279,6 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.CreatureDieEventPacketOrBuilder getDieOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.PlayerRevivePacket playerRevive = 30;</code>
-   * @return Whether the playerRevive field is set.
-   */
-  boolean hasPlayerRevive();
-  /**
-   * <code>.org.y1000.network.gen.PlayerRevivePacket playerRevive = 30;</code>
-   * @return The playerRevive.
-   */
-  org.y1000.network.gen.PlayerRevivePacket getPlayerRevive();
-  /**
-   * <code>.org.y1000.network.gen.PlayerRevivePacket playerRevive = 30;</code>
-   */
-  org.y1000.network.gen.PlayerRevivePacketOrBuilder getPlayerReviveOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.PlayerGainExpPacket gainExp = 31;</code>
    * @return Whether the gainExp field is set.
    */
@@ -444,21 +309,6 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.ProjectilePacketOrBuilder getProjectileOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.MonsterMoveEventPacket monsterMove = 33;</code>
-   * @return Whether the monsterMove field is set.
-   */
-  boolean hasMonsterMove();
-  /**
-   * <code>.org.y1000.network.gen.MonsterMoveEventPacket monsterMove = 33;</code>
-   * @return The monsterMove.
-   */
-  org.y1000.network.gen.MonsterMoveEventPacket getMonsterMove();
-  /**
-   * <code>.org.y1000.network.gen.MonsterMoveEventPacket monsterMove = 33;</code>
-   */
-  org.y1000.network.gen.MonsterMoveEventPacketOrBuilder getMonsterMoveOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.KungFuPacket learnKungFu = 34;</code>
    * @return Whether the learnKungFu field is set.
    */
@@ -474,49 +324,19 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.KungFuPacketOrBuilder getLearnKungFuOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
-   * @return Whether the itemAttribute field is set.
+   * <code>.org.y1000.network.gen.ItemDescriptionPacket itemDescription = 35;</code>
+   * @return Whether the itemDescription field is set.
    */
-  boolean hasItemAttribute();
+  boolean hasItemDescription();
   /**
-   * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
-   * @return The itemAttribute.
+   * <code>.org.y1000.network.gen.ItemDescriptionPacket itemDescription = 35;</code>
+   * @return The itemDescription.
    */
-  org.y1000.network.gen.ItemAttributePacket getItemAttribute();
+  org.y1000.network.gen.ItemDescriptionPacket getItemDescription();
   /**
-   * <code>.org.y1000.network.gen.ItemAttributePacket itemAttribute = 35;</code>
+   * <code>.org.y1000.network.gen.ItemDescriptionPacket itemDescription = 35;</code>
    */
-  org.y1000.network.gen.ItemAttributePacketOrBuilder getItemAttributeOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
-   * @return Whether the rightClickAttribute field is set.
-   */
-  boolean hasRightClickAttribute();
-  /**
-   * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
-   * @return The rightClickAttribute.
-   */
-  org.y1000.network.gen.PlayerRightClickAttributePacket getRightClickAttribute();
-  /**
-   * <code>.org.y1000.network.gen.PlayerRightClickAttributePacket rightClickAttribute = 36;</code>
-   */
-  org.y1000.network.gen.PlayerRightClickAttributePacketOrBuilder getRightClickAttributeOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-   * @return Whether the updateTradeWindow field is set.
-   */
-  boolean hasUpdateTradeWindow();
-  /**
-   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-   * @return The updateTradeWindow.
-   */
-  org.y1000.network.gen.UpdateTradeWindowPacket getUpdateTradeWindow();
-  /**
-   * <code>.org.y1000.network.gen.UpdateTradeWindowPacket updateTradeWindow = 37;</code>
-   */
-  org.y1000.network.gen.UpdateTradeWindowPacketOrBuilder getUpdateTradeWindowOrBuilder();
+  org.y1000.network.gen.ItemDescriptionPacketOrBuilder getItemDescriptionOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.ShowDynamicObjectPacket showDynamicObject = 38;</code>
@@ -532,21 +352,6 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.network.gen.ShowDynamicObjectPacket showDynamicObject = 38;</code>
    */
   org.y1000.network.gen.ShowDynamicObjectPacketOrBuilder getShowDynamicObjectOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.UpdateDynamicObjectPacket updateDynamicObject = 39;</code>
-   * @return Whether the updateDynamicObject field is set.
-   */
-  boolean hasUpdateDynamicObject();
-  /**
-   * <code>.org.y1000.network.gen.UpdateDynamicObjectPacket updateDynamicObject = 39;</code>
-   * @return The updateDynamicObject.
-   */
-  org.y1000.network.gen.UpdateDynamicObjectPacket getUpdateDynamicObject();
-  /**
-   * <code>.org.y1000.network.gen.UpdateDynamicObjectPacket updateDynamicObject = 39;</code>
-   */
-  org.y1000.network.gen.UpdateDynamicObjectPacketOrBuilder getUpdateDynamicObjectOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.TeleportPacket teleport = 40;</code>
@@ -639,51 +444,6 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.NpcPositionPacketOrBuilder getNpcPositionOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.ChatPacket chat = 46;</code>
-   * @return Whether the chat field is set.
-   */
-  boolean hasChat();
-  /**
-   * <code>.org.y1000.network.gen.ChatPacket chat = 46;</code>
-   * @return The chat.
-   */
-  org.y1000.network.gen.ChatPacket getChat();
-  /**
-   * <code>.org.y1000.network.gen.ChatPacket chat = 46;</code>
-   */
-  org.y1000.network.gen.ChatPacketOrBuilder getChatOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
-   * @return Whether the openBank field is set.
-   */
-  boolean hasOpenBank();
-  /**
-   * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
-   * @return The openBank.
-   */
-  org.y1000.network.gen.OpenBankPacket getOpenBank();
-  /**
-   * <code>.org.y1000.network.gen.OpenBankPacket openBank = 47;</code>
-   */
-  org.y1000.network.gen.OpenBankPacketOrBuilder getOpenBankOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
-   * @return Whether the updateBank field is set.
-   */
-  boolean hasUpdateBank();
-  /**
-   * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
-   * @return The updateBank.
-   */
-  org.y1000.network.gen.UpdateBankPacket getUpdateBank();
-  /**
-   * <code>.org.y1000.network.gen.UpdateBankPacket updateBank = 48;</code>
-   */
-  org.y1000.network.gen.UpdateBankPacketOrBuilder getUpdateBankOrBuilder();
-
-  /**
    * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
    * @return Whether the nameColor field is set.
    */
@@ -697,21 +457,6 @@ public interface PacketOrBuilder extends
    * <code>.org.y1000.network.gen.NameColorPacket nameColor = 49;</code>
    */
   org.y1000.network.gen.NameColorPacketOrBuilder getNameColorOrBuilder();
-
-  /**
-   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-   * @return Whether the updateGuild field is set.
-   */
-  boolean hasUpdateGuild();
-  /**
-   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-   * @return The updateGuild.
-   */
-  org.y1000.network.gen.UpdateGuildPacket getUpdateGuild();
-  /**
-   * <code>.org.y1000.network.gen.UpdateGuildPacket updateGuild = 50;</code>
-   */
-  org.y1000.network.gen.UpdateGuildPacketOrBuilder getUpdateGuildOrBuilder();
 
   /**
    * <code>.org.y1000.network.gen.UpdateGuildKungFuFormPacket kungFuForm = 51;</code>
@@ -759,34 +504,454 @@ public interface PacketOrBuilder extends
   org.y1000.network.gen.UpdateBuffPacketOrBuilder getUpdateBuffOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
-   * @return Whether the interactionMenu field is set.
+   * <code>.org.y1000.network.gen.KungFuBookPacket kungFuBook = 56;</code>
+   * @return Whether the kungFuBook field is set.
    */
-  boolean hasInteractionMenu();
+  boolean hasKungFuBook();
   /**
-   * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
-   * @return The interactionMenu.
+   * <code>.org.y1000.network.gen.KungFuBookPacket kungFuBook = 56;</code>
+   * @return The kungFuBook.
    */
-  org.y1000.network.gen.NpcInteractionMenuPacket getInteractionMenu();
+  org.y1000.network.gen.KungFuBookPacket getKungFuBook();
   /**
-   * <code>.org.y1000.network.gen.NpcInteractionMenuPacket interactionMenu = 54;</code>
+   * <code>.org.y1000.network.gen.KungFuBookPacket kungFuBook = 56;</code>
    */
-  org.y1000.network.gen.NpcInteractionMenuPacketOrBuilder getInteractionMenuOrBuilder();
+  org.y1000.network.gen.KungFuBookPacketOrBuilder getKungFuBookOrBuilder();
 
   /**
-   * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
-   * @return Whether the merchantMenu field is set.
+   * <code>.org.y1000.network.gen.InventoryPacket inventory = 57;</code>
+   * @return Whether the inventory field is set.
    */
-  boolean hasMerchantMenu();
+  boolean hasInventory();
   /**
-   * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
-   * @return The merchantMenu.
+   * <code>.org.y1000.network.gen.InventoryPacket inventory = 57;</code>
+   * @return The inventory.
    */
-  org.y1000.network.gen.MerchantMenuPacket getMerchantMenu();
+  org.y1000.network.gen.InventoryPacket getInventory();
   /**
-   * <code>.org.y1000.network.gen.MerchantMenuPacket merchantMenu = 55;</code>
+   * <code>.org.y1000.network.gen.InventoryPacket inventory = 57;</code>
    */
-  org.y1000.network.gen.MerchantMenuPacketOrBuilder getMerchantMenuOrBuilder();
+  org.y1000.network.gen.InventoryPacketOrBuilder getInventoryOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.JoinRealmPacket joinRealm = 58;</code>
+   * @return Whether the joinRealm field is set.
+   */
+  boolean hasJoinRealm();
+  /**
+   * <code>.org.y1000.network.gen.JoinRealmPacket joinRealm = 58;</code>
+   * @return The joinRealm.
+   */
+  org.y1000.network.gen.JoinRealmPacket getJoinRealm();
+  /**
+   * <code>.org.y1000.network.gen.JoinRealmPacket joinRealm = 58;</code>
+   */
+  org.y1000.network.gen.JoinRealmPacketOrBuilder getJoinRealmOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.PlayerSnapshotPacket playerSnapshot = 59;</code>
+   * @return Whether the playerSnapshot field is set.
+   */
+  boolean hasPlayerSnapshot();
+  /**
+   * <code>.org.y1000.network.gen.PlayerSnapshotPacket playerSnapshot = 59;</code>
+   * @return The playerSnapshot.
+   */
+  org.y1000.network.gen.PlayerSnapshotPacket getPlayerSnapshot();
+  /**
+   * <code>.org.y1000.network.gen.PlayerSnapshotPacket playerSnapshot = 59;</code>
+   */
+  org.y1000.network.gen.PlayerSnapshotPacketOrBuilder getPlayerSnapshotOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.NpcSnapshotPacket npcSnapshot = 60;</code>
+   * @return Whether the npcSnapshot field is set.
+   */
+  boolean hasNpcSnapshot();
+  /**
+   * <code>.org.y1000.network.gen.NpcSnapshotPacket npcSnapshot = 60;</code>
+   * @return The npcSnapshot.
+   */
+  org.y1000.network.gen.NpcSnapshotPacket getNpcSnapshot();
+  /**
+   * <code>.org.y1000.network.gen.NpcSnapshotPacket npcSnapshot = 60;</code>
+   */
+  org.y1000.network.gen.NpcSnapshotPacketOrBuilder getNpcSnapshotOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+   * @return Whether the say field is set.
+   */
+  boolean hasSay();
+  /**
+   * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+   * @return The say.
+   */
+  org.y1000.network.gen.CreatureSayPacket getSay();
+  /**
+   * <code>.org.y1000.network.gen.CreatureSayPacket say = 61;</code>
+   */
+  org.y1000.network.gen.CreatureSayPacketOrBuilder getSayOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+   * @return Whether the activeKungFuList field is set.
+   */
+  boolean hasActiveKungFuList();
+  /**
+   * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+   * @return The activeKungFuList.
+   */
+  org.y1000.network.gen.SyncActiveKungFuPacket getActiveKungFuList();
+  /**
+   * <code>.org.y1000.network.gen.SyncActiveKungFuPacket activeKungFuList = 62;</code>
+   */
+  org.y1000.network.gen.SyncActiveKungFuPacketOrBuilder getActiveKungFuListOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.PlayerChangeStatePacket playerChangeState = 63;</code>
+   * @return Whether the playerChangeState field is set.
+   */
+  boolean hasPlayerChangeState();
+  /**
+   * <code>.org.y1000.network.gen.PlayerChangeStatePacket playerChangeState = 63;</code>
+   * @return The playerChangeState.
+   */
+  org.y1000.network.gen.PlayerChangeStatePacket getPlayerChangeState();
+  /**
+   * <code>.org.y1000.network.gen.PlayerChangeStatePacket playerChangeState = 63;</code>
+   */
+  org.y1000.network.gen.PlayerChangeStatePacketOrBuilder getPlayerChangeStateOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+   * @return Whether the attack field is set.
+   */
+  boolean hasAttack();
+  /**
+   * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+   * @return The attack.
+   */
+  org.y1000.network.gen.PlayerAttackPacket getAttack();
+  /**
+   * <code>.org.y1000.network.gen.PlayerAttackPacket attack = 64;</code>
+   */
+  org.y1000.network.gen.PlayerAttackPacketOrBuilder getAttackOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.PlayerSetPositionPacket playerSetPosition = 66;</code>
+   * @return Whether the playerSetPosition field is set.
+   */
+  boolean hasPlayerSetPosition();
+  /**
+   * <code>.org.y1000.network.gen.PlayerSetPositionPacket playerSetPosition = 66;</code>
+   * @return The playerSetPosition.
+   */
+  org.y1000.network.gen.PlayerSetPositionPacket getPlayerSetPosition();
+  /**
+   * <code>.org.y1000.network.gen.PlayerSetPositionPacket playerSetPosition = 66;</code>
+   */
+  org.y1000.network.gen.PlayerSetPositionPacketOrBuilder getPlayerSetPositionOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.NpcMovePacket npcMove = 67;</code>
+   * @return Whether the npcMove field is set.
+   */
+  boolean hasNpcMove();
+  /**
+   * <code>.org.y1000.network.gen.NpcMovePacket npcMove = 67;</code>
+   * @return The npcMove.
+   */
+  org.y1000.network.gen.NpcMovePacket getNpcMove();
+  /**
+   * <code>.org.y1000.network.gen.NpcMovePacket npcMove = 67;</code>
+   */
+  org.y1000.network.gen.NpcMovePacketOrBuilder getNpcMoveOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.PlayerMovePacket playerMove = 68;</code>
+   * @return Whether the playerMove field is set.
+   */
+  boolean hasPlayerMove();
+  /**
+   * <code>.org.y1000.network.gen.PlayerMovePacket playerMove = 68;</code>
+   * @return The playerMove.
+   */
+  org.y1000.network.gen.PlayerMovePacket getPlayerMove();
+  /**
+   * <code>.org.y1000.network.gen.PlayerMovePacket playerMove = 68;</code>
+   */
+  org.y1000.network.gen.PlayerMovePacketOrBuilder getPlayerMoveOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.EntitySoundPacket entitySound = 69;</code>
+   * @return Whether the entitySound field is set.
+   */
+  boolean hasEntitySound();
+  /**
+   * <code>.org.y1000.network.gen.EntitySoundPacket entitySound = 69;</code>
+   * @return The entitySound.
+   */
+  org.y1000.network.gen.EntitySoundPacket getEntitySound();
+  /**
+   * <code>.org.y1000.network.gen.EntitySoundPacket entitySound = 69;</code>
+   */
+  org.y1000.network.gen.EntitySoundPacketOrBuilder getEntitySoundOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.PlayerDamagedPacket playerDamaged = 70;</code>
+   * @return Whether the playerDamaged field is set.
+   */
+  boolean hasPlayerDamaged();
+  /**
+   * <code>.org.y1000.network.gen.PlayerDamagedPacket playerDamaged = 70;</code>
+   * @return The playerDamaged.
+   */
+  org.y1000.network.gen.PlayerDamagedPacket getPlayerDamaged();
+  /**
+   * <code>.org.y1000.network.gen.PlayerDamagedPacket playerDamaged = 70;</code>
+   */
+  org.y1000.network.gen.PlayerDamagedPacketOrBuilder getPlayerDamagedOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.EntityDamagedPacket entityDamaged = 71;</code>
+   * @return Whether the entityDamaged field is set.
+   */
+  boolean hasEntityDamaged();
+  /**
+   * <code>.org.y1000.network.gen.EntityDamagedPacket entityDamaged = 71;</code>
+   * @return The entityDamaged.
+   */
+  org.y1000.network.gen.EntityDamagedPacket getEntityDamaged();
+  /**
+   * <code>.org.y1000.network.gen.EntityDamagedPacket entityDamaged = 71;</code>
+   */
+  org.y1000.network.gen.EntityDamagedPacketOrBuilder getEntityDamagedOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.StartDopItemPacket dropItemPacket = 72;</code>
+   * @return Whether the dropItemPacket field is set.
+   */
+  boolean hasDropItemPacket();
+  /**
+   * <code>.org.y1000.network.gen.StartDopItemPacket dropItemPacket = 72;</code>
+   * @return The dropItemPacket.
+   */
+  org.y1000.network.gen.StartDopItemPacket getDropItemPacket();
+  /**
+   * <code>.org.y1000.network.gen.StartDopItemPacket dropItemPacket = 72;</code>
+   */
+  org.y1000.network.gen.StartDopItemPacketOrBuilder getDropItemPacketOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.NpcMenuPacket npcMenuPacket = 73;</code>
+   * @return Whether the npcMenuPacket field is set.
+   */
+  boolean hasNpcMenuPacket();
+  /**
+   * <code>.org.y1000.network.gen.NpcMenuPacket npcMenuPacket = 73;</code>
+   * @return The npcMenuPacket.
+   */
+  org.y1000.network.gen.NpcMenuPacket getNpcMenuPacket();
+  /**
+   * <code>.org.y1000.network.gen.NpcMenuPacket npcMenuPacket = 73;</code>
+   */
+  org.y1000.network.gen.NpcMenuPacketOrBuilder getNpcMenuPacketOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.NpcTradeMenuPacket tradeMenuPacket = 74;</code>
+   * @return Whether the tradeMenuPacket field is set.
+   */
+  boolean hasTradeMenuPacket();
+  /**
+   * <code>.org.y1000.network.gen.NpcTradeMenuPacket tradeMenuPacket = 74;</code>
+   * @return The tradeMenuPacket.
+   */
+  org.y1000.network.gen.NpcTradeMenuPacket getTradeMenuPacket();
+  /**
+   * <code>.org.y1000.network.gen.NpcTradeMenuPacket tradeMenuPacket = 74;</code>
+   */
+  org.y1000.network.gen.NpcTradeMenuPacketOrBuilder getTradeMenuPacketOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.CloseTradeWindowPacket closeTradePacket = 75;</code>
+   * @return Whether the closeTradePacket field is set.
+   */
+  boolean hasCloseTradePacket();
+  /**
+   * <code>.org.y1000.network.gen.CloseTradeWindowPacket closeTradePacket = 75;</code>
+   * @return The closeTradePacket.
+   */
+  org.y1000.network.gen.CloseTradeWindowPacket getCloseTradePacket();
+  /**
+   * <code>.org.y1000.network.gen.CloseTradeWindowPacket closeTradePacket = 75;</code>
+   */
+  org.y1000.network.gen.CloseTradeWindowPacketOrBuilder getCloseTradePacketOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.UpdateTradeWindowSlotPacket updateTradeWindowSlot = 76;</code>
+   * @return Whether the updateTradeWindowSlot field is set.
+   */
+  boolean hasUpdateTradeWindowSlot();
+  /**
+   * <code>.org.y1000.network.gen.UpdateTradeWindowSlotPacket updateTradeWindowSlot = 76;</code>
+   * @return The updateTradeWindowSlot.
+   */
+  org.y1000.network.gen.UpdateTradeWindowSlotPacket getUpdateTradeWindowSlot();
+  /**
+   * <code>.org.y1000.network.gen.UpdateTradeWindowSlotPacket updateTradeWindowSlot = 76;</code>
+   */
+  org.y1000.network.gen.UpdateTradeWindowSlotPacketOrBuilder getUpdateTradeWindowSlotOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+   * @return Whether the dynamicObjectSnapshot field is set.
+   */
+  boolean hasDynamicObjectSnapshot();
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+   * @return The dynamicObjectSnapshot.
+   */
+  org.y1000.network.gen.DynamicObjectSnapshotPacket getDynamicObjectSnapshot();
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectSnapshotPacket dynamicObjectSnapshot = 77;</code>
+   */
+  org.y1000.network.gen.DynamicObjectSnapshotPacketOrBuilder getDynamicObjectSnapshotOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectShiftPacket dynamicObjectShift = 78;</code>
+   * @return Whether the dynamicObjectShift field is set.
+   */
+  boolean hasDynamicObjectShift();
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectShiftPacket dynamicObjectShift = 78;</code>
+   * @return The dynamicObjectShift.
+   */
+  org.y1000.network.gen.DynamicObjectShiftPacket getDynamicObjectShift();
+  /**
+   * <code>.org.y1000.network.gen.DynamicObjectShiftPacket dynamicObjectShift = 78;</code>
+   */
+  org.y1000.network.gen.DynamicObjectShiftPacketOrBuilder getDynamicObjectShiftOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.FollowRopePacket followRope = 79;</code>
+   * @return Whether the followRope field is set.
+   */
+  boolean hasFollowRope();
+  /**
+   * <code>.org.y1000.network.gen.FollowRopePacket followRope = 79;</code>
+   * @return The followRope.
+   */
+  org.y1000.network.gen.FollowRopePacket getFollowRope();
+  /**
+   * <code>.org.y1000.network.gen.FollowRopePacket followRope = 79;</code>
+   */
+  org.y1000.network.gen.FollowRopePacketOrBuilder getFollowRopeOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.PillsPacket pills = 80;</code>
+   * @return Whether the pills field is set.
+   */
+  boolean hasPills();
+  /**
+   * <code>.org.y1000.network.gen.PillsPacket pills = 80;</code>
+   * @return The pills.
+   */
+  org.y1000.network.gen.PillsPacket getPills();
+  /**
+   * <code>.org.y1000.network.gen.PillsPacket pills = 80;</code>
+   */
+  org.y1000.network.gen.PillsPacketOrBuilder getPillsOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+   * @return Whether the attributeEquip field is set.
+   */
+  boolean hasAttributeEquip();
+  /**
+   * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+   * @return The attributeEquip.
+   */
+  org.y1000.network.gen.AttributeEquipPacket getAttributeEquip();
+  /**
+   * <code>.org.y1000.network.gen.AttributeEquipPacket attributeEquip = 81;</code>
+   */
+  org.y1000.network.gen.AttributeEquipPacketOrBuilder getAttributeEquipOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+   * @return Whether the activateEffect field is set.
+   */
+  boolean hasActivateEffect();
+  /**
+   * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+   * @return The activateEffect.
+   */
+  org.y1000.network.gen.ActivateEffectPacket getActivateEffect();
+  /**
+   * <code>.org.y1000.network.gen.ActivateEffectPacket activateEffect = 82;</code>
+   */
+  org.y1000.network.gen.ActivateEffectPacketOrBuilder getActivateEffectOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.ShowQuestPacket showQuest = 83;</code>
+   * @return Whether the showQuest field is set.
+   */
+  boolean hasShowQuest();
+  /**
+   * <code>.org.y1000.network.gen.ShowQuestPacket showQuest = 83;</code>
+   * @return The showQuest.
+   */
+  org.y1000.network.gen.ShowQuestPacket getShowQuest();
+  /**
+   * <code>.org.y1000.network.gen.ShowQuestPacket showQuest = 83;</code>
+   */
+  org.y1000.network.gen.ShowQuestPacketOrBuilder getShowQuestOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.ShowBankWindowPacket showBank = 84;</code>
+   * @return Whether the showBank field is set.
+   */
+  boolean hasShowBank();
+  /**
+   * <code>.org.y1000.network.gen.ShowBankWindowPacket showBank = 84;</code>
+   * @return The showBank.
+   */
+  org.y1000.network.gen.ShowBankWindowPacket getShowBank();
+  /**
+   * <code>.org.y1000.network.gen.ShowBankWindowPacket showBank = 84;</code>
+   */
+  org.y1000.network.gen.ShowBankWindowPacketOrBuilder getShowBankOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.ShowCreateGuildWindowPacket showCreateGuild = 85;</code>
+   * @return Whether the showCreateGuild field is set.
+   */
+  boolean hasShowCreateGuild();
+  /**
+   * <code>.org.y1000.network.gen.ShowCreateGuildWindowPacket showCreateGuild = 85;</code>
+   * @return The showCreateGuild.
+   */
+  org.y1000.network.gen.ShowCreateGuildWindowPacket getShowCreateGuild();
+  /**
+   * <code>.org.y1000.network.gen.ShowCreateGuildWindowPacket showCreateGuild = 85;</code>
+   */
+  org.y1000.network.gen.ShowCreateGuildWindowPacketOrBuilder getShowCreateGuildOrBuilder();
+
+  /**
+   * <code>.org.y1000.network.gen.ApplyKungFuWindowPacket showApplyKungFu = 86;</code>
+   * @return Whether the showApplyKungFu field is set.
+   */
+  boolean hasShowApplyKungFu();
+  /**
+   * <code>.org.y1000.network.gen.ApplyKungFuWindowPacket showApplyKungFu = 86;</code>
+   * @return The showApplyKungFu.
+   */
+  org.y1000.network.gen.ApplyKungFuWindowPacket getShowApplyKungFu();
+  /**
+   * <code>.org.y1000.network.gen.ApplyKungFuWindowPacket showApplyKungFu = 86;</code>
+   */
+  org.y1000.network.gen.ApplyKungFuWindowPacketOrBuilder getShowApplyKungFuOrBuilder();
 
   org.y1000.network.gen.Packet.TypedPacketCase getTypedPacketCase();
 }

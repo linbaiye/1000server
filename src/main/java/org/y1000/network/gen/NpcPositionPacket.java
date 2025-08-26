@@ -21,6 +21,7 @@ private static final long serialVersionUID = 0L;
     yList_ = emptyIntList();
     nameList_ =
         com.google.protobuf.LazyStringArrayList.emptyList();
+    idList_ = emptyLongList();
   }
 
   @java.lang.Override
@@ -140,6 +141,36 @@ private static final long serialVersionUID = 0L;
     return nameList_.getByteString(index);
   }
 
+  public static final int IDLIST_FIELD_NUMBER = 4;
+  @SuppressWarnings("serial")
+  private com.google.protobuf.Internal.LongList idList_ =
+      emptyLongList();
+  /**
+   * <code>repeated int64 idList = 4;</code>
+   * @return A list containing the idList.
+   */
+  @java.lang.Override
+  public java.util.List<java.lang.Long>
+      getIdListList() {
+    return idList_;
+  }
+  /**
+   * <code>repeated int64 idList = 4;</code>
+   * @return The count of idList.
+   */
+  public int getIdListCount() {
+    return idList_.size();
+  }
+  /**
+   * <code>repeated int64 idList = 4;</code>
+   * @param index The index of the element to return.
+   * @return The idList at the given index.
+   */
+  public long getIdList(int index) {
+    return idList_.getLong(index);
+  }
+  private int idListMemoizedSerializedSize = -1;
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -171,6 +202,13 @@ private static final long serialVersionUID = 0L;
     }
     for (int i = 0; i < nameList_.size(); i++) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, nameList_.getRaw(i));
+    }
+    if (getIdListList().size() > 0) {
+      output.writeUInt32NoTag(34);
+      output.writeUInt32NoTag(idListMemoizedSerializedSize);
+    }
+    for (int i = 0; i < idList_.size(); i++) {
+      output.writeInt64NoTag(idList_.getLong(i));
     }
     getUnknownFields().writeTo(output);
   }
@@ -217,6 +255,20 @@ private static final long serialVersionUID = 0L;
       size += dataSize;
       size += 1 * getNameListList().size();
     }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < idList_.size(); i++) {
+        dataSize += com.google.protobuf.CodedOutputStream
+          .computeInt64SizeNoTag(idList_.getLong(i));
+      }
+      size += dataSize;
+      if (!getIdListList().isEmpty()) {
+        size += 1;
+        size += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(dataSize);
+      }
+      idListMemoizedSerializedSize = dataSize;
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -238,6 +290,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getYListList())) return false;
     if (!getNameListList()
         .equals(other.getNameListList())) return false;
+    if (!getIdListList()
+        .equals(other.getIdListList())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -260,6 +314,10 @@ private static final long serialVersionUID = 0L;
     if (getNameListCount() > 0) {
       hash = (37 * hash) + NAMELIST_FIELD_NUMBER;
       hash = (53 * hash) + getNameListList().hashCode();
+    }
+    if (getIdListCount() > 0) {
+      hash = (37 * hash) + IDLIST_FIELD_NUMBER;
+      hash = (53 * hash) + getIdListList().hashCode();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -396,6 +454,7 @@ private static final long serialVersionUID = 0L;
       yList_ = emptyIntList();
       nameList_ =
           com.google.protobuf.LazyStringArrayList.emptyList();
+      idList_ = emptyLongList();
       return this;
     }
 
@@ -440,6 +499,10 @@ private static final long serialVersionUID = 0L;
       if (((from_bitField0_ & 0x00000004) != 0)) {
         nameList_.makeImmutable();
         result.nameList_ = nameList_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        idList_.makeImmutable();
+        result.idList_ = idList_;
       }
     }
 
@@ -519,6 +582,17 @@ private static final long serialVersionUID = 0L;
         }
         onChanged();
       }
+      if (!other.idList_.isEmpty()) {
+        if (idList_.isEmpty()) {
+          idList_ = other.idList_;
+          idList_.makeImmutable();
+          bitField0_ |= 0x00000008;
+        } else {
+          ensureIdListIsMutable();
+          idList_.addAll(other.idList_);
+        }
+        onChanged();
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -583,6 +657,22 @@ private static final long serialVersionUID = 0L;
               nameList_.add(s);
               break;
             } // case 26
+            case 32: {
+              long v = input.readInt64();
+              ensureIdListIsMutable();
+              idList_.addLong(v);
+              break;
+            } // case 32
+            case 34: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              ensureIdListIsMutable();
+              while (input.getBytesUntilLimit() > 0) {
+                idList_.addLong(input.readInt64());
+              }
+              input.popLimit(limit);
+              break;
+            } // case 34
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -875,6 +965,90 @@ private static final long serialVersionUID = 0L;
       ensureNameListIsMutable();
       nameList_.add(value);
       bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.Internal.LongList idList_ = emptyLongList();
+    private void ensureIdListIsMutable() {
+      if (!idList_.isModifiable()) {
+        idList_ = makeMutableCopy(idList_);
+      }
+      bitField0_ |= 0x00000008;
+    }
+    /**
+     * <code>repeated int64 idList = 4;</code>
+     * @return A list containing the idList.
+     */
+    public java.util.List<java.lang.Long>
+        getIdListList() {
+      idList_.makeImmutable();
+      return idList_;
+    }
+    /**
+     * <code>repeated int64 idList = 4;</code>
+     * @return The count of idList.
+     */
+    public int getIdListCount() {
+      return idList_.size();
+    }
+    /**
+     * <code>repeated int64 idList = 4;</code>
+     * @param index The index of the element to return.
+     * @return The idList at the given index.
+     */
+    public long getIdList(int index) {
+      return idList_.getLong(index);
+    }
+    /**
+     * <code>repeated int64 idList = 4;</code>
+     * @param index The index to set the value at.
+     * @param value The idList to set.
+     * @return This builder for chaining.
+     */
+    public Builder setIdList(
+        int index, long value) {
+
+      ensureIdListIsMutable();
+      idList_.setLong(index, value);
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated int64 idList = 4;</code>
+     * @param value The idList to add.
+     * @return This builder for chaining.
+     */
+    public Builder addIdList(long value) {
+
+      ensureIdListIsMutable();
+      idList_.addLong(value);
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated int64 idList = 4;</code>
+     * @param values The idList to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllIdList(
+        java.lang.Iterable<? extends java.lang.Long> values) {
+      ensureIdListIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, idList_);
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated int64 idList = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearIdList() {
+      idList_ = emptyLongList();
+      bitField0_ = (bitField0_ & ~0x00000008);
       onChanged();
       return this;
     }

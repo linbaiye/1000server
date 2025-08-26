@@ -1,8 +1,5 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.creatures.State;
-import org.y1000.exp.Experience;
-
 public final class PlayerRevival {
     private final Experience experience;
 
@@ -34,29 +31,29 @@ public final class PlayerRevival {
         return value + value * experience.level() / 10000;
     }
 
-    public int regenerateHalLife(State state) {
-        return switch (state) {
-            case DIE -> applyLevel(300);
-            case SIT -> applyLevel(150);
-            case IDLE -> applyLevel(80);
+    public int regenerateHalLife(PlayerStateEnum playerStateEnum) {
+        return switch (playerStateEnum) {
+            case Die -> applyLevel(300);
+            case Sit -> applyLevel(150);
+            case Idle -> applyLevel(80);
             default -> applyLevel(50);
         };
     }
 
     /*
       case FFeatureState of
-         wfs_normal   : n := 50;
-         wfs_care     : n := 20;
-         wfs_sitdown  : n := 70;
-         wfs_die      : n := 100;
-         else n :=50;
+         wfs_normal   : number := 50;
+         wfs_care     : number := 20;
+         wfs_sitdown  : number := 70;
+         wfs_die      : number := 100;
+         else number :=50;
       end;
      */
-    public int regenerateResources(State state) {
-        return switch (state) {
-            case DIE -> applyLevel(100);
-            case SIT -> applyLevel(70);
-            case IDLE -> applyLevel(50);
+    public int regenerateResources(PlayerStateEnum playerStateEnum) {
+        return switch (playerStateEnum) {
+            case Die -> applyLevel(100);
+            case Sit -> applyLevel(70);
+            case Idle -> applyLevel(50);
             default -> applyLevel(10);
         };
     }

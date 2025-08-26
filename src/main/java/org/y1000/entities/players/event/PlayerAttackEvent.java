@@ -1,44 +1,22 @@
 package org.y1000.entities.players.event;
 
-
-import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.event.AbstractCreatureAttackEvent;
+import org.y1000.entities.players.AttackAction;
 import org.y1000.entities.players.Player;
-import org.y1000.message.serverevent.PlayerEventVisitor;
-import org.y1000.network.gen.CreatureAttackEventPacket;
+import org.y1000.network.gen.Packet;
+import org.y1000.network.gen.PlayerAttackPacket;
 
-public final class PlayerAttackEvent extends AbstractCreatureAttackEvent
-        implements PlayerEvent {
-
-    private final State attackState;
-
-    private final Integer effectId;
-
-    public PlayerAttackEvent(Player source, State attackState, Integer effectId) {
-        super(source, source.coordinate(), source.direction());
-        this.attackState = attackState;
-        this.effectId = effectId;
-    }
-    public PlayerAttackEvent(Player source, State attackState) {
-        this(source, attackState, null);
+public final class PlayerAttackEvent extends Abstract2VisibleAndSelfMessageEvent  {
+    public PlayerAttackEvent(Player player, Packet packet) {
+        super(player, packet);
     }
 
-    public static PlayerAttackEvent of(Player player, Integer effectId) {
-        return new PlayerAttackEvent(player, player.stateEnum(), effectId);
-    }
-
-     @Override
-    protected CreatureAttackEventPacket.Builder setCreatureSpecificFields(CreatureAttackEventPacket.Builder builder) {
-        builder.setPlayer(true)
-                .setState(attackState.value());
-        if (effectId != null) {
-            builder.setEffectId(effectId);
-        }
-        return builder;
-    }
-
-    @Override
-    public void accept(PlayerEventVisitor visitor) {
-        visitor.visit(this);
+    public static PlayerAttackEvent attack(Player player, AttackAction action, String effectId) {
+        PlayerAttackPacket attackPacket = PlayerAttackPacket.newBuilder()
+                .setId(player.id())
+                .setAction(action.value())
+                .setDirection(player.direction().value())
+                .setEffectSprite(effectId)
+                .build();
+        return new PlayerAttackEvent(player, Packet.newBuilder().setAttack(attackPacket).build());
     }
 }

@@ -6,12 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.Validate;
-import org.y1000.entities.creatures.State;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.PlayerExperiencedAgedAttribute;
 import org.y1000.entities.players.PlayerLife;
 import org.y1000.entities.players.YinYang;
-import org.y1000.item.Equipment;
+import org.y1000.entities.players.equipment.EquipmentType;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
@@ -22,11 +23,13 @@ import java.util.*;
 @Table(name = "player")
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedNativeQuery(name = "selectIdByName",
+        query = "SELECT p.id FROM player p where p.name = ?1")
 public class PlayerPo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "player_seq")
+    @SequenceGenerator(name = "player_seq", allocationSize = 1)
     private Long id;
 
     @Column(unique = true)
@@ -64,8 +67,6 @@ public class PlayerPo {
 
     private int y;
 
-    private int state;
-
     private int realmId;
 
     @Column(name = "account_id")
@@ -75,12 +76,10 @@ public class PlayerPo {
     @Transient
     private YinYang yinYang;
 
-    @OneToMany(cascade = CascadeType.MERGE)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "player_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id")
-    )
-    private List<EquipmentPo> equipments = new ArrayList<>();
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Map<EquipmentType, Long> equipments;
+
 
     public YinYang yinYang() {
         if (yinYang == null)
@@ -92,9 +91,6 @@ public class PlayerPo {
         return Coordinate.xy(x, y);
     }
 
-    public State state() {
-        return State.valueOf(state);
-    }
 
     public PlayerLife life(int innate) {
         return new PlayerLife(innate, yinYang().age(), life);
@@ -125,12 +121,6 @@ public class PlayerPo {
     }
 
 
-    public void addEquipments(Collection<Equipment> equipmentSet) {
-        equipments.clear();
-        equipmentSet.stream().map(EquipmentPo::convert)
-                .forEach(equipments::add);
-    }
-
     public static PlayerPo convert(Player player, int accountId, int realmId) {
         Validate.notNull(player);
         PlayerPo playerPo = new PlayerPo();
@@ -140,6 +130,8 @@ public class PlayerPo {
         playerPo.setMale(player.isMale());
         playerPo.setName(player.viewName());
         playerPo.setId(null);
+        playerPo.equipments = new HashMap<>();
+        player.getEquipments().forEach(e -> playerPo.equipments.put(e.equipmentType(), e.id()));
         return playerPo;
     }
 
@@ -165,11 +157,8 @@ public class PlayerPo {
     public void merge(Player player) {
         Validate.notNull(player);
         mergeWithoutEquipments(player);
-        addEquipments(player.getEquipments());
+        equipments = new HashMap<>();
+        player.getEquipments().forEach(e -> equipments.put(e.equipmentType(), e.id()));
     }
 
-    public Optional<EquipmentPo> findEquipment(String name) {
-        return equipments != null ? equipments.stream().filter(e -> e.getName().equals(name)).findFirst() :
-                Optional.empty();
-    }
 }

@@ -15,20 +15,67 @@ public interface PlayerEquipPacketOrBuilder extends
   long getId();
 
   /**
-   * <code>string equipmentName = 2;</code>
-   * @return The equipmentName.
+   * <code>int32 equipmentType = 2;</code>
+   * @return The equipmentType.
    */
-  java.lang.String getEquipmentName();
-  /**
-   * <code>string equipmentName = 2;</code>
-   * @return The bytes for equipmentName.
-   */
-  com.google.protobuf.ByteString
-      getEquipmentNameBytes();
+  int getEquipmentType();
 
   /**
    * <code>int32 color = 3;</code>
    * @return The color.
    */
   int getColor();
+
+  /**
+   * <code>string prefix = 4;</code>
+   * @return The prefix.
+   */
+  java.lang.String getPrefix();
+  /**
+   * <code>string prefix = 4;</code>
+   * @return The bytes for prefix.
+   */
+  com.google.protobuf.ByteString
+      getPrefixBytes();
+
+  /**
+   * <code>optional string pairedPrefix = 5;</code>
+   * @return Whether the pairedPrefix field is set.
+   */
+  boolean hasPairedPrefix();
+  /**
+   * <code>optional string pairedPrefix = 5;</code>
+   * @return The pairedPrefix.
+   */
+  java.lang.String getPairedPrefix();
+  /**
+   * <code>optional string pairedPrefix = 5;</code>
+   * @return The bytes for pairedPrefix.
+   */
+  com.google.protobuf.ByteString
+      getPairedPrefixBytes();
+
+  /**
+   * <code>int32 weaponType = 6;</code>
+   * @return The weaponType.
+   */
+  int getWeaponType();
+
+  /**
+   * <code>string name = 7;</code>
+   * @return The name.
+   */
+  java.lang.String getName();
+  /**
+   * <code>string name = 7;</code>
+   * @return The bytes for name.
+   */
+  com.google.protobuf.ByteString
+      getNameBytes();
+
+  /**
+   * <code>int32 icon = 8;</code>
+   * @return The icon.
+   */
+  int getIcon();
 }

@@ -17,7 +17,7 @@ public final class CreateGateSdbImpl extends AbstractCSVSdbReader implements Cre
         CreateGateSdbImpl monstersSdb= CreateGateSdbImpl.INSTANCE;
 //        Set<String> names = itemSdb.names();
         Set<String> names = monstersSdb.columnNames();
-        Set<String> items = monstersSdb.names();
+        Set<String> items = monstersSdb.uniqueIds();
         for (String i: items) {
             if (monstersSdb.getEX(i) != null)
                 continue;
@@ -52,7 +52,7 @@ public final class CreateGateSdbImpl extends AbstractCSVSdbReader implements Cre
 
     @Override
     public Set<String> getNames(int realmId) {
-        return names().stream()
+        return uniqueIds().stream()
                 .filter(n -> getMapId(n) == realmId)
                 .collect(Collectors.toSet());
     }
@@ -111,4 +111,20 @@ public final class CreateGateSdbImpl extends AbstractCSVSdbReader implements Cre
     public String getNeedItem(String name) {
         return get(name, "NeedItem");
     }
+
+    @Override
+    public int getRegenInterval(String name) {
+        return getIntOrZero(name, "RegenInterval");
+    }
+
+    @Override
+    public int getActiveInterval(String name) {
+        return getIntOrZero(name, "ActiveInterval");
+    }
+
+    @Override
+    public String getAnnouncement(String name) {
+        return get(name, "Announcement");
+    }
+
 }

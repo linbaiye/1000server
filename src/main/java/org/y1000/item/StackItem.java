@@ -51,7 +51,7 @@ public record StackItem(Item item, long number) implements Item {
     }
 
     public boolean hasMoreSpace(long more) {
-        return number + more <= MAX_NUMBER;
+        return more >= 0 && number + more <= MAX_NUMBER;
     }
 
     public long number() {
@@ -94,6 +94,11 @@ public record StackItem(Item item, long number) implements Item {
     @Override
     public String toString() {
         return item.name() + ":" + number;
+    }
+
+    @Override
+    public int icon() {
+        return item.icon();
     }
 }
 

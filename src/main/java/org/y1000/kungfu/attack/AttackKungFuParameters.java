@@ -4,6 +4,7 @@ package org.y1000.kungfu.attack;
  * Parameters that will never change and can be shared by all attack KungFu instances.
  */
 public interface AttackKungFuParameters {
+
     default int headDamage() {
         return 1;
     }
@@ -64,6 +65,14 @@ public interface AttackKungFuParameters {
 
     default int effectId() {
         return 0;
+    }
+
+    default int icon() {
+        return 0;
+    }
+
+    default boolean isGuild() {
+        return false;
     }
 
 }

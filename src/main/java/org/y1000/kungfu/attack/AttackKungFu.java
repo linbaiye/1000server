@@ -1,13 +1,10 @@
 package org.y1000.kungfu.attack;
 
 
-import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.players.Armor;
-import org.y1000.entities.players.Damage;
-import org.y1000.entities.creatures.State;
-import org.y1000.entities.players.PlayerImpl;
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.players.*;
 import org.y1000.kungfu.KungFu;
-import org.y1000.message.clientevent.ClientAttackEvent;
+import org.y1000.util.Coordinate;
 
 public interface AttackKungFu extends KungFu {
 
@@ -29,13 +26,7 @@ public interface AttackKungFu extends KungFu {
 
     int avoidance();
 
-    State randomAttackState();
-
     AttackKungFuType getType();
-
-    void attackAgain(PlayerImpl player);
-
-    void startAttack(PlayerImpl player, ClientAttackEvent event, AttackableActiveEntity target);
 
     boolean isRanged();
 
@@ -51,6 +42,21 @@ public interface AttackKungFu extends KungFu {
 
     String swingSound();
 
-    Integer computeEffectId();
+    String computeEffectId();
+
+    AttackAction computeAttackAction();
+
+    /**
+     *  Check if resource is enough to attack.
+     * @return
+     */
+    String checkResourceToAttack(Player player);
+
+
+    void consumeAttributes(Player player);
+
+    boolean isWithinAttackRange(Coordinate playerCoordinate, ActiveEntity entity);
+
+    boolean guild();
 
 }

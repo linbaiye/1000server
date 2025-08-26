@@ -1,6 +1,6 @@
 package org.y1000.entities.players;
 
-public class PlayerTestingAttribute extends AbstractPlayerAgedAttribute {
+public class PlayerTestingAttribute extends AbstractAgedAttribute {
 
     private int maxValue;
 

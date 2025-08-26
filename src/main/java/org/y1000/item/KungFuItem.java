@@ -10,8 +10,9 @@ public final class KungFuItem extends AbstractItem {
                       String dropSound,
                       String eventSound,
                       String desc,
-                      KungFu kungFu) {
-        super(name, ItemType.KUNGFU, dropSound, eventSound, desc);
+                      KungFu kungFu,
+                      int icon) {
+        super(name, ItemType.KUNGFU, dropSound, eventSound, desc, icon);
         this.kungFu = kungFu;
     }
 

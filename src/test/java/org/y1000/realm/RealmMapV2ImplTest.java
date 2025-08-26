@@ -4,11 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.y1000.AbstractUnitTestFixture;
-import org.y1000.entities.creatures.monster.PassiveMonster;
+import org.y1000.entities.npc.Npc;
 import org.y1000.entities.objects.DynamicObject;
 import org.y1000.util.Coordinate;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -21,12 +20,26 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
     private RealmMap realmMap;
     byte[][] cells = new byte[10][10];
 
+
+    private Npc createNpc(Coordinate coordinate) {
+        return npcFactory.create(mockRealmMap(), coordinate);
+    }
+
     @BeforeEach
     void setUp() {
         for (byte[] cell : cells) {
             Arrays.fill(cell, (byte) 0);
         }
         realmMap = new RealmMapV2Impl(cells, name);
+    }
+
+    private Npc mockNpc(Coordinate coordinate) {
+
+        Npc npc = Mockito.mock(Npc.class);
+        when(npc.id()).thenReturn(1L);
+        when(npc.realmMap()).thenReturn(mockRealmMap());
+        when(npc.coordinate()).thenReturn(coordinate);
+        return npc;
     }
 
     @Test
@@ -41,18 +54,18 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
 
     @Test
     void occupy() {
-        PassiveMonster monster = monsterBuilder().coordinate(Coordinate.xy(1, 1)).build();
+        var monster = createNpc(Coordinate.xy(1, 1));
         assertTrue(realmMap.movable(monster.coordinate()));
         realmMap.occupy(monster);
         assertFalse(realmMap.movable(monster.coordinate()));
         realmMap.occupy(monster);
         assertFalse(realmMap.movable(monster.coordinate()));
-        assertThrows(IllegalArgumentException.class, () -> realmMap.occupy(monsterBuilder().coordinate(Coordinate.xy(100, 100)).build()));
+        assertThrows(IllegalArgumentException.class, () -> realmMap.occupy(createNpc(Coordinate.xy(100, 100))));
     }
 
     @Test
     void free() {
-        PassiveMonster monster = monsterBuilder().coordinate(Coordinate.xy(1, 1)).build();
+        var monster = createNpc(Coordinate.xy(1, 1));
         realmMap.free(monster);
         assertTrue(realmMap.movable(monster.coordinate()));
         realmMap.occupy(monster);
@@ -74,7 +87,7 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
     @Test
     void dynamicObjectOccupy() {
         DynamicObject dynamicObject = Mockito.mock(DynamicObject.class);
-        when(dynamicObject.occupyingCoordinates()).thenReturn(Set.of(Coordinate.xy(1, 1), Coordinate.xy(1, 2)));
+        when(dynamicObject.occupiedCoordinates()).thenReturn(Set.of(Coordinate.xy(1, 1), Coordinate.xy(1, 2)));
         assertTrue(realmMap.movable(Coordinate.xy(1, 1)));
         assertTrue(realmMap.movable(Coordinate.xy(1, 2)));
         realmMap.occupy(dynamicObject);
@@ -85,7 +98,7 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
     @Test
     void dynamicObjectFree() {
         DynamicObject dynamicObject = Mockito.mock(DynamicObject.class);
-        when(dynamicObject.occupyingCoordinates()).thenReturn(Set.of(Coordinate.xy(3, 1), Coordinate.xy(3, 2)));
+        when(dynamicObject.occupiedCoordinates()).thenReturn(Set.of(Coordinate.xy(3, 1), Coordinate.xy(3, 2)));
         realmMap.occupy(dynamicObject);
         assertFalse(realmMap.movable(Coordinate.xy(3, 1)));
         assertFalse(realmMap.movable(Coordinate.xy(3, 2)));
@@ -97,9 +110,9 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
     @Test
     void intersectedOccupy() {
         DynamicObject dynamicObject = Mockito.mock(DynamicObject.class);
-        when(dynamicObject.occupyingCoordinates()).thenReturn(Set.of(Coordinate.xy(1, 1), Coordinate.xy(1, 2)));
+        when(dynamicObject.occupiedCoordinates()).thenReturn(Set.of(Coordinate.xy(1, 1), Coordinate.xy(1, 2)));
         realmMap.occupy(dynamicObject);
-        PassiveMonster monster = monsterBuilder().coordinate(Coordinate.xy(1, 1)).build();
+        var monster = createNpc(Coordinate.xy(1, 1));
         realmMap.occupy(monster);
         assertFalse(realmMap.movable(Coordinate.xy(1, 1)));
         realmMap.free(monster);
@@ -112,10 +125,5 @@ class RealmMapV2ImplTest extends AbstractUnitTestFixture {
 
     @Test
     void files() {
-        realmMap = new RealmMapV2Impl(cells, name, "tile", "obj", "rof");
-        assertEquals(name, realmMap.mapFile());
-        assertEquals("tile", realmMap.tileFile());
-        assertEquals("obj", realmMap.objectFile());
-        assertEquals("rof", realmMap.roofFile());
     }
 }

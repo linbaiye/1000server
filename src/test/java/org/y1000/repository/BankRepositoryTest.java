@@ -3,10 +3,11 @@ package org.y1000.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.y1000.AbstractUnitTestFixture;
+import org.y1000.entities.players.equipment.Dyable;
 import org.y1000.entities.players.inventory.Bank;
 import org.y1000.item.*;
 import org.y1000.persistence.BankPo;
-import org.y1000.persistence.SlotItem;
+import org.y1000.persistence.SlotItemPo;
 import org.y1000.sdb.ItemDrugSdbImpl;
 
 import java.util.List;
@@ -42,15 +43,15 @@ class BankRepositoryTest extends AbstractUnitTestFixture {
     void saveNonEmptyBank() {
         Bank bank = Bank.open();
         bank.unlock();
-        bank.put(itemFactory.createItem("长剑"));
-        bank.put(itemFactory.createItem("生药", 12));
-        bank.put(itemFactory.createItem("女子黄龙弓服"));
+        bank.add(itemFactory.createItem("长剑"));
+        bank.add(itemFactory.createItem("生药", 12));
+        bank.add(itemFactory.createItem("女子黄龙弓服"));
         bankRepository.save(1L, bank);
         BankPo bankPo = jpaFixture.newEntityManager().createQuery("select b from BankPo b where b.playerId = ?1", BankPo.class)
                 .setParameter(1, 1L).getResultList().get(0);
         assertEquals(bank.getUnlocked(), bankPo.getUnlocked());
-        List<SlotItem> items = bankPo.getSlots();
-        List<String> names = items.stream().map(SlotItem::getName).filter(Objects::nonNull).toList();
+        List<SlotItemPo> items = bankPo.getSlots();
+        List<String> names = items.stream().map(SlotItemPo::getName).filter(Objects::nonNull).toList();
         assertTrue(names.contains("生药"));
         assertEquals(1, names.size());
         assertEquals(3, items.size());
@@ -61,12 +62,12 @@ class BankRepositoryTest extends AbstractUnitTestFixture {
         Bank bank = Bank.open();
         bank.unlock();
         bank.unlock();
-        bank.put(itemFactory.createItem("生药", 12));
-        bank.put(itemFactory.createItem("女子黄龙弓服"));
+        bank.add(itemFactory.createItem("生药", 12));
+        bank.add(itemFactory.createItem("女子黄龙弓服"));
         var equipment = itemFactory.createHair("女子长发");
         Item item = itemFactory.createItem("红色染剂", 2);
         equipment.findAbility(Dyable.class).ifPresent(d -> d.dye(item.color()));
-        bank.put(equipment);
+        bank.add(equipment);
         bankRepository.save(1L, bank);
         var bank1 = bankRepository.find(1L).get();
         assertEquals(20, bank1.getUnlocked());
@@ -81,10 +82,10 @@ class BankRepositoryTest extends AbstractUnitTestFixture {
     void saveBankShouldBeIsolated() {
         Bank bank = Bank.open();
         bank.unlock();
-        bank.put(itemFactory.createItem("长剑"));
+        bank.add(itemFactory.createItem("长剑"));
         bankRepository.save(1L, bank);
 
-        bank.put(itemFactory.createItem("长刀"));
+        bank.add(itemFactory.createItem("长刀"));
         bankRepository.save(2L, bank);
         Bank bank2 = bankRepository.find(2L).get();
         assertEquals(10, bank2.getUnlocked());

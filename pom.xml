@@ -13,7 +13,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <protobuf.version>4.28.0</protobuf.version>
+        <protobuf.version>4.28.2</protobuf.version>
         <lombok.version>1.18.30</lombok.version>
     </properties>
     <dependencies>
@@ -28,6 +28,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -78,7 +79,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.99.Final</version>
+            <version>4.2.3.Final</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -88,7 +89,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-codec-http</artifactId>
-            <version>4.1.99.Final</version>
+            <version>4.2.3.Final</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
         <dependency>

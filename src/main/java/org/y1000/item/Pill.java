@@ -6,7 +6,7 @@ public final class Pill extends AbstractItem {
 
     public Pill(String name, PillAttributeProvider attributeProvider) {
         super(name, ItemType.PILL, attributeProvider.dropSound(),
-                attributeProvider.eventSound(), attributeProvider.description());
+                attributeProvider.eventSound(), attributeProvider.description(), attributeProvider.icon());
         this.attributeProvider = attributeProvider;
     }
 

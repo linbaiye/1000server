@@ -1,11 +1,17 @@
 package org.y1000.entities.players;
 
-import org.y1000.entities.AttackableActiveEntity;
-import org.y1000.entities.creatures.State;
-import org.y1000.entities.creatures.ViolentCreature;
+import org.y1000.entities.ActiveEntity;
+import org.y1000.entities.HurtAbility;
+import org.y1000.entities.Creature;
+import org.y1000.entities.players.equipment.ArmorEquipment;
+import org.y1000.entities.players.equipment.Equipment;
+import org.y1000.entities.players.equipment.SexualEquipment;
+import org.y1000.entities.players.equipment.Weapon;
+import org.y1000.entities.players.event.DirectMessage;
+import org.y1000.entities.players.event.PlayerEvent;
 import org.y1000.entities.players.inventory.Inventory;
-import org.y1000.entities.projectile.Projectile;
 import org.y1000.guild.GuildMembership;
+import org.y1000.input.SelfHandleInput;
 import org.y1000.kungfu.AssistantKungFu;
 import org.y1000.kungfu.KungFuBook;
 import org.y1000.item.*;
@@ -13,26 +19,28 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.FootKungFu;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
-import org.y1000.message.clientevent.ClientAttackEvent;
-import org.y1000.message.clientevent.ClientEvent;
+import org.y1000.network.I2ClientMessage;
+import org.y1000.realm.PlayerEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.util.Coordinate;
 
 import java.util.*;
 
-public interface Player extends ViolentCreature {
+public interface Player extends Creature, HurtAbility {
 
     default boolean isMale() {
         return true;
     }
 
-    void joinRealm(Realm realm);
+    void joinRealm(Realm realm, PlayerEventListener messageListener);
 
-    void joinRealm(Realm realm, Coordinate coordinate);
+    void joinRealm(Realm realm, Coordinate coordinate, PlayerEventListener messageListener);
 
     Realm getRealm();
 
     void leaveRealm();
+
+    boolean isLeftRealm();
 
     default Optional<FootKungFu> footKungFu() {
         return Optional.empty();
@@ -50,9 +58,9 @@ public interface Player extends ViolentCreature {
 
     Inventory inventory();
 
-    void handleClientEvent(ClientEvent clientEvent);
+    void handleInput(SelfHandleInput input);
 
-    void attack(ClientAttackEvent event, AttackableActiveEntity target);
+    void attack(ActiveEntity entity);
 
     Optional<ArmorEquipment> hat();
 
@@ -96,10 +104,6 @@ public interface Player extends ViolentCreature {
 
     int maxOuterPower();
 
-    int maxEnergy();
-
-    int energy();
-
     void consumePower(int amount);
 
     void consumeInnerPower(int amount);
@@ -116,38 +120,13 @@ public interface Player extends ViolentCreature {
 
     void gainLife(int v);
 
-    void gainAttackExp(int amount);
-
-    void gainRangedAttackExp(int amount);
-
-    void gainAssistantExp(int amount);
-
     Armor armor();
 
     int headPercent();
     int armPercent();
     int legPercent();
 
-    int attackedByAoe(Damage damage, int hit);
-
     boolean consumeItem(int slotId);
-
-    default boolean canDrag(Player target, int ropeSlot) {
-        if (stateEnum() == State.DIE || stateEnum() == State.FROZEN ||
-                target.equals(this)) {
-            return false;
-        }
-        if (target.stateEnum() != State.DIE) {
-            return false;
-        }
-        if (target.coordinate().directDistance(coordinate()) > 4) {
-            return false;
-        }
-        Item item = inventory().getItem(ropeSlot);
-        return item != null && item.name().equals("追魂索");
-    }
-
-    void onProjectileReachTarget(Projectile projectile);
 
     PlayerExperiencedAgedAttribute innerPowerAttribute();
 
@@ -174,6 +153,8 @@ public interface Player extends ViolentCreature {
 
     void cancelBuff();
 
+    boolean pickItem(Item item);
+
     default List<Equipment> getEquipments() {
         List<Equipment> ret = new ArrayList<>();
         weapon().ifPresent(ret::add);
@@ -186,5 +167,42 @@ public interface Player extends ViolentCreature {
         wrist().ifPresent(ret::add);
         return ret;
     }
+
+    void sendEvent(PlayerEvent event);
+
+    PlayerStateEnum stateEnum();
+
+    int accuracy();
+
+    void dropItemOnAnother(Player another, int slot);
+
+    boolean acceptTrade(PlayerTrade trade);
+
+    void closeTrade();
+
+    boolean canBeDragged();
+
+    int attackSpeed();
+
+    int recovery();
+
+    Damage damage();
+
+    default int totalAttribute() {
+        return maxLife() + maxPower() + maxInnerPower()
+                + maxOuterPower() + age() / 2;
+    }
+
+    int avoidance();
+
+    /**
+     * Send to self.
+     * @param message
+     */
+    default void sendMessage(I2ClientMessage message) {
+        sendEvent(DirectMessage.of(this, message));
+    }
+
+    boolean learnGuildKungFu(AttackKungFu attackKungFu);
 }
 

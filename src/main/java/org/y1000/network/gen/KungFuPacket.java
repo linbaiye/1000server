@@ -112,6 +112,17 @@ private static final long serialVersionUID = 0L;
     return type_;
   }
 
+  public static final int ICON_FIELD_NUMBER = 5;
+  private int icon_ = 0;
+  /**
+   * <code>int32 icon = 5;</code>
+   * @return The icon.
+   */
+  @java.lang.Override
+  public int getIcon() {
+    return icon_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -138,6 +149,9 @@ private static final long serialVersionUID = 0L;
     if (type_ != 0) {
       output.writeInt32(4, type_);
     }
+    if (icon_ != 0) {
+      output.writeInt32(5, icon_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -162,6 +176,10 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(4, type_);
     }
+    if (icon_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(5, icon_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -185,6 +203,8 @@ private static final long serialVersionUID = 0L;
         != other.getSlot()) return false;
     if (getType()
         != other.getType()) return false;
+    if (getIcon()
+        != other.getIcon()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -204,6 +224,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getSlot();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
     hash = (53 * hash) + getType();
+    hash = (37 * hash) + ICON_FIELD_NUMBER;
+    hash = (53 * hash) + getIcon();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -339,6 +361,7 @@ private static final long serialVersionUID = 0L;
       level_ = 0;
       slot_ = 0;
       type_ = 0;
+      icon_ = 0;
       return this;
     }
 
@@ -383,6 +406,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000008) != 0)) {
         result.type_ = type_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.icon_ = icon_;
       }
     }
 
@@ -444,6 +470,9 @@ private static final long serialVersionUID = 0L;
       if (other.getType() != 0) {
         setType(other.getType());
       }
+      if (other.getIcon() != 0) {
+        setIcon(other.getIcon());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -490,6 +519,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000008;
               break;
             } // case 32
+            case 40: {
+              icon_ = input.readInt32();
+              bitField0_ |= 0x00000010;
+              break;
+            } // case 40
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -671,6 +705,38 @@ private static final long serialVersionUID = 0L;
     public Builder clearType() {
       bitField0_ = (bitField0_ & ~0x00000008);
       type_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int icon_ ;
+    /**
+     * <code>int32 icon = 5;</code>
+     * @return The icon.
+     */
+    @java.lang.Override
+    public int getIcon() {
+      return icon_;
+    }
+    /**
+     * <code>int32 icon = 5;</code>
+     * @param value The icon to set.
+     * @return This builder for chaining.
+     */
+    public Builder setIcon(int value) {
+
+      icon_ = value;
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 icon = 5;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearIcon() {
+      bitField0_ = (bitField0_ & ~0x00000010);
+      icon_ = 0;
       onChanged();
       return this;
     }

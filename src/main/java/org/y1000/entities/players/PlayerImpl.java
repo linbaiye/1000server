@@ -1,22 +1,12 @@
 package org.y1000.entities.players;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.y1000.entities.*;
-import org.y1000.entities.creatures.*;
-import org.y1000.entities.creatures.event.CreatureDieEvent;
-import org.y1000.entities.creatures.event.CreatureHurtEvent;
-import org.y1000.entities.creatures.event.EntitySoundEvent;
+import org.y1000.entities.players.equipment.*;
 import org.y1000.entities.players.event.*;
-import org.y1000.entities.players.fight.PlayerAttackState;
-import org.y1000.entities.players.fight.PlayerCooldownState;
-import org.y1000.entities.players.fight.PlayerWaitDistanceState;
-import org.y1000.entities.projectile.Projectile;
-import org.y1000.event.EntityEvent;
-import org.y1000.event.EntityEventListener;
-import org.y1000.exp.ExperienceUtil;
+import org.y1000.entities.players.event.PlayerDropItemEvent;
 import org.y1000.guild.GuildMembership;
 import org.y1000.item.*;
 import org.y1000.entities.players.inventory.Inventory;
@@ -25,25 +15,27 @@ import org.y1000.kungfu.attack.AttackKungFu;
 import org.y1000.kungfu.attack.AttackKungFuType;
 import org.y1000.kungfu.breath.BreathKungFu;
 import org.y1000.kungfu.protect.ProtectKungFu;
-import org.y1000.message.clientevent.*;
-import org.y1000.message.serverevent.*;
-import org.y1000.message.*;
+import org.y1000.input.*;
+import org.y1000.network.I2ClientMessage;
+import org.y1000.realm.PlayerEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
+import org.y1000.realm.event.ApplyKungFuEvent;
+import org.y1000.realm.event.GuildCreationEvent;
+import org.y1000.realm.event.PlayerDropGuildStoneEvent;
+import org.y1000.realm.event.RealmEvent;
 import org.y1000.util.Action;
 import org.y1000.util.Coordinate;
-import org.y1000.util.UnaryAction;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
-public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> implements Player,
-        EntityEventListener {
+public class PlayerImpl extends AbstractCreature implements Player, PlayerInputHandler {
 
     public static final int DEFAULT_REGENERATE_SECONDS = 9;
-    private Realm realm;
-
     private AttackKungFu attackKungFu;
 
     private FootKungFu footKungfu;
@@ -88,55 +80,34 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     private int attackCooldown;
 
-    @Getter
-    private AttackableActiveEntity fightingEntity;
-
     private final PillSlots pillSlots;
 
     private GuildMembership guildMembership;
 
     private final BuffPillSlot buffPillSlot;
 
-    private static final Map<State, Integer> STATE_MILLIS = new HashMap<>() {{
-        put(State.IDLE, 2200);
-        put(State.WALK, 840);
-        put(State.RUN, 420);
-        put(State.FLY, 360);
-        put(State.COOLDOWN, 1400);
-        put(State.FIST, AttackKungFuType.QUANFA.below50Millis());
-        put(State.KICK, AttackKungFuType.QUANFA.above50Millis());
-        put(State.HURT, 280);
-        put(State.ENFIGHT_WALK, 840);
-        put(State.BOW, AttackKungFuType.BOW.above50Millis());
-        put(State.THROW, AttackKungFuType.THROW.above50Millis());
-        put(State.SWORD2H, AttackKungFuType.SWORD.above50Millis());
-        put(State.SWORD, AttackKungFuType.SWORD.below50Millis());
-        put(State.BLADE2H, AttackKungFuType.BLADE.above50Millis());
-        put(State.BLADE, AttackKungFuType.BLADE.below50Millis());
-        put(State.AXE, AttackKungFuType.AXE.below50Millis());
-        put(State.SPEAR, AttackKungFuType.SPEAR.below50Millis());
-        put(State.SIT, 750);
-        put(State.STANDUP, 750);
-        put(State.DIE, 1500);
-        put(State.HELLO, 750);
-    }};
+    private PlayerState state;
+
+    private PlayerEventListener eventListener;
+
+    private CombatController combatController;
+
+    private PlayerTrade playerTrade;
+
+    private final List<Rope> ropes;
+
+    private final ThreadLocal<Realm> realm;
+
 
     @Builder
     public PlayerImpl(long id,
                       Coordinate coordinate,
                       String name,
                       Inventory inventory,
-                      Weapon weapon,
                       AttackKungFu attackKungFu,
                       KungFuBook kungFuBook,
                       boolean male,
-                      ArmorEquipment hat,
-                      ArmorEquipment chest,
-                      SexualEquipment hair,
-                      ArmorEquipment wrist,
-                      ArmorEquipment boot,
-                      SexualEquipment trouser,
-                      SexualEquipment clothing,
+                      Map<EquipmentType, Equipment> equipments,
                       FootKungFu footKungfu,
                       ProtectKungFu protectKungFu,
                       BreathKungFu breathKungFu,
@@ -152,7 +123,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                       YinYang yinYang,
                       PillSlots pillSlots,
                       GuildMembership guildMembership) {
-        super(id, coordinate, Direction.DOWN, name, STATE_MILLIS);
+        super(id, coordinate, Direction.DOWN, name);
         Objects.requireNonNull(kungFuBook, "kungFuBook can't be null.");
         Objects.requireNonNull(attackKungFu, "attackKungFu can't be null.");
         Objects.requireNonNull(inventory, "inventory can't be null.");
@@ -167,15 +138,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         this.innerPower = innerPower;
         this.outerPower = outerPower;
         this.yinYang = yinYang != null ? yinYang : new YinYang();
-        this.equippedEquipments = new HashMap<>();
-        equippedEquipments.put(EquipmentType.HAT, hat);
-        equippedEquipments.put(EquipmentType.WEAPON, weapon);
-        equippedEquipments.put(EquipmentType.BOOT, boot);
-        equippedEquipments.put(EquipmentType.CHEST, chest);
-        equippedEquipments.put(EquipmentType.CLOTHING, clothing);
-        equippedEquipments.put(EquipmentType.WRIST, wrist);
-        equippedEquipments.put(EquipmentType.TROUSER, trouser);
-        equippedEquipments.put(EquipmentType.HAIR, hair);
+        this.equippedEquipments = equipments != null ? equipments : new HashMap<>();
         this.innateAttributesProvider = innateAttributesProvider;
         this.revival = new PlayerRevival(revival);
         this.life = life;
@@ -183,11 +146,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         this.legLife = leg;
         this.headLife = head;
         this.pillSlots = pillSlots;
-        this.changeState(new PlayerStillState(getStateMillis(State.IDLE)));
         setRegenerateTimer();
         team = 0;
         this.guildMembership = guildMembership;
         this.buffPillSlot = new BuffPillSlot();
+        this.changeState(PlayerStandState.idle(this));
+        this.ropes = new ArrayList<>();
+        this.realm = new ThreadLocal<>();
     }
 
     private void setRegenerateTimer() {
@@ -225,315 +190,537 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         return attackKungFu;
     }
 
-    public void disableFootKungFuNoTip() {
-        if (footKungfu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, footKungfu));
-        }
-        footKungfu = null;
-    }
 
-    public void disableBreathKungNoTip() {
+    void disableBreathAndSync() {
         if (breathKungFu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, breathKungFu));
+            breathKungFu = null;
+            syncActiveKungFuList();
         }
-        breathKungFu = null;
     }
 
-    private void disableAssistantKungFuNoTip() {
-        if (assistantKungFu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, assistantKungFu));
-        }
-        assistantKungFu = null;
-    }
 
-    private void disableProtectionNoTip() {
+    private void disableProtectionAndSync() {
         if (protectKungFu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
-            emitEvent(new EntitySoundEvent(this, protectKungFu.disableSound()));
-            this.protectKungFu = null;
+            sendSound(protectKungFu.disableSound());
+            protectKungFu = null;
+            syncActiveKungFuList();
         }
     }
 
-
-    private void unequip(EquipmentType type) {
+    public void unequip(EquipmentType type) {
+        if (isDead() || isLeftRealm() || type == null || !equippedEquipments.containsKey(type)) {
+            return;
+        }
         if (inventory.isFull()) {
-            emitEvent(PlayerTextEvent.inventoryFull(this));
+            sendText("物品栏已满。");
             return;
         }
-        Equipment equipped = equippedEquipments.remove(type);
-        if (equipped == null) {
-            return;
+        Equipment equipped = equippedEquipments.get(type);
+        if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.Fist) {
+            tryChangeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.Fist));
+        } else {
+            equipped = equippedEquipments.remove(type);
+            inventory.add(equipped);
+            equipped.eventSound().ifPresent(this::sendSound);
+            sendEvent(PlayerUnequipEvent.of(this, equipped.equipmentType()));
+            syncInventoryQuietly();
         }
-        if (equipped instanceof Weapon weapon && weapon.kungFuType() != AttackKungFuType.QUANFA) {
-            changeAttackKungFu(kungFuBook.findUnnamedAttack(AttackKungFuType.QUANFA));
-        }
-        emitEvent(new PlayerUnequipEvent(this, equipped.equipmentType()));
-        int slot = inventory.put(equipped);
-        emitEvent(new UpdateInventorySlotEvent(this, slot, equipped));
-        equipped.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
     }
 
+    @Override
+    public void swapKungFu(int page, int slot1, int slot2) {
+        if (kungFuBook().swapSlot(page, slot1, slot2))
+            syncKungFuBookQuietly();
+    }
 
-    private void learnKungFu(int inventorySlotId, KungFuItem kungFuItem) {
+    private boolean dropActionInvalid(int slot, Coordinate at) {
+        if (isDead())
+            return false;
+        if (inventory.getItem(slot) == null)
+            return true;
+        if (at.directDistance(coordinate()) > 2) {
+            sendText("距离过远。");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void startDropItem(int slot, Coordinate at) {
+        if (dropActionInvalid(slot, at))
+            return;
+        Item item = inventory.getItem(slot);
+        if (item.itemType() == ItemType.GUILD_STONE) {
+            realm.get().handle(new PlayerDropGuildStoneEvent(this, at, slot));
+        } else {
+            sendEvent(StartDropItemMessage.of(this, slot, inventory.getItem(slot), at));
+        }
+    }
+
+    @Override
+    public void confirmDropItem(int slot, int number, Coordinate at) {
+        if (isLeftRealm() || isDead())
+            return;
+        if (dropActionInvalid(slot, at))
+            return;
+        Item removed = inventory.remove(slot, number);
+        if (removed == null) {
+            return;
+        }
+        sendEvent(new PlayerDropItemEvent(this, removed, at));
+        sendEvent(UpdateInventorySlotMessage.update(this, slot));
+    }
+
+    @Override
+    public void changeTradeState(PlayerTradeStateInput.State state) {
+        if (playerTrade == null || isDead())
+            return;
+        switch (state) {
+            case Cancel -> playerTrade.cancel(this);
+            case Confirm -> playerTrade.confirm(this);
+            case Unconfirmed -> playerTrade.unconfirm(this);
+        }
+    }
+
+    @Override
+    public void addTradeItem(int slot, int number) {
+        if (isLeftRealm() || isDead())
+            return;
+        if (playerTrade != null)
+            playerTrade.addTradeItem(this, slot, number);
+    }
+
+    @Override
+    public void usePill(String name) {
+        if (isLeftRealm() || isDead())
+            return;
+        int slot = inventory.findFirstSlot(name);
+        if (slot == 0)
+           return;
+        if (inventory.getStackItem(slot, Pill.class).isPresent())
+            handleInventorySlotDoubleClick(slot);
+    }
+
+    @Override
+    public void handleChat(ChatInput input) {
+        if (isLeftRealm())
+            return;
+        input.toRealmEvent(this).ifPresentOrElse(re -> realm.get().handle(re),
+                () -> input.toPlayerEvent(this).ifPresent(this::sendEvent));
+    }
+
+    @Override
+    public void clickEquipment(EquipmentType type) {
+        getEquipment(type, Equipment.class)
+                .ifPresent(e -> sendEvent(ItemDescriptionMessage.equipWindow(this, type, e)));
+    }
+
+    @Override
+    public void unlearnKungFu(String name) {
+        if (isLeftRealm() || isDead())
+            return;
+        int basicSlot = kungFuBook.findBasicSlot(name);
+        if (basicSlot == 0)
+            return;
+        kungFuBook.removeBasic(basicSlot);
+        if (attackKungFu.name().equals(name)) {
+            changeAndSayAndCooldown(kungFuBook.findUnnamedAttack(attackKungFu.getType()));
+            syncActiveKungFuList();
+        }
+        syncKungFuBookQuietly();
+    }
+
+    @Override
+    public void proxyToRealm(Function<Player, RealmEvent> eventCreator) {
+        if (isLeftRealm())
+            return;
+        realm.get().handle(eventCreator.apply(this));
+    }
+
+    private void learnAndUpdateInventory(int inventorySlotId, KungFuItem kungFuItem) {
         if (kungFuItem.kungFu() instanceof AssistantKungFu kf) {
             String ret = kf.checkPreconditions(this);
             if (ret != null) {
-                emitEvent(PlayerTextEvent.systemTip(this, ret));
+                sendText(ret);
                 return;
             }
         }
         KungFu kungFu = kungFuItem.kungFu().duplicate();
         var slot = kungFuBook().addToBasic(kungFu);
         if (slot == 0) {
+            sendText("修炼失败。");
             return;
         }
-        emitEvent(new PlayerLearnKungFuEvent(this, slot, kungFu));
         inventory().decrease(inventorySlotId);
-        emitEvent(new UpdateInventorySlotEvent(this, inventorySlotId, inventory().getItem(inventorySlotId)));
-        kungFuItem.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
+        kungFuItem.eventSound().ifPresent(this::sendSound);
+        syncKungFuBookQuietly();
+        syncInventoryQuietly();
     }
 
 
+    private void syncInventoryQuietly() {
+        sendEvent(UpdateInventoryMessage.quiet(this));
+    }
+
+    private void syncKungFuBookQuietly() {
+        sendEvent(KungFuBookMessage.quietly(this));
+    }
+
+
+    private void changeAndSayAndCooldown(AttackKungFu attackKungFu) {
+        this.attackKungFu = attackKungFu;
+        if (!this.attackKungFu.isLevelFull())
+            assistantKungFu = null;
+        sendEvent(PlayerSayEvent.kungfuTip(this, attackKungFu.name()));
+        cooldownAttack();
+    }
+
+    /**
+     * Used internally, make sure {@code equipment} is at {@code slot}.
+     * @param slotId
+     * @param equipment
+     * @return
+     */
+    boolean tryEquipFromSlot(int slotId, Equipment equipment) {
+        if (equipment instanceof Weapon newWeapon) {
+            equipWeaponFromSlot(slotId);
+            if (newWeapon.kungFuType() != attackKungFu.getType()) {
+                changeAndSayAndCooldown(kungFuBook.findUnnamedAttack(newWeapon.kungFuType()));
+                syncActiveKungFuList();
+            }
+        }
+        else if (equipment instanceof SexualEquipment sexualEquipment && sexualEquipment.isMale() == isMale()) {
+            equipArmorFromSlot(slotId);
+        } else {
+            sendText("你无法使用该装备。");
+            return false;
+        }
+        equipment.eventSound().ifPresent(this::sendSound);
+        sendEvent(PlayerEquipEvent.create(this, equipment));
+        syncInventoryQuietly();
+        return true;
+    }
+
+    private int unequipAndPutToInventory(EquipmentType type) {
+        Equipment removed = equippedEquipments.remove(type);
+        int slot = 0;
+        if (removed != null) {
+            slot = inventory.add(removed);
+        }
+        return slot;
+    }
+
+
+
+    private void sendText(String t) {
+        sendEvent(PlayerTextMessage.bottom(this,t));
+    }
+
+    private void sendSystip(String t) {
+        sendEvent(PlayerTextMessage.systip(this,t));
+    }
+
+    private void sendLeftText(String t) {
+        sendEvent(PlayerTextMessage.left(this,t));
+    }
+
+
+
+    /**
+     * Return true if attack kung fu is changed.
+     * @param newKungFu newKungFu to use.
+     * @return
+     */
+    boolean tryChangeAttackKungFu(AttackKungFu newKungFu) {
+        if (newKungFu.nameEquals(attackKungFu)) {
+            return false;
+        }
+        if (headPercent() < 50) {
+            sendText("头部活力不足。");
+            return false;
+        }
+        if (newKungFu.getType() == attackKungFu.getType()) {
+            changeAndSayAndCooldown(newKungFu);
+            syncActiveKungFuList();
+            return true;
+        }
+        int weaponSlot = inventory.findWeaponSlot(newKungFu.getType());
+        if (weaponSlot == 0) {
+            if (newKungFu.getType() != AttackKungFuType.Fist) {
+                sendText("没有对应的武器。");
+                return false;
+            }
+            if (weapon().isPresent() && inventory.isFull()) {
+                sendText("物品栏已满，无法卸下武器。");
+                return false;
+            }
+            int slot = unequipAndPutToInventory(EquipmentType.WEAPON);
+            if (slot > 0) {
+                inventory.getItem(slot, Weapon.class).flatMap(Item::eventSound).ifPresent(this::sendSound);
+                sendEvent(PlayerUnequipEvent.of(this, EquipmentType.WEAPON));
+                syncInventoryQuietly();
+            }
+        } else {
+            Weapon weapon = (Weapon) inventory.getItem(weaponSlot);
+            equipWeaponFromSlot(weaponSlot);
+            weapon.eventSound().ifPresent(this::sendSound);
+            sendEvent(PlayerEquipEvent.create(this, weapon));
+            syncInventoryQuietly();
+        }
+        changeAndSayAndCooldown(newKungFu);
+        syncActiveKungFuList();
+        return true;
+    }
+
+
+
     private void handleInventorySlotDoubleClick(int slotId) {
+        if (isDead())
+            return;
         Item item = inventory.getItem(slotId);
         if (item == null) {
             return;
         }
         if (item instanceof Equipment equipment) {
-            equip(slotId, equipment);
+            state.equip(slotId, equipment);
         } else if (item instanceof StackItem stackItem) {
-            if (stackItem.item() instanceof Pill pill) {
+            if (stackItem.item() instanceof KungFuItem kungFuItem) {
+                learnAndUpdateInventory(slotId, kungFuItem);
+            } else if (stackItem.item() instanceof Pill pill) {
                 if (pillSlots.canTakePill() && inventory.decrease(slotId)) {
-                    emitEvent(new UpdateInventorySlotEvent(this, slotId, inventory.getItem(slotId)));
-                    pillSlots.usePill(this, pill);
+                    if (pillSlots.tryUsePill(pill)) {
+                        sendLeftText("服用了" + pill.name() + "。");
+                        sendEvent(UpdateInventorySlotMessage.update(this, slotId, inventory.getItem(slotId)));
+                        pill.eventSound().ifPresent(this::sendSound);
+                    }
                 } else {
-                    emitEvent(PlayerTextEvent.noMorePill(this));
-                }
-            } else if (stackItem.item() instanceof KungFuItem kungFuItem) {
-                learnKungFu(slotId, kungFuItem);
-            } else if (stackItem.item() instanceof BuffPill p) {
-                if (!buffPillSlot.canTake()) {
-                    emitEvent(PlayerTextEvent.noMorePill(this));
-                    return;
-                }
-                if (inventory.decrease(slotId)) {
-                    buffPillSlot.take(p);
-                    emitEvent(new UpdateInventorySlotEvent(this, slotId));
-                    emitEvent(PlayerTextEvent.havePill(this, p.name()));
-                    p.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-                    emitEvent(UpdateBuffEvent.gain(this, p));
+                    sendLeftText("无法再服用。");
                 }
             }
         }
     }
 
-    private void handleClickAttackKungFu(AttackKungFu newAttack) {
-        if (headPercent() < 50) {
-            emitEvent(PlayerTextEvent.headLifeTooLow(this));
-            return;
+
+    void disableFootKungFuAndSync() {
+        if (footKungfu != null) {
+            footKungfu = null;
+            syncActiveKungFuList();
         }
-        if (this.attackKungFu.name().equals(newAttack.name())) {
-            return;
-        }
-        if (this.attackKungFu.getType() == newAttack.getType()) {
-            changeAttackKungFu(newAttack);
-            return;
-        }
-        int slot = inventory.findWeaponSlot(newAttack.getType());
-        if (slot == 0) {
-            if (newAttack.getType() == AttackKungFuType.QUANFA) {
-                unequip(EquipmentType.WEAPON);
-                changeAttackKungFu(newAttack);
-            } else {
-                emitEvent(PlayerTextEvent.noWeapon(this));
-            }
-            return;
-        }
-        equipWeaponFromSlot(slot, (Weapon) inventory.getItem(slot));
-        changeAttackKungFu(newAttack);
     }
 
+    void stopCombat() {
+        combatController = null;
+    }
+
+    void toggleBreathAndSync(BreathKungFu newBreath) {
+        if (newBreath.nameEquals(breathKungFu)) {
+            breathKungFu = null;
+        } else {
+            breathKungFu = newBreath;
+            footKungfu = null;
+            protectKungFu().ifPresent(k -> sendSound(k.disableSound()));
+            protectKungFu = null;
+            stopCombat();
+        }
+        sendEvent(PlayerSayEvent.kungfuTip(this, newBreath.name()));
+        syncActiveKungFuList();
+    }
 
     private void toggleProtectionKungFu(ProtectKungFu newProtection) {
-        disableBreathKungNoTip();
-        if (protectKungFu != null && protectKungFu.name().equals(newProtection.name())) {
-            emitEvent(PlayerToggleKungFuEvent.disable(this, protectKungFu));
-            emitEvent(new EntitySoundEvent(this, protectKungFu.disableSound()));
+        if (newProtection.nameEquals(protectKungFu)) {
+            sendSound(protectKungFu.disableSound());
             protectKungFu = null;
-            return;
+        } else {
+            breathKungFu = null;
+            protectKungFu = newProtection;
+            sendSound(protectKungFu.enableSound());
+            protectKungFu.resetTimer();
         }
-        protectKungFu = newProtection;
-        protectKungFu.resetTimer();
-        emitEvent(PlayerToggleKungFuEvent.enable(this, protectKungFu));
-        emitEvent(new EntitySoundEvent(this, protectKungFu.enableSound()));
+        sendEvent(PlayerSayEvent.kungfuTip(this, newProtection.name()));
+        syncActiveKungFuList();
     }
 
-    private void toggleBreathingKungFu(BreathKungFu newBreath) {
-        if (breathKungFu != null) {
-            if (breathKungFu.name().equals(newBreath.name())) {
-                this.breathKungFu = null;
-                emitEvent(PlayerToggleKungFuEvent.disable(this, newBreath));
-            } else {
-                this.breathKungFu = newBreath;
-                emitEvent(PlayerToggleKungFuEvent.enable(this, newBreath));
-            }
-            return;
-        }
-        if (state().canSitDown()) {
-            sitDown(true);
-        }
-        if (stateEnum() == State.SIT) {
-            if (this.protectKungFu != null) {
-                emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, protectKungFu));
-                emitEvent(new EntitySoundEvent(this, this.protectKungFu.disableSound()));
-                this.protectKungFu = null;
-            }
-            this.breathKungFu = newBreath;
-            emitEvent(PlayerToggleKungFuEvent.enable(this, newBreath));
-        }
+    void syncActiveKungFuList() {
+        sendEvent(SyncActiveKungMessage.of(this));
     }
 
-    private void toggleFootKungFu(FootKungFu newKungFu) {
-        if (!state().canUseFootKungFu()) {
-            return;
+    void toggleFootAndSync(FootKungFu newKungFu) {
+        if (newKungFu.nameEquals(footKungfu)) {
+            this.footKungfu = null;
+        } else {
+            this.footKungfu = newKungFu;
         }
-        clearFightingEntity();
-        if (this.footKungfu != null ){
-            if (newKungFu.name().equals(this.footKungfu.name())) {
-                emitEvent(PlayerToggleKungFuEvent.disable(this, this.footKungfu));
-                this.footKungfu = null;
-            } else {
-                this.footKungfu = newKungFu;
-                emitEvent(PlayerToggleKungFuEvent.enable(this, this.footKungfu));
-            }
-            return;
-        }
-        if (stateEnum() == State.SIT) {
-            this.changeState(new PlayerStandUpState(this));
-            emitEvent(new PlayerStandUpEvent(this, true));
-        } else if (stateEnum() != State.WALK && stateEnum() != State.ENFIGHT_WALK) {
-            this.changeState(PlayerStillState.idle(this));
-            emitEvent(new SetPositionEvent(this, direction(), coordinate()));
-        }
-        disableBreathKungNoTip();
-        this.footKungfu = newKungFu;
-        emitEvent(new PlayerToggleKungFuEvent(this, this.footKungfu));
+        breathKungFu = null;
+        syncActiveKungFuList();
+        sendEvent(PlayerSayEvent.kungfuTip(this, newKungFu.name()));
+    }
+
+    boolean movable(Coordinate coordinate) {
+        return realmMap() != null && realmMap().movable(coordinate);
     }
 
     private void toggleAssistantKungFu(AssistantKungFu newAssistant) {
+        if (isDead())
+            return;
         if (attackKungFu.level() < 9999) {
-            emitEvent(PlayerTextEvent.kungFuLevelLow(this));
+            sendEvent(PlayerTextMessage.bottom(this, "满级武功方可使用" + newAssistant.name() + "。"));
             return;
         }
-        if (this.assistantKungFu != null &&
-                this.assistantKungFu.name().equals(newAssistant.name())) {
-            emitEvent(PlayerToggleKungFuEvent.disable(this, this.assistantKungFu));
-            this.assistantKungFu = null;
+        if (newAssistant.nameEquals(this.assistantKungFu)) {
+            assistantKungFu = null;
         } else {
-            this.assistantKungFu = newAssistant;
-            emitEvent(PlayerToggleKungFuEvent.enable(this, this.assistantKungFu));
+            assistantKungFu = newAssistant;
         }
+        sendEvent(PlayerSayEvent.kungfuTip(this, newAssistant.name()));
+        syncActiveKungFuList();
     }
 
-    private void useKungFu(KungFu kungFu) {
+
+    private void handleDoubleClickKungFu(KungFu kungFu) {
+        if (isLeftRealm() || isDead())
+            return;
         if (kungFu instanceof FootKungFu newKungFu) {
-            toggleFootKungFu(newKungFu);
+            state.tryToggleFootKungFu(newKungFu);
         } else if (kungFu instanceof ProtectKungFu newProtectKungFu) {
             toggleProtectionKungFu(newProtectKungFu);
         } else if (kungFu instanceof BreathKungFu newBreath) {
-            toggleBreathingKungFu(newBreath);
+            state.tryToggleBreathKungFu(newBreath);
         } else if (kungFu instanceof AssistantKungFu newAssistant) {
             toggleAssistantKungFu(newAssistant);
         } else if (kungFu instanceof AttackKungFu newAttack) {
-            handleClickAttackKungFu(newAttack);
+            state.tryToggleAttackKungFu(newAttack);
         }
     }
 
 
-    private void sitDown(boolean includeSelf) {
-        if (!state().canSitDown()) {
-            log.debug("Cant sit down in state {}.", state().stateEnum());
+
+    /**
+     * Try to accept a combat, and PlayerState should change state accordingly if no strike happened.
+     * @param entity the target to combat.
+     * @return -1 if not acceptable, 1 if a strike is carried, 0 if accepted but no strike happened.
+     */
+    int tryAcceptAttack(ActiveEntity entity) {
+        combatController = CombatController.acceptIfAllowed(this, entity);
+        if (combatController == null)
+            return -1;
+        footKungfu = null;
+        breathKungFu = null;
+        syncActiveKungFuList();
+        int ret =  combatController.update(0);
+        if (ret == -1)
+            combatController = null;
+        return ret;
+    }
+
+
+    @Override
+    public void attack(org.y1000.entities.ActiveEntity target) {
+        if (!isLeftRealm() && target != null)
+            state.attack(target);
+    }
+
+
+    @Override
+    public void handleInput(SelfHandleInput input) {
+        if (input == null || isLeftRealm())
             return;
-        }
-        if (footKungfu != null) {
-            emitEvent(PlayerToggleKungFuEvent.disableNoTip(this, footKungfu));
-            footKungfu = null;
-        }
-        clearFightingEntity();
-        this.changeState(PlayerSitDownState.sit(this));
-        emitEvent(new PlayerSitDownEvent(this, includeSelf));
+        if (isDead() && !(input instanceof SimpleInput))
+            return;
+        input.accept(this);
     }
 
-    private void standUp(boolean includeSelf) {
-        if (state().canStandUp()) {
-            disableBreathKungNoTip();
-            this.changeState(new PlayerStandUpState(this));
-            emitEvent(new PlayerStandUpEvent(this, includeSelf));
+    @Override
+    public void move(MoveInput moveInput) {
+        state.tryMove(moveInput);
+    }
+
+    @Override
+    public void turn(TurnInput turnInput) {
+        state.turn(turnInput);
+    }
+
+
+    @Override
+    public void handleSimpleInput(SimpleInput.Type type) {
+        switch (type) {
+            case KungFuBook -> sendEvent(KungFuBookMessage.forceful(this));
+            case Inventory -> sendEvent(UpdateInventoryMessage.forceful(this));
+            case KeyF4 -> state.sayHello();
+            case KeyF3 -> state.sitOrStandUp();
+            case KeyF2 -> state.switchStand();
+            case KungFuBookQuietly -> sendEvent(KungFuBookMessage.quietly(this));
+            case InventoryQuietly -> sendEvent(UpdateInventoryMessage.quiet(this));
+            case GetPills -> sendEvent(PillsMessage.of(this));
+            case AttributeEquipment -> sendEvent(AttributeEquipmentMessage.of(this));
+            case AttributeQuietly -> sendEvent(AttributeEquipmentMessage.quietly(this));
         }
     }
 
-    public void attack(ClientAttackEvent event, AttackableActiveEntity target) {
-        Validate.notNull(event, "event can't be null.");
-        Validate.notNull(target, "target can't be null.");
-        attackKungFu.startAttack(this, event, target);
+    @Override
+    public boolean canBeSeenAt(Coordinate another) {
+        return realm.get() != null && super.canBeSeenAt(another);
     }
 
-    private void move(ClientMovementEvent event) {
-        if (state() instanceof MovableState movableState) {
-            movableState.move(this, event);
-        } else if (state() instanceof AbstractPlayerMoveState moveState) {
-            moveState.onMoveEvent(event);
-        }
-    }
-
-    private void handleRightClick(ClientRightClickEvent event) {
-        if (event.type() == RightClickType.INVENTORY) {
-            Item item = inventory.getItem(event.slotId());
-            if (item != null) {
-                emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), item.description(), event.type()));
+    @Override
+    public void onKungFuClicked(int page, int slot, ClickKungFuInput.ClickType type) {
+        if (isLeftRealm())
+            return;
+        kungFuBook().getKungFu(page, slot).ifPresent(kungFu -> {
+            if (type == ClickKungFuInput.ClickType.LeftDoubleClick) {
+                handleDoubleClickKungFu(kungFu);
+            } else if (type == ClickKungFuInput.ClickType.LeftClick) {
+                sendEvent(PlayerTextMessage.bottom(this, kungFu.detailText()));
+            } else if (type == ClickKungFuInput.ClickType.RightClick) {
+                sendEvent(ItemDescriptionMessage.kungfu(this, slot, kungFu));
             }
-        } else if (event.type() == RightClickType.KUNGFU) {
-            Optional<KungFu> kungFu = kungFuBook.getKungFu(event.page(), event.slotId());
-            kungFu.ifPresent(k -> emitEvent(new ItemOrKungFuAttributeEvent(this, event.page(), event.slotId(), k.description(), event.type())));
-        } else if (event.type() == RightClickType.CHARACTER) {
-            emitEvent(new PlayerRightClickAttributeEvent(this));
-        }
+        });
     }
 
-    private void handleSwapKungFuSlot(ClientSwapKungFuSlotEvent event) {
-        if (kungFuBook().swapSlot(event.page(), event.slot1(), event.slot2())) {
-            emitEvent(new UpdateKungFuSlotEvent(this, event.slot1(), kungFuBook().getKungFu(event.page(), event.slot1()).orElse(null)));
-            emitEvent(new UpdateKungFuSlotEvent(this, event.slot2(), kungFuBook().getKungFu(event.page(), event.slot2()).orElse(null)));
+
+    private boolean tryDye(int from, int to) {
+        var fromItem = inventory.getItem(from);
+        if (fromItem == null) {
+            return false;
+        }
+        var toItem = inventory.getItem(to);
+        if (!(toItem instanceof Equipment equipment)) {
+            return false;
+        }
+        if (fromItem instanceof StackItem stackItem && stackItem.item() instanceof Dye dye) {
+            var dyable = equipment.findAbility(Dyable.class).orElse(null);
+            if (dyable == null) {
+                return false;
+            }
+            inventory.decrease(from, 1);
+            dye.dye(dyable);
+            sendEvent(UpdateInventorySlotMessage.update(this, from));
+            sendEvent(UpdateInventorySlotMessage.update(this, to));
+            return true;
+        }
+        return false;
+
+    }
+
+    @Override
+    public void swapItem(int from, int to) {
+        if (isLeftRealm())
+            return;
+        if (tryDye(from, to))
+            return;
+        if (inventory.move(from, to)) {
+            sendEvent(UpdateInventoryMessage.forceful(this));
         }
     }
 
 
     @Override
-    public void handleClientEvent(ClientEvent clientEvent) {
-        if (stateEnum() == State.DIE) {
-            return;
-        }
-        if (clientEvent instanceof ClientDoubleClickSlotEvent doubleClickSlotEvent) {
-            handleInventorySlotDoubleClick(doubleClickSlotEvent.sourceSlot());
-        } else if (clientEvent instanceof ClientInventoryEvent inventoryEvent) {
-            inventory.handleClientEvent(this, inventoryEvent, this::emitEvent);
-        } else if (clientEvent instanceof ClientUnequipEvent unequipEvent) {
-            unequip(unequipEvent.type());
-        } else if (clientEvent instanceof ClientToggleKungFuEvent useKungFuEvent) {
-            kungFuBook().getKungFu(useKungFuEvent.tab(), useKungFuEvent.slot()).ifPresent(this::useKungFu);
-        } else if (clientEvent instanceof ClientSitDownEvent) {
-            sitDown(false);
-        } else if (clientEvent instanceof ClientStandUpEvent) {
-            standUp(false);
-        } else if (clientEvent instanceof ClientMovementEvent movementEvent) {
-            move(movementEvent);
-        } else if (clientEvent instanceof ClientRightClickEvent event) {
-            handleRightClick(event);
-        } else if (clientEvent instanceof ClientSwapKungFuSlotEvent swapKungfuSlotEvent) {
-            handleSwapKungFuSlot(swapKungfuSlotEvent);
-        } else if (clientEvent instanceof ClientChangeTeamEvent teamEvent) {
-            team = teamEvent.team();
-            emitEvent(new PlayerNameColorEvent(this));
+    public void onInventorySlotClicked(int slot, ClickInventorySlotInput.ClickType type) {
+        if (type == AbstractClickContainerSlotInput.ClickType.LeftDoubleClick) {
+            handleInventorySlotDoubleClick(slot);
+        } else if (type == AbstractClickContainerSlotInput.ClickType.RightClick) {
+            var item = inventory.getItem(slot);
+            if (item != null)
+                sendEvent(ItemDescriptionMessage.inventory(this, slot, item));
         }
     }
 
@@ -578,74 +765,38 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         return getEquipment(EquipmentType.TROUSER, SexualEquipment.class);
     }
 
+
     @Override
-    public void changeState(PlayerState newState) {
-        //log().debug("Change state from {} to {}.", state(), newState);
-        super.changeState(newState);
+    public void joinRealm(Realm realm, PlayerEventListener messageListener) {
+        joinRealm(realm, coordinate(), messageListener);
     }
 
     @Override
-    public void joinRealm(Realm realm) {
-        joinRealm(realm, coordinate());
+    public void sendEvent(PlayerEvent event) {
+        if (eventListener != null)
+            eventListener.onEvent(event);
     }
 
-
     @Override
-    public void joinRealm(Realm realm, Coordinate coordinate) {
+    public void joinRealm(Realm realm, Coordinate coordinate, PlayerEventListener eventListener) {
         Validate.notNull(realm);
         Validate.notNull(coordinate);
-        Validate.isTrue(this.realm == null);
-        this.realm = realm;
+        Validate.isTrue(this.realm.get() == null);
+        this.realm.set(realm);
         changeCoordinate(coordinate);
+        this.eventListener = eventListener;
     }
 
-    private void onKilled() {
-        disableFootKungFuNoTip();
-        disableBreathKungNoTip();
-        var oldLevel = revival.level();
-        revival = revival.gainExp();
-        if (oldLevel != revival.level()) {
-            emitEvent(PlayerGainExpEvent.nonKungFu(this, "再生"));
-        }
-        this.changeState(PlayerDeadState.die(this));
-        emitEvent(new CreatureDieEvent(this));
-        dieSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-    }
 
     private void gainProtectionExp(int bodyDamage) {
         if (protectKungFu == null) {
             return;
         }
-        var exp = ExperienceUtil.DEFAULT_EXP - damagedLifeToExp(bodyDamage);
-        if (protectKungFu.gainPermittedExp(exp)) {
-            emitEvent(new PlayerGainExpEvent(this, protectKungFu.name(), protectKungFu.level()));
-            if (protectKungFu.isLevelFull())
-                emitEvent(new PlayerKungFuFullEvent(this, protectKungFu));
-        }
+        var exp = ExperienceUtil.DEFAULT_EXP - ExperienceUtil.damageToExp(life.maxValue(), bodyDamage);
+        protectKungFu.gainExp(this, exp);
     }
 
 
-    private void afterTakingDamage(int damagedLife) {
-        if (currentLife() > 0) {
-            cooldownRecovery();
-            state().moveToHurtCoordinate(this);
-            State afterHurtState = state().decideAfterHurtState();
-            this.changeState(PlayerHurtState.hurt(this, afterHurtState));
-            emitEvent(new CreatureHurtEvent(this, afterHurtState));
-            hurtSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-            gainProtectionExp(damagedLife);
-        } else {
-            onKilled();
-        }
-        emitEvent(new PlayerAttributeEvent(this));
-    }
-
-
-    @Override
-    public void attackedBy(ViolentCreature attacker) {
-        Validate.notNull(attacker);
-        doAttacked(attacker.damage(), attacker.hit(), e -> {});
-    }
 
     private void takeDamage(Damage damage) {
         var armor = aggregateArmor();
@@ -659,28 +810,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         legLife.consume(damagedLeg);
     }
 
-    private boolean doAttacked(Damage damage, int hit, UnaryAction<Integer> gainExp) {
-        int damagedLife = doAttackedAndGiveExp(damage, hit, this::takeDamage, gainExp);
-        if (damagedLife > 0) {
-            afterTakingDamage(damagedLife);
-        }
-        return damagedLife > 0;
-    }
-
-
-    @Override
-    public boolean attackedBy(Player attacker) {
-        return doAttacked(attacker.damage(), attacker.hit(), attacker::gainAttackExp);
-    }
-
-    @Override
-    public void attackedBy(Projectile projectile) {
-        if (projectile.shooter() instanceof Player player) {
-            doAttacked(projectile.damage(), projectile.hit(), player::gainRangedAttackExp);
-        } else {
-            attackedBy(projectile.shooter());
-        }
-    }
 
     @Override
     public RealmMap realmMap() {
@@ -689,75 +818,42 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     @Override
     public Realm getRealm() {
-        return this.realm;
+        return this.realm.get();
     }
 
     @Override
     public void leaveRealm() {
-        if (realm != null) {
-            realm.map().free(this);
+        var r = getRealm();
+        if (r != null) {
+            r.map().free(this);
         }
-        realm = null;
-        clearFightingEntity();
-        emitEvent(new PlayerLeftEvent(this));
-    }
-
-    private void changeAttackKungFu(AttackKungFu newKungFu) {
-        if (newKungFu.level() < 9999) {
-            disableAssistantKungFuNoTip();
-        }
-        boolean needCooldownState = newKungFu.getType() != this.attackKungFu.getType();
-        this.attackKungFu = newKungFu;
-        cooldownAttack();
-        if (needCooldownState && state() instanceof PlayerAttackState) {
-            this.changeState(new PlayerCooldownState(cooldown()));
-            emitEvent(new PlayerCooldownEvent(this));
-        }
-        emitEvent(PlayerToggleKungFuEvent.enable(this, attackKungFu));
-    }
-
-    private void equipWeaponFromSlot(int slot, Weapon weaponToEquip) {
-        inventory.remove(slot);
-        emitEvent(UpdateInventorySlotEvent.remove(this, slot));
-        weapon().ifPresent(equippedWeapon -> {
-            inventory.put(slot, equippedWeapon);
-            emitEvent(new UpdateInventorySlotEvent(this, slot, equippedWeapon));
-            log.debug("Put equipped weapon {} back to inventory.", equippedWeapon.name());
-        });
-        equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
-        emitEvent(new PlayerEquipEvent(this, weaponToEquip));
-        weaponToEquip.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-        log.debug("Equipped weapon {}.", weaponToEquip.name());
+        eventListener = null;
+        realm.remove();
+        if (playerTrade != null)
+            playerTrade.cancel(this);
+        ropes.clear();
+        combatController = null;
     }
 
     @Override
-    public boolean canBeAttackedNow() {
-        return realm != null && super.canBeAttackedNow();
+    public boolean isLeftRealm() {
+        return realm.get() == null;
     }
 
-    private void equip(int slotId, Equipment equipmentInSlot) {
-        if (equipmentInSlot.equipmentType() == EquipmentType.WEAPON) {
-            Weapon weaponInSlot = (Weapon) equipmentInSlot;
-            equipWeaponFromSlot(slotId, weaponInSlot);
-            if (attackKungFu.getType() != weaponInSlot.kungFuType()) {
-                changeAttackKungFu(kungFuBook.findUnnamedAttack(weaponInSlot.kungFuType()));
-            }
-        } else {
-            if (equipmentInSlot instanceof SexualEquipment sexualEquipment &&
-                    sexualEquipment.isMale() != isMale()) {
-                return;
-            }
-            inventory.remove(slotId);
-            Equipment currentEquipped = equippedEquipments.put(equipmentInSlot.equipmentType(), equipmentInSlot);
-            emitEvent(new PlayerEquipEvent(this, equipmentInSlot));
-            if (currentEquipped != null) {
-                inventory.put(slotId, currentEquipped);
-            }
-            emitEvent(new UpdateInventorySlotEvent(this, slotId, currentEquipped));
-            equipmentInSlot.eventSound().ifPresent(s -> emitEvent(new EntitySoundEvent(this, s)));
-        }
+    private void equipWeaponFromSlot(int slot) {
+        Weapon weaponToEquip = (Weapon) inventory.remove(slot);
+        weapon().ifPresent(equippedWeapon -> {
+            inventory.add(slot, equippedWeapon);
+        });
+        equippedEquipments.put(EquipmentType.WEAPON, weaponToEquip);
     }
 
+    private void equipArmorFromSlot(int slot) {
+        SexualEquipment equipment = (SexualEquipment) inventory.remove(slot);
+        getEquipment(equipment.equipmentType(), SexualEquipment.class)
+                .ifPresent(equipped -> inventory.add(slot, equipped));
+        equippedEquipments.put(equipment.equipmentType(), equipment);
+    }
 
     @Override
     public int attackSpeed() {
@@ -772,8 +868,9 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public PlayerInterpolation captureInterpolation() {
-        return PlayerInterpolation.FromPlayer(this, state().elapsedMillis());
+    public I2ClientMessage captureSnapshot() {
+        MoveAction action = state instanceof PlayerMoveState moveState ?  moveState.moveAction() : null;
+        return PlayerSnapshot.build(this, state.elapsedMillis(), action);
     }
 
 
@@ -785,7 +882,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         setRegenerateTimer();
         var newYY = yinYang.accumulate(DEFAULT_REGENERATE_SECONDS);
         if (newYY.hasHigherLevel(yinYang)) {
-            emitEvent(PlayerGainExpEvent.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
+            sendEvent(PlayerGainExpMessage.nonKungFu(this, yinYang.isYin() ? "阴气" : "阳气"));
         }
         int newAge = newYY.age();
         if (newAge != yinYang.age()) {
@@ -807,14 +904,14 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         gainOuterPower(resource);
         gainInnerPower(resource);
         gainPower(resource / 2);
-        emitEvent(new PlayerAttributeEvent(this));
+        sendEvent(PlayerAttributeMessage.of(this));
     }
 
-    private void doGainExperiencedResource(PlayerAgedAttribute attribute, String name, int v) {
+    private void doGainExperiencedResource(AgedAttribute attribute, String name, int v) {
         int old = attribute.maxValue();
         attribute.gain(v);
         if (attribute.maxValue() != old) {
-            emitEvent(PlayerGainExpEvent.nonKungFu(this, name));
+            sendEvent(PlayerGainExpMessage.nonKungFu(this, name));
         }
     }
 
@@ -849,13 +946,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         legLife.gain(v);
     }
 
-    private boolean updateKungFuAndCheck(PeriodicalKungFu kungFu,
-                                         int delta,
-                                         Action disableAction) {
+    private boolean consumeAndDisable(PeriodicalKungFu kungFu,
+                                      int delta,
+                                      Action disableAction) {
         if (kungFu == null) {
             return false;
         }
-        var ret = kungFu.updateResources(this, delta);
+        var ret = kungFu.consumeResources(this, delta);
         if (ret && !kungFu.canKeep(this)) {
             disableAction.invoke();
         }
@@ -863,16 +960,15 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     private void updateKungFu(int delta) {
-        var resourceUpdated = updateKungFuAndCheck(protectKungFu, delta, this::disableProtectionNoTip);
-        resourceUpdated = resourceUpdated || updateKungFuAndCheck(footKungfu, delta, this::disableFootKungFuNoTip);
-        if (resourceUpdated) {
-            emitEvent(new PlayerAttributeEvent(this));
+        boolean consumed = consumeAndDisable(protectKungFu, delta, this::disableProtectionAndSync);
+        consumed = consumed|| consumeAndDisable(footKungfu, delta, this::disableFootKungFuAndSync);
+        if (consumed) {
+            sendEvent(PlayerAttributeMessage.of(this));
             return;
         }
-        if (breathKungFu == null) {
-            return;
+        if (breathKungFu != null) {
+            breathKungFu.update(this, delta);
         }
-        breathKungFu.update(this, delta, this::emitEvent);
         /*if (!breathKungFu.canRegenerateResources(this)) {
             standUp(true);
         }*/
@@ -883,8 +979,27 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         buffPillSlot.update(delta);
         if (previousEffective && !buffPillSlot.isEffective()) {
             buffPillSlot.cancel();
-            emitEvent(UpdateBuffEvent.fade(this));
+//            emitEvent(UpdateBuffEvent.fade(this));
         }
+    }
+
+    /**
+     * Update combat if there is any.
+     * @param delta
+     * @return Return true if changed to attack state.
+     */
+    boolean tryCombatStrike(int delta) {
+        if (combatController == null)
+            return false;
+        int ret = combatController.update(delta);
+        if (ret == -1)
+            combatController = null;
+        return ret == 1;
+    }
+
+    private void updateRopes(int delta) {
+        ropes.forEach(r -> r.update(delta));
+        ropes.removeIf(Rope::isBroken);
     }
 
     @Override
@@ -894,7 +1009,8 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         updateKungFu(delta);
         pillSlots.update(this, delta);
         updateBuff(delta);
-        state().update(this, delta);
+        this.state.update(delta);
+        updateRopes(delta);
     }
 
     public int recovery() {
@@ -912,8 +1028,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     public KungFuBook kungFuBook() {
         return kungFuBook;
     }
-
-
 
     @Override
     public Optional<ProtectKungFu> protectKungFu() {
@@ -966,17 +1080,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public int maxEnergy() {
-        return 0;
-    }
-
-    @Override
-    public int energy() {
-        return 0;
-    }
-
-
-    @Override
     public void consumePower(int amount) {
         power.consume(amount);
     }
@@ -998,44 +1101,10 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         }
         life.consume(amount);
         if (life.currentValue() == 0) {
-            onKilled();
+            handleKilled();
         } else {
-            emitEvent(new PlayerAttributeEvent(this));
+            sendEvent(PlayerAttributeMessage.of(this));
         }
-    }
-
-
-    private void doGainExp(int amount, KungFu kungFu) {
-        if (amount <= 0) {
-            return;
-        }
-        if (armLife.percent() < 50) {
-            emitEvent(PlayerTextEvent.armLifeTooLowToExp(this));
-            return;
-        }
-        if (kungFu.gainPermittedExp(amount)) {
-            emitEvent(new PlayerGainExpEvent(this, kungFu.name(), kungFu.level()));
-            if (kungFu.isLevelFull())
-                emitEvent(new PlayerKungFuFullEvent(this, kungFu));
-        }
-    }
-
-
-    @Override
-    public void gainAttackExp(int amount) {
-        doGainExp(amount, attackKungFu);
-    }
-
-    @Override
-    public void gainRangedAttackExp(int amount) {
-        if (attackKungFu.isRanged()) {
-            gainAttackExp(amount);
-        }
-    }
-
-    @Override
-    public void gainAssistantExp(int amount) {
-        assistantKungFu().ifPresent(kf -> doGainExp(amount, kf));
     }
 
     @Override
@@ -1054,29 +1123,11 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public int attackedByAoe(Damage damage, int hit) {
-        int[] exp = new int[1];
-        doAttacked(damage, hit, e -> exp[0] = e);
-        return exp[0];
-    }
-
-    @Override
     public boolean consumeItem(int slotId) {
         var ret = inventory.decrease(slotId);
         if (ret)
-            emitEvent(new UpdateInventorySlotEvent(this, slotId, inventory.getItem(slotId)));
+            sendEvent(UpdateInventorySlotMessage.update(this, slotId, inventory.getItem(slotId)));
         return ret;
-    }
-
-    @Override
-    public void onProjectileReachTarget(Projectile projectile) {
-        Validate.notNull(projectile, "projectile can't nbe null");
-        if (!projectile.target().canBeAttackedNow()) {
-            return;
-        }
-        assistantKungFu().ifPresentOrElse(
-                kf -> emitEvent(PlayerAttackAoeEvent.ranged(this, projectile.target(), projectile.direction(), projectile.damage(), kf)),
-                () -> projectile.target().attackedBy(projectile));
     }
 
     @Override
@@ -1132,7 +1183,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     @Override
     public void joinGuild(GuildMembership membership) {
         if (guildMembership().isPresent()) {
-            emitEvent(PlayerTextEvent.systemTip(this, "你已有门派。"));
+            sendEvent(PlayerTextMessage.systip(this, "你已有门派。"));
         } else {
             guildMembership = membership;
         }
@@ -1147,18 +1198,124 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     public void cancelBuff() {
         if (buffPillSlot.isEffective()) {
             buffPillSlot.cancel();
-            emitEvent(UpdateBuffEvent.fade(this));
+            //emitEvent(UpdateBuffEvent.fade(this));
         }
+    }
+
+    @Override
+    public boolean pickItem(Item item) {
+        if (isLeftRealm() || isDead())
+            return false;
+        if (!inventory().canAdd(item)) {
+            sendText("物品栏已满。");
+            return false;
+        }
+        int slot = inventory().add(item);
+        sendEvent(UpdateInventorySlotMessage.update(this, slot));
+        item.eventSound().ifPresent(s -> sendEvent(PlayerSoundEvent.toSelf(this, s)));
+        long number = item instanceof StackItem stackItem ? stackItem.number() : 1;
+        sendLeftText("获得 " + item.name() + " " + number + "个。");
+        return true;
+    }
+
+    void changeState(PlayerState playerState) {
+        this.state = playerState;
+    }
+
+
+    @Override
+    public PlayerStateEnum stateEnum() {
+        return state.playerStateEnum();
+    }
+
+    @Override
+    public int accuracy() {
+        return innateAttributesProvider.hit();
+    }
+
+    private void startTradeWith(Player another, int slot) {
+        if (isDead() || isLeftRealm()) {
+            sendText("你无法进行交易。");
+            return;
+        }
+        if (coordinate().directDistance(another.coordinate()) > 2) {
+            sendText("距离过远。");
+            return;
+        }
+        if (playerTrade != null) {
+            sendText("交易正在进行中。");
+            return;
+        }
+        var trade = new PlayerTrade(this, another);
+        if (!another.acceptTrade(trade)) {
+            sendText("对方无法被交易。");
+            return;
+        }
+        playerTrade = trade;
+        var item = inventory.getItem(slot);
+        sendEvent(OpenTradeWindowMessage.proactive(this, another.viewName(), slot, item instanceof StackItem stackItem ? stackItem.number() : 1, item.name()));
+    }
+
+    private void dragDeadPlayer(Player dragged, int slot) {
+        if (!dragged.canBeDragged())
+            return;
+        Item item = inventory().getItem(slot);
+        if (!item.name().equals("追魂索"))
+            return;
+        for (Rope rope : ropes) {
+            if (rope.isDragging(this, dragged))
+                return;
+        }
+        Rope rope = new Rope(this, dragged);
+        ropes.add(rope);
+        inventory.decrease(slot, 1);
+        sendEvent(UpdateInventorySlotMessage.update(this, slot));
+    }
+
+    @Override
+    public void dropItemOnAnother(Player another, int slot) {
+        if (isLeftRealm())
+            return;
+        if (this.equals(another))
+            return;
+        Item item = inventory().getItem(slot);
+        if (item == null)
+            return;
+        if (!another.isDead())
+            startTradeWith(another, slot);
+        else
+            dragDeadPlayer(another, slot);
+    }
+
+    @Override
+    public boolean acceptTrade(PlayerTrade trade) {
+        if (isDead() || isLeftRealm() || playerTrade != null)
+            return false;
+        Player another = trade.getAnother(this).orElse(null);
+        if (another == null)
+            return false;
+        this.playerTrade = trade;
+        sendEvent(OpenTradeWindowMessage.passive(this, another.viewName()));
+        return true;
+    }
+
+    @Override
+    public void closeTrade() {
+        playerTrade = null;
+    }
+
+    @Override
+    public boolean canBeDragged() {
+        return !isLeftRealm() && state.canBeDragged();
+    }
+
+    private void sendSound(String s) {
+        sendEvent(PlayerSoundEvent.toAll(this, s));
     }
 
     @Override
     public Inventory inventory() {
         return inventory;
-    }
-
-    @Override
-    public int hit() {
-        return innateAttributesProvider.hit();
     }
 
     @Override
@@ -1198,18 +1355,6 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
 
-    @Override
-    public void onEvent(EntityEvent entityEvent) {
-        if (!entityEvent.source().equals(getFightingEntity())) {
-            return;
-        }
-        if (!canChaseOrAttack(entityEvent.source())) {
-            clearFightingEntity();
-        }
-        if (state() instanceof PlayerWaitDistanceState waitDistanceState) {
-            waitDistanceState.onTargetEvent(this);
-        }
-    }
 
     @Override
     public int avoidance() {
@@ -1221,6 +1366,26 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
             }
         }
         return av;
+    }
+
+    @Override
+    public boolean learnGuildKungFu(AttackKungFu attackKungFu) {
+        if (isLeftRealm())
+            return false;
+        if (!attackKungFu.guild())
+            return false;
+        if (kungFuBook.hasGuildKungFu()) {
+            sendSystip("已有门武，传授失败。");
+            return false;
+        }
+        int i = kungFuBook.addToBasic(attackKungFu);
+        if (i == 0) {
+            sendSystip("传授失败，武功栏已满。");
+            return false;
+        }
+        syncKungFuBookQuietly();
+        sendSystip("习得新武功<" + attackKungFu.name() + ">。");
+        return true;
     }
 
     @Override
@@ -1236,7 +1401,7 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
 
     private Armor aggregateArmor() {
         var armor = protectKungFu().map(ProtectKungFu::armor)
-                .orElse(Armor.Empty)
+                .orElse(Armor.Zero)
                 .add(attackKungFu.armor());
         for (var e : equippedEquipments.values()) {
             if (e instanceof ArmorEquipment armorEquipment) {
@@ -1247,19 +1412,13 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
     }
 
     @Override
-    public int bodyArmor() {
-        return armor().body();
-    }
-
-    @Override
     public Armor armor() {
         return aggregateArmor();
     }
 
     // mandieNew 2003, ManDieOld 2005, womanDieNew 2203, womanDieOld 2205.
 
-    @Override
-    public Optional<String> hurtSound() {
+    private Optional<String> hurtSound() {
         if (ThreadLocalRandom.current().nextInt(0, 10) < 4) {
             return Optional.empty();
         }
@@ -1268,36 +1427,19 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
                 (isMale() ? "2004" : "2204") );
     }
 
-    @Override
-    public boolean canChaseOrAttack(Entity target) {
-        var ret = target instanceof AttackableActiveEntity attackableEntity &&
-                attackableEntity.realmMap() == realmMap() &&
-                target.canBeSeenAt(coordinate()) &&
-                attackableEntity.canBeAttackedNow();
-        if (!ret) {
-            return false;
-        }
-        if (target instanceof Player another) {
-            return another.team() == 0 || this.team() == 0 || (another.team() != this.team());
-        }
-        return true;
-    }
-
-    @Override
-    public Optional<String> dieSound() {
+    private Optional<String> dieSound() {
         return Optional.of(age() < 6000 ?
                 (isMale() ? "2003" : "2203") :
                 (isMale() ? "2005" : "2205") );
     }
 
-
     @Override
-    public int recoveryCooldown() {
-        return recoveryCooldown;
+    public boolean isDead() {
+        return stateEnum() == PlayerStateEnum.Die;
     }
 
-    @Override
-    public int attackCooldown() {
+
+    int attackCooldown() {
         return attackCooldown;
     }
 
@@ -1306,28 +1448,96 @@ public final class PlayerImpl extends AbstractCreature<PlayerImpl, PlayerState> 
         attackCooldown = attackCooldown > delta ? attackCooldown - delta : 0;
     }
 
-    public void cooldownRecovery() {
+    private void cooldownRecovery() {
         recoveryCooldown = recovery() * Realm.STEP_MILLIS;
     }
 
-    public void cooldownAttack() {
+    void cooldownAttack() {
         attackCooldown = attackSpeed() * Realm.STEP_MILLIS;
     }
 
-    public void setFightingEntity(AttackableActiveEntity entity){
-        Objects.requireNonNull(entity, "entity can't be null");
-        if (this.fightingEntity != null) {
-            this.fightingEntity.deregisterEventListener(this);
+    private void handleKilled() {
+        footKungfu = null;
+        breathKungFu = null;
+        combatController = null;
+        var oldLevel = revival.level();
+        revival = revival.gainExp();
+        if (oldLevel != revival.level()) {
+            sendEvent(PlayerGainExpMessage.nonKungFu(this, "再生"));
         }
-        this.fightingEntity = entity;
-        this.fightingEntity.registerEventListener(this);
+        syncActiveKungFuList();
+        dieSound().ifPresent(this::sendSound);
+        changeState(PlayerDieState.of(this));
+        if (playerTrade != null)
+            playerTrade.cancel(this);
+        sendEvent(PlayerChangeStateEvent.allVisible(this));
     }
 
 
-    private void clearFightingEntity() {
-        if (this.fightingEntity != null) {
-            this.fightingEntity.deregisterEventListener(this);
-            this.fightingEntity = null;
+    @Override
+    public <AB> Optional<AB> findAbility(Class<AB> type) {
+        return  type.isAssignableFrom(this.getClass()) ?
+                Optional.of(type.cast(this)) : Optional.empty();
+    }
+    @Override
+    public boolean canBeAttacked() {
+        return !isDead() && realm.get() != null;
+    }
+
+    @Override
+    public boolean swingAllowed() {
+        return !isLeftRealm();
+    }
+
+    int maxCooldown(){
+        return Math.max(attackCooldown, recoveryCooldown);
+    }
+
+    private boolean isDodged(int attackerHit) {
+        var rand = ThreadLocalRandom.current().nextInt(0, attackerHit + avoidance());
+        return rand < avoidance();
+    }
+
+
+    @Override
+    public int attacked(ActiveEntity attacker, Damage damage, int accuracy) {
+        if (isDodged(accuracy))
+            return -1;
+        if (isDead() || isLeftRealm())
+            return -1;
+        int old = life.currentValue();
+        takeDamage(damage);
+        sendEvent(PlayerLifeBarEvent.of(this));
+        sendEvent(PlayerDamagedEvent.create(this));
+        if (life.currentValue() > 0) {
+            cooldownRecovery();
+            hurtSound().ifPresent(this::sendSound);
+            changeState(PlayerHurtState.create(this, state));
+            sendEvent(PlayerChangeStateEvent.allVisible(this));
+            gainProtectionExp(old - currentLife());
+        } else {
+            handleKilled();
         }
+        return ExperienceUtil.damageToExp(maxLife(), old - life.currentValue());
+    }
+
+    @Override
+    public Set<Entity> getEntitiesAt(Set<Coordinate> coordinates) {
+        var event = FilterVisibleEvent.filterVisibleAt(this, coordinates);
+        sendEvent(event);
+        return event.resultStream(Entity.class).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Optional<String> clickText() {
+        StringBuilder stringBuilder = new StringBuilder("名称: ")
+                .append(viewName()).append("\r\n");
+        guildMembership().ifPresent(m -> m.appendGuildInfo(stringBuilder).append("\r\n"));
+        stringBuilder.append("使用武功: ").append(attackKungFu().name());
+        protectKungFu().ifPresent(p -> stringBuilder.append(" ").append(p.name()));
+        footKungFu().ifPresent(f -> stringBuilder.append(" ").append(f.name()));
+        assistantKungFu().ifPresent(a -> stringBuilder.append(" ").append(a.name()));
+        breathKungFu().ifPresent(b -> stringBuilder.append(" ").append(b.name()));
+        return Optional.of(stringBuilder.toString());
     }
 }

@@ -27,8 +27,14 @@ public interface ProjectilePacketOrBuilder extends
   int getFlyingTimeMillis();
 
   /**
-   * <code>int32 sprite = 4;</code>
+   * <code>string sprite = 4;</code>
    * @return The sprite.
    */
-  int getSprite();
+  java.lang.String getSprite();
+  /**
+   * <code>string sprite = 4;</code>
+   * @return The bytes for sprite.
+   */
+  com.google.protobuf.ByteString
+      getSpriteBytes();
 }

@@ -1,10 +1,9 @@
 package org.y1000.kungfu.attack;
 
 import lombok.Builder;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
-import org.y1000.entities.creatures.State;
+import org.y1000.entities.players.AttackAction;
 import org.y1000.item.ItemType;
 import org.y1000.kungfu.KungFu;
 
@@ -17,19 +16,19 @@ public final class ThrowKungFu extends AbstractRangedKungFu {
     }
 
     @Override
-    protected ItemType getAmmoType() {
+    public ItemType getAmmoType() {
         return ItemType.KNIFE;
-    }
-
-    @Override
-    public State randomAttackState() {
-        return State.THROW;
     }
 
 
     @Override
     public AttackKungFuType getType() {
         return AttackKungFuType.THROW;
+    }
+
+    @Override
+    public AttackAction computeAttackAction() {
+        return AttackAction.Throw;
     }
 
 
@@ -40,6 +39,6 @@ public final class ThrowKungFu extends AbstractRangedKungFu {
 
     @Override
     public KungFu duplicate() {
-        return new ThrowKungFu(name(), 0, getParameters());
+        return new ThrowKungFu(name(), exp(), getParameters());
     }
 }
