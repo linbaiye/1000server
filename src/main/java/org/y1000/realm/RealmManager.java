@@ -21,9 +21,7 @@ public final class RealmManager implements Runnable , RealmEventSender {
 
     private ExecutorService executorService;
 
-    private final Queue<ConnectionEvent> eventQueue;
-
-    private final Map<Integer, RealmGroup> realmIdGroupMap;
+    private final BlockingQueue<ConnectionEvent> eventQueue;
 
     private volatile boolean shutdown;
 
@@ -31,21 +29,22 @@ public final class RealmManager implements Runnable , RealmEventSender {
 
     private final int realmNumber;
 
+    private List<RealmGroup> realmGroups;
+
     private RealmManager(AccountManager accountManager, int realmNumber) {
         this.realmNumber = realmNumber;
-        eventQueue = new ArrayDeque<>(100);
+        eventQueue = new ArrayBlockingQueue<>(100);
         shutdown = false;
         this.accountManager = accountManager;
-        realmIdGroupMap = new ConcurrentHashMap<>();
     }
 
     public void startRealms() {
-        realmIdGroupMap.values().forEach(executorService::submit);
+        realmGroups.forEach(executorService::submit);
     }
 
 
     private void logoutPlayer(long playerId) {
-        realmIdGroupMap.values().forEach(r -> r.broadcast(Logout.byPlayerId(playerId)));
+        realmGroups.forEach(r -> r.broadcast(Logout.byPlayerId(playerId)));
     }
 
 
@@ -54,7 +53,7 @@ public final class RealmManager implements Runnable , RealmEventSender {
             accountManager.getAllPlayerId(connection).forEach(this::logoutPlayer);
             long[] idAndRealmId = accountManager.loginCharacter(connection, characterRequest.name());
             if (idAndRealmId != null) {
-                realmIdGroupMap.values().forEach(r -> r.handle((int) idAndRealmId[1], new Login(connection, idAndRealmId[0])));
+                realmGroups.forEach(r -> r.handle((int) idAndRealmId[1], new Login(connection, idAndRealmId[0])));
             }
             else
                 connection.tryClose();
@@ -64,14 +63,14 @@ public final class RealmManager implements Runnable , RealmEventSender {
     }
 
     private void handleLogout(Connection co) {
-        realmIdGroupMap.values().forEach(r -> r.broadcast(Logout.byConnection(co)));
+        realmGroups.forEach(r -> r.broadcast(Logout.byConnection(co)));
     }
 
     private void handleDataEvent(Connection connection, Object data) {
         if (data instanceof AccountMessage accountMessage)
             handleAccountMessage(connection, accountMessage);
         else
-            realmIdGroupMap.values().forEach(r -> r.broadcast(new ConnectionInput(connection, data)));
+            realmGroups.forEach(r -> r.broadcast(new ConnectionInput(connection, data)));
     }
 
 
@@ -94,10 +93,10 @@ public final class RealmManager implements Runnable , RealmEventSender {
 
     public synchronized void shut() {
         try {
-            shutdown = true;
             if (shutdown)
                 return;
-            for (RealmGroup group : realmIdGroupMap.values()) {
+            shutdown = true;
+            for (RealmGroup group : realmGroups) {
                 group.shutdown();
             }
             executorService.shutdown();
@@ -109,17 +108,21 @@ public final class RealmManager implements Runnable , RealmEventSender {
     }
 
     public void queueEvent(ConnectionEvent event) {
-        synchronized (eventQueue) {
-            eventQueue.add(event);
-            eventQueue.notifyAll();
+        if (event == null)
+            return;
+        try {
+            boolean put = eventQueue.offer(event, 1, TimeUnit.SECONDS);
+            if (!put)
+                log.warn("Missing event {}.", event.data());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
         }
     }
 
 
     private void setRealmGroups(List<RealmGroup> groups) {
-        for (RealmGroup group : groups) {
-            group.realmIds().forEach(id -> realmIdGroupMap.put(id,group));
-        }
+        this.realmGroups = groups;
         this.executorService = Executors.newFixedThreadPool(groups.size());
     }
 
@@ -131,24 +134,25 @@ public final class RealmManager implements Runnable , RealmEventSender {
         return allIds;
     }
 
+    private static final int DEFAULT_CORE_NUMBER = 4;
+
     public static RealmManager create(MapSdb mapSdb, RealmFactory realmFactory,
                                       AccountManager accountManager) {
         List<Integer> realmIds = getRealmIds(mapSdb);
-        List<Realm> realmList = new ArrayList<>();
+        var groupSize = Math.min(realmIds.size(), DEFAULT_CORE_NUMBER);
+        var groupMap = new HashMap<Integer, List<Realm>>(groupSize);
         var manager = new RealmManager(accountManager, realmIds.size());
+        int idx = 0;
         for (Integer id : realmIds) {
+            var list = groupMap.computeIfAbsent(idx++, i -> new ArrayList<>());
             Realm realm = realmFactory.createRealm(id, manager);
-            realmList.add(realm);
+            list.add(realm);
+            if (idx >= groupSize)
+                idx = 0;
         }
-        var groupSize = (realmList.size() / 4 ) > 0 ? (realmList.size() / 4) : 1;
-        var left = realmList.size() % groupSize;
-        int groupNumber = realmList.size() / groupSize + (left > 0 ? 1 : 0);
-        List<RealmGroup> groups = new ArrayList<>();
-        for (int i = 0, start = 0; i < groupNumber; i++, start += groupSize) {
-            int end = Math.min(start + groupSize, realmList.size());
-            RealmGroup group = new RealmGroup(realmList.subList(start, end), realmFactory, manager);
-            groups.add(group);
-        }
+        List<RealmGroup> groups = groupMap.values().stream()
+                .map(l -> new RealmGroup(l, realmFactory, manager))
+                .toList();
         manager.setRealmGroups(groups);
         return manager;
     }
@@ -158,14 +162,9 @@ public final class RealmManager implements Runnable , RealmEventSender {
     public void run() {
         while (!shutdown) {
             try {
-                ConnectionEvent event;
-                synchronized (eventQueue) {
-                    while (eventQueue.isEmpty()) {
-                        eventQueue.wait();
-                    }
-                    event = eventQueue.poll();
-                    eventQueue.notifyAll();
-                }
+                ConnectionEvent event = eventQueue.poll(1, TimeUnit.SECONDS);
+                if (event == null)
+                    continue;
                 if (event.type() == ConnectionEventType.DATA)
                     handleDataEvent(event.connection(), event.data());
                 else if (event.type() == ConnectionEventType.CLOSED)
@@ -180,7 +179,7 @@ public final class RealmManager implements Runnable , RealmEventSender {
 
     private void handlePrivateChatDelivery(DeliveryPrivateChatEvent event) {
         privateChatReply.put(event, realmNumber);
-        realmIdGroupMap.values().forEach(r -> r.broadcast(event));
+        realmGroups.forEach(r -> r.broadcast(event));
     }
 
     private void handlePrivateChatDeliveryResult(DeliveryPrivateChatResultEvent resultEvent) {
@@ -190,7 +189,7 @@ public final class RealmManager implements Runnable , RealmEventSender {
         i--;
         if (resultEvent.delivered() || i <= 0) {
             privateChatReply.remove(resultEvent.source());
-            realmIdGroupMap.values().forEach(r -> r.broadcast(resultEvent));
+            realmGroups.forEach(r -> r.broadcast(resultEvent));
         } else {
             privateChatReply.put(resultEvent.source(), i);
         }
@@ -198,19 +197,17 @@ public final class RealmManager implements Runnable , RealmEventSender {
 
     @Override
     public void send(RealmEvent realmEvent) {
-        synchronized (realmIdGroupMap) {
-            if (realmEvent instanceof DeliveryPrivateChatEvent deliveryPrivateChatEvent) {
-                handlePrivateChatDelivery(deliveryPrivateChatEvent);
-            } else if (realmEvent instanceof DeliveryPrivateChatResultEvent deliveryPrivateChatResultEvent) {
-                handlePrivateChatDeliveryResult(deliveryPrivateChatResultEvent);
-            } else {
-                realmIdGroupMap.values().forEach(r -> {
-                    if (realmEvent instanceof IdentifiedRealmEvent identifiedRealmEvent)
-                        r.handle(identifiedRealmEvent.toRealm(), realmEvent);
-                    else
-                        r.broadcast(realmEvent);
-                });
-            }
+        if (realmEvent instanceof DeliveryPrivateChatEvent deliveryPrivateChatEvent) {
+            handlePrivateChatDelivery(deliveryPrivateChatEvent);
+        } else if (realmEvent instanceof DeliveryPrivateChatResultEvent deliveryPrivateChatResultEvent) {
+            handlePrivateChatDeliveryResult(deliveryPrivateChatResultEvent);
+        } else {
+            realmGroups.forEach(r -> {
+                if (realmEvent instanceof IdentifiedRealmEvent identifiedRealmEvent)
+                    r.handle(identifiedRealmEvent.toRealm(), realmEvent);
+                else
+                    r.broadcast(realmEvent);
+            });
         }
     }
 }

@@ -27,6 +27,8 @@ import org.y1000.sdb.ActionSdb;
 import org.y1000.sdb.*;
 
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Slf4j
 public final class Server {
@@ -91,6 +93,11 @@ public final class Server {
         }
 
         @Override
+        public String getName() {
+            return "";
+        }
+
+        @Override
         public Map<String, Object> getProperties() {
             return null;
         }
@@ -102,6 +109,16 @@ public final class Server {
 
         @Override
         public PersistenceUnitUtil getPersistenceUnitUtil() {
+            return null;
+        }
+
+        @Override
+        public PersistenceUnitTransactionType getTransactionType() {
+            return null;
+        }
+
+        @Override
+        public SchemaManager getSchemaManager() {
             return null;
         }
 
@@ -119,9 +136,29 @@ public final class Server {
         public <T> void addNamedEntityGraph(String graphName, EntityGraph<T> entityGraph) {
 
         }
+
+        @Override
+        public <R> Map<String, TypedQueryReference<R>> getNamedQueries(Class<R> resultType) {
+            return Map.of();
+        }
+
+        @Override
+        public <E> Map<String, EntityGraph<? extends E>> getNamedEntityGraphs(Class<E> entityType) {
+            return Map.of();
+        }
+
+        @Override
+        public void runInTransaction(Consumer<EntityManager> work) {
+
+        }
+
+        @Override
+        public <R> R callInTransaction(Function<EntityManager, R> work) {
+            return null;
+        }
     }
 
-    private static final boolean Dev = false;
+    private static final boolean Dev = true;
 
 
     public Server() {
@@ -137,7 +174,7 @@ public final class Server {
         DynamicObjectFactory dynamicObjectFactory = new DynamicObjectFactoryImpl(DynamicObjectSdbImpl.INSTANCE);
         GuildRepository guildRepository = Dev ? new DevGuildRepository() : new GuildRepositoryImpl(entityManagerFactory, kungFuRepositoryImpl);
         PlayerRepositoryImpl factory = new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, repository, guildRepository);
-        PlayerRepository playerRepository = Dev ? new DevPlayerRepository(factory, repository) :
+        PlayerRepository playerRepository = Dev ? new DevPlayerRepository(factory, repository, kungFuRepositoryImpl) :
                 new PlayerRepositoryImpl(repository, kungFuRepositoryImpl, kungFuRepositoryImpl, entityManagerFactory, repository, guildRepository);
         RealmFactory realmFactory = new RealmFactoryImpl(repository, npcFactory, ItemSdbImpl.INSTANCE, MonstersSdbImpl.INSTANCE,
                 MapSdbImpl.INSTANCE, RealmSpecificSdbRepositoryImpl.INSTANCE, dynamicObjectFactory, CreateGateSdbImpl.INSTANCE,

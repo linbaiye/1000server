@@ -43,6 +43,7 @@ public abstract class AbstractCreature extends AbstractActiveEntity implements C
     @Override
     public void changeCoordinate(Coordinate newCoor) {
         coordinate = newCoor;
-        realmMap().occupy(this);
+        if (realmMap() != null)
+            realmMap().occupy(this);
     }
 }

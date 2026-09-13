@@ -136,6 +136,8 @@ abstract class AbstractPlayerManager extends AbstractActiveEntityManager<Player>
 
 
     public void sendTo(Player player, I2ClientMessage message) {
+        if (message instanceof PlayerJoinRealmMessage)
+            log().debug("Sending message {}.", message);
         connectionManager.sendTo(player, message);
     }
 
