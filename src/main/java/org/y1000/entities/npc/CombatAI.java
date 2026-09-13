@@ -5,12 +5,14 @@ import org.y1000.entities.ActiveEntity;
 import org.y1000.entities.Direction;
 import org.y1000.entities.HurtAbility;
 
+import java.util.Optional;
+
 @Slf4j
 public class CombatAI extends AbstractMovableNpcAI {
     private ActiveEntity enemy;
     private final NpcMeleeAbility meleeAbility;
     private final NpcHurtAbility hurtAbility;
-    private final HurtAbility enemyHurtAbility;
+    private HurtAbility enemyHurtAbility;
 
     public CombatAI(Npc npc, ActiveEntity entity,
                      NpcAnimatedAbility ability) {
@@ -139,8 +141,13 @@ public class CombatAI extends AbstractMovableNpcAI {
     }
 
     private void onAttacked(ActiveEntity attacker, NpcHurtAbility ability) {
-        if (attacker.findAbility(HurtAbility.class).isPresent())
-            enemy = attacker;
+        Optional<HurtAbility> hurtAbility = attacker.findAbility(HurtAbility.class);
+        if (hurtAbility.isPresent()) {
+            if (enemy.coordinate().distance(npc().coordinate()) > 1 || !enemyHurtAbility.canBeAttacked()) {
+                enemy = attacker;
+                enemyHurtAbility = hurtAbility.get();
+            }
+        }
         npc().findAbility(NpcCopyAbility.class)
                         .ifPresent(a -> a.tryApply(npc(), attacker));
         applyHurtAbility(ability);

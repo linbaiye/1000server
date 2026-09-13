@@ -210,7 +210,6 @@ public final class ItemRepositoryImpl implements ItemRepository, ItemFactory, Ba
             session.evict(equipmentPo);
             Equipment equipment = toUpdate.get(equipmentPo.getId());
             equipmentPo.merge(equipment);
-            session.update(equipmentPo);
         }
     }
 

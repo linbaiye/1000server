@@ -20,8 +20,6 @@ import org.y1000.network.I2ClientMessage;
 import org.y1000.realm.PlayerEventListener;
 import org.y1000.realm.Realm;
 import org.y1000.realm.RealmMap;
-import org.y1000.realm.event.ApplyKungFuEvent;
-import org.y1000.realm.event.GuildCreationEvent;
 import org.y1000.realm.event.PlayerDropGuildStoneEvent;
 import org.y1000.realm.event.RealmEvent;
 import org.y1000.util.Action;
@@ -29,6 +27,7 @@ import org.y1000.util.Coordinate;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -96,7 +95,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
 
     private final List<Rope> ropes;
 
-    private final ThreadLocal<Realm> realm;
+    private final AtomicReference<Realm> realm;
 
 
     @Builder
@@ -152,7 +151,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
         this.buffPillSlot = new BuffPillSlot();
         this.changeState(PlayerStandState.idle(this));
         this.ropes = new ArrayList<>();
-        this.realm = new ThreadLocal<>();
+        this.realm = new AtomicReference<>();
     }
 
     private void setRegenerateTimer() {
@@ -828,7 +827,7 @@ public class PlayerImpl extends AbstractCreature implements Player, PlayerInputH
             r.map().free(this);
         }
         eventListener = null;
-        realm.remove();
+        realm.set(null);
         if (playerTrade != null)
             playerTrade.cancel(this);
         ropes.clear();

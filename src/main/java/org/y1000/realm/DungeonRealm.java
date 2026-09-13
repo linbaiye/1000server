@@ -3,6 +3,7 @@ package org.y1000.realm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
+import org.y1000.entities.npc.Npc;
 import org.y1000.entities.players.Player;
 import org.y1000.entities.players.event.PlayerTextMessage;
 import org.y1000.input.Login;
@@ -156,6 +157,8 @@ final class DungeonRealm extends AbstractRealm {
     @Override
     public void init() {
         doInit();
+        //getNpcManager().find(n -> true)
+        //        .forEach(Npc::instantKill);
     }
 
 }

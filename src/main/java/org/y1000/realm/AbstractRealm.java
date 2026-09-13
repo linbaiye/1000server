@@ -238,4 +238,8 @@ abstract class AbstractRealm implements Realm, TeleportEventHandler, RealmEventH
     public void handleProxiedLogin(long playerId, Coordinate toCoordinate, Connection connection) {
         acceptLogin(playerId, connection, toCoordinate);
     }
+
+    protected NpcManager getNpcManager() {
+        return npcManager;
+    }
 }

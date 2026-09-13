@@ -116,4 +116,9 @@ class GuildableRealm extends AbstractRealm {
         playerManager().shutdown();
         guildManager.shutdown();
     }
+
+    @Override
+    public String toString() {
+        return "GuildableRealm {" + id() + "}";
+    }
 }

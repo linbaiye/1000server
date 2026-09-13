@@ -2,9 +2,12 @@ package org.y1000.realm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.y1000.input.Login;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,7 +27,6 @@ public final class RealmGroup implements Runnable {
 
     private final Set<Integer> ids;
 
-
     public RealmGroup(List<Realm> realms,
                       RealmFactory realmFactory,
                       RealmEventSender crossRealmEventSender) {
@@ -33,12 +35,11 @@ public final class RealmGroup implements Runnable {
         Validate.notNull(crossRealmEventSender);
         this.realms = realms.toArray(new Realm[0]);
         this.realmFactory = realmFactory;
-        pendingEvents = new ArrayList<>();
+        pendingEvents = new ArrayList<>(5000);
         shutdown = false;
         this.crossRealmEventSender = crossRealmEventSender;
         ids = realms.stream().map(Realm::id).collect(Collectors.toSet());
     }
-
 
 
     private void updateRealm(Realm realm) {
@@ -89,7 +90,7 @@ public final class RealmGroup implements Runnable {
                     events = new ArrayList<>(pendingEvents);
                     pendingEvents.clear();
                 }
-                pendingEvents.notify();
+                pendingEvents.notifyAll();
             }
         } catch (Exception e) {
             log.error("Exception when polling events.", e);
@@ -126,9 +127,11 @@ public final class RealmGroup implements Runnable {
     public void handle(int realmId, Object event) {
         if (!ids.contains(realmId) || event == null)
             return;
+        if (event instanceof Login login)
+            log.info("Received login {} in realm {}.", login.playerId(), realmId);
         synchronized (pendingEvents) {
             pendingEvents.add(new Envelop(realmId, event));
-            pendingEvents.notify();
+            pendingEvents.notifyAll();
         }
     }
 
@@ -136,9 +139,12 @@ public final class RealmGroup implements Runnable {
         if (event == null) {
             return;
         }
+        List<Envelop> list = realmIds().stream()
+                .map(i -> new Envelop(i, event))
+                .toList();
         synchronized (pendingEvents) {
-            realmIds().forEach(id -> pendingEvents.add(new Envelop(id, event)));
-            pendingEvents.notify();
+            pendingEvents.addAll(list);
+            pendingEvents.notifyAll();
         }
     }
 

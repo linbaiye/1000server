@@ -36,4 +36,9 @@ public class PlayerJoinRealmMessage implements I2ClientMessage {
     public Packet toPacket() {
         return packet;
     }
+
+    @Override
+    public String toString() {
+        return "PlayerJoinRealm{ id : " + packet.getJoinRealm().getId() + "}";
+    }
 }
